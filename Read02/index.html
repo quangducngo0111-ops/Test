@@ -1,0 +1,632 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>IELTS Reading - Cane Toad / Farmers / Life on Mars</title><style>
+:root{--navy:#17344f;--navy2:#0d263b;--blue:#2e6f9f;--paper:#f4f4f2;--line:#d6dade;--text:#20262b;--muted:#64717b;--accent:#e9784e;--good:#2e7d5b;--bad:#b5442e}*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff}.hidden{display:none!important}button,input,select{font:inherit}.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700}.start-card h1{margin:8px 0 6px;color:var(--navy)}.start-card p{margin:0 0 22px;color:var(--muted)}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}.btn{border:0;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer}.exam{height:100vh;display:grid;grid-template-rows:auto auto 1fr auto}.top{background:var(--navy2);color:#fff;padding:11px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}.timer{font-family:ui-monospace,monospace;font-weight:700;background:rgba(255,255,255,.1);padding:8px 11px;border-radius:6px}.timer.danger{background:#912f25}.tabs{display:flex;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);background:#fafafa}.tab{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 13px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.workspace{display:grid;grid-template-columns:1fr 1fr;min-height:0}.passage,.questions{overflow:auto;padding:24px 26px}.passage{border-right:1px solid var(--line)}.questions{background:#fafafa}.passage h2{font-size:1.35rem;color:var(--navy);margin:0 0 18px}.copy{font-size:15px;line-height:1.72}.copy p{margin:0 0 15px}.group{margin-bottom:26px}.group h3{color:var(--navy);margin:0 0 5px}.inst{font-size:.92rem;color:var(--muted);margin-bottom:12px}.bank{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;background:#eef3f6;border:1px solid var(--line);padding:12px;border-radius:8px;margin:10px 0;font-size:.92rem}.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}.qhead{display:flex;gap:10px;align-items:flex-start}.qnum{min-width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.qtext{flex:1}.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer}.option.correct{border-color:var(--good);background:rgba(46,125,91,.08)}.option.wrong{border-color:var(--bad);background:rgba(181,68,46,.08)}.ans{width:100%;margin-top:9px;padding:10px;border:1px solid var(--line);border-radius:7px}.ans.correct{border-color:var(--good);background:rgba(46,125,91,.06)}.ans.wrong{border-color:var(--bad);background:rgba(181,68,46,.06)}.feedback{font-size:.88rem;margin-top:6px}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}.bottom{border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:10px;align-items:center}.nav{display:flex;gap:4px;overflow-x:auto;flex:1}.nq{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:12px;font-weight:700}.nq.answered{background:#dcebf5}.nq.correct{background:#dcefe5;border-color:var(--good)}.nq.wrong{background:#f3ddd8;border-color:var(--bad)}.submit{background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:7px;font-weight:700;white-space:nowrap;cursor:pointer}.overlay{position:fixed;inset:0;background:rgba(8,20,30,.7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.result{background:#fff;width:min(620px,100%);border-radius:14px;padding:28px}.score{font-size:2.5rem;font-weight:800;color:var(--navy);margin:8px 0}.break{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.break div{background:#f2f5f7;padding:12px;border-radius:8px;text-align:center}
+
+.result{max-height:90vh;overflow:auto}
+.review-wrap{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.review-title{font-size:1.08rem;color:var(--navy);margin:0 0 6px}
+.review-sub{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.wrong-review{border:1px solid #e2c8c2;background:#fffaf8;border-radius:9px;padding:14px 15px;margin:11px 0}
+.wrong-review .review-q{font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.45}
+.answer-row{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;font-size:.92rem;margin:4px 0}
+.answer-label{color:var(--muted);font-weight:700}
+.student-wrong{color:var(--bad);font-weight:700}
+.correct-answer{color:var(--good);font-weight:700}
+.explain-box{margin-top:10px;padding:10px 11px;background:#fff;border-left:3px solid var(--blue);border-radius:4px;font-size:.92rem;line-height:1.5}
+.evidence-box{margin-top:9px;padding:10px 11px;background:#f3f7fa;border:1px solid #d7e2ea;border-radius:7px;font-size:.9rem;line-height:1.5}
+.evidence-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);font-weight:700;margin-bottom:4px}
+.evidence-quote{font-style:italic}
+.goto-evidence{margin-top:9px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:7px 10px;font-size:.84rem;font-weight:700;cursor:pointer}
+.goto-evidence:hover{background:#f4f7f9}
+.evidence-pulse{outline:3px solid rgba(233,120,78,.45);background:#fff8e8;border-radius:5px;transition:background .2s}
+.perfect-review{padding:14px;border-radius:8px;background:#edf7f1;color:#245c43;font-weight:700}
+
+
+.completion-box{background:#fff;border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin-top:12px;line-height:1.8}
+.completion-box h4{margin:0 0 12px;color:var(--navy);font-size:1.05rem}
+.completion-text{font-size:15px;line-height:2.05;margin:0}
+.inline-blank{display:inline-flex;align-items:center;gap:5px;margin:2px 4px;vertical-align:middle;scroll-margin:100px}
+.blank-num{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700}
+.inline-answer{width:auto!important;min-width:145px;max-width:245px;margin:0!important;padding:7px 9px!important;display:inline-block;vertical-align:middle;background:#fff}
+.inline-answer.short{min-width:115px;max-width:180px}
+.inline-answer.select-wide{min-width:190px;max-width:270px}
+.flowchart{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin-top:10px}
+.flow-step{background:#fbfcfc;border:1px solid var(--line);border-radius:8px;padding:12px 14px;line-height:1.75}
+.flow-arrow{text-align:center;color:var(--blue);font-size:20px;font-weight:700;line-height:1}
+.notes-list{margin:8px 0 0;padding-left:20px}
+.notes-list li{margin:9px 0;line-height:1.8}
+.completion-box .bank{margin-top:14px;margin-bottom:16px}
+.inline-answer.correct{border-color:var(--good)!important;background:rgba(46,125,91,.06)!important}
+.inline-answer.wrong{border-color:var(--bad)!important;background:rgba(181,68,46,.06)!important}
+@media(max-width:600px){
+  .inline-answer,.inline-answer.select-wide{min-width:130px;max-width:100%;font-size:16px}
+  .completion-box{padding:15px}
+}
+
+
+.questions-pane 
+/* ===== INLINE REVIEW AFTER SUBMISSION ===== */
+.inline-review{
+  margin:12px 0 4px;
+  padding:13px 14px;
+  border:1px solid #e3c8c1;
+  border-left:4px solid var(--bad);
+  border-radius:8px;
+  background:#fffaf8;
+  color:var(--text);
+  line-height:1.5;
+  font-size:.92rem;
+}
+.inline-review.integrated{
+  width:100%;
+  margin-top:10px;
+}
+.inline-review-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  color:var(--navy);
+  font-weight:800;
+}
+.inline-review-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:27px;
+  height:27px;
+  padding:0 7px;
+  border-radius:999px;
+  background:var(--bad);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.inline-review-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:5px 9px;
+  margin:4px 0;
+}
+.inline-review-label{
+  color:var(--muted);
+  font-weight:700;
+}
+.inline-review-student{
+  color:var(--bad);
+  font-weight:700;
+}
+.inline-review-correct{
+  color:var(--good);
+  font-weight:800;
+}
+.inline-review-explain{
+  margin-top:9px;
+  padding:9px 10px;
+  background:#fff;
+  border-left:3px solid var(--blue);
+  border-radius:4px;
+}
+.inline-review-evidence{
+  margin-top:8px;
+  padding:9px 10px;
+  background:#f2f7fa;
+  border:1px solid #d7e3ea;
+  border-radius:7px;
+}
+.inline-review-evidence-label{
+  margin-bottom:4px;
+  color:var(--blue);
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.inline-review-quote{
+  font-style:italic;
+}
+.inline-review-btn{
+  margin-top:9px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  border-radius:6px;
+  padding:7px 10px;
+  font-size:.84rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.inline-review-btn:hover{background:#f4f7f9}
+.review-mode-note{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:7px;
+  background:#eef5f9;
+  color:var(--navy);
+  font-size:.9rem;
+  font-weight:700;
+}
+#questionsCopy input:disabled,
+#questionsCopy select:disabled{
+  opacity:1;
+  color:inherit;
+  cursor:not-allowed;
+}
+
+.annotation-bar{background:#fbfbfa}
+.annotation-zone-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-right:2px}
+
+.annotation-bar{position:sticky;top:-24px;z-index:8;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);margin:-24px -26px 18px;padding:10px 14px}
+.annotation-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}
+.annotation-btn:hover{background:#f4f7f9}
+.annotation-tip{font-size:12px;color:var(--muted);margin-left:auto}
+mark.user-highlight{background:#fff29a;color:inherit;padding:1px 0;border-radius:2px}
+.note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer;border-radius:2px}
+.notes-panel{display:none;background:#f6f9fb;border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:16px}
+.notes-panel.open{display:block}
+.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:10px 11px;margin:8px 0}
+.note-quote{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:5px}
+.note-text{font-size:14px;margin-bottom:7px}
+.note-actions{display:flex;gap:6px}
+.note-actions button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer}
+.timer.warning{background:#8b651d}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.passage,.questions{height:48vh}.passage{border-right:0;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<div id="start" class="start"><div class="start-card"><div class="eyebrow">IELTS Reading Practice</div><h1>Computer-Based Reading Test</h1><p>3 passages · 40 questions · 60 minutes</p><div class="field"><label>Họ và tên học sinh</label><input id="studentName" placeholder="Ví dụ: Nguyễn Văn An"></div><div class="field"><label>Lớp</label><input id="studentClass" placeholder="Ví dụ: 8A1"></div><button class="btn" onclick="startExam()">Bắt đầu làm bài</button><div id="startError" style="color:var(--bad);margin-top:10px"></div></div></div>
+<div id="exam" class="exam hidden"><div class="top"><div>Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div><div id="timer" class="timer">60:00</div></div><div class="tabs"><button class="tab active" data-p="1" onclick="showPassage(1)">Passage 1</button><button class="tab" data-p="2" onclick="showPassage(2)">Passage 2</button><button class="tab" data-p="3" onclick="showPassage(3)">Passage 3</button></div><div class="workspace"><div id="passage" class="passage"></div><div id="questions" class="questions"></div></div><div class="bottom"><div id="nav" class="nav"></div><button class="submit" onclick="submitExam(false)">Nộp bài</button></div></div>
+<div id="overlay" class="overlay hidden"><div class="result"><div class="eyebrow">Kết quả</div><div id="rstudent"></div><div id="rscore" class="score">0 / 40</div><div id="rpercent"></div><div class="break"><div><b>Passage 1</b><br><span id="p1s"></span></div><div><b>Passage 2</b><br><span id="p2s"></span></div><div><b>Passage 3</b><br><span id="p3s"></span></div></div><div id="status" style="color:var(--muted);font-size:.92rem"></div><div id="wrongReview" class="review-wrap"></div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn" onclick="closeResult()">Xem lại toàn bài</button><button class="btn" style="background:#587087" onclick="location.reload()">Làm lại từ đầu</button></div></div></div>
+<script>const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const passages={"1": {"title": "Australia's cane toad problem", "text": "<p><b>A</b> In the north of Australia there are many sugar cane plantations, which early in the 20th century were being damaged by a particular pest. This was a species of beetle whose larvae, the infant form of the beetle, live underground in the soil in the sugar cane fields. The sugar cane plants were weakened or died because their roots were eaten by the larvae. This had serious economic consequences for sugar cane farmers. Modern pesticides were not developed until the 1940s, so farmers had to use what was available at the time. Chemicals like arsenic and copper were used, but these were not only expensive but also stayed in the environment and were poisonous to people, plants and animals. It was generally acknowledged by government, farmers and scientists that cheaper and safer methods of pest control had to be found.</p>\n<p><b>B</b> A promising replacement for copper and arsenic was the use of biological control. Farmers already used some forms of biological pest control in the form of predatory and parasitic wasps and flies, insect-eating birds, and plants from different regions or countries to control pests. Common practice was to release these introduced agents into new environments, the expectation being that they would destroy resident pests. Some species of toad already had successful records as agents of biological control in gardens. For example, in 19th-century France toads were sold to gardeners at markets in Paris to eat insect pests in their gardens. In the early 20th century French sugar cane farmers first took giant toads from South America to control pests in their Caribbean sugar cane plantations. Although there is no evidence that these toads did help to control pests, sugar cane scientists then carried some of these toads from Jamaica and Barbados to Puerto Rico and from there to Hawaii.</p>\n<p><b>C</b> The idea of biological control of pests was not new to Australia. For example, in 1926 there had been a highly successful prevention of the increase of the exotic prickly-pear cactus by the introduction of a moth from Argentina. This success added strength to the argument that biological control was the answer to the sugar cane industry's pest problems. Accordingly, in the early 1930s a decision was taken to introduce the giant South American toads, which in Australia are now commonly called cane toads, into Australian sugar cane plantations.</p>\n<p><b>D</b> In 1935, an Australian entomologist brought 101 cane toads from Hawaii and released them in sugar cane plantations in the north of Australia. However, over the following years it became clear that the cane toads were a failure. There was a fatal flaw in the plan to use them as a form of biological control. This was that earthbound cane toads were expected to eat the mostly flying adult beetles in order to eliminate the soil-dwelling beetle larvae that ate the roots of the cane sugar plants. This, of course, cane toads could not do.</p>\n<p><b>E</b> Prior to their introduction in Australia, there had been very few opponents and only one made his views public. He was a retired former Chief Entomologist from the state government of New South Wales named Walter Froggatt. He forecast that cane toads might become as great a pest in Australia as rabbits. However, Froggatt's peers rebuked him and eminent scientists branded his views 'decidedly pessimistic'. It is estimated that today as many as a hundred million cane toads form a toxic infestation which is slowly spreading throughout the land.</p>\n<p><b>F</b> Cane toads are large, heavily built amphibians. Average-sized adults are 10-15 cm long and weigh more than a kilo. They have large swellings on each shoulder from which they squirt poison when they are threatened. This venom contains 14 different chemicals, but they do not appear to be harmful to humans as no-one has died in Australia from cane toad poison. Until recently there was no understanding of the toxicity of cane toad poison, but it is now clear that freshwater crocodiles, goannas (large lizards) and dingoes (wild dogs) have died after eating cane toads. Cane toads compete with native Australian fauna for food, and eat the eggs and young of ground-nesting birds. As their numbers increase, they are taking over more and more of the land where native Australian fauna live.</p>\n<p><b>G</b> The lesson that can be learned from the introduction of cane toads is important. It is wrong to think that such an awful biological event could not be repeated. In this instance, the catalyst was the overwhelming consensus of support for introducing cane toads to Australia. The error was that there was little or no testing of these biological agents before they were introduced to see what unplanned effects they might have on the environment.</p>"}, "2": {"title": "Farmers", "text": "<p><b>A</b> The chain of stores known as Farmers began one hundred years ago as a mail order company. Today the Farmers chain employs 3,500 staff across 58 branches making it the most venerable institution of its type in New Zealand. Coming to Farmers once a week has become woven into the fabric of New Zealand culture, says business historian Ian Hunter. By 1960, one in every ten people had an account with the company. It was not only a shop but also hosted the largest annual parade in the country, the Santa parade each Christmas time. Gary Blumenthal, whose family have been customers for three generations, understands well the role Farmers have played in New Zealand culture. 'We were on holiday in Auckland,' he explains, 'and I decided that the lookout tower on top of the Farmers building would be a unique place to fit the ring on my new fiancee's finger.' The couple has been married for 50 years.</p>\n<p><b>B</b> Farmers' longevity can be attributed to the philosophy fostered by Robert Laidlaw, the Scottish immigrant who established the business. Right from the outset, Laidlaw guaranteed customer satisfaction, and those who were not entirely happy with a purchase would receive a full refund with no questions asked. This was certainly the first time such a guarantee had been made by a New Zealand retailer and was probably one of the first worldwide. Laidlaw believed that the scheme could work if he ensured that every product sold was of the highest quality relative to its price.</p>\n<p><b>C</b> Another important aspect of the Farmers' philosophy was to internationalize the New Zealand market. By the time the Hobson Street store opened in 1920 in order to sell directly to customers for the first time, Laidlaw had established buying officers in New York and London so as to offer his customers the latest designs. This was a bold move in those days and won Farmers a devoted following. It's also true that whoever you speak to regarding Farmers in the early years, whether managers or workers, they all emphasize how the company represented a large family. Everyone employed by Laidlaw felt they were building something that would ultimately be to the benefit of the whole country. For example, to mark the centenary celebrations, 58 Farmers' stores around the country announced the neighborhood charities they would raise funds for; everything from guide dog services to volunteer fire brigades will benefit.</p>\n<p><b>D</b> Farmers has always had a heart, according to former board chairman Rawdon Busfield. 'One day I was in the Hobson Street store and a woman came in with two small children-they didn't have a lot of money, you could tell. That week we had a special on, a big bar of chocolate for a shilling... But the boy only had a penny. I took the penny and gave him the chocolate.' However, not everything has stayed the same. Farmers was once home to genteel tea rooms, children's playgrounds, and an annual sale to celebrate the birthday of Hector the Parrot-who came to embody the store in the eyes of many shoppers and who died, aged 131, in the 1970s. You could buy houses from Farmers, and its saddle factory supplied the armed forces. In fact, although the company has grown considerably over the years, today it sells a narrower assortment of products than in the past.</p>\n<p><b>E</b> Walk through a Farmers store today and you'll see big changes. Its most recent branch in the suburb of Albany is filled with bright lights and big brands. The branch sells cosmetics from 16 different international companies and buys from approximately 500 suppliers, of which about 30 percent are locally owned. 'Eight or ten years ago,' says current chief executive Rod McDermott, 'lots of brands wouldn't partner with us. We weren't in trouble as such, but we could have been doing much better because we were focused too much on price and not on fashion. The reorientation of the last decade has seen a great improvement.'</p>\n<p><b>F</b> Farmers almost didn't pull through one economic crisis. In the mid-1980s, business was booming and the company had stores throughout the country. Then, with sales topping $375 million, it was taken over by Chase Corporation. Lincoln Laidlaw, the son of the company's founder, remembers the dark days following the stock market crash of 1987 and the collapse of the Chase Corporation. The business was being divided up, he says, and 'I believe that the original culture of the store was dispelled and it hasn't been recovered. That's a shame, but the business is still strong.' For a few turbulent years the stores were controlled first by a consortium of Australian banks, and later a local corporation. In 2003, it went back into 'family' ownership with the purchase by the James Pascoe Group owned by an established New Zealand retail family. Brand power has made Farmers profitable again, according to McDermott. 'And now we're becoming the brand we used to be... It's like the rebirth of an icon.'</p>"}, "3": {"title": "LIFE ON MARS?", "text": "<p><b>A</b> When scientists began observing Mars with their first primitive telescopes, they assumed from the start that the planet was peopled. The 18th-century astronomer William Herschel, noting the seasons and atmosphere of Mars, declared that 'its inhabitants enjoy a situation similar to our own'. A century later, astronomers asserted that they could detect canals running across the Martian landscape. These canals, argued US scientist Percival Lowell, had been built by technologically advanced Martians to transport water from the poles to the equator of their drying world. 'Martian folk are possessed of inventions of which we have not dreamed,' he argued.</p>\n<p><b>B</b> The vision of an advanced culture trapped on a drying world was taken up by the British writer H.G. Wells in 1898 in his masterpiece The War of the Worlds, in which Earth is subjected to a pitiless invasion from a race of hideous Martians armed with poison gas and heat rays. Martians became synonymous with grotesque, threatening aliens, at least as far as the public was concerned. Scientists were more restrained, but still supported the idea that the planet might support relatively complex life forms.</p>\n<p><b>C</b> Then, in the late 1960s, rocket science changed our image of Mars forever. The US Mariner probes swept past Mars and sent back pictures, not of a world covered in vegetation, as many scientists still expected, but of vistas of cratered, arid deserts. Finally, in 1975, two huge US probes settled on the Martian surface and began a series of experiments aimed at pinpointing, once and for all, the existence of air-breathing organisms. None were found, for the Viking probes landed in areas as dead as the Sahara Desert. All that was sent back were images of a bleak, boulder-strewn terrain. Mars was declared officially dead – for a while.</p>\n<p><b>D</b> Since that time, two critical pieces of evidence have been found on Earth which support the idea that Mars has life. The first is known as ALH84001, a meteorite that was blasted into space when a large body struck Mars 15 million years ago and which spiralled across the solar system to crash into the Antarctic. Analysis carried out by NASA scientist Imre Friedmann showed that the meteorite contained elements identical to those found on Mars by the Viking probes, and revealed chains of crystals similar to those created by earthbound bacteria. Friedmann believes that these could only have been created by living organisms. Others, however, argue that the crystals could have been laid down by simple chemical processes. A second area of support for the idea that living organisms could survive Mars's harshness has been provided by the study of extremophiles, bacteria that have been found in increasingly hostile landscapes on Earth – acid lakes, for example, and volcanoes.</p>\n<p><b>E</b> In the past few years, astronomers have become convinced that the Martian surface, although hostile and arid today, was once lush and welcoming. Images sent back by recent probes such as the Mars Global Surveyor have revealed dried-up riverbeds and old estuaries. Rivers poured into ancient seas, it appears, and rain swept the sodden terrain. Then catastrophe struck. Mars lost its magnetic field several billion years ago, explains British astronomer Paul Murdin. 'Earth retained one, and it protects our atmosphere. Without that protection, Mars's gases and water boiled off.' That is why they are so different today.</p>\n<p><b>F</b> The discovery of signs of water on Mars has changed everything. Some researchers believe that water from underground reservoirs still gushes through Martian valleys as occasional flash floods bubble to the surface. In the 1990s, the Mars Odyssey probe began to map the chemical make-up of the Mars soil, and discovered that much of the ground in the southern hemisphere of Mars is mixed with large quantities of ice. And where there is ice, there is likely to be liquid water, probably underneath. 'There are huge underground reservoirs on Mars,' says Marcello Coradini, head of planetary exploration for the European Space Agency. 'I am now convinced of that.'</p>\n<p><b>G</b> Current projects are hoping to clarify the question of the presence of water once and for all. These are aimed at conducting experiments to detect the presence of a substance called carbon 13 in soil and rock samples on Mars; this would be, according to some researchers, an unequivocal indicator of the presence of living organisms, past or present.</p>\n<p><b>H</b> But would the presence of a few Martian organisms alter our world view in any significant way? Professor Juan Pérez Mercader of Madrid's Centre for Astrobiology in Spain believes that it would. 'For a start, we will be able to find out if Martian organisms have DNA, the golden molecule that controls the replication of earthly creatures.' If there is no DNA, that would show that Martian biology is quite unlike Earth's, and that on two planets, side by side in the same solar system, life evolved independently. If DNA is located, it would mean that life on Mars and on Earth may spring from the same source. 'If organisms can pop up that easily, our chances of finding intelligent versions elsewhere in the universe will look extremely good,' Pérez Mercader states. The discovery of any evidence of living organisms on Mars would also mean renewed purpose for manned space flight projects.</p>"}};
+const questions=[{"n": 1, "p": 1, "type": "text", "text": "The larvae of a type of ___ were a serious pest in sugar cane fields.", "ans": ["beetle"]}, {"n": 2, "p": 1, "type": "text", "text": "Its larvae ate the ___ of the plant.", "ans": ["roots"]}, {"n": 3, "p": 1, "type": "text", "text": "Chemical pesticides were poisonous, ___, and difficult to remove from the ground.", "ans": ["expensive"]}, {"n": 4, "p": 1, "type": "text", "text": "In the 19th century French ___ used toads.", "ans": ["gardeners"]}, {"n": 5, "p": 1, "type": "text", "text": "In Australia a ___ stopped the spread of prickly-pear cactus.", "ans": ["moth"]}, {"n": 6, "p": 1, "type": "text", "text": "Cane toads were brought to Australia from ___.", "ans": ["Hawaii"]}, {"n": 7, "p": 1, "type": "text", "text": "Cane toads proved to be a ___ as pest control.", "ans": ["failure"]}, {"n": 8, "p": 1, "type": "choice", "text": "The outcome of the introduction of cane toads was immediately obvious.", "ans": "FALSE", "opts": ["TRUE", "FALSE", "NOT GIVEN"]}, {"n": 9, "p": 1, "type": "choice", "text": "Rabbits were introduced to Australia to control weeds.", "ans": "NOT GIVEN", "opts": ["TRUE", "FALSE", "NOT GIVEN"]}, {"n": 10, "p": 1, "type": "choice", "text": "Walter Froggatt was criticized for his efforts to stop the introduction of the cane toad to Australia.", "ans": "TRUE", "opts": ["TRUE", "FALSE", "NOT GIVEN"]}, {"n": 11, "p": 1, "type": "choice", "text": "The average size of cane toads has increased since their introduction.", "ans": "NOT GIVEN", "opts": ["TRUE", "FALSE", "NOT GIVEN"]}, {"n": 12, "p": 1, "type": "choice", "text": "Australian animals can eat cane toads safely.", "ans": "FALSE", "opts": ["TRUE", "FALSE", "NOT GIVEN"]}, {"n": 13, "p": 1, "type": "choice", "text": "In many places cane toads are gaining control of the habitats of Australian fauna.", "ans": "TRUE", "opts": ["TRUE", "FALSE", "NOT GIVEN"]}, {"n": 14, "p": 2, "type": "choice", "text": "a mention of the company being sold", "ans": "F", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F"]}, {"n": 15, "p": 2, "type": "choice", "text": "a reference to how the range of goods for sale has become more limited", "ans": "D", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F"]}, {"n": 16, "p": 2, "type": "choice", "text": "an example of an innovative offer made by the company's founder", "ans": "B", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F"]}, {"n": 17, "p": 2, "type": "choice", "text": "a description of a romantic event on the shop's roof", "ans": "A", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F"]}, {"n": 18, "p": 2, "type": "choice", "text": "a description of the latest store in the chain", "ans": "E", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F"]}, {"n": 19, "p": 2, "type": "text", "text": "Farmers were set up as a/an ___ business before it became a chain.", "ans": ["mail order", "mail-order"]}, {"n": 20, "p": 2, "type": "text", "text": "Robert Laidlaw set up ___ overseas so he could sell up-to-date fashions.", "ans": ["buying officers"]}, {"n": 21, "p": 2, "type": "text", "text": "According to employees, Farmers were like a/an ___.", "ans": ["large family"]}, {"n": 22, "p": 2, "type": "text", "text": "Farmers held a/an ___ once a year in honour of the company's famous pet.", "ans": ["annual sale"]}, {"n": 23, "p": 2, "type": "select", "text": "Ian Hunter", "ans": "E", "opts": ["A — The character of the company has changed for the worse", "B — The store is selling more local products than in the past", "C — The company believes in offering lower prices than their competitors", "D — The staff has always believed in generosity", "E — The store is an integral part of the local way of life", "F — The store needed to change its approach to business"]}, {"n": 24, "p": 2, "type": "select", "text": "Rawdon Busfield", "ans": "D", "opts": ["A — The character of the company has changed for the worse", "B — The store is selling more local products than in the past", "C — The company believes in offering lower prices than their competitors", "D — The staff has always believed in generosity", "E — The store is an integral part of the local way of life", "F — The store needed to change its approach to business"]}, {"n": 25, "p": 2, "type": "select", "text": "Rod McDermott", "ans": "F", "opts": ["A — The character of the company has changed for the worse", "B — The store is selling more local products than in the past", "C — The company believes in offering lower prices than their competitors", "D — The staff has always believed in generosity", "E — The store is an integral part of the local way of life", "F — The store needed to change its approach to business"]}, {"n": 26, "p": 2, "type": "select", "text": "Lincoln Laidlaw", "ans": "A", "opts": ["A — The character of the company has changed for the worse", "B — The store is selling more local products than in the past", "C — The company believes in offering lower prices than their competitors", "D — The staff has always believed in generosity", "E — The store is an integral part of the local way of life", "F — The store needed to change its approach to business"]}, {"n": 27, "p": 3, "type": "choice", "text": "evidence that a rock found on Earth originated on Mars", "ans": "D", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H"]}, {"n": 28, "p": 3, "type": "choice", "text": "a plan to analyse material on Mars", "ans": "G", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H"]}, {"n": 29, "p": 3, "type": "choice", "text": "the reason Mars is no longer similar to Earth", "ans": "E", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H"]}, {"n": 30, "p": 3, "type": "choice", "text": "an observation suggesting that there is currently water on Mars", "ans": "F", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H"]}, {"n": 31, "p": 3, "type": "choice", "text": "a claim that construction had taken place on Mars", "ans": "A", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H"]}, {"n": 32, "p": 3, "type": "choice", "text": "a possibility that humans and Martians could share the same origins", "ans": "H", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H"]}, {"n": 33, "p": 3, "type": "choice", "text": "The 18th-century astronomer William Herschel believed that", "ans": "2", "opts": ["1 — the Martians were physically similar to humans.", "2 — the Martian environment resembled that of Earth.", "3 — members of the Martian race were extremely primitive.", "4 — the climatic conditions on Mars were very dry."]}, {"n": 34, "p": 3, "type": "choice", "text": "At the end of the 19th century, the public's ideas about Martians changed because of", "ans": "3", "opts": ["1 — scientific discussion.", "2 — media reports.", "3 — a work of literature.", "4 — a magazine illustration."]}, {"n": 35, "p": 3, "type": "choice", "text": "What does the writer say happened in the 1960s?", "ans": "4", "opts": ["1 — The appearance of some regions of Mars changed.", "2 — Evidence of organisms was found on Mars.", "3 — The Martian atmosphere was tested scientifically.", "4 — Earlier beliefs about Mars were disproven."]}, {"n": 36, "p": 3, "type": "choice", "text": "The study of extremophiles suggests that", "ans": "1", "opts": ["1 — organisms can survive on Mars.", "2 — organisms on Earth are like those found on Mars.", "3 — Martian conditions resemble those in Earth's volcanoes.", "4 — Martian crystals can survive acid conditions."]}, {"n": 37, "p": 3, "type": "choice", "text": "Lowell believed that Martian technology was more developed than human technology.", "ans": "YES", "opts": ["YES", "NO", "NOT GIVEN"]}, {"n": 38, "p": 3, "type": "choice", "text": "Information gained from Viking probes remains unchallenged.", "ans": "NO", "opts": ["YES", "NO", "NOT GIVEN"]}, {"n": 39, "p": 3, "type": "choice", "text": "There is evidence that there has been significant climate change on Mars.", "ans": "YES", "opts": ["YES", "NO", "NOT GIVEN"]}, {"n": 40, "p": 3, "type": "choice", "text": "Spanish scientists plan to launch space probes if DNA is found on Mars.", "ans": "NOT GIVEN", "opts": ["YES", "NO", "NOT GIVEN"]}];
+const answerReview={"1": {"para": 1, "explain": "The passage identifies the pest as a species of beetle.", "evidence": "a species of beetle whose larvae ... live underground"}, "2": {"para": 1, "explain": "The larvae damaged the plants by eating their roots.", "evidence": "their roots were eaten by the larvae"}, "3": {"para": 1, "explain": "The chemical pesticides were expensive, poisonous and persistent in the environment.", "evidence": "these were not only expensive but also stayed in the environment and were poisonous"}, "4": {"para": 2, "explain": "The people who bought and used toads in 19th-century France were gardeners.", "evidence": "toads were sold to gardeners at markets in Paris"}, "5": {"para": 3, "explain": "A moth from Argentina successfully controlled the prickly-pear cactus.", "evidence": "prevention ... by the introduction of a moth from Argentina"}, "6": {"para": 4, "explain": "The cane toads released in Australia were brought from Hawaii.", "evidence": "brought 101 cane toads from Hawaii"}, "7": {"para": 4, "explain": "The passage explicitly calls the cane toads a failure as biological control.", "evidence": "it became clear that the cane toads were a failure"}, "8": {"para": 4, "explain": "FALSE: the failure became clear over the following years, not immediately.", "evidence": "over the following years it became clear"}, "9": {"para": 5, "explain": "NOT GIVEN: rabbits are mentioned as a pest comparison, but the passage does not explain why rabbits were introduced.", "evidence": "as great a pest in Australia as rabbits"}, "10": {"para": 5, "explain": "TRUE: Froggatt publicly opposed the introduction and his peers rebuked him; scientists called his views 'decidedly pessimistic'.", "evidence": "Froggatt's peers rebuked him and eminent scientists branded his views 'decidedly pessimistic'"}, "11": {"para": 6, "explain": "NOT GIVEN: a current average size is given, but there is no comparison with the size at the time of introduction.", "evidence": "Average-sized adults are 10-15 cm long"}, "12": {"para": 6, "explain": "FALSE: crocodiles, goannas and dingoes have died after eating cane toads.", "evidence": "have died after eating cane toads"}, "13": {"para": 6, "explain": "TRUE: cane toads are taking over increasing amounts of native fauna's habitat.", "evidence": "taking over more and more of the land where native Australian fauna live"}, "14": {"para": 6, "explain": "Paragraph F mentions the company being taken over by Chase Corporation.", "evidence": "it was taken over by Chase Corporation"}, "15": {"para": 4, "explain": "Paragraph D says Farmers now sells a narrower assortment than before.", "evidence": "today it sells a narrower assortment of products than in the past"}, "16": {"para": 2, "explain": "Paragraph B describes Laidlaw's unusual full-refund guarantee.", "evidence": "would receive a full refund with no questions asked"}, "17": {"para": 1, "explain": "Paragraph A describes a marriage proposal at the lookout tower on top of the Farmers building.", "evidence": "the lookout tower on top of the Farmers building would be a unique place to fit the ring"}, "18": {"para": 5, "explain": "Paragraph E describes the most recent branch in Albany.", "evidence": "Its most recent branch in the suburb of Albany"}, "19": {"para": 1, "explain": "The company began as a mail order company.", "evidence": "began one hundred years ago as a mail order company"}, "20": {"para": 3, "explain": "Laidlaw established buying officers in New York and London.", "evidence": "established buying officers in New York and London"}, "21": {"para": 3, "explain": "Employees described Farmers as a large family.", "evidence": "the company represented a large family"}, "22": {"para": 4, "explain": "The annual event in honour of Hector the Parrot was an annual sale.", "evidence": "an annual sale to celebrate the birthday of Hector the Parrot"}, "23": {"para": 1, "explain": "Ian Hunter describes Farmers as woven into New Zealand culture, matching idea E.", "evidence": "woven into the fabric of New Zealand culture"}, "24": {"para": 4, "explain": "Rawdon Busfield says Farmers 'has always had a heart' and gives an example of generosity, matching D.", "evidence": "Farmers has always had a heart"}, "25": {"para": 5, "explain": "Rod McDermott says the company had focused too much on price and needed reorientation, matching F.", "evidence": "we were focused too much on price and not on fashion"}, "26": {"para": 6, "explain": "Lincoln Laidlaw regrets that the original culture disappeared, matching A.", "evidence": "the original culture of the store was dispelled and it hasn't been recovered"}, "27": {"para": 4, "explain": "Paragraph D explains that the Antarctic meteorite had been blasted from Mars.", "evidence": "a meteorite that was blasted into space when a large body struck Mars"}, "28": {"para": 7, "explain": "Paragraph G describes experiments planned on Martian soil and rock samples.", "evidence": "conducting experiments to detect ... carbon 13 in soil and rock samples on Mars"}, "29": {"para": 5, "explain": "Paragraph E explains that Mars lost its magnetic field, after which its gases and water boiled off.", "evidence": "Mars lost its magnetic field ... Mars's gases and water boiled off"}, "30": {"para": 6, "explain": "Paragraph F reports possible present-day water from underground reservoirs.", "evidence": "water from underground reservoirs still gushes through Martian valleys"}, "31": {"para": 1, "explain": "Paragraph A reports Lowell's claim that canals had been built by advanced Martians.", "evidence": "These canals ... had been built by technologically advanced Martians"}, "32": {"para": 8, "explain": "Paragraph H says life on Mars and Earth may come from the same source.", "evidence": "life on Mars and on Earth may spring from the same source"}, "33": {"para": 1, "explain": "Option 2: Herschel said Martian inhabitants enjoyed a situation similar to ours, referring to the environment.", "evidence": "its inhabitants enjoy a situation similar to our own"}, "34": {"para": 2, "explain": "Option 3: H.G. Wells's The War of the Worlds changed the public image of Martians.", "evidence": "The vision ... was taken up by the British writer H.G. Wells"}, "35": {"para": 3, "explain": "Option 4: Mariner probe images contradicted earlier beliefs about a vegetated Mars.", "evidence": "rocket science changed our image of Mars forever"}, "36": {"para": 4, "explain": "Option 1: extremophiles show that organisms can survive extremely hostile conditions.", "evidence": "bacteria that have been found in increasingly hostile landscapes on Earth"}, "37": {"para": 1, "explain": "YES: Lowell said Martians possessed inventions humans had not even dreamed of.", "evidence": "possessed of inventions of which we have not dreamed"}, "38": {"para": 4, "explain": "NO: later evidence challenged the earlier Viking-based conclusion that Mars was lifeless.", "evidence": "two critical pieces of evidence ... support the idea that Mars has life"}, "39": {"para": 5, "explain": "YES: Mars is arid today but is described as once lush, wet and welcoming.", "evidence": "although hostile and arid today, was once lush and welcoming"}, "40": {"para": 8, "explain": "NOT GIVEN: the passage discusses implications for manned space flight but gives no plan by Spanish scientists to launch probes if DNA is found.", "evidence": "renewed purpose for manned space flight projects"}};
+
+let current=1,startedAt=0,endAt=0,remaining=3600,timerHandle=null,submitted=false,savedSelection=null,savedSelectionZone=null,activeHighlight=null,activeHighlightZone=null;
+const STORAGE_PREFIX="READ_CANE_FARMERS_MARS_";
+function ssGet(k){return sessionStorage.getItem(STORAGE_PREFIX+k)}
+function ssSet(k,v){sessionStorage.setItem(STORAGE_PREFIX+k,v)}
+function clearAttempt(){const a=[];for(let i=0;i<sessionStorage.length;i++){const k=sessionStorage.key(i);if(k&&k.startsWith(STORAGE_PREFIX))a.push(k)}a.forEach(k=>sessionStorage.removeItem(k))}
+const norm=v=>String(v??'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ');
+function startExam(){const n=document.getElementById('studentName').value.trim(),c=document.getElementById('studentClass').value.trim();if(!n||!c){document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}clearAttempt();document.getElementById('topName').textContent=n;document.getElementById('topClass').textContent=c;document.getElementById('start').classList.add('hidden');document.getElementById('exam').classList.remove('hidden');startedAt=Date.now();endAt=startedAt+60*60*1000;buildNav();showPassage(1);tickTimer();timerHandle=setInterval(tickTimer,250)}
+function tickTimer(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));updateTimer();if(remaining<=0&&!submitted){clearInterval(timerHandle);submitExam(true)}}function updateTimer(){const e=document.getElementById('timer'),m=Math.floor(Math.max(remaining,0)/60),s=Math.max(remaining,0)%60;e.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;e.classList.toggle('warning',remaining<=600&&remaining>300);e.classList.toggle('danger',remaining<=300)}
+function groupMeta(n,p){if(p===1){if(n<=7)return['Questions 1–7','Choose TRUE, FALSE or NOT GIVEN.'];if(n<=10)return['Questions 8–10','Complete the flow-chart. Choose NO MORE THAN TWO WORDS from the passage.'];return['Questions 11–13','Complete the notes. Choose ONE WORD ONLY from the passage.']}if(p===2){if(n<=19)return['Questions 14–19','Complete the summary using the list A–J.'];if(n<=23)return['Questions 20–23','Choose YES, NO or NOT GIVEN.'];return['Questions 24–26','Choose the correct letter A, B, C or D.']}if(n<=32)return['Questions 27–32','Complete the summary using the list A–J.'];if(n<=36)return['Questions 33–36','Choose YES, NO or NOT GIVEN.'];return['Questions 37–40','Choose the correct letter A, B, C or D.']}
+
+function zoneRoot(zone){
+  return document.getElementById(zone==='questions'?'questionsCopy':'passageCopy');
+}
+function zoneMarkupKey(zone,p=current){
+  return (zone==='questions'?'questionsMarkup':'passageMarkup')+p;
+}
+function noteStoreKey(zone,p=current){
+  return 'notes_'+zone+'_'+p;
+}
+function notesPanelId(zone){
+  return zone==='questions'?'notesPanelQuestions':'notesPanelPassage';
+}
+function notesCountId(zone){
+  return zone==='questions'?'notesCountQuestions':'notesCountPassage';
+}
+function saveZoneMarkup(zone){
+  const root=zoneRoot(zone);
+  if(root)ssSet(zoneMarkupKey(zone),root.innerHTML);
+}
+function saveCurrentMarkups(){
+  saveZoneMarkup('passage');
+  saveZoneMarkup('questions');
+}
+function captureSelection(zone){
+  if(submitted)return;
+  const sel=window.getSelection();
+  const root=zoneRoot(zone);
+  if(!sel||!root||sel.rangeCount===0||sel.isCollapsed)return;
+  const r=sel.getRangeAt(0);
+  if(root.contains(r.commonAncestorContainer)){
+    savedSelection=r.cloneRange();
+    savedSelectionZone=zone;
+  }
+}
+function annotationBlock(node){
+  const el=node&&node.nodeType===3?node.parentElement:node;
+  if(!el)return null;
+  return el.closest('p,.completion-text,.flow-step,li,.card,.option,.inst,.bank div,h3,h4,.qtext');
+}
+function getUsableSelection(zone){
+  const root=zoneRoot(zone);
+  if(!savedSelection||savedSelectionZone!==zone||!root||!root.contains(savedSelection.commonAncestorContainer)){
+    alert(zone==='questions'
+      ?'Hãy bôi đen phần chữ ở bên câu hỏi trước.'
+      :'Hãy bôi đen phần chữ trong bài đọc trước.');
+    return null;
+  }
+  if(savedSelection.collapsed||!savedSelection.toString().trim()){
+    alert('Hãy bôi đen một đoạn chữ trước.');
+    return null;
+  }
+
+  const a=annotationBlock(savedSelection.startContainer);
+  const b=annotationBlock(savedSelection.endContainer);
+  if(!a||!b||a!==b){
+    alert('Để highlight/ghi chú ổn định, hãy chọn chữ trong cùng một câu hoặc cùng một khối nội dung.');
+    return null;
+  }
+
+  const cloned=savedSelection.cloneContents();
+  if(cloned.querySelector && cloned.querySelector('input,select,button,textarea')){
+    alert('Không thể highlight xuyên qua ô trả lời. Hãy chỉ chọn phần chữ.');
+    return null;
+  }
+  return savedSelection.cloneRange();
+}
+function clearBrowserSelection(){
+  const sel=window.getSelection();
+  if(sel)sel.removeAllRanges();
+  savedSelection=null;
+  savedSelectionZone=null;
+}
+function addHighlight(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  try{
+    const mark=document.createElement('mark');
+    mark.className='user-highlight';
+    mark.dataset.annotationZone=zone;
+    const frag=r.extractContents();
+    mark.appendChild(frag);
+    r.insertNode(mark);
+    activeHighlight=mark;
+    activeHighlightZone=zone;
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+  }catch(e){
+    alert('Không thể highlight vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function clearHighlight(zone){
+  if(submitted)return;
+  let targets=[];
+  if(activeHighlight&&activeHighlightZone===zone&&document.body.contains(activeHighlight)){
+    targets=[activeHighlight];
+  }else if(savedSelection&&savedSelectionZone===zone){
+    const root=zoneRoot(zone);
+    if(root)targets=[...root.querySelectorAll('mark.user-highlight')].filter(m=>{
+      try{return savedSelection.intersectsNode(m)}catch(e){return false}
+    });
+  }
+  if(!targets.length){
+    alert('Hãy bấm vào phần đã highlight rồi chọn “Xóa HL”.');
+    return;
+  }
+  targets.forEach(m=>{
+    const p=m.parentNode;
+    while(m.firstChild)p.insertBefore(m.firstChild,m);
+    m.remove();
+    p.normalize();
+  });
+  activeHighlight=null;
+  activeHighlightZone=null;
+  saveZoneMarkup(zone);
+  clearBrowserSelection();
+}
+function loadNotes(zone,p=current){
+  try{return JSON.parse(ssGet(noteStoreKey(zone,p))||'[]')}catch(e){return[]}
+}
+function saveNotes(zone,notes,p=current){
+  ssSet(noteStoreKey(zone,p),JSON.stringify(notes));
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function addNote(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  const quote=r.toString().trim();
+  const text=prompt('Nhập ghi chú cho đoạn đã chọn:');
+  if(text===null||!text.trim())return;
+  const id='note_'+zone+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  try{
+    const span=document.createElement('span');
+    span.className='note-anchor';
+    span.dataset.noteId=id;
+    span.dataset.annotationZone=zone;
+    span.title='Bấm để xem/sửa ghi chú';
+    const frag=r.extractContents();
+    span.appendChild(frag);
+    r.insertNode(span);
+
+    const notes=loadNotes(zone);
+    notes.push({id,quote,text:text.trim()});
+    saveNotes(zone,notes);
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+    renderNotesPanel(zone,current,true);
+  }catch(e){
+    alert('Không thể tạo ghi chú cho vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function toggleNotes(zone){
+  const panel=document.getElementById(notesPanelId(zone));
+  if(panel)panel.classList.toggle('open');
+}
+function renderNotesPanel(zone,p=current,forceOpen=false){
+  const panel=document.getElementById(notesPanelId(zone));
+  const count=document.getElementById(notesCountId(zone));
+  if(!panel)return;
+  const notes=loadNotes(zone,p);
+  if(count)count.textContent=notes.length;
+  panel.innerHTML=notes.length
+    ?notes.map(n=>`<div class="note-item">
+        <div class="note-quote">“${esc(n.quote)}”</div>
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-actions">
+          <button type="button" onclick="editNote('${zone}','${n.id}')">Sửa</button>
+          <button type="button" onclick="deleteNote('${zone}','${n.id}')">Xóa</button>
+        </div>
+      </div>`).join('')
+    :'<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở phần này.</div>';
+  if(forceOpen)panel.classList.add('open');
+}
+function editNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt('Sửa ghi chú:',n.text);if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function deleteNote(zone,id){
+  const notes=loadNotes(zone).filter(x=>x.id!==id);
+  saveNotes(zone,notes);
+  const root=zoneRoot(zone);
+  if(root)root.querySelectorAll(`[data-note-id="${id}"]`).forEach(s=>{
+    const p=s.parentNode;
+    while(s.firstChild)p.insertBefore(s.firstChild,s);
+    s.remove();
+    p.normalize();
+  });
+  saveZoneMarkup(zone);
+  renderNotesPanel(zone,current,true);
+}
+function openNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt(`Đoạn đã ghi chú:\n“${n.quote}”\n\nGhi chú:`,n.text);
+  if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function bindAnnotations(zone){
+  const root=zoneRoot(zone);if(!root)return;
+  root.addEventListener('mouseup',()=>captureSelection(zone));
+  root.addEventListener('keyup',()=>captureSelection(zone));
+  root.addEventListener('click',e=>{
+    const note=e.target.closest('.note-anchor');
+    if(note){openNote(zone,note.dataset.noteId);return}
+    const mark=e.target.closest('mark.user-highlight');
+    if(mark){
+      activeHighlight=mark;
+      activeHighlightZone=zone;
+    }else if(zone===activeHighlightZone){
+      activeHighlight=null;
+      activeHighlightZone=null;
+    }
+  });
+}
+function annotationToolbar(zone){
+  const isQ=zone==='questions';
+  const label=isQ?'Câu hỏi':'Bài đọc';
+  const countId=isQ?'notesCountQuestions':'notesCountPassage';
+  return `<div class="annotation-bar">
+    <span class="annotation-zone-label">${label}</span>
+    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button>
+    <button type="button" class="annotation-btn" onclick="clearHighlight('${zone}')">Xóa HL</button>
+    <button type="button" class="annotation-btn" onclick="addNote('${zone}')">📝 Add note</button>
+    <button type="button" class="annotation-btn" onclick="toggleNotes('${zone}')">Ghi chú (<span id="${countId}">0</span>)</button>
+    <span class="annotation-tip">Bôi đen phần chữ rồi chọn công cụ.</span>
+  </div>`;
+}
+
+function showPassage(p){
+  saveCurrentMarkups();
+  current=p;
+  activeHighlight=null;
+  activeHighlightZone=null;
+  savedSelection=null;
+  savedSelectionZone=null;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));
+
+  const passageMarkup=ssGet(zoneMarkupKey('passage',p))||passages[p].text;
+  document.getElementById('passage').innerHTML=
+    annotationToolbar('passage')+
+    `<div id="notesPanelPassage" class="notes-panel"></div>
+     <h2>${passages[p].title}</h2>
+     <div class="copy" id="passageCopy">${passageMarkup}</div>`;
+
+  bindAnnotations('passage');
+  renderNotesPanel('passage',p,false);
+  buildQuestions(p);
+
+  document.getElementById('passage').scrollTop=0;
+  document.getElementById('questions').scrollTop=0;
+}
+function renderQ(q){let body='';if(q.type==='text')body=`<input class="ans" id="q${q.n}" data-q="${q.n}" type="text" autocomplete="off" placeholder="Type your answer">`;else if(q.type==='select')body=`<select class="ans" id="q${q.n}" data-q="${q.n}"><option value="">-- Choose --</option>${q.opts.map(x=>`<option value="${x.charAt(0)}">${x}</option>`).join('')}</select>`;else body=q.opts.map(x=>{const v=/^[A-H1-4] —/.test(x)?x.charAt(0):x;return `<label class="option" data-q="${q.n}" data-val="${v}"><input type="radio" name="q${q.n}" value="${v}"> ${x}</label>`}).join('');return `<div class="card" id="card${q.n}"><div class="qhead"><span class="qnum">${q.n}</span><div class="qtext">${q.text}</div></div>${body}<div class="feedback" id="fb${q.n}"></div></div>`}
+
+function inlineText(n,placeholder='answer'){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><input class="ans inline-answer short" id="q${n}" data-q="${n}" type="text" autocomplete="off" placeholder="${placeholder}"></span>`;
+}
+function inlineSelect(n,opts){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><select class="ans inline-answer select-wide" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(x=>`<option value="${x.charAt(0)}">${x}</option>`).join('')}</select></span>`;
+}
+function renderP1Table(){
+ return `<div class="group"><h3>Questions 1–7</h3><div class="inst">Complete the table below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div><div class="completion-box"><h4>Pest control</h4><p class="completion-text"><b>Early 20th-century problems in Australia</b></p><p class="completion-text">The larvae of a type of ${inlineText(1)} were a serious pest in sugar cane fields.</p><p class="completion-text">Its larvae ate the ${inlineText(2)} of the plant.</p><p class="completion-text">Chemical pesticides were unsatisfactory because they were:</p><ul class="notes-list"><li>poisonous</li><li>${inlineText(3)}</li><li>difficult to remove from the ground</li></ul><p class="completion-text"><b>Experiences with biological pest control</b></p><p class="completion-text">The use of insects, plants and birds was widespread.</p><p class="completion-text">In the 19th century French ${inlineText(4)} used toads.</p><p class="completion-text">In Australia a ${inlineText(5)} stopped the spread of prickly-pear cactus.</p><p class="completion-text">Cane toads were brought to Australia from ${inlineText(6)}.</p><p class="completion-text">Cane toads proved to be a ${inlineText(7)} as pest control.</p></div></div>`;
+}
+function renderP2SentenceCompletion(){
+ return `<div class="group"><h3>Questions 19–22</h3><div class="inst">Complete the sentences below. Write <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</div><div class="completion-box"><p class="completion-text">Farmers were set up as a/an ${inlineText(19)} business before it became a chain.</p><p class="completion-text">Robert Laidlaw set up ${inlineText(20)} overseas so he could sell up-to-date fashions.</p><p class="completion-text">According to employees, Farmers were like a/an ${inlineText(21)}.</p><p class="completion-text">Farmers held a/an ${inlineText(22)} once a year in honour of the company's famous pet.</p></div></div>`;
+}
+function renderP2People(){
+ const opts=questions.find(q=>q.n===23).opts;
+ const rows=questions.filter(q=>q.n>=23&&q.n<=26);
+ return `<div class="group"><h3>Questions 23–26</h3><div class="inst">Match each person with the correct idea, A–F.</div><div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div><table class="match-table">${rows.map(q=>`<tr id="card${q.n}"><td style="width:55px"><span class="blank-num">${q.n}</span></td><td style="font-weight:700">${q.text}</td><td>${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}</td></tr>`).join('')}</table></div>`;
+}
+function renderStandardGroup(qs,title,inst){return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>${qs.map(renderQ).join('')}</div>`;}
+function buildQuestions(p){
+ let h='';
+ if(p===1){h+=renderP1Table();h+=renderStandardGroup(questions.filter(q=>q.n>=8&&q.n<=13),'Questions 8–13','Choose TRUE, FALSE or NOT GIVEN.');}
+ else if(p===2){h+=renderStandardGroup(questions.filter(q=>q.n>=14&&q.n<=18),'Questions 14–18','Which paragraph contains the following information? Choose A–F.');h+=renderP2SentenceCompletion();h+=renderP2People();}
+ else{h+=renderStandardGroup(questions.filter(q=>q.n>=27&&q.n<=32),'Questions 27–32','Which paragraph contains the following information? Choose A–H.');h+=renderStandardGroup(questions.filter(q=>q.n>=33&&q.n<=36),'Questions 33–36','Choose the correct answer.');h+=renderStandardGroup(questions.filter(q=>q.n>=37&&q.n<=40),'Questions 37–40','Choose YES, NO or NOT GIVEN.');}
+ const savedQuestionMarkup=ssGet(zoneMarkupKey('questions',p));
+ const questionMarkup=savedQuestionMarkup||h;
+ document.getElementById('questions').innerHTML=annotationToolbar('questions')+`<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${questionMarkup}</div>`;
+ restore(p);bindTrack();bindAnnotations('questions');renderNotesPanel('questions',p,false);
+ if(submitted){const copy=document.getElementById('questionsCopy');if(copy&&!copy.querySelector('.review-mode-note.top-review-note'))copy.insertAdjacentHTML('afterbegin','<div class="review-mode-note top-review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới. Bấm “Đối chiếu trong bài đọc” để đưa đoạn bằng chứng ở cột trái vào vị trí xem.</div>');markPassage(p);}
+}
+
+function restore(p){for(const q of questions.filter(x=>x.p===p)){const v=ssGet('q'+q.n)||'';if(q.type==='text'||q.type==='select'){const e=document.getElementById('q'+q.n);if(e)e.value=v}else if(v){const e=[...document.querySelectorAll(`input[name="q${q.n}"]`)].find(x=>x.value===v);if(e)e.checked=true}}}
+function bindTrack(){document.querySelectorAll('.ans').forEach(e=>{e.oninput=e.onchange=()=>save(+e.dataset.q,e.value)});document.querySelectorAll('input[type=radio]').forEach(e=>e.onchange=()=>save(+e.closest('.option').dataset.q,e.value))}
+function save(n,v){ssSet('q'+n,v);const e=document.getElementById('nav'+n);if(e)e.classList.toggle('answered',String(v).trim()!=='')}
+function buildNav(){document.getElementById('nav').innerHTML=questions.map(q=>`<button class="nq" id="nav${q.n}" onclick="goQ(${q.n})">${q.n}</button>`).join('')}
+function goQ(n){const q=questions.find(x=>x.n===n);if(q.p!==current)showPassage(q.p);setTimeout(()=>{const target=document.getElementById('card'+n);target?.scrollIntoView({behavior:'smooth',block:'center'});const control=document.getElementById('q'+n);if(control&&(control.tagName==='SELECT'||control.type==='text'))control.focus({preventScroll:true})},60)}
+function correct(q,u){return q.type==='text'?q.ans.map(norm).includes(norm(u)):norm(u)===norm(q.ans)}
+function inlineReviewHTML(q,user){
+  const r=answerReview[q.n];
+  return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
+    <div class="inline-review-title">
+      <span class="inline-review-badge">Q${q.n}</span>
+      <span>Giải thích câu trả lời sai</span>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Bạn trả lời</div>
+      <div class="inline-review-student">${esc(displayAnswer(q,user))}</div>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Đáp án đúng</div>
+      <div class="inline-review-correct">${esc(displayKey(q))}</div>
+    </div>
+    <div class="inline-review-explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="inline-review-evidence">
+      <div class="inline-review-evidence-label">Evidence · Passage ${q.p}, đoạn ${r.para}</div>
+      <div class="inline-review-quote">“${esc(r.evidence)}”</div>
+    </div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(${q.n})">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+
+function removeInlineReview(n){
+  document.querySelectorAll(`[data-inline-review="${n}"]`).forEach(e=>e.remove());
+}
+
+function renderInlineReview(q,user,ok){
+  removeInlineReview(q.n);
+  if(ok)return;
+
+  const card=document.getElementById('card'+q.n);
+  if(!card)return;
+
+  // Standard IELTS question cards: explanation sits directly under the options.
+  if(card.classList.contains('card')){
+    card.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+    return;
+  }
+
+  // Completion tasks: place review under the sentence/step/note containing the blank.
+  const host=card.closest('.flow-step,li,.completion-text') || card.parentElement;
+  if(!host)return;
+
+  // Several blanks may live in the same summary paragraph; keep each explanation labelled by Q number.
+  host.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+}
+
+function lockSubmittedAnswers(){
+  if(!submitted)return;
+  document.querySelectorAll('#questionsCopy input,#questionsCopy select').forEach(e=>e.disabled=true);
+}
+
+function focusEvidence(n){
+  const q=questions.find(x=>x.n===n);
+  const r=answerReview[n];
+  if(!q||!r)return;
+
+  const reveal=()=>{
+    const copy=document.getElementById('passageCopy');
+    const ps=copy?[...copy.querySelectorAll('p')]:[];
+    const target=ps[r.para-1];
+    if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:'center'});
+    target.classList.add('evidence-pulse');
+    setTimeout(()=>target.classList.remove('evidence-pulse'),3200);
+  };
+
+  if(q.p!==current){
+    showPassage(q.p);
+    setTimeout(reveal,150);
+  }else{
+    reveal();
+  }
+}
+
+function markPassage(p){
+  for(const q of questions.filter(x=>x.p===p)){
+    const u=ssGet('q'+q.n)||'';
+    const ok=correct(q,u);
+    const fb=document.getElementById('fb'+q.n);
+
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e){
+        e.classList.remove('correct','wrong');
+        e.classList.add(ok?'correct':'wrong');
+      }
+    }else{
+      document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{
+        l.classList.remove('correct','wrong');
+        if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');
+        else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong');
+      });
+    }
+
+    if(fb){
+      const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+      fb.className='feedback '+(ok?'good':'bad');
+      fb.textContent=ok?'✓ Correct':'Correct answer: '+key;
+    }
+
+    if(submitted)renderInlineReview(q,u,ok);
+  }
+
+  lockSubmittedAnswers();
+}
+
+function displayAnswer(q,user){
+  if(!String(user).trim())return 'Không trả lời';
+  if(q.type==='select'||(q.type==='choice'&&/^[A-H1-4]$/.test(String(user)))){
+    const found=(q.opts||[]).find(x=>String(x).startsWith(String(user)+' '));
+    return found||user;
+  }
+  return user;
+}
+function displayKey(q){
+  const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+  if(q.type==='select'||(q.type==='choice'&&/^[A-H1-4]$/.test(String(key)))){
+    const found=(q.opts||[]).find(x=>String(x).startsWith(String(key)+' '));
+    return found||key;
+  }
+  return key;
+}
+function renderWrongReview(details){
+  const box=document.getElementById('wrongReview');
+  const wrong=details.filter(x=>!x.correct);
+  if(!wrong.length){
+    box.innerHTML='<h3 class="review-title">Review đáp án</h3><div class="perfect-review">🎉 Không có câu sai. Bạn đã trả lời đúng cả 40 câu!</div>';
+    return;
+  }
+  box.innerHTML=`<h3 class="review-title">${wrong.length} câu cần xem lại</h3>
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
+}
+function gotoEvidence(n){
+  document.getElementById('overlay').classList.add('hidden');
+  focusEvidence(n);
+}
+
+async function submitExam(auto=false){if(submitted)return;saveCurrentMarkups();const unanswered=questions.filter(q=>!(ssGet('q'+q.n)||'').trim()).length;if(!auto&&unanswered&& !confirm(`Bạn còn ${unanswered} câu chưa trả lời. Vẫn nộp bài?`))return;submitted=true;clearInterval(timerHandle);let total=0,s=[0,0,0,0],details=[];for(const q of questions){const u=ssGet('q'+q.n)||'',ok=correct(q,u);if(ok){total++;s[q.p]++}details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});const ne=document.getElementById('nav'+q.n);if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong')}}markPassage(current);saveZoneMarkup('questions');const name=document.getElementById('studentName').value.trim(),cls=document.getElementById('studentClass').value.trim(),dur=Math.round((Date.now()-startedAt)/1000);document.getElementById('rstudent').textContent=`${name} — ${cls}`;document.getElementById('rscore').textContent=`${total} / 40`;document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;document.getElementById('p1s').textContent=`${s[1]} / 13`;document.getElementById('p2s').textContent=`${s[2]} / 13`;document.getElementById('p3s').textContent=`${s[3]} / 14`;renderWrongReview(details);document.getElementById('overlay').classList.remove('hidden');document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';const p=new URLSearchParams({name,className:cls,total:String(total),maxScore:'40',durationSeconds:String(dur),activity:'IELTS Reading - Cane Toad / Farmers / Life on Mars',reading:String(s[1]),grammar:String(s[2]),ing:String(s[3]),writingA:JSON.stringify(details),submittedAt:new Date().toISOString()});try{await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.'}catch(e){document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng.'}}
+function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current);saveZoneMarkup('questions')}
+</script></body></html>
