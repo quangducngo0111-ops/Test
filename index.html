@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>IELTS Practice Portal</title>
+<style>
+:root{--navy:#15324a;--navy2:#0f2639;--blue:#2f6f9f;--paper:#f5f7f8;--white:#fff;--line:#dce2e6;--text:#1e2932;--muted:#66737e;--accent:#e97a50}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--paper)}button,input{font:inherit}.hidden{display:none!important}
+.topbar{background:var(--navy2);color:#fff;padding:14px 20px}.topbar-inner{width:min(1180px,100%);margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px}.mark{width:42px;height:42px;border-radius:12px;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:900}.brand small{display:block;color:#b8c9d5;margin-top:2px}
+.student-mini{font-size:13px;display:flex;align-items:center;gap:10px}.student-mini button{border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;border-radius:7px;padding:7px 9px}
+main{width:min(1180px,100%);margin:auto;padding:34px 20px 50px}.login-wrap{min-height:calc(100vh - 100px);display:grid;place-items:center}.login-card{width:min(640px,100%);background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 16px 40px rgba(22,50,74,.10)}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:var(--blue)}h1,h2,h3{color:var(--navy)}.login-card h1{font-size:40px;margin:8px 0}.lead{color:var(--muted);line-height:1.6}
+.form-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:12px;margin-top:22px}.field label{display:block;font-weight:800;margin-bottom:6px}.field input{width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;min-height:48px}.start-btn{width:100%;margin-top:15px;padding:14px;border:0;border-radius:9px;background:var(--navy);color:#fff;font-weight:900}.error{color:#b34534;font-size:13px;min-height:20px;margin-top:7px}
+.dashboard-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px}.dashboard-head h1{margin:5px 0}.profile{background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;min-width:220px;font-size:13px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;background:#e6ecef;padding:6px;border-radius:12px;margin-bottom:22px}.tab{border:0;background:transparent;border-radius:8px;padding:13px;font-weight:900;color:#53636f}.tab.active{background:#fff;color:var(--navy)}
+.skill-head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:14px}.skill-head p{margin:3px 0 0;color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}.card-top{display:flex;justify-content:space-between;align-items:flex-start}.icon{width:42px;height:42px;border-radius:10px;background:#eef4f7;display:grid;place-items:center;font-size:20px}.tag{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:var(--blue);background:#eaf3f9;padding:6px 8px;border-radius:999px}.card h3{margin:12px 0 8px}.meta{display:flex;gap:6px;flex-wrap:wrap}.meta span{font-size:12px;background:#f5f7f8;color:var(--muted);padding:5px 7px;border-radius:6px}.desc{font-size:13px;color:var(--muted);line-height:1.5}.launch{width:100%;padding:10px;border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;font-weight:900}.launch:hover{background:var(--navy);color:#fff}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:26px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:640px){main{padding:24px 14px}.form-grid,.grid{grid-template-columns:1fr}.login-card{padding:23px 18px}.login-card h1{font-size:31px}.dashboard-head,.skill-head{align-items:flex-start;flex-direction:column}.profile{width:100%}.student-mini{display:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><div class="mark">S</div><div><strong>IELTS PRACTICE PORTAL</strong><small>Listening & Reading Practice</small></div></div>
+    <div id="studentMini" class="student-mini hidden"><span id="miniInfo"></span><button id="changeStudentTop" type="button">Đổi học sinh</button></div>
+  </div>
+</header>
+
+<main>
+<section id="loginView" class="login-wrap">
+  <div class="login-card">
+    <div class="eyebrow">IELTS Practice</div>
+    <h1>IELTS Practice Portal</h1>
+    <p class="lead">Nhập thông tin một lần, sau đó chọn kỹ năng và đề thi muốn luyện tập. Tên và lớp sẽ được chuyển sang bài test.</p>
+    <form id="studentForm">
+      <div class="form-grid">
+        <div class="field"><label for="studentName">Họ và tên</label><input id="studentName" placeholder="Ví dụ: Nguyễn Minh Anh"></div>
+        <div class="field"><label for="studentClass">Lớp</label><input id="studentClass" placeholder="Ví dụ: 11A1"></div>
+      </div>
+      <button class="start-btn" type="submit">VÀO KHO LUYỆN THI</button>
+      <div id="formError" class="error"></div>
+    </form>
+  </div>
+</section>
+
+<section id="dashboardView" class="hidden">
+  <div class="dashboard-head">
+    <div><div class="eyebrow">Kho luyện thi</div><h1 id="welcomeTitle">Xin chào!</h1><p>Chọn kỹ năng và đề muốn bắt đầu.</p></div>
+    <div class="profile"><div><b>Học sinh:</b> <span id="profileName"></span></div><div style="margin-top:5px"><b>Lớp:</b> <span id="profileClass"></span></div></div>
+  </div>
+
+  <div class="tabs">
+    <button id="tabListening" class="tab active" type="button">🎧 Listening <span id="listeningCount"></span></button>
+    <button id="tabReading" class="tab" type="button">📖 Reading <span id="readingCount"></span></button>
+  </div>
+
+  <section id="listeningPanel">
+    <div class="skill-head"><div><h2>Listening Tests</h2><p>Nghe audio, hoàn thành 40 câu hỏi và nộp kết quả.</p></div><div>🎧 Nên dùng tai nghe</div></div>
+    <div id="listeningGrid" class="grid"></div>
+  </section>
+
+  <section id="readingPanel" class="hidden">
+    <div class="skill-head"><div><h2>Reading Tests</h2><p>3 passages · 40 questions · 60 minutes.</p></div><div>📖 Highlight & ghi chú</div></div>
+    <div id="readingGrid" class="grid"></div>
+  </section>
+
+  <div class="footer">Thông tin học sinh được lưu trên trình duyệt để tự điền khi mở bài test.</div>
+</section>
+</main>
+
+<script>
+const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
+
+const listeningTests=[
+  {title:'Listening Test 01',path:'./Lis01/',meta:['40 câu','4 parts','Audio'],desc:'Cambridge-style Listening practice.'}
+];
+
+const readingTests=Array.from({length:11},(_,i)=>{
+  const n=String(i+1).padStart(2,'0');
+  return {title:`Reading Test ${n}`,path:`./Read${n}/`,meta:['40 câu','3 passages','60 phút'],desc:'IELTS Academic Reading computer-based practice.'};
+});
+
+const loginView=document.getElementById('loginView');
+const dashboardView=document.getElementById('dashboardView');
+const studentForm=document.getElementById('studentForm');
+const nameInput=document.getElementById('studentName');
+const classInput=document.getElementById('studentClass');
+const formError=document.getElementById('formError');
+const tabListening=document.getElementById('tabListening');
+const tabReading=document.getElementById('tabReading');
+const listeningPanel=document.getElementById('listeningPanel');
+const readingPanel=document.getElementById('readingPanel');
+let currentStudent=null;
+
+function normalizeStudent(v){
+  if(!v||typeof v!=='object')return null;
+  const name=String(v.name||'').trim();
+  const className=String(v.className||'').trim();
+  return name&&className?{name,className}:null;
+}
+function readStudent(){
+  try{return normalizeStudent(JSON.parse(localStorage.getItem(STUDENT_KEY)||'null'))}catch(e){return null}
+}
+function saveStudent(s){
+  currentStudent=normalizeStudent(s);
+  if(!currentStudent)return;
+  localStorage.setItem(STUDENT_KEY,JSON.stringify(currentStudent));
+  localStorage.setItem('IELTS_STUDENT_NAME',currentStudent.name);
+  localStorage.setItem('IELTS_STUDENT_CLASS',currentStudent.className);
+  sessionStorage.setItem('IELTS_STUDENT_NAME',currentStudent.name);
+  sessionStorage.setItem('IELTS_STUDENT_CLASS',currentStudent.className);
+}
+function clearStudent(){
+  [STUDENT_KEY,'IELTS_STUDENT_NAME','IELTS_STUDENT_CLASS'].forEach(k=>localStorage.removeItem(k));
+  ['IELTS_STUDENT_NAME','IELTS_STUDENT_CLASS'].forEach(k=>sessionStorage.removeItem(k));
+}
+function showLogin(prefill=true){
+  dashboardView.classList.add('hidden');document.getElementById('studentMini').classList.add('hidden');loginView.classList.remove('hidden');
+  if(prefill&&currentStudent){nameInput.value=currentStudent.name;classInput.value=currentStudent.className}else{nameInput.value='';classInput.value=''}
+  nameInput.focus();
+}
+function showDashboard(){
+  if(!currentStudent)return showLogin(false);
+  loginView.classList.add('hidden');dashboardView.classList.remove('hidden');document.getElementById('studentMini').classList.remove('hidden');
+  const first=currentStudent.name.split(/\s+/).slice(-1)[0];
+  document.getElementById('welcomeTitle').textContent=`Xin chào, ${first}!`;
+  document.getElementById('profileName').textContent=currentStudent.name;
+  document.getElementById('profileClass').textContent=currentStudent.className;
+  document.getElementById('miniInfo').textContent=`${currentStudent.name} · ${currentStudent.className}`;
+  setSkill('listening');
+}
+function setSkill(skill){
+  const l=skill==='listening';
+  tabListening.classList.toggle('active',l);tabReading.classList.toggle('active',!l);
+  listeningPanel.classList.toggle('hidden',!l);readingPanel.classList.toggle('hidden',l);
+}
+function card(t,skill){
+  const icon=skill==='listening'?'🎧':'📖',tag=skill==='listening'?'Listening':'Reading';
+  return `<article class="card"><div class="card-top"><div class="icon">${icon}</div><div class="tag">${tag}</div></div><h3>${t.title}</h3><div class="meta">${t.meta.map(x=>`<span>${x}</span>`).join('')}</div><p class="desc">${t.desc}</p><button class="launch" type="button" data-path="${t.path}">Bắt đầu làm bài →</button></article>`;
+}
+function renderTests(){
+  document.getElementById('listeningGrid').innerHTML=listeningTests.map(t=>card(t,'listening')).join('');
+  document.getElementById('readingGrid').innerHTML=readingTests.map(t=>card(t,'reading')).join('');
+  document.getElementById('listeningCount').textContent=`(${listeningTests.length})`;
+  document.getElementById('readingCount').textContent=`(${readingTests.length})`;
+  document.querySelectorAll('[data-path]').forEach(b=>b.addEventListener('click',()=>launchTest(b.dataset.path)));
+}
+function launchTest(path){
+  if(!currentStudent)return showLogin(false);
+  saveStudent(currentStudent);
+  const url=new URL(path,window.location.href);
+  url.searchParams.set('name',currentStudent.name);
+  url.searchParams.set('className',currentStudent.className);
+  url.searchParams.set('fromPortal','1');
+  window.location.href=url.toString();
+}
+studentForm.addEventListener('submit',e=>{
+  e.preventDefault();
+  const s=normalizeStudent({name:nameInput.value,className:classInput.value});
+  if(!s){formError.textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}
+  formError.textContent='';saveStudent(s);showDashboard();
+});
+tabListening.addEventListener('click',()=>setSkill('listening'));
+tabReading.addEventListener('click',()=>setSkill('reading'));
+document.getElementById('changeStudentTop').addEventListener('click',()=>{
+  const old=currentStudent;clearStudent();currentStudent=old;showLogin(true);
+});
+renderTests();
+currentStudent=readStudent();
+currentStudent?showDashboard():showLogin(false);
+</script>
+</body>
+</html>
