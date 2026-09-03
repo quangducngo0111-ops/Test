@@ -43,7 +43,116 @@
 }
 
 
-.questions-pane .annotation-bar{background:#fbfbfa}
+.questions-pane 
+/* ===== INLINE REVIEW AFTER SUBMISSION ===== */
+.inline-review{
+  margin:12px 0 4px;
+  padding:13px 14px;
+  border:1px solid #e3c8c1;
+  border-left:4px solid var(--bad);
+  border-radius:8px;
+  background:#fffaf8;
+  color:var(--text);
+  line-height:1.5;
+  font-size:.92rem;
+}
+.inline-review.integrated{
+  width:100%;
+  margin-top:10px;
+}
+.inline-review-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  color:var(--navy);
+  font-weight:800;
+}
+.inline-review-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:27px;
+  height:27px;
+  padding:0 7px;
+  border-radius:999px;
+  background:var(--bad);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.inline-review-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:5px 9px;
+  margin:4px 0;
+}
+.inline-review-label{
+  color:var(--muted);
+  font-weight:700;
+}
+.inline-review-student{
+  color:var(--bad);
+  font-weight:700;
+}
+.inline-review-correct{
+  color:var(--good);
+  font-weight:800;
+}
+.inline-review-explain{
+  margin-top:9px;
+  padding:9px 10px;
+  background:#fff;
+  border-left:3px solid var(--blue);
+  border-radius:4px;
+}
+.inline-review-evidence{
+  margin-top:8px;
+  padding:9px 10px;
+  background:#f2f7fa;
+  border:1px solid #d7e3ea;
+  border-radius:7px;
+}
+.inline-review-evidence-label{
+  margin-bottom:4px;
+  color:var(--blue);
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.inline-review-quote{
+  font-style:italic;
+}
+.inline-review-btn{
+  margin-top:9px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  border-radius:6px;
+  padding:7px 10px;
+  font-size:.84rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.inline-review-btn:hover{background:#f4f7f9}
+.review-mode-note{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:7px;
+  background:#eef5f9;
+  color:var(--navy);
+  font-size:.9rem;
+  font-weight:700;
+}
+#questionsCopy input:disabled,
+#questionsCopy select:disabled{
+  opacity:1;
+  color:inherit;
+  cursor:not-allowed;
+}
+
+.annotation-bar{background:#fbfbfa}
 .annotation-zone-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-right:2px}
 
 .annotation-bar{position:sticky;top:-24px;z-index:8;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);margin:-24px -26px 18px;padding:10px 14px}
@@ -449,7 +558,13 @@ function buildQuestions(p){
   bindTrack();
   bindAnnotations('questions');
   renderNotesPanel('questions',p,false);
-  if(submitted)markPassage(p);
+  if(submitted){
+    const copy=document.getElementById('questionsCopy');
+    if(copy && !copy.querySelector('.review-mode-note.top-review-note')){
+      copy.insertAdjacentHTML('afterbegin','<div class="review-mode-note top-review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới. Bấm “Đối chiếu trong bài đọc” để đưa đoạn bằng chứng ở cột trái vào vị trí xem.</div>');
+    }
+    markPassage(p);
+  }
 }
 
 function restore(p){for(const q of questions.filter(x=>x.p===p)){const v=sessionStorage.getItem('q'+q.n)||'';if(q.type==='text'||q.type==='select'){const e=document.getElementById('q'+q.n);if(e)e.value=v}else if(v){const e=[...document.querySelectorAll(`input[name="q${q.n}"]`)].find(x=>x.value===v);if(e)e.checked=true}}}
@@ -458,7 +573,114 @@ function save(n,v){sessionStorage.setItem('q'+n,v);const e=document.getElementBy
 function buildNav(){document.getElementById('nav').innerHTML=questions.map(q=>`<button class="nq" id="nav${q.n}" onclick="goQ(${q.n})">${q.n}</button>`).join('')}
 function goQ(n){const q=questions.find(x=>x.n===n);if(q.p!==current)showPassage(q.p);setTimeout(()=>{const target=document.getElementById('card'+n);target?.scrollIntoView({behavior:'smooth',block:'center'});const control=document.getElementById('q'+n);if(control&&(control.tagName==='SELECT'||control.type==='text'))control.focus({preventScroll:true})},60)}
 function correct(q,u){return q.type==='text'?q.ans.map(norm).includes(norm(u)):norm(u)===norm(q.ans)}
-function markPassage(p){for(const q of questions.filter(x=>x.p===p)){const u=sessionStorage.getItem('q'+q.n)||'',ok=correct(q,u),fb=document.getElementById('fb'+q.n);if(q.type==='text'||q.type==='select'){const e=document.getElementById('q'+q.n);if(e){e.classList.remove('correct','wrong');e.classList.add(ok?'correct':'wrong')}}else document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{l.classList.remove('correct','wrong');if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong')});if(fb){const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;fb.className='feedback '+(ok?'good':'bad');fb.textContent=ok?'✓ Correct':'Correct answer: '+key}}}
+function inlineReviewHTML(q,user){
+  const r=answerReview[q.n];
+  return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
+    <div class="inline-review-title">
+      <span class="inline-review-badge">Q${q.n}</span>
+      <span>Giải thích câu trả lời sai</span>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Bạn trả lời</div>
+      <div class="inline-review-student">${esc(displayAnswer(q,user))}</div>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Đáp án đúng</div>
+      <div class="inline-review-correct">${esc(displayKey(q))}</div>
+    </div>
+    <div class="inline-review-explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="inline-review-evidence">
+      <div class="inline-review-evidence-label">Evidence · Passage ${q.p}, đoạn ${r.para}</div>
+      <div class="inline-review-quote">“${esc(r.evidence)}”</div>
+    </div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(${q.n})">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+
+function removeInlineReview(n){
+  document.querySelectorAll(`[data-inline-review="${n}"]`).forEach(e=>e.remove());
+}
+
+function renderInlineReview(q,user,ok){
+  removeInlineReview(q.n);
+  if(ok)return;
+
+  const card=document.getElementById('card'+q.n);
+  if(!card)return;
+
+  // Standard IELTS question cards: explanation sits directly under the options.
+  if(card.classList.contains('card')){
+    card.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+    return;
+  }
+
+  // Completion tasks: place review under the sentence/step/note containing the blank.
+  const host=card.closest('.flow-step,li,.completion-text') || card.parentElement;
+  if(!host)return;
+
+  // Several blanks may live in the same summary paragraph; keep each explanation labelled by Q number.
+  host.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+}
+
+function lockSubmittedAnswers(){
+  if(!submitted)return;
+  document.querySelectorAll('#questionsCopy input,#questionsCopy select').forEach(e=>e.disabled=true);
+}
+
+function focusEvidence(n){
+  const q=questions.find(x=>x.n===n);
+  const r=answerReview[n];
+  if(!q||!r)return;
+
+  const reveal=()=>{
+    const copy=document.getElementById('passageCopy');
+    const ps=copy?[...copy.querySelectorAll('p')]:[];
+    const target=ps[r.para-1];
+    if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:'center'});
+    target.classList.add('evidence-pulse');
+    setTimeout(()=>target.classList.remove('evidence-pulse'),3200);
+  };
+
+  if(q.p!==current){
+    showPassage(q.p);
+    setTimeout(reveal,150);
+  }else{
+    reveal();
+  }
+}
+
+function markPassage(p){
+  for(const q of questions.filter(x=>x.p===p)){
+    const u=sessionStorage.getItem('q'+q.n)||'';
+    const ok=correct(q,u);
+    const fb=document.getElementById('fb'+q.n);
+
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e){
+        e.classList.remove('correct','wrong');
+        e.classList.add(ok?'correct':'wrong');
+      }
+    }else{
+      document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{
+        l.classList.remove('correct','wrong');
+        if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');
+        else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong');
+      });
+    }
+
+    if(fb){
+      const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+      fb.className='feedback '+(ok?'good':'bad');
+      fb.textContent=ok?'✓ Correct':'Correct answer: '+key;
+    }
+
+    if(submitted)renderInlineReview(q,u,ok);
+  }
+
+  lockSubmittedAnswers();
+}
 
 function displayAnswer(q,user){
   if(!String(user).trim())return 'Không trả lời';
@@ -483,43 +705,14 @@ function renderWrongReview(details){
     box.innerHTML='<h3 class="review-title">Review đáp án</h3><div class="perfect-review">🎉 Không có câu sai. Bạn đã trả lời đúng cả 40 câu!</div>';
     return;
   }
-  box.innerHTML=`<h3 class="review-title">Giải thích các câu trả lời sai (${wrong.length})</h3>
-    <div class="review-sub">Mỗi câu gồm đáp án của bạn, đáp án đúng, lý do và trích dẫn trực tiếp từ passage.</div>`+
-    wrong.map(d=>{
-      const q=questions.find(x=>x.n===d.q),r=answerReview[d.q];
-      return `<div class="wrong-review">
-        <div class="review-q">Câu ${q.n}. ${esc(q.text)}</div>
-        <div class="answer-row"><div class="answer-label">Bạn trả lời</div><div class="student-wrong">${esc(displayAnswer(q,d.answer))}</div></div>
-        <div class="answer-row"><div class="answer-label">Đáp án đúng</div><div class="correct-answer">${esc(displayKey(q))}</div></div>
-        <div class="explain-box"><b>Giải thích:</b> ${esc(r.explain)}</div>
-        <div class="evidence-box">
-          <div class="evidence-label">Trích dẫn · Passage ${q.p}, đoạn ${r.para}</div>
-          <div class="evidence-quote">“${esc(r.evidence)}”</div>
-        </div>
-        <button type="button" class="goto-evidence" onclick="gotoEvidence(${q.n})">↗ Xem trong bài đọc</button>
-      </div>`;
-    }).join('');
+  box.innerHTML=`<h3 class="review-title">${wrong.length} câu cần xem lại</h3>
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
 }
 function gotoEvidence(n){
-  const q=questions.find(x=>x.n===n),r=answerReview[n];
   document.getElementById('overlay').classList.add('hidden');
-  showPassage(q.p);
-  setTimeout(()=>{
-    const copy=document.getElementById('passageCopy');
-    const ps=copy?[...copy.querySelectorAll('p')]:[];
-    const target=ps[r.para-1];
-    if(target){
-      target.scrollIntoView({behavior:'smooth',block:'center'});
-      target.classList.add('evidence-pulse');
-      setTimeout(()=>target.classList.remove('evidence-pulse'),2600);
-    }
-    setTimeout(()=>{
-      const card=document.getElementById('card'+n);
-      if(card)card.scrollIntoView({behavior:'smooth',block:'center'});
-    },1000);
-  },100);
+  focusEvidence(n);
 }
 
-async function submitExam(auto=false){if(submitted)return;saveCurrentMarkups();const unanswered=questions.filter(q=>!(sessionStorage.getItem('q'+q.n)||'').trim()).length;if(!auto&&unanswered&& !confirm(`Bạn còn ${unanswered} câu chưa trả lời. Vẫn nộp bài?`))return;submitted=true;clearInterval(timerHandle);let total=0,s=[0,0,0,0],details=[];for(const q of questions){const u=sessionStorage.getItem('q'+q.n)||'',ok=correct(q,u);if(ok){total++;s[q.p]++}details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});const ne=document.getElementById('nav'+q.n);if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong')}}markPassage(current);const name=document.getElementById('studentName').value.trim(),cls=document.getElementById('studentClass').value.trim(),dur=Math.round((Date.now()-startedAt)/1000);document.getElementById('rstudent').textContent=`${name} — ${cls}`;document.getElementById('rscore').textContent=`${total} / 40`;document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;document.getElementById('p1s').textContent=`${s[1]} / 13`;document.getElementById('p2s').textContent=`${s[2]} / 13`;document.getElementById('p3s').textContent=`${s[3]} / 14`;renderWrongReview(details);document.getElementById('overlay').classList.remove('hidden');document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';const p=new URLSearchParams({name,className:cls,total:String(total),maxScore:'40',durationSeconds:String(dur),activity:'IELTS Reading Computer-Based Test',reading:String(s[1]),grammar:String(s[2]),ing:String(s[3]),writingA:JSON.stringify(details),submittedAt:new Date().toISOString()});try{await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.'}catch(e){document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng.'}}
-function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current)}
+async function submitExam(auto=false){if(submitted)return;saveCurrentMarkups();const unanswered=questions.filter(q=>!(sessionStorage.getItem('q'+q.n)||'').trim()).length;if(!auto&&unanswered&& !confirm(`Bạn còn ${unanswered} câu chưa trả lời. Vẫn nộp bài?`))return;submitted=true;clearInterval(timerHandle);let total=0,s=[0,0,0,0],details=[];for(const q of questions){const u=sessionStorage.getItem('q'+q.n)||'',ok=correct(q,u);if(ok){total++;s[q.p]++}details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});const ne=document.getElementById('nav'+q.n);if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong')}}markPassage(current);saveZoneMarkup('questions');const name=document.getElementById('studentName').value.trim(),cls=document.getElementById('studentClass').value.trim(),dur=Math.round((Date.now()-startedAt)/1000);document.getElementById('rstudent').textContent=`${name} — ${cls}`;document.getElementById('rscore').textContent=`${total} / 40`;document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;document.getElementById('p1s').textContent=`${s[1]} / 13`;document.getElementById('p2s').textContent=`${s[2]} / 13`;document.getElementById('p3s').textContent=`${s[3]} / 14`;renderWrongReview(details);document.getElementById('overlay').classList.remove('hidden');document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';const p=new URLSearchParams({name,className:cls,total:String(total),maxScore:'40',durationSeconds:String(dur),activity:'IELTS Reading Computer-Based Test',reading:String(s[1]),grammar:String(s[2]),ing:String(s[3]),writingA:JSON.stringify(details),submittedAt:new Date().toISOString()});try{await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.'}catch(e){document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng.'}}
+function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current);saveZoneMarkup('questions')}
 </script></body></html>
