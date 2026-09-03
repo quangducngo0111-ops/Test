@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>IELTS Listening Computer-Based Test</title>
+<style>
+:root{--navy:#17344f;--navy2:#0d2538;--blue:#2b6b9d;--paper:#f4f4f1;--white:#fff;--line:#d6dade;--text:#20262b;--muted:#66737e;--accent:#e5794e;--good:#2e7d5b;--bad:#b5442e;--soft:#eef3f7}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--text)}
+button,input,select{font:inherit} .hidden{display:none!important}
+.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}
+.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:800}
+.start h1{margin:8px 0 7px;color:var(--navy)} .sub{color:var(--muted);margin:0 0 24px}
+.field{margin:14px 0} .field label{display:block;font-weight:700;margin-bottom:6px} .field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}
+.btn{border:0;background:var(--navy);color:#fff;padding:11px 17px;border-radius:8px;font-weight:700;cursor:pointer} .btn:hover{background:var(--blue)}
+.exam{min-height:100vh;background:#fff;padding-bottom:72px}
+.top{position:sticky;top:0;z-index:30;background:var(--navy2);color:#fff;padding:10px 15px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+.student{font-size:14px} .elapsed{font-family:ui-monospace,monospace;background:rgba(255,255,255,.11);padding:7px 10px;border-radius:7px;font-weight:700}
+.tabs{position:sticky;top:48px;z-index:28;display:flex;gap:7px;padding:9px 14px;background:#fafafa;border-bottom:1px solid var(--line);overflow:auto}
+.tab{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap} .tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.content{max-width:980px;margin:auto;padding:20px}
+.audio-card{position:sticky;top:104px;z-index:25;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.audio-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px} .audio-head b{color:var(--navy)} audio{width:100%}
+.annot-bar{position:sticky;top:190px;z-index:22;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fbfbfa;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:12px}
+.annot-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 9px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer} .annot-tip{font-size:12px;color:var(--muted);margin-left:auto}
+.notes-panel{display:none;background:#f5f8fa;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:12px} .notes-panel.open{display:block}
+.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:9px 10px;margin:7px 0} .note-quote{font-size:12px;color:var(--muted);font-style:italic} .note-actions button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:5px 7px;margin-right:5px;cursor:pointer}
+mark.user-highlight{background:#fff29a;color:inherit} .note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer}
+.questions h2{color:var(--navy);margin:6px 0 12px} .group{margin-bottom:27px} .group h3{color:var(--navy);font-size:1.05rem;margin:0 0 5px} .inst{color:var(--muted);font-size:.92rem;margin-bottom:10px}
+.completion{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;line-height:1.9} .completion h4{margin:0 0 12px;color:var(--navy)}
+.form-grid{display:grid;grid-template-columns:minmax(240px,.8fr) 1.4fr;gap:7px 14px;align-items:start} .form-label{font-weight:600;color:#36434d}
+.inline{display:inline-flex;align-items:center;gap:5px;margin:2px 3px;vertical-align:middle;scroll-margin:140px} .qnum{display:inline-flex;align-items:center;justify-content:center;min-width:27px;height:27px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800}
+.ans{padding:8px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;min-width:145px;max-width:240px} .ans.correct{border-color:var(--good);background:rgba(46,125,91,.07)} .ans.wrong{border-color:var(--bad);background:rgba(181,68,46,.06)}
+.subline{padding-left:24px;margin:4px 0} .section-title{font-weight:800;color:var(--navy);margin-top:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0;scroll-margin:140px} .card-head{display:flex;gap:10px;align-items:flex-start} .qtext{flex:1;line-height:1.45}
+.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer} .option.correct{border-color:var(--good);background:rgba(46,125,91,.08)} .option.wrong{border-color:var(--bad);background:rgba(181,68,46,.08)}
+.limit{font-size:12px;color:var(--accent);font-weight:700;margin:8px 0}
+.bank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px;background:#f4f7f9;border:1px solid var(--line);border-radius:8px;padding:12px;margin:9px 0 14px;font-size:.92rem}
+.match-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:9px;overflow:hidden} .match-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle} .match-table tr:last-child td{border-bottom:0} .match-name{font-weight:700}
+.feedback{font-size:.87rem;margin-top:6px} .good{color:var(--good)} .bad{color:var(--bad)}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:35;background:#fff;border-top:1px solid var(--line);padding:9px 11px;display:flex;gap:10px;align-items:center} .nav{display:flex;gap:4px;overflow:auto;flex:1} .nav button{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer} .nav button.answered{background:#dceaf5} .nav button.correct{background:#dff0e7;border-color:var(--good)} .nav button.wrong{background:#f4ddd8;border-color:var(--bad)}
+.submit{background:var(--accent);color:#fff;border:0;border-radius:7px;padding:10px 15px;font-weight:800;cursor:pointer;white-space:nowrap}
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(8,20,30,.72);display:flex;align-items:center;justify-content:center;padding:20px} .result{background:#fff;border-radius:14px;padding:26px;width:min(720px,100%);max-height:90vh;overflow:auto}
+.bigscore{font-size:2.5rem;font-weight:800;color:var(--navy);margin:6px 0} .breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:15px 0} .breakdown div{background:#f3f6f8;padding:10px;border-radius:8px;text-align:center}
+.review{border-top:1px solid var(--line);margin-top:18px;padding-top:15px} .wrong-review{border:1px solid #e4cbc5;background:#fffaf8;border-radius:8px;padding:12px 13px;margin:9px 0} .review-q{font-weight:800;color:var(--navy);margin-bottom:7px} .row{display:grid;grid-template-columns:115px 1fr;gap:5px 8px;font-size:.91rem;margin:3px 0} .label{color:var(--muted);font-weight:700} .correct-text{color:var(--good);font-weight:800} .wrong-text{color:var(--bad);font-weight:800} .explain{margin-top:8px;background:#f4f7f9;border-left:3px solid var(--blue);padding:9px 10px;border-radius:4px;font-size:.91rem;line-height:1.45}
+@media(max-width:700px){.form-grid{grid-template-columns:1fr} .bank{grid-template-columns:1fr} .breakdown{grid-template-columns:repeat(2,1fr)} .top{align-items:flex-start} .tabs{top:76px} .audio-card{top:129px} .annot-bar{top:216px} .ans{font-size:16px;min-width:120px;max-width:100%}}
+</style>
+</head>
+<body>
+<div id="start" class="start">
+  <div class="start-card">
+    <div class="eyebrow">IELTS Listening Practice</div>
+    <h1>Computer-Based Listening Test</h1>
+    <p class="sub">4 Parts · 40 Questions · Audio included · Auto-graded</p>
+    <div class="field"><label>Họ và tên học sinh</label><input id="studentName" type="text" placeholder="Ví dụ: Nguyễn Văn An"></div>
+    <div class="field"><label>Lớp</label><input id="studentClass" type="text" placeholder="Ví dụ: 8A1"></div>
+    <button class="btn" onclick="startExam()">Bắt đầu làm bài</button>
+    <div id="startError" style="color:var(--bad);margin-top:9px"></div>
+  </div>
+</div>
+
+<div id="exam" class="exam hidden">
+  <div class="top">
+    <div class="student">Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div>
+    <div class="elapsed">Time: <span id="elapsed">00:00</span></div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-p="1" onclick="showPart(1)">Part 1</button>
+    <button class="tab" data-p="2" onclick="showPart(2)">Part 2</button>
+    <button class="tab" data-p="3" onclick="showPart(3)">Part 3</button>
+    <button class="tab" data-p="4" onclick="showPart(4)">Part 4</button>
+  </div>
+
+  <div class="content">
+    <div class="audio-card">
+      <div class="audio-head"><b id="audioTitle">Audio — Part 1</b><span style="font-size:12px;color:var(--muted)">Use headphones if possible</span></div>
+      <audio id="audio1" controls preload="metadata"></audio>
+      <audio id="audio2" controls preload="metadata" class="hidden"></audio>
+      <audio id="audio3" controls preload="metadata" class="hidden"></audio>
+      <audio id="audio4" controls preload="metadata" class="hidden"></audio>
+    </div>
+
+    <div class="annot-bar">
+      <button class="annot-btn" onclick="addHighlight()">🖍 Highlight</button>
+      <button class="annot-btn" onclick="clearHighlight()">Xóa HL</button>
+      <button class="annot-btn" onclick="addNote()">📝 Add note</button>
+      <button class="annot-btn" onclick="toggleNotes()">Ghi chú (<span id="noteCount">0</span>)</button>
+      <span class="annot-tip">Bôi đen chữ trong câu hỏi rồi chọn công cụ.</span>
+    </div>
+    <div id="notesPanel" class="notes-panel"></div>
+    <div id="questions" class="questions"></div>
+  </div>
+
+  <div class="bottom">
+    <div class="nav" id="nav"></div>
+    <button class="submit" onclick="submitExam(false)">Nộp bài</button>
+  </div>
+</div>
+
+<div id="overlay" class="overlay hidden">
+  <div class="result">
+    <div class="eyebrow">Kết quả</div>
+    <div id="resultStudent"></div>
+    <div id="resultScore" class="bigscore">0 / 40</div>
+    <div id="resultPercent"></div>
+    <div class="breakdown">
+      <div><b>Part 1</b><br><span id="s1"></span></div>
+      <div><b>Part 2</b><br><span id="s2"></span></div>
+      <div><b>Part 3</b><br><span id="s3"></span></div>
+      <div><b>Part 4</b><br><span id="s4"></span></div>
+    </div>
+    <div id="sheetStatus" style="color:var(--muted);font-size:.92rem"></div>
+    <div id="wrongReview" class="review"></div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn" onclick="closeResult()">Xem lại bài</button>
+      <button class="btn" style="background:#587087" onclick="location.reload()">Làm lại</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const STORAGE_PREFIX = "C21T4_LISTENING_";
+
+function ssKey(key){
+  return STORAGE_PREFIX + key;
+}
+function ssGet(key){
+  return sessionStorage.getItem(ssKey(key));
+}
+function ssSet(key,value){
+  sessionStorage.setItem(ssKey(key),value);
+}
+function clearListeningAttempt(){
+  const toDelete=[];
+  for(let i=0;i<sessionStorage.length;i++){
+    const k=sessionStorage.key(i);
+    if(k && k.startsWith(STORAGE_PREFIX)) toDelete.push(k);
+  }
+  toDelete.forEach(k=>sessionStorage.removeItem(k));
+}
+
+
+// ============================================================
+// AUDIO CONFIG
+// Cách 1: để 4 file MP3 cùng thư mục với file HTML -> giữ nguyên.
+// Cách 2: upload MP3 lên hosting rồi thay bằng URL đầy đủ.
+// ============================================================
+const AUDIO_FILES = {
+  1: "cam21-test4-part1.mp3",
+  2: "cam21-test4-part2.mp3",
+  3: "cam21-test4-part3.mp3",
+  4: "cam21-test4-part4.mp3"
+};
+
+function initAudioSources(){
+  for(let i=1;i<=4;i++){
+    const audio = document.getElementById("audio"+i);
+    if(audio){
+      audio.src = AUDIO_FILES[i];
+      audio.load();
+    }
+  }
+}
+
+const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const keys={
+1:"leigh",2:"motorbike",3:"hairdresser",4:"suit",5:"laptop",6:"monday",7:"coffee",8:"books",9:"plants",10:"cinema",
+15:"C",16:"G",17:"D",18:"A",19:"F",20:"B",
+21:"B",22:"A",23:"B",24:"B",25:"E",26:"I",27:"A",28:"D",29:"H",30:"G",
+31:"routine",32:"trials",33:"calming",34:"pillows",35:"anxiety",36:"medication",37:"awake",38:"distraction",39:"nature",40:"volume"
+};
+const multiKeys={"11-12":["C","E"],"13-14":["A","B"]};
+const explain={"1": "The speaker gives his surname and spells it L-E-I-G-H, so the required family name is Leigh.", "2": "He mentions that he normally uses another form of transport, but for today's journey he says he used his motorbike.", "3": "He says he has just been to the hairdresser.", "4": "He is shopping for a suit for an interview.", "5": "He needs to collect his laptop after it has been repaired.", "6": "Saturday is mentioned, but he says Monday is the day he prefers because the shops are quieter.", "7": "He feels there are too many places selling coffee.", "8": "He says the town needs more choice for buying books.", "9": "Although another feature is described positively, he identifies the plants as his favourite feature.", "10": "He says he cannot see the advantage of having the cinema there, so he considers it unnecessary.", "11": "For last year, one of the two areas mentioned is the Breakout area.", "12": "The other area used to promote the company last year is the Business Connections Zone.", "13": "The discount scheme is available to all members of an exhibiting organisation.", "14": "The discounts cover outlets connected with clothing/fashion as well as grocery/food purchases.", "15": "Jim Clowrie's story centres on the consequences of a business growing much faster than expected.", "16": "David France combines running a successful company with regular support for charitable causes.", "17": "Oliver Stanton draws on business experience from several countries and cultures.", "18": "Francesca Heptonstall focuses on helping people find employment.", "19": "Salman Khan discusses adapting a company when markets and business conditions change.", "20": "Annie Craven discusses difficulties in people's personal lives and how to deal with them.", "21": "Both students agree that finding suitable examples or specific cases will require considerable work.", "22": "Their final choice is housing designed for family groups or different generations living together.", "23": "They agree on building upwards in urban areas, i.e. constructing tall / multi-storey buildings.", "24": "Roof gardens are described as particularly valuable for people living in high-rise city homes without outdoor space.", "25": "Shared working spaces can bring people from different professions together and generate new ideas.", "26": "Moveable walls allow a home to adapt to both current household members and people who may join later.", "27": "The concern about smart mirrors is that health warnings could make people worry unnecessarily.", "28": "Charging points for bikes could encourage cycling instead of driving, giving an environmental benefit.", "29": "Car restrictions could help some groups but make access harder for elderly or disabled people.", "30": "Communal vegetable plots are presented as a shared activity that could be particularly suitable for retired people.", "31": "The lecture says surgery can disrupt the normal things patients do, so the missing word is routine.", "32": "The review brought together data from nearly one hundred trials.", "33": "The different music used in the studies shared a calming quality.", "34": "The lecture says the music was more often delivered through music pillows.", "35": "Patients who listened to music reported no anxiety or only low levels of anxiety.", "36": "Hospital records showed that music listeners needed less medication for pain.", "37": "The positive effects were greatest when the patients were awake.", "38": "The researchers concluded that music worked as a distraction from patients' problems.", "39": "Recordings of sounds from nature are recommended as an alternative to music.", "40": "A future study will examine the most appropriate volume for the music."};
+
+const p2topics=[
+["A","Supporting job seekers"],["B","Dealing with personal problems"],["C","Effects of an unexpectedly rapid expansion"],
+["D","A global range of business experiences"],["E","Coping with financial set-backs"],
+["F","Developing a company in response to changing markets"],["G","Combining business success with contributions to charities"]
+];
+const p3opinions=[
+["A","This could cause unnecessary anxiety."],["B","This would be especially beneficial for city residents."],
+["C","This would be challenging for young people."],["D","This would have environmental benefits."],
+["E","This could encourage creativity."],["F","This could lead to social problems."],
+["G","This could enable retired people to share a project."],["H","This would help some people but cause problems for others."],
+["I","This would suit both existing and new members of a household."]
+];
+
+let currentPart=1,startedAt=0,timeHandle=null,submitted=false,savedSelection=null,activeHighlight=null;
+
+function norm(v){return String(v??"").normalize("NFKC").trim().toLowerCase().replace(/\s+/g," ")}
+function inlineInput(n){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><input class="ans" id="q${n}" data-q="${n}" type="text" autocomplete="off"></span>`}
+function inlineSelect(n,opts){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><select class="ans" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(([l,t])=>`<option value="${l}">${l} — ${t}</option>`).join("")}</select></span>`}
+function mcqCard(n,text,opts){
+ return `<div class="card" id="card${n}"><div class="card-head"><span class="qnum">${n}</span><div class="qtext">${text}</div></div>${opts.map(([l,t])=>`<label class="option" data-q="${n}" data-val="${l}"><input type="radio" name="q${n}" value="${l}"> <b>${l}</b> &nbsp;${t}</label>`).join("")}<div class="feedback" id="fb${n}"></div></div>`
+}
+function twoChoice(group,start,text,opts){
+ return `<div class="card" id="card${start}"><div class="card-head"><span class="qnum">${start}–${start+1}</span><div class="qtext">${text}</div></div><div class="limit">Select exactly TWO options.</div>${opts.map(([l,t])=>`<label class="option multi-option" data-group="${group}" data-val="${l}"><input type="checkbox" name="${group}" value="${l}"> <b>${l}</b> &nbsp;${t}</label>`).join("")}<div class="feedback" id="fb${group}"></div></div>`
+}
+
+function renderPart1(){
+ return `<h2>PART 1</h2>
+ <div class="group"><h3>Questions 1–10</h3><div class="inst">Complete the form below. Write <b>ONE WORD ONLY</b> for each answer.</div>
+ <div class="completion"><h4>Survey about shopping in Broadbeach</h4>
+ <div class="form-grid">
+   <div class="form-label">Name:</div><div>Martyn ${inlineInput(1)}.</div>
+   <div class="form-label">Today's journey to Broadbeach town centre:</div><div>used his ${inlineInput(2)}.</div>
+   <div class="form-label">Purpose of today's trip:</div><div>
+      <div>has visited the ${inlineInput(3)}.</div>
+      <div>looking for a new ${inlineInput(4)}.</div>
+      <div>collecting ${inlineInput(5)} (after repair)</div>
+   </div>
+   <div class="form-label">Preferred day for shopping:</div><div>${inlineInput(6)}.</div>
+ </div>
+ <div class="section-title">Opinions about shopping in the town centre</div>
+ <div>Finds the service in shops is excellent</div>
+ <div>Thinks there are too many places selling ${inlineInput(7)}.</div>
+ <div>Would like more places to buy ${inlineInput(8)}.</div>
+ <div class="section-title">Opinions about new out-of-town Shopping Centre</div>
+ <div>Likes the ${inlineInput(9)} best</div>
+ <div>Believes the ${inlineInput(10)} is unnecessary</div>
+ </div></div>`;
+}
+function renderPart2(){
+ const optAE=[["A","the Digital Marketing Centre"],["B","the TalkCon Zone"],["C","the Breakout area"],["D","the Business Village"],["E","the Business Connections Zone"]];
+ const disc=[["A","They are available to all members of exhibiting companies."],["B","They can be used for both food and clothing."],["C","They only apply if people spend at least £400."],["D","They can be used by family members."],["E","The percentage saved is always the same."]];
+ const speakers=[[15,"Jim Clowrie"],[16,"David France"],[17,"Oliver Stanton"],[18,"Francesca Heptonstall"],[19,"Salman Khan"],[20,"Annie Craven"]];
+ return `<h2>PART 2</h2>
+ <div class="group"><h3>Questions 11 and 12</h3><div class="inst">Choose <b>TWO</b> letters, A–E.</div>${twoChoice("g1112",11,"In which TWO areas of the business exhibition did James Craig promote his company last year?",optAE)}</div>
+ <div class="group"><h3>Questions 13 and 14</h3><div class="inst">Choose <b>TWO</b> letters, A–E.</div>${twoChoice("g1314",13,"Which TWO facts are given about discounts on popular brands available to exhibitors?",disc)}</div>
+ <div class="group"><h3>Questions 15–20</h3><div class="inst">Which topic will each speaker focus on? Choose SIX answers from A–G.</div>
+ <div class="bank">${p2topics.map(([l,t])=>`<div><b>${l}</b> &nbsp;${t}</div>`).join("")}</div>
+ <table class="match-table">${speakers.map(([n,name])=>`<tr id="card${n}"><td style="width:55px"><span class="qnum">${n}</span></td><td class="match-name">${name}</td><td>${inlineSelect(n,p2topics).replace(`id="card${n}"`,"")}</td></tr>`).join("")}</table></div>`;
+}
+function renderPart3(){
+ const dev=[[24,"use of roof space for gardens"],[25,"shared working spaces"],[26,"moveable internal walls"],[27,"smart mirrors in bathrooms"],[28,"bike sheds with charging points"],[29,"restriction of cars to certain areas"],[30,"communal vegetable plots"]];
+ return `<h2>PART 3</h2>
+ <div class="group"><h3>Questions 21–23</h3><div class="inst">Choose the correct letter, A, B or C.</div>
+ ${mcqCard(21,"Which aspect of their presentation are Mia and Leo both concerned about?",[["A","meeting the deadline"],["B","finding suitable examples"],["C","including original ideas"]])}
+ ${mcqCard(22,"The students decide to focus their assignment on housing for",[["A","family groups."],["B","old people."],["C","single people."]])}
+ ${mcqCard(23,"The students agree that demand for accommodation in urban areas should be met by",[["A","repurposing offices and factories."],["B","constructing tall buildings."],["C","developing creative ideas for smaller homes."]])}
+ </div>
+ <div class="group"><h3>Questions 24–30</h3><div class="inst">What opinion is given about each development? Choose SEVEN answers from A–I.</div>
+ <div class="bank">${p3opinions.map(([l,t])=>`<div><b>${l}</b> &nbsp;${t}</div>`).join("")}</div>
+ <table class="match-table">${dev.map(([n,name])=>`<tr id="card${n}"><td style="width:55px"><span class="qnum">${n}</span></td><td class="match-name">${name}</td><td>${inlineSelect(n,p3opinions).replace(`id="card${n}"`,"")}</td></tr>`).join("")}</table></div>`;
+}
+function renderPart4(){
+ return `<h2>PART 4</h2>
+ <div class="group"><h3>Questions 31–40</h3><div class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.</div>
+ <div class="completion"><h4>Music therapy for surgical patients</h4>
+ <div class="section-title">Background</div>
+ <ul>
+   <li>Surgery impacts patients because they may experience discomfort or unwelcome changes to their ${inlineInput(31)}.</li>
+   <li>Current post-surgical strategies focus mainly on pain relief.</li>
+ </ul>
+ <div class="section-title">Recent research</div>
+ <ul>
+   <li>A study reviewed data from about 100 ${inlineInput(32)} and found that listening to music
+     <div class="subline">– improved hospital patients' sense of wellbeing.</div>
+     <div class="subline">– reduced the length of their stay.</div>
+   </li>
+   <li>The patients in the study all listened to music with a ${inlineInput(33)} effect.</li>
+   <li>The music was mostly played through music ${inlineInput(34)}.</li>
+   <li>Patients reported an absence or low levels of ${inlineInput(35)}.</li>
+   <li>Medical records confirmed that patients who were played music in hospital needed less ${inlineInput(36)} than those who weren't played music.</li>
+   <li>The best results were achieved when patients were played music while they were ${inlineInput(37)}.</li>
+   <li>The study concluded that playing music was effective because it served as a ${inlineInput(38)}.</li>
+   <li>The researchers recommend playing either music or sounds from ${inlineInput(39)} to all surgical patients.</li>
+   <li>A future study will investigate the best ${inlineInput(40)} for the music.</li>
+ </ul></div></div>`;
+}
+const renderers={1:renderPart1,2:renderPart2,3:renderPart3,4:renderPart4};
+
+function startExam(){
+ const n=document.getElementById("studentName").value.trim(),c=document.getElementById("studentClass").value.trim();
+ if(!n||!c){document.getElementById("startError").textContent="Vui lòng nhập đầy đủ Họ tên và Lớp.";return}
+ clearListeningAttempt();
+ initAudioSources();
+ document.getElementById("topName").textContent=n;document.getElementById("topClass").textContent=c;
+ document.getElementById("start").classList.add("hidden");document.getElementById("exam").classList.remove("hidden");
+ submitted=false;savedSelection=null;activeHighlight=null;startedAt=Date.now();buildNav();showPart(1);timeHandle=setInterval(updateTime,500);updateTime();
+}
+function updateTime(){
+ const s=Math.floor((Date.now()-startedAt)/1000),m=Math.floor(s/60),ss=s%60;
+ document.getElementById("elapsed").textContent=`${String(m).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+}
+function showPart(p){
+ saveQuestionMarkup();currentPart=p;savedSelection=null;activeHighlight=null;
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",+b.dataset.p===p));
+ document.getElementById("audioTitle").textContent="Audio — Part "+p;
+ document.querySelectorAll("audio").forEach((a,i)=>{a.classList.toggle("hidden",i+1!==p);if(i+1!==p)a.pause()});
+ const saved=ssGet("markup"+p);
+ document.getElementById("questions").innerHTML=saved||renderers[p]();
+ restoreAnswers(p);bindTracking();bindMultiLimits();bindAnnotations();renderNotes();
+ if(submitted)markPart(p);
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function partRange(p){return p===1?[1,10]:p===2?[11,20]:p===3?[21,30]:[31,40]}
+function restoreAnswers(p){
+ const [a,b]=partRange(p);
+ for(let n=a;n<=b;n++){
+   const val=ssGet("q"+n)||"";
+   const el=document.getElementById("q"+n);
+   if(el)el.value=val;
+   const radio=document.querySelector(`input[name="q${n}"][value="${CSS.escape(val)}"]`);if(radio)radio.checked=true;
+ }
+ [["g1112",11],["g1314",13]].forEach(([g,start])=>{
+   if(p!==2)return;const arr=JSON.parse(ssGet(g)||"[]");
+   document.querySelectorAll(`input[name="${g}"]`).forEach(x=>x.checked=arr.includes(x.value));
+ });
+}
+function bindTracking(){
+ document.querySelectorAll("input.ans,select.ans").forEach(el=>{
+   const fn=()=>{ssSet("q"+el.dataset.q,el.value);updateNav()};
+   el.addEventListener("input",fn);el.addEventListener("change",fn);
+ });
+ document.querySelectorAll('input[type="radio"]').forEach(el=>el.addEventListener("change",()=>{ssSet("q"+el.name.slice(1),el.value);updateNav()}));
+ document.querySelectorAll('input[type="checkbox"]').forEach(el=>el.addEventListener("change",()=>{
+   const g=el.name;const vals=[...document.querySelectorAll(`input[name="${g}"]:checked`)].map(x=>x.value);
+   ssSet(g,JSON.stringify(vals));updateNav();
+ }));
+}
+function bindMultiLimits(){
+ ["g1112","g1314"].forEach(g=>document.querySelectorAll(`input[name="${g}"]`).forEach(el=>el.addEventListener("change",e=>{
+   const checked=document.querySelectorAll(`input[name="${g}"]:checked`);
+   if(checked.length>2){e.target.checked=false;const vals=[...document.querySelectorAll(`input[name="${g}"]:checked`)].map(x=>x.value);ssSet(g,JSON.stringify(vals));alert("Chỉ chọn TWO đáp án.")}
+ })));
+}
+function buildNav(){document.getElementById("nav").innerHTML=Array.from({length:40},(_,i)=>`<button id="nav${i+1}" onclick="goQ(${i+1})">${i+1}</button>`).join("");updateNav()}
+function isAnswered(n){
+ if(n===11||n===12)return JSON.parse(ssGet("g1112")||"[]").length===2;
+ if(n===13||n===14)return JSON.parse(ssGet("g1314")||"[]").length===2;
+ return !!(ssGet("q"+n)||"").trim();
+}
+function updateNav(){for(let n=1;n<=40;n++)document.getElementById("nav"+n)?.classList.toggle("answered",isAnswered(n))}
+function goQ(n){
+ const p=n<=10?1:n<=20?2:n<=30?3:4;if(p!==currentPart)showPart(p);
+ setTimeout(()=>{const target=document.getElementById("card"+n)||document.getElementById("q"+n);target?.scrollIntoView({behavior:"smooth",block:"center"});document.getElementById("q"+n)?.focus({preventScroll:true})},80);
+}
+
+function saveQuestionMarkup(){const q=document.getElementById("questions");if(q&&q.innerHTML)ssSet("markup"+currentPart,q.innerHTML)}
+function notesKey(){return "listenNotes"+currentPart}
+function loadNotes(){try{return JSON.parse(ssGet(notesKey())||"[]")}catch(e){return[]}}
+function saveNotes(a){ssSet(notesKey(),JSON.stringify(a))}
+function captureSelection(){
+ if(submitted)return;const sel=window.getSelection(),root=document.getElementById("questions");
+ if(!sel||!root||sel.rangeCount===0||sel.isCollapsed)return;const r=sel.getRangeAt(0);
+ if(root.contains(r.commonAncestorContainer))savedSelection=r.cloneRange();
+}
+function usableSelection(){
+ const root=document.getElementById("questions");
+ if(!savedSelection||!root.contains(savedSelection.commonAncestorContainer)||!savedSelection.toString().trim()){alert("Hãy bôi đen phần chữ trong câu hỏi trước.");return null}
+ const frag=savedSelection.cloneContents();if(frag.querySelector&&frag.querySelector("input,select,button")){alert("Hãy chỉ chọn phần chữ, không chọn xuyên qua ô trả lời.");return null}
+ return savedSelection.cloneRange();
+}
+function clearSel(){window.getSelection()?.removeAllRanges();savedSelection=null}
+function addHighlight(){
+ const r=usableSelection();if(!r)return;try{const m=document.createElement("mark");m.className="user-highlight";m.appendChild(r.extractContents());r.insertNode(m);activeHighlight=m;saveQuestionMarkup();clearSel()}catch(e){alert("Hãy chọn một đoạn chữ ngắn hơn.")}
+}
+function clearHighlight(){
+ if(!activeHighlight||!document.body.contains(activeHighlight)){alert("Hãy bấm vào phần đã highlight rồi chọn Xóa HL.");return}
+ const p=activeHighlight.parentNode;while(activeHighlight.firstChild)p.insertBefore(activeHighlight.firstChild,activeHighlight);activeHighlight.remove();p.normalize();activeHighlight=null;saveQuestionMarkup();
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function addNote(){
+ const r=usableSelection();if(!r)return;const quote=r.toString().trim(),text=prompt("Nhập ghi chú:");if(text===null||!text.trim())return;
+ const id="n"+Date.now()+Math.random().toString(36).slice(2,6);const span=document.createElement("span");span.className="note-anchor";span.dataset.noteId=id;span.title="Bấm để xem/sửa ghi chú";
+ try{span.appendChild(r.extractContents());r.insertNode(span);const notes=loadNotes();notes.push({id,quote,text:text.trim()});saveNotes(notes);saveQuestionMarkup();clearSel();renderNotes(true)}catch(e){alert("Hãy chọn một đoạn chữ ngắn hơn.")}
+}
+function renderNotes(force=false){
+ const panel=document.getElementById("notesPanel"),notes=loadNotes();document.getElementById("noteCount").textContent=notes.length;
+ panel.innerHTML=notes.length?notes.map(n=>`<div class="note-item"><div class="note-quote">“${esc(n.quote)}”</div><div>${esc(n.text)}</div><div class="note-actions"><button onclick="editNote('${n.id}')">Sửa</button><button onclick="deleteNote('${n.id}')">Xóa</button></div></div>`).join(""):`<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở Part này.</div>`;
+ if(force)panel.classList.add("open");
+}
+function toggleNotes(){document.getElementById("notesPanel").classList.toggle("open")}
+function editNote(id){const a=loadNotes(),n=a.find(x=>x.id===id);if(!n)return;const t=prompt("Sửa ghi chú:",n.text);if(t===null)return;if(!t.trim()){deleteNote(id);return}n.text=t.trim();saveNotes(a);renderNotes(true)}
+function deleteNote(id){
+ const a=loadNotes().filter(x=>x.id!==id);saveNotes(a);document.getElementById("questions")?.querySelectorAll(`[data-note-id="${id}"]`).forEach(s=>{const p=s.parentNode;while(s.firstChild)p.insertBefore(s.firstChild,s);s.remove();p.normalize()});saveQuestionMarkup();renderNotes(true)
+}
+function openNote(id){const a=loadNotes(),n=a.find(x=>x.id===id);if(!n)return;const t=prompt(`Đoạn đã ghi chú:\n“${n.quote}”\n\nGhi chú:`,n.text);if(t===null)return;if(!t.trim()){deleteNote(id);return}n.text=t.trim();saveNotes(a);renderNotes(true)}
+function bindAnnotations(){
+ const root=document.getElementById("questions");root.addEventListener("mouseup",captureSelection);root.addEventListener("keyup",captureSelection);root.addEventListener("click",e=>{const n=e.target.closest(".note-anchor");if(n){openNote(n.dataset.noteId);return}activeHighlight=e.target.closest("mark.user-highlight")||null})
+}
+
+function getQ(n){return ssGet("q"+n)||""}
+function scoreExam(){
+ let total=0,s={1:0,2:0,3:0,4:0},details=[];
+ for(let n=1;n<=10;n++){const u=getQ(n),ok=norm(u)===keys[n];if(ok){total++;s[1]++}details.push({q:n,user:u,key:keys[n],ok})}
+ [["g1112",[11,12],multiKeys["11-12"]],["g1314",[13,14],multiKeys["13-14"]]].forEach(([g,nums,key])=>{
+   const sel=JSON.parse(ssGet(g)||"[]"),correctSelected=sel.filter(x=>key.includes(x)).length;
+   total+=correctSelected;s[2]+=correctSelected;
+   nums.forEach((n,i)=>details.push({q:n,user:sel.join(", "),key:key.join(" & "),ok:correctSelected===2,group:g}));
+ });
+ for(let n=15;n<=20;n++){const u=getQ(n),ok=u===keys[n];if(ok){total++;s[2]++}details.push({q:n,user:u,key:keys[n],ok})}
+ for(let n=21;n<=30;n++){const u=getQ(n),ok=u===keys[n];if(ok){total++;s[3]++}details.push({q:n,user:u,key:keys[n],ok})}
+ for(let n=31;n<=40;n++){const u=getQ(n),ok=norm(u)===keys[n];if(ok){total++;s[4]++}details.push({q:n,user:u,key:keys[n],ok})}
+ return {total,s,details};
+}
+function displayKey(n,key){
+ if(n>=15&&n<=20){const x=p2topics.find(a=>a[0]===key);return x?`${x[0]} — ${x[1]}`:key}
+ if(n>=24&&n<=30){const x=p3opinions.find(a=>a[0]===key);return x?`${x[0]} — ${x[1]}`:key}
+ return key;
+}
+function renderReview(details){
+ const box=document.getElementById("wrongReview");
+ const byGroup=new Set(),wrong=details.filter(d=>!d.ok).filter(d=>{if(d.group){if(byGroup.has(d.group))return false;byGroup.add(d.group)}return true});
+ if(!wrong.length){box.innerHTML=`<h3>Review</h3><div style="background:#edf7f1;padding:12px;border-radius:8px;color:#245c43;font-weight:700">🎉 Bạn đã trả lời đúng cả 40 câu.</div>`;return}
+ box.innerHTML=`<h3 style="color:var(--navy)">Giải thích câu sai (${wrong.length} mục)</h3><div style="font-size:.9rem;color:var(--muted);margin-bottom:9px">Đáp án đúng và listening clue cho từng câu/nhóm câu làm sai.</div>`+
+ wrong.map(d=>{
+   const title=d.group?(d.group==="g1112"?"Questions 11–12":"Questions 13–14"):`Question ${d.q}`;
+   const exp=d.group?(d.group==="g1112"?`${explain[11]} ${explain[12]}`:`${explain[13]} ${explain[14]}`):explain[d.q];
+   return `<div class="wrong-review"><div class="review-q">${title}</div><div class="row"><div class="label">Bạn trả lời</div><div class="wrong-text">${esc(d.user||"Không trả lời")}</div></div><div class="row"><div class="label">Đáp án đúng</div><div class="correct-text">${esc(displayKey(d.q,d.key))}</div></div><div class="explain"><b>Listening clue:</b> ${esc(exp)}</div></div>`;
+ }).join("");
+}
+function markPart(p){
+ const [a,b]=partRange(p);
+ for(let n=a;n<=b;n++){
+   if(n===11||n===12||n===13||n===14)continue;
+   const u=getQ(n),ok=n<=10||n>=31?norm(u)===keys[n]:u===keys[n];
+   const el=document.getElementById("q"+n);if(el){el.classList.remove("correct","wrong");el.classList.add(ok?"correct":"wrong")}
+   document.querySelectorAll(`label[data-q="${n}"]`).forEach(l=>{l.classList.remove("correct","wrong");if(l.dataset.val===keys[n])l.classList.add("correct");else if(l.dataset.val===u&&u)l.classList.add("wrong")});
+   const nav=document.getElementById("nav"+n);nav?.classList.remove("answered");nav?.classList.add(ok?"correct":"wrong");
+ }
+ if(p===2){
+   [["g1112",[11,12],multiKeys["11-12"]],["g1314",[13,14],multiKeys["13-14"]]].forEach(([g,nums,key])=>{
+     const sel=JSON.parse(ssGet(g)||"[]");
+     document.querySelectorAll(`[data-group="${g}"]`).forEach(l=>{l.classList.remove("correct","wrong");if(key.includes(l.dataset.val))l.classList.add("correct");else if(sel.includes(l.dataset.val))l.classList.add("wrong")});
+     nums.forEach(n=>{const nav=document.getElementById("nav"+n);nav?.classList.remove("answered");nav?.classList.add(sel.filter(x=>key.includes(x)).length===2?"correct":"wrong")});
+   });
+ }
+}
+async function submitExam(auto=false){
+ if(submitted)return;saveQuestionMarkup();
+ const unanswered=Array.from({length:40},(_,i)=>i+1).filter(n=>!isAnswered(n)).length;
+ if(!auto&&unanswered&& !confirm(`Bạn còn ${unanswered} câu chưa hoàn thành. Vẫn nộp bài?`))return;
+ submitted=true;clearInterval(timeHandle);document.querySelectorAll("audio").forEach(a=>a.pause());
+ const r=scoreExam();for(let p=1;p<=4;p++){const old=currentPart; if(p===currentPart)markPart(p)}
+ document.getElementById("resultStudent").textContent=`${document.getElementById("studentName").value.trim()} — ${document.getElementById("studentClass").value.trim()}`;
+ document.getElementById("resultScore").textContent=`${r.total} / 40`;document.getElementById("resultPercent").textContent=`${Math.round(r.total/40*100)}% correct`;
+ document.getElementById("s1").textContent=`${r.s[1]} / 10`;document.getElementById("s2").textContent=`${r.s[2]} / 10`;document.getElementById("s3").textContent=`${r.s[3]} / 10`;document.getElementById("s4").textContent=`${r.s[4]} / 10`;
+ renderReview(r.details);document.getElementById("overlay").classList.remove("hidden");document.getElementById("sheetStatus").textContent="Đang gửi kết quả về Google Sheet...";
+ const duration=Math.round((Date.now()-startedAt)/1000),params=new URLSearchParams();
+ params.set("name",document.getElementById("studentName").value.trim());params.set("className",document.getElementById("studentClass").value.trim());
+ params.set("total",String(r.total));params.set("maxScore","40");params.set("durationSeconds",String(duration));params.set("activity","IELTS Listening Cambridge 21 Test 4");
+ params.set("reading",String(r.s[1]));params.set("grammar",String(r.s[2]));params.set("ing",String(r.s[3]));params.set("error",String(r.s[4]));
+ params.set("writingA",JSON.stringify(r.details));params.set("submittedAt",new Date().toISOString());
+ try{await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:params.toString()});document.getElementById("sheetStatus").textContent="✓ Đã gửi kết quả về Google Sheet."}
+ catch(e){document.getElementById("sheetStatus").textContent="Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng."}
+}
+function closeResult(){document.getElementById("overlay").classList.add("hidden");markPart(currentPart)}
+</script>
+</body>
+</html>
