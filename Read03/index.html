@@ -1,0 +1,911 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>IELTS Reading - Chicken / Introvert-Extrovert / Synesthesia</title><style>
+:root{--navy:#17344f;--navy2:#0d263b;--blue:#2e6f9f;--paper:#f4f4f2;--line:#d6dade;--text:#20262b;--muted:#64717b;--accent:#e9784e;--good:#2e7d5b;--bad:#b5442e}*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff}.hidden{display:none!important}button,input,select{font:inherit}.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700}.start-card h1{margin:8px 0 6px;color:var(--navy)}.start-card p{margin:0 0 22px;color:var(--muted)}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}.btn{border:0;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer}.exam{height:100vh;display:grid;grid-template-rows:auto auto 1fr auto}.top{background:var(--navy2);color:#fff;padding:11px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}.timer{font-family:ui-monospace,monospace;font-weight:700;background:rgba(255,255,255,.1);padding:8px 11px;border-radius:6px}.timer.danger{background:#912f25}.tabs{display:flex;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);background:#fafafa}.tab{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 13px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.workspace{display:grid;grid-template-columns:1fr 1fr;min-height:0}.passage,.questions{overflow:auto;padding:24px 26px}.passage{border-right:1px solid var(--line)}.questions{background:#fafafa}.passage h2{font-size:1.35rem;color:var(--navy);margin:0 0 18px}.copy{font-size:15px;line-height:1.72}.copy p{margin:0 0 15px}.group{margin-bottom:26px}.group h3{color:var(--navy);margin:0 0 5px}.inst{font-size:.92rem;color:var(--muted);margin-bottom:12px}.bank{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;background:#eef3f6;border:1px solid var(--line);padding:12px;border-radius:8px;margin:10px 0;font-size:.92rem}.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}.qhead{display:flex;gap:10px;align-items:flex-start}.qnum{min-width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.qtext{flex:1}.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer}.option.correct{border-color:var(--good);background:rgba(46,125,91,.08)}.option.wrong{border-color:var(--bad);background:rgba(181,68,46,.08)}.ans{width:100%;margin-top:9px;padding:10px;border:1px solid var(--line);border-radius:7px}.ans.correct{border-color:var(--good);background:rgba(46,125,91,.06)}.ans.wrong{border-color:var(--bad);background:rgba(181,68,46,.06)}.feedback{font-size:.88rem;margin-top:6px}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}.bottom{border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:10px;align-items:center}.nav{display:flex;gap:4px;overflow-x:auto;flex:1}.nq{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:12px;font-weight:700}.nq.answered{background:#dcebf5}.nq.correct{background:#dcefe5;border-color:var(--good)}.nq.wrong{background:#f3ddd8;border-color:var(--bad)}.submit{background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:7px;font-weight:700;white-space:nowrap;cursor:pointer}.overlay{position:fixed;inset:0;background:rgba(8,20,30,.7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.result{background:#fff;width:min(620px,100%);border-radius:14px;padding:28px}.score{font-size:2.5rem;font-weight:800;color:var(--navy);margin:8px 0}.break{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.break div{background:#f2f5f7;padding:12px;border-radius:8px;text-align:center}
+
+.result{max-height:90vh;overflow:auto}
+.review-wrap{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.review-title{font-size:1.08rem;color:var(--navy);margin:0 0 6px}
+.review-sub{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.wrong-review{border:1px solid #e2c8c2;background:#fffaf8;border-radius:9px;padding:14px 15px;margin:11px 0}
+.wrong-review .review-q{font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.45}
+.answer-row{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;font-size:.92rem;margin:4px 0}
+.answer-label{color:var(--muted);font-weight:700}
+.student-wrong{color:var(--bad);font-weight:700}
+.correct-answer{color:var(--good);font-weight:700}
+.explain-box{margin-top:10px;padding:10px 11px;background:#fff;border-left:3px solid var(--blue);border-radius:4px;font-size:.92rem;line-height:1.5}
+.evidence-box{margin-top:9px;padding:10px 11px;background:#f3f7fa;border:1px solid #d7e2ea;border-radius:7px;font-size:.9rem;line-height:1.5}
+.evidence-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);font-weight:700;margin-bottom:4px}
+.evidence-quote{font-style:italic}
+.goto-evidence{margin-top:9px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:7px 10px;font-size:.84rem;font-weight:700;cursor:pointer}
+.goto-evidence:hover{background:#f4f7f9}
+.evidence-pulse{outline:3px solid rgba(233,120,78,.45);background:#fff8e8;border-radius:5px;transition:background .2s}
+.perfect-review{padding:14px;border-radius:8px;background:#edf7f1;color:#245c43;font-weight:700}
+
+
+.completion-box{background:#fff;border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin-top:12px;line-height:1.8}
+.completion-box h4{margin:0 0 12px;color:var(--navy);font-size:1.05rem}
+.completion-text{font-size:15px;line-height:2.05;margin:0}
+.inline-blank{display:inline-flex;align-items:center;gap:5px;margin:2px 4px;vertical-align:middle;scroll-margin:100px}
+.blank-num{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700}
+.inline-answer{width:auto!important;min-width:145px;max-width:245px;margin:0!important;padding:7px 9px!important;display:inline-block;vertical-align:middle;background:#fff}
+.inline-answer.short{min-width:115px;max-width:180px}
+.inline-answer.select-wide{min-width:190px;max-width:270px}
+.flowchart{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin-top:10px}
+.flow-step{background:#fbfcfc;border:1px solid var(--line);border-radius:8px;padding:12px 14px;line-height:1.75}
+.flow-arrow{text-align:center;color:var(--blue);font-size:20px;font-weight:700;line-height:1}
+.notes-list{margin:8px 0 0;padding-left:20px}
+.notes-list li{margin:9px 0;line-height:1.8}
+.completion-box .bank{margin-top:14px;margin-bottom:16px}
+.inline-answer.correct{border-color:var(--good)!important;background:rgba(46,125,91,.06)!important}
+.inline-answer.wrong{border-color:var(--bad)!important;background:rgba(181,68,46,.06)!important}
+@media(max-width:600px){
+  .inline-answer,.inline-answer.select-wide{min-width:130px;max-width:100%;font-size:16px}
+  .completion-box{padding:15px}
+}
+
+
+.questions-pane 
+/* ===== INLINE REVIEW AFTER SUBMISSION ===== */
+.inline-review{
+  margin:12px 0 4px;
+  padding:13px 14px;
+  border:1px solid #e3c8c1;
+  border-left:4px solid var(--bad);
+  border-radius:8px;
+  background:#fffaf8;
+  color:var(--text);
+  line-height:1.5;
+  font-size:.92rem;
+}
+.inline-review.integrated{
+  width:100%;
+  margin-top:10px;
+}
+.inline-review-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  color:var(--navy);
+  font-weight:800;
+}
+.inline-review-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:27px;
+  height:27px;
+  padding:0 7px;
+  border-radius:999px;
+  background:var(--bad);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.inline-review-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:5px 9px;
+  margin:4px 0;
+}
+.inline-review-label{
+  color:var(--muted);
+  font-weight:700;
+}
+.inline-review-student{
+  color:var(--bad);
+  font-weight:700;
+}
+.inline-review-correct{
+  color:var(--good);
+  font-weight:800;
+}
+.inline-review-explain{
+  margin-top:9px;
+  padding:9px 10px;
+  background:#fff;
+  border-left:3px solid var(--blue);
+  border-radius:4px;
+}
+.inline-review-evidence{
+  margin-top:8px;
+  padding:9px 10px;
+  background:#f2f7fa;
+  border:1px solid #d7e3ea;
+  border-radius:7px;
+}
+.inline-review-evidence-label{
+  margin-bottom:4px;
+  color:var(--blue);
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.inline-review-quote{
+  font-style:italic;
+}
+.inline-review-btn{
+  margin-top:9px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  border-radius:6px;
+  padding:7px 10px;
+  font-size:.84rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.inline-review-btn:hover{background:#f4f7f9}
+.review-mode-note{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:7px;
+  background:#eef5f9;
+  color:var(--navy);
+  font-size:.9rem;
+  font-weight:700;
+}
+#questionsCopy input:disabled,
+#questionsCopy select:disabled{
+  opacity:1;
+  color:inherit;
+  cursor:not-allowed;
+}
+
+
+.match-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.match-row .match-label{min-width:120px;font-weight:700;color:var(--navy);padding-top:7px}
+.match-row .inline-review{flex-basis:100%}
+.choose-two-card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}
+.choose-two-card .option{display:block}
+.nq.partial{background:#fff0c9!important;border-color:#d6a534!important;color:#6f5313!important}
+.multi-score-note{font-size:.88rem;color:var(--muted);margin-top:7px}
+
+.annotation-bar{background:#fbfbfa}
+.annotation-zone-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-right:2px}
+
+.annotation-bar{position:sticky;top:-24px;z-index:8;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);margin:-24px -26px 18px;padding:10px 14px}
+.annotation-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}
+.annotation-btn:hover{background:#f4f7f9}
+.annotation-tip{font-size:12px;color:var(--muted);margin-left:auto}
+mark.user-highlight{background:#fff29a;color:inherit;padding:1px 0;border-radius:2px}
+.note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer;border-radius:2px}
+.notes-panel{display:none;background:#f6f9fb;border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:16px}
+.notes-panel.open{display:block}
+.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:10px 11px;margin:8px 0}
+.note-quote{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:5px}
+.note-text{font-size:14px;margin-bottom:7px}
+.note-actions{display:flex;gap:6px}
+.note-actions button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer}
+.timer.warning{background:#8b651d}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.passage,.questions{height:48vh}.passage{border-right:0;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<div id="start" class="start"><div class="start-card"><div class="eyebrow">IELTS Reading Practice</div><h1>Computer-Based Reading Test</h1><p>3 passages · 40 questions · 60 minutes</p><div class="field"><label>Họ và tên học sinh</label><input id="studentName" placeholder="Ví dụ: Nguyễn Văn An"></div><div class="field"><label>Lớp</label><input id="studentClass" placeholder="Ví dụ: 8A1"></div><button class="btn" onclick="startExam()">Bắt đầu làm bài</button><div id="startError" style="color:var(--bad);margin-top:10px"></div></div></div>
+<div id="exam" class="exam hidden"><div class="top"><div>Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div><div id="timer" class="timer">60:00</div></div><div class="tabs"><button class="tab active" data-p="1" onclick="showPassage(1)">Passage 1</button><button class="tab" data-p="2" onclick="showPassage(2)">Passage 2</button><button class="tab" data-p="3" onclick="showPassage(3)">Passage 3</button></div><div class="workspace"><div id="passage" class="passage"></div><div id="questions" class="questions"></div></div><div class="bottom"><div id="nav" class="nav"></div><button class="submit" onclick="submitExam(false)">Nộp bài</button></div></div>
+<div id="overlay" class="overlay hidden"><div class="result"><div class="eyebrow">Kết quả</div><div id="rstudent"></div><div id="rscore" class="score">0 / 40</div><div id="rpercent"></div><div class="break"><div><b>Passage 1</b><br><span id="p1s"></span></div><div><b>Passage 2</b><br><span id="p2s"></span></div><div><b>Passage 3</b><br><span id="p3s"></span></div></div><div id="status" style="color:var(--muted);font-size:.92rem"></div><div id="wrongReview" class="review-wrap"></div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn" onclick="closeResult()">Xem lại toàn bài</button><button class="btn" style="background:#587087" onclick="location.reload()">Làm lại từ đầu</button></div></div></div>
+<script>const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const passages={"1": {"title": "The History of the Chicken", "text": "<p>Chicken is the universal food of our era, crossing cultural boundaries with ease. With its mild taste and uniform texture, chicken presents a blank canvas for the national flavours of almost any cuisine. However, until the introduction of large-scale industrial production in the 20th century, the economic and nutritional contribution of chickens was small. Chickens were considered as domestic birds that were useful to humanity, but unlike other animals such as the horse or the ox, they did little to change the course of history. Nonetheless, the chicken has inspired contributions to culture, art, cuisine, science and religion over the millennia. Chickens were, and still are, a sacred animal in some cultures. The hen is a worldwide symbol of nurturing and fertility. The rooster is a universal sign of masculinity.</p>\n<p>The domesticated chicken has a complicated family tree, stretching back 10,000 years. Recent DNA testing has shown that the chicken's wild ancestor is the red junglefowl. The bird's resemblance to modern chickens is seen in the red feathers on top of its head, the red flesh around its mouth, and its distinctive call in the morning. The females of this breed protect their eggs in the same way modern-day chickens do, and they make the same clucking sounds. In its habitat, which stretches from north-eastern India to the Philippines, the red junglefowl looks on the forest floor for insects, seeds and fruit, and flies up to nest in the trees at night. That's about as much flying as it can manage, a trail that made it relatively easy for humans to capture and domesticate it. But the red junglefowl is not the sole ancestor of the modern chicken. Scientists have identified three closely related species that might have bred with the red junglefowl. Precisely how much genetic material these other birds contributed to the DNA of domesticated chickens is unknown. However, recent research suggests that modern chickens inherited at least one trait, their yellow skin, from the grey junglefowl of southern India.</p>\n<p>Once chickens were domesticated, cultural contacts, trade, migration and territorial conquest resulted in their introduction to different regions around the world over several thousand years. Chickens arrived in Egypt in around 1750 BC, as fighting birds and additions to zoos. Drawings of the birds decorated royal tombs, which contained the treasures that the kings and queens would take to the afterlife. Yet it would be another 100 years before the bird became popular among ordinary Egyptians.</p>\n<p>It was in that era that Egyptians mastered the technique of artificial incubation, which freed hens to lay more eggs. This was not easy. Most chicken eggs will hatch in three weeks, but only if the temperature remains at around 38 degrees Celsius. The eggs must also be turned three to five times a day, and the humidity must remain stable at about 55 percent, otherwise physical deformities can result, or the eggs won't hatch The Egyptians constructed vast complexes of large rooms, which were essentially ovens, and these were connected to a series of corridors and vents that allowed attendants to regulate the heat from fires. The egg attendants kept their methods a secret from outsiders for centuries.</p>\n<p>Around the Mediterranean, archaeologists have uncovered chicken bones from about 800 BC. Chickens were a delicacy among the Romans, whose culinary innovations included the omelette, and the practice of stuffing birds for cooking. European farmers began developing methods to fatten the birds, such as feeding them bread which had been soaked in wine. But the chicken’s status in Europe appears to have diminished with the collapse of Rome. In the period after the fall of the Roman Empire, chicken farms vanished and the birds returned to the size they had been 1,000 years earlier.</p>\n<p>Well into the 20th century chickens, although valued as a source of eggs, played a relatively minor role in diet and the economy. Long after cattle had entered the industrial age of centralized and mechanized large-scale production, chicken production was still a small-scale, local enterprise. The breakthrough that made today’s huge bird farms was the inclusion of antibiotics, along with a mixture of different vitamins, in the food chickens ate. This allowed chickens to be raised indoors and be protected from cold temperatures and heavy rain as well as predators. This factory farming represents the chicken’s final step in its transformation into a big protein-producing business.</p>\n<p>Factory farms turning out an increasing amount of chicken have resulted in an increasing demand. Modern chickens are cogs in a system designed to convert grain into protein with staggering efficiency. It takes less than 1 kilogram of feed to produce 400 grams of chicken. By comparison, around 3 kilograms of feed are required to produce 400 grams of beef. A day-old chick can be turned into a 2 kilogram bird in six week – half the time it took two generations ago.</p>\n<p>Chickens also make wonderful pets, as breeders will tell you. They are as colourful as tropical fish but more affectionate, as cute as guinea pigs and better catching mice than cats. In the USA, exotic and heritage breeds of chicken are being sold for a considerable source of money as the fashion for keeping chickens in the backyards becomes more popular.</p>\n<p>All in all, the globe-spanning chicken is an epic story of evolutionary, agricultural and culinary success, outnumbering human beings on the planet by nearly three to one.</p>"}, "2": {"title": "A study of introvert and extrovert characters", "text": "<p><b>A</b> We are often labelled as introverts or extroverts, and humans do seem to have biological propensities to behave in certain ways; some of us are naturally more talkative and sociable while others prefer more time alone. But, according to Canadian-born research psychologist Professor Brian Little, our traits are by no means fixed. In his book Me, Myself and Us: The Science of Personality and the Art of Well/-Being, Little suggests that we are often able to override our biological make-up through the adoption of what he calls \"free-traits', which allow us to behave in a manner which contrasts with our natural selves. According to Little, we adopt these free-traits only when we need them, in order to meet the demands of different situations and reach targets and goals that are important to us - our 'persona projects' These projects might be big (such as career ambitions) or small (like cleaning the car) and pursuing them shapes our day-to-day behavior and our relationships with friends, family and workmates.</p>\n<p><b>B</b> Little recommends that we might usefully think of ourselves as amateur scientists. We are continually exploring and testing the world around us to discover what works and what doesn't. We do things, say things, and then we observe the reactions and unconsciously store the results. We apply the knowledge gained from our 'experiments' to the advancement of our personal projects. Sometimes our personal project pursuit requires us to engage in free traits; at other times, we can just be ourselves. Little proposes that the successful pursuit of personal projects which are meaningful, manageable, supported by others and generate positive feelings can greatly impact our happiness and the quality of our lives.</p>\n<p><b>C</b> Professor Little and one of his graduate students, Sanna Balsari-Palsule, have looked into the experiences of employees in a range of organisations. The reason for basing the research on this environment, as Balsari-Palsule explains, is that ‘in an ideal world, one's job would fit one's traits perfectly, but that's very rarely the case. As so much can hinge on how we behave with others while at work, I wanted to discover what happens when people push the limits of their ability to act out of character. Do employees experience detriments in their well-being or work performance and does this increase their chances of burnout?\"</p>\n<p><b>D</b> Their findings suggest that extroverts initially experience advantages over introverts at work, in terms of getting noticed and promoted more rapidly. However, when introvert employees higher up in the organisation act out of character and take on extrovert traits, they have equal performance ratings to those extroverts, and do not report any negative effects of this use of free traits. Balsari Palsule offers an explanation: introvert employees make frequent use of 'restorative resources ‘These are spaces designed to allow employees to read quietly or simply relax in order to recover their equilibrium after a strenuous session of acting out of character that would otherwise leave them feeling drained. However, if the same employees were expected to act out of character for more prolonged periods, without the chance to recover, the benefits could quickly turn into costs.</p>\n<p><b>E</b> In the same study, however, extroverts report strikingly different, and much less rewarding, experiences of acting out of character. It appears that more outwardly confident personality types find it extremely hard-and stressful-to rein back their personalities and act as if they were introverted. We found this difference was most common among younger employees. It may be that introverts are generally so used to acting extrovertly in situations outside of the workplace that it becomes a relatively easy force of habit, particularly in Western cultures where extroversion is often highly valued. On the other hand, extrovert employees at the beginning of their careers are much less used to being isolated in an office for long periods of time, so may feel like caged animals, needing to feed off the energy of others in order to thrive, ‘says Balsari-Palsule.</p>\n<p><b>F</b> In the second stage of research, Balsari-Palsule is looking into the idiosyncrasies of people's work projects and how the work environment plays a vital role in supporting or, in some cases, constraining them. For example, highly competitive environments, which place demands on employees to conform to certain types of behaviour, may leave little time for employees to pursue projects which are important to them on a personal level. This could eventually be detrimental to their well-being. She expects that a closer look at the influences of different factors in the work environment, in conjunction with how people behave, will shed more light on what acting out of character may lead to.</p>\n<p><b>G</b> The implications of Little and BalsariPalsule's research are numerous and need to be taken into account by businesses. Balsari-Palsule suggests that it would serve companies well not to dismiss the costs of free-trait acting. She points out that compromised psychological and physical well-being can quickly result in more frequent occurrences of absenteeism. She also believes that management should rely less on handing out personality surveys that pigeonhole employees into introvert and extrovert categories. instead, organisations should adopt policies and build work environments that are supportive of free-trait expression, and also provide the spaces for people to be themselves. Furthermore, making these changes is also likely to lead to increases in productivity in the long run.</p>"}, "3": {"title": "Seeing the colour of sounds, hearing the colour of numbers", "text": "<p><b>A</b> What is the colour of five? What is the sound of blue? To most of us such questions are either meaningless or suitable only for poetry. But for some people these are questions to which very precise answers can be given. Five, for example, for some people is green, while others say the sound of a guitar is like someone blowing on their ankles. People who 'see' colour in numbers or letters of the alphabet and 'feel' sensation in sound have synesthesia – meaning literally 'joined sensation' – an extraordinary condition that causes certain senses to leak' into one another.</p>\n<p><b>B</b> People whose senses behave in this way are called 'synesthetes'. Some synesthetes take pleasure in it. To me it's like other people see the world in black and white, says one, who sees every letter, number, sound and pain in colour. Others learn to keep it a secret for fear of people laughing at them. But to neurologists investigating the brain it is of great interest. 'When scientists study normal perception,' says Daniel Smilek of the University of Waterloo in Ontario, Canada, there are lots of things we don't question because most of us perceive in the same way. Synesthesia, because it's abnormal, can give us new insights into normal perception.</p>\n<p><b>C</b> Seventeenth-century English philosopher John Locke was the first westerner to describe synesthesia. He wrote about a man who experienced bright red as the sound of the trumpet. Later, the condition excited the imagination of nineteenth-century European painters, such as the non-synesthete Wassily Kandinsky, who believed synesthetes were like good, much-played violins, which vibrate in all their parts and fibres. But it proved impossible to research and people lost interest. Recently, however, advances in brain imaging have sparked renewed interest.</p>\n<p><b>D</b> Early claims that the multi-sensory experiences of synesthesia were linked with the hallucinations of mental illness have long been disproved. Until 1993, many researchers dismissed it as another name for a vivid imagination, but then an experiment by Simon Baron-Cohen of Cambridge University in the UK showed that synesthetes who, when tested, had linked particular colours or shapes to letters, gave the same answers in 92 per cent of instances when tested again a week later. Non-synesthetes, given similar examples to imagine, returned the same answers in only 37 per cent of instances.</p>\n<p><b>E</b> Although there is some overlap between synesthetes as to what colour is linked to what – 56 per cent see the letter 'o' as white – most of the responses are individual. There are 30 possible sensory combinations, but links between sounds and colours are the most common. Women are between two and eight times more likely than men to have the condition.</p>\n<p><b>F</b> As yet there is no explanation for any of this, but small pieces of the jigsaw are emerging. A brain scanning experiment by Baron-Cohen in 1995 found that when synesthetes were listening to words, areas of the brain lit up that are normally only active in response to vision and colour. From this comes the notion that we may all have synesthesia at birth, when many parts of the brain are linked, but, as we develop, connections are pruned, so our senses become separated and the synesthetic mechanism is no longer intact. Somehow, synesthetes have kept their synaptic connections intact. It's an idea that has been challenged, however, on the grounds that if you give people certain drugs they will have synesthetic experiences, which suggests the mechanism is intact in adults but repressed.</p>\n<p><b>G</b> There are many more unanswered questions about synesthesia. For example, is the synesthete's colour response to a number five triggered by actually seeing the number five written on a page, or does the synesthete 'see' the colour just by thinking of the number five? The neurologist Vilyanur Ramachandran came up with a test for synesthesia which seemed to suggest it was the sight of the number that was important. He asked people to look at a page made up of specially drawn twos and fives that were a mirror image of each other. The fives were placed at random on the page but the twos were placed to form shapes such as circles or triangles. To most people the numbers just looked like a jumble without order, but to synesthetes the patterns made by the twos were very obvious as a different colour from the fives. 'This shows they were really sensing colour in the numbers they saw,' says Ramachandran 'Ideas don't form these kinds of patterns.'</p>\n<p><b>H</b> However, Smilek subsequently came up with evidence that what really matters is the idea of a number rather than the sight of it on a page. He asked a synesthete to do some simple mental arithmetic while looking at different coloured papers, The subject did not write her answers, but only thought of them and said them aloud. Smilek found that when the colour of the paper clashed with the colour of the answer, the subject's response was slower than when the colours were the same. An actual colour (the colour of the paper) could interfere with the colour of a number that existed only in her head (the answer to the mental arithmetic question). 'My research suggests that colour experiences coincide with the processing of meaning,' says Smilek. 'It's the concept of a number that's coloured.'</p>\n<p><b>I</b> So which is it? At present, we don't know, but in the future neurologists may be able to explain what's going on in the brains of people like the novelist Nabokov, who perceived the English 'a' as dark brown and the French 'e' as black.</p>"}};
+const questions=[{"n": 1, "p": 1, "type": "choice", "text": "Chicken is globally popular because it can be used for different styles of cooking.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 2, "p": 1, "type": "choice", "text": "Chickens have poor capacity for flight compared to Junglefowl.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 3, "p": 1, "type": "choice", "text": "Scientists believe that the domestic chicken has more than one ancestor.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 4, "p": 1, "type": "choice", "text": "A modern chicken has the same skin colour as the grey junglefowl.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 5, "p": 1, "type": "choice", "text": "After the Roman Empire ended, chicken consumption in Europe declined.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 6, "p": 1, "type": "choice", "text": "Some people criticise the methods involved in factory farming chickens.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 7, "p": 1, "type": "choice", "text": "In the USA, fewer people are keeping expensive breeds of chicken at home.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 8, "p": 1, "type": "text", "text": "Egyptian ...", "ans": ["zoos"]}, {"n": 9, "p": 1, "type": "text", "text": "Pictures used on the ... of kings and queens", "ans": ["tombs"]}, {"n": 10, "p": 1, "type": "text", "text": "method of egg ...", "ans": ["incubation"]}, {"n": 11, "p": 1, "type": "text", "text": "heat and ... levels", "ans": ["humidity"]}, {"n": 12, "p": 1, "type": "text", "text": "rooms functioned as ...", "ans": ["ovens"]}, {"n": 13, "p": 1, "type": "text", "text": "safe from bad weather and ...", "ans": ["predators"]}, {"n": 14, "p": 2, "type": "select", "text": "Paragraph A", "opts": ["i — How company culture can have a negative impact", "ii — Recommendations for employers", "iii — The pressure of restraining an outgoing nature", "iv — Why researchers decided to focus on the workplace", "v — How does personality influence your choice of career?", "vi — Examples of various contexts in which we might need to act out of character", "vii — How workplace facilities aid the success of one personality type", "viii — Learning by trial and error"], "ans": "vi"}, {"n": 15, "p": 2, "type": "select", "text": "Paragraph B", "opts": ["i — How company culture can have a negative impact", "ii — Recommendations for employers", "iii — The pressure of restraining an outgoing nature", "iv — Why researchers decided to focus on the workplace", "v — How does personality influence your choice of career?", "vi — Examples of various contexts in which we might need to act out of character", "vii — How workplace facilities aid the success of one personality type", "viii — Learning by trial and error"], "ans": "viii"}, {"n": 16, "p": 2, "type": "select", "text": "Paragraph C", "opts": ["i — How company culture can have a negative impact", "ii — Recommendations for employers", "iii — The pressure of restraining an outgoing nature", "iv — Why researchers decided to focus on the workplace", "v — How does personality influence your choice of career?", "vi — Examples of various contexts in which we might need to act out of character", "vii — How workplace facilities aid the success of one personality type", "viii — Learning by trial and error"], "ans": "iv"}, {"n": 17, "p": 2, "type": "select", "text": "Paragraph D", "opts": ["i — How company culture can have a negative impact", "ii — Recommendations for employers", "iii — The pressure of restraining an outgoing nature", "iv — Why researchers decided to focus on the workplace", "v — How does personality influence your choice of career?", "vi — Examples of various contexts in which we might need to act out of character", "vii — How workplace facilities aid the success of one personality type", "viii — Learning by trial and error"], "ans": "vii"}, {"n": 18, "p": 2, "type": "select", "text": "Paragraph E", "opts": ["i — How company culture can have a negative impact", "ii — Recommendations for employers", "iii — The pressure of restraining an outgoing nature", "iv — Why researchers decided to focus on the workplace", "v — How does personality influence your choice of career?", "vi — Examples of various contexts in which we might need to act out of character", "vii — How workplace facilities aid the success of one personality type", "viii — Learning by trial and error"], "ans": "iii"}, {"n": 19, "p": 2, "type": "select", "text": "Paragraph F", "opts": ["i — How company culture can have a negative impact", "ii — Recommendations for employers", "iii — The pressure of restraining an outgoing nature", "iv — Why researchers decided to focus on the workplace", "v — How does personality influence your choice of career?", "vi — Examples of various contexts in which we might need to act out of character", "vii — How workplace facilities aid the success of one personality type", "viii — Learning by trial and error"], "ans": "i"}, {"n": 20, "p": 2, "type": "select", "text": "Paragraph G", "opts": ["i — How company culture can have a negative impact", "ii — Recommendations for employers", "iii — The pressure of restraining an outgoing nature", "iv — Why researchers decided to focus on the workplace", "v — How does personality influence your choice of career?", "vi — Examples of various contexts in which we might need to act out of character", "vii — How workplace facilities aid the success of one personality type", "viii — Learning by trial and error"], "ans": "ii"}, {"n": 21, "p": 2, "type": "multi", "text": "Choose TWO characteristics of free traits.", "opts": ["A — They can affect the degree to which people are content with what they have.", "B — They are not used by people all the time.", "C — They influence people's choice of profession.", "D — They are useful in the pursuit of objectives assigned by others.", "E — They enable people to act in ways which are not typical for them."], "ans": ["B", "E"], "group": "g2122"}, {"n": 22, "p": 2, "type": "multi", "text": "Choose TWO characteristics of free traits.", "opts": ["A — They can affect the degree to which people are content with what they have.", "B — They are not used by people all the time.", "C — They influence people's choice of profession.", "D — They are useful in the pursuit of objectives assigned by others.", "E — They enable people to act in ways which are not typical for them."], "ans": ["B", "E"], "group": "g2122"}, {"n": 23, "p": 2, "type": "text", "text": "very ... workplaces", "ans": ["competitive"]}, {"n": 24, "p": 2, "type": "text", "text": "many ... for businesses", "ans": ["implications"]}, {"n": 25, "p": 2, "type": "text", "text": "depend too much on ...", "ans": ["surveys"]}, {"n": 26, "p": 2, "type": "text", "text": "boost a company's ...", "ans": ["productivity"]}, {"n": 27, "p": 3, "type": "select", "text": "For synesthetes, hearing the names of things affects the brain in the same way that looking at things does.", "opts": ["A — Daniel Smilek", "B — John Locke", "C — Simon Baron-Cohen", "D — Vilyanur Ramachandran"], "ans": "C"}, {"n": 28, "p": 3, "type": "select", "text": "Synesthetes are consistent in their association of a certain colour with a certain written symbol.", "opts": ["A — Daniel Smilek", "B — John Locke", "C — Simon Baron-Cohen", "D — Vilyanur Ramachandran"], "ans": "C"}, {"n": 29, "p": 3, "type": "select", "text": "One synesthete heard a particular musical instrument when he saw a certain colour.", "opts": ["A — Daniel Smilek", "B — John Locke", "C — Simon Baron-Cohen", "D — Vilyanur Ramachandran"], "ans": "B"}, {"n": 30, "p": 3, "type": "select", "text": "Because synesthetes experience things differently to other people, studying synesthesia can give fresh perspectives on how the senses usually work.", "opts": ["A — Daniel Smilek", "B — John Locke", "C — Simon Baron-Cohen", "D — Vilyanur Ramachandran"], "ans": "A"}, {"n": 31, "p": 3, "type": "select", "text": "an investigation into synesthesia using modern medical technology", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "F"}, {"n": 32, "p": 3, "type": "select", "text": "a mention of a writer who was a synesthete", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "I"}, {"n": 33, "p": 3, "type": "select", "text": "a definition of synesthesia", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "A"}, {"n": 34, "p": 3, "type": "select", "text": "two different explanations of why synesthesia is uncommon in adults", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "F"}, {"n": 35, "p": 3, "type": "select", "text": "a reason why some synesthetes do not tell people about their experiences", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "B"}, {"n": 36, "p": 3, "type": "choice", "text": "The painter Kandinsky admired synesthetes.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 37, "p": 3, "type": "choice", "text": "It is no longer believed that synesthesia is associated with mental illness.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 38, "p": 3, "type": "choice", "text": "Equal numbers of men and women have synesthesia.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 39, "p": 3, "type": "choice", "text": "Synesthetes have greater powers of logic than people with normal perception.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 40, "p": 3, "type": "choice", "text": "It is possible that we are all born with synesthesia.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}];
+const answerReview={"1": {"para": 1, "explain": "TRUE: the opening paragraph says chicken's mild taste and uniform texture allow it to take on the flavours of almost any cuisine.", "evidence": "With its mild taste and uniform texture, chicken presents a blank canvas for the national flavours of almost any cuisine."}, "2": {"para": 2, "explain": "NOT GIVEN: the text describes the red junglefowl's limited flying ability, but it does not compare that ability with modern chickens.", "evidence": "That's about as much flying as it can manage"}, "3": {"para": 2, "explain": "TRUE: the red junglefowl is explicitly described as not being the sole ancestor; three related species may also have contributed.", "evidence": "the red junglefowl is not the sole ancestor of the modern chicken"}, "4": {"para": 2, "explain": "TRUE: the passage says modern chickens inherited yellow skin from the grey junglefowl.", "evidence": "modern chickens inherited at least one trait, their yellow skin, from the grey junglefowl"}, "5": {"para": 5, "explain": "NOT GIVEN: the passage says chicken's status diminished and farms vanished after Rome, but it does not explicitly state that consumption declined.", "evidence": "the chicken’s status in Europe appears to have diminished with the collapse of Rome"}, "6": {"para": 6, "explain": "NOT GIVEN: factory farming is described, but no criticism of the farming methods is reported.", "evidence": "This factory farming represents the chicken’s final step in its transformation into a big protein-producing business."}, "7": {"para": 8, "explain": "FALSE: keeping exotic and heritage chickens in American backyards is becoming more popular, not less popular.", "evidence": "the fashion for keeping chickens in the backyards becomes more popular"}, "8": {"para": 3, "explain": "The one-word answer is zoos: chickens arrived in Egypt as fighting birds and additions to zoos.", "evidence": "as fighting birds and additions to zoos"}, "9": {"para": 3, "explain": "The pictures decorated royal tombs, so the answer is tombs.", "evidence": "Drawings of the birds decorated royal tombs"}, "10": {"para": 4, "explain": "The method that did not require hens was artificial incubation.", "evidence": "Egyptians mastered the technique of artificial incubation"}, "11": {"para": 4, "explain": "Humidity had to remain stable as well as temperature, so the answer is humidity.", "evidence": "the humidity must remain stable at about 55 percent"}, "12": {"para": 4, "explain": "The rooms were essentially ovens.", "evidence": "large rooms, which were essentially ovens"}, "13": {"para": 6, "explain": "Indoor chickens were protected from weather as well as predators.", "evidence": "protected from cold temperatures and heavy rain as well as predators"}, "14": {"para": 1, "explain": "Heading vi fits because paragraph A explains free-traits and gives examples of situations/projects that can require people to act unlike their natural selves.", "evidence": "free-traits ... allow us to behave in a manner which contrasts with our natural selves"}, "15": {"para": 2, "explain": "Heading viii fits because paragraph B compares people with amateur scientists who experiment, observe reactions and apply what they learn.", "evidence": "We are continually exploring and testing the world around us to discover what works and what doesn't."}, "16": {"para": 3, "explain": "Heading iv fits because paragraph C explicitly explains why the researchers chose workplaces as their research setting.", "evidence": "The reason for basing the research on this environment"}, "17": {"para": 4, "explain": "Heading vii fits because restorative spaces help introverts recover after acting extrovertedly.", "evidence": "introvert employees make frequent use of 'restorative resources'"}, "18": {"para": 5, "explain": "Heading iii fits because the paragraph focuses on the stress extroverts experience when they have to restrain their outgoing personalities.", "evidence": "find it extremely hard-and stressful-to rein back their personalities"}, "19": {"para": 6, "explain": "Heading i fits because highly competitive workplace environments can restrict personal projects and damage well-being.", "evidence": "highly competitive environments ... may leave little time for employees to pursue projects which are important to them"}, "20": {"para": 7, "explain": "Heading ii fits because the final paragraph gives practical recommendations to companies and managers.", "evidence": "organisations should adopt policies and build work environments that are supportive of free-trait expression"}, "21": {"para": 1, "explain": "The two correct ideas are B and E: free-traits are adopted only when needed, and they allow people to behave in ways that contrast with their natural selves.", "evidence": "we adopt these free-traits only when we need them"}, "22": {"para": 1, "explain": "The two correct ideas are B and E: free-traits are not used all the time and enable people to act out of character.", "evidence": "allow us to behave in a manner which contrasts with our natural selves"}, "23": {"para": 6, "explain": "The answer is competitive because the second-stage research specifically discusses highly competitive workplaces.", "evidence": "highly competitive environments"}, "24": {"para": 7, "explain": "The answer is implications: the research is said to have numerous implications for businesses.", "evidence": "The implications of Little and Balsari-Palsule's research are numerous"}, "25": {"para": 7, "explain": "The answer is surveys: management is advised to rely less on personality surveys.", "evidence": "management should rely less on handing out personality surveys"}, "26": {"para": 7, "explain": "The answer is productivity: supportive changes are expected to increase productivity in the long run.", "evidence": "likely to lead to increases in productivity in the long run"}, "27": {"para": 6, "explain": "C — Simon Baron-Cohen. His brain scan found visual/colour areas activated when synesthetes listened to words.", "evidence": "when synesthetes were listening to words, areas of the brain lit up that are normally only active in response to vision and colour"}, "28": {"para": 4, "explain": "C — Simon Baron-Cohen. His experiment showed synesthetes repeated the same colour/shape associations 92% of the time.", "evidence": "gave the same answers in 92 per cent of instances when tested again a week later"}, "29": {"para": 3, "explain": "B — John Locke. He described a man who experienced bright red as the sound of a trumpet.", "evidence": "a man who experienced bright red as the sound of the trumpet"}, "30": {"para": 2, "explain": "A — Daniel Smilek. He says abnormal synesthetic perception can provide new insights into normal perception.", "evidence": "Synesthesia, because it's abnormal, can give us new insights into normal perception."}, "31": {"para": 6, "explain": "Paragraph F contains the brain-scanning experiment using modern medical imaging technology.", "evidence": "A brain scanning experiment by Baron-Cohen in 1995"}, "32": {"para": 9, "explain": "Paragraph I mentions novelist Nabokov and gives examples of the colours he associated with letters.", "evidence": "the novelist Nabokov, who perceived the English 'a' as dark brown"}, "33": {"para": 1, "explain": "Paragraph A defines synesthesia as 'joined sensation' and explains that senses leak into one another.", "evidence": "synesthesia – meaning literally 'joined sensation'"}, "34": {"para": 6, "explain": "Paragraph F presents two explanations: connections may be pruned during development, or the mechanism may remain intact but be repressed.", "evidence": "connections are pruned ... [or] the mechanism is intact in adults but repressed"}, "35": {"para": 2, "explain": "Paragraph B says some synesthetes hide the condition because they fear being laughed at.", "evidence": "keep it a secret for fear of people laughing at them"}, "36": {"para": 3, "explain": "TRUE: Kandinsky's comparison of synesthetes with good, much-played violins is presented admiringly.", "evidence": "synesthetes were like good, much-played violins"}, "37": {"para": 4, "explain": "TRUE: the text says claims connecting synesthesia with hallucinations of mental illness have long been disproved.", "evidence": "have long been disproved"}, "38": {"para": 5, "explain": "FALSE: women are reported to be between two and eight times more likely than men to have synesthesia.", "evidence": "Women are between two and eight times more likely than men to have the condition."}, "39": {"para": 2, "explain": "NOT GIVEN: the passage discusses perception and neurological interest, but gives no information that synesthetes have stronger logical ability.", "evidence": "can give us new insights into normal perception"}, "40": {"para": 6, "explain": "TRUE: one proposed explanation is that everyone may have synesthesia at birth before brain connections are pruned.", "evidence": "we may all have synesthesia at birth"}};
+
+let current=1,startedAt=0,endAt=0,remaining=3600,timerHandle=null,submitted=false,savedSelection=null,savedSelectionZone=null,activeHighlight=null,activeHighlightZone=null;
+const STORAGE_PREFIX="READ_CHICKEN_INTROVERT_SYNESTHESIA_";
+function ssGet(k){return sessionStorage.getItem(STORAGE_PREFIX+k)}
+function ssSet(k,v){sessionStorage.setItem(STORAGE_PREFIX+k,v)}
+function clearAttempt(){const a=[];for(let i=0;i<sessionStorage.length;i++){const k=sessionStorage.key(i);if(k&&k.startsWith(STORAGE_PREFIX))a.push(k)}a.forEach(k=>sessionStorage.removeItem(k))}
+const norm=v=>String(v??'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ');
+function startExam(){const n=document.getElementById('studentName').value.trim(),c=document.getElementById('studentClass').value.trim();if(!n||!c){document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}clearAttempt();document.getElementById('topName').textContent=n;document.getElementById('topClass').textContent=c;document.getElementById('start').classList.add('hidden');document.getElementById('exam').classList.remove('hidden');startedAt=Date.now();endAt=startedAt+60*60*1000;buildNav();showPassage(1);tickTimer();timerHandle=setInterval(tickTimer,250)}
+function tickTimer(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));updateTimer();if(remaining<=0&&!submitted){clearInterval(timerHandle);submitExam(true)}}function updateTimer(){const e=document.getElementById('timer'),m=Math.floor(Math.max(remaining,0)/60),s=Math.max(remaining,0)%60;e.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;e.classList.toggle('warning',remaining<=600&&remaining>300);e.classList.toggle('danger',remaining<=300)}
+function groupMeta(n,p){if(p===1){if(n<=7)return['Questions 1–7','Choose TRUE, FALSE or NOT GIVEN.'];if(n<=10)return['Questions 8–10','Complete the flow-chart. Choose NO MORE THAN TWO WORDS from the passage.'];return['Questions 11–13','Complete the notes. Choose ONE WORD ONLY from the passage.']}if(p===2){if(n<=19)return['Questions 14–19','Complete the summary using the list A–J.'];if(n<=23)return['Questions 20–23','Choose YES, NO or NOT GIVEN.'];return['Questions 24–26','Choose the correct letter A, B, C or D.']}if(n<=32)return['Questions 27–32','Complete the summary using the list A–J.'];if(n<=36)return['Questions 33–36','Choose YES, NO or NOT GIVEN.'];return['Questions 37–40','Choose the correct letter A, B, C or D.']}
+
+function zoneRoot(zone){
+  return document.getElementById(zone==='questions'?'questionsCopy':'passageCopy');
+}
+function zoneMarkupKey(zone,p=current){
+  return (zone==='questions'?'questionsMarkup':'passageMarkup')+p;
+}
+function noteStoreKey(zone,p=current){
+  return 'notes_'+zone+'_'+p;
+}
+function notesPanelId(zone){
+  return zone==='questions'?'notesPanelQuestions':'notesPanelPassage';
+}
+function notesCountId(zone){
+  return zone==='questions'?'notesCountQuestions':'notesCountPassage';
+}
+function saveZoneMarkup(zone){
+  const root=zoneRoot(zone);
+  if(root)ssSet(zoneMarkupKey(zone),root.innerHTML);
+}
+function saveCurrentMarkups(){
+  saveZoneMarkup('passage');
+  saveZoneMarkup('questions');
+}
+function captureSelection(zone){
+  if(submitted)return;
+  const sel=window.getSelection();
+  const root=zoneRoot(zone);
+  if(!sel||!root||sel.rangeCount===0||sel.isCollapsed)return;
+  const r=sel.getRangeAt(0);
+  if(root.contains(r.commonAncestorContainer)){
+    savedSelection=r.cloneRange();
+    savedSelectionZone=zone;
+  }
+}
+function annotationBlock(node){
+  const el=node&&node.nodeType===3?node.parentElement:node;
+  if(!el)return null;
+  return el.closest('p,.completion-text,.flow-step,li,.card,.option,.inst,.bank div,h3,h4,.qtext');
+}
+function getUsableSelection(zone){
+  const root=zoneRoot(zone);
+  if(!savedSelection||savedSelectionZone!==zone||!root||!root.contains(savedSelection.commonAncestorContainer)){
+    alert(zone==='questions'
+      ?'Hãy bôi đen phần chữ ở bên câu hỏi trước.'
+      :'Hãy bôi đen phần chữ trong bài đọc trước.');
+    return null;
+  }
+  if(savedSelection.collapsed||!savedSelection.toString().trim()){
+    alert('Hãy bôi đen một đoạn chữ trước.');
+    return null;
+  }
+
+  const a=annotationBlock(savedSelection.startContainer);
+  const b=annotationBlock(savedSelection.endContainer);
+  if(!a||!b||a!==b){
+    alert('Để highlight/ghi chú ổn định, hãy chọn chữ trong cùng một câu hoặc cùng một khối nội dung.');
+    return null;
+  }
+
+  const cloned=savedSelection.cloneContents();
+  if(cloned.querySelector && cloned.querySelector('input,select,button,textarea')){
+    alert('Không thể highlight xuyên qua ô trả lời. Hãy chỉ chọn phần chữ.');
+    return null;
+  }
+  return savedSelection.cloneRange();
+}
+function clearBrowserSelection(){
+  const sel=window.getSelection();
+  if(sel)sel.removeAllRanges();
+  savedSelection=null;
+  savedSelectionZone=null;
+}
+function addHighlight(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  try{
+    const mark=document.createElement('mark');
+    mark.className='user-highlight';
+    mark.dataset.annotationZone=zone;
+    const frag=r.extractContents();
+    mark.appendChild(frag);
+    r.insertNode(mark);
+    activeHighlight=mark;
+    activeHighlightZone=zone;
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+  }catch(e){
+    alert('Không thể highlight vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function clearHighlight(zone){
+  if(submitted)return;
+  let targets=[];
+  if(activeHighlight&&activeHighlightZone===zone&&document.body.contains(activeHighlight)){
+    targets=[activeHighlight];
+  }else if(savedSelection&&savedSelectionZone===zone){
+    const root=zoneRoot(zone);
+    if(root)targets=[...root.querySelectorAll('mark.user-highlight')].filter(m=>{
+      try{return savedSelection.intersectsNode(m)}catch(e){return false}
+    });
+  }
+  if(!targets.length){
+    alert('Hãy bấm vào phần đã highlight rồi chọn “Xóa HL”.');
+    return;
+  }
+  targets.forEach(m=>{
+    const p=m.parentNode;
+    while(m.firstChild)p.insertBefore(m.firstChild,m);
+    m.remove();
+    p.normalize();
+  });
+  activeHighlight=null;
+  activeHighlightZone=null;
+  saveZoneMarkup(zone);
+  clearBrowserSelection();
+}
+function loadNotes(zone,p=current){
+  try{return JSON.parse(ssGet(noteStoreKey(zone,p))||'[]')}catch(e){return[]}
+}
+function saveNotes(zone,notes,p=current){
+  ssSet(noteStoreKey(zone,p),JSON.stringify(notes));
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function addNote(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  const quote=r.toString().trim();
+  const text=prompt('Nhập ghi chú cho đoạn đã chọn:');
+  if(text===null||!text.trim())return;
+  const id='note_'+zone+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  try{
+    const span=document.createElement('span');
+    span.className='note-anchor';
+    span.dataset.noteId=id;
+    span.dataset.annotationZone=zone;
+    span.title='Bấm để xem/sửa ghi chú';
+    const frag=r.extractContents();
+    span.appendChild(frag);
+    r.insertNode(span);
+
+    const notes=loadNotes(zone);
+    notes.push({id,quote,text:text.trim()});
+    saveNotes(zone,notes);
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+    renderNotesPanel(zone,current,true);
+  }catch(e){
+    alert('Không thể tạo ghi chú cho vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function toggleNotes(zone){
+  const panel=document.getElementById(notesPanelId(zone));
+  if(panel)panel.classList.toggle('open');
+}
+function renderNotesPanel(zone,p=current,forceOpen=false){
+  const panel=document.getElementById(notesPanelId(zone));
+  const count=document.getElementById(notesCountId(zone));
+  if(!panel)return;
+  const notes=loadNotes(zone,p);
+  if(count)count.textContent=notes.length;
+  panel.innerHTML=notes.length
+    ?notes.map(n=>`<div class="note-item">
+        <div class="note-quote">“${esc(n.quote)}”</div>
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-actions">
+          <button type="button" onclick="editNote('${zone}','${n.id}')">Sửa</button>
+          <button type="button" onclick="deleteNote('${zone}','${n.id}')">Xóa</button>
+        </div>
+      </div>`).join('')
+    :'<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở phần này.</div>';
+  if(forceOpen)panel.classList.add('open');
+}
+function editNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt('Sửa ghi chú:',n.text);if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function deleteNote(zone,id){
+  const notes=loadNotes(zone).filter(x=>x.id!==id);
+  saveNotes(zone,notes);
+  const root=zoneRoot(zone);
+  if(root)root.querySelectorAll(`[data-note-id="${id}"]`).forEach(s=>{
+    const p=s.parentNode;
+    while(s.firstChild)p.insertBefore(s.firstChild,s);
+    s.remove();
+    p.normalize();
+  });
+  saveZoneMarkup(zone);
+  renderNotesPanel(zone,current,true);
+}
+function openNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt(`Đoạn đã ghi chú:\n“${n.quote}”\n\nGhi chú:`,n.text);
+  if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function bindAnnotations(zone){
+  const root=zoneRoot(zone);if(!root)return;
+  root.addEventListener('mouseup',()=>captureSelection(zone));
+  root.addEventListener('keyup',()=>captureSelection(zone));
+  root.addEventListener('click',e=>{
+    const note=e.target.closest('.note-anchor');
+    if(note){openNote(zone,note.dataset.noteId);return}
+    const mark=e.target.closest('mark.user-highlight');
+    if(mark){
+      activeHighlight=mark;
+      activeHighlightZone=zone;
+    }else if(zone===activeHighlightZone){
+      activeHighlight=null;
+      activeHighlightZone=null;
+    }
+  });
+}
+function annotationToolbar(zone){
+  const isQ=zone==='questions';
+  const label=isQ?'Câu hỏi':'Bài đọc';
+  const countId=isQ?'notesCountQuestions':'notesCountPassage';
+  return `<div class="annotation-bar">
+    <span class="annotation-zone-label">${label}</span>
+    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button>
+    <button type="button" class="annotation-btn" onclick="clearHighlight('${zone}')">Xóa HL</button>
+    <button type="button" class="annotation-btn" onclick="addNote('${zone}')">📝 Add note</button>
+    <button type="button" class="annotation-btn" onclick="toggleNotes('${zone}')">Ghi chú (<span id="${countId}">0</span>)</button>
+    <span class="annotation-tip">Bôi đen phần chữ rồi chọn công cụ.</span>
+  </div>`;
+}
+
+function showPassage(p){
+  saveCurrentMarkups();
+  current=p;
+  activeHighlight=null;
+  activeHighlightZone=null;
+  savedSelection=null;
+  savedSelectionZone=null;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));
+
+  const passageMarkup=ssGet(zoneMarkupKey('passage',p))||passages[p].text;
+  document.getElementById('passage').innerHTML=
+    annotationToolbar('passage')+
+    `<div id="notesPanelPassage" class="notes-panel"></div>
+     <h2>${passages[p].title}</h2>
+     <div class="copy" id="passageCopy">${passageMarkup}</div>`;
+
+  bindAnnotations('passage');
+  renderNotesPanel('passage',p,false);
+  buildQuestions(p);
+
+  document.getElementById('passage').scrollTop=0;
+  document.getElementById('questions').scrollTop=0;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function renderQ(q){
+  let body='';
+  if(q.type==='text'){
+    body=`<input class="ans" id="q${q.n}" data-q="${q.n}" type="text" autocomplete="off" placeholder="Type your answer">`;
+  }else if(q.type==='select'){
+    body=`<select class="ans" id="q${q.n}" data-q="${q.n}"><option value="">-- Choose --</option>${q.opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select>`;
+  }else{
+    body=q.opts.map(x=>{
+      const v=optionValue(x);
+      return `<label class="option" data-q="${q.n}" data-val="${v}"><input type="radio" name="q${q.n}" value="${v}"> ${x}</label>`;
+    }).join('');
+  }
+  return `<div class="card" id="card${q.n}"><div class="qhead"><span class="qnum">${q.n}</span><div class="qtext">${q.text}</div></div>${body}<div class="feedback" id="fb${q.n}"></div></div>`;
+}
+function inlineText(n,placeholder='answer'){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><input class="ans inline-answer short" id="q${n}" data-q="${n}" type="text" autocomplete="off" placeholder="${placeholder}"></span>`;
+}
+function inlineSelect(n,opts){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><select class="ans inline-answer select-wide" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select></span>`;
+}
+function renderP1Notes(){
+  return `<div class="group"><h3>Questions 8–13</h3>
+    <div class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="completion-box">
+      <h4>The domestication and farming of chickens</h4>
+      <p class="completion-text"><b>Egypt</b></p>
+      <ul class="notes-list">
+        <li>In 1750 BC the first chickens were seen in Egyptian ${inlineText(8)} and used in fights.</li>
+        <li>Pictures of chickens were used on the ${inlineText(9)} of kings and queens.</li>
+        <li>Egyptians developed a method of egg ${inlineText(10)} that didn't involve hens.</li>
+        <li>For eggs to hatch, heat and ${inlineText(11)} levels had to stay the same.</li>
+        <li>The eggs were hatched in rooms that functioned as ${inlineText(12)}.</li>
+      </ul>
+      <p class="completion-text"><b>Romans</b></p>
+      <ul class="notes-list"><li>Farmers gave chickens a mixture of bread and wine to make them bigger.</li></ul>
+      <p class="completion-text"><b>20th-century farming</b></p>
+      <ul class="notes-list">
+        <li>Farmers started adding antibiotics and vitamins to chicken feed.</li>
+        <li>Chickens were kept inside, safe from bad weather and ${inlineText(13)}.</li>
+      </ul>
+    </div>
+  </div>`;
+}
+function renderHeadingMatch(){
+  const opts=questions.find(q=>q.n===14).opts;
+  const rows=questions.filter(q=>q.n>=14&&q.n<=20);
+  return `<div class="group"><h3>Questions 14–20</h3>
+    <div class="inst">Choose the correct heading for each paragraph from the list below. Choose <b>i–viii</b>.</div>
+    <div class="bank">${opts.map(x=>`<div><b>${optionValue(x)}</b> ${x.slice(x.indexOf(' — ')+3)}</div>`).join('')}</div>
+    ${rows.map(q=>`<div class="match-row completion-text" id="card${q.n}">
+      <div class="match-label"><span class="blank-num">${q.n}</span> ${q.text}</div>
+      ${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}
+    </div>`).join('')}
+  </div>`;
+}
+function renderChooseTwo(){
+  const opts=questions.find(q=>q.n===21).opts;
+  return `<div class="group"><h3>Questions 21–22</h3>
+    <div class="inst">Choose <b>TWO</b> correct answers. Which TWO characteristics of free traits are stated by Professor Brian Little in the first paragraph?</div>
+    <div class="choose-two-card" id="card21"><span id="card22"></span>
+      ${opts.map(x=>`<label class="option multi-option" data-group="g2122" data-val="${optionValue(x)}"><input type="checkbox" name="g2122" value="${optionValue(x)}"> ${x}</label>`).join('')}
+      <div class="multi-score-note" id="fb2122">Select exactly TWO options.</div>
+      <div id="multiReview2122"></div>
+    </div>
+  </div>`;
+}
+function renderP2Completion(){
+  return `<div class="group"><h3>Questions 23–26</h3>
+    <div class="inst">Complete the sentences below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="completion-box">
+      <p class="completion-text">In the second stage of her research, Balsari-Palsule will explore her theory that very ${inlineText(23)} workplaces prevent employees from completing projects of personal importance.</p>
+      <p class="completion-text">The research done by Little and Balsari-Palsule has many ${inlineText(24)} for businesses.</p>
+      <p class="completion-text">Balsari-Palsule thinks that managers depend too much on ${inlineText(25)} aimed at determining personality types.</p>
+      <p class="completion-text">Balsari-Palsule thinks that relieving the stress caused by free-trait acting could boost a company's ${inlineText(26)} over time.</p>
+    </div>
+  </div>`;
+}
+function renderPeopleMatch(){
+  const opts=questions.find(q=>q.n===27).opts;
+  const rows=questions.filter(q=>q.n>=27&&q.n<=30);
+  return `<div class="group"><h3>Questions 27–30</h3>
+    <div class="inst">Match each finding with the correct academic, A–D. You may use any letter more than once.</div>
+    <div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>
+    ${rows.map(q=>`<div class="match-row completion-text" id="card${q.n}">
+      <div style="flex:1;min-width:260px"><span class="blank-num">${q.n}</span> ${q.text}</div>
+      ${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}
+    </div>`).join('')}
+  </div>`;
+}
+function renderParagraphMatch(){
+  const opts=questions.find(q=>q.n===31).opts;
+  const rows=questions.filter(q=>q.n>=31&&q.n<=35);
+  return `<div class="group"><h3>Questions 31–35</h3>
+    <div class="inst">Which paragraph contains the following information? Choose A–I. You may use any letter more than once.</div>
+    ${rows.map(q=>`<div class="match-row completion-text" id="card${q.n}">
+      <div style="flex:1;min-width:260px"><span class="blank-num">${q.n}</span> ${q.text}</div>
+      ${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}
+    </div>`).join('')}
+  </div>`;
+}
+function renderStandardGroup(qs,title,inst){
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>${qs.map(renderQ).join('')}</div>`;
+}
+function buildQuestions(p){
+  let h='';
+  if(p===1){
+    h+=renderStandardGroup(questions.filter(q=>q.n>=1&&q.n<=7),'Questions 1–7','Choose TRUE, FALSE or NOT GIVEN.');
+    h+=renderP1Notes();
+  }else if(p===2){
+    h+=renderHeadingMatch();
+    h+=renderChooseTwo();
+    h+=renderP2Completion();
+  }else{
+    h+=renderPeopleMatch();
+    h+=renderParagraphMatch();
+    h+=renderStandardGroup(questions.filter(q=>q.n>=36&&q.n<=40),'Questions 36–40','Choose TRUE, FALSE or NOT GIVEN.');
+  }
+
+  const savedQuestionMarkup=ssGet(zoneMarkupKey('questions',p));
+  const questionMarkup=savedQuestionMarkup||h;
+  document.getElementById('questions').innerHTML=
+    annotationToolbar('questions')+
+    `<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${questionMarkup}</div>`;
+
+  restore(p);
+  bindTrack();
+  bindAnnotations('questions');
+  renderNotesPanel('questions',p,false);
+
+  if(submitted){
+    const copy=document.getElementById('questionsCopy');
+    if(copy&&!copy.querySelector('.review-mode-note.top-review-note')){
+      copy.insertAdjacentHTML('afterbegin','<div class="review-mode-note top-review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới. Bấm “Đối chiếu trong bài đọc” để đưa đoạn bằng chứng ở cột trái vào vị trí xem.</div>');
+    }
+    markPassage(p);
+  }
+}
+function getMulti(){
+  try{return JSON.parse(ssGet('g2122')||'[]')}catch(e){return[]}
+}
+function restore(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const v=ssGet('q'+q.n)||'';
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e)e.value=v;
+    }else if(v){
+      const e=[...document.querySelectorAll(`input[name="q${q.n}"]`)].find(x=>x.value===v);
+      if(e)e.checked=true;
+    }
+  }
+  if(p===2){
+    const sel=getMulti();
+    document.querySelectorAll('input[name="g2122"]').forEach(e=>e.checked=sel.includes(e.value));
+  }
+}
+function bindTrack(){
+  document.querySelectorAll('.ans').forEach(e=>{
+    e.oninput=e.onchange=()=>save(+e.dataset.q,e.value);
+  });
+  document.querySelectorAll('input[type=radio]').forEach(e=>{
+    e.onchange=()=>save(+e.closest('.option').dataset.q,e.value);
+  });
+  document.querySelectorAll('input[name="g2122"]').forEach(e=>{
+    e.onchange=()=>{
+      let sel=[...document.querySelectorAll('input[name="g2122"]:checked')].map(x=>x.value);
+      if(sel.length>2){
+        e.checked=false;
+        sel=[...document.querySelectorAll('input[name="g2122"]:checked')].map(x=>x.value);
+        alert('Chỉ chọn TWO đáp án.');
+      }
+      ssSet('g2122',JSON.stringify(sel));
+      const done=sel.length===2;
+      document.getElementById('nav21')?.classList.toggle('answered',done);
+      document.getElementById('nav22')?.classList.toggle('answered',done);
+    };
+  });
+}
+function save(n,v){
+  ssSet('q'+n,v);
+  const e=document.getElementById('nav'+n);
+  if(e)e.classList.toggle('answered',String(v).trim()!=='');
+}
+function buildNav(){
+  document.getElementById('nav').innerHTML=questions.map(q=>`<button class="nq" id="nav${q.n}" onclick="goQ(${q.n})">${q.n}</button>`).join('');
+}
+function goQ(n){
+  const q=questions.find(x=>x.n===n);
+  if(q.p!==current)showPassage(q.p);
+  setTimeout(()=>{
+    const target=document.getElementById('card'+n)||(n===22?document.getElementById('card21'):null);
+    target?.scrollIntoView({behavior:'smooth',block:'center'});
+    const control=document.getElementById('q'+n);
+    if(control&&(control.tagName==='SELECT'||control.type==='text'))control.focus({preventScroll:true});
+  },60);
+}
+function correct(q,u){
+  if(q.type==='multi')return false;
+  return q.type==='text'?q.ans.map(norm).includes(norm(u)):norm(u)===norm(q.ans);
+}
+
+function inlineReviewHTML(q,user){
+  const r=answerReview[q.n];
+  return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
+    <div class="inline-review-title">
+      <span class="inline-review-badge">Q${q.n}</span>
+      <span>Giải thích câu trả lời sai</span>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Bạn trả lời</div>
+      <div class="inline-review-student">${esc(displayAnswer(q,user))}</div>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Đáp án đúng</div>
+      <div class="inline-review-correct">${esc(displayKey(q))}</div>
+    </div>
+    <div class="inline-review-explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="inline-review-evidence">
+      <div class="inline-review-evidence-label">Evidence · Passage ${q.p}, đoạn ${r.para}</div>
+      <div class="inline-review-quote">“${esc(r.evidence)}”</div>
+    </div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(${q.n})">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+
+function removeInlineReview(n){
+  document.querySelectorAll(`[data-inline-review="${n}"]`).forEach(e=>e.remove());
+}
+
+function renderInlineReview(q,user,ok){
+  removeInlineReview(q.n);
+  if(ok)return;
+
+  const card=document.getElementById('card'+q.n);
+  if(!card)return;
+
+  // Standard IELTS question cards: explanation sits directly under the options.
+  if(card.classList.contains('card')){
+    card.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+    return;
+  }
+
+  // Completion tasks: place review under the sentence/step/note containing the blank.
+  const host=card.closest('.flow-step,li,.completion-text') || card.parentElement;
+  if(!host)return;
+
+  // Several blanks may live in the same summary paragraph; keep each explanation labelled by Q number.
+  host.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+}
+
+function lockSubmittedAnswers(){
+  if(!submitted)return;
+  document.querySelectorAll('#questionsCopy input,#questionsCopy select').forEach(e=>e.disabled=true);
+}
+
+function focusEvidence(n){
+  const q=questions.find(x=>x.n===n);
+  const r=answerReview[n];
+  if(!q||!r)return;
+
+  const reveal=()=>{
+    const copy=document.getElementById('passageCopy');
+    const ps=copy?[...copy.querySelectorAll('p')]:[];
+    const target=ps[r.para-1];
+    if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:'center'});
+    target.classList.add('evidence-pulse');
+    setTimeout(()=>target.classList.remove('evidence-pulse'),3200);
+  };
+
+  if(q.p!==current){
+    showPassage(q.p);
+    setTimeout(reveal,150);
+  }else{
+    reveal();
+  }
+}
+
+function multiReviewHTML(sel,hits){
+  if(hits===2)return '';
+  const r=answerReview[21];
+  return `<div class="inline-review integrated" data-inline-review="2122">
+    <div class="inline-review-title"><span class="inline-review-badge">Q21–22</span><span>Giải thích nhóm câu trả lời sai</span></div>
+    <div class="inline-review-row"><div class="inline-review-label">Bạn chọn</div><div class="inline-review-student">${esc(sel.length?sel.join(', '):'Không trả lời')}</div></div>
+    <div class="inline-review-row"><div class="inline-review-label">Đáp án đúng</div><div class="inline-review-correct">B, E</div></div>
+    <div class="inline-review-row"><div class="inline-review-label">Điểm nhóm</div><div>${hits} / 2</div></div>
+    <div class="inline-review-explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="inline-review-evidence"><div class="inline-review-evidence-label">Evidence · Passage 2, đoạn ${r.para}</div><div class="inline-review-quote">“${esc(r.evidence)}”</div></div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(21)">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+function markMultiGroup(){
+  const sel=getMulti(),key=['B','E'],hits=sel.filter(x=>key.includes(x)).length,perfect=hits===2&&sel.length===2;
+  document.querySelectorAll('[data-group="g2122"]').forEach(l=>{
+    l.classList.remove('correct','wrong');
+    if(key.includes(l.dataset.val))l.classList.add('correct');
+    else if(sel.includes(l.dataset.val))l.classList.add('wrong');
+  });
+  const fb=document.getElementById('fb2122');
+  if(fb){
+    fb.className='multi-score-note '+(perfect?'good':'bad');
+    fb.textContent=perfect?'✓ Correct — 2 / 2':`Correct answers: B, E · Score: ${hits} / 2`;
+  }
+  ['nav21','nav22'].forEach(id=>{
+    const e=document.getElementById(id);
+    if(!e)return;
+    e.classList.remove('answered','correct','wrong','partial');
+    e.classList.add(perfect?'correct':hits===1?'partial':'wrong');
+  });
+  document.querySelector('[data-inline-review="2122"]')?.remove();
+  const host=document.getElementById('multiReview2122');
+  if(host&&!perfect)host.innerHTML=multiReviewHTML(sel,hits);
+  document.querySelectorAll('input[name="g2122"]').forEach(e=>e.disabled=true);
+}
+function markPassage(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const u=ssGet('q'+q.n)||'';
+    const ok=correct(q,u);
+    const fb=document.getElementById('fb'+q.n);
+
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e){e.classList.remove('correct','wrong');e.classList.add(ok?'correct':'wrong');}
+    }else{
+      document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{
+        l.classList.remove('correct','wrong');
+        if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');
+        else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong');
+      });
+    }
+
+    if(fb){
+      const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+      fb.className='feedback '+(ok?'good':'bad');
+      fb.textContent=ok?'✓ Correct':'Correct answer: '+key;
+    }
+    if(submitted)renderInlineReview(q,u,ok);
+  }
+
+  if(p===2&&submitted)markMultiGroup();
+  lockSubmittedAnswers();
+}
+function displayAnswer(q,user){
+  if(!String(user).trim())return 'Không trả lời';
+  if(q.type==='select'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(user));
+    return found||user;
+  }
+  if(q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(user));
+    return found||user;
+  }
+  return user;
+}
+function displayKey(q){
+  const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+  if(q.type==='select'||q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(key));
+    return found||key;
+  }
+  return key;
+}
+function renderWrongReview(total){
+  const box=document.getElementById('wrongReview');
+  const wrong=40-total;
+  if(!wrong){
+    box.innerHTML='<h3 class="review-title">Review đáp án</h3><div class="perfect-review">🎉 Không có câu sai. Bạn đã trả lời đúng cả 40 câu!</div>';
+    return;
+  }
+  box.innerHTML=`<h3 class="review-title">${wrong} điểm cần xem lại</h3>
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu/nhóm câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
+}
+function gotoEvidence(n){
+  document.getElementById('overlay').classList.add('hidden');
+  focusEvidence(n);
+}
+async function submitExam(auto=false){
+  if(submitted)return;
+  saveCurrentMarkups();
+
+  const normalMissing=questions.filter(q=>q.type!=='multi'&&!(ssGet('q'+q.n)||'').trim()).length;
+  const multiMissing=Math.max(0,2-getMulti().length);
+  const unanswered=normalMissing+multiMissing;
+  if(!auto&&unanswered&&!confirm(`Bạn còn ${unanswered} câu/ô đáp án chưa hoàn thành. Vẫn nộp bài?`))return;
+
+  submitted=true;
+  clearInterval(timerHandle);
+
+  let total=0,scores=[0,0,0,0],details=[];
+
+  for(const q of questions.filter(q=>q.type!=='multi')){
+    const u=ssGet('q'+q.n)||'',ok=correct(q,u);
+    if(ok){total++;scores[q.p]++;}
+    details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});
+    const ne=document.getElementById('nav'+q.n);
+    if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong');}
+  }
+
+  const sel=getMulti(),multiKey=['B','E'];
+  const hits=sel.filter(x=>multiKey.includes(x)).length;
+  total+=hits;
+  scores[2]+=hits;
+  details.push({q:'21-22',answer:sel.join(', '),correct:hits===2,key:'B, E',score:hits});
+
+  markPassage(current);
+  saveZoneMarkup('questions');
+
+  const name=document.getElementById('studentName').value.trim();
+  const cls=document.getElementById('studentClass').value.trim();
+  const dur=Math.round((Date.now()-startedAt)/1000);
+
+  document.getElementById('rstudent').textContent=`${name} — ${cls}`;
+  document.getElementById('rscore').textContent=`${total} / 40`;
+  document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;
+  document.getElementById('p1s').textContent=`${scores[1]} / 13`;
+  document.getElementById('p2s').textContent=`${scores[2]} / 13`;
+  document.getElementById('p3s').textContent=`${scores[3]} / 14`;
+  renderWrongReview(total);
+
+  document.getElementById('overlay').classList.remove('hidden');
+  document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';
+
+  const p=new URLSearchParams({
+    name,
+    className:cls,
+    total:String(total),
+    maxScore:'40',
+    durationSeconds:String(dur),
+    activity:'IELTS Reading - Chicken / Introvert-Extrovert / Synesthesia',
+    reading:String(scores[1]),
+    grammar:String(scores[2]),
+    ing:String(scores[3]),
+    writingA:JSON.stringify(details),
+    submittedAt:new Date().toISOString()
+  });
+
+  try{
+    await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});
+    document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.';
+  }catch(e){
+    document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng.';
+  }
+}
+
+function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current);saveZoneMarkup('questions')}
+</script></body></html>
