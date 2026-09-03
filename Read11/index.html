@@ -1,0 +1,445 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>IELTS Reading Computer-Based Test</title><style>
+:root{--navy:#18344f;--navy2:#10283b;--blue:#2d6ea3;--paper:#f4f4f1;--white:#fff;--line:#d6d9dc;--text:#20262b;--muted:#64717c;--accent:#e7794e;--good:#2e7d5b;--bad:#b5442e}*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--paper)}button,input,select{font:inherit}.hidden{display:none!important}.start-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:800}.start-card h1{color:var(--navy)}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}.btn{border:0;background:var(--navy);color:#fff;padding:11px 17px;border-radius:8px;font-weight:700;cursor:pointer}.exam{height:100vh;display:grid;grid-template-rows:auto auto 1fr auto;background:#fff}.topbar{background:var(--navy2);color:#fff;padding:11px 16px;display:flex;justify-content:space-between;gap:15px}.timer{font-family:ui-monospace,monospace;font-weight:800;background:rgba(255,255,255,.11);padding:8px 11px;border-radius:7px}.timer.warning{background:#8b651d}.timer.danger{background:#8f2e22}.tabs{display:flex;gap:7px;padding:9px 13px;border-bottom:1px solid var(--line);background:#fafafa}.tab{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:7px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.workspace{display:grid;grid-template-columns:1fr 1fr;min-height:0}.pane{overflow:auto;padding:20px 23px;min-width:0}.passage-pane{border-right:1px solid var(--line)}.questions-pane{background:#fbfbfa}
+.flow{background:#fff;border:1px solid var(--line);border-radius:9px;padding:16px 18px}
+.flow-step{text-align:center;padding:11px 8px}
+.flow-step:not(:last-child)::after{content:"↓";display:block;color:var(--blue);font-size:23px;line-height:1;margin-top:8px}
+.section-label{font-weight:800;color:var(--navy);background:#eef3f7;border-left:4px solid var(--blue);padding:7px 10px;margin:18px 0 8px;border-radius:4px}
+
+
+.summary-box{background:#fff;border:1px solid var(--line);border-radius:9px;padding:16px 18px;line-height:1.9}
+
+.annot-bar{position:sticky;top:-20px;z-index:8;display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);margin:-20px -23px 16px;padding:9px 12px}.questions-pane .annot-bar{background:#fbfbfa}.annot-btn{border:1px solid var(--line);background:#fff;padding:6px 9px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer}.annot-tip{font-size:11px;color:var(--muted);margin-left:auto}.notes-panel{display:none;background:#f5f8fa;border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:13px}.notes-panel.open{display:block}mark.user-highlight{background:#fff29a}.note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer}.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:9px;margin:7px 0}.passage-title{font-size:1.38rem;color:var(--navy);margin:4px 0 8px;text-align:center}.passage-sub{font-style:italic;color:var(--muted);margin-bottom:18px;text-align:center}.passage-copy p{font-size:15px;line-height:1.78;margin:0 0 16px;text-align:justify;text-align-last:left;hyphens:auto}.footnote{font-size:.88rem!important;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}.group{margin-bottom:27px}.group h3{color:var(--navy);margin:0 0 5px}.inst{color:var(--muted);font-size:.92rem;margin-bottom:10px}.completion{background:#fff;border:1px solid var(--line);border-radius:9px;padding:17px 18px;line-height:1.9}.inline{display:inline-flex;align-items:center;gap:5px;margin:2px 3px;vertical-align:middle;scroll-margin:100px}.qnum{display:inline-flex;align-items:center;justify-content:center;min-width:27px;height:27px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800}.ans{padding:7px 8px;border:1px solid var(--line);border-radius:7px;min-width:140px;background:#fff}.ans.correct{border-color:var(--good);background:#edf7f1}.ans.wrong{border-color:var(--bad);background:#fff1ee}.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0;scroll-margin:100px}.card-head{display:flex;gap:10px;align-items:flex-start}.qtext{flex:1;line-height:1.45}.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer}.option.correct{border-color:var(--good);background:#edf7f1}.option.wrong{border-color:var(--bad);background:#fff1ee}.bank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px;background:#f3f6f8;border:1px solid var(--line);border-radius:8px;padding:11px;margin:9px 0 13px;font-size:.9rem}.match-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}.match-label{flex:1;min-width:240px;line-height:1.5}.diagram{width:100%;max-width:850px;display:block;margin:10px auto;border:1px solid var(--line);border-radius:8px;background:#fff}.diagram-answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}.multi-card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}.multi-score-note{font-size:.88rem;color:var(--muted);margin-top:7px}.nq.partial{background:#fff0c9!important;border-color:#d6a534!important}.feedback{font-size:.87rem;margin-top:6px}.good{color:var(--good)}.bad{color:var(--bad)}.inline-review{margin:11px 0 4px;padding:12px 13px;border:1px solid #e3c8c1;border-left:4px solid var(--bad);border-radius:8px;background:#fffaf8;font-size:.91rem;line-height:1.5}.inline-review-title{font-weight:800;color:var(--navy);margin-bottom:7px}.review-row{display:grid;grid-template-columns:105px 1fr;gap:5px 8px;margin:3px 0}.review-label{color:var(--muted);font-weight:700}.student-wrong{color:var(--bad);font-weight:700}.correct-answer{color:var(--good);font-weight:800}.explain{margin-top:8px;background:#fff;border-left:3px solid var(--blue);padding:8px 9px;border-radius:4px}.evidence{margin-top:8px;background:#f2f7fa;border:1px solid #d7e3ea;padding:8px 9px;border-radius:7px}.evidence-btn{margin-top:8px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:6px 9px;font-size:.83rem;font-weight:700;cursor:pointer}.evidence-pulse{outline:3px solid rgba(231,121,78,.45);background:#fff8e8;border-radius:5px}.review-note{background:#eef5f9;color:var(--navy);padding:9px 11px;border-radius:7px;font-size:.9rem;font-weight:700;margin-bottom:10px}.bottom{border-top:1px solid var(--line);padding:9px 10px;background:#fff;display:flex;gap:9px;align-items:center}.nav{display:flex;gap:4px;overflow:auto;flex:1}.nav button{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer}.nav button.answered{background:#dceaf5}.nav button.correct{background:#dff0e7;border-color:var(--good)}.nav button.wrong{background:#f4ddd8;border-color:var(--bad)}.submit{background:var(--accent);color:#fff;border:0;border-radius:7px;padding:10px 15px;font-weight:800;cursor:pointer}.overlay{position:fixed;inset:0;z-index:50;background:rgba(8,20,30,.72);display:flex;align-items:center;justify-content:center;padding:20px}.result{background:#fff;border-radius:14px;padding:25px;width:min(620px,100%);max-height:90vh;overflow:auto}.score{font-size:2.5rem;color:var(--navy);font-weight:800}.breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:15px 0}.breakdown div{background:#f3f6f8;padding:10px;border-radius:8px;text-align:center}@media(max-width:850px){.workspace{grid-template-columns:1fr}.pane{height:48vh}.passage-pane{border-right:0;border-bottom:1px solid var(--line)}.bank,.diagram-answers{grid-template-columns:1fr}}</style></head><body>
+<div id="startScreen" class="start-screen"><div class="start-card"><div class="eyebrow">IELTS Reading Practice</div><h1>Computer-Based Reading Test</h1><p>3 passages · 40 questions · 60 minutes</p><div class="field"><label>Họ và tên</label><input id="studentName"></div><div class="field"><label>Lớp</label><input id="studentClass"></div><button class="btn" onclick="startExam()">Bắt đầu làm bài</button><div id="startError" class="bad" style="margin-top:9px"></div></div></div>
+<div id="exam" class="exam hidden"><div class="topbar"><div>Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div><div id="timer" class="timer">60:00</div></div><div class="tabs"><button class="tab active" data-p="1" onclick="showPassage(1)">Passage 1</button><button class="tab" data-p="2" onclick="showPassage(2)">Passage 2</button><button class="tab" data-p="3" onclick="showPassage(3)">Passage 3</button></div><div class="workspace"><div class="pane passage-pane" id="passagePane"></div><div class="pane questions-pane" id="questionsPane"></div></div><div class="bottom"><div id="navigator" class="nav"></div><button class="submit" onclick="submitExam(false)">Nộp bài</button></div></div>
+<div id="resultOverlay" class="overlay hidden"><div class="result"><div class="eyebrow">Kết quả</div><div id="resultStudent"></div><div id="resultScore" class="score">0 / 40</div><div id="resultPercent"></div><div class="breakdown"><div><b>Passage 1</b><br><span id="p1score"></span></div><div><b>Passage 2</b><br><span id="p2score"></span></div><div><b>Passage 3</b><br><span id="p3score"></span></div></div><div id="sheetStatus"></div><div id="reviewSummary" class="review-note" style="margin-top:12px"></div><div style="display:flex;gap:9px;margin-top:14px"><button class="btn" onclick="closeResult()">Xem lại bài</button><button class="btn" style="background:#587087" onclick="location.reload()">Làm lại</button></div></div></div>
+<script>const STORAGE_PREFIX="READ_WEATHER_ICEBERGS_DUNEDIN_V1_";
+const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const passages={"1": {"title": "The Origins of Weather Forecasting", "subtitle": "", "text": "<p data-para=\"1\">The world's first public weather forecast appeared in The Times newspaper over 150 years ago: the beginning of a service that gives everyone something to comment on. The pioneering forecast on August 1, 1861, was introduced with a deceptively simple heading: ‘General weather probable during next two days.’ But those few words started an ongoing controversy that still continues today – after all, everyone remembers the forecasts that go wrong, but rarely the ones that are right. The first forecast was the idea of Admiral Robert FitzRoy, head of the newly founded Meteorological Department, and one of Britain's greatest but least-known heroes. It was a brave undertaking, because in those days predicting the weather had gained a reputation similar to astrology or fortune-telling. The few people who attempted it had become a national joke when their forecasts inevitably went wrong.</p><p data-para=\"2\">FitzRoy was different, though. His background was faultless, most famously his captaining of the ship HMS Beagle on Charles Darwin's voyage around the world, which eventually led to the publication of Darwin's well-known book On the Origin of Species. When FitzRoy retired from active service as an admiral in Britain's navy, he was looking for a new direction. He subsequently secured a job as chief statistician at the Meteorological Department, part of the Board of Trade. Parliament had voted to set up and fund the Meteorological Department on June 30, 1854, to chart the safest sailing routes across the Atlantic Ocean. However, the British Government was not impressed with the idea of collecting weather reports and establishing a weather forecast, and the suggestion by one Member of Parliament for this was met with laughter from the other MPs.</p><p data-para=\"3\">FitzRoy was given a staff of three clerks in a small office in London, but he soon grew bored with the tedium of transcribing thousands of ships’ reports. Instead, he focused on a much more pressing issue – the huge loss of life at sea from storms. This problem came to a head in 1859, when gale-force winds sank the ship named Royal Charter, with the loss of 430 lives, within sight of the shore. Even in those days when ships regularly sank in storms, the loss of the Royal Charter was considered a national tragedy. FitzRoy stirred up feelings even further when he wrote a letter to The Times newspaper explaining that the storm had been entirely predictable.</p><p data-para=\"4\">That same year, a total of 1,645 lives were lost off the British coast, and FitzRoy wrote repeatedly to The Times pushing for a storm-warning service for shipping. This was just the right moment for a national forecasting service. Knowledge of the weather was improving, barometer readings gave warning of approaching storms, and the invention of the electric telegraph and Morse code in 1844 gave instant communication for the first time.</p><p data-para=\"5\">So in February 1861, FitzRoy pressed ahead with a storm-warning service. Previous weather reports had been unreliable, but FitzRoy's innovation was to issue ships with standardised instruments which allowed for accurate weather reports. At exactly the same time each day the information was sent to him by telegraph, and he was able to draw up more detailed weather maps. The approach of an incoming storm could be recognised, and from London, FitzRoy could telegraph warnings to ports on the coast, where an ingenious system of flags was hoisted up high for passing ships to read. This represented the biggest advance in shipping safety after the introduction of the lifeboat, and in subsequent years the number of lives lost around Britain fell by about a third. FitzRoy became a hero to the fishing and maritime fleets. Encouraged by his storm-warning success, FitzRoy then started a public weather forecasting service. As he had a close connection with The Times, this newspaper introduced his daily forecast in August 1861. It attracted huge attention, including from Queen Victoria, who regularly sent messengers to FitzRoy's office to get a forecast for the sea crossing over the Solent to an island which she liked to visit off the south coast of England. He was also popular with ordinary fishermen, who were happy not to be out at sea in bad weather. The owners of fishing vessels, however, were not supportive of FitzRoy’s forecasts, which often caused delays for them when bad weather was forecast.</p><p data-para=\"6\">Nevertheless, weather forecasting at that time was very difficult, and one mistake could result in much bad publicity. It wasn’t long before some forecasts turned out wrong, and the letters pages of The Times were full of heated correspondence.</p><p data-para=\"7\">It is indisputable that FitzRoy was way ahead of his time, but it is only in recent years that he has been recognized as a towering figure in meteorology, with the honour of an area of sea being given his name in the shipping forecast (a radio broadcast of weather reports for the seas around Britain). His extraordinary determination to get forecasting established cost him dearly though, and he died prematurely. But his legacy lives on, because late in his life he published a book about weather forecasting which was recognized by other scientists to be well ahead of its time.</p>"}, "2": {"title": "The importance of icebergs to ocean life", "subtitle": "", "text": "<p data-para=\"1\"><b>A</b> The word iceberg refers to pieces of ice larger than five meters across. The waters surrounding Antarctica are home to most of the icebergs on Earth, although they can also be found in the Arctic region. The water surrounding icebergs teems with life including a range of fish and, consequently, the seals which prey on them. Seabirds such as gulls, fulmars and other birds often visit as well. Some fishermen in Arctic regions claim that the fishing is often best in the immediate vicinity of icebergs. Recent research is beginning to shed light on what it is about icebergs that is attractive to wildlife.</p><p data-para=\"2\"><b>B</b> Ken Smith, senior scientist at the Monterey Bay Aquarium Research Institute, explains that \"free-drifting icebergs are hot spots of chemical and biological enrichment. His studies in the Weddell Sea off Antarctica confirmed high concentrations of chlorophyll, krill, and seabirds in the water surrounding the icebergs he sampled, extending out to about two miles around each berg. While he wouldn't speculate about whether the same results would be found around Arctic icebergs, other scientists say that the evidence suggests it may well be the case.</p><p data-para=\"3\"><b>C</b> During their first expedition, Smith and his research team deployed a series of oceanographic instruments, fishing nets, and video cameras attached to remotely operated vehicles around a small iceberg with a surface area of 0.12 square kilometers, as well as around another much larger example. Their results revealed how important icebergs are to the marine environment.</p><p data-para=\"4\"><b>D</b> Perhaps their most significant finding was that as icebergs melt, accumulated dust, pulverized rocks, and other terrestrial materials are dispersed into the water. These were all incorporated into the ice millions of years ago when it was part of glaciers which scraped up debris from the surface of the soil while moving across huge areas of land. Once in the water, these materials act as ocean fertilizer to nourish microscopic marine organisms such as plankton, upon which the entire food chain ultimately depends. These icebergs can be compared to river estuaries that supply surrounding coastal regions with nutrients as they enter the ocean,' Smith and his team wrote.</p><p data-para=\"5\"><b>E</b> Oceanographer Greg Stone had a more hands-on approach to studying the productivity around icebergs. A vice president at Conservation International, one of the world's largest biodiversity conservation organizations, he led a team of scuba divers and scientists on a rare and dangerous expedition to study iceberg ecology around B-15, the largest iceberg ever known, which broke away from the Ross Ice Shelf in Antarctica in 2000. Nearly the size of the US state of Connecticut and containing enough fresh water to supply the entire US for five years, the berg had begun to break up by the time Stone's team arrived several months later, and the shifting pack ice made it impossible for them to reach it. But Stone and his colleagues still conducted about ninety dives around icebergs of various sizes. What they found was an unexpected bonanza of marine life in and around the ice.</p><p data-para=\"6\"><b>F</b> Greg Stone noted that the water of Antarctica where his team undertook dives was several degrees below freezing. Like Smith's team, they recorded higher concentrations of jellyfish and krill within a mile or so around the icebergs. They also frequently saw juvenile ice fish living in burrows in the ice, though they were uncertain whether the fish excavated these themselves to hide from predators or simply took advantage of natural features of the ice. In an especially dangerous dive, they swam 300 meters into a cave inside another iceberg that had been grounded for several years and found a spectacular garden of invertebrates - feather duster worms, starfish, colorful sponges, sea cucumbers, and more - living on the seafloor at the farthest reaches of the cave.</p><p data-para=\"7\"><b>G</b> According to Stone, most Antarctic icebergs get pushed around continuously by the wind and currents. As they move, their keel will rub along the seafloor, disturbing the benthic ecosystem. But because this particular iceberg had been grounded for several years, it served to protect bottom-dwelling creatures from the ravages of moving icebergs and nurtured this underwater garden.</p><p data-para=\"8\"><b>H</b> Stone agrees with Smith's conclusion that the big picture of iceberg ecology is the vital role they play in fertilizing the Southern Ocean, thereby creating the largest biomass on Earth. The whole food chain gets fired up around one of these things,' Stone explains. 'The ice is the biological engine that drives the ecosystem, fueled further by the Antarctic's twenty-four-hour summer sunshine. There's no doubt that if you're an ocean animal, you're going to be attracted to an iceberg because it's generally a better place to be.\"</p><p data-para=\"9\"><b>I</b> If you're not an ocean animal, on the other hand, it's probably best to keep your distance from icebergs, because one thing they are not is safe. Just hours after Stone's dive team emerged from exploring the cave within the grounded iceberg, the entire berg completely crumbled and disintegrated, leaving in its place what Stone described as 'two square miles of shattered crystal'. The pressures caused by the continuous melting and re-freezing of water throughout these mountainous structures ultimately lead to their destruction. As frightening as it was to Stone and his team of scientists, who decided then and there never to dive in an iceberg cave again, it also may have been the first time anyone had witnessed such an event.</p>"}, "3": {"title": "The Dunedin study", "subtitle": "", "text": "<p data-para=\"1\">The New Zealand city of Dunedin in the early 1970s can easily be made to sound idyllic. There was next to no unemployment and people left their doors unlocked at night. New Zealand was then the ninth richest country in the world and many residents believed that, as a place to bring up children, this was a city without rival. However, Phil Silva, an educational psychologist, was not so certain and decided to take a closer look. Silva identified those children born in the year from April 1, 1972 whose mothers were still living in the city three years later. The parents were asked if they would mind bringing their children in for a health and development assessment. Incredibly, no fewer than 91% agreed to help and 1037 three-year-olds completed half a day of tests and experiments. In the process, the Dunedin Multidisciplinary Health and Development Study was born.</p><p data-para=\"2\">There was precious little money at Silva's disposal, so the assessments were done in a church with the help of dozens of volunteers. Each child was assessed against a range of measures such as height, weight, and head circumference. Language skills were assessed and profiles of behaviour were compiled. However, one set of assessments was never going to satisfy Silva's curiosity, so when the children were five, his same team asked the parents to bring the children back for a second study. Of the original 1037 children, 96% came. The data gathered at age three was updated and new measurement criteria – discipline, nutrition, dental health - were introduced.</p><p data-para=\"3\">By 1978, Silva was able to shock the nation with his findings: one in four children had delayed language development; 15% had ear problems; the researchers had identified one child who was blind and another who might have died from undetected skin cancer. New Zealanders, Silva declared, were more diligent about their cars than their children. Cars were required by law to be regularly checked; if children were treated similarly, ideally at behavioural clinics in schools, problems could be picked up in time to prevent lasting damage.</p><p data-para=\"4\">The parents were asked to bring their children back at ages seven, nine and 11 to the old church for further assessments. Crucially for the study's survival, the politicians were finally starting to take note and government funding began to trickle in. By the time the children returned at age 13, the study had taken up residence in an abandoned building tucked behind the dental school. It wouldn't have been the researchers' first choice, and was certainly not grand, but it was at least a site for the long term and its acquisition represented a landmark in the study's development. It was to this building that the participants returned at ages 15, 18, 21, 26 and, most recently, at 32.</p><p data-para=\"5\">Among the most recent findings are that birth complications - a focus of Silva's original research - don't necessarily set children up for problems as they mature in later life, although the amount a newborn infant weighs is associated with IQ. Paediatric textbooks had insisted for years that breast-feeding protected against medical problems like asthma and allergies. The Dunedin study has shown that assumption to be incorrect. Other findings that challenged the received wisdom include the fact that thumb-sucking does no harm; birth order makes no difference to later development; and pre-schoolers whose mothers work are not disadvantaged. Overall, the study has confirmed the notion that broad personality traits are laid down by the age of three. Along the way, the Dunedin researchers have been able to contradict old assumptions and explode medical myths long held by the profession.</p><p data-para=\"6\">The Dunedin study is important not only because of its findings, however. It also provides a model because of the extraordinary commitment of study members. No other longitudinal research project in the world matches its retention rate of 96% at age 32. Silva concedes that luck has a lot to do with this: Dunedin city was, and largely still is, close-knit, homogeneous and devoted to its university and medical school. It is large enough to produce a study population that produces findings that can be generalised to New Zealand and other developed countries, yet small enough that one in every 10 households has had a child or relative in the study.</p><p data-para=\"7\">More important than circumstance, though, was the approach taken by the researchers. Silva recalls that by year 13, participation had dropped off - only 82% came in for assessments. He realised the most important asset they had was the sample group and these people must be nurtured at all costs. He spent many long hours out in the field, finding those participants who had gone adrift and persuading them to come in. Study members are kept up to date with the steady flow of findings to which they have contributed. Privacy is absolutely paramount: Silva won't even say how many of the study members are now in prison: nothing must erode the trust that's been built up over the years.</p><p data-para=\"8\">Today, more than a quarter of the sample live overseas so the study also has its own travel agent, who does her best to accommodate requests to spend Christmas in Dunedin with family. This is just one example of the enormous effort that goes into maintaining contact and removing obstacles to participation. With such diligence and care, researchers hope the Dunedin study will continue for many years, perhaps generations, to come.</p>"}};
+const questions=[{"n": 1, "p": 1, "type": "choice", "text": "In Robert FitzRoy’s time, weather forecasting was a respected skill.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 2, "p": 1, "type": "choice", "text": "When FitzRoy retired from the navy, he had already had a successful career at sea.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 3, "p": 1, "type": "choice", "text": "FitzRoy faced competition from other applicants for the chief statistician’s job.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 4, "p": 1, "type": "choice", "text": "The British Parliament supported the idea of regular weather forecasts in 1854.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 5, "p": 1, "type": "choice", "text": "Progress in technology made it a good time for publicly available weather forecasting to begin.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 6, "p": 1, "type": "text", "ans": ["instruments"]}, {"n": 7, "p": 1, "type": "text", "ans": ["ports"]}, {"n": 8, "p": 1, "type": "text", "ans": ["flags"]}, {"n": 9, "p": 1, "type": "text", "ans": ["lifeboat"]}, {"n": 10, "p": 1, "type": "text", "ans": ["island"]}, {"n": 11, "p": 1, "type": "text", "ans": ["owners"]}, {"n": 12, "p": 1, "type": "text", "ans": ["name"]}, {"n": 13, "p": 1, "type": "text", "ans": ["book"]}, {"n": 14, "p": 2, "type": "select", "text": "examples of equipment used in the study of icebergs", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "C"}, {"n": 15, "p": 2, "type": "select", "text": "a description of the volume of water inside one iceberg", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "E"}, {"n": 16, "p": 2, "type": "select", "text": "a reference to causes of instability in icebergs", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "I"}, {"n": 17, "p": 2, "type": "select", "text": "an explanation as to the origins of the contents of the water around icebergs", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "D"}, {"n": 18, "p": 2, "type": "select", "text": "a definition of the term 'iceberg'", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "A"}, {"n": 19, "p": 2, "type": "select", "text": "a reference to the temperature of the water surrounding an iceberg", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G", "H — Paragraph H", "I — Paragraph I"], "ans": "F"}, {"n": 20, "p": 2, "type": "multi", "group": "g2021", "ans": ["A", "D"]}, {"n": 21, "p": 2, "type": "multi", "group": "g2021", "ans": ["A", "D"]}, {"n": 22, "p": 2, "type": "text", "ans": ["jellyfish"]}, {"n": 23, "p": 2, "type": "text", "ans": ["burrows"]}, {"n": 24, "p": 2, "type": "text", "ans": ["predators"]}, {"n": 25, "p": 2, "type": "text", "ans": ["cave"]}, {"n": 26, "p": 2, "type": "text", "ans": ["currents"]}, {"n": 27, "p": 3, "type": "choice", "text": "What does the writer say about Dunedin in the 1970s?", "opts": ["A — It was the safest city in the country.", "B — It was less prosperous than other cities.", "C — Many people were frustrated that they could not find a job.", "D — It was wealthy and seen as an ideal place to raise children."], "ans": "D"}, {"n": 28, "p": 3, "type": "choice", "text": "What did the writer find surprising about Phil Silva’s original study?", "opts": ["A — That the study was held in a church.", "B — That the tests took half a day.", "C — That 91% of parents agreed to help.", "D — That the study used volunteers."], "ans": "C"}, {"n": 29, "p": 3, "type": "choice", "text": "What was Silva's main finding in 1978?", "opts": ["A — Children had excellent language.", "B — Many children had developmental problems.", "C — No children had ear problems.", "D — All children were healthy."], "ans": "B"}, {"n": 30, "p": 3, "type": "choice", "text": "What was different about the first and second studies?", "opts": ["A — The sample group was smaller in the first study.", "B — The second study produced conflicting results.", "C — Helpers were not used in the second study.", "D — The second study collected additional types of information."], "ans": "D"}, {"n": 31, "p": 3, "type": "choice", "text": "What problem did Silva face when conducting the original study?", "opts": ["A — A shortage of helpers.", "B — A lack of available funding.", "C — The bad behaviour of some children.", "D — The poor language skills of the participants."], "ans": "B"}, {"n": 32, "p": 3, "type": "choice", "text": "Why does the writer mention the new building in the fourth paragraph?", "opts": ["A — To show how generous project funding had become.", "B — To show that the study was being taken seriously.", "C — To emphasise the temporary nature of the facilities.", "D — To highlight that the children disliked the site."], "ans": "B"}, {"n": 33, "p": 3, "type": "choice", "text": "Recent results suggest that intellectual development and birth weight are linked.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "YES"}, {"n": 34, "p": 3, "type": "choice", "text": "Medical textbooks used to claim that breast-fed children were more intelligent.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NO"}, {"n": 35, "p": 3, "type": "choice", "text": "Children who suck their thumbs are prone to developmental problems.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NO"}, {"n": 36, "p": 3, "type": "choice", "text": "The findings of the Dunedin study have challenged some doctors’ preconceptions.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "YES"}, {"n": 37, "p": 3, "type": "select", "text": "Dunedin provides ... that can be applied both nationally and internationally.", "opts": ["A — generalisable research", "B — study members", "C — government funding", "D — assessments", "E — loyalty", "F — barriers to involvement", "G — confidentiality", "H — results"], "ans": "A"}, {"n": 38, "p": 3, "type": "select", "text": "Silva believed that the ... must be looked after.", "opts": ["A — generalisable research", "B — study members", "C — government funding", "D — assessments", "E — loyalty", "F — barriers to involvement", "G — confidentiality", "H — results"], "ans": "B"}, {"n": 39, "p": 3, "type": "select", "text": "Nothing should be done to threaten the study’s ...", "opts": ["A — generalisable research", "B — study members", "C — government funding", "D — assessments", "E — loyalty", "F — barriers to involvement", "G — confidentiality", "H — results"], "ans": "G"}, {"n": 40, "p": 3, "type": "select", "text": "A lot of work is done to minimise ...", "opts": ["A — generalisable research", "B — study members", "C — government funding", "D — assessments", "E — loyalty", "F — barriers to involvement", "G — confidentiality", "H — results"], "ans": "F"}];
+const answerReview={"1": {"para": 1, "explain": "FALSE: forecasting was compared with astrology and fortune-telling, and forecasters were often ridiculed.", "evidence": "predicting the weather had gained a reputation similar to astrology or fortune-telling"}, "2": {"para": 2, "explain": "TRUE: FitzRoy already had a distinguished naval background, including captaining HMS Beagle.", "evidence": "most famously his captaining of the ship HMS Beagle"}, "3": {"para": 2, "explain": "NOT GIVEN: the passage states that FitzRoy secured the job, but says nothing about rival applicants.", "evidence": "He subsequently secured a job as chief statistician"}, "4": {"para": 2, "explain": "FALSE: MPs laughed at the suggestion of collecting weather reports and establishing forecasts.", "evidence": "the suggestion ... was met with laughter from the other MPs"}, "5": {"para": 4, "explain": "TRUE: the writer says it was the right moment because weather knowledge, barometers and telegraphy had improved.", "evidence": "This was just the right moment for a national forecasting service"}, "6": {"para": 5, "explain": "The answer is instruments: ships were issued with standardised instruments for accurate reports.", "evidence": "issue ships with standardised instruments"}, "7": {"para": 5, "explain": "The answer is ports: warnings were sent from London to coastal ports.", "evidence": "telegraph warnings to ports on the coast"}, "8": {"para": 5, "explain": "The answer is flags: warnings were displayed using a system of flags.", "evidence": "an ingenious system of flags was hoisted up high"}, "9": {"para": 5, "explain": "The answer is lifeboat: the storm-warning service was the greatest advance since the lifeboat.", "evidence": "after the introduction of the lifeboat"}, "10": {"para": 5, "explain": "The answer is island: Queen Victoria used forecasts for trips to a favourite island.", "evidence": "an island which she liked to visit"}, "11": {"para": 5, "explain": "The answer is owners: fishing-vessel owners disliked the delays caused by forecasts.", "evidence": "The owners of fishing vessels, however, were not supportive"}, "12": {"para": 7, "explain": "The answer is name: a marine area in the shipping forecast was given FitzRoy's name.", "evidence": "an area of sea being given his name"}, "13": {"para": 7, "explain": "The answer is book: late in life FitzRoy published a respected forecasting book.", "evidence": "he published a book about weather forecasting"}, "14": {"para": 3, "explain": "Paragraph C lists the instruments, nets and video cameras used around the icebergs.", "evidence": "oceanographic instruments, fishing nets, and video cameras"}, "15": {"para": 5, "explain": "Paragraph E says B-15 contained enough fresh water to supply the entire US for five years.", "evidence": "enough fresh water to supply the entire US for five years"}, "16": {"para": 9, "explain": "Paragraph I explains that repeated melting and re-freezing creates pressures that eventually destroy icebergs.", "evidence": "pressures caused by the continuous melting and re-freezing of water"}, "17": {"para": 4, "explain": "Paragraph D explains that dust, rocks and other materials were originally scraped up by ancient glaciers.", "evidence": "glaciers which scraped up debris from the surface of the soil"}, "18": {"para": 1, "explain": "Paragraph A directly defines icebergs as pieces of ice larger than five metres across.", "evidence": "pieces of ice larger than five meters across"}, "19": {"para": 6, "explain": "Paragraph F says the Antarctic water where the team dived was several degrees below freezing.", "evidence": "several degrees below freezing"}, "20": {"para": 4, "explain": "The correct answers are A and D: Smith compared iceberg fertilisation to river estuaries and connected released terrestrial material with marine food chains.", "evidence": "icebergs can be compared to river estuaries"}, "21": {"para": 4, "explain": "The correct answers are A and D: Smith's key result linked iceberg contents with surrounding biological productivity.", "evidence": "materials act as ocean fertilizer to nourish microscopic marine organisms"}, "22": {"para": 6, "explain": "The answer is jellyfish: Stone's team found increased concentrations of jellyfish and krill near icebergs.", "evidence": "higher concentrations of jellyfish and krill"}, "23": {"para": 6, "explain": "The answer is burrows: juvenile ice fish were seen living in burrows in the ice.", "evidence": "juvenile ice fish living in burrows in the ice"}, "24": {"para": 6, "explain": "The answer is predators: one possible reason for the burrows was protection from predators.", "evidence": "to hide from predators"}, "25": {"para": 6, "explain": "The answer is cave: the spectacular invertebrate garden was found deep inside an iceberg cave.", "evidence": "300 meters into a cave inside another iceberg"}, "26": {"para": 7, "explain": "The answer is currents: moving icebergs are pushed by winds and ocean currents.", "evidence": "pushed around continuously by the wind and currents"}, "27": {"para": 1, "explain": "D is correct: Dunedin is described as prosperous and widely regarded as an ideal place to raise children.", "evidence": "the ninth richest country in the world ... a city without rival"}, "28": {"para": 1, "explain": "C is correct: the writer highlights as remarkable that 91% of parents agreed to participate.", "evidence": "Incredibly, no fewer than 91% agreed to help"}, "29": {"para": 3, "explain": "B is correct: Silva revealed substantial developmental and health problems among the children.", "evidence": "one in four children had delayed language development; 15% had ear problems"}, "30": {"para": 2, "explain": "D is correct: the second round updated the earlier data and added new measures such as discipline, nutrition and dental health.", "evidence": "new measurement criteria ... were introduced"}, "31": {"para": 2, "explain": "B is correct: Silva initially had very little money available for the project.", "evidence": "There was precious little money at Silva's disposal"}, "32": {"para": 4, "explain": "B is correct: moving into a long-term building represented a landmark in the study's development.", "evidence": "its acquisition represented a landmark in the study's development"}, "33": {"para": 5, "explain": "YES: newborn weight is explicitly associated with IQ.", "evidence": "the amount a newborn infant weighs is associated with IQ"}, "34": {"para": 5, "explain": "NO: textbooks claimed breast-feeding protected against asthma and allergies, not that it increased intelligence.", "evidence": "breast-feeding protected against medical problems like asthma and allergies"}, "35": {"para": 5, "explain": "NO: the study found that thumb-sucking does no harm.", "evidence": "thumb-sucking does no harm"}, "36": {"para": 5, "explain": "YES: the study contradicted old assumptions and exploded long-held medical myths.", "evidence": "contradict old assumptions and explode medical myths"}, "37": {"para": 6, "explain": "A — generalisable research. Dunedin's population is large enough for findings to be applied beyond the city.", "evidence": "findings that can be generalised to New Zealand and other developed countries"}, "38": {"para": 7, "explain": "B — study members. Silva realised the sample group was the study's most important asset and had to be nurtured.", "evidence": "the most important asset they had was the sample group"}, "39": {"para": 7, "explain": "G — confidentiality. The passage stresses privacy and says nothing must erode participants' trust.", "evidence": "Privacy is absolutely paramount"}, "40": {"para": 8, "explain": "F — barriers to involvement. The study puts enormous effort into removing obstacles to continued participation.", "evidence": "removing obstacles to participation"}};
+const DIAGRAM_IMAGE="";
+
+let current=1,startedAt=0,endAt=0,remaining=3600,timerHandle=null,submitted=false;let savedSelection=null,savedSelectionZone=null,activeHighlight=null,activeHighlightZone=null;
+function key(k){return STORAGE_PREFIX+k} function ssGet(k){return sessionStorage.getItem(key(k))} function ssSet(k,v){sessionStorage.setItem(key(k),v)}
+function clearAttempt(){const a=[];for(let i=0;i<sessionStorage.length;i++){const k=sessionStorage.key(i);if(k&&k.startsWith(STORAGE_PREFIX))a.push(k)}a.forEach(k=>sessionStorage.removeItem(k))}
+function norm(v){return String(v??'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ')} function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function optionValue(x){const t=String(x),i=t.indexOf(' — ');return i>=0?t.slice(0,i):t} function qBy(n){return questions.find(q=>q.n===n)}
+function startExam(){const n=document.getElementById('studentName').value.trim(),c=document.getElementById('studentClass').value.trim();if(!n||!c){document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}clearAttempt();document.getElementById('topName').textContent=n;document.getElementById('topClass').textContent=c;document.getElementById('startScreen').classList.add('hidden');document.getElementById('exam').classList.remove('hidden');startedAt=Date.now();endAt=startedAt+3600000;buildNav();showPassage(1);tick();timerHandle=setInterval(tick,250)}
+function tick(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));const m=Math.floor(remaining/60),s=remaining%60,e=document.getElementById('timer');e.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;e.classList.toggle('warning',remaining<=600&&remaining>300);e.classList.toggle('danger',remaining<=300);if(remaining<=0&&!submitted){clearInterval(timerHandle);submitExam(true)}}
+function annotationToolbar(zone){return `<div class="annot-bar"><button class="annot-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button><button class="annot-btn" onclick="clearHighlight('${zone}')">Xóa HL</button><button class="annot-btn" onclick="addNote('${zone}')">📝 Add note</button><button class="annot-btn" onclick="toggleNotes('${zone}')">Ghi chú</button><span class="annot-tip">Bôi đen chữ rồi chọn công cụ.</span></div>`}
+function zoneRoot(zone){return document.getElementById(zone==='passage'?'passageCopy':'questionsCopy')} function notesKey(zone,p=current){return `notes_${zone}_${p}`} function markupKey(zone,p=current){return `markup_${zone}_${p}`}
+function loadNotes(zone){try{return JSON.parse(ssGet(notesKey(zone))||'[]')}catch(e){return[]}} function saveNotes(zone,a){ssSet(notesKey(zone),JSON.stringify(a))}
+function captureSelection(zone){if(submitted)return;const sel=window.getSelection(),root=zoneRoot(zone);if(!sel||!root||!sel.rangeCount||sel.isCollapsed)return;const r=sel.getRangeAt(0);if(root.contains(r.commonAncestorContainer)){savedSelection=r.cloneRange();savedSelectionZone=zone}}
+function getSel(zone){const root=zoneRoot(zone);if(!savedSelection||savedSelectionZone!==zone||!root||!root.contains(savedSelection.commonAncestorContainer)||!savedSelection.toString().trim()){alert('Hãy bôi đen phần chữ trước.');return null}return savedSelection.cloneRange()}
+function addHighlight(zone){const r=getSel(zone);if(!r)return;try{const m=document.createElement('mark');m.className='user-highlight';m.appendChild(r.extractContents());r.insertNode(m);activeHighlight=m;activeHighlightZone=zone;saveMarkup(zone)}catch(e){alert('Hãy chọn đoạn ngắn hơn.')}}
+function clearHighlight(zone){if(!activeHighlight||activeHighlightZone!==zone)return alert('Hãy bấm phần đã highlight trước.');const p=activeHighlight.parentNode;while(activeHighlight.firstChild)p.insertBefore(activeHighlight.firstChild,activeHighlight);activeHighlight.remove();p.normalize();saveMarkup(zone)}
+function addNote(zone){const r=getSel(zone);if(!r)return;const quote=r.toString().trim(),text=prompt('Nhập ghi chú:');if(!text)return;const id='n'+Date.now(),s=document.createElement('span');s.className='note-anchor';s.dataset.noteId=id;s.appendChild(r.extractContents());r.insertNode(s);const a=loadNotes(zone);a.push({id,quote,text});saveNotes(zone,a);saveMarkup(zone);renderNotes(zone,true)}
+function renderNotes(zone,force=false){const id=zone==='passage'?'notesPassage':'notesQuestions',p=document.getElementById(id),a=loadNotes(zone);if(!p)return;p.innerHTML=a.length?a.map(n=>`<div class="note-item"><i>“${esc(n.quote)}”</i><br>${esc(n.text)}</div>`).join(''):'Chưa có ghi chú.';if(force)p.classList.add('open')}
+function toggleNotes(zone){document.getElementById(zone==='passage'?'notesPassage':'notesQuestions')?.classList.toggle('open')} function saveMarkup(zone){const r=zoneRoot(zone);if(r)ssSet(markupKey(zone),r.innerHTML)}
+function bindAnnotations(zone){const r=zoneRoot(zone);if(!r)return;r.addEventListener('mouseup',()=>captureSelection(zone));r.addEventListener('keyup',()=>captureSelection(zone));r.addEventListener('click',e=>{const m=e.target.closest('mark.user-highlight');if(m){activeHighlight=m;activeHighlightZone=zone}})}
+function passageHTML(p){const d=passages[p],saved=ssGet(markupKey('passage',p));return annotationToolbar('passage')+`<div id="notesPassage" class="notes-panel"></div><h2 class="passage-title">${d.title}</h2>${d.subtitle?`<div class="passage-sub">${d.subtitle}</div>`:''}<div id="passageCopy" class="passage-copy">${saved||d.text}</div>`}
+function inlineText(n){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><input class="ans" id="q${n}" data-q="${n}" type="text"></span>`}
+function inlineSelect(n,opts){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><select class="ans" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select></span>`}
+function card(q){return `<div class="card" id="card${q.n}"><div class="card-head"><span class="qnum">${q.n}</span><div class="qtext">${q.text}</div></div>${q.opts.map(x=>`<label class="option" data-q="${q.n}" data-val="${optionValue(x)}"><input type="radio" name="q${q.n}" value="${optionValue(x)}"> ${x}</label>`).join('')}<div id="fb${q.n}" class="feedback"></div></div>`}
+function renderMatch(start,end,title,inst,showBank=true){const rows=questions.filter(q=>q.n>=start&&q.n<=end),opts=rows[0].opts;return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>${showBank?`<div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>`:''}${rows.map(q=>`<div class="match-row" id="card${q.n}"><div class="match-label"><span class="qnum">${q.n}</span> ${q.text}</div>${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}</div>`).join('')}</div>`}
+function multiCard(group,start,end,title,stem,opts){
+  return `<div class="group">
+    <h3>${title}</h3>
+    <div class="inst">Choose <b>${end-start+1===2?'TWO':'THREE'}</b> correct answers.</div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="qtext"><b>${start}–${end}</b> ${stem}</div>
+    </div>
+    <div class="multi-card" id="card${start}">
+      ${Array.from({length:end-start},(_,i)=>`<span id="card${start+i+1}"></span>`).join('')}
+      ${opts.map(x=>`<label class="option multi-option" data-group="${group}" data-val="${optionValue(x)}"><input type="checkbox" name="${group}" value="${optionValue(x)}"> ${x}</label>`).join('')}
+      <div id="fb${group}" class="multi-score-note">Select exactly ${end-start+1} options.</div>
+      <div id="review${group}"></div>
+    </div>
+  </div>`
+}
+const g2324Opts=['A — a decrease in output in workplaces without windows to let in natural light','B — a failure among workers on night-shifts to perform tasks','C — an increase in casualties on the roads at specific times of day','D — a decline in efficiency on certain days in a number of fixed cycles','E — a rise in mood swings dependent on the appearance of the Sun'];
+const g2526Opts=['A — the precise length of the free-running daily cycle in different animals','B — the reason for clocks being temporarily driven out of synchronisation','C — the reason for living beings forming a connection with the Sun’s rhythms','D — the way in which all clocks in a single organism are able to stay in step with one another','E — the location of the clocks across the whole range of living organisms'];
+const g3840Opts=['A — Evidence from prehistoric times','B — Intelligence','C — Individual sounds','D — Music','E — Emotions','F — Human intellect','G — Children’s language'];
+function renderChoiceGroup(start,end,title,inst){
+  const rows=questions.filter(q=>q.n>=start&&q.n<=end);
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>${rows.map(card).join('')}</div>`;
+}
+function renderP1Notes(){
+  return `<div class="group"><h3>Questions 6–13</h3>
+    <div class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="completion">
+      <h4>February 1861: Storm warning service</h4>
+      <p>FitzRoy received weather reports produced by ships using reliable ${inlineText(6)}.</p>
+      <p>Simultaneous weather reports were taken daily.</p>
+      <p>Storm warnings were telegraphed to ${inlineText(7)} along the shore.</p>
+      <p>Signals for ships were displayed using raised ${inlineText(8)}.</p>
+      <p>The storm warning service was the greatest development in sea safety since the ${inlineText(9)} was introduced.</p>
+      <h4>August 1861: Public weather forecasting service</h4>
+      <p>Very popular in <i>The Times</i> newspaper.</p>
+      <p>Frequently used by the English Queen for safe trips to a favourite ${inlineText(10)}.</p>
+      <p>FitzRoy's forecasts were popular with fishermen but not with boat ${inlineText(11)}.</p>
+      <p>In modern times FitzRoy's ${inlineText(12)} is used for a marine area.</p>
+      <p>FitzRoy produced a ${inlineText(13)} which was respected by the scientific community.</p>
+    </div>
+  </div>`;
+}
+function renderIcebergChooseTwo(){
+  const opts=[
+    "A — Ken Smith likened iceberg melt to river estuaries.",
+    "B — He obtained all his results from a single Antarctic iceberg.",
+    "C — He confirmed that all icebergs had identical ecosystems.",
+    "D — He connected iceberg contents with surrounding marine life.",
+    "E — He was the first to note bacteria around icebergs."
+  ];
+  return `<div class="group"><h3>Questions 20–21</h3>
+    <div class="inst">Choose <b>TWO</b> correct answers.</div>
+    <div class="card" style="margin-bottom:10px"><div class="qtext"><b>20–21</b> Which TWO of the following are true about Ken Smith’s findings?</div></div>
+    <div class="multi-card" id="card20"><span id="card21"></span>
+      ${opts.map(x=>`<label class="option multi-option" data-group="g2021" data-val="${optionValue(x)}"><input type="checkbox" name="g2021" value="${optionValue(x)}"> ${x}</label>`).join('')}
+      <div id="fbg2021" class="multi-score-note">Select exactly 2 options.</div>
+      <div id="reviewg2021"></div>
+    </div>
+  </div>`;
+}
+function renderP2Summary(){
+  return `<div class="group"><h3>Questions 22–26</h3>
+    <div class="inst">Complete the summary below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="summary-box">
+      <h4>Iceberg ecosystems</h4>
+      <p>
+        On his dives in Antarctica, Greg Stone and his team noted the presence of above-normal levels of marine life, such as krill and ${inlineText(22)} in the immediate vicinity of the ice.
+        They also observed that under many icebergs, young fish appeared to have created ${inlineText(23)} to live in – possibly as a means of avoiding ${inlineText(24)}.
+      </p>
+      <p>
+        Under one iceberg, they located a stunning display of sea cucumbers, sponges and other invertebrates living deep within a ${inlineText(25)} in the ice.
+        These had probably survived because the iceberg had become stuck on the seabed rather than being blown around or moved by ocean ${inlineText(26)}.
+      </p>
+    </div>
+  </div>`;
+}
+function renderDunedinSummary(){
+  const opts=questions.find(q=>q.n===37).opts;
+  return `<div class="group"><h3>Questions 37–40</h3>
+    <div class="inst">Complete the summary below using the correct phrase, <b>A–H</b>.</div>
+    <div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>
+    <div class="summary-box">
+      <h4>A model study</h4>
+      <p>
+        The success of the Dunedin project has been put down to two principal factors: good fortune and Phil Silva's methodology.
+        The demographics of Dunedin mean that residents feel committed to the study, and that it also provides ${inlineSelect(37,opts)} that can be applied both nationally and internationally,
+        but even more important was Silva's conviction that the ${inlineSelect(38,opts)} must be looked after;
+        nothing should be done to threaten the study's ${inlineSelect(39,opts)} and as a result Silva is cautious when questioned,
+        and a lot of work is done to minimise ${inlineSelect(40,opts)} in order to ensure that the study continues into the future.
+      </p>
+    </div>
+  </div>`;
+}
+function freshQuestionsHTML(p){
+  let h='';
+  if(p===1){
+    h+=renderChoiceGroup(1,5,'Questions 1–5','Choose TRUE, FALSE or NOT GIVEN.');
+    h+=renderP1Notes();
+  }else if(p===2){
+    h+=renderMatch(14,19,'Questions 14–19','Which paragraph contains the following information? Choose A–I. You may use any letter more than once.',false);
+    h+=renderIcebergChooseTwo();
+    h+=renderP2Summary();
+  }else if(p===3){
+    h+=renderChoiceGroup(27,32,'Questions 27–32','Choose the correct answer.');
+    h+=renderChoiceGroup(33,36,'Questions 33–36','Choose YES, NO or NOT GIVEN.');
+    h+=renderDunedinSummary();
+  }else{
+    throw new Error('Invalid passage number: '+p);
+  }
+  return h;
+}
+function expectedQuestionRange(p){
+  return p===1?[1,13]:p===2?[14,26]:[27,40];
+}
+function cachedQuestionsAreValid(markup,p){
+  if(!markup)return false;
+  const [a,b]=expectedQuestionRange(p);
+  const box=document.createElement('div');
+  box.innerHTML=markup;
+  const nums=[...box.querySelectorAll('.qnum')].map(e=>Number(e.textContent.trim())).filter(Number.isFinite);
+  if(!nums.length)return false;
+  return nums.every(n=>n>=a&&n<=b) && nums.some(n=>n===a) && nums.some(n=>n===b);
+}
+function freshQuestionsHTML(p){
+  let h='';
+  if(p===1){
+    h+=renderChoiceGroup(1,7,'Questions 1–7','Choose TRUE, FALSE or NOT GIVEN.');
+    h+=renderP1Notes();
+  }else if(p===2){
+    h+=renderMatch(14,17,'Questions 14–17','Which paragraph contains the following information? Choose A–F. You may use any letter more than once.',false);
+    h+=renderP2Summary();
+    h+=renderMatch(22,26,'Questions 22–26','Match each statement with the correct person, A–D. You may use any letter more than once.',true);
+  }else if(p===3){
+    h+=renderChoiceGroup(27,31,'Questions 27–31','Choose YES, NO or NOT GIVEN.');
+    h+=renderChoiceGroup(32,35,'Questions 32–35','Choose the correct answer.');
+    h+=renderSentenceEndings();
+  }else{
+    throw new Error('Invalid passage number: '+p);
+  }
+  return h;
+}
+function buildQuestions(p){
+  const cacheKey=markupKey('questions',p);
+  const saved=ssGet(cacheKey);
+  const h=cachedQuestionsAreValid(saved,p)?saved:freshQuestionsHTML(p);
+
+  // If an invalid cross-passage cache was found, remove it immediately.
+  if(saved && saved!==h) sessionStorage.removeItem(key(cacheKey));
+
+  document.getElementById('questionsPane').innerHTML=
+    annotationToolbar('questions')+
+    `<div id="notesQuestions" class="notes-panel"></div><div id="questionsCopy">${h}</div>`;
+
+  restore(p);
+  bindTracking();
+  bindAnnotations('questions');
+  renderNotes('questions');
+
+  if(submitted){
+    const copy=document.getElementById('questionsCopy');
+    if(copy&&!copy.querySelector('.review-note')){
+      copy.insertAdjacentHTML('afterbegin','<div class="review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới.</div>');
+    }
+    markPassage(p);
+  }
+}
+function showPassage(p){
+  saveMarkup('passage');saveMarkup('questions');current=p;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));
+  document.getElementById('passagePane').innerHTML=passageHTML(p);
+  bindAnnotations('passage');renderNotes('passage');buildQuestions(p);
+  document.getElementById('passagePane').scrollTop=0;
+  document.getElementById('questionsPane').scrollTop=0;
+}
+function save(n,v){
+  ssSet('q'+n,v);
+  document.getElementById('nav'+n)?.classList.toggle('answered',String(v).trim()!=='');
+}
+function getMulti2021(){
+  try{return JSON.parse(ssGet('g2021')||'[]')}catch(e){return[]}
+}
+function restore(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const v=ssGet('q'+q.n)||'';
+    const e=document.getElementById('q'+q.n);
+    if(e)e.value=v;
+    if(q.type==='choice'&&v){
+      const r=[...document.querySelectorAll(`input[name="q${q.n}"]`)].find(x=>x.value===v);
+      if(r)r.checked=true;
+    }
+  }
+  if(p===2){
+    const sel=getMulti2021();
+    document.querySelectorAll('input[name="g2021"]').forEach(e=>e.checked=sel.includes(e.value));
+  }
+}
+function bindTracking(){
+  document.querySelectorAll('.ans').forEach(e=>e.oninput=e.onchange=()=>save(+e.dataset.q,e.value));
+  document.querySelectorAll('input[type="radio"]').forEach(e=>e.onchange=()=>save(+e.closest('.option').dataset.q,e.value));
+  document.querySelectorAll('input[name="g2021"]').forEach(e=>{
+    e.onchange=()=>{
+      let sel=[...document.querySelectorAll('input[name="g2021"]:checked')].map(x=>x.value);
+      if(sel.length>2){
+        e.checked=false;
+        sel=[...document.querySelectorAll('input[name="g2021"]:checked')].map(x=>x.value);
+        alert('Chỉ chọn TWO đáp án.');
+      }
+      ssSet('g2021',JSON.stringify(sel));
+      const done=sel.length===2;
+      document.getElementById('nav20')?.classList.toggle('answered',done);
+      document.getElementById('nav21')?.classList.toggle('answered',done);
+    };
+  });
+}
+function buildNav(){
+  document.getElementById('navigator').innerHTML=Array.from({length:40},(_,i)=>`<button id="nav${i+1}" onclick="goQ(${i+1})">${i+1}</button>`).join('');
+}
+function goQ(n){
+  const p=n<=13?1:n<=26?2:3;
+  if(p!==current)showPassage(p);
+  setTimeout(()=>{
+    const target=document.getElementById('card'+n)||(n===21?document.getElementById('card20'):null);
+    target?.scrollIntoView({behavior:'smooth',block:'center'});
+  },60);
+}
+function correct(q,u){
+  return q.type==='text'?q.ans.map(norm).includes(norm(u)):norm(u)===norm(q.ans);
+}
+function displayKey(q){
+  if(q.type==='select'||q.type==='choice'){
+    const f=(q.opts||[]).find(x=>optionValue(x)===String(q.ans));
+    return f||q.ans;
+  }
+  return Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+}
+function displayAnswer(q,u){
+  if(!u)return 'Không trả lời';
+  if(q.type==='select'||q.type==='choice'){
+    const f=(q.opts||[]).find(x=>optionValue(x)===String(u));
+    return f||u;
+  }
+  return u;
+}
+function reviewHTML(q,u){
+  const r=answerReview[q.n];
+  return `<div class="inline-review" data-review="${q.n}">
+    <div class="inline-review-title">Q${q.n} · Giải thích câu sai</div>
+    <div class="review-row"><div class="review-label">Bạn trả lời</div><div class="student-wrong">${esc(displayAnswer(q,u))}</div></div>
+    <div class="review-row"><div class="review-label">Đáp án đúng</div><div class="correct-answer">${esc(displayKey(q))}</div></div>
+    <div class="explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="evidence"><b>Evidence:</b> “${esc(r.evidence)}”</div>
+    <button class="evidence-btn" onclick="focusEvidence(${q.n})">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+function placeReview(q,u,ok){
+  document.querySelectorAll(`[data-review="${q.n}"]`).forEach(e=>e.remove());
+  if(ok)return;
+  const c=document.getElementById('card'+q.n);
+  if(!c)return;
+  const host=c.classList.contains('card')?c:(c.closest('.flow-step,p,.match-row')||c.parentElement);
+  host.insertAdjacentHTML('beforeend',reviewHTML(q,u));
+}
+function markMulti2021(){
+  const sel=getMulti2021(),key=['A','D'],hits=sel.filter(x=>key.includes(x)).length,perfect=hits===2&&sel.length===2;
+  document.querySelectorAll('[data-group="g2021"]').forEach(l=>{
+    l.classList.remove('correct','wrong');
+    if(key.includes(l.dataset.val))l.classList.add('correct');
+    else if(sel.includes(l.dataset.val))l.classList.add('wrong');
+  });
+  const fb=document.getElementById('fbg2021');
+  if(fb){
+    fb.className='multi-score-note '+(perfect?'good':'bad');
+    fb.textContent=perfect?'✓ Correct — 2 / 2':`Correct answers: A, D · Score: ${hits} / 2`;
+  }
+  ['nav20','nav21'].forEach(id=>{
+    const e=document.getElementById(id);
+    if(!e)return;
+    e.classList.remove('answered','correct','wrong','partial');
+    e.classList.add(perfect?'correct':hits===1?'partial':'wrong');
+  });
+  const host=document.getElementById('reviewg2021');
+  if(host){
+    host.innerHTML='';
+    if(!perfect){
+      const r=answerReview[20];
+      host.innerHTML=`<div class="inline-review">
+        <div class="inline-review-title">Q20–21 · Giải thích nhóm câu sai</div>
+        <div class="review-row"><div class="review-label">Bạn chọn</div><div class="student-wrong">${esc(sel.join(', ')||'Không trả lời')}</div></div>
+        <div class="review-row"><div class="review-label">Đáp án đúng</div><div class="correct-answer">A, D</div></div>
+        <div class="explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+        <div class="evidence"><b>Evidence:</b> “${esc(r.evidence)}”</div>
+        <button class="evidence-btn" onclick="focusEvidence(20)">↗ Đối chiếu trong bài đọc</button>
+      </div>`;
+    }
+  }
+  document.querySelectorAll('input[name="g2021"]').forEach(e=>e.disabled=true);
+  return hits;
+}
+function markPassage(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const u=ssGet('q'+q.n)||'',ok=correct(q,u);
+    const e=document.getElementById('q'+q.n);
+    if(e){e.classList.remove('correct','wrong');e.classList.add(ok?'correct':'wrong')}
+    document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{
+      l.classList.remove('correct','wrong');
+      if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');
+      else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong');
+    });
+    const nav=document.getElementById('nav'+q.n);
+    if(nav){nav.classList.remove('answered');nav.classList.add(ok?'correct':'wrong')}
+    placeReview(q,u,ok);
+  }
+  if(p===2&&submitted)markMulti2021();
+  document.querySelectorAll('#questionsCopy input,#questionsCopy select').forEach(e=>e.disabled=true);
+}
+function focusEvidence(n){
+  const q=qBy(n),r=answerReview[n];
+  const reveal=()=>{
+    const t=document.querySelector(`#passageCopy p[data-para="${r.para}"]`);
+    if(t){
+      t.scrollIntoView({behavior:'smooth',block:'center'});
+      t.classList.add('evidence-pulse');
+      setTimeout(()=>t.classList.remove('evidence-pulse'),3000);
+    }
+  };
+  if(q.p!==current){showPassage(q.p);setTimeout(reveal,120)}else reveal();
+}
+function questionRenderSelfCheck(){
+  const result={};
+  for(const p of [1,2,3]){
+    const h=freshQuestionsHTML(p);
+    const box=document.createElement('div');
+    box.innerHTML=h;
+    const nums=[...box.querySelectorAll('.qnum')].map(e=>Number(e.textContent.trim())).filter(Number.isFinite);
+    const [a,b]=expectedQuestionRange(p);
+    result[p]={
+      min:Math.min(...nums),
+      max:Math.max(...nums),
+      valid:nums.length>0 && nums.every(n=>n>=a&&n<=b) && nums.includes(a) && nums.includes(b)
+    };
+  }
+  return result;
+}
+async function submitExam(auto=false){
+  if(submitted)return;
+  saveMarkup('passage');saveMarkup('questions');
+
+  const normalMissing=questions.filter(q=>q.type!=='multi'&&!(ssGet('q'+q.n)||'').trim()).length;
+  const multiMissing=Math.max(0,2-getMulti2021().length);
+  const unanswered=normalMissing+multiMissing;
+  if(!auto&&unanswered&&!confirm(`Bạn còn ${unanswered} câu/ô đáp án chưa hoàn thành. Vẫn nộp bài?`))return;
+
+  submitted=true;
+  clearInterval(timerHandle);
+
+  let total=0,s=[0,0,0,0],details=[];
+  for(const q of questions.filter(q=>q.type!=='multi')){
+    const u=ssGet('q'+q.n)||'',ok=correct(q,u);
+    if(ok){total++;s[q.p]++}
+    details.push({q:q.n,answer:u,correct:ok,key:displayKey(q)});
+  }
+
+  const sel=getMulti2021(),key2021=['A','D'];
+  const hits=sel.filter(x=>key2021.includes(x)).length;
+  total+=hits;
+  s[2]+=hits;
+  details.push({q:'20-21',answer:sel.join(', '),correct:hits===2,key:'A, D',score:hits});
+
+  markPassage(current);
+
+  const name=document.getElementById('studentName').value.trim();
+  const cls=document.getElementById('studentClass').value.trim();
+  const dur=Math.round((Date.now()-startedAt)/1000);
+
+  document.getElementById('resultStudent').textContent=`${name} — ${cls}`;
+  document.getElementById('resultScore').textContent=`${total} / 40`;
+  document.getElementById('resultPercent').textContent=`${Math.round(total/40*100)}% correct`;
+  document.getElementById('p1score').textContent=`${s[1]} / 13`;
+  document.getElementById('p2score').textContent=`${s[2]} / 13`;
+  document.getElementById('p3score').textContent=`${s[3]} / 14`;
+  document.getElementById('reviewSummary').innerHTML=total===40?'🎉 Bạn đã trả lời đúng cả 40 câu.':`Có <b>${40-total} điểm cần xem lại</b>. Đóng bảng điểm để xem giải thích + evidence ngay dưới câu sai.`;
+  document.getElementById('resultOverlay').classList.remove('hidden');
+  document.getElementById('sheetStatus').textContent='Đang gửi kết quả về Google Sheet...';
+
+  const data=new URLSearchParams({
+    name,className:cls,total:String(total),maxScore:'40',durationSeconds:String(dur),
+    activity:'IELTS Reading - Weather Forecasting / Icebergs / Dunedin Study',
+    reading:String(s[1]),grammar:String(s[2]),ing:String(s[3]),
+    writingA:JSON.stringify(details),submittedAt:new Date().toISOString()
+  });
+  try{
+    await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:data.toString()});
+    document.getElementById('sheetStatus').textContent='✓ Đã gửi kết quả về Google Sheet.';
+  }catch(e){
+    document.getElementById('sheetStatus').textContent='Không gửi được kết quả về Google Sheet.';
+  }
+}
+function closeResult(){
+  document.getElementById('resultOverlay').classList.add('hidden');
+  markPassage(current);
+}
+</script></body></html>
