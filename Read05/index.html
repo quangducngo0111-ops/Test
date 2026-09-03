@@ -1,0 +1,767 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>IELTS Reading - Pixar / Mechanical Friend / Patagonia</title><style>
+:root{--navy:#17344f;--navy2:#0d263b;--blue:#2e6f9f;--paper:#f4f4f2;--line:#d6dade;--text:#20262b;--muted:#64717b;--accent:#e9784e;--good:#2e7d5b;--bad:#b5442e}*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff}.hidden{display:none!important}button,input,select{font:inherit}.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700}.start-card h1{margin:8px 0 6px;color:var(--navy)}.start-card p{margin:0 0 22px;color:var(--muted)}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}.btn{border:0;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer}.exam{height:100vh;display:grid;grid-template-rows:auto auto 1fr auto}.top{background:var(--navy2);color:#fff;padding:11px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}.timer{font-family:ui-monospace,monospace;font-weight:700;background:rgba(255,255,255,.1);padding:8px 11px;border-radius:6px}.timer.danger{background:#912f25}.tabs{display:flex;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);background:#fafafa}.tab{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 13px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.workspace{display:grid;grid-template-columns:1fr 1fr;min-height:0}.passage,.questions{overflow:auto;padding:24px 26px}.passage{border-right:1px solid var(--line)}.questions{background:#fafafa}.passage h2{font-size:1.35rem;color:var(--navy);margin:0 0 18px}.copy{font-size:15px;line-height:1.72}.copy p{margin:0 0 15px}.group{margin-bottom:26px}.group h3{color:var(--navy);margin:0 0 5px}.inst{font-size:.92rem;color:var(--muted);margin-bottom:12px}.bank{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;background:#eef3f6;border:1px solid var(--line);padding:12px;border-radius:8px;margin:10px 0;font-size:.92rem}.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}.qhead{display:flex;gap:10px;align-items:flex-start}.qnum{min-width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.qtext{flex:1}.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer}.option.correct{border-color:var(--good);background:rgba(46,125,91,.08)}.option.wrong{border-color:var(--bad);background:rgba(181,68,46,.08)}.ans{width:100%;margin-top:9px;padding:10px;border:1px solid var(--line);border-radius:7px}.ans.correct{border-color:var(--good);background:rgba(46,125,91,.06)}.ans.wrong{border-color:var(--bad);background:rgba(181,68,46,.06)}.feedback{font-size:.88rem;margin-top:6px}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}.bottom{border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:10px;align-items:center}.nav{display:flex;gap:4px;overflow-x:auto;flex:1}.nq{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:12px;font-weight:700}.nq.answered{background:#dcebf5}.nq.correct{background:#dcefe5;border-color:var(--good)}.nq.wrong{background:#f3ddd8;border-color:var(--bad)}.submit{background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:7px;font-weight:700;white-space:nowrap;cursor:pointer}.overlay{position:fixed;inset:0;background:rgba(8,20,30,.7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.result{background:#fff;width:min(620px,100%);border-radius:14px;padding:28px}.score{font-size:2.5rem;font-weight:800;color:var(--navy);margin:8px 0}.break{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.break div{background:#f2f5f7;padding:12px;border-radius:8px;text-align:center}
+
+.result{max-height:90vh;overflow:auto}
+.review-wrap{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.review-title{font-size:1.08rem;color:var(--navy);margin:0 0 6px}
+.review-sub{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.wrong-review{border:1px solid #e2c8c2;background:#fffaf8;border-radius:9px;padding:14px 15px;margin:11px 0}
+.wrong-review .review-q{font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.45}
+.answer-row{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;font-size:.92rem;margin:4px 0}
+.answer-label{color:var(--muted);font-weight:700}
+.student-wrong{color:var(--bad);font-weight:700}
+.correct-answer{color:var(--good);font-weight:700}
+.explain-box{margin-top:10px;padding:10px 11px;background:#fff;border-left:3px solid var(--blue);border-radius:4px;font-size:.92rem;line-height:1.5}
+.evidence-box{margin-top:9px;padding:10px 11px;background:#f3f7fa;border:1px solid #d7e2ea;border-radius:7px;font-size:.9rem;line-height:1.5}
+.evidence-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);font-weight:700;margin-bottom:4px}
+.evidence-quote{font-style:italic}
+.goto-evidence{margin-top:9px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:7px 10px;font-size:.84rem;font-weight:700;cursor:pointer}
+.goto-evidence:hover{background:#f4f7f9}
+.evidence-pulse{outline:3px solid rgba(233,120,78,.45);background:#fff8e8;border-radius:5px;transition:background .2s}
+.perfect-review{padding:14px;border-radius:8px;background:#edf7f1;color:#245c43;font-weight:700}
+
+
+.completion-box{background:#fff;border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin-top:12px;line-height:1.8}
+.completion-box h4{margin:0 0 12px;color:var(--navy);font-size:1.05rem}
+.completion-text{font-size:15px;line-height:2.05;margin:0}
+.inline-blank{display:inline-flex;align-items:center;gap:5px;margin:2px 4px;vertical-align:middle;scroll-margin:100px}
+.blank-num{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700}
+.inline-answer{width:auto!important;min-width:145px;max-width:245px;margin:0!important;padding:7px 9px!important;display:inline-block;vertical-align:middle;background:#fff}
+.inline-answer.short{min-width:115px;max-width:180px}
+.inline-answer.select-wide{min-width:190px;max-width:270px}
+.flowchart{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin-top:10px}
+.flow-step{background:#fbfcfc;border:1px solid var(--line);border-radius:8px;padding:12px 14px;line-height:1.75}
+.flow-arrow{text-align:center;color:var(--blue);font-size:20px;font-weight:700;line-height:1}
+.notes-list{margin:8px 0 0;padding-left:20px}
+.notes-list li{margin:9px 0;line-height:1.8}
+.completion-box .bank{margin-top:14px;margin-bottom:16px}
+.inline-answer.correct{border-color:var(--good)!important;background:rgba(46,125,91,.06)!important}
+.inline-answer.wrong{border-color:var(--bad)!important;background:rgba(181,68,46,.06)!important}
+@media(max-width:600px){
+  .inline-answer,.inline-answer.select-wide{min-width:130px;max-width:100%;font-size:16px}
+  .completion-box{padding:15px}
+}
+
+
+.questions-pane 
+/* ===== INLINE REVIEW AFTER SUBMISSION ===== */
+.inline-review{
+  margin:12px 0 4px;
+  padding:13px 14px;
+  border:1px solid #e3c8c1;
+  border-left:4px solid var(--bad);
+  border-radius:8px;
+  background:#fffaf8;
+  color:var(--text);
+  line-height:1.5;
+  font-size:.92rem;
+}
+.inline-review.integrated{
+  width:100%;
+  margin-top:10px;
+}
+.inline-review-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  color:var(--navy);
+  font-weight:800;
+}
+.inline-review-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:27px;
+  height:27px;
+  padding:0 7px;
+  border-radius:999px;
+  background:var(--bad);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.inline-review-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:5px 9px;
+  margin:4px 0;
+}
+.inline-review-label{
+  color:var(--muted);
+  font-weight:700;
+}
+.inline-review-student{
+  color:var(--bad);
+  font-weight:700;
+}
+.inline-review-correct{
+  color:var(--good);
+  font-weight:800;
+}
+.inline-review-explain{
+  margin-top:9px;
+  padding:9px 10px;
+  background:#fff;
+  border-left:3px solid var(--blue);
+  border-radius:4px;
+}
+.inline-review-evidence{
+  margin-top:8px;
+  padding:9px 10px;
+  background:#f2f7fa;
+  border:1px solid #d7e3ea;
+  border-radius:7px;
+}
+.inline-review-evidence-label{
+  margin-bottom:4px;
+  color:var(--blue);
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.inline-review-quote{
+  font-style:italic;
+}
+.inline-review-btn{
+  margin-top:9px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  border-radius:6px;
+  padding:7px 10px;
+  font-size:.84rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.inline-review-btn:hover{background:#f4f7f9}
+.review-mode-note{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:7px;
+  background:#eef5f9;
+  color:var(--navy);
+  font-size:.9rem;
+  font-weight:700;
+}
+#questionsCopy input:disabled,
+#questionsCopy select:disabled{
+  opacity:1;
+  color:inherit;
+  cursor:not-allowed;
+}
+
+
+.match-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.match-row .match-label{flex:1;min-width:240px;line-height:1.5}
+.match-row .inline-review{flex-basis:100%}
+.footnote{font-size:.88rem!important;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+
+.annotation-bar{background:#fbfbfa}
+.annotation-zone-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-right:2px}
+
+.annotation-bar{position:sticky;top:-24px;z-index:8;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);margin:-24px -26px 18px;padding:10px 14px}
+.annotation-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}
+.annotation-btn:hover{background:#f4f7f9}
+.annotation-tip{font-size:12px;color:var(--muted);margin-left:auto}
+mark.user-highlight{background:#fff29a;color:inherit;padding:1px 0;border-radius:2px}
+.note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer;border-radius:2px}
+.notes-panel{display:none;background:#f6f9fb;border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:16px}
+.notes-panel.open{display:block}
+.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:10px 11px;margin:8px 0}
+.note-quote{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:5px}
+.note-text{font-size:14px;margin-bottom:7px}
+.note-actions{display:flex;gap:6px}
+.note-actions button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer}
+.timer.warning{background:#8b651d}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.passage,.questions{height:48vh}.passage{border-right:0;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<div id="start" class="start"><div class="start-card"><div class="eyebrow">IELTS Reading Practice</div><h1>Computer-Based Reading Test</h1><p>3 passages · 40 questions · 60 minutes</p><div class="field"><label>Họ và tên học sinh</label><input id="studentName" placeholder="Ví dụ: Nguyễn Văn An"></div><div class="field"><label>Lớp</label><input id="studentClass" placeholder="Ví dụ: 8A1"></div><button class="btn" onclick="startExam()">Bắt đầu làm bài</button><div id="startError" style="color:var(--bad);margin-top:10px"></div></div></div>
+<div id="exam" class="exam hidden"><div class="top"><div>Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div><div id="timer" class="timer">60:00</div></div><div class="tabs"><button class="tab active" data-p="1" onclick="showPassage(1)">Passage 1</button><button class="tab" data-p="2" onclick="showPassage(2)">Passage 2</button><button class="tab" data-p="3" onclick="showPassage(3)">Passage 3</button></div><div class="workspace"><div id="passage" class="passage"></div><div id="questions" class="questions"></div></div><div class="bottom"><div id="nav" class="nav"></div><button class="submit" onclick="submitExam(false)">Nộp bài</button></div></div>
+<div id="overlay" class="overlay hidden"><div class="result"><div class="eyebrow">Kết quả</div><div id="rstudent"></div><div id="rscore" class="score">0 / 40</div><div id="rpercent"></div><div class="break"><div><b>Passage 1</b><br><span id="p1s"></span></div><div><b>Passage 2</b><br><span id="p2s"></span></div><div><b>Passage 3</b><br><span id="p3s"></span></div></div><div id="status" style="color:var(--muted);font-size:.92rem"></div><div id="wrongReview" class="review-wrap"></div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn" onclick="closeResult()">Xem lại toàn bài</button><button class="btn" style="background:#587087" onclick="location.reload()">Làm lại từ đầu</button></div></div></div>
+<script>const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const passages={"1": {"title": "The Pixar Story", "text": "<p><b>A</b> Between 2000 and 2005. under former Chief Executive Officer (CEO) Michael D. Eisner, Walt Disney Company set its shareholder meetings in a series of cold-weather cities during cold-weather months. Many suspected that this had been to discourage attendance by the company's increasingly restless shareholders. In 2006, however, there was no need for such measures. In October 2005, Chief Operating Officer Robert Iger had replaced Eisner as CEO. On taking charge. Iger had quickly carried out a bold stroke, negotiating a buyout of Pixar Animation Studios. Although the price was high, the acquisition proved to be overwhelmingly popular.</p>\n<p><b>B</b> Pixar had started life twenty years earlier as Pixar Inc., a computer hardware company, one of hundreds dotting the landscape of the San Francisco Bay Area in California. Within the company, a tiny animation group made short promotional films that brought in practically zero revenue; the group came close more than once to being shut down. When the Pixar Image Computer proved unprofitable. the company turned to selling animation software and making animated commercials, but it kept losing money year after year.</p>\n<p><b>C</b> In 1991. when Disney agreed to finance the production of Pixar's first feature film for cinema release. Disney had virtually dictated the terms of the contract. In late 1993. Disney considered ordering Pixar to shut down production of the John Lasseter directed film. Toy Story. on account of issues with the script. At the time, Hollywood commentators doubted whether audiences would even sit through a full-length film in the new medium of computer animation. It was unclear whether computer animation would prove to be a novelty that would quickly wear thin.</p>\n<p><b>D</b> Before long. however, things had changed dramatically. A succession of beloved and commercially successful animated feature films, starting with the 1995 release of Toy Story and including A Bug's Life and Finding Nemo, made Pixar the world's dominant animation studio. Disney made a fortune distributing the films. When Pixar's majority owner and CEO. Steve Jobs, cut off contract talks with Disney in early 2004, as the end of their distribution contract was in sight, the business press focused on the question of how Disney would cope. By then, it was Disney that seemed to need Pixar-the distribution of Pixar's films made up around 45% of the operating income from Disney's film operations. Disney's internal market research showed that mothers of young children trusted the Pixar brand more than Disney's.</p>\n<p><b>E</b> With the 2005 acquisition, John Lasseter was soon to hold the titles of Chief Creative Officer for Disney and Pixar animation and Principal Creative Advisor for Disney's worldwide theme parks and resorts. Having created a new genre of film with his colleagues at Pixar, Lasseter had been able to make the films he wanted to make, and he was coming back to Disney on his own terms, having briefly been an employee there when he was young.</p>\n<p><b>F</b> When lger brought Lasseter on to speak at the 2006 shareholders' meeting. Lasseter was met with energetic applause as the sound system played a few bars of the signature song of Toy Story. In his speech, Lasseter recalled afternoons as a schoolboy running home to catch Bugs Bunny cartoons on TV. It wasn't long. he told the audience, before he realized he wanted to earn a living from making cartoons. He went on to talk about working on the Jungle Cruise ride in Disneyland, and the terrible jokes that he and his fellow operator told to enliven the show. He said the experience had brought him out of his shell and given him confidence in front of people. He also explained how he joined Disney's animation division fresh out of the California Institute of the Arts, and saw one of the early trials of 3-D computer animation. He mentioned the disappointment he had felt as a young man in trying. and failing. to get the Disney studio to embrace the new technology. Keeping his presentation upbeat, he said simply. 'So I followed my dream to work with one of the most amazing people I've ever known in my life-Ed Catmull.'</p>\n<p><b>G</b> The sixty-one-year-old president of Pixar, Dr. Edwin Catmull, was seated amongst the shareholders. Catmull has been a computer graphics researcher who had fallen accidentally into the role of business leader. Those who knew him well invariably described him as brilliant, but his intelligence was not the kind that advertised itself by dominating conversations; by and large, he was keener on listening than talking. When he did speak, his words were friendly and polite.</p>\n<p><b>H</b> While Catmull had built upon the work of others, the revolution in 3-D animation was in many respects his revolution. It was Catmull who had held to his vision of fully computer-animated movies. And it was Catmull, while running computer graphics labs at the New York Institute of Technology and George Lucas's Lucasfilm, who had assembled the technical and creative staff that would go on to become the heart of Pixar Animation Studios.</p>"}, "2": {"title": "A mechanical friend for children", "text": "<p><b>A</b> The development of robots that interact socially with people and assist them in everyday life has been an elusive goal of modern science. Despite impressive advances in the mechanical aspects of this problem, producing robots that bond and socialize with people for sustained periods of time has proven difficult. The most successful robots so far have been storytellers, but they have only been able to maintain human interest for a limited time and typically rely on the robot telling stories that change over time. In practice, commercially available robots seldom cross the 10-hour barrier (i.e. individual users tend to spend less than a combined total of 10 hours with the robots before losing interest). This observation is in sharp contrast to the long-term interactions and bonding that commonly develop between humans and their pets.</p>\n<p><b>B</b> In a recent study, researchers from the Institute for Neural Computation in California introduced a state-of-the-art social robot into a classroom of 18- to 24-month-olds for five months as a way of studying human/robot interactions. The researchers, including Fumihide Tanaka and Javier R Movellan, introduced a toddler-sized humanoid robot into a classroom at a childhood education center. One of the QRIO series of robots, the 58cm machine, was originally developed by Sony. Children of toddler age were chosen because they have no preconceived notions of robots, according to Tanaka. One of the goals of the study was to establish whether it was possible for social robots to maintain the interest of children beyond the 10-hour barrier.</p>\n<p><b>C</b> The researchers sent instructions to the robot about every two minutes to do things like giggle, dance, sit down, fall down or walk in a certain direction. The 45 sessions were videotaped, and interactions between toddlers and the robot were later analyzed. The results showed that the quality of those interactions improved steadily over 27 sessions. The interactions deteriorated quickly over the next 15 sessions, when the robot was ordered to behave in a more limited, predictable manner. Finally, the human/robot relations improved in the last three sessions, after the robot had been instructed to display its full range of behaviors.</p>\n<p><b>D</b> 'Initially the children treated the robot very differently from the way they treated each other,' Tanaka said. 'Early in the study some children cried when QRIO fell. But a month into the study, the toddlers helped QRIO stand up by pushing its back or pulling its hands.' The most important aspect of interaction was touch, Tanaka said. At first the toddlers would touch the robot on its face, but later on they would touch it only on its hands and arms, like they would with other humans. Another robot-like toy named Robby, which resembled QRIO but did not move, was used as a control in the study. While hugging of QRIO increased, hugging of Robby decreased throughout the study. Furthermore, when QRIO laid down on the floor as its batteries ran down, a toddler would put a blanket over his silver-colored 'friend' and say 'night-night'. Care-taking behaviors were frequently observed toward QRIO but seldom toward Robby.</p>\n<p><b>E</b> The study concluded that after 45 days of immersion in a childcare center over a period of five months, long-term bonding and socialization occurred between toddlers and a state-of-the-art social robot. Overall, the interaction between children and the robot improved over time and the children progressively treated it more as a peer than a plaything. 'To my knowledge, this is the first long-term study of this sort,' said Ronald Arkin, a roboticist at the Georgia Institute of Technology in the US.</p>\n<p><b>F</b> Tanaka and Movellan are now developing autonomous robots for the toddler classroom. 'It could have great potential in educational settings assisting teachers and enriching the classroom environment,' Tanaka said. The researchers hope that more advanced versions of robots like QRIO could become personalized tutors to assist teachers in classrooms. A robotic tutor could react on the spot to social cues and approximate social skills like facial expression and eye gaze, they said. 'It is becoming clear that, to achieve this goal, we are going to [need to] endow machines with something similar to emotion, not just traditional forms of intelligence,' said Movellan.</p>\n<p><b>G</b> Associate professor David Powers, an expert in artificial intelligence and cognitive science at Flinders University in South Australia, commented, 'In this study it is clearly demonstrated that limited range of robot behaviors, however impressive, is nowhere near as important to human/robot interaction as being able to make appropriate responses from a broad repertoire of behaviors'. Ronald Arkin was not surprised by the affection demonstrated by the toddlers toward the robot. 'Humans have a tremendous propensity to bond with artifacts, whether it be a car, a doll, or a robot,' he said. But he also cautioned that researchers do not yet understand the consequences of increased human/robot interaction. 'Studying how robots and humans work together can give us insight into whether this is a good thing or a bad thing for society,' Arkin said. 'We need to find out what the consequences are of introducing a robot into a cadre of children. How will that enhance, or potentially interfere with, their social development? Do we really understand the long-term impact of having a robot as a childhood friend?'</p>"}, "3": {"title": "The peopling of Patagonia", "text": "<p><b>A</b> The human settlement of the southern extremity of the Americas has always fascinated pre-historians. Viewed from a global perspective, this was the last major continental land mass to be reached by human beings. The earliest occupation of Patagonia carries obvious implications for understanding when the North and South American continents were peopled, because it gives a baseline that all calculations regarding the rate of dispersion of humans throughout both continents must take into account.</p>\n<p><b>B</b> For many years the human settlement of North and South America has been conceived of as beginning in the far north and travelling progressively southwards to Patagonia. However, fundamental disagreements developed concerning the length of time involved. Some scholars accepted a human presence in the Americas as early as 20,000 years ago, while others proposed that it could date no earlier than 8,000 years ago, and the debate is still with us today.</p>\n<p><b>C</b> The idea of a relatively 'late' settlement of the Americas (around 8,000 years ago) implies that a rapid process of migration took place. Herein lies a second debate which revolves around the question of how migration is to be understood. The 'late' model demands a hypothetical migration conceived of as a single continually advancing wave of settlement. This has always been difficult to take seriously and many scholars now support the idea of an 'early' model that sees the migration as a less ordered migration, and this is surely the most realistic scenario as migrants slowly adapted to the diverse natural habitats they would have met while travelling through the continent.</p>\n<p><b>D</b> Those who argue for an earlier settlement, however, must contend with the lack of unequivocal evidence for archaeological sites older than around 14,000 years. Nevertheless, evidence for human occupation of the centre of South America is now securely dated to around 12,500 years ago at the Monte Verde site, which casts doubt on the 'late' model. The lack of archaeological evidence further south for this time period may be explained by the obstacle to humans on foot posed by the huge glacial streams that were present at that time.</p>\n<p><b>E</b> We can speculate then that the retreat of the Patagonian glaciers around 14,000 years ago allowed the initial human intrusion into a pristine environment, which was similar to that of early post-glacial Europe. Human settlement of the vast horizontal expanse of treeless high country must have been tenuous at best, and the evidence for this occupation remains relatively scant, most of it coming from rock shelters in Argentina and Chile. There is, however, reliable evidence from these sites to confirm the presence of humans by around 11,000 years ago in different habitats and some hints of an even older occupation. However, some other sites where evidence for even earlier human occupation was initially posited, have recently come under fresh scrutiny. This is because anthropologists have come to recognise that bones or other evidence may be deposited in caves by natural agency, in other words by other forces such as floods or predators, and not necessarily by humans.</p>\n<p><b>F</b> We shall turn now to a more detailed discussion of the archaeological evidence found in various parts of Patagonia. At the site located beside Chinchihuapi Creek, excavations have produced convincing evidence of human occupation, including hut foundations and wooden artefacts. They were buried in layers of peat, which has the property of preserving wood remarkably well, and as a result radiocarbon dating\\ tests have shown these artefacts to date from around 12,500 years ago. One of the most famous Patagonian sites is a cave known as Los Toldos. However, the evidence from this site has recently been called into question, because dispersed flecks of carbon used in the test process were taken unsystematically from many different places in the site. As a result, the association of this material with the artefacts is not at all clear. About 150 kilometres south is the site called El Ceibo, where a similar collection of artefacts to that found at Los Toldos has been discovered from the lowest levels of the dig, but as yet no radiocarbon dates are available and this sort of analysis of the existing evidence is required before the site's value can be confirmed.</p>\n<p><b>G</b> The Arroyo Feo site is located very close to the high plateau. The artefacts from the earliest occupations were found at the same depth and have the same origins as those from Los Toldos, and have been securely dated to around 9,000 years ago. Another site that is mentioned in the debate is at Las Buitreras, where a number of stone flakes associated with bone remains of various animals have been discovered. However, anthropologists now believe that presumed cut marks on the bones are somewhat dubious, and despite detailed testing there is no way of securely relating any of these remains with human occupation. Finally some 50 kilometres to the south is the site at Cueva Fell, which was the first Patagonian site to be systematically studied by modern archaeological methods. However, it is now recognised that the utility of this site must be restricted to its direct vicinity, given changes to the nearby area caused by flooding, and findings cannot be freely extrapolated further afield.</p>\n<p><b>H</b> In conclusion, based on the evidence from a number of reliable sites, it seems probable that human populations reached Patagonia around 11,000 years ago.</p><p class=\"footnote\"><i>* radiocarbon dating: finding out the age of an organic object by examining carbon it contains</i></p>"}};
+const questions=[{"n": 1, "p": 1, "type": "choice", "text": "Robert Iger had a low opinion of Michael D. Eisner.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 2, "p": 1, "type": "choice", "text": "Pixar Inc. had extremely limited financial success in its early years.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 3, "p": 1, "type": "choice", "text": "There were difficulties during the production of the film Toy Story.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 4, "p": 1, "type": "choice", "text": "In the early 1990s, Hollywood commentators were convinced animated films had a promising future.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 5, "p": 1, "type": "choice", "text": "Finding Nemo was more popular than Toy Story.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 6, "p": 1, "type": "choice", "text": "In 2004, Pixar contributed little to Disney's income from its film operations.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 7, "p": 1, "type": "text", "text": "worked as a ride ... at Disneyland", "ans": ["operator"]}, {"n": 8, "p": 1, "type": "text", "text": "increased his ...", "ans": ["confidence"]}, {"n": 9, "p": 1, "type": "text", "text": "suffered ... over rejection of new technology", "ans": ["disappointment"]}, {"n": 10, "p": 1, "type": "text", "text": "was Pixar's ... in 2006", "ans": ["president"]}, {"n": 11, "p": 1, "type": "text", "text": "preferred ... to taking control of conversations", "ans": ["listening"]}, {"n": 12, "p": 1, "type": "text", "text": "did not let go of his ... for computer animated films", "ans": ["vision"]}, {"n": 13, "p": 1, "type": "text", "text": "teams on which the ... of Pixar would be founded", "ans": ["heart"]}, {"n": 14, "p": 2, "type": "select", "text": "a comparison of children's reactions towards different robots", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "D"}, {"n": 15, "p": 2, "type": "select", "text": "a speculation about ways robots may be able to communicate", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "F"}, {"n": 16, "p": 2, "type": "select", "text": "a description of changes in the way the children physically handled a robot", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "D"}, {"n": 17, "p": 2, "type": "select", "text": "a comparison between people's connections with animals and their connections with robots", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "A"}, {"n": 18, "p": 2, "type": "select", "text": "an account of the way one robot was programmed", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "C"}, {"n": 19, "p": 2, "type": "select", "text": "In future, robots will not only have to think, but also to show feelings.", "opts": ["A — Fumihide Tanaka", "B — Javier R Movellan", "C — Ronald Arkin", "D — David Powers"], "ans": "B"}, {"n": 20, "p": 2, "type": "select", "text": "It is uncertain whether more contact between people and robots will be beneficial.", "opts": ["A — Fumihide Tanaka", "B — Javier R Movellan", "C — Ronald Arkin", "D — David Powers"], "ans": "C"}, {"n": 21, "p": 2, "type": "select", "text": "Very young children have not yet developed ideas about robots.", "opts": ["A — Fumihide Tanaka", "B — Javier R Movellan", "C — Ronald Arkin", "D — David Powers"], "ans": "A"}, {"n": 22, "p": 2, "type": "select", "text": "Robots need to perform a wide variety of actions for people to relate to them.", "opts": ["A — Fumihide Tanaka", "B — Javier R Movellan", "C — Ronald Arkin", "D — David Powers"], "ans": "D"}, {"n": 23, "p": 2, "type": "select", "text": "Using robots as an aid in schools may have many benefits.", "opts": ["A — Fumihide Tanaka", "B — Javier R Movellan", "C — Ronald Arkin", "D — David Powers"], "ans": "A"}, {"n": 24, "p": 2, "type": "text", "text": "robots that held people's attention acted as ...", "ans": ["storytellers"]}, {"n": 25, "p": 2, "type": "text", "text": "children treated QRIO as a friend or ...", "ans": ["peer"]}, {"n": 26, "p": 2, "type": "text", "text": "Arkin expected the children would show ... towards QRIO", "ans": ["affection"]}, {"n": 27, "p": 3, "type": "choice", "text": "In the first paragraph, what is the writer's main point about migration to Patagonia?", "opts": ["1 — It started earlier than previously thought.", "2 — Historians have overlooked its importance.", "3 — It impacts on research into the wider region.", "4 — Researchers have calculated its effects on the environment."], "ans": "3"}, {"n": 28, "p": 3, "type": "choice", "text": "In the second paragraph, what is the writer's purpose?", "opts": ["1 — to challenge previous research", "2 — to propose new areas to investigate", "3 — to summarise a scholarly debate", "4 — to suggest reasons for human migration"], "ans": "3"}, {"n": 29, "p": 3, "type": "choice", "text": "The writer refers to the 'late' model in order to", "opts": ["1 — compare it with another theory of migration.", "2 — evaluate the success of American migration.", "3 — criticise the speed of research into migration.", "4 — compare migration in different parts of the world."], "ans": "1"}, {"n": 30, "p": 3, "type": "choice", "text": "What is the writer's main point about the 'early' model?", "opts": ["1 — Scholars support the idea of fast migrations.", "2 — It is too random to be a convincing theory.", "3 — South America was more habitable at an earlier time.", "4 — It is more consistent with the physical conditions of the land."], "ans": "4"}, {"n": 31, "p": 3, "type": "choice", "text": "What does the writer suggest about the Monte Verde site?", "opts": ["1 — It is much younger than researchers once estimated.", "2 — It provides supporting evidence for relatively early settlement.", "3 — Archaeologists believe the site is of questionable value.", "4 — Streams exposed the site, making new research possible."], "ans": "2"}, {"n": 32, "p": 3, "type": "choice", "text": "The conditions encountered by the first migrants to Patagonia were unique.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NO"}, {"n": 33, "p": 3, "type": "choice", "text": "In the high country the first migrants hunted wild animals for food.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 34, "p": 3, "type": "choice", "text": "Archaeologists have failed to draw conclusions from the evidence found at rock shelters in Argentina and Chile.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NO"}, {"n": 35, "p": 3, "type": "choice", "text": "Archaeological evidence can be moved from place to place in a variety of ways.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "YES"}, {"n": 36, "p": 3, "type": "select", "text": "summary blank 36", "opts": ["A — fixed date", "B — random collection", "C — similar properties", "D — good condition", "E — scientific valuation", "F — huge quantities", "G — new samples", "H — reliable connection", "I — skilled preservation", "J — immediate surroundings"], "ans": "D"}, {"n": 37, "p": 3, "type": "select", "text": "summary blank 37", "opts": ["A — fixed date", "B — random collection", "C — similar properties", "D — good condition", "E — scientific valuation", "F — huge quantities", "G — new samples", "H — reliable connection", "I — skilled preservation", "J — immediate surroundings"], "ans": "B"}, {"n": 38, "p": 3, "type": "select", "text": "summary blank 38", "opts": ["A — fixed date", "B — random collection", "C — similar properties", "D — good condition", "E — scientific valuation", "F — huge quantities", "G — new samples", "H — reliable connection", "I — skilled preservation", "J — immediate surroundings"], "ans": "C"}, {"n": 39, "p": 3, "type": "select", "text": "summary blank 39", "opts": ["A — fixed date", "B — random collection", "C — similar properties", "D — good condition", "E — scientific valuation", "F — huge quantities", "G — new samples", "H — reliable connection", "I — skilled preservation", "J — immediate surroundings"], "ans": "H"}, {"n": 40, "p": 3, "type": "select", "text": "summary blank 40", "opts": ["A — fixed date", "B — random collection", "C — similar properties", "D — good condition", "E — scientific valuation", "F — huge quantities", "G — new samples", "H — reliable connection", "I — skilled preservation", "J — immediate surroundings"], "ans": "J"}];
+const answerReview={"1": {"para": 1, "explain": "NOT GIVEN: the passage says Iger replaced Eisner and negotiated the Pixar buyout, but it never states Iger's personal opinion of Eisner.", "evidence": "Iger had replaced Eisner as CEO."}, "2": {"para": 2, "explain": "TRUE: Pixar's animation group made almost no revenue, and the company kept losing money year after year.", "evidence": "brought in practically zero revenue"}, "3": {"para": 3, "explain": "TRUE: Disney considered stopping Toy Story because of problems with the script.", "evidence": "Disney considered ordering Pixar to shut down production ... on account of issues with the script."}, "4": {"para": 3, "explain": "FALSE: commentators doubted whether audiences would sit through a full-length computer-animated film.", "evidence": "Hollywood commentators doubted whether audiences would even sit through a full-length film"}, "5": {"para": 4, "explain": "NOT GIVEN: both Toy Story and Finding Nemo are described as successful, but the passage does not compare their popularity.", "evidence": "A succession of beloved and commercially successful animated feature films"}, "6": {"para": 4, "explain": "FALSE: Pixar films made up around 45% of the operating income from Disney's film operations.", "evidence": "made up around 45% of the operating income from Disney's film operations"}, "7": {"para": 6, "explain": "The one-word answer is operator: Lasseter worked on the Jungle Cruise ride and refers to himself and a fellow operator.", "evidence": "his fellow operator"}, "8": {"para": 6, "explain": "The answer is confidence: the ride experience brought him out of his shell and increased his confidence with people.", "evidence": "given him confidence in front of people"}, "9": {"para": 6, "explain": "The answer is disappointment: Lasseter explicitly mentions the disappointment he felt when Disney rejected the new technology.", "evidence": "the disappointment he had felt"}, "10": {"para": 7, "explain": "The answer is president: Catmull is identified as the president of Pixar at the 2006 meeting.", "evidence": "The sixty-one-year-old president of Pixar"}, "11": {"para": 7, "explain": "The answer is listening: Catmull was generally keener on listening than talking.", "evidence": "he was keener on listening than talking"}, "12": {"para": 8, "explain": "The answer is vision: Catmull held to his vision of fully computer-animated movies.", "evidence": "held to his vision of fully computer-animated movies"}, "13": {"para": 8, "explain": "The answer is heart: the staff Catmull assembled became the heart of Pixar Animation Studios.", "evidence": "the heart of Pixar Animation Studios"}, "14": {"para": 4, "explain": "Paragraph D compares children's behaviour towards the moving QRIO with their behaviour towards the non-moving Robby.", "evidence": "While hugging of QRIO increased, hugging of Robby decreased"}, "15": {"para": 6, "explain": "Paragraph F speculates that future robotic tutors could use facial expression and eye gaze as social signals.", "evidence": "approximate social skills like facial expression and eye gaze"}, "16": {"para": 4, "explain": "Paragraph D describes how touching changed from the robot's face to its hands and arms.", "evidence": "At first the toddlers would touch the robot on its face, but later ... only on its hands and arms"}, "17": {"para": 1, "explain": "Paragraph A contrasts the short-lived interest in commercial robots with the long-term bonding people commonly form with pets.", "evidence": "in sharp contrast to the long-term interactions and bonding that commonly develop between humans and their pets"}, "18": {"para": 3, "explain": "Paragraph C explains that researchers sent the robot instructions every two minutes to giggle, dance, sit, fall or walk.", "evidence": "sent instructions to the robot about every two minutes"}, "19": {"para": 6, "explain": "B — Javier R Movellan says future machines will need something similar to emotion as well as traditional intelligence.", "evidence": "we are going to need to endow machines with something similar to emotion"}, "20": {"para": 7, "explain": "C — Ronald Arkin says researchers still do not know whether increased human/robot interaction will be good or bad for society.", "evidence": "whether this is a good thing or a bad thing for society"}, "21": {"para": 2, "explain": "A — Fumihide Tanaka says toddlers were chosen because they have no preconceived notions of robots.", "evidence": "they have no preconceived notions of robots, according to Tanaka"}, "22": {"para": 7, "explain": "D — David Powers says appropriate responses from a broad repertoire of behaviours matter more than a limited range.", "evidence": "appropriate responses from a broad repertoire of behaviors"}, "23": {"para": 6, "explain": "A — Fumihide Tanaka says robots could have great potential in educational settings and assist teachers.", "evidence": "great potential in educational settings assisting teachers"}, "24": {"para": 1, "explain": "The one-word answer is storytellers: the most successful robots at maintaining interest had been storytellers.", "evidence": "The most successful robots so far have been storytellers"}, "25": {"para": 5, "explain": "The answer is peer: over time, children treated the robot more as a peer than a plaything.", "evidence": "treated it more as a peer than a plaything"}, "26": {"para": 7, "explain": "The answer is affection: Arkin says he was not surprised by the affection the toddlers showed towards the robot.", "evidence": "not surprised by the affection demonstrated by the toddlers"}, "27": {"para": 1, "explain": "Option 3 is correct: Patagonia provides a baseline for calculations about the spread of humans throughout both American continents.", "evidence": "gives a baseline that all calculations regarding the rate of dispersion of humans throughout both continents must take into account"}, "28": {"para": 2, "explain": "Option 3 is correct: paragraph B summarises an ongoing scholarly disagreement about when settlement began.", "evidence": "fundamental disagreements developed concerning the length of time involved"}, "29": {"para": 3, "explain": "Option 1 is correct: the writer introduces the late model and immediately contrasts it with the early model of migration.", "evidence": "many scholars now support the idea of an 'early' model"}, "30": {"para": 3, "explain": "Option 4 is correct: the early model is described as more realistic because migrants would have adapted gradually to diverse natural habitats.", "evidence": "the most realistic scenario as migrants slowly adapted to the diverse natural habitats"}, "31": {"para": 4, "explain": "Option 2 is correct: Monte Verde is securely dated to about 12,500 years ago and casts doubt on the late model.", "evidence": "securely dated to around 12,500 years ago ... casts doubt on the 'late' model"}, "32": {"para": 5, "explain": "NO: the first Patagonian environment is compared with early post-glacial Europe, so it was not unique.", "evidence": "similar to that of early post-glacial Europe"}, "33": {"para": 5, "explain": "NOT GIVEN: the passage discusses settlement in the high country but gives no information about migrants hunting wild animals for food.", "evidence": "Human settlement of the vast horizontal expanse of treeless high country"}, "34": {"para": 5, "explain": "NO: the rock shelters provide reliable evidence confirming human presence by around 11,000 years ago.", "evidence": "reliable evidence from these sites to confirm the presence of humans"}, "35": {"para": 5, "explain": "YES: the passage explains that bones or other evidence can be deposited in caves by natural forces such as floods or predators.", "evidence": "bones or other evidence may be deposited in caves by natural agency"}, "36": {"para": 6, "explain": "D — good condition. Peat preserved the wooden remains remarkably well, allowing them to be radiocarbon dated.", "evidence": "peat, which has the property of preserving wood remarkably well"}, "37": {"para": 6, "explain": "B — random collection. The Los Toldos carbon samples were taken unsystematically from many different places.", "evidence": "taken unsystematically from many different places in the site"}, "38": {"para": 7, "explain": "C — similar properties. Arroyo Feo artefacts were at the same depth and had the same origins as those from Los Toldos.", "evidence": "found at the same depth and have the same origins as those from Los Toldos"}, "39": {"para": 7, "explain": "H — reliable connection. The passage says the remains at Las Buitreras cannot be securely related to human occupation.", "evidence": "there is no way of securely relating any of these remains with human occupation"}, "40": {"para": 7, "explain": "J — immediate surroundings. Findings at Cueva Fell cannot be freely applied beyond its direct vicinity.", "evidence": "must be restricted to its direct vicinity"}};
+
+let current=1,startedAt=0,endAt=0,remaining=3600,timerHandle=null,submitted=false,savedSelection=null,savedSelectionZone=null,activeHighlight=null,activeHighlightZone=null;
+const STORAGE_PREFIX="READ_PIXAR_ROBOT_PATAGONIA_";
+function ssGet(k){return sessionStorage.getItem(STORAGE_PREFIX+k)}
+function ssSet(k,v){sessionStorage.setItem(STORAGE_PREFIX+k,v)}
+function clearAttempt(){const a=[];for(let i=0;i<sessionStorage.length;i++){const k=sessionStorage.key(i);if(k&&k.startsWith(STORAGE_PREFIX))a.push(k)}a.forEach(k=>sessionStorage.removeItem(k))}
+const norm=v=>String(v??'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ');
+function startExam(){const n=document.getElementById('studentName').value.trim(),c=document.getElementById('studentClass').value.trim();if(!n||!c){document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}clearAttempt();document.getElementById('topName').textContent=n;document.getElementById('topClass').textContent=c;document.getElementById('start').classList.add('hidden');document.getElementById('exam').classList.remove('hidden');startedAt=Date.now();endAt=startedAt+60*60*1000;buildNav();showPassage(1);tickTimer();timerHandle=setInterval(tickTimer,250)}
+function tickTimer(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));updateTimer();if(remaining<=0&&!submitted){clearInterval(timerHandle);submitExam(true)}}function updateTimer(){const e=document.getElementById('timer'),m=Math.floor(Math.max(remaining,0)/60),s=Math.max(remaining,0)%60;e.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;e.classList.toggle('warning',remaining<=600&&remaining>300);e.classList.toggle('danger',remaining<=300)}
+function groupMeta(n,p){if(p===1){if(n<=7)return['Questions 1–7','Choose TRUE, FALSE or NOT GIVEN.'];if(n<=10)return['Questions 8–10','Complete the flow-chart. Choose NO MORE THAN TWO WORDS from the passage.'];return['Questions 11–13','Complete the notes. Choose ONE WORD ONLY from the passage.']}if(p===2){if(n<=19)return['Questions 14–19','Complete the summary using the list A–J.'];if(n<=23)return['Questions 20–23','Choose YES, NO or NOT GIVEN.'];return['Questions 24–26','Choose the correct letter A, B, C or D.']}if(n<=32)return['Questions 27–32','Complete the summary using the list A–J.'];if(n<=36)return['Questions 33–36','Choose YES, NO or NOT GIVEN.'];return['Questions 37–40','Choose the correct letter A, B, C or D.']}
+
+function zoneRoot(zone){
+  return document.getElementById(zone==='questions'?'questionsCopy':'passageCopy');
+}
+function zoneMarkupKey(zone,p=current){
+  return (zone==='questions'?'questionsMarkup':'passageMarkup')+p;
+}
+function noteStoreKey(zone,p=current){
+  return 'notes_'+zone+'_'+p;
+}
+function notesPanelId(zone){
+  return zone==='questions'?'notesPanelQuestions':'notesPanelPassage';
+}
+function notesCountId(zone){
+  return zone==='questions'?'notesCountQuestions':'notesCountPassage';
+}
+function saveZoneMarkup(zone){
+  const root=zoneRoot(zone);
+  if(root)ssSet(zoneMarkupKey(zone),root.innerHTML);
+}
+function saveCurrentMarkups(){
+  saveZoneMarkup('passage');
+  saveZoneMarkup('questions');
+}
+function captureSelection(zone){
+  if(submitted)return;
+  const sel=window.getSelection();
+  const root=zoneRoot(zone);
+  if(!sel||!root||sel.rangeCount===0||sel.isCollapsed)return;
+  const r=sel.getRangeAt(0);
+  if(root.contains(r.commonAncestorContainer)){
+    savedSelection=r.cloneRange();
+    savedSelectionZone=zone;
+  }
+}
+function annotationBlock(node){
+  const el=node&&node.nodeType===3?node.parentElement:node;
+  if(!el)return null;
+  return el.closest('p,.completion-text,.flow-step,li,.card,.option,.inst,.bank div,h3,h4,.qtext');
+}
+function getUsableSelection(zone){
+  const root=zoneRoot(zone);
+  if(!savedSelection||savedSelectionZone!==zone||!root||!root.contains(savedSelection.commonAncestorContainer)){
+    alert(zone==='questions'
+      ?'Hãy bôi đen phần chữ ở bên câu hỏi trước.'
+      :'Hãy bôi đen phần chữ trong bài đọc trước.');
+    return null;
+  }
+  if(savedSelection.collapsed||!savedSelection.toString().trim()){
+    alert('Hãy bôi đen một đoạn chữ trước.');
+    return null;
+  }
+
+  const a=annotationBlock(savedSelection.startContainer);
+  const b=annotationBlock(savedSelection.endContainer);
+  if(!a||!b||a!==b){
+    alert('Để highlight/ghi chú ổn định, hãy chọn chữ trong cùng một câu hoặc cùng một khối nội dung.');
+    return null;
+  }
+
+  const cloned=savedSelection.cloneContents();
+  if(cloned.querySelector && cloned.querySelector('input,select,button,textarea')){
+    alert('Không thể highlight xuyên qua ô trả lời. Hãy chỉ chọn phần chữ.');
+    return null;
+  }
+  return savedSelection.cloneRange();
+}
+function clearBrowserSelection(){
+  const sel=window.getSelection();
+  if(sel)sel.removeAllRanges();
+  savedSelection=null;
+  savedSelectionZone=null;
+}
+function addHighlight(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  try{
+    const mark=document.createElement('mark');
+    mark.className='user-highlight';
+    mark.dataset.annotationZone=zone;
+    const frag=r.extractContents();
+    mark.appendChild(frag);
+    r.insertNode(mark);
+    activeHighlight=mark;
+    activeHighlightZone=zone;
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+  }catch(e){
+    alert('Không thể highlight vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function clearHighlight(zone){
+  if(submitted)return;
+  let targets=[];
+  if(activeHighlight&&activeHighlightZone===zone&&document.body.contains(activeHighlight)){
+    targets=[activeHighlight];
+  }else if(savedSelection&&savedSelectionZone===zone){
+    const root=zoneRoot(zone);
+    if(root)targets=[...root.querySelectorAll('mark.user-highlight')].filter(m=>{
+      try{return savedSelection.intersectsNode(m)}catch(e){return false}
+    });
+  }
+  if(!targets.length){
+    alert('Hãy bấm vào phần đã highlight rồi chọn “Xóa HL”.');
+    return;
+  }
+  targets.forEach(m=>{
+    const p=m.parentNode;
+    while(m.firstChild)p.insertBefore(m.firstChild,m);
+    m.remove();
+    p.normalize();
+  });
+  activeHighlight=null;
+  activeHighlightZone=null;
+  saveZoneMarkup(zone);
+  clearBrowserSelection();
+}
+function loadNotes(zone,p=current){
+  try{return JSON.parse(ssGet(noteStoreKey(zone,p))||'[]')}catch(e){return[]}
+}
+function saveNotes(zone,notes,p=current){
+  ssSet(noteStoreKey(zone,p),JSON.stringify(notes));
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function addNote(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  const quote=r.toString().trim();
+  const text=prompt('Nhập ghi chú cho đoạn đã chọn:');
+  if(text===null||!text.trim())return;
+  const id='note_'+zone+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  try{
+    const span=document.createElement('span');
+    span.className='note-anchor';
+    span.dataset.noteId=id;
+    span.dataset.annotationZone=zone;
+    span.title='Bấm để xem/sửa ghi chú';
+    const frag=r.extractContents();
+    span.appendChild(frag);
+    r.insertNode(span);
+
+    const notes=loadNotes(zone);
+    notes.push({id,quote,text:text.trim()});
+    saveNotes(zone,notes);
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+    renderNotesPanel(zone,current,true);
+  }catch(e){
+    alert('Không thể tạo ghi chú cho vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function toggleNotes(zone){
+  const panel=document.getElementById(notesPanelId(zone));
+  if(panel)panel.classList.toggle('open');
+}
+function renderNotesPanel(zone,p=current,forceOpen=false){
+  const panel=document.getElementById(notesPanelId(zone));
+  const count=document.getElementById(notesCountId(zone));
+  if(!panel)return;
+  const notes=loadNotes(zone,p);
+  if(count)count.textContent=notes.length;
+  panel.innerHTML=notes.length
+    ?notes.map(n=>`<div class="note-item">
+        <div class="note-quote">“${esc(n.quote)}”</div>
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-actions">
+          <button type="button" onclick="editNote('${zone}','${n.id}')">Sửa</button>
+          <button type="button" onclick="deleteNote('${zone}','${n.id}')">Xóa</button>
+        </div>
+      </div>`).join('')
+    :'<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở phần này.</div>';
+  if(forceOpen)panel.classList.add('open');
+}
+function editNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt('Sửa ghi chú:',n.text);if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function deleteNote(zone,id){
+  const notes=loadNotes(zone).filter(x=>x.id!==id);
+  saveNotes(zone,notes);
+  const root=zoneRoot(zone);
+  if(root)root.querySelectorAll(`[data-note-id="${id}"]`).forEach(s=>{
+    const p=s.parentNode;
+    while(s.firstChild)p.insertBefore(s.firstChild,s);
+    s.remove();
+    p.normalize();
+  });
+  saveZoneMarkup(zone);
+  renderNotesPanel(zone,current,true);
+}
+function openNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt(`Đoạn đã ghi chú:\n“${n.quote}”\n\nGhi chú:`,n.text);
+  if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function bindAnnotations(zone){
+  const root=zoneRoot(zone);if(!root)return;
+  root.addEventListener('mouseup',()=>captureSelection(zone));
+  root.addEventListener('keyup',()=>captureSelection(zone));
+  root.addEventListener('click',e=>{
+    const note=e.target.closest('.note-anchor');
+    if(note){openNote(zone,note.dataset.noteId);return}
+    const mark=e.target.closest('mark.user-highlight');
+    if(mark){
+      activeHighlight=mark;
+      activeHighlightZone=zone;
+    }else if(zone===activeHighlightZone){
+      activeHighlight=null;
+      activeHighlightZone=null;
+    }
+  });
+}
+function annotationToolbar(zone){
+  const isQ=zone==='questions';
+  const label=isQ?'Câu hỏi':'Bài đọc';
+  const countId=isQ?'notesCountQuestions':'notesCountPassage';
+  return `<div class="annotation-bar">
+    <span class="annotation-zone-label">${label}</span>
+    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button>
+    <button type="button" class="annotation-btn" onclick="clearHighlight('${zone}')">Xóa HL</button>
+    <button type="button" class="annotation-btn" onclick="addNote('${zone}')">📝 Add note</button>
+    <button type="button" class="annotation-btn" onclick="toggleNotes('${zone}')">Ghi chú (<span id="${countId}">0</span>)</button>
+    <span class="annotation-tip">Bôi đen phần chữ rồi chọn công cụ.</span>
+  </div>`;
+}
+
+function showPassage(p){
+  saveCurrentMarkups();
+  current=p;
+  activeHighlight=null;
+  activeHighlightZone=null;
+  savedSelection=null;
+  savedSelectionZone=null;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));
+
+  const passageMarkup=ssGet(zoneMarkupKey('passage',p))||passages[p].text;
+  document.getElementById('passage').innerHTML=
+    annotationToolbar('passage')+
+    `<div id="notesPanelPassage" class="notes-panel"></div>
+     <h2>${passages[p].title}</h2>
+     <div class="copy" id="passageCopy">${passageMarkup}</div>`;
+
+  bindAnnotations('passage');
+  renderNotesPanel('passage',p,false);
+  buildQuestions(p);
+
+  document.getElementById('passage').scrollTop=0;
+  document.getElementById('questions').scrollTop=0;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function renderQ(q){
+  let body='';
+  if(q.type==='text'){
+    body=`<input class="ans" id="q${q.n}" data-q="${q.n}" type="text" autocomplete="off" placeholder="Type your answer">`;
+  }else if(q.type==='select'){
+    body=`<select class="ans" id="q${q.n}" data-q="${q.n}"><option value="">-- Choose --</option>${q.opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select>`;
+  }else{
+    body=q.opts.map(x=>{
+      const v=optionValue(x);
+      return `<label class="option" data-q="${q.n}" data-val="${v}"><input type="radio" name="q${q.n}" value="${v}"> ${x}</label>`;
+    }).join('');
+  }
+  return `<div class="card" id="card${q.n}"><div class="qhead"><span class="qnum">${q.n}</span><div class="qtext">${q.text}</div></div>${body}<div class="feedback" id="fb${q.n}"></div></div>`;
+}
+function inlineText(n,placeholder='answer'){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><input class="ans inline-answer short" id="q${n}" data-q="${n}" type="text" autocomplete="off" placeholder="${placeholder}"></span>`;
+}
+function inlineSelect(n,opts){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><select class="ans inline-answer select-wide" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select></span>`;
+}
+function renderP1Notes(){
+  return `<div class="group"><h3>Questions 7–13</h3>
+    <div class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="completion-box">
+      <h4>Lasseter and Catmull – a professional success story</h4>
+      <p class="completion-text"><b>John Lasseter</b></p>
+      <ul class="notes-list">
+        <li>was keen on watching Bugs Bunny cartoons when he was a schoolboy</li>
+        <li>worked as a ride ${inlineText(7)} at Disneyland which increased his ${inlineText(8)}</li>
+        <li>attended California Institute of the Arts</li>
+        <li>suffered ${inlineText(9)} over rejection of new technology by Disney studio</li>
+      </ul>
+      <p class="completion-text"><b>Ed Catmull</b></p>
+      <ul class="notes-list">
+        <li>was Pixar's ${inlineText(10)} at time of shareholder meeting in 2006</li>
+        <li>preferred ${inlineText(11)} to taking control of conversations</li>
+        <li>did not let go of his ${inlineText(12)} for computer animated films</li>
+        <li>ran various computer graphics laboratories</li>
+        <li>brought together the various teams on which the ${inlineText(13)} of Pixar would be founded</li>
+      </ul>
+    </div>
+  </div>`;
+}
+function renderMatchRows(start,end,title,inst){
+  const rows=questions.filter(q=>q.n>=start&&q.n<=end);
+  const opts=rows[0].opts;
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>
+    <div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>
+    ${rows.map(q=>`<div class="match-row completion-text" id="card${q.n}">
+      <div class="match-label"><span class="blank-num">${q.n}</span> ${q.text}</div>
+      ${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}
+    </div>`).join('')}
+  </div>`;
+}
+function renderP2Completion(){
+  return `<div class="group"><h3>Questions 24–26</h3>
+    <div class="inst">Complete the sentences below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="completion-box">
+      <p class="completion-text">Until recently, robots that were best at holding people's attention were those that acted as ${inlineText(24)}.</p>
+      <p class="completion-text">The children responded to the QRIO robot as a friend or ${inlineText(25)}, rather than as a toy.</p>
+      <p class="completion-text">Arkin expected that the children would show ${inlineText(26)} towards the QRIO robot.</p>
+    </div>
+  </div>`;
+}
+function renderPatagoniaSummary(){
+  const opts=questions.find(q=>q.n===36).opts;
+  return `<div class="group"><h3>Questions 36–40</h3>
+    <div class="inst">Complete the summary using the list of words, <b>A–J</b>, below.</div>
+    <div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>
+    <div class="completion-box">
+      <h4>The archaeological evidence from Patagonia</h4>
+      <p class="completion-text">
+        Building remains and other evidence have been found in ${inlineSelect(36,opts)} at the Chinchihuapi Creek site, and because of this it has been possible to date them to around 12,500 years ago.
+        However, the ${inlineSelect(37,opts)} of the sample taken from Los Toldos means that this site is of doubtful value.
+        El Ceibo is a more promising dig, where the examination of artefacts would be beneficial in order to confirm the usefulness of discoveries there.
+        The remains found at the Arroyo Feo site show ${inlineSelect(38,opts)} and date from around 9,000 years ago.
+        Unfortunately, no ${inlineSelect(39,opts)} can be made between the samples taken from Las Buitreras and human presence.
+        The findings of the work carried out at Cueva Fell cannot provide useful information beyond the ${inlineSelect(40,opts)}.
+        In conclusion, though the evidence is mixed, it is believed that human population of Patagonia began about 11,000 years ago.
+      </p>
+    </div>
+  </div>`;
+}
+function renderStandardGroup(qs,title,inst){
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>${qs.map(renderQ).join('')}</div>`;
+}
+function buildQuestions(p){
+  let h='';
+  if(p===1){
+    h+=renderStandardGroup(questions.filter(q=>q.n>=1&&q.n<=6),'Questions 1–6','Choose TRUE, FALSE or NOT GIVEN.');
+    h+=renderP1Notes();
+  }else if(p===2){
+    h+=renderMatchRows(14,18,'Questions 14–18','Which paragraph contains the following information? Choose A–G. You may use any letter more than once.');
+    h+=renderMatchRows(19,23,'Questions 19–23','Match each statement with the correct person, A–D. You may use any letter more than once.');
+    h+=renderP2Completion();
+  }else{
+    h+=renderStandardGroup(questions.filter(q=>q.n>=27&&q.n<=31),'Questions 27–31','Choose the correct answer.');
+    h+=renderStandardGroup(questions.filter(q=>q.n>=32&&q.n<=35),'Questions 32–35','Choose YES, NO or NOT GIVEN.');
+    h+=renderPatagoniaSummary();
+  }
+
+  const savedQuestionMarkup=ssGet(zoneMarkupKey('questions',p));
+  const questionMarkup=savedQuestionMarkup||h;
+  document.getElementById('questions').innerHTML=
+    annotationToolbar('questions')+
+    `<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${questionMarkup}</div>`;
+
+  restore(p);
+  bindTrack();
+  bindAnnotations('questions');
+  renderNotesPanel('questions',p,false);
+
+  if(submitted){
+    const copy=document.getElementById('questionsCopy');
+    if(copy&&!copy.querySelector('.review-mode-note.top-review-note')){
+      copy.insertAdjacentHTML('afterbegin','<div class="review-mode-note top-review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới. Bấm “Đối chiếu trong bài đọc” để đưa đoạn bằng chứng ở cột trái vào vị trí xem.</div>');
+    }
+    markPassage(p);
+  }
+}
+function restore(p){
+  for(const q of questions.filter(x=>x.p===p)){
+    const v=ssGet('q'+q.n)||'';
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e)e.value=v;
+    }else if(v){
+      const e=[...document.querySelectorAll(`input[name="q${q.n}"]`)].find(x=>x.value===v);
+      if(e)e.checked=true;
+    }
+  }
+}
+function bindTrack(){
+  document.querySelectorAll('.ans').forEach(e=>{
+    e.oninput=e.onchange=()=>save(+e.dataset.q,e.value);
+  });
+  document.querySelectorAll('input[type=radio]').forEach(e=>{
+    e.onchange=()=>save(+e.closest('.option').dataset.q,e.value);
+  });
+}
+function save(n,v){
+  ssSet('q'+n,v);
+  const e=document.getElementById('nav'+n);
+  if(e)e.classList.toggle('answered',String(v).trim()!=='');
+}
+function buildNav(){
+  document.getElementById('nav').innerHTML=questions.map(q=>`<button class="nq" id="nav${q.n}" onclick="goQ(${q.n})">${q.n}</button>`).join('');
+}
+function goQ(n){
+  const q=questions.find(x=>x.n===n);
+  if(q.p!==current)showPassage(q.p);
+  setTimeout(()=>{
+    const target=document.getElementById('card'+n);
+    target?.scrollIntoView({behavior:'smooth',block:'center'});
+    const control=document.getElementById('q'+n);
+    if(control&&(control.tagName==='SELECT'||control.type==='text'))control.focus({preventScroll:true});
+  },60);
+}
+function correct(q,u){
+  return q.type==='text'?q.ans.map(norm).includes(norm(u)):norm(u)===norm(q.ans);
+}
+
+function inlineReviewHTML(q,user){
+  const r=answerReview[q.n];
+  return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
+    <div class="inline-review-title">
+      <span class="inline-review-badge">Q${q.n}</span>
+      <span>Giải thích câu trả lời sai</span>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Bạn trả lời</div>
+      <div class="inline-review-student">${esc(displayAnswer(q,user))}</div>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Đáp án đúng</div>
+      <div class="inline-review-correct">${esc(displayKey(q))}</div>
+    </div>
+    <div class="inline-review-explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="inline-review-evidence">
+      <div class="inline-review-evidence-label">Evidence · Passage ${q.p}, đoạn ${r.para}</div>
+      <div class="inline-review-quote">“${esc(r.evidence)}”</div>
+    </div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(${q.n})">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+
+function removeInlineReview(n){
+  document.querySelectorAll(`[data-inline-review="${n}"]`).forEach(e=>e.remove());
+}
+
+function renderInlineReview(q,user,ok){
+  removeInlineReview(q.n);
+  if(ok)return;
+
+  const card=document.getElementById('card'+q.n);
+  if(!card)return;
+
+  // Standard IELTS question cards: explanation sits directly under the options.
+  if(card.classList.contains('card')){
+    card.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+    return;
+  }
+
+  // Completion tasks: place review under the sentence/step/note containing the blank.
+  const host=card.closest('.flow-step,li,.completion-text') || card.parentElement;
+  if(!host)return;
+
+  // Several blanks may live in the same summary paragraph; keep each explanation labelled by Q number.
+  host.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+}
+
+function lockSubmittedAnswers(){
+  if(!submitted)return;
+  document.querySelectorAll('#questionsCopy input,#questionsCopy select').forEach(e=>e.disabled=true);
+}
+
+function focusEvidence(n){
+  const q=questions.find(x=>x.n===n);
+  const r=answerReview[n];
+  if(!q||!r)return;
+
+  const reveal=()=>{
+    const copy=document.getElementById('passageCopy');
+    const ps=copy?[...copy.querySelectorAll('p')]:[];
+    const target=ps[r.para-1];
+    if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:'center'});
+    target.classList.add('evidence-pulse');
+    setTimeout(()=>target.classList.remove('evidence-pulse'),3200);
+  };
+
+  if(q.p!==current){
+    showPassage(q.p);
+    setTimeout(reveal,150);
+  }else{
+    reveal();
+  }
+}
+
+function markPassage(p){
+  for(const q of questions.filter(x=>x.p===p)){
+    const u=ssGet('q'+q.n)||'';
+    const ok=correct(q,u);
+    const fb=document.getElementById('fb'+q.n);
+
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e){
+        e.classList.remove('correct','wrong');
+        e.classList.add(ok?'correct':'wrong');
+      }
+    }else{
+      document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{
+        l.classList.remove('correct','wrong');
+        if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');
+        else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong');
+      });
+    }
+
+    if(fb){
+      const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+      fb.className='feedback '+(ok?'good':'bad');
+      fb.textContent=ok?'✓ Correct':'Correct answer: '+key;
+    }
+
+    if(submitted)renderInlineReview(q,u,ok);
+  }
+
+  lockSubmittedAnswers();
+}
+
+function displayAnswer(q,user){
+  if(!String(user).trim())return 'Không trả lời';
+  if(q.type==='select'||q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(user));
+    return found||user;
+  }
+  return user;
+}
+function displayKey(q){
+  const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+  if(q.type==='select'||q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(key));
+    return found||key;
+  }
+  return key;
+}
+function renderWrongReview(details){
+  const box=document.getElementById('wrongReview');
+  const wrong=details.filter(x=>!x.correct);
+  if(!wrong.length){
+    box.innerHTML='<h3 class="review-title">Review đáp án</h3><div class="perfect-review">🎉 Không có câu sai. Bạn đã trả lời đúng cả 40 câu!</div>';
+    return;
+  }
+  box.innerHTML=`<h3 class="review-title">${wrong.length} câu cần xem lại</h3>
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
+}
+function gotoEvidence(n){
+  document.getElementById('overlay').classList.add('hidden');
+  focusEvidence(n);
+}
+
+async function submitExam(auto=false){if(submitted)return;saveCurrentMarkups();const unanswered=questions.filter(q=>!(ssGet('q'+q.n)||'').trim()).length;if(!auto&&unanswered&& !confirm(`Bạn còn ${unanswered} câu chưa trả lời. Vẫn nộp bài?`))return;submitted=true;clearInterval(timerHandle);let total=0,s=[0,0,0,0],details=[];for(const q of questions){const u=ssGet('q'+q.n)||'',ok=correct(q,u);if(ok){total++;s[q.p]++}details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});const ne=document.getElementById('nav'+q.n);if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong')}}markPassage(current);saveZoneMarkup('questions');const name=document.getElementById('studentName').value.trim(),cls=document.getElementById('studentClass').value.trim(),dur=Math.round((Date.now()-startedAt)/1000);document.getElementById('rstudent').textContent=`${name} — ${cls}`;document.getElementById('rscore').textContent=`${total} / 40`;document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;document.getElementById('p1s').textContent=`${s[1]} / 13`;document.getElementById('p2s').textContent=`${s[2]} / 13`;document.getElementById('p3s').textContent=`${s[3]} / 14`;renderWrongReview(details);document.getElementById('overlay').classList.remove('hidden');document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';const p=new URLSearchParams({name,className:cls,total:String(total),maxScore:'40',durationSeconds:String(dur),activity:'IELTS Reading - Pixar / Mechanical Friend / Patagonia',reading:String(s[1]),grammar:String(s[2]),ing:String(s[3]),writingA:JSON.stringify(details),submittedAt:new Date().toISOString()});try{await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.'}catch(e){document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng.'}}
+function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current);saveZoneMarkup('questions')}
+</script></body></html>
