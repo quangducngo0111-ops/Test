@@ -1,0 +1,908 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>IELTS Reading - Gilbert / Multitasking / Music</title><style>
+:root{--navy:#17344f;--navy2:#0d263b;--blue:#2e6f9f;--paper:#f4f4f2;--line:#d6dade;--text:#20262b;--muted:#64717b;--accent:#e9784e;--good:#2e7d5b;--bad:#b5442e}*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff}.hidden{display:none!important}button,input,select{font:inherit}.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700}.start-card h1{margin:8px 0 6px;color:var(--navy)}.start-card p{margin:0 0 22px;color:var(--muted)}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}.btn{border:0;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer}.exam{height:100vh;display:grid;grid-template-rows:auto auto 1fr auto}.top{background:var(--navy2);color:#fff;padding:11px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}.timer{font-family:ui-monospace,monospace;font-weight:700;background:rgba(255,255,255,.1);padding:8px 11px;border-radius:6px}.timer.danger{background:#912f25}.tabs{display:flex;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);background:#fafafa}.tab{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 13px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.workspace{display:grid;grid-template-columns:1fr 1fr;min-height:0}.passage,.questions{overflow:auto;padding:24px 26px}.passage{border-right:1px solid var(--line)}.questions{background:#fafafa}.passage-sub{font-style:italic;color:var(--muted);text-align:center;margin:-8px 0 18px}.passage h2{font-size:1.35rem;color:var(--navy);margin:0 0 18px;text-align:center}.copy{font-size:15px;line-height:1.72}.copy p{margin:0 0 16px;text-align:justify;text-align-last:left;line-height:1.78;hyphens:auto}.group{margin-bottom:26px}.group h3{color:var(--navy);margin:0 0 5px}.inst{font-size:.92rem;color:var(--muted);margin-bottom:12px}.bank{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;background:#eef3f6;border:1px solid var(--line);padding:12px;border-radius:8px;margin:10px 0;font-size:.92rem}.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}.qhead{display:flex;gap:10px;align-items:flex-start}.qnum{min-width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.qtext{flex:1}.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer}.option.correct{border-color:var(--good);background:rgba(46,125,91,.08)}.option.wrong{border-color:var(--bad);background:rgba(181,68,46,.08)}.ans{width:100%;margin-top:9px;padding:10px;border:1px solid var(--line);border-radius:7px}.ans.correct{border-color:var(--good);background:rgba(46,125,91,.06)}.ans.wrong{border-color:var(--bad);background:rgba(181,68,46,.06)}.feedback{font-size:.88rem;margin-top:6px}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}.bottom{border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:10px;align-items:center}.nav{display:flex;gap:4px;overflow-x:auto;flex:1}.nq{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:12px;font-weight:700}.nq.answered{background:#dcebf5}.nq.correct{background:#dcefe5;border-color:var(--good)}.nq.wrong{background:#f3ddd8;border-color:var(--bad)}.submit{background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:7px;font-weight:700;white-space:nowrap;cursor:pointer}.overlay{position:fixed;inset:0;background:rgba(8,20,30,.7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.result{background:#fff;width:min(620px,100%);border-radius:14px;padding:28px}.score{font-size:2.5rem;font-weight:800;color:var(--navy);margin:8px 0}.break{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.break div{background:#f2f5f7;padding:12px;border-radius:8px;text-align:center}
+
+.result{max-height:90vh;overflow:auto}
+.review-wrap{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.review-title{font-size:1.08rem;color:var(--navy);margin:0 0 6px}
+.review-sub{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.wrong-review{border:1px solid #e2c8c2;background:#fffaf8;border-radius:9px;padding:14px 15px;margin:11px 0}
+.wrong-review .review-q{font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.45}
+.answer-row{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;font-size:.92rem;margin:4px 0}
+.answer-label{color:var(--muted);font-weight:700}
+.student-wrong{color:var(--bad);font-weight:700}
+.correct-answer{color:var(--good);font-weight:700}
+.explain-box{margin-top:10px;padding:10px 11px;background:#fff;border-left:3px solid var(--blue);border-radius:4px;font-size:.92rem;line-height:1.5}
+.evidence-box{margin-top:9px;padding:10px 11px;background:#f3f7fa;border:1px solid #d7e2ea;border-radius:7px;font-size:.9rem;line-height:1.5}
+.evidence-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);font-weight:700;margin-bottom:4px}
+.evidence-quote{font-style:italic}
+.goto-evidence{margin-top:9px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:7px 10px;font-size:.84rem;font-weight:700;cursor:pointer}
+.goto-evidence:hover{background:#f4f7f9}
+.evidence-pulse{outline:3px solid rgba(233,120,78,.45);background:#fff8e8;border-radius:5px;transition:background .2s}
+.perfect-review{padding:14px;border-radius:8px;background:#edf7f1;color:#245c43;font-weight:700}
+
+
+.completion-box{background:#fff;border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin-top:12px;line-height:1.8}
+.completion-box h4{margin:0 0 12px;color:var(--navy);font-size:1.05rem}
+.completion-text{font-size:15px;line-height:2.05;margin:0}
+.inline-blank{display:inline-flex;align-items:center;gap:5px;margin:2px 4px;vertical-align:middle;scroll-margin:100px}
+.blank-num{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700}
+.inline-answer{width:auto!important;min-width:145px;max-width:245px;margin:0!important;padding:7px 9px!important;display:inline-block;vertical-align:middle;background:#fff}
+.inline-answer.short{min-width:115px;max-width:180px}
+.inline-answer.select-wide{min-width:190px;max-width:270px}
+.flowchart{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin-top:10px}
+.flow-step{background:#fbfcfc;border:1px solid var(--line);border-radius:8px;padding:12px 14px;line-height:1.75}
+.flow-arrow{text-align:center;color:var(--blue);font-size:20px;font-weight:700;line-height:1}
+.notes-list{margin:8px 0 0;padding-left:20px}
+.notes-list li{margin:9px 0;line-height:1.8}
+.completion-box .bank{margin-top:14px;margin-bottom:16px}
+.inline-answer.correct{border-color:var(--good)!important;background:rgba(46,125,91,.06)!important}
+.inline-answer.wrong{border-color:var(--bad)!important;background:rgba(181,68,46,.06)!important}
+@media(max-width:600px){
+  .inline-answer,.inline-answer.select-wide{min-width:130px;max-width:100%;font-size:16px}
+  .completion-box{padding:15px}
+}
+
+
+.questions-pane 
+/* ===== INLINE REVIEW AFTER SUBMISSION ===== */
+.inline-review{
+  margin:12px 0 4px;
+  padding:13px 14px;
+  border:1px solid #e3c8c1;
+  border-left:4px solid var(--bad);
+  border-radius:8px;
+  background:#fffaf8;
+  color:var(--text);
+  line-height:1.5;
+  font-size:.92rem;
+}
+.inline-review.integrated{
+  width:100%;
+  margin-top:10px;
+}
+.inline-review-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  color:var(--navy);
+  font-weight:800;
+}
+.inline-review-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:27px;
+  height:27px;
+  padding:0 7px;
+  border-radius:999px;
+  background:var(--bad);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.inline-review-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:5px 9px;
+  margin:4px 0;
+}
+.inline-review-label{
+  color:var(--muted);
+  font-weight:700;
+}
+.inline-review-student{
+  color:var(--bad);
+  font-weight:700;
+}
+.inline-review-correct{
+  color:var(--good);
+  font-weight:800;
+}
+.inline-review-explain{
+  margin-top:9px;
+  padding:9px 10px;
+  background:#fff;
+  border-left:3px solid var(--blue);
+  border-radius:4px;
+}
+.inline-review-evidence{
+  margin-top:8px;
+  padding:9px 10px;
+  background:#f2f7fa;
+  border:1px solid #d7e3ea;
+  border-radius:7px;
+}
+.inline-review-evidence-label{
+  margin-bottom:4px;
+  color:var(--blue);
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.inline-review-quote{
+  font-style:italic;
+}
+.inline-review-btn{
+  margin-top:9px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  border-radius:6px;
+  padding:7px 10px;
+  font-size:.84rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.inline-review-btn:hover{background:#f4f7f9}
+.review-mode-note{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:7px;
+  background:#eef5f9;
+  color:var(--navy);
+  font-size:.9rem;
+  font-weight:700;
+}
+#questionsCopy input:disabled,
+#questionsCopy select:disabled{
+  opacity:1;
+  color:inherit;
+  cursor:not-allowed;
+}
+
+
+.match-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.match-row .match-label{flex:1;min-width:240px;line-height:1.5}
+.match-row .inline-review{flex-basis:100%}
+.footnote{font-size:.88rem!important;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+
+
+.given-heading{
+  margin:0 auto 16px;
+  width:max-content;
+  max-width:100%;
+  padding:7px 11px;
+  border-radius:7px;
+  background:#eef3f6;
+  color:var(--navy);
+  text-align:center;
+  font-size:.9rem;
+}
+.match-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.match-row .match-label{flex:1;min-width:220px;line-height:1.5}
+.match-row .inline-review{flex-basis:100%}
+
+
+.choose-three-card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}
+.choose-three-card .option{display:block}
+.nq.partial{background:#fff0c9!important;border-color:#d6a534!important;color:#6f5313!important}
+.multi-score-note{font-size:.88rem;color:var(--muted);margin-top:7px}
+
+.annotation-bar{background:#fbfbfa}
+.annotation-zone-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-right:2px}
+
+.annotation-bar{position:sticky;top:-24px;z-index:8;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);margin:-24px -26px 18px;padding:10px 14px}
+.annotation-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}
+.annotation-btn:hover{background:#f4f7f9}
+.annotation-tip{font-size:12px;color:var(--muted);margin-left:auto}
+mark.user-highlight{background:#fff29a;color:inherit;padding:1px 0;border-radius:2px}
+.note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer;border-radius:2px}
+.notes-panel{display:none;background:#f6f9fb;border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:16px}
+.notes-panel.open{display:block}
+.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:10px 11px;margin:8px 0}
+.note-quote{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:5px}
+.note-text{font-size:14px;margin-bottom:7px}
+.note-actions{display:flex;gap:6px}
+.note-actions button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer}
+.timer.warning{background:#8b651d}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.passage,.questions{height:48vh}.passage{border-right:0;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<div id="start" class="start"><div class="start-card"><div class="eyebrow">IELTS Reading Practice</div><h1>Computer-Based Reading Test</h1><p>3 passages · 40 questions · 60 minutes</p><div class="field"><label>Họ và tên học sinh</label><input id="studentName" placeholder="Ví dụ: Nguyễn Văn An"></div><div class="field"><label>Lớp</label><input id="studentClass" placeholder="Ví dụ: 8A1"></div><button class="btn" onclick="startExam()">Bắt đầu làm bài</button><div id="startError" style="color:var(--bad);margin-top:10px"></div></div></div>
+<div id="exam" class="exam hidden"><div class="top"><div>Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div><div id="timer" class="timer">60:00</div></div><div class="tabs"><button class="tab active" data-p="1" onclick="showPassage(1)">Passage 1</button><button class="tab" data-p="2" onclick="showPassage(2)">Passage 2</button><button class="tab" data-p="3" onclick="showPassage(3)">Passage 3</button></div><div class="workspace"><div id="passage" class="passage"></div><div id="questions" class="questions"></div></div><div class="bottom"><div id="nav" class="nav"></div><button class="submit" onclick="submitExam(false)">Nộp bài</button></div></div>
+<div id="overlay" class="overlay hidden"><div class="result"><div class="eyebrow">Kết quả</div><div id="rstudent"></div><div id="rscore" class="score">0 / 40</div><div id="rpercent"></div><div class="break"><div><b>Passage 1</b><br><span id="p1s"></span></div><div><b>Passage 2</b><br><span id="p2s"></span></div><div><b>Passage 3</b><br><span id="p3s"></span></div></div><div id="status" style="color:var(--muted);font-size:.92rem"></div><div id="wrongReview" class="review-wrap"></div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn" onclick="closeResult()">Xem lại toàn bài</button><button class="btn" style="background:#587087" onclick="location.reload()">Làm lại từ đầu</button></div></div></div>
+<script>const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const passages={"1": {"title": "William Gilbert and Magnetism", "subtitle": "", "text": "<p><b>A</b> The 16th and 17th centuries saw two great pioneers of modern science: Galileo and Gilbert. The impact of their findings is eminent. Gilbert was the first modern scientist, also the accredited father of the science of electricity and magnetism, an Englishman of learning and a physician at the court of Elizabeth. Prior to him, all that was known of electricity and magnetism was what the ancients knew, nothing more than that the lodestone possessed magnetic properties and that amber and jet, when rubbed, would attract bits of paper or other substances of small specific gravity. However, he is less well known than he deserves.</p><p><b>B</b> Gilbert’s birth pre-dated Galileo. Born in an eminent local family in Colchester County in the UK, on May 24, 1544, he went to grammar school, and then studied medicine at St John’s College, Cambridge, graduating in 1573. Later he travelled in the continent and eventually settled down in London.</p><p><b>C</b> He was a very successful and eminent doctor. All this culminated in his election to the president of the Royal Science Society. He was also appointed personal physician to the Queen (Elizabeth I), and later knighted by the Queen. He faithfully served her until her death. However, he didn’t outlive the Queen for long and died on November 30, 1603, only a few months after his appointment as personal physician to King James.</p><p><b>D</b> Gilbert was first interested in chemistry but later changed his focus due to the large portion of mysticism of alchemy involved (such as the transmutation of metal). He gradually developed his interest in physics after the great minds of the ancient, particularly about the knowledge the ancient Greeks had about lodestones, strange minerals with the power to attract iron. In the meantime, Britain became a major seafaring nation in 1588 when the Spanish Armada was defeated, opening the way to British settlement of America. British ships depended on the magnetic compass, yet no one understood why it worked. Did the Pole Star attract it, as Columbus once speculated; or was there a magnetic mountain at the pole, as described in Odyssey, which ships would never approach, because the sailors thought its pull would yank out all their iron nails and fittings? For nearly 20 years, William Gilbert conducted ingenious experiments to understand magnetism. His works include On the Magnet, Magnetic Bodies, and the Great Magnet of the Earth.</p><p><b>E</b> Gilbert’s discovery was so important to modern physics. He investigated the nature of magnetism and electricity. He even coined the word “electric”. Though the early beliefs of magnetism were also largely entangled with superstitions such as that rubbing garlic on lodestone can neutralise its magnetism, one example being that sailors even believed the smell of garlic would even interfere with the action of compass, which is why helmsmen were forbidden to eat it near a ship’s compass. Gilbert also found that metals can be magnetised by rubbing materials such as fur, plastic or the like on them. He named the ends of a magnet “north pole” and “south pole”. The magnetic poles can attract or repel, depending on polarity. In addition, however, ordinary iron is always attracted to a magnet. Though he started to study the relationship between magnetism and electricity, sadly he didn’t complete it. His research of static electricity using amber and jet only demonstrated that objects with electrical charges can work like magnets attracting small pieces of paper and stuff. It is a French guy named du Fay that discovered that there are actually two electrical charges, positive and negative.</p><p><b>F</b> He also questioned the traditional astronomical beliefs. Though a Copernican, he didn’t express in his quintessential beliefs whether the earth is at the centre of the universe or in orbit around the sun. However, he believed that stars are not equidistant from the earth but have their own earth-like planets orbiting around them. The earth itself is like a giant magnet, which is also why compasses always point north. They spin on an axis that is aligned with the earth’s polarity. He even likened the polarity of the magnet to the polarity of the earth and built an entire magnetic philosophy on this analogy. In his explanation, magnetism is the soul of the earth. Thus a perfectly spherical lodestone, when aligned with the earth’s poles, would wobble all by itself in 24 hours. Further, he also believed that the sun and other stars wobble just like the earth does around a crystal core, and speculated that the moon might also be a magnet caused to orbit by its magnetic attraction to the earth. This was perhaps the first proposal that a force might cause a heavenly orbit.</p><p><b>G</b> His research method was revolutionary in that he used experiments rather than pure logic and reasoning like the ancient Greek philosophers did. It was a new attitude towards scientific investigation. Until then, scientific experiments were not in fashion. It was because of this scientific attitude, together with his contribution to our knowledge of magnetism, that a unit of magneto motive force, also known as magnetic potential, was named Gilbert in his honour. His approach of careful observation and experimentation rather than the authoritative opinion or deductive philosophy of others had laid the very foundation for modern science.</p>"}, "2": {"title": "Multi-tasking and the brain", "subtitle": "", "text": "<p><b>A</b> Do you think you're a master of multi-tasking? Think again. Unless you are one of the three percent of super-taskers in the population, research shows that your brain is incapable of paying close attention to more than one complex task at a time. Researchers who study attention say that effective multi-tasking is beyond most of us. Psychiatrist Edward M Hallowell even describes multi-tasking as a 'mythical activity in which people believe they can perform two or more tasks simultaneously as effectively as they can perform one'.</p><p><b>B</b> It’s true that you can check your email while eating your lunch, or listen to music while walking. But innate activities like walking, chewing, and breathing do not require you to pay attention, whereas activities such as reading, tapping out a text message or driving a car do require attention. Why is paying attention to two things at once difficult? 'The brain can perform simultaneous tasks, but attention has capacity limitations,' says Associate Professor Paul E Dux, a cognitive neuroscientist at the University of Queensland in Australia. When you do only one thing at a time, you’re better at that task than when you're doing multiple things concurrently. Take the classic multi-tasking scenario of talking on a mobile phone while driving – an ill-advised activity that many people believe they have mastered. When David Strayer, Professor of Psychology in the University of Utah in the US, and his team observed 56,000 drivers as they approached an intersection. The majority of drivers who were talking on their phone failed to stop in accordance with traffic laws. And it did not matter if the driver was using a handheld or hands-free device. Even with both eyes on the road and both hands on the wheel, drivers' performance was impaired. Strayer’s research shows that performance deteriorates dramatically when attention is split between tasks: more mistakes are made and it takes longer to complete each activity.</p><p><b>C</b> The prefrontal cortex is the brain region responsible for choosing what to pay attention to, and for coordinating inputs from other brain areas. By scanning the prefrontal cortex of people while they multi-tasked, scientists at the French Institute of Health and Medical Research in Paris (INSERM) found that when people focused on a single thing, the right and left sides of the prefrontal cortex work together. But when people attempt to perform two things at once, the sides work independently. Neuroscientist Etienne Koechlin says his study demonstrates that while the brain can switch back and forth between two tasks, we might be in great trouble when we try to juggle more than two tasks simply because we have only two frontal lobes.</p><p><b>D</b> To the question of whether there is a difference between the sexes, Koechlin's imaging studies uncovered no differences in the ability switch between tasks in the prefrontal cortices of men or women. But other researchers studying real life scenarios such as finding lost keys, believe there might be truth to the claim that women are superior multi-taskers. Women have a much better strategy for finding the keys, whereas men tend to jump to it and be far less organised and thorough. 'It's as if they don't stop to reflect and plan for a moment,' says Professor Keith Laws from the University of Hertfordshire in England. But while the ability to develop strategies for coping with the numerous tasks in everyday life could give women an advantage, 'nobody can juggle two, never mind three, “complex” tasks at the same time.'</p><p><b>E</b> However, David Strayer's research uncovered that some rare people possess extraordinary multi-tasking ability. These so-called 'super-taskers' exhibit different patterns of brain activity when multi-tasking compared to ordinary people: they show less activity in the prefrontal cortex during multi-tasking suggesting their brains are functioning with a high level of efficiency. Strayer thinks that pilots of high-performance aircraft, high-end chefs who can cook several meals at the same time to perfection, and elite doctors in hospital emergency rooms might all be more likely to be super-taskers. 'All other things being equal, we suspect that super-taskers will rise to a top position in any occupation that places a high demand on juggling numerous tasks that demand attention at the same time.'</p><p><b>F</b> The ability to multi-task probably comes down to the DNA you inherit from your parents. To a large extent, says Strayer. 'You are either born with the neural structure that allows you to overcome the usual multi-tasking challenges, or you aren't. Super-taskers' brains are doing something we can’t do.' All in all, these findings may have very real consequences on our lives.</p>"}, "3": {"title": "The benefits of learning an instrument", "subtitle": "Studies show that learning a musical instrument can bring about significant improvements in your brain", "text": "<p><b>A</b> Are music lessons the way to get smarter? That's what a lot of parents and experts believe: studying an instrument gives children an advantage in the development of their intellectual, perceptual, and cognitive skills. This may, however, turn out to be wishful thinking. Two highly convincing trials carried out recently have found no evidence to support this idea. The IQs of pre-school children who attended several weeks of music classes as part of these studies did not differ significantly from the IQs of those who had not.</p><p><b>B</b> But that does not mean that the advantages of learning to play music are limited to expressing yourself, impressing friends, or just having fun. A growing number of studies show that learning an instrument in childhood can do something perhaps more valuable for the brain: it can provide benefits as we age, in the form of an added defense against memory loss cognitive decline, and impaired hearing. Not only that you may well get those benefits even if you haven't picked up your instrument in years, or decide to take up music for the first time in mid-life or beyond. According to neuropsychologist Brenda Hanna-Pladdy of Emory University in Atlanta, the time spent learning and practicing specific types of motor control and coordination – each finger on each hand doing something different, and for wind and brass instruments also using your mouth and breathing – contributes to the brain boost that shows up later in life.</p><p><b>C</b> You can even map the impact of musical training of the brain itself. In one study, Harvard neurologist Gottfried Schlaug found that the brains of adult professional musicians had a larger volume of grey matter than the brains of non-musicians had. Schlaug and colleagues also found that after 15 months of musical training in early childhood, structural brain changes associated with motor and auditory improvements begin to appear. 'What's unique about playing an instrument is that it requires a wide array of brain regions and cognitive functions to work together simultaneously, in both right and left hemispheres of the brain,' says Alison Balbag of the University of Southern California. 'Playing music may be an efficient way to stimulate the brain,' she says, 'cutting across a broad swath of its regions and cognitive functions and with ripple effects through the decades.'</p><p><b>D</b> More research is showing this might well be the case. In her first study on the subject, Hanna-Pladdy divided 70 healthy adults between the ages of 60 and 83 into three groups: musicians who had studied an instrument for at least ten years, those who had played between one and nine years, and a control group who had never learned an instrument. The group who had studied for at least ten years scored the highest when tested in such areas as nonverbal and visuo-spatial memory, naming objects, and taking in and adapting new information. Her follow-up study a year later confirmed those findings and further suggested that starting musical training before the age of nine and keeping at it for ten years or more may yield the greatest benefits. Interestingly, it was the group who had the lowest level of general education which showed the greatest gap in scores between those who had studied an instrument in childhood and those who had not. Hanna-Pladdy suspects that musical training could have made up for the lack of cognitive stimulation these people had academically.</p><p><b>E</b> Neuroscientist Nina Kraus of Northwestern University in Chicago has found still more positive effects of early musical training. She measured the electrical activity in the auditory brainstems of adults, ages 55 to 76, as they responded to the synthesized speech syllable 'da'. Although none of the subjects had played a musical instrument in 40 years, those who had trained the longest – between four and fourteen years – responded the fastest. 'That's significant,' says Kraus, 'because hearing tends to decline as we age, including the ability to quickly and accurately discern consonants, a skill crucial to understanding and participating in conversation.' 'If your nervous system is not keeping up with the timing necessary for encoding consonants, you will lose out on the flow and meaning of the conversation, and that can potentially create to a downward spiral leading to a sense of social isolation,' says Kraus. 'In addition, the fact that musical training appears to enhance auditory working memory might help reinforce in later life the memory capacity that facilitates verbal interaction.'</p><p><b>F</b> In another study at the University of South Florida, assistant professor of music education Jennifer Bugos studied the impact of elementary piano instruction on adults between the ages of 60 and 85. After six months, those who had received piano lessons showed more robust gains in memory, verbal fluency, the speed at which they processed information, planning ability, and other cognitive functions, compared with those who had not received the lessons. Bugos believes that playing an instrument has beneficial effects, regardless of how old the person is when he or she begins. 'Musical training contains all the components of a cognitive training program that sometimes are overlooked,' she says, 'And just as we work out our bodies, we should work out our minds.'</p>"}};
+const questions=[{"n": 1, "p": 1, "type": "select", "text": "Paragraph A", "opts": ["i — Early years of Gilbert", "ii — What was new about his scientific research method", "iii — The development of chemistry", "iv — Questioning traditional astronomy", "v — Pioneers of the early science", "vi — Professional and social recognition", "vii — Becoming the president of the Royal Science Society", "viii — The great works of Gilbert", "ix — His discovery about magnetism", "x — His change of focus"], "ans": "v"}, {"n": 2, "p": 1, "type": "select", "text": "Paragraph B", "opts": ["i — Early years of Gilbert", "ii — What was new about his scientific research method", "iii — The development of chemistry", "iv — Questioning traditional astronomy", "v — Pioneers of the early science", "vi — Professional and social recognition", "vii — Becoming the president of the Royal Science Society", "viii — The great works of Gilbert", "ix — His discovery about magnetism", "x — His change of focus"], "ans": "i"}, {"n": 3, "p": 1, "type": "select", "text": "Paragraph C", "opts": ["i — Early years of Gilbert", "ii — What was new about his scientific research method", "iii — The development of chemistry", "iv — Questioning traditional astronomy", "v — Pioneers of the early science", "vi — Professional and social recognition", "vii — Becoming the president of the Royal Science Society", "viii — The great works of Gilbert", "ix — His discovery about magnetism", "x — His change of focus"], "ans": "vi"}, {"n": 4, "p": 1, "type": "select", "text": "Paragraph D", "opts": ["i — Early years of Gilbert", "ii — What was new about his scientific research method", "iii — The development of chemistry", "iv — Questioning traditional astronomy", "v — Pioneers of the early science", "vi — Professional and social recognition", "vii — Becoming the president of the Royal Science Society", "viii — The great works of Gilbert", "ix — His discovery about magnetism", "x — His change of focus"], "ans": "x"}, {"n": 5, "p": 1, "type": "select", "text": "Paragraph E", "opts": ["i — Early years of Gilbert", "ii — What was new about his scientific research method", "iii — The development of chemistry", "iv — Questioning traditional astronomy", "v — Pioneers of the early science", "vi — Professional and social recognition", "vii — Becoming the president of the Royal Science Society", "viii — The great works of Gilbert", "ix — His discovery about magnetism", "x — His change of focus"], "ans": "ix"}, {"n": 6, "p": 1, "type": "select", "text": "Paragraph F", "opts": ["i — Early years of Gilbert", "ii — What was new about his scientific research method", "iii — The development of chemistry", "iv — Questioning traditional astronomy", "v — Pioneers of the early science", "vi — Professional and social recognition", "vii — Becoming the president of the Royal Science Society", "viii — The great works of Gilbert", "ix — His discovery about magnetism", "x — His change of focus"], "ans": "iv"}, {"n": 7, "p": 1, "type": "select", "text": "Paragraph G", "opts": ["i — Early years of Gilbert", "ii — What was new about his scientific research method", "iii — The development of chemistry", "iv — Questioning traditional astronomy", "v — Pioneers of the early science", "vi — Professional and social recognition", "vii — Becoming the president of the Royal Science Society", "viii — The great works of Gilbert", "ix — His discovery about magnetism", "x — His change of focus"], "ans": "ii"}, {"n": 8, "p": 1, "type": "choice", "text": "He is less famous than he should be.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 9, "p": 1, "type": "choice", "text": "He was famous as a doctor before he was employed by the Queen.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 10, "p": 1, "type": "choice", "text": "He lost faith in the medical theories of his time.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 11, "p": 1, "type": "multi", "text": "Choose THREE parts of Gilbert's discovery.", "opts": ["A — Metal can be transformed into another.", "B — Garlic can remove magnetism.", "C — Metals can be magnetised.", "D — Stars are at different distances from the earth.", "E — The earth wobbles on its axis.", "F — There are two charges of electricity."], "ans": ["C", "D", "E"], "group": "g1113"}, {"n": 12, "p": 1, "type": "multi", "text": "Choose THREE parts of Gilbert's discovery.", "opts": ["A — Metal can be transformed into another.", "B — Garlic can remove magnetism.", "C — Metals can be magnetised.", "D — Stars are at different distances from the earth.", "E — The earth wobbles on its axis.", "F — There are two charges of electricity."], "ans": ["C", "D", "E"], "group": "g1113"}, {"n": 13, "p": 1, "type": "multi", "text": "Choose THREE parts of Gilbert's discovery.", "opts": ["A — Metal can be transformed into another.", "B — Garlic can remove magnetism.", "C — Metals can be magnetised.", "D — Stars are at different distances from the earth.", "E — The earth wobbles on its axis.", "F — There are two charges of electricity."], "ans": ["C", "D", "E"], "group": "g1113"}, {"n": 14, "p": 2, "type": "select", "text": "Paragraph A", "opts": ["i — Professions in which super-taskers are likely to be found", "ii — The effects of multi-tasking on neurological structure", "iii — A distinction between situations when people can and can’t multitask", "iv — Real multi-tasking is nearly impossible", "v — Multi-tasking and gender", "vi — The neurological reasons for struggling to manage more things", "vii — The ability to multi-task is determined by people's genes", "viii — Gender and the structure of the brain"], "ans": "iv"}, {"n": 15, "p": 2, "type": "select", "text": "Paragraph B", "opts": ["i — Professions in which super-taskers are likely to be found", "ii — The effects of multi-tasking on neurological structure", "iii — A distinction between situations when people can and can’t multitask", "iv — Real multi-tasking is nearly impossible", "v — Multi-tasking and gender", "vi — The neurological reasons for struggling to manage more things", "vii — The ability to multi-task is determined by people's genes", "viii — Gender and the structure of the brain"], "ans": "iii"}, {"n": 16, "p": 2, "type": "select", "text": "Paragraph C", "opts": ["i — Professions in which super-taskers are likely to be found", "ii — The effects of multi-tasking on neurological structure", "iii — A distinction between situations when people can and can’t multitask", "iv — Real multi-tasking is nearly impossible", "v — Multi-tasking and gender", "vi — The neurological reasons for struggling to manage more things", "vii — The ability to multi-task is determined by people's genes", "viii — Gender and the structure of the brain"], "ans": "vi"}, {"n": 17, "p": 2, "type": "select", "text": "Paragraph D", "opts": ["i — Professions in which super-taskers are likely to be found", "ii — The effects of multi-tasking on neurological structure", "iii — A distinction between situations when people can and can’t multitask", "iv — Real multi-tasking is nearly impossible", "v — Multi-tasking and gender", "vi — The neurological reasons for struggling to manage more things", "vii — The ability to multi-task is determined by people's genes", "viii — Gender and the structure of the brain"], "ans": "v"}, {"n": 18, "p": 2, "type": "select", "text": "Paragraph E", "opts": ["i — Professions in which super-taskers are likely to be found", "ii — The effects of multi-tasking on neurological structure", "iii — A distinction between situations when people can and can’t multitask", "iv — Real multi-tasking is nearly impossible", "v — Multi-tasking and gender", "vi — The neurological reasons for struggling to manage more things", "vii — The ability to multi-task is determined by people's genes", "viii — Gender and the structure of the brain"], "ans": "i"}, {"n": 19, "p": 2, "type": "select", "text": "Paragraph F", "opts": ["i — Professions in which super-taskers are likely to be found", "ii — The effects of multi-tasking on neurological structure", "iii — A distinction between situations when people can and can’t multitask", "iv — Real multi-tasking is nearly impossible", "v — Multi-tasking and gender", "vi — The neurological reasons for struggling to manage more things", "vii — The ability to multi-task is determined by people's genes", "viii — Gender and the structure of the brain"], "ans": "vii"}, {"n": 20, "p": 2, "type": "select", "text": "The brain of a good multi-tasker works differently from other people's.", "opts": ["A — Edward M Hallowell", "B — Paul E Dux", "C — David Strayer", "D — Etienne Koechlin", "E — Keith Laws"], "ans": "C"}, {"n": 21, "p": 2, "type": "select", "text": "The rate of error is considerably higher when people multi-task.", "opts": ["A — Edward M Hallowell", "B — Paul E Dux", "C — David Strayer", "D — Etienne Koechlin", "E — Keith Laws"], "ans": "C"}, {"n": 22, "p": 2, "type": "select", "text": "People are mistaken in their assumption that they can multi-task.", "opts": ["A — Edward M Hallowell", "B — Paul E Dux", "C — David Strayer", "D — Etienne Koechlin", "E — Keith Laws"], "ans": "A"}, {"n": 23, "p": 2, "type": "select", "text": "One gender does not seem to pause to consider before taking action.", "opts": ["A — Edward M Hallowell", "B — Paul E Dux", "C — David Strayer", "D — Etienne Koechlin", "E — Keith Laws"], "ans": "E"}, {"n": 24, "p": 2, "type": "text", "text": "super-taskers are most likely to achieve a ... high on the career ladder", "ans": ["position"]}, {"n": 25, "p": 2, "type": "text", "text": "tasks that need their ...", "ans": ["attention"]}, {"n": 26, "p": 2, "type": "text", "text": "special brain ...", "ans": ["structure"]}, {"n": 27, "p": 3, "type": "choice", "text": "Many parents indicate that their children struggle to learn a musical instrument.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 28, "p": 3, "type": "choice", "text": "The findings of the recent research into pre-school children's IQs are unreliable.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 29, "p": 3, "type": "choice", "text": "The main reasons people take up an instrument are that they enjoy playing music and being creative.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 30, "p": 3, "type": "choice", "text": "Evidence about the long-term advantages of learning an instrument is increasing.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 31, "p": 3, "type": "choice", "text": "The studies mentioned in the first paragraph", "opts": ["A — confirm a link between musical training and intelligence.", "B — present misleading information about the value of learning an instrument.", "C — suggest that there are undiscovered benefits to studying music.", "D — cast doubt on a belief about the effects of taking music lessons."], "ans": "D"}, {"n": 32, "p": 3, "type": "choice", "text": "According to the second paragraph, there may be many benefits to studying music,", "opts": ["A — even for those who begin learning in adulthood.", "B — providing the person learns the correct techniques.", "C — especially if the person practises on a regular basis.", "D — particularly if the person plays a range of different instruments."], "ans": "A"}, {"n": 33, "p": 3, "type": "choice", "text": "The phrase 'this might well be the case' in the fourth paragraph suggests that", "opts": ["A — music lessons and long-term physical well-being may be connected.", "B — the ability to learn music may depend on neurological features.", "C — learning an instrument may have a lasting impact on brain function.", "D — older people's brains may be better suited to studying music than those of children."], "ans": "C"}, {"n": 34, "p": 3, "type": "choice", "text": "Which aspect of playing an instrument was included in Hanna-Pladdy's follow-up study but not in her first study?", "opts": ["A — the number of years that the person had played", "B — at which age the person began having lessons", "C — the length of time since the person last played", "D — how the person had practised as a child"], "ans": "B"}, {"n": 35, "p": 3, "type": "choice", "text": "What do Hanna-Pladdy's studies suggest about people's general education?", "opts": ["A — Studying music compensates for an otherwise limited level of education.", "B — Learning to play an instrument improves educational performance.", "C — Highly educated people are more likely to benefit from music training.", "D — Level of education makes no difference to a person's musical ability."], "ans": "A"}, {"n": 36, "p": 3, "type": "select", "text": "Brenda Hanna-Pladdy believes the cognitive benefits of music lessons are a result of", "opts": ["A — comparing the brains of people who had never played an instrument with those who played for a living.", "B — activating many different parts of the brain at the same time.", "C — teaching a group of older people to play an instrument.", "D — acquiring the particular set of physical skills needed to play an instrument.", "E — discovering which group of people become the best musicians.", "F — having played an instrument for a considerable length of time."], "ans": "D"}, {"n": 37, "p": 3, "type": "select", "text": "The research undertaken by Gottfried Schlaug focused on", "opts": ["A — comparing the brains of people who had never played an instrument with those who played for a living.", "B — activating many different parts of the brain at the same time.", "C — teaching a group of older people to play an instrument.", "D — acquiring the particular set of physical skills needed to play an instrument.", "E — discovering which group of people become the best musicians.", "F — having played an instrument for a considerable length of time."], "ans": "A"}, {"n": 38, "p": 3, "type": "select", "text": "According to Alison Balbag, playing an instrument is a unique experience because it involves", "opts": ["A — comparing the brains of people who had never played an instrument with those who played for a living.", "B — activating many different parts of the brain at the same time.", "C — teaching a group of older people to play an instrument.", "D — acquiring the particular set of physical skills needed to play an instrument.", "E — discovering which group of people become the best musicians.", "F — having played an instrument for a considerable length of time."], "ans": "B"}, {"n": 39, "p": 3, "type": "select", "text": "Nina Kraus believes there is a link between better hearing in later life and the experience of", "opts": ["A — comparing the brains of people who had never played an instrument with those who played for a living.", "B — activating many different parts of the brain at the same time.", "C — teaching a group of older people to play an instrument.", "D — acquiring the particular set of physical skills needed to play an instrument.", "E — discovering which group of people become the best musicians.", "F — having played an instrument for a considerable length of time."], "ans": "F"}, {"n": 40, "p": 3, "type": "select", "text": "Jennifer Bugos's study involved", "opts": ["A — comparing the brains of people who had never played an instrument with those who played for a living.", "B — activating many different parts of the brain at the same time.", "C — teaching a group of older people to play an instrument.", "D — acquiring the particular set of physical skills needed to play an instrument.", "E — discovering which group of people become the best musicians.", "F — having played an instrument for a considerable length of time."], "ans": "C"}];
+const answerReview={"1": {"para": 1, "explain": "Heading v fits because the opening paragraph introduces Gilbert and Galileo as two major pioneers of modern science.", "evidence": "two great pioneers of modern science: Galileo and Gilbert"}, "2": {"para": 2, "explain": "Heading i fits because paragraph B gives Gilbert's birth, education, travel and eventual settlement in London.", "evidence": "Born ... on May 24, 1544 ... studied medicine ... graduating in 1573"}, "3": {"para": 3, "explain": "Heading vi fits because paragraph C focuses on Gilbert's professional success, presidency, appointment as royal physician and knighthood.", "evidence": "a very successful and eminent doctor ... appointed personal physician to the Queen ... knighted by the Queen"}, "4": {"para": 4, "explain": "Heading x fits because paragraph D explains how Gilbert moved from chemistry/alchemy towards physics and magnetism.", "evidence": "first interested in chemistry but later changed his focus"}, "5": {"para": 5, "explain": "Heading ix fits because paragraph E describes Gilbert's discoveries about magnetism, poles and magnetising metals.", "evidence": "metals can be magnetised ... He named the ends of a magnet 'north pole' and 'south pole'"}, "6": {"para": 6, "explain": "Heading iv fits because paragraph F deals with Gilbert's challenges to traditional astronomy and his ideas about Earth, stars and the moon.", "evidence": "He also questioned the traditional astronomical beliefs"}, "7": {"para": 7, "explain": "Heading ii fits because paragraph G emphasises Gilbert's revolutionary use of experiments and observation rather than pure reasoning.", "evidence": "he used experiments rather than pure logic and reasoning"}, "8": {"para": 1, "explain": "TRUE: the passage explicitly says Gilbert is less well known than he deserves.", "evidence": "he is less well known than he deserves"}, "9": {"para": 3, "explain": "TRUE: Gilbert was already described as a very successful and eminent doctor before his appointment as personal physician to the Queen.", "evidence": "He was a very successful and eminent doctor ... He was also appointed personal physician to the Queen"}, "10": {"para": 4, "explain": "NOT GIVEN: Gilbert changed focus from chemistry because of mysticism in alchemy, but the passage does not say he lost faith in contemporary medical theories.", "evidence": "changed his focus due to the large portion of mysticism of alchemy involved"}, "11": {"para": 5, "explain": "The three correct answers are C, D and E. C is supported by Gilbert's finding that metals can be magnetised.", "evidence": "metals can be magnetised"}, "12": {"para": 6, "explain": "The three correct answers are C, D and E. D is supported by his belief that stars are not all the same distance from Earth.", "evidence": "stars are not equidistant from the earth"}, "13": {"para": 6, "explain": "The three correct answers are C, D and E. E is supported by his idea that Earth itself wobbles around a crystal core.", "evidence": "the sun and other stars wobble just like the earth does around a crystal core"}, "14": {"para": 1, "explain": "Heading iv fits because paragraph A argues that true multi-tasking is impossible for almost everyone.", "evidence": "effective multi-tasking is beyond most of us"}, "15": {"para": 2, "explain": "Heading iii fits because paragraph B distinguishes automatic activities from attention-demanding tasks and explains when simultaneous activity is possible.", "evidence": "innate activities like walking ... do not require you to pay attention, whereas activities such as reading ... do require attention"}, "16": {"para": 3, "explain": "Heading vi fits because paragraph C explains the neurological reason people struggle with more than two tasks: the two frontal lobes.", "evidence": "we might be in great trouble when we try to juggle more than two tasks simply because we have only two frontal lobes"}, "17": {"para": 4, "explain": "Heading v fits because paragraph D discusses possible differences between men and women in multi-tasking strategy.", "evidence": "whether there is a difference between the sexes"}, "18": {"para": 5, "explain": "Heading i fits because paragraph E gives examples of occupations in which super-taskers may be especially common.", "evidence": "pilots ... high-end chefs ... elite doctors"}, "19": {"para": 6, "explain": "Heading vii fits because paragraph F says multi-tasking ability probably depends on inherited DNA and neural structure.", "evidence": "The ability to multi-task probably comes down to the DNA you inherit"}, "20": {"para": 5, "explain": "C — David Strayer. His research found super-taskers show different patterns of brain activity from ordinary people.", "evidence": "exhibit different patterns of brain activity when multi-tasking compared to ordinary people"}, "21": {"para": 2, "explain": "C — David Strayer. His driving research showed that splitting attention increases mistakes and slows performance.", "evidence": "more mistakes are made and it takes longer to complete each activity"}, "22": {"para": 1, "explain": "A — Edward M Hallowell calls multi-tasking a mythical activity because people wrongly believe they can do multiple tasks equally well.", "evidence": "a 'mythical activity in which people believe they can perform two or more tasks simultaneously'"}, "23": {"para": 4, "explain": "E — Keith Laws says men tend to jump into the task without stopping to reflect and plan.", "evidence": "It's as if they don't stop to reflect and plan for a moment"}, "24": {"para": 5, "explain": "The answer is position: Strayer says super-taskers are likely to rise to a top position in demanding occupations.", "evidence": "rise to a top position"}, "25": {"para": 5, "explain": "The answer is attention: their jobs involve juggling numerous tasks that demand attention simultaneously.", "evidence": "tasks that demand attention at the same time"}, "26": {"para": 6, "explain": "The answer is structure: Strayer says some people are born with a neural structure that overcomes normal multi-tasking limits.", "evidence": "born with the neural structure"}, "27": {"para": 1, "explain": "NOT GIVEN: the passage says many parents believe music lessons make children smarter, but it does not say their children struggle to learn instruments.", "evidence": "That's what a lot of parents and experts believe"}, "28": {"para": 1, "explain": "FALSE: the two trials are described as highly convincing, so the writer does not regard their findings as unreliable.", "evidence": "Two highly convincing trials carried out recently"}, "29": {"para": 2, "explain": "NOT GIVEN: self-expression, impressing friends and fun are mentioned as benefits, not as the main reasons people start learning an instrument.", "evidence": "advantages ... are limited to expressing yourself, impressing friends, or just having fun"}, "30": {"para": 2, "explain": "TRUE: the passage explicitly says a growing number of studies show long-term benefits of childhood musical training.", "evidence": "A growing number of studies show that learning an instrument in childhood"}, "31": {"para": 1, "explain": "D is correct because the studies found no significant IQ difference, challenging the belief that music lessons make children smarter.", "evidence": "found no evidence to support this idea"}, "32": {"para": 2, "explain": "A is correct because the passage says people may benefit even if they start learning music in mid-life or later.", "evidence": "decide to take up music for the first time in mid-life or beyond"}, "33": {"para": 3, "explain": "C is correct. The phrase refers back to the claim that playing an instrument can stimulate many brain areas and have effects lasting for decades.", "evidence": "with ripple effects through the decades"}, "34": {"para": 4, "explain": "B is correct because the follow-up study added the finding that starting before age nine may give the greatest benefits.", "evidence": "starting musical training before the age of nine"}, "35": {"para": 4, "explain": "A is correct because Hanna-Pladdy suspects music training may compensate for a lack of academic cognitive stimulation.", "evidence": "musical training could have made up for the lack of cognitive stimulation these people had academically"}, "36": {"para": 2, "explain": "D fits because Hanna-Pladdy links later cognitive benefits to practicing the specialised motor control and coordination required by instruments.", "evidence": "learning and practicing specific types of motor control and coordination"}, "37": {"para": 3, "explain": "A fits because Schlaug compared the brains of professional musicians with those of non-musicians.", "evidence": "brains of adult professional musicians had a larger volume of grey matter than the brains of non-musicians"}, "38": {"para": 3, "explain": "B fits because Balbag says playing an instrument requires many brain regions and cognitive functions to work together simultaneously.", "evidence": "requires a wide array of brain regions and cognitive functions to work together simultaneously"}, "39": {"para": 5, "explain": "F fits because Kraus found the fastest auditory responses among people who had trained for the longest period.", "evidence": "those who had trained the longest ... responded the fastest"}, "40": {"para": 6, "explain": "C fits because Bugos's study gave elementary piano lessons to adults aged 60 to 85.", "evidence": "studied the impact of elementary piano instruction on adults between the ages of 60 and 85"}};
+
+let current=1,startedAt=0,endAt=0,remaining=3600,timerHandle=null,submitted=false,savedSelection=null,savedSelectionZone=null,activeHighlight=null,activeHighlightZone=null;
+const STORAGE_PREFIX="READ_GILBERT_MULTITASK_MUSIC_";
+function ssGet(k){return sessionStorage.getItem(STORAGE_PREFIX+k)}
+function ssSet(k,v){sessionStorage.setItem(STORAGE_PREFIX+k,v)}
+function clearAttempt(){const a=[];for(let i=0;i<sessionStorage.length;i++){const k=sessionStorage.key(i);if(k&&k.startsWith(STORAGE_PREFIX))a.push(k)}a.forEach(k=>sessionStorage.removeItem(k))}
+const norm=v=>String(v??'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ');
+function startExam(){const n=document.getElementById('studentName').value.trim(),c=document.getElementById('studentClass').value.trim();if(!n||!c){document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}clearAttempt();document.getElementById('topName').textContent=n;document.getElementById('topClass').textContent=c;document.getElementById('start').classList.add('hidden');document.getElementById('exam').classList.remove('hidden');startedAt=Date.now();endAt=startedAt+60*60*1000;buildNav();showPassage(1);tickTimer();timerHandle=setInterval(tickTimer,250)}
+function tickTimer(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));updateTimer();if(remaining<=0&&!submitted){clearInterval(timerHandle);submitExam(true)}}function updateTimer(){const e=document.getElementById('timer'),m=Math.floor(Math.max(remaining,0)/60),s=Math.max(remaining,0)%60;e.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;e.classList.toggle('warning',remaining<=600&&remaining>300);e.classList.toggle('danger',remaining<=300)}
+function groupMeta(n,p){if(p===1){if(n<=7)return['Questions 1–7','Choose TRUE, FALSE or NOT GIVEN.'];if(n<=10)return['Questions 8–10','Complete the flow-chart. Choose NO MORE THAN TWO WORDS from the passage.'];return['Questions 11–13','Complete the notes. Choose ONE WORD ONLY from the passage.']}if(p===2){if(n<=19)return['Questions 14–19','Complete the summary using the list A–J.'];if(n<=23)return['Questions 20–23','Choose YES, NO or NOT GIVEN.'];return['Questions 24–26','Choose the correct letter A, B, C or D.']}if(n<=32)return['Questions 27–32','Complete the summary using the list A–J.'];if(n<=36)return['Questions 33–36','Choose YES, NO or NOT GIVEN.'];return['Questions 37–40','Choose the correct letter A, B, C or D.']}
+
+function zoneRoot(zone){
+  return document.getElementById(zone==='questions'?'questionsCopy':'passageCopy');
+}
+function zoneMarkupKey(zone,p=current){
+  return (zone==='questions'?'questionsMarkup':'passageMarkup')+p;
+}
+function noteStoreKey(zone,p=current){
+  return 'notes_'+zone+'_'+p;
+}
+function notesPanelId(zone){
+  return zone==='questions'?'notesPanelQuestions':'notesPanelPassage';
+}
+function notesCountId(zone){
+  return zone==='questions'?'notesCountQuestions':'notesCountPassage';
+}
+function saveZoneMarkup(zone){
+  const root=zoneRoot(zone);
+  if(root)ssSet(zoneMarkupKey(zone),root.innerHTML);
+}
+function saveCurrentMarkups(){
+  saveZoneMarkup('passage');
+  saveZoneMarkup('questions');
+}
+function captureSelection(zone){
+  if(submitted)return;
+  const sel=window.getSelection();
+  const root=zoneRoot(zone);
+  if(!sel||!root||sel.rangeCount===0||sel.isCollapsed)return;
+  const r=sel.getRangeAt(0);
+  if(root.contains(r.commonAncestorContainer)){
+    savedSelection=r.cloneRange();
+    savedSelectionZone=zone;
+  }
+}
+function annotationBlock(node){
+  const el=node&&node.nodeType===3?node.parentElement:node;
+  if(!el)return null;
+  return el.closest('p,.completion-text,.flow-step,li,.card,.option,.inst,.bank div,h3,h4,.qtext');
+}
+function getUsableSelection(zone){
+  const root=zoneRoot(zone);
+  if(!savedSelection||savedSelectionZone!==zone||!root||!root.contains(savedSelection.commonAncestorContainer)){
+    alert(zone==='questions'
+      ?'Hãy bôi đen phần chữ ở bên câu hỏi trước.'
+      :'Hãy bôi đen phần chữ trong bài đọc trước.');
+    return null;
+  }
+  if(savedSelection.collapsed||!savedSelection.toString().trim()){
+    alert('Hãy bôi đen một đoạn chữ trước.');
+    return null;
+  }
+
+  const a=annotationBlock(savedSelection.startContainer);
+  const b=annotationBlock(savedSelection.endContainer);
+  if(!a||!b||a!==b){
+    alert('Để highlight/ghi chú ổn định, hãy chọn chữ trong cùng một câu hoặc cùng một khối nội dung.');
+    return null;
+  }
+
+  const cloned=savedSelection.cloneContents();
+  if(cloned.querySelector && cloned.querySelector('input,select,button,textarea')){
+    alert('Không thể highlight xuyên qua ô trả lời. Hãy chỉ chọn phần chữ.');
+    return null;
+  }
+  return savedSelection.cloneRange();
+}
+function clearBrowserSelection(){
+  const sel=window.getSelection();
+  if(sel)sel.removeAllRanges();
+  savedSelection=null;
+  savedSelectionZone=null;
+}
+function addHighlight(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  try{
+    const mark=document.createElement('mark');
+    mark.className='user-highlight';
+    mark.dataset.annotationZone=zone;
+    const frag=r.extractContents();
+    mark.appendChild(frag);
+    r.insertNode(mark);
+    activeHighlight=mark;
+    activeHighlightZone=zone;
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+  }catch(e){
+    alert('Không thể highlight vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function clearHighlight(zone){
+  if(submitted)return;
+  let targets=[];
+  if(activeHighlight&&activeHighlightZone===zone&&document.body.contains(activeHighlight)){
+    targets=[activeHighlight];
+  }else if(savedSelection&&savedSelectionZone===zone){
+    const root=zoneRoot(zone);
+    if(root)targets=[...root.querySelectorAll('mark.user-highlight')].filter(m=>{
+      try{return savedSelection.intersectsNode(m)}catch(e){return false}
+    });
+  }
+  if(!targets.length){
+    alert('Hãy bấm vào phần đã highlight rồi chọn “Xóa HL”.');
+    return;
+  }
+  targets.forEach(m=>{
+    const p=m.parentNode;
+    while(m.firstChild)p.insertBefore(m.firstChild,m);
+    m.remove();
+    p.normalize();
+  });
+  activeHighlight=null;
+  activeHighlightZone=null;
+  saveZoneMarkup(zone);
+  clearBrowserSelection();
+}
+function loadNotes(zone,p=current){
+  try{return JSON.parse(ssGet(noteStoreKey(zone,p))||'[]')}catch(e){return[]}
+}
+function saveNotes(zone,notes,p=current){
+  ssSet(noteStoreKey(zone,p),JSON.stringify(notes));
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function addNote(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  const quote=r.toString().trim();
+  const text=prompt('Nhập ghi chú cho đoạn đã chọn:');
+  if(text===null||!text.trim())return;
+  const id='note_'+zone+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  try{
+    const span=document.createElement('span');
+    span.className='note-anchor';
+    span.dataset.noteId=id;
+    span.dataset.annotationZone=zone;
+    span.title='Bấm để xem/sửa ghi chú';
+    const frag=r.extractContents();
+    span.appendChild(frag);
+    r.insertNode(span);
+
+    const notes=loadNotes(zone);
+    notes.push({id,quote,text:text.trim()});
+    saveNotes(zone,notes);
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+    renderNotesPanel(zone,current,true);
+  }catch(e){
+    alert('Không thể tạo ghi chú cho vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function toggleNotes(zone){
+  const panel=document.getElementById(notesPanelId(zone));
+  if(panel)panel.classList.toggle('open');
+}
+function renderNotesPanel(zone,p=current,forceOpen=false){
+  const panel=document.getElementById(notesPanelId(zone));
+  const count=document.getElementById(notesCountId(zone));
+  if(!panel)return;
+  const notes=loadNotes(zone,p);
+  if(count)count.textContent=notes.length;
+  panel.innerHTML=notes.length
+    ?notes.map(n=>`<div class="note-item">
+        <div class="note-quote">“${esc(n.quote)}”</div>
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-actions">
+          <button type="button" onclick="editNote('${zone}','${n.id}')">Sửa</button>
+          <button type="button" onclick="deleteNote('${zone}','${n.id}')">Xóa</button>
+        </div>
+      </div>`).join('')
+    :'<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở phần này.</div>';
+  if(forceOpen)panel.classList.add('open');
+}
+function editNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt('Sửa ghi chú:',n.text);if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function deleteNote(zone,id){
+  const notes=loadNotes(zone).filter(x=>x.id!==id);
+  saveNotes(zone,notes);
+  const root=zoneRoot(zone);
+  if(root)root.querySelectorAll(`[data-note-id="${id}"]`).forEach(s=>{
+    const p=s.parentNode;
+    while(s.firstChild)p.insertBefore(s.firstChild,s);
+    s.remove();
+    p.normalize();
+  });
+  saveZoneMarkup(zone);
+  renderNotesPanel(zone,current,true);
+}
+function openNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt(`Đoạn đã ghi chú:\n“${n.quote}”\n\nGhi chú:`,n.text);
+  if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function bindAnnotations(zone){
+  const root=zoneRoot(zone);if(!root)return;
+  root.addEventListener('mouseup',()=>captureSelection(zone));
+  root.addEventListener('keyup',()=>captureSelection(zone));
+  root.addEventListener('click',e=>{
+    const note=e.target.closest('.note-anchor');
+    if(note){openNote(zone,note.dataset.noteId);return}
+    const mark=e.target.closest('mark.user-highlight');
+    if(mark){
+      activeHighlight=mark;
+      activeHighlightZone=zone;
+    }else if(zone===activeHighlightZone){
+      activeHighlight=null;
+      activeHighlightZone=null;
+    }
+  });
+}
+function annotationToolbar(zone){
+  const isQ=zone==='questions';
+  const label=isQ?'Câu hỏi':'Bài đọc';
+  const countId=isQ?'notesCountQuestions':'notesCountPassage';
+  return `<div class="annotation-bar">
+    <span class="annotation-zone-label">${label}</span>
+    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button>
+    <button type="button" class="annotation-btn" onclick="clearHighlight('${zone}')">Xóa HL</button>
+    <button type="button" class="annotation-btn" onclick="addNote('${zone}')">📝 Add note</button>
+    <button type="button" class="annotation-btn" onclick="toggleNotes('${zone}')">Ghi chú (<span id="${countId}">0</span>)</button>
+    <span class="annotation-tip">Bôi đen phần chữ rồi chọn công cụ.</span>
+  </div>`;
+}
+
+function showPassage(p){
+  saveCurrentMarkups();
+  current=p;
+  activeHighlight=null;
+  activeHighlightZone=null;
+  savedSelection=null;
+  savedSelectionZone=null;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));
+
+  const passageMarkup=ssGet(zoneMarkupKey('passage',p))||passages[p].text;
+  document.getElementById('passage').innerHTML=
+    annotationToolbar('passage')+
+    `<div id="notesPanelPassage" class="notes-panel"></div>
+     <h2>${passages[p].title}</h2>
+     <div class="copy" id="passageCopy">${passageMarkup}</div>`;
+
+  bindAnnotations('passage');
+  renderNotesPanel('passage',p,false);
+  buildQuestions(p);
+
+  document.getElementById('passage').scrollTop=0;
+  document.getElementById('questions').scrollTop=0;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function renderQ(q){
+  let body='';
+  if(q.type==='text'){
+    body=`<input class="ans" id="q${q.n}" data-q="${q.n}" type="text" autocomplete="off" placeholder="Type your answer">`;
+  }else if(q.type==='select'){
+    body=`<select class="ans" id="q${q.n}" data-q="${q.n}"><option value="">-- Choose --</option>${q.opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select>`;
+  }else{
+    body=q.opts.map(x=>{
+      const v=optionValue(x);
+      return `<label class="option" data-q="${q.n}" data-val="${v}"><input type="radio" name="q${q.n}" value="${v}"> ${x}</label>`;
+    }).join('');
+  }
+  return `<div class="card" id="card${q.n}"><div class="qhead"><span class="qnum">${q.n}</span><div class="qtext">${q.text}</div></div>${body}<div class="feedback" id="fb${q.n}"></div></div>`;
+}
+function inlineText(n,placeholder='answer'){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><input class="ans inline-answer short" id="q${n}" data-q="${n}" type="text" autocomplete="off" placeholder="${placeholder}"></span>`;
+}
+function inlineSelect(n,opts){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><select class="ans inline-answer select-wide" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select></span>`;
+}
+function renderMatchRows(start,end,title,inst,showBank=true){
+  const rows=questions.filter(q=>q.n>=start&&q.n<=end);
+  const opts=rows[0].opts;
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>
+    ${showBank?`<div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>`:''}
+    ${rows.map(q=>`<div class="match-row completion-text" id="card${q.n}">
+      <div class="match-label"><span class="blank-num">${q.n}</span> ${q.text}</div>
+      ${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}
+    </div>`).join('')}
+  </div>`;
+}
+function renderChooseThree(){
+  const opts=questions.find(q=>q.n===11).opts;
+  return `<div class="group"><h3>Questions 11–13</h3>
+    <div class="inst">Choose <b>THREE</b> correct answers. Which THREE of the following are parts of Gilbert's discovery?</div>
+    <div class="choose-three-card" id="card11"><span id="card12"></span><span id="card13"></span>
+      ${opts.map(x=>`<label class="option multi-option" data-group="g1113" data-val="${optionValue(x)}"><input type="checkbox" name="g1113" value="${optionValue(x)}"> ${x}</label>`).join('')}
+      <div class="multi-score-note" id="fb1113">Select exactly THREE options.</div>
+      <div id="multiReview1113"></div>
+    </div>
+  </div>`;
+}
+function renderP2Summary(){
+  return `<div class="group"><h3>Questions 24–26</h3>
+    <div class="inst">Complete the summary below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="completion-box">
+      <h4>Super-taskers</h4>
+      <p class="completion-text">
+        Super-taskers are those of us who possess special multi-tasking ability. They can be found in all professions.
+        People who are pilots, chefs and doctors are often super-taskers and super-taskers are most likely to achieve a ${inlineText(24)} that is high on the career ladder.
+        Super-taskers typically have to undertake many tasks simultaneously that need their ${inlineText(25)}.
+        Genes play an important role in having this capability: these people have a special brain ${inlineText(26)} which helps them do what we cannot.
+      </p>
+    </div>
+  </div>`;
+}
+function renderSentenceEndings(){
+  const rows=questions.filter(q=>q.n>=36&&q.n<=40);
+  const opts=rows[0].opts;
+  return `<div class="group"><h3>Questions 36–40</h3>
+    <div class="inst">Complete each sentence with the correct ending, <b>A–F</b>, below.</div>
+    <div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>
+    ${rows.map(q=>`<div class="match-row completion-text" id="card${q.n}">
+      <div class="match-label"><span class="blank-num">${q.n}</span> ${q.text}</div>
+      ${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}
+    </div>`).join('')}
+  </div>`;
+}
+function renderStandardGroup(qs,title,inst){
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>${qs.map(renderQ).join('')}</div>`;
+}
+function buildQuestions(p){
+  let h='';
+  if(p===1){
+    h+=renderMatchRows(1,7,'Questions 1–7','Choose the correct heading, i–x, for each paragraph.');
+    h+=renderStandardGroup(questions.filter(q=>q.n>=8&&q.n<=10),'Questions 8–10','Choose TRUE, FALSE or NOT GIVEN.');
+    h+=renderChooseThree();
+  }else if(p===2){
+    h+=renderMatchRows(14,19,'Questions 14–19','Choose the correct heading, i–viii, for each section.');
+    h+=renderMatchRows(20,23,'Questions 20–23','Match each statement with the correct researcher, A–E. You may use any letter more than once.');
+    h+=renderP2Summary();
+  }else{
+    h+=renderStandardGroup(questions.filter(q=>q.n>=27&&q.n<=30),'Questions 27–30','Choose TRUE, FALSE or NOT GIVEN.');
+    h+=renderStandardGroup(questions.filter(q=>q.n>=31&&q.n<=35),'Questions 31–35','Choose the correct answer.');
+    h+=renderSentenceEndings();
+  }
+
+  const savedQuestionMarkup=ssGet(zoneMarkupKey('questions',p));
+  const questionMarkup=savedQuestionMarkup||h;
+  document.getElementById('questions').innerHTML=
+    annotationToolbar('questions')+
+    `<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${questionMarkup}</div>`;
+
+  restore(p);
+  bindTrack();
+  bindAnnotations('questions');
+  renderNotesPanel('questions',p,false);
+
+  if(submitted){
+    const copy=document.getElementById('questionsCopy');
+    if(copy&&!copy.querySelector('.review-mode-note.top-review-note')){
+      copy.insertAdjacentHTML('afterbegin','<div class="review-mode-note top-review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới. Bấm “Đối chiếu trong bài đọc” để đưa đoạn bằng chứng ở cột trái vào vị trí xem.</div>');
+    }
+    markPassage(p);
+  }
+}
+function getMulti(){
+  try{return JSON.parse(ssGet('g1113')||'[]')}catch(e){return[]}
+}
+function restore(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const v=ssGet('q'+q.n)||'';
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e)e.value=v;
+    }else if(v){
+      const e=[...document.querySelectorAll(`input[name="q${q.n}"]`)].find(x=>x.value===v);
+      if(e)e.checked=true;
+    }
+  }
+  if(p===1){
+    const sel=getMulti();
+    document.querySelectorAll('input[name="g1113"]').forEach(e=>e.checked=sel.includes(e.value));
+  }
+}
+function bindTrack(){
+  document.querySelectorAll('.ans').forEach(e=>{
+    e.oninput=e.onchange=()=>save(+e.dataset.q,e.value);
+  });
+  document.querySelectorAll('input[type=radio]').forEach(e=>{
+    e.onchange=()=>save(+e.closest('.option').dataset.q,e.value);
+  });
+  document.querySelectorAll('input[name="g1113"]').forEach(e=>{
+    e.onchange=()=>{
+      let sel=[...document.querySelectorAll('input[name="g1113"]:checked')].map(x=>x.value);
+      if(sel.length>3){
+        e.checked=false;
+        sel=[...document.querySelectorAll('input[name="g1113"]:checked')].map(x=>x.value);
+        alert('Chỉ chọn THREE đáp án.');
+      }
+      ssSet('g1113',JSON.stringify(sel));
+      const done=sel.length===3;
+      ['nav11','nav12','nav13'].forEach(id=>document.getElementById(id)?.classList.toggle('answered',done));
+    };
+  });
+}
+function save(n,v){
+  ssSet('q'+n,v);
+  const e=document.getElementById('nav'+n);
+  if(e)e.classList.toggle('answered',String(v).trim()!=='');
+}
+function buildNav(){
+  document.getElementById('nav').innerHTML=questions.map(q=>`<button class="nq" id="nav${q.n}" onclick="goQ(${q.n})">${q.n}</button>`).join('');
+}
+function goQ(n){
+  const q=questions.find(x=>x.n===n);
+  if(q.p!==current)showPassage(q.p);
+  setTimeout(()=>{
+    const target=document.getElementById('card'+n)||(n===12||n===13?document.getElementById('card11'):null);
+    target?.scrollIntoView({behavior:'smooth',block:'center'});
+    const control=document.getElementById('q'+n);
+    if(control&&(control.tagName==='SELECT'||control.type==='text'))control.focus({preventScroll:true});
+  },60);
+}
+function correct(q,u){
+  if(q.type==='multi')return false;
+  return q.type==='text'?q.ans.map(norm).includes(norm(u)):norm(u)===norm(q.ans);
+}
+
+function inlineReviewHTML(q,user){
+  const r=answerReview[q.n];
+  return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
+    <div class="inline-review-title">
+      <span class="inline-review-badge">Q${q.n}</span>
+      <span>Giải thích câu trả lời sai</span>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Bạn trả lời</div>
+      <div class="inline-review-student">${esc(displayAnswer(q,user))}</div>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Đáp án đúng</div>
+      <div class="inline-review-correct">${esc(displayKey(q))}</div>
+    </div>
+    <div class="inline-review-explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="inline-review-evidence">
+      <div class="inline-review-evidence-label">Evidence · Passage ${q.p}, đoạn ${r.para}</div>
+      <div class="inline-review-quote">“${esc(r.evidence)}”</div>
+    </div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(${q.n})">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+
+function removeInlineReview(n){
+  document.querySelectorAll(`[data-inline-review="${n}"]`).forEach(e=>e.remove());
+}
+
+function renderInlineReview(q,user,ok){
+  removeInlineReview(q.n);
+  if(ok)return;
+
+  const card=document.getElementById('card'+q.n);
+  if(!card)return;
+
+  // Standard IELTS question cards: explanation sits directly under the options.
+  if(card.classList.contains('card')){
+    card.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+    return;
+  }
+
+  // Completion tasks: place review under the sentence/step/note containing the blank.
+  const host=card.closest('.flow-step,li,.completion-text') || card.parentElement;
+  if(!host)return;
+
+  // Several blanks may live in the same summary paragraph; keep each explanation labelled by Q number.
+  host.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+}
+
+function lockSubmittedAnswers(){
+  if(!submitted)return;
+  document.querySelectorAll('#questionsCopy input,#questionsCopy select').forEach(e=>e.disabled=true);
+}
+
+function focusEvidence(n){
+  const q=questions.find(x=>x.n===n);
+  const r=answerReview[n];
+  if(!q||!r)return;
+
+  const reveal=()=>{
+    const copy=document.getElementById('passageCopy');
+    const ps=copy?[...copy.querySelectorAll('p')]:[];
+    const target=ps[r.para-1];
+    if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:'center'});
+    target.classList.add('evidence-pulse');
+    setTimeout(()=>target.classList.remove('evidence-pulse'),3200);
+  };
+
+  if(q.p!==current){
+    showPassage(q.p);
+    setTimeout(reveal,150);
+  }else{
+    reveal();
+  }
+}
+
+function multiReviewHTML(sel,hits){
+  if(hits===3)return '';
+  const r=answerReview[11];
+  return `<div class="inline-review integrated" data-inline-review="1113">
+    <div class="inline-review-title"><span class="inline-review-badge">Q11–13</span><span>Giải thích nhóm câu trả lời sai</span></div>
+    <div class="inline-review-row"><div class="inline-review-label">Bạn chọn</div><div class="inline-review-student">${esc(sel.length?sel.join(', '):'Không trả lời')}</div></div>
+    <div class="inline-review-row"><div class="inline-review-label">Đáp án đúng</div><div class="inline-review-correct">C, D, E</div></div>
+    <div class="inline-review-row"><div class="inline-review-label">Điểm nhóm</div><div>${hits} / 3</div></div>
+    <div class="inline-review-explain"><b>Vì sao?</b> C: metals can be magnetised; D: stars are not equidistant from Earth; E: Gilbert believed Earth wobbles.</div>
+    <div class="inline-review-evidence"><div class="inline-review-evidence-label">Evidence · Passage 1</div><div class="inline-review-quote">“metals can be magnetised” · “stars are not equidistant from the earth” · “the sun and other stars wobble just like the earth does”</div></div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(11)">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+function markMultiGroup(){
+  const sel=getMulti(),key=['C','D','E'],hits=sel.filter(x=>key.includes(x)).length,perfect=hits===3&&sel.length===3;
+  document.querySelectorAll('[data-group="g1113"]').forEach(l=>{
+    l.classList.remove('correct','wrong');
+    if(key.includes(l.dataset.val))l.classList.add('correct');
+    else if(sel.includes(l.dataset.val))l.classList.add('wrong');
+  });
+  const fb=document.getElementById('fb1113');
+  if(fb){
+    fb.className='multi-score-note '+(perfect?'good':'bad');
+    fb.textContent=perfect?'✓ Correct — 3 / 3':`Correct answers: C, D, E · Score: ${hits} / 3`;
+  }
+  ['nav11','nav12','nav13'].forEach(id=>{
+    const e=document.getElementById(id);
+    if(!e)return;
+    e.classList.remove('answered','correct','wrong','partial');
+    e.classList.add(perfect?'correct':hits>0?'partial':'wrong');
+  });
+  document.querySelector('[data-inline-review="1113"]')?.remove();
+  const host=document.getElementById('multiReview1113');
+  if(host&&!perfect)host.innerHTML=multiReviewHTML(sel,hits);
+  document.querySelectorAll('input[name="g1113"]').forEach(e=>e.disabled=true);
+}
+function markPassage(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const u=ssGet('q'+q.n)||'';
+    const ok=correct(q,u);
+    const fb=document.getElementById('fb'+q.n);
+
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e){e.classList.remove('correct','wrong');e.classList.add(ok?'correct':'wrong');}
+    }else{
+      document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{
+        l.classList.remove('correct','wrong');
+        if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');
+        else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong');
+      });
+    }
+
+    if(fb){
+      const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+      fb.className='feedback '+(ok?'good':'bad');
+      fb.textContent=ok?'✓ Correct':'Correct answer: '+key;
+    }
+    if(submitted)renderInlineReview(q,u,ok);
+  }
+  if(p===1&&submitted)markMultiGroup();
+  lockSubmittedAnswers();
+}
+function displayAnswer(q,user){
+  if(!String(user).trim())return 'Không trả lời';
+  if(q.type==='select'||q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(user));
+    return found||user;
+  }
+  return user;
+}
+function displayKey(q){
+  const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+  if(q.type==='select'||q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(key));
+    return found||key;
+  }
+  return key;
+}
+function renderWrongReview(total){
+  const box=document.getElementById('wrongReview');
+  const wrong=40-total;
+  if(!wrong){
+    box.innerHTML='<h3 class="review-title">Review đáp án</h3><div class="perfect-review">🎉 Không có câu sai. Bạn đã trả lời đúng cả 40 câu!</div>';
+    return;
+  }
+  box.innerHTML=`<h3 class="review-title">${wrong} điểm cần xem lại</h3>
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu/nhóm câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
+}
+function gotoEvidence(n){
+  document.getElementById('overlay').classList.add('hidden');
+  focusEvidence(n);
+}
+async function submitExam(auto=false){
+  if(submitted)return;
+  saveCurrentMarkups();
+
+  const normalMissing=questions.filter(q=>q.type!=='multi'&&!(ssGet('q'+q.n)||'').trim()).length;
+  const multiMissing=Math.max(0,3-getMulti().length);
+  const unanswered=normalMissing+multiMissing;
+  if(!auto&&unanswered&&!confirm(`Bạn còn ${unanswered} câu/ô đáp án chưa hoàn thành. Vẫn nộp bài?`))return;
+
+  submitted=true;
+  clearInterval(timerHandle);
+
+  let total=0,scores=[0,0,0,0],details=[];
+
+  for(const q of questions.filter(q=>q.type!=='multi')){
+    const u=ssGet('q'+q.n)||'',ok=correct(q,u);
+    if(ok){total++;scores[q.p]++;}
+    details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});
+    const ne=document.getElementById('nav'+q.n);
+    if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong');}
+  }
+
+  const sel=getMulti(),multiKey=['C','D','E'];
+  const hits=sel.filter(x=>multiKey.includes(x)).length;
+  total+=hits;
+  scores[1]+=hits;
+  details.push({q:'11-13',answer:sel.join(', '),correct:hits===3,key:'C, D, E',score:hits});
+
+  markPassage(current);
+  saveZoneMarkup('questions');
+
+  const name=document.getElementById('studentName').value.trim();
+  const cls=document.getElementById('studentClass').value.trim();
+  const dur=Math.round((Date.now()-startedAt)/1000);
+
+  document.getElementById('rstudent').textContent=`${name} — ${cls}`;
+  document.getElementById('rscore').textContent=`${total} / 40`;
+  document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;
+  document.getElementById('p1s').textContent=`${scores[1]} / 13`;
+  document.getElementById('p2s').textContent=`${scores[2]} / 13`;
+  document.getElementById('p3s').textContent=`${scores[3]} / 14`;
+  renderWrongReview(total);
+
+  document.getElementById('overlay').classList.remove('hidden');
+  document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';
+
+  const p=new URLSearchParams({
+    name,
+    className:cls,
+    total:String(total),
+    maxScore:'40',
+    durationSeconds:String(dur),
+    activity:'IELTS Reading - Gilbert / Multitasking / Music',
+    reading:String(scores[1]),
+    grammar:String(scores[2]),
+    ing:String(scores[3]),
+    writingA:JSON.stringify(details),
+    submittedAt:new Date().toISOString()
+  });
+
+  try{
+    await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});
+    document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.';
+  }catch(e){
+    document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng.';
+  }
+}
+
+function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current);saveZoneMarkup('questions')}
+</script></body></html>
