@@ -1,0 +1,944 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>IELTS Reading - Optimism / New Zealand Health IT / Game Theory</title><style>
+:root{--navy:#17344f;--navy2:#0d263b;--blue:#2e6f9f;--paper:#f4f4f2;--line:#d6dade;--text:#20262b;--muted:#64717b;--accent:#e9784e;--good:#2e7d5b;--bad:#b5442e}*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff}.hidden{display:none!important}button,input,select{font:inherit}.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700}.start-card h1{margin:8px 0 6px;color:var(--navy)}.start-card p{margin:0 0 22px;color:var(--muted)}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}.btn{border:0;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer}.exam{height:100vh;display:grid;grid-template-rows:auto auto 1fr auto}.top{background:var(--navy2);color:#fff;padding:11px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}.timer{font-family:ui-monospace,monospace;font-weight:700;background:rgba(255,255,255,.1);padding:8px 11px;border-radius:6px}.timer.danger{background:#912f25}.tabs{display:flex;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);background:#fafafa}.tab{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 13px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.workspace{display:grid;grid-template-columns:1fr 1fr;min-height:0}.passage,.questions{overflow:auto;padding:24px 26px}.passage{border-right:1px solid var(--line)}.questions{background:#fafafa}.passage-sub{font-style:italic;color:var(--muted);text-align:center;margin:-8px 0 18px}.passage h2{font-size:1.35rem;color:var(--navy);margin:0 0 18px;text-align:center}.copy{font-size:15px;line-height:1.72}.copy p{margin:0 0 16px;text-align:justify;text-align-last:left;line-height:1.78;hyphens:auto}
+.multi-card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}
+.multi-score-note{font-size:.86rem;color:var(--muted);margin-top:10px}
+.multi-score-note.good{color:var(--good);font-weight:700}
+.multi-score-note.bad{color:var(--bad);font-weight:700}
+.nq.partial{background:#fff1cc!important;color:#785700!important;border-color:#e2c66d!important}
+
+.group{margin-bottom:26px}.group h3{color:var(--navy);margin:0 0 5px}.inst{font-size:.92rem;color:var(--muted);margin-bottom:12px}.bank{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;background:#eef3f6;border:1px solid var(--line);padding:12px;border-radius:8px;margin:10px 0;font-size:.92rem}.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0}.qhead{display:flex;gap:10px;align-items:flex-start}.qnum{min-width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.qtext{flex:1}.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer}.option.correct{border-color:var(--good);background:rgba(46,125,91,.08)}.option.wrong{border-color:var(--bad);background:rgba(181,68,46,.08)}.ans{width:100%;margin-top:9px;padding:10px;border:1px solid var(--line);border-radius:7px}.ans.correct{border-color:var(--good);background:rgba(46,125,91,.06)}.ans.wrong{border-color:var(--bad);background:rgba(181,68,46,.06)}.feedback{font-size:.88rem;margin-top:6px}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}.bottom{border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:10px;align-items:center}.nav{display:flex;gap:4px;overflow-x:auto;flex:1}.nq{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:12px;font-weight:700}.nq.answered{background:#dcebf5}.nq.correct{background:#dcefe5;border-color:var(--good)}.nq.wrong{background:#f3ddd8;border-color:var(--bad)}.submit{background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:7px;font-weight:700;white-space:nowrap;cursor:pointer}.overlay{position:fixed;inset:0;background:rgba(8,20,30,.7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.result{background:#fff;width:min(620px,100%);border-radius:14px;padding:28px}.score{font-size:2.5rem;font-weight:800;color:var(--navy);margin:8px 0}.break{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.break div{background:#f2f5f7;padding:12px;border-radius:8px;text-align:center}
+
+.result{max-height:90vh;overflow:auto}
+.review-wrap{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.review-title{font-size:1.08rem;color:var(--navy);margin:0 0 6px}
+.review-sub{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.wrong-review{border:1px solid #e2c8c2;background:#fffaf8;border-radius:9px;padding:14px 15px;margin:11px 0}
+.wrong-review .review-q{font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.45}
+.answer-row{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;font-size:.92rem;margin:4px 0}
+.answer-label{color:var(--muted);font-weight:700}
+.student-wrong{color:var(--bad);font-weight:700}
+.correct-answer{color:var(--good);font-weight:700}
+.explain-box{margin-top:10px;padding:10px 11px;background:#fff;border-left:3px solid var(--blue);border-radius:4px;font-size:.92rem;line-height:1.5}
+.evidence-box{margin-top:9px;padding:10px 11px;background:#f3f7fa;border:1px solid #d7e2ea;border-radius:7px;font-size:.9rem;line-height:1.5}
+.evidence-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);font-weight:700;margin-bottom:4px}
+.evidence-quote{font-style:italic}
+.goto-evidence{margin-top:9px;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:6px;padding:7px 10px;font-size:.84rem;font-weight:700;cursor:pointer}
+.goto-evidence:hover{background:#f4f7f9}
+.evidence-pulse{outline:3px solid rgba(233,120,78,.45);background:#fff8e8;border-radius:5px;transition:background .2s}
+.perfect-review{padding:14px;border-radius:8px;background:#edf7f1;color:#245c43;font-weight:700}
+
+
+.completion-box{background:#fff;border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin-top:12px;line-height:1.8}
+.completion-box h4{margin:0 0 12px;color:var(--navy);font-size:1.05rem}
+.completion-text{font-size:15px;line-height:2.05;margin:0}
+.inline-blank{display:inline-flex;align-items:center;gap:5px;margin:2px 4px;vertical-align:middle;scroll-margin:100px}
+.blank-num{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700}
+.inline-answer{width:auto!important;min-width:145px;max-width:245px;margin:0!important;padding:7px 9px!important;display:inline-block;vertical-align:middle;background:#fff}
+.inline-answer.short{min-width:115px;max-width:180px}
+.inline-answer.select-wide{min-width:190px;max-width:270px}
+.flowchart{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin-top:10px}
+.flow-step{background:#fbfcfc;border:1px solid var(--line);border-radius:8px;padding:12px 14px;line-height:1.75}
+.flow-arrow{text-align:center;color:var(--blue);font-size:20px;font-weight:700;line-height:1}
+.notes-list{margin:8px 0 0;padding-left:20px}
+.notes-list li{margin:9px 0;line-height:1.8}
+.completion-box .bank{margin-top:14px;margin-bottom:16px}
+.inline-answer.correct{border-color:var(--good)!important;background:rgba(46,125,91,.06)!important}
+.inline-answer.wrong{border-color:var(--bad)!important;background:rgba(181,68,46,.06)!important}
+@media(max-width:600px){
+  .inline-answer,.inline-answer.select-wide{min-width:130px;max-width:100%;font-size:16px}
+  .completion-box{padding:15px}
+}
+
+
+.questions-pane 
+/* ===== INLINE REVIEW AFTER SUBMISSION ===== */
+.inline-review{
+  margin:12px 0 4px;
+  padding:13px 14px;
+  border:1px solid #e3c8c1;
+  border-left:4px solid var(--bad);
+  border-radius:8px;
+  background:#fffaf8;
+  color:var(--text);
+  line-height:1.5;
+  font-size:.92rem;
+}
+.inline-review.integrated{
+  width:100%;
+  margin-top:10px;
+}
+.inline-review-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  color:var(--navy);
+  font-weight:800;
+}
+.inline-review-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:27px;
+  height:27px;
+  padding:0 7px;
+  border-radius:999px;
+  background:var(--bad);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.inline-review-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:5px 9px;
+  margin:4px 0;
+}
+.inline-review-label{
+  color:var(--muted);
+  font-weight:700;
+}
+.inline-review-student{
+  color:var(--bad);
+  font-weight:700;
+}
+.inline-review-correct{
+  color:var(--good);
+  font-weight:800;
+}
+.inline-review-explain{
+  margin-top:9px;
+  padding:9px 10px;
+  background:#fff;
+  border-left:3px solid var(--blue);
+  border-radius:4px;
+}
+.inline-review-evidence{
+  margin-top:8px;
+  padding:9px 10px;
+  background:#f2f7fa;
+  border:1px solid #d7e3ea;
+  border-radius:7px;
+}
+.inline-review-evidence-label{
+  margin-bottom:4px;
+  color:var(--blue);
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.inline-review-quote{
+  font-style:italic;
+}
+.inline-review-btn{
+  margin-top:9px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--navy);
+  border-radius:6px;
+  padding:7px 10px;
+  font-size:.84rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.inline-review-btn:hover{background:#f4f7f9}
+.review-mode-note{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:7px;
+  background:#eef5f9;
+  color:var(--navy);
+  font-size:.9rem;
+  font-weight:700;
+}
+#questionsCopy input:disabled,
+#questionsCopy select:disabled{
+  opacity:1;
+  color:inherit;
+  cursor:not-allowed;
+}
+
+
+.match-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.match-row .match-label{flex:1;min-width:240px;line-height:1.5}
+.match-row .inline-review{flex-basis:100%}
+.footnote{font-size:.88rem!important;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+
+
+.given-heading{
+  margin:0 auto 16px;
+  width:max-content;
+  max-width:100%;
+  padding:7px 11px;
+  border-radius:7px;
+  background:#eef3f6;
+  color:var(--navy);
+  text-align:center;
+  font-size:.9rem;
+}
+.match-row{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.match-row .match-label{flex:1;min-width:220px;line-height:1.5}
+.match-row .inline-review{flex-basis:100%}
+
+.annotation-bar{background:#fbfbfa}
+.annotation-zone-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-right:2px}
+
+.annotation-bar{position:sticky;top:-24px;z-index:8;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);margin:-24px -26px 18px;padding:10px 14px}
+.annotation-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}
+.annotation-btn:hover{background:#f4f7f9}
+.annotation-tip{font-size:12px;color:var(--muted);margin-left:auto}
+mark.user-highlight{background:#fff29a;color:inherit;padding:1px 0;border-radius:2px}
+.note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer;border-radius:2px}
+.notes-panel{display:none;background:#f6f9fb;border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin-bottom:16px}
+.notes-panel.open{display:block}
+.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:10px 11px;margin:8px 0}
+.note-quote{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:5px}
+.note-text{font-size:14px;margin-bottom:7px}
+.note-actions{display:flex;gap:6px}
+.note-actions button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer}
+.timer.warning{background:#8b651d}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.passage,.questions{height:48vh}.passage{border-right:0;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<div id="start" class="start"><div class="start-card"><div class="eyebrow">IELTS Reading Practice</div><h1>Computer-Based Reading Test</h1><p>3 passages · 40 questions · 60 minutes</p><div class="field"><label>Họ và tên học sinh</label><input id="studentName" placeholder="Ví dụ: Nguyễn Văn An"></div><div class="field"><label>Lớp</label><input id="studentClass" placeholder="Ví dụ: 8A1"></div><button class="btn" onclick="startExam()">Bắt đầu làm bài</button><div id="startError" style="color:var(--bad);margin-top:10px"></div></div></div>
+<div id="exam" class="exam hidden"><div class="top"><div>Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div><div id="timer" class="timer">60:00</div></div><div class="tabs"><button class="tab active" data-p="1" onclick="showPassage(1)">Passage 1</button><button class="tab" data-p="2" onclick="showPassage(2)">Passage 2</button><button class="tab" data-p="3" onclick="showPassage(3)">Passage 3</button></div><div class="workspace"><div id="passage" class="passage"></div><div id="questions" class="questions"></div></div><div class="bottom"><div id="nav" class="nav"></div><button class="submit" onclick="submitExam(false)">Nộp bài</button></div></div>
+<div id="overlay" class="overlay hidden"><div class="result"><div class="eyebrow">Kết quả</div><div id="rstudent"></div><div id="rscore" class="score">0 / 40</div><div id="rpercent"></div><div class="break"><div><b>Passage 1</b><br><span id="p1s"></span></div><div><b>Passage 2</b><br><span id="p2s"></span></div><div><b>Passage 3</b><br><span id="p3s"></span></div></div><div id="status" style="color:var(--muted);font-size:.92rem"></div><div id="wrongReview" class="review-wrap"></div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn" onclick="closeResult()">Xem lại toàn bài</button><button class="btn" style="background:#587087" onclick="location.reload()">Làm lại từ đầu</button></div></div></div>
+<script>const GOOGLE_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const passages={"1": {"title": "Candles", "subtitle": "", "text": "<p>One of the earliest forms of portable illumination, candles have served vital functions for humankind throughout history, a fact chronicled through the use of candles or candle-like objects in virtually every society. Historians believe the original candle may have been invented by early humans who dipped dried branches from trees into animal fat, thus producing a slow-burning and reliable source of light. Ancient Egyptian artworks depict the use of candles by writers and philosophers who worked long after sundown. These early candles were most likely developed from tapers that were made of fibrous materials mixed with wax or with tallow, the white, nearly tasteless fat of cattle or sheep also used to make soap.</p><p>A major improvement in candle making materials came in the Middle Ages, when beeswax was preferred over animal or vegetable fats candles were introduced to Europe. Beeswax was preferred over animal or vegetable fats because it smelled pleasant and did not produce as much mess as other fats. During this time, candles were primarily used as a source of illumination. However, this was not their only purpose. In the 15th century, for example, candles were used as a means of keeping time. At auctions, the bidding time was limited by inserting a pin into a candle and letting the wax melt until the pin dropped, thus concluding the period in which a bid could be made.</p><p>The growth of the whaling industry in the late 18th century brought another major change in candle making materials, as spermaceti wax, which was extracted from the oil of the sperm whale, became more widely available. Spermaceti wax was popular because it provided a significantly brighter light and burned evenly. Ozokerite, a colorless mineral hydrocarbon wax, was also popular in the 17th and 18th centuries, particularly in warmer weather, when its relatively high melting point meant it remained firm. Paraffin, a wax crystallized from petroleum, became popular during the 1860s. It was eventually blended with spermaceti and ceresin — a byproduct of refined petroleum oil. This created a more durable wax, and, thanks to the fact that it resulted in inexpensive candles of reasonably high quality; its use was widespread by the end of the 19th century.</p><p>The candle wick, the length of soft material which runs through the middle of the candle, was made from a variety of natural fibers. In 1824, Frenchman Jean-Jacques Cambaceres introduced an important refinement to wick technology with the plaited wick, which consisted of several strands of material woven together. This burned more evenly than unplaited wicks. Although candle making materials have changed through the years, the art of candle making has remained surprisingly similar to the original production process.</p><p>Originally, candles were produced by hand using an approach known as the dipping method. Dating back to the Middle Ages, the method involved the use of wicks made from rushes. These were repeatedly dipped into molten fat until the desired thickness of fat had stuck to them. In the pouring method, which was introduced later, melted beeswax was poured over a suspended cotton wick while the wick was manually twirled. After a sufficient amount of wax had gathered at the bottom of the wick, the candle was reversed and wax was poured from the other end.</p><p>It was not until the 1830s that the large-scale manufacture of candles became a reality when British manufacturer Joseph Morgan introduced the first mass-production candle making machine. Today’s modern machines are strikingly similar to Morgan’s original machine, with speed and the quality of the finished product being the only major differences.</p><p>In today’s manufacturing process, different substances are often mixed together to create stronger candles with higher melting points. In the United States, for example, standard commercial candles are made of paraffin, stearic acid and beeswax. Some candles also contain small amounts of candelilla, which comes from the stem of the candelilla shrub, or carnauba wax, which is from the leaves of the carnauba palm.</p><p>In the many decorative candles that are made, waxes other than beeswax and paraffin are used. One example is bayberry wax, which is derived from the fruit of the bayberry bush and has a distinctive aroma. In decorative candles, non-burning wax is used to make the casing, which is not intended to melt.</p><p>Today’s wicks are made of a high grade of cotton or linen. The material is woven (or plaited) so that it will burn in one direction and will curl so that its end remains in the candle flame’s oxidizing zone for even and intense burning. Often, these wicks have a center made of wire that allows them to burn slightly hotter than cotton and remain erect in the melted wax.</p>"}, "2": {"title": "Introduction to a book about the assessment of carbon footprints", "subtitle": "", "text": "<p><b>A</b> As this book is about ways of measuring the carbon footprint of particular things, I should start by making it clear what I mean. I am using the word ‘carbon’ as shorthand for all the different global-warming greenhouse gases, and I am using the word ‘footprint’ as a metaphor for the total impact that something has. So I am using the phrase ‘carbon footprint’ as shorthand to mean the full climate-change impact of something. That something could be anything – an activity, an item, a lifestyle, a company, a country, or even the whole world.</p><p><b>B</b> Measuring carbon footprints is a long way from being an exact process, whatever anyone tells you, or whatever numbers you might see written on the side of products in some shops. All my numbers are best estimates and nothing more, even though I have reached them as carefully as I can.</p><p><b>C</b> I have used a variety of different methods, and so I have drawn on a range of data sets and models taken from publicly available reports of life-cycle studies. I have also used studies carried out for businesses across different industries by my own company, Small World Consulting, using models that we are developing all the time. Often I have arrived at numbers by a couple of different routes, to check that the results agree with each other. Occasionally, it has been more a case of putting my finger in the air and guessing, but when that has been the case I have tried to make it clear.</p><p><b>D</b> The publicly available data sets I have used were arrived at by two main methods. The first of these, process-based life-cycle analysis, is the most common approach to carbon footprint calculations. It is often referred to as ‘bottom-up’ because you start off identifying, one by one, all the processes that have had to happen in order for, say, a product to be created. Then you add up the emissions from each process, and that is the footprint of the product. It may sound simple, but it is not at all. It is back-breaking work, and since the number of processes you really need to include is always infinite, the job is never quite complete, so you end up with an underestimate. In fact, the omissions from the calculation are often shocking: they can be fifty per cent or more. To make matters worse, these problems are commonly overlooked, even in the development of government-backed and government-funded guidelines, such as the UK’s PAS 2050 standard. But for all the problems, process-based life-cycle analysis is still an essential source of detailed information that can’t be gathered any other way.</p><p><b>E</b> The other method is environmental input-output analysis. This is a neat alternative to process-based life-cycle analysis. It is not as popular, perhaps because it is a bit less easy to understand, but it is at least as robust as anything else in the dim world of measuring carbon footprints. It is sometimes called a ‘top-down’ approach because it begins by looking at the whole economy. It uses macroeconomic modelling to understand the way in which the activities of one industry trigger activities and emissions in every other industry. Input-output analysis’ key ‘trick’ is a piece of ingenious maths (for which a man called Wassily Leontief got a Nobel Prize) that succeeds in capturing the endless ripple effects in a way that is one hundred per cent complete. It has the further advantage that if you know how much something costs, you can get an instant crude estimate of its carbon footprint. It is like a magic trick. And just like all the best magic it is also a bit too good to be true – in many cases the results can be ridiculously general and of little value.</p><p><b>F</b> Input-output analysis is nevertheless a method of choice both because it does not miss things, and because once a specific model has been built it is often easy to use. The basic technique is well established. The specific model I have used is one that was developed at Small World Consulting in collaboration with Lancaster University in the UK, and draws mainly on data obtained from government sources. It was based on a 2007 picture of the UK economy. It deals with all the greenhouse gases, and employs a weighting factor for gases emitted at a high altitude, which have a greater impact than ground-level emissions. A key weakness, which I sometimes adjust for, is that it treats imported products as though they had the same carbon intensity as products from within the UK, whereas in reality imports are usually more carbon intensive.</p><p><b>G</b> Most of the time I have used a combination of life-cycle analysis and input-output analysis to get my numbers. At its best, life-cycle analysis can be more precise, but input-output analysis is often able to get at information that life-cycle analysis is unable to reach. Putting the two methods together is sometimes called a hybrid approach, and the result is a bit like looking through both a microscope and a telescope at the same time. They each show you different things, and between them, if the lenses are clean, you end up with a passable understanding of whatever it is you are looking at. life-cycle: the stages of a product’s life from beginning to end (i.e. from raw material extraction through materials processing, manufacture, distribution, use, repair and maintenance, and disposal or recycling)</p><p class=\"footnote\"><i>* life-cycle: the stages of a product’s life from beginning to end (from raw material extraction through processing, manufacture, distribution, use, repair and maintenance, and disposal or recycling)</i></p>"}, "3": {"title": "The Science of Shopping", "subtitle": "", "text": "<p>You may have wondered why so many supermarkets are virtually indistinguishable from each other. It is not, as some might suspect, that the companies operating them lack imagination. It is more that they are all well-versed in the science of persuading people to buy things – a science that, thanks to technological advances, is beginning to understand what motivates consumers when they make decisions on what to purchase.</p><p>It takes a while for the mind to get into a shopping mode. People need to make a gentle start and take stock of the surroundings. This is why some supermarkets have a so-called ‘chill zone’ for browsing magazines, books and DVDs, an area which is also designed to catch the customer’s eye and tempt them to make impulsive purchases. But many will ignore it, in which case the first thing they encounter is the fresh fruit and vegetables section. For shoppers, this makes no sense. Fruit in particular can be easily bruised, so ideally should be bought at the end, not the beginning, of a shopping trip. But psychology is at work here: selecting wholesome fresh food is an uplifting way to start shopping, and it makes people feel less guilty about reaching for the less nutritious stuff later on.</p><p>Shoppers have worked out that everyday items, like milk, will invariably be placed in an aisle towards the back of a store to provide more opportunity to tempt customers on their way there. This is also why pharmacies are generally at the rear, even in ‘convenience’ stores. But supermarkets know shoppers know this, so they use other tricks, like placing popular items halfway along a section, thereby forcing people to walk along the aisle looking for them. The idea is to boost the length of time shoppers spend in a store.</p><p>Having walked to the end of the fruit and vegetable aisle, shoppers arrive at counters of prepared food, the fishmonger and the butcher. Then there is the in-store bakery, which can be smelt before being seen. Even small supermarkets now use in-store bakeries. Mostly these bake pre-prepared items, and they have boomed, although central bakeries that deliver to many stores are more efficient. The smell of freshly baked bread can make people hungry, encouraging them to buy not just bread but other food.</p><p>There are also numerous ways stores get shoppers to choose particular products. For example, stores encourage customers to buy expensive branded products by arranging them at eye-level, with cheaper ones lower down. Often head offices specify where everything has to be placed and spot-checks are carried out to make sure instructions are followed to the letter. But shelf-positioning is extremely controversial. Despite all the academic papers written on how best to stack shelves, retailers have their own views. While many stores consider eye-level to be the top spot, others think a little higher is better.</p><p>Technology is making the process of monitoring shopper behaviour easier, which is why the security cameras in stores may be doing considerably more than watching out for theft. Pictures showing shoppers while they are making their selections can now be analysed. It is possible to see how many shoppers went straight to one brand, the number that hesitated, and those that compared several brands. However, despite the availability of sophisticated technology, researchers have found that simply talking to consumers as they exit the store can yield valuable insights. This low-tech approach has become widespread following comments from stores that data collected electronically tells them little about why so many customers leave without making a purchase. Face-to-face interviews reveal that customers leave shops empty-handed more often because they are ‘unable to decide’ than because prices are too high.</p><p>People tell market researchers that they make decisions about what to buy based on logic and common sense, considering issues such as price, quality or convenience. But there are clearly other factors which play a role, such as certain feelings and memories which individuals are not fully aware of. Researchers hired by big stores are now conducting studies using functional magnetic resonance imaging (fMRI), which detects changes in the brain corresponding to increases or decreases in mental activity. Research participants are shown different products and asked questions about them, while scanners reveal their brain activity as they respond. Often, major contradictions are apparent between what they say and what they are thinking. This is immensely valuable information. Eight out of ten new consumer products launched on the market do not succeed, despite having been tested on people who insist they would buy them but who, deep down, may have reservations about the desirability of these products.</p><p>This ‘shopping science’ probably has its limits, however. Dr Eric Spangenberg of the University of Washington argues that while it’s unlikely that someone could be persuaded to buy something they don’t need, they might be convinced to choose one brand in preference to another without being aware that this is happening. This claim is also borne out by numerous research findings. But if consumers were to realise quite how much research is being done into the many psychological factors influencing their choices, they might be much more wary of making purchases in the future.</p>"}};
+const questions=[{"n": 1, "p": 1, "type": "choice", "text": "Artwork from ancient Egypt indicates that the use of candles was limited to royalty.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 2, "p": 1, "type": "choice", "text": "Tallow was produced exclusively for candle making.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 3, "p": 1, "type": "choice", "text": "In the Middle Ages, candles made from beeswax were more popular than those made from other substances.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "TRUE"}, {"n": 4, "p": 1, "type": "choice", "text": "Keeping time at auctions in the 15th century involved marking lines on the surface of a candle.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "FALSE"}, {"n": 5, "p": 1, "type": "choice", "text": "The candles used at auctions had to be of good quality.", "opts": ["TRUE", "FALSE", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 6, "p": 1, "type": "text", "ans": ["mess"]}, {"n": 7, "p": 1, "type": "text", "ans": ["light"]}, {"n": 8, "p": 1, "type": "text", "ans": ["weather"]}, {"n": 9, "p": 1, "type": "text", "ans": ["cotton"]}, {"n": 10, "p": 1, "type": "text", "ans": ["shrub"]}, {"n": 11, "p": 1, "type": "text", "ans": ["fruit"]}, {"n": 12, "p": 1, "type": "text", "ans": ["casing"]}, {"n": 13, "p": 1, "type": "text", "ans": ["wire"]}, {"n": 14, "p": 2, "type": "select", "text": "reference to an award-winning formula", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "E"}, {"n": 15, "p": 2, "type": "select", "text": "an acknowledgement of the general shortcomings of carbon footprint calculations", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "B"}, {"n": 16, "p": 2, "type": "select", "text": "mention of a working partnership", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "F"}, {"n": 17, "p": 2, "type": "select", "text": "reference to the demanding nature of one way of calculating carbon footprints", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "D"}, {"n": 18, "p": 2, "type": "select", "text": "the advantage of combining two different methods", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "G"}, {"n": 19, "p": 2, "type": "select", "text": "a comparison between goods from home and abroad", "opts": ["A — Paragraph A", "B — Paragraph B", "C — Paragraph C", "D — Paragraph D", "E — Paragraph E", "F — Paragraph F", "G — Paragraph G"], "ans": "F"}, {"n": 20, "p": 2, "type": "multi", "group": "g2021", "ans": ["A", "C"]}, {"n": 21, "p": 2, "type": "multi", "group": "g2021", "ans": ["A", "C"]}, {"n": 22, "p": 2, "type": "multi", "group": "g2223", "ans": ["C", "E"]}, {"n": 23, "p": 2, "type": "multi", "group": "g2223", "ans": ["C", "E"]}, {"n": 24, "p": 2, "type": "text", "ans": ["government"]}, {"n": 25, "p": 2, "type": "text", "ans": ["weakness"]}, {"n": 26, "p": 2, "type": "text", "ans": ["products"]}, {"n": 27, "p": 3, "type": "choice", "text": "What does the writer suggest about supermarkets in the first paragraph?", "opts": ["A — They need to try harder to be different from one another.", "B — They share a similar understanding of consumer psychology.", "C — They depend too much on the latest technology.", "D — They should do more to analyse how consumers think."], "ans": "B"}, {"n": 28, "p": 3, "type": "choice", "text": "The writer says the function of the ‘chill zone’ in supermarkets is", "opts": ["1 — to give customers time to decide what they want to buy.", "2 — to present customers with a range of interesting bargains.", "3 — to ensure customers feel under no pressure to buy anything.", "4 — to help customers slowly prepare themselves to go shopping."], "ans": "4"}, {"n": 29, "p": 3, "type": "choice", "text": "According to the writer, placing fruit and vegetables near the front of the store", "opts": ["A — ensures the customers will feel good about the first products they buy.", "B — reduces the risk of customers damaging these products later on.", "C — encourages customers to buy more of these products than they intended.", "D — makes customers consider healthier options in other sections they visit."], "ans": "A"}, {"n": 30, "p": 3, "type": "choice", "text": "What point does the writer make about shoppers in the third paragraph?", "opts": ["A — They spend more time in stores than they realise.", "B — They believe stores make life unnecessarily difficult for them.", "C — They are aware of some of the techniques used by stores.", "D — They are confused by frequent changes in the layout of stores."], "ans": "C"}, {"n": 31, "p": 3, "type": "choice", "text": "Cheaper products are placed on lower shelves to minimise the likelihood that they will be bought.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "YES"}, {"n": 32, "p": 3, "type": "choice", "text": "Head offices should be more flexible about how products are arranged by supermarkets.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 33, "p": 3, "type": "choice", "text": "There is widespread agreement on how products should be arranged on shelves.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NO"}, {"n": 34, "p": 3, "type": "choice", "text": "Security cameras are a serious threat to customers’ privacy.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NOT GIVEN"}, {"n": 35, "p": 3, "type": "choice", "text": "Technology is the best tool for determining why shoppers fail to make purchases.", "opts": ["YES", "NO", "NOT GIVEN"], "ans": "NO"}, {"n": 36, "p": 3, "type": "select", "text": "Most shoppers believe that their choices are the result of ...", "opts": ["A — brain scans", "B — purpose", "C — unconscious factors", "D — questionnaire", "E — failures", "F — procedure", "G — rational decisions", "H — emotional reaction", "I — achievements"], "ans": "G"}, {"n": 37, "p": 3, "type": "select", "text": "Research involving fMRI scanners has revealed that certain ... influence shoppers’ decisions significantly.", "opts": ["A — brain scans", "B — purpose", "C — unconscious factors", "D — questionnaire", "E — failures", "F — procedure", "G — rational decisions", "H — emotional reaction", "I — achievements"], "ans": "C"}, {"n": 38, "p": 3, "type": "select", "text": "Participants’ stated opinions were compared with data from ...", "opts": ["A — brain scans", "B — purpose", "C — unconscious factors", "D — questionnaire", "E — failures", "F — procedure", "G — rational decisions", "H — emotional reaction", "I — achievements"], "ans": "A"}, {"n": 39, "p": 3, "type": "select", "text": "The brain data often indicated a radically different ...", "opts": ["A — brain scans", "B — purpose", "C — unconscious factors", "D — questionnaire", "E — failures", "F — procedure", "G — rational decisions", "H — emotional reaction", "I — achievements"], "ans": "H"}, {"n": 40, "p": 3, "type": "select", "text": "As most new products are ..., this information could be valuable for marketing departments.", "opts": ["A — brain scans", "B — purpose", "C — unconscious factors", "D — questionnaire", "E — failures", "F — procedure", "G — rational decisions", "H — emotional reaction", "I — achievements"], "ans": "E"}];
+const answerReview={"1": {"para": 1, "explain": "FALSE: Egyptian art shows candles being used by writers and philosophers, not only royalty.", "evidence": "Ancient Egyptian artworks depict the use of candles by writers and philosophers"}, "2": {"para": 1, "explain": "FALSE: tallow was also used to make soap.", "evidence": "tallow ... also used to make soap"}, "3": {"para": 2, "explain": "TRUE: beeswax was preferred to animal or vegetable fats because it smelled better and created less mess.", "evidence": "Beeswax was preferred over animal or vegetable fats"}, "4": {"para": 2, "explain": "FALSE: auction time was controlled by inserting a pin into a candle and waiting for it to fall.", "evidence": "inserting a pin into a candle and letting the wax melt until the pin dropped"}, "5": {"para": 2, "explain": "NOT GIVEN: the passage explains how candles were used at auctions but says nothing about the required quality of those candles.", "evidence": "the bidding time was limited by inserting a pin into a candle"}, "6": {"para": 2, "explain": "The answer is mess: beeswax produced less mess than animal or vegetable fats.", "evidence": "did not produce as much mess as other fats"}, "7": {"para": 3, "explain": "The answer is light: spermaceti wax provided a significantly brighter light.", "evidence": "provided a significantly brighter light"}, "8": {"para": 3, "explain": "The answer is weather: ozokerite stayed firm in warmer weather.", "evidence": "particularly in warmer weather"}, "9": {"para": 5, "explain": "The answer is cotton: the pouring method used a suspended cotton wick.", "evidence": "melted beeswax was poured over a suspended cotton wick"}, "10": {"para": 7, "explain": "The answer is shrub: candelilla comes from the stem of the candelilla shrub.", "evidence": "comes from the stem of the candelilla shrub"}, "11": {"para": 8, "explain": "The answer is fruit: bayberry wax comes from the fruit of the bayberry bush.", "evidence": "derived from the fruit of the bayberry bush"}, "12": {"para": 8, "explain": "The answer is casing: non-burning wax is used to make the casing.", "evidence": "non-burning wax is used to make the casing"}, "13": {"para": 9, "explain": "The answer is wire: modern wicks can have a wire centre that helps them remain erect.", "evidence": "a center made of wire ... remain erect in the melted wax"}, "14": {"para": 5, "explain": "Paragraph E refers to the mathematical technique for which Wassily Leontief received a Nobel Prize.", "evidence": "a man called Wassily Leontief got a Nobel Prize"}, "15": {"para": 2, "explain": "Paragraph B says carbon-footprint measurement is far from exact and the figures are only estimates.", "evidence": "Measuring carbon footprints is a long way from being an exact process"}, "16": {"para": 6, "explain": "Paragraph F mentions collaboration between Small World Consulting and Lancaster University.", "evidence": "developed at Small World Consulting in collaboration with Lancaster University"}, "17": {"para": 4, "explain": "Paragraph D describes process-based analysis as back-breaking work.", "evidence": "It is back-breaking work"}, "18": {"para": 7, "explain": "Paragraph G explains that combining both methods gives a better overall understanding.", "evidence": "Putting the two methods together is sometimes called a hybrid approach"}, "19": {"para": 6, "explain": "Paragraph F compares imports with UK products and says imports are usually more carbon intensive.", "evidence": "imports are usually more carbon intensive"}, "20": {"para": 4, "explain": "The correct answers are A and C: the method is more complicated than it sounds and is the most common approach.", "evidence": "It may sound simple, but it is not at all"}, "21": {"para": 4, "explain": "The correct answers are A and C: process-based life-cycle analysis is explicitly described as the most common approach.", "evidence": "the most common approach to carbon footprint calculations"}, "22": {"para": 5, "explain": "The correct answers are C and E: input-output analysis is complete in scope and can estimate footprints from prices.", "evidence": "succeeds in capturing the endless ripple effects ... one hundred per cent complete"}, "23": {"para": 5, "explain": "The correct answers are C and E: knowing a product's cost allows an instant crude carbon-footprint estimate.", "evidence": "if you know how much something costs, you can get an instant crude estimate"}, "24": {"para": 6, "explain": "The answer is government: the model mainly uses data from government sources.", "evidence": "draws mainly on data obtained from government sources"}, "25": {"para": 6, "explain": "The answer is weakness: the writer explicitly identifies a key weakness in the model.", "evidence": "A key weakness"}, "26": {"para": 6, "explain": "The answer is products: the model treats imported products as if they had the same carbon intensity as UK products.", "evidence": "treats imported products as though they had the same carbon intensity as products from within the UK"}, "27": {"para": 1, "explain": "B is correct: supermarkets look similar because they share knowledge of how to influence consumer purchasing decisions.", "evidence": "they are all well-versed in the science of persuading people to buy things"}, "28": {"para": 2, "explain": "Option 4 is correct: the chill zone gives shoppers a gentle start while their minds move into shopping mode.", "evidence": "People need to make a gentle start and take stock of the surroundings"}, "29": {"para": 2, "explain": "A is correct: choosing wholesome fresh food first makes shoppers feel positive and less guilty later.", "evidence": "selecting wholesome fresh food is an uplifting way to start shopping"}, "30": {"para": 3, "explain": "C is correct: shoppers already know that essentials such as milk are usually placed at the back.", "evidence": "Shoppers have worked out that everyday items, like milk, will invariably be placed ... towards the back"}, "31": {"para": 5, "explain": "YES: expensive branded items are deliberately placed at eye level, while cheaper items are put lower down.", "evidence": "encourage customers to buy expensive branded products by arranging them at eye-level, with cheaper ones lower down"}, "32": {"para": 5, "explain": "NOT GIVEN: the passage says head offices often specify product positions but does not state that they should be more flexible.", "evidence": "head offices specify where everything has to be placed"}, "33": {"para": 5, "explain": "NO: shelf positioning is described as controversial, and retailers disagree about the best position.", "evidence": "shelf-positioning is extremely controversial"}, "34": {"para": 6, "explain": "NOT GIVEN: security cameras are discussed as tools for analysing behaviour, but the writer does not claim they seriously threaten privacy.", "evidence": "security cameras in stores may be doing considerably more than watching out for theft"}, "35": {"para": 6, "explain": "NO: the writer says face-to-face interviews can reveal why shoppers leave empty-handed when electronic data cannot.", "evidence": "simply talking to consumers as they exit the store can yield valuable insights"}, "36": {"para": 7, "explain": "G — rational decisions. Shoppers say they use logic and common sense when choosing what to buy.", "evidence": "they make decisions about what to buy based on logic and common sense"}, "37": {"para": 7, "explain": "C — unconscious factors. Feelings and memories outside full awareness can influence purchasing decisions.", "evidence": "certain feelings and memories which individuals are not fully aware of"}, "38": {"para": 7, "explain": "A — brain scans. fMRI scanners reveal brain activity while participants respond to products.", "evidence": "scanners reveal their brain activity as they respond"}, "39": {"para": 7, "explain": "H — emotional reaction. The scan evidence can contradict what participants consciously say, revealing a different internal response.", "evidence": "major contradictions are apparent between what they say and what they are thinking"}, "40": {"para": 7, "explain": "E — failures. Eight out of ten new consumer products do not succeed.", "evidence": "Eight out of ten new consumer products launched on the market do not succeed"}};
+
+let current=1,startedAt=0,endAt=0,remaining=3600,timerHandle=null,submitted=false,savedSelection=null,savedSelectionZone=null,activeHighlight=null,activeHighlightZone=null;
+const STORAGE_PREFIX="READ_CANDLES_CARBON_SHOPPING_";
+function ssGet(k){return sessionStorage.getItem(STORAGE_PREFIX+k)}
+function ssSet(k,v){sessionStorage.setItem(STORAGE_PREFIX+k,v)}
+function clearAttempt(){const a=[];for(let i=0;i<sessionStorage.length;i++){const k=sessionStorage.key(i);if(k&&k.startsWith(STORAGE_PREFIX))a.push(k)}a.forEach(k=>sessionStorage.removeItem(k))}
+const norm=v=>String(v??'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ');
+function startExam(){const n=document.getElementById('studentName').value.trim(),c=document.getElementById('studentClass').value.trim();if(!n||!c){document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}clearAttempt();document.getElementById('topName').textContent=n;document.getElementById('topClass').textContent=c;document.getElementById('start').classList.add('hidden');document.getElementById('exam').classList.remove('hidden');startedAt=Date.now();endAt=startedAt+60*60*1000;buildNav();showPassage(1);tickTimer();timerHandle=setInterval(tickTimer,250)}
+function tickTimer(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));updateTimer();if(remaining<=0&&!submitted){clearInterval(timerHandle);submitExam(true)}}function updateTimer(){const e=document.getElementById('timer'),m=Math.floor(Math.max(remaining,0)/60),s=Math.max(remaining,0)%60;e.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;e.classList.toggle('warning',remaining<=600&&remaining>300);e.classList.toggle('danger',remaining<=300)}
+function groupMeta(n,p){if(p===1){if(n<=7)return['Questions 1–7','Choose TRUE, FALSE or NOT GIVEN.'];if(n<=10)return['Questions 8–10','Complete the flow-chart. Choose NO MORE THAN TWO WORDS from the passage.'];return['Questions 11–13','Complete the notes. Choose ONE WORD ONLY from the passage.']}if(p===2){if(n<=19)return['Questions 14–19','Complete the summary using the list A–J.'];if(n<=23)return['Questions 20–23','Choose YES, NO or NOT GIVEN.'];return['Questions 24–26','Choose the correct letter A, B, C or D.']}if(n<=32)return['Questions 27–32','Complete the summary using the list A–J.'];if(n<=36)return['Questions 33–36','Choose YES, NO or NOT GIVEN.'];return['Questions 37–40','Choose the correct letter A, B, C or D.']}
+
+function zoneRoot(zone){
+  return document.getElementById(zone==='questions'?'questionsCopy':'passageCopy');
+}
+function zoneMarkupKey(zone,p=current){
+  return (zone==='questions'?'questionsMarkup':'passageMarkup')+p;
+}
+function noteStoreKey(zone,p=current){
+  return 'notes_'+zone+'_'+p;
+}
+function notesPanelId(zone){
+  return zone==='questions'?'notesPanelQuestions':'notesPanelPassage';
+}
+function notesCountId(zone){
+  return zone==='questions'?'notesCountQuestions':'notesCountPassage';
+}
+function saveZoneMarkup(zone){
+  const root=zoneRoot(zone);
+  if(root)ssSet(zoneMarkupKey(zone),root.innerHTML);
+}
+function saveCurrentMarkups(){
+  saveZoneMarkup('passage');
+  saveZoneMarkup('questions');
+}
+function captureSelection(zone){
+  if(submitted)return;
+  const sel=window.getSelection();
+  const root=zoneRoot(zone);
+  if(!sel||!root||sel.rangeCount===0||sel.isCollapsed)return;
+  const r=sel.getRangeAt(0);
+  if(root.contains(r.commonAncestorContainer)){
+    savedSelection=r.cloneRange();
+    savedSelectionZone=zone;
+  }
+}
+function annotationBlock(node){
+  const el=node&&node.nodeType===3?node.parentElement:node;
+  if(!el)return null;
+  return el.closest('p,.completion-text,.flow-step,li,.card,.option,.inst,.bank div,h3,h4,.qtext');
+}
+function getUsableSelection(zone){
+  const root=zoneRoot(zone);
+  if(!savedSelection||savedSelectionZone!==zone||!root||!root.contains(savedSelection.commonAncestorContainer)){
+    alert(zone==='questions'
+      ?'Hãy bôi đen phần chữ ở bên câu hỏi trước.'
+      :'Hãy bôi đen phần chữ trong bài đọc trước.');
+    return null;
+  }
+  if(savedSelection.collapsed||!savedSelection.toString().trim()){
+    alert('Hãy bôi đen một đoạn chữ trước.');
+    return null;
+  }
+
+  const a=annotationBlock(savedSelection.startContainer);
+  const b=annotationBlock(savedSelection.endContainer);
+  if(!a||!b||a!==b){
+    alert('Để highlight/ghi chú ổn định, hãy chọn chữ trong cùng một câu hoặc cùng một khối nội dung.');
+    return null;
+  }
+
+  const cloned=savedSelection.cloneContents();
+  if(cloned.querySelector && cloned.querySelector('input,select,button,textarea')){
+    alert('Không thể highlight xuyên qua ô trả lời. Hãy chỉ chọn phần chữ.');
+    return null;
+  }
+  return savedSelection.cloneRange();
+}
+function clearBrowserSelection(){
+  const sel=window.getSelection();
+  if(sel)sel.removeAllRanges();
+  savedSelection=null;
+  savedSelectionZone=null;
+}
+function addHighlight(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  try{
+    const mark=document.createElement('mark');
+    mark.className='user-highlight';
+    mark.dataset.annotationZone=zone;
+    const frag=r.extractContents();
+    mark.appendChild(frag);
+    r.insertNode(mark);
+    activeHighlight=mark;
+    activeHighlightZone=zone;
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+  }catch(e){
+    alert('Không thể highlight vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function clearHighlight(zone){
+  if(submitted)return;
+  let targets=[];
+  if(activeHighlight&&activeHighlightZone===zone&&document.body.contains(activeHighlight)){
+    targets=[activeHighlight];
+  }else if(savedSelection&&savedSelectionZone===zone){
+    const root=zoneRoot(zone);
+    if(root)targets=[...root.querySelectorAll('mark.user-highlight')].filter(m=>{
+      try{return savedSelection.intersectsNode(m)}catch(e){return false}
+    });
+  }
+  if(!targets.length){
+    alert('Hãy bấm vào phần đã highlight rồi chọn “Xóa HL”.');
+    return;
+  }
+  targets.forEach(m=>{
+    const p=m.parentNode;
+    while(m.firstChild)p.insertBefore(m.firstChild,m);
+    m.remove();
+    p.normalize();
+  });
+  activeHighlight=null;
+  activeHighlightZone=null;
+  saveZoneMarkup(zone);
+  clearBrowserSelection();
+}
+function loadNotes(zone,p=current){
+  try{return JSON.parse(ssGet(noteStoreKey(zone,p))||'[]')}catch(e){return[]}
+}
+function saveNotes(zone,notes,p=current){
+  ssSet(noteStoreKey(zone,p),JSON.stringify(notes));
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function addNote(zone){
+  if(submitted)return;
+  const r=getUsableSelection(zone);if(!r)return;
+  const quote=r.toString().trim();
+  const text=prompt('Nhập ghi chú cho đoạn đã chọn:');
+  if(text===null||!text.trim())return;
+  const id='note_'+zone+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  try{
+    const span=document.createElement('span');
+    span.className='note-anchor';
+    span.dataset.noteId=id;
+    span.dataset.annotationZone=zone;
+    span.title='Bấm để xem/sửa ghi chú';
+    const frag=r.extractContents();
+    span.appendChild(frag);
+    r.insertNode(span);
+
+    const notes=loadNotes(zone);
+    notes.push({id,quote,text:text.trim()});
+    saveNotes(zone,notes);
+    saveZoneMarkup(zone);
+    clearBrowserSelection();
+    renderNotesPanel(zone,current,true);
+  }catch(e){
+    alert('Không thể tạo ghi chú cho vùng chọn này. Hãy chọn lại một đoạn chữ ngắn hơn.');
+  }
+}
+function toggleNotes(zone){
+  const panel=document.getElementById(notesPanelId(zone));
+  if(panel)panel.classList.toggle('open');
+}
+function renderNotesPanel(zone,p=current,forceOpen=false){
+  const panel=document.getElementById(notesPanelId(zone));
+  const count=document.getElementById(notesCountId(zone));
+  if(!panel)return;
+  const notes=loadNotes(zone,p);
+  if(count)count.textContent=notes.length;
+  panel.innerHTML=notes.length
+    ?notes.map(n=>`<div class="note-item">
+        <div class="note-quote">“${esc(n.quote)}”</div>
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-actions">
+          <button type="button" onclick="editNote('${zone}','${n.id}')">Sửa</button>
+          <button type="button" onclick="deleteNote('${zone}','${n.id}')">Xóa</button>
+        </div>
+      </div>`).join('')
+    :'<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở phần này.</div>';
+  if(forceOpen)panel.classList.add('open');
+}
+function editNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt('Sửa ghi chú:',n.text);if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function deleteNote(zone,id){
+  const notes=loadNotes(zone).filter(x=>x.id!==id);
+  saveNotes(zone,notes);
+  const root=zoneRoot(zone);
+  if(root)root.querySelectorAll(`[data-note-id="${id}"]`).forEach(s=>{
+    const p=s.parentNode;
+    while(s.firstChild)p.insertBefore(s.firstChild,s);
+    s.remove();
+    p.normalize();
+  });
+  saveZoneMarkup(zone);
+  renderNotesPanel(zone,current,true);
+}
+function openNote(zone,id){
+  const notes=loadNotes(zone);
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=prompt(`Đoạn đã ghi chú:\n“${n.quote}”\n\nGhi chú:`,n.text);
+  if(t===null)return;
+  if(!t.trim()){deleteNote(zone,id);return}
+  n.text=t.trim();
+  saveNotes(zone,notes);
+  renderNotesPanel(zone,current,true);
+}
+function bindAnnotations(zone){
+  const root=zoneRoot(zone);if(!root)return;
+  root.addEventListener('mouseup',()=>captureSelection(zone));
+  root.addEventListener('keyup',()=>captureSelection(zone));
+  root.addEventListener('click',e=>{
+    const note=e.target.closest('.note-anchor');
+    if(note){openNote(zone,note.dataset.noteId);return}
+    const mark=e.target.closest('mark.user-highlight');
+    if(mark){
+      activeHighlight=mark;
+      activeHighlightZone=zone;
+    }else if(zone===activeHighlightZone){
+      activeHighlight=null;
+      activeHighlightZone=null;
+    }
+  });
+}
+function annotationToolbar(zone){
+  const isQ=zone==='questions';
+  const label=isQ?'Câu hỏi':'Bài đọc';
+  const countId=isQ?'notesCountQuestions':'notesCountPassage';
+  return `<div class="annotation-bar">
+    <span class="annotation-zone-label">${label}</span>
+    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button>
+    <button type="button" class="annotation-btn" onclick="clearHighlight('${zone}')">Xóa HL</button>
+    <button type="button" class="annotation-btn" onclick="addNote('${zone}')">📝 Add note</button>
+    <button type="button" class="annotation-btn" onclick="toggleNotes('${zone}')">Ghi chú (<span id="${countId}">0</span>)</button>
+    <span class="annotation-tip">Bôi đen phần chữ rồi chọn công cụ.</span>
+  </div>`;
+}
+
+function showPassage(p){
+  saveCurrentMarkups();
+  current=p;
+  activeHighlight=null;
+  activeHighlightZone=null;
+  savedSelection=null;
+  savedSelectionZone=null;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));
+
+  const passageMarkup=ssGet(zoneMarkupKey('passage',p))||passages[p].text;
+  document.getElementById('passage').innerHTML=
+    annotationToolbar('passage')+
+    `<div id="notesPanelPassage" class="notes-panel"></div>
+     <h2>${passages[p].title}</h2>
+     <div class="copy" id="passageCopy">${passageMarkup}</div>`;
+
+  bindAnnotations('passage');
+  renderNotesPanel('passage',p,false);
+  buildQuestions(p);
+
+  document.getElementById('passage').scrollTop=0;
+  document.getElementById('questions').scrollTop=0;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function optionValue(x){
+  const t=String(x);
+  const i=t.indexOf(' — ');
+  return i>=0?t.slice(0,i):t;
+}
+function renderQ(q){
+  let body='';
+  if(q.type==='text'){
+    body=`<input class="ans" id="q${q.n}" data-q="${q.n}" type="text" autocomplete="off" placeholder="Type your answer">`;
+  }else if(q.type==='select'){
+    body=`<select class="ans" id="q${q.n}" data-q="${q.n}"><option value="">-- Choose --</option>${q.opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select>`;
+  }else{
+    body=q.opts.map(x=>{
+      const v=optionValue(x);
+      return `<label class="option" data-q="${q.n}" data-val="${v}"><input type="radio" name="q${q.n}" value="${v}"> ${x}</label>`;
+    }).join('');
+  }
+  return `<div class="card" id="card${q.n}"><div class="qhead"><span class="qnum">${q.n}</span><div class="qtext">${q.text}</div></div>${body}<div class="feedback" id="fb${q.n}"></div></div>`;
+}
+function inlineText(n,placeholder='answer'){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><input class="ans inline-answer short" id="q${n}" data-q="${n}" type="text" autocomplete="off" placeholder="${placeholder}"></span>`;
+}
+function inlineSelect(n,opts){
+  return `<span class="inline-blank" id="card${n}"><span class="blank-num">${n}</span><select class="ans inline-answer select-wide" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select></span>`;
+}
+function renderMatchRows(start,end,title,inst,showBank=true){
+  const rows=questions.filter(q=>q.n>=start&&q.n<=end),opts=rows[0].opts;
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>
+    ${showBank?`<div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>`:''}
+    ${rows.map(q=>`<div class="match-row completion-text" id="card${q.n}">
+      <div class="match-label"><span class="blank-num">${q.n}</span> ${q.text}</div>
+      ${inlineSelect(q.n,opts).replace(`id="card${q.n}"`,'')}
+    </div>`).join('')}
+  </div>`;
+}
+function renderStandardGroup(rows,title,inst){
+  return `<div class="group"><h3>${title}</h3><div class="inst">${inst}</div>${rows.map(renderQ).join('')}</div>`;
+}
+function renderP1Notes(){
+  return `<div class="group"><h3>Questions 6–13</h3>
+    <div class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> from the passage for each answer.</div>
+    <div class="completion-box">
+      <h4>Candle making</h4>
+      <p class="completion-text"><b>Advantages of the various types of wax used in candle-making</b></p>
+      <p class="completion-text">• beeswax made less ${inlineText(6)} than animal fats</p>
+      <p class="completion-text">• spermaceti wax produced a stronger ${inlineText(7)}</p>
+      <p class="completion-text">• ozokerite did not melt when the ${inlineText(8)} was hot</p>
+      <p class="completion-text">• paraffin blend made good quality candles which were inexpensive</p>
+      <p class="completion-text"><b>The candlemaking process</b></p>
+      <p class="completion-text">• in the dipping method, wicks were made from rushes</p>
+      <p class="completion-text">• in the pouring method, melted beeswax was poured over a wick that was made of ${inlineText(9)}</p>
+      <p class="completion-text"><b>Candlemaking today</b></p>
+      <p class="completion-text">• wax can be obtained from the stem of a ${inlineText(10)} called candelilla</p>
+      <p class="completion-text">• bayberry wax, used in decorative candles, comes from the plant’s ${inlineText(11)}</p>
+      <p class="completion-text">• the ${inlineText(12)} of a decorative candle is made from wax which can resist heat</p>
+      <p class="completion-text">• ${inlineText(13)} is often used to keep the wick of a candle upright</p>
+    </div>
+  </div>`;
+}
+function renderMultiGroup(group,start,end,title,stem,opts){
+  return `<div class="group"><h3>${title}</h3>
+    <div class="inst">Choose <b>TWO</b> correct answers.</div>
+    <div class="card"><div class="qtext"><b>${start}–${end}</b> ${stem}</div></div>
+    <div class="multi-card" id="card${start}"><span id="card${end}"></span>
+      ${opts.map(x=>`<label class="option multi-option" data-group="${group}" data-val="${optionValue(x)}"><input type="checkbox" name="${group}" value="${optionValue(x)}"> ${x}</label>`).join('')}
+      <div class="multi-score-note" id="fb${group}">Select exactly 2 options.</div>
+      <div id="review${group}"></div>
+    </div>
+  </div>`;
+}
+function renderP2Summary(){
+  return `<div class="group"><h3>Questions 24–26</h3>
+    <div class="inst">Complete the summary. Write <b>ONE WORD ONLY</b> from the text for each answer.</div>
+    <div class="completion-box">
+      <h4>Small World Consulting</h4>
+      <p class="completion-text">
+        Small World Consulting has collaborated with a UK university to develop a version of the environmental input-output model of analysis,
+        using data provided by the ${inlineText(24)} about the UK economy in 2007.
+        This model is able to take into account the altitude at which greenhouse gases are released.
+        A significant ${inlineText(25)} is that it does not distinguish between ${inlineText(26)} of different origin,
+        but the writer occasionally makes allowances for that.
+      </p>
+    </div>
+  </div>`;
+}
+function renderP3Summary(){
+  const opts=questions.find(q=>q.n===36).opts;
+  return `<div class="group"><h3>Questions 36–40</h3>
+    <div class="inst">Complete the summary using the list of words and phrases, <b>A–I</b>, below.</div>
+    <div class="bank">${opts.map(x=>`<div>${x}</div>`).join('')}</div>
+    <div class="completion-box">
+      <h4>New technology could help retailers sell more</h4>
+      <p class="completion-text">
+        Research is providing insights into what makes people purchase particular products.
+        Most shoppers believe that their choices are the result of ${inlineSelect(36,opts)}.
+        Research involving fMRI scanners, however, has revealed that certain ${inlineSelect(37,opts)} influence shoppers’ decisions to a significant extent.
+        In the research, a comparison was made between participants’ stated opinions of a product and data from ${inlineSelect(38,opts)},
+        which often indicated a radically different ${inlineSelect(39,opts)}.
+        As most new products are ${inlineSelect(40,opts)}, this data could be extremely valuable for marketing departments.
+      </p>
+    </div>
+  </div>`;
+}
+function freshQuestionsHTML(p){
+  let h='';
+  if(p===1){
+    h+=renderStandardGroup(questions.filter(q=>q.n>=1&&q.n<=5),'Questions 1–5','Choose TRUE, FALSE or NOT GIVEN.');
+    h+=renderP1Notes();
+  }else if(p===2){
+    h+=renderMatchRows(14,19,'Questions 14–19','Which paragraph contains the following information? Choose A–G. You may choose any paragraph more than once.',false);
+    h+=renderMultiGroup('g2021',20,21,'Questions 20–21','Which TWO of these features of process-based life-cycle analysis are mentioned by the writer?',[
+      'A — It is more complicated than it sounds.','B — It usually produces exaggerated results.','C — It is a frequently used procedure.','D — Its faults are widely recognised.','E — It was first developed in the UK.'
+    ]);
+    h+=renderMultiGroup('g2223',22,23,'Questions 22–23','Which TWO of these features of environmental input-output analysis are mentioned by the writer?',[
+      'A — It is often the basis of national guidelines.','B — Its starting point is the manufacturing process.','C — It is comprehensive in scope.','D — It is a relatively new method of calculation.','E — It can use prices to get approximate carbon footprints.'
+    ]);
+    h+=renderP2Summary();
+  }else{
+    h+=renderStandardGroup(questions.filter(q=>q.n>=27&&q.n<=30),'Questions 27–30','Choose the correct answer.');
+    h+=renderStandardGroup(questions.filter(q=>q.n>=31&&q.n<=35),'Questions 31–35','Choose YES, NO or NOT GIVEN.');
+    h+=renderP3Summary();
+  }
+  return h;
+}
+function buildQuestions(p){
+  const h=freshQuestionsHTML(p);
+  document.getElementById('questions').innerHTML=
+    annotationToolbar('questions')+
+    `<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${h}</div>`;
+  restore(p);
+  bindTrack();
+  bindAnnotations('questions');
+  renderNotesPanel('questions',p,false);
+  if(submitted){
+    const copy=document.getElementById('questionsCopy');
+    if(copy&&!copy.querySelector('.review-mode-note.top-review-note')){
+      copy.insertAdjacentHTML('afterbegin','<div class="review-mode-note top-review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới. Bấm “Đối chiếu trong bài đọc” để đưa đoạn bằng chứng ở cột trái vào vị trí xem.</div>');
+    }
+    markPassage(p);
+  }
+}
+function getMulti(group){
+  try{return JSON.parse(ssGet(group)||'[]')}catch(e){return[]}
+}
+function restore(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const v=ssGet('q'+q.n)||'';
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e)e.value=v;
+    }else if(v){
+      const e=[...document.querySelectorAll(`input[name="q${q.n}"]`)].find(x=>x.value===v);
+      if(e)e.checked=true;
+    }
+  }
+  if(p===2){
+    for(const group of ['g2021','g2223']){
+      const sel=getMulti(group);
+      document.querySelectorAll(`input[name="${group}"]`).forEach(e=>e.checked=sel.includes(e.value));
+    }
+  }
+}
+function bindTrack(){
+  document.querySelectorAll('.ans').forEach(e=>e.oninput=e.onchange=()=>save(+e.dataset.q,e.value));
+  document.querySelectorAll('input[type=radio]').forEach(e=>e.onchange=()=>save(+e.closest('.option').dataset.q,e.value));
+  for(const [group,a,b] of [['g2021',20,21],['g2223',22,23]]){
+    document.querySelectorAll(`input[name="${group}"]`).forEach(e=>{
+      e.onchange=()=>{
+        let sel=[...document.querySelectorAll(`input[name="${group}"]:checked`)].map(x=>x.value);
+        if(sel.length>2){
+          e.checked=false;
+          sel=[...document.querySelectorAll(`input[name="${group}"]:checked`)].map(x=>x.value);
+          alert('Chỉ chọn TWO đáp án.');
+        }
+        ssSet(group,JSON.stringify(sel));
+        for(let n=a;n<=b;n++) document.getElementById('nav'+n)?.classList.toggle('answered',sel.length===2);
+      };
+    });
+  }
+}
+function save(n,v){
+  ssSet('q'+n,v);
+  document.getElementById('nav'+n)?.classList.toggle('answered',String(v).trim()!=='');
+}
+function buildNav(){
+  document.getElementById('nav').innerHTML=questions.map(q=>`<button class="nq" id="nav${q.n}" onclick="goQ(${q.n})">${q.n}</button>`).join('');
+}
+function goQ(n){
+  const q=questions.find(x=>x.n===n);
+  if(q.p!==current)showPassage(q.p);
+  setTimeout(()=>{
+    let target=document.getElementById('card'+n);
+    if(!target&&n===21)target=document.getElementById('card20');
+    if(!target&&n===23)target=document.getElementById('card22');
+    target?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('q'+n)?.focus?.({preventScroll:true});
+  },60);
+}
+function correct(q,u){
+  if(q.type==='multi')return false;
+  return q.type==='text'?q.ans.map(norm).includes(norm(u)):norm(u)===norm(q.ans);
+}
+
+function inlineReviewHTML(q,user){
+  const r=answerReview[q.n];
+  return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
+    <div class="inline-review-title">
+      <span class="inline-review-badge">Q${q.n}</span>
+      <span>Giải thích câu trả lời sai</span>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Bạn trả lời</div>
+      <div class="inline-review-student">${esc(displayAnswer(q,user))}</div>
+    </div>
+    <div class="inline-review-row">
+      <div class="inline-review-label">Đáp án đúng</div>
+      <div class="inline-review-correct">${esc(displayKey(q))}</div>
+    </div>
+    <div class="inline-review-explain"><b>Vì sao?</b> ${esc(r.explain)}</div>
+    <div class="inline-review-evidence">
+      <div class="inline-review-evidence-label">Evidence · Passage ${q.p}, đoạn ${r.para}</div>
+      <div class="inline-review-quote">“${esc(r.evidence)}”</div>
+    </div>
+    <button type="button" class="inline-review-btn" onclick="focusEvidence(${q.n})">↗ Đối chiếu trong bài đọc</button>
+  </div>`;
+}
+
+function removeInlineReview(n){
+  document.querySelectorAll(`[data-inline-review="${n}"]`).forEach(e=>e.remove());
+}
+
+function renderInlineReview(q,user,ok){
+  removeInlineReview(q.n);
+  if(ok)return;
+
+  const card=document.getElementById('card'+q.n);
+  if(!card)return;
+
+  // Standard IELTS question cards: explanation sits directly under the options.
+  if(card.classList.contains('card')){
+    card.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+    return;
+  }
+
+  // Completion tasks: place review under the sentence/step/note containing the blank.
+  const host=card.closest('.flow-step,li,.completion-text') || card.parentElement;
+  if(!host)return;
+
+  // Several blanks may live in the same summary paragraph; keep each explanation labelled by Q number.
+  host.insertAdjacentHTML('beforeend',inlineReviewHTML(q,user));
+}
+
+function lockSubmittedAnswers(){
+  if(!submitted)return;
+  document.querySelectorAll('#questionsCopy input,#questionsCopy select').forEach(e=>e.disabled=true);
+}
+
+function focusEvidence(n){
+  const q=questions.find(x=>x.n===n);
+  const r=answerReview[n];
+  if(!q||!r)return;
+  const reveal=()=>{
+    const copy=document.getElementById('passageCopy');
+    const ps=copy?[...copy.querySelectorAll('p')]:[];
+    const target=ps[r.para-1];
+    if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:'center'});
+    target.classList.add('evidence-pulse');
+    setTimeout(()=>target.classList.remove('evidence-pulse'),3200);
+  };
+  if(q.p!==current){showPassage(q.p);setTimeout(reveal,150)}else reveal();
+}
+function markMulti(group,start,end,key,evidenceQ){
+  const sel=getMulti(group),hits=sel.filter(x=>key.includes(x)).length,perfect=hits===2&&sel.length===2;
+  document.querySelectorAll(`[data-group="${group}"]`).forEach(l=>{
+    l.classList.remove('correct','wrong');
+    if(key.includes(l.dataset.val))l.classList.add('correct');
+    else if(sel.includes(l.dataset.val))l.classList.add('wrong');
+  });
+  const fb=document.getElementById('fb'+group);
+  if(fb){
+    fb.className='multi-score-note '+(perfect?'good':'bad');
+    fb.textContent=perfect?'✓ Correct — 2 / 2':`Correct answers: ${key.join(', ')} · Score: ${hits} / 2`;
+  }
+  for(let n=start;n<=end;n++){
+    const nav=document.getElementById('nav'+n);
+    if(nav){
+      nav.classList.remove('answered','correct','wrong','partial');
+      nav.classList.add(perfect?'correct':hits===1?'partial':'wrong');
+    }
+  }
+  const host=document.getElementById('review'+group);
+  if(host){
+    host.innerHTML='';
+    if(!perfect){
+      const r=answerReview[evidenceQ];
+      host.innerHTML=`<div class="inline-review integrated">
+        <div class="inline-review-title"><span class="inline-review-badge">Q${start}–${end}</span><span>Giải thích nhóm câu sai</span></div>
+        <div class="review-row"><div class="review-label">Bạn chọn</div><div class="student-wrong">${sel.join(', ')||'Không trả lời'}</div></div>
+        <div class="review-row"><div class="review-label">Đáp án đúng</div><div class="correct-answer">${key.join(', ')}</div></div>
+        <div class="explain"><b>Vì sao?</b> ${r.explain}</div>
+        <div class="evidence"><b>Evidence:</b> “${r.evidence}”</div>
+        <button class="evidence-btn" onclick="focusEvidence(${evidenceQ})">↗ Đối chiếu trong bài đọc</button>
+      </div>`;
+    }
+  }
+  return hits;
+}
+function markPassage(p){
+  for(const q of questions.filter(x=>x.p===p&&x.type!=='multi')){
+    const u=ssGet('q'+q.n)||'',ok=correct(q,u);
+    const fb=document.getElementById('fb'+q.n);
+    if(q.type==='text'||q.type==='select'){
+      const e=document.getElementById('q'+q.n);
+      if(e){e.classList.remove('correct','wrong');e.classList.add(ok?'correct':'wrong')}
+    }else{
+      document.querySelectorAll(`label[data-q="${q.n}"]`).forEach(l=>{
+        l.classList.remove('correct','wrong');
+        if(norm(l.dataset.val)===norm(q.ans))l.classList.add('correct');
+        else if(u&&norm(l.dataset.val)===norm(u))l.classList.add('wrong');
+      });
+    }
+    if(fb){
+      const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+      fb.className='feedback '+(ok?'good':'bad');
+      fb.textContent=ok?'✓ Correct':'Correct answer: '+key;
+    }
+    if(submitted)renderInlineReview(q,u,ok);
+  }
+  if(p===2&&submitted){
+    markMulti('g2021',20,21,['A','C'],20);
+    markMulti('g2223',22,23,['C','E'],22);
+  }
+  lockSubmittedAnswers();
+}
+
+function displayAnswer(q,user){
+  if(!String(user).trim())return 'Không trả lời';
+  if(q.type==='select'||q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(user));
+    return found||user;
+  }
+  return user;
+}
+function displayKey(q){
+  const key=Array.isArray(q.ans)?q.ans.join(' / '):q.ans;
+  if(q.type==='select'||q.type==='choice'){
+    const found=(q.opts||[]).find(x=>optionValue(x)===String(key));
+    return found||key;
+  }
+  return key;
+}
+function renderWrongReview(details){
+  const box=document.getElementById('wrongReview');
+  const wrong=details.filter(x=>!x.correct);
+  if(!wrong.length){
+    box.innerHTML='<h3 class="review-title">Review đáp án</h3><div class="perfect-review">🎉 Không có câu sai. Bạn đã trả lời đúng cả 40 câu!</div>';
+    return;
+  }
+  box.innerHTML=`<h3 class="review-title">${wrong.length} câu cần xem lại</h3>
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
+}
+function gotoEvidence(n){
+  document.getElementById('overlay').classList.add('hidden');
+  focusEvidence(n);
+}
+
+async function submitExam(auto=false){
+  if(submitted)return;
+  saveCurrentMarkups();
+
+  const normalMissing=questions.filter(q=>q.type!=='multi'&&!(ssGet('q'+q.n)||'').trim()).length;
+  const missing2021=Math.max(0,2-getMulti('g2021').length);
+  const missing2223=Math.max(0,2-getMulti('g2223').length);
+  const unanswered=normalMissing+missing2021+missing2223;
+
+  if(!auto&&unanswered&&!confirm(`Bạn còn ${unanswered} câu/ô đáp án chưa hoàn thành. Vẫn nộp bài?`))return;
+
+  submitted=true;
+  clearInterval(timerHandle);
+
+  let total=0,s=[0,0,0,0],details=[];
+  for(const q of questions.filter(q=>q.type!=='multi')){
+    const u=ssGet('q'+q.n)||'',ok=correct(q,u);
+    if(ok){total++;s[q.p]++}
+    details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});
+    const ne=document.getElementById('nav'+q.n);
+    if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong')}
+  }
+
+  const sel2021=getMulti('g2021'),hits2021=sel2021.filter(x=>['A','C'].includes(x)).length;
+  const sel2223=getMulti('g2223'),hits2223=sel2223.filter(x=>['C','E'].includes(x)).length;
+  total+=hits2021+hits2223;
+  s[2]+=hits2021+hits2223;
+
+  details.push({q:20,answer:sel2021.join(', '),correct:hits2021>=1,key:'A, C'});
+  details.push({q:21,answer:sel2021.join(', '),correct:hits2021===2,key:'A, C'});
+  details.push({q:22,answer:sel2223.join(', '),correct:hits2223>=1,key:'C, E'});
+  details.push({q:23,answer:sel2223.join(', '),correct:hits2223===2,key:'C, E'});
+
+  markPassage(current);
+
+  const name=document.getElementById('studentName').value.trim();
+  const cls=document.getElementById('studentClass').value.trim();
+  const dur=Math.round((Date.now()-startedAt)/1000);
+
+  document.getElementById('rstudent').textContent=`${name} — ${cls}`;
+  document.getElementById('rscore').textContent=`${total} / 40`;
+  document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;
+  document.getElementById('p1s').textContent=`${s[1]} / 13`;
+  document.getElementById('p2s').textContent=`${s[2]} / 13`;
+  document.getElementById('p3s').textContent=`${s[3]} / 14`;
+
+  renderWrongReview(details);
+  document.getElementById('overlay').classList.remove('hidden');
+  document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';
+
+  const payload=new URLSearchParams({
+    name,
+    className:cls,
+    total:String(total),
+    maxScore:'40',
+    durationSeconds:String(dur),
+    activity:'IELTS Reading - Candles / Carbon Footprints / Science of Shopping',
+    reading:String(s[1]),
+    grammar:String(s[2]),
+    ing:String(s[3]),
+    writingA:JSON.stringify(details),
+    submittedAt:new Date().toISOString()
+  });
+
+  try{
+    await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:payload.toString()});
+    document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.';
+  }catch(e){
+    document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet.';
+  }
+}
+function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current);saveZoneMarkup('questions')}
+
+(function(){
+  const params=new URLSearchParams(location.search);
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){}
+  const name=(params.get('name')||'').trim()||(saved&&saved.name)||localStorage.getItem('IELTS_STUDENT_NAME')||'';
+  const className=(params.get('className')||'').trim()||(saved&&saved.className)||localStorage.getItem('IELTS_STUDENT_CLASS')||'';
+  const n=document.getElementById('studentName'),c=document.getElementById('studentClass');
+  if(name&&className&&n&&c){
+    n.value=name;c.value=className;
+    if(params.get('fromPortal')==='1')setTimeout(()=>startExam(),100);
+  }
+})();
+
+</script></body></html>
