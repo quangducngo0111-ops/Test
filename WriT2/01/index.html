@@ -161,8 +161,8 @@ Is working hard always a good thing?`
 
 
 const GRADER_URL='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
-const PREFIX='IELTS_WRITE01_V1_';
-let currentTask=1, started=false, submitted=false, startedAt=0, timerHandle=null, secondsLeft=2400;
+const PREFIX='IELTS_WRIT2_01_V1_';
+let currentTask=2, started=false, submitted=false, startedAt=0, timerHandle=null, secondsLeft=2400;
 let student={name:'',className:''};
 
 const $=id=>document.getElementById(id);
@@ -195,7 +195,7 @@ function startExam(){
   if(!name||!cls){$('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';$('startError').classList.remove('hidden');return}
   student={name,className:cls}; started=true; startedAt=Date.now(); secondsLeft=2400;
   $('studentInfo').textContent=name+' · '+cls; $('startOverlay').classList.add('hidden');
-  restoreDraft(); timerHandle=setInterval(tick,1000); tick();
+  restoreDraft(); showTask(2); timerHandle=setInterval(tick,1000); tick();
 }
 window.startExam=startExam;
 function tick(){
