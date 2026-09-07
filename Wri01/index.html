@@ -110,50 +110,60 @@ textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,159,.12
 
 <div id="resultOverlay" class="result-overlay hidden">
   <div class="modal">
-    <div class="task-label">Writing submitted</div>
-    <h2>Đã nộp bài thành công</h2>
-    <div id="submitMessage" class="pending">Đang gửi bài về Google Sheet...</div>
-    <div class="feedback-box">
-      <h4>Thông tin bài nộp</h4>
-      <div class="criteria"><span>Task 1 words</span><b id="resultT1Words">0</b></div>
-      <div class="criteria"><span>Task 2 words</span><b id="resultT2Words">0</b></div>
-      <div class="criteria"><span>Thời gian làm bài</span><b id="resultDuration">0 phút</b></div>
+    <div class="task-label">Writing result</div>
+    <h2>Estimated IELTS Writing Band</h2>
+    <div id="gradingPending" class="pending">Đã nộp bài. Hệ thống đang chấm và phân tích bài viết…</div>
+    <div id="gradingError" class="error hidden"></div>
+    <div id="gradeResult" class="hidden">
+      <div id="overallBand" class="score-big">–</div>
+      <div class="small">Estimated band for practice purposes</div>
+      <div class="score-grid">
+        <div class="score-card">
+          <h3>Task 1</h3>
+          <div class="criteria"><span>Task Achievement</span><b id="t1ta">–</b></div>
+          <div class="criteria"><span>Coherence & Cohesion</span><b id="t1cc">–</b></div>
+          <div class="criteria"><span>Lexical Resource</span><b id="t1lr">–</b></div>
+          <div class="criteria"><span>Grammar</span><b id="t1gr">–</b></div>
+          <div class="criteria"><span>Task 1 Band</span><b id="t1band">–</b></div>
+        </div>
+        <div class="score-card">
+          <h3>Task 2</h3>
+          <div class="criteria"><span>Task Response</span><b id="t2tr">–</b></div>
+          <div class="criteria"><span>Coherence & Cohesion</span><b id="t2cc">–</b></div>
+          <div class="criteria"><span>Lexical Resource</span><b id="t2lr">–</b></div>
+          <div class="criteria"><span>Grammar</span><b id="t2gr">–</b></div>
+          <div class="criteria"><span>Task 2 Band</span><b id="t2band">–</b></div>
+        </div>
+      </div>
+      <div class="feedback-box"><h4>Overall feedback</h4><div id="overallComment"></div></div>
+      <div class="feedback-box"><h4>Task 1 — Strengths</h4><ul id="t1strengths"></ul><h4>What to improve</h4><ul id="t1improvements"></ul></div>
+      <div class="feedback-box"><h4>Task 2 — Strengths</h4><ul id="t2strengths"></ul><h4>What to improve</h4><ul id="t2improvements"></ul></div>
     </div>
     <button class="close-btn" id="closeResult" type="button">Close</button>
   </div>
 </div>
 
 <script>
-const SAVE_URL='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
-const PREFIX='IELTS_WRITE01_MANUAL_V1_';
-let currentTask=1,submitted=false,startedAt=0,timerHandle=null,secondsLeft=3600;
+const GRADER_URL='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+const PREFIX='IELTS_WRITE01_V1_';
+let currentTask=1, started=false, submitted=false, startedAt=0, timerHandle=null, secondsLeft=3600;
 let student={name:'',className:''};
-const $=id=>document.getElementById(id);
 
-function wordCount(t){const s=String(t||'').trim();return s?s.split(/\s+/).filter(Boolean).length:0}
+const $=id=>document.getElementById(id);
+function wordCount(text){const s=String(text||'').trim();return s?s.split(/\s+/).filter(Boolean).length:0}
 function saveDraft(){
   localStorage.setItem(PREFIX+'task1',$('task1Essay').value);
   localStorage.setItem(PREFIX+'task2',$('task2Essay').value);
   $('saveStatus').textContent='Saved '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 }
-function restoreDraft(){
-  $('task1Essay').value=localStorage.getItem(PREFIX+'task1')||'';
-  $('task2Essay').value=localStorage.getItem(PREFIX+'task2')||'';
-  updateCount();
-}
-function updateCount(){
-  $('wordCount').textContent=wordCount(currentTask===1?$('task1Essay').value:$('task2Essay').value);
-}
+function restoreDraft(){$('task1Essay').value=localStorage.getItem(PREFIX+'task1')||'';$('task2Essay').value=localStorage.getItem(PREFIX+'task2')||'';updateCount()}
+function updateCount(){$('wordCount').textContent=wordCount(currentTask===1?$('task1Essay').value:$('task2Essay').value)}
 function showTask(n){
   currentTask=n;
-  $('task1Tab').classList.toggle('active',n===1);
-  $('task2Tab').classList.toggle('active',n===2);
-  $('task1Prompt').classList.toggle('hidden',n!==1);
-  $('task2Prompt').classList.toggle('hidden',n!==2);
-  $('task1Essay').classList.toggle('hidden',n!==1);
-  $('task2Essay').classList.toggle('hidden',n!==2);
-  $('writerTitle').textContent='Your answer — Task '+n;
-  updateCount();
+  $('task1Tab').classList.toggle('active',n===1);$('task2Tab').classList.toggle('active',n===2);
+  $('task1Prompt').classList.toggle('hidden',n!==1);$('task2Prompt').classList.toggle('hidden',n!==2);
+  $('task1Essay').classList.toggle('hidden',n!==1);$('task2Essay').classList.toggle('hidden',n!==2);
+  $('writerTitle').textContent='Your answer — Task '+n; updateCount();
 }
 function getPortalStudent(){
   const p=new URLSearchParams(location.search); let saved=null;
@@ -166,17 +176,12 @@ function getPortalStudent(){
 }
 function startExam(){
   const name=$('studentName').value.trim(), cls=$('studentClass').value.trim();
-  if(!name||!cls){
-    $('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';
-    $('startError').classList.remove('hidden'); return;
-  }
-  student={name,className:cls}; startedAt=Date.now(); secondsLeft=3600;
-  $('studentInfo').textContent=name+' · '+cls;
-  $('startOverlay').classList.add('hidden');
+  if(!name||!cls){$('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';$('startError').classList.remove('hidden');return}
+  student={name,className:cls}; started=true; startedAt=Date.now(); secondsLeft=3600;
+  $('studentInfo').textContent=name+' · '+cls; $('startOverlay').classList.add('hidden');
   restoreDraft(); timerHandle=setInterval(tick,1000); tick();
 }
 window.startExam=startExam;
-
 function tick(){
   const m=Math.floor(secondsLeft/60),s=secondsLeft%60;
   $('timer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
@@ -185,58 +190,66 @@ function tick(){
   if(secondsLeft<=0){clearInterval(timerHandle);submitExam(true);return}
   secondsLeft--;
 }
-
-async function submitExam(auto=false){
-  if(submitted)return;
-  if(!auto&&!confirm('Submit both Writing tasks now? You will not be able to edit after submitting.'))return;
-
-  submitted=true; clearInterval(timerHandle); saveDraft();
-  $('task1Essay').disabled=true; $('task2Essay').disabled=true; $('submitBtn').disabled=true;
-
-  const t1=$('task1Essay').value.trim(), t2=$('task2Essay').value.trim();
-  const t1Words=wordCount(t1), t2Words=wordCount(t2);
-  const duration=Math.max(0,Math.round((Date.now()-startedAt)/1000));
-
-  $('resultT1Words').textContent=t1Words;
-  $('resultT2Words').textContent=t2Words;
-  $('resultDuration').textContent=Math.round(duration/60)+' phút';
-  $('resultOverlay').classList.remove('hidden');
-
-  const body=new URLSearchParams({
-    mode:'writingSave',
-    activity:'IELTS Writing Test 01',
-    name:student.name,
-    className:student.className,
-    task1:t1,
-    task2:t2,
-    task1Words:String(t1Words),
-    task2Words:String(t2Words),
-    durationSeconds:String(duration),
-    submittedAt:new Date().toISOString()
+function makeAttemptId(){return 'W'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function postGrade(payload){
+  const body=new URLSearchParams(payload);
+  return fetch(GRADER_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
+}
+function jsonpResult(attemptId){
+  return new Promise((resolve,reject)=>{
+    const cb='__wrGrade'+Date.now()+Math.random().toString(36).slice(2,6);
+    const script=document.createElement('script');
+    const timer=setTimeout(()=>{cleanup();reject(new Error('timeout'))},12000);
+    function cleanup(){clearTimeout(timer);delete window[cb];script.remove()}
+    window[cb]=data=>{cleanup();resolve(data)};
+    script.onerror=()=>{cleanup();reject(new Error('network'))};
+    script.src=GRADER_URL+'?mode=writingResult&attemptId='+encodeURIComponent(attemptId)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+    document.body.appendChild(script);
   });
-
-  try{
-    await fetch(SAVE_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
-    $('submitMessage').textContent='✓ Bài đã được gửi về Google Sheet để giáo viên chấm.';
-  }catch(e){
-    $('submitMessage').textContent='Không gửi được bài. Vui lòng báo giáo viên kiểm tra hệ thống.';
+}
+async function pollGrade(attemptId){
+  for(let i=0;i<60;i++){
+    await new Promise(r=>setTimeout(r,3000));
+    try{
+      const r=await jsonpResult(attemptId);
+      if(r&&r.status==='DONE'){renderGrade(r.grade);return}
+      if(r&&r.status==='ERROR'){throw new Error(r.error||'Grading error')}
+    }catch(e){if(i===59)showGradeError('Không lấy được kết quả chấm. Bài viết vẫn đã được lưu trên Google Sheet.')} 
   }
 }
-
-$('task1Tab').onclick=()=>showTask(1);
-$('task2Tab').onclick=()=>showTask(2);
-$('task1Essay').addEventListener('input',()=>{updateCount();saveDraft()});
-$('task2Essay').addEventListener('input',()=>{updateCount();saveDraft()});
-$('submitBtn').onclick=()=>submitExam(false);
-$('startBtn').onclick=startExam;
-$('closeResult').onclick=()=>$('resultOverlay').classList.add('hidden');
-
-const ps=getPortalStudent();
-if(ps.name&&ps.className){
-  $('studentName').value=ps.name;
-  $('studentClass').value=ps.className;
-  if(ps.fromPortal)setTimeout(startExam,80);
+function list(id,items){$ (id).innerHTML=(items||[]).map(x=>'<li>'+escapeHtml(x)+'</li>').join('')}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function renderGrade(g){
+  $('gradingPending').classList.add('hidden');$('gradeResult').classList.remove('hidden');
+  $('overallBand').textContent=Number(g.overall).toFixed(1);
+  $('t1ta').textContent=g.task1.taskAchievement;$('t1cc').textContent=g.task1.coherenceCohesion;$('t1lr').textContent=g.task1.lexicalResource;$('t1gr').textContent=g.task1.grammar;$('t1band').textContent=g.task1.band;
+  $('t2tr').textContent=g.task2.taskResponse;$('t2cc').textContent=g.task2.coherenceCohesion;$('t2lr').textContent=g.task2.lexicalResource;$('t2gr').textContent=g.task2.grammar;$('t2band').textContent=g.task2.band;
+  $('overallComment').textContent=g.overallComment||'';
+  list('t1strengths',g.task1.strengths);list('t1improvements',g.task1.improvements);list('t2strengths',g.task2.strengths);list('t2improvements',g.task2.improvements);
 }
+function showGradeError(msg){$('gradingPending').classList.add('hidden');$('gradingError').textContent=msg;$('gradingError').classList.remove('hidden')}
+async function submitExam(auto=false){
+  if(submitted)return;
+  const t1=$('task1Essay').value.trim(),t2=$('task2Essay').value.trim();
+  if(!auto&&!confirm('Submit both Writing tasks now? You will not be able to edit after submitting.'))return;
+  submitted=true;clearInterval(timerHandle);saveDraft();
+  $('task1Essay').disabled=true;$('task2Essay').disabled=true;$('submitBtn').disabled=true;
+  $('resultOverlay').classList.remove('hidden');
+  const attemptId=makeAttemptId();
+  const duration=Math.round((Date.now()-startedAt)/1000);
+  try{
+    await postGrade({
+      mode:'writingGrade',attemptId,name:student.name,className:student.className,
+      task1:t1,task2:t2,task1Words:String(wordCount(t1)),task2Words:String(wordCount(t2)),
+      durationSeconds:String(duration),submittedAt:new Date().toISOString()
+    });
+    pollGrade(attemptId);
+  }catch(e){showGradeError('Không gửi được bài để chấm. Vui lòng kiểm tra Apps Script.')} 
+}
+$('task1Tab').onclick=()=>showTask(1);$('task2Tab').onclick=()=>showTask(2);
+$('task1Essay').addEventListener('input',()=>{updateCount();saveDraft()});$('task2Essay').addEventListener('input',()=>{updateCount();saveDraft()});
+$('submitBtn').onclick=()=>submitExam(false);$('startBtn').onclick=startExam;$('closeResult').onclick=()=>$('resultOverlay').classList.add('hidden');
+const ps=getPortalStudent(); if(ps.name&&ps.className){$('studentName').value=ps.name;$('studentClass').value=ps.className;if(ps.fromPortal)setTimeout(startExam,80)}
 </script>
 </body>
 </html>
