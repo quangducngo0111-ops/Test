@@ -22,7 +22,7 @@ main{width:min(1180px,100%);margin:auto;padding:34px 20px 50px}.login-wrap{min-h
 <body>
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="brand"><div class="mark">S</div><div><strong>IELTS PRACTICE PORTAL</strong><small>Listening & Reading Practice</small></div></div>
+    <div class="brand"><div class="mark">S</div><div><strong>IELTS PRACTICE PORTAL</strong><small>Listening · Reading · Writing Practice</small></div></div>
     <div id="studentMini" class="student-mini hidden"><span id="miniInfo"></span><button id="changeStudentTop" type="button">Đổi học sinh</button></div>
   </div>
 </header>
@@ -67,7 +67,7 @@ main{width:min(1180px,100%);margin:auto;padding:34px 20px 50px}.login-wrap{min-h
   </section>
 
   <section id="writingPanel" class="hidden">
-    <div class="skill-head"><div><h2>Writing Tests</h2><p>Task 1 + Task 2 · 60 minutes · AI feedback.</p></div><div>✍️ Autosave & estimated band</div></div>
+    <div class="skill-head"><div><h2>Writing Practice</h2><p>Chọn luyện Task 1, Task 2 hoặc làm Full Writing Test.</p></div><div>✍️ Autosave & AI grading</div></div>
     <div id="writingGrid" class="grid"></div>
   </section>
 
@@ -79,12 +79,31 @@ main{width:min(1180px,100%);margin:auto;padding:34px 20px 50px}.login-wrap{min-h
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
 const listeningTests=[
-  {title:'Listening Test 01',path:'./Lis01/C21T4/',meta:['40 câu','4 parts','Audio'],desc:'Cambridge-style Listening practice.'}
+  {title:'Listening Test 01 — Cambridge 21 Test 4',path:'./Lis01/C21T4/',meta:['40 câu','4 parts','Audio'],desc:'Cambridge 21 Test 4 Listening practice.'}
 ];
 
-const writingTests=[{title:'Writing Test 01',path:'./Wri01/',meta:['Task 1 + Task 2','60 phút','AI grading'],desc:'IELTS Academic Writing practice with estimated band and feedback.'}];
+const writingTests=[
+  {
+    title:'Task 1 Practice 01',
+    path:'./WriT1/01/',
+    meta:['Task 1','20 phút','AI grading'],
+    desc:'Luyện riêng IELTS Academic Writing Task 1.'
+  },
+  {
+    title:'Task 2 Practice 01',
+    path:'./WriT2/01/',
+    meta:['Task 2','40 phút','AI grading'],
+    desc:'Luyện riêng IELTS Writing Task 2.'
+  },
+  {
+    title:'Full Writing Test 01',
+    path:'./WriFull/01/',
+    meta:['Task 1 + Task 2','60 phút','AI grading'],
+    desc:'Full IELTS Writing test với cả Task 1 và Task 2.'
+  }
+];
 
-const readingTests=Array.from({length:11},(_,i)=>{
+const readingTests=Array.from({length:12},(_,i)=>{
   const n=String(i+1).padStart(2,'0');
   return {title:`Reading Test ${n}`,path:`./Read${n}/`,meta:['40 câu','3 passages','60 phút'],desc:'IELTS Academic Reading computer-based practice.'};
 });
