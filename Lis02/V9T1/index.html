@@ -64,7 +64,7 @@ mark.study-hl.has-note::after{
 .audio-status>div:first-child{display:flex;align-items:center;gap:8px}
 .pulse-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#9ca3af;box-shadow:0 0 0 0 rgba(76,47,160,.25)}
 .audio-card.playing .pulse-dot{background:#2f6fdf;animation:audioPulse 1.5s infinite}
-.audio-card.finished .pulse-dot{background:#16a34a;animation:none}
+.audio-card.finished .pulse-dot{background:#16a34a;animation:none}.audio-card.reviewing .pulse-dot{background:#f59e0b;animation:audioPulse 1.5s infinite}
 @keyframes audioPulse{0%{box-shadow:0 0 0 0 rgba(47,111,223,.30)}70%{box-shadow:0 0 0 7px rgba(47,111,223,0)}100%{box-shadow:0 0 0 0 rgba(47,111,223,0)}}
 .audio-time{font-variant-numeric:tabular-nums;color:#657084;font-weight:850;white-space:nowrap}
 .locked-progress{height:8px;border-radius:999px;background:#e7e9ef;overflow:hidden}
@@ -394,10 +394,32 @@ function openToolsForMark(mark){
 }
 function playEvidence(start,end){
   if(!submitted)return;
-  stopAt=Math.min(audio.duration||99999,end+2);
-  audio.currentTime=Math.max(0,start-2);
+
+  // Quan trọng: xóa stopAt cũ trước khi nhảy khỏi trạng thái "ended".
+  // Nếu đặt stopAt trước khi đổi currentTime, timeupdate ở cuối file có thể
+  // lập tức pause audio trước khi browser kịp seek về đoạn cần review.
+  stopAt=null;
+  audio.pause();
+
+  const reviewStart=Math.max(0,start-2);
+  const reviewEnd=Math.min(audio.duration||99999,end+2);
+
   audio.playbackRate=1;
-  audio.play();
+  audio.currentTime=reviewStart;
+  stopAt=reviewEnd;
+
+  audioCard.classList.remove('finished');
+  audioCard.classList.add('reviewing');
+  audioStatusText.textContent='Đang nghe lại đoạn chứa đáp án · '+fmt(reviewStart)+'–'+fmt(reviewEnd);
+  audioNow.textContent=fmt(reviewStart);
+
+  const p=audio.play();
+  if(p&&p.catch){
+    p.catch(()=>{
+      audioStatusText.textContent='Không phát được đoạn review — hãy bấm lại nút Nghe đoạn chứa đáp án';
+    });
+  }
+
   document.getElementById('audioCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
 audio.addEventListener('loadedmetadata',()=>{
@@ -414,6 +436,10 @@ audio.addEventListener('timeupdate',()=>{
   if(stopAt!==null&&audio.currentTime>=stopAt){
     audio.pause();
     stopAt=null;
+    if(submitted){
+      audioCard.classList.remove('reviewing');
+      audioStatusText.textContent='Đã phát xong đoạn chứa đáp án';
+    }
   }
 });
 audio.addEventListener('seeking',()=>{
