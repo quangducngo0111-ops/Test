@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Listening Test 03</title>
+<style>
+:root{--ink:#172033;--muted:#6f7890;--line:#e5e7ef;--bg:#f5f7fb;--purple:#281260;--purple2:#4d32a0;--blue:#2f6fdf;--green:#16845b;--red:#b83345}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}
+.top{position:sticky;top:0;z-index:50;background:linear-gradient(100deg,#1c0e49,#281260,#37217e);color:#fff;box-shadow:0 8px 24px rgba(40,18,96,.14)}
+.wrap{width:min(1250px,calc(100% - 24px));margin:auto}.topin{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}.nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);padding:7px 10px;border-radius:9px;font-size:11px;font-weight:850}.brand{font-weight:950;letter-spacing:.02em}.chip{font-size:11px;font-weight:850;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);padding:7px 10px;border-radius:999px}
+main{padding:24px 0 50px}.hero{margin-bottom:14px}.hero h1{margin:4px 0 5px;font-size:30px;color:#21164b}.hero p{margin:0;color:var(--muted);font-size:12px}.progress{height:8px;background:#e4e7ef;border-radius:999px;overflow:hidden;margin-top:11px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--purple2),var(--blue))}.progtext{margin-top:5px;color:var(--muted);font-size:11px;font-weight:850}
+.audio-card{position:sticky;top:72px;z-index:30;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 15px;box-shadow:0 10px 28px rgba(31,24,65,.07);margin-bottom:14px}#audio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.audio-status{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:9px;font-size:12px;color:#302a48}.audio-status>div:first-child{display:flex;align-items:center;gap:8px}.pulse-dot{width:9px;height:9px;border-radius:50%;background:#9ca3af;display:inline-block}.audio-card.playing .pulse-dot{background:#2f6fdf;animation:pulse 1.5s infinite}.audio-card.finished .pulse-dot{background:#16a34a}.audio-card.reviewing .pulse-dot{background:#f59e0b;animation:pulse 1.5s infinite}@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,111,223,.3)}70%{box-shadow:0 0 0 7px rgba(47,111,223,0)}100%{box-shadow:0 0 0 0 rgba(47,111,223,0)}}.audio-time{font-variant-numeric:tabular-nums;color:#657084;font-weight:850}.locked-progress{height:8px;border-radius:999px;background:#e7e9ef;overflow:hidden}.locked-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--blue));transition:width .25s linear}.lock-note{margin-top:8px;font-size:10.5px;color:#6e6680;background:#f5f4fb;padding:8px 10px;border-radius:8px}.audio-note{font-size:10.5px;color:var(--muted);margin-top:7px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;background:#e9ebf1;padding:6px;border-radius:14px;margin-bottom:15px}.tab{border:0;background:transparent;border-radius:9px;padding:11px;font-weight:900;color:#697083}.tab.active{background:#fff;color:var(--purple);box-shadow:0 5px 15px rgba(35,25,75,.07)}.pane{display:none}.pane.active{display:block}
+.section-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 7px 24px rgba(35,25,75,.045)}.section-head{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:16px}.section-head h2{margin:0;color:#21164b;font-size:21px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}.tag{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:#e8f3ff;color:#2b5fac;border-radius:999px;padding:6px 9px}
+.group{margin-bottom:24px}.group h3{margin:0 0 5px;color:#21164b;font-size:17px}.inst{font-size:12px;color:var(--muted);line-height:1.55}.q{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px}.q.good{border-color:#8ed6b4;background:#fbfffd}.q.bad{border-color:#f0b5bd;background:#fffafb}.qt{font-size:13px;font-weight:780;line-height:1.55;margin-bottom:8px}.opts{display:grid;gap:6px}.opt{display:flex;gap:8px;border:1px solid var(--line);border-radius:9px;padding:8px 9px;font-size:12px;line-height:1.5;background:#fff}.textans,.selans{border:1px solid #cfd4df;border-radius:8px;padding:8px;background:#fff;outline:none}.textans:focus,.selans:focus{border-color:#6a55bf;box-shadow:0 0 0 3px rgba(78,56,160,.08)}.qnum{display:inline-block;min-width:24px;color:#21164b;font-weight:950;margin:0 3px}.inline-answer{width:150px;border:0;border-bottom:2px solid #969dad;border-radius:0;padding:3px 5px;margin:0 3px;background:transparent;font-weight:800;color:#251a50}.inline-answer.wide{width:185px}.note-sheet{border:1px solid var(--line);border-radius:14px;background:#fbfcfe;padding:17px 18px}.note-title{font-weight:950;color:#21164b;margin:4px 0 7px}.note-title.center{text-align:center;font-size:16px;margin-bottom:14px}.note-subtitle{font-weight:950;color:#2d2a3d;margin:14px 0 4px}.note-line{font-size:13px;line-height:2.2}.note-line.q{border:0;border-radius:0;padding:2px 0;margin:0;background:transparent}.indent{padding-left:18px!important}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.exam-table{width:100%;border-collapse:collapse;min-width:760px;font-size:12px}.exam-table th,.exam-table td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:10px;vertical-align:top;line-height:1.45}.exam-table th{background:#f7f8fb;color:#2d2a3d;text-align:left}.exam-table th:last-child,.exam-table td:last-child{border-right:0}.table-answer{width:100px;border:0;border-bottom:2px solid #969dad;border-radius:0;padding:2px 4px;background:transparent;font-weight:800}
+.flow-layout,.match-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(250px,.55fr);gap:18px;align-items:start}.flow-chart{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfcfe}.flow-title{text-align:center;font-weight:950;color:#21164b;margin-bottom:12px}.flow-box{border:1px solid #dde1e8;border-radius:8px;padding:10px;text-align:center;background:#fff;font-size:12px;line-height:1.45;margin:0}.flow-box.q{margin:0}.flow-box.good{border-color:#8ed6b4;background:#fbfffd}.flow-box.bad{border-color:#f0b5bd;background:#fffafb}.flow-box.plain{color:#3d4350}.arrow{text-align:center;font-size:17px;line-height:1.2;color:#747b89}.flow-select{min-width:115px;padding:5px 7px;margin:0 3px}.choice-box{position:sticky;top:165px;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;font-size:11.5px;line-height:1.6}.choice-box>div{margin:4px 0}.choice-title{font-weight:950;text-align:center;color:#21164b;margin-bottom:8px!important}.inline-select-q{padding:10px 12px}.inline-select-q .qt{margin:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,.85fr);align-items:center;gap:10px}.inline-select{width:100%}
+.actions{display:flex;gap:8px;position:sticky;bottom:0;background:linear-gradient(to top,#f5f7fb 75%,rgba(245,247,251,.8));padding:14px 0 4px;z-index:25}.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:900}.primary{background:linear-gradient(100deg,var(--purple),var(--purple2));color:#fff}.ghost{background:#e9ebf1;color:#3d4251}.result{display:none;background:#19162a;color:#fff;border-radius:16px;padding:18px;margin-top:10px}.result.show{display:block}.result .big{font-size:34px;font-weight:950}.status.ok{color:#8ef0c2}.status.err{color:#ffadb8}
+.review{margin-top:9px;padding-top:9px;border-top:1px dashed #f1bbc2;font-size:12px;line-height:1.5}.badans{color:#a31e31}.goodans{color:#13724c}.why{margin-top:6px;background:#fff6e9;border:1px solid #f3d4a6;border-radius:9px;padding:8px;color:#7a4711}.review-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.ev,.trbtn{border:0;border-radius:8px;padding:7px 9px;font-size:10.5px;font-weight:900}.ev{background:#e7f0ff;color:#255eaf}.trbtn{background:#f1ecff;color:#5a3ba0}.transcript{display:none;margin-top:7px;background:#f6f7fa;border:1px solid #e4e6eb;border-radius:9px;padding:9px;color:#394050}.transcript.show{display:block}.timecode{font-size:10px;font-weight:900;color:#6a55bf;margin-bottom:4px}
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(17,14,36,.55);display:grid;place-items:center;padding:18px}.start{width:min(450px,100%);background:#fff;border-radius:20px;padding:22px;box-shadow:0 24px 70px rgba(20,15,55,.24)}.start h2{margin:3px 0 7px;color:#21164b}.start p{font-size:12px;color:var(--muted);line-height:1.55}.field{margin-top:10px}.field label{display:block;font-size:11px;font-weight:900;margin-bottom:5px}.field input{width:100%;padding:10px;border:1px solid #d0d5df;border-radius:9px}.err{display:none;color:#b52d3d;font-size:11px;font-weight:800;margin-top:6px}
+.text-tools{position:fixed;z-index:120;display:none;gap:6px;padding:6px;background:#17152b;border-radius:10px;box-shadow:0 10px 28px rgba(20,18,48,.22)}.text-tools.show{display:flex}.text-tools button{border:0;border-radius:7px;background:#fff;color:#25223c;padding:7px 10px;font-size:11px;font-weight:900;white-space:nowrap}.text-tools button.danger{color:#a32735;background:#fff2f3}mark.study-hl{background:#fff29a;border-radius:3px;padding:1px 0;cursor:pointer}mark.study-hl.has-note{background:#ffe6a6;border-bottom:2px solid #e28b19}mark.study-hl.has-note::after{content:"✎";font-size:9px;margin-left:2px;color:#a86108;vertical-align:super}
+@media(max-width:900px){.flow-layout,.match-layout{grid-template-columns:1fr}.choice-box{position:static}}@media(max-width:720px){.wrap{width:min(100% - 14px,1250px)}.tabs{grid-template-columns:repeat(2,1fr)}.section-card{padding:14px}.audio-status{align-items:flex-start;flex-direction:column}.inline-select-q .qt{grid-template-columns:1fr}.inline-answer,.inline-answer.wide{width:135px;max-width:50vw}}
+</style>
+</head>
+<body>
+<div class="text-tools" id="textTools"><button id="hlTool" type="button">Highlight</button><button id="noteTool" type="button">Take note</button></div>
+<div class="overlay" id="overlay"><div class="start"><div style="font-size:10px;font-weight:950;color:#5a3ba0;text-transform:uppercase;letter-spacing:.1em">Listening Test</div><h2>Listening Test 03</h2><p>Nhập Họ tên và Lớp. Khi bấm <b>Bắt đầu làm bài</b>, audio sẽ tự chạy từ đầu và không thể tua, đổi tốc độ hoặc tạm dừng trong lúc thi.</p><div class="field"><label>Họ và tên</label><input id="studentName"></div><div class="field"><label>Lớp</label><input id="studentClass"></div><div class="err" id="startErr">Vui lòng nhập đầy đủ Họ tên và Lớp.</div><button class="btn primary" style="width:100%;margin-top:13px" id="startBtn">Bắt đầu làm bài</button></div></div>
+
+<header class="top"><div class="wrap topin"><div class="nav"><a href="../../">← Trang chủ</a><div class="brand">Listening Test 03</div></div><div class="chip" id="studentChip">—</div></div></header>
+
+<main class="wrap">
+<section class="hero"><h1>Listening Test 03</h1><p>4 sections · 40 questions · locked audio · auto-submit when audio ends</p><div class="progress"><i id="bar"></i></div><div class="progtext" id="pt">0/40</div></section>
+
+<div class="audio-card" id="audioCard"><audio id="audio" preload="auto" controlslist="nodownload noplaybackrate noremoteplayback"><source src="V9T2.mp3" type="audio/mpeg"></audio><div class="audio-status"><div><span class="pulse-dot"></span><b id="audioStatusText">Audio sẽ tự phát khi bắt đầu bài</b></div><div class="audio-time"><span id="audioNow">00:00</span> / <span id="audioTotal">--:--</span></div></div><div class="locked-progress"><i id="audioProgress"></i></div><div class="lock-note">🔒 Chế độ bài test: audio tự chạy 1 lần, không thể tua, đổi tốc độ hoặc điều khiển vị trí phát.</div><div class="audio-note">Sau khi nộp, câu sai sẽ có nút nghe lại đúng đoạn audio và xem transcript.</div></div>
+
+<div class="tabs"><button class="tab active" data-tab="1">Section 1 · Q1–10</button><button class="tab" data-tab="2">Section 2 · Q11–20</button><button class="tab" data-tab="3">Section 3 · Q21–30</button><button class="tab" data-tab="4">Section 4 · Q31–40</button></div>
+
+<section class="pane active" id="tab1"><div class="section-card"><div class="section-head"><div><h2>Section 1</h2><p>Questions 1–10 · Poppy Reserve</p></div><div class="tag">Notes + Table Completion</div></div>
+<div class="group">
+  <h3>Questions 1–5</h3>
+  <p class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.</p>
+  <div class="note-sheet">
+    <div class="note-title">Poppy Reserve</div>
+    <div>Almond Valley Poppy Reserve is a nature reserve</div>
+    <div class="q note-line" id="q1">• The poppies will be at their best at the end of the <b class="qnum">1</b><input class="textans inline-answer" id="a1">.</div>
+    <div class="q note-line" id="q2">• The poppies on the hills are <b class="qnum">2</b><input class="textans inline-answer" id="a2"> in colour.</div>
+    <div class="q note-line" id="q3">The reserve is located to the <b class="qnum">3</b><input class="textans inline-answer" id="a3"> of Lakeside.</div>
+    <div class="note-line">• The best time for photography is mid-afternoon.</div>
+    <div class="q note-line" id="q4">• Wear <b class="qnum">4</b><input class="textans inline-answer" id="a4"> because of rattlesnakes.</div>
+    <div class="q note-line" id="q5">• The reserve is a <b class="qnum">5</b><input class="textans inline-answer" id="a5"> park.</div>
+  </div>
+</div>
+<div class="group">
+  <h3>Questions 6–10</h3>
+  <p class="inst">Complete the table below. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p>
+  <div class="table-wrap">
+    <table class="exam-table">
+      <thead><tr><th>Tour</th><th>Start time</th><th>Duration</th><th>Highlights</th><th>Photography</th></tr></thead>
+      <tbody>
+        <tr id="q6"><td>The <b class="qnum">6</b><input class="textans table-answer" id="a6"> tour</td><td>Every hour from 7:30 a.m.</td><td>30 minutes</td><td>Viewpoints, film and the <span id="q7"><b class="qnum">7</b><input class="textans table-answer" id="a7"></span></td><td>Panoramic pictures</td></tr>
+        <tr><td>The wildflower tour</td><td>Every two hours from 8:00 a.m.</td><td id="q8"><b class="qnum">8</b><input class="textans table-answer" id="a8"></td><td>Poppy, cream cup, and sage</td><td>Close-up tips</td></tr>
+        <tr><td>The wildlife tour</td><td id="q9"><b class="qnum">9</b><input class="textans table-answer" id="a9"> a.m. or 7:00 p.m.</td><td>1.5 hours</td><td>Coyote, quail, roadrunners</td><td id="q10">Bring tripod and a <b class="qnum">10</b><input class="textans table-answer" id="a10"> lens</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div></section>
+<section class="pane" id="tab2"><div class="section-card"><div class="section-head"><div><h2>Section 2</h2><p>Questions 11–20 · Re-creating life in an Iron Age village</p></div><div class="tag">MCQ + Flow-chart</div></div><div class="group"><h3>Questions 11–15</h3><p class="inst">Choose the correct answer.</p><div class="q" id="q11">
+      <div class="qt"><b>11</b> Jim says that in the Iron Age village</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q11" value="A"><span><b>A</b> he is sometimes cold at night.</span></label><label class="opt"><input type="radio" name="q11" value="B"><span><b>B</b> he always gets up early.</span></label><label class="opt"><input type="radio" name="q11" value="C"><span><b>C</b> he has time to himself.</span></label></div></div><div class="q" id="q12">
+      <div class="qt"><b>12</b> What does Jim say about the food they eat in the village?</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q12" value="A"><span><b>A</b> It takes time to prepare.</span></label><label class="opt"><input type="radio" name="q12" value="B"><span><b>B</b> It is difficult to get used to.</span></label><label class="opt"><input type="radio" name="q12" value="C"><span><b>C</b> It has to be eaten quickly.</span></label></div></div><div class="q" id="q13">
+      <div class="qt"><b>13</b> Jim says that at the evening meal</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q13" value="A"><span><b>A</b> they are sometimes too tired to eat.</span></label><label class="opt"><input type="radio" name="q13" value="B"><span><b>B</b> they mainly have fruit and berries.</span></label><label class="opt"><input type="radio" name="q13" value="C"><span><b>C</b> they talk about what they've done.</span></label></div></div><div class="q" id="q14">
+      <div class="qt"><b>14</b> The most important job for the blacksmiths is</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q14" value="A"><span><b>A</b> to mend broken tools and implements.</span></label><label class="opt"><input type="radio" name="q14" value="B"><span><b>B</b> to maintain a good source of heat.</span></label><label class="opt"><input type="radio" name="q14" value="C"><span><b>C</b> to collect sufficient firewood.</span></label></div></div><div class="q" id="q15">
+      <div class="qt"><b>15</b> Jim likes the fact that in the village, people</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q15" value="A"><span><b>A</b> do varied activities.</span></label><label class="opt"><input type="radio" name="q15" value="B"><span><b>B</b> share their knowledge.</span></label><label class="opt"><input type="radio" name="q15" value="C"><span><b>C</b> get a lot of exercise.</span></label></div></div></div>
+<div class="group">
+  <h3>Questions 16–20</h3>
+  <p class="inst">Complete the flow-chart below. Choose FIVE correct answers from the box, A–I.</p>
+  <div class="flow-layout">
+    <div class="flow-chart">
+      <div class="flow-title">MAKING AN IRON AGE ROUNDHOUSE</div>
+      <div class="flow-box q" id="q16">Mark centre of planned house with a <b class="qnum">16</b><select class="selans flow-select" id="a16"><option value="">— Chọn —</option><option value="A">A · bone</option><option value="B">B · different</option><option value="C">C · equal</option><option value="D">D · elm</option><option value="E">E · hazel</option><option value="F">F · iron</option><option value="G">G · peg</option><option value="H">H · roof</option><option value="I">I · scaffold</option></select> </div>
+      <div class="arrow">↓</div>
+      <div class="flow-box plain">Mark out circle for outer boundary</div>
+      <div class="arrow">↓</div>
+      <div class="flow-box q" id="q17">Dig ground using tools made from <b class="qnum">17</b><select class="selans flow-select" id="a17"><option value="">— Chọn —</option><option value="A">A · bone</option><option value="B">B · different</option><option value="C">C · equal</option><option value="D">D · elm</option><option value="E">E · hazel</option><option value="F">F · iron</option><option value="G">G · peg</option><option value="H">H · roof</option><option value="I">I · scaffold</option></select> </div>
+      <div class="arrow">↓</div>
+      <div class="flow-box plain">Insert wall posts (Iron Age builders preferred wood from oak trees)</div>
+      <div class="arrow">↓</div>
+      <div class="flow-box plain">Slot more stakes into upright posts</div>
+      <div class="arrow">↓</div>
+      <div class="flow-box q" id="q18">Insert centre post and build a wooden <b class="qnum">18</b><select class="selans flow-select" id="a18"><option value="">— Chọn —</option><option value="A">A · bone</option><option value="B">B · different</option><option value="C">C · equal</option><option value="D">D · elm</option><option value="E">E · hazel</option><option value="F">F · iron</option><option value="G">G · peg</option><option value="H">H · roof</option><option value="I">I · scaffold</option></select> around it</div>
+      <div class="arrow">↓</div>
+      <div class="flow-box plain">Add main supporting beams and ring beams</div>
+      <div class="arrow">↓</div>
+      <div class="flow-box q" id="q19">Complete roof framework using <b class="qnum">19</b><select class="selans flow-select" id="a19"><option value="">— Chọn —</option><option value="A">A · bone</option><option value="B">B · different</option><option value="C">C · equal</option><option value="D">D · elm</option><option value="E">E · hazel</option><option value="F">F · iron</option><option value="G">G · peg</option><option value="H">H · roof</option><option value="I">I · scaffold</option></select> wood rods</div>
+      <div class="arrow">↓</div>
+      <div class="flow-box q" id="q20">Cover roof with reed bundles of <b class="qnum">20</b><select class="selans flow-select" id="a20"><option value="">— Chọn —</option><option value="A">A · bone</option><option value="B">B · different</option><option value="C">C · equal</option><option value="D">D · elm</option><option value="E">E · hazel</option><option value="F">F · iron</option><option value="G">G · peg</option><option value="H">H · roof</option><option value="I">I · scaffold</option></select> lengths</div>
+      <div class="arrow">↓</div>
+      <div class="flow-box plain">Daub with mixture of clay, dung and straw</div>
+    </div>
+    <div class="choice-box">
+      <div><b>A</b> bone</div><div><b>B</b> different</div><div><b>C</b> equal</div><div><b>D</b> elm</div><div><b>E</b> hazel</div><div><b>F</b> iron</div><div><b>G</b> peg</div><div><b>H</b> roof</div><div><b>I</b> scaffold</div>
+    </div>
+  </div>
+</div>
+</div></section>
+<section class="pane" id="tab3"><div class="section-card"><div class="section-head"><div><h2>Section 3</h2><p>Questions 21–30 · How jobs might change in the future</p></div><div class="tag">MCQ + Matching</div></div><div class="group"><h3>Questions 21–24</h3><p class="inst">Choose the correct answer.</p><div class="q" id="q21">
+      <div class="qt"><b>21</b> What do the students find surprising about the way that complaints were dealt with at the call centre?</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q21" value="A"><span><b>A</b> the way that customers responded to it</span></label><label class="opt"><input type="radio" name="q21" value="B"><span><b>B</b> the employees’ lack of enthusiasm for it</span></label><label class="opt"><input type="radio" name="q21" value="C"><span><b>C</b> the kind of questions employees were obliged to ask</span></label></div></div><div class="q" id="q22">
+      <div class="qt"><b>22</b> What does Emma say about the report by Jerry Kaplan?</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q22" value="A"><span><b>A</b> It shows how machines will respond to human needs.</span></label><label class="opt"><input type="radio" name="q22" value="B"><span><b>B</b> It emphasises the variety of roles that machines will have.</span></label><label class="opt"><input type="radio" name="q22" value="C"><span><b>C</b> It explains the limitations of machines.</span></label></div></div><div class="q" id="q23">
+      <div class="qt"><b>23</b> What is Nick's reaction to the article The Human Cloud?</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q23" value="A"><span><b>A</b> He agrees that companies should focus on making savings.</span></label><label class="opt"><input type="radio" name="q23" value="B"><span><b>B</b> He supports the concept of greater flexibility for employees.</span></label><label class="opt"><input type="radio" name="q23" value="C"><span><b>C</b> He approves of businesses spending more on recruiting experts.</span></label></div></div><div class="q" id="q24">
+      <div class="qt"><b>24</b> What do the students agree about the use of technology to collect information about employees?</div>
+      <div class="opts"><label class="opt"><input type="radio" name="q24" value="A"><span><b>A</b> Cameras are an effective means of maintaining security.</span></label><label class="opt"><input type="radio" name="q24" value="B"><span><b>B</b> Sometimes productivity is more important than individual privacy.</span></label><label class="opt"><input type="radio" name="q24" value="C"><span><b>C</b> Employees may object to certain types of monitoring.</span></label></div></div></div>
+<div class="group">
+  <h3>Questions 25–30</h3>
+  <p class="inst">What issue do Emma and Nick discuss for each aspect of the presentation? Choose SIX correct answers, A–H.</p>
+  <div class="match-layout">
+    <div class="aspect-list">
+<div class="q inline-select-q" id="q25">
+      <div class="qt"><b>Introduction</b> <span class="qnum">25</span>
+      <select class="selans inline-select" id="a25">
+        <option value="">— Chọn —</option>
+        <option value="A">A · at which point of the presentation it should come</option><option value="B">B · whether it should be removed completely</option><option value="C">C · whether it is clear enough</option><option value="D">D · if it needs to be completely re-written</option><option value="E">E · if visuals will help or not</option><option value="F">F · if the information needs to be checked</option><option value="G">G · which further examples should be included</option><option value="H">H · which of them will present it</option>
+      </select></div>
+    </div><div class="q inline-select-q" id="q26">
+      <div class="qt"><b>Researcher profiles</b> <span class="qnum">26</span>
+      <select class="selans inline-select" id="a26">
+        <option value="">— Chọn —</option>
+        <option value="A">A · at which point of the presentation it should come</option><option value="B">B · whether it should be removed completely</option><option value="C">C · whether it is clear enough</option><option value="D">D · if it needs to be completely re-written</option><option value="E">E · if visuals will help or not</option><option value="F">F · if the information needs to be checked</option><option value="G">G · which further examples should be included</option><option value="H">H · which of them will present it</option>
+      </select></div>
+    </div><div class="q inline-select-q" id="q27">
+      <div class="qt"><b>Section on automation</b> <span class="qnum">27</span>
+      <select class="selans inline-select" id="a27">
+        <option value="">— Chọn —</option>
+        <option value="A">A · at which point of the presentation it should come</option><option value="B">B · whether it should be removed completely</option><option value="C">C · whether it is clear enough</option><option value="D">D · if it needs to be completely re-written</option><option value="E">E · if visuals will help or not</option><option value="F">F · if the information needs to be checked</option><option value="G">G · which further examples should be included</option><option value="H">H · which of them will present it</option>
+      </select></div>
+    </div><div class="q inline-select-q" id="q28">
+      <div class="qt"><b>Section on workplace structure</b> <span class="qnum">28</span>
+      <select class="selans inline-select" id="a28">
+        <option value="">— Chọn —</option>
+        <option value="A">A · at which point of the presentation it should come</option><option value="B">B · whether it should be removed completely</option><option value="C">C · whether it is clear enough</option><option value="D">D · if it needs to be completely re-written</option><option value="E">E · if visuals will help or not</option><option value="F">F · if the information needs to be checked</option><option value="G">G · which further examples should be included</option><option value="H">H · which of them will present it</option>
+      </select></div>
+    </div><div class="q inline-select-q" id="q29">
+      <div class="qt"><b>Section on tracking technology</b> <span class="qnum">29</span>
+      <select class="selans inline-select" id="a29">
+        <option value="">— Chọn —</option>
+        <option value="A">A · at which point of the presentation it should come</option><option value="B">B · whether it should be removed completely</option><option value="C">C · whether it is clear enough</option><option value="D">D · if it needs to be completely re-written</option><option value="E">E · if visuals will help or not</option><option value="F">F · if the information needs to be checked</option><option value="G">G · which further examples should be included</option><option value="H">H · which of them will present it</option>
+      </select></div>
+    </div><div class="q inline-select-q" id="q30">
+      <div class="qt"><b>Interview with company manager</b> <span class="qnum">30</span>
+      <select class="selans inline-select" id="a30">
+        <option value="">— Chọn —</option>
+        <option value="A">A · at which point of the presentation it should come</option><option value="B">B · whether it should be removed completely</option><option value="C">C · whether it is clear enough</option><option value="D">D · if it needs to be completely re-written</option><option value="E">E · if visuals will help or not</option><option value="F">F · if the information needs to be checked</option><option value="G">G · which further examples should be included</option><option value="H">H · which of them will present it</option>
+      </select></div>
+    </div>
+    </div>
+    <div class="choice-box">
+      <div class="choice-title">Issues</div>
+<div><b>A</b> at which point of the presentation it should come</div><div><b>B</b> whether it should be removed completely</div><div><b>C</b> whether it is clear enough</div><div><b>D</b> if it needs to be completely re-written</div><div><b>E</b> if visuals will help or not</div><div><b>F</b> if the information needs to be checked</div><div><b>G</b> which further examples should be included</div><div><b>H</b> which of them will present it</div>
+    </div>
+  </div>
+</div>
+</div></section>
+<section class="pane" id="tab4"><div class="section-card"><div class="section-head"><div><h2>Section 4</h2><p>Questions 31–40 · Health on the Night Shift</p></div><div class="tag">Note Completion</div></div>
+<div class="group">
+  <h3>Questions 31–40</h3>
+  <p class="inst">Complete the notes below. Write <b>NO MORE THAN THREE WORDS</b> for each answer.</p>
+  <div class="note-sheet">
+    <div class="note-title center">HEALTH ON THE NIGHT SHIFT</div>
+
+    <div class="note-subtitle">Background:</div>
+    <div class="q note-line" id="q31">• increase in number of night workers because of <b class="qnum">31</b><input class="textans inline-answer wide" id="a31"> 24-hour shopping/services</div>
+    <div class="note-line">• need to examine effects of changing work and sleep habits</div>
+    <div class="note-line">• US and British research found these lead to health problems</div>
+
+    <div class="note-subtitle">Main Causes:</div>
+    <div class="q note-line" id="q32"><b>A</b> <b class="qnum">32</b><input class="textans inline-answer wide" id="a32"></div>
+    <div class="note-line indent">• regulates daily life</div>
+    <div class="q note-line indent" id="q33">• connected to behavioural patterns and cycles of <b class="qnum">33</b><input class="textans inline-answer wide" id="a33"></div>
+    <div class="note-line indent">• programmes us to be awake and asleep at certain times</div>
+    <div class="note-line"><b>B</b> Sleep Debt</div>
+    <div class="note-line indent">• impossible to get enough sleep during daytime</div>
+    <div class="q note-line" id="q34"><b>C</b> <b class="qnum">34</b><input class="textans inline-answer wide" id="a34"></div>
+    <div class="note-line indent">• different working/sleeping times, ‘dislocation’</div>
+
+    <div class="note-subtitle">Effects:</div>
+    <div class="note-line"><b>A Physical</b></div>
+    <div class="q note-line indent" id="q35">• higher incidence of heart and <b class="qnum">35</b><input class="textans inline-answer wide" id="a35"> problems</div>
+    <div class="note-line indent">• more minor illnesses, suggesting that immunity of shift workers is affected</div>
+
+    <div class="note-line"><b>B Psychological</b></div>
+    <div class="q note-line indent" id="q36">• most common: <b class="qnum">36</b><input class="textans inline-answer wide" id="a36"></div>
+    <div class="q note-line indent" id="q37">• <b class="qnum">37</b><input class="textans inline-answer wide" id="a37"> affected, e.g. decision-making, planning, which regulate our <span id="q38"><b class="qnum">38</b><input class="textans inline-answer wide" id="a38"></span></div>
+
+    <div class="note-line"><b>C Social</b></div>
+    <div class="note-line">Night shift work can lead to:</div>
+    <div class="q note-line indent" id="q39">• destruction of <b class="qnum">39</b><input class="textans inline-answer wide" id="a39"> and other relationships, e.g. <span id="q40"><b class="qnum">40</b><input class="textans inline-answer wide" id="a40"></span></div>
+    <div class="note-line indent">• eventually, for individuals: social isolation</div>
+  </div>
+</div>
+</div></section>
+
+<div class="actions"><button class="btn primary" id="submitBtn">Nộp bài & xem kết quả</button><button class="btn ghost" id="resetBtn">Làm lại</button></div>
+<div class="result" id="result"><div class="big" id="scoreBig">0/40</div><h3 id="scoreTitle">Kết quả</h3><p id="scoreDetail"></p><p>Gửi kết quả: <span id="sendStatus">đang xử lý…</span></p></div>
+</main>
+
+<script>
+const Q={"1": {"answers": ["month"], "display": "month", "start": 100, "end": 121, "tr": "The ranger says the poppies should be in full bloom “at the end of the month.”", "why": "Poppies sẽ đẹp nhất vào cuối tháng → month."}, "2": {"answers": ["orange"], "display": "orange", "start": 100, "end": 121, "tr": "The ranger says the hills are already covered with orange poppies.", "why": "Hoa poppy trên các sườn đồi có màu orange."}, "3": {"answers": ["east"], "display": "east", "start": 122, "end": 145, "tr": "From Lakeside, visitors need to drive about an hour east.", "why": "Khu bảo tồn nằm về phía east của Lakeside."}, "4": {"answers": ["trousers"], "display": "trousers", "start": 146, "end": 161, "tr": "Because of rattlesnakes, visitors are advised to wear trousers.", "why": "Để an toàn trước rattlesnakes, khách được khuyên mặc trousers."}, "5": {"answers": ["state"], "display": "state", "start": 161, "end": 184, "tr": "The ranger explains that it is a state park, not a national park.", "why": "Đây là state park."}, "6": {"answers": ["general"], "display": "general", "start": 243, "end": 255, "tr": "The first option is described as the general tour.", "why": "Tour bắt đầu mỗi giờ từ 7:30 là general tour."}, "7": {"answers": ["museum"], "display": "museum", "start": 255, "end": 281, "tr": "Highlights include viewpoints, a film and the museum.", "why": "Điểm nổi bật còn lại là museum."}, "8": {"answers": ["one hour", "1 hour", "an hour"], "display": "one hour", "start": 281, "end": 304, "tr": "The wildflower tour lasts one hour.", "why": "Wildflower tour kéo dài one hour."}, "9": {"answers": ["5.30", "5:30", "5.30 a.m.", "5:30 a.m.", "5.30 am", "5:30 am"], "display": "5.30", "start": 305, "end": 343, "tr": "The wildlife tour is offered at 5.30 a.m. or 7 p.m.", "why": "Buổi wildlife tour đầu tiên bắt đầu lúc 5.30 a.m."}, "10": {"answers": ["zoom"], "display": "zoom", "start": 344, "end": 361, "tr": "Visitors are advised to bring a tripod and zoom lens.", "why": "Loại lens cần mang theo là zoom lens."}, "11": {"a": "B", "display": "B", "start": 524, "end": 556, "tr": "Jim says he gets up at first light every day in the Iron Age village.", "why": "Jim nói ở làng này anh ấy dậy sớm mỗi ngày → B."}, "12": {"a": "A", "display": "A", "start": 557, "end": 574, "tr": "He explains that cooking takes a long time and meals require preparation.", "why": "Jim nhấn mạnh đồ ăn mất nhiều thời gian để chuẩn bị/nấu → A."}, "13": {"a": "C", "display": "C", "start": 575, "end": 595, "tr": "At the evening meal they gather as a community and chat about the day.", "why": "Họ nói chuyện về những gì đã làm trong ngày → C."}, "14": {"a": "B", "display": "B", "start": 611, "end": 630, "tr": "The blacksmiths’ biggest priority is tending the fire and keeping it hot.", "why": "Công việc quan trọng nhất là duy trì nguồn nhiệt tốt → B."}, "15": {"a": "A", "display": "A", "start": 642, "end": 660, "tr": "Jim likes learning how to do different things every day.", "why": "Jim thích việc mọi người làm nhiều hoạt động khác nhau → A."}, "16": {"a": "G", "display": "G · peg", "start": 724, "end": 741, "tr": "The centre of the house is marked with a wooden peg.", "why": "Trung tâm ngôi nhà được đánh dấu bằng peg → G."}, "17": {"a": "A", "display": "A · bone", "start": 742, "end": 756, "tr": "The ground was dug with tools fashioned from animal bone.", "why": "Dụng cụ đào được làm từ bone → A."}, "18": {"a": "I", "display": "I · scaffold", "start": 799, "end": 832, "tr": "A timber scaffold tower is built around the centre post.", "why": "Quanh cột trung tâm là một wooden scaffold → I."}, "19": {"a": "E", "display": "E · hazel", "start": 833, "end": 851, "tr": "Hazel wood rods are linked to the beams in parallel hoops.", "why": "Khung mái được hoàn thiện bằng hazel rods → E."}, "20": {"a": "C", "display": "C · equal", "start": 864, "end": 880, "tr": "Reed bundles are cut so that each is of equal length.", "why": "Các bó reed được cắt có độ dài equal → C."}, "21": {"a": "A", "display": "A", "start": 998, "end": 1029, "tr": "They are surprised that customers were happier with the new complaint-handling method.", "why": "Điều gây bất ngờ là phản ứng tích cực của customers → A."}, "22": {"a": "C", "display": "C", "start": 1030, "end": 1051, "tr": "Kaplan argues there will still be jobs unsuitable for machines because machines cannot empathise.", "why": "Báo cáo nhấn mạnh những giới hạn của machines → C."}, "23": {"a": "B", "display": "B", "start": 1051, "end": 1092, "tr": "Nick likes the idea of working from home at a time that suits him.", "why": "Nick ủng hộ sự linh hoạt lớn hơn cho người lao động → B."}, "24": {"a": "C", "display": "C", "start": 1092, "end": 1118, "tr": "They expect many employees would refuse some forms of monitoring.", "why": "Hai sinh viên cho rằng nhân viên có thể phản đối một số kiểu monitoring → C."}, "25": {"a": "H", "display": "H · which of them will present it", "start": 1174, "end": 1190, "tr": "They discuss who should deliver the introduction and decide Nick should do it.", "why": "Vấn đề của Introduction là ai sẽ trình bày → H."}, "26": {"a": "B", "display": "B · whether it should be removed completely", "start": 1190, "end": 1210, "tr": "They discuss whether the researcher profiles are necessary or should be cut.", "why": "Họ cân nhắc có nên bỏ hoàn toàn phần researcher profiles → B."}, "27": {"a": "D", "display": "D · if it needs to be completely re-written", "start": 1211, "end": 1225, "tr": "Emma says the automation section may need to be started again.", "why": "Họ bàn xem phần automation có cần viết lại hoàn toàn → D."}, "28": {"a": "G", "display": "G · which further examples should be included", "start": 1225, "end": 1249, "tr": "They decide to search for more situations and choose stronger case examples.", "why": "Phần workplace structure cần thêm ví dụ → G."}, "29": {"a": "E", "display": "E · if visuals will help or not", "start": 1249, "end": 1274, "tr": "They discuss whether photos would serve a real purpose in the tracking technology section.", "why": "Họ cân nhắc visuals có thực sự hữu ích hay không → E."}, "30": {"a": "F", "display": "F · if the information needs to be checked", "start": 1274, "end": 1291, "tr": "They want the manager to confirm that her views were recorded accurately.", "why": "Thông tin từ cuộc phỏng vấn cần được kiểm tra/xác nhận → F."}, "31": {"answers": ["the number of", "number of"], "display": "the number of", "start": 1357, "end": 1380, "tr": "There has been a huge increase in night workers mainly because of the number of shops and services open 24/7.", "why": "Nguyên nhân được nêu là the number of 24-hour shops/services."}, "32": {"answers": ["internal clock", "the internal clock"], "display": "internal clock", "start": 1381, "end": 1401, "tr": "The first main cause is what researchers call the internal clock.", "why": "Nguyên nhân A là internal clock."}, "33": {"answers": ["light and dark"], "display": "light and dark", "start": 1401, "end": 1431, "tr": "The internal clock is linked to cycles of light and dark.", "why": "Đồng hồ sinh học gắn với chu kỳ light and dark."}, "34": {"answers": ["unsocial hours"], "display": "unsocial hours", "start": 1459, "end": 1477, "tr": "The third cause is the unsocial hours night workers have to keep.", "why": "Nguyên nhân C là unsocial hours."}, "35": {"answers": ["stomach"], "display": "stomach", "start": 1505, "end": 1534, "tr": "Night shift workers have a high incidence of stomach problems such as ulcers.", "why": "Nhóm này có nhiều vấn đề về stomach."}, "36": {"answers": ["depression"], "display": "depression", "start": 1558, "end": 1584, "tr": "The most common psychological problem is depression.", "why": "Vấn đề tâm lý phổ biến nhất là depression."}, "37": {"answers": ["mental abilities"], "display": "mental abilities", "start": 1558, "end": 1584, "tr": "Accident statistics suggest that mental abilities are badly affected.", "why": "Night work ảnh hưởng xấu đến mental abilities."}, "38": {"answers": ["performance"], "display": "performance", "start": 1584, "end": 1609, "tr": "Decision-making and planning abilities are described as controlling performance.", "why": "Các năng lực này điều khiển performance."}, "39": {"answers": ["family life"], "display": "family life", "start": 1609, "end": 1643, "tr": "Night work can contribute to the breakup of family life.", "why": "Một hậu quả xã hội là sự phá vỡ family life."}, "40": {"answers": ["peer group"], "display": "peer group", "start": 1609, "end": 1643, "tr": "Relationships can also break down among the peer group.", "why": "Các quan hệ trong peer group cũng bị ảnh hưởng."}};
+const ENDPOINT="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
+const STORE='IELTS_LISTENING_LIS03_V9T2',ANN=STORE+'_ANN',STUDENT_KEY='IELTS_PRACTICE_STUDENT',TEST_ID='LIS03_V9T2';
+let student={},started=0,submitted=false,stopAt=null,lastSafeTime=0,seekLock=false,savedRange=null,savedRoot=null,activeMark=null;
+
+function norm(s){return String(s||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[.,;:!?]+$/g,'').replace(/\s+/g,' ')}
+function fmt(sec){sec=Math.max(0,Math.floor(Number(sec)||0));return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
+function getA(n){const el=document.getElementById('a'+n);if(el)return el.value;const r=document.querySelector(`input[name="q${n}"]:checked`);return r?r.value:''}
+function ok(q,a){return (q.answers||[q.a]).some(x=>norm(x)===norm(a))}
+function save(){if(submitted)return;const a={};for(let n=1;n<=40;n++)a[n]=getA(n);localStorage.setItem(STORE,JSON.stringify(a))}
+function restore(){let a={};try{a=JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){};Object.entries(a).forEach(([n,v])=>{const el=document.getElementById('a'+n);if(el)el.value=v;const r=document.querySelector(`input[name="q${n}"][value="${CSS.escape(v)}"]`);if(r)r.checked=true});prog()}
+function prog(){let d=0;for(let n=1;n<=40;n++)if(norm(getA(n)))d++;bar.style.width=Math.round(d/40*100)+'%';pt.textContent=d+'/40'}
+function prefill(){const p=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem(STUDENT_KEY)||'{}')}catch(e){};studentName.value=p.get('name')||s.name||localStorage.getItem('IELTS_STUDENT_NAME')||'';studentClass.value=p.get('className')||s.className||localStorage.getItem('IELTS_STUDENT_CLASS')||''}
+
+function annData(){let d={items:[]};try{d={...d,...JSON.parse(localStorage.getItem(ANN)||'{}')}}catch(e){};if(!Array.isArray(d.items))d.items=[];return d}
+function saveAnnData(d){localStorage.setItem(ANN,JSON.stringify(d))}
+function textOffset(root,node,offset){let total=0;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let cur;while(cur=w.nextNode()){if(cur===node)return total+offset;total+=cur.nodeValue.length}return total}
+function nodeAtOffset(root,target){let total=0;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let cur;while(cur=w.nextNode()){const len=cur.nodeValue.length;if(total+len>=target)return [cur,Math.max(0,target-total)];total+=len}return [null,0]}
+function makeMark(range,id,note=''){const m=document.createElement('mark');m.className='study-hl'+(note?' has-note':'');m.dataset.hid=id;if(note){m.dataset.note=note;m.title=note}range.surroundContents(m);return m}
+function applySavedAnnotations(){[...annData().items].sort((a,b)=>b.start-a.start).forEach(item=>{const root=document.getElementById(item.rootId);if(!root)return;const [sn,so]=nodeAtOffset(root,item.start),[en,eo]=nodeAtOffset(root,item.end);if(!sn||!en)return;try{const r=document.createRange();r.setStart(sn,so);r.setEnd(en,eo);makeMark(r,item.id,item.note||'')}catch(e){}})}
+function selectedRoot(range){return [...document.querySelectorAll('.pane')].find(root=>root.contains(range.commonAncestorContainer))}
+function selectionHasFormControls(range){const frag=range.cloneContents();return !!frag.querySelector?.('input,select,button,textarea,audio')}
+function positionTools(rect){textTools.style.left=Math.max(8,Math.min(window.innerWidth-230,rect.left))+'px';textTools.style.top=Math.max(8,rect.top-44)+'px';textTools.classList.add('show')}
+function hideTools(){textTools.classList.remove('show');activeMark=null}
+function setToolLabelsForSelection(){hlTool.textContent='Highlight';noteTool.textContent='Take note';hlTool.classList.remove('danger');noteTool.classList.remove('danger')}
+function setToolLabelsForMark(mark){hlTool.textContent='Xóa highlight';hlTool.classList.add('danger');if(mark.dataset.note){noteTool.textContent='Xóa take note';noteTool.classList.add('danger')}else{noteTool.textContent='Take note';noteTool.classList.remove('danger')}}
+function captureSelection(){if(submitted)return;const s=window.getSelection();if(!s||!s.rangeCount||s.isCollapsed)return;const r=s.getRangeAt(0),root=selectedRoot(r);if(!root||!s.toString().trim()||selectionHasFormControls(r))return;savedRange=r.cloneRange();savedRoot=root;activeMark=null;setToolLabelsForSelection();positionTools(r.getBoundingClientRect())}
+function addAnnotation(withNote=false){if(!savedRange||!savedRoot)return;let note='';if(withNote){note=prompt('Nhập ghi chú cho đoạn đã chọn:')??'';if(!note)return}const id='h'+Date.now()+Math.random().toString(36).slice(2,7),start=textOffset(savedRoot,savedRange.startContainer,savedRange.startOffset),end=textOffset(savedRoot,savedRange.endContainer,savedRange.endOffset);try{makeMark(savedRange,id,note);const d=annData();d.items.push({id,rootId:savedRoot.id,start,end,note});saveAnnData(d)}catch(e){alert('Hãy chọn một đoạn chữ liên tục, không bao gồm ô trả lời.')}window.getSelection()?.removeAllRanges();savedRange=null;savedRoot=null;hideTools()}
+function unwrapMark(mark){const p=mark.parentNode;while(mark.firstChild)p.insertBefore(mark.firstChild,mark);p.removeChild(mark);p.normalize()}
+function removeHighlight(mark){const id=mark.dataset.hid,d=annData();d.items=d.items.filter(x=>x.id!==id);saveAnnData(d);unwrapMark(mark);hideTools()}
+function toggleMarkNote(mark){const d=annData(),item=d.items.find(x=>x.id===mark.dataset.hid);if(mark.dataset.note){delete mark.dataset.note;mark.removeAttribute('title');mark.classList.remove('has-note');if(item)item.note=''}else{const note=prompt('Nhập ghi chú cho đoạn highlight:');if(!note)return;mark.dataset.note=note;mark.title=note;mark.classList.add('has-note');if(item)item.note=note}saveAnnData(d);setToolLabelsForMark(mark)}
+function openToolsForMark(mark){activeMark=mark;savedRange=null;savedRoot=null;setToolLabelsForMark(mark);positionTools(mark.getBoundingClientRect())}
+
+function playEvidence(start,end){
+  if(!submitted)return;
+  stopAt=null;audio.pause();
+  const reviewStart=Math.max(0,start-2),reviewEnd=Math.min(audio.duration||99999,end+2);
+  audio.playbackRate=1;audio.currentTime=reviewStart;stopAt=reviewEnd;
+  audioCard.classList.remove('finished');audioCard.classList.add('reviewing');
+  audioStatusText.textContent='Đang nghe lại đoạn chứa đáp án · '+fmt(reviewStart)+'–'+fmt(reviewEnd);
+  audioNow.textContent=fmt(reviewStart);
+  const p=audio.play();if(p&&p.catch)p.catch(()=>audioStatusText.textContent='Không phát được đoạn review — hãy bấm lại nút Nghe đoạn chứa đáp án');
+  audioCard.scrollIntoView({behavior:'smooth',block:'start'});
+}
+audio.addEventListener('loadedmetadata',()=>audioTotal.textContent=fmt(audio.duration||0));
+audio.addEventListener('timeupdate',()=>{
+  if(!submitted){lastSafeTime=audio.currentTime;audioNow.textContent=fmt(audio.currentTime);if(Number.isFinite(audio.duration)&&audio.duration>0)audioProgress.style.width=Math.min(100,(audio.currentTime/audio.duration)*100)+'%'}
+  if(stopAt!==null&&audio.currentTime>=stopAt){audio.pause();stopAt=null;if(submitted){audioCard.classList.remove('reviewing');audioStatusText.textContent='Đã phát xong đoạn chứa đáp án'}}
+});
+audio.addEventListener('seeking',()=>{if(started&&!submitted&&!seekLock&&Math.abs(audio.currentTime-lastSafeTime)>1.25){seekLock=true;audio.currentTime=lastSafeTime;setTimeout(()=>seekLock=false,0)}});
+audio.addEventListener('ratechange',()=>{if(started&&!submitted&&audio.playbackRate!==1)audio.playbackRate=1});
+audio.addEventListener('pause',()=>{if(started&&!submitted&&!audio.ended&&stopAt===null)setTimeout(()=>audio.play().catch(()=>{}),50)});
+audio.addEventListener('ended',()=>{audioCard.classList.remove('playing');audioCard.classList.add('finished');audioStatusText.textContent='Audio đã kết thúc · bài đang được nộp';audioProgress.style.width='100%';if(started&&!submitted)submit(true)});
+
+function addReview(box,selected,correct,item){const d=document.createElement('div');d.className='review';d.innerHTML=`<div>Đáp án em chọn: <b class="badans">${selected||'Chưa trả lời'}</b></div><div>Đáp án đúng: <b class="goodans">${correct}</b></div><div class="why"><b>Giải thích:</b> ${item.why}</div><div class="review-actions"><button class="ev">▶ Nghe đoạn chứa đáp án (${fmt(item.start)})</button><button class="trbtn">↗ Xem transcript</button></div><div class="transcript"><div class="timecode">${fmt(item.start)}–${fmt(item.end)}</div>${item.tr}</div>`;d.querySelector('.ev').onclick=()=>playEvidence(item.start,item.end);d.querySelector('.trbtn').onclick=()=>d.querySelector('.transcript').classList.toggle('show');box.appendChild(d)}
+function submit(auto=false){if(submitted)return;submitted=true;stopAt=null;audio.pause();audioCard.classList.remove('playing');audioStatusText.textContent=auto?'Audio đã kết thúc':'Bài đã nộp · có thể nghe lại đoạn chứa đáp án';let score=0,details=[];for(let n=1;n<=40;n++){const q=Q[n],a=getA(n),good=ok(q,a),box=document.getElementById('q'+n);if(good)score++;box?.classList.add(good?'good':'bad');if(!good&&box)addReview(box,a,q.display||q.a,q);details.push({question:n,answer:a,correct:q.display||q.a,isCorrect:good})}document.querySelectorAll('input,select').forEach(e=>e.disabled=true);const pct=Math.round(score/40*100),dur=Math.floor((Date.now()-started)/1000);scoreBig.textContent=score+'/40';scoreTitle.textContent=pct+'%';scoreDetail.textContent=auto?'Audio đã kết thúc — hệ thống tự động nộp bài.':(pct>=85?'Rất tốt!':pct>=70?'Khá tốt. Hãy nghe lại các đoạn chứa đáp án ở câu sai.':'Hãy dùng nút Nghe đoạn chứa đáp án và transcript để review.');result.classList.add('show');submitBtn.disabled=true;localStorage.removeItem(STORE);send(score,pct,dur,details)}
+async function send(score,pct,dur,details){const p=new URLSearchParams({name:student.name,className:student.className,score:String(score),total:'40',percent:String(pct),duration:String(dur),details:JSON.stringify({testId:TEST_ID,title:'Listening Test 03',answers:details})});try{await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:p.toString()});sendStatus.textContent='đã gửi';sendStatus.className='status ok'}catch(e){sendStatus.textContent='chưa gửi được';sendStatus.className='status err'}}
+function start(){const n=studentName.value.trim(),c=studentClass.value.trim();if(!n||!c){startErr.style.display='block';return}student={name:n,className:c};localStorage.setItem(STUDENT_KEY,JSON.stringify(student));localStorage.setItem('IELTS_STUDENT_NAME',n);localStorage.setItem('IELTS_STUDENT_CLASS',c);studentChip.textContent=n+' · '+c;audio.currentTime=0;audio.playbackRate=1;lastSafeTime=0;started=Date.now();restore();const p=audio.play();if(p&&p.catch)p.catch(()=>{audioStatusText.textContent='Không thể tự phát — bấm Bắt đầu làm bài lại';started=0});overlay.style.display='none';audioCard.classList.add('playing');audioStatusText.textContent='Audio đang phát · không thể tua'}
+
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('tab'+b.dataset.tab).classList.add('active')})
+document.querySelectorAll('input,select').forEach(e=>{e.addEventListener('input',()=>{save();prog()});e.addEventListener('change',()=>{save();prog()})})
+document.querySelectorAll('.pane').forEach(pane=>{pane.addEventListener('mouseup',()=>setTimeout(captureSelection,10));pane.addEventListener('touchend',()=>setTimeout(captureSelection,100));pane.addEventListener('click',e=>{const mark=e.target.closest('mark.study-hl');if(mark){e.stopPropagation();openToolsForMark(mark);return}if(!e.target.closest('#textTools'))textTools.classList.remove('show')})})
+hlTool.onclick=()=>{if(activeMark)removeHighlight(activeMark);else addAnnotation(false)}
+noteTool.onclick=()=>{if(activeMark)toggleMarkNote(activeMark);else addAnnotation(true)}
+document.addEventListener('scroll',()=>textTools.classList.remove('show'),true);
+startBtn.onclick=start;
+studentClass.addEventListener('keydown',e=>{if(e.key==='Enter')start()});
+submitBtn.onclick=()=>{if(confirm('Nộp bài Listening Test 03?'))submit(false)};
+resetBtn.onclick=()=>{if(confirm('Xóa đáp án và làm lại?')){localStorage.removeItem(STORE);location.reload()}};
+prefill();applySavedAnnotations();prog();
+</script>
+</body></html>
