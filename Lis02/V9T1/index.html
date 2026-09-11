@@ -56,6 +56,21 @@ mark.study-hl.has-note::after{
   content:"✎";font-size:9px;margin-left:2px;color:#a86108;vertical-align:super
 }
 
+
+/* Locked Listening Test Player */
+#audio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.locked-player{width:100%;padding:4px 0 2px}
+.audio-status{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px;font-size:12px;color:#302a48}
+.audio-status>div:first-child{display:flex;align-items:center;gap:8px}
+.pulse-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#9ca3af;box-shadow:0 0 0 0 rgba(76,47,160,.25)}
+.audio-card.playing .pulse-dot{background:#2f6fdf;animation:audioPulse 1.5s infinite}
+.audio-card.finished .pulse-dot{background:#16a34a;animation:none}
+@keyframes audioPulse{0%{box-shadow:0 0 0 0 rgba(47,111,223,.30)}70%{box-shadow:0 0 0 7px rgba(47,111,223,0)}100%{box-shadow:0 0 0 0 rgba(47,111,223,0)}}
+.audio-time{font-variant-numeric:tabular-nums;color:#657084;font-weight:850;white-space:nowrap}
+.locked-progress{height:8px;border-radius:999px;background:#e7e9ef;overflow:hidden}
+.locked-progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#281260,#2f6fdf);transition:width .25s linear}
+.lock-note{margin-top:9px;padding:9px 11px;border-radius:9px;background:#f5f4fb;color:#665d7d;font-size:11px;line-height:1.45}
+
 </style>
 </head>
 <body>
@@ -68,7 +83,20 @@ mark.study-hl.has-note::after{
 <header class="top"><div class="wrap topin"><div class="nav"><a href="../../">← Kho luyện thi</a><div class="brand">🎧 Listening Test 02 <span style="font-weight:700;color:#8178a4">· V9T1</span></div></div><div class="chip studentchip" id="studentChip">—</div></div></header>
 <main class="wrap">
 <section class="hero"><h1>Listening Test 02</h1><p>4 sections · 40 câu · tự chấm · nghe lại đúng đoạn chứa đáp án sau khi nộp</p><div class="progress"><i id="bar"></i></div><div class="progtext" id="pt">0/40</div></section>
-<div class="audio-card" id="audioCard"><div class="audio-row"><audio id="audio" controls preload="metadata"><source src="V9T1.mp3" type="audio/mpeg"></audio><div class="speed" id="speed"><button data-rate="0.75">0.75×</button><button class="active" data-rate="1">1×</button><button data-rate="1.25">1.25×</button><button data-rate="1.5">1.5×</button></div></div><div class="audio-note">Transcript được khóa trong lúc làm bài. Sau khi nộp, câu sai có nút <b>Nghe đoạn chứa đáp án</b> và <b>Xem transcript</b>.</div></div>
+<div class="audio-card" id="audioCard">
+  <audio id="audio" preload="auto" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture>
+    <source src="V9T1.mp3" type="audio/mpeg">
+  </audio>
+  <div class="locked-player">
+    <div class="audio-status">
+      <div><span class="pulse-dot"></span><b id="audioStatusText">Audio sẽ tự phát khi bắt đầu bài</b></div>
+      <div class="audio-time"><span id="audioNow">00:00</span> / <span id="audioTotal">--:--</span></div>
+    </div>
+    <div class="locked-progress"><i id="audioProgress"></i></div>
+    <div class="lock-note">🔒 Chế độ bài test: audio tự chạy 1 lần, không thể tua, thay đổi tốc độ hoặc điều khiển vị trí phát.</div>
+  </div>
+  <div class="audio-note">Transcript được khóa trong lúc làm bài. Sau khi nộp, câu sai có nút <b>Nghe đoạn chứa đáp án</b> và <b>Xem transcript</b>.</div>
+</div>
 <div class="tabs"><button class="tab active" data-tab="1">Section 1<br><small>Q1–10</small></button><button class="tab" data-tab="2">Section 2<br><small>Q11–20</small></button><button class="tab" data-tab="3">Section 3<br><small>Q21–30</small></button><button class="tab" data-tab="4">Section 4<br><small>Q31–40</small></button></div>
 
 <section class="pane active" id="tab1"><div class="section-card"><div class="section-head"><div><h2>Section 1</h2><p>Questions 1–10</p></div><div class="tag">Sentence Completion</div></div><div class="group"><h3>Questions 1–10</h3><p class="inst">Complete the sentences below. Write <b>NO MORE THAN THREE WORDS AND/OR A NUMBER</b> for each answer.</p>
@@ -190,7 +218,7 @@ const Q={"1": {"answers": ["80", "$80", "80 dollars", "80 dollar"], "display": "
 const GROUPS={"25-26": {"correct": ["B", "E"], "start": 1046, "end": 1061, "tr": "They decide to borrow “Research Methods in Forensic Linguistics” and “Modern Forensic Techniques”. Voice Identification will be borrowed from a classmate, not the library.", "why": "Hai cuốn họ quyết định lấy từ thư viện là Modern Forensic Techniques (B) và Research Methods in Forensic Linguistics (E)."}, "27-28": {"correct": ["A", "D"], "start": 1067, "end": 1100, "tr": "They are unsure about how to record the voices, and later worry about “fitting in the writing up” because of other assignments.", "why": "Cả hai lo về recording equipment (D) và thời gian dành cho writing up (A)."}, "29-30": {"correct": ["C", "E"], "start": 1101, "end": 1120, "tr": "They split the writing: Rob will handle the introduction and discussion/conclusions alone; the literature review and analysis are shared.", "why": "Theo đáp án, Rob viết riêng Introduction (C) và Discussion and conclusions (E)."}};
 const ENDPOINT="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
 const STORE='IELTS_LISTENING_LIS02_V9T1',ANN=STORE+'_ANN',STUDENT_KEY='IELTS_PRACTICE_STUDENT',TEST_ID='LIS02_V9T1';
-let student={},started=0,submitted=false,stopAt=null,savedRange=null,savedRoot=null,activeMark=null;
+let student={},started=0,submitted=false,stopAt=null,savedRange=null,savedRoot=null,activeMark=null,lastSafeTime=0,seekLock=false;
 const audio=document.getElementById('audio');
 function norm(s){return String(s||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[.,;:!?]+$/g,'').replace(/\s+/g,' ')}
 function getA(n){const e=document.getElementById('a'+n);if(e)return e.value;const r=document.querySelector(`input[name="q${n}"]:checked`);return r?r.value:''}
@@ -364,14 +392,85 @@ function openToolsForMark(mark){
   setToolLabelsForMark(mark);
   positionTools(mark.getBoundingClientRect());
 }
-function playEvidence(start,end){stopAt=Math.min(audio.duration||99999,end+2);audio.currentTime=Math.max(0,start-2);audio.play();document.getElementById('audioCard').scrollIntoView({behavior:'smooth',block:'start'})}
-audio.addEventListener('timeupdate',()=>{if(stopAt!==null&&audio.currentTime>=stopAt){audio.pause();stopAt=null}})
-audio.addEventListener('ended',()=>{if(started&&!submitted)submit(true)})
-document.querySelectorAll('#speed button').forEach(b=>b.onclick=()=>{audio.playbackRate=Number(b.dataset.rate);document.querySelectorAll('#speed button').forEach(x=>x.classList.toggle('active',x===b))})
+function playEvidence(start,end){
+  if(!submitted)return;
+  stopAt=Math.min(audio.duration||99999,end+2);
+  audio.currentTime=Math.max(0,start-2);
+  audio.playbackRate=1;
+  audio.play();
+  document.getElementById('audioCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+audio.addEventListener('loadedmetadata',()=>{
+  audioTotal.textContent=fmt(audio.duration||0);
+});
+audio.addEventListener('timeupdate',()=>{
+  if(!submitted){
+    lastSafeTime=audio.currentTime;
+    audioNow.textContent=fmt(audio.currentTime);
+    if(Number.isFinite(audio.duration)&&audio.duration>0){
+      audioProgress.style.width=Math.min(100,(audio.currentTime/audio.duration)*100)+'%';
+    }
+  }
+  if(stopAt!==null&&audio.currentTime>=stopAt){
+    audio.pause();
+    stopAt=null;
+  }
+});
+audio.addEventListener('seeking',()=>{
+  if(started&&!submitted&&!seekLock&&Math.abs(audio.currentTime-lastSafeTime)>1.25){
+    seekLock=true;
+    audio.currentTime=lastSafeTime;
+    setTimeout(()=>seekLock=false,0);
+  }
+});
+audio.addEventListener('ratechange',()=>{
+  if(started&&!submitted&&audio.playbackRate!==1) audio.playbackRate=1;
+});
+audio.addEventListener('pause',()=>{
+  // During the actual test, the audio must continue playing once started.
+  if(started&&!submitted&&!audio.ended&&stopAt===null){
+    setTimeout(()=>audio.play().catch(()=>{}),50);
+  }
+});
+audio.addEventListener('ended',()=>{
+  audioCard.classList.remove('playing');
+  audioCard.classList.add('finished');
+  audioStatusText.textContent='Audio đã kết thúc · bài đang được nộp';
+  audioProgress.style.width='100%';
+  if(started&&!submitted)submit(true);
+});
 function addReview(box,selected,correct,item){const d=document.createElement('div');d.className='review';d.innerHTML=`<div>Đáp án em chọn: <b class="badans">${selected||'Chưa trả lời'}</b></div><div>Đáp án đúng: <b class="goodans">${correct}</b></div><div class="why"><b>Giải thích:</b> ${item.why}</div><div class="review-actions"><button class="ev">▶ Nghe đoạn chứa đáp án (${fmt(item.start)})</button><button class="trbtn">↗ Xem transcript</button></div><div class="transcript"><div class="timecode">${fmt(item.start)}–${fmt(item.end)}</div>${item.tr}</div>`;d.querySelector('.ev').onclick=()=>playEvidence(item.start,item.end);d.querySelector('.trbtn').onclick=()=>d.querySelector('.transcript').classList.toggle('show');box.appendChild(d)}
-function submit(auto=false){if(submitted)return;submitted=true;let score=0,details=[];Object.entries(Q).forEach(([n,q])=>{const a=getA(n),good=ok(q,a),box=document.getElementById('q'+n);if(good)score++;box.classList.add(good?'good':'bad');if(!good)addReview(box,a,q.display||q.a,q);details.push({question:Number(n),answer:a,correct:q.display||q.a,isCorrect:good})});Object.entries(GROUPS).forEach(([id,g])=>{const sel=groupVals(id),inter=sel.filter(x=>g.correct.includes(x)).length;score+=inter;const good=sel.length===2&&inter===2,box=document.getElementById('g'+id);box.classList.add(good?'good':'bad');if(!good)addReview(box,sel.join(', ')||'Chưa trả lời',g.correct.join(', '),g);details.push({question:id,answer:sel,correct:g.correct,score:inter,max:2})});document.querySelectorAll('input,select').forEach(e=>e.disabled=true);const pct=Math.round(score/40*100),dur=Math.floor((Date.now()-started)/1000);scoreBig.textContent=score+'/40';scoreTitle.textContent=pct+'%';scoreDetail.textContent=auto?'Audio đã kết thúc — hệ thống tự động nộp bài.':(pct>=85?'Rất tốt!':pct>=70?'Khá tốt. Hãy nghe lại các đoạn chứa đáp án ở câu sai.':'Hãy dùng nút Nghe đoạn chứa đáp án và transcript để review.');result.classList.add('show');submitBtn.disabled=true;localStorage.removeItem(STORE);send(score,pct,dur,details)}
+function submit(auto=false){if(submitted)return;submitted=true;audioCard.classList.remove('playing');audioStatusText.textContent=auto?'Audio đã kết thúc':'Bài đã nộp · có thể nghe lại đoạn chứa đáp án';let score=0,details=[];Object.entries(Q).forEach(([n,q])=>{const a=getA(n),good=ok(q,a),box=document.getElementById('q'+n);if(good)score++;box.classList.add(good?'good':'bad');if(!good)addReview(box,a,q.display||q.a,q);details.push({question:Number(n),answer:a,correct:q.display||q.a,isCorrect:good})});Object.entries(GROUPS).forEach(([id,g])=>{const sel=groupVals(id),inter=sel.filter(x=>g.correct.includes(x)).length;score+=inter;const good=sel.length===2&&inter===2,box=document.getElementById('g'+id);box.classList.add(good?'good':'bad');if(!good)addReview(box,sel.join(', ')||'Chưa trả lời',g.correct.join(', '),g);details.push({question:id,answer:sel,correct:g.correct,score:inter,max:2})});document.querySelectorAll('input,select').forEach(e=>e.disabled=true);const pct=Math.round(score/40*100),dur=Math.floor((Date.now()-started)/1000);scoreBig.textContent=score+'/40';scoreTitle.textContent=pct+'%';scoreDetail.textContent=auto?'Audio đã kết thúc — hệ thống tự động nộp bài.':(pct>=85?'Rất tốt!':pct>=70?'Khá tốt. Hãy nghe lại các đoạn chứa đáp án ở câu sai.':'Hãy dùng nút Nghe đoạn chứa đáp án và transcript để review.');result.classList.add('show');submitBtn.disabled=true;localStorage.removeItem(STORE);send(score,pct,dur,details)}
 async function send(score,pct,dur,details){const p=new URLSearchParams({name:student.name,className:student.className,score:String(score),total:'40',percent:String(pct),duration:String(dur),details:JSON.stringify({testId:TEST_ID,title:'Listening Test 02 · V9T1',answers:details})});try{await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:p.toString()});sendStatus.textContent='đã gửi';sendStatus.className='status ok'}catch(e){sendStatus.textContent='chưa gửi được';sendStatus.className='status err'}}
-function start(){const n=studentName.value.trim(),c=studentClass.value.trim();if(!n||!c){startErr.style.display='block';return}student={name:n,className:c};localStorage.setItem(STUDENT_KEY,JSON.stringify(student));localStorage.setItem('IELTS_STUDENT_NAME',n);localStorage.setItem('IELTS_STUDENT_CLASS',c);studentChip.textContent=n+' · '+c;overlay.style.display='none';started=Date.now();restore()}
+function start(){
+  const n=studentName.value.trim(),c=studentClass.value.trim();
+  if(!n||!c){startErr.style.display='block';return}
+  student={name:n,className:c};
+  localStorage.setItem(STUDENT_KEY,JSON.stringify(student));
+  localStorage.setItem('IELTS_STUDENT_NAME',n);
+  localStorage.setItem('IELTS_STUDENT_CLASS',c);
+  studentChip.textContent=n+' · '+c;
+
+  // User's click on "Bắt đầu làm bài" is the browser gesture that starts audio.
+  audio.currentTime=0;
+  audio.playbackRate=1;
+  lastSafeTime=0;
+  started=Date.now();
+  restore();
+
+  const p=audio.play();
+  if(p&&p.catch){
+    p.catch(()=>{
+      audioStatusText.textContent='Không thể tự phát — bấm “Bắt đầu làm bài” lại';
+      started=0;
+      return;
+    });
+  }
+
+  overlay.style.display='none';
+  audioCard.classList.add('playing');
+  audioStatusText.textContent='Audio đang phát · không thể tua';
+}
 function prefill(){const p=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem(STUDENT_KEY)||'{}')}catch(e){};studentName.value=p.get('name')||s.name||localStorage.getItem('IELTS_STUDENT_NAME')||'';studentClass.value=p.get('className')||s.className||localStorage.getItem('IELTS_STUDENT_CLASS')||''}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('tab'+b.dataset.tab).classList.add('active')})
 document.querySelectorAll('input[type="text"],input.textans,select,input[type="radio"]').forEach(e=>{e.addEventListener('input',()=>{save();prog()});e.addEventListener('change',()=>{save();prog()})})
