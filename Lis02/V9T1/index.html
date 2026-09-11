@@ -33,9 +33,37 @@
 .actions{position:sticky;bottom:0;z-index:20;background:linear-gradient(to top,#f5f7fb 70%,rgba(245,247,251,.80));padding:14px 0 9px;display:flex;gap:8px}.btn{border:0;border-radius:11px;padding:11px 14px;font-weight:900}.primary{background:linear-gradient(100deg,var(--purple),#5035a1);color:#fff}.ghost{background:#e9ecf2;color:#343849}.result{display:none;background:#16122a;color:#fff;border-radius:16px;padding:18px;margin:5px 0 28px}.result.show{display:block}.big{font-size:38px;font-weight:950}.status.ok{color:#86efac}.status.err{color:#fda4af}
 .overlay{position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.55);display:grid;place-items:center;padding:18px}.start{width:min(470px,100%);background:#fff;border-radius:22px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2)}.start h2{margin:4px 0 7px}.start p{color:var(--muted);font-size:13px;line-height:1.5}.field{margin-top:11px}.field label{display:block;font-size:12px;font-weight:850;margin-bottom:5px}.field input{width:100%;padding:11px;border:1px solid #d7dbe4;border-radius:10px}.err{display:none;color:#b91c1c;font-size:12px;font-weight:800;margin-top:7px}
 @media(max-width:720px){.audio-row{grid-template-columns:1fr}.tabs{grid-template-columns:1fr 1fr}.topin{align-items:flex-start;padding:9px 0}.studentchip{display:none}.hero h1{font-size:27px}}
+
+/* Highlight + Take note */
+.text-tools{
+  position:fixed;z-index:120;display:none;gap:6px;
+  padding:6px;background:#17152b;border-radius:10px;
+  box-shadow:0 10px 28px rgba(20,18,48,.22)
+}
+.text-tools.show{display:flex}
+.text-tools button{
+  border:0;border-radius:7px;background:#fff;color:#25223c;
+  padding:7px 10px;font-size:11px;font-weight:900;white-space:nowrap
+}
+.text-tools button.danger{color:#a32735;background:#fff2f3}
+mark.study-hl{
+  background:#fff29a;border-radius:3px;padding:1px 0;cursor:pointer
+}
+mark.study-hl.has-note{
+  background:#ffe6a6;border-bottom:2px solid #e28b19
+}
+mark.study-hl.has-note::after{
+  content:"✎";font-size:9px;margin-left:2px;color:#a86108;vertical-align:super
+}
+
 </style>
 </head>
 <body>
+<div class="text-tools" id="textTools">
+  <button id="hlTool" type="button">Highlight</button>
+  <button id="noteTool" type="button">Take note</button>
+</div>
+
 <div class="overlay" id="overlay"><div class="start"><div style="font-size:11px;font-weight:900;color:#5b21b6">LISTENING TEST 02 · V9T1</div><h2>Thông tin học sinh</h2><p>Nhập Họ tên và Lớp. Nếu vào từ Portal, thông tin sẽ được tự điền nhưng bài chỉ bắt đầu khi em bấm nút bên dưới.</p><div class="field"><label>Họ và tên</label><input id="studentName"></div><div class="field"><label>Lớp</label><input id="studentClass"></div><div class="err" id="startErr">Vui lòng nhập đầy đủ Họ tên và Lớp.</div><button class="btn primary" style="width:100%;margin-top:14px" id="startBtn">Bắt đầu làm bài</button></div></div>
 <header class="top"><div class="wrap topin"><div class="nav"><a href="../../">← Kho luyện thi</a><div class="brand">🎧 Listening Test 02 <span style="font-weight:700;color:#8178a4">· V9T1</span></div></div><div class="chip studentchip" id="studentChip">—</div></div></header>
 <main class="wrap">
@@ -101,45 +129,59 @@
 <div class="group"><h3>Questions 27–28</h3><p class="inst">Choose <b>TWO</b> correct answers. Which TWO practical considerations are both Jen and Rob concerned about?</p><div class="q" id="g27-28"><div class="choose2" data-group="27-28"><label class="opt"><input type="checkbox" value="A"><span><b>A</b> how much time they have for writing up the project</span></label><label class="opt"><input type="checkbox" value="B"><span><b>B</b> being able to do enough research</span></label><label class="opt"><input type="checkbox" value="C"><span><b>C</b> only speaking to the 'suspect' once</span></label><label class="opt"><input type="checkbox" value="D"><span><b>D</b> using recording equipment</span></label><label class="opt"><input type="checkbox" value="E"><span><b>E</b> how easy it will be to contact the 'suspect'</span></label></div><div class="pairhint">Chọn tối đa 2 đáp án · nhóm này tính 2 điểm.</div></div></div>
 <div class="group"><h3>Questions 29–30</h3><p class="inst">Choose <b>TWO</b> correct answers. Which TWO sections of the project will Rob write alone?</p><div class="q" id="g29-30"><div class="choose2" data-group="29-30"><label class="opt"><input type="checkbox" value="A"><span><b>A</b> Methodology</span></label><label class="opt"><input type="checkbox" value="B"><span><b>B</b> Literature review</span></label><label class="opt"><input type="checkbox" value="C"><span><b>C</b> Introduction</span></label><label class="opt"><input type="checkbox" value="D"><span><b>D</b> Analysis</span></label><label class="opt"><input type="checkbox" value="E"><span><b>E</b> Discussion and conclusions</span></label></div><div class="pairhint">Chọn tối đa 2 đáp án · nhóm này tính 2 điểm.</div></div></div></div></section>
 
-<section class="pane" id="tab4"><div class="section-card"><div class="section-head"><div><h2>Section 4</h2><p>Questions 31–40 · Dormancy</p></div><div class="group"><h3>Questions 31–40</h3>
-<p class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.</p>
-<div class="note-sheet">
-  <div class="note-title">Dormancy</div>
-  <div>Organisms enter a state of dormancy, or inactivity, to:</div>
-  <div class="q note-line" id="q31">• save available <b class="qnum">31</b><input class="textans inline-answer" id="a31" aria-label="Question 31 answer"></div>
-  <div class="note-line">• reduce demands on their environment</div>
+<section class="pane" id="tab4">
+<div class="section-card">
+  <div class="section-head">
+    <div>
+      <h2>Section 4</h2>
+      <p>Questions 31–40 · Dormancy</p>
+    </div>
+    <div class="tag">Note Completion</div>
+  </div>
 
-  <div class="note-title">Value of dormancy</div>
-  <div>Organisms which become dormant:</div>
-  <div class="q note-line" id="q32">• can live in conditions which are environmentally <b class="qnum">32</b><input class="textans inline-answer" id="a32" aria-label="Question 32 answer"></div>
-  <div class="note-line">• can live in a wider range of places</div>
-  <div class="q note-line" id="q33">• have less <b class="qnum">33</b><input class="textans inline-answer" id="a33" aria-label="Question 33 answer"> from other animals</div>
+  <div class="group">
+    <h3>Questions 31–40</h3>
+    <p class="inst">Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.</p>
 
-  <div class="note-title">Causes of dormancy</div>
-  <div class="q note-line" id="q34">• changes in temperature and <b class="qnum">34</b><input class="textans inline-answer" id="a34" aria-label="Question 34 answer"></div>
-  <div class="note-line">• availability of food, water, oxygen</div>
+    <div class="note-sheet">
+      <div class="note-title">Dormancy</div>
+      <div>Organisms enter a state of dormancy, or inactivity, to:</div>
+      <div class="q note-line" id="q31">• save available <b class="qnum">31</b><input class="textans inline-answer" id="a31" aria-label="Question 31 answer"></div>
+      <div class="note-line">• reduce demands on their environment</div>
 
-  <div class="note-title">Dormancy in insects</div>
-  <div class="q note-line" id="q35">• There may be a <b class="qnum">35</b><input class="textans inline-answer" id="a35" aria-label="Question 35 answer"> in their metabolism (diapause)</div>
-  <div class="note-line">• Diapause occurs during extreme conditions, or as part of the life cycle</div>
+      <div class="note-title">Value of dormancy</div>
+      <div>Organisms which become dormant:</div>
+      <div class="q note-line" id="q32">• can live in conditions which are environmentally <b class="qnum">32</b><input class="textans inline-answer" id="a32" aria-label="Question 32 answer"></div>
+      <div class="note-line">• can live in a wider range of places</div>
+      <div class="q note-line" id="q33">• have less <b class="qnum">33</b><input class="textans inline-answer" id="a33" aria-label="Question 33 answer"> from other animals</div>
 
-  <div class="note-title">The African lungfish</div>
-  <div class="q note-line" id="q36">• It buries itself in the <b class="qnum">36</b><input class="textans inline-answer" id="a36" aria-label="Question 36 answer"> and creates a slimy cocoon</div>
-  <div class="q note-line" id="q37">• Two dangers: <b class="qnum">37</b><input class="textans inline-answer" id="a37" aria-label="Question 37 answer"> and desiccation</div>
+      <div class="note-title">Causes of dormancy</div>
+      <div class="q note-line" id="q34">• changes in temperature and <b class="qnum">34</b><input class="textans inline-answer" id="a34" aria-label="Question 34 answer"></div>
+      <div class="note-line">• availability of food, water, oxygen</div>
 
-  <div class="note-title">Snails</div>
-  <div class="note-line">• Some close their shells with a membrane during dormancy</div>
-  <div class="q note-line" id="q38">• Light-coloured shells reflect sunlight and limit <b class="qnum">38</b><input class="textans inline-answer" id="a38" aria-label="Question 38 answer"></div>
+      <div class="note-title">Dormancy in insects</div>
+      <div class="q note-line" id="q35">• There may be a <b class="qnum">35</b><input class="textans inline-answer" id="a35" aria-label="Question 35 answer"> in their metabolism (diapause)</div>
+      <div class="note-line">• Diapause occurs during extreme conditions, or as part of the life cycle</div>
 
-  <div class="note-title">Hibernation</div>
-  <div class="note-line">• Only warm-blooded animals hibernate</div>
+      <div class="note-title">The African lungfish</div>
+      <div class="q note-line" id="q36">• It buries itself in the <b class="qnum">36</b><input class="textans inline-answer" id="a36" aria-label="Question 36 answer"> and creates a slimy cocoon</div>
+      <div class="q note-line" id="q37">• Two dangers: <b class="qnum">37</b><input class="textans inline-answer" id="a37" aria-label="Question 37 answer"> and desiccation</div>
 
-  <div class="note-title">The Arctic ground squirrel</div>
-  <div class="q note-line" id="q39">• It hibernates in an insulated, underground <b class="qnum">39</b><input class="textans inline-answer" id="a39" aria-label="Question 39 answer"></div>
-  <div class="note-line">• It loses 40% of its weight during hibernation</div>
-  <div class="q note-line" id="q40">• When it wakes up, the first part of the body to heat up is the <b class="qnum">40</b><input class="textans inline-answer" id="a40" aria-label="Question 40 answer"></div>
+      <div class="note-title">Snails</div>
+      <div class="note-line">• Some close their shells with a membrane during dormancy</div>
+      <div class="q note-line" id="q38">• Light-coloured shells reflect sunlight and limit <b class="qnum">38</b><input class="textans inline-answer" id="a38" aria-label="Question 38 answer"></div>
+
+      <div class="note-title">Hibernation</div>
+      <div class="note-line">• Only warm-blooded animals hibernate</div>
+
+      <div class="note-title">The Arctic ground squirrel</div>
+      <div class="q note-line" id="q39">• It hibernates in an insulated, underground <b class="qnum">39</b><input class="textans inline-answer" id="a39" aria-label="Question 39 answer"></div>
+      <div class="note-line">• It loses 40% of its weight during hibernation</div>
+      <div class="q note-line" id="q40">• When it wakes up, the first part of the body to heat up is the <b class="qnum">40</b><input class="textans inline-answer" id="a40" aria-label="Question 40 answer"></div>
+    </div>
+  </div>
 </div>
-</div></div></section>
+</section>
 
 <div class="actions"><button class="btn primary" id="submitBtn">Nộp bài & xem kết quả</button><button class="btn ghost" id="resetBtn">Làm lại</button></div><div class="result" id="result"><div class="big" id="scoreBig">0/40</div><h3 id="scoreTitle">Kết quả</h3><p id="scoreDetail"></p><p>Gửi kết quả: <span id="sendStatus">đang xử lý…</span></p></div>
 </main>
@@ -147,8 +189,8 @@
 const Q={"1": {"answers": ["80", "$80", "80 dollars", "80 dollar"], "display": "80", "start": 147, "end": 157, "tr": "Peter: “I have the large bedroom, so I pay $110 a week. Yours is $80 because it’s a bit smaller.”", "why": "Peter nói phòng của Jim nhỏ hơn nên tiền thuê là $80 mỗi tuần."}, "2": {"answers": ["garage"], "display": "garage", "start": 173, "end": 181, "tr": "Jim asks where he can park. Peter replies: “You’re lucky because this house has a garage.”", "why": "Peter nói căn nhà có garage để Jim đỗ xe."}, "3": {"answers": ["kitchen"], "display": "kitchen", "start": 182, "end": 222, "tr": "Peter explains that the house phone is “in the kitchen”; it used to be in the living room.", "why": "Điện thoại trong nhà hiện được đặt ở kitchen."}, "4": {"answers": ["heater", "a heater"], "display": "heater", "start": 223, "end": 232, "tr": "Peter says the room gets cold and has no heater. Jim replies that a friend has given him one, so he will bring it.", "why": "Jim sẽ mang heater do bạn của anh ấy vừa cho."}, "5": {"answers": ["toaster", "a toaster"], "display": "toaster", "start": 231, "end": 245, "tr": "Peter says they already have a microwave and rice cooker, but “it would be great if you had a toaster.”", "why": "Peter muốn Jim mang theo toaster."}, "6": {"answers": ["Friday evening", "Friday evenings"], "display": "Friday evening", "start": 243, "end": 296, "tr": "Peter says: “I usually watch the game on TV on Friday evening.”", "why": "Hai người đều thích xem trận đấu trên TV vào Friday evening."}, "7": {"answers": ["supermarket", "a supermarket"], "display": "supermarket", "start": 243, "end": 296, "tr": "Jim says: “I work at the supermarket on Tuesday and Thursday nights.”", "why": "Jim làm việc ở supermarket hai buổi tối mỗi tuần."}, "8": {"answers": ["petrol"], "display": "petrol", "start": 294, "end": 310, "tr": "They discuss travelling to lectures together and Peter says: “We can share the petrol.”", "why": "Peter đề nghị hai người cùng chia chi phí petrol."}, "9": {"answers": ["1st of June", "1st June", "1 June", "June 1st", "June 1", "the 1st of June"], "display": "1st of June", "start": 308, "end": 327, "tr": "Peter says he needs someone “by the 1st of June when the new rent period starts.”", "why": "Peter muốn Jim chuyển vào trước/ngày 1st of June."}, "10": {"answers": ["exam", "his exam"], "display": "exam", "start": 308, "end": 327, "tr": "Jim says: “I’ve got an exam next week, so I’ll move in after that.”", "why": "Jim đồng ý chuyển vào sau kỳ exam."}, "11": {"answers": ["8:55", "8.55", "8:55 a.m.", "8.55 a.m.", "8:55 am", "8.55 am"], "display": "8:55", "start": 447, "end": 469, "tr": "The bell is rung for everybody to go to their classrooms “at 8.55 so that we can take the register.”", "why": "Giờ đăng ký bắt đầu lúc 8:55."}, "12": {"answers": ["hot meal", "a hot meal"], "display": "hot meal", "start": 490, "end": 516, "tr": "At lunch, children can bring a packed lunch or “a hot meal is available.”", "why": "Canteen có hot meal cho bữa trưa."}, "13": {"answers": ["15 minutes", "15 minute", "15"], "display": "15 minutes", "start": 490, "end": 516, "tr": "There are two breaks “of 15 minutes”.", "why": "Mỗi giờ nghỉ sáng và chiều kéo dài 15 minutes."}, "14": {"answers": ["sports"], "display": "sports", "start": 517, "end": 540, "tr": "On Thursday afternoons “we expect the whole school to do sports.”", "why": "Chiều thứ Năm, tất cả học sinh phải tham gia sports."}, "15": {"answers": ["poster", "a poster"], "display": "poster", "start": 541, "end": 559, "tr": "For each of the three terms, the children “are expected to produce a poster.”", "why": "Mỗi kỳ học, học sinh làm một poster đặc biệt."}, "16": {"answers": ["month", "a month", "every month"], "display": "month", "start": 560, "end": 599, "tr": "“Every month … they have to do tests and we record their performance.”", "why": "Các em làm bài kiểm tra mỗi month."}, "17": {"answers": ["clubs", "club"], "display": "clubs", "start": 560, "end": 599, "tr": "After school, many teachers have set up “clubs” where children learn new skills such as music.", "why": "Sau giờ học, học sinh có thể tham gia clubs để học kỹ năng mới."}, "18": {"a": "E", "display": "E · Head's office", "start": 603, "end": 656, "tr": "At the main entrance, on the right, “you’ll see the Head’s office.”", "why": "Vị trí số 18 ở bên phải lối vào chính là Head’s office."}, "19": {"a": "A", "display": "A · music room", "start": 657, "end": 726, "tr": "“On the left of the classrooms, we have converted one of the old cloakrooms to create a music room.”", "why": "Vị trí số 19 là music room."}, "20": {"a": "G", "display": "G · gym", "start": 657, "end": 726, "tr": "The old assembly hall next to the new main hall “has now been turned into a gym.”", "why": "Vị trí số 20 là gym."}, "21": {"a": "B", "start": 879, "end": 887, "tr": "They decide to add an example of what forensic linguists actually do, such as analysing documents to identify the writer.", "why": "Hai sinh viên đồng ý nên đưa ví dụ về loại công việc của forensic linguists."}, "22": {"a": "A", "start": 906, "end": 917, "tr": "Jen says: “Where we’re really going to get in trouble is that the recording is very unclear.”", "why": "Jen lo bản ghi âm không rõ/chất lượng kém."}, "23": {"a": "B", "start": 946, "end": 963, "tr": "They say the suspect might speak with another accent “because the tutor suggests they do that just to test us.”", "why": "Người bị nghi có thể thay đổi giọng vì được tutor yêu cầu."}, "24": {"a": "A", "start": 946, "end": 963, "tr": "Rob tells Jen not to start her “usual self-doubt about whether you can do the work or not.”", "why": "Rob cho rằng Jen thường lo lắng quá nhiều về khả năng của mình."}, "31": {"answers": ["resources"], "display": "resources", "start": 1259, "end": 1285, "tr": "Dormancy is entered when organisms need to “conserve the resources available to them”.", "why": "Dormancy giúp sinh vật tiết kiệm resources sẵn có."}, "32": {"answers": ["stressful"], "display": "stressful", "start": 1286, "end": 1324, "tr": "Animals capable of dormancy can survive conditions “which are stressful in environmental terms.”", "why": "Sinh vật ngủ nghỉ có thể sống trong điều kiện môi trường stressful."}, "33": {"answers": ["competition"], "display": "competition", "start": 1325, "end": 1356, "tr": "The amount of “competition” they have to deal with from other creatures is greatly reduced.", "why": "Chúng phải chịu ít competition hơn từ các loài khác."}, "34": {"answers": ["light"], "display": "light", "start": 1325, "end": 1356, "tr": "Important causes include changes in temperature and “the amount of light organisms get.”", "why": "Một nguyên nhân là thay đổi nhiệt độ và light."}, "35": {"answers": ["reduction", "a reduction"], "display": "reduction", "start": 1375, "end": 1405, "tr": "“Insects can experience a reduction in their metabolism,” a form of dormancy called diapause.", "why": "Diapause có thể đi kèm reduction trong quá trình trao đổi chất."}, "36": {"answers": ["mud"], "display": "mud", "start": 1426, "end": 1441, "tr": "The African lungfish “burrows deep into the mud” and surrounds itself with a slimy cocoon.", "why": "African lungfish vùi mình trong mud."}, "37": {"answers": ["starvation"], "display": "starvation", "start": 1442, "end": 1462, "tr": "While dormant, one danger is “the possibility of starvation”; the other is desiccation.", "why": "Hai nguy cơ là starvation và desiccation."}, "38": {"answers": ["evaporation"], "display": "evaporation", "start": 1477, "end": 1507, "tr": "Bright shells reflect sunlight, “minimising evaporation.”", "why": "Vỏ sáng màu giúp hạn chế evaporation."}, "39": {"answers": ["nest", "a nest"], "display": "nest", "start": 1537, "end": 1555, "tr": "The Arctic ground squirrel “digs underground and builds a nest that is insulated.”", "why": "Nó ngủ đông trong một nest dưới đất có lớp cách nhiệt."}, "40": {"answers": ["heart"], "display": "heart", "start": 1576, "end": 1596, "tr": "When it wakes, “the area around the heart warms more quickly than the rest of the animal.”", "why": "Khi tỉnh dậy, vùng quanh heart nóng lên trước."}};
 const GROUPS={"25-26": {"correct": ["B", "E"], "start": 1046, "end": 1061, "tr": "They decide to borrow “Research Methods in Forensic Linguistics” and “Modern Forensic Techniques”. Voice Identification will be borrowed from a classmate, not the library.", "why": "Hai cuốn họ quyết định lấy từ thư viện là Modern Forensic Techniques (B) và Research Methods in Forensic Linguistics (E)."}, "27-28": {"correct": ["A", "D"], "start": 1067, "end": 1100, "tr": "They are unsure about how to record the voices, and later worry about “fitting in the writing up” because of other assignments.", "why": "Cả hai lo về recording equipment (D) và thời gian dành cho writing up (A)."}, "29-30": {"correct": ["C", "E"], "start": 1101, "end": 1120, "tr": "They split the writing: Rob will handle the introduction and discussion/conclusions alone; the literature review and analysis are shared.", "why": "Theo đáp án, Rob viết riêng Introduction (C) và Discussion and conclusions (E)."}};
 const ENDPOINT="https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec";
-const STORE='IELTS_LISTENING_LIS02_V9T1',STUDENT_KEY='IELTS_PRACTICE_STUDENT',TEST_ID='LIS02_V9T1';
-let student={},started=0,submitted=false,stopAt=null;
+const STORE='IELTS_LISTENING_LIS02_V9T1',ANN=STORE+'_ANN',STUDENT_KEY='IELTS_PRACTICE_STUDENT',TEST_ID='LIS02_V9T1';
+let student={},started=0,submitted=false,stopAt=null,savedRange=null,savedRoot=null,activeMark=null;
 const audio=document.getElementById('audio');
 function norm(s){return String(s||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[.,;:!?]+$/g,'').replace(/\s+/g,' ')}
 function getA(n){const e=document.getElementById('a'+n);if(e)return e.value;const r=document.querySelector(`input[name="q${n}"]:checked`);return r?r.value:''}
@@ -159,17 +201,206 @@ function restore(){let d={};try{d=JSON.parse(localStorage.getItem(STORE)||'{}')}
 function refreshSelected(){document.querySelectorAll('.choose2 .opt').forEach(l=>l.classList.toggle('selected',l.querySelector('input').checked))}
 function prog(){let done=Object.keys(Q).filter(n=>norm(getA(n))).length;Object.keys(GROUPS).forEach(id=>done+=Math.min(2,groupVals(id).length));bar.style.width=Math.round(done/40*100)+'%';pt.textContent=done+'/40'}
 function fmt(sec){sec=Math.max(0,Math.round(sec));return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
+
+function annData(){
+  let d={items:[]};
+  try{d={...d,...JSON.parse(localStorage.getItem(ANN)||'{}')}}catch(e){}
+  if(!Array.isArray(d.items))d.items=[];
+  return d;
+}
+function saveAnnData(d){localStorage.setItem(ANN,JSON.stringify(d))}
+function textOffset(root,node,offset){
+  let total=0;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  let cur;
+  while(cur=w.nextNode()){
+    if(cur===node)return total+offset;
+    total+=cur.nodeValue.length;
+  }
+  return total;
+}
+function nodeAtOffset(root,target){
+  let total=0;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  let cur;
+  while(cur=w.nextNode()){
+    const len=cur.nodeValue.length;
+    if(total+len>=target)return [cur,Math.max(0,target-total)];
+    total+=len;
+  }
+  return [null,0];
+}
+function makeMark(range,id,note=''){
+  const m=document.createElement('mark');
+  m.className='study-hl'+(note?' has-note':'');
+  m.dataset.hid=id;
+  if(note){m.dataset.note=note;m.title=note}
+  range.surroundContents(m);
+  return m;
+}
+function applySavedAnnotations(){
+  const d=annData();
+  // Restore from the end backwards so earlier ranges keep stable text offsets.
+  [...d.items].sort((a,b)=>b.start-a.start).forEach(item=>{
+    const root=document.getElementById(item.rootId);
+    if(!root)return;
+    const [sn,so]=nodeAtOffset(root,item.start);
+    const [en,eo]=nodeAtOffset(root,item.end);
+    if(!sn||!en)return;
+    try{
+      const r=document.createRange();
+      r.setStart(sn,so);r.setEnd(en,eo);
+      makeMark(r,item.id,item.note||'');
+    }catch(e){}
+  });
+}
+function selectedRoot(range){
+  return [...document.querySelectorAll('.pane')].find(root=>root.contains(range.commonAncestorContainer));
+}
+function selectionHasFormControls(range){
+  const frag=range.cloneContents();
+  return !!frag.querySelector?.('input,select,button,textarea,audio');
+}
+function positionTools(rect){
+  const tools=document.getElementById('textTools');
+  const left=Math.max(8,Math.min(window.innerWidth-230,rect.left));
+  const top=Math.max(8,rect.top-44);
+  tools.style.left=left+'px';
+  tools.style.top=top+'px';
+  tools.classList.add('show');
+}
+function hideTools(){
+  document.getElementById('textTools').classList.remove('show');
+  activeMark=null;
+}
+function setToolLabelsForSelection(){
+  hlTool.textContent='Highlight';
+  noteTool.textContent='Take note';
+  hlTool.classList.remove('danger');
+  noteTool.classList.remove('danger');
+}
+function setToolLabelsForMark(mark){
+  hlTool.textContent='Xóa highlight';
+  hlTool.classList.add('danger');
+  if(mark.dataset.note){
+    noteTool.textContent='Xóa take note';
+    noteTool.classList.add('danger');
+  }else{
+    noteTool.textContent='Take note';
+    noteTool.classList.remove('danger');
+  }
+}
+function captureSelection(){
+  if(submitted)return;
+  const s=window.getSelection();
+  if(!s||!s.rangeCount||s.isCollapsed){return}
+  const r=s.getRangeAt(0);
+  const root=selectedRoot(r);
+  if(!root||!s.toString().trim()||selectionHasFormControls(r))return;
+  savedRange=r.cloneRange();
+  savedRoot=root;
+  activeMark=null;
+  setToolLabelsForSelection();
+  positionTools(r.getBoundingClientRect());
+}
+function addAnnotation(withNote=false){
+  if(!savedRange||!savedRoot)return;
+  let note='';
+  if(withNote){
+    note=prompt('Nhập ghi chú cho đoạn đã chọn:') ?? '';
+    if(!note)return;
+  }
+  const id='h'+Date.now()+Math.random().toString(36).slice(2,7);
+  const start=textOffset(savedRoot,savedRange.startContainer,savedRange.startOffset);
+  const end=textOffset(savedRoot,savedRange.endContainer,savedRange.endOffset);
+  try{
+    makeMark(savedRange,id,note);
+    const d=annData();
+    d.items.push({id,rootId:savedRoot.id,start,end,note});
+    saveAnnData(d);
+  }catch(e){
+    alert('Hãy chọn một đoạn chữ liên tục, không bao gồm ô trả lời.');
+  }
+  window.getSelection()?.removeAllRanges();
+  savedRange=null;savedRoot=null;hideTools();
+}
+function unwrapMark(mark){
+  const p=mark.parentNode;
+  while(mark.firstChild)p.insertBefore(mark.firstChild,mark);
+  p.removeChild(mark);
+  p.normalize();
+}
+function removeHighlight(mark){
+  const id=mark.dataset.hid;
+  const d=annData();
+  d.items=d.items.filter(x=>x.id!==id);
+  saveAnnData(d);
+  unwrapMark(mark);
+  hideTools();
+}
+function toggleMarkNote(mark){
+  const id=mark.dataset.hid;
+  const d=annData();
+  const item=d.items.find(x=>x.id===id);
+  if(mark.dataset.note){
+    delete mark.dataset.note;
+    mark.removeAttribute('title');
+    mark.classList.remove('has-note');
+    if(item)item.note='';
+  }else{
+    const note=prompt('Nhập ghi chú cho đoạn highlight:');
+    if(!note)return;
+    mark.dataset.note=note;
+    mark.title=note;
+    mark.classList.add('has-note');
+    if(item)item.note=note;
+  }
+  saveAnnData(d);
+  setToolLabelsForMark(mark);
+}
+function openToolsForMark(mark){
+  activeMark=mark;
+  savedRange=null;savedRoot=null;
+  setToolLabelsForMark(mark);
+  positionTools(mark.getBoundingClientRect());
+}
 function playEvidence(start,end){stopAt=Math.min(audio.duration||99999,end+2);audio.currentTime=Math.max(0,start-2);audio.play();document.getElementById('audioCard').scrollIntoView({behavior:'smooth',block:'start'})}
 audio.addEventListener('timeupdate',()=>{if(stopAt!==null&&audio.currentTime>=stopAt){audio.pause();stopAt=null}})
+audio.addEventListener('ended',()=>{if(started&&!submitted)submit(true)})
 document.querySelectorAll('#speed button').forEach(b=>b.onclick=()=>{audio.playbackRate=Number(b.dataset.rate);document.querySelectorAll('#speed button').forEach(x=>x.classList.toggle('active',x===b))})
 function addReview(box,selected,correct,item){const d=document.createElement('div');d.className='review';d.innerHTML=`<div>Đáp án em chọn: <b class="badans">${selected||'Chưa trả lời'}</b></div><div>Đáp án đúng: <b class="goodans">${correct}</b></div><div class="why"><b>Giải thích:</b> ${item.why}</div><div class="review-actions"><button class="ev">▶ Nghe đoạn chứa đáp án (${fmt(item.start)})</button><button class="trbtn">↗ Xem transcript</button></div><div class="transcript"><div class="timecode">${fmt(item.start)}–${fmt(item.end)}</div>${item.tr}</div>`;d.querySelector('.ev').onclick=()=>playEvidence(item.start,item.end);d.querySelector('.trbtn').onclick=()=>d.querySelector('.transcript').classList.toggle('show');box.appendChild(d)}
-function submit(){if(submitted)return;submitted=true;let score=0,details=[];Object.entries(Q).forEach(([n,q])=>{const a=getA(n),good=ok(q,a),box=document.getElementById('q'+n);if(good)score++;box.classList.add(good?'good':'bad');if(!good)addReview(box,a,q.display||q.a,q);details.push({question:Number(n),answer:a,correct:q.display||q.a,isCorrect:good})});Object.entries(GROUPS).forEach(([id,g])=>{const sel=groupVals(id),inter=sel.filter(x=>g.correct.includes(x)).length;score+=inter;const good=sel.length===2&&inter===2,box=document.getElementById('g'+id);box.classList.add(good?'good':'bad');if(!good)addReview(box,sel.join(', ')||'Chưa trả lời',g.correct.join(', '),g);details.push({question:id,answer:sel,correct:g.correct,score:inter,max:2})});document.querySelectorAll('input,select').forEach(e=>e.disabled=true);const pct=Math.round(score/40*100),dur=Math.floor((Date.now()-started)/1000);scoreBig.textContent=score+'/40';scoreTitle.textContent=pct+'%';scoreDetail.textContent=pct>=85?'Rất tốt!':pct>=70?'Khá tốt. Hãy nghe lại các đoạn chứa đáp án ở câu sai.':'Hãy dùng nút Nghe đoạn chứa đáp án và transcript để review.';result.classList.add('show');submitBtn.disabled=true;localStorage.removeItem(STORE);send(score,pct,dur,details)}
+function submit(auto=false){if(submitted)return;submitted=true;let score=0,details=[];Object.entries(Q).forEach(([n,q])=>{const a=getA(n),good=ok(q,a),box=document.getElementById('q'+n);if(good)score++;box.classList.add(good?'good':'bad');if(!good)addReview(box,a,q.display||q.a,q);details.push({question:Number(n),answer:a,correct:q.display||q.a,isCorrect:good})});Object.entries(GROUPS).forEach(([id,g])=>{const sel=groupVals(id),inter=sel.filter(x=>g.correct.includes(x)).length;score+=inter;const good=sel.length===2&&inter===2,box=document.getElementById('g'+id);box.classList.add(good?'good':'bad');if(!good)addReview(box,sel.join(', ')||'Chưa trả lời',g.correct.join(', '),g);details.push({question:id,answer:sel,correct:g.correct,score:inter,max:2})});document.querySelectorAll('input,select').forEach(e=>e.disabled=true);const pct=Math.round(score/40*100),dur=Math.floor((Date.now()-started)/1000);scoreBig.textContent=score+'/40';scoreTitle.textContent=pct+'%';scoreDetail.textContent=auto?'Audio đã kết thúc — hệ thống tự động nộp bài.':(pct>=85?'Rất tốt!':pct>=70?'Khá tốt. Hãy nghe lại các đoạn chứa đáp án ở câu sai.':'Hãy dùng nút Nghe đoạn chứa đáp án và transcript để review.');result.classList.add('show');submitBtn.disabled=true;localStorage.removeItem(STORE);send(score,pct,dur,details)}
 async function send(score,pct,dur,details){const p=new URLSearchParams({name:student.name,className:student.className,score:String(score),total:'40',percent:String(pct),duration:String(dur),details:JSON.stringify({testId:TEST_ID,title:'Listening Test 02 · V9T1',answers:details})});try{await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:p.toString()});sendStatus.textContent='đã gửi';sendStatus.className='status ok'}catch(e){sendStatus.textContent='chưa gửi được';sendStatus.className='status err'}}
 function start(){const n=studentName.value.trim(),c=studentClass.value.trim();if(!n||!c){startErr.style.display='block';return}student={name:n,className:c};localStorage.setItem(STUDENT_KEY,JSON.stringify(student));localStorage.setItem('IELTS_STUDENT_NAME',n);localStorage.setItem('IELTS_STUDENT_CLASS',c);studentChip.textContent=n+' · '+c;overlay.style.display='none';started=Date.now();restore()}
 function prefill(){const p=new URLSearchParams(location.search);let s={};try{s=JSON.parse(localStorage.getItem(STUDENT_KEY)||'{}')}catch(e){};studentName.value=p.get('name')||s.name||localStorage.getItem('IELTS_STUDENT_NAME')||'';studentClass.value=p.get('className')||s.className||localStorage.getItem('IELTS_STUDENT_CLASS')||''}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('tab'+b.dataset.tab).classList.add('active')})
 document.querySelectorAll('input[type="text"],input.textans,select,input[type="radio"]').forEach(e=>{e.addEventListener('input',()=>{save();prog()});e.addEventListener('change',()=>{save();prog()})})
 document.querySelectorAll('.choose2 input').forEach(c=>c.addEventListener('change',e=>{const root=e.target.closest('.choose2'),checked=[...root.querySelectorAll('input:checked')];if(checked.length>2){e.target.checked=false;alert('Chỉ chọn tối đa 2 đáp án.')}refreshSelected();save();prog()}))
+
+document.querySelectorAll('.pane').forEach(pane=>{
+  pane.addEventListener('mouseup',()=>setTimeout(captureSelection,10));
+  pane.addEventListener('touchend',()=>setTimeout(captureSelection,100));
+  pane.addEventListener('click',e=>{
+    const mark=e.target.closest('mark.study-hl');
+    if(mark){
+      e.stopPropagation();
+      openToolsForMark(mark);
+      return;
+    }
+    if(!e.target.closest('#textTools'))document.getElementById('textTools').classList.remove('show');
+  });
+});
+hlTool.onclick=()=>{
+  if(activeMark)removeHighlight(activeMark);
+  else addAnnotation(false);
+};
+noteTool.onclick=()=>{
+  if(activeMark)toggleMarkNote(activeMark);
+  else addAnnotation(true);
+};
+document.addEventListener('scroll',()=>document.getElementById('textTools').classList.remove('show'),true);
+applySavedAnnotations();
+
 startBtn.onclick=start;studentClass.addEventListener('keydown',e=>{if(e.key==='Enter')start()});submitBtn.onclick=()=>{if(confirm('Nộp bài Listening Test 02? Sau khi nộp em sẽ không sửa được đáp án.'))submit()};resetBtn.onclick=()=>{if(confirm('Xóa đáp án và làm lại từ đầu?')){localStorage.removeItem(STORE);location.reload()}};prefill();prog();
 </script>
 </body></html>
