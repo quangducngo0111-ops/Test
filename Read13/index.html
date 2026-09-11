@@ -838,8 +838,10 @@ function closeResult(){document.getElementById('overlay').classList.add('hidden'
   const className=(params.get('className')||'').trim()||(saved&&saved.className)||localStorage.getItem('IELTS_STUDENT_CLASS')||'';
   const n=document.getElementById('studentName'),c=document.getElementById('studentClass');
   if(name&&className&&n&&c){
-    n.value=name;c.value=className;
-    if(params.get('fromPortal')==='1')setTimeout(()=>startExam(),100);
+    // Chỉ tự điền thông tin từ Portal, KHÔNG tự bắt đầu bài.
+    // Học sinh vẫn phải bấm “Bắt đầu làm bài”.
+    n.value=name;
+    c.value=className;
   }
 })();
 
