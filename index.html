@@ -78,35 +78,166 @@ main{width:min(1180px,100%);margin:auto;padding:34px 20px 50px}.login-wrap{min-h
 <script>
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
-const listeningTests=[
+const FALLBACK_LISTENING=[
   {title:'Listening Test 01 — Cambridge 21 Test 4',path:'./Lis01/C21T4/',meta:['40 câu','4 parts','Audio'],desc:'Cambridge 21 Test 4 Listening practice.'}
 ];
 
-const writingTests=[
-  {
-    title:'Task 1 Practice 01',
-    path:'./WriT1/01/',
-    meta:['Task 1','20 phút','AI grading'],
-    desc:'Luyện riêng IELTS Academic Writing Task 1.'
-  },
-  {
-    title:'Task 2 Practice 01',
-    path:'./WriT2/01/',
-    meta:['Task 2','40 phút','AI grading'],
-    desc:'Luyện riêng IELTS Writing Task 2.'
-  },
-  {
-    title:'Full Writing Test 01',
-    path:'./WriFull/01/',
-    meta:['Task 1 + Task 2','60 phút','AI grading'],
-    desc:'Full IELTS Writing test với cả Task 1 và Task 2.'
-  }
+const FALLBACK_WRITING=[
+  {title:'Task 1 Practice 01',path:'./WriT1/01/',meta:['Task 1','20 phút','AI grading'],desc:'Luyện riêng IELTS Academic Writing Task 1.'},
+  {title:'Task 2 Practice 01',path:'./WriT2/01/',meta:['Task 2','40 phút','AI grading'],desc:'Luyện riêng IELTS Writing Task 2.'},
+  {title:'Full Writing Test 01',path:'./WriFull/01/',meta:['Task 1 + Task 2','60 phút','AI grading'],desc:'Full IELTS Writing test với cả Task 1 và Task 2.'}
 ];
 
-const readingTests=Array.from({length:12},(_,i)=>{
+const FALLBACK_READING=Array.from({length:13},(_,i)=>{
   const n=String(i+1).padStart(2,'0');
   return {title:`Reading Test ${n}`,path:`./Read${n}/`,meta:['40 câu','3 passages','60 phút'],desc:'IELTS Academic Reading computer-based practice.'};
 });
+
+let listeningTests=[];
+let readingTests=[];
+let writingTests=[];
+
+function numFromText(s){
+  const m=String(s||'').match(/\d+/);
+  return m?Number(m[0]):0;
+}
+
+function cambridgeLabel(folder){
+  const m=String(folder||'').match(/^C(\d+)T(\d+)$/i);
+  return m?`Cambridge ${Number(m[1])} Test ${Number(m[2])}`:folder;
+}
+
+function uniqueByPath(items){
+  const seen=new Set();
+  return items.filter(x=>{
+    if(!x||!x.path||seen.has(x.path))return false;
+    seen.add(x.path);
+    return true;
+  });
+}
+
+function buildCatalogFromTree(tree){
+  const indexPaths=tree
+    .filter(x=>x.type==='blob' && /(^|\/)index\.html$/i.test(x.path))
+    .map(x=>x.path);
+
+  // READING: Read01/index.html, Read02/index.html ...
+  readingTests=indexPaths
+    .filter(p=>/^Read\d+\/index\.html$/i.test(p))
+    .map(p=>{
+      const folder=p.split('/')[0];
+      const num=numFromText(folder);
+      const n=String(num).padStart(2,'0');
+      return {
+        num,
+        title:`Reading Test ${n}`,
+        path:`./${folder}/`,
+        meta:['40 câu','3 passages','60 phút'],
+        desc:'IELTS Academic Reading computer-based practice.'
+      };
+    })
+    .sort((a,b)=>a.num-b.num);
+
+  // LISTENING:
+  // Supports Lis01/C21T4/index.html, Lis02/.../index.html,
+  // and also Lis01/index.html if a future test is stored directly in LisXX.
+  listeningTests=indexPaths
+    .filter(p=>/^Lis\d+(?:\/.+)?\/index\.html$/i.test(p))
+    .map(p=>{
+      const parts=p.split('/');
+      const root=parts[0];
+      const testNum=numFromText(root);
+      const inner=parts.slice(1,-1);
+      const leaf=inner.length?inner[inner.length-1]:'';
+      const detail=leaf?cambridgeLabel(leaf):'Listening Practice';
+      return {
+        testNum,
+        leaf,
+        title:`Listening Test ${String(testNum).padStart(2,'0')}${detail?' — '+detail:''}`,
+        path:'./'+parts.slice(0,-1).join('/')+'/',
+        meta:['40 câu','4 parts','Audio'],
+        desc: detail==='Listening Practice' ? 'IELTS Listening computer-based practice.' : `${detail} Listening practice.`
+      };
+    })
+    .sort((a,b)=>a.testNum-b.testNum || a.leaf.localeCompare(b.leaf,undefined,{numeric:true}));
+
+  // WRITING:
+  // Auto-recognises WriT1/01, WriT2/01, WriFull/01...
+  // Also keeps generic WriXX folders if they contain an index.html.
+  writingTests=indexPaths
+    .filter(p=>/^(WriT1|WriT2|WriFull|Wri\d+)(?:\/.+)?\/index\.html$/i.test(p))
+    .map(p=>{
+      const parts=p.split('/');
+      const root=parts[0];
+      const inner=parts.slice(1,-1);
+      const leaf=inner.length?inner[inner.length-1]:'01';
+      const num=numFromText(leaf)||1;
+      let title,meta,desc,order;
+
+      if(/^WriT1$/i.test(root)){
+        title=`Task 1 Practice ${String(num).padStart(2,'0')}`;
+        meta=['Task 1','20 phút','AI grading'];
+        desc='Luyện riêng IELTS Academic Writing Task 1.';
+        order=1;
+      }else if(/^WriT2$/i.test(root)){
+        title=`Task 2 Practice ${String(num).padStart(2,'0')}`;
+        meta=['Task 2','40 phút','AI grading'];
+        desc='Luyện riêng IELTS Writing Task 2.';
+        order=2;
+      }else if(/^WriFull$/i.test(root)){
+        title=`Full Writing Test ${String(num).padStart(2,'0')}`;
+        meta=['Task 1 + Task 2','60 phút','AI grading'];
+        desc='Full IELTS Writing test với cả Task 1 và Task 2.';
+        order=3;
+      }else{
+        const rootNum=numFromText(root);
+        title=`Writing Practice ${String(rootNum||num).padStart(2,'0')}`;
+        meta=['Writing','Practice'];
+        desc='IELTS Writing practice.';
+        order=4;
+      }
+
+      return {
+        order,
+        num,
+        title,
+        path:'./'+parts.slice(0,-1).join('/')+'/',
+        meta,
+        desc
+      };
+    })
+    .sort((a,b)=>a.order-b.order || a.num-b.num || a.path.localeCompare(b.path,undefined,{numeric:true}));
+
+  listeningTests=uniqueByPath(listeningTests);
+  readingTests=uniqueByPath(readingTests);
+  writingTests=uniqueByPath(writingTests);
+}
+
+async function discoverAllTests(){
+  // One GitHub API request discovers the whole repository tree.
+  // After this, adding a new LisXX / ReadXX / Wri... folder is enough:
+  // no need to edit Test/index.html again.
+  const api='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
+
+  try{
+    const res=await fetch(api,{cache:'no-store'});
+    if(!res.ok)throw new Error(`GitHub API ${res.status}`);
+    const data=await res.json();
+    if(!data||!Array.isArray(data.tree))throw new Error('Invalid GitHub tree response');
+
+    buildCatalogFromTree(data.tree);
+
+    // Safety fallback for any category that unexpectedly returns empty.
+    if(!listeningTests.length)listeningTests=[...FALLBACK_LISTENING];
+    if(!readingTests.length)readingTests=[...FALLBACK_READING];
+    if(!writingTests.length)writingTests=[...FALLBACK_WRITING];
+  }catch(err){
+    console.warn('Auto catalog unavailable; using fallback catalog.',err);
+    listeningTests=[...FALLBACK_LISTENING];
+    readingTests=[...FALLBACK_READING];
+    writingTests=[...FALLBACK_WRITING];
+  }
+}
 
 const loginView=document.getElementById('loginView');
 const dashboardView=document.getElementById('dashboardView');
@@ -172,11 +303,16 @@ function renderTests(){
   document.getElementById('listeningGrid').innerHTML=listeningTests.map(t=>card(t,'listening')).join('');
   document.getElementById('readingGrid').innerHTML=readingTests.map(t=>card(t,'reading')).join('');
   document.getElementById('writingGrid').innerHTML=writingTests.map(t=>card(t,'writing')).join('');
+
   document.getElementById('listeningCount').textContent=`(${listeningTests.length})`;
   document.getElementById('readingCount').textContent=`(${readingTests.length})`;
   document.getElementById('writingCount').textContent=`(${writingTests.length})`;
-  document.querySelectorAll('[data-path]').forEach(b=>b.addEventListener('click',()=>launchTest(b.dataset.path)));
+
+  document.querySelectorAll('[data-path]').forEach(
+    b=>b.addEventListener('click',()=>launchTest(b.dataset.path))
+  );
 }
+
 function launchTest(path){
   if(!currentStudent)return showLogin(false);
   saveStudent(currentStudent);
@@ -198,9 +334,20 @@ tabWriting.addEventListener('click',()=>setSkill('writing'));
 document.getElementById('changeStudentTop').addEventListener('click',()=>{
   const old=currentStudent;clearStudent();currentStudent=old;showLogin(true);
 });
-renderTests();
-currentStudent=readStudent();
-currentStudent?showDashboard():showLogin(false);
+async function initPortal(){
+  // Show loading state while the repository catalog is being discovered.
+  document.getElementById('listeningGrid').innerHTML='<div style="grid-column:1/-1;color:var(--muted)">Đang tải danh sách Listening...</div>';
+  document.getElementById('readingGrid').innerHTML='<div style="grid-column:1/-1;color:var(--muted)">Đang tải danh sách Reading...</div>';
+  document.getElementById('writingGrid').innerHTML='<div style="grid-column:1/-1;color:var(--muted)">Đang tải danh sách Writing...</div>';
+
+  currentStudent=readStudent();
+  currentStudent?showDashboard():showLogin(false);
+
+  await discoverAllTests();
+  renderTests();
+}
+
+initPortal();
 </script>
 </body>
 </html>
