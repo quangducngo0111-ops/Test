@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>IELTS Practice Portal</title>
 <style>
 :root{--navy:#15324a;--navy2:#0f2639;--blue:#2f6f9f;--paper:#f5f7f8;--white:#fff;--line:#dce2e6;--text:#1e2932;--muted:#66737e;--accent:#e97a50}
@@ -79,7 +82,7 @@ main{width:min(1180px,100%);margin:auto;padding:34px 20px 50px}.login-wrap{min-h
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
 const FALLBACK_LISTENING=[
-  {title:'Listening Test 01 — Cambridge 21 Test 4',path:'./Lis01/C21T4/',meta:['40 câu','4 parts','Audio'],desc:'Cambridge 21 Test 4 Listening practice.'}
+  {title:'Listening Test 01',path:'./Lis01/C21T4/',meta:['40 câu','4 parts','Audio'],desc:'IELTS Listening computer-based practice.'}
 ];
 
 const FALLBACK_WRITING=[
@@ -93,9 +96,9 @@ const FALLBACK_READING=Array.from({length:13},(_,i)=>{
   return {title:`Reading Test ${n}`,path:`./Read${n}/`,meta:['40 câu','3 passages','60 phút'],desc:'IELTS Academic Reading computer-based practice.'};
 });
 
-let listeningTests=[];
-let readingTests=[];
-let writingTests=[];
+let listeningTests=[...FALLBACK_LISTENING];
+let readingTests=[...FALLBACK_READING];
+let writingTests=[...FALLBACK_WRITING];
 
 function numFromText(s){
   const m=String(s||'').match(/\d+/);
@@ -114,6 +117,10 @@ function uniqueByPath(items){
     seen.add(x.path);
     return true;
   });
+}
+
+function mergeByPath(primary,fallback){
+  return uniqueByPath([...(primary||[]),...(fallback||[])]);
 }
 
 function buildCatalogFromTree(tree){
@@ -149,14 +156,13 @@ function buildCatalogFromTree(tree){
       const testNum=numFromText(root);
       const inner=parts.slice(1,-1);
       const leaf=inner.length?inner[inner.length-1]:'';
-      const detail=leaf?cambridgeLabel(leaf):'Listening Practice';
       return {
         testNum,
         leaf,
-        title:`Listening Test ${String(testNum).padStart(2,'0')}${detail?' — '+detail:''}`,
+        title:`Listening Test ${String(testNum).padStart(2,'0')}`,
         path:'./'+parts.slice(0,-1).join('/')+'/',
         meta:['40 câu','4 parts','Audio'],
-        desc: detail==='Listening Practice' ? 'IELTS Listening computer-based practice.' : `${detail} Listening practice.`
+        desc:'IELTS Listening computer-based practice.'
       };
     })
     .sort((a,b)=>a.testNum-b.testNum || a.leaf.localeCompare(b.leaf,undefined,{numeric:true}));
@@ -208,9 +214,12 @@ function buildCatalogFromTree(tree){
     })
     .sort((a,b)=>a.order-b.order || a.num-b.num || a.path.localeCompare(b.path,undefined,{numeric:true}));
 
-  listeningTests=uniqueByPath(listeningTests);
-  readingTests=uniqueByPath(readingTests);
-  writingTests=uniqueByPath(writingTests);
+  // Merge với danh sách hiện có để các đề đã có chắc chắn không biến mất
+  // nếu GitHub API trả dữ liệu chậm/stale.
+  listeningTests=mergeByPath(listeningTests,FALLBACK_LISTENING);
+  readingTests=mergeByPath(readingTests,FALLBACK_READING)
+    .sort((a,b)=>(a.num||numFromText(a.path))-(b.num||numFromText(b.path)));
+  writingTests=mergeByPath(writingTests,FALLBACK_WRITING);
 }
 
 async function discoverAllTests(){
@@ -232,10 +241,11 @@ async function discoverAllTests(){
     if(!readingTests.length)readingTests=[...FALLBACK_READING];
     if(!writingTests.length)writingTests=[...FALLBACK_WRITING];
   }catch(err){
-    console.warn('Auto catalog unavailable; using fallback catalog.',err);
-    listeningTests=[...FALLBACK_LISTENING];
-    readingTests=[...FALLBACK_READING];
-    writingTests=[...FALLBACK_WRITING];
+    console.warn('Auto catalog unavailable; keeping fallback catalog.',err);
+    listeningTests=mergeByPath(listeningTests,FALLBACK_LISTENING);
+    readingTests=mergeByPath(readingTests,FALLBACK_READING)
+      .sort((a,b)=>(a.num||numFromText(a.path))-(b.num||numFromText(b.path)));
+    writingTests=mergeByPath(writingTests,FALLBACK_WRITING);
   }
 }
 
@@ -335,14 +345,13 @@ document.getElementById('changeStudentTop').addEventListener('click',()=>{
   const old=currentStudent;clearStudent();currentStudent=old;showLogin(true);
 });
 async function initPortal(){
-  // Show loading state while the repository catalog is being discovered.
-  document.getElementById('listeningGrid').innerHTML='<div style="grid-column:1/-1;color:var(--muted)">Đang tải danh sách Listening...</div>';
-  document.getElementById('readingGrid').innerHTML='<div style="grid-column:1/-1;color:var(--muted)">Đang tải danh sách Reading...</div>';
-  document.getElementById('writingGrid').innerHTML='<div style="grid-column:1/-1;color:var(--muted)">Đang tải danh sách Writing...</div>';
-
   currentStudent=readStudent();
+
+  // Hiển thị ngay catalog fallback (Reading 01–13 có ngay, không chờ API).
+  renderTests();
   currentStudent?showDashboard():showLogin(false);
 
+  // Sau đó mới cập nhật thêm các bài mới tìm thấy trong repo.
   await discoverAllTests();
   renderTests();
 }
