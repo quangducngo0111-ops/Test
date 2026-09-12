@@ -1,102 +1,440 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>IELTS Listening Computer-Based Test</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Listening Test 01</title>
 <style>
-:root{--navy:#17344f;--navy2:#0d2538;--blue:#2b6b9d;--paper:#f4f4f1;--white:#fff;--line:#d6dade;--text:#20262b;--muted:#66737e;--accent:#e5794e;--good:#2e7d5b;--bad:#b5442e;--soft:#eef3f7}
+:root{
+  --ink:#172033;--muted:#6f7890;--line:#e5e7ef;--bg:#f5f7fb;
+  --purple:#281260;--purple2:#4d32a0;--blue:#2f6fdf;
+  --green:#16845b;--red:#b83345;--orange:#e5794e
+}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--text)}
-button,input,select{font:inherit} .hidden{display:none!important}
-.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(145deg,var(--navy2),var(--navy))}
-.start-card{width:min(620px,100%);background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22)}
-.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:800}
-.start h1{margin:8px 0 7px;color:var(--navy)} .sub{color:var(--muted);margin:0 0 24px}
-.field{margin:14px 0} .field label{display:block;font-weight:700;margin-bottom:6px} .field input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}
-.btn{border:0;background:var(--navy);color:#fff;padding:11px 17px;border-radius:8px;font-weight:700;cursor:pointer} .btn:hover{background:var(--blue)}
-.exam{min-height:100vh;background:#fff;padding-bottom:72px}
-.top{position:sticky;top:0;z-index:30;background:var(--navy2);color:#fff;padding:10px 15px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
-.student{font-size:14px} .elapsed{font-family:ui-monospace,monospace;background:rgba(255,255,255,.11);padding:7px 10px;border-radius:7px;font-weight:700}
-.tabs{position:sticky;top:48px;z-index:28;display:flex;gap:7px;padding:9px 14px;background:#fafafa;border-bottom:1px solid var(--line);overflow:auto}
-.tab{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap} .tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.content{max-width:980px;margin:auto;padding:20px}
-.audio-card{position:sticky;top:104px;z-index:25;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.audio-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px} .audio-head b{color:var(--navy)} audio{width:100%}
-.annot-bar{position:sticky;top:190px;z-index:22;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#fbfbfa;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:12px}
-.annot-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 9px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer} .annot-tip{font-size:12px;color:var(--muted);margin-left:auto}
-.notes-panel{display:none;background:#f5f8fa;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:12px} .notes-panel.open{display:block}
-.note-item{background:#fff;border:1px solid var(--line);border-radius:7px;padding:9px 10px;margin:7px 0} .note-quote{font-size:12px;color:var(--muted);font-style:italic} .note-actions button{border:1px solid var(--line);background:#fff;border-radius:5px;padding:5px 7px;margin-right:5px;cursor:pointer}
-mark.user-highlight{background:#fff29a;color:inherit} .note-anchor{background:#dcecf9;border-bottom:2px dotted var(--blue);cursor:pointer}
-.questions h2{color:var(--navy);margin:6px 0 12px} .group{margin-bottom:27px} .group h3{color:var(--navy);font-size:1.05rem;margin:0 0 5px} .inst{color:var(--muted);font-size:.92rem;margin-bottom:10px}
-.completion{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;line-height:1.9} .completion h4{margin:0 0 12px;color:var(--navy)}
-.form-grid{display:grid;grid-template-columns:minmax(240px,.8fr) 1.4fr;gap:7px 14px;align-items:start} .form-label{font-weight:600;color:#36434d}
-.inline{display:inline-flex;align-items:center;gap:5px;margin:2px 3px;vertical-align:middle;scroll-margin:140px} .qnum{display:inline-flex;align-items:center;justify-content:center;min-width:27px;height:27px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800}
-.ans{padding:8px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;min-width:145px;max-width:240px} .ans.correct{border-color:var(--good);background:rgba(46,125,91,.07)} .ans.wrong{border-color:var(--bad);background:rgba(181,68,46,.06)}
-.subline{padding-left:24px;margin:4px 0} .section-title{font-weight:800;color:var(--navy);margin-top:10px}
-.card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px 15px;margin:10px 0;scroll-margin:140px} .card-head{display:flex;gap:10px;align-items:flex-start} .qtext{flex:1;line-height:1.45}
-.option{display:block;border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:7px 0;cursor:pointer} .option.correct{border-color:var(--good);background:rgba(46,125,91,.08)} .option.wrong{border-color:var(--bad);background:rgba(181,68,46,.08)}
-.limit{font-size:12px;color:var(--accent);font-weight:700;margin:8px 0}
-.bank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px;background:#f4f7f9;border:1px solid var(--line);border-radius:8px;padding:12px;margin:9px 0 14px;font-size:.92rem}
-.match-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:9px;overflow:hidden} .match-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle} .match-table tr:last-child td{border-bottom:0} .match-name{font-weight:700}
-.feedback{font-size:.87rem;margin-top:6px} .good{color:var(--good)} .bad{color:var(--bad)}
-.bottom{position:fixed;left:0;right:0;bottom:0;z-index:35;background:#fff;border-top:1px solid var(--line);padding:9px 11px;display:flex;gap:10px;align-items:center} .nav{display:flex;gap:4px;overflow:auto;flex:1} .nav button{min-width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer} .nav button.answered{background:#dceaf5} .nav button.correct{background:#dff0e7;border-color:var(--good)} .nav button.wrong{background:#f4ddd8;border-color:var(--bad)}
-.submit{background:var(--accent);color:#fff;border:0;border-radius:7px;padding:10px 15px;font-weight:800;cursor:pointer;white-space:nowrap}
-.overlay{position:fixed;inset:0;z-index:60;background:rgba(8,20,30,.72);display:flex;align-items:center;justify-content:center;padding:20px} .result{background:#fff;border-radius:14px;padding:26px;width:min(720px,100%);max-height:90vh;overflow:auto}
-.bigscore{font-size:2.5rem;font-weight:800;color:var(--navy);margin:6px 0} .breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:15px 0} .breakdown div{background:#f3f6f8;padding:10px;border-radius:8px;text-align:center}
-.review{border-top:1px solid var(--line);margin-top:18px;padding-top:15px} .wrong-review{border:1px solid #e4cbc5;background:#fffaf8;border-radius:8px;padding:12px 13px;margin:9px 0} .review-q{font-weight:800;color:var(--navy);margin-bottom:7px} .row{display:grid;grid-template-columns:115px 1fr;gap:5px 8px;font-size:.91rem;margin:3px 0} .label{color:var(--muted);font-weight:700} .correct-text{color:var(--good);font-weight:800} .wrong-text{color:var(--bad);font-weight:800} .explain{margin-top:8px;background:#f4f7f9;border-left:3px solid var(--blue);padding:9px 10px;border-radius:4px;font-size:.91rem;line-height:1.45}
-@media(max-width:700px){.form-grid{grid-template-columns:1fr} .bank{grid-template-columns:1fr} .breakdown{grid-template-columns:repeat(2,1fr)} .top{align-items:flex-start} .tabs{top:76px} .audio-card{top:129px} .annot-bar{top:216px} .ans{font-size:16px;min-width:120px;max-width:100%}}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif
+}
+button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.wrap{width:min(1250px,calc(100% - 24px));margin:auto}
+
+/* Header giống các Listening Test mới */
+.top{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  color:#fff;box-shadow:0 8px 24px rgba(40,18,96,.14)
+}
+.topin{
+  min-height:64px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px
+}
+.nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav a{
+  color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;border-radius:9px;font-size:11px;font-weight:850
+}
+.brand{font-weight:950;letter-spacing:.02em}
+.chip{
+  font-size:11px;font-weight:850;background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.20);padding:7px 10px;border-radius:999px
+}
+
+.exam{min-height:100vh;background:var(--bg);padding-bottom:50px}
+main.exam-main{padding:24px 0 56px}
+.hero{margin-bottom:14px}
+.hero h1{margin:4px 0 5px;font-size:30px;color:#21164b}
+.hero p{margin:0;color:var(--muted);font-size:12px}
+.progress{
+  height:8px;background:#e4e7ef;border-radius:999px;overflow:hidden;margin-top:11px
+}
+.progress i{
+  display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--purple2),var(--blue));
+  transition:width .2s ease
+}
+.progtext{margin-top:5px;color:var(--muted);font-size:11px;font-weight:850}
+
+/* Locked audio */
+.audio-card{
+  position:sticky;top:72px;z-index:30;background:#fff;border:1px solid var(--line);
+  border-radius:16px;padding:13px 15px;box-shadow:0 10px 28px rgba(31,24,65,.07);
+  margin-bottom:14px
+}
+.audio-card audio.exam-audio{
+  position:absolute;width:1px;height:1px;opacity:0;pointer-events:none
+}
+.audio-status{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin-bottom:9px;font-size:12px;color:#302a48
+}
+.audio-status>div:first-child{display:flex;align-items:center;gap:8px}
+.pulse-dot{width:9px;height:9px;border-radius:50%;background:#9ca3af;display:inline-block}
+.audio-card.playing .pulse-dot{background:#2f6fdf;animation:pulse 1.5s infinite}
+.audio-card.finished .pulse-dot{background:#16a34a}
+.audio-card.reviewing .pulse-dot{background:#f59e0b;animation:pulse 1.5s infinite}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(47,111,223,.3)}
+  70%{box-shadow:0 0 0 7px rgba(47,111,223,0)}
+  100%{box-shadow:0 0 0 0 rgba(47,111,223,0)}
+}
+.audio-time{font-variant-numeric:tabular-nums;color:#657084;font-weight:850}
+.locked-progress{height:8px;border-radius:999px;background:#e7e9ef;overflow:hidden}
+.locked-progress i{
+  display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--purple),var(--blue));
+  transition:width .2s linear
+}
+.lock-note{
+  margin-top:8px;font-size:10.5px;color:#6e6680;background:#f5f4fb;
+  padding:8px 10px;border-radius:8px;line-height:1.45
+}
+.review-audio{
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--line)
+}
+.review-audio .review-label{
+  font-size:11px;font-weight:900;color:#4b4561;margin-bottom:7px
+}
+.review-buttons{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.review-buttons button{
+  border:1px solid #dcdfea;background:#fff;color:#35285e;border-radius:8px;
+  padding:7px 10px;font-size:10.5px;font-weight:900
+}
+#reviewPlayer{width:100%}
+
+/* Tabs */
+.tabs{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:7px;
+  background:#e9ebf1;padding:6px;border-radius:14px;margin-bottom:15px
+}
+.tab{
+  border:0;background:transparent;border-radius:9px;padding:11px;
+  font-weight:900;color:#697083
+}
+.tab.active{
+  background:#fff;color:var(--purple);
+  box-shadow:0 5px 15px rgba(35,25,75,.07)
+}
+
+.section-card{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;
+  margin-bottom:16px;box-shadow:0 7px 24px rgba(35,25,75,.045)
+}
+.section-head{
+  display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:16px
+}
+.section-head h2{margin:0;color:#21164b;font-size:21px}
+.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.tag{
+  font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+  background:#e8f3ff;color:#2b5fac;border-radius:999px;padding:6px 9px
+}
+
+.questions h2{display:none}
+.group{margin-bottom:24px}
+.group h3{margin:0 0 5px;color:#21164b;font-size:17px}
+.inst{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:10px}
+
+/* Completion */
+.completion{
+  border:1px solid var(--line);border-radius:14px;background:#fbfcfe;
+  padding:17px 18px;line-height:1.9
+}
+.completion h4{
+  margin:3px 0 15px;color:#21164b;font-size:16px;text-align:center
+}
+.form-grid{
+  display:grid;grid-template-columns:minmax(220px,.75fr) minmax(0,1.4fr);
+  gap:8px 16px;align-items:start
+}
+.form-label{font-weight:800;color:#3b4050;font-size:13px}
+.inline{
+  display:inline-flex;align-items:center;gap:5px;margin:2px 3px;
+  vertical-align:middle;scroll-margin:150px
+}
+.qnum{
+  display:inline-flex;align-items:center;justify-content:center;min-width:24px;
+  height:24px;border-radius:50%;background:#eee9ff;color:#4b318e;
+  font-size:10px;font-weight:950
+}
+.ans{
+  border:1px solid #cfd4df;border-radius:8px;padding:8px;background:#fff;
+  outline:none;min-width:145px;max-width:260px
+}
+.ans:focus{
+  border-color:#6a55bf;box-shadow:0 0 0 3px rgba(78,56,160,.08)
+}
+.ans.correct{border-color:#8ed6b4;background:#fbfffd}
+.ans.wrong{border-color:#f0b5bd;background:#fffafb}
+.subline{padding-left:24px;margin:4px 0}
+.section-title{font-weight:950;color:#2d2a3d;margin:14px 0 5px}
+
+/* Question cards */
+.card{
+  border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px;
+  background:#fff;scroll-margin:150px
+}
+.card-head{display:flex;gap:10px;align-items:flex-start}
+.qtext{flex:1;line-height:1.55;font-size:13px;font-weight:780}
+.option{
+  display:flex;gap:8px;border:1px solid var(--line);border-radius:9px;
+  padding:8px 9px;margin:7px 0;font-size:12px;line-height:1.5;background:#fff
+}
+.option:hover{background:#fafaff}
+.option.correct{border-color:#8ed6b4;background:#fbfffd}
+.option.wrong{border-color:#f0b5bd;background:#fffafb}
+.limit{font-size:11px;color:#8a5412;font-weight:850;margin:8px 0}
+.bank{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px;
+  background:#f8fafc;border:1px solid var(--line);border-radius:12px;
+  padding:12px;margin:9px 0 14px;font-size:12px;line-height:1.55
+}
+.match-table{
+  width:100%;border-collapse:separate;border-spacing:0;background:#fff;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden
+}
+.match-table td{
+  padding:10px;border-bottom:1px solid var(--line);vertical-align:middle
+}
+.match-table tr:last-child td{border-bottom:0}
+.match-name{font-weight:800;font-size:12px}
+
+/* Annotation toolbar */
+.annot-bar{
+  position:sticky;top:165px;z-index:22;display:flex;align-items:center;gap:7px;
+  flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:8px 10px;margin-bottom:12px;box-shadow:0 6px 18px rgba(35,25,75,.04)
+}
+.annot-btn{
+  border:1px solid var(--line);background:#fff;color:#3b315e;padding:7px 9px;
+  border-radius:8px;font-size:11px;font-weight:900
+}
+.annot-tip{font-size:10.5px;color:var(--muted);margin-left:auto}
+.notes-panel{
+  display:none;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;margin-bottom:12px
+}
+.notes-panel.open{display:block}
+.note-item{
+  background:#fff;border:1px solid var(--line);border-radius:9px;
+  padding:9px 10px;margin:7px 0
+}
+.note-quote{font-size:11px;color:var(--muted);font-style:italic}
+.note-actions button{
+  border:1px solid var(--line);background:#fff;border-radius:6px;
+  padding:5px 7px;margin-right:5px
+}
+mark.user-highlight{background:#fff29a;color:inherit;border-radius:3px;cursor:pointer}
+.note-anchor{
+  background:#ffe6a6;border-bottom:2px dotted #e28b19;cursor:pointer
+}
+
+/* Bottom actions */
+.bottom{
+  position:sticky;bottom:0;z-index:35;
+  background:linear-gradient(to top,#f5f7fb 72%,rgba(245,247,251,.92));
+  padding:14px 0 6px;display:flex;gap:10px;align-items:center
+}
+.bottom .nav{display:flex;gap:4px;overflow:auto;flex:1}
+.bottom .nav button{
+  min-width:30px;height:30px;border:1px solid var(--line);background:#fff;
+  border-radius:7px;font-size:10px;font-weight:900
+}
+.bottom .nav button.answered{background:#e8f0ff;border-color:#c5d8ff}
+.bottom .nav button.correct{background:#dff0e7;border-color:#8ed6b4}
+.bottom .nav button.wrong{background:#f4ddd8;border-color:#f0b5bd}
+.submit{
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;border:0;border-radius:10px;padding:11px 15px;
+  font-weight:900;white-space:nowrap
+}
+
+/* Start + Result */
+.overlay{
+  position:fixed;inset:0;z-index:100;background:rgba(17,14,36,.55);
+  display:grid;place-items:center;padding:18px
+}
+.start{
+  width:min(460px,100%);background:#fff;border-radius:20px;padding:23px;
+  box-shadow:0 24px 70px rgba(20,15,55,.24)
+}
+.start h2{margin:4px 0 7px;color:#21164b}
+.start p{font-size:12px;color:var(--muted);line-height:1.55}
+.eyebrow{
+  font-size:10px;font-weight:950;letter-spacing:.10em;text-transform:uppercase;
+  color:#6a4db4
+}
+.field{margin-top:10px}
+.field label{display:block;font-size:11px;font-weight:900;margin-bottom:5px}
+.field input{
+  width:100%;padding:10px;border:1px solid #d0d5df;border-radius:9px;outline:none
+}
+.field input:focus{
+  border-color:#6a55bf;box-shadow:0 0 0 3px rgba(78,56,160,.08)
+}
+.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:900}
+.btn.primary{background:linear-gradient(100deg,var(--purple),var(--purple2));color:#fff}
+.btn.ghost{background:#e9ebf1;color:#3d4251}
+.start .btn{width:100%;margin-top:13px}
+.start-error{color:var(--red);font-size:11px;font-weight:850;margin-top:7px}
+
+.result{
+  background:#fff;border-radius:18px;padding:23px;width:min(720px,100%);
+  max-height:90vh;overflow:auto;box-shadow:0 24px 70px rgba(20,15,55,.24)
+}
+.bigscore{font-size:38px;font-weight:950;color:#21164b;margin:6px 0}
+.breakdown{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:15px 0
+}
+.breakdown div{
+  background:#f6f7fa;padding:10px;border-radius:9px;text-align:center;font-size:12px
+}
+.review{border-top:1px solid var(--line);margin-top:18px;padding-top:15px}
+.wrong-review{
+  border:1px solid #f0d0d5;background:#fffafb;border-radius:10px;
+  padding:12px 13px;margin:9px 0
+}
+.review-q{font-weight:900;color:#21164b;margin-bottom:7px}
+.row{display:grid;grid-template-columns:115px 1fr;gap:5px 8px;font-size:12px;margin:3px 0}
+.label{color:var(--muted);font-weight:800}
+.correct-text{color:#13724c;font-weight:900}
+.wrong-text{color:#a31e31;font-weight:900}
+.explain{
+  margin-top:8px;background:#fff6e9;border:1px solid #f3d4a6;border-radius:9px;
+  padding:8px;color:#7a4711;font-size:12px;line-height:1.5
+}
+.review-part{
+  margin-top:8px;border:0;border-radius:8px;padding:7px 10px;
+  background:#e7f0ff;color:#255eaf;font-size:10.5px;font-weight:900
+}
+
+@media(max-width:700px){
+  .wrap{width:min(100% - 14px,1250px)}
+  .topin{align-items:flex-start;padding:9px 0}
+  .chip.studentchip{display:none}
+  .tabs{grid-template-columns:1fr 1fr}
+  .audio-card{top:84px}
+  .annot-bar{top:196px}
+  .form-grid{grid-template-columns:1fr}
+  .bank{grid-template-columns:1fr}
+  .breakdown{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
-<div id="start" class="start">
-  <div class="start-card">
+
+<div id="start" class="overlay">
+  <div class="start">
     <div class="eyebrow">IELTS Listening Practice</div>
-    <h1>Computer-Based Listening Test</h1>
-    <p class="sub">4 Parts · 40 Questions · Audio included · Auto-graded</p>
-    <div class="field"><label>Họ và tên học sinh</label><input id="studentName" type="text" placeholder="Ví dụ: Nguyễn Văn An"></div>
-    <div class="field"><label>Lớp</label><input id="studentClass" type="text" placeholder="Ví dụ: 8A1"></div>
-    <button class="btn" onclick="startExam()">Bắt đầu làm bài</button>
-    <div id="startError" style="color:var(--bad);margin-top:9px"></div>
+    <h2>Listening Test 01</h2>
+    <p>4 sections · 40 câu · audio tự chạy · tự chấm · tự nộp khi audio kết thúc.</p>
+    <div class="field">
+      <label>Họ và tên học sinh</label>
+      <input id="studentName" type="text" placeholder="Ví dụ: Nguyễn Văn An">
+    </div>
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass" type="text" placeholder="Ví dụ: 8A1">
+    </div>
+    <button class="btn primary" onclick="startExam()">Bắt đầu làm bài</button>
+    <div id="startError" class="start-error"></div>
   </div>
 </div>
 
 <div id="exam" class="exam hidden">
-  <div class="top">
-    <div class="student">Student: <b id="topName"></b> &nbsp; | &nbsp; Class: <b id="topClass"></b></div>
-    <div class="elapsed">Time: <span id="elapsed">00:00</span></div>
-  </div>
-  <div class="tabs">
-    <button class="tab active" data-p="1" onclick="showPart(1)">Part 1</button>
-    <button class="tab" data-p="2" onclick="showPart(2)">Part 2</button>
-    <button class="tab" data-p="3" onclick="showPart(3)">Part 3</button>
-    <button class="tab" data-p="4" onclick="showPart(4)">Part 4</button>
-  </div>
-
-  <div class="content">
-    <div class="audio-card">
-      <div class="audio-head"><b id="audioTitle">Audio — Part 1</b><span style="font-size:12px;color:var(--muted)">Use headphones if possible</span></div>
-      <audio id="audio1" controls preload="metadata"></audio>
-      <audio id="audio2" controls preload="metadata" class="hidden"></audio>
-      <audio id="audio3" controls preload="metadata" class="hidden"></audio>
-      <audio id="audio4" controls preload="metadata" class="hidden"></audio>
+  <header class="top">
+    <div class="wrap topin">
+      <div class="nav">
+        <a href="../../">← Kho luyện thi</a>
+        <div class="brand">🎧 Listening Test 01</div>
+      </div>
+      <div class="chip studentchip">
+        <span id="topName"></span> · <span id="topClass"></span>
+      </div>
+      <div class="chip">⏱ <span id="elapsed">00:00</span></div>
     </div>
+  </header>
 
-    <div class="annot-bar">
-      <button class="annot-btn" onclick="addHighlight()">🖍 Highlight</button>
-      <button class="annot-btn" onclick="clearHighlight()">Xóa HL</button>
-      <button class="annot-btn" onclick="addNote()">📝 Add note</button>
-      <button class="annot-btn" onclick="toggleNotes()">Ghi chú (<span id="noteCount">0</span>)</button>
-      <span class="annot-tip">Bôi đen chữ trong câu hỏi rồi chọn công cụ.</span>
+  <main class="exam-main">
+    <div class="wrap">
+      <section class="hero">
+        <h1>Listening Test 01</h1>
+        <p>4 sections · 40 câu · tự chấm · audio khóa trong lúc thi</p>
+        <div class="progress"><i id="answerBar"></i></div>
+        <div class="progtext" id="answerProgressText">0/40 câu đã trả lời</div>
+      </section>
+
+      <section class="audio-card" id="audioCard">
+        <audio id="audio1" class="exam-audio" preload="metadata"></audio>
+        <audio id="audio2" class="exam-audio" preload="metadata"></audio>
+        <audio id="audio3" class="exam-audio" preload="metadata"></audio>
+        <audio id="audio4" class="exam-audio" preload="metadata"></audio>
+
+        <div class="audio-status">
+          <div>
+            <span class="pulse-dot"></span>
+            <b id="audioStatusText">Audio sẽ tự chạy khi bắt đầu</b>
+          </div>
+          <div class="audio-time">
+            <span id="audioNow">00:00</span> /
+            <span id="audioTotal">00:00</span>
+          </div>
+        </div>
+        <div class="locked-progress"><i id="audioProgress"></i></div>
+        <div class="lock-note">
+          Trong lúc làm bài, audio tự phát ở tốc độ 1× và không thể tua hoặc tạm dừng.
+          Sau khi nộp bài, em có thể nghe lại từng Part để review.
+        </div>
+
+        <div id="reviewAudio" class="review-audio hidden">
+          <div class="review-label">Nghe lại audio sau khi nộp</div>
+          <div class="review-buttons">
+            <button type="button" onclick="playReviewPart(1)">Part 1</button>
+            <button type="button" onclick="playReviewPart(2)">Part 2</button>
+            <button type="button" onclick="playReviewPart(3)">Part 3</button>
+            <button type="button" onclick="playReviewPart(4)">Part 4</button>
+          </div>
+          <audio id="reviewPlayer" controls preload="metadata"></audio>
+        </div>
+      </section>
+
+      <div class="tabs">
+        <button class="tab active" data-p="1" onclick="showPart(1)">Part 1</button>
+        <button class="tab" data-p="2" onclick="showPart(2)">Part 2</button>
+        <button class="tab" data-p="3" onclick="showPart(3)">Part 3</button>
+        <button class="tab" data-p="4" onclick="showPart(4)">Part 4</button>
+      </div>
+
+      <section class="section-card">
+        <div class="section-head">
+          <div>
+            <h2 id="sectionHeading">Section 1</h2>
+            <p id="sectionMeta">Questions 1–10</p>
+          </div>
+          <div class="tag">Listening</div>
+        </div>
+
+        <div class="annot-bar">
+          <button class="annot-btn" onclick="addHighlight()">🖍 Highlight</button>
+          <button class="annot-btn" onclick="clearHighlight()">Xóa highlight</button>
+          <button class="annot-btn" onclick="addNote()">📝 Take note</button>
+          <button class="annot-btn" onclick="toggleNotes()">Ghi chú (<span id="noteCount">0</span>)</button>
+          <span class="annot-tip">Bôi đen chữ trong câu hỏi rồi chọn công cụ.</span>
+        </div>
+
+        <div id="notesPanel" class="notes-panel"></div>
+        <div id="questions" class="questions"></div>
+      </section>
+
+      <div class="bottom">
+        <div class="nav" id="nav"></div>
+        <button class="submit" onclick="submitExam(false)">Nộp bài</button>
+      </div>
     </div>
-    <div id="notesPanel" class="notes-panel"></div>
-    <div id="questions" class="questions"></div>
-  </div>
-
-  <div class="bottom">
-    <div class="nav" id="nav"></div>
-    <button class="submit" onclick="submitExam(false)">Nộp bài</button>
-  </div>
+  </main>
 </div>
 
 <div id="overlay" class="overlay hidden">
@@ -111,16 +449,17 @@ mark.user-highlight{background:#fff29a;color:inherit} .note-anchor{background:#d
       <div><b>Part 3</b><br><span id="s3"></span></div>
       <div><b>Part 4</b><br><span id="s4"></span></div>
     </div>
-    <div id="sheetStatus" style="color:var(--muted);font-size:.92rem"></div>
+    <div id="sheetStatus" style="color:var(--muted);font-size:12px"></div>
     <div id="wrongReview" class="review"></div>
     <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:16px">
-      <button class="btn" onclick="closeResult()">Xem lại bài</button>
-      <button class="btn" style="background:#587087" onclick="location.reload()">Làm lại</button>
+      <button class="btn primary" onclick="closeResult()">Xem lại bài</button>
+      <button class="btn ghost" onclick="location.reload()">Làm lại</button>
     </div>
   </div>
 </div>
 
 <script>
+
 
 const STORAGE_PREFIX = "C21T4_LISTENING_";
 
@@ -188,7 +527,7 @@ const p3opinions=[
 ["I","This would suit both existing and new members of a household."]
 ];
 
-let currentPart=1,startedAt=0,timeHandle=null,submitted=false,savedSelection=null,activeHighlight=null;
+let currentPart=1,startedAt=0,timeHandle=null,submitted=false,savedSelection=null,activeHighlight=null,currentAudioPart=0;
 
 function norm(v){return String(v??"").normalize("NFKC").trim().toLowerCase().replace(/\s+/g," ")}
 function inlineInput(n){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><input class="ans" id="q${n}" data-q="${n}" type="text" autocomplete="off"></span>`}
@@ -274,28 +613,51 @@ function renderPart4(){
 const renderers={1:renderPart1,2:renderPart2,3:renderPart3,4:renderPart4};
 
 function startExam(){
- const n=document.getElementById("studentName").value.trim(),c=document.getElementById("studentClass").value.trim();
- if(!n||!c){document.getElementById("startError").textContent="Vui lòng nhập đầy đủ Họ tên và Lớp.";return}
- clearListeningAttempt();
- initAudioSources();
- document.getElementById("topName").textContent=n;document.getElementById("topClass").textContent=c;
- document.getElementById("start").classList.add("hidden");document.getElementById("exam").classList.remove("hidden");
- submitted=false;savedSelection=null;activeHighlight=null;startedAt=Date.now();buildNav();showPart(1);timeHandle=setInterval(updateTime,500);updateTime();
+  const n=document.getElementById("studentName").value.trim(),
+        c=document.getElementById("studentClass").value.trim();
+  if(!n||!c){
+    document.getElementById("startError").textContent="Vui lòng nhập đầy đủ Họ tên và Lớp.";
+    return;
+  }
+  clearListeningAttempt();
+  initAudioSources();
+  document.getElementById("topName").textContent=n;
+  document.getElementById("topClass").textContent=c;
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("exam").classList.remove("hidden");
+  submitted=false;
+  savedSelection=null;
+  activeHighlight=null;
+  startedAt=Date.now();
+  buildNav();
+  showPart(1);
+  setupLockedAudio();
+  timeHandle=setInterval(updateTime,500);
+  updateTime();
+  setTimeout(()=>playExamPart(1),100);
 }
 function updateTime(){
  const s=Math.floor((Date.now()-startedAt)/1000),m=Math.floor(s/60),ss=s%60;
  document.getElementById("elapsed").textContent=`${String(m).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
 }
 function showPart(p){
- saveQuestionMarkup();currentPart=p;savedSelection=null;activeHighlight=null;
- document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",+b.dataset.p===p));
- document.getElementById("audioTitle").textContent="Audio — Part "+p;
- document.querySelectorAll("audio").forEach((a,i)=>{a.classList.toggle("hidden",i+1!==p);if(i+1!==p)a.pause()});
- const saved=ssGet("markup"+p);
- document.getElementById("questions").innerHTML=saved||renderers[p]();
- restoreAnswers(p);bindTracking();bindMultiLimits();bindAnnotations();renderNotes();
- if(submitted)markPart(p);
- window.scrollTo({top:0,behavior:"smooth"});
+  saveQuestionMarkup();
+  currentPart=p;
+  savedSelection=null;
+  activeHighlight=null;
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",+b.dataset.p===p));
+  const saved=ssGet("markup"+p);
+  document.getElementById("questions").innerHTML=saved||renderers[p]();
+  document.getElementById("sectionHeading").textContent="Section "+p;
+  const [from,to]=partRange(p);
+  document.getElementById("sectionMeta").textContent=`Questions ${from}–${to}`;
+  restoreAnswers(p);
+  bindTracking();
+  bindMultiLimits();
+  bindAnnotations();
+  renderNotes();
+  if(submitted)markPart(p);
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function partRange(p){return p===1?[1,10]:p===2?[11,20]:p===3?[21,30]:[31,40]}
 function restoreAnswers(p){
@@ -334,7 +696,18 @@ function isAnswered(n){
  if(n===13||n===14)return JSON.parse(ssGet("g1314")||"[]").length===2;
  return !!(ssGet("q"+n)||"").trim();
 }
-function updateNav(){for(let n=1;n<=40;n++)document.getElementById("nav"+n)?.classList.toggle("answered",isAnswered(n))}
+function updateNav(){
+  let answered=0;
+  for(let n=1;n<=40;n++){
+    const yes=isAnswered(n);
+    if(yes)answered++;
+    document.getElementById("nav"+n)?.classList.toggle("answered",yes);
+  }
+  const bar=document.getElementById("answerBar");
+  const txt=document.getElementById("answerProgressText");
+  if(bar)bar.style.width=(answered/40*100)+"%";
+  if(txt)txt.textContent=`${answered}/40 câu đã trả lời`;
+}
 function goQ(n){
  const p=n<=10?1:n<=20?2:n<=30?3:4;if(p!==currentPart)showPart(p);
  setTimeout(()=>{const target=document.getElementById("card"+n)||document.getElementById("q"+n);target?.scrollIntoView({behavior:"smooth",block:"center"});document.getElementById("q"+n)?.focus({preventScroll:true})},80);
@@ -404,15 +777,33 @@ function displayKey(n,key){
  return key;
 }
 function renderReview(details){
- const box=document.getElementById("wrongReview");
- const byGroup=new Set(),wrong=details.filter(d=>!d.ok).filter(d=>{if(d.group){if(byGroup.has(d.group))return false;byGroup.add(d.group)}return true});
- if(!wrong.length){box.innerHTML=`<h3>Review</h3><div style="background:#edf7f1;padding:12px;border-radius:8px;color:#245c43;font-weight:700">🎉 Bạn đã trả lời đúng cả 40 câu.</div>`;return}
- box.innerHTML=`<h3 style="color:var(--navy)">Giải thích câu sai (${wrong.length} mục)</h3><div style="font-size:.9rem;color:var(--muted);margin-bottom:9px">Đáp án đúng và listening clue cho từng câu/nhóm câu làm sai.</div>`+
- wrong.map(d=>{
-   const title=d.group?(d.group==="g1112"?"Questions 11–12":"Questions 13–14"):`Question ${d.q}`;
-   const exp=d.group?(d.group==="g1112"?`${explain[11]} ${explain[12]}`:`${explain[13]} ${explain[14]}`):explain[d.q];
-   return `<div class="wrong-review"><div class="review-q">${title}</div><div class="row"><div class="label">Bạn trả lời</div><div class="wrong-text">${esc(d.user||"Không trả lời")}</div></div><div class="row"><div class="label">Đáp án đúng</div><div class="correct-text">${esc(displayKey(d.q,d.key))}</div></div><div class="explain"><b>Listening clue:</b> ${esc(exp)}</div></div>`;
- }).join("");
+  const box=document.getElementById("wrongReview");
+  const byGroup=new Set(),
+        wrong=details.filter(d=>!d.ok).filter(d=>{
+          if(d.group){
+            if(byGroup.has(d.group))return false;
+            byGroup.add(d.group);
+          }
+          return true;
+        });
+  if(!wrong.length){
+    box.innerHTML=`<h3>Review</h3><div style="background:#edf7f1;padding:12px;border-radius:8px;color:#245c43;font-weight:700">🎉 Bạn đã trả lời đúng cả 40 câu.</div>`;
+    return;
+  }
+  box.innerHTML=`<h3 style="color:var(--purple)">Giải thích câu sai (${wrong.length} mục)</h3>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:9px">Đáp án đúng và listening clue cho từng câu/nhóm câu làm sai.</div>`+
+    wrong.map(d=>{
+      const title=d.group?(d.group==="g1112"?"Questions 11–12":"Questions 13–14"):`Question ${d.q}`;
+      const exp=d.group?(d.group==="g1112"?`${explain[11]} ${explain[12]}`:`${explain[13]} ${explain[14]}`):explain[d.q];
+      const part=d.q<=10?1:d.q<=20?2:d.q<=30?3:4;
+      return `<div class="wrong-review">
+        <div class="review-q">${title}</div>
+        <div class="row"><div class="label">Bạn trả lời</div><div class="wrong-text">${esc(d.user||"Không trả lời")}</div></div>
+        <div class="row"><div class="label">Đáp án đúng</div><div class="correct-text">${esc(displayKey(d.q,d.key))}</div></div>
+        <div class="explain"><b>Listening clue:</b> ${esc(exp)}</div>
+        <button class="review-part" onclick="closeResult();playReviewPart(${part})">▶ Nghe lại Part ${part}</button>
+      </div>`;
+    }).join("");
 }
 function markPart(p){
  const [a,b]=partRange(p);
@@ -435,7 +826,13 @@ async function submitExam(auto=false){
  if(submitted)return;saveQuestionMarkup();
  const unanswered=Array.from({length:40},(_,i)=>i+1).filter(n=>!isAnswered(n)).length;
  if(!auto&&unanswered&& !confirm(`Bạn còn ${unanswered} câu chưa hoàn thành. Vẫn nộp bài?`))return;
- submitted=true;clearInterval(timeHandle);document.querySelectorAll("audio").forEach(a=>a.pause());
+ submitted=true;
+  clearInterval(timeHandle);
+  document.querySelectorAll("audio.exam-audio").forEach(a=>a.pause());
+  document.getElementById("audioCard")?.classList.remove("playing");
+  document.getElementById("audioCard")?.classList.add("finished");
+  document.getElementById("audioStatusText").textContent=auto?"Audio đã kết thúc · hệ thống tự động nộp bài":"Bài đã nộp · có thể nghe lại từng Part";
+  document.getElementById("reviewAudio")?.classList.remove("hidden");
  const r=scoreExam();for(let p=1;p<=4;p++){const old=currentPart; if(p===currentPart)markPart(p)}
  document.getElementById("resultStudent").textContent=`${document.getElementById("studentName").value.trim()} — ${document.getElementById("studentClass").value.trim()}`;
  document.getElementById("resultScore").textContent=`${r.total} / 40`;document.getElementById("resultPercent").textContent=`${Math.round(r.total/40*100)}% correct`;
@@ -449,7 +846,120 @@ async function submitExam(auto=false){
  try{await fetch(GOOGLE_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:params.toString()});document.getElementById("sheetStatus").textContent="✓ Đã gửi kết quả về Google Sheet."}
  catch(e){document.getElementById("sheetStatus").textContent="Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng."}
 }
-function closeResult(){document.getElementById("overlay").classList.add("hidden");markPart(currentPart)}
+
+function fmtAudio(sec){
+  sec=Math.max(0,Math.floor(Number(sec)||0));
+  return `${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;
+}
+
+function setupLockedAudio(){
+  for(let p=1;p<=4;p++){
+    const a=document.getElementById("audio"+p);
+    if(!a||a.dataset.lockReady==="1")continue;
+    a.dataset.lockReady="1";
+    a._safe=0;
+
+    a.addEventListener("loadedmetadata",()=>{
+      if(currentAudioPart===p){
+        document.getElementById("audioTotal").textContent=fmtAudio(a.duration);
+      }
+    });
+
+    a.addEventListener("timeupdate",()=>{
+      if(currentAudioPart!==p||submitted)return;
+      a._safe=a.currentTime;
+      document.getElementById("audioNow").textContent=fmtAudio(a.currentTime);
+      document.getElementById("audioTotal").textContent=fmtAudio(a.duration);
+      if(Number.isFinite(a.duration)&&a.duration>0){
+        document.getElementById("audioProgress").style.width=Math.min(100,a.currentTime/a.duration*100)+"%";
+      }
+    });
+
+    a.addEventListener("seeking",()=>{
+      if(submitted||currentAudioPart!==p)return;
+      if(Math.abs(a.currentTime-(a._safe||0))>1){
+        a.currentTime=a._safe||0;
+      }
+    });
+
+    a.addEventListener("ratechange",()=>{
+      if(!submitted&&a.playbackRate!==1)a.playbackRate=1;
+    });
+
+    a.addEventListener("pause",()=>{
+      if(!submitted&&currentAudioPart===p&&!a.ended&&startedAt){
+        setTimeout(()=>a.play().catch(()=>{}),70);
+      }
+    });
+
+    a.addEventListener("ended",()=>{
+      if(submitted||currentAudioPart!==p)return;
+      document.getElementById("audioProgress").style.width="100%";
+      if(p<4){
+        showPart(p+1);
+        setTimeout(()=>playExamPart(p+1),250);
+      }else{
+        document.getElementById("audioCard").classList.remove("playing");
+        document.getElementById("audioCard").classList.add("finished");
+        document.getElementById("audioStatusText").textContent="Audio đã kết thúc · đang tự động nộp bài";
+        submitExam(true);
+      }
+    });
+  }
+}
+
+function playExamPart(p){
+  if(submitted)return;
+  currentAudioPart=p;
+  for(let i=1;i<=4;i++){
+    const a=document.getElementById("audio"+i);
+    if(!a)continue;
+    if(i!==p)a.pause();
+  }
+  const a=document.getElementById("audio"+p);
+  if(!a)return;
+  a.currentTime=0;
+  a.playbackRate=1;
+  a._safe=0;
+  document.getElementById("audioNow").textContent="00:00";
+  document.getElementById("audioTotal").textContent=fmtAudio(a.duration||0);
+  document.getElementById("audioProgress").style.width="0%";
+  document.getElementById("audioCard").classList.remove("finished","reviewing");
+  document.getElementById("audioCard").classList.add("playing");
+  document.getElementById("audioStatusText").textContent=`Audio đang phát · Part ${p} · không thể tua`;
+  const promise=a.play();
+  if(promise&&promise.catch){
+    promise.catch(()=>{
+      document.getElementById("audioStatusText").textContent="Không thể tự phát audio. Hãy bấm Bắt đầu làm bài lại.";
+    });
+  }
+}
+
+function playReviewPart(p){
+  if(!submitted)return;
+  const rp=document.getElementById("reviewPlayer");
+  rp.src=AUDIO_FILES[p];
+  rp.playbackRate=1;
+  document.getElementById("reviewAudio").classList.remove("hidden");
+  document.getElementById("audioCard").classList.remove("finished");
+  document.getElementById("audioCard").classList.add("reviewing");
+  document.getElementById("audioStatusText").textContent=`Đang nghe lại Part ${p}`;
+  rp.play().catch(()=>{});
+  document.getElementById("audioCard").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function closeResult(){document.getElementById("overlay").classList.add("hidden");markPart(currentPart);document.getElementById("reviewAudio")?.classList.remove("hidden")}
+
+
+function prefillStudent(){
+  const qs=new URLSearchParams(location.search);
+  const savedName=qs.get("name")||localStorage.getItem("IELTS_STUDENT_NAME")||"";
+  const savedClass=qs.get("className")||localStorage.getItem("IELTS_STUDENT_CLASS")||"";
+  document.getElementById("studentName").value=savedName;
+  document.getElementById("studentClass").value=savedClass;
+}
+prefillStudent();
+
 </script>
 </body>
 </html>
