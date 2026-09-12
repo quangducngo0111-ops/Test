@@ -145,18 +145,27 @@ textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,159,.12
 
 <script>
 const GRADER_URL='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
-const PREFIX='IELTS_WRITE01_V1_';
+const PREFIX='IELTS_WRITE01_V2_';
 let currentTask=1, started=false, submitted=false, startedAt=0, timerHandle=null, secondsLeft=3600;
 let student={name:'',className:''};
 
 const $=id=>document.getElementById(id);
 function wordCount(text){const s=String(text||'').trim();return s?s.split(/\s+/).filter(Boolean).length:0}
 function saveDraft(){
+  if(submitted)return;
   localStorage.setItem(PREFIX+'task1',$('task1Essay').value);
   localStorage.setItem(PREFIX+'task2',$('task2Essay').value);
   $('saveStatus').textContent='Saved '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 }
-function restoreDraft(){$('task1Essay').value=localStorage.getItem(PREFIX+'task1')||'';$('task2Essay').value=localStorage.getItem(PREFIX+'task2')||'';updateCount()}
+function clearDraft(){
+  localStorage.removeItem(PREFIX+'task1');
+  localStorage.removeItem(PREFIX+'task2');
+}
+function restoreDraft(){
+  $('task1Essay').value=localStorage.getItem(PREFIX+'task1')||'';
+  $('task2Essay').value=localStorage.getItem(PREFIX+'task2')||'';
+  updateCount();
+}
 function updateCount(){$('wordCount').textContent=wordCount(currentTask===1?$('task1Essay').value:$('task2Essay').value)}
 function showTask(n){
   currentTask=n;
@@ -243,6 +252,7 @@ async function submitExam(auto=false){
       task1:t1,task2:t2,task1Words:String(wordCount(t1)),task2Words:String(wordCount(t2)),
       durationSeconds:String(duration),submittedAt:new Date().toISOString()
     });
+    clearDraft();
     pollGrade(attemptId);
   }catch(e){showGradeError('Không gửi được bài để chấm. Vui lòng kiểm tra Apps Script.')} 
 }
