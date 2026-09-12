@@ -8,20 +8,15 @@
 <meta http-equiv="Expires" content="0">
 <title>IELTS Practice Portal</title>
 <style>
-
 :root{
+  --navy:#10283c;
   --ink:#172033;
   --muted:#6f7890;
   --line:#e7e9f1;
-  --surface:#ffffff;
-  --bg:#f6f7fb;
+  --bg:#f7f8fc;
   --purple:#281260;
-  --purple2:#4c2fa0;
-  --blue:#2f6fdf;
-  --cyan:#22a6b3;
-  --orange:#ef8e57;
-  --shadow:0 18px 48px rgba(35,25,75,.10);
-  --shadow-soft:0 8px 26px rgba(35,25,75,.07);
+  --purple2:#5434a6;
+  --shadow:0 16px 36px rgba(25,31,56,.10);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -30,720 +25,2181 @@ body{
   color:var(--ink);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
   background:
-    radial-gradient(circle at 8% 10%,rgba(76,47,160,.08),transparent 24%),
-    radial-gradient(circle at 92% 12%,rgba(47,111,223,.08),transparent 22%),
+    radial-gradient(circle at 10% 8%,rgba(84,52,166,.08),transparent 22%),
+    radial-gradient(circle at 92% 8%,rgba(47,111,223,.08),transparent 21%),
     var(--bg);
 }
 button,input{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
 
-/* TOP BAR */
+/* TOPBAR */
 .topbar{
   position:sticky;
   top:0;
   z-index:50;
-  padding:12px 20px;
+  background:linear-gradient(105deg,#10283c,#281260 58%,#3d277f);
   color:#fff;
-  background:linear-gradient(105deg,#1c0e49 0%,#281260 52%,#35207c 100%);
-  box-shadow:0 8px 28px rgba(40,18,96,.16);
+  box-shadow:0 8px 22px rgba(16,40,60,.16);
 }
 .topbar-inner{
-  width:min(1220px,100%);
-  min-height:58px;
+  width:min(1500px,calc(100% - 28px));
+  min-height:68px;
   margin:auto;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:18px;
 }
-.brand{display:flex;align-items:center;gap:12px}
-.mark{
-  width:44px;height:44px;border-radius:14px;
-  display:grid;place-items:center;
-  font-size:18px;font-weight:950;
-  color:var(--purple);
-  background:linear-gradient(145deg,#fff,#ece9ff);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.65),0 8px 20px rgba(0,0,0,.14);
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
-.brand strong{font-size:14px;letter-spacing:.055em}
-.brand small{display:block;margin-top:3px;color:#d6d0ef;font-size:11px}
+.brand-mark{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  color:var(--purple);
+  font-weight:950;
+  box-shadow:0 8px 18px rgba(0,0,0,.16);
+}
+.brand strong{
+  display:block;
+  font-size:15px;
+  letter-spacing:.04em;
+}
+.brand small{
+  display:block;
+  font-size:11px;
+  color:#d9d4ee;
+  margin-top:2px;
+}
 .student-mini{
-  display:flex;align-items:center;gap:10px;
-  font-size:12px;font-weight:750;
-  color:#f2efff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:12px;
+  font-weight:800;
 }
 .student-mini button{
-  border:1px solid rgba(255,255,255,.28);
-  color:#fff;
-  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.3);
   border-radius:10px;
   padding:8px 11px;
-  transition:.2s ease;
+  color:#fff;
+  background:rgba(255,255,255,.08);
 }
-.student-mini button:hover{background:rgba(255,255,255,.16)}
 
-/* PAGE */
-main{width:min(1220px,100%);margin:auto;padding:36px 20px 58px}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:11px;text-transform:uppercase;letter-spacing:.14em;
-  font-weight:900;color:var(--purple2);
+main{
+  width:min(1500px,calc(100% - 28px));
+  margin:auto;
+  padding:30px 0 56px;
 }
-.eyebrow:before{
-  content:"";width:7px;height:7px;border-radius:50%;
-  background:linear-gradient(135deg,var(--purple2),var(--blue));
-  box-shadow:0 0 0 4px rgba(76,47,160,.08);
-}
-h1,h2,h3{color:#1d1740}
-p{line-height:1.6}
 
 /* LOGIN */
 .login-wrap{
   min-height:calc(100vh - 130px);
-  display:grid;place-items:center;
-  padding:32px 0;
+  display:grid;
+  place-items:center;
 }
-.login-card{
-  position:relative;
-  isolation:isolate;
+.login-shell{
+  width:min(980px,100%);
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:0;
   overflow:hidden;
-  width:min(720px,100%);
-  padding:44px;
-  border:1px solid rgba(76,47,160,.10);
-  border-radius:28px;
-  background:rgba(255,255,255,.92);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(14px);
+  border-radius:30px;
+  background:#fff;
+  border:1px solid #e8e5f1;
+  box-shadow:0 28px 70px rgba(35,25,75,.12);
 }
-.login-card:before,
-.login-card:after{
-  content:"";position:absolute;z-index:-1;border-radius:50%;
-  filter:blur(1px);
+.login-copy{
+  padding:48px 46px;
+  background:linear-gradient(145deg,#fff,#faf8ff);
 }
-.login-card:before{
-  width:260px;height:260px;right:-110px;top:-120px;
-  background:radial-gradient(circle,rgba(76,47,160,.15),rgba(76,47,160,0) 70%);
+.login-copy .eyebrow,
+.hero .eyebrow{
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#6a4fb7;
 }
-.login-card:after{
-  width:220px;height:220px;left:-110px;bottom:-130px;
-  background:radial-gradient(circle,rgba(47,111,223,.12),rgba(47,111,223,0) 70%);
-}
-.login-card h1{
-  margin:10px 0 8px;
-  font-size:clamp(34px,5vw,48px);
-  letter-spacing:-.035em;
+.login-copy h1{
+  font-size:44px;
   line-height:1.08;
+  margin:10px 0 10px;
+  color:#1d1740;
+  letter-spacing:-.04em;
 }
-.lead{margin:0;color:var(--muted);font-size:14px;max-width:590px}
+.login-copy p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.65;
+  font-size:14px;
+}
 .form-grid{
   display:grid;
-  grid-template-columns:1.45fr .75fr;
+  grid-template-columns:1.5fr .75fr;
   gap:12px;
-  margin-top:27px;
+  margin-top:28px;
 }
 .field label{
-  display:block;margin-bottom:7px;
-  font-size:12px;font-weight:850;color:#35304b;
+  display:block;
+  font-size:12px;
+  font-weight:850;
+  margin-bottom:7px;
+  color:#37324b;
 }
 .field input{
   width:100%;
-  min-height:51px;
-  padding:13px 14px;
+  height:52px;
   border:1px solid #dfe2eb;
   border-radius:12px;
-  background:#fbfbfe;
-  color:var(--ink);
+  padding:0 14px;
   outline:none;
-  transition:.2s ease;
+  background:#fbfbfe;
 }
 .field input:focus{
-  border-color:#866fe0;
+  border-color:#8069d1;
+  box-shadow:0 0 0 4px rgba(84,52,166,.09);
   background:#fff;
-  box-shadow:0 0 0 4px rgba(76,47,160,.09);
 }
 .start-btn{
   width:100%;
-  margin-top:15px;
-  padding:14px 18px;
   border:0;
   border-radius:12px;
+  padding:14px 18px;
+  margin-top:14px;
   color:#fff;
   font-weight:900;
-  letter-spacing:.025em;
   background:linear-gradient(100deg,var(--purple),var(--purple2));
-  box-shadow:0 10px 22px rgba(40,18,96,.20);
-  transition:.2s ease;
+  box-shadow:0 10px 22px rgba(40,18,96,.22);
 }
-.start-btn:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(40,18,96,.25)}
-.error{min-height:20px;margin-top:8px;font-size:12px;color:#b43e48}
-
-/* DASHBOARD HERO */
-.dashboard-head{
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:24px;
-  margin-bottom:18px;
-  padding:26px 28px;
-  border:1px solid rgba(76,47,160,.10);
-  border-radius:22px;
-  background:
-    linear-gradient(120deg,rgba(255,255,255,.96),rgba(248,246,255,.96));
-  box-shadow:var(--shadow-soft);
-}
-.dashboard-head:after{
-  content:"";
-  position:absolute;right:-45px;top:-70px;
-  width:220px;height:220px;border-radius:50%;
-  background:radial-gradient(circle,rgba(76,47,160,.12),transparent 68%);
-  pointer-events:none;
-}
-.dashboard-head h1{
-  margin:7px 0 4px;
-  font-size:clamp(28px,4vw,38px);
-  letter-spacing:-.025em;
-}
-.dashboard-head p{margin:0;color:var(--muted);font-size:13px}
-.profile{
-  position:relative;z-index:1;
-  min-width:250px;
-  padding:14px 16px;
-  border:1px solid #e5e1f2;
-  border-radius:15px;
-  background:rgba(255,255,255,.88);
+.error{
+  min-height:20px;
+  margin-top:8px;
   font-size:12px;
-  box-shadow:0 7px 20px rgba(35,25,75,.05);
+  color:#b43e48;
 }
-.profile b{color:#332761}
-
-/* TABS */
-.tabs{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin:0 0 26px;
-  padding:6px;
-  border:1px solid #e5e6ef;
-  border-radius:16px;
-  background:rgba(239,240,246,.80);
-}
-.tab{
+.login-art{
   position:relative;
-  border:0;
-  border-radius:11px;
-  padding:13px 14px;
-  background:transparent;
-  color:#717789;
-  font-weight:850;
-  transition:.2s ease;
-}
-.tab:hover{color:#322464;background:rgba(255,255,255,.65)}
-.tab.active{
-  color:var(--purple);
-  background:#fff;
-  box-shadow:0 6px 18px rgba(45,32,86,.08);
-}
-.tab span{
-  display:inline-flex;
-  margin-left:4px;
-  padding:2px 7px;
-  border-radius:999px;
-  background:#eeecf8;
-  color:#65559d;
-  font-size:10px;
-  vertical-align:1px;
-}
-.tab.active span{background:#ede8ff;color:#432b91}
-
-/* SECTION */
-.skill-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  margin:0 0 15px;
-}
-.skill-head h2{
-  margin:0;
-  font-size:22px;
-  letter-spacing:-.015em;
-}
-.skill-head p{margin:3px 0 0;color:var(--muted);font-size:12px}
-.skill-head>div:last-child{
-  padding:8px 11px;
-  border:1px solid #e6e7ee;
-  border-radius:999px;
-  background:rgba(255,255,255,.78);
-  color:#665f78;
-  font-size:11px;font-weight:800;
-}
-
-/* CARDS */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
-}
-.card{
-  position:relative;
+  min-height:520px;
+  background:linear-gradient(180deg,#fff8ef,#f9efe3);
   overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  min-height:270px;
+  display:grid;
+  place-items:end center;
   padding:20px;
-  border:1px solid #e6e8f0;
-  border-radius:20px;
-  background:rgba(255,255,255,.96);
-  box-shadow:0 5px 18px rgba(35,25,75,.045);
-  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
 }
-.card:before{
+.login-art:before,
+.login-art:after{
   content:"";
   position:absolute;
-  left:0;right:0;top:0;height:4px;
-  background:linear-gradient(90deg,var(--purple2),var(--blue));
-  opacity:.82;
+  border-radius:50%;
+  background:rgba(255,255,255,.5);
 }
-.card:hover{
-  transform:translateY(-4px);
-  border-color:#d9d4ee;
-  box-shadow:0 16px 34px rgba(35,25,75,.10);
+.login-art:before{
+  width:260px;
+  height:260px;
+  right:-80px;
+  top:-70px;
 }
-.card.listening:before{background:linear-gradient(90deg,#237a8a,#22a6b3)}
-.card.reading:before{background:linear-gradient(90deg,#2f6fdf,#6d8eff)}
-.card.writing:before{background:linear-gradient(90deg,#6f42c1,#9b69df)}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.icon{
-  width:48px;height:48px;
-  display:grid;place-items:center;
-  border-radius:14px;
-  font-size:21px;
-  background:linear-gradient(145deg,#f1effb,#e9e5fa);
-  box-shadow:inset 0 0 0 1px rgba(76,47,160,.06);
+.login-art:after{
+  width:180px;
+  height:180px;
+  left:-40px;
+  bottom:20px;
 }
-.card.listening .icon{background:linear-gradient(145deg,#e8f8f9,#dff2f4)}
-.card.reading .icon{background:linear-gradient(145deg,#edf3ff,#e5edff)}
-.card.writing .icon{background:linear-gradient(145deg,#f2edff,#ebe4fb)}
-.tag{
+.login-art img{
+  position:relative;
+  z-index:2;
+  width:min(100%,390px);
+  max-height:500px;
+  object-fit:contain;
+  filter:drop-shadow(0 22px 26px rgba(29,23,64,.12));
+}
+
+/* HERO */
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height:250px;
+  display:grid;
+  grid-template-columns:1fr 300px;
+  align-items:center;
+  gap:24px;
+  padding:30px 34px;
+  margin-bottom:24px;
+  border:1px solid #e8e4f2;
+  border-radius:30px;
+  background:linear-gradient(120deg,#fff 0%,#fbf8ff 58%,#fff4e9 100%);
+  box-shadow:var(--shadow);
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  right:220px;
+  top:-120px;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(84,52,166,.10),transparent 68%);
+}
+.hero h1{
+  margin:8px 0 6px;
+  font-size:clamp(31px,4vw,46px);
+  letter-spacing:-.04em;
+  color:#1d1740;
+}
+.hero p{
+  margin:0;
+  max-width:720px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.65;
+}
+.hero-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:16px;
+}
+.hero-chips span{
+  padding:7px 11px;
+  border:1px solid #e3dcf8;
+  background:#f4f0ff;
+  color:#58429b;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:850;
+}
+.hero-profile{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.hero-profile b{
+  color:#342760;
+}
+.hero-profile span{
+  padding:9px 11px;
+  border-radius:11px;
+  background:#fff;
+  border:1px solid #ece9f4;
+  font-size:12px;
+}
+.hero-art{
+  align-self:end;
+  justify-self:center;
+  position:relative;
+  z-index:2;
+  height:220px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+}
+.hero-art img{
+  max-height:240px;
+  max-width:270px;
+  object-fit:contain;
+  filter:drop-shadow(0 18px 20px rgba(29,23,64,.15));
+}
+.hero-sticker{
+  position:absolute;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #efe6da;
+  box-shadow:0 10px 24px rgba(35,25,75,.10);
+  overflow:hidden;
+}
+.hero-sticker img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.hero-sticker.s1{
+  width:62px;
+  height:62px;
+  right:8px;
+  top:25px;
+  transform:rotate(7deg);
+}
+.hero-sticker.s2{
+  width:52px;
+  height:52px;
+  left:-10px;
+  bottom:22px;
+  transform:rotate(-8deg);
+}
+
+/* SKILL POSTERS */
+.section-title{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:16px;
+  margin:0 0 14px;
+}
+.section-title h2{
+  margin:0;
+  color:#1d1740;
+  font-size:24px;
+  letter-spacing:-.02em;
+}
+.section-title p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+.skill-grid{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:30px;
+}
+.skill-card{
+  position:relative;
+  overflow:hidden;
+  min-height:355px;
+  padding:16px;
+  border:0;
+  border-radius:24px;
+  text-align:left;
+  color:#fff;
+  box-shadow:0 14px 26px rgba(35,25,75,.10);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+button.skill-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 34px rgba(35,25,75,.16);
+}
+.skill-card.listening{
+  background:linear-gradient(180deg,#5c7ee4,#4866c8);
+}
+.skill-card.reading{
+  background:linear-gradient(180deg,#3f9a61,#318653);
+}
+.skill-card.speaking{
+  background:linear-gradient(180deg,#e78842,#cd6d2d);
+}
+.skill-card.writing{
+  background:linear-gradient(180deg,#df7f92,#c55f76);
+}
+.skill-card.self{
+  background:linear-gradient(180deg,#7047c2,#523197);
+}
+.skill-card.vocab{
+  background:linear-gradient(180deg,#4da7a7,#3c9693);
+}
+.skill-card.placeholder{
+  cursor:default;
+}
+.skill-icon{
+  width:58px;
+  height:58px;
+  border-radius:17px;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.86);
+  font-size:29px;
+  color:#425574;
+}
+.skill-tag{
+  position:absolute;
+  top:16px;
+  right:16px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.skill-card h3{
+  font-size:24px;
+  line-height:1.08;
+  margin:17px 0 9px;
+  color:#fff;
+  letter-spacing:-.03em;
+}
+.skill-card p{
+  margin:0;
+  color:rgba(255,255,255,.93);
+  font-size:12.5px;
+  line-height:1.6;
+}
+.skill-stars{
+  position:absolute;
+  right:16px;
+  top:68px;
+  color:#ffd35f;
+  font-size:19px;
+  letter-spacing:7px;
+}
+.mascot{
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:18px;
+  height:120px;
+}
+.blob{
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:85%;
+  height:106px;
+  border-radius:54% 54% 34% 34%/72% 72% 28% 28%;
+  background:rgba(255,255,255,.23);
+}
+.eye{
+  position:absolute;
+  bottom:40px;
+  width:39px;
+  height:24px;
+  background:#10131a;
+  border-radius:55% 45% 55% 45%/58% 42% 58% 42%;
+}
+.eye.left{
+  left:33%;
+}
+.eye.right{
+  right:33%;
+  transform:scaleX(-1);
+}
+.skill-count{
+  position:absolute;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%);
+  padding:9px 16px;
+  border-radius:999px;
+  background:rgba(0,0,0,.16);
+  backdrop-filter:blur(6px);
+  font-size:14px;
+  font-weight:950;
+  white-space:nowrap;
+}
+
+/* TEST LIST */
+.test-shell{
+  border:1px solid #e8e9f1;
+  border-radius:26px;
+  background:rgba(255,255,255,.78);
+  padding:22px;
+  box-shadow:0 10px 28px rgba(35,25,75,.06);
+}
+.test-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:16px;
+}
+.test-head h2{
+  margin:0;
+  font-size:24px;
+  color:#1d1740;
+}
+.test-head p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+.test-chip{
+  padding:8px 12px;
+  border-radius:999px;
+  background:#f2edff;
+  color:#5437a3;
+  font-size:11px;
+  font-weight:900;
+}
+.test-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.test-card{
+  display:flex;
+  flex-direction:column;
+  min-height:245px;
+  padding:18px;
+  border:1px solid #e8e9f0;
+  border-radius:19px;
+  background:#fff;
+  box-shadow:0 7px 18px rgba(35,25,75,.045);
+}
+.test-card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.test-icon{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:#f1eefb;
+  font-size:20px;
+}
+.test-label{
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.09em;
+  text-transform:uppercase;
   padding:6px 9px;
   border-radius:999px;
-  font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:.105em;
-  font-weight:950;
-  color:#544487;
-  background:#efecfa;
+  background:#f0ecfa;
+  color:#644a9c;
 }
-.card.listening .tag{color:#176775;background:#e4f5f6}
-.card.reading .tag{color:#2b5fba;background:#e9f0ff}
-.card.writing .tag{color:#7242a4;background:#f0e8fa}
-.card h3{
-  margin:15px 0 9px;
-  font-size:19px;
-  line-height:1.28;
-  letter-spacing:-.015em;
+.test-card h3{
+  margin:14px 0 8px;
+  font-size:18px;
+  color:#1d1740;
 }
-.meta{display:flex;gap:6px;flex-wrap:wrap}
+.meta{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
 .meta span{
-  padding:5px 8px;
+  padding:5px 7px;
   border:1px solid #ececf3;
   border-radius:7px;
-  color:#757d8e;
   background:#f8f8fb;
+  color:#747d8e;
   font-size:10px;
   font-weight:700;
 }
 .desc{
   flex:1;
-  margin:13px 0 17px;
+  margin:12px 0 16px;
   color:var(--muted);
   font-size:12px;
   line-height:1.55;
 }
 .launch{
   width:100%;
-  padding:11px 13px;
   border:0;
-  border-radius:11px;
+  border-radius:10px;
+  padding:11px 13px;
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
   color:#fff;
   font-weight:900;
-  background:linear-gradient(100deg,var(--purple),var(--purple2));
-  box-shadow:0 8px 16px rgba(40,18,96,.13);
-  transition:.2s ease;
 }
-.card.listening .launch{background:linear-gradient(100deg,#196d79,#238c9b)}
-.card.reading .launch{background:linear-gradient(100deg,#285fc3,#3f79df)}
-.card.writing .launch{background:linear-gradient(100deg,#5f36a6,#7c4fc2)}
-.launch:hover{filter:brightness(1.04);transform:translateY(-1px)}
-.footer{
-  margin-top:30px;
-  padding-top:18px;
-  border-top:1px solid #e7e8ef;
-  color:#9196a3;
+.empty{
+  padding:38px;
   text-align:center;
+  color:var(--muted);
+  border:1px dashed #dfe2eb;
+  border-radius:18px;
+  background:#fff;
+}
+.footer{
+  text-align:center;
+  color:#9aa0ad;
   font-size:11px;
+  padding:24px 0 4px;
 }
 
-@media(max-width:920px){
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .dashboard-head{align-items:flex-start}
+@media(max-width:1250px){
+  .skill-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-@media(max-width:680px){
-  .topbar{padding:10px 13px}
-  .brand small{display:none}
-  main{padding:24px 14px 42px}
-  .login-card{padding:30px 20px;border-radius:22px}
-  .form-grid,.grid{grid-template-columns:1fr}
-  .dashboard-head,.skill-head{align-items:flex-start;flex-direction:column}
-  .dashboard-head{padding:22px 18px}
-  .profile{width:100%;min-width:0}
-  .student-mini{display:none}
-  .tabs{grid-template-columns:1fr;gap:5px}
-  .tab{text-align:left}
-  .skill-head>div:last-child{align-self:flex-start}
-  .card{min-height:0}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr 220px}
+  .test-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .login-shell{grid-template-columns:1fr}
+  .login-art{min-height:350px}
+  .login-art img{max-height:340px}
 }
-
+@media(max-width:700px){
+  main{width:min(100% - 16px,1500px)}
+  .topbar-inner{width:min(100% - 16px,1500px)}
+  .hero{grid-template-columns:1fr;padding:24px}
+  .hero-art{height:180px}
+  .skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .test-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .login-copy{padding:32px 24px}
+  .login-copy h1{font-size:36px}
+}
+@media(max-width:480px){
+  .skill-grid{grid-template-columns:1fr}
+  .skill-card{min-height:315px}
+  .student-mini span{display:none}
+}
 </style>
 </head>
+
 <body>
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="brand"><div class="mark">S</div><div><strong>IELTS PRACTICE PORTAL</strong><small>Listening · Reading · Writing Practice</small></div></div>
-    <div id="studentMini" class="student-mini hidden"><span id="miniInfo"></span><button id="changeStudentTop" type="button">Đổi học sinh</button></div>
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div>
+        <strong>IELTS PRACTICE</strong>
+        <small>Listening · Reading · Writing</small>
+      </div>
+    </div>
+
+    <div class="student-mini hidden" id="studentMini">
+      <span id="miniInfo"></span>
+      <button id="changeStudentTop" type="button">Đổi học sinh</button>
+    </div>
   </div>
 </header>
 
 <main>
-<section id="loginView" class="login-wrap">
-  <div class="login-card">
-    <div class="eyebrow">IELTS Practice</div>
-    <h1>IELTS Practice Portal</h1>
-    <p class="lead">Nhập thông tin một lần, sau đó chọn kỹ năng và đề thi muốn luyện tập. Tên và lớp sẽ được chuyển sang bài test.</p>
-    <form id="studentForm">
-      <div class="form-grid">
-        <div class="field"><label for="studentName">Họ và tên</label><input id="studentName" placeholder="Ví dụ: Nguyễn Minh Anh"></div>
-        <div class="field"><label for="studentClass">Lớp</label><input id="studentClass" placeholder="Ví dụ: 11A1"></div>
+
+  <section id="loginView" class="login-wrap">
+    <div class="login-shell">
+
+      <div class="login-copy">
+        <div class="eyebrow">IELTS PRACTICE PORTAL</div>
+        <h1>Học IELTS theo cách trực quan hơn.</h1>
+
+        <p>
+          Nhập thông tin học sinh để bắt đầu.
+          Hệ thống sẽ tự lưu tên và lớp để dùng cho các bài Reading,
+          Listening và Writing.
+        </p>
+
+        <form id="studentForm">
+          <div class="form-grid">
+
+            <div class="field">
+              <label>Họ và tên</label>
+              <input
+                id="studentName"
+                autocomplete="name"
+                placeholder="Nguyễn Văn A"
+              >
+            </div>
+
+            <div class="field">
+              <label>Lớp</label>
+              <input
+                id="studentClass"
+                placeholder="11A1"
+              >
+            </div>
+
+          </div>
+
+          <div class="error" id="formError"></div>
+
+          <button class="start-btn" type="submit">
+            Vào kho luyện thi →
+          </button>
+        </form>
       </div>
-      <button class="start-btn" type="submit">VÀO KHO LUYỆN THI</button>
-      <div id="formError" class="error"></div>
-    </form>
-  </div>
-</section>
 
-<section id="dashboardView" class="hidden">
-  <div class="dashboard-head">
-    <div><div class="eyebrow">Kho luyện thi</div><h1 id="welcomeTitle">Xin chào!</h1><p>Chọn kỹ năng và đề muốn bắt đầu.</p></div>
-    <div class="profile"><div><b>Học sinh:</b> <span id="profileName"></span></div><div style="margin-top:5px"><b>Lớp:</b> <span id="profileClass"></span></div></div>
-  </div>
+      <div class="login-art">
+        <img
+          src="./character.png"
+          alt="Nhân vật đồng hành"
+          onerror="this.style.display='none'"
+        >
+      </div>
 
-  <div class="tabs">
-    <button id="tabListening" class="tab active" type="button">🎧 Listening <span id="listeningCount"></span></button>
-    <button id="tabReading" class="tab" type="button">📖 Reading <span id="readingCount"></span></button>
-    <button id="tabWriting" class="tab" type="button">✍️ Writing <span id="writingCount"></span></button>
-  </div>
-
-  <section id="listeningPanel">
-    <div class="skill-head"><div><h2>Listening Tests</h2><p>Nghe audio, hoàn thành 40 câu hỏi và nộp kết quả.</p></div><div>🎧 Nên dùng tai nghe</div></div>
-    <div id="listeningGrid" class="grid"></div>
+    </div>
   </section>
 
-  <section id="readingPanel" class="hidden">
-    <div class="skill-head"><div><h2>Reading Tests</h2><p>3 passages · 40 questions · 60 minutes.</p></div><div>📖 Highlight & ghi chú</div></div>
-    <div id="readingGrid" class="grid"></div>
+
+  <section id="dashboardView" class="hidden">
+
+    <section class="hero">
+
+      <div>
+        <div class="eyebrow">KHO LUYỆN THI</div>
+
+        <h1 id="welcomeTitle">Xin chào!</h1>
+
+        <p>
+          Chọn kỹ năng bạn muốn luyện.
+          Trang chủ được thiết kế như một learning hub trực quan,
+          dễ chọn bài và vẫn tự động nhận các đề mới bạn thêm vào GitHub.
+        </p>
+
+        <div class="hero-chips">
+          <span>Listening</span>
+          <span>Reading</span>
+          <span>Writing</span>
+          <span>Auto cập nhật đề mới</span>
+        </div>
+
+        <div class="hero-profile">
+          <span>
+            <b>Học sinh:</b>
+            <span id="profileName"></span>
+          </span>
+
+          <span>
+            <b>Lớp:</b>
+            <span id="profileClass"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="hero-art">
+
+        <div class="hero-sticker s1">
+          <img src="./character.png" alt="">
+        </div>
+
+        <div class="hero-sticker s2">
+          <img src="./character.png" alt="">
+        </div>
+
+        <img
+          src="./character.png"
+          alt="Nhân vật đồng hành"
+          onerror="this.style.display='none'"
+        >
+
+      </div>
+
+    </section>
+
+
+    <div class="section-title">
+      <div>
+        <h2>Chọn kỹ năng</h2>
+        <p>Thiết kế theo dạng poster học tập như mẫu bạn gửi.</p>
+      </div>
+    </div>
+
+
+    <section class="skill-grid">
+
+      <button
+        class="skill-card listening"
+        type="button"
+        data-skill="listening"
+      >
+        <div class="skill-icon">🎧</div>
+        <div class="skill-tag">Listening</div>
+        <div class="skill-stars">✦ ✦</div>
+
+        <h3>Listening</h3>
+
+        <p>
+          Luyện nghe với audio, chấm điểm tự động
+          và review đúng đoạn chứa đáp án.
+        </p>
+
+        <div class="mascot">
+          <div class="blob"></div>
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+        </div>
+
+        <div class="skill-count" id="countListening">
+          ĐỀ
+        </div>
+      </button>
+
+
+      <button
+        class="skill-card reading"
+        type="button"
+        data-skill="reading"
+      >
+        <div class="skill-icon">📖</div>
+        <div class="skill-tag">Reading</div>
+        <div class="skill-stars">✦ ✦</div>
+
+        <h3>Reading</h3>
+
+        <p>
+          Đọc hiểu 3 passages, làm 40 câu
+          và sử dụng highlight hoặc take note trực tiếp.
+        </p>
+
+        <div class="mascot">
+          <div class="blob"></div>
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+        </div>
+
+        <div class="skill-count" id="countReading">
+          ĐỀ
+        </div>
+      </button>
+
+
+      <article class="skill-card speaking placeholder">
+
+        <div class="skill-icon">💬</div>
+        <div class="skill-tag">Speaking</div>
+        <div class="skill-stars">✦ ✦</div>
+
+        <h3>Speaking</h3>
+
+        <p>
+          Khu luyện Speaking có thể bổ sung sau
+          mà không ảnh hưởng các module hiện tại.
+        </p>
+
+        <div class="mascot">
+          <div class="blob"></div>
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+        </div>
+
+        <div class="skill-count">
+          SẮP CÓ
+        </div>
+
+      </article>
+
+
+      <button
+        class="skill-card writing"
+        type="button"
+        data-skill="writing"
+      >
+        <div class="skill-icon">✍️</div>
+        <div class="skill-tag">Writing</div>
+        <div class="skill-stars">✦ ✦</div>
+
+        <h3>Writing</h3>
+
+        <p>
+          Luyện viết trong giao diện riêng,
+          có autosave và sẵn sàng mở rộng thêm nhiều đề.
+        </p>
+
+        <div class="mascot">
+          <div class="blob"></div>
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+        </div>
+
+        <div class="skill-count" id="countWriting">
+          ĐỀ
+        </div>
+      </button>
+
+
+      <article class="skill-card self placeholder">
+
+        <div class="skill-icon">🎓</div>
+        <div class="skill-tag">Tự học</div>
+        <div class="skill-stars">✦ ✦</div>
+
+        <h3>
+          Định Hướng<br>
+          Tự Học
+        </h3>
+
+        <p>
+          Khu vực dành cho lộ trình,
+          mẹo học và tài liệu tự học trong tương lai.
+        </p>
+
+        <div class="mascot">
+          <div class="blob"></div>
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+        </div>
+
+        <div class="skill-count">
+          FREE
+        </div>
+
+      </article>
+
+
+      <article class="skill-card vocab placeholder">
+
+        <div class="skill-icon">📝</div>
+        <div class="skill-tag">Vocab</div>
+        <div class="skill-stars">✦ ✦</div>
+
+        <h3>
+          Vocab &amp;<br>
+          Grammar
+        </h3>
+
+        <p>
+          Khu luyện từ vựng và ngữ pháp theo chủ đề
+          có thể bổ sung sau.
+        </p>
+
+        <div class="mascot">
+          <div class="blob"></div>
+          <span class="eye left"></span>
+          <span class="eye right"></span>
+        </div>
+
+        <div class="skill-count">
+          SẮP CÓ
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <section
+      class="test-shell"
+      id="testSection"
+    >
+
+      <div class="test-head">
+
+        <div>
+          <h2 id="testTitle">
+            Listening Tests
+          </h2>
+
+          <p id="testDesc">
+            Chọn đề muốn bắt đầu.
+          </p>
+        </div>
+
+        <div
+          class="test-chip"
+          id="testChip"
+        >
+          0 đề
+        </div>
+
+      </div>
+
+      <div
+        id="testGrid"
+        class="test-grid"
+      ></div>
+
+    </section>
+
+
+    <div class="footer">
+      Thông tin học sinh được lưu trên trình duyệt
+      để tự điền khi mở bài test.
+    </div>
+
   </section>
 
-  <section id="writingPanel" class="hidden">
-    <div class="skill-head"><div><h2>Writing Practice</h2><p>Chọn luyện Task 1, Task 2 hoặc làm Full Writing Test.</p></div><div>✍️ Autosave & AI grading</div></div>
-    <div id="writingGrid" class="grid"></div>
-  </section>
-
-  <div class="footer">Thông tin học sinh được lưu trên trình duyệt để tự điền khi mở bài test.</div>
-</section>
 </main>
+
 
 <script>
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
+const REPO_TREE=
+'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
+
+
+const FALLBACK_READING=
+Array.from({length:13},(_,i)=>{
+
+  const n=
+  String(i+1).padStart(2,'0');
+
+  return{
+    title:`Reading Test ${n}`,
+    path:`./Read${n}/`,
+    meta:[
+      '40 câu',
+      '3 passages',
+      '60 phút'
+    ],
+    desc:
+    'IELTS Academic Reading computer-based practice.'
+  };
+
+});
+
+
 const FALLBACK_LISTENING=[
-  {title:'Listening Test 01',path:'./Lis01/C21T4/',meta:['40 câu','4 parts','Audio'],desc:'IELTS Listening computer-based practice.'}
+
+  {
+    title:'Listening Test 01',
+    path:'./Lis01/V9T1/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 02',
+    path:'./Lis02/V9T2/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 04',
+    path:'./Lis04/V9T3/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 05',
+    path:'./Lis05/V9T4/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 06',
+    path:'./Lis06/V9T5/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 07',
+    path:'./Lis07/V9T6/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 08',
+    path:'./Lis08/V9T7/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 09',
+    path:'./Lis09/V9T8/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  },
+
+  {
+    title:'Listening Test 10',
+    path:'./Lis10/V9T9/',
+    meta:[
+      '40 câu',
+      '4 sections',
+      'Audio'
+    ],
+    desc:
+    'IELTS Listening computer-based practice.'
+  }
+
 ];
+
 
 const FALLBACK_WRITING=[
-  {title:'Task 1 Practice 01',path:'./WriT1/01/',meta:['Task 1','20 phút','AI grading'],desc:'Luyện riêng IELTS Academic Writing Task 1.'},
-  {title:'Task 2 Practice 01',path:'./WriT2/01/',meta:['Task 2','40 phút','AI grading'],desc:'Luyện riêng IELTS Writing Task 2.'},
-  {title:'Full Writing Test 01',path:'./WriFull/01/',meta:['Task 1 + Task 2','60 phút','AI grading'],desc:'Full IELTS Writing test với cả Task 1 và Task 2.'}
+
+  {
+    title:'Writing Practice 01',
+    path:'./Wri01/',
+    meta:[
+      'Writing',
+      'Practice'
+    ],
+    desc:
+    'IELTS Writing practice.'
+  }
+
 ];
 
-const FALLBACK_READING=Array.from({length:13},(_,i)=>{
-  const n=String(i+1).padStart(2,'0');
-  return {title:`Reading Test ${n}`,path:`./Read${n}/`,meta:['40 câu','3 passages','60 phút'],desc:'IELTS Academic Reading computer-based practice.'};
-});
 
-let listeningTests=[...FALLBACK_LISTENING];
-let readingTests=[...FALLBACK_READING];
-let writingTests=[...FALLBACK_WRITING];
+let catalog={
+
+  listening:[
+    ...FALLBACK_LISTENING
+  ],
+
+  reading:[
+    ...FALLBACK_READING
+  ],
+
+  writing:[
+    ...FALLBACK_WRITING
+  ]
+
+};
+
+
+let currentSkill=
+'listening';
+
+let currentStudent=
+null;
+
+
+const $=
+id=>document.getElementById(id);
+
 
 function numFromText(s){
-  const m=String(s||'').match(/\d+/);
-  return m?Number(m[0]):0;
+
+  const m=
+  String(s||'')
+  .match(/\d+/);
+
+  return m
+  ?Number(m[0])
+  :0;
+
 }
 
-function cambridgeLabel(folder){
-  const m=String(folder||'').match(/^C(\d+)T(\d+)$/i);
-  return m?`Cambridge ${Number(m[1])} Test ${Number(m[2])}`:folder;
-}
 
 function uniqueByPath(items){
-  const seen=new Set();
-  return items.filter(x=>{
-    if(!x||!x.path||seen.has(x.path))return false;
-    seen.add(x.path);
-    return true;
-  });
+
+  const seen=
+  new Set();
+
+  return items.filter(x=>
+    x&&
+    x.path&&
+    !seen.has(x.path)&&
+    seen.add(x.path)
+  );
+
 }
 
-function mergeByPath(primary,fallback){
-  return uniqueByPath([...(primary||[]),...(fallback||[])]);
-}
-
-function buildCatalogFromTree(tree){
-  const indexPaths=tree
-    .filter(x=>x.type==='blob' && /(^|\/)index\.html$/i.test(x.path))
-    .map(x=>x.path);
-
-  // READING: Read01/index.html, Read02/index.html ...
-  readingTests=indexPaths
-    .filter(p=>/^Read\d+\/index\.html$/i.test(p))
-    .map(p=>{
-      const folder=p.split('/')[0];
-      const num=numFromText(folder);
-      const n=String(num).padStart(2,'0');
-      return {
-        num,
-        title:`Reading Test ${n}`,
-        path:`./${folder}/`,
-        meta:['40 câu','3 passages','60 phút'],
-        desc:'IELTS Academic Reading computer-based practice.'
-      };
-    })
-    .sort((a,b)=>a.num-b.num);
-
-  // LISTENING:
-  // Supports Lis01/C21T4/index.html, Lis02/.../index.html,
-  // and also Lis01/index.html if a future test is stored directly in LisXX.
-  listeningTests=indexPaths
-    .filter(p=>/^Lis\d+(?:\/.+)?\/index\.html$/i.test(p))
-    .map(p=>{
-      const parts=p.split('/');
-      const root=parts[0];
-      const testNum=numFromText(root);
-      const inner=parts.slice(1,-1);
-      const leaf=inner.length?inner[inner.length-1]:'';
-      return {
-        testNum,
-        leaf,
-        title:`Listening Test ${String(testNum).padStart(2,'0')}`,
-        path:'./'+parts.slice(0,-1).join('/')+'/',
-        meta:['40 câu','4 parts','Audio'],
-        desc:'IELTS Listening computer-based practice.'
-      };
-    })
-    .sort((a,b)=>a.testNum-b.testNum || a.leaf.localeCompare(b.leaf,undefined,{numeric:true}));
-
-  // WRITING:
-  // Auto-recognises WriT1/01, WriT2/01, WriFull/01...
-  // Also keeps generic WriXX folders if they contain an index.html.
-  writingTests=indexPaths
-    .filter(p=>/^(WriT1|WriT2|WriFull|Wri\d+)(?:\/.+)?\/index\.html$/i.test(p))
-    .map(p=>{
-      const parts=p.split('/');
-      const root=parts[0];
-      const inner=parts.slice(1,-1);
-      const leaf=inner.length?inner[inner.length-1]:'01';
-      const num=numFromText(leaf)||1;
-      let title,meta,desc,order;
-
-      if(/^WriT1$/i.test(root)){
-        title=`Task 1 Practice ${String(num).padStart(2,'0')}`;
-        meta=['Task 1','20 phút','AI grading'];
-        desc='Luyện riêng IELTS Academic Writing Task 1.';
-        order=1;
-      }else if(/^WriT2$/i.test(root)){
-        title=`Task 2 Practice ${String(num).padStart(2,'0')}`;
-        meta=['Task 2','40 phút','AI grading'];
-        desc='Luyện riêng IELTS Writing Task 2.';
-        order=2;
-      }else if(/^WriFull$/i.test(root)){
-        title=`Full Writing Test ${String(num).padStart(2,'0')}`;
-        meta=['Task 1 + Task 2','60 phút','AI grading'];
-        desc='Full IELTS Writing test với cả Task 1 và Task 2.';
-        order=3;
-      }else{
-        const rootNum=numFromText(root);
-        title=`Writing Practice ${String(rootNum||num).padStart(2,'0')}`;
-        meta=['Writing','Practice'];
-        desc='IELTS Writing practice.';
-        order=4;
-      }
-
-      return {
-        order,
-        num,
-        title,
-        path:'./'+parts.slice(0,-1).join('/')+'/',
-        meta,
-        desc
-      };
-    })
-    .sort((a,b)=>a.order-b.order || a.num-b.num || a.path.localeCompare(b.path,undefined,{numeric:true}));
-
-  // Merge với danh sách hiện có để các đề đã có chắc chắn không biến mất
-  // nếu GitHub API trả dữ liệu chậm/stale.
-  listeningTests=mergeByPath(listeningTests,FALLBACK_LISTENING);
-  readingTests=mergeByPath(readingTests,FALLBACK_READING)
-    .sort((a,b)=>(a.num||numFromText(a.path))-(b.num||numFromText(b.path)));
-  writingTests=mergeByPath(writingTests,FALLBACK_WRITING);
-}
-
-async function discoverAllTests(){
-  // One GitHub API request discovers the whole repository tree.
-  // After this, adding a new LisXX / ReadXX / Wri... folder is enough:
-  // no need to edit Test/index.html again.
-  const api='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-
-  try{
-    const res=await fetch(api,{cache:'no-store'});
-    if(!res.ok)throw new Error(`GitHub API ${res.status}`);
-    const data=await res.json();
-    if(!data||!Array.isArray(data.tree))throw new Error('Invalid GitHub tree response');
-
-    buildCatalogFromTree(data.tree);
-
-    // Safety fallback for any category that unexpectedly returns empty.
-    if(!listeningTests.length)listeningTests=[...FALLBACK_LISTENING];
-    if(!readingTests.length)readingTests=[...FALLBACK_READING];
-    if(!writingTests.length)writingTests=[...FALLBACK_WRITING];
-  }catch(err){
-    console.warn('Auto catalog unavailable; keeping fallback catalog.',err);
-    listeningTests=mergeByPath(listeningTests,FALLBACK_LISTENING);
-    readingTests=mergeByPath(readingTests,FALLBACK_READING)
-      .sort((a,b)=>(a.num||numFromText(a.path))-(b.num||numFromText(b.path)));
-    writingTests=mergeByPath(writingTests,FALLBACK_WRITING);
-  }
-}
-
-const loginView=document.getElementById('loginView');
-const dashboardView=document.getElementById('dashboardView');
-const studentForm=document.getElementById('studentForm');
-const nameInput=document.getElementById('studentName');
-const classInput=document.getElementById('studentClass');
-const formError=document.getElementById('formError');
-const tabListening=document.getElementById('tabListening');
-const tabReading=document.getElementById('tabReading');
-const tabWriting=document.getElementById('tabWriting');
-const listeningPanel=document.getElementById('listeningPanel');
-const readingPanel=document.getElementById('readingPanel');
-const writingPanel=document.getElementById('writingPanel');
-let currentStudent=null;
 
 function normalizeStudent(v){
-  if(!v||typeof v!=='object')return null;
-  const name=String(v.name||'').trim();
-  const className=String(v.className||'').trim();
-  return name&&className?{name,className}:null;
+
+  if(
+    !v||
+    typeof v!=='object'
+  ){
+    return null;
+  }
+
+  const name=
+  String(v.name||'')
+  .trim();
+
+  const className=
+  String(v.className||'')
+  .trim();
+
+  return name&&className
+  ?{
+    name,
+    className
+  }
+  :null;
+
 }
+
+
 function readStudent(){
-  try{return normalizeStudent(JSON.parse(localStorage.getItem(STUDENT_KEY)||'null'))}catch(e){return null}
+
+  try{
+
+    return normalizeStudent(
+      JSON.parse(
+        localStorage.getItem(
+          STUDENT_KEY
+        )||'null'
+      )
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
 }
+
+
 function saveStudent(s){
-  currentStudent=normalizeStudent(s);
-  if(!currentStudent)return;
-  localStorage.setItem(STUDENT_KEY,JSON.stringify(currentStudent));
-  localStorage.setItem('IELTS_STUDENT_NAME',currentStudent.name);
-  localStorage.setItem('IELTS_STUDENT_CLASS',currentStudent.className);
-  sessionStorage.setItem('IELTS_STUDENT_NAME',currentStudent.name);
-  sessionStorage.setItem('IELTS_STUDENT_CLASS',currentStudent.className);
-}
-function clearStudent(){
-  [STUDENT_KEY,'IELTS_STUDENT_NAME','IELTS_STUDENT_CLASS'].forEach(k=>localStorage.removeItem(k));
-  ['IELTS_STUDENT_NAME','IELTS_STUDENT_CLASS'].forEach(k=>sessionStorage.removeItem(k));
-}
-function showLogin(prefill=true){
-  dashboardView.classList.add('hidden');document.getElementById('studentMini').classList.add('hidden');loginView.classList.remove('hidden');
-  if(prefill&&currentStudent){nameInput.value=currentStudent.name;classInput.value=currentStudent.className}else{nameInput.value='';classInput.value=''}
-  nameInput.focus();
-}
-function showDashboard(){
-  if(!currentStudent)return showLogin(false);
-  loginView.classList.add('hidden');dashboardView.classList.remove('hidden');document.getElementById('studentMini').classList.remove('hidden');
-  const first=currentStudent.name.split(/\s+/).slice(-1)[0];
-  document.getElementById('welcomeTitle').textContent=`Xin chào, ${first}!`;
-  document.getElementById('profileName').textContent=currentStudent.name;
-  document.getElementById('profileClass').textContent=currentStudent.className;
-  document.getElementById('miniInfo').textContent=`${currentStudent.name} · ${currentStudent.className}`;
-  setSkill('listening');
-}
-function setSkill(skill){
-  const l=skill==='listening',r=skill==='reading',w=skill==='writing';
-  tabListening.classList.toggle('active',l);tabReading.classList.toggle('active',r);tabWriting.classList.toggle('active',w);
-  listeningPanel.classList.toggle('hidden',!l);readingPanel.classList.toggle('hidden',!r);writingPanel.classList.toggle('hidden',!w);
-}
-function card(t,skill){
-  const icon=skill==='listening'?'🎧':skill==='reading'?'📖':'✍️',tag=skill==='listening'?'Listening':skill==='reading'?'Reading':'Writing';
-  return `<article class="card ${skill}"><div class="card-top"><div class="icon">${icon}</div><div class="tag">${tag}</div></div><h3>${t.title}</h3><div class="meta">${t.meta.map(x=>`<span>${x}</span>`).join('')}</div><p class="desc">${t.desc}</p><button class="launch" type="button" data-path="${t.path}">Bắt đầu làm bài <span aria-hidden="true">→</span></button></article>`;
-}
-function renderTests(){
-  document.getElementById('listeningGrid').innerHTML=listeningTests.map(t=>card(t,'listening')).join('');
-  document.getElementById('readingGrid').innerHTML=readingTests.map(t=>card(t,'reading')).join('');
-  document.getElementById('writingGrid').innerHTML=writingTests.map(t=>card(t,'writing')).join('');
 
-  document.getElementById('listeningCount').textContent=`(${listeningTests.length})`;
-  document.getElementById('readingCount').textContent=`(${readingTests.length})`;
-  document.getElementById('writingCount').textContent=`(${writingTests.length})`;
+  currentStudent=
+  normalizeStudent(s);
 
-  document.querySelectorAll('[data-path]').forEach(
-    b=>b.addEventListener('click',()=>launchTest(b.dataset.path))
+  if(!currentStudent){
+    return;
+  }
+
+  localStorage.setItem(
+    STUDENT_KEY,
+    JSON.stringify(
+      currentStudent
+    )
   );
+
+  localStorage.setItem(
+    'IELTS_STUDENT_NAME',
+    currentStudent.name
+  );
+
+  localStorage.setItem(
+    'IELTS_STUDENT_CLASS',
+    currentStudent.className
+  );
+
+  sessionStorage.setItem(
+    'IELTS_STUDENT_NAME',
+    currentStudent.name
+  );
+
+  sessionStorage.setItem(
+    'IELTS_STUDENT_CLASS',
+    currentStudent.className
+  );
+
 }
+
+
+function clearStudent(){
+
+  [
+    STUDENT_KEY,
+    'IELTS_STUDENT_NAME',
+    'IELTS_STUDENT_CLASS'
+  ]
+  .forEach(k=>
+    localStorage.removeItem(k)
+  );
+
+  [
+    'IELTS_STUDENT_NAME',
+    'IELTS_STUDENT_CLASS'
+  ]
+  .forEach(k=>
+    sessionStorage.removeItem(k)
+  );
+
+}
+
+
+function showLogin(prefill=true){
+
+  $('dashboardView')
+  .classList
+  .add('hidden');
+
+  $('studentMini')
+  .classList
+  .add('hidden');
+
+  $('loginView')
+  .classList
+  .remove('hidden');
+
+
+  if(
+    prefill&&
+    currentStudent
+  ){
+
+    $('studentName').value=
+    currentStudent.name;
+
+    $('studentClass').value=
+    currentStudent.className;
+
+  }else{
+
+    $('studentName').value='';
+    $('studentClass').value='';
+
+  }
+
+  $('studentName').focus();
+
+}
+
+
+function showDashboard(){
+
+  if(!currentStudent){
+    return showLogin(false);
+  }
+
+  $('loginView')
+  .classList
+  .add('hidden');
+
+  $('dashboardView')
+  .classList
+  .remove('hidden');
+
+  $('studentMini')
+  .classList
+  .remove('hidden');
+
+
+  const first=
+  currentStudent
+  .name
+  .split(/\s+/)
+  .slice(-1)[0];
+
+
+  $('welcomeTitle')
+  .textContent=
+  `Xin chào, ${first}!`;
+
+
+  $('profileName')
+  .textContent=
+  currentStudent.name;
+
+
+  $('profileClass')
+  .textContent=
+  currentStudent.className;
+
+
+  $('miniInfo')
+  .textContent=
+  `${currentStudent.name} · ${currentStudent.className}`;
+
+
+  setSkill(
+    'listening',
+    false
+  );
+
+}
+
+
+function buildCatalogFromTree(tree){
+
+  const indexPaths=
+  tree
+  .filter(
+    x=>
+    x.type==='blob'&&
+    /(^|\/)index\.html$/i
+    .test(x.path)
+  )
+  .map(
+    x=>x.path
+  );
+
+
+  const reading=
+  indexPaths
+
+  .filter(
+    p=>
+    /^Read\d+\/index\.html$/i
+    .test(p)
+  )
+
+  .map(p=>{
+
+    const root=
+    p.split('/')[0];
+
+    const n=
+    numFromText(root);
+
+    return{
+      n,
+      title:
+      `Reading Test ${String(n).padStart(2,'0')}`,
+
+      path:
+      `./${root}/`,
+
+      meta:[
+        '40 câu',
+        '3 passages',
+        '60 phút'
+      ],
+
+      desc:
+      'IELTS Academic Reading computer-based practice.'
+    };
+
+  })
+
+  .sort(
+    (a,b)=>
+    a.n-b.n
+  );
+
+
+  const listeningGroups=
+  new Map();
+
+
+  indexPaths
+
+  .filter(
+    p=>
+    /^Lis\d+(?:\/.+)?\/index\.html$/i
+    .test(p)
+  )
+
+  .forEach(p=>{
+
+    const root=
+    p.split('/')[0];
+
+    if(
+      !listeningGroups
+      .has(root)
+    ){
+      listeningGroups
+      .set(
+        root,
+        []
+      );
+    }
+
+    listeningGroups
+    .get(root)
+    .push(p);
+
+  });
+
+
+  const listening=[];
+
+
+  for(
+    const[
+      root,
+      paths
+    ]
+    of
+    listeningGroups
+  ){
+
+    const n=
+    numFromText(root);
+
+
+    const preferred=
+
+    paths.find(
+      p=>
+      /\/V9T\d+\/index\.html$/i
+      .test(p)
+    )
+
+    ||
+
+    paths.find(
+      p=>
+      new RegExp(
+        `^${root}/index\\.html$`,
+        'i'
+      )
+      .test(p)
+    )
+
+    ||
+
+    paths[0];
+
+
+    listening.push({
+
+      n,
+
+      title:
+      `Listening Test ${String(n).padStart(2,'0')}`,
+
+      path:
+      './'+
+      preferred.replace(
+        /index\.html$/i,
+        ''
+      ),
+
+      meta:[
+        '40 câu',
+        '4 sections',
+        'Audio'
+      ],
+
+      desc:
+      'IELTS Listening computer-based practice.'
+
+    });
+
+  }
+
+
+  listening.sort(
+    (a,b)=>
+    a.n-b.n
+  );
+
+
+  const writing=
+  indexPaths
+
+  .filter(
+    p=>
+    /^(WriT1|WriT2|WriFull|Wri\d+)(?:\/.+)?\/index\.html$/i
+    .test(p)
+  )
+
+  .map(p=>{
+
+    const parts=
+    p.split('/');
+
+    const root=
+    parts[0];
+
+    const inner=
+    parts.slice(
+      1,
+      -1
+    );
+
+    const leaf=
+    inner.length
+    ?inner[
+      inner.length-1
+    ]
+    :'01';
+
+    const n=
+    numFromText(leaf)
+    ||
+    numFromText(root)
+    ||
+    1;
+
+
+    let title,
+        meta,
+        desc,
+        order;
+
+
+    if(
+      /^WriT1$/i
+      .test(root)
+    ){
+
+      title=
+      `Task 1 Practice ${String(n).padStart(2,'0')}`;
+
+      meta=[
+        'Task 1',
+        '20 phút'
+      ];
+
+      desc=
+      'IELTS Academic Writing Task 1.';
+
+      order=1;
+
+    }
+
+    else if(
+      /^WriT2$/i
+      .test(root)
+    ){
+
+      title=
+      `Task 2 Practice ${String(n).padStart(2,'0')}`;
+
+      meta=[
+        'Task 2',
+        '40 phút'
+      ];
+
+      desc=
+      'IELTS Academic Writing Task 2.';
+
+      order=2;
+
+    }
+
+    else if(
+      /^WriFull$/i
+      .test(root)
+    ){
+
+      title=
+      `Full Writing Test ${String(n).padStart(2,'0')}`;
+
+      meta=[
+        'Task 1 + Task 2',
+        '60 phút'
+      ];
+
+      desc=
+      'Full IELTS Writing test.';
+
+      order=3;
+
+    }
+
+    else{
+
+      title=
+      `Writing Practice ${String(numFromText(root)||n).padStart(2,'0')}`;
+
+      meta=[
+        'Writing',
+        'Practice'
+      ];
+
+      desc=
+      'IELTS Writing practice.';
+
+      order=4;
+
+    }
+
+
+    return{
+
+      order,
+      n,
+      title,
+
+      path:
+      './'+
+      parts
+      .slice(
+        0,
+        -1
+      )
+      .join('/')+
+      '/',
+
+      meta,
+      desc
+
+    };
+
+  })
+
+  .sort(
+    (a,b)=>
+    a.order-b.order
+    ||
+    a.n-b.n
+  );
+
+
+  if(
+    reading.length
+  ){
+    catalog.reading=
+    reading;
+  }
+
+
+  if(
+    listening.length
+  ){
+    catalog.listening=
+    listening;
+  }
+
+
+  if(
+    writing.length
+  ){
+    catalog.writing=
+    uniqueByPath(
+      writing
+    );
+  }
+
+}
+
+
+async function discoverAll(){
+
+  try{
+
+    const res=
+    await fetch(
+      REPO_TREE,
+      {
+        cache:'no-store'
+      }
+    );
+
+
+    if(
+      !res.ok
+    ){
+      throw new Error(
+        'GitHub API '+
+        res.status
+      );
+    }
+
+
+    const data=
+    await res.json();
+
+
+    if(
+      data&&
+      Array.isArray(
+        data.tree
+      )
+    ){
+      buildCatalogFromTree(
+        data.tree
+      );
+    }
+
+  }
+
+  catch(err){
+
+    console.warn(
+      'Auto catalog unavailable, using fallback.',
+      err
+    );
+
+  }
+
+
+  updateCounts();
+  renderTests();
+
+}
+
+
+function updateCounts(){
+
+  $('countListening')
+  .textContent=
+  `${catalog.listening.length} ĐỀ`;
+
+
+  $('countReading')
+  .textContent=
+  `${catalog.reading.length} ĐỀ`;
+
+
+  $('countWriting')
+  .textContent=
+  `${catalog.writing.length} ĐỀ`;
+
+}
+
+
+function skillInfo(skill){
+
+  if(
+    skill==='reading'
+  ){
+
+    return{
+      title:'Reading Tests',
+      desc:'3 passages · 40 questions · 60 minutes.',
+      icon:'📖',
+      label:'Reading'
+    };
+
+  }
+
+
+  if(
+    skill==='writing'
+  ){
+
+    return{
+      title:'Writing Practice',
+      desc:'Chọn bài Writing muốn bắt đầu.',
+      icon:'✍️',
+      label:'Writing'
+    };
+
+  }
+
+
+  return{
+    title:'Listening Tests',
+    desc:'Nghe audio, hoàn thành 40 câu hỏi và nộp kết quả.',
+    icon:'🎧',
+    label:'Listening'
+  };
+
+}
+
+
+function testCard(
+  t,
+  skill
+){
+
+  const info=
+  skillInfo(skill);
+
+
+  return`
+
+  <article class="test-card">
+
+    <div class="test-card-top">
+
+      <div class="test-icon">
+        ${info.icon}
+      </div>
+
+      <div class="test-label">
+        ${info.label}
+      </div>
+
+    </div>
+
+
+    <h3>
+      ${t.title}
+    </h3>
+
+
+    <div class="meta">
+
+      ${(t.meta||[])
+        .map(
+          x=>
+          `<span>${x}</span>`
+        )
+        .join('')
+      }
+
+    </div>
+
+
+    <p class="desc">
+      ${t.desc||''}
+    </p>
+
+
+    <button
+      class="launch"
+      type="button"
+      data-path="${t.path}"
+    >
+      Bắt đầu làm bài →
+    </button>
+
+  </article>
+
+  `;
+
+}
+
+
+function renderTests(){
+
+  const list=
+  catalog[
+    currentSkill
+  ]
+  ||
+  [];
+
+
+  const info=
+  skillInfo(
+    currentSkill
+  );
+
+
+  $('testTitle')
+  .textContent=
+  info.title;
+
+
+  $('testDesc')
+  .textContent=
+  info.desc;
+
+
+  $('testChip')
+  .textContent=
+  `${list.length} đề`;
+
+
+  $('testGrid')
+  .innerHTML=
+
+  list.length
+
+  ?
+
+  list
+  .map(
+    t=>
+    testCard(
+      t,
+      currentSkill
+    )
+  )
+  .join('')
+
+  :
+
+  '<div class="empty">Chưa có bài luyện ở kỹ năng này.</div>';
+
+
+  document
+  .querySelectorAll(
+    '[data-path]'
+  )
+  .forEach(
+    b=>
+    b.addEventListener(
+      'click',
+      ()=>
+      launchTest(
+        b.dataset.path
+      )
+    )
+  );
+
+}
+
+
+function setSkill(
+  skill,
+  scroll=true
+){
+
+  currentSkill=
+  skill;
+
+  renderTests();
+
+
+  document
+  .querySelectorAll(
+    'button.skill-card[data-skill]'
+  )
+  .forEach(
+    btn=>
+    btn.style.outline=
+    btn.dataset.skill===skill
+    ?
+    '4px solid rgba(40,18,96,.14)'
+    :
+    'none'
+  );
+
+
+  if(
+    scroll
+  ){
+
+    $('testSection')
+    .scrollIntoView({
+      behavior:'smooth',
+      block:'start'
+    });
+
+  }
+
+}
+
 
 function launchTest(path){
-  if(!currentStudent)return showLogin(false);
-  saveStudent(currentStudent);
-  const url=new URL(path,window.location.href);
-  url.searchParams.set('name',currentStudent.name);
-  url.searchParams.set('className',currentStudent.className);
-  url.searchParams.set('fromPortal','1');
-  window.location.href=url.toString();
+
+  if(
+    !currentStudent
+  ){
+    return showLogin(false);
+  }
+
+
+  saveStudent(
+    currentStudent
+  );
+
+
+  const url=
+  new URL(
+    path,
+    window.location.href
+  );
+
+
+  url.searchParams.set(
+    'name',
+    currentStudent.name
+  );
+
+
+  url.searchParams.set(
+    'className',
+    currentStudent.className
+  );
+
+
+  url.searchParams.set(
+    'fromPortal',
+    '1'
+  );
+
+
+  window.location.href=
+  url.toString();
+
 }
-studentForm.addEventListener('submit',e=>{
-  e.preventDefault();
-  const s=normalizeStudent({name:nameInput.value,className:classInput.value});
-  if(!s){formError.textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}
-  formError.textContent='';saveStudent(s);showDashboard();
-});
-tabListening.addEventListener('click',()=>setSkill('listening'));
-tabReading.addEventListener('click',()=>setSkill('reading'));
-tabWriting.addEventListener('click',()=>setSkill('writing'));
-document.getElementById('changeStudentTop').addEventListener('click',()=>{
-  const old=currentStudent;clearStudent();currentStudent=old;showLogin(true);
-});
-async function initPortal(){
-  currentStudent=readStudent();
 
-  // Hiển thị ngay catalog fallback (Reading 01–13 có ngay, không chờ API).
-  renderTests();
-  currentStudent?showDashboard():showLogin(false);
 
-  // Sau đó mới cập nhật thêm các bài mới tìm thấy trong repo.
-  await discoverAllTests();
+$('studentForm')
+.addEventListener(
+  'submit',
+  e=>{
+
+    e.preventDefault();
+
+
+    const s=
+    normalizeStudent({
+
+      name:
+      $('studentName')
+      .value,
+
+      className:
+      $('studentClass')
+      .value
+
+    });
+
+
+    if(
+      !s
+    ){
+
+      $('formError')
+      .textContent=
+      'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+      return;
+
+    }
+
+
+    $('formError')
+    .textContent='';
+
+
+    saveStudent(s);
+
+    showDashboard();
+
+  }
+);
+
+
+document
+.querySelectorAll(
+  'button.skill-card[data-skill]'
+)
+.forEach(
+  btn=>
+  btn.addEventListener(
+    'click',
+    ()=>
+    setSkill(
+      btn.dataset.skill,
+      true
+    )
+  )
+);
+
+
+$('changeStudentTop')
+.addEventListener(
+  'click',
+  ()=>{
+
+    const old=
+    currentStudent;
+
+    clearStudent();
+
+    currentStudent=
+    old;
+
+    showLogin(true);
+
+  }
+);
+
+
+async function init(){
+
+  currentStudent=
+  readStudent();
+
+
+  updateCounts();
+
   renderTests();
+
+
+  currentStudent
+  ?
+  showDashboard()
+  :
+  showLogin(false);
+
+
+  await discoverAll();
+
 }
 
-initPortal();
+
+init();
 </script>
+
 </body>
 </html>
