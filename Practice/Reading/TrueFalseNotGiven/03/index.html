@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>True / False / Not Given 03 — The Context, Meaning and Scope of Tourism</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+/* HEADER */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1350px,calc(100% - 18px));
+  min-height:62px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:tabular-nums;
+  font-size:19px;
+  font-weight:950;
+  background:rgba(255,255,255,.13);
+  padding:8px 11px;
+  border-radius:9px;
+}
+
+/* PAGE */
+
+.page{
+  width:min(1350px,calc(100% - 18px));
+  margin:auto;
+  padding:18px 0 46px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+  color:#21164b;
+  font-size:27px;
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+/* PROGRESS */
+
+.progress-wrap{min-width:245px}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--muted);
+  font-size:10.5px;
+  font-weight:850;
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+  background:#e5e8ef;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--purple2),var(--blue));
+  transition:width .2s ease;
+}
+
+/* WORKSPACE */
+
+.workspace{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(35,25,75,.05);
+}
+
+.pane{
+  min-width:0;
+  overflow:auto;
+  max-height:calc(100vh - 205px);
+  scroll-behavior:smooth;
+}
+
+.passage{
+  border-right:1px solid var(--line);
+  background:#fff;
+}
+
+.questions{background:#fafbfe}
+
+.content{padding:20px 23px}
+
+.passage h2{
+  margin:0 0 16px;
+  text-align:center;
+  color:#21164b;
+  font-size:21px;
+}
+
+.passage p{
+  margin:0 0 17px;
+  font-size:13.5px;
+  line-height:1.78;
+  text-align:justify;
+}
+
+.para-letter{
+  font-weight:950;
+  color:#281260;
+  margin-right:7px;
+}
+
+/* CLICK TARGET IN PASSAGE */
+
+.evidence-source{
+  border-radius:4px;
+  transition:
+    background .3s ease,
+    box-shadow .3s ease,
+    font-weight .3s ease;
+}
+
+.evidence-source.evidence-focus{
+  background:#fff1a8;
+  box-shadow:
+    0 0 0 3px rgba(245,190,35,.25),
+    0 0 18px rgba(245,190,35,.35);
+  font-weight:800;
+  padding:2px 3px;
+  margin:-2px -3px;
+  animation:evidencePulse .85s ease 2;
+}
+
+@keyframes evidencePulse{
+  0%{
+    box-shadow:
+      0 0 0 2px rgba(245,190,35,.15),
+      0 0 4px rgba(245,190,35,.1);
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 6px rgba(245,190,35,.30),
+      0 0 24px rgba(245,190,35,.55);
+  }
+
+  100%{
+    box-shadow:
+      0 0 0 3px rgba(245,190,35,.25),
+      0 0 18px rgba(245,190,35,.35);
+  }
+}
+
+/* INSTRUCTIONS */
+
+.instructions{margin-bottom:13px}
+
+.instructions h3{
+  margin:0 0 6px;
+  color:#21164b;
+  font-size:17px;
+}
+
+.instructions p{
+  margin:3px 0;
+  color:#5f6677;
+  font-size:11.5px;
+  line-height:1.55;
+}
+
+.legend{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:4px 8px;
+  font-size:11px;
+  margin-top:8px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+}
+
+.legend b{color:#21164b}
+
+/* QUESTIONS */
+
+.qcard{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px;
+  margin:8px 0;
+  scroll-margin:100px;
+}
+
+.qhead{
+  display:flex;
+  gap:9px;
+  align-items:flex-start;
+}
+
+.qnum{
+  min-width:25px;
+  height:25px;
+  border-radius:50%;
+  background:#eee9ff;
+  color:#4b318e;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  font-weight:950;
+}
+
+.qtext{
+  font-size:12.5px;
+  line-height:1.5;
+  font-weight:760;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:10px;
+}
+
+.option{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:9px;
+  background:#fff;
+  font-size:10.5px;
+  font-weight:850;
+}
+
+.option:hover{background:#fafaff}
+
+.option.correct{
+  border-color:#8ed6b4;
+  background:#f4fcf7;
+  color:#126b48;
+}
+
+.option.wrong{
+  border-color:#efb7bf;
+  background:#fff7f8;
+  color:#9b2838;
+}
+
+/* REVIEW */
+
+.inline-review{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid #f0d0d5;
+  border-left:4px solid var(--bad);
+  border-radius:9px;
+  background:#fffafb;
+  font-size:11px;
+  line-height:1.55;
+}
+
+.review-title{
+  font-weight:950;
+  color:#21164b;
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:4px 8px;
+  margin:4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+  font-weight:900;
+}
+
+/* COMPARE */
+
+.compare-box{
+  margin-top:12px;
+  padding:13px;
+  background:#f8f7ff;
+  border:1px solid #ddd6fb;
+  border-radius:10px;
+}
+
+.compare-heading{
+  margin-bottom:11px;
+  color:#281260;
+  font-size:12px;
+  font-weight:950;
+}
+
+.compare-item{margin-top:10px}
+
+.compare-label{
+  margin-bottom:4px;
+  color:#6f7890;
+  font-size:9.5px;
+  font-weight:950;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+
+.compare-text{
+  padding:9px 10px;
+  background:#fff;
+  border:1px solid #e5e7ee;
+  border-radius:7px;
+  font-size:11px;
+  line-height:1.6;
+}
+
+/* CLICKABLE EVIDENCE IN REVIEW */
+
+.passage-evidence{
+  position:relative;
+  padding:10px 35px 10px 10px;
+  background:#eef3ff;
+  border:1px solid #d6dffb;
+  border-left:3px solid #5773d9;
+  border-radius:7px;
+  color:#293a70;
+  font-size:11px;
+  font-style:italic;
+  line-height:1.6;
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .15s ease;
+}
+
+.passage-evidence:hover{
+  background:#e5ecff;
+  border-color:#b9c8f8;
+  transform:translateY(-1px);
+}
+
+.passage-evidence::after{
+  content:"↗";
+  position:absolute;
+  top:50%;
+  right:12px;
+  transform:translateY(-50%);
+  font-size:16px;
+  font-style:normal;
+  font-weight:950;
+  color:#5b43b5;
+}
+
+.evidence-help{
+  margin-top:5px;
+  color:#7b8292;
+  font-size:9.5px;
+  font-style:normal;
+}
+
+.compare-analysis{
+  padding:9px 10px;
+  background:#fff;
+  border-radius:7px;
+  font-size:11px;
+  line-height:1.65;
+}
+
+.conclusion-box{
+  margin-top:10px;
+  padding:9px 10px;
+  background:#f2fff8;
+  border:1px solid #bde5ce;
+  border-radius:7px;
+}
+
+.conclusion-text{
+  color:#126b48;
+  font-size:11px;
+  font-weight:900;
+  line-height:1.55;
+}
+
+/* USER HIGHLIGHT + NOTE */
+
+mark.user-highlight{
+  background:#fff29a;
+  color:inherit;
+  border-radius:3px;
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+  border-bottom:2px dotted #e28b19;
+  cursor:pointer;
+  border-radius:2px;
+}
+
+.selection-menu{
+  position:fixed;
+  z-index:90;
+  display:none;
+  align-items:center;
+  gap:5px;
+  padding:6px;
+  background:#21164b;
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(25,18,65,.22);
+}
+
+.selection-menu.show{display:flex}
+
+.selection-menu button{
+  border:0;
+  background:#fff;
+  color:#35285e;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:10.5px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+  background:#fff1f3;
+}
+
+/* BOTTOM */
+
+.bottom{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  width:min(1350px,calc(100% - 18px));
+  margin:0 auto;
+  padding:9px 0 6px;
+  background:linear-gradient(to top,var(--bg) 75%,rgba(245,247,251,.88));
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+  gap:5px;
+  flex:1;
+}
+
+.nav button{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+  border-color:#f0b5bd;
+}
+
+.submit{
+  border:0;
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;
+  border-radius:9px;
+  padding:10px 15px;
+  font-weight:900;
+}
+
+/* RESULT */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(15,11,35,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.overlay.hidden{display:none}
+
+.result{
+  width:min(590px,100%);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.score{
+  font-size:38px;
+  font-weight:950;
+  color:#21164b;
+  margin:7px 0;
+}
+
+.btn{
+  border:0;
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;
+  border-radius:9px;
+  padding:10px 13px;
+  font-weight:900;
+}
+
+/* START */
+
+.start{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  background:rgba(16,12,40,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.start.hidden{display:none}
+
+.start-card{
+  width:min(460px,100%);
+  background:#fff;
+  border-radius:19px;
+  padding:23px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.start-card h2{
+  margin:5px 0 6px;
+  color:#21164b;
+}
+
+.start-card p{
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+.field{margin:9px 0}
+
+.field label{
+  display:block;
+  font-size:10.5px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.field input{
+  width:100%;
+  padding:10px;
+  border:1px solid #d5d9e2;
+  border-radius:9px;
+  outline:none;
+}
+
+.start-card .btn{
+  width:100%;
+  margin-top:10px;
+}
+
+@media(max-width:850px){
+  .workspace{grid-template-columns:1fr}
+
+  .passage{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .pane{max-height:none}
+
+  .hero{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .progress-wrap{min-width:0}
+
+  .options{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+
+<div id="start" class="start">
+
+  <div class="start-card">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:#6a4db4
+    ">
+      Reading Practice
+    </div>
+
+    <h2>
+      True / False / Not Given 03
+    </h2>
+
+    <p>
+      The Context, Meaning and Scope of Tourism · 6 câu
+    </p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input id="studentName" placeholder="Nguyễn Văn A">
+    </div>
+
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass" placeholder="11A1">
+    </div>
+
+    <button class="btn" onclick="startPractice()">
+      Bắt đầu luyện
+    </button>
+
+    <div
+      id="startError"
+      style="font-size:10.5px;color:#b83345;margin-top:7px"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- HEADER -->
+
+<header class="top">
+
+  <div class="topin">
+
+    <div class="left">
+
+      <a class="back" href="../">
+        ← True / False / Not Given
+      </a>
+
+      <div class="brand">
+        📖 True / False / Not Given 03
+      </div>
+
+    </div>
+
+    <div class="student" id="studentInfo"></div>
+
+    <div class="timer" id="timer">
+      00:00
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main class="page">
+
+  <section class="hero">
+
+    <div>
+      <h1>True / False / Not Given 03</h1>
+
+      <p>
+        The Context, Meaning and Scope of Tourism · Questions 5–10
+      </p>
+    </div>
+
+
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+
+        <span>Tiến độ</span>
+
+        <span id="progressText">
+          0/6 câu đã trả lời
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="workspace">
+
+    <!-- PASSAGE -->
+
+    <div
+      class="pane passage"
+      id="passagePane"
+    >
+
+      <div
+        id="passageRoot"
+        class="content"
+      >
+
+        <h2>
+          The Context, Meaning and Scope of Tourism
+        </h2>
+
+
+        <!-- C -->
+
+        <p>
+
+          <span class="para-letter">
+            C
+          </span>
+
+          Tourism today has grown significantly in both economic and social importance.
+
+          In most industrialised countries over the past few years the fastest growth
+          has been seen in the area of services.
+
+          One of the largest segments of the service industry,
+          although largely unrecognised as an entity in some of these countries,
+          is travel and tourism.
+
+          According to the World Travel and Tourism Council (1992),
+          Travel and tourism is the largest industry in the world on virtually
+          any economic measure including value-added capital investment,
+          employment and tax contributions.
+
+          In 1992 the industry’s gross output was estimated to be $3.5 trillion,
+          over 12 per cent of all consumer spending.
+
+          <span
+            class="evidence-source"
+            data-evidence="5"
+          >
+            The travel and tourism industry is the world’s largest employer
+            with almost 130 million jobs, or almost 7 per cent of all employees.
+          </span>
+
+          <span
+            class="evidence-source"
+            data-evidence="6"
+          >
+            This industry is the world’s leading industrial contributor,
+            producing over 6 per cent of the world’s national product.
+          </span>
+
+          It also accounts for capital investment in excess of $422 billion
+          and substantial direct, indirect and personal taxes each year.
+
+          Thus, tourism has a profound impact both on the
