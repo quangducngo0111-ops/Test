@@ -140,15 +140,36 @@ function pretty(s){
 function item(path,root){
   const rel=path.slice(root.length).replace(/\/index\.html$/i,'');
   const parts=rel.split('/').filter(Boolean);
-  if(!parts.length)return null;
-  const top=pretty(parts[0]);
-  const leaf=pretty(parts[parts.length-1]);
+
+  // Trang Luyện tập chỉ hiển thị folder dạng bài cấp 1.
+  // Ví dụ Reading/TrueFalseNotGiven/index.html.
+  // Các đề 01/02/03... sẽ nằm ở trang danh sách của dạng bài đó.
+  if(parts.length!==1)return null;
+
+  const raw=parts[0];
+  const labels={
+    TrueFalseNotGiven:'True / False / Not Given',
+    YesNoNotGiven:'Yes / No / Not Given',
+    MatchingHeadings:'Matching Headings',
+    MatchingInformation:'Matching Information',
+    MatchingFeatures:'Matching Features',
+    MatchingSentenceEndings:'Matching Sentence Endings',
+    SentenceCompletion:'Sentence Completion',
+    SummaryCompletion:'Summary Completion',
+    TableCompletion:'Table Completion',
+    NoteCompletion:'Note Completion',
+    FlowChartCompletion:'Flow-chart Completion',
+    ShortAnswerQuestions:'Short Answer Questions',
+    MultipleChoice:'Multiple Choice',
+    DiagramLabelling:'Diagram Labelling'
+  };
+
   return{
-    title:parts.length===1?top:`${top} · ${leaf}`,
-    desc:parts.length===1?'Danh mục luyện tập':'Bài luyện tập',
+    title:labels[raw]||pretty(raw),
+    desc:'Dạng bài luyện tập',
     url:'../'+path.replace(/index\.html$/i,''),
-    depth:parts.length,
-    sort:[num(parts[0]),num(parts.at(-1)),rel]
+    depth:1,
+    sort:[num(raw),raw]
   }
 }
 function renderTabs(){
