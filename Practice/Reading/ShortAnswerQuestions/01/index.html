@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Short Answer Questions 01 — Stepwells</title>
+<style>
+:root{
+  --purple:#281260;--purple2:#5135a6;--blue:#2f6fdf;--ink:#202636;
+  --muted:#6f7890;--line:#e4e7ef;--bg:#f5f7fb;--good:#16845b;--bad:#b83345
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button,input{font:inherit}button{cursor:pointer}
+
+.top{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  color:#fff;box-shadow:0 8px 22px rgba(40,18,96,.14)
+}
+.topin{
+  width:min(1350px,calc(100% - 18px));min-height:62px;margin:auto;
+  display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.left{display:flex;align-items:center;gap:9px;min-width:0}
+.back{
+  color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;border-radius:9px;font-size:11px;font-weight:900;white-space:nowrap
+}
+.brand{font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.student{
+  font-size:11px;font-weight:800;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);padding:7px 10px;border-radius:999px
+}
+.timer{
+  font-variant-numeric:tabular-nums;font-size:19px;font-weight:950;
+  background:rgba(255,255,255,.13);padding:8px 11px;border-radius:9px
+}
+
+.page{width:min(1350px,calc(100% - 18px));margin:auto;padding:18px 0 46px}
+.hero{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:13px}
+.hero h1{margin:0;color:#21164b;font-size:27px;letter-spacing:-.03em}
+.hero p{margin:4px 0 0;color:var(--muted);font-size:11.5px}
+.progress-wrap{min-width:245px}
+.progress-row{
+  display:flex;justify-content:space-between;gap:10px;color:var(--muted);
+  font-size:10.5px;font-weight:850;margin-bottom:5px
+}
+.progress{height:7px;background:#e5e8ef;border-radius:999px;overflow:hidden}
+.progress i{
+  display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--purple2),var(--blue));transition:width .2s ease
+}
+
+.workspace{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:0;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  background:#fff;box-shadow:0 8px 24px rgba(35,25,75,.05)
+}
+.pane{min-width:0;overflow:auto;max-height:calc(100vh - 205px)}
+.passage{border-right:1px solid var(--line);background:#fff}
+.questions{background:#fafbfe}
+.content{padding:22px 24px}
+.passage h2{margin:0 0 15px;text-align:center;color:#21164b;font-size:21px}
+.passage p{margin:0 0 16px;font-size:14px;line-height:1.78;text-align:justify}
+
+.instructions{margin-bottom:14px}
+.instructions h3{margin:0 0 6px;color:#21164b;font-size:17px}
+.instructions p{margin:4px 0;color:#5f6677;font-size:11.5px;line-height:1.55}
+.rule{
+  display:inline-block;margin-top:7px;padding:7px 10px;border-radius:8px;
+  background:#f0ecff;color:#5d43ae;font-size:10.5px;font-weight:900
+}
+
+.qcard{
+  background:#fff;border:1px solid var(--line);border-radius:11px;
+  padding:13px;margin:9px 0;scroll-margin:100px
+}
+.qhead{display:flex;gap:9px;align-items:flex-start}
+.qnum{
+  min-width:26px;height:26px;border-radius:50%;
+  background:#eee9ff;color:#4b318e;display:inline-flex;
+  align-items:center;justify-content:center;font-size:10px;font-weight:950
+}
+.qtext{font-size:12.5px;line-height:1.5;font-weight:760}
+.answer-row{margin-top:10px}
+.ans{
+  width:100%;padding:10px 11px;border:1px solid #d5d9e2;
+  border-radius:9px;outline:none;background:#fff
+}
+.ans:focus{border-color:#6a55bf;box-shadow:0 0 0 3px rgba(78,56,160,.08)}
+.ans.correct{border-color:#8ed6b4;background:#f6fcf8;color:#126b48}
+.ans.wrong{border-color:#efb7bf;background:#fff7f8;color:#9b2838}
+
+.inline-review{
+  margin-top:10px;padding:11px;border:1px solid #f0d0d5;
+  border-left:4px solid var(--bad);border-radius:8px;background:#fffafb;
+  font-size:11px;line-height:1.5
+}
+.review-title{font-weight:900;color:#21164b;margin-bottom:6px}
+.review-row{display:grid;grid-template-columns:100px 1fr;gap:4px 8px;margin:3px 0}
+.review-label{color:var(--muted);font-weight:800}
+.review-user{color:var(--bad);font-weight:850}
+.review-correct{color:var(--good);font-weight:900}
+.explain{margin-top:7px;padding:8px 9px;background:#fff;border-left:3px solid #6a55bf;border-radius:5px}
+.evidence{
+  margin-top:7px;padding:8px 9px;background:#f2f5ff;
+  border:1px solid #d9e1fb;border-radius:8px;font-style:italic
+}
+
+mark.user-highlight{background:#fff29a;color:inherit;border-radius:3px;cursor:pointer}
+.note-anchor{
+  background:#ffe6a6;border-bottom:2px dotted #e28b19;
+  cursor:pointer;border-radius:2px
+}
+.selection-menu{
+  position:fixed;z-index:90;display:none;align-items:center;gap:5px;
+  padding:6px;background:#21164b;border-radius:10px;
+  box-shadow:0 12px 30px rgba(25,18,65,.22)
+}
+.selection-menu.show{display:flex}
+.selection-menu button{
+  border:0;background:#fff;color:#35285e;border-radius:7px;
+  padding:7px 9px;font-size:10.5px;font-weight:900;white-space:nowrap
+}
+.selection-menu button.danger{color:#a31e31;background:#fff1f3}
+
+.bottom{
+  position:sticky;bottom:0;z-index:20;
+  width:min(1350px,calc(100% - 18px));margin:0 auto;
+  padding:9px 0 6px;
+  background:linear-gradient(to top,var(--bg) 75%,rgba(245,247,251,.88));
+  display:flex;align-items:center;gap:10px
+}
+.nav{display:flex;gap:5px;flex:1}
+.nav button{
+  width:31px;height:31px;border:1px solid var(--line);
+  background:#fff;border-radius:7px;font-size:10px;font-weight:900
+}
+.nav button.answered{background:#e7efff;border-color:#c4d5ff}
+.nav button.correct{background:#dff0e7;border-color:#8ed6b4}
+.nav button.wrong{background:#f4ddd8;border-color:#f0b5bd}
+.submit{
+  border:0;background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;border-radius:9px;padding:10px 15px;font-weight:900
+}
+
+.overlay{
+  position:fixed;inset:0;z-index:100;background:rgba(15,11,35,.62);
+  display:grid;place-items:center;padding:18px
+}
+.overlay.hidden{display:none}
+.result{
+  width:min(590px,100%);max-height:88vh;overflow:auto;
+  background:#fff;border-radius:18px;padding:22px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28)
+}
+.score{font-size:38px;font-weight:950;color:#21164b;margin:7px 0}
+.btn{
+  border:0;background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;border-radius:9px;padding:10px 13px;font-weight:900
+}
+
+.start{
+  position:fixed;inset:0;z-index:120;background:rgba(16,12,40,.62);
+  display:grid;place-items:center;padding:18px
+}
+.start.hidden{display:none}
+.start-card{
+  width:min(460px,100%);background:#fff;border-radius:19px;
+  padding:23px;box-shadow:0 24px 70px rgba(18,10,53,.28)
+}
+.start-card h2{margin:5px 0 6px;color:#21164b}
+.start-card p{margin:0 0 14px;color:var(--muted);font-size:11.5px;line-height:1.55}
+.field{margin:9px 0}
+.field label{display:block;font-size:10.5px;font-weight:900;margin-bottom:5px}
+.field input{
+  width:100%;padding:10px;border:1px solid #d5d9e2;
+  border-radius:9px;outline:none
+}
+.start-card .btn{width:100%;margin-top:10px}
+
+@media(max-width:850px){
+  .workspace{grid-template-columns:1fr}
+  .passage{border-right:0;border-bottom:1px solid var(--line)}
+  .pane{max-height:none}
+  .hero{align-items:stretch;flex-direction:column}
+  .progress-wrap{min-width:0}
+}
+</style>
+</head>
+<body>
+
+<div id="start" class="start">
+  <div class="start-card">
+    <div style="font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;color:#6a4db4">Reading Practice</div>
+    <h2>Short Answer Questions 01</h2>
+    <p>Stepwells · Questions 6–8</p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input id="studentName" placeholder="Nguyễn Văn A">
+    </div>
+
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass" placeholder="11A1">
+    </div>
+
+    <button class="btn" onclick="startPractice()">Bắt đầu luyện</button>
+    <div id="startError" style="font-size:10.5px;color:#b83345;margin-top:7px"></div>
+  </div>
+</div>
+
+<header class="top">
+  <div class="topin">
+    <div class="left">
+      <a class="back" href="../">← Short Answer Questions</a>
+      <div class="brand">📖 Short Answer Questions 01</div>
+    </div>
+
+    <div class="student" id="studentInfo"></div>
+    <div class="timer" id="timer">00:00</div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div>
+      <h1>Short Answer Questions 01</h1>
+      <p>Stepwells · Questions 6–8</p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span>Tiến độ</span>
+        <span id="progressText">0/3 câu đã trả lời</span>
+      </div>
+      <div class="progress"><i id="progressBar"></i></div>
+    </div>
+  </section>
+
+  <section class="workspace">
+    <div class="pane passage">
+      <div id="passageRoot" class="content">
+        <h2>Stepwells</h2>
+        <p>Some wells are vast, open craters with hundreds of steps paving each sloping side, often in tiers. Others are more elaborate, with long stepped passages leading to the water via several storeys. Built from stone and supported by pillars, they also included pavilions that sheltered visitors from the relentless heat. But perhaps the most impressive features are the intricate decorative sculptures that embellish many stepwells, showing activities from fighting and dancing to everyday acts such as women combing their hair and churning butter.</p><p>Down the centuries, thousands of wells were constructed throughout northwestern India, but the majority have now fallen into disuse; many are derelict and dry, as groundwater has been diverted for industrial use and the wells no longer reach the water table. Their condition hasn’t been helped by recent dry spells: southern Rajasthan suffered an eight-year drought between 1996 and 2004.</p><p>Today, following years of neglect, many of these monuments to medieval engineering have been saved by the Archaeological Survey of India, which has recognised the importance of preserving them as part of the country’s rich history. Tourists flock to wells in far-flung corners of northwestern India to gaze in wonder at these architectural marvels from 1,000 years ago, which serve as a reminder of both the ingenuity and artistry of ancient civilisations and of the value of water to human existence.</p>
+      </div>
+    </div>
+
+    <div class="pane questions">
+      <div id="questionsRoot" class="content">
+        <div class="instructions">
+          <h3>Questions 6–8</h3>
+          <p>Answer the questions below.</p>
+          <p>Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p>
+          <div class="rule">ONE WORD ONLY</div>
+        </div>
+        
+    <div class="qcard" id="q6">
+      <div class="qhead">
+        <span class="qnum">6</span>
+        <div class="qtext">Which part of some stepwells provided shade for people?</div>
+      </div>
+      <div class="answer-row">
+        <input class="ans" id="a6" type="text" autocomplete="off"
+               placeholder="ONE WORD ONLY"
+               oninput="saveAnswer(6, this.value)">
+      </div>
+      <div id="review6"></div>
+    </div>
+    
+    <div class="qcard" id="q7">
+      <div class="qhead">
+        <span class="qnum">7</span>
+        <div class="qtext">What type of serious climatic event, which took place in southern Rajasthan, is mentioned in the article?</div>
+      </div>
+      <div class="answer-row">
+        <input class="ans" id="a7" type="text" autocomplete="off"
+               placeholder="ONE WORD ONLY"
+               oninput="saveAnswer(7, this.value)">
+      </div>
+      <div id="review7"></div>
+    </div>
+    
+    <div class="qcard" id="q8">
+      <div class="qhead">
+        <span class="qnum">8</span>
+        <div class="qtext">Who are frequent visitors to stepwells nowadays?</div>
+      </div>
+      <div class="answer-row">
+        <input class="ans" id="a8" type="text" autocomplete="off"
+               placeholder="ONE WORD ONLY"
+               oninput="saveAnswer(8, this.value)">
+      </div>
+      <div id="review8"></div>
+    </div>
+    
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="bottom">
+  <div class="nav">
+    <button id="nav6" onclick="goQ(6)">6</button>
+    <button id="nav7" onclick="goQ(7)">7</button>
+    <button id="nav8" onclick="goQ(8)">8</button>
+  </div>
+  <button class="submit" onclick="submitPractice()">Nộp bài</button>
+</div>
+
+<div id="selectionMenu" class="selection-menu">
+  <button id="menuHighlight" type="button">🖍 Highlight</button>
+  <button id="menuNote" type="button">📝 Take note</button>
+</div>
+
+<div id="resultOverlay" class="overlay hidden">
+  <div class="result">
+    <div style="font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;color:#6a4db4">Kết quả luyện tập</div>
+    <div id="resultStudent" style="margin-top:5px;font-size:12px;color:var(--muted)"></div>
+    <div id="resultScore" class="score">0 / 3</div>
+    <div id="resultPercent"></div>
+    <p style="font-size:11px;color:var(--muted)">Các câu sai được giải thích trực tiếp ngay dưới từng câu hỏi.</p>
+    <button class="btn" onclick="closeResult()">Xem lại bài</button>
+  </div>
+</div>
+
+<script>
+const KEY={"6": "pavilions", "7": "drought", "8": "tourists"};
+const EXPLAIN={"6": "Đoạn đọc cho biết các công trình có “pavilions that sheltered visitors from the relentless heat”. Từ cần điền là pavilions.", "7": "Bài nói southern Rajasthan đã trải qua một đợt drought kéo dài 8 năm, từ 1996 đến 2004.", "8": "Đoạn cuối nói “Tourists flock to wells…”, nên người thường xuyên đến thăm các stepwells ngày nay là tourists."};
+const EVIDENCE={"6": "they also included pavilions that sheltered visitors from the relentless heat", "7": "southern Rajasthan suffered an eight-year drought between 1996 and 2004", "8": "Tourists flock to wells in far-flung corners of northwestern India"};
+const ATTEMPT_KEY='PRACTICE_SHORTANSWER01_STEPWELLS';
+
+let startedAt=0;
+let submitted=false;
+let savedSelection=null;
+let savedZone=null;
+let menuMode='selection';
+let menuTarget=null;
+let menuZone=null;
+
+function normalize(s){
+  return String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
+}
+
+function readStudent(){
+  try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}
+  catch(e){return null}
+}
+
+function prefill(){
+  const s=readStudent();
+  if(s){
+    studentName.value=s.name||'';
+    studentClass.value=s.className||'';
+  }
+}
+
+function startPractice(){
+  const name=studentName.value.trim();
+  const cls=studentClass.value.trim();
+
+  if(!name||!cls){
+    startError.textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';
+    return;
+  }
+
+  localStorage.setItem('IELTS_PRACTICE_STUDENT',JSON.stringify({name,className:cls}));
+  studentInfo.textContent=`${name} · ${cls}`;
+  start.classList.add('hidden');
+
+  startedAt=Date.now();
+  restoreMarkup();
+  restoreAnswers();
+  updateProgress();
+}
+
+function fmt(sec){
+  sec=Math.max(0,Math.floor(sec));
+  const h=Math.floor(sec/3600);
+  const m=Math.floor((sec%3600)/60);
+  const s=sec%60;
+
+  return h
+    ?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+    :`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+setInterval(()=>{
+  if(startedAt)timer.textContent=fmt((Date.now()-startedAt)/1000);
+},500);
+
+function saveAnswer(n,v){
+  if(submitted)return;
+  localStorage.setItem(`${ATTEMPT_KEY}_q${n}`,v);
+  navState(n);
+  updateProgress();
+}
+
+function getAnswer(n){
+  return localStorage.getItem(`${ATTEMPT_KEY}_q${n}`)||'';
+}
+
+function restoreAnswers(){
+  [6,7,8].forEach(n=>{
+    const v=getAnswer(n);
+    const input=document.getElementById('a'+n);
+    if(input)input.value=v;
+    navState(n);
+  });
+}
+
+function navState(n){
+  document.getElementById('nav'+n).classList.toggle('answered',!!normalize(getAnswer(n)));
+}
+
+function updateProgress(){
+  const answered=[6,7,8].filter(n=>normalize(getAnswer(n))).length;
+  progressText.textContent=`${answered}/3 câu đã trả lời`;
+  progressBar.style.width=(answered/3*100)+'%';
+}
+
+function goQ(n){
+  document.getElementById('q'+n).scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('a'+n)?.focus();
+}
+
+function submitPractice(){
+  if(submitted)return;
+  submitted=true;
+
+  let score=0;
+
+  [6,7,8].forEach(n=>{
+    const user=getAnswer(n);
+    const correct=KEY[n];
+    const ok=normalize(user)===normalize(correct);
+
+    if(ok)score++;
+
+    const input=document.getElementById('a'+n);
+    input.disabled=true;
+    input.classList.add(ok?'correct':'wrong');
+
+    const nav=document.getElementById('nav'+n);
+    nav.classList.add(ok?'correct':'wrong');
+
+    if(!ok)reviewHTML(n,user,correct);
+  });
+
+  const s=readStudent();
+  resultStudent.textContent=s?`${s.name} · ${s.className}`:'';
+  resultScore.textContent=`${score} / 3`;
+  resultPercent.textContent=
+    `${Math.round(score/3*100)}% đúng · Thời gian ${fmt((Date.now()-startedAt)/1000)}`;
+
+  resultOverlay.classList.remove('hidden');
+}
+
+function reviewHTML(n,user,correct){
+  document.getElementById('review'+n).innerHTML=`
+    <div class="inline-review">
+      <div class="review-title">Câu ${n}</div>
+      <div class="review-row">
+        <div class="review-label">Đáp án em chọn</div>
+        <div class="review-user">${escapeHTML(user||'Chưa trả lời')}</div>
+      </div>
+      <div class="review-row">
+        <div class="review-label">Đáp án đúng</div>
+        <div class="review-correct">${escapeHTML(correct)}</div>
+      </div>
+      <div class="explain">${EXPLAIN[n]}</div>
+      <div class="evidence">↗ ${EVIDENCE[n]}</div>
+    </div>`;
+}
+
+function closeResult(){
+  resultOverlay.classList.add('hidden');
+}
+
+/* CONTEXTUAL HIGHLIGHT / TAKE NOTE */
+
+const selectionMenu=document.getElementById('selectionMenu');
+const menuHighlight=document.getElementById('menuHighlight');
+const menuNote=document.getElementById('menuNote');
+
+function zoneRoot(zone){
+  return document.getElementById(zone==='passage'?'passageRoot':'questionsRoot');
+}
+
+function markupKey(zone){
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+}
+
+function notesKey(zone){
+  return `${ATTEMPT_KEY}_notes_${zone}`;
+}
+
+function loadNotes(zone){
+  try{return JSON.parse(localStorage.getItem(notesKey(zone))||'[]')}
+  catch(e){return []}
+}
+
+function saveNotes(zone,a){
+  localStorage.setItem(notesKey(zone),JSON.stringify(a));
+}
+
+function saveMarkup(zone){
+  localStorage.setItem(markupKey(zone),zoneRoot(zone).innerHTML);
+}
+
+function restoreMarkup(){
+  ['passage','questions'].forEach(zone=>{
+    const m=localStorage.getItem(markupKey(zone));
+    if(m)zoneRoot(zone).innerHTML=m;
+    bindContextActions(zone);
+  });
+}
+
+function resetMenu(){
+  menuHighlight.style.display='';
+  menuNote.style.display='';
+  menuHighlight.textContent='🖍 Highlight';
+  menuNote.textContent='📝 Take note';
+  menuHighlight.classList.remove('danger');
+  menuNote.classList.remove('danger');
+}
+
+function hideSelectionMenu(){
+  selectionMenu.classList.remove('show');
+  menuMode='selection';
+  menuTarget=null;
+  menuZone=null;
+}
+
+function positionMenu(rect){
+  selectionMenu.classList.add('show');
+  requestAnimationFrame(()=>{
+    const width=selectionMenu.offsetWidth||190;
+    const left=Math.min(
+      window.innerWidth-width-10,
+      Math.max(10,rect.left+rect.width/2-width/2)
+    );
+    const top=Math.max(10,rect.top-47);
+
+    selectionMenu.style.left=left+'px';
+    selectionMenu.style.top=top+'px';
+  });
+}
+
+function captureSelection(zone){
+  const s=window.getSelection();
+
+  if(!s||s.rangeCount===0||s.isCollapsed)return false;
+
+  const r=s.getRangeAt(0);
+  const root=zoneRoot(zone);
+
+  if(!root.contains(r.commonAncestorContainer))return false;
+
+  savedSelection=r.cloneRange();
+  savedZone=zone;
+  menuMode='selection';
+  menuZone=zone;
+  menuTarget=null;
+
+  resetMenu();
+  positionMenu(r.getBoundingClientRect());
+
+  return true;
+}
+
+function clearBrowserSelection(){
+  const s=window.getSelection();
+  if(s)s.removeAllRanges();
+  savedSelection=null;
+  savedZone=null;
+}
+
+function addHighlight(){
+  if(menuMode==='delete-highlight'){
+    removeHighlight();
+    return;
+  }
+
+  if(!savedSelection||!savedZone)return;
+
+  const r=savedSelection.cloneRange();
+
+  try{
+    const mark=document.createElement('mark');
+    mark.className='user-highlight';
+    mark.appendChild(r.extractContents());
+    r.insertNode(mark);
+
+    saveMarkup(savedZone);
+    clearBrowserSelection();
+    hideSelectionMenu();
+  }catch(e){
+    alert('Hãy chọn một đoạn chữ ngắn hơn.');
+  }
+}
+
+function addNote(){
+  if(menuMode==='delete-note'){
+    removeNote();
+    return;
+  }
+
+  if(!savedSelection||!savedZone)return;
+
+  const r=savedSelection.cloneRange();
+  const quote=r.toString().trim();
+  const text=prompt('Nhập ghi chú:');
+
+  if(text===null||!text.trim())return;
+
+  const id='n'+Date.now()+Math.random().toString(36).slice(2,5);
+  const span=document.createElement('span');
+
+  span.className='note-anchor';
+  span.dataset.noteId=id;
+
+  try{
+    span.appendChild(r.extractContents());
+    r.insertNode(span);
+
+    const notes=loadNotes(savedZone);
+    notes.push({id,quote,text:text.trim()});
+    saveNotes(savedZone,notes);
+    saveMarkup(savedZone);
+
+    clearBrowserSelection();
+    hideSelectionMenu();
+  }catch(e){
+    alert('Hãy chọn một đoạn chữ ngắn hơn.');
+  }
+}
+
+function showDeleteMenu(target,zone,type){
+  menuTarget=target;
+  menuZone=zone;
+  resetMenu();
+
+  if(type==='highlight'){
+    menuMode='delete-highlight';
+    menuHighlight.textContent='✕ Xóa highlight';
+    menuHighlight.classList.add('danger');
+    menuNote.style.display='none';
+  }else{
+    menuMode='delete-note';
+    menuNote.textContent='✕ Xóa note';
+    menuNote.classList.add('danger');
+    menuHighlight.style.display='none';
+  }
+
+  clearBrowserSelection();
+  positionMenu(target.getBoundingClientRect());
+}
+
+function removeHighlight(){
+  if(!menuTarget)return;
+
+  const parent=menuTarget.parentNode;
+
+  while(menuTarget.firstChild){
+    parent.insertBefore(menuTarget.firstChild,menuTarget);
+  }
+
+  menuTarget.remove();
+  parent.normalize();
+
+  saveMarkup(menuZone);
+  hideSelectionMenu();
+  resetMenu();
+}
+
+function removeNote(){
+  if(!menuTarget)return;
+
+  const id=menuTarget.dataset.noteId;
+  const zone=menuZone;
+
+  saveNotes(zone,loadNotes(zone).filter(x=>x.id!==id));
+
+  const parent=menuTarget.parentNode;
+
+  while(menuTarget.firstChild){
+    parent.insertBefore(menuTarget.firstChild,menuTarget);
+  }
+
+  menuTarget.remove();
+  parent.normalize();
+
+  saveMarkup(zone);
+  hideSelectionMenu();
+  resetMenu();
+}
+
+function bindContextActions(zone){
+  const root=zoneRoot(zone);
+
+  root.addEventListener('mouseup',()=>{
+    setTimeout(()=>captureSelection(zone),0);
+  });
+
+  root.addEventListener('touchend',()=>{
+    setTimeout(()=>captureSelection(zone),120);
+  });
+
+  root.addEventListener('click',e=>{
+    const note=e.target.closest('.note-anchor');
+    const mark=e.target.closest('mark.user-highlight');
+
+    if(note){
+      e.stopPropagation();
+      showDeleteMenu(note,zone,'note');
+      return;
+    }
+
+    if(mark){
+      e.stopPropagation();
+      showDeleteMenu(mark,zone,'highlight');
+      return;
+    }
+  });
+}
+
+menuHighlight.addEventListener('click',addHighlight);
+menuNote.addEventListener('click',addNote);
+
+document.addEventListener('mousedown',e=>{
+  if(
+    !selectionMenu.contains(e.target)&&
+    !e.target.closest('mark.user-highlight')&&
+    !e.target.closest('.note-anchor')
+  ){
+    hideSelectionMenu();
+    resetMenu();
+  }
+});
+
+window.addEventListener('scroll',()=>{
+  hideSelectionMenu();
+  resetMenu();
+},true);
+
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+prefill();
+</script>
+</body>
+</html>
