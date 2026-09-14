@@ -5,418 +5,2999 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>True / False / Not Given 01 — Stepwells</title>
+
 <style>
-:root{--purple:#281260;--purple2:#5135a6;--blue:#2f6fdf;--ink:#202636;--muted:#6f7890;--line:#e4e7ef;--bg:#f5f7fb;--good:#16845b;--bad:#b83345}
-*{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
-button,input{font:inherit} button{cursor:pointer}
-.top{position:sticky;top:0;z-index:30;background:linear-gradient(100deg,#1c0e49,#281260,#37217e);color:#fff;box-shadow:0 8px 22px rgba(40,18,96,.14)}
-.topin{width:min(1350px,calc(100% - 18px));min-height:62px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.left{display:flex;align-items:center;gap:9px;min-width:0} .back{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);padding:7px 10px;border-radius:9px;font-size:11px;font-weight:900;white-space:nowrap}
-.brand{font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .student{font-size:11px;font-weight:800;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:7px 10px;border-radius:999px}
-.timer{font-variant-numeric:tabular-nums;font-size:19px;font-weight:950;background:rgba(255,255,255,.13);padding:8px 11px;border-radius:9px}
-.page{width:min(1350px,calc(100% - 18px));margin:auto;padding:18px 0 46px}
-.hero{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:13px}
-.hero h1{margin:0;color:#21164b;font-size:27px;letter-spacing:-.03em} .hero p{margin:4px 0 0;color:var(--muted);font-size:11.5px}
-.progress-wrap{min-width:245px} .progress-row{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10.5px;font-weight:850;margin-bottom:5px}
-.progress{height:7px;background:#e5e8ef;border-radius:999px;overflow:hidden} .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--purple2),var(--blue));transition:width .2s ease}
-.workspace{display:grid;grid-template-columns:1.05fr .95fr;gap:0;min-height:calc(100vh - 190px);border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(35,25,75,.05)}
-.pane{min-width:0;overflow:auto;max-height:calc(100vh - 205px)} .passage{border-right:1px solid var(--line);background:#fff} .questions{background:#fafbfe}
-.annotation-bar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:9px 11px}
-.annotation-zone{font-size:10px;font-weight:950;letter-spacing:.07em;text-transform:uppercase;color:#6047a2} .annot-btn{border:1px solid #dfe2ea;background:#fff;color:#3b315e;padding:7px 9px;border-radius:8px;font-size:10.5px;font-weight:900}
-.annot-btn.remove-mode{background:#fff1f3;border-color:#efc4cb;color:#a31e31} .annot-tip{margin-left:auto;font-size:9.7px;color:var(--muted)}
-.notes-panel{display:none;margin:10px 14px 0;padding:10px;border:1px solid var(--line);border-radius:10px;background:#f7f8fb} .notes-panel.open{display:block}
-.note-item{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 9px;margin:6px 0} .note-quote{font-size:10.5px;color:var(--muted);font-style:italic;margin-bottom:4px}
-.note-actions button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 7px;font-size:9.5px;margin-right:4px}
-.content{padding:20px 23px} .passage h2{margin:0 0 14px;text-align:center;color:#21164b;font-size:21px}
-.passage p{margin:0 0 15px;font-size:14px;line-height:1.78;text-align:justify}
-.instructions{margin-bottom:13px} .instructions h3{margin:0 0 6px;color:#21164b;font-size:17px} .instructions p{margin:3px 0;color:#5f6677;font-size:11.5px;line-height:1.55}
-.legend{display:grid;grid-template-columns:105px 1fr;gap:3px 8px;font-size:11px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff} .legend b{color:#21164b}
-.qcard{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;margin:8px 0;scroll-margin:100px} .qhead{display:flex;gap:9px;align-items:flex-start}
-.qnum{min-width:25px;height:25px;border-radius:50%;background:#eee9ff;color:#4b318e;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:950}
-.qtext{font-size:12.5px;line-height:1.5;font-weight:760} .options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
-.option{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:9px;background:#fff;font-size:10.5px;font-weight:850}
-.option:hover{background:#fafaff} .option.correct{border-color:#8ed6b4;background:#f4fcf7;color:#126b48} .option.wrong{border-color:#efb7bf;background:#fff7f8;color:#9b2838}
-.inline-review{margin-top:10px;padding:11px;border:1px solid #f0d0d5;border-left:4px solid var(--bad);border-radius:8px;background:#fffafb;font-size:11px;line-height:1.5}
-.review-title{font-weight:900;color:#21164b;margin-bottom:6px} .review-row{display:grid;grid-template-columns:100px 1fr;gap:4px 8px;margin:3px 0}
-.review-label{color:var(--muted);font-weight:800} .review-user{color:var(--bad);font-weight:850} .review-correct{color:var(--good);font-weight:900}
-.explain{margin-top:7px;padding:8px 9px;background:#fff;border-left:3px solid #6a55bf;border-radius:5px} .evidence{margin-top:7px;padding:8px 9px;background:#f2f5ff;border:1px solid #d9e1fb;border-radius:8px;font-style:italic}
-mark.user-highlight{background:#fff29a;color:inherit;border-radius:3px;cursor:pointer} .note-anchor{background:#ffe6a6;border-bottom:2px dotted #e28b19;cursor:pointer;border-radius:2px}
-.bottom{position:sticky;bottom:0;z-index:20;width:min(1350px,calc(100% - 18px));margin:0 auto;padding:9px 0 6px;background:linear-gradient(to top,var(--bg) 75%,rgba(245,247,251,.88));display:flex;align-items:center;gap:10px}
-.nav{display:flex;gap:5px;flex:1} .nav button{width:31px;height:31px;border:1px solid var(--line);background:#fff;border-radius:7px;font-size:10px;font-weight:900}
-.nav button.answered{background:#e7efff;border-color:#c4d5ff} .nav button.correct{background:#dff0e7;border-color:#8ed6b4} .nav button.wrong{background:#f4ddd8;border-color:#f0b5bd}
-.submit{border:0;background:linear-gradient(100deg,var(--purple),var(--purple2));color:#fff;border-radius:9px;padding:10px 15px;font-weight:900}
-.overlay{position:fixed;inset:0;z-index:100;background:rgba(15,11,35,.62);display:grid;place-items:center;padding:18px} .overlay.hidden{display:none}
-.result{width:min(590px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(18,10,53,.28)} .score{font-size:38px;font-weight:950;color:#21164b;margin:7px 0}
-.btn{border:0;background:linear-gradient(100deg,var(--purple),var(--purple2));color:#fff;border-radius:9px;padding:10px 13px;font-weight:900}
-.start{position:fixed;inset:0;z-index:120;background:rgba(16,12,40,.62);display:grid;place-items:center;padding:18px} .start.hidden{display:none}
-.start-card{width:min(460px,100%);background:#fff;border-radius:19px;padding:23px;box-shadow:0 24px 70px rgba(18,10,53,.28)} .start-card h2{margin:5px 0 6px;color:#21164b} .start-card p{margin:0 0 14px;color:var(--muted);font-size:11.5px;line-height:1.55}
-.field{margin:9px 0} .field label{display:block;font-size:10.5px;font-weight:900;margin-bottom:5px} .field input{width:100%;padding:10px;border:1px solid #d5d9e2;border-radius:9px;outline:none} .start-card .btn{width:100%;margin-top:10px}
-@media(max-width:850px){.workspace{grid-template-columns:1fr} .passage{border-right:0;border-bottom:1px solid var(--line)} .pane{max-height:none} .hero{align-items:stretch;flex-direction:column} .progress-wrap{min-width:0} .options{grid-template-columns:1fr}}
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+/* HEADER */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:linear-gradient(
+    100deg,
+    #1c0e49,
+    #281260,
+    #37217e
+  );
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1350px,calc(100% - 18px));
+  min-height:62px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:tabular-nums;
+  font-size:19px;
+  font-weight:950;
+  background:rgba(255,255,255,.13);
+  padding:8px 11px;
+  border-radius:9px;
+}
+
+/* MAIN */
+
+.page{
+  width:min(1350px,calc(100% - 18px));
+  margin:auto;
+  padding:18px 0 46px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+  color:#21164b;
+  font-size:27px;
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+/* PROGRESS */
+
+.progress-wrap{
+  min-width:245px;
+}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--muted);
+  font-size:10.5px;
+  font-weight:850;
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+  background:#e5e8ef;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(
+    90deg,
+    var(--purple2),
+    var(--blue)
+  );
+  transition:width .2s ease;
+}
+
+/* WORKSPACE */
+
+.workspace{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:0;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(35,25,75,.05);
+}
+
+.pane{
+  min-width:0;
+  overflow:auto;
+  max-height:calc(100vh - 205px);
+}
+
+.passage{
+  border-right:1px solid var(--line);
+  background:#fff;
+}
+
+.questions{
+  background:#fafbfe;
+}
+
+.content{
+  padding:20px 23px;
+}
+
+.passage h2{
+  margin:0 0 14px;
+  text-align:center;
+  color:#21164b;
+  font-size:21px;
+}
+
+.passage p{
+  margin:0 0 15px;
+  font-size:14px;
+  line-height:1.78;
+  text-align:justify;
+}
+
+/* INSTRUCTIONS */
+
+.instructions{
+  margin-bottom:13px;
+}
+
+.instructions h3{
+  margin:0 0 6px;
+  color:#21164b;
+  font-size:17px;
+}
+
+.instructions p{
+  margin:3px 0;
+  color:#5f6677;
+  font-size:11.5px;
+  line-height:1.55;
+}
+
+.legend{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:3px 8px;
+  font-size:11px;
+  margin-top:8px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+}
+
+.legend b{
+  color:#21164b;
+}
+
+/* QUESTIONS */
+
+.qcard{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px;
+  margin:8px 0;
+  scroll-margin:100px;
+}
+
+.qhead{
+  display:flex;
+  gap:9px;
+  align-items:flex-start;
+}
+
+.qnum{
+  min-width:25px;
+  height:25px;
+  border-radius:50%;
+  background:#eee9ff;
+  color:#4b318e;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  font-weight:950;
+}
+
+.qtext{
+  font-size:12.5px;
+  line-height:1.5;
+  font-weight:760;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:10px;
+}
+
+.option{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:9px;
+  background:#fff;
+  font-size:10.5px;
+  font-weight:850;
+}
+
+.option:hover{
+  background:#fafaff;
+}
+
+.option.correct{
+  border-color:#8ed6b4;
+  background:#f4fcf7;
+  color:#126b48;
+}
+
+.option.wrong{
+  border-color:#efb7bf;
+  background:#fff7f8;
+  color:#9b2838;
+}
+
+/* REVIEW */
+
+.inline-review{
+  margin-top:10px;
+  padding:11px;
+  border:1px solid #f0d0d5;
+  border-left:4px solid var(--bad);
+  border-radius:8px;
+  background:#fffafb;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.review-title{
+  font-weight:900;
+  color:#21164b;
+  margin-bottom:6px;
+}
+
+.review-row{
+  display:grid;
+  grid-template-columns:100px 1fr;
+  gap:4px 8px;
+  margin:3px 0;
+}
+
+.review-label{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+  font-weight:850;
+}
+
+.review-correct{
+  color:var(--good);
+  font-weight:900;
+}
+
+.explain{
+  margin-top:7px;
+  padding:8px 9px;
+  background:#fff;
+  border-left:3px solid #6a55bf;
+  border-radius:5px;
+}
+
+.evidence{
+  margin-top:7px;
+  padding:8px 9px;
+  background:#f2f5ff;
+  border:1px solid #d9e1fb;
+  border-radius:8px;
+  font-style:italic;
+}
+
+/* HIGHLIGHT + NOTE */
+
+mark.user-highlight{
+  background:#fff29a;
+  color:inherit;
+  border-radius:3px;
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+  border-bottom:2px dotted #e28b19;
+  cursor:pointer;
+  border-radius:2px;
+}
+
+/* FLOATING MENU */
 
 .selection-menu{
-  position:fixed;z-index:90;display:none;align-items:center;gap:5px;
-  padding:6px;background:#21164b;border-radius:10px;
-  box-shadow:0 12px 30px rgba(25,18,65,.22)
+  position:fixed;
+  z-index:90;
+  display:none;
+  align-items:center;
+  gap:5px;
+  padding:6px;
+  background:#21164b;
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(25,18,65,.22);
 }
-.selection-menu.show{display:flex}
-.selection-menu button{
-  border:0;background:#fff;color:#35285e;border-radius:7px;
-  padding:7px 9px;font-size:10.5px;font-weight:900;white-space:nowrap
-}
-.selection-menu button.danger{color:#a31e31;background:#fff1f3}
 
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+  background:#fff;
+  color:#35285e;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:10.5px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+  background:#fff1f3;
+}
+
+/* BOTTOM */
+
+.bottom{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  width:min(1350px,calc(100% - 18px));
+  margin:0 auto;
+  padding:9px 0 6px;
+  background:linear-gradient(
+    to top,
+    var(--bg) 75%,
+    rgba(245,247,251,.88)
+  );
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+  gap:5px;
+  flex:1;
+}
+
+.nav button{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+  border-color:#f0b5bd;
+}
+
+.submit{
+  border:0;
+  background:linear-gradient(
+    100deg,
+    var(--purple),
+    var(--purple2)
+  );
+  color:#fff;
+  border-radius:9px;
+  padding:10px 15px;
+  font-weight:900;
+}
+
+/* RESULT */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(15,11,35,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.overlay.hidden{
+  display:none;
+}
+
+.result{
+  width:min(590px,100%);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.score{
+  font-size:38px;
+  font-weight:950;
+  color:#21164b;
+  margin:7px 0;
+}
+
+.btn{
+  border:0;
+  background:linear-gradient(
+    100deg,
+    var(--purple),
+    var(--purple2)
+  );
+  color:#fff;
+  border-radius:9px;
+  padding:10px 13px;
+  font-weight:900;
+}
+
+/* START */
+
+.start{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  background:rgba(16,12,40,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.start.hidden{
+  display:none;
+}
+
+.start-card{
+  width:min(460px,100%);
+  background:#fff;
+  border-radius:19px;
+  padding:23px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.start-card h2{
+  margin:5px 0 6px;
+  color:#21164b;
+}
+
+.start-card p{
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size:11.5px;
+  line-height:1.55;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+  font-size:10.5px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.field input{
+  width:100%;
+  padding:10px;
+  border:1px solid #d5d9e2;
+  border-radius:9px;
+  outline:none;
+}
+
+.start-card .btn{
+  width:100%;
+  margin-top:10px;
+}
+
+@media(max-width:850px){
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .passage{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .pane{
+    max-height:none;
+  }
+
+  .hero{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+  .options{
+    grid-template-columns:1fr;
+  }
+
+}
 </style>
 </head>
+
 <body>
 
+<!-- START -->
+
 <div id="start" class="start">
+
   <div class="start-card">
-    <div style="font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;color:#6a4db4">Reading Practice</div>
-    <h2>True / False / Not Given 01</h2>
-    <p>Stepwells · 5 câu</p>
-    <div class="field"><label>Họ và tên</label><input id="studentName" placeholder="Nguyễn Văn A"></div>
-    <div class="field"><label>Lớp</label><input id="studentClass" placeholder="11A1"></div>
-    <button class="btn" onclick="startPractice()">Bắt đầu luyện</button>
-    <div id="startError" style="font-size:10.5px;color:#b83345;margin-top:7px"></div>
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:#6a4db4
+    ">
+      Reading Practice
+    </div>
+
+    <h2>
+      True / False / Not Given 01
+    </h2>
+
+    <p>
+      Stepwells · 5 câu
+    </p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+    </div>
+
+    <div class="field">
+      <label>Lớp</label>
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+    </div>
+
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
+      Bắt đầu luyện
+    </button>
+
+    <div
+      id="startError"
+      style="
+        font-size:10.5px;
+        color:#b83345;
+        margin-top:7px
+      "
+    ></div>
+
   </div>
+
 </div>
+
+
+<!-- HEADER -->
 
 <header class="top">
+
   <div class="topin">
-    <div class="left"><a class="back" href="../">← True / False / Not Given</a><div class="brand">📖 True / False / Not Given 01</div></div>
-    <div class="student" id="studentInfo"></div>
-    <div class="timer" id="timer">00:00</div>
+
+    <div class="left">
+
+      <a
+        class="back"
+        href="../"
+      >
+        ← True / False / Not Given
+      </a>
+
+      <div class="brand">
+        📖 True / False / Not Given 01
+      </div>
+
+    </div>
+
+    <div
+      class="student"
+      id="studentInfo"
+    ></div>
+
+    <div
+      class="timer"
+      id="timer"
+    >
+      00:00
+    </div>
+
   </div>
+
 </header>
 
+
+<!-- MAIN -->
+
 <main class="page">
+
   <section class="hero">
-    <div><h1>True / False / Not Given 01</h1><p>Stepwells · Questions 1–5</p></div>
-    <div class="progress-wrap"><div class="progress-row"><span>Tiến độ</span><span id="progressText">0/5 câu đã trả lời</span></div><div class="progress"><i id="progressBar"></i></div></div>
+
+    <div>
+
+      <h1>
+        True / False / Not Given 01
+      </h1>
+
+      <p>
+        Stepwells · Questions 1–5
+      </p>
+
+    </div>
+
+
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+
+        <span>
+          Tiến độ
+        </span>
+
+        <span id="progressText">
+          0/5 câu đã trả lời
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
   </section>
+
 
   <section class="workspace">
+
+    <!-- PASSAGE -->
+
     <div class="pane passage">
-      
-      <div id="passageRoot" class="content"><h2>Stepwells</h2><p>Unique to the region, stepwells are often architecturally complex and vary widely in size and shape. During their heyday, they were places of gathering, of leisure, of relaxation and of worship for villagers of all but the lowest castes. Most stepwells are found dotted around the desert areas of Gujarat (where they are called vav) and Rajasthan (where they are known as baori), while a few also survive in Delhi. Some were located in or near villages as public spaces for the community; others were positioned beside roads as resting places for travellers.</p><p>As their name suggests, stepwells comprise a series of stone steps descending from ground level to the water source (normally an underground aquifer) as it recedes following the rains. When the water level was high, the user needed only to descend a few steps to reach it; when it was low, several levels would have to be negotiated.</p></div>
+
+      <div
+        id="passageRoot"
+        class="content"
+      >
+
+        <h2>
+          Stepwells
+        </h2>
+
+        <p>
+          Unique to the region, stepwells are often architecturally complex and vary widely in size and shape. During their heyday, they were places of gathering, of leisure, of relaxation and of worship for villagers of all but the lowest castes. Most stepwells are found dotted around the desert areas of Gujarat (where they are called vav) and Rajasthan (where they are known as baori), while a few also survive in Delhi. Some were located in or near villages as public spaces for the community; others were positioned beside roads as resting places for travellers.
+        </p>
+
+        <p>
+          As their name suggests, stepwells comprise a series of stone steps descending from ground level to the water source (normally an underground aquifer) as it recedes following the rains. When the water level was high, the user needed only to descend a few steps to reach it; when it was low, several levels would have to be negotiated.
+        </p>
+
+      </div>
+
     </div>
+
+
+    <!-- QUESTIONS -->
 
     <div class="pane questions">
-      
-      <div id="questionsRoot" class="content">
+
+      <div
+        id="questionsRoot"
+        class="content"
+      >
+
         <div class="instructions">
-          <h3>Questions 1–5</h3>
-          <p>Do the following statements agree with the information given in the passage?</p>
+
+          <h3>
+            Questions 1–5
+          </h3>
+
+          <p>
+            Do the following statements agree with the information given in the passage?
+          </p>
+
           <div class="legend">
-            <b>TRUE</b><span>if the statement agrees with the information</span>
-            <b>FALSE</b><span>if the statement contradicts the information</span>
-            <b>NOT GIVEN</b><span>if there is no information on this</span>
+
+            <b>TRUE</b>
+            <span>
+              if the statement agrees with the information
+            </span>
+
+            <b>FALSE</b>
+            <span>
+              if the statement contradicts the information
+            </span>
+
+            <b>NOT GIVEN</b>
+            <span>
+              if there is no information on this
+            </span>
+
           </div>
+
         </div>
-        
-    <div class="qcard" id="q1">
-      <div class="qhead"><span class="qnum">1</span><div class="qtext">Examples of ancient stepwells can be found all over the world.</div></div>
-      <div class="options"><label class="option"><input type="radio" name="q1" value="TRUE" onchange="saveAnswer(1, this.value)"> TRUE</label><label class="option"><input type="radio" name="q1" value="FALSE" onchange="saveAnswer(1, this.value)"> FALSE</label><label class="option"><input type="radio" name="q1" value="NOT GIVEN" onchange="saveAnswer(1, this.value)"> NOT GIVEN</label></div>
-      <div id="review1"></div>
-    </div>
-    
-    <div class="qcard" id="q2">
-      <div class="qhead"><span class="qnum">2</span><div class="qtext">Stepwells had a range of functions, in addition to those related to water collection.</div></div>
-      <div class="options"><label class="option"><input type="radio" name="q2" value="TRUE" onchange="saveAnswer(2, this.value)"> TRUE</label><label class="option"><input type="radio" name="q2" value="FALSE" onchange="saveAnswer(2, this.value)"> FALSE</label><label class="option"><input type="radio" name="q2" value="NOT GIVEN" onchange="saveAnswer(2, this.value)"> NOT GIVEN</label></div>
-      <div id="review2"></div>
-    </div>
-    
-    <div class="qcard" id="q3">
-      <div class="qhead"><span class="qnum">3</span><div class="qtext">The few existing stepwells in Delhi are more attractive than those found elsewhere.</div></div>
-      <div class="options"><label class="option"><input type="radio" name="q3" value="TRUE" onchange="saveAnswer(3, this.value)"> TRUE</label><label class="option"><input type="radio" name="q3" value="FALSE" onchange="saveAnswer(3, this.value)"> FALSE</label><label class="option"><input type="radio" name="q3" value="NOT GIVEN" onchange="saveAnswer(3, this.value)"> NOT GIVEN</label></div>
-      <div id="review3"></div>
-    </div>
-    
-    <div class="qcard" id="q4">
-      <div class="qhead"><span class="qnum">4</span><div class="qtext">It took workers many years to build the stone steps characteristic of stepwells.</div></div>
-      <div class="options"><label class="option"><input type="radio" name="q4" value="TRUE" onchange="saveAnswer(4, this.value)"> TRUE</label><label class="option"><input type="radio" name="q4" value="FALSE" onchange="saveAnswer(4, this.value)"> FALSE</label><label class="option"><input type="radio" name="q4" value="NOT GIVEN" onchange="saveAnswer(4, this.value)"> NOT GIVEN</label></div>
-      <div id="review4"></div>
-    </div>
-    
-    <div class="qcard" id="q5">
-      <div class="qhead"><span class="qnum">5</span><div class="qtext">The number of steps above the water level in a stepwell altered during the course of a year.</div></div>
-      <div class="options"><label class="option"><input type="radio" name="q5" value="TRUE" onchange="saveAnswer(5, this.value)"> TRUE</label><label class="option"><input type="radio" name="q5" value="FALSE" onchange="saveAnswer(5, this.value)"> FALSE</label><label class="option"><input type="radio" name="q5" value="NOT GIVEN" onchange="saveAnswer(5, this.value)"> NOT GIVEN</label></div>
-      <div id="review5"></div>
-    </div>
-    
+
+
+        <!-- Q1 -->
+
+        <div
+          class="qcard"
+          id="q1"
+        >
+
+          <div class="qhead">
+
+            <span class="qnum">
+              1
+            </span>
+
+            <div class="qtext">
+              Examples of ancient stepwells can be found all over the world.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q1"
+                value="TRUE"
+                onchange="saveAnswer(1,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q1"
+                value="FALSE"
+                onchange="saveAnswer(1,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q1"
+                value="NOT GIVEN"
+                onchange="saveAnswer(1,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review1"></div>
+
+        </div>
+
+
+        <!-- Q2 -->
+
+        <div
+          class="qcard"
+          id="q2"
+        >
+
+          <div class="qhead">
+
+            <span class="qnum">
+              2
+            </span>
+
+            <div class="qtext">
+              Stepwells had a range of functions, in addition to those related to water collection.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q2"
+                value="TRUE"
+                onchange="saveAnswer(2,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q2"
+                value="FALSE"
+                onchange="saveAnswer(2,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q2"
+                value="NOT GIVEN"
+                onchange="saveAnswer(2,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review2"></div>
+
+        </div>
+
+
+        <!-- Q3 -->
+
+        <div
+          class="qcard"
+          id="q3"
+        >
+
+          <div class="qhead">
+
+            <span class="qnum">
+              3
+            </span>
+
+            <div class="qtext">
+              The few existing stepwells in Delhi are more attractive than those found elsewhere.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q3"
+                value="TRUE"
+                onchange="saveAnswer(3,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q3"
+                value="FALSE"
+                onchange="saveAnswer(3,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q3"
+                value="NOT GIVEN"
+                onchange="saveAnswer(3,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review3"></div>
+
+        </div>
+
+
+        <!-- Q4 -->
+
+        <div
+          class="qcard"
+          id="q4"
+        >
+
+          <div class="qhead">
+
+            <span class="qnum">
+              4
+            </span>
+
+            <div class="qtext">
+              It took workers many years to build the stone steps characteristic of stepwells.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q4"
+                value="TRUE"
+                onchange="saveAnswer(4,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q4"
+                value="FALSE"
+                onchange="saveAnswer(4,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q4"
+                value="NOT GIVEN"
+                onchange="saveAnswer(4,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review4"></div>
+
+        </div>
+
+
+        <!-- Q5 -->
+
+        <div
+          class="qcard"
+          id="q5"
+        >
+
+          <div class="qhead">
+
+            <span class="qnum">
+              5
+            </span>
+
+            <div class="qtext">
+              The number of steps above the water level in a stepwell altered during the course of a year.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q5"
+                value="TRUE"
+                onchange="saveAnswer(5,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q5"
+                value="FALSE"
+                onchange="saveAnswer(5,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q5"
+                value="NOT GIVEN"
+                onchange="saveAnswer(5,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review5"></div>
+
+        </div>
+
       </div>
+
     </div>
+
   </section>
+
 </main>
 
+
+<!-- BOTTOM -->
+
 <div class="bottom">
-  <div class="nav"><button id="nav1" onclick="goQ(1)">1</button><button id="nav2" onclick="goQ(2)">2</button><button id="nav3" onclick="goQ(3)">3</button><button id="nav4" onclick="goQ(4)">4</button><button id="nav5" onclick="goQ(5)">5</button></div>
-  <button class="submit" onclick="submitPractice()">Nộp bài</button>
-</div>
 
-<div id="resultOverlay" class="overlay hidden">
-  <div class="result">
-    <div style="font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;color:#6a4db4">Kết quả luyện tập</div>
-    <div id="resultStudent" style="margin-top:5px;font-size:12px;color:var(--muted)"></div>
-    <div id="resultScore" class="score">0 / 5</div>
-    <div id="resultPercent"></div>
-    <p style="font-size:11px;color:var(--muted)">Các câu sai được giải thích trực tiếp ngay dưới từng câu hỏi.</p>
-    <button class="btn" onclick="closeResult()">Xem lại bài</button>
+  <div class="nav">
+
+    <button
+      id="nav1"
+      onclick="goQ(1)"
+    >
+      1
+    </button>
+
+    <button
+      id="nav2"
+      onclick="goQ(2)"
+    >
+      2
+    </button>
+
+    <button
+      id="nav3"
+      onclick="goQ(3)"
+    >
+      3
+    </button>
+
+    <button
+      id="nav4"
+      onclick="goQ(4)"
+    >
+      4
+    </button>
+
+    <button
+      id="nav5"
+      onclick="goQ(5)"
+    >
+      5
+    </button>
+
   </div>
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
 </div>
 
 
-<div id="selectionMenu" class="selection-menu">
-  <button id="menuHighlight" type="button">🖍 Highlight</button>
-  <button id="menuNote" type="button">📝 Take note</button>
+<!-- RESULT -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:#6a4db4
+    ">
+      Kết quả luyện tập
+    </div>
+
+    <div
+      id="resultStudent"
+      style="
+        margin-top:5px;
+        font-size:12px;
+        color:var(--muted)
+      "
+    ></div>
+
+    <div
+      id="resultScore"
+      class="score"
+    >
+      0 / 5
+    </div>
+
+    <div id="resultPercent"></div>
+
+    <p style="
+      font-size:11px;
+      color:var(--muted)
+    ">
+      Các câu sai được giải thích trực tiếp ngay dưới từng câu hỏi.
+    </p>
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
 </div>
+
+
+<!-- FLOATING HIGHLIGHT MENU -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
 
 <script>
-const KEY={"1": "FALSE", "2": "TRUE", "3": "NOT GIVEN", "4": "NOT GIVEN", "5": "TRUE"};
-const EXPLAIN={"1": "Đoạn đọc nói stepwells là “Unique to the region”, tức là đặc trưng của khu vực này, không phải được tìm thấy trên khắp thế giới.", "2": "Ngoài việc tiếp cận nước, stepwells còn là nơi tụ họp, giải trí, thư giãn và thờ cúng.", "3": "Bài chỉ nói một vài stepwells còn tồn tại ở Delhi, không so sánh mức độ hấp dẫn của chúng với nơi khác.", "4": "Bài có nhắc tới các bậc đá nhưng không cho biết mất bao nhiêu năm để xây dựng chúng.", "5": "Mực nước thay đổi sau mùa mưa: khi nước cao chỉ cần đi xuống vài bậc, khi nước thấp phải xuống nhiều tầng hơn."};
-const EVIDENCE={"1": "Unique to the region, stepwells are often architecturally complex...", "2": "they were places of gathering, of leisure, of relaxation and of worship", "3": "while a few also survive in Delhi", "4": "stepwells comprise a series of stone steps descending from ground level to the water source", "5": "When the water level was high, the user needed only to descend a few steps... when it was low, several levels would have to be negotiated."};
-const ATTEMPT_KEY='PRACTICE_TFNG01_STEPWELLS';
-let startedAt=0,submitted=false,savedSelection=null,savedZone=null;
-let activeHighlight=null,activeHighlightZone=null,activeNote=null,activeNoteZone=null;
 
-function readStudent(){try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){return null}}
-function prefill(){const s=readStudent();if(s){studentName.value=s.name||'';studentClass.value=s.className||''}}
-function startPractice(){
-  const name=studentName.value.trim(),cls=studentClass.value.trim();
-  if(!name||!cls){startError.textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}
-  localStorage.setItem('IELTS_PRACTICE_STUDENT',JSON.stringify({name,className:cls}));
-  studentInfo.textContent=`${name} · ${cls}`;start.classList.add('hidden');startedAt=Date.now();
-  restoreMarkup();restoreAnswers();updateProgress();
-}
-function fmt(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return h?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
-setInterval(()=>{if(startedAt)timer.textContent=fmt((Date.now()-startedAt)/1000)},500);
+/* =========================================================
+   ANSWER KEY
+   ========================================================= */
 
-function saveAnswer(n,v){if(submitted)return;localStorage.setItem(`${ATTEMPT_KEY}_q${n}`,v);navState(n);updateProgress()}
-function getAnswer(n){return localStorage.getItem(`${ATTEMPT_KEY}_q${n}`)||''}
-function restoreAnswers(){
-  for(let n=1;n<=5;n++){const v=getAnswer(n);if(v){const el=document.querySelector(`input[name="q${n}"][value="${v}"]`);if(el)el.checked=true}navState(n)}
-}
-function navState(n){document.getElementById('nav'+n).classList.toggle('answered',!!getAnswer(n))}
-function updateProgress(){const a=[1,2,3,4,5].filter(n=>getAnswer(n)).length;progressText.textContent=`${a}/5 câu đã trả lời`;progressBar.style.width=(a/5*100)+'%'}
-function goQ(n){document.getElementById('q'+n).scrollIntoView({behavior:'smooth',block:'center'})}
+const KEY={
+  1:'FALSE',
+  2:'TRUE',
+  3:'NOT GIVEN',
+  4:'NOT GIVEN',
+  5:'TRUE'
+};
 
-function submitPractice(){
-  if(submitted)return;submitted=true;let score=0;
-  for(let n=1;n<=5;n++){const user=getAnswer(n),correct=KEY[n],ok=user===correct;if(ok)score++;
-    const inputs=[...document.querySelectorAll(`input[name="q${n}"]`)];inputs.forEach(x=>x.disabled=true);
-    inputs.forEach(x=>{const lab=x.closest('.option');lab.classList.remove('correct','wrong');if(x.value===correct)lab.classList.add('correct');if(x.checked&&!ok)lab.classList.add('wrong')});
-    document.getElementById('nav'+n).classList.add(ok?'correct':'wrong');if(!ok)reviewHTML(n,user,correct);
-  }
-  const s=readStudent();resultStudent.textContent=s?`${s.name} · ${s.className}`:'';resultScore.textContent=`${score} / 5`;
-  resultPercent.textContent=`${Math.round(score/5*100)}% đúng · Thời gian ${fmt((Date.now()-startedAt)/1000)}`;resultOverlay.classList.remove('hidden');
-}
-function reviewHTML(n,user,correct){
-  document.getElementById('review'+n).innerHTML=`<div class="inline-review">
-  <div class="review-title">Câu ${n}</div>
-  <div class="review-row"><div class="review-label">Đáp án em chọn</div><div class="review-user">${user||'Chưa trả lời'}</div></div>
-  <div class="review-row"><div class="review-label">Đáp án đúng</div><div class="review-correct">${correct}</div></div>
-  <div class="explain">${EXPLAIN[n]}</div><div class="evidence">↗ ${EVIDENCE[n]}</div></div>`;
-}
-function closeResult(){resultOverlay.classList.add('hidden')}
 
-function zoneRoot(zone){
-  return document.getElementById(zone==='passage'?'passageRoot':'questionsRoot');
-}
-function notesKey(zone){return `${ATTEMPT_KEY}_notes_${zone}`}
-function markupKey(zone){return `${ATTEMPT_KEY}_markup_${zone}`}
-function loadNotes(zone){try{return JSON.parse(localStorage.getItem(notesKey(zone))||'[]')}catch(e){return []}}
-function saveNotes(zone,a){localStorage.setItem(notesKey(zone),JSON.stringify(a))}
-function saveMarkup(zone){localStorage.setItem(markupKey(zone),zoneRoot(zone).innerHTML)}
+const EXPLAIN={
 
-function restoreMarkup(){
-  ['passage','questions'].forEach(zone=>{
-    const m=localStorage.getItem(markupKey(zone));
-    if(m)zoneRoot(zone).innerHTML=m;
-    bindContextActions(zone);
-  });
-}
+  1:
+  'Đoạn đọc nói stepwells là “Unique to the region”, tức là đặc trưng của khu vực này, không phải được tìm thấy trên khắp thế giới.',
 
-const selectionMenu=document.getElementById('selectionMenu');
-const menuHighlight=document.getElementById('menuHighlight');
-const menuNote=document.getElementById('menuNote');
+  2:
+  'Ngoài việc tiếp cận nước, stepwells còn là nơi tụ họp, giải trí, thư giãn và thờ cúng.',
+
+  3:
+  'Bài chỉ nói một vài stepwells còn tồn tại ở Delhi, không so sánh mức độ hấp dẫn của chúng với nơi khác.',
+
+  4:
+  'Bài có nhắc tới các bậc đá nhưng không cho biết mất bao nhiêu năm để xây dựng chúng.',
+
+  5:
+  'Mực nước thay đổi sau mùa mưa: khi nước cao chỉ cần đi xuống vài bậc, khi nước thấp phải xuống nhiều tầng hơn.'
+
+};
+
+
+const EVIDENCE={
+
+  1:
+  'Unique to the region, stepwells are often architecturally complex...',
+
+  2:
+  'they were places of gathering, of leisure, of relaxation and of worship',
+
+  3:
+  'while a few also survive in Delhi',
+
+  4:
+  'stepwells comprise a series of stone steps descending from ground level to the water source',
+
+  5:
+  'When the water level was high, the user needed only to descend a few steps... when it was low, several levels would have to be negotiated.'
+
+};
+
+
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+const ATTEMPT_KEY=
+  'PRACTICE_TFNG01_STEPWELLS';
+
+
+const RESULT_ENDPOINT=
+  'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+let startedAt=0;
+
+let submitted=false;
+
+let savedSelection=null;
+
+let savedZone=null;
 
 let menuMode='selection';
+
 let menuTarget=null;
+
 let menuZone=null;
 
+
+/* =========================================================
+   STUDENT
+   ========================================================= */
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+      ||
+      'null'
+    );
+
+  }
+
+  catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const s=
+    readStudent();
+
+
+  if(s){
+
+    studentName.value=
+      s.name || '';
+
+    studentClass.value=
+      s.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name=
+    studentName.value.trim();
+
+  const cls=
+    studentClass.value.trim();
+
+
+  if(
+    !name
+    ||
+    !cls
+  ){
+
+    startError.textContent=
+      'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+
+      name:name,
+
+      className:cls
+
+    })
+
+  );
+
+
+  studentInfo.textContent=
+    `${name} · ${cls}`;
+
+
+  start
+    .classList
+    .add('hidden');
+
+
+  startedAt=
+    Date.now();
+
+
+  restoreMarkup();
+
+  restoreAnswers();
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+function fmt(sec){
+
+  sec=
+    Math.max(
+      0,
+      Math.floor(sec)
+    );
+
+
+  const h=
+    Math.floor(
+      sec / 3600
+    );
+
+
+  const m=
+    Math.floor(
+      (sec % 3600) / 60
+    );
+
+
+  const s=
+    sec % 60;
+
+
+  return h
+
+    ?
+
+    `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+
+    :
+
+    `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+}
+
+
+setInterval(
+  ()=>{
+
+    if(startedAt){
+
+      timer.textContent=
+        fmt(
+          (
+            Date.now()
+            -
+            startedAt
+          )
+          /
+          1000
+        );
+
+    }
+
+  },
+  500
+);
+
+
+/* =========================================================
+   ANSWERS
+   ========================================================= */
+
+function saveAnswer(
+  n,
+  value
+){
+
+  if(submitted){
+    return;
+  }
+
+
+  localStorage.setItem(
+    `${ATTEMPT_KEY}_q${n}`,
+    value
+  );
+
+
+  navState(n);
+
+  updateProgress();
+
+}
+
+
+function getAnswer(n){
+
+  return localStorage.getItem(
+    `${ATTEMPT_KEY}_q${n}`
+  )
+  ||
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  for(
+    let n=1;
+    n<=5;
+    n++
+  ){
+
+    const value=
+      getAnswer(n);
+
+
+    if(value){
+
+      const input=
+        document.querySelector(
+          `input[name="q${n}"][value="${value}"]`
+        );
+
+
+      if(input){
+
+        input.checked=
+          true;
+
+      }
+
+    }
+
+
+    navState(n);
+
+  }
+
+}
+
+
+function navState(n){
+
+  document
+    .getElementById(
+      'nav' + n
+    )
+    .classList
+    .toggle(
+      'answered',
+      !!getAnswer(n)
+    );
+
+}
+
+
+function updateProgress(){
+
+  const answered=
+    [1,2,3,4,5]
+      .filter(
+        n =>
+          getAnswer(n)
+      )
+      .length;
+
+
+  progressText.textContent=
+    `${answered}/5 câu đã trả lời`;
+
+
+  progressBar.style.width=
+    (
+      answered / 5 * 100
+    )
+    +
+    '%';
+
+}
+
+
+function goQ(n){
+
+  document
+    .getElementById(
+      'q' + n
+    )
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'center'
+
+    });
+
+}
+
+
+/* =========================================================
+   SUBMIT
+   ========================================================= */
+
+async function submitPractice(){
+
+  if(submitted){
+    return;
+  }
+
+
+  submitted=
+    true;
+
+
+  let score=
+    0;
+
+
+  const answers=
+    {};
+
+
+  for(
+    let n=1;
+    n<=5;
+    n++
+  ){
+
+    const user=
+      getAnswer(n);
+
+
+    const correct=
+      KEY[n];
+
+
+    const ok=
+      user === correct;
+
+
+    answers[n]=
+      user || '';
+
+
+    if(ok){
+
+      score++;
+
+    }
+
+
+    const inputs=
+      [
+        ...document.querySelectorAll(
+          `input[name="q${n}"]`
+        )
+      ];
+
+
+    inputs.forEach(
+      input => {
+
+        input.disabled=
+          true;
+
+      }
+    );
+
+
+    inputs.forEach(
+      input => {
+
+        const label=
+          input.closest(
+            '.option'
+          );
+
+
+        label.classList.remove(
+          'correct',
+          'wrong'
+        );
+
+
+        if(
+          input.value
+          ===
+          correct
+        ){
+
+          label.classList.add(
+            'correct'
+          );
+
+        }
+
+
+        if(
+          input.checked
+          &&
+          !ok
+        ){
+
+          label.classList.add(
+            'wrong'
+          );
+
+        }
+
+      }
+    );
+
+
+    const nav=
+      document.getElementById(
+        'nav' + n
+      );
+
+
+    nav.classList.add(
+      ok
+        ?
+        'correct'
+        :
+        'wrong'
+    );
+
+
+    if(!ok){
+
+      reviewHTML(
+        n,
+        user,
+        correct
+      );
+
+    }
+
+  }
+
+
+  const durationSeconds=
+    Math.floor(
+      (
+        Date.now()
+        -
+        startedAt
+      )
+      /
+      1000
+    );
+
+
+  const s=
+    readStudent();
+
+
+  resultStudent.textContent=
+    s
+      ?
+      `${s.name} · ${s.className}`
+      :
+      '';
+
+
+  resultScore.textContent=
+    `${score} / 5`;
+
+
+  resultPercent.textContent=
+    `${Math.round(score / 5 * 100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay
+    .classList
+    .remove('hidden');
+
+
+  /*
+   * DATA GỬI VỀ PRACTICE_RESULTS
+   */
+
+  const details=
+    JSON.stringify({
+
+      title:
+        'Stepwells - True / False / Not Given 01',
+
+      answers:
+        answers,
+
+      correctAnswers:
+        KEY
+
+    });
+
+
+  const body=
+    new URLSearchParams({
+
+      mode:
+        'PRACTICE',
+
+      name:
+        s?.name || '',
+
+      className:
+        s?.className || '',
+
+      skill:
+        'Reading',
+
+      practiceType:
+        'True / False / Not Given',
+
+      practiceId:
+        '01',
+
+      score:
+        String(score),
+
+      total:
+        '5',
+
+      durationSeconds:
+        String(
+          durationSeconds
+        ),
+
+      details:
+        details,
+
+      submittedAt:
+        new Date()
+          .toISOString()
+
+    });
+
+
+  try{
+
+    await fetch(
+
+      RESULT_ENDPOINT,
+
+      {
+
+        method:
+          'POST',
+
+        mode:
+          'no-cors',
+
+        headers:{
+
+          'Content-Type':
+            'application/x-www-form-urlencoded;charset=UTF-8'
+
+        },
+
+        body:
+          body.toString()
+
+      }
+
+    );
+
+  }
+
+  catch(err){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      err
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   REVIEW
+   ========================================================= */
+
+function reviewHTML(
+  n,
+  user,
+  correct
+){
+
+  document
+    .getElementById(
+      'review' + n
+    )
+    .innerHTML=
+    `
+      <div class="inline-review">
+
+        <div class="review-title">
+          Câu ${n}
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án em chọn
+          </div>
+
+          <div class="review-user">
+            ${user || 'Chưa trả lời'}
+          </div>
+
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án đúng
+          </div>
+
+          <div class="review-correct">
+            ${correct}
+          </div>
+
+        </div>
+
+        <div class="explain">
+          ${EXPLAIN[n]}
+        </div>
+
+        <div class="evidence">
+          ↗ ${EVIDENCE[n]}
+        </div>
+
+      </div>
+    `;
+
+}
+
+
+function closeResult(){
+
+  resultOverlay
+    .classList
+    .add('hidden');
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + NOTE
+   ========================================================= */
+
+const selectionMenu=
+  document.getElementById(
+    'selectionMenu'
+  );
+
+
+const menuHighlight=
+  document.getElementById(
+    'menuHighlight'
+  );
+
+
+const menuNote=
+  document.getElementById(
+    'menuNote'
+  );
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+
+    zone === 'passage'
+
+      ?
+
+      'passageRoot'
+
+      :
+
+      'questionsRoot'
+
+  );
+
+}
+
+
+function notesKey(zone){
+
+  return `${ATTEMPT_KEY}_notes_${zone}`;
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function loadNotes(zone){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        notesKey(zone)
+      )
+      ||
+      '[]'
+
+    );
+
+  }
+
+  catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+function saveNotes(
+  zone,
+  notes
+){
+
+  localStorage.setItem(
+
+    notesKey(zone),
+
+    JSON.stringify(
+      notes
+    )
+
+  );
+
+}
+
+
+function saveMarkup(zone){
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    zoneRoot(zone)
+      .innerHTML
+
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  [
+    'passage',
+    'questions'
+  ]
+  .forEach(
+    zone => {
+
+      const markup=
+        localStorage.getItem(
+          markupKey(zone)
+        );
+
+
+      if(markup){
+
+        zoneRoot(zone)
+          .innerHTML=
+          markup;
+
+      }
+
+
+      bindContextActions(
+        zone
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FLOATING MENU
+   ========================================================= */
+
 function hideSelectionMenu(){
-  selectionMenu.classList.remove('show');
-  menuTarget=null;
-  menuZone=null;
-  menuMode='selection';
+
+  selectionMenu
+    .classList
+    .remove('show');
+
+
+  menuTarget=
+    null;
+
+
+  menuZone=
+    null;
+
+
+  menuMode=
+    'selection';
+
 }
+
+
+function resetMenuButtons(){
+
+  menuHighlight.style.display=
+    '';
+
+
+  menuNote.style.display=
+    '';
+
+
+  menuHighlight.textContent=
+    '🖍 Highlight';
+
+
+  menuNote.textContent=
+    '📝 Take note';
+
+
+  menuHighlight
+    .classList
+    .remove(
+      'danger'
+    );
+
+
+  menuNote
+    .classList
+    .remove(
+      'danger'
+    );
+
+}
+
+
 function positionMenu(rect){
-  const width=selectionMenu.offsetWidth||190;
-  const left=Math.min(window.innerWidth-width-10,Math.max(10,rect.left+rect.width/2-width/2));
-  const top=Math.max(10,rect.top-46);
-  selectionMenu.style.left=left+'px';
-  selectionMenu.style.top=top+'px';
+
+  selectionMenu
+    .classList
+    .add('show');
+
+
+  requestAnimationFrame(
+    ()=>{
+
+      const width=
+        selectionMenu.offsetWidth
+        ||
+        190;
+
+
+      const left=
+        Math.min(
+
+          window.innerWidth
+          -
+          width
+          -
+          10,
+
+          Math.max(
+
+            10,
+
+            rect.left
+            +
+            rect.width / 2
+            -
+            width / 2
+
+          )
+
+        );
+
+
+      const top=
+        Math.max(
+          10,
+          rect.top - 47
+        );
+
+
+      selectionMenu.style.left=
+        left + 'px';
+
+
+      selectionMenu.style.top=
+        top + 'px';
+
+    }
+  );
+
 }
+
+
+/* =========================================================
+   SELECT TEXT
+   ========================================================= */
+
 function captureSelection(zone){
-  const s=window.getSelection();
-  if(!s||s.rangeCount===0||s.isCollapsed)return false;
-  const r=s.getRangeAt(0),root=zoneRoot(zone);
-  if(!root.contains(r.commonAncestorContainer))return false;
 
-  savedSelection=r.cloneRange();
-  savedZone=zone;
-  menuMode='selection';
-  menuZone=zone;
-  menuTarget=null;
+  const selection=
+    window.getSelection();
 
-  menuHighlight.textContent='🖍 Highlight';
-  menuHighlight.classList.remove('danger');
-  menuNote.textContent='📝 Take note';
-  menuNote.classList.remove('danger');
 
-  selectionMenu.classList.add('show');
-  requestAnimationFrame(()=>positionMenu(r.getBoundingClientRect()));
+  if(
+    !selection
+    ||
+    selection.rangeCount === 0
+    ||
+    selection.isCollapsed
+  ){
+
+    return false;
+
+  }
+
+
+  const range=
+    selection.getRangeAt(0);
+
+
+  const root=
+    zoneRoot(zone);
+
+
+  if(
+    !root.contains(
+      range.commonAncestorContainer
+    )
+  ){
+
+    return false;
+
+  }
+
+
+  savedSelection=
+    range.cloneRange();
+
+
+  savedZone=
+    zone;
+
+
+  menuMode=
+    'selection';
+
+
+  menuZone=
+    zone;
+
+
+  menuTarget=
+    null;
+
+
+  resetMenuButtons();
+
+
+  positionMenu(
+    range.getBoundingClientRect()
+  );
+
+
   return true;
+
 }
+
+
 function clearBrowserSelection(){
-  const s=window.getSelection();
-  if(s)s.removeAllRanges();
-  savedSelection=null;savedZone=null;
-}
-function addHighlightFromMenu(){
-  if(menuMode==='delete-highlight'){
-    removeHighlightTarget();
-    return;
-  }
-  if(!savedSelection||!savedZone)return;
-  const r=savedSelection.cloneRange();
-  try{
-    const m=document.createElement('mark');
-    m.className='user-highlight';
-    m.appendChild(r.extractContents());
-    r.insertNode(m);
-    saveMarkup(savedZone);
-    clearBrowserSelection();
-    hideSelectionMenu();
-  }catch(e){alert('Hãy chọn một đoạn chữ ngắn hơn.')}
-}
-function addNoteFromMenu(){
-  if(menuMode==='delete-note'){
-    deleteNoteTarget();
-    return;
-  }
-  if(!savedSelection||!savedZone)return;
-  const r=savedSelection.cloneRange();
-  const quote=r.toString().trim();
-  const text=prompt('Nhập ghi chú:');
-  if(text===null||!text.trim())return;
 
-  const id='n'+Date.now()+Math.random().toString(36).slice(2,5);
-  const span=document.createElement('span');
-  span.className='note-anchor';
-  span.dataset.noteId=id;
+  const selection=
+    window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection=
+    null;
+
+
+  savedZone=
+    null;
+
+}
+
+
+/* =========================================================
+   ADD HIGHLIGHT
+   ========================================================= */
+
+function addHighlight(){
+
+  if(
+    menuMode
+    ===
+    'delete-highlight'
+  ){
+
+    removeHighlight();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+    savedSelection.cloneRange();
+
 
   try{
-    span.appendChild(r.extractContents());
-    r.insertNode(span);
-    const a=loadNotes(savedZone);
-    a.push({id,quote,text:text.trim()});
-    saveNotes(savedZone,a);
-    saveMarkup(savedZone);
+
+    const mark=
+      document.createElement(
+        'mark'
+      );
+
+
+    mark.className=
+      'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
     clearBrowserSelection();
+
+
     hideSelectionMenu();
-  }catch(e){alert('Hãy chọn một đoạn chữ ngắn hơn.')}
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
 }
-function removeHighlightTarget(){
-  if(!menuTarget)return;
-  const zone=menuZone,p=menuTarget.parentNode;
-  while(menuTarget.firstChild)p.insertBefore(menuTarget.firstChild,menuTarget);
-  menuTarget.remove();
-  p.normalize();
-  saveMarkup(zone);
-  hideSelectionMenu();
+
+
+/* =========================================================
+   ADD NOTE
+   ========================================================= */
+
+function addNote(){
+
+  if(
+    menuMode
+    ===
+    'delete-note'
+  ){
+
+    removeNote();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+    savedSelection.cloneRange();
+
+
+  const quote=
+    range
+      .toString()
+      .trim();
+
+
+  const text=
+    prompt(
+      'Nhập ghi chú:'
+    );
+
+
+  if(
+    text === null
+    ||
+    !text.trim()
+  ){
+
+    return;
+
+  }
+
+
+  const id=
+    'n'
+    +
+    Date.now()
+    +
+    Math.random()
+      .toString(36)
+      .slice(2,5);
+
+
+  const span=
+    document.createElement(
+      'span'
+    );
+
+
+  span.className=
+    'note-anchor';
+
+
+  span.dataset.noteId=
+    id;
+
+
+  try{
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    const notes=
+      loadNotes(
+        savedZone
+      );
+
+
+    notes.push({
+
+      id:id,
+
+      quote:quote,
+
+      text:text.trim()
+
+    });
+
+
+    saveNotes(
+      savedZone,
+      notes
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearBrowserSelection();
+
+
+    hideSelectionMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
 }
-function deleteNoteTarget(){
-  if(!menuTarget)return;
-  const zone=menuZone,id=menuTarget.dataset.noteId;
-  saveNotes(zone,loadNotes(zone).filter(x=>x.id!==id));
-  const p=menuTarget.parentNode;
-  while(menuTarget.firstChild)p.insertBefore(menuTarget.firstChild,menuTarget);
-  menuTarget.remove();
-  p.normalize();
-  saveMarkup(zone);
-  hideSelectionMenu();
-}
-function showDeleteMenu(target,zone,type){
-  menuTarget=target;
-  menuZone=zone;
+
+
+/* =========================================================
+   DELETE MENU
+   ========================================================= */
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget=
+    target;
+
+
+  menuZone=
+    zone;
+
+
+  resetMenuButtons();
+
+
+  if(
+    type
+    ===
+    'highlight'
+  ){
+
+    menuMode=
+      'delete-highlight';
+
+
+    menuHighlight.textContent=
+      '✕ Xóa highlight';
+
+
+    menuHighlight
+      .classList
+      .add(
+        'danger'
+      );
+
+
+    menuNote.style.display=
+      'none';
+
+  }
+
+  else{
+
+    menuMode=
+      'delete-note';
+
+
+    menuNote.textContent=
+      '✕ Xóa note';
+
+
+    menuNote
+      .classList
+      .add(
+        'danger'
+      );
+
+
+    menuHighlight.style.display=
+      'none';
+
+  }
+
+
   clearBrowserSelection();
 
-  const rect=target.getBoundingClientRect();
-  selectionMenu.classList.add('show');
 
-  if(type==='highlight'){
-    menuMode='delete-highlight';
-    menuHighlight.textContent='✕ Xóa highlight';
-    menuHighlight.classList.add('danger');
-    menuNote.style.display='none';
-  }else{
-    menuMode='delete-note';
-    menuNote.textContent='✕ Xóa note';
-    menuNote.classList.add('danger');
-    menuHighlight.style.display='none';
+  positionMenu(
+    target
+      .getBoundingClientRect()
+  );
+
+}
+
+
+/* =========================================================
+   DELETE HIGHLIGHT
+   ========================================================= */
+
+function removeHighlight(){
+
+  if(!menuTarget){
+
+    return;
+
   }
-  requestAnimationFrame(()=>positionMenu(rect));
+
+
+  const zone=
+    menuZone;
+
+
+  const parent=
+    menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    zone
+  );
+
+
+  hideSelectionMenu();
+
+
+  resetMenuButtons();
+
 }
-function resetMenuButtons(){
-  menuHighlight.style.display='';
-  menuNote.style.display='';
-  menuHighlight.classList.remove('danger');
-  menuNote.classList.remove('danger');
+
+
+/* =========================================================
+   DELETE NOTE
+   ========================================================= */
+
+function removeNote(){
+
+  if(!menuTarget){
+
+    return;
+
+  }
+
+
+  const zone=
+    menuZone;
+
+
+  const id=
+    menuTarget.dataset.noteId;
+
+
+  const notes=
+    loadNotes(zone)
+      .filter(
+        note =>
+          note.id !== id
+      );
+
+
+  saveNotes(
+    zone,
+    notes
+  );
+
+
+  const parent=
+    menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    zone
+  );
+
+
+  hideSelectionMenu();
+
+
+  resetMenuButtons();
+
 }
+
+
+/* =========================================================
+   BIND CONTEXT ACTIONS
+   ========================================================= */
+
 function bindContextActions(zone){
-  const root=zoneRoot(zone);
-  if(!root)return;
 
-  root.addEventListener('mouseup',e=>{
-    resetMenuButtons();
-    setTimeout(()=>captureSelection(zone),0);
-  });
+  const root=
+    zoneRoot(zone);
 
-  root.addEventListener('touchend',e=>{
-    resetMenuButtons();
-    setTimeout(()=>captureSelection(zone),120);
-  });
 
-  root.addEventListener('click',e=>{
-    const note=e.target.closest('.note-anchor');
-    const mark=e.target.closest('mark.user-highlight');
+  if(!root){
 
-    if(note){
-      resetMenuButtons();
-      showDeleteMenu(note,zone,'note');
-      e.stopPropagation();
-      return;
-    }
-    if(mark){
-      resetMenuButtons();
-      showDeleteMenu(mark,zone,'highlight');
-      e.stopPropagation();
-      return;
-    }
-  });
-}
-menuHighlight.addEventListener('click',addHighlightFromMenu);
-menuNote.addEventListener('click',addNoteFromMenu);
-document.addEventListener('mousedown',e=>{
-  if(!selectionMenu.contains(e.target)&&!e.target.closest('mark.user-highlight')&&!e.target.closest('.note-anchor')){
-    hideSelectionMenu();
-    resetMenuButtons();
+    return;
+
   }
-});
-window.addEventListener('scroll',()=>{hideSelectionMenu();resetMenuButtons();},true);
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    ()=>{
+
+      resetMenuButtons();
+
+      setTimeout(
+        ()=>captureSelection(zone),
+        0
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    ()=>{
+
+      resetMenuButtons();
+
+      setTimeout(
+        ()=>captureSelection(zone),
+        120
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event => {
+
+      const note=
+        event.target.closest(
+          '.note-anchor'
+        );
+
+
+      const mark=
+        event.target.closest(
+          'mark.user-highlight'
+        );
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+
+        return;
+
+      }
+
+
+      if(mark){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          mark,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   MENU BUTTONS
+   ========================================================= */
+
+menuHighlight
+  .addEventListener(
+    'click',
+    addHighlight
+  );
+
+
+menuNote
+  .addEventListener(
+    'click',
+    addNote
+  );
+
+
+document
+  .addEventListener(
+
+    'mousedown',
+
+    event => {
+
+      if(
+
+        !selectionMenu.contains(
+          event.target
+        )
+
+        &&
+
+        !event.target.closest(
+          'mark.user-highlight'
+        )
+
+        &&
+
+        !event.target.closest(
+          '.note-anchor'
+        )
+
+      ){
+
+        hideSelectionMenu();
+
+        resetMenuButtons();
+
+      }
+
+    }
+
+  );
+
+
+window
+  .addEventListener(
+
+    'scroll',
+
+    ()=>{
+
+      hideSelectionMenu();
+
+      resetMenuButtons();
+
+    },
+
+    true
+
+  );
+
+
+/* =========================================================
+   INIT
+   ========================================================= */
 
 prefill();
+
 </script>
+
 </body>
 </html>
