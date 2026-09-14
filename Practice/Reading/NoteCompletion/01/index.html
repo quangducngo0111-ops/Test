@@ -20,7 +20,9 @@
   --bad:#b83345;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -34,16 +36,25 @@ button,input{
   font:inherit;
 }
 
-button{cursor:pointer}
+button{
+  cursor:pointer;
+}
 
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .top{
   position:sticky;
   top:0;
   z-index:30;
-  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  background:linear-gradient(
+    100deg,
+    #1c0e49,
+    #281260,
+    #37217e
+  );
   color:#fff;
   box-shadow:0 8px 22px rgba(40,18,96,.14);
 }
@@ -102,7 +113,9 @@ button{cursor:pointer}
 }
 
 
-/* PAGE */
+/* =========================
+   PAGE
+========================= */
 
 .page{
   width:min(1400px,calc(100% - 18px));
@@ -122,6 +135,7 @@ button{cursor:pointer}
   margin:0;
   color:#21164b;
   font-size:27px;
+  letter-spacing:-.03em;
 }
 
 .hero p{
@@ -131,7 +145,9 @@ button{cursor:pointer}
 }
 
 
-/* PROGRESS */
+/* =========================
+   PROGRESS
+========================= */
 
 .progress-wrap{
   min-width:245px;
@@ -140,8 +156,9 @@ button{cursor:pointer}
 .progress-row{
   display:flex;
   justify-content:space-between;
-  font-size:10.5px;
+  gap:10px;
   color:var(--muted);
+  font-size:10.5px;
   font-weight:850;
   margin-bottom:5px;
 }
@@ -157,11 +174,18 @@ button{cursor:pointer}
   display:block;
   width:0;
   height:100%;
-  background:linear-gradient(90deg,var(--purple2),var(--blue));
+  background:linear-gradient(
+    90deg,
+    var(--purple2),
+    var(--blue)
+  );
+  transition:width .2s ease;
 }
 
 
-/* WORKSPACE */
+/* =========================
+   WORKSPACE
+========================= */
 
 .workspace{
   display:grid;
@@ -171,6 +195,7 @@ button{cursor:pointer}
   border-radius:18px;
   overflow:hidden;
   background:#fff;
+  box-shadow:0 8px 24px rgba(35,25,75,.05);
 }
 
 .pane{
@@ -182,6 +207,7 @@ button{cursor:pointer}
 
 .passage{
   border-right:1px solid var(--line);
+  background:#fff;
 }
 
 .questions{
@@ -207,11 +233,16 @@ button{cursor:pointer}
 }
 
 
-/* EVIDENCE */
+/* =========================
+   EVIDENCE
+========================= */
 
 .evidence-source{
   border-radius:4px;
-  transition:.3s;
+  transition:
+    background .3s ease,
+    box-shadow .3s ease,
+    font-weight .3s ease;
 }
 
 .evidence-source.evidence-focus{
@@ -226,39 +257,53 @@ button{cursor:pointer}
 }
 
 @keyframes evidencePulse{
+
   0%{
-    box-shadow:0 0 4px rgba(245,190,35,.1);
+    box-shadow:
+      0 0 0 2px rgba(245,190,35,.15),
+      0 0 4px rgba(245,190,35,.1);
   }
+
   50%{
     box-shadow:
-      0 0 0 6px rgba(245,190,35,.3),
+      0 0 0 6px rgba(245,190,35,.30),
       0 0 24px rgba(245,190,35,.55);
   }
+
   100%{
     box-shadow:
       0 0 0 3px rgba(245,190,35,.25),
       0 0 18px rgba(245,190,35,.35);
   }
+
 }
 
 
-/* QUESTIONS */
+/* =========================
+   INSTRUCTIONS
+========================= */
+
+.instructions{
+  margin-bottom:13px;
+}
 
 .instructions h3{
   margin:0 0 6px;
   color:#21164b;
+  font-size:17px;
 }
 
 .instructions p{
-  font-size:11.5px;
+  margin:3px 0;
   color:var(--muted);
+  font-size:11.5px;
   line-height:1.55;
 }
 
 .rule{
   display:inline-block;
   padding:7px 10px;
-  margin:5px 0 14px;
+  margin:7px 0 14px;
   border-radius:8px;
   background:#f0ecff;
   color:#5c43b2;
@@ -266,22 +311,27 @@ button{cursor:pointer}
   font-weight:900;
 }
 
+
+/* =========================
+   NOTES
+========================= */
+
 .note-box{
   background:#fff;
   border:1px solid var(--line);
   border-radius:12px;
-  padding:15px;
+  padding:16px;
 }
 
 .note-title{
-  font-size:15px;
+  font-size:17px;
   font-weight:950;
   color:#21164b;
-  margin-bottom:12px;
+  margin-bottom:15px;
 }
 
 .note-section{
-  margin-top:16px;
+  margin-top:20px;
 }
 
 .note-section:first-of-type{
@@ -289,31 +339,59 @@ button{cursor:pointer}
 }
 
 .note-section-title{
-  font-size:11.5px;
+  font-size:12px;
   font-weight:950;
-  margin-bottom:8px;
+  margin-bottom:10px;
   color:#3f3562;
+  line-height:1.55;
 }
 
 .note-line{
-  margin:8px 0;
-  padding-left:14px;
   position:relative;
+  margin:9px 0;
+  padding-left:16px;
   font-size:12px;
-  line-height:1.7;
+  line-height:1.8;
 }
 
 .note-line::before{
   content:"–";
   position:absolute;
   left:0;
+  color:#6f7890;
 }
+
+
+/* =========================
+   QUESTION NUMBER
+========================= */
+
+.qno{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:23px;
+  height:23px;
+  margin:0 4px;
+  padding:0 5px;
+  border-radius:6px;
+  background:#eee9ff;
+  color:#4b318e;
+  font-size:10px;
+  font-weight:950;
+  vertical-align:middle;
+}
+
+
+/* =========================
+   ANSWER INPUT
+========================= */
 
 .answer{
   display:inline-block;
   width:125px;
   vertical-align:middle;
-  margin:0 4px;
+  margin:0 4px 0 1px;
 }
 
 .answer input{
@@ -322,6 +400,7 @@ button{cursor:pointer}
   border:1px solid #cdd3df;
   border-radius:7px;
   outline:none;
+  background:#fff;
   font-size:11px;
   font-weight:800;
 }
@@ -344,10 +423,12 @@ button{cursor:pointer}
 }
 
 
-/* REVIEW */
+/* =========================
+   REVIEW
+========================= */
 
 .review-list{
-  margin-top:12px;
+  margin-top:14px;
 }
 
 .inline-review{
@@ -358,6 +439,7 @@ button{cursor:pointer}
   border-radius:9px;
   background:#fffafb;
   font-size:11px;
+  line-height:1.55;
 }
 
 .review-title{
@@ -412,12 +494,14 @@ button{cursor:pointer}
   font-size:9.5px;
   font-weight:950;
   text-transform:uppercase;
+  letter-spacing:.04em;
 }
 
 .compare-text,
 .compare-analysis{
   padding:9px 10px;
   background:#fff;
+  border:1px solid #e5e7ee;
   border-radius:7px;
   line-height:1.6;
 }
@@ -433,10 +517,12 @@ button{cursor:pointer}
   font-style:italic;
   line-height:1.6;
   cursor:pointer;
+  transition:.15s ease;
 }
 
 .passage-evidence:hover{
   background:#e5ecff;
+  transform:translateY(-1px);
 }
 
 .passage-evidence::after{
@@ -448,6 +534,7 @@ button{cursor:pointer}
   font-size:16px;
   font-style:normal;
   font-weight:950;
+  color:#5b43b5;
 }
 
 .evidence-help{
@@ -468,7 +555,9 @@ button{cursor:pointer}
 }
 
 
-/* USER HIGHLIGHT */
+/* =========================
+   USER HIGHLIGHT / NOTE
+========================= */
 
 mark.user-highlight{
   background:#fff29a;
@@ -480,6 +569,7 @@ mark.user-highlight{
 .note-anchor{
   background:#ffe6a6;
   border-bottom:2px dotted #e28b19;
+  border-radius:2px;
   cursor:pointer;
 }
 
@@ -491,6 +581,7 @@ mark.user-highlight{
   padding:6px;
   background:#21164b;
   border-radius:10px;
+  box-shadow:0 12px 30px rgba(25,18,65,.22);
 }
 
 .selection-menu.show{
@@ -505,6 +596,7 @@ mark.user-highlight{
   padding:7px 9px;
   font-size:10.5px;
   font-weight:900;
+  white-space:nowrap;
 }
 
 .selection-menu button.danger{
@@ -513,7 +605,9 @@ mark.user-highlight{
 }
 
 
-/* BOTTOM */
+/* =========================
+   BOTTOM
+========================= */
 
 .bottom{
   position:sticky;
@@ -522,7 +616,11 @@ mark.user-highlight{
   width:min(1400px,calc(100% - 18px));
   margin:auto;
   padding:9px 0 6px;
-  background:linear-gradient(to top,var(--bg) 75%,rgba(245,247,251,.88));
+  background:linear-gradient(
+    to top,
+    var(--bg) 75%,
+    rgba(245,247,251,.88)
+  );
   display:flex;
   align-items:center;
   gap:10px;
@@ -546,6 +644,7 @@ mark.user-highlight{
 
 .nav button.answered{
   background:#e7efff;
+  border-color:#c4d5ff;
 }
 
 .nav button.correct{
@@ -558,9 +657,14 @@ mark.user-highlight{
   border-color:#f0b5bd;
 }
 
-.submit,.btn{
+.submit,
+.btn{
   border:0;
-  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  background:linear-gradient(
+    100deg,
+    var(--purple),
+    var(--purple2)
+  );
   color:#fff;
   border-radius:9px;
   padding:10px 15px;
@@ -568,7 +672,9 @@ mark.user-highlight{
 }
 
 
-/* OVERLAY */
+/* =========================
+   OVERLAYS
+========================= */
 
 .overlay,
 .start{
@@ -592,6 +698,8 @@ mark.user-highlight{
 .result,
 .start-card{
   width:min(590px,100%);
+  max-height:88vh;
+  overflow:auto;
   background:#fff;
   border-radius:18px;
   padding:22px;
@@ -615,9 +723,9 @@ mark.user-highlight{
 
 .field label{
   display:block;
+  margin-bottom:5px;
   font-size:10.5px;
   font-weight:900;
-  margin-bottom:5px;
 }
 
 .field input{
@@ -632,6 +740,10 @@ mark.user-highlight{
   margin-top:10px;
 }
 
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:900px){
 
@@ -648,6 +760,15 @@ mark.user-highlight{
     max-height:none;
   }
 
+  .hero{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
 }
 </style>
 </head>
@@ -655,11 +776,20 @@ mark.user-highlight{
 <body>
 
 
+<!-- =========================
+     START
+========================= -->
+
 <div id="start" class="start">
 
   <div class="start-card">
 
-    <div style="font-size:10px;font-weight:950;color:#6a4db4">
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      color:#6a4db4;
+      letter-spacing:.08em
+    ">
       READING PRACTICE
     </div>
 
@@ -667,27 +797,53 @@ mark.user-highlight{
       Note Completion 01
     </h2>
 
-    <p style="font-size:11.5px;color:#6f7890">
+    <p style="
+      font-size:11.5px;
+      color:#6f7890
+    ">
       The Megafires of California · Questions 1–6
     </p>
 
     <div class="field">
-      <label>Họ và tên</label>
-      <input id="studentName">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+
     </div>
 
     <div class="field">
-      <label>Lớp</label>
-      <input id="studentClass">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+
     </div>
 
-    <button class="btn" onclick="startPractice()">
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
       Bắt đầu luyện
     </button>
 
     <div
       id="startError"
-      style="font-size:10px;color:#b83345;margin-top:7px"
+      style="
+        font-size:10px;
+        color:#b83345;
+        margin-top:7px
+      "
     ></div>
 
   </div>
@@ -695,13 +851,20 @@ mark.user-highlight{
 </div>
 
 
+<!-- =========================
+     HEADER
+========================= -->
+
 <header class="top">
 
   <div class="topin">
 
     <div class="left">
 
-      <a class="back" href="../">
+      <a
+        class="back"
+        href="../"
+      >
         ← Note Completion
       </a>
 
@@ -711,9 +874,15 @@ mark.user-highlight{
 
     </div>
 
-    <div id="studentInfo" class="student"></div>
+    <div
+      id="studentInfo"
+      class="student"
+    ></div>
 
-    <div id="timer" class="timer">
+    <div
+      id="timer"
+      class="timer"
+    >
       00:00
     </div>
 
@@ -722,20 +891,39 @@ mark.user-highlight{
 </header>
 
 
+<!-- =========================
+     MAIN
+========================= -->
+
 <main class="page">
 
   <section class="hero">
 
     <div>
-      <h1>Note Completion 01</h1>
-      <p>The Megafires of California · Questions 1–6</p>
+
+      <h1>
+        Note Completion 01
+      </h1>
+
+      <p>
+        The Megafires of California · Questions 1–6
+      </p>
+
     </div>
+
 
     <div class="progress-wrap">
 
       <div class="progress-row">
-        <span>Tiến độ</span>
-        <span id="progressText">0/6 câu đã trả lời</span>
+
+        <span>
+          Tiến độ
+        </span>
+
+        <span id="progressText">
+          0/6 câu đã trả lời
+        </span>
+
       </div>
 
       <div class="progress">
@@ -749,11 +937,17 @@ mark.user-highlight{
 
   <section class="workspace">
 
-    <!-- PASSAGE -->
+
+    <!-- =========================
+         PASSAGE
+    ========================= -->
 
     <div class="pane passage">
 
-      <div id="passageRoot" class="content">
+      <div
+        id="passageRoot"
+        class="content"
+      >
 
         <h2>
           The Megafires of California
@@ -769,7 +963,10 @@ mark.user-highlight{
           despite better preparedness than ever and decades of experience
           fighting fires fanned by the ‘Santa Ana Winds’.
 
-          <span class="evidence-source" data-evidence="1">
+          <span
+            class="evidence-source"
+            data-evidence="1"
+          >
             The wildfires themselves, experts say, are generally hotter,
             faster, and spread more erratically than in the past.
           </span>
@@ -777,56 +974,78 @@ mark.user-highlight{
 
 
         <p>
-          <span class="evidence-source" data-evidence="2">
+
+          <span
+            class="evidence-source"
+            data-evidence="2"
+          >
             Megafires, also called ‘siege fires’, are the increasingly frequent
             blazes that burn 500,000 acres or more -
             10 times the size of the average forest fire of 20 years ago.
           </span>
 
           Some recent wildfires are among the biggest ever in California
-          in terms of acreage burned.
+          in terms of acreage burned, according to state figures
+          and news reports.
+
         </p>
 
 
         <p>
           One explanation for the trend to more superhot fires is that
 
-          <span class="evidence-source" data-evidence="3">
+          <span
+            class="evidence-source"
+            data-evidence="3"
+          >
             the region, which usually has dry summers,
             has had significantly below normal precipitation
             in many recent years.
           </span>
 
-          Another reason is related to the century-long policy
-          of the US Forest Service to stop wildfires
-          as quickly as possible.
+          Another reason, experts say,
+          is related to the century-long policy
+          of the US Forest Service
+          to stop wildfires as quickly as possible.
         </p>
 
 
         <p>
-          <span class="evidence-source" data-evidence="4">
+
+          <span
+            class="evidence-source"
+            data-evidence="4"
+          >
             The unintentional consequence has been to halt
             the natural eradication of underbrush,
             now the primary fuel for megafires.
           </span>
+
         </p>
 
 
         <p>
-          Three other factors contribute to the trend.
+          Three other factors contribute to the trend, they add.
 
           First is climate change,
           marked by a 1-degree Fahrenheit rise
           in average yearly temperature across the western states.
 
-          <span class="evidence-source" data-evidence="5">
+          <span
+            class="evidence-source"
+            data-evidence="5"
+          >
             Second is fire seasons that on average are
             78 days longer than they were 20 years ago.
           </span>
 
-          <span class="evidence-source" data-evidence="6">
+          <span
+            class="evidence-source"
+            data-evidence="6"
+          >
             Third is increased construction of homes in wooded areas.
           </span>
+
         </p>
 
       </div>
@@ -834,11 +1053,16 @@ mark.user-highlight{
     </div>
 
 
-    <!-- QUESTIONS -->
+    <!-- =========================
+         QUESTIONS
+    ========================= -->
 
     <div class="pane questions">
 
-      <div id="questionsRoot" class="content">
+      <div
+        id="questionsRoot"
+        class="content"
+      >
 
         <div class="instructions">
 
@@ -851,7 +1075,8 @@ mark.user-highlight{
           </p>
 
           <p>
-            Choose <b>ONE WORD AND/OR A NUMBER</b>
+            Choose
+            <b>ONE WORD AND/OR A NUMBER</b>
             from the passage for each answer.
           </p>
 
@@ -869,52 +1094,81 @@ mark.user-highlight{
           </div>
 
 
+          <!-- GROUP 1 -->
+
           <div class="note-section">
 
             <div class="note-section-title">
               ● Characteristics of wildfires and wildfire conditions today compared to the past:
             </div>
 
+
             <div class="note-line">
               occurrence: more frequent
             </div>
+
 
             <div class="note-line">
               temperature: hotter
             </div>
 
+
             <div class="note-line">
               speed: faster
             </div>
 
+
             <div class="note-line">
+
               movement:
 
+              <span class="qno">
+                1
+              </span>
+
               <span class="answer">
+
                 <input
                   id="a1"
+                  type="text"
+                  autocomplete="off"
                   oninput="saveAnswer(1,this.value)"
                 >
+
               </span>
 
               more unpredictably
+
             </div>
 
+
             <div class="note-line">
+
               size of fires:
 
+              <span class="qno">
+                2
+              </span>
+
               <span class="answer">
+
                 <input
                   id="a2"
+                  type="text"
+                  autocomplete="off"
                   oninput="saveAnswer(2,this.value)"
                 >
+
               </span>
 
               greater on average than two decades ago
+
             </div>
 
           </div>
 
+
+          <!-- GROUP 2 -->
 
           <div class="note-section">
 
@@ -922,56 +1176,101 @@ mark.user-highlight{
               ● Reasons wildfires cause more damage today compared to the past:
             </div>
 
+
             <div class="note-line">
+
               rainfall:
 
+              <span class="qno">
+                3
+              </span>
+
               <span class="answer">
+
                 <input
                   id="a3"
+                  type="text"
+                  autocomplete="off"
                   oninput="saveAnswer(3,this.value)"
                 >
+
               </span>
 
               average
+
             </div>
+
 
             <div class="note-line">
+
               more brush to act as
 
+              <span class="qno">
+                4
+              </span>
+
               <span class="answer">
+
                 <input
                   id="a4"
+                  type="text"
+                  autocomplete="off"
                   oninput="saveAnswer(4,this.value)"
                 >
+
               </span>
+
             </div>
+
 
             <div class="note-line">
               increase in yearly temperature
             </div>
 
+
             <div class="note-line">
+
               extended fire
 
+              <span class="qno">
+                5
+              </span>
+
               <span class="answer">
+
                 <input
                   id="a5"
+                  type="text"
+                  autocomplete="off"
                   oninput="saveAnswer(5,this.value)"
                 >
+
               </span>
+
             </div>
 
+
             <div class="note-line">
+
               more building of
 
+              <span class="qno">
+                6
+              </span>
+
               <span class="answer">
+
                 <input
                   id="a6"
+                  type="text"
+                  autocomplete="off"
                   oninput="saveAnswer(6,this.value)"
                 >
+
               </span>
 
               in vulnerable places
+
             </div>
 
           </div>
@@ -993,16 +1292,37 @@ mark.user-highlight{
 </main>
 
 
+<!-- =========================
+     BOTTOM
+========================= -->
+
 <div class="bottom">
 
   <div class="nav">
 
-    <button id="nav1" onclick="goQ(1)">1</button>
-    <button id="nav2" onclick="goQ(2)">2</button>
-    <button id="nav3" onclick="goQ(3)">3</button>
-    <button id="nav4" onclick="goQ(4)">4</button>
-    <button id="nav5" onclick="goQ(5)">5</button>
-    <button id="nav6" onclick="goQ(6)">6</button>
+    <button id="nav1" onclick="goQ(1)">
+      1
+    </button>
+
+    <button id="nav2" onclick="goQ(2)">
+      2
+    </button>
+
+    <button id="nav3" onclick="goQ(3)">
+      3
+    </button>
+
+    <button id="nav4" onclick="goQ(4)">
+      4
+    </button>
+
+    <button id="nav5" onclick="goQ(5)">
+      5
+    </button>
+
+    <button id="nav6" onclick="goQ(6)">
+      6
+    </button>
 
   </div>
 
@@ -1016,18 +1336,35 @@ mark.user-highlight{
 </div>
 
 
-<div id="selectionMenu" class="selection-menu">
+<!-- =========================
+     SELECTION MENU
+========================= -->
 
-  <button id="menuHighlight">
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
     🖍 Highlight
   </button>
 
-  <button id="menuNote">
+  <button
+    id="menuNote"
+    type="button"
+  >
     📝 Take note
   </button>
 
 </div>
 
+
+<!-- =========================
+     RESULT
+========================= -->
 
 <div
   id="resultOverlay"
@@ -1036,22 +1373,37 @@ mark.user-highlight{
 
   <div class="result">
 
-    <div style="font-size:10px;font-weight:950;color:#6a4db4">
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      color:#6a4db4;
+      letter-spacing:.08em
+    ">
       KẾT QUẢ LUYỆN TẬP
     </div>
 
     <div
       id="resultStudent"
-      style="margin-top:5px;font-size:12px;color:#6f7890"
+      style="
+        margin-top:5px;
+        font-size:12px;
+        color:#6f7890
+      "
     ></div>
 
-    <div id="resultScore" class="score">
+    <div
+      id="resultScore"
+      class="score"
+    >
       0 / 6
     </div>
 
     <div id="resultPercent"></div>
 
-    <p style="font-size:11px;color:#6f7890">
+    <p style="
+      font-size:11px;
+      color:#6f7890
+    ">
       Các câu sai được giải thích bên dưới phần Notes.
     </p>
 
@@ -1069,12 +1421,21 @@ mark.user-highlight{
 
 <script>
 
+/* =========================================================
+   CONFIG
+========================================================= */
+
 const RESULT_ENDPOINT=
 'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
 
-const ATTEMPT_KEY=
-'PRACTICE_NOTECOMPLETION01_MEGAFIRES';
 
+const ATTEMPT_KEY=
+'PRACTICE_NOTECOMPLETION01_MEGAFIRES_V2';
+
+
+/* =========================================================
+   ANSWER KEY
+========================================================= */
 
 const KEYS={
 
@@ -1109,42 +1470,63 @@ const KEYS={
 
 
 const DISPLAY_KEY={
-  1:'spread',
-  2:'10 / ten times',
-  3:'below',
-  4:'fuel',
-  5:'seasons',
-  6:'homes / housing'
+
+  1:
+  'spread',
+
+  2:
+  '10 / ten times',
+
+  3:
+  'below',
+
+  4:
+  'fuel',
+
+  5:
+  'seasons',
+
+  6:
+  'homes / housing'
+
 };
 
+
+/* =========================================================
+   NOTES TEXT
+========================================================= */
 
 const NOTE_TEXT={
 
   1:
-  'movement: ______ more unpredictably',
+  'movement: 1 ______ more unpredictably',
 
   2:
-  'size of fires: ______ greater on average than two decades ago',
+  'size of fires: 2 ______ greater on average than two decades ago',
 
   3:
-  'rainfall: ______ average',
+  'rainfall: 3 ______ average',
 
   4:
-  'more brush to act as ______',
+  'more brush to act as 4 ______',
 
   5:
-  'extended fire ______',
+  'extended fire 5 ______',
 
   6:
-  'more building of ______ in vulnerable places'
+  'more building of 6 ______ in vulnerable places'
 
 };
 
 
+/* =========================================================
+   EVIDENCE
+========================================================= */
+
 const EVIDENCE={
 
   1:
-  'The wildfires themselves ... are generally hotter, faster, and spread more erratically than in the past.',
+  'The wildfires themselves, experts say, are generally hotter, faster, and spread more erratically than in the past.',
 
   2:
   'Megafires ... burn 500,000 acres or more - 10 times the size of the average forest fire of 20 years ago.',
@@ -1164,6 +1546,10 @@ const EVIDENCE={
 };
 
 
+/* =========================================================
+   ANALYSIS
+========================================================= */
+
 const ANALYSIS={
 
   1:
@@ -1171,45 +1557,48 @@ const ANALYSIS={
     Notes đã cho sẵn <b>“more unpredictably”</b>.
     Passage dùng cụm <b>“spread more erratically”</b>.
     “erratically” được paraphrase thành “unpredictably”,
-    nên từ cần lấy nguyên từ passage là <b>spread</b>.
+    nên từ cần lấy từ passage là <b>spread</b>.
   `,
 
   2:
   `
-    Passage so sánh trực tiếp megafires hiện nay với
-    average forest fire của 20 năm trước và nói chúng lớn
-    <b>10 times</b>.
-    Vì vậy đáp án là <b>10</b> hoặc <b>ten times</b>.
+    Passage nói megafires có kích thước
+    <b>10 times the size</b>
+    của average forest fire cách đây 20 năm.
+    Đây chính là thông tin được paraphrase thành
+    “greater on average than two decades ago”.
   `,
 
   3:
   `
-    Passage nói lượng mưa trong nhiều năm gần đây
-    <b>below normal precipitation</b>.
-    Notes đã có từ “average” phía sau chỗ trống,
-    nên từ cần điền là <b>below</b>.
+    Passage dùng cụm
+    <b>“below normal precipitation”</b>.
+    Notes đã có từ “average” ở sau chỗ trống,
+    nên đáp án cần điền là <b>below</b>.
   `,
 
   4:
   `
-    Passage xác định underbrush là
+    Passage xác định underbrush hiện là
     <b>“the primary fuel for megafires”</b>.
     Vì vậy brush hoạt động như <b>fuel</b>.
   `,
 
   5:
   `
-    Passage nói <b>fire seasons</b>
+    Passage nói
+    <b>“fire seasons”</b>
     hiện dài hơn trung bình 78 ngày.
-    Notes paraphrase thành “extended fire ___”,
-    nên điền <b>seasons</b>.
+    Notes chuyển thành “extended fire ___”,
+    nên đáp án là <b>seasons</b>.
   `,
 
   6:
   `
-    Passage nói có sự gia tăng trong
-    <b>construction of homes in wooded areas</b>.
-    “wooded areas” được paraphrase thành “vulnerable places”,
+    Passage nói có
+    <b>“increased construction of homes in wooded areas”</b>.
+    “wooded areas” được paraphrase thành
+    “vulnerable places”,
     nên đáp án là <b>homes</b>.
     <b>housing</b> cũng được chấp nhận theo key.
   `
@@ -1217,50 +1606,89 @@ const ANALYSIS={
 };
 
 
+/* =========================================================
+   STATE
+========================================================= */
+
 let startedAt=0;
+
 let submitted=false;
 
 let savedSelection=null;
+
 let savedZone=null;
+
 let menuMode='selection';
+
 let menuTarget=null;
+
 let menuZone=null;
 
 
-function normalize(v){
+/* =========================================================
+   ANSWER CHECK
+========================================================= */
 
-  return String(v || '')
+function normalize(value){
+
+  return String(
+    value || ''
+  )
   .trim()
   .toLowerCase()
-  .replace(/\s+/g,' ');
-
-}
-
-
-function isCorrect(n,value){
-
-  const answer=
-  normalize(value);
-
-  return KEYS[n].some(
-    key =>
-    normalize(key)===answer
+  .replace(
+    /\s+/g,
+    ' '
   );
 
 }
 
+
+function isCorrect(
+  number,
+  value
+){
+
+  const answer=
+  normalize(
+    value
+  );
+
+
+  return KEYS[number]
+  .some(
+    key =>
+    normalize(key)
+    ===
+    answer
+  );
+
+}
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
 
 function readStudent(){
 
   try{
 
     return JSON.parse(
-      localStorage.getItem('IELTS_PRACTICE_STUDENT')
+
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+
       ||
+
       'null'
+
     );
 
-  }catch(e){
+  }
+
+  catch(e){
 
     return null;
 
@@ -1271,16 +1699,17 @@ function readStudent(){
 
 function prefill(){
 
-  const s=
+  const student=
   readStudent();
 
-  if(s){
+
+  if(student){
 
     studentName.value=
-    s.name || '';
+    student.name || '';
 
     studentClass.value=
-    s.className || '';
+    student.className || '';
 
   }
 
@@ -1292,11 +1721,16 @@ function startPractice(){
   const name=
   studentName.value.trim();
 
-  const cls=
+
+  const className=
   studentClass.value.trim();
 
 
-  if(!name || !cls){
+  if(
+    !name
+    ||
+    !className
+  ){
 
     startError.textContent=
     'Vui lòng nhập đầy đủ Họ tên và Lớp.';
@@ -1307,19 +1741,29 @@ function startPractice(){
 
 
   localStorage.setItem(
+
     'IELTS_PRACTICE_STUDENT',
+
     JSON.stringify({
-      name,
-      className:cls
+
+      name:name,
+
+      className:className
+
     })
+
   );
 
 
   studentInfo.textContent=
-  `${name} · ${cls}`;
+  `${name} · ${className}`;
 
 
-  start.classList.add('hidden');
+  start
+  .classList
+  .add(
+    'hidden'
+  );
 
 
   startedAt=
@@ -1327,11 +1771,17 @@ function startPractice(){
 
 
   restoreMarkup();
+
   restoreAnswers();
+
   updateProgress();
 
 }
 
+
+/* =========================================================
+   TIMER
+========================================================= */
 
 function fmt(sec){
 
@@ -1341,63 +1791,105 @@ function fmt(sec){
     Math.floor(sec)
   );
 
-  const m=
-  Math.floor(sec/60);
 
-  const s=
+  const hours=
+  Math.floor(
+    sec/3600
+  );
+
+
+  const minutes=
+  Math.floor(
+    (sec%3600)/60
+  );
+
+
+  const seconds=
   sec%60;
 
-  return(
-    String(m).padStart(2,'0')
-    +
-    ':'
-    +
-    String(s).padStart(2,'0')
-  );
+
+  return hours
+
+  ?
+
+  `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`
+
+  :
+
+  `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
 
 }
 
 
 setInterval(
+
   ()=>{
 
     if(startedAt){
 
       timer.textContent=
       fmt(
-        (Date.now()-startedAt)/1000
+        (
+          Date.now()
+          -
+          startedAt
+        )
+        /
+        1000
       );
 
     }
 
   },
+
   500
+
 );
 
 
-function saveAnswer(n,value){
+/* =========================================================
+   ANSWERS
+========================================================= */
 
-  if(submitted)return;
+function saveAnswer(
+  number,
+  value
+){
+
+  if(submitted){
+    return;
+  }
 
 
   localStorage.setItem(
-    `${ATTEMPT_KEY}_q${n}`,
+
+    `${ATTEMPT_KEY}_q${number}`,
+
     value
+
   );
 
 
-  navState(n);
+  navState(
+    number
+  );
+
+
   updateProgress();
 
 }
 
 
-function getAnswer(n){
+function getAnswer(number){
 
   return localStorage.getItem(
-    `${ATTEMPT_KEY}_q${n}`
+
+    `${ATTEMPT_KEY}_q${number}`
+
   )
+
   ||
+
   '';
 
 }
@@ -1405,38 +1897,60 @@ function getAnswer(n){
 
 function restoreAnswers(){
 
-  [1,2,3,4,5,6]
+  [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
   .forEach(
-    n=>{
+
+    number => {
 
       const input=
       document.getElementById(
-        'a'+n
+        'a' + number
       );
+
 
       if(input){
 
         input.value=
-        getAnswer(n);
+        getAnswer(
+          number
+        );
 
       }
 
-      navState(n);
+
+      navState(
+        number
+      );
 
     }
+
   );
 
 }
 
 
-function navState(n){
+function navState(number){
 
   document
-  .getElementById('nav'+n)
+  .getElementById(
+    'nav' + number
+  )
   .classList
   .toggle(
+
     'answered',
-    !!normalize(getAnswer(n))
+
+    !!normalize(
+      getAnswer(number)
+    )
+
   );
 
 }
@@ -1444,80 +1958,149 @@ function navState(n){
 
 function updateProgress(){
 
-  const total=
-  [1,2,3,4,5,6]
+  const answered=
+  [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
   .filter(
-    n=>normalize(getAnswer(n))
+
+    number =>
+    normalize(
+      getAnswer(number)
+    )
+
   )
   .length;
 
 
   progressText.textContent=
-  `${total}/6 câu đã trả lời`;
+  `${answered}/6 câu đã trả lời`;
 
 
   progressBar.style.width=
-  `${total/6*100}%`;
+  (
+    answered
+    /
+    6
+    *
+    100
+  )
+  +
+  '%';
 
 }
 
 
-function goQ(n){
+function goQ(number){
 
   const input=
-  document.getElementById('a'+n);
+  document.getElementById(
+    'a' + number
+  );
+
+
+  if(!input){
+    return;
+  }
+
 
   input.scrollIntoView({
+
     behavior:'smooth',
+
     block:'center'
+
   });
 
+
   setTimeout(
+
     ()=>input.focus(),
+
     300
+
   );
 
 }
 
 
+/* =========================================================
+   SUBMIT
+========================================================= */
+
 async function submitPractice(){
 
-  if(submitted)return;
-
-  submitted=true;
-
-
-  let score=0;
-
-  const answers={};
-
-  reviewList.innerHTML='';
+  if(submitted){
+    return;
+  }
 
 
-  [1,2,3,4,5,6]
+  submitted=
+  true;
+
+
+  let score=
+  0;
+
+
+  const answers=
+  {};
+
+
+  reviewList.innerHTML=
+  '';
+
+
+  [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
   .forEach(
-    n=>{
+
+    number => {
 
       const user=
-      getAnswer(n);
+      getAnswer(
+        number
+      );
+
 
       const ok=
-      isCorrect(n,user);
+      isCorrect(
+        number,
+        user
+      );
 
-      answers[n]=
+
+      answers[number]=
       user || '';
 
 
-      if(ok)score++;
+      if(ok){
+
+        score++;
+
+      }
 
 
       const input=
       document.getElementById(
-        'a'+n
+        'a' + number
       );
 
 
-      input.disabled=true;
+      input.disabled=
+      true;
+
 
       input.classList.add(
         ok
@@ -1529,7 +2112,9 @@ async function submitPractice(){
 
 
       document
-      .getElementById('nav'+n)
+      .getElementById(
+        'nav' + number
+      )
       .classList
       .add(
         ok
@@ -1542,28 +2127,38 @@ async function submitPractice(){
 
       if(!ok){
 
-        renderReview(n,user);
+        renderReview(
+          number,
+          user
+        );
 
       }
 
     }
+
   );
 
 
   const durationSeconds=
   Math.floor(
-    (Date.now()-startedAt)/1000
+    (
+      Date.now()
+      -
+      startedAt
+    )
+    /
+    1000
   );
 
 
-  const s=
+  const student=
   readStudent();
 
 
   resultStudent.textContent=
-  s
+  student
   ?
-  `${s.name} · ${s.className}`
+  `${student.name} · ${student.className}`
   :
   '';
 
@@ -1576,43 +2171,66 @@ async function submitPractice(){
   `${Math.round(score/6*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
 
 
-  resultOverlay.classList.remove(
+  resultOverlay
+  .classList
+  .remove(
     'hidden'
   );
 
 
   const details=
   JSON.stringify({
+
     title:
     'The Megafires of California - Note Completion 01',
+
+    answers:
     answers,
-    correctAnswers:DISPLAY_KEY
+
+    correctAnswers:
+    DISPLAY_KEY
+
   });
 
 
   const body=
   new URLSearchParams({
 
-    mode:'PRACTICE',
+    mode:
+    'PRACTICE',
 
-    name:s?.name || '',
+    name:
+    student?.name || '',
 
-    className:s?.className || '',
+    className:
+    student?.className || '',
 
-    skill:'Reading',
+    skill:
+    'Reading',
 
-    practiceType:'Note Completion',
+    practiceType:
+    'Note Completion',
 
-    practiceId:'01',
+    practiceId:
+    '01',
 
-    score:String(score),
+    score:
+    String(score),
 
-    total:'6',
+    total:
+    '6',
 
     durationSeconds:
-    String(durationSeconds),
+    String(
+      durationSeconds
+    ),
 
-    details
+    details:
+    details,
+
+    submittedAt:
+    new Date()
+    .toISOString()
 
   });
 
@@ -1620,209 +2238,300 @@ async function submitPractice(){
   try{
 
     await fetch(
+
       RESULT_ENDPOINT,
+
       {
-        method:'POST',
-        mode:'no-cors',
+
+        method:
+        'POST',
+
+        mode:
+        'no-cors',
+
         headers:{
+
           'Content-Type':
           'application/x-www-form-urlencoded;charset=UTF-8'
+
         },
-        body:body.toString()
+
+        body:
+        body.toString()
+
       }
+
     );
 
-  }catch(e){}
+  }
+
+  catch(err){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      err
+    );
+
+  }
 
 }
 
 
-function renderReview(n,user){
+/* =========================================================
+   REVIEW
+========================================================= */
 
-  reviewList.insertAdjacentHTML(
+function renderReview(
+  number,
+  user
+){
+
+  reviewList
+  .insertAdjacentHTML(
+
     'beforeend',
+
     `
-    <div class="inline-review">
+      <div class="inline-review">
 
-      <div class="review-title">
-        Câu ${n}
-      </div>
-
-      <div class="review-row">
-
-        <div class="review-label">
-          Đáp án em chọn
-        </div>
-
-        <div class="review-user">
-          ${escapeHTML(user || 'Chưa trả lời')}
-        </div>
-
-      </div>
-
-      <div class="review-row">
-
-        <div class="review-label">
-          Đáp án đúng
-        </div>
-
-        <div class="review-correct">
-          ${DISPLAY_KEY[n]}
-        </div>
-
-      </div>
-
-
-      <div class="compare-box">
-
-        <div class="compare-heading">
-          🔎 Đối chiếu với bài đọc
+        <div class="review-title">
+          Câu ${number}
         </div>
 
 
-        <div class="compare-item">
+        <div class="review-row">
 
-          <div class="compare-label">
-            Notes
+          <div class="review-label">
+            Đáp án em chọn
           </div>
 
-          <div class="compare-text">
-            ${NOTE_TEXT[n]}
+          <div class="review-user">
+            ${escapeHTML(user || 'Chưa trả lời')}
           </div>
 
         </div>
 
 
-        <div class="compare-item">
+        <div class="review-row">
 
-          <div class="compare-label">
-            Passage
+          <div class="review-label">
+            Đáp án đúng
           </div>
 
-          <div
-            class="passage-evidence"
-            onclick="focusEvidence(${n})"
-          >
+          <div class="review-correct">
+            ${DISPLAY_KEY[number]}
+          </div>
 
-            “${EVIDENCE[n]}”
+        </div>
 
-            <div class="evidence-help">
-              Nhấn để xem vị trí trong bài đọc
+
+        <div class="compare-box">
+
+          <div class="compare-heading">
+            🔎 Đối chiếu với bài đọc
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Notes
+            </div>
+
+            <div class="compare-text">
+              ${NOTE_TEXT[number]}
             </div>
 
           </div>
 
-        </div>
 
+          <div class="compare-item">
 
-        <div class="compare-item">
+            <div class="compare-label">
+              Passage
+            </div>
 
-          <div class="compare-label">
-            Phân tích
+            <div
+              class="passage-evidence"
+              role="button"
+              tabindex="0"
+              onclick="focusEvidence(${number})"
+              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusEvidence(${number});}"
+            >
+
+              “${EVIDENCE[number]}”
+
+              <div class="evidence-help">
+                Nhấn để xem vị trí trong bài đọc
+              </div>
+
+            </div>
+
           </div>
 
-          <div class="compare-analysis">
-            ${ANALYSIS[n]}
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Phân tích
+            </div>
+
+            <div class="compare-analysis">
+              ${ANALYSIS[number]}
+            </div>
+
           </div>
 
-        </div>
 
+          <div class="conclusion">
+            Điền: ${DISPLAY_KEY[number]}
+          </div>
 
-        <div class="conclusion">
-          Điền: ${DISPLAY_KEY[n]}
         </div>
 
       </div>
-
-    </div>
     `
+
   );
 
 }
 
 
-function focusEvidence(n){
+/* =========================================================
+   CLICK EVIDENCE
+========================================================= */
+
+function focusEvidence(number){
 
   document
   .querySelectorAll(
     '.evidence-source.evidence-focus'
   )
   .forEach(
-    el=>
-    el.classList.remove(
-      'evidence-focus'
-    )
+
+    element => {
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
   );
 
 
-  const targets=[
+  const targets=
+  [
     ...document.querySelectorAll(
-      `[data-evidence="${n}"]`
+      `[data-evidence="${number}"]`
     )
   ];
 
 
-  if(!targets.length)return;
+  if(
+    !targets.length
+  ){
+
+    return;
+
+  }
 
 
   targets.forEach(
-    el=>
-    el.classList.add(
-      'evidence-focus'
-    )
+
+    target => {
+
+      target.classList.add(
+        'evidence-focus'
+      );
+
+    }
+
   );
 
 
-  targets[0].scrollIntoView({
+  targets[0]
+  .scrollIntoView({
+
     behavior:'smooth',
+
     block:'center'
+
   });
 
 
   targets.forEach(
-    el=>{
 
-      el.style.animation='none';
+    target => {
 
-      void el.offsetWidth;
+      target.style.animation=
+      'none';
 
-      el.style.animation='';
+
+      void target.offsetWidth;
+
+
+      target.style.animation=
+      '';
 
     }
+
   );
 
 }
 
 
+/* =========================================================
+   RESULT
+========================================================= */
+
 function closeResult(){
 
-  resultOverlay.classList.add(
+  resultOverlay
+  .classList
+  .add(
     'hidden'
   );
 
 }
 
 
-/* HIGHLIGHT / NOTE */
+/* =========================================================
+   HIGHLIGHT / NOTE
+========================================================= */
 
 const selectionMenu=
-document.getElementById('selectionMenu');
+document.getElementById(
+  'selectionMenu'
+);
+
 
 const menuHighlight=
-document.getElementById('menuHighlight');
+document.getElementById(
+  'menuHighlight'
+);
+
 
 const menuNote=
-document.getElementById('menuNote');
+document.getElementById(
+  'menuNote'
+);
 
 
 function zoneRoot(zone){
 
   return document.getElementById(
-    zone==='passage'
+
+    zone === 'passage'
+
     ?
+
     'passageRoot'
+
     :
+
     'questionsRoot'
+
   );
 
 }
@@ -1839,19 +2548,28 @@ function saveMarkup(zone){
 
   document
   .querySelectorAll(
-    '.evidence-focus'
+    '.evidence-source.evidence-focus'
   )
   .forEach(
-    x=>
-    x.classList.remove(
-      'evidence-focus'
-    )
+
+    element => {
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
   );
 
 
   localStorage.setItem(
+
     markupKey(zone),
-    zoneRoot(zone).innerHTML
+
+    zoneRoot(zone)
+    .innerHTML
+
   );
 
 }
@@ -1859,27 +2577,157 @@ function saveMarkup(zone){
 
 function restoreMarkup(){
 
-  ['passage','questions']
+  [
+    'passage',
+    'questions'
+  ]
   .forEach(
-    zone=>{
 
-      const value=
+    zone => {
+
+      const html=
       localStorage.getItem(
         markupKey(zone)
       );
 
 
-      if(value){
+      if(html){
 
-        zoneRoot(zone).innerHTML=
-        value;
+        zoneRoot(zone)
+        .innerHTML=
+        html;
 
       }
 
 
-      bindContext(zone);
+      bindContext(
+        zone
+      );
 
     }
+
+  );
+
+}
+
+
+function resetMenu(){
+
+  menuMode=
+  'selection';
+
+
+  menuTarget=
+  null;
+
+
+  menuZone=
+  null;
+
+
+  menuHighlight.style.display=
+  '';
+
+
+  menuNote.style.display=
+  '';
+
+
+  menuHighlight.textContent=
+  '🖍 Highlight';
+
+
+  menuNote.textContent=
+  '📝 Take note';
+
+
+  menuHighlight
+  .classList
+  .remove(
+    'danger'
+  );
+
+
+  menuNote
+  .classList
+  .remove(
+    'danger'
+  );
+
+}
+
+
+function hideMenu(){
+
+  selectionMenu
+  .classList
+  .remove(
+    'show'
+  );
+
+
+  resetMenu();
+
+}
+
+
+function showMenu(rect){
+
+  selectionMenu
+  .classList
+  .add(
+    'show'
+  );
+
+
+  requestAnimationFrame(
+
+    ()=>{
+
+      const width=
+      selectionMenu.offsetWidth
+      ||
+      180;
+
+
+      const left=
+      Math.min(
+
+        window.innerWidth
+        -
+        width
+        -
+        10,
+
+        Math.max(
+
+          10,
+
+          rect.left
+          +
+          rect.width/2
+          -
+          width/2
+
+        )
+
+      );
+
+
+      selectionMenu.style.left=
+      left + 'px';
+
+
+      selectionMenu.style.top=
+      Math.max(
+        10,
+        rect.top - 47
+      )
+      +
+      'px';
+
+    }
+
   );
 
 }
@@ -1887,21 +2735,25 @@ function restoreMarkup(){
 
 function captureSelection(zone){
 
-  const sel=
+  const selection=
   window.getSelection();
 
 
   if(
-    !sel
+    !selection
     ||
-    !sel.rangeCount
+    selection.rangeCount===0
     ||
-    sel.isCollapsed
-  )return;
+    selection.isCollapsed
+  ){
+
+    return;
+
+  }
 
 
   const range=
-  sel.getRangeAt(0);
+  selection.getRangeAt(0);
 
 
   if(
@@ -1909,179 +2761,278 @@ function captureSelection(zone){
     .contains(
       range.commonAncestorContainer
     )
-  )return;
+  ){
+
+    return;
+
+  }
 
 
   savedSelection=
   range.cloneRange();
 
-  savedZone=zone;
 
-  menuMode='selection';
-
-  menuHighlight.textContent=
-  '🖍 Highlight';
-
-  menuNote.textContent=
-  '📝 Take note';
-
-  menuHighlight.style.display='';
-  menuNote.style.display='';
+  savedZone=
+  zone;
 
 
-  const rect=
-  range.getBoundingClientRect();
+  resetMenu();
 
 
-  selectionMenu.classList.add(
-    'show'
+  showMenu(
+    range.getBoundingClientRect()
   );
 
-
-  selectionMenu.style.left=
-  Math.max(
-    10,
-    rect.left
-  )
-  +'px';
+}
 
 
-  selectionMenu.style.top=
-  Math.max(
-    10,
-    rect.top-45
-  )
-  +'px';
+function clearSelection(){
+
+  const selection=
+  window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection=
+  null;
+
+
+  savedZone=
+  null;
 
 }
 
 
 function addHighlight(){
 
-  if(menuMode==='delete-highlight'){
+  if(
+    menuMode === 'delete-highlight'
+  ){
 
-    removeHighlight();
+    removeMark();
+
     return;
 
   }
 
 
-  if(!savedSelection)return;
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
 
 
-  const mark=
-  document.createElement(
-    'mark'
-  );
+  try{
+
+    const range=
+    savedSelection.cloneRange();
 
 
-  mark.className=
-  'user-highlight';
+    const mark=
+    document.createElement(
+      'mark'
+    );
 
 
-  mark.appendChild(
-    savedSelection.extractContents()
-  );
+    mark.className=
+    'user-highlight';
 
 
-  savedSelection.insertNode(
-    mark
-  );
+    mark.appendChild(
+      range.extractContents()
+    );
 
 
-  saveMarkup(savedZone);
+    range.insertNode(
+      mark
+    );
 
-  window.getSelection()
-  .removeAllRanges();
 
-  selectionMenu.classList.remove(
-    'show'
-  );
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
 
 }
 
 
 function addNote(){
 
-  if(menuMode==='delete-note'){
+  if(
+    menuMode === 'delete-note'
+  ){
 
-    removeNote();
+    removeMark();
+
     return;
 
   }
 
 
-  if(!savedSelection)return;
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
 
 
   const text=
-  prompt('Nhập ghi chú:');
-
-
-  if(!text)return;
-
-
-  const span=
-  document.createElement(
-    'span'
+  prompt(
+    'Nhập ghi chú:'
   );
 
 
-  span.className=
-  'note-anchor';
+  if(
+    text === null
+    ||
+    !text.trim()
+  ){
 
-  span.dataset.note=
-  text;
+    return;
 
-
-  span.appendChild(
-    savedSelection.extractContents()
-  );
-
-
-  savedSelection.insertNode(
-    span
-  );
+  }
 
 
-  saveMarkup(savedZone);
+  try{
 
-  window.getSelection()
-  .removeAllRanges();
+    const range=
+    savedSelection.cloneRange();
 
-  selectionMenu.classList.remove(
-    'show'
-  );
+
+    const span=
+    document.createElement(
+      'span'
+    );
+
+
+    span.className=
+    'note-anchor';
+
+
+    span.dataset.note=
+    text.trim();
+
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
 
 }
 
 
-function showDelete(
+function showDeleteMenu(
   target,
   zone,
   type
 ){
 
-  menuTarget=target;
-  menuZone=zone;
+  menuTarget=
+  target;
 
 
-  if(type==='highlight'){
+  menuZone=
+  zone;
 
-    menuMode='delete-highlight';
+
+  clearSelection();
+
+
+  if(
+    type === 'highlight'
+  ){
+
+    menuMode=
+    'delete-highlight';
+
 
     menuHighlight.textContent=
     '✕ Xóa highlight';
 
+
+    menuHighlight
+    .classList
+    .add(
+      'danger'
+    );
+
+
     menuNote.style.display=
     'none';
 
-  }else{
+  }
 
-    menuMode='delete-note';
+  else{
+
+    menuMode=
+    'delete-note';
+
 
     menuNote.textContent=
     '✕ Xóa note';
+
+
+    menuNote
+    .classList
+    .add(
+      'danger'
+    );
+
 
     menuHighlight.style.display=
     'none';
@@ -2089,36 +3040,35 @@ function showDelete(
   }
 
 
-  const rect=
-  target.getBoundingClientRect();
-
-
-  selectionMenu.classList.add(
-    'show'
+  showMenu(
+    target
+    .getBoundingClientRect()
   );
-
-
-  selectionMenu.style.left=
-  Math.max(10,rect.left)+'px';
-
-
-  selectionMenu.style.top=
-  Math.max(10,rect.top-45)+'px';
 
 }
 
 
-function removeHighlight(){
+function removeMark(){
 
-  const p=
+  if(!menuTarget){
+    return;
+  }
+
+
+  const parent=
   menuTarget.parentNode;
 
 
-  while(menuTarget.firstChild){
+  while(
+    menuTarget.firstChild
+  ){
 
-    p.insertBefore(
+    parent.insertBefore(
+
       menuTarget.firstChild,
+
       menuTarget
+
     );
 
   }
@@ -2126,20 +3076,16 @@ function removeHighlight(){
 
   menuTarget.remove();
 
-  p.normalize();
 
-  saveMarkup(menuZone);
+  parent.normalize();
 
-  selectionMenu.classList.remove(
-    'show'
+
+  saveMarkup(
+    menuZone
   );
 
-}
 
-
-function removeNote(){
-
-  removeHighlight();
+  hideMenu();
 
 }
 
@@ -2150,78 +3096,183 @@ function bindContext(zone){
   zoneRoot(zone);
 
 
+  if(!root){
+    return;
+  }
+
+
   root.addEventListener(
+
     'mouseup',
-    ()=>setTimeout(
-      ()=>captureSelection(zone),
-      0
-    )
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        0
+
+      );
+
+    }
+
   );
 
 
   root.addEventListener(
+
+    'touchend',
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        120
+
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
     'click',
-    e=>{
+
+    event => {
+
+      const highlight=
+      event.target.closest(
+        'mark.user-highlight'
+      );
+
 
       const note=
-      e.target.closest(
+      event.target.closest(
         '.note-anchor'
       );
 
 
-      const mark=
-      e.target.closest(
-        '.user-highlight'
-      );
+      if(highlight){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
 
 
       if(note){
 
-        showDelete(
+        event.stopPropagation();
+
+
+        showDeleteMenu(
           note,
           zone,
           'note'
         );
 
-      }else if(mark){
-
-        showDelete(
-          mark,
-          zone,
-          'highlight'
-        );
-
       }
 
     }
+
   );
 
 }
 
 
-menuHighlight.onclick=
-addHighlight;
+menuHighlight
+.addEventListener(
+  'click',
+  addHighlight
+);
 
-menuNote.onclick=
-addNote;
+
+menuNote
+.addEventListener(
+  'click',
+  addNote
+);
 
 
-function escapeHTML(v){
+document
+.addEventListener(
 
-  return String(v)
+  'mousedown',
+
+  event => {
+
+    if(
+      !selectionMenu.contains(
+        event.target
+      )
+      &&
+      !event.target.closest(
+        '.user-highlight'
+      )
+      &&
+      !event.target.closest(
+        '.note-anchor'
+      )
+    ){
+
+      hideMenu();
+
+    }
+
+  }
+
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value
+  )
   .replace(
+
     /[&<>"']/g,
-    c=>({
+
+    char => ({
+
       '&':'&amp;',
+
       '<':'&lt;',
+
       '>':'&gt;',
+
       '"':'&quot;',
+
       "'":'&#39;'
-    })[c]
+
+    })[char]
+
   );
 
 }
 
+
+/* =========================================================
+   INIT
+========================================================= */
 
 prefill();
 
