@@ -1,0 +1,3324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>Table Completion 01 — Stepwells</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+/* HEADER */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:linear-gradient(
+    100deg,
+    #1c0e49,
+    #281260,
+    #37217e
+  );
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1400px,calc(100% - 18px));
+  min-height:62px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:tabular-nums;
+  font-size:19px;
+  font-weight:950;
+  background:rgba(255,255,255,.13);
+  padding:8px 11px;
+  border-radius:9px;
+}
+
+/* PAGE */
+
+.page{
+  width:min(1400px,calc(100% - 18px));
+  margin:auto;
+  padding:18px 0 46px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+  color:#21164b;
+  font-size:27px;
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+/* PROGRESS */
+
+.progress-wrap{
+  min-width:245px;
+}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--muted);
+  font-size:10.5px;
+  font-weight:850;
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+  background:#e5e8ef;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(
+    90deg,
+    var(--purple2),
+    var(--blue)
+  );
+  transition:width .2s ease;
+}
+
+/* WORKSPACE */
+
+.workspace{
+  display:grid;
+  grid-template-columns:.92fr 1.08fr;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(35,25,75,.05);
+}
+
+.pane{
+  min-width:0;
+  overflow:auto;
+  max-height:calc(100vh - 205px);
+}
+
+.passage{
+  border-right:1px solid var(--line);
+  background:#fff;
+}
+
+.questions{
+  background:#fafbfe;
+}
+
+.content{
+  padding:20px 22px;
+}
+
+.passage h2{
+  margin:0 0 14px;
+  text-align:center;
+  color:#21164b;
+  font-size:21px;
+}
+
+.passage p{
+  margin:0 0 15px;
+  font-size:13.5px;
+  line-height:1.78;
+  text-align:justify;
+}
+
+/* INSTRUCTIONS */
+
+.instructions{
+  margin-bottom:13px;
+}
+
+.instructions h3{
+  margin:0 0 6px;
+  color:#21164b;
+  font-size:17px;
+}
+
+.instructions p{
+  margin:3px 0;
+  color:#5f6677;
+  font-size:11.5px;
+  line-height:1.55;
+}
+
+.rule{
+  display:inline-block;
+  margin-top:7px;
+  padding:7px 10px;
+  border-radius:8px;
+  background:#f0ecff;
+  color:#5d43ae;
+  font-size:10.5px;
+  font-weight:900;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+
+.ielts-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px;
+}
+
+.ielts-table th,
+.ielts-table td{
+  border-bottom:1px solid var(--line);
+  padding:11px 12px;
+  vertical-align:middle;
+  text-align:left;
+  font-size:11.5px;
+  line-height:1.55;
+}
+
+.ielts-table th{
+  background:#fbfbfd;
+  color:#21164b;
+  font-weight:950;
+}
+
+.ielts-table tr:last-child td{
+  border-bottom:0;
+}
+
+.namecell{
+  font-weight:900;
+  font-style:italic;
+  color:#21164b;
+}
+
+.qno{
+  font-weight:950;
+  color:#281260;
+  margin-right:2px;
+}
+
+.answer-inline{
+  display:inline-block;
+  vertical-align:middle;
+  min-width:118px;
+  margin:2px 4px;
+}
+
+.answer-inline input{
+  width:100%;
+  padding:7px 8px;
+  border:1px solid #ccd2df;
+  border-radius:7px;
+  outline:none;
+  background:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+
+.answer-inline input:focus{
+  border-color:#6a55bf;
+  box-shadow:0 0 0 3px rgba(78,56,160,.08);
+}
+
+.answer-inline input.correct{
+  border-color:#8ed6b4;
+  background:#f6fcf8;
+  color:#126b48;
+}
+
+.answer-inline input.wrong{
+  border-color:#efb7bf;
+  background:#fff7f8;
+  color:#9b2838;
+}
+
+/* REVIEW */
+
+.review-list{
+  margin-top:12px;
+}
+
+.inline-review{
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #f0d0d5;
+  border-left:4px solid var(--bad);
+  border-radius:9px;
+  background:#fffafb;
+  font-size:11px;
+  line-height:1.55;
+}
+
+.review-title{
+  font-weight:950;
+  color:#21164b;
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:4px 8px;
+  margin:4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+  font-weight:900;
+}
+
+/* ĐỐI CHIẾU */
+
+.compare-box{
+  margin-top:12px;
+  padding:13px;
+  background:#f8f7ff;
+  border:1px solid #ddd6fb;
+  border-radius:10px;
+}
+
+.compare-heading{
+  margin-bottom:11px;
+  color:#281260;
+  font-size:12px;
+  font-weight:950;
+}
+
+.compare-item{
+  margin-top:10px;
+}
+
+.compare-label{
+  margin-bottom:4px;
+  color:#6f7890;
+  font-size:9.5px;
+  font-weight:950;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+
+.compare-text{
+  padding:9px 10px;
+  background:#fff;
+  border:1px solid #e5e7ee;
+  border-radius:7px;
+  font-size:11px;
+  line-height:1.6;
+}
+
+.passage-evidence{
+  padding:9px 10px;
+  background:#eef3ff;
+  border-left:3px solid #5773d9;
+  border-radius:6px;
+  color:#293a70;
+  font-size:11px;
+  font-style:italic;
+  line-height:1.6;
+}
+
+.compare-analysis{
+  padding:9px 10px;
+  background:#fff;
+  border-radius:7px;
+  font-size:11px;
+  line-height:1.65;
+}
+
+.conclusion-box{
+  margin-top:10px;
+  padding:9px 10px;
+  background:#f2fff8;
+  border:1px solid #bde5ce;
+  border-radius:7px;
+}
+
+.conclusion-text{
+  color:#126b48;
+  font-size:11px;
+  font-weight:900;
+  line-height:1.55;
+}
+
+/* HIGHLIGHT + NOTE */
+
+mark.user-highlight{
+  background:#fff29a;
+  color:inherit;
+  border-radius:3px;
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+  border-bottom:2px dotted #e28b19;
+  cursor:pointer;
+  border-radius:2px;
+}
+
+.selection-menu{
+  position:fixed;
+  z-index:90;
+  display:none;
+  align-items:center;
+  gap:5px;
+  padding:6px;
+  background:#21164b;
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+  background:#fff;
+  color:#35285e;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:10.5px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+  background:#fff1f3;
+}
+
+/* BOTTOM */
+
+.bottom{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  width:min(1400px,calc(100% - 18px));
+  margin:0 auto;
+  padding:9px 0 6px;
+  background:linear-gradient(
+    to top,
+    var(--bg) 75%,
+    rgba(245,247,251,.88)
+  );
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+  gap:5px;
+  flex:1;
+}
+
+.nav button{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+  border-color:#f0b5bd;
+}
+
+.submit{
+  border:0;
+  background:linear-gradient(
+    100deg,
+    var(--purple),
+    var(--purple2)
+  );
+  color:#fff;
+  border-radius:9px;
+  padding:10px 15px;
+  font-weight:900;
+}
+
+/* RESULT */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(15,11,35,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.overlay.hidden{
+  display:none;
+}
+
+.result{
+  width:min(590px,100%);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.score{
+  font-size:38px;
+  font-weight:950;
+  color:#21164b;
+  margin:7px 0;
+}
+
+.btn{
+  border:0;
+  background:linear-gradient(
+    100deg,
+    var(--purple),
+    var(--purple2)
+  );
+  color:#fff;
+  border-radius:9px;
+  padding:10px 13px;
+  font-weight:900;
+}
+
+/* START */
+
+.start{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  background:rgba(16,12,40,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.start.hidden{
+  display:none;
+}
+
+.start-card{
+  width:min(460px,100%);
+  background:#fff;
+  border-radius:19px;
+  padding:23px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.start-card h2{
+  margin:5px 0 6px;
+  color:#21164b;
+}
+
+.start-card p{
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+  font-size:10.5px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.field input{
+  width:100%;
+  padding:10px;
+  border:1px solid #d5d9e2;
+  border-radius:9px;
+  outline:none;
+}
+
+.start-card .btn{
+  width:100%;
+  margin-top:10px;
+}
+
+@media(max-width:900px){
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .passage{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .pane{
+    max-height:none;
+  }
+
+  .hero{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="start" class="start">
+
+  <div class="start-card">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:#6a4db4
+    ">
+      Reading Practice
+    </div>
+
+    <h2>
+      Table Completion 01
+    </h2>
+
+    <p>
+      Stepwells · Questions 9–13
+    </p>
+
+    <div class="field">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+
+    </div>
+
+    <div class="field">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+
+    </div>
+
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
+      Bắt đầu luyện
+    </button>
+
+    <div
+      id="startError"
+      style="
+        font-size:10.5px;
+        color:#b83345;
+        margin-top:7px
+      "
+    ></div>
+
+  </div>
+
+</div>
+
+
+<header class="top">
+
+  <div class="topin">
+
+    <div class="left">
+
+      <a
+        class="back"
+        href="../"
+      >
+        ← Table Completion
+      </a>
+
+      <div class="brand">
+        📖 Table Completion 01
+      </div>
+
+    </div>
+
+    <div
+      class="student"
+      id="studentInfo"
+    ></div>
+
+    <div
+      class="timer"
+      id="timer"
+    >
+      00:00
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <div>
+
+      <h1>
+        Table Completion 01
+      </h1>
+
+      <p>
+        Stepwells · Questions 9–13
+      </p>
+
+    </div>
+
+
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+
+        <span>
+          Tiến độ
+        </span>
+
+        <span id="progressText">
+          0/5 câu đã trả lời
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="workspace">
+
+    <!-- PASSAGE -->
+
+    <div class="pane passage">
+
+      <div
+        id="passageRoot"
+        class="content"
+      >
+
+        <h2>
+          Stepwells
+        </h2>
+
+
+        <p>
+          In Patan, the state’s ancient capital, the stepwell of
+          <i>Rani Ki Vav</i> (Queen’s Stepwell) is perhaps the finest current example.
+          It was built by Queen Udayamati during the late 11th century,
+          but became silted up following a flood during the 13th century.
+          But the Archaeological Survey of India began restoring it in the 1960s,
+          and today it’s in pristine condition.
+          At 65 metres long, 20 metres wide and 27 metres deep,
+          <i>Rani Ki Vav</i> features 500 distinct sculptures carved into niches
+          throughout the monument, depicting gods such as Vishnu and Parvati
+          in various incarnations.
+          Incredibly, in January 2001, this ancient structure survived
+          a devastating earthquake that measured 7.6 on the Richter scale.
+        </p>
+
+
+        <p>
+          Another example is the <i>Surya Kund</i> in Modhera,
+          northern Gujarat, next to the Sun Temple,
+          built by King Bhima I in 1026 to honour the sun god Surya.
+          It’s actually a tank (<i>kund</i> means reservoir or pond)
+          rather than a well, but displays the hallmarks of stepwell architecture,
+          including four sides of steps that descend to the bottom
+          in a stunning geometrical formation.
+          The terraces house 108 small, intricately carved shrines
+          between the sets of steps.
+        </p>
+
+
+        <p>
+          In the old ruined town of Abhaneri,
+          about 95 kilometres east of Jaipur,
+          is <i>Chand Baori</i>, one of India’s oldest and deepest wells;
+          aesthetically, it’s perhaps one of the most dramatic.
+          Built in around 850 AD next to the temple of Harshat Mata,
+          the baori comprises hundreds of zigzagging steps
+          that run along three of its sides,
+          steeply descending 11 storeys,
+          resulting in a striking geometric pattern when seen from afar.
+          On the fourth side, covered verandas supported by ornate pillars
+          overlook the steps.
+        </p>
+
+
+        <p>
+          Still in public use is <i>Neemrana Ki Baori</i>,
+          located just off the Jaipur–Dehli highway.
+          Constructed in around 1700,
+          it’s nine storeys deep,
+          with the last two levels underwater.
+          At ground level, there are 86 colonnaded openings
+          from where the visitor descends 170 steps
+          to the deepest water source.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- QUESTIONS -->
+
+    <div class="pane questions">
+
+      <div
+        id="questionsRoot"
+        class="content"
+      >
+
+        <div class="instructions">
+
+          <h3>
+            Questions 9–13
+          </h3>
+
+          <p>
+            Complete the table below.
+          </p>
+
+          <p>
+            Choose
+            <b>ONE WORD AND/OR A NUMBER</b>
+            from the passage for each answer.
+          </p>
+
+          <div class="rule">
+            ONE WORD AND/OR A NUMBER
+          </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+          <table class="ielts-table">
+
+            <thead>
+
+              <tr>
+                <th>Stepwells</th>
+                <th>Date</th>
+                <th>Features</th>
+                <th>Other notes</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+
+              <!-- RANI KI VAV -->
+
+              <tr>
+
+                <td class="namecell">
+                  Rani Ki Vav
+                </td>
+
+                <td>
+                  Late 11th century
+                </td>
+
+                <td>
+                  As many as 500 sculptures decorate the monument
+                </td>
+
+                <td>
+
+                  Restored in the 1960s
+
+                  <br><br>
+
+                  Excellent condition despite the
+
+                  <span class="qno">
+                    9.
+                  </span>
+
+                  <span class="answer-inline">
+
+                    <input
+                      id="a9"
+                      type="text"
+                      autocomplete="off"
+                      oninput="saveAnswer(9,this.value)"
+                      placeholder="answer"
+                    >
+
+                  </span>
+
+                  of 2001.
+
+                </td>
+
+              </tr>
+
+
+              <!-- SURYA KUND -->
+
+              <tr>
+
+                <td class="namecell">
+                  Surya Kund
+                </td>
+
+                <td>
+                  1026
+                </td>
+
+                <td>
+
+                  Steps on the
+
+                  <span class="qno">
+                    10.
+                  </span>
+
+                  <span class="answer-inline">
+
+                    <input
+                      id="a10"
+                      type="text"
+                      autocomplete="off"
+                      oninput="saveAnswer(10,this.value)"
+                      placeholder="answer"
+                    >
+
+                  </span>
+
+                  in a geometric pattern
+
+                  <br><br>
+
+                  Carved shrines.
+
+                </td>
+
+                <td>
+
+                  Looks more like a
+
+                  <span class="qno">
+                    11.
+                  </span>
+
+                  <span class="answer-inline">
+
+                    <input
+                      id="a11"
+                      type="text"
+                      autocomplete="off"
+                      oninput="saveAnswer(11,this.value)"
+                      placeholder="answer"
+                    >
+
+                  </span>
+
+                  than a well.
+
+                </td>
+
+              </tr>
+
+
+              <!-- RANIJI KI BAORI -->
+
+              <tr>
+
+                <td class="namecell">
+                  Raniji Ki Baori
+                </td>
+
+                <td>
+                  1699
+                </td>
+
+                <td>
+                  Intricately carved monument
+                </td>
+
+                <td>
+                  One of 21 <i>baoris</i> in the area
+                  commissioned by Queen Nathavatji
+                </td>
+
+              </tr>
+
+
+              <!-- CHAND BAORI -->
+
+              <tr>
+
+                <td class="namecell">
+                  Chand Baori
+                </td>
+
+                <td>
+                  850 AD
+                </td>
+
+                <td>
+                  Steps take you down 11 storeys to the bottom
+                </td>
+
+                <td>
+
+                  Old, deep and very dramatic
+
+                  <br><br>
+
+                  Has
+
+                  <span class="qno">
+                    12.
+                  </span>
+
+                  <span class="answer-inline">
+
+                    <input
+                      id="a12"
+                      type="text"
+                      autocomplete="off"
+                      oninput="saveAnswer(12,this.value)"
+                      placeholder="answer"
+                    >
+
+                  </span>
+
+                  which provide a view to the steps.
+
+                </td>
+
+              </tr>
+
+
+              <!-- NEEMRANA -->
+
+              <tr>
+
+                <td class="namecell">
+                  Neemrana Ki Baori
+                </td>
+
+                <td>
+                  1700
+                </td>
+
+                <td>
+
+                  Has two
+
+                  <span class="qno">
+                    13.
+                  </span>
+
+                  <span class="answer-inline">
+
+                    <input
+                      id="a13"
+                      type="text"
+                      autocomplete="off"
+                      oninput="saveAnswer(13,this.value)"
+                      placeholder="answer"
+                    >
+
+                  </span>
+
+                  levels.
+
+                </td>
+
+                <td>
+                  Used by public today
+                </td>
+
+              </tr>
+
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div
+          id="reviewList"
+          class="review-list"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<div class="bottom">
+
+  <div class="nav">
+
+    <button
+      id="nav9"
+      onclick="goQ(9)"
+    >
+      9
+    </button>
+
+    <button
+      id="nav10"
+      onclick="goQ(10)"
+    >
+      10
+    </button>
+
+    <button
+      id="nav11"
+      onclick="goQ(11)"
+    >
+      11
+    </button>
+
+    <button
+      id="nav12"
+      onclick="goQ(12)"
+    >
+      12
+    </button>
+
+    <button
+      id="nav13"
+      onclick="goQ(13)"
+    >
+      13
+    </button>
+
+  </div>
+
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
+</div>
+
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:#6a4db4
+    ">
+      Kết quả luyện tập
+    </div>
+
+    <div
+      id="resultStudent"
+      style="
+        margin-top:5px;
+        font-size:12px;
+        color:var(--muted)
+      "
+    ></div>
+
+    <div
+      id="resultScore"
+      class="score"
+    >
+      0 / 5
+    </div>
+
+    <div id="resultPercent"></div>
+
+    <p style="
+      font-size:11px;
+      color:var(--muted)
+    ">
+      Các câu sai được đối chiếu trực tiếp với bài đọc ở bên dưới bảng.
+    </p>
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* ===============================
+   CONFIG
+================================ */
+
+const RESULT_ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const ATTEMPT_KEY=
+'PRACTICE_TABLECOMPLETION01_STEPWELLS_V1';
+
+
+/* ===============================
+   ANSWERS
+================================ */
+
+const KEYS={
+
+  9:[
+    'earthquake'
+  ],
+
+  10:[
+    'four sides',
+    '4 sides'
+  ],
+
+  11:[
+    'tank'
+  ],
+
+  12:[
+    'verandas',
+    'verandahs'
+  ],
+
+  13:[
+    'underwater'
+  ]
+
+};
+
+
+const DISPLAY_KEY={
+
+  9:
+  'earthquake',
+
+  10:
+  'four sides / 4 sides',
+
+  11:
+  'tank',
+
+  12:
+  'verandas / verandahs',
+
+  13:
+  'underwater'
+
+};
+
+
+/* ===============================
+   TABLE QUESTION TEXT
+================================ */
+
+const QUESTION_TEXT={
+
+  9:
+  'Excellent condition despite the ______ of 2001.',
+
+  10:
+  'Steps on the ______ in a geometric pattern.',
+
+  11:
+  'Looks more like a ______ than a well.',
+
+  12:
+  'Has ______ which provide a view to the steps.',
+
+  13:
+  'Has two ______ levels.'
+
+};
+
+
+/* ===============================
+   PASSAGE EVIDENCE
+================================ */
+
+const EVIDENCE={
+
+  9:
+  'Incredibly, in January 2001, this ancient structure survived a devastating earthquake that measured 7.6 on the Richter scale.',
+
+  10:
+  '...including four sides of steps that descend to the bottom in a stunning geometrical formation.',
+
+  11:
+  'It’s actually a tank (kund means reservoir or pond) rather than a well...',
+
+  12:
+  'On the fourth side, covered verandas supported by ornate pillars overlook the steps.',
+
+  13:
+  '...it’s nine storeys deep, with the last two levels underwater.'
+
+};
+
+
+/* ===============================
+   ANALYSIS
+================================ */
+
+const ANALYSIS={
+
+  9:
+  `
+    Bảng nhắc đến một sự kiện xảy ra vào năm 2001
+    và công trình vẫn ở tình trạng rất tốt sau sự kiện đó.
+    Passage xác định sự kiện này là một trận
+    <b>earthquake</b>.
+  `,
+
+  10:
+  `
+    Table dùng cách diễn đạt
+    <b>“in a geometric pattern”</b>.
+    Passage nói có
+    <b>four sides</b>
+    of steps tạo thành
+    “a stunning geometrical formation”.
+    Vì vậy đáp án là
+    <b>four sides</b>
+    hoặc
+    <b>4 sides</b>.
+  `,
+
+  11:
+  `
+    Table hỏi Surya Kund trông giống một thứ khác hơn là một cái giếng.
+    Passage nói trực tiếp:
+    <b>“It’s actually a tank rather than a well.”</b>
+    Vì vậy từ cần điền là
+    <b>tank</b>.
+  `,
+
+  12:
+  `
+    Table hỏi bộ phận nào cho phép nhìn xuống các bậc thang.
+    Passage nói
+    <b>covered verandas</b>
+    “overlook the steps”.
+    Vì vậy đáp án là
+    <b>verandas</b>.
+    Cách viết
+    <b>verandahs</b>
+    cũng được chấp nhận.
+  `,
+
+  13:
+  `
+    Table nói Neemrana Ki Baori có hai tầng như thế nào.
+    Passage nói:
+    <b>“the last two levels underwater”</b>.
+    Vì vậy từ cần điền là
+    <b>underwater</b>.
+  `
+
+};
+
+
+/* ===============================
+   STATE
+================================ */
+
+let startedAt=0;
+
+let submitted=false;
+
+let savedSelection=null;
+
+let savedZone=null;
+
+let menuMode='selection';
+
+let menuTarget=null;
+
+let menuZone=null;
+
+
+/* ===============================
+   ANSWER CHECK
+================================ */
+
+function normalizeAnswer(value){
+
+  return String(
+    value || ''
+  )
+  .trim()
+  .toLowerCase()
+  .replace(
+    /\s+/g,
+    ' '
+  );
+
+}
+
+
+function isCorrect(
+  n,
+  value
+){
+
+  const answer=
+  normalizeAnswer(
+    value
+  );
+
+
+  return KEYS[n]
+  .some(
+    key =>
+    normalizeAnswer(key)
+    ===
+    answer
+  );
+
+}
+
+
+/* ===============================
+   STUDENT
+================================ */
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+
+      ||
+
+      'null'
+
+    );
+
+  }
+
+  catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const student=
+  readStudent();
+
+
+  if(student){
+
+    studentName.value=
+    student.name || '';
+
+    studentClass.value=
+    student.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name=
+  studentName.value.trim();
+
+
+  const className=
+  studentClass.value.trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    startError.textContent=
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+
+      name:name,
+
+      className:className
+
+    })
+
+  );
+
+
+  studentInfo.textContent=
+  `${name} · ${className}`;
+
+
+  start
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  startedAt=
+  Date.now();
+
+
+  restoreMarkup();
+
+  restoreAnswers();
+
+  updateProgress();
+
+}
+
+
+/* ===============================
+   TIMER
+================================ */
+
+function fmt(sec){
+
+  sec=
+  Math.max(
+    0,
+    Math.floor(sec)
+  );
+
+
+  const h=
+  Math.floor(
+    sec / 3600
+  );
+
+
+  const m=
+  Math.floor(
+    (sec % 3600) / 60
+  );
+
+
+  const s=
+  sec % 60;
+
+
+  return h
+
+  ?
+
+  `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+
+  :
+
+  `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+}
+
+
+setInterval(
+
+  ()=>{
+
+    if(startedAt){
+
+      timer.textContent=
+      fmt(
+        (
+          Date.now()
+          -
+          startedAt
+        )
+        /
+        1000
+      );
+
+    }
+
+  },
+
+  500
+
+);
+
+
+/* ===============================
+   SAVE ANSWERS
+================================ */
+
+function saveAnswer(
+  n,
+  value
+){
+
+  if(submitted){
+    return;
+  }
+
+
+  localStorage.setItem(
+
+    `${ATTEMPT_KEY}_q${n}`,
+
+    value
+
+  );
+
+
+  navState(n);
+
+  updateProgress();
+
+}
+
+
+function getAnswer(n){
+
+  return localStorage.getItem(
+
+    `${ATTEMPT_KEY}_q${n}`
+
+  )
+
+  ||
+
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  [
+    9,
+    10,
+    11,
+    12,
+    13
+  ]
+  .forEach(
+    n => {
+
+      const input=
+      document.getElementById(
+        'a' + n
+      );
+
+
+      if(input){
+
+        input.value=
+        getAnswer(n);
+
+      }
+
+
+      navState(n);
+
+    }
+  );
+
+}
+
+
+function navState(n){
+
+  document
+  .getElementById(
+    'nav' + n
+  )
+  .classList
+  .toggle(
+
+    'answered',
+
+    !!normalizeAnswer(
+      getAnswer(n)
+    )
+
+  );
+
+}
+
+
+function updateProgress(){
+
+  const answered=
+  [
+    9,
+    10,
+    11,
+    12,
+    13
+  ]
+  .filter(
+    n =>
+    normalizeAnswer(
+      getAnswer(n)
+    )
+  )
+  .length;
+
+
+  progressText.textContent=
+  `${answered}/5 câu đã trả lời`;
+
+
+  progressBar.style.width=
+  (
+    answered
+    /
+    5
+    *
+    100
+  )
+  +
+  '%';
+
+}
+
+
+function goQ(n){
+
+  const input=
+  document.getElementById(
+    'a' + n
+  );
+
+
+  input
+  ?.scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  setTimeout(
+    ()=>input?.focus(),
+    300
+  );
+
+}
+
+
+/* ===============================
+   SUBMIT
+================================ */
+
+async function submitPractice(){
+
+  if(submitted){
+    return;
+  }
+
+
+  submitted=
+  true;
+
+
+  let score=
+  0;
+
+
+  const answers=
+  {};
+
+
+  reviewList.innerHTML=
+  '';
+
+
+  [
+    9,
+    10,
+    11,
+    12,
+    13
+  ]
+  .forEach(
+    n => {
+
+      const user=
+      getAnswer(n);
+
+
+      const ok=
+      isCorrect(
+        n,
+        user
+      );
+
+
+      answers[n]=
+      user || '';
+
+
+      if(ok){
+
+        score++;
+
+      }
+
+
+      const input=
+      document.getElementById(
+        'a' + n
+      );
+
+
+      input.disabled=
+      true;
+
+
+      input
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      document
+      .getElementById(
+        'nav' + n
+      )
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      if(!ok){
+
+        renderReview(
+          n,
+          user
+        );
+
+      }
+
+    }
+  );
+
+
+  const durationSeconds=
+  Math.floor(
+    (
+      Date.now()
+      -
+      startedAt
+    )
+    /
+    1000
+  );
+
+
+  const student=
+  readStudent();
+
+
+  resultStudent.textContent=
+  student
+
+  ?
+
+  `${student.name} · ${student.className}`
+
+  :
+
+  '';
+
+
+  resultScore.textContent=
+  `${score} / 5`;
+
+
+  resultPercent.textContent=
+  `${Math.round(score / 5 * 100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  const details=
+  JSON.stringify({
+
+    title:
+    'Stepwells - Table Completion 01',
+
+    answers:
+    answers,
+
+    correctAnswers:
+    DISPLAY_KEY
+
+  });
+
+
+  const body=
+  new URLSearchParams({
+
+    mode:
+    'PRACTICE',
+
+    name:
+    student?.name || '',
+
+    className:
+    student?.className || '',
+
+    skill:
+    'Reading',
+
+    practiceType:
+    'Table Completion',
+
+    practiceId:
+    '01',
+
+    score:
+    String(score),
+
+    total:
+    '5',
+
+    durationSeconds:
+    String(
+      durationSeconds
+    ),
+
+    details:
+    details,
+
+    submittedAt:
+    new Date()
+    .toISOString()
+
+  });
+
+
+  try{
+
+    await fetch(
+
+      RESULT_ENDPOINT,
+
+      {
+
+        method:
+        'POST',
+
+        mode:
+        'no-cors',
+
+        headers:{
+
+          'Content-Type':
+          'application/x-www-form-urlencoded;charset=UTF-8'
+
+        },
+
+        body:
+        body.toString()
+
+      }
+
+    );
+
+  }
+
+  catch(err){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      err
+    );
+
+  }
+
+}
+
+
+/* ===============================
+   REVIEW
+================================ */
+
+function renderReview(
+  n,
+  user
+){
+
+  reviewList
+  .insertAdjacentHTML(
+
+    'beforeend',
+
+    `
+      <div class="inline-review">
+
+        <div class="review-title">
+          Câu ${n}
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án em chọn
+          </div>
+
+          <div class="review-user">
+            ${escapeHTML(user || 'Chưa trả lời')}
+          </div>
+
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án đúng
+          </div>
+
+          <div class="review-correct">
+            ${DISPLAY_KEY[n]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-box">
+
+          <div class="compare-heading">
+            🔎 Đối chiếu với bài đọc
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Table
+            </div>
+
+            <div class="compare-text">
+              ${QUESTION_TEXT[n]}
+            </div>
+
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Passage
+            </div>
+
+            <div class="passage-evidence">
+              “${EVIDENCE[n]}”
+            </div>
+
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Phân tích
+            </div>
+
+            <div class="compare-analysis">
+              ${ANALYSIS[n]}
+            </div>
+
+          </div>
+
+
+          <div class="conclusion-box">
+
+            <div class="compare-label">
+              Kết luận
+            </div>
+
+            <div class="conclusion-text">
+              Điền: ${DISPLAY_KEY[n]}
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    `
+
+  );
+
+}
+
+
+function closeResult(){
+
+  resultOverlay
+  .classList
+  .add(
+    'hidden'
+  );
+
+}
+
+
+/* ===============================
+   HIGHLIGHT + NOTES
+================================ */
+
+const selectionMenu=
+document.getElementById(
+  'selectionMenu'
+);
+
+
+const menuHighlight=
+document.getElementById(
+  'menuHighlight'
+);
+
+
+const menuNote=
+document.getElementById(
+  'menuNote'
+);
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+
+    zone === 'passage'
+
+    ?
+
+    'passageRoot'
+
+    :
+
+    'questionsRoot'
+
+  );
+
+}
+
+
+function notesKey(zone){
+
+  return `${ATTEMPT_KEY}_notes_${zone}`;
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function loadNotes(zone){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        notesKey(zone)
+      )
+
+      ||
+
+      '[]'
+
+    );
+
+  }
+
+  catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+function saveNotes(
+  zone,
+  notes
+){
+
+  localStorage.setItem(
+
+    notesKey(zone),
+
+    JSON.stringify(
+      notes
+    )
+
+  );
+
+}
+
+
+function saveMarkup(zone){
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    zoneRoot(zone)
+    .innerHTML
+
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  [
+    'passage',
+    'questions'
+  ]
+  .forEach(
+    zone => {
+
+      const markup=
+      localStorage.getItem(
+        markupKey(zone)
+      );
+
+
+      if(markup){
+
+        zoneRoot(zone)
+        .innerHTML=
+        markup;
+
+      }
+
+
+      bindContextActions(
+        zone
+      );
+
+    }
+  );
+
+}
+
+
+/* ===============================
+   FLOATING MENU
+================================ */
+
+function hideSelectionMenu(){
+
+  selectionMenu
+  .classList
+  .remove(
+    'show'
+  );
+
+
+  menuTarget=
+  null;
+
+
+  menuZone=
+  null;
+
+
+  menuMode=
+  'selection';
+
+}
+
+
+function resetMenuButtons(){
+
+  menuHighlight.style.display=
+  '';
+
+
+  menuNote.style.display=
+  '';
+
+
+  menuHighlight.textContent=
+  '🖍 Highlight';
+
+
+  menuNote.textContent=
+  '📝 Take note';
+
+
+  menuHighlight
+  .classList
+  .remove(
+    'danger'
+  );
+
+
+  menuNote
+  .classList
+  .remove(
+    'danger'
+  );
+
+}
+
+
+function positionMenu(rect){
+
+  selectionMenu
+  .classList
+  .add(
+    'show'
+  );
+
+
+  requestAnimationFrame(
+    ()=>{
+
+      const width=
+      selectionMenu.offsetWidth
+      ||
+      190;
+
+
+      const left=
+      Math.min(
+
+        window.innerWidth
+        -
+        width
+        -
+        10,
+
+        Math.max(
+
+          10,
+
+          rect.left
+          +
+          rect.width / 2
+          -
+          width / 2
+
+        )
+
+      );
+
+
+      const top=
+      Math.max(
+        10,
+        rect.top - 47
+      );
+
+
+      selectionMenu.style.left=
+      left + 'px';
+
+
+      selectionMenu.style.top=
+      top + 'px';
+
+    }
+  );
+
+}
+
+
+/* ===============================
+   TEXT SELECTION
+================================ */
+
+function captureSelection(zone){
+
+  const selection=
+  window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    selection.rangeCount === 0
+    ||
+    selection.isCollapsed
+  ){
+
+    return false;
+
+  }
+
+
+  const range=
+  selection.getRangeAt(0);
+
+
+  const root=
+  zoneRoot(zone);
+
+
+  if(
+    !root.contains(
+      range.commonAncestorContainer
+    )
+  ){
+
+    return false;
+
+  }
+
+
+  savedSelection=
+  range.cloneRange();
+
+
+  savedZone=
+  zone;
+
+
+  menuMode=
+  'selection';
+
+
+  menuZone=
+  zone;
+
+
+  menuTarget=
+  null;
+
+
+  resetMenuButtons();
+
+
+  positionMenu(
+    range.getBoundingClientRect()
+  );
+
+
+  return true;
+
+}
+
+
+function clearBrowserSelection(){
+
+  const selection=
+  window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection=
+  null;
+
+
+  savedZone=
+  null;
+
+}
+
+
+/* ===============================
+   ADD HIGHLIGHT
+================================ */
+
+function addHighlight(){
+
+  if(
+    menuMode
+    ===
+    'delete-highlight'
+  ){
+
+    removeHighlight();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+  savedSelection.cloneRange();
+
+
+  try{
+
+    const mark=
+    document.createElement(
+      'mark'
+    );
+
+
+    mark.className=
+    'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearBrowserSelection();
+
+
+    hideSelectionMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* ===============================
+   ADD NOTE
+================================ */
+
+function addNote(){
+
+  if(
+    menuMode
+    ===
+    'delete-note'
+  ){
+
+    removeNote();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+  savedSelection.cloneRange();
+
+
+  const quote=
+  range
+  .toString()
+  .trim();
+
+
+  const text=
+  prompt(
+    'Nhập ghi chú:'
+  );
+
+
+  if(
+    text === null
+    ||
+    !text.trim()
+  ){
+
+    return;
+
+  }
+
+
+  const id=
+  'n'
+  +
+  Date.now()
+  +
+  Math.random()
+  .toString(36)
+  .slice(2,5);
+
+
+  const span=
+  document.createElement(
+    'span'
+  );
+
+
+  span.className=
+  'note-anchor';
+
+
+  span.dataset.noteId=
+  id;
+
+
+  try{
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    const notes=
+    loadNotes(
+      savedZone
+    );
+
+
+    notes.push({
+
+      id:id,
+
+      quote:quote,
+
+      text:text.trim()
+
+    });
+
+
+    saveNotes(
+      savedZone,
+      notes
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearBrowserSelection();
+
+
+    hideSelectionMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* ===============================
+   DELETE MENU
+================================ */
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget=
+  target;
+
+
+  menuZone=
+  zone;
+
+
+  resetMenuButtons();
+
+
+  if(
+    type
+    ===
+    'highlight'
+  ){
+
+    menuMode=
+    'delete-highlight';
+
+
+    menuHighlight.textContent=
+    '✕ Xóa highlight';
+
+
+    menuHighlight
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuNote.style.display=
+    'none';
+
+  }
+
+  else{
+
+    menuMode=
+    'delete-note';
+
+
+    menuNote.textContent=
+    '✕ Xóa note';
+
+
+    menuNote
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuHighlight.style.display=
+    'none';
+
+  }
+
+
+  clearBrowserSelection();
+
+
+  positionMenu(
+    target
+    .getBoundingClientRect()
+  );
+
+}
+
+
+/* ===============================
+   REMOVE HIGHLIGHT
+================================ */
+
+function removeHighlight(){
+
+  if(!menuTarget){
+
+    return;
+
+  }
+
+
+  const zone=
+  menuZone;
+
+
+  const parent=
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    zone
+  );
+
+
+  hideSelectionMenu();
+
+
+  resetMenuButtons();
+
+}
+
+
+/* ===============================
+   REMOVE NOTE
+================================ */
+
+function removeNote(){
+
+  if(!menuTarget){
+
+    return;
+
+  }
+
+
+  const zone=
+  menuZone;
+
+
+  const id=
+  menuTarget.dataset.noteId;
+
+
+  const notes=
+  loadNotes(zone)
+  .filter(
+    note =>
+    note.id !== id
+  );
+
+
+  saveNotes(
+    zone,
+    notes
+  );
+
+
+  const parent=
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    zone
+  );
+
+
+  hideSelectionMenu();
+
+
+  resetMenuButtons();
+
+}
+
+
+/* ===============================
+   BIND
+================================ */
+
+function bindContextActions(zone){
+
+  const root=
+  zoneRoot(zone);
+
+
+  if(!root){
+
+    return;
+
+  }
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    ()=>{
+
+      resetMenuButtons();
+
+
+      setTimeout(
+        ()=>captureSelection(zone),
+        0
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    ()=>{
+
+      resetMenuButtons();
+
+
+      setTimeout(
+        ()=>captureSelection(zone),
+        120
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event => {
+
+      const note=
+      event.target.closest(
+        '.note-anchor'
+      );
+
+
+      const mark=
+      event.target.closest(
+        'mark.user-highlight'
+      );
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+
+        return;
+
+      }
+
+
+      if(mark){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          mark,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* ===============================
+   MENU EVENTS
+================================ */
+
+menuHighlight
+.addEventListener(
+  'click',
+  addHighlight
+);
+
+
+menuNote
+.addEventListener(
+  'click',
+  addNote
+);
+
+
+document
+.addEventListener(
+
+  'mousedown',
+
+  event => {
+
+    if(
+
+      !selectionMenu.contains(
+        event.target
+      )
+
+      &&
+
+      !event.target.closest(
+        'mark.user-highlight'
+      )
+
+      &&
+
+      !event.target.closest(
+        '.note-anchor'
+      )
+
+    ){
+
+      hideSelectionMenu();
+
+      resetMenuButtons();
+
+    }
+
+  }
+
+);
+
+
+window
+.addEventListener(
+
+  'scroll',
+
+  ()=>{
+
+    hideSelectionMenu();
+
+    resetMenuButtons();
+
+  },
+
+  true
+
+);
+
+
+/* ===============================
+   ESCAPE
+================================ */
+
+function escapeHTML(value){
+
+  return String(
+    value
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    char => ({
+
+      '&':'&amp;',
+
+      '<':'&lt;',
+
+      '>':'&gt;',
+
+      '"':'&quot;',
+
+      "'":'&#39;'
+
+    })[char]
+
+  );
+
+}
+
+
+/* ===============================
+   INIT
+================================ */
+
+prefill();
+
+</script>
+
+</body>
+</html>
