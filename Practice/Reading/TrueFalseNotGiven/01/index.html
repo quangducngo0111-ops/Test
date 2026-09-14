@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
 <title>True / False / Not Given 01 — Stepwells</title>
 
 <style>
@@ -23,8 +24,7 @@
   box-sizing:border-box;
 }
 
-html,
-body{
+html,body{
   margin:0;
   min-height:100%;
   font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
@@ -32,8 +32,7 @@ body{
   background:var(--bg);
 }
 
-button,
-input{
+button,input{
   font:inherit;
 }
 
@@ -41,7 +40,9 @@ button{
   cursor:pointer;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .top{
   position:sticky;
@@ -110,7 +111,9 @@ button{
   border-radius:9px;
 }
 
-/* MAIN */
+/* =========================
+   PAGE
+========================= */
 
 .page{
   width:min(1350px,calc(100% - 18px));
@@ -139,7 +142,9 @@ button{
   font-size:11.5px;
 }
 
-/* PROGRESS */
+/* =========================
+   PROGRESS
+========================= */
 
 .progress-wrap{
   min-width:245px;
@@ -174,12 +179,13 @@ button{
   transition:width .2s ease;
 }
 
-/* WORKSPACE */
+/* =========================
+   WORKSPACE
+========================= */
 
 .workspace{
   display:grid;
   grid-template-columns:1.05fr .95fr;
-  gap:0;
   min-height:calc(100vh - 190px);
   border:1px solid var(--line);
   border-radius:18px;
@@ -221,7 +227,9 @@ button{
   text-align:justify;
 }
 
-/* INSTRUCTIONS */
+/* =========================
+   INSTRUCTIONS
+========================= */
 
 .instructions{
   margin-bottom:13px;
@@ -243,7 +251,7 @@ button{
 .legend{
   display:grid;
   grid-template-columns:105px 1fr;
-  gap:3px 8px;
+  gap:4px 8px;
   font-size:11px;
   margin-top:8px;
   padding:10px;
@@ -256,7 +264,9 @@ button{
   color:#21164b;
 }
 
-/* QUESTIONS */
+/* =========================
+   QUESTIONS
+========================= */
 
 .qcard{
   background:#fff;
@@ -328,30 +338,32 @@ button{
   color:#9b2838;
 }
 
-/* REVIEW */
+/* =========================
+   REVIEW
+========================= */
 
 .inline-review{
-  margin-top:10px;
-  padding:11px;
+  margin-top:12px;
+  padding:12px;
   border:1px solid #f0d0d5;
   border-left:4px solid var(--bad);
-  border-radius:8px;
+  border-radius:9px;
   background:#fffafb;
   font-size:11px;
-  line-height:1.5;
+  line-height:1.55;
 }
 
 .review-title{
-  font-weight:900;
+  font-weight:950;
   color:#21164b;
-  margin-bottom:6px;
+  margin-bottom:7px;
 }
 
 .review-row{
   display:grid;
-  grid-template-columns:100px 1fr;
+  grid-template-columns:105px 1fr;
   gap:4px 8px;
-  margin:3px 0;
+  margin:4px 0;
 }
 
 .review-label{
@@ -361,7 +373,7 @@ button{
 
 .review-user{
   color:var(--bad);
-  font-weight:850;
+  font-weight:900;
 }
 
 .review-correct{
@@ -369,24 +381,84 @@ button{
   font-weight:900;
 }
 
-.explain{
-  margin-top:7px;
-  padding:8px 9px;
+/* =========================
+   COMPARE WITH PASSAGE
+========================= */
+
+.compare-box{
+  margin-top:12px;
+  padding:13px;
+  background:#f8f7ff;
+  border:1px solid #ddd6fb;
+  border-radius:10px;
+}
+
+.compare-heading{
+  margin-bottom:11px;
+  color:#281260;
+  font-size:12px;
+  font-weight:950;
+}
+
+.compare-item{
+  margin-top:10px;
+}
+
+.compare-label{
+  margin-bottom:4px;
+  color:#6f7890;
+  font-size:9.5px;
+  font-weight:950;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+
+.compare-text{
+  padding:9px 10px;
   background:#fff;
-  border-left:3px solid #6a55bf;
-  border-radius:5px;
+  border:1px solid #e5e7ee;
+  border-radius:7px;
+  font-size:11px;
+  line-height:1.6;
 }
 
-.evidence{
-  margin-top:7px;
-  padding:8px 9px;
-  background:#f2f5ff;
-  border:1px solid #d9e1fb;
-  border-radius:8px;
+.passage-evidence{
+  padding:9px 10px;
+  background:#eef3ff;
+  border-left:3px solid #5773d9;
+  border-radius:6px;
+  color:#293a70;
+  font-size:11px;
   font-style:italic;
+  line-height:1.6;
 }
 
-/* HIGHLIGHT + NOTE */
+.compare-analysis{
+  padding:9px 10px;
+  background:#fff;
+  border-radius:7px;
+  font-size:11px;
+  line-height:1.65;
+}
+
+.conclusion-box{
+  margin-top:10px;
+  padding:9px 10px;
+  background:#f2fff8;
+  border:1px solid #bde5ce;
+  border-radius:7px;
+}
+
+.conclusion-text{
+  color:#126b48;
+  font-size:11px;
+  font-weight:900;
+  line-height:1.55;
+}
+
+/* =========================
+   HIGHLIGHT + NOTE
+========================= */
 
 mark.user-highlight{
   background:#fff29a;
@@ -402,7 +474,9 @@ mark.user-highlight{
   border-radius:2px;
 }
 
-/* FLOATING MENU */
+/* =========================
+   FLOATING MENU
+========================= */
 
 .selection-menu{
   position:fixed;
@@ -436,7 +510,9 @@ mark.user-highlight{
   background:#fff1f3;
 }
 
-/* BOTTOM */
+/* =========================
+   BOTTOM
+========================= */
 
 .bottom{
   position:sticky;
@@ -499,7 +575,9 @@ mark.user-highlight{
   font-weight:900;
 }
 
-/* RESULT */
+/* =========================
+   RESULT
+========================= */
 
 .overlay{
   position:fixed;
@@ -545,7 +623,9 @@ mark.user-highlight{
   font-weight:900;
 }
 
-/* START */
+/* =========================
+   START
+========================= */
 
 .start{
   position:fixed;
@@ -639,7 +719,9 @@ mark.user-highlight{
 
 <body>
 
-<!-- START -->
+<!-- =========================
+     START
+========================= -->
 
 <div id="start" class="start">
 
@@ -665,6 +747,7 @@ mark.user-highlight{
 
     <div class="field">
       <label>Họ và tên</label>
+
       <input
         id="studentName"
         placeholder="Nguyễn Văn A"
@@ -673,6 +756,7 @@ mark.user-highlight{
 
     <div class="field">
       <label>Lớp</label>
+
       <input
         id="studentClass"
         placeholder="11A1"
@@ -700,7 +784,9 @@ mark.user-highlight{
 </div>
 
 
-<!-- HEADER -->
+<!-- =========================
+     HEADER
+========================= -->
 
 <header class="top">
 
@@ -738,7 +824,9 @@ mark.user-highlight{
 </header>
 
 
-<!-- MAIN -->
+<!-- =========================
+     MAIN
+========================= -->
 
 <main class="page">
 
@@ -755,7 +843,6 @@ mark.user-highlight{
       </p>
 
     </div>
-
 
     <div class="progress-wrap">
 
@@ -849,12 +936,9 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q1 -->
+        <!-- QUESTION 1 -->
 
-        <div
-          class="qcard"
-          id="q1"
-        >
+        <div class="qcard" id="q1">
 
           <div class="qhead">
 
@@ -871,33 +955,42 @@ mark.user-highlight{
           <div class="options">
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q1"
                 value="TRUE"
                 onchange="saveAnswer(1,this.value)"
               >
+
               TRUE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q1"
                 value="FALSE"
                 onchange="saveAnswer(1,this.value)"
               >
+
               FALSE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q1"
                 value="NOT GIVEN"
                 onchange="saveAnswer(1,this.value)"
               >
+
               NOT GIVEN
+
             </label>
 
           </div>
@@ -907,12 +1000,9 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q2 -->
+        <!-- QUESTION 2 -->
 
-        <div
-          class="qcard"
-          id="q2"
-        >
+        <div class="qcard" id="q2">
 
           <div class="qhead">
 
@@ -929,33 +1019,42 @@ mark.user-highlight{
           <div class="options">
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q2"
                 value="TRUE"
                 onchange="saveAnswer(2,this.value)"
               >
+
               TRUE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q2"
                 value="FALSE"
                 onchange="saveAnswer(2,this.value)"
               >
+
               FALSE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q2"
                 value="NOT GIVEN"
                 onchange="saveAnswer(2,this.value)"
               >
+
               NOT GIVEN
+
             </label>
 
           </div>
@@ -965,12 +1064,9 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q3 -->
+        <!-- QUESTION 3 -->
 
-        <div
-          class="qcard"
-          id="q3"
-        >
+        <div class="qcard" id="q3">
 
           <div class="qhead">
 
@@ -987,33 +1083,42 @@ mark.user-highlight{
           <div class="options">
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q3"
                 value="TRUE"
                 onchange="saveAnswer(3,this.value)"
               >
+
               TRUE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q3"
                 value="FALSE"
                 onchange="saveAnswer(3,this.value)"
               >
+
               FALSE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q3"
                 value="NOT GIVEN"
                 onchange="saveAnswer(3,this.value)"
               >
+
               NOT GIVEN
+
             </label>
 
           </div>
@@ -1023,12 +1128,9 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q4 -->
+        <!-- QUESTION 4 -->
 
-        <div
-          class="qcard"
-          id="q4"
-        >
+        <div class="qcard" id="q4">
 
           <div class="qhead">
 
@@ -1045,33 +1147,42 @@ mark.user-highlight{
           <div class="options">
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q4"
                 value="TRUE"
                 onchange="saveAnswer(4,this.value)"
               >
+
               TRUE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q4"
                 value="FALSE"
                 onchange="saveAnswer(4,this.value)"
               >
+
               FALSE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q4"
                 value="NOT GIVEN"
                 onchange="saveAnswer(4,this.value)"
               >
+
               NOT GIVEN
+
             </label>
 
           </div>
@@ -1081,12 +1192,9 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q5 -->
+        <!-- QUESTION 5 -->
 
-        <div
-          class="qcard"
-          id="q5"
-        >
+        <div class="qcard" id="q5">
 
           <div class="qhead">
 
@@ -1103,33 +1211,42 @@ mark.user-highlight{
           <div class="options">
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q5"
                 value="TRUE"
                 onchange="saveAnswer(5,this.value)"
               >
+
               TRUE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q5"
                 value="FALSE"
                 onchange="saveAnswer(5,this.value)"
               >
+
               FALSE
+
             </label>
 
             <label class="option">
+
               <input
                 type="radio"
                 name="q5"
                 value="NOT GIVEN"
                 onchange="saveAnswer(5,this.value)"
               >
+
               NOT GIVEN
+
             </label>
 
           </div>
@@ -1147,44 +1264,31 @@ mark.user-highlight{
 </main>
 
 
-<!-- BOTTOM -->
+<!-- =========================
+     BOTTOM NAV
+========================= -->
 
 <div class="bottom">
 
   <div class="nav">
 
-    <button
-      id="nav1"
-      onclick="goQ(1)"
-    >
+    <button id="nav1" onclick="goQ(1)">
       1
     </button>
 
-    <button
-      id="nav2"
-      onclick="goQ(2)"
-    >
+    <button id="nav2" onclick="goQ(2)">
       2
     </button>
 
-    <button
-      id="nav3"
-      onclick="goQ(3)"
-    >
+    <button id="nav3" onclick="goQ(3)">
       3
     </button>
 
-    <button
-      id="nav4"
-      onclick="goQ(4)"
-    >
+    <button id="nav4" onclick="goQ(4)">
       4
     </button>
 
-    <button
-      id="nav5"
-      onclick="goQ(5)"
-    >
+    <button id="nav5" onclick="goQ(5)">
       5
     </button>
 
@@ -1200,7 +1304,35 @@ mark.user-highlight{
 </div>
 
 
-<!-- RESULT -->
+<!-- =========================
+     FLOATING HIGHLIGHT MENU
+========================= -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
+<!-- =========================
+     RESULT OVERLAY
+========================= -->
 
 <div
   id="resultOverlay"
@@ -1256,35 +1388,23 @@ mark.user-highlight{
 </div>
 
 
-<!-- FLOATING HIGHLIGHT MENU -->
-
-<div
-  id="selectionMenu"
-  class="selection-menu"
->
-
-  <button
-    id="menuHighlight"
-    type="button"
-  >
-    🖍 Highlight
-  </button>
-
-  <button
-    id="menuNote"
-    type="button"
-  >
-    📝 Take note
-  </button>
-
-</div>
-
-
 <script>
 
 /* =========================================================
-   ANSWER KEY
-   ========================================================= */
+   CONFIG
+========================================================= */
+
+const RESULT_ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const ATTEMPT_KEY=
+'PRACTICE_TFNG01_STEPWELLS_V3';
+
+
+/* =========================================================
+   ANSWERS
+========================================================= */
 
 const KEY={
   1:'FALSE',
@@ -1295,57 +1415,140 @@ const KEY={
 };
 
 
-const EXPLAIN={
+/* =========================================================
+   STATEMENTS
+========================================================= */
+
+const STATEMENTS={
 
   1:
-  'Đoạn đọc nói stepwells là “Unique to the region”, tức là đặc trưng của khu vực này, không phải được tìm thấy trên khắp thế giới.',
+  'Examples of ancient stepwells can be found all over the world.',
 
   2:
-  'Ngoài việc tiếp cận nước, stepwells còn là nơi tụ họp, giải trí, thư giãn và thờ cúng.',
+  'Stepwells had a range of functions, in addition to those related to water collection.',
 
   3:
-  'Bài chỉ nói một vài stepwells còn tồn tại ở Delhi, không so sánh mức độ hấp dẫn của chúng với nơi khác.',
+  'The few existing stepwells in Delhi are more attractive than those found elsewhere.',
 
   4:
-  'Bài có nhắc tới các bậc đá nhưng không cho biết mất bao nhiêu năm để xây dựng chúng.',
+  'It took workers many years to build the stone steps characteristic of stepwells.',
 
   5:
-  'Mực nước thay đổi sau mùa mưa: khi nước cao chỉ cần đi xuống vài bậc, khi nước thấp phải xuống nhiều tầng hơn.'
-
-};
-
-
-const EVIDENCE={
-
-  1:
-  'Unique to the region, stepwells are often architecturally complex...',
-
-  2:
-  'they were places of gathering, of leisure, of relaxation and of worship',
-
-  3:
-  'while a few also survive in Delhi',
-
-  4:
-  'stepwells comprise a series of stone steps descending from ground level to the water source',
-
-  5:
-  'When the water level was high, the user needed only to descend a few steps... when it was low, several levels would have to be negotiated.'
+  'The number of steps above the water level in a stepwell altered during the course of a year.'
 
 };
 
 
 /* =========================================================
-   CONFIG
-   ========================================================= */
+   PASSAGE EVIDENCE
+========================================================= */
 
-const ATTEMPT_KEY=
-  'PRACTICE_TFNG01_STEPWELLS';
+const EVIDENCE={
+
+  1:
+  'Unique to the region, stepwells are often architecturally complex and vary widely in size and shape.',
+
+  2:
+  'During their heyday, they were places of gathering, of leisure, of relaxation and of worship for villagers of all but the lowest castes.',
+
+  3:
+  'Most stepwells are found dotted around the desert areas of Gujarat and Rajasthan, while a few also survive in Delhi.',
+
+  4:
+  'As their name suggests, stepwells comprise a series of stone steps descending from ground level to the water source.',
+
+  5:
+  'When the water level was high, the user needed only to descend a few steps to reach it; when it was low, several levels would have to be negotiated.'
+
+};
 
 
-const RESULT_ENDPOINT=
-  'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+/* =========================================================
+   COMPARISON
+========================================================= */
 
+const COMPARE={
+
+  1:
+  `
+    Statement nói <b>“all over the world”</b>,
+    trong khi bài đọc nói <b>“Unique to the region”</b>.
+    Nghĩa là stepwells là công trình đặc trưng của khu vực này,
+    không phải được tìm thấy trên toàn thế giới.
+    Hai thông tin trái ngược nhau.
+  `,
+
+  2:
+  `
+    Statement cho rằng stepwells có nhiều chức năng khác
+    ngoài việc tiếp cận và lấy nước.
+    Bài đọc xác nhận stepwells từng là nơi
+    <b>gathering, leisure, relaxation and worship</b>.
+    Vì vậy statement diễn đạt đúng thông tin của passage.
+  `,
+
+  3:
+  `
+    Passage chỉ xác nhận rằng
+    <b>một vài stepwells vẫn còn tồn tại ở Delhi</b>.
+    Tuy nhiên, passage không hề đưa ra bất kỳ so sánh nào
+    cho thấy chúng <b>“more attractive”</b>
+    hơn stepwells ở Gujarat, Rajasthan hay nơi khác.
+    Phần thông tin về mức độ hấp dẫn không xuất hiện trong bài.
+  `,
+
+  4:
+  `
+    Passage nói stepwells có
+    <b>“a series of stone steps”</b>
+    dẫn xuống nguồn nước.
+    Tuy nhiên, bài không cho biết
+    <b>công nhân mất bao nhiêu năm để xây dựng</b>
+    các bậc đá này.
+    Vì vậy không thể xác định statement là đúng hay sai từ passage.
+  `,
+
+  5:
+  `
+    Passage nói khi <b>mực nước cao</b>,
+    người dùng chỉ cần đi xuống vài bậc;
+    khi <b>mực nước thấp</b>,
+    họ phải đi xuống nhiều tầng hơn.
+    Điều này cho thấy số bậc nằm phía trên mực nước
+    thay đổi khi mực nước thay đổi.
+    Statement phù hợp với thông tin trong passage.
+  `
+
+};
+
+
+/* =========================================================
+   CONCLUSION
+========================================================= */
+
+const CONCLUSION={
+
+  1:
+  'FALSE — Statement trái với thông tin trong bài đọc.',
+
+  2:
+  'TRUE — Statement phù hợp với thông tin trong bài đọc.',
+
+  3:
+  'NOT GIVEN — Passage không có thông tin so sánh mức độ hấp dẫn.',
+
+  4:
+  'NOT GIVEN — Passage không cho biết thời gian xây dựng các bậc đá.',
+
+  5:
+  'TRUE — Passage xác nhận số bậc cần đi xuống thay đổi theo mực nước.'
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let startedAt=0;
 
@@ -1364,7 +1567,7 @@ let menuZone=null;
 
 /* =========================================================
    STUDENT
-   ========================================================= */
+========================================================= */
 
 function readStudent(){
 
@@ -1392,16 +1595,16 @@ function readStudent(){
 function prefill(){
 
   const s=
-    readStudent();
+  readStudent();
 
 
   if(s){
 
     studentName.value=
-      s.name || '';
+    s.name || '';
 
     studentClass.value=
-      s.className || '';
+    s.className || '';
 
   }
 
@@ -1411,10 +1614,11 @@ function prefill(){
 function startPractice(){
 
   const name=
-    studentName.value.trim();
+  studentName.value.trim();
+
 
   const cls=
-    studentClass.value.trim();
+  studentClass.value.trim();
 
 
   if(
@@ -1424,7 +1628,7 @@ function startPractice(){
   ){
 
     startError.textContent=
-      'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
 
     return;
 
@@ -1447,16 +1651,16 @@ function startPractice(){
 
 
   studentInfo.textContent=
-    `${name} · ${cls}`;
+  `${name} · ${cls}`;
 
 
   start
-    .classList
-    .add('hidden');
+  .classList
+  .add('hidden');
 
 
   startedAt=
-    Date.now();
+  Date.now();
 
 
   restoreMarkup();
@@ -1470,72 +1674,90 @@ function startPractice(){
 
 /* =========================================================
    TIMER
-   ========================================================= */
+========================================================= */
 
 function fmt(sec){
 
   sec=
-    Math.max(
-      0,
-      Math.floor(sec)
-    );
+  Math.max(
+    0,
+    Math.floor(sec)
+  );
 
 
   const h=
-    Math.floor(
-      sec / 3600
-    );
+  Math.floor(
+    sec / 3600
+  );
 
 
   const m=
-    Math.floor(
-      (sec % 3600) / 60
-    );
+  Math.floor(
+    (sec % 3600) / 60
+  );
 
 
   const s=
-    sec % 60;
+  sec % 60;
 
 
-  return h
+  if(h){
 
-    ?
+    return (
+      String(h).padStart(2,'0')
+      +
+      ':'
+      +
+      String(m).padStart(2,'0')
+      +
+      ':'
+      +
+      String(s).padStart(2,'0')
+    );
 
-    `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+  }
 
-    :
 
-    `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  return (
+    String(m).padStart(2,'0')
+    +
+    ':'
+    +
+    String(s).padStart(2,'0')
+  );
 
 }
 
 
 setInterval(
+
   ()=>{
 
     if(startedAt){
 
       timer.textContent=
-        fmt(
-          (
-            Date.now()
-            -
-            startedAt
-          )
-          /
-          1000
-        );
+      fmt(
+        (
+          Date.now()
+          -
+          startedAt
+        )
+        /
+        1000
+      );
 
     }
 
   },
+
   500
+
 );
 
 
 /* =========================================================
    ANSWERS
-   ========================================================= */
+========================================================= */
 
 function saveAnswer(
   n,
@@ -1580,21 +1802,21 @@ function restoreAnswers(){
   ){
 
     const value=
-      getAnswer(n);
+    getAnswer(n);
 
 
     if(value){
 
       const input=
-        document.querySelector(
-          `input[name="q${n}"][value="${value}"]`
-        );
+      document.querySelector(
+        `input[name="q${n}"][value="${value}"]`
+      );
 
 
       if(input){
 
         input.checked=
-          true;
+        true;
 
       }
 
@@ -1611,14 +1833,14 @@ function restoreAnswers(){
 function navState(n){
 
   document
-    .getElementById(
-      'nav' + n
-    )
-    .classList
-    .toggle(
-      'answered',
-      !!getAnswer(n)
-    );
+  .getElementById(
+    'nav' + n
+  )
+  .classList
+  .toggle(
+    'answered',
+    !!getAnswer(n)
+  );
 
 }
 
@@ -1626,24 +1848,24 @@ function navState(n){
 function updateProgress(){
 
   const answered=
-    [1,2,3,4,5]
-      .filter(
-        n =>
-          getAnswer(n)
-      )
-      .length;
+  [1,2,3,4,5]
+  .filter(
+    n =>
+    getAnswer(n)
+  )
+  .length;
 
 
   progressText.textContent=
-    `${answered}/5 câu đã trả lời`;
+  `${answered}/5 câu đã trả lời`;
 
 
   progressBar.style.width=
-    (
-      answered / 5 * 100
-    )
-    +
-    '%';
+  (
+    answered / 5 * 100
+  )
+  +
+  '%';
 
 }
 
@@ -1651,23 +1873,23 @@ function updateProgress(){
 function goQ(n){
 
   document
-    .getElementById(
-      'q' + n
-    )
-    .scrollIntoView({
+  .getElementById(
+    'q' + n
+  )
+  .scrollIntoView({
 
-      behavior:'smooth',
+    behavior:'smooth',
 
-      block:'center'
+    block:'center'
 
-    });
+  });
 
 }
 
 
 /* =========================================================
    SUBMIT
-   ========================================================= */
+========================================================= */
 
 async function submitPractice(){
 
@@ -1677,15 +1899,15 @@ async function submitPractice(){
 
 
   submitted=
-    true;
+  true;
 
 
   let score=
-    0;
+  0;
 
 
   const answers=
-    {};
+  {};
 
 
   for(
@@ -1695,19 +1917,19 @@ async function submitPractice(){
   ){
 
     const user=
-      getAnswer(n);
+    getAnswer(n);
 
 
     const correct=
-      KEY[n];
+    KEY[n];
 
 
     const ok=
-      user === correct;
+    user === correct;
 
 
     answers[n]=
-      user || '';
+    user || '';
 
 
     if(ok){
@@ -1718,30 +1940,24 @@ async function submitPractice(){
 
 
     const inputs=
-      [
-        ...document.querySelectorAll(
-          `input[name="q${n}"]`
-        )
-      ];
+    [
+      ...document.querySelectorAll(
+        `input[name="q${n}"]`
+      )
+    ];
 
 
     inputs.forEach(
       input => {
 
         input.disabled=
-          true;
+        true;
 
-      }
-    );
-
-
-    inputs.forEach(
-      input => {
 
         const label=
-          input.closest(
-            '.option'
-          );
+        input.closest(
+          '.option'
+        );
 
 
         label.classList.remove(
@@ -1780,17 +1996,17 @@ async function submitPractice(){
 
 
     const nav=
-      document.getElementById(
-        'nav' + n
-      );
+    document.getElementById(
+      'nav' + n
+    );
 
 
     nav.classList.add(
       ok
-        ?
-        'correct'
-        :
-        'wrong'
+      ?
+      'correct'
+      :
+      'wrong'
     );
 
 
@@ -1808,101 +2024,97 @@ async function submitPractice(){
 
 
   const durationSeconds=
-    Math.floor(
-      (
-        Date.now()
-        -
-        startedAt
-      )
-      /
-      1000
-    );
+  Math.floor(
+    (
+      Date.now()
+      -
+      startedAt
+    )
+    /
+    1000
+  );
 
 
   const s=
-    readStudent();
+  readStudent();
 
 
   resultStudent.textContent=
-    s
-      ?
-      `${s.name} · ${s.className}`
-      :
-      '';
+  s
+  ?
+  `${s.name} · ${s.className}`
+  :
+  '';
 
 
   resultScore.textContent=
-    `${score} / 5`;
+  `${score} / 5`;
 
 
   resultPercent.textContent=
-    `${Math.round(score / 5 * 100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+  `${Math.round(score / 5 * 100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
 
 
   resultOverlay
-    .classList
-    .remove('hidden');
+  .classList
+  .remove('hidden');
 
-
-  /*
-   * DATA GỬI VỀ PRACTICE_RESULTS
-   */
 
   const details=
-    JSON.stringify({
+  JSON.stringify({
 
-      title:
-        'Stepwells - True / False / Not Given 01',
+    title:
+    'Stepwells - True / False / Not Given 01',
 
-      answers:
-        answers,
+    answers:
+    answers,
 
-      correctAnswers:
-        KEY
+    correctAnswers:
+    KEY
 
-    });
+  });
 
 
   const body=
-    new URLSearchParams({
+  new URLSearchParams({
 
-      mode:
-        'PRACTICE',
+    mode:
+    'PRACTICE',
 
-      name:
-        s?.name || '',
+    name:
+    s?.name || '',
 
-      className:
-        s?.className || '',
+    className:
+    s?.className || '',
 
-      skill:
-        'Reading',
+    skill:
+    'Reading',
 
-      practiceType:
-        'True / False / Not Given',
+    practiceType:
+    'True / False / Not Given',
 
-      practiceId:
-        '01',
+    practiceId:
+    '01',
 
-      score:
-        String(score),
+    score:
+    String(score),
 
-      total:
-        '5',
+    total:
+    '5',
 
-      durationSeconds:
-        String(
-          durationSeconds
-        ),
+    durationSeconds:
+    String(
+      durationSeconds
+    ),
 
-      details:
-        details,
+    details:
+    details,
 
-      submittedAt:
-        new Date()
-          .toISOString()
+    submittedAt:
+    new Date()
+    .toISOString()
 
-    });
+  });
 
 
   try{
@@ -1914,20 +2126,20 @@ async function submitPractice(){
       {
 
         method:
-          'POST',
+        'POST',
 
         mode:
-          'no-cors',
+        'no-cors',
 
         headers:{
 
           'Content-Type':
-            'application/x-www-form-urlencoded;charset=UTF-8'
+          'application/x-www-form-urlencoded;charset=UTF-8'
 
         },
 
         body:
-          body.toString()
+        body.toString()
 
       }
 
@@ -1948,8 +2160,8 @@ async function submitPractice(){
 
 
 /* =========================================================
-   REVIEW
-   ========================================================= */
+   REVIEW WITH PASSAGE COMPARISON
+========================================================= */
 
 function reviewHTML(
   n,
@@ -1958,51 +2170,106 @@ function reviewHTML(
 ){
 
   document
-    .getElementById(
-      'review' + n
-    )
-    .innerHTML=
-    `
-      <div class="inline-review">
+  .getElementById(
+    'review' + n
+  )
+  .innerHTML=
+  `
+    <div class="inline-review">
 
-        <div class="review-title">
-          Câu ${n}
+      <div class="review-title">
+        Câu ${n}
+      </div>
+
+
+      <div class="review-row">
+
+        <div class="review-label">
+          Đáp án em chọn
         </div>
 
-        <div class="review-row">
-
-          <div class="review-label">
-            Đáp án em chọn
-          </div>
-
-          <div class="review-user">
-            ${user || 'Chưa trả lời'}
-          </div>
-
-        </div>
-
-        <div class="review-row">
-
-          <div class="review-label">
-            Đáp án đúng
-          </div>
-
-          <div class="review-correct">
-            ${correct}
-          </div>
-
-        </div>
-
-        <div class="explain">
-          ${EXPLAIN[n]}
-        </div>
-
-        <div class="evidence">
-          ↗ ${EVIDENCE[n]}
+        <div class="review-user">
+          ${escapeHTML(user || 'Chưa trả lời')}
         </div>
 
       </div>
-    `;
+
+
+      <div class="review-row">
+
+        <div class="review-label">
+          Đáp án đúng
+        </div>
+
+        <div class="review-correct">
+          ${correct}
+        </div>
+
+      </div>
+
+
+      <div class="compare-box">
+
+        <div class="compare-heading">
+          🔎 Đối chiếu với bài đọc
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Statement
+          </div>
+
+          <div class="compare-text">
+            ${STATEMENTS[n]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Passage
+          </div>
+
+          <div class="passage-evidence">
+            “${EVIDENCE[n]}”
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Phân tích
+          </div>
+
+          <div class="compare-analysis">
+            ${COMPARE[n]}
+          </div>
+
+        </div>
+
+
+        <div class="conclusion-box">
+
+          <div class="compare-label">
+            Kết luận
+          </div>
+
+          <div class="conclusion-text">
+            ${CONCLUSION[n]}
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
 
 }
 
@@ -2010,32 +2277,32 @@ function reviewHTML(
 function closeResult(){
 
   resultOverlay
-    .classList
-    .add('hidden');
+  .classList
+  .add('hidden');
 
 }
 
 
 /* =========================================================
    HIGHLIGHT + NOTE
-   ========================================================= */
+========================================================= */
 
 const selectionMenu=
-  document.getElementById(
-    'selectionMenu'
-  );
+document.getElementById(
+  'selectionMenu'
+);
 
 
 const menuHighlight=
-  document.getElementById(
-    'menuHighlight'
-  );
+document.getElementById(
+  'menuHighlight'
+);
 
 
 const menuNote=
-  document.getElementById(
-    'menuNote'
-  );
+document.getElementById(
+  'menuNote'
+);
 
 
 function zoneRoot(zone){
@@ -2044,13 +2311,13 @@ function zoneRoot(zone){
 
     zone === 'passage'
 
-      ?
+    ?
 
-      'passageRoot'
+    'passageRoot'
 
-      :
+    :
 
-      'questionsRoot'
+    'questionsRoot'
 
   );
 
@@ -2121,7 +2388,7 @@ function saveMarkup(zone){
     markupKey(zone),
 
     zoneRoot(zone)
-      .innerHTML
+    .innerHTML
 
   );
 
@@ -2138,16 +2405,16 @@ function restoreMarkup(){
     zone => {
 
       const markup=
-        localStorage.getItem(
-          markupKey(zone)
-        );
+      localStorage.getItem(
+        markupKey(zone)
+      );
 
 
       if(markup){
 
         zoneRoot(zone)
-          .innerHTML=
-          markup;
+        .innerHTML=
+        markup;
 
       }
 
@@ -2163,26 +2430,26 @@ function restoreMarkup(){
 
 
 /* =========================================================
-   FLOATING MENU
-   ========================================================= */
+   MENU
+========================================================= */
 
 function hideSelectionMenu(){
 
   selectionMenu
-    .classList
-    .remove('show');
+  .classList
+  .remove('show');
 
 
   menuTarget=
-    null;
+  null;
 
 
   menuZone=
-    null;
+  null;
 
 
   menuMode=
-    'selection';
+  'selection';
 
 }
 
@@ -2190,33 +2457,33 @@ function hideSelectionMenu(){
 function resetMenuButtons(){
 
   menuHighlight.style.display=
-    '';
+  '';
 
 
   menuNote.style.display=
-    '';
+  '';
 
 
   menuHighlight.textContent=
-    '🖍 Highlight';
+  '🖍 Highlight';
 
 
   menuNote.textContent=
-    '📝 Take note';
+  '📝 Take note';
 
 
   menuHighlight
-    .classList
-    .remove(
-      'danger'
-    );
+  .classList
+  .remove(
+    'danger'
+  );
 
 
   menuNote
-    .classList
-    .remove(
-      'danger'
-    );
+  .classList
+  .remove(
+    'danger'
+  );
 
 }
 
@@ -2224,56 +2491,56 @@ function resetMenuButtons(){
 function positionMenu(rect){
 
   selectionMenu
-    .classList
-    .add('show');
+  .classList
+  .add('show');
 
 
   requestAnimationFrame(
     ()=>{
 
       const width=
-        selectionMenu.offsetWidth
-        ||
-        190;
+      selectionMenu.offsetWidth
+      ||
+      190;
 
 
       const left=
-        Math.min(
+      Math.min(
 
-          window.innerWidth
-          -
-          width
-          -
+        window.innerWidth
+        -
+        width
+        -
+        10,
+
+        Math.max(
+
           10,
 
-          Math.max(
+          rect.left
+          +
+          rect.width / 2
+          -
+          width / 2
 
-            10,
+        )
 
-            rect.left
-            +
-            rect.width / 2
-            -
-            width / 2
-
-          )
-
-        );
+      );
 
 
       const top=
-        Math.max(
-          10,
-          rect.top - 47
-        );
+      Math.max(
+        10,
+        rect.top - 47
+      );
 
 
       selectionMenu.style.left=
-        left + 'px';
+      left + 'px';
 
 
       selectionMenu.style.top=
-        top + 'px';
+      top + 'px';
 
     }
   );
@@ -2282,13 +2549,13 @@ function positionMenu(rect){
 
 
 /* =========================================================
-   SELECT TEXT
-   ========================================================= */
+   TEXT SELECTION
+========================================================= */
 
 function captureSelection(zone){
 
   const selection=
-    window.getSelection();
+  window.getSelection();
 
 
   if(
@@ -2305,11 +2572,11 @@ function captureSelection(zone){
 
 
   const range=
-    selection.getRangeAt(0);
+  selection.getRangeAt(0);
 
 
   const root=
-    zoneRoot(zone);
+  zoneRoot(zone);
 
 
   if(
@@ -2324,23 +2591,23 @@ function captureSelection(zone){
 
 
   savedSelection=
-    range.cloneRange();
+  range.cloneRange();
 
 
   savedZone=
-    zone;
+  zone;
 
 
   menuMode=
-    'selection';
+  'selection';
 
 
   menuZone=
-    zone;
+  zone;
 
 
   menuTarget=
-    null;
+  null;
 
 
   resetMenuButtons();
@@ -2359,7 +2626,7 @@ function captureSelection(zone){
 function clearBrowserSelection(){
 
   const selection=
-    window.getSelection();
+  window.getSelection();
 
 
   if(selection){
@@ -2370,18 +2637,18 @@ function clearBrowserSelection(){
 
 
   savedSelection=
-    null;
+  null;
 
 
   savedZone=
-    null;
+  null;
 
 }
 
 
 /* =========================================================
    ADD HIGHLIGHT
-   ========================================================= */
+========================================================= */
 
 function addHighlight(){
 
@@ -2410,19 +2677,19 @@ function addHighlight(){
 
 
   const range=
-    savedSelection.cloneRange();
+  savedSelection.cloneRange();
 
 
   try{
 
     const mark=
-      document.createElement(
-        'mark'
-      );
+    document.createElement(
+      'mark'
+    );
 
 
     mark.className=
-      'user-highlight';
+    'user-highlight';
 
 
     mark.appendChild(
@@ -2460,7 +2727,7 @@ function addHighlight(){
 
 /* =========================================================
    ADD NOTE
-   ========================================================= */
+========================================================= */
 
 function addNote(){
 
@@ -2489,19 +2756,19 @@ function addNote(){
 
 
   const range=
-    savedSelection.cloneRange();
+  savedSelection.cloneRange();
 
 
   const quote=
-    range
-      .toString()
-      .trim();
+  range
+  .toString()
+  .trim();
 
 
   const text=
-    prompt(
-      'Nhập ghi chú:'
-    );
+  prompt(
+    'Nhập ghi chú:'
+  );
 
 
   if(
@@ -2516,27 +2783,27 @@ function addNote(){
 
 
   const id=
-    'n'
-    +
-    Date.now()
-    +
-    Math.random()
-      .toString(36)
-      .slice(2,5);
+  'n'
+  +
+  Date.now()
+  +
+  Math.random()
+  .toString(36)
+  .slice(2,5);
 
 
   const span=
-    document.createElement(
-      'span'
-    );
+  document.createElement(
+    'span'
+  );
 
 
   span.className=
-    'note-anchor';
+  'note-anchor';
 
 
   span.dataset.noteId=
-    id;
+  id;
 
 
   try{
@@ -2552,9 +2819,9 @@ function addNote(){
 
 
     const notes=
-      loadNotes(
-        savedZone
-      );
+    loadNotes(
+      savedZone
+    );
 
 
     notes.push({
@@ -2599,7 +2866,7 @@ function addNote(){
 
 /* =========================================================
    DELETE MENU
-   ========================================================= */
+========================================================= */
 
 function showDeleteMenu(
   target,
@@ -2608,11 +2875,11 @@ function showDeleteMenu(
 ){
 
   menuTarget=
-    target;
+  target;
 
 
   menuZone=
-    zone;
+  zone;
 
 
   resetMenuButtons();
@@ -2625,44 +2892,44 @@ function showDeleteMenu(
   ){
 
     menuMode=
-      'delete-highlight';
+    'delete-highlight';
 
 
     menuHighlight.textContent=
-      '✕ Xóa highlight';
+    '✕ Xóa highlight';
 
 
     menuHighlight
-      .classList
-      .add(
-        'danger'
-      );
+    .classList
+    .add(
+      'danger'
+    );
 
 
     menuNote.style.display=
-      'none';
+    'none';
 
   }
 
   else{
 
     menuMode=
-      'delete-note';
+    'delete-note';
 
 
     menuNote.textContent=
-      '✕ Xóa note';
+    '✕ Xóa note';
 
 
     menuNote
-      .classList
-      .add(
-        'danger'
-      );
+    .classList
+    .add(
+      'danger'
+    );
 
 
     menuHighlight.style.display=
-      'none';
+    'none';
 
   }
 
@@ -2672,15 +2939,15 @@ function showDeleteMenu(
 
   positionMenu(
     target
-      .getBoundingClientRect()
+    .getBoundingClientRect()
   );
 
 }
 
 
 /* =========================================================
-   DELETE HIGHLIGHT
-   ========================================================= */
+   REMOVE HIGHLIGHT
+========================================================= */
 
 function removeHighlight(){
 
@@ -2692,11 +2959,11 @@ function removeHighlight(){
 
 
   const zone=
-    menuZone;
+  menuZone;
 
 
   const parent=
-    menuTarget.parentNode;
+  menuTarget.parentNode;
 
 
   while(
@@ -2734,8 +3001,8 @@ function removeHighlight(){
 
 
 /* =========================================================
-   DELETE NOTE
-   ========================================================= */
+   REMOVE NOTE
+========================================================= */
 
 function removeNote(){
 
@@ -2747,19 +3014,19 @@ function removeNote(){
 
 
   const zone=
-    menuZone;
+  menuZone;
 
 
   const id=
-    menuTarget.dataset.noteId;
+  menuTarget.dataset.noteId;
 
 
   const notes=
-    loadNotes(zone)
-      .filter(
-        note =>
-          note.id !== id
-      );
+  loadNotes(zone)
+  .filter(
+    note =>
+    note.id !== id
+  );
 
 
   saveNotes(
@@ -2769,7 +3036,7 @@ function removeNote(){
 
 
   const parent=
-    menuTarget.parentNode;
+  menuTarget.parentNode;
 
 
   while(
@@ -2807,13 +3074,13 @@ function removeNote(){
 
 
 /* =========================================================
-   BIND CONTEXT ACTIONS
-   ========================================================= */
+   BIND
+========================================================= */
 
 function bindContextActions(zone){
 
   const root=
-    zoneRoot(zone);
+  zoneRoot(zone);
 
 
   if(!root){
@@ -2830,6 +3097,7 @@ function bindContextActions(zone){
     ()=>{
 
       resetMenuButtons();
+
 
       setTimeout(
         ()=>captureSelection(zone),
@@ -2849,6 +3117,7 @@ function bindContextActions(zone){
 
       resetMenuButtons();
 
+
       setTimeout(
         ()=>captureSelection(zone),
         120
@@ -2866,15 +3135,15 @@ function bindContextActions(zone){
     event => {
 
       const note=
-        event.target.closest(
-          '.note-anchor'
-        );
+      event.target.closest(
+        '.note-anchor'
+      );
 
 
       const mark=
-        event.target.closest(
-          'mark.user-highlight'
-        );
+      event.target.closest(
+        'mark.user-highlight'
+      );
 
 
       if(note){
@@ -2918,82 +3187,114 @@ function bindContextActions(zone){
 
 
 /* =========================================================
-   MENU BUTTONS
-   ========================================================= */
+   MENU EVENTS
+========================================================= */
 
 menuHighlight
-  .addEventListener(
-    'click',
-    addHighlight
-  );
+.addEventListener(
+  'click',
+  addHighlight
+);
 
 
 menuNote
-  .addEventListener(
-    'click',
-    addNote
-  );
+.addEventListener(
+  'click',
+  addNote
+);
 
 
 document
-  .addEventListener(
+.addEventListener(
 
-    'mousedown',
+  'mousedown',
 
-    event => {
+  event => {
 
-      if(
+    if(
 
-        !selectionMenu.contains(
-          event.target
-        )
+      !selectionMenu.contains(
+        event.target
+      )
 
-        &&
+      &&
 
-        !event.target.closest(
-          'mark.user-highlight'
-        )
+      !event.target.closest(
+        'mark.user-highlight'
+      )
 
-        &&
+      &&
 
-        !event.target.closest(
-          '.note-anchor'
-        )
+      !event.target.closest(
+        '.note-anchor'
+      )
 
-      ){
-
-        hideSelectionMenu();
-
-        resetMenuButtons();
-
-      }
-
-    }
-
-  );
-
-
-window
-  .addEventListener(
-
-    'scroll',
-
-    ()=>{
+    ){
 
       hideSelectionMenu();
 
       resetMenuButtons();
 
-    },
+    }
 
-    true
+  }
+
+);
+
+
+window
+.addEventListener(
+
+  'scroll',
+
+  ()=>{
+
+    hideSelectionMenu();
+
+    resetMenuButtons();
+
+  },
+
+  true
+
+);
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    char => ({
+
+      '&':'&amp;',
+
+      '<':'&lt;',
+
+      '>':'&gt;',
+
+      '"':'&quot;',
+
+      "'":'&#39;'
+
+    })[char]
 
   );
+
+}
 
 
 /* =========================================================
    INIT
-   ========================================================= */
+========================================================= */
 
 prefill();
 
