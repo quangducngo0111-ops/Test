@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>Table Completion</title>
+
+<style>
+:root{
+  --ink:#172033;
+  --muted:#6f7890;
+  --line:#e3e7ef;
+  --bg:#f5f7fb;
+  --purple:#281260;
+  --purple2:#5b43b5;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 8% 0%,
+      rgba(141,105,246,.10),
+      transparent 24%
+    ),
+    linear-gradient(
+      180deg,
+      #f8f8ff,
+      #f3f7fc
+    );
+
+  color:var(--ink);
+}
+
+.wrap{
+  width:min(
+    1100px,
+    calc(100% - 24px)
+  );
+
+  margin:auto;
+}
+
+
+/* ==============================
+   HEADER
+============================== */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:20;
+
+  background:
+    rgba(255,255,255,.94);
+
+  backdrop-filter:
+    blur(12px);
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.topin{
+  min-height:62px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:12px;
+}
+
+.back{
+  color:#3b315e;
+  text-decoration:none;
+
+  border:
+    1px solid var(--line);
+
+  background:#fff;
+
+  border-radius:10px;
+
+  padding:
+    8px 11px;
+
+  font-size:11px;
+  font-weight:900;
+}
+
+.brand{
+  font-weight:950;
+  color:#21164b;
+}
+
+.student{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:800;
+}
+
+
+/* ==============================
+   MAIN
+============================== */
+
+main{
+  padding:
+    26px 0 50px;
+}
+
+.hero{
+  padding:24px;
+
+  border:
+    1px solid rgba(255,255,255,.95);
+
+  border-radius:22px;
+
+  background:
+    linear-gradient(
+      120deg,
+      #fff,
+      #f7f4ff 55%,
+      #eef7ff
+    );
+
+  box-shadow:
+    0 10px 28px
+    rgba(35,25,75,.06);
+
+  margin-bottom:16px;
+}
+
+.eyebrow{
+  display:inline-block;
+
+  font-size:10px;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+
+  color:#6a4db4;
+
+  font-weight:950;
+}
+
+.hero h1{
+  margin:
+    7px 0 6px;
+
+  font-size:31px;
+
+  color:#21164b;
+
+  letter-spacing:-.035em;
+}
+
+.hero p{
+  margin:0;
+
+  color:var(--muted);
+
+  font-size:12px;
+}
+
+
+/* ==============================
+   LIST HEADER
+============================== */
+
+.head{
+  display:flex;
+
+  align-items:end;
+
+  justify-content:
+    space-between;
+
+  gap:14px;
+
+  margin:
+    20px 0 11px;
+}
+
+.head h2{
+  margin:0;
+
+  font-size:22px;
+
+  color:#21164b;
+}
+
+.head p{
+  margin:
+    4px 0 0;
+
+  color:var(--muted);
+
+  font-size:11px;
+}
+
+.count{
+  font-size:11px;
+
+  color:#6c7383;
+
+  font-weight:900;
+}
+
+
+/* ==============================
+   GRID
+============================== */
+
+.grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:10px;
+}
+
+.card{
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  text-decoration:none;
+
+  color:inherit;
+
+  padding:14px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:14px;
+
+  background:#fff;
+
+  box-shadow:
+    0 5px 14px
+    rgba(35,25,75,.035);
+
+  transition:
+    .15s ease;
+}
+
+.card:hover{
+  transform:
+    translateY(-2px);
+
+  border-color:#cdbff9;
+
+  box-shadow:
+    0 10px 22px
+    rgba(35,25,75,.08);
+}
+
+.badge{
+  flex:
+    0 0 42px;
+
+  width:42px;
+  height:42px;
+
+  border-radius:12px;
+
+  background:#eee9ff;
+
+  color:#5c43b2;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:10px;
+
+  font-weight:950;
+}
+
+.copy{
+  flex:1;
+
+  min-width:0;
+}
+
+.copy b{
+  display:block;
+
+  font-size:13px;
+
+  color:#21164b;
+
+  margin-bottom:3px;
+}
+
+.copy span{
+  display:block;
+
+  font-size:10.5px;
+
+  color:var(--muted);
+}
+
+.arrow{
+  color:#9ca3b2;
+
+  font-size:17px;
+}
+
+.empty{
+  grid-column:
+    1 / -1;
+
+  padding:34px;
+
+  text-align:center;
+
+  background:#fff;
+
+  border:
+    1px dashed #d8dce6;
+
+  border-radius:14px;
+
+  color:#7b8292;
+}
+
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media(max-width:750px){
+
+  .grid{
+    grid-template-columns:
+      1fr;
+  }
+
+  .brand{
+    font-size:13px;
+  }
+
+  .student{
+    display:none;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ==============================
+     HEADER
+============================== -->
+
+<header class="top">
+
+  <div class="wrap topin">
+
+    <a
+      class="back"
+      href="../../"
+    >
+      ← Reading
+    </a>
+
+
+    <div class="brand">
+      Table Completion
+    </div>
+
+
+    <div
+      class="student"
+      id="studentInfo"
+    ></div>
+
+  </div>
+
+</header>
+
+
+<!-- ==============================
+     MAIN
+============================== -->
+
+<main class="wrap">
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      Reading Practice
+    </div>
+
+
+    <h1>
+      Table Completion
+    </h1>
+
+
+    <p>
+      Chọn một đề để bắt đầu luyện tập.
+    </p>
+
+  </section>
+
+
+  <!-- LIST TITLE -->
+
+  <div class="head">
+
+    <div>
+
+      <h2>
+        Danh sách đề
+      </h2>
+
+      <p>
+        Chọn đề muốn luyện.
+      </p>
+
+    </div>
+
+
+    <div
+      class="count"
+      id="count"
+    >
+      0 đề
+    </div>
+
+  </div>
+
+
+  <!-- GRID -->
+
+  <section
+    class="grid"
+    id="grid"
+  ></section>
+
+
+</main>
+
+
+<script>
+
+/* ==============================
+   CONFIG
+============================== */
+
+const TREE =
+'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
+
+
+const ROOT =
+'Practice/Reading/TableCompletion/';
+
+
+/* ==============================
+   STUDENT
+============================== */
+
+function loadStudent(){
+
+  try{
+
+    const student =
+      JSON.parse(
+
+        localStorage.getItem(
+          'IELTS_PRACTICE_STUDENT'
+        )
+
+        ||
+
+        'null'
+
+      );
+
+
+    if(
+      student
+      &&
+      student.name
+      &&
+      student.className
+    ){
+
+      studentInfo.textContent =
+        `${student.name} · ${student.className}`;
+
+    }
+
+  }
+
+  catch(err){
+
+    console.warn(
+      'Không đọc được thông tin học sinh.',
+      err
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   NUMBER
+============================== */
+
+function getNumber(value){
+
+  const match =
+    String(
+      value || ''
+    )
+    .match(
+      /\d+/
+    );
+
+
+  return match
+
+    ?
+
+    Number(
+      match[0]
+    )
+
+    :
+
+    9999;
+
+}
+
+
+/* ==============================
+   LOAD EXERCISES
+============================== */
+
+async function loadExercises(){
+
+  try{
+
+    const response =
+      await fetch(
+
+        TREE,
+
+        {
+          cache:'no-store'
+        }
+
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const escapedRoot =
+      ROOT.replace(
+
+        /[.*+?^${}()|[\]\\]/g,
+
+        '\\$&'
+
+      );
+
+
+    const pattern =
+      new RegExp(
+
+        '^'
+        +
+        escapedRoot
+        +
+        '\\d+/index\\.html$',
+
+        'i'
+
+      );
+
+
+    const items =
+      data.tree
+
+      .filter(
+
+        item =>
+
+          item.type === 'blob'
+
+          &&
+
+          pattern.test(
+            item.path
+          )
+
+      )
+
+      .map(
+
+        item => {
+
+          const folder =
+            item.path
+
+            .slice(
+              ROOT.length
+            )
+
+            .split(
+              '/'
+            )[0];
+
+
+          return {
+
+            number:
+              getNumber(
+                folder
+              ),
+
+            folder:
+              folder,
+
+            url:
+              './'
+              +
+              folder
+              +
+              '/'
+
+          };
+
+        }
+
+      )
+
+      .sort(
+
+        (a,b) =>
+
+          a.number
+          -
+          b.number
+
+      );
+
+
+    renderExercises(
+      items
+    );
+
+  }
+
+  catch(err){
+
+    console.warn(
+      'Không tải được danh sách đề:',
+      err
+    );
+
+
+    grid.innerHTML =
+      `
+        <div class="empty">
+          Không tải được danh sách đề.
+        </div>
+      `;
+
+  }
+
+}
+
+
+/* ==============================
+   RENDER
+============================== */
+
+function renderExercises(
+  items
+){
+
+  count.textContent =
+    `${items.length} đề`;
+
+
+  if(
+    !items.length
+  ){
+
+    grid.innerHTML =
+      `
+        <div class="empty">
+          Chưa có đề trong dạng bài này.
+        </div>
+      `;
+
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    items
+
+    .map(
+
+      item => {
+
+        const number =
+          String(
+            item.number
+          )
+          .padStart(
+            2,
+            '0'
+          );
+
+
+        return `
+          <a
+            class="card"
+            href="${item.url}"
+          >
+
+            <div class="badge">
+              ${number}
+            </div>
+
+
+            <div class="copy">
+
+              <b>
+                Table Completion ${number}
+              </b>
+
+
+              <span>
+                Reading practice
+              </span>
+
+            </div>
+
+
+            <div class="arrow">
+              →
+            </div>
+
+          </a>
+        `;
+
+      }
+
+    )
+
+    .join('');
+
+}
+
+
+/* ==============================
+   INIT
+============================== */
+
+loadStudent();
+
+loadExercises();
+
+</script>
+
+</body>
+</html>
