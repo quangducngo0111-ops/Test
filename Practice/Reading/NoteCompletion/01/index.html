@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>Note Completion 01 — The Megafires of California</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,input{
+  font:inherit;
+}
+
+button{cursor:pointer}
+
+
+/* HEADER */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1400px,calc(100% - 18px));
+  min-height:62px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:tabular-nums;
+  font-size:19px;
+  font-weight:950;
+  background:rgba(255,255,255,.13);
+  padding:8px 11px;
+  border-radius:9px;
+}
+
+
+/* PAGE */
+
+.page{
+  width:min(1400px,calc(100% - 18px));
+  margin:auto;
+  padding:18px 0 46px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+  color:#21164b;
+  font-size:27px;
+}
+
+.hero p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+
+/* PROGRESS */
+
+.progress-wrap{
+  min-width:245px;
+}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:10.5px;
+  color:var(--muted);
+  font-weight:850;
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+  background:#e5e8ef;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,var(--purple2),var(--blue));
+}
+
+
+/* WORKSPACE */
+
+.workspace{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.pane{
+  min-width:0;
+  overflow:auto;
+  max-height:calc(100vh - 205px);
+  scroll-behavior:smooth;
+}
+
+.passage{
+  border-right:1px solid var(--line);
+}
+
+.questions{
+  background:#fafbfe;
+}
+
+.content{
+  padding:20px 23px;
+}
+
+.passage h2{
+  margin:0 0 15px;
+  color:#21164b;
+  font-size:21px;
+  text-align:center;
+}
+
+.passage p{
+  font-size:13.5px;
+  line-height:1.78;
+  margin:0 0 16px;
+  text-align:justify;
+}
+
+
+/* EVIDENCE */
+
+.evidence-source{
+  border-radius:4px;
+  transition:.3s;
+}
+
+.evidence-source.evidence-focus{
+  background:#fff1a8;
+  box-shadow:
+    0 0 0 3px rgba(245,190,35,.25),
+    0 0 18px rgba(245,190,35,.35);
+  font-weight:800;
+  padding:2px 3px;
+  margin:-2px -3px;
+  animation:evidencePulse .85s ease 2;
+}
+
+@keyframes evidencePulse{
+  0%{
+    box-shadow:0 0 4px rgba(245,190,35,.1);
+  }
+  50%{
+    box-shadow:
+      0 0 0 6px rgba(245,190,35,.3),
+      0 0 24px rgba(245,190,35,.55);
+  }
+  100%{
+    box-shadow:
+      0 0 0 3px rgba(245,190,35,.25),
+      0 0 18px rgba(245,190,35,.35);
+  }
+}
+
+
+/* QUESTIONS */
+
+.instructions h3{
+  margin:0 0 6px;
+  color:#21164b;
+}
+
+.instructions p{
+  font-size:11.5px;
+  color:var(--muted);
+  line-height:1.55;
+}
+
+.rule{
+  display:inline-block;
+  padding:7px 10px;
+  margin:5px 0 14px;
+  border-radius:8px;
+  background:#f0ecff;
+  color:#5c43b2;
+  font-size:10.5px;
+  font-weight:900;
+}
+
+.note-box{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:15px;
+}
+
+.note-title{
+  font-size:15px;
+  font-weight:950;
+  color:#21164b;
+  margin-bottom:12px;
+}
+
+.note-section{
+  margin-top:16px;
+}
+
+.note-section:first-of-type{
+  margin-top:0;
+}
+
+.note-section-title{
+  font-size:11.5px;
+  font-weight:950;
+  margin-bottom:8px;
+  color:#3f3562;
+}
+
+.note-line{
+  margin:8px 0;
+  padding-left:14px;
+  position:relative;
+  font-size:12px;
+  line-height:1.7;
+}
+
+.note-line::before{
+  content:"–";
+  position:absolute;
+  left:0;
+}
+
+.answer{
+  display:inline-block;
+  width:125px;
+  vertical-align:middle;
+  margin:0 4px;
+}
+
+.answer input{
+  width:100%;
+  padding:7px 8px;
+  border:1px solid #cdd3df;
+  border-radius:7px;
+  outline:none;
+  font-size:11px;
+  font-weight:800;
+}
+
+.answer input:focus{
+  border-color:#6a55bf;
+  box-shadow:0 0 0 3px rgba(81,53,166,.08);
+}
+
+.answer input.correct{
+  border-color:#8ed6b4;
+  background:#f4fcf7;
+  color:#126b48;
+}
+
+.answer input.wrong{
+  border-color:#efb7bf;
+  background:#fff7f8;
+  color:#9b2838;
+}
+
+
+/* REVIEW */
+
+.review-list{
+  margin-top:12px;
+}
+
+.inline-review{
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #f0d0d5;
+  border-left:4px solid var(--bad);
+  border-radius:9px;
+  background:#fffafb;
+  font-size:11px;
+}
+
+.review-title{
+  font-weight:950;
+  color:#21164b;
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:5px 8px;
+  margin:4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+  font-weight:900;
+}
+
+.compare-box{
+  margin-top:12px;
+  padding:13px;
+  background:#f8f7ff;
+  border:1px solid #ddd6fb;
+  border-radius:10px;
+}
+
+.compare-heading{
+  color:#281260;
+  font-weight:950;
+  margin-bottom:10px;
+}
+
+.compare-item{
+  margin-top:10px;
+}
+
+.compare-label{
+  margin-bottom:4px;
+  color:#6f7890;
+  font-size:9.5px;
+  font-weight:950;
+  text-transform:uppercase;
+}
+
+.compare-text,
+.compare-analysis{
+  padding:9px 10px;
+  background:#fff;
+  border-radius:7px;
+  line-height:1.6;
+}
+
+.passage-evidence{
+  position:relative;
+  padding:10px 35px 10px 10px;
+  background:#eef3ff;
+  border:1px solid #d6dffb;
+  border-left:3px solid #5773d9;
+  border-radius:7px;
+  color:#293a70;
+  font-style:italic;
+  line-height:1.6;
+  cursor:pointer;
+}
+
+.passage-evidence:hover{
+  background:#e5ecff;
+}
+
+.passage-evidence::after{
+  content:"↗";
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:16px;
+  font-style:normal;
+  font-weight:950;
+}
+
+.evidence-help{
+  margin-top:5px;
+  color:#7b8292;
+  font-size:9.5px;
+  font-style:normal;
+}
+
+.conclusion{
+  margin-top:10px;
+  padding:9px 10px;
+  border:1px solid #bde5ce;
+  background:#f2fff8;
+  border-radius:7px;
+  color:#126b48;
+  font-weight:900;
+}
+
+
+/* USER HIGHLIGHT */
+
+mark.user-highlight{
+  background:#fff29a;
+  color:inherit;
+  border-radius:3px;
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+  border-bottom:2px dotted #e28b19;
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+  z-index:90;
+  display:none;
+  gap:5px;
+  padding:6px;
+  background:#21164b;
+  border-radius:10px;
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+  background:#fff;
+  color:#35285e;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:10.5px;
+  font-weight:900;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+  background:#fff1f3;
+}
+
+
+/* BOTTOM */
+
+.bottom{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  width:min(1400px,calc(100% - 18px));
+  margin:auto;
+  padding:9px 0 6px;
+  background:linear-gradient(to top,var(--bg) 75%,rgba(245,247,251,.88));
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+  gap:5px;
+  flex:1;
+}
+
+.nav button{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+  border-color:#f0b5bd;
+}
+
+.submit,.btn{
+  border:0;
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;
+  border-radius:9px;
+  padding:10px 15px;
+  font-weight:900;
+}
+
+
+/* OVERLAY */
+
+.overlay,
+.start{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(15,11,35,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.start{
+  z-index:120;
+}
+
+.hidden{
+  display:none;
+}
+
+.result,
+.start-card{
+  width:min(590px,100%);
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.start-card{
+  width:min(460px,100%);
+}
+
+.score{
+  font-size:38px;
+  font-weight:950;
+  color:#21164b;
+  margin:7px 0;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+  font-size:10.5px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.field input{
+  width:100%;
+  padding:10px;
+  border:1px solid #d5d9e2;
+  border-radius:9px;
+}
+
+.start-card .btn{
+  width:100%;
+  margin-top:10px;
+}
+
+
+@media(max-width:900px){
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .passage{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .pane{
+    max-height:none;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<div id="start" class="start">
+
+  <div class="start-card">
+
+    <div style="font-size:10px;font-weight:950;color:#6a4db4">
+      READING PRACTICE
+    </div>
+
+    <h2>
+      Note Completion 01
+    </h2>
+
+    <p style="font-size:11.5px;color:#6f7890">
+      The Megafires of California · Questions 1–6
+    </p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input id="studentName">
+    </div>
+
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass">
+    </div>
+
+    <button class="btn" onclick="startPractice()">
+      Bắt đầu luyện
+    </button>
+
+    <div
+      id="startError"
+      style="font-size:10px;color:#b83345;margin-top:7px"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<header class="top">
+
+  <div class="topin">
+
+    <div class="left">
+
+      <a class="back" href="../">
+        ← Note Completion
+      </a>
+
+      <div class="brand">
+        📖 Note Completion 01
+      </div>
+
+    </div>
+
+    <div id="studentInfo" class="student"></div>
+
+    <div id="timer" class="timer">
+      00:00
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <div>
+      <h1>Note Completion 01</h1>
+      <p>The Megafires of California · Questions 1–6</p>
+    </div>
+
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+        <span>Tiến độ</span>
+        <span id="progressText">0/6 câu đã trả lời</span>
+      </div>
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="workspace">
+
+    <!-- PASSAGE -->
+
+    <div class="pane passage">
+
+      <div id="passageRoot" class="content">
+
+        <h2>
+          The Megafires of California
+        </h2>
+
+
+        <p>
+          Wildfires are becoming an increasing menace in the western United States,
+          with Southern California being the hardest hit area.
+
+          There's a reason fire squads battling more frequent blazes
+          in Southern California are having such difficulty containing the flames,
+          despite better preparedness than ever and decades of experience
+          fighting fires fanned by the ‘Santa Ana Winds’.
+
+          <span class="evidence-source" data-evidence="1">
+            The wildfires themselves, experts say, are generally hotter,
+            faster, and spread more erratically than in the past.
+          </span>
+        </p>
+
+
+        <p>
+          <span class="evidence-source" data-evidence="2">
+            Megafires, also called ‘siege fires’, are the increasingly frequent
+            blazes that burn 500,000 acres or more -
+            10 times the size of the average forest fire of 20 years ago.
+          </span>
+
+          Some recent wildfires are among the biggest ever in California
+          in terms of acreage burned.
+        </p>
+
+
+        <p>
+          One explanation for the trend to more superhot fires is that
+
+          <span class="evidence-source" data-evidence="3">
+            the region, which usually has dry summers,
+            has had significantly below normal precipitation
+            in many recent years.
+          </span>
+
+          Another reason is related to the century-long policy
+          of the US Forest Service to stop wildfires
+          as quickly as possible.
+        </p>
+
+
+        <p>
+          <span class="evidence-source" data-evidence="4">
+            The unintentional consequence has been to halt
+            the natural eradication of underbrush,
+            now the primary fuel for megafires.
+          </span>
+        </p>
+
+
+        <p>
+          Three other factors contribute to the trend.
+
+          First is climate change,
+          marked by a 1-degree Fahrenheit rise
+          in average yearly temperature across the western states.
+
+          <span class="evidence-source" data-evidence="5">
+            Second is fire seasons that on average are
+            78 days longer than they were 20 years ago.
+          </span>
+
+          <span class="evidence-source" data-evidence="6">
+            Third is increased construction of homes in wooded areas.
+          </span>
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- QUESTIONS -->
+
+    <div class="pane questions">
+
+      <div id="questionsRoot" class="content">
+
+        <div class="instructions">
+
+          <h3>
+            Questions 1–6
+          </h3>
+
+          <p>
+            Complete the notes below.
+          </p>
+
+          <p>
+            Choose <b>ONE WORD AND/OR A NUMBER</b>
+            from the passage for each answer.
+          </p>
+
+          <div class="rule">
+            ONE WORD AND/OR A NUMBER
+          </div>
+
+        </div>
+
+
+        <div class="note-box">
+
+          <div class="note-title">
+            Wildfires
+          </div>
+
+
+          <div class="note-section">
+
+            <div class="note-section-title">
+              ● Characteristics of wildfires and wildfire conditions today compared to the past:
+            </div>
+
+            <div class="note-line">
+              occurrence: more frequent
+            </div>
+
+            <div class="note-line">
+              temperature: hotter
+            </div>
+
+            <div class="note-line">
+              speed: faster
+            </div>
+
+            <div class="note-line">
+              movement:
+
+              <span class="answer">
+                <input
+                  id="a1"
+                  oninput="saveAnswer(1,this.value)"
+                >
+              </span>
+
+              more unpredictably
+            </div>
+
+            <div class="note-line">
+              size of fires:
+
+              <span class="answer">
+                <input
+                  id="a2"
+                  oninput="saveAnswer(2,this.value)"
+                >
+              </span>
+
+              greater on average than two decades ago
+            </div>
+
+          </div>
+
+
+          <div class="note-section">
+
+            <div class="note-section-title">
+              ● Reasons wildfires cause more damage today compared to the past:
+            </div>
+
+            <div class="note-line">
+              rainfall:
+
+              <span class="answer">
+                <input
+                  id="a3"
+                  oninput="saveAnswer(3,this.value)"
+                >
+              </span>
+
+              average
+            </div>
+
+            <div class="note-line">
+              more brush to act as
+
+              <span class="answer">
+                <input
+                  id="a4"
+                  oninput="saveAnswer(4,this.value)"
+                >
+              </span>
+            </div>
+
+            <div class="note-line">
+              increase in yearly temperature
+            </div>
+
+            <div class="note-line">
+              extended fire
+
+              <span class="answer">
+                <input
+                  id="a5"
+                  oninput="saveAnswer(5,this.value)"
+                >
+              </span>
+            </div>
+
+            <div class="note-line">
+              more building of
+
+              <span class="answer">
+                <input
+                  id="a6"
+                  oninput="saveAnswer(6,this.value)"
+                >
+              </span>
+
+              in vulnerable places
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="reviewList"
+          class="review-list"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<div class="bottom">
+
+  <div class="nav">
+
+    <button id="nav1" onclick="goQ(1)">1</button>
+    <button id="nav2" onclick="goQ(2)">2</button>
+    <button id="nav3" onclick="goQ(3)">3</button>
+    <button id="nav4" onclick="goQ(4)">4</button>
+    <button id="nav5" onclick="goQ(5)">5</button>
+    <button id="nav6" onclick="goQ(6)">6</button>
+
+  </div>
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
+</div>
+
+
+<div id="selectionMenu" class="selection-menu">
+
+  <button id="menuHighlight">
+    🖍 Highlight
+  </button>
+
+  <button id="menuNote">
+    📝 Take note
+  </button>
+
+</div>
+
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="font-size:10px;font-weight:950;color:#6a4db4">
+      KẾT QUẢ LUYỆN TẬP
+    </div>
+
+    <div
+      id="resultStudent"
+      style="margin-top:5px;font-size:12px;color:#6f7890"
+    ></div>
+
+    <div id="resultScore" class="score">
+      0 / 6
+    </div>
+
+    <div id="resultPercent"></div>
+
+    <p style="font-size:11px;color:#6f7890">
+      Các câu sai được giải thích bên dưới phần Notes.
+    </p>
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const RESULT_ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+const ATTEMPT_KEY=
+'PRACTICE_NOTECOMPLETION01_MEGAFIRES';
+
+
+const KEYS={
+
+  1:[
+    'spread'
+  ],
+
+  2:[
+    '10',
+    '10 times',
+    'ten times'
+  ],
+
+  3:[
+    'below'
+  ],
+
+  4:[
+    'fuel'
+  ],
+
+  5:[
+    'seasons'
+  ],
+
+  6:[
+    'homes',
+    'housing'
+  ]
+
+};
+
+
+const DISPLAY_KEY={
+  1:'spread',
+  2:'10 / ten times',
+  3:'below',
+  4:'fuel',
+  5:'seasons',
+  6:'homes / housing'
+};
+
+
+const NOTE_TEXT={
+
+  1:
+  'movement: ______ more unpredictably',
+
+  2:
+  'size of fires: ______ greater on average than two decades ago',
+
+  3:
+  'rainfall: ______ average',
+
+  4:
+  'more brush to act as ______',
+
+  5:
+  'extended fire ______',
+
+  6:
+  'more building of ______ in vulnerable places'
+
+};
+
+
+const EVIDENCE={
+
+  1:
+  'The wildfires themselves ... are generally hotter, faster, and spread more erratically than in the past.',
+
+  2:
+  'Megafires ... burn 500,000 acres or more - 10 times the size of the average forest fire of 20 years ago.',
+
+  3:
+  'The region ... has had significantly below normal precipitation in many recent years.',
+
+  4:
+  'Underbrush, now the primary fuel for megafires.',
+
+  5:
+  'Fire seasons that on average are 78 days longer than they were 20 years ago.',
+
+  6:
+  'Increased construction of homes in wooded areas.'
+
+};
+
+
+const ANALYSIS={
+
+  1:
+  `
+    Notes đã cho sẵn <b>“more unpredictably”</b>.
+    Passage dùng cụm <b>“spread more erratically”</b>.
+    “erratically” được paraphrase thành “unpredictably”,
+    nên từ cần lấy nguyên từ passage là <b>spread</b>.
+  `,
+
+  2:
+  `
+    Passage so sánh trực tiếp megafires hiện nay với
+    average forest fire của 20 năm trước và nói chúng lớn
+    <b>10 times</b>.
+    Vì vậy đáp án là <b>10</b> hoặc <b>ten times</b>.
+  `,
+
+  3:
+  `
+    Passage nói lượng mưa trong nhiều năm gần đây
+    <b>below normal precipitation</b>.
+    Notes đã có từ “average” phía sau chỗ trống,
+    nên từ cần điền là <b>below</b>.
+  `,
+
+  4:
+  `
+    Passage xác định underbrush là
+    <b>“the primary fuel for megafires”</b>.
+    Vì vậy brush hoạt động như <b>fuel</b>.
+  `,
+
+  5:
+  `
+    Passage nói <b>fire seasons</b>
+    hiện dài hơn trung bình 78 ngày.
+    Notes paraphrase thành “extended fire ___”,
+    nên điền <b>seasons</b>.
+  `,
+
+  6:
+  `
+    Passage nói có sự gia tăng trong
+    <b>construction of homes in wooded areas</b>.
+    “wooded areas” được paraphrase thành “vulnerable places”,
+    nên đáp án là <b>homes</b>.
+    <b>housing</b> cũng được chấp nhận theo key.
+  `
+
+};
+
+
+let startedAt=0;
+let submitted=false;
+
+let savedSelection=null;
+let savedZone=null;
+let menuMode='selection';
+let menuTarget=null;
+let menuZone=null;
+
+
+function normalize(v){
+
+  return String(v || '')
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g,' ');
+
+}
+
+
+function isCorrect(n,value){
+
+  const answer=
+  normalize(value);
+
+  return KEYS[n].some(
+    key =>
+    normalize(key)===answer
+  );
+
+}
+
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem('IELTS_PRACTICE_STUDENT')
+      ||
+      'null'
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const s=
+  readStudent();
+
+  if(s){
+
+    studentName.value=
+    s.name || '';
+
+    studentClass.value=
+    s.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name=
+  studentName.value.trim();
+
+  const cls=
+  studentClass.value.trim();
+
+
+  if(!name || !cls){
+
+    startError.textContent=
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    'IELTS_PRACTICE_STUDENT',
+    JSON.stringify({
+      name,
+      className:cls
+    })
+  );
+
+
+  studentInfo.textContent=
+  `${name} · ${cls}`;
+
+
+  start.classList.add('hidden');
+
+
+  startedAt=
+  Date.now();
+
+
+  restoreMarkup();
+  restoreAnswers();
+  updateProgress();
+
+}
+
+
+function fmt(sec){
+
+  sec=
+  Math.max(
+    0,
+    Math.floor(sec)
+  );
+
+  const m=
+  Math.floor(sec/60);
+
+  const s=
+  sec%60;
+
+  return(
+    String(m).padStart(2,'0')
+    +
+    ':'
+    +
+    String(s).padStart(2,'0')
+  );
+
+}
+
+
+setInterval(
+  ()=>{
+
+    if(startedAt){
+
+      timer.textContent=
+      fmt(
+        (Date.now()-startedAt)/1000
+      );
+
+    }
+
+  },
+  500
+);
+
+
+function saveAnswer(n,value){
+
+  if(submitted)return;
+
+
+  localStorage.setItem(
+    `${ATTEMPT_KEY}_q${n}`,
+    value
+  );
+
+
+  navState(n);
+  updateProgress();
+
+}
+
+
+function getAnswer(n){
+
+  return localStorage.getItem(
+    `${ATTEMPT_KEY}_q${n}`
+  )
+  ||
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  [1,2,3,4,5,6]
+  .forEach(
+    n=>{
+
+      const input=
+      document.getElementById(
+        'a'+n
+      );
+
+      if(input){
+
+        input.value=
+        getAnswer(n);
+
+      }
+
+      navState(n);
+
+    }
+  );
+
+}
+
+
+function navState(n){
+
+  document
+  .getElementById('nav'+n)
+  .classList
+  .toggle(
+    'answered',
+    !!normalize(getAnswer(n))
+  );
+
+}
+
+
+function updateProgress(){
+
+  const total=
+  [1,2,3,4,5,6]
+  .filter(
+    n=>normalize(getAnswer(n))
+  )
+  .length;
+
+
+  progressText.textContent=
+  `${total}/6 câu đã trả lời`;
+
+
+  progressBar.style.width=
+  `${total/6*100}%`;
+
+}
+
+
+function goQ(n){
+
+  const input=
+  document.getElementById('a'+n);
+
+  input.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+  setTimeout(
+    ()=>input.focus(),
+    300
+  );
+
+}
+
+
+async function submitPractice(){
+
+  if(submitted)return;
+
+  submitted=true;
+
+
+  let score=0;
+
+  const answers={};
+
+  reviewList.innerHTML='';
+
+
+  [1,2,3,4,5,6]
+  .forEach(
+    n=>{
+
+      const user=
+      getAnswer(n);
+
+      const ok=
+      isCorrect(n,user);
+
+      answers[n]=
+      user || '';
+
+
+      if(ok)score++;
+
+
+      const input=
+      document.getElementById(
+        'a'+n
+      );
+
+
+      input.disabled=true;
+
+      input.classList.add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      document
+      .getElementById('nav'+n)
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      if(!ok){
+
+        renderReview(n,user);
+
+      }
+
+    }
+  );
+
+
+  const durationSeconds=
+  Math.floor(
+    (Date.now()-startedAt)/1000
+  );
+
+
+  const s=
+  readStudent();
+
+
+  resultStudent.textContent=
+  s
+  ?
+  `${s.name} · ${s.className}`
+  :
+  '';
+
+
+  resultScore.textContent=
+  `${score} / 6`;
+
+
+  resultPercent.textContent=
+  `${Math.round(score/6*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay.classList.remove(
+    'hidden'
+  );
+
+
+  const details=
+  JSON.stringify({
+    title:
+    'The Megafires of California - Note Completion 01',
+    answers,
+    correctAnswers:DISPLAY_KEY
+  });
+
+
+  const body=
+  new URLSearchParams({
+
+    mode:'PRACTICE',
+
+    name:s?.name || '',
+
+    className:s?.className || '',
+
+    skill:'Reading',
+
+    practiceType:'Note Completion',
+
+    practiceId:'01',
+
+    score:String(score),
+
+    total:'6',
+
+    durationSeconds:
+    String(durationSeconds),
+
+    details
+
+  });
+
+
+  try{
+
+    await fetch(
+      RESULT_ENDPOINT,
+      {
+        method:'POST',
+        mode:'no-cors',
+        headers:{
+          'Content-Type':
+          'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body:body.toString()
+      }
+    );
+
+  }catch(e){}
+
+}
+
+
+function renderReview(n,user){
+
+  reviewList.insertAdjacentHTML(
+    'beforeend',
+    `
+    <div class="inline-review">
+
+      <div class="review-title">
+        Câu ${n}
+      </div>
+
+      <div class="review-row">
+
+        <div class="review-label">
+          Đáp án em chọn
+        </div>
+
+        <div class="review-user">
+          ${escapeHTML(user || 'Chưa trả lời')}
+        </div>
+
+      </div>
+
+      <div class="review-row">
+
+        <div class="review-label">
+          Đáp án đúng
+        </div>
+
+        <div class="review-correct">
+          ${DISPLAY_KEY[n]}
+        </div>
+
+      </div>
+
+
+      <div class="compare-box">
+
+        <div class="compare-heading">
+          🔎 Đối chiếu với bài đọc
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Notes
+          </div>
+
+          <div class="compare-text">
+            ${NOTE_TEXT[n]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Passage
+          </div>
+
+          <div
+            class="passage-evidence"
+            onclick="focusEvidence(${n})"
+          >
+
+            “${EVIDENCE[n]}”
+
+            <div class="evidence-help">
+              Nhấn để xem vị trí trong bài đọc
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Phân tích
+          </div>
+
+          <div class="compare-analysis">
+            ${ANALYSIS[n]}
+          </div>
+
+        </div>
+
+
+        <div class="conclusion">
+          Điền: ${DISPLAY_KEY[n]}
+        </div>
+
+      </div>
+
+    </div>
+    `
+  );
+
+}
+
+
+function focusEvidence(n){
+
+  document
+  .querySelectorAll(
+    '.evidence-source.evidence-focus'
+  )
+  .forEach(
+    el=>
+    el.classList.remove(
+      'evidence-focus'
+    )
+  );
+
+
+  const targets=[
+    ...document.querySelectorAll(
+      `[data-evidence="${n}"]`
+    )
+  ];
+
+
+  if(!targets.length)return;
+
+
+  targets.forEach(
+    el=>
+    el.classList.add(
+      'evidence-focus'
+    )
+  );
+
+
+  targets[0].scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+
+  targets.forEach(
+    el=>{
+
+      el.style.animation='none';
+
+      void el.offsetWidth;
+
+      el.style.animation='';
+
+    }
+  );
+
+}
+
+
+function closeResult(){
+
+  resultOverlay.classList.add(
+    'hidden'
+  );
+
+}
+
+
+/* HIGHLIGHT / NOTE */
+
+const selectionMenu=
+document.getElementById('selectionMenu');
+
+const menuHighlight=
+document.getElementById('menuHighlight');
+
+const menuNote=
+document.getElementById('menuNote');
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+    zone==='passage'
+    ?
+    'passageRoot'
+    :
+    'questionsRoot'
+  );
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function saveMarkup(zone){
+
+  document
+  .querySelectorAll(
+    '.evidence-focus'
+  )
+  .forEach(
+    x=>
+    x.classList.remove(
+      'evidence-focus'
+    )
+  );
+
+
+  localStorage.setItem(
+    markupKey(zone),
+    zoneRoot(zone).innerHTML
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  ['passage','questions']
+  .forEach(
+    zone=>{
+
+      const value=
+      localStorage.getItem(
+        markupKey(zone)
+      );
+
+
+      if(value){
+
+        zoneRoot(zone).innerHTML=
+        value;
+
+      }
+
+
+      bindContext(zone);
+
+    }
+  );
+
+}
+
+
+function captureSelection(zone){
+
+  const sel=
+  window.getSelection();
+
+
+  if(
+    !sel
+    ||
+    !sel.rangeCount
+    ||
+    sel.isCollapsed
+  )return;
+
+
+  const range=
+  sel.getRangeAt(0);
+
+
+  if(
+    !zoneRoot(zone)
+    .contains(
+      range.commonAncestorContainer
+    )
+  )return;
+
+
+  savedSelection=
+  range.cloneRange();
+
+  savedZone=zone;
+
+  menuMode='selection';
+
+  menuHighlight.textContent=
+  '🖍 Highlight';
+
+  menuNote.textContent=
+  '📝 Take note';
+
+  menuHighlight.style.display='';
+  menuNote.style.display='';
+
+
+  const rect=
+  range.getBoundingClientRect();
+
+
+  selectionMenu.classList.add(
+    'show'
+  );
+
+
+  selectionMenu.style.left=
+  Math.max(
+    10,
+    rect.left
+  )
+  +'px';
+
+
+  selectionMenu.style.top=
+  Math.max(
+    10,
+    rect.top-45
+  )
+  +'px';
+
+}
+
+
+function addHighlight(){
+
+  if(menuMode==='delete-highlight'){
+
+    removeHighlight();
+    return;
+
+  }
+
+
+  if(!savedSelection)return;
+
+
+  const mark=
+  document.createElement(
+    'mark'
+  );
+
+
+  mark.className=
+  'user-highlight';
+
+
+  mark.appendChild(
+    savedSelection.extractContents()
+  );
+
+
+  savedSelection.insertNode(
+    mark
+  );
+
+
+  saveMarkup(savedZone);
+
+  window.getSelection()
+  .removeAllRanges();
+
+  selectionMenu.classList.remove(
+    'show'
+  );
+
+}
+
+
+function addNote(){
+
+  if(menuMode==='delete-note'){
+
+    removeNote();
+    return;
+
+  }
+
+
+  if(!savedSelection)return;
+
+
+  const text=
+  prompt('Nhập ghi chú:');
+
+
+  if(!text)return;
+
+
+  const span=
+  document.createElement(
+    'span'
+  );
+
+
+  span.className=
+  'note-anchor';
+
+  span.dataset.note=
+  text;
+
+
+  span.appendChild(
+    savedSelection.extractContents()
+  );
+
+
+  savedSelection.insertNode(
+    span
+  );
+
+
+  saveMarkup(savedZone);
+
+  window.getSelection()
+  .removeAllRanges();
+
+  selectionMenu.classList.remove(
+    'show'
+  );
+
+}
+
+
+function showDelete(
+  target,
+  zone,
+  type
+){
+
+  menuTarget=target;
+  menuZone=zone;
+
+
+  if(type==='highlight'){
+
+    menuMode='delete-highlight';
+
+    menuHighlight.textContent=
+    '✕ Xóa highlight';
+
+    menuNote.style.display=
+    'none';
+
+  }else{
+
+    menuMode='delete-note';
+
+    menuNote.textContent=
+    '✕ Xóa note';
+
+    menuHighlight.style.display=
+    'none';
+
+  }
+
+
+  const rect=
+  target.getBoundingClientRect();
+
+
+  selectionMenu.classList.add(
+    'show'
+  );
+
+
+  selectionMenu.style.left=
+  Math.max(10,rect.left)+'px';
+
+
+  selectionMenu.style.top=
+  Math.max(10,rect.top-45)+'px';
+
+}
+
+
+function removeHighlight(){
+
+  const p=
+  menuTarget.parentNode;
+
+
+  while(menuTarget.firstChild){
+
+    p.insertBefore(
+      menuTarget.firstChild,
+      menuTarget
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+  p.normalize();
+
+  saveMarkup(menuZone);
+
+  selectionMenu.classList.remove(
+    'show'
+  );
+
+}
+
+
+function removeNote(){
+
+  removeHighlight();
+
+}
+
+
+function bindContext(zone){
+
+  const root=
+  zoneRoot(zone);
+
+
+  root.addEventListener(
+    'mouseup',
+    ()=>setTimeout(
+      ()=>captureSelection(zone),
+      0
+    )
+  );
+
+
+  root.addEventListener(
+    'click',
+    e=>{
+
+      const note=
+      e.target.closest(
+        '.note-anchor'
+      );
+
+
+      const mark=
+      e.target.closest(
+        '.user-highlight'
+      );
+
+
+      if(note){
+
+        showDelete(
+          note,
+          zone,
+          'note'
+        );
+
+      }else if(mark){
+
+        showDelete(
+          mark,
+          zone,
+          'highlight'
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+menuHighlight.onclick=
+addHighlight;
+
+menuNote.onclick=
+addNote;
+
+
+function escapeHTML(v){
+
+  return String(v)
+  .replace(
+    /[&<>"']/g,
+    c=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    })[c]
+  );
+
+}
+
+
+prefill();
+
+</script>
+
+</body>
+</html>
