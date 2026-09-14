@@ -1,0 +1,5497 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>Listening Note Completion 01 — Hiring a Public Room</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+  --soft:#f8f7ff;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+
+  background:
+    linear-gradient(
+      100deg,
+      #1c0e49,
+      #281260,
+      #37217e
+    );
+
+  color:#fff;
+
+  box-shadow:
+    0 8px 22px
+    rgba(40,18,96,.14);
+}
+
+.topin{
+  width:
+    min(
+      1180px,
+      calc(100% - 18px)
+    );
+
+  min-height:62px;
+
+  margin:auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+
+  border:
+    1px solid
+    rgba(255,255,255,.25);
+
+  padding:7px 10px;
+
+  border-radius:9px;
+
+  font-size:11px;
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+
+  background:
+    rgba(255,255,255,.1);
+
+  border:
+    1px solid
+    rgba(255,255,255,.18);
+
+  padding:7px 10px;
+
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:
+    tabular-nums;
+
+  font-size:19px;
+  font-weight:950;
+
+  background:
+    rgba(255,255,255,.13);
+
+  padding:8px 11px;
+
+  border-radius:9px;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+  width:
+    min(
+      1180px,
+      calc(100% - 18px)
+    );
+
+  margin:auto;
+
+  padding:
+    18px 0 50px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:
+    space-between;
+
+  gap:18px;
+
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+
+  color:#21164b;
+
+  font-size:27px;
+
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:
+    4px 0 0;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-wrap{
+  min-width:260px;
+}
+
+.progress-row{
+  display:flex;
+  justify-content:
+    space-between;
+
+  gap:10px;
+
+  margin-bottom:5px;
+
+  color:var(--muted);
+
+  font-size:10.5px;
+  font-weight:850;
+}
+
+.progress{
+  height:7px;
+
+  background:#e5e8ef;
+
+  border-radius:999px;
+
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+
+  width:0;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--purple2),
+      var(--blue)
+    );
+
+  transition:
+    width .2s ease;
+}
+
+
+/* =========================
+   AUDIO PLAYER
+========================= */
+
+.audio-panel{
+  background:#fff;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:16px;
+
+  padding:14px 15px;
+
+  margin-bottom:12px;
+
+  box-shadow:
+    0 6px 18px
+    rgba(35,25,75,.04);
+}
+
+.audio-head{
+  display:flex;
+  align-items:center;
+  justify-content:
+    space-between;
+
+  gap:12px;
+}
+
+.audio-title{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+}
+
+.audio-icon{
+  width:38px;
+  height:38px;
+
+  border-radius:11px;
+
+  background:#eee9ff;
+
+  color:#5135a6;
+
+  display:grid;
+  place-items:center;
+
+  font-size:18px;
+}
+
+.audio-title b{
+  display:block;
+
+  color:#21164b;
+
+  font-size:12px;
+}
+
+.audio-title span{
+  display:block;
+
+  margin-top:2px;
+
+  color:var(--muted);
+
+  font-size:10px;
+}
+
+.audio-time{
+  font-size:11px;
+  font-weight:950;
+
+  color:#281260;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+.audio-controls{
+  display:grid;
+
+  grid-template-columns:
+    auto
+    auto
+    1fr
+    auto
+    auto
+    auto;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:12px;
+}
+
+.audio-btn{
+  border:
+    1px solid
+    #dddfe8;
+
+  background:#fff;
+
+  color:#32255c;
+
+  border-radius:9px;
+
+  min-height:36px;
+
+  padding:0 10px;
+
+  font-size:11px;
+  font-weight:900;
+}
+
+.audio-btn:hover{
+  background:#f7f5ff;
+}
+
+.audio-btn.primary{
+  width:42px;
+
+  background:#281260;
+
+  color:#fff;
+
+  border-color:#281260;
+
+  font-size:14px;
+}
+
+.seek{
+  width:100%;
+
+  accent-color:#5135a6;
+}
+
+.speed-wrap,
+.volume-wrap{
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
+  font-weight:850;
+}
+
+.speed-wrap select{
+  border:
+    1px solid
+    #d9dde7;
+
+  background:#fff;
+
+  border-radius:8px;
+
+  padding:7px 6px;
+
+  color:#33265d;
+
+  font-weight:900;
+}
+
+.volume{
+  width:80px;
+
+  accent-color:#5135a6;
+}
+
+.practice-note{
+  margin-top:8px;
+
+  padding:7px 9px;
+
+  background:#f8f7ff;
+
+  border-radius:8px;
+
+  color:#6f7890;
+
+  font-size:9.7px;
+
+  line-height:1.5;
+}
+
+
+/* =========================
+   PAPER
+========================= */
+
+.paper{
+  background:#fff;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 8px 24px
+    rgba(35,25,75,.045);
+}
+
+.paper-inner{
+  padding:
+    22px 28px 26px;
+}
+
+
+/* =========================
+   INSTRUCTIONS
+========================= */
+
+.instructions{
+  margin-bottom:17px;
+}
+
+.instructions h3{
+  margin:
+    0 0 7px;
+
+  color:#21164b;
+
+  font-size:17px;
+}
+
+.instructions p{
+  margin:3px 0;
+
+  color:#5f6677;
+
+  font-size:11.5px;
+
+  line-height:1.55;
+}
+
+.rule{
+  display:inline-block;
+
+  margin-top:7px;
+
+  padding:7px 10px;
+
+  border-radius:8px;
+
+  background:#f0ecff;
+
+  color:#5c43b2;
+
+  font-size:10.5px;
+  font-weight:900;
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+.notes{
+  width:min(850px,100%);
+
+  margin:0 auto;
+
+  border:
+    1px solid
+    #d9dde6;
+
+  padding:20px 24px;
+
+  background:#fff;
+}
+
+.notes-title{
+  margin:
+    0 0 18px;
+
+  text-align:center;
+
+  font-size:18px;
+  font-weight:950;
+
+  letter-spacing:.02em;
+
+  color:#202636;
+}
+
+.example{
+  margin-bottom:17px;
+
+  font-size:12.5px;
+
+  line-height:1.7;
+}
+
+.example-label{
+  display:block;
+
+  margin-bottom:4px;
+
+  font-size:10px;
+  font-weight:950;
+  font-style:italic;
+}
+
+.example-answer{
+  display:inline-block;
+
+  min-width:72px;
+
+  text-align:center;
+
+  border-bottom:
+    1px dotted
+    #717888;
+
+  font-weight:950;
+  font-style:italic;
+}
+
+.section-title{
+  margin:
+    19px 0 8px;
+
+  font-size:13px;
+  font-weight:950;
+}
+
+.note-line{
+  position:relative;
+
+  padding-left:18px;
+
+  margin:8px 0;
+
+  font-size:12.5px;
+
+  line-height:1.85;
+}
+
+.note-line::before{
+  content:"●";
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  color:#2c3140;
+
+  font-size:8px;
+}
+
+.subline{
+  padding-left:35px;
+}
+
+.subline::before{
+  content:"+";
+
+  left:18px;
+
+  font-size:12px;
+  font-weight:900;
+}
+
+.qno{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  min-width:22px;
+  height:22px;
+
+  margin:0 3px;
+
+  padding:0 5px;
+
+  border-radius:6px;
+
+  background:#eee9ff;
+
+  color:#4b318e;
+
+  font-size:10px;
+  font-weight:950;
+
+  vertical-align:middle;
+}
+
+.answer{
+  display:inline-block;
+
+  width:132px;
+
+  margin:
+    0 3px 0 0;
+
+  vertical-align:middle;
+}
+
+.answer.small{
+  width:92px;
+}
+
+.answer input{
+  width:100%;
+
+  padding:7px 8px;
+
+  border:
+    1px solid
+    #cbd1dc;
+
+  border-radius:7px;
+
+  outline:none;
+
+  background:#fff;
+
+  color:#202636;
+
+  font-size:11px;
+  font-weight:850;
+}
+
+.answer input:focus{
+  border-color:#6a55bf;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.08);
+}
+
+.answer input.correct{
+  border-color:#8ed6b4;
+
+  background:#f4fcf7;
+
+  color:#126b48;
+}
+
+.answer input.wrong{
+  border-color:#efb7bf;
+
+  background:#fff7f8;
+
+  color:#9b2838;
+}
+
+
+/* =========================
+   REVIEW
+========================= */
+
+.review-list{
+  width:min(850px,100%);
+
+  margin:
+    14px auto 0;
+}
+
+.inline-review{
+  margin-top:10px;
+
+  padding:12px;
+
+  border:
+    1px solid
+    #f0d0d5;
+
+  border-left:
+    4px solid
+    var(--bad);
+
+  border-radius:9px;
+
+  background:#fffafb;
+
+  font-size:11px;
+
+  line-height:1.6;
+}
+
+.review-title{
+  color:#21164b;
+
+  font-weight:950;
+
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+
+  grid-template-columns:
+    110px 1fr;
+
+  gap:5px 8px;
+
+  margin:4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+
+  font-weight:900;
+}
+
+.explain-box{
+  margin-top:11px;
+
+  padding:11px;
+
+  background:#f8f7ff;
+
+  border:
+    1px solid
+    #ddd6fb;
+
+  border-radius:9px;
+}
+
+.explain-label{
+  margin-bottom:4px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.explain-text{
+  padding:8px 9px;
+
+  background:#fff;
+
+  border:
+    1px solid
+    #e5e7ee;
+
+  border-radius:7px;
+
+  line-height:1.65;
+}
+
+
+/* CLICKABLE TRANSCRIPT EVIDENCE */
+
+.transcript-evidence{
+  position:relative;
+
+  margin-top:5px;
+
+  padding:
+    10px 36px 10px 10px;
+
+  background:#eef3ff;
+
+  border:
+    1px solid
+    #d6dffb;
+
+  border-left:
+    3px solid
+    #5773d9;
+
+  border-radius:7px;
+
+  color:#293a70;
+
+  line-height:1.65;
+
+  cursor:pointer;
+
+  transition:.15s ease;
+}
+
+.transcript-evidence:hover{
+  background:#e5ecff;
+
+  transform:
+    translateY(-1px);
+}
+
+.transcript-evidence::after{
+  content:"▶";
+
+  position:absolute;
+
+  right:12px;
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  font-size:13px;
+  font-weight:950;
+
+  color:#5135a6;
+}
+
+.evidence-help{
+  margin-top:5px;
+
+  color:#7b8292;
+
+  font-size:9.5px;
+}
+
+.review-actions{
+  display:flex;
+
+  gap:7px;
+
+  flex-wrap:wrap;
+
+  margin-top:8px;
+}
+
+.review-btn{
+  border:
+    1px solid
+    #d9d3f1;
+
+  background:#fff;
+
+  color:#4b318e;
+
+  border-radius:8px;
+
+  padding:7px 9px;
+
+  font-size:10px;
+  font-weight:900;
+}
+
+.review-btn:hover{
+  background:#f4f1ff;
+}
+
+.conclusion{
+  margin-top:8px;
+
+  padding:8px 9px;
+
+  border:
+    1px solid
+    #bde5ce;
+
+  border-radius:7px;
+
+  background:#f2fff8;
+
+  color:#126b48;
+
+  font-weight:900;
+}
+
+
+/* =========================
+   FULL TRANSCRIPT
+========================= */
+
+.transcript-panel{
+  width:min(850px,100%);
+
+  margin:
+    18px auto 0;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#fff;
+
+  overflow:hidden;
+}
+
+.transcript-panel.hidden{
+  display:none;
+}
+
+.transcript-head{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:10px;
+
+  padding:12px 14px;
+
+  background:#faf9ff;
+
+  border-bottom:
+    1px solid
+    var(--line);
+}
+
+.transcript-head b{
+  color:#281260;
+
+  font-size:12px;
+}
+
+.transcript-head span{
+  color:#7b8292;
+
+  font-size:9.5px;
+}
+
+.transcript-body{
+  max-height:480px;
+
+  overflow:auto;
+
+  padding:12px 14px;
+
+  scroll-behavior:smooth;
+}
+
+.tline{
+  padding:8px 9px;
+
+  border-radius:8px;
+
+  font-size:11px;
+
+  line-height:1.6;
+
+  transition:.25s ease;
+}
+
+.tline + .tline{
+  margin-top:2px;
+}
+
+.speaker{
+  font-weight:950;
+
+  color:#281260;
+
+  margin-right:6px;
+}
+
+.answer-word{
+  background:#fff0a3;
+
+  color:#332750;
+
+  padding:1px 3px;
+
+  border-radius:3px;
+
+  font-weight:950;
+}
+
+.tline.cue{
+  cursor:pointer;
+}
+
+.tline.cue:hover{
+  background:#f7f5ff;
+}
+
+.tline.transcript-focus{
+  background:#fff1a8;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(245,190,35,.22),
+    0 0 18px
+    rgba(245,190,35,.30);
+
+  animation:
+    transcriptPulse
+    .85s ease 2;
+}
+
+@keyframes transcriptPulse{
+
+  50%{
+    box-shadow:
+      0 0 0 6px
+      rgba(245,190,35,.30),
+      0 0 24px
+      rgba(245,190,35,.55);
+  }
+
+}
+
+
+/* =========================
+   HIGHLIGHT + NOTE
+========================= */
+
+mark.user-highlight{
+  background:#fff29a;
+
+  color:inherit;
+
+  border-radius:3px;
+
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+
+  border-bottom:
+    2px dotted
+    #e28b19;
+
+  border-radius:2px;
+
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+
+  z-index:90;
+
+  display:none;
+
+  gap:5px;
+
+  padding:6px;
+
+  background:#21164b;
+
+  border-radius:10px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+
+  background:#fff;
+
+  color:#35285e;
+
+  border-radius:7px;
+
+  padding:7px 9px;
+
+  font-size:10.5px;
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+
+  background:#fff1f3;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom{
+  position:sticky;
+
+  bottom:0;
+
+  z-index:20;
+
+  width:
+    min(
+      1180px,
+      calc(100% - 18px)
+    );
+
+  margin:auto;
+
+  padding:
+    9px 0 6px;
+
+  background:
+    linear-gradient(
+      to top,
+      var(--bg) 75%,
+      rgba(245,247,251,.88)
+    );
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px;
+
+  flex:1;
+}
+
+.nav button{
+  width:31px;
+  height:31px;
+
+  border:
+    1px solid
+    var(--line);
+
+  background:#fff;
+
+  border-radius:7px;
+
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+
+  border-color:#f0b5bd;
+}
+
+.submit,
+.btn{
+  border:0;
+
+  background:
+    linear-gradient(
+      100deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  color:#fff;
+
+  border-radius:9px;
+
+  padding:10px 15px;
+
+  font-weight:900;
+}
+
+
+/* =========================
+   START + RESULT
+========================= */
+
+.start,
+.overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:120;
+
+  display:grid;
+  place-items:center;
+
+  padding:18px;
+
+  background:
+    rgba(16,12,40,.64);
+}
+
+.overlay{
+  z-index:110;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.start-card,
+.result{
+  width:min(500px,100%);
+
+  max-height:88vh;
+
+  overflow:auto;
+
+  padding:22px;
+
+  background:#fff;
+
+  border-radius:19px;
+
+  box-shadow:
+    0 24px 70px
+    rgba(18,10,53,.28);
+}
+
+.start-card h2{
+  margin:
+    5px 0 6px;
+
+  color:#21164b;
+}
+
+.start-card p{
+  margin:
+    0 0 14px;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+
+  margin-bottom:5px;
+
+  font-size:10.5px;
+  font-weight:900;
+}
+
+.field input{
+  width:100%;
+
+  padding:10px;
+
+  border:
+    1px solid
+    #d5d9e2;
+
+  border-radius:9px;
+}
+
+.start-card .btn{
+  width:100%;
+
+  margin-top:10px;
+}
+
+.score{
+  margin:
+    7px 0;
+
+  color:#21164b;
+
+  font-size:38px;
+  font-weight:950;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:760px){
+
+  .hero{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+  .paper-inner{
+    padding:
+      16px 10px 22px;
+  }
+
+  .notes{
+    padding:
+      16px 13px;
+  }
+
+  .student{
+    display:none;
+  }
+
+  .answer{
+    width:115px;
+  }
+
+  .audio-controls{
+    grid-template-columns:
+      auto
+      auto
+      1fr
+      auto;
+  }
+
+  .speed-wrap{
+    grid-column:
+      1 / 3;
+  }
+
+  .volume-wrap{
+    grid-column:
+      3 / 5;
+
+    justify-content:
+      flex-end;
+  }
+
+  .volume{
+    width:95px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     AUDIO FILE
+========================= -->
+
+<audio
+  id="practiceAudio"
+  preload="metadata"
+  src="./Cam11-Test1-Section1.mp3"
+></audio>
+
+
+<!-- =========================
+     START
+========================= -->
+
+<div
+  id="start"
+  class="start"
+>
+
+  <div class="start-card">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      color:#6a4db4
+    ">
+      LISTENING PRACTICE
+    </div>
+
+    <h2>
+      Note Completion 01
+    </h2>
+
+    <p>
+      Hiring a Public Room · Questions 1–10
+    </p>
+
+
+    <div class="field">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+
+    </div>
+
+
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
+      Bắt đầu luyện
+    </button>
+
+
+    <div
+      id="startError"
+      style="
+        margin-top:7px;
+        color:#b83345;
+        font-size:10.5px
+      "
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="top">
+
+  <div class="topin">
+
+    <div class="left">
+
+      <a
+        class="back"
+        href="../"
+      >
+        ← Note Completion
+      </a>
+
+      <div class="brand">
+        🎧 Note Completion 01
+      </div>
+
+    </div>
+
+
+    <div
+      class="student"
+      id="studentInfo"
+    ></div>
+
+
+    <div
+      class="timer"
+      id="timer"
+    >
+      00:00
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="page">
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div>
+
+      <h1>
+        Note Completion 01
+      </h1>
+
+      <p>
+        Hiring a Public Room · Questions 1–10
+      </p>
+
+    </div>
+
+
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+
+        <span>
+          Tiến độ
+        </span>
+
+        <span id="progressText">
+          0/10 câu đã trả lời
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       PRACTICE AUDIO PLAYER
+  ========================= -->
+
+  <section class="audio-panel">
+
+    <div class="audio-head">
+
+      <div class="audio-title">
+
+        <div class="audio-icon">
+          🎧
+        </div>
+
+        <div>
+
+          <b id="audioStatusTitle">
+            Audio luyện tập
+          </b>
+
+          <span id="audioStatusText">
+            Có thể nghe lại, tua và đổi tốc độ tùy ý
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="audio-time"
+        id="audioTime"
+      >
+        00:00 / 00:00
+      </div>
+
+    </div>
+
+
+    <div class="audio-controls">
+
+      <button
+        class="audio-btn primary"
+        id="playPauseBtn"
+        onclick="togglePlay()"
+      >
+        ▶
+      </button>
+
+
+      <button
+        class="audio-btn"
+        onclick="skipAudio(-10)"
+      >
+        −10s
+      </button>
+
+
+      <input
+        class="seek"
+        id="seekBar"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="0.1"
+        oninput="seekPreview(this.value)"
+        onchange="seekCommit(this.value)"
+      >
+
+
+      <button
+        class="audio-btn"
+        onclick="skipAudio(10)"
+      >
+        +10s
+      </button>
+
+
+      <div class="speed-wrap">
+
+        <span>
+          Tốc độ
+        </span>
+
+        <select
+          id="speedSelect"
+          onchange="setSpeed(this.value)"
+        >
+
+          <option value="0.5">
+            0.5×
+          </option>
+
+          <option value="0.75">
+            0.75×
+          </option>
+
+          <option
+            value="1"
+            selected
+          >
+            1×
+          </option>
+
+          <option value="1.25">
+            1.25×
+          </option>
+
+          <option value="1.5">
+            1.5×
+          </option>
+
+          <option value="2">
+            2×
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="volume-wrap">
+
+        <span>
+          Âm lượng
+        </span>
+
+        <input
+          class="volume"
+          id="volumeSlider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+          oninput="setVolume(this.value)"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="practice-note">
+      Đây là chế độ luyện tập: học sinh có thể dừng,
+      nghe lại, tua tới/lùi và thay đổi tốc độ bất cứ lúc nào.
+      Sau khi nộp bài, phần chữa sẽ cho phép nhảy thẳng
+      đến đoạn audio chứa đáp án và đối chiếu transcript.
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       PAPER
+  ========================= -->
+
+  <section class="paper">
+
+    <div
+      class="paper-inner"
+      id="questionsRoot"
+    >
+
+
+      <!-- INSTRUCTIONS -->
+
+      <div class="instructions">
+
+        <h3>
+          Questions 1–10
+        </h3>
+
+        <p>
+          Complete the notes below.
+        </p>
+
+        <p>
+          Write
+          <b>ONE WORD AND/OR A NUMBER</b>
+          for each answer.
+        </p>
+
+        <div class="rule">
+          ONE WORD AND/OR A NUMBER
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           NOTES
+      ========================= -->
+
+      <div class="notes">
+
+        <div class="notes-title">
+          HIRING A PUBLIC ROOM
+        </div>
+
+
+        <!-- EXAMPLE -->
+
+        <div class="example">
+
+          <span class="example-label">
+            Example
+          </span>
+
+          ● the Main Hall – seats
+
+          <span class="example-answer">
+            200
+          </span>
+
+        </div>
+
+
+        <!-- ROOM AND COST -->
+
+        <div class="section-title">
+          Room and cost
+        </div>
+
+
+        <div class="note-line">
+
+          the
+
+          <span class="qno">
+            1
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a1"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(1,this.value)"
+            >
+
+          </span>
+
+          Room – seats 100
+
+        </div>
+
+
+        <div class="note-line">
+
+          Cost of Main Hall for Saturday evening:
+
+          <span class="qno">
+            2
+          </span>
+
+          £
+
+          <span class="answer small">
+
+            <input
+              id="a2"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              oninput="saveAnswer(2,this.value)"
+            >
+
+          </span>
+
+        </div>
+
+
+        <div class="note-line subline">
+
+          £250 deposit
+
+          (
+
+          <span class="qno">
+            3
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a3"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(3,this.value)"
+            >
+
+          </span>
+
+          payment is required)
+
+        </div>
+
+
+        <div class="note-line">
+
+          Cost includes use of tables and chairs and also
+
+          <span class="qno">
+            4
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a4"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(4,this.value)"
+            >
+
+          </span>
+
+        </div>
+
+
+        <div class="note-line">
+          Additional charge for use of the kitchen: £25
+        </div>
+
+
+        <!-- BEFORE -->
+
+        <div class="section-title">
+          Before the event
+        </div>
+
+
+        <div class="note-line">
+
+          Will need a
+
+          <span class="qno">
+            5
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a5"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(5,this.value)"
+            >
+
+          </span>
+
+          licence
+
+        </div>
+
+
+        <div class="note-line">
+
+          Need to contact caretaker (Mr Evans) in advance to arrange
+
+          <span class="qno">
+            6
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a6"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(6,this.value)"
+            >
+
+          </span>
+
+        </div>
+
+
+        <!-- DURING -->
+
+        <div class="section-title">
+          During the event
+        </div>
+
+
+        <div class="note-line">
+          The building is no smoking
+        </div>
+
+
+        <div class="note-line">
+
+          The band should use the
+
+          <span class="qno">
+            7
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a7"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(7,this.value)"
+            >
+
+          </span>
+
+          door at the back
+
+        </div>
+
+
+        <div class="note-line">
+          Don’t touch the system that controls the volume
+        </div>
+
+
+        <div class="note-line">
+          For microphones, contact the caretaker
+        </div>
+
+
+        <!-- AFTER -->
+
+        <div class="section-title">
+          After the event
+        </div>
+
+
+        <div class="note-line">
+
+          Need to know the
+
+          <span class="qno">
+            8
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a8"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(8,this.value)"
+            >
+
+          </span>
+
+          for the cleaning cupboard
+
+        </div>
+
+
+        <div class="note-line">
+
+          The
+
+          <span class="qno">
+            9
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a9"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(9,this.value)"
+            >
+
+          </span>
+
+          must be washed and rubbish placed in black bags
+
+        </div>
+
+
+        <div class="note-line">
+
+          All
+
+          <span class="qno">
+            10
+          </span>
+
+          <span class="answer">
+
+            <input
+              id="a10"
+              type="text"
+              autocomplete="off"
+              oninput="saveAnswer(10,this.value)"
+            >
+
+          </span>
+
+          must be taken down
+
+        </div>
+
+
+        <div class="note-line">
+          Chairs and tables must be piled up
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           WRONG ANSWER REVIEWS
+      ========================= -->
+
+      <div
+        id="reviewList"
+        class="review-list"
+      ></div>
+
+
+      <!-- =========================
+           FULL TRANSCRIPT
+      ========================= -->
+
+      <div
+        id="transcriptPanel"
+        class="transcript-panel hidden"
+      >
+
+        <div class="transcript-head">
+
+          <b>
+            📝 Transcript
+          </b>
+
+          <span>
+            Nhấn vào dòng có đáp án để nghe lại đoạn tương ứng
+          </span>
+
+        </div>
+
+
+        <div
+          class="transcript-body"
+          id="transcriptRoot"
+        >
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Hello?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Oh, hello. I wanted to enquire about hiring a room
+            in the Village Hall, for the evening of September the first.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Let me just see … Yes, we have both rooms available
+            that evening. There’s our Main Hall - that’s got seating
+            for 200 people. Or there’s the Charlton Room …
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Sorry?
+
+          </div>
+
+
+          <!-- Q1 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q1"
+            onclick="playSegment(1,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            The
+
+            <span class="answer-word">
+              Charlton
+            </span>
+
+            Room - C-H-A-R-L-T-O-N.
+            That’s got seating for up to one hundred.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Well, we’re organising a dinner to raise money
+            for a charity, and we’re hoping for at least 150 people,
+            so I think we’ll go for the Main Hall.
+            How much would that cost?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Let’s see. You wanted it for the evening of September 1st?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Yes, that’s a Saturday.
+
+          </div>
+
+
+          <!-- Q2 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q2"
+            onclick="playSegment(2,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            So from six pm to midnight that’d be
+
+            <span class="answer-word">
+              £115
+            </span>
+
+            - that’s the weekend price,
+            it’s £75 on weekdays.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            That’s all right.
+
+          </div>
+
+
+          <!-- Q3 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q3"
+            onclick="playSegment(3,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            And I have to tell you there’s also a deposit of £250,
+            which is returnable of course as long as there’s no damage.
+            But we do insist that this is
+
+            <span class="answer-word">
+              paid in cash
+            </span>,
+
+            we don’t take cards for that.
+            You can pay the actual rent of the room however you like though
+            - cash, credit card, cheque …
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Oh, well I suppose that’s OK.
+            So does the charge include use of tables and chairs and so on?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Oh, yes.
+
+          </div>
+
+
+          <!-- Q4 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q4"
+            onclick="playSegment(4,true)"
+          >
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            And what about
+
+            <span class="answer-word">
+              parking
+            </span>
+
+            ?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Yeah, that’s all included.
+            The only thing that isn’t included is …
+            you said you were organising a dinner?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Yeah.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Well, you’ll have to pay extra for the kitchen
+            if you want to use that. It’s £25.
+            It’s got very good facilities -
+            good quality cookers and fridges and so on.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            OK, well I suppose that’s all right.
+            We can cover the cost in our entry charges.
+
+          </div>
+
+
+          <!-- Q5 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q5"
+            onclick="playSegment(5,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Right. So I’ll make a note of that.
+            Now there are just one or two things
+            you need to think about before the event.
+            For example, you’ll have to see about getting a licence
+            if you’re planning to have any
+
+            <span class="answer-word">
+              music
+            </span>
+
+            during the meal.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Oh, really?
+
+          </div>
+
+
+          <!-- Q6 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q6"
+            onclick="playSegment(6,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            It’s quite straightforward,
+            I’ll give you the details later on.
+            And about a week or ten days before your event
+            you’ll need to contact the caretaker,
+            that’s Mr Evans,
+            to make the arrangements for
+
+            <span class="answer-word">
+              entry
+            </span>
+
+            - he’ll sort that out with you.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            And do I give him the payment as well?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            No, you do that directly with me.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Right. Now is there anything I need to know
+            about what happens during the event?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Well, as you’ll be aware,
+            of course the building is no smoking throughout.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Of course.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Now, are you having a band?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Yes.
+
+          </div>
+
+
+          <!-- Q7 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q7"
+            onclick="playSegment(7,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Well, they’ll have a lot of equipment,
+            so rather than using the front door
+            they should park their van round the back
+            and use the
+
+            <span class="answer-word">
+              stage door
+            </span>
+
+            there.
+            You can open that from inside
+            but don’t forget to lock it at the end.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            OK.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            And talking of bands,
+            I’m sure I don’t need to tell you this,
+            but you must make sure that no one fiddles about
+            with the black box by the fire door -
+            that’s a system that cuts in
+            when the volume reaches a certain level.
+            It’s a legal requirement.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Sure. Anyway, we want people to be able to talk
+            to one another so we don’t want anything too loud.
+            Oh, that reminds me,
+            we’ll be having speeches -
+            are there any microphones available?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Yeah. Just let the caretaker know,
+            he’ll get those for you.
+            Right, now when the event is over
+            we do ask that the premises are left in good condition.
+
+          </div>
+
+
+          <!-- Q8 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q8"
+            onclick="playSegment(8,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            So there’s a locked cupboard
+            and you’ll be informed of the
+
+            <span class="answer-word">
+              code
+            </span>
+
+            you need to open that.
+            It’s got all the cleaning equipment,
+            brushes and detergent and so on.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Right. So what do we need to do
+            after everyone’s gone?
+            Sweep the floors I suppose?
+
+          </div>
+
+
+          <!-- Q9 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q9"
+            onclick="playSegment(9,true)"
+          >
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Well, actually
+
+            <span class="answer-word">
+              they have to be washed, not just swept
+            </span>.
+
+            Then you’ll be provided with black plastic bags,
+            so all the rubbish must be collected up
+            and left outside the door.
+
+          </div>
+
+
+          <!-- Q10 -->
+
+          <div
+            class="tline cue"
+            id="transcript-q10"
+            onclick="playSegment(10,true)"
+          >
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Of course.
+            We’ll make sure everything’s left tidy.
+            Oh, and I forgot to ask,
+            I presume we can have
+
+            <span class="answer-word">
+              decorations
+            </span>
+
+            in the room?
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            Yes, but you must take them down afterwards.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            Sure.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OFFICIAL:
+            </span>
+
+            And the chairs and tables should be stacked up neatly
+            at the back of the room.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              WOMAN:
+            </span>
+
+            I’ll make sure I’ve got a few people to help me.
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<div class="bottom">
+
+  <div class="nav">
+
+    <button id="nav1" onclick="goQ(1)">
+      1
+    </button>
+
+    <button id="nav2" onclick="goQ(2)">
+      2
+    </button>
+
+    <button id="nav3" onclick="goQ(3)">
+      3
+    </button>
+
+    <button id="nav4" onclick="goQ(4)">
+      4
+    </button>
+
+    <button id="nav5" onclick="goQ(5)">
+      5
+    </button>
+
+    <button id="nav6" onclick="goQ(6)">
+      6
+    </button>
+
+    <button id="nav7" onclick="goQ(7)">
+      7
+    </button>
+
+    <button id="nav8" onclick="goQ(8)">
+      8
+    </button>
+
+    <button id="nav9" onclick="goQ(9)">
+      9
+    </button>
+
+    <button id="nav10" onclick="goQ(10)">
+      10
+    </button>
+
+  </div>
+
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
+</div>
+
+
+<!-- =========================
+     HIGHLIGHT MENU
+========================= -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
+<!-- =========================
+     RESULT
+========================= -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      color:#6a4db4
+    ">
+      KẾT QUẢ LUYỆN TẬP
+    </div>
+
+    <div
+      id="resultStudent"
+      style="
+        margin-top:5px;
+        color:#6f7890;
+        font-size:12px
+      "
+    ></div>
+
+    <div
+      id="resultScore"
+      class="score"
+    >
+      0 / 10
+    </div>
+
+    <div id="resultPercent"></div>
+
+    <p style="
+      color:#6f7890;
+      font-size:11px
+    ">
+      Các câu sai có transcript và nút nghe đúng đoạn audio.
+      Toàn bộ transcript cũng được mở để đối chiếu.
+    </p>
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const RESULT_ENDPOINT =
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const ATTEMPT_KEY =
+'PRACTICE_LISTENING_NOTE_COMPLETION_01_HIRING_PUBLIC_ROOM_V2';
+
+
+const COMPLETED_KEY =
+ATTEMPT_KEY
++
+'_completed';
+
+
+const NUMBERS = [
+  1,2,3,4,5,6,7,8,9,10
+];
+
+
+/* =========================================================
+   ANSWERS
+========================================================= */
+
+const KEYS = {
+
+  1:[
+    'charlton'
+  ],
+
+  2:[
+    '115',
+    '£115',
+    'one hundred and fifteen',
+    'one hundred fifteen'
+  ],
+
+  3:[
+    'cash'
+  ],
+
+  4:[
+    'parking'
+  ],
+
+  5:[
+    'music'
+  ],
+
+  6:[
+    'entry'
+  ],
+
+  7:[
+    'stage'
+  ],
+
+  8:[
+    'code'
+  ],
+
+  9:[
+    'floor',
+    'floors'
+  ],
+
+  10:[
+    'decoration',
+    'decorations'
+  ]
+
+};
+
+
+const DISPLAY_KEY = {
+
+  1:
+  'Charlton',
+
+  2:
+  '115',
+
+  3:
+  'cash',
+
+  4:
+  'parking',
+
+  5:
+  'music',
+
+  6:
+  'entry',
+
+  7:
+  'stage',
+
+  8:
+  'code',
+
+  9:
+  'floor / floors',
+
+  10:
+  'decoration / decorations'
+
+};
+
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+const QUESTION_TEXT = {
+
+  1:
+  'the 1 ______ Room – seats 100',
+
+  2:
+  'Cost of Main Hall for Saturday evening: 2 £______',
+
+  3:
+  '+ £250 deposit (3 ______ payment is required)',
+
+  4:
+  'Cost includes use of tables and chairs and also 4 ______',
+
+  5:
+  'Will need a 5 ______ licence',
+
+  6:
+  'Need to contact caretaker (Mr Evans) in advance to arrange 6 ______',
+
+  7:
+  'The band should use the 7 ______ door at the back',
+
+  8:
+  'Need to know the 8 ______ for the cleaning cupboard',
+
+  9:
+  'The 9 ______ must be washed and rubbish placed in black bags',
+
+  10:
+  'All 10 ______ must be taken down'
+
+};
+
+
+/* =========================================================
+   TRANSCRIPT EXCERPTS
+========================================================= */
+
+const TRANSCRIPT_SNIPPET = {
+
+  1:
+  'OFFICIAL: The Charlton Room - C-H-A-R-L-T-O-N. That’s got seating for up to one hundred.',
+
+  2:
+  'OFFICIAL: So from six pm to midnight that’d be £115 - that’s the weekend price, it’s £75 on weekdays.',
+
+  3:
+  'OFFICIAL: ... there’s also a deposit of £250 ... we do insist that this is paid in cash, we don’t take cards for that.',
+
+  4:
+  'WOMAN: And what about parking? OFFICIAL: Yeah, that’s all included.',
+
+  5:
+  'OFFICIAL: ... you’ll have to see about getting a licence if you’re planning to have any music during the meal.',
+
+  6:
+  'OFFICIAL: ... contact the caretaker, that’s Mr Evans, to make the arrangements for entry - he’ll sort that out with you.',
+
+  7:
+  'OFFICIAL: ... they should park their van round the back and use the stage door there.',
+
+  8:
+  'OFFICIAL: ... there’s a locked cupboard and you’ll be informed of the code you need to open that.',
+
+  9:
+  'WOMAN: Sweep the floors I suppose? OFFICIAL: Well, actually they have to be washed, not just swept.',
+
+  10:
+  'WOMAN: ... I presume we can have decorations in the room? OFFICIAL: Yes, but you must take them down afterwards.'
+
+};
+
+
+/* =========================================================
+   EXPLANATIONS
+========================================================= */
+
+const EXPLANATION = {
+
+  1:
+  `
+    Tên phòng được đánh vần ngay trong audio:
+    <b>C-H-A-R-L-T-O-N</b>.
+    Vì vậy đáp án là
+    <b>Charlton</b>.
+  `,
+
+  2:
+  `
+    Câu hỏi hỏi giá thuê vào
+    <b>Saturday evening</b>.
+    Audio nói mức weekend price
+    từ 6pm đến midnight là
+    <b>£115</b>,
+    còn £75 là weekday.
+  `,
+
+  3:
+  `
+    Khoản £250 là deposit
+    và audio nhấn mạnh khoản này phải được
+    <b>paid in cash</b>.
+    Thẻ không được chấp nhận cho deposit.
+  `,
+
+  4:
+  `
+    Sau khi hỏi tables and chairs,
+    người phụ nữ hỏi thêm
+    <b>parking</b>
+    và người phụ trách xác nhận
+    “that’s all included”.
+  `,
+
+  5:
+  `
+    Audio nói nếu có
+    <b>music</b>
+    trong bữa ăn thì phải xin licence.
+    Vì vậy cụm hoàn chỉnh là
+    <b>music licence</b>.
+  `,
+
+  6:
+  `
+    Người thuê cần liên hệ Mr Evans trước sự kiện
+    để “make the arrangements for
+    <b>entry</b>”.
+  `,
+
+  7:
+  `
+    Ban nhạc có nhiều thiết bị
+    nên được hướng dẫn dùng
+    <b>stage door</b>
+    ở phía sau.
+  `,
+
+  8:
+  `
+    Cleaning cupboard bị khóa
+    và người thuê sẽ được cung cấp
+    <b>code</b>
+    để mở.
+  `,
+
+  9:
+  `
+    Audio có distractor
+    “sweep the floors”,
+    sau đó sửa lại:
+    “they have to be
+    <b>washed</b>,
+    not just swept”.
+    Danh từ cần điền là
+    <b>floor/floors</b>.
+  `,
+
+  10:
+  `
+    Người phụ nữ hỏi có được dùng
+    <b>decorations</b>
+    không và được trả lời có,
+    nhưng phải tháo xuống sau sự kiện.
+  `
+
+};
+
+
+/* =========================================================
+   AUDIO CUES
+   start / end = seconds
+========================================================= */
+
+const CUES = {
+
+  1:{
+    start:138,
+    end:154
+  },
+
+  2:{
+    start:172,
+    end:188
+  },
+
+  3:{
+    start:188,
+    end:218
+  },
+
+  4:{
+    start:216,
+    end:239
+  },
+
+  5:{
+    start:255,
+    end:276
+  },
+
+  6:{
+    start:272,
+    end:296
+  },
+
+  7:{
+    start:346,
+    end:370
+  },
+
+  8:{
+    start:401,
+    end:424
+  },
+
+  9:{
+    start:421,
+    end:447
+  },
+
+  10:{
+    start:445,
+    end:463
+  }
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let startedAt = 0;
+
+let submitted = false;
+
+let segmentEnd = null;
+
+let seekPreviewing = false;
+
+let savedSelection = null;
+
+let savedZone = null;
+
+let menuTarget = null;
+
+let menuZone = null;
+
+let menuMode = 'selection';
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const practiceAudio =
+document.getElementById(
+  'practiceAudio'
+);
+
+
+const selectionMenu =
+document.getElementById(
+  'selectionMenu'
+);
+
+
+const menuHighlight =
+document.getElementById(
+  'menuHighlight'
+);
+
+
+const menuNote =
+document.getElementById(
+  'menuNote'
+);
+
+
+/* =========================================================
+   ANSWER CHECK
+========================================================= */
+
+function normalizeAnswer(value){
+
+  return String(
+    value || ''
+  )
+  .trim()
+  .toLowerCase()
+  .replace(
+    /[£,]/g,
+    ''
+  )
+  .replace(
+    /\s+/g,
+    ' '
+  );
+
+}
+
+
+function isCorrect(
+  number,
+  value
+){
+
+  const answer =
+  normalizeAnswer(
+    value
+  );
+
+
+  return KEYS[number]
+  .some(
+    key =>
+    normalizeAnswer(key)
+    ===
+    answer
+  );
+
+}
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+
+      ||
+
+      'null'
+
+    );
+
+  }
+  catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const student =
+  readStudent();
+
+
+  if(student){
+
+    studentName.value =
+    student.name || '';
+
+    studentClass.value =
+    student.className || '';
+
+  }
+
+}
+
+
+/* =========================================================
+   RESET OLD COMPLETED ATTEMPT
+========================================================= */
+
+function resetFinishedAttempt(){
+
+  if(
+    localStorage.getItem(
+      COMPLETED_KEY
+    )
+    !==
+    '1'
+  ){
+
+    return;
+
+  }
+
+
+  NUMBERS.forEach(
+    number => {
+
+      localStorage.removeItem(
+        `${ATTEMPT_KEY}_q${number}`
+      );
+
+    }
+  );
+
+
+  localStorage.removeItem(
+    `${ATTEMPT_KEY}_markup_questions`
+  );
+
+
+  localStorage.removeItem(
+    COMPLETED_KEY
+  );
+
+}
+
+
+/* =========================================================
+   START PRACTICE
+========================================================= */
+
+async function startPractice(){
+
+  const name =
+  studentName.value.trim();
+
+
+  const className =
+  studentClass.value.trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    startError.textContent =
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  resetFinishedAttempt();
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+
+      name:name,
+
+      className:className
+
+    })
+
+  );
+
+
+  studentInfo.textContent =
+  `${name} · ${className}`;
+
+
+  restoreMarkup();
+
+  restoreAnswers();
+
+  updateProgress();
+
+
+  start
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  startedAt =
+  Date.now();
+
+
+  submitted =
+  false;
+
+
+  audioStatusTitle.textContent =
+  'Audio luyện tập';
+
+
+  audioStatusText.textContent =
+  'Có thể nghe lại, tua và đổi tốc độ tùy ý';
+
+
+  try{
+
+    await practiceAudio.play();
+
+  }
+  catch(e){
+
+    audioStatusText.textContent =
+    'Nhấn nút ▶ để bắt đầu nghe.';
+
+  }
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function fmt(sec){
+
+  sec =
+  Math.max(
+    0,
+    Math.floor(
+      sec || 0
+    )
+  );
+
+
+  const hours =
+  Math.floor(
+    sec / 3600
+  );
+
+
+  const minutes =
+  Math.floor(
+    (sec % 3600) / 60
+  );
+
+
+  const seconds =
+  sec % 60;
+
+
+  return hours
+
+  ?
+
+  `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`
+
+  :
+
+  `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+
+}
+
+
+setInterval(
+
+  ()=>{
+
+    if(
+      startedAt
+      &&
+      !submitted
+    ){
+
+      timer.textContent =
+      fmt(
+        (
+          Date.now()
+          -
+          startedAt
+        )
+        /
+        1000
+      );
+
+    }
+
+  },
+
+  500
+
+);
+
+
+/* =========================================================
+   AUDIO PLAYER
+========================================================= */
+
+practiceAudio
+.addEventListener(
+
+  'loadedmetadata',
+
+  ()=>{
+
+    seekBar.max =
+    practiceAudio.duration || 100;
+
+
+    audioTime.textContent =
+    `${fmt(practiceAudio.currentTime)} / ${fmt(practiceAudio.duration)}`;
+
+  }
+
+);
+
+
+practiceAudio
+.addEventListener(
+
+  'timeupdate',
+
+  ()=>{
+
+    if(
+      !seekPreviewing
+    ){
+
+      seekBar.value =
+      practiceAudio.currentTime;
+
+    }
+
+
+    /*
+     * Khi đang nghe riêng một đoạn chữa bài,
+     * tự dừng khi đến cuối đoạn.
+     */
+
+    if(
+      segmentEnd !== null
+      &&
+      practiceAudio.currentTime >= segmentEnd
+    ){
+
+      practiceAudio.pause();
+
+
+      segmentEnd =
+      null;
+
+
+      audioStatusText.textContent =
+      'Đã phát xong đoạn đối chiếu. Có thể tiếp tục nghe hoặc tua tự do.';
+
+    }
+
+
+    audioTime.textContent =
+    `${fmt(practiceAudio.currentTime)} / ${fmt(practiceAudio.duration)}`;
+
+
+    playPauseBtn.textContent =
+    practiceAudio.paused
+    ?
+    '▶'
+    :
+    '❚❚';
+
+  }
+
+);
+
+
+practiceAudio
+.addEventListener(
+
+  'play',
+
+  ()=>{
+
+    playPauseBtn.textContent =
+    '❚❚';
+
+  }
+
+);
+
+
+practiceAudio
+.addEventListener(
+
+  'pause',
+
+  ()=>{
+
+    playPauseBtn.textContent =
+    '▶';
+
+  }
+
+);
+
+
+practiceAudio
+.addEventListener(
+
+  'ended',
+
+  ()=>{
+
+    segmentEnd =
+    null;
+
+
+    audioStatusText.textContent =
+    'Audio đã hết. Có thể tua lại và nghe tiếp.';
+
+  }
+
+);
+
+
+practiceAudio
+.addEventListener(
+
+  'error',
+
+  ()=>{
+
+    audioStatusTitle.textContent =
+    'Không tải được audio';
+
+
+    audioStatusText.textContent =
+    'Kiểm tra file Cam11-Test1-Section1.mp3 trong cùng thư mục.';
+
+  }
+
+);
+
+
+/* PLAY / PAUSE */
+
+function togglePlay(){
+
+  segmentEnd =
+  null;
+
+
+  if(
+    practiceAudio.paused
+  ){
+
+    practiceAudio
+    .play()
+    .catch(
+      ()=>{}
+    );
+
+  }
+
+  else{
+
+    practiceAudio.pause();
+
+  }
+
+}
+
+
+/* SKIP +/- */
+
+function skipAudio(seconds){
+
+  segmentEnd =
+  null;
+
+
+  practiceAudio.currentTime =
+  Math.min(
+
+    Math.max(
+
+      0,
+
+      practiceAudio.currentTime
+      +
+      seconds
+
+    ),
+
+    practiceAudio.duration
+    ||
+    Infinity
+
+  );
+
+}
+
+
+/* DRAG SEEK BAR */
+
+function seekPreview(value){
+
+  seekPreviewing =
+  true;
+
+
+  audioTime.textContent =
+  `${fmt(Number(value))} / ${fmt(practiceAudio.duration)}`;
+
+}
+
+
+function seekCommit(value){
+
+  seekPreviewing =
+  false;
+
+
+  segmentEnd =
+  null;
+
+
+  practiceAudio.currentTime =
+  Number(
+    value
+  );
+
+}
+
+
+/* SPEED */
+
+function setSpeed(value){
+
+  practiceAudio.playbackRate =
+  Number(
+    value
+  );
+
+
+  audioStatusText.textContent =
+  `Tốc độ ${value}× · Có thể tua và nghe lại tùy ý`;
+
+}
+
+
+/* VOLUME */
+
+function setVolume(value){
+
+  practiceAudio.volume =
+  Number(
+    value
+  );
+
+}
+
+
+/* =========================================================
+   ANSWERS
+========================================================= */
+
+function saveAnswer(
+  number,
+  value
+){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    `${ATTEMPT_KEY}_q${number}`,
+
+    value
+
+  );
+
+
+  navState(
+    number
+  );
+
+
+  updateProgress();
+
+}
+
+
+function getAnswer(number){
+
+  return localStorage.getItem(
+
+    `${ATTEMPT_KEY}_q${number}`
+
+  )
+
+  ||
+
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  NUMBERS.forEach(
+    number => {
+
+      const input =
+      document.getElementById(
+        'a' + number
+      );
+
+
+      if(input){
+
+        input.value =
+        getAnswer(
+          number
+        );
+
+      }
+
+
+      navState(
+        number
+      );
+
+    }
+  );
+
+}
+
+
+function navState(number){
+
+  const button =
+  document.getElementById(
+    'nav' + number
+  );
+
+
+  if(button){
+
+    button
+    .classList
+    .toggle(
+
+      'answered',
+
+      !!normalizeAnswer(
+        getAnswer(number)
+      )
+
+    );
+
+  }
+
+}
+
+
+function updateProgress(){
+
+  const answered =
+  NUMBERS
+  .filter(
+    number =>
+    normalizeAnswer(
+      getAnswer(number)
+    )
+  )
+  .length;
+
+
+  progressText.textContent =
+  `${answered}/10 câu đã trả lời`;
+
+
+  progressBar.style.width =
+  `${answered/10*100}%`;
+
+}
+
+
+function goQ(number){
+
+  const input =
+  document.getElementById(
+    'a' + number
+  );
+
+
+  if(!input){
+
+    return;
+
+  }
+
+
+  input
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  setTimeout(
+
+    ()=>input.focus(),
+
+    300
+
+  );
+
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+async function submitPractice(){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  submitted =
+  true;
+
+
+  localStorage.setItem(
+    COMPLETED_KEY,
+    '1'
+  );
+
+
+  let score =
+  0;
+
+
+  const answers =
+  {};
+
+
+  reviewList.innerHTML =
+  '';
+
+
+  NUMBERS.forEach(
+    number => {
+
+      const user =
+      getAnswer(
+        number
+      );
+
+
+      const ok =
+      isCorrect(
+        number,
+        user
+      );
+
+
+      answers[number] =
+      user || '';
+
+
+      if(ok){
+
+        score++;
+
+      }
+
+
+      const input =
+      document.getElementById(
+        'a' + number
+      );
+
+
+      input.disabled =
+      true;
+
+
+      input
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      document
+      .getElementById(
+        'nav' + number
+      )
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      if(!ok){
+
+        renderReview(
+          number,
+          user
+        );
+
+      }
+
+    }
+  );
+
+
+  /*
+   * Mở transcript sau khi nộp.
+   */
+
+  transcriptPanel
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  audioStatusTitle.textContent =
+  'Chế độ chữa bài';
+
+
+  audioStatusText.textContent =
+  'Có thể tua tự do hoặc nhấn vào transcript/giải thích để nghe đúng đoạn chứa đáp án.';
+
+
+  const durationSeconds =
+  Math.floor(
+    (
+      Date.now()
+      -
+      startedAt
+    )
+    /
+    1000
+  );
+
+
+  const student =
+  readStudent();
+
+
+  resultStudent.textContent =
+  student
+
+  ?
+
+  `${student.name} · ${student.className}`
+
+  :
+
+  '';
+
+
+  resultScore.textContent =
+  `${score} / 10`;
+
+
+  resultPercent.textContent =
+  `${Math.round(score/10*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  const body =
+  new URLSearchParams({
+
+    mode:
+    'PRACTICE',
+
+    name:
+    student?.name || '',
+
+    className:
+    student?.className || '',
+
+    skill:
+    'Listening',
+
+    practiceType:
+    'Note Completion',
+
+    practiceId:
+    '01',
+
+    score:
+    String(score),
+
+    total:
+    '10',
+
+    durationSeconds:
+    String(
+      durationSeconds
+    ),
+
+    details:
+    JSON.stringify({
+
+      title:
+      'Hiring a Public Room - Listening Note Completion 01',
+
+      audio:
+      'Cam11-Test1-Section1.mp3',
+
+      answers:
+      answers,
+
+      correctAnswers:
+      DISPLAY_KEY
+
+    }),
+
+    submittedAt:
+    new Date()
+    .toISOString()
+
+  });
+
+
+  try{
+
+    await fetch(
+
+      RESULT_ENDPOINT,
+
+      {
+
+        method:
+        'POST',
+
+        mode:
+        'no-cors',
+
+        headers:{
+
+          'Content-Type':
+          'application/x-www-form-urlencoded;charset=UTF-8'
+
+        },
+
+        body:
+        body.toString()
+
+      }
+
+    );
+
+  }
+
+  catch(error){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   WRONG ANSWER REVIEW
+========================================================= */
+
+function renderReview(
+  number,
+  user
+){
+
+  reviewList
+  .insertAdjacentHTML(
+
+    'beforeend',
+
+    `
+      <div class="inline-review">
+
+        <div class="review-title">
+          Câu ${number}
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án em chọn
+          </div>
+
+          <div class="review-user">
+            ${escapeHTML(user || 'Chưa trả lời')}
+          </div>
+
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án đúng
+          </div>
+
+          <div class="review-correct">
+            ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+
+        <div class="explain-box">
+
+          <div class="explain-label">
+            Notes
+          </div>
+
+          <div class="explain-text">
+            ${QUESTION_TEXT[number]}
+          </div>
+
+
+          <div
+            class="explain-label"
+            style="margin-top:9px"
+          >
+            Transcript
+          </div>
+
+
+          <div
+            class="transcript-evidence"
+            onclick="reviewCue(${number})"
+          >
+
+            ${TRANSCRIPT_SNIPPET[number]}
+
+            <div class="evidence-help">
+              Nhấn để tua đến đúng đoạn audio
+              và mở dòng transcript tương ứng
+            </div>
+
+          </div>
+
+
+          <div class="review-actions">
+
+            <button
+              class="review-btn"
+              onclick="playSegment(${number},false)"
+            >
+              ▶ Nghe đoạn chứa đáp án
+            </button>
+
+
+            <button
+              class="review-btn"
+              onclick="showTranscriptCue(${number})"
+            >
+              📝 Xem trong transcript
+            </button>
+
+          </div>
+
+
+          <div
+            class="explain-label"
+            style="margin-top:9px"
+          >
+            Phân tích
+          </div>
+
+
+          <div class="explain-text">
+            ${EXPLANATION[number]}
+          </div>
+
+
+          <div class="conclusion">
+            Điền: ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+      </div>
+    `
+
+  );
+
+}
+
+
+/* =========================================================
+   REVIEW CUE
+========================================================= */
+
+function reviewCue(number){
+
+  showTranscriptCue(
+    number
+  );
+
+
+  playSegment(
+    number,
+    true
+  );
+
+}
+
+
+/* =========================================================
+   PLAY EXACT ANSWER SEGMENT
+========================================================= */
+
+function playSegment(
+  number,
+  keepTranscriptVisible = false
+){
+
+  const cue =
+  CUES[number];
+
+
+  if(!cue){
+
+    return;
+
+  }
+
+
+  segmentEnd =
+  cue.end;
+
+
+  practiceAudio.currentTime =
+  cue.start;
+
+
+  practiceAudio
+  .play()
+  .catch(
+    ()=>{}
+  );
+
+
+  audioStatusTitle.textContent =
+  `Đang nghe lại câu ${number}`;
+
+
+  audioStatusText.textContent =
+  `Đoạn ${fmt(cue.start)} – ${fmt(cue.end)} · tốc độ ${practiceAudio.playbackRate}×`;
+
+
+  if(
+    keepTranscriptVisible
+  ){
+
+    showTranscriptCue(
+      number
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SCROLL TO TRANSCRIPT
+========================================================= */
+
+function showTranscriptCue(number){
+
+  transcriptPanel
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  document
+  .querySelectorAll(
+    '.tline.transcript-focus'
+  )
+  .forEach(
+    element => {
+
+      element
+      .classList
+      .remove(
+        'transcript-focus'
+      );
+
+    }
+  );
+
+
+  const line =
+  document.getElementById(
+    'transcript-q' + number
+  );
+
+
+  if(!line){
+
+    return;
+
+  }
+
+
+  line
+  .classList
+  .add(
+    'transcript-focus'
+  );
+
+
+  line
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  /*
+   * Restart animation mỗi lần click.
+   */
+
+  line.style.animation =
+  'none';
+
+
+  void line.offsetWidth;
+
+
+  line.style.animation =
+  '';
+
+}
+
+
+/* =========================================================
+   CLOSE RESULT
+========================================================= */
+
+function closeResult(){
+
+  resultOverlay
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  const firstWrong =
+  NUMBERS.find(
+    number =>
+    !isCorrect(
+      number,
+      getAnswer(number)
+    )
+  );
+
+
+  if(firstWrong){
+
+    reviewList
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'start'
+
+    });
+
+  }
+
+  else{
+
+    transcriptPanel
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'start'
+
+    });
+
+  }
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + TAKE NOTE
+========================================================= */
+
+function zoneRoot(zone){
+
+  return zone === 'transcript'
+
+  ?
+
+  document.getElementById(
+    'transcriptRoot'
+  )
+
+  :
+
+  document.getElementById(
+    'questionsRoot'
+  );
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+/*
+ * Chỉ lưu annotation trước khi nộp.
+ * Không lưu phần review động vào localStorage.
+ */
+
+function saveMarkup(zone){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    zoneRoot(zone)
+    .innerHTML
+
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  const markup =
+  localStorage.getItem(
+    markupKey(
+      'questions'
+    )
+  );
+
+
+  if(markup){
+
+    questionsRoot.innerHTML =
+    markup;
+
+  }
+
+
+  bindContextActions(
+    'questions'
+  );
+
+
+  bindContextActions(
+    'transcript'
+  );
+
+}
+
+
+/* MENU RESET */
+
+function resetMenu(){
+
+  menuMode =
+  'selection';
+
+
+  menuTarget =
+  null;
+
+
+  menuZone =
+  null;
+
+
+  menuHighlight.style.display =
+  '';
+
+
+  menuNote.style.display =
+  '';
+
+
+  menuHighlight.textContent =
+  '🖍 Highlight';
+
+
+  menuNote.textContent =
+  '📝 Take note';
+
+
+  menuHighlight
+  .classList
+  .remove(
+    'danger'
+  );
+
+
+  menuNote
+  .classList
+  .remove(
+    'danger'
+  );
+
+}
+
+
+function hideMenu(){
+
+  selectionMenu
+  .classList
+  .remove(
+    'show'
+  );
+
+
+  resetMenu();
+
+}
+
+
+function showMenu(rect){
+
+  selectionMenu
+  .classList
+  .add(
+    'show'
+  );
+
+
+  requestAnimationFrame(
+
+    ()=>{
+
+      const width =
+      selectionMenu.offsetWidth
+      ||
+      180;
+
+
+      const left =
+      Math.min(
+
+        window.innerWidth
+        -
+        width
+        -
+        10,
+
+        Math.max(
+
+          10,
+
+          rect.left
+          +
+          rect.width/2
+          -
+          width/2
+
+        )
+
+      );
+
+
+      selectionMenu.style.left =
+      left + 'px';
+
+
+      selectionMenu.style.top =
+      Math.max(
+        10,
+        rect.top - 47
+      )
+      +
+      'px';
+
+    }
+
+  );
+
+}
+
+
+/* CAPTURE SELECTED TEXT */
+
+function captureSelection(zone){
+
+  const selection =
+  window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    !selection.rangeCount
+    ||
+    selection.isCollapsed
+  ){
+
+    return;
+
+  }
+
+
+  const range =
+  selection.getRangeAt(0);
+
+
+  const root =
+  zoneRoot(zone);
+
+
+  if(
+    !root
+    ||
+    !root.contains(
+      range.commonAncestorContainer
+    )
+  ){
+
+    return;
+
+  }
+
+
+  savedSelection =
+  range.cloneRange();
+
+
+  savedZone =
+  zone;
+
+
+  resetMenu();
+
+
+  showMenu(
+    range
+    .getBoundingClientRect()
+  );
+
+}
+
+
+function clearSelection(){
+
+  const selection =
+  window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection =
+  null;
+
+
+  savedZone =
+  null;
+
+}
+
+
+/* ADD HIGHLIGHT */
+
+function addHighlight(){
+
+  if(
+    menuMode ===
+    'delete-highlight'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+    savedSelection.cloneRange();
+
+
+    const mark =
+    document.createElement(
+      'mark'
+    );
+
+
+    mark.className =
+    'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(error){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* ADD NOTE */
+
+function addNote(){
+
+  if(
+    menuMode ===
+    'delete-note'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const note =
+  prompt(
+    'Nhập ghi chú:'
+  );
+
+
+  if(
+    note === null
+    ||
+    !note.trim()
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+    savedSelection.cloneRange();
+
+
+    const span =
+    document.createElement(
+      'span'
+    );
+
+
+    span.className =
+    'note-anchor';
+
+
+    span.dataset.note =
+    note.trim();
+
+
+    /*
+     * Hover vào note cũng xem được nội dung note.
+     */
+
+    span.title =
+    note.trim();
+
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(error){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* DELETE EXISTING ANNOTATION */
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget =
+  target;
+
+
+  menuZone =
+  zone;
+
+
+  clearSelection();
+
+
+  if(
+    type ===
+    'highlight'
+  ){
+
+    menuMode =
+    'delete-highlight';
+
+
+    menuHighlight.textContent =
+    '✕ Xóa highlight';
+
+
+    menuHighlight
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuNote.style.display =
+    'none';
+
+  }
+
+  else{
+
+    menuMode =
+    'delete-note';
+
+
+    menuNote.textContent =
+    '✕ Xóa note';
+
+
+    menuNote
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuHighlight.style.display =
+    'none';
+
+  }
+
+
+  showMenu(
+    target
+    .getBoundingClientRect()
+  );
+
+}
+
+
+function removeMark(){
+
+  if(!menuTarget){
+
+    return;
+
+  }
+
+
+  const parent =
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    menuZone
+  );
+
+
+  hideMenu();
+
+}
+
+
+/* BIND ANNOTATION EVENTS */
+
+function bindContextActions(zone){
+
+  const root =
+  zoneRoot(zone);
+
+
+  if(
+    !root
+    ||
+    root.dataset.contextBound === '1'
+  ){
+
+    return;
+
+  }
+
+
+  root.dataset.contextBound =
+  '1';
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        0
+
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        120
+
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event => {
+
+      const highlight =
+      event.target.closest(
+        'mark.user-highlight'
+      );
+
+
+      const note =
+      event.target.closest(
+        '.note-anchor'
+      );
+
+
+      if(highlight){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* MENU BUTTONS */
+
+menuHighlight
+.addEventListener(
+  'click',
+  addHighlight
+);
+
+
+menuNote
+.addEventListener(
+  'click',
+  addNote
+);
+
+
+document
+.addEventListener(
+
+  'mousedown',
+
+  event => {
+
+    if(
+      !selectionMenu.contains(
+        event.target
+      )
+
+      &&
+
+      !event.target.closest(
+        '.user-highlight'
+      )
+
+      &&
+
+      !event.target.closest(
+        '.note-anchor'
+      )
+    ){
+
+      hideMenu();
+
+    }
+
+  }
+
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    character => ({
+
+      '&':'&amp;',
+
+      '<':'&lt;',
+
+      '>':'&gt;',
+
+      '"':'&quot;',
+
+      "'":'&#39;'
+
+    })[character]
+
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+prefill();
+
+
+bindContextActions(
+  'questions'
+);
+
+
+bindContextActions(
+  'transcript'
+);
+
+</script>
+
+</body>
+</html>
