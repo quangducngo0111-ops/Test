@@ -40,7 +40,9 @@ button{
   cursor:pointer;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .top{
   position:sticky;
@@ -104,7 +106,9 @@ button{
   border-radius:9px;
 }
 
-/* PAGE */
+/* =========================
+   PAGE
+========================= */
 
 .page{
   width:min(1350px,calc(100% - 18px));
@@ -133,7 +137,9 @@ button{
   font-size:11.5px;
 }
 
-/* PROGRESS */
+/* =========================
+   PROGRESS
+========================= */
 
 .progress-wrap{
   min-width:245px;
@@ -164,7 +170,9 @@ button{
   transition:width .2s ease;
 }
 
-/* WORKSPACE */
+/* =========================
+   WORKSPACE
+========================= */
 
 .workspace{
   display:grid;
@@ -181,6 +189,7 @@ button{
   min-width:0;
   overflow:auto;
   max-height:calc(100vh - 205px);
+  scroll-behavior:smooth;
 }
 
 .passage{
@@ -216,7 +225,54 @@ button{
   margin-right:7px;
 }
 
-/* INSTRUCTIONS */
+/* =========================
+   EVIDENCE IN PASSAGE
+========================= */
+
+.evidence-source{
+  border-radius:4px;
+  transition:
+    background .3s ease,
+    box-shadow .3s ease,
+    font-weight .3s ease;
+}
+
+.evidence-source.evidence-focus{
+  background:#fff1a8;
+  box-shadow:
+    0 0 0 3px rgba(245,190,35,.25),
+    0 0 18px rgba(245,190,35,.35);
+  font-weight:800;
+  padding:2px 3px;
+  margin:-2px -3px;
+  animation:evidencePulse .85s ease 2;
+}
+
+@keyframes evidencePulse{
+
+  0%{
+    box-shadow:
+      0 0 0 2px rgba(245,190,35,.15),
+      0 0 4px rgba(245,190,35,.1);
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 6px rgba(245,190,35,.30),
+      0 0 24px rgba(245,190,35,.55);
+  }
+
+  100%{
+    box-shadow:
+      0 0 0 3px rgba(245,190,35,.25),
+      0 0 18px rgba(245,190,35,.35);
+  }
+
+}
+
+/* =========================
+   INSTRUCTIONS
+========================= */
 
 .instructions{
   margin-bottom:13px;
@@ -251,7 +307,9 @@ button{
   color:#21164b;
 }
 
-/* QUESTIONS */
+/* =========================
+   QUESTIONS
+========================= */
 
 .qcard{
   background:#fff;
@@ -323,7 +381,9 @@ button{
   color:#9b2838;
 }
 
-/* REVIEW */
+/* =========================
+   REVIEW
+========================= */
 
 .inline-review{
   margin-top:12px;
@@ -364,7 +424,9 @@ button{
   font-weight:900;
 }
 
-/* COMPARE */
+/* =========================
+   COMPARE
+========================= */
 
 .compare-box{
   margin-top:12px;
@@ -403,15 +465,49 @@ button{
   line-height:1.6;
 }
 
+/* CLICKABLE CITATION */
+
 .passage-evidence{
-  padding:9px 10px;
+  position:relative;
+  padding:10px 35px 10px 10px;
   background:#eef3ff;
+  border:1px solid #d6dffb;
   border-left:3px solid #5773d9;
-  border-radius:6px;
+  border-radius:7px;
   color:#293a70;
   font-size:11px;
   font-style:italic;
   line-height:1.6;
+  cursor:pointer;
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .15s ease;
+}
+
+.passage-evidence:hover{
+  background:#e5ecff;
+  border-color:#b9c8f8;
+  transform:translateY(-1px);
+}
+
+.passage-evidence::after{
+  content:"↗";
+  position:absolute;
+  top:50%;
+  right:12px;
+  transform:translateY(-50%);
+  font-size:16px;
+  font-style:normal;
+  font-weight:950;
+  color:#5b43b5;
+}
+
+.evidence-help{
+  margin-top:5px;
+  color:#7b8292;
+  font-size:9.5px;
+  font-style:normal;
 }
 
 .compare-analysis{
@@ -437,7 +533,9 @@ button{
   line-height:1.55;
 }
 
-/* HIGHLIGHT */
+/* =========================
+   HIGHLIGHT
+========================= */
 
 mark.user-highlight{
   background:#fff29a;
@@ -485,7 +583,9 @@ mark.user-highlight{
   background:#fff1f3;
 }
 
-/* BOTTOM */
+/* =========================
+   BOTTOM
+========================= */
 
 .bottom{
   position:sticky;
@@ -540,7 +640,9 @@ mark.user-highlight{
   font-weight:900;
 }
 
-/* RESULT */
+/* =========================
+   RESULT
+========================= */
 
 .overlay{
   position:fixed;
@@ -582,7 +684,9 @@ mark.user-highlight{
   font-weight:900;
 }
 
-/* START */
+/* =========================
+   START
+========================= */
 
 .start{
   position:fixed;
@@ -668,6 +772,7 @@ mark.user-highlight{
   .options{
     grid-template-columns:1fr;
   }
+
 }
 </style>
 </head>
@@ -699,16 +804,35 @@ mark.user-highlight{
     </p>
 
     <div class="field">
-      <label>Họ và tên</label>
-      <input id="studentName" placeholder="Nguyễn Văn A">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+
     </div>
 
     <div class="field">
-      <label>Lớp</label>
-      <input id="studentClass" placeholder="11A1">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+
     </div>
 
-    <button class="btn" onclick="startPractice()">
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
       Bắt đầu luyện
     </button>
 
@@ -730,7 +854,10 @@ mark.user-highlight{
 
     <div class="left">
 
-      <a class="back" href="../">
+      <a
+        class="back"
+        href="../"
+      >
         ← True / False / Not Given
       </a>
 
@@ -803,104 +930,210 @@ mark.user-highlight{
 
     <!-- PASSAGE -->
 
-    <div class="pane passage">
+    <div
+      class="pane passage"
+      id="passagePane"
+    >
 
-      <div id="passageRoot" class="content">
+      <div
+        id="passageRoot"
+        class="content"
+      >
 
         <h2>
           Tea and the Industrial Revolution
         </h2>
 
 
+        <!-- PARAGRAPH B -->
+
         <p>
-          <span class="para-letter">B</span>
+
+          <span class="para-letter">
+            B
+          </span>
+
           Macfarlane compares the puzzle to a combination lock.
+
           ‘There are about 20 different factors and all of them need to be present
           before the revolution can happen,’ he says.
-          For industry to take off, there needs to be the technology and power
-          to drive factories, large urban populations to provide cheap labour,
-          easy transport to move goods around, an affluent middle-class willing
-          to buy mass-produced objects, a market-driven economy and a political
-          system that allows this to happen.
+
+          <span
+            class="evidence-source"
+            data-evidence="8"
+          >
+            For industry to take off, there needs to be the technology and power
+            to drive factories, large urban populations to provide cheap labour,
+            easy transport to move goods around, an affluent middle-class willing
+            to buy mass-produced objects, a market-driven economy and a political
+            system that allows this to happen.
+          </span>
+
           While this was the case for England, other nations, such as Japan,
           the Netherlands and France also met some of these criteria but were
           not industrialising.
+
           All these factors must have been necessary.
+
           But not sufficient to cause the revolution, says Macfarlane.
-          ‘After all, Holland had everything except coal while China also had
-          many of these factors.
+
+          ‘After all, Holland had everything except coal while
+
+          <span
+            class="evidence-source"
+            data-evidence="8"
+          >
+            China also had many of these factors.
+          </span>
+
           Most historians are convinced there are one or two missing factors
           that you need to open the lock.’
+
         </p>
 
 
+        <!-- PARAGRAPH C -->
+
         <p>
-          <span class="para-letter">C</span>
+
+          <span class="para-letter">
+            C
+          </span>
+
           The missing factors, he proposes, are to be found in almost every
           kitchen cupboard.
+
           Tea and beer, two of the nation’s favourite drinks, fuelled the revolution.
-          The antiseptic properties of tannin, the active ingredient in tea,
-          and of hops in beer – plus the fact that both are made with boiled water –
-          allowed urban communities to flourish at close quarters without
-          succumbing to water-borne diseases such as dysentery.
+
+          <span
+            class="evidence-source"
+            data-evidence="9"
+          >
+            The antiseptic properties of tannin, the active ingredient in tea,
+            and of hops in beer – plus the fact that both are made with boiled water –
+            allowed urban communities to flourish at close quarters without
+            succumbing to water-borne diseases such as dysentery.
+          </span>
+
           The theory sounds eccentric but once he starts to explain the detective
           work that went into his deduction, the scepticism gives way to wary admiration.
+
           Macfarlane’s case has been strengthened by support from notable quarters –
-          Roy Porter, the distinguished medical historian, recently wrote a favourable
-          appraisal of his research.
+
+          <span
+            class="evidence-source"
+            data-evidence="10"
+          >
+            Roy Porter, the distinguished medical historian, recently wrote
+            a favourable appraisal of his research.
+          </span>
+
         </p>
 
 
+        <!-- PARAGRAPH D -->
+
         <p>
-          <span class="para-letter">D</span>
+
+          <span class="para-letter">
+            D
+          </span>
+
           Macfarlane had wondered for a long time how the Industrial Revolution
           came about.
+
           Historians had alighted on one interesting factor around the mid-18th
           century that required explanation.
-          Between about 1650 and 1740, the population in Britain was static.
-          But then there was a burst in population growth.
+
+          <span
+            class="evidence-source"
+            data-evidence="11"
+          >
+            Between about 1650 and 1740, the population in Britain was static.
+            But then there was a burst in population growth.
+          </span>
+
           Macfarlane says:
+
           ‘The infant mortality rate halved in the space of 20 years,
           and this happened in both rural areas and cities, and across all classes.
+
           People suggested four possible causes.
+
           Was there a sudden change in the viruses and bacteria around? Unlikely.
+
           Was there a revolution in medical science?
+
           But this was a century before Lister’s revolution.
+
           Was there a change in environmental conditions?
+
           There were improvements in agriculture that wiped out malaria,
           but these were small gains.
+
           Sanitation did not become widespread until the 19th century.
+
           The only option left is food.
+
           But the height and weight statistics show a decline.
+
           So the food must have got worse.
+
           Efforts to explain this sudden reduction in child deaths appeared
           to draw a blank.’
+
         </p>
 
 
+        <!-- PARAGRAPH E -->
+
         <p>
-          <span class="para-letter">E</span>
+
+          <span class="para-letter">
+            E
+          </span>
+
           This population burst seemed to happen at just the right time
           to provide labour for the Industrial Revolution.
+
           ‘When you start moving towards an industrial revolution,
           it is economically efficient to have people living close together,’
           says Macfarlane.
+
           ‘But then you get disease, particularly from human waste.’
+
           Some digging around in historical records revealed that there was
           a change in the incidence of water-borne disease at that time,
           especially dysentery.
+
           Macfarlane deduced that whatever the British were drinking must have
           been important in regulating disease.
+
           He says,
-          ‘We drank beer.
-          For a long time, the English were protected by the strong antibacterial
-          agent in hops, which were added to help preserve the beer.
-          But in the late 17th century a tax was introduced on malt,
-          the basic ingredient of beer.
-          The poor turned to water and gin and in the 1720s the mortality rate
-          began to rise again.
+
+          <span
+            class="evidence-source"
+            data-evidence="12"
+          >
+            ‘We drank beer.
+            For a long time, the English were protected by the strong antibacterial
+            agent in hops, which were added to help preserve the beer.’
+          </span>
+
+          <span
+            class="evidence-source"
+            data-evidence="13"
+          >
+            But in the late 17th century a tax was introduced on malt,
+            the basic ingredient of beer.
+            The poor turned to water and gin and in the 1720s the mortality rate
+            began to rise again.
+          </span>
+
           Then it suddenly dropped again.
+
           What caused this?’
+
         </p>
 
       </div>
@@ -912,7 +1145,10 @@ mark.user-highlight{
 
     <div class="pane questions">
 
-      <div id="questionsRoot" class="content">
+      <div
+        id="questionsRoot"
+        class="content"
+      >
 
         <div class="instructions">
 
@@ -946,7 +1182,7 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q8 -->
+        <!-- QUESTION 8 -->
 
         <div class="qcard" id="q8">
 
@@ -1001,7 +1237,7 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q9 -->
+        <!-- QUESTION 9 -->
 
         <div class="qcard" id="q9">
 
@@ -1056,7 +1292,7 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q10 -->
+        <!-- QUESTION 10 -->
 
         <div class="qcard" id="q10">
 
@@ -1111,7 +1347,7 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q11 -->
+        <!-- QUESTION 11 -->
 
         <div class="qcard" id="q11">
 
@@ -1166,7 +1402,7 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q12 -->
+        <!-- QUESTION 12 -->
 
         <div class="qcard" id="q12">
 
@@ -1221,7 +1457,7 @@ mark.user-highlight{
         </div>
 
 
-        <!-- Q13 -->
+        <!-- QUESTION 13 -->
 
         <div class="qcard" id="q13">
 
@@ -1316,7 +1552,10 @@ mark.user-highlight{
 
   </div>
 
-  <button class="submit" onclick="submitPractice()">
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
     Nộp bài
   </button>
 
@@ -1325,7 +1564,10 @@ mark.user-highlight{
 
 <!-- HIGHLIGHT MENU -->
 
-<div id="selectionMenu" class="selection-menu">
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
 
   <button
     id="menuHighlight"
@@ -1372,7 +1614,10 @@ mark.user-highlight{
       "
     ></div>
 
-    <div id="resultScore" class="score">
+    <div
+      id="resultScore"
+      class="score"
+    >
       0 / 6
     </div>
 
@@ -1385,7 +1630,10 @@ mark.user-highlight{
       Các câu sai được giải thích trực tiếp ngay dưới từng câu hỏi.
     </p>
 
-    <button class="btn" onclick="closeResult()">
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
       Xem lại bài
     </button>
 
@@ -1396,17 +1644,21 @@ mark.user-highlight{
 
 <script>
 
-/* CONFIG */
+/* =========================================================
+   CONFIG
+========================================================= */
 
 const RESULT_ENDPOINT=
 'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
 
 
 const ATTEMPT_KEY=
-'PRACTICE_TFNG02_TEA_INDUSTRIAL_REVOLUTION';
+'PRACTICE_TFNG02_TEA_INDUSTRIAL_REVOLUTION_V2';
 
 
-/* ANSWER KEY */
+/* =========================================================
+   ANSWER KEY
+========================================================= */
 
 const KEY={
   8:'NOT GIVEN',
@@ -1418,7 +1670,9 @@ const KEY={
 };
 
 
-/* STATEMENTS */
+/* =========================================================
+   STATEMENTS
+========================================================= */
 
 const STATEMENTS={
 
@@ -1443,12 +1697,14 @@ const STATEMENTS={
 };
 
 
-/* EVIDENCE */
+/* =========================================================
+   REVIEW EVIDENCE TEXT
+========================================================= */
 
 const EVIDENCE={
 
   8:
-  'For industry to take off, there needs to be ... easy transport to move goods around ... while China also had many of these factors.',
+  'For industry to take off, there needs to be ... easy transport to move goods around ... China also had many of these factors.',
 
   9:
   'The antiseptic properties of tannin ... and of hops in beer – plus the fact that both are made with boiled water – allowed urban communities to flourish ... without succumbing to water-borne diseases such as dysentery.',
@@ -1468,15 +1724,17 @@ const EVIDENCE={
 };
 
 
-/* ANALYSIS */
+/* =========================================================
+   ANALYSIS
+========================================================= */
 
 const COMPARE={
 
   8:
   `
     Passage nói <b>easy transport</b> là một trong những điều kiện cần cho công nghiệp,
-    đồng thời chỉ nói rằng China có <b>many of these factors</b>.
-    Tuy nhiên, bài không xác định China có hay không có hệ thống vận tải phù hợp.
+    đồng thời chỉ nói China có <b>many of these factors</b>.
+    Bài không xác định China có hay không có hệ thống vận tải phù hợp.
     Vì vậy thông tin cụ thể về transport system của China không được cung cấp.
   `,
 
@@ -1494,7 +1752,7 @@ const COMPARE={
     nhưng passage nói ông đã viết một
     <b>“favourable appraisal”</b>
     về nghiên cứu của Macfarlane.
-    “Favourable” nghĩa là đánh giá tích cực, tức là trái với “disagrees”.
+    “Favourable” nghĩa là đánh giá tích cực, trái với “disagrees”.
   `,
 
   11:
@@ -1518,14 +1776,16 @@ const COMPARE={
   13:
   `
     Passage cho thấy chuỗi nguyên nhân:
-    <b>tax on malt → beer trở nên khó tiếp cận hơn → người nghèo chuyển sang water và gin → mortality rate tăng</b>.
+    <b>tax on malt → người nghèo chuyển sang water và gin → mortality rate tăng</b>.
     Vì vậy thuế malt gián tiếp góp phần làm tăng tỷ lệ tử vong.
   `
 
 };
 
 
-/* CONCLUSION */
+/* =========================================================
+   CONCLUSION
+========================================================= */
 
 const CONCLUSION={
 
@@ -1550,20 +1810,28 @@ const CONCLUSION={
 };
 
 
-/* STATE */
+/* =========================================================
+   STATE
+========================================================= */
 
 let startedAt=0;
+
 let submitted=false;
 
 let savedSelection=null;
+
 let savedZone=null;
 
 let menuMode='selection';
+
 let menuTarget=null;
+
 let menuZone=null;
 
 
-/* STUDENT */
+/* =========================================================
+   STUDENT
+========================================================= */
 
 function readStudent(){
 
@@ -1577,7 +1845,8 @@ function readStudent(){
       'null'
     );
 
-  }catch(e){
+  }
+  catch(e){
 
     return null;
 
@@ -1588,15 +1857,17 @@ function readStudent(){
 
 function prefill(){
 
-  const s=readStudent();
+  const student=
+  readStudent();
 
-  if(s){
+
+  if(student){
 
     studentName.value=
-    s.name || '';
+    student.name || '';
 
     studentClass.value=
-    s.className || '';
+    student.className || '';
 
   }
 
@@ -1608,11 +1879,16 @@ function startPractice(){
   const name=
   studentName.value.trim();
 
-  const cls=
+
+  const className=
   studentClass.value.trim();
 
 
-  if(!name || !cls){
+  if(
+    !name
+    ||
+    !className
+  ){
 
     startError.textContent=
     'Vui lòng nhập đầy đủ Họ tên và Lớp.';
@@ -1623,16 +1899,22 @@ function startPractice(){
 
 
   localStorage.setItem(
+
     'IELTS_PRACTICE_STUDENT',
+
     JSON.stringify({
+
       name:name,
-      className:cls
+
+      className:className
+
     })
+
   );
 
 
   studentInfo.textContent=
-  `${name} · ${cls}`;
+  `${name} · ${className}`;
 
 
   start.classList.add(
@@ -1653,7 +1935,9 @@ function startPractice(){
 }
 
 
-/* TIMER */
+/* =========================================================
+   TIMER
+========================================================= */
 
 function fmt(sec){
 
@@ -1664,76 +1948,106 @@ function fmt(sec){
   );
 
 
-  const h=
+  const hours=
   Math.floor(
     sec / 3600
   );
 
 
-  const m=
+  const minutes=
   Math.floor(
     (sec % 3600) / 60
   );
 
 
-  const s=
+  const seconds=
   sec % 60;
 
 
-  return h
+  return hours
+
   ?
-  `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+
+  `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`
+
   :
-  `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+  `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
 
 }
 
 
 setInterval(
+
   ()=>{
 
     if(startedAt){
 
       timer.textContent=
       fmt(
-        (Date.now()-startedAt)/1000
+        (
+          Date.now()
+          -
+          startedAt
+        )
+        /
+        1000
       );
 
     }
 
   },
+
   500
+
 );
 
 
-/* ANSWERS */
+/* =========================================================
+   ANSWERS
+========================================================= */
 
-function saveAnswer(n,value){
+function saveAnswer(
+  number,
+  value
+){
 
   if(submitted){
+
     return;
+
   }
 
 
   localStorage.setItem(
-    `${ATTEMPT_KEY}_q${n}`,
+
+    `${ATTEMPT_KEY}_q${number}`,
+
     value
+
   );
 
 
-  navState(n);
+  navState(
+    number
+  );
+
 
   updateProgress();
 
 }
 
 
-function getAnswer(n){
+function getAnswer(number){
 
   return localStorage.getItem(
-    `${ATTEMPT_KEY}_q${n}`
+
+    `${ATTEMPT_KEY}_q${number}`
+
   )
+
   ||
+
   '';
 
 }
@@ -1741,19 +2055,29 @@ function getAnswer(n){
 
 function restoreAnswers(){
 
-  [8,9,10,11,12,13]
+  [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ]
   .forEach(
-    n=>{
+
+    number => {
 
       const value=
-      getAnswer(n);
+      getAnswer(
+        number
+      );
 
 
       if(value){
 
         const input=
         document.querySelector(
-          `input[name="q${n}"][value="${value}"]`
+          `input[name="q${number}"][value="${value}"]`
         );
 
 
@@ -1767,24 +2091,27 @@ function restoreAnswers(){
       }
 
 
-      navState(n);
+      navState(
+        number
+      );
 
     }
+
   );
 
 }
 
 
-function navState(n){
+function navState(number){
 
   document
   .getElementById(
-    'nav'+n
+    'nav' + number
   )
   .classList
   .toggle(
     'answered',
-    !!getAnswer(n)
+    !!getAnswer(number)
   );
 
 }
@@ -1793,9 +2120,17 @@ function navState(n){
 function updateProgress(){
 
   const answered=
-  [8,9,10,11,12,13]
+  [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ]
   .filter(
-    n=>getAnswer(n)
+    number =>
+    getAnswer(number)
   )
   .length;
 
@@ -1806,7 +2141,7 @@ function updateProgress(){
 
   progressBar.style.width=
   (
-    answered/6*100
+    answered / 6 * 100
   )
   +
   '%';
@@ -1814,71 +2149,100 @@ function updateProgress(){
 }
 
 
-function goQ(n){
+function goQ(number){
 
   document
   .getElementById(
-    'q'+n
+    'q' + number
   )
   .scrollIntoView({
+
     behavior:'smooth',
+
     block:'center'
+
   });
 
 }
 
 
-/* SUBMIT */
+/* =========================================================
+   SUBMIT
+========================================================= */
 
 async function submitPractice(){
 
   if(submitted){
+
     return;
+
   }
 
 
-  submitted=true;
+  submitted=
+  true;
 
 
-  let score=0;
+  let score=
+  0;
 
-  const answers={};
+
+  const answers=
+  {};
 
 
-  [8,9,10,11,12,13]
+  [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ]
   .forEach(
-    n=>{
+
+    number => {
 
       const user=
-      getAnswer(n);
+      getAnswer(
+        number
+      );
+
 
       const correct=
-      KEY[n];
+      KEY[number];
+
 
       const ok=
-      user===correct;
+      user === correct;
 
 
-      answers[n]=
+      answers[number]=
       user || '';
 
 
       if(ok){
+
         score++;
+
       }
 
 
-      const inputs=[
+      const inputs=
+      [
         ...document.querySelectorAll(
-          `input[name="q${n}"]`
+          `input[name="q${number}"]`
         )
       ];
 
 
       inputs.forEach(
-        input=>{
 
-          input.disabled=true;
+        input => {
+
+          input.disabled=
+          true;
+
 
           const label=
           input.closest(
@@ -1893,7 +2257,9 @@ async function submitPractice(){
 
 
           if(
-            input.value===correct
+            input.value
+            ===
+            correct
           ){
 
             label.classList.add(
@@ -1916,12 +2282,13 @@ async function submitPractice(){
           }
 
         }
+
       );
 
 
       document
       .getElementById(
-        'nav'+n
+        'nav' + number
       )
       .classList
       .add(
@@ -1936,7 +2303,7 @@ async function submitPractice(){
       if(!ok){
 
         reviewHTML(
-          n,
+          number,
           user,
           correct
         );
@@ -1944,23 +2311,30 @@ async function submitPractice(){
       }
 
     }
+
   );
 
 
   const durationSeconds=
   Math.floor(
-    (Date.now()-startedAt)/1000
+    (
+      Date.now()
+      -
+      startedAt
+    )
+    /
+    1000
   );
 
 
-  const s=
+  const student=
   readStudent();
 
 
   resultStudent.textContent=
-  s
+  student
   ?
-  `${s.name} · ${s.className}`
+  `${student.name} · ${student.className}`
   :
   '';
 
@@ -2002,10 +2376,10 @@ async function submitPractice(){
     'PRACTICE',
 
     name:
-    s?.name || '',
+    student?.name || '',
 
     className:
-    s?.className || '',
+    student?.className || '',
 
     skill:
     'Reading',
@@ -2023,13 +2397,16 @@ async function submitPractice(){
     '6',
 
     durationSeconds:
-    String(durationSeconds),
+    String(
+      durationSeconds
+    ),
 
     details:
     details,
 
     submittedAt:
-    new Date().toISOString()
+    new Date()
+    .toISOString()
 
   });
 
@@ -2037,22 +2414,32 @@ async function submitPractice(){
   try{
 
     await fetch(
+
       RESULT_ENDPOINT,
+
       {
+
         method:'POST',
+
         mode:'no-cors',
 
         headers:{
+
           'Content-Type':
           'application/x-www-form-urlencoded;charset=UTF-8'
+
         },
 
         body:
         body.toString()
+
       }
+
     );
 
-  }catch(err){
+  }
+
+  catch(err){
 
     console.warn(
       'Không gửi được kết quả Practice:',
@@ -2064,24 +2451,26 @@ async function submitPractice(){
 }
 
 
-/* REVIEW */
+/* =========================================================
+   REVIEW
+========================================================= */
 
 function reviewHTML(
-  n,
+  number,
   user,
   correct
 ){
 
   document
   .getElementById(
-    'review'+n
+    'review' + number
   )
   .innerHTML=
   `
     <div class="inline-review">
 
       <div class="review-title">
-        Câu ${n}
+        Câu ${number}
       </div>
 
 
@@ -2125,7 +2514,7 @@ function reviewHTML(
           </div>
 
           <div class="compare-text">
-            ${STATEMENTS[n]}
+            ${STATEMENTS[number]}
           </div>
 
         </div>
@@ -2137,8 +2526,20 @@ function reviewHTML(
             Passage
           </div>
 
-          <div class="passage-evidence">
-            “${EVIDENCE[n]}”
+          <div
+            class="passage-evidence"
+            role="button"
+            tabindex="0"
+            onclick="focusEvidence(${number})"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusEvidence(${number});}"
+          >
+
+            “${EVIDENCE[number]}”
+
+            <div class="evidence-help">
+              Nhấn để xem vị trí trong bài đọc
+            </div>
+
           </div>
 
         </div>
@@ -2151,7 +2552,7 @@ function reviewHTML(
           </div>
 
           <div class="compare-analysis">
-            ${COMPARE[n]}
+            ${COMPARE[number]}
           </div>
 
         </div>
@@ -2164,7 +2565,7 @@ function reviewHTML(
           </div>
 
           <div class="conclusion-text">
-            ${CONCLUSION[n]}
+            ${CONCLUSION[number]}
           </div>
 
         </div>
@@ -2177,6 +2578,114 @@ function reviewHTML(
 }
 
 
+/* =========================================================
+   CLICK EVIDENCE -> GLOW PASSAGE
+========================================================= */
+
+function focusEvidence(number){
+
+  /*
+   * Xóa highlight đối chiếu trước đó.
+   */
+
+  document
+  .querySelectorAll(
+    '.evidence-source.evidence-focus'
+  )
+  .forEach(
+
+    element => {
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  /*
+   * Có một số câu như câu 8 có hơn 1 đoạn evidence.
+   */
+
+  const targets=
+  [
+    ...document.querySelectorAll(
+      `[data-evidence="${number}"]`
+    )
+  ];
+
+
+  if(
+    !targets.length
+  ){
+
+    return;
+
+  }
+
+
+  /*
+   * Làm nổi bật tất cả đoạn liên quan.
+   */
+
+  targets.forEach(
+
+    target => {
+
+      target.classList.add(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  /*
+   * Cuộn pane bài đọc tới evidence đầu tiên.
+   */
+
+  targets[0]
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  /*
+   * Chạy lại animation mỗi lần bấm.
+   */
+
+  targets.forEach(
+
+    target => {
+
+      target.style.animation=
+      'none';
+
+
+      void target.offsetWidth;
+
+
+      target.style.animation=
+      '';
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   RESULT MODAL
+========================================================= */
+
 function closeResult(){
 
   resultOverlay
@@ -2188,7 +2697,9 @@ function closeResult(){
 }
 
 
-/* HIGHLIGHT + NOTES */
+/* =========================================================
+   HIGHLIGHT + NOTE
+========================================================= */
 
 const selectionMenu=
 document.getElementById(
@@ -2211,11 +2722,17 @@ document.getElementById(
 function zoneRoot(zone){
 
   return document.getElementById(
-    zone==='passage'
+
+    zone === 'passage'
+
     ?
+
     'passageRoot'
+
     :
+
     'questionsRoot'
+
   );
 
 }
@@ -2240,14 +2757,20 @@ function loadNotes(zone){
   try{
 
     return JSON.parse(
+
       localStorage.getItem(
         notesKey(zone)
       )
+
       ||
+
       '[]'
+
     );
 
-  }catch(e){
+  }
+
+  catch(e){
 
     return [];
 
@@ -2256,11 +2779,19 @@ function loadNotes(zone){
 }
 
 
-function saveNotes(zone,notes){
+function saveNotes(
+  zone,
+  notes
+){
 
   localStorage.setItem(
+
     notesKey(zone),
-    JSON.stringify(notes)
+
+    JSON.stringify(
+      notes
+    )
+
   );
 
 }
@@ -2268,9 +2799,34 @@ function saveNotes(zone,notes){
 
 function saveMarkup(zone){
 
+  /*
+   * Không lưu class evidence-focus vì đây chỉ là hiệu ứng đối chiếu.
+   */
+
+  document
+  .querySelectorAll(
+    '.evidence-source.evidence-focus'
+  )
+  .forEach(
+
+    element => {
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
   localStorage.setItem(
+
     markupKey(zone),
-    zoneRoot(zone).innerHTML
+
+    zoneRoot(zone)
+    .innerHTML
+
   );
 
 }
@@ -2278,9 +2834,13 @@ function saveMarkup(zone){
 
 function restoreMarkup(){
 
-  ['passage','questions']
+  [
+    'passage',
+    'questions'
+  ]
   .forEach(
-    zone=>{
+
+    zone => {
 
       const markup=
       localStorage.getItem(
@@ -2290,43 +2850,64 @@ function restoreMarkup(){
 
       if(markup){
 
-        zoneRoot(zone).innerHTML=
+        zoneRoot(zone)
+        .innerHTML=
         markup;
 
       }
 
 
-      bindContextActions(zone);
+      bindContextActions(
+        zone
+      );
 
     }
+
   );
 
 }
 
 
-/* MENU */
+/* =========================================================
+   FLOATING MENU
+========================================================= */
 
 function hideSelectionMenu(){
 
   selectionMenu
   .classList
-  .remove('show');
+  .remove(
+    'show'
+  );
 
 
-  menuTarget=null;
-  menuZone=null;
-  menuMode='selection';
+  menuTarget=
+  null;
+
+
+  menuZone=
+  null;
+
+
+  menuMode=
+  'selection';
 
 }
 
 
 function resetMenuButtons(){
 
-  menuHighlight.style.display='';
-  menuNote.style.display='';
+  menuHighlight.style.display=
+  '';
+
+
+  menuNote.style.display=
+  '';
+
 
   menuHighlight.textContent=
   '🖍 Highlight';
+
 
   menuNote.textContent=
   '📝 Take note';
@@ -2334,12 +2915,16 @@ function resetMenuButtons(){
 
   menuHighlight
   .classList
-  .remove('danger');
+  .remove(
+    'danger'
+  );
 
 
   menuNote
   .classList
-  .remove('danger');
+  .remove(
+    'danger'
+  );
 
 }
 
@@ -2348,10 +2933,13 @@ function positionMenu(rect){
 
   selectionMenu
   .classList
-  .add('show');
+  .add(
+    'show'
+  );
 
 
   requestAnimationFrame(
+
     ()=>{
 
       const width=
@@ -2362,38 +2950,52 @@ function positionMenu(rect){
 
       const left=
       Math.min(
-        window.innerWidth-width-10,
+
+        window.innerWidth
+        -
+        width
+        -
+        10,
+
         Math.max(
+
           10,
+
           rect.left
           +
-          rect.width/2
+          rect.width / 2
           -
-          width/2
+          width / 2
+
         )
+
       );
 
 
       const top=
       Math.max(
         10,
-        rect.top-47
+        rect.top - 47
       );
 
 
       selectionMenu.style.left=
-      left+'px';
+      left + 'px';
+
 
       selectionMenu.style.top=
-      top+'px';
+      top + 'px';
 
     }
+
   );
 
 }
 
 
-/* SELECTION */
+/* =========================================================
+   TEXT SELECTION
+========================================================= */
 
 function captureSelection(zone){
 
@@ -2404,7 +3006,7 @@ function captureSelection(zone){
   if(
     !selection
     ||
-    selection.rangeCount===0
+    selection.rangeCount === 0
     ||
     selection.isCollapsed
   ){
@@ -2479,19 +3081,26 @@ function clearBrowserSelection(){
   }
 
 
-  savedSelection=null;
+  savedSelection=
+  null;
 
-  savedZone=null;
+
+  savedZone=
+  null;
 
 }
 
 
-/* ADD HIGHLIGHT */
+/* =========================================================
+   ADD HIGHLIGHT
+========================================================= */
 
 function addHighlight(){
 
   if(
-    menuMode==='delete-highlight'
+    menuMode
+    ===
+    'delete-highlight'
   ){
 
     removeHighlight();
@@ -2533,7 +3142,9 @@ function addHighlight(){
     );
 
 
-    range.insertNode(mark);
+    range.insertNode(
+      mark
+    );
 
 
     saveMarkup(
@@ -2546,7 +3157,9 @@ function addHighlight(){
 
     hideSelectionMenu();
 
-  }catch(e){
+  }
+
+  catch(e){
 
     alert(
       'Hãy chọn một đoạn chữ ngắn hơn.'
@@ -2557,12 +3170,16 @@ function addHighlight(){
 }
 
 
-/* ADD NOTE */
+/* =========================================================
+   ADD NOTE
+========================================================= */
 
 function addNote(){
 
   if(
-    menuMode==='delete-note'
+    menuMode
+    ===
+    'delete-note'
   ){
 
     removeNote();
@@ -2600,7 +3217,7 @@ function addNote(){
 
 
   if(
-    text===null
+    text === null
     ||
     !text.trim()
   ){
@@ -2653,9 +3270,13 @@ function addNote(){
 
 
     notes.push({
+
       id:id,
+
       quote:quote,
+
       text:text.trim()
+
     });
 
 
@@ -2675,7 +3296,9 @@ function addNote(){
 
     hideSelectionMenu();
 
-  }catch(e){
+  }
+
+  catch(e){
 
     alert(
       'Hãy chọn một đoạn chữ ngắn hơn.'
@@ -2686,7 +3309,9 @@ function addNote(){
 }
 
 
-/* DELETE MENU */
+/* =========================================================
+   DELETE MENU
+========================================================= */
 
 function showDeleteMenu(
   target,
@@ -2706,7 +3331,9 @@ function showDeleteMenu(
 
 
   if(
-    type==='highlight'
+    type
+    ===
+    'highlight'
   ){
 
     menuMode=
@@ -2727,7 +3354,9 @@ function showDeleteMenu(
     menuNote.style.display=
     'none';
 
-  }else{
+  }
+
+  else{
 
     menuMode=
     'delete-note';
@@ -2754,18 +3383,23 @@ function showDeleteMenu(
 
 
   positionMenu(
-    target.getBoundingClientRect()
+    target
+    .getBoundingClientRect()
   );
 
 }
 
 
-/* REMOVE HIGHLIGHT */
+/* =========================================================
+   REMOVE HIGHLIGHT
+========================================================= */
 
 function removeHighlight(){
 
   if(!menuTarget){
+
     return;
+
   }
 
 
@@ -2782,8 +3416,11 @@ function removeHighlight(){
   ){
 
     parent.insertBefore(
+
       menuTarget.firstChild,
+
       menuTarget
+
     );
 
   }
@@ -2795,7 +3432,9 @@ function removeHighlight(){
   parent.normalize();
 
 
-  saveMarkup(zone);
+  saveMarkup(
+    zone
+  );
 
 
   hideSelectionMenu();
@@ -2806,12 +3445,16 @@ function removeHighlight(){
 }
 
 
-/* REMOVE NOTE */
+/* =========================================================
+   REMOVE NOTE
+========================================================= */
 
 function removeNote(){
 
   if(!menuTarget){
+
     return;
+
   }
 
 
@@ -2826,8 +3469,10 @@ function removeNote(){
   const notes=
   loadNotes(zone)
   .filter(
-    note=>
-    note.id!==id
+
+    note =>
+    note.id !== id
+
   );
 
 
@@ -2846,8 +3491,11 @@ function removeNote(){
   ){
 
     parent.insertBefore(
+
       menuTarget.firstChild,
+
       menuTarget
+
     );
 
   }
@@ -2859,7 +3507,9 @@ function removeNote(){
   parent.normalize();
 
 
-  saveMarkup(zone);
+  saveMarkup(
+    zone
+  );
 
 
   hideSelectionMenu();
@@ -2870,7 +3520,9 @@ function removeNote(){
 }
 
 
-/* BIND */
+/* =========================================================
+   BIND
+========================================================= */
 
 function bindContextActions(zone){
 
@@ -2879,43 +3531,61 @@ function bindContextActions(zone){
 
 
   if(!root){
+
     return;
+
   }
 
 
   root.addEventListener(
+
     'mouseup',
+
     ()=>{
 
       resetMenuButtons();
 
+
       setTimeout(
+
         ()=>captureSelection(zone),
+
         0
+
       );
 
     }
+
   );
 
 
   root.addEventListener(
+
     'touchend',
+
     ()=>{
 
       resetMenuButtons();
 
+
       setTimeout(
+
         ()=>captureSelection(zone),
+
         120
+
       );
 
     }
+
   );
 
 
   root.addEventListener(
+
     'click',
-    event=>{
+
+    event => {
 
       const note=
       event.target.closest(
@@ -2933,11 +3603,13 @@ function bindContextActions(zone){
 
         event.stopPropagation();
 
+
         showDeleteMenu(
           note,
           zone,
           'note'
         );
+
 
         return;
 
@@ -2948,23 +3620,28 @@ function bindContextActions(zone){
 
         event.stopPropagation();
 
+
         showDeleteMenu(
           mark,
           zone,
           'highlight'
         );
 
+
         return;
 
       }
 
     }
+
   );
 
 }
 
 
-/* MENU EVENTS */
+/* =========================================================
+   MENU EVENTS
+========================================================= */
 
 menuHighlight
 .addEventListener(
@@ -2982,67 +3659,97 @@ menuNote
 
 document
 .addEventListener(
+
   'mousedown',
-  event=>{
+
+  event => {
 
     if(
+
       !selectionMenu.contains(
         event.target
       )
+
       &&
+
       !event.target.closest(
         'mark.user-highlight'
       )
+
       &&
+
       !event.target.closest(
         '.note-anchor'
       )
+
     ){
 
       hideSelectionMenu();
+
 
       resetMenuButtons();
 
     }
 
   }
+
 );
 
 
 window
 .addEventListener(
+
   'scroll',
+
   ()=>{
 
     hideSelectionMenu();
 
+
     resetMenuButtons();
 
   },
+
   true
+
 );
 
 
-/* ESCAPE */
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHTML(value){
 
-  return String(value)
+  return String(
+    value
+  )
   .replace(
+
     /[&<>"']/g,
-    char=>({
+
+    char => ({
+
       '&':'&amp;',
+
       '<':'&lt;',
+
       '>':'&gt;',
+
       '"':'&quot;',
+
       "'":'&#39;'
+
     })[char]
+
   );
 
 }
 
 
-/* INIT */
+/* =========================================================
+   INIT
+========================================================= */
 
 prefill();
 
