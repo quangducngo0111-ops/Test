@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>True / False / Not Given 04 — The Megafires of California</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+
+/* HEADER */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1350px,calc(100% - 18px));
+  min-height:62px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.brand{
+  font-weight:950;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+  background:rgba(255,255,255,.1);
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.timer{
+  font-size:19px;
+  font-weight:950;
+  background:rgba(255,255,255,.13);
+  padding:8px 11px;
+  border-radius:9px;
+}
+
+
+/* MAIN */
+
+.page{
+  width:min(1350px,calc(100% - 18px));
+  margin:auto;
+  padding:18px 0 46px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+  color:#21164b;
+  font-size:27px;
+}
+
+.hero p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+
+/* PROGRESS */
+
+.progress-wrap{
+  min-width:245px;
+}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:10.5px;
+  color:var(--muted);
+  font-weight:850;
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+  background:#e5e8ef;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,var(--purple2),var(--blue));
+}
+
+
+/* WORKSPACE */
+
+.workspace{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.pane{
+  overflow:auto;
+  max-height:calc(100vh - 205px);
+  scroll-behavior:smooth;
+}
+
+.passage{
+  border-right:1px solid var(--line);
+}
+
+.questions{
+  background:#fafbfe;
+}
+
+.content{
+  padding:20px 23px;
+}
+
+.passage h2{
+  margin:0 0 16px;
+  text-align:center;
+  color:#21164b;
+  font-size:21px;
+}
+
+.passage p{
+  margin:0 0 17px;
+  font-size:13.5px;
+  line-height:1.78;
+  text-align:justify;
+}
+
+
+/* EVIDENCE */
+
+.evidence-source{
+  border-radius:4px;
+  transition:.3s;
+}
+
+.evidence-source.evidence-focus{
+  background:#fff1a8;
+  box-shadow:
+    0 0 0 3px rgba(245,190,35,.25),
+    0 0 18px rgba(245,190,35,.35);
+  font-weight:800;
+  padding:2px 3px;
+  margin:-2px -3px;
+  animation:evidencePulse .85s ease 2;
+}
+
+@keyframes evidencePulse{
+
+  50%{
+    box-shadow:
+      0 0 0 6px rgba(245,190,35,.3),
+      0 0 24px rgba(245,190,35,.55);
+  }
+
+}
+
+
+/* QUESTION */
+
+.instructions h3{
+  margin:0 0 6px;
+  color:#21164b;
+}
+
+.instructions p{
+  font-size:11.5px;
+  color:var(--muted);
+}
+
+.legend{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:4px 8px;
+  font-size:11px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+  margin:8px 0 13px;
+}
+
+.qcard{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px;
+  margin:8px 0;
+}
+
+.qhead{
+  display:flex;
+  gap:9px;
+}
+
+.qnum{
+  min-width:25px;
+  height:25px;
+  border-radius:50%;
+  background:#eee9ff;
+  color:#4b318e;
+  display:grid;
+  place-items:center;
+  font-size:10px;
+  font-weight:950;
+}
+
+.qtext{
+  font-size:12.5px;
+  line-height:1.5;
+  font-weight:760;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:10px;
+}
+
+.option{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:9px;
+  font-size:10.5px;
+  font-weight:850;
+}
+
+.option.correct{
+  border-color:#8ed6b4;
+  background:#f4fcf7;
+  color:#126b48;
+}
+
+.option.wrong{
+  border-color:#efb7bf;
+  background:#fff7f8;
+  color:#9b2838;
+}
+
+
+/* REVIEW */
+
+.inline-review{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid #f0d0d5;
+  border-left:4px solid var(--bad);
+  border-radius:9px;
+  background:#fffafb;
+  font-size:11px;
+}
+
+.review-title{
+  font-weight:950;
+  color:#21164b;
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:5px 8px;
+  margin:4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+  font-weight:900;
+}
+
+.compare-box{
+  margin-top:12px;
+  padding:13px;
+  background:#f8f7ff;
+  border:1px solid #ddd6fb;
+  border-radius:10px;
+}
+
+.compare-heading{
+  color:#281260;
+  font-weight:950;
+  margin-bottom:10px;
+}
+
+.compare-item{
+  margin-top:10px;
+}
+
+.compare-label{
+  color:#6f7890;
+  font-size:9.5px;
+  font-weight:950;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+
+.compare-text,
+.compare-analysis{
+  padding:9px 10px;
+  background:#fff;
+  border-radius:7px;
+  line-height:1.6;
+}
+
+.passage-evidence{
+  position:relative;
+  padding:10px 35px 10px 10px;
+  background:#eef3ff;
+  border:1px solid #d6dffb;
+  border-left:3px solid #5773d9;
+  border-radius:7px;
+  color:#293a70;
+  font-style:italic;
+  line-height:1.6;
+  cursor:pointer;
+}
+
+.passage-evidence::after{
+  content:"↗";
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:16px;
+  font-style:normal;
+  font-weight:950;
+}
+
+.evidence-help{
+  margin-top:5px;
+  font-size:9.5px;
+  color:#7b8292;
+  font-style:normal;
+}
+
+.conclusion{
+  margin-top:10px;
+  padding:9px 10px;
+  border:1px solid #bde5ce;
+  border-radius:7px;
+  background:#f2fff8;
+  color:#126b48;
+  font-weight:900;
+}
+
+
+/* HIGHLIGHT */
+
+mark.user-highlight{
+  background:#fff29a;
+  color:inherit;
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+  border-bottom:2px dotted #e28b19;
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+  z-index:90;
+  display:none;
+  gap:5px;
+  padding:6px;
+  border-radius:10px;
+  background:#21164b;
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:10.5px;
+  font-weight:900;
+}
+
+
+/* BOTTOM */
+
+.bottom{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  width:min(1350px,calc(100% - 18px));
+  margin:auto;
+  padding:9px 0 6px;
+  background:linear-gradient(to top,var(--bg) 75%,rgba(245,247,251,.88));
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+  gap:5px;
+  flex:1;
+}
+
+.nav button{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#fff;
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+}
+
+.submit,.btn{
+  border:0;
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;
+  border-radius:9px;
+  padding:10px 15px;
+  font-weight:900;
+}
+
+
+/* OVERLAYS */
+
+.start,.overlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(15,11,35,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.start{
+  z-index:120;
+}
+
+.hidden{
+  display:none;
+}
+
+.start-card,.result{
+  width:min(500px,100%);
+  padding:22px;
+  border-radius:18px;
+  background:#fff;
+}
+
+.score{
+  font-size:38px;
+  font-weight:950;
+  color:#21164b;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+  font-size:10.5px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.field input{
+  width:100%;
+  padding:10px;
+  border:1px solid #d5d9e2;
+  border-radius:9px;
+}
+
+.start-card .btn{
+  width:100%;
+}
+
+
+@media(max-width:850px){
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .pane{
+    max-height:none;
+  }
+
+  .options{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<div id="start" class="start">
+
+  <div class="start-card">
+
+    <h2>
+      True / False / Not Given 04
+    </h2>
+
+    <p style="font-size:11px;color:#6f7890">
+      The Megafires of California · Questions 7–13
+    </p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input id="studentName">
+    </div>
+
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass">
+    </div>
+
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
+      Bắt đầu luyện
+    </button>
+
+    <div
+      id="startError"
+      style="font-size:10px;color:#b83345;margin-top:6px"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<header class="top">
+
+  <div class="topin">
+
+    <div class="left">
+
+      <a class="back" href="../">
+        ← True / False / Not Given
+      </a>
+
+      <div class="brand">
+        📖 True / False / Not Given 04
+      </div>
+
+    </div>
+
+    <div id="studentInfo" class="student"></div>
+
+    <div id="timer" class="timer">
+      00:00
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <div>
+      <h1>True / False / Not Given 04</h1>
+      <p>The Megafires of California · Questions 7–13</p>
+    </div>
+
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+        <span>Tiến độ</span>
+        <span id="progressText">0/7 câu đã trả lời</span>
+      </div>
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="workspace">
+
+    <!-- PASSAGE -->
+
+    <div class="pane passage">
+
+      <div id="passageRoot" class="content">
+
+        <h2>
+          The Megafires of California
+        </h2>
+
+
+        <p>
+          In California, where population growth has averaged
+          more than 600,000 a year for at least a decade,
+          more residential housing is being built.
+
+          <span class="evidence-source" data-evidence="7">
+            ‘What once was open space is now residential homes
+            providing fuel to make fires burn with greater intensity,’
+            says Terry McHale.
+          </span>
+        </p>
+
+
+        <p>
+          <span class="evidence-source" data-evidence="8">
+            That said, many experts give California high marks
+            for making progress on preparedness in recent years.
+          </span>
+
+          After some of the largest fires in state history
+          scorched thousands of acres, burned thousands of homes,
+          and killed numerous people.
+
+          <span class="evidence-source" data-evidence="9">
+            Stung in the past by criticism of bungling
+            that allowed fires to spread when they might have been contained,
+            personnel are meeting the peculiar challenges
+            of neighborhood- and canyon-hopping fires better than previously.
+          </span>
+        </p>
+
+
+        <p>
+          <span class="evidence-source" data-evidence="10">
+            State promises to provide more up-to-date engines,
+            planes, and helicopters to fight fires have been fulfilled.
+          </span>
+
+          Firefighters’ unions that in the past complained
+          of dilapidated equipment,
+          old fire engines,
+          and insufficient blueprints for fire safety
+          are now praising the state's commitment,
+          noting that funding for firefighting has increased.
+        </p>
+
+
+        <p>
+          <span class="evidence-source" data-evidence="11">
+            The passage states that funding for firefighting has increased
+            and discusses improved equipment and infrastructure.
+          </span>
+
+          Mr. McHale says the current state administration
+          has been proactive in supporting
+          the infrastructure needs firefighters have long sought.
+        </p>
+
+
+        <p>
+          After a commission examined and revamped communications procedures,
+          the statewide response has become far more professional and responsive.
+
+          <span class="evidence-source" data-evidence="12">
+            There is a sense among both government officials and residents
+            that the speed, dedication, and coordination of firefighters
+            from several states and jurisdictions
+            are resulting in greater efficiency
+            than in past ‘siege fire’ situations.
+          </span>
+        </p>
+
+
+        <p>
+          In recent years,
+          the Southern California region has improved building codes,
+          evacuation procedures,
+          and procurement of new technology.
+
+          <span class="evidence-source" data-evidence="13">
+            ‘Notwithstanding all the damage that will continue to be caused
+            by wildfires, we will no longer suffer the loss of life endured
+            in the past because of the fire prevention and firefighting measures
+            that have been put in place,’ says Randy Jacobs.
+          </span>
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- QUESTIONS -->
+
+    <div class="pane questions">
+
+      <div id="questionsRoot" class="content">
+
+        <div class="instructions">
+
+          <h3>
+            Questions 7–13
+          </h3>
+
+          <p>
+            Do the following statements agree with the information given in the passage?
+          </p>
+
+          <div class="legend">
+
+            <b>TRUE</b>
+            <span>if the statement agrees with the information</span>
+
+            <b>FALSE</b>
+            <span>if the statement contradicts the information</span>
+
+            <b>NOT GIVEN</b>
+            <span>if there is no information on this</span>
+
+          </div>
+
+        </div>
+
+
+        <div id="questionList"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<div class="bottom">
+
+  <div id="nav" class="nav"></div>
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
+</div>
+
+
+<div id="selectionMenu" class="selection-menu">
+
+  <button id="menuHighlight">
+    🖍 Highlight
+  </button>
+
+  <button id="menuNote">
+    📝 Take note
+  </button>
+
+</div>
+
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="font-size:10px;font-weight:950;color:#6a4db4">
+      KẾT QUẢ LUYỆN TẬP
+    </div>
+
+    <div
+      id="resultStudent"
+      style="font-size:11px;color:#6f7890;margin-top:5px"
+    ></div>
+
+    <div id="resultScore" class="score">
+      0 / 7
+    </div>
+
+    <div id="resultPercent"></div>
+
+    <p style="font-size:11px;color:#6f7890">
+      Các câu sai được giải thích trực tiếp dưới từng câu.
+    </p>
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const RESULT_ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+const ATTEMPT_KEY=
+'PRACTICE_TFNG04_MEGAFIRES';
+
+
+const NUMBERS=[
+  7,8,9,10,11,12,13
+];
+
+
+const QUESTIONS={
+
+  7:
+  'The amount of open space in California has diminished over the last ten years.',
+
+  8:
+  'Many experts believe California has made little progress in readying itself to fight fires.',
+
+  9:
+  'Personnel in the past have been criticised for mishandling fire containment.',
+
+  10:
+  'California has replaced a range of firefighting tools.',
+
+  11:
+  'More firefighters have been hired to improve fire-fighting capacity.',
+
+  12:
+  'Citizens and government groups disapprove of the efforts of different states and agencies working together.',
+
+  13:
+  'Randy Jacobs believes that loss of life from fires will continue at the same levels, despite changes made.'
+
+};
+
+
+const KEY={
+  7:'TRUE',
+  8:'FALSE',
+  9:'TRUE',
+  10:'TRUE',
+  11:'NOT GIVEN',
+  12:'FALSE',
+  13:'FALSE'
+};
+
+
+const EVIDENCE={
+
+  7:
+  'What once was open space is now residential homes.',
+
+  8:
+  'Many experts give California high marks for making progress on preparedness in recent years.',
+
+  9:
+  'Stung in the past by criticism of bungling that allowed fires to spread when they might have been contained...',
+
+  10:
+  'State promises to provide more up-to-date engines, planes, and helicopters to fight fires have been fulfilled.',
+
+  11:
+  'The passage discusses increased funding, equipment and infrastructure, but does not state that more firefighters were hired.',
+
+  12:
+  'Government officials and residents believe coordination of firefighters from several states and jurisdictions is resulting in greater efficiency.',
+
+  13:
+  'We will no longer suffer the loss of life endured in the past because of the fire prevention and firefighting measures that have been put in place.'
+
+};
+
+
+const ANALYSIS={
+
+  7:
+  `
+    Passage nói khu vực trước đây là <b>open space</b>
+    nay đã trở thành <b>residential homes</b>.
+    Đồng thời đoạn văn đặt thông tin này trong bối cảnh
+    population growth kéo dài ít nhất một thập kỷ.
+    Điều đó xác nhận lượng open space đã giảm.
+  `,
+
+  8:
+  `
+    Statement nói California chỉ đạt
+    <b>little progress</b>.
+    Passage lại nói nhiều chuyên gia
+    <b>“give California high marks for making progress”</b>.
+    Hai ý trái ngược nhau.
+  `,
+
+  9:
+  `
+    Passage dùng trực tiếp cụm
+    <b>“criticism of bungling”</b>
+    và nói sự xử lý yếu kém đã khiến lửa lan rộng
+    trong những trường hợp đáng lẽ có thể kiểm soát.
+    Vì vậy statement đúng.
+  `,
+
+  10:
+  `
+    Passage xác nhận California đã thực hiện lời hứa
+    cung cấp thiết bị mới hơn gồm
+    <b>engines, planes and helicopters</b>.
+    Đây là nhiều loại công cụ/thiết bị chữa cháy khác nhau.
+  `,
+
+  11:
+  `
+    Passage có nói <b>funding increased</b>,
+    thiết bị được nâng cấp và infrastructure được hỗ trợ.
+    Tuy nhiên không có thông tin nào cho biết
+    <b>nhiều firefighters hơn đã được tuyển dụng</b>.
+  `,
+
+  12:
+  `
+    Statement nói người dân và cơ quan chính phủ
+    <b>disapprove</b> việc phối hợp.
+    Passage lại nói họ cho rằng sự phối hợp
+    giữa nhiều bang và jurisdiction
+    đang tạo ra <b>greater efficiency</b>.
+    Đây là ý tích cực, trái với “disapprove”.
+  `,
+
+  13:
+  `
+    Statement nói loss of life sẽ tiếp tục
+    <b>ở cùng mức như trước</b>.
+    Randy Jacobs lại nói
+    <b>“we will no longer suffer the loss of life endured in the past”</b>.
+    Hai ý trái ngược nhau.
+  `
+
+};
+
+
+const CONCLUSION={
+
+  7:
+  'TRUE — Open space trước đây đã được chuyển thành residential homes.',
+
+  8:
+  'FALSE — Experts đánh giá California đã có tiến bộ rõ rệt về preparedness.',
+
+  9:
+  'TRUE — Nhân sự từng bị chỉ trích vì xử lý containment không tốt.',
+
+  10:
+  'TRUE — Engines, planes và helicopters mới hơn đã được cung cấp.',
+
+  11:
+  'NOT GIVEN — Không có thông tin nói số lượng firefighters được tuyển thêm.',
+
+  12:
+  'FALSE — Officials và residents đánh giá tích cực sự phối hợp giữa các lực lượng.',
+
+  13:
+  'FALSE — Jacobs tin mức độ mất mát về người sẽ không còn như trước.'
+
+};
+
+
+let startedAt=0;
+let submitted=false;
+
+let savedSelection=null;
+let savedZone=null;
+let menuMode='selection';
+let menuTarget=null;
+let menuZone=null;
+
+
+/* BUILD QUESTIONS */
+
+function buildQuestions(){
+
+  questionList.innerHTML=
+  NUMBERS.map(
+    n=>`
+      <div class="qcard" id="q${n}">
+
+        <div class="qhead">
+
+          <span class="qnum">
+            ${n}
+          </span>
+
+          <div class="qtext">
+            ${QUESTIONS[n]}
+          </div>
+
+        </div>
+
+        <div class="options">
+
+          ${['TRUE','FALSE','NOT GIVEN']
+          .map(
+            value=>`
+              <label class="option">
+
+                <input
+                  type="radio"
+                  name="q${n}"
+                  value="${value}"
+                  onchange="saveAnswer(${n},this.value)"
+                >
+
+                ${value}
+
+              </label>
+            `
+          )
+          .join('')}
+
+        </div>
+
+        <div id="review${n}"></div>
+
+      </div>
+    `
+  )
+  .join('');
+
+
+  nav.innerHTML=
+  NUMBERS.map(
+    n=>`
+      <button
+        id="nav${n}"
+        onclick="goQ(${n})"
+      >
+        ${n}
+      </button>
+    `
+  )
+  .join('');
+
+}
+
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem('IELTS_PRACTICE_STUDENT')
+      ||
+      'null'
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const s=
+  readStudent();
+
+  if(s){
+
+    studentName.value=
+    s.name || '';
+
+    studentClass.value=
+    s.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name=
+  studentName.value.trim();
+
+  const cls=
+  studentClass.value.trim();
+
+
+  if(!name || !cls){
+
+    startError.textContent=
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    'IELTS_PRACTICE_STUDENT',
+    JSON.stringify({
+      name,
+      className:cls
+    })
+  );
+
+
+  studentInfo.textContent=
+  `${name} · ${cls}`;
+
+
+  start.classList.add(
+    'hidden'
+  );
+
+
+  startedAt=
+  Date.now();
+
+
+  restoreMarkup();
+  restoreAnswers();
+  updateProgress();
+
+}
+
+
+function fmt(sec){
+
+  sec=
+  Math.floor(sec);
+
+  return(
+    String(
+      Math.floor(sec/60)
+    )
+    .padStart(2,'0')
+    +
+    ':'
+    +
+    String(sec%60)
+    .padStart(2,'0')
+  );
+
+}
+
+
+setInterval(
+  ()=>{
+
+    if(startedAt){
+
+      timer.textContent=
+      fmt(
+        (Date.now()-startedAt)/1000
+      );
+
+    }
+
+  },
+  500
+);
+
+
+function saveAnswer(n,value){
+
+  if(submitted)return;
+
+
+  localStorage.setItem(
+    `${ATTEMPT_KEY}_q${n}`,
+    value
+  );
+
+
+  navState(n);
+  updateProgress();
+
+}
+
+
+function getAnswer(n){
+
+  return localStorage.getItem(
+    `${ATTEMPT_KEY}_q${n}`
+  )
+  ||
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  NUMBERS.forEach(
+    n=>{
+
+      const value=
+      getAnswer(n);
+
+
+      if(value){
+
+        const input=
+        document.querySelector(
+          `input[name="q${n}"][value="${value}"]`
+        );
+
+
+        if(input)input.checked=true;
+
+      }
+
+
+      navState(n);
+
+    }
+  );
+
+}
+
+
+function navState(n){
+
+  document
+  .getElementById('nav'+n)
+  .classList
+  .toggle(
+    'answered',
+    !!getAnswer(n)
+  );
+
+}
+
+
+function updateProgress(){
+
+  const answered=
+  NUMBERS.filter(
+    n=>getAnswer(n)
+  )
+  .length;
+
+
+  progressText.textContent=
+  `${answered}/7 câu đã trả lời`;
+
+
+  progressBar.style.width=
+  `${answered/7*100}%`;
+
+}
+
+
+function goQ(n){
+
+  document
+  .getElementById('q'+n)
+  .scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+}
+
+
+async function submitPractice(){
+
+  if(submitted)return;
+
+  submitted=true;
+
+
+  let score=0;
+
+  const answers={};
+
+
+  NUMBERS.forEach(
+    n=>{
+
+      const user=
+      getAnswer(n);
+
+      const correct=
+      KEY[n];
+
+      const ok=
+      user===correct;
+
+
+      answers[n]=
+      user || '';
+
+
+      if(ok)score++;
+
+
+      document
+      .querySelectorAll(
+        `input[name="q${n}"]`
+      )
+      .forEach(
+        input=>{
+
+          input.disabled=true;
+
+          const label=
+          input.closest('.option');
+
+
+          if(input.value===correct){
+
+            label.classList.add(
+              'correct'
+            );
+
+          }
+
+
+          if(input.checked && !ok){
+
+            label.classList.add(
+              'wrong'
+            );
+
+          }
+
+        }
+      );
+
+
+      document
+      .getElementById('nav'+n)
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      if(!ok){
+
+        reviewHTML(
+          n,
+          user,
+          correct
+        );
+
+      }
+
+    }
+  );
+
+
+  const durationSeconds=
+  Math.floor(
+    (Date.now()-startedAt)/1000
+  );
+
+
+  const s=
+  readStudent();
+
+
+  resultStudent.textContent=
+  s
+  ?
+  `${s.name} · ${s.className}`
+  :
+  '';
+
+
+  resultScore.textContent=
+  `${score} / 7`;
+
+
+  resultPercent.textContent=
+  `${Math.round(score/7*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay.classList.remove(
+    'hidden'
+  );
+
+
+  const body=
+  new URLSearchParams({
+
+    mode:'PRACTICE',
+
+    name:s?.name || '',
+
+    className:s?.className || '',
+
+    skill:'Reading',
+
+    practiceType:
+    'True / False / Not Given',
+
+    practiceId:'04',
+
+    score:String(score),
+
+    total:'7',
+
+    durationSeconds:
+    String(durationSeconds),
+
+    details:
+    JSON.stringify({
+      title:
+      'The Megafires of California - True / False / Not Given 04',
+      answers,
+      correctAnswers:KEY
+    })
+
+  });
+
+
+  try{
+
+    await fetch(
+      RESULT_ENDPOINT,
+      {
+        method:'POST',
+        mode:'no-cors',
+        headers:{
+          'Content-Type':
+          'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body:body.toString()
+      }
+    );
+
+  }catch(e){}
+
+}
+
+
+function reviewHTML(
+  n,
+  user,
+  correct
+){
+
+  document
+  .getElementById(
+    'review'+n
+  )
+  .innerHTML=
+  `
+    <div class="inline-review">
+
+      <div class="review-title">
+        Câu ${n}
+      </div>
+
+      <div class="review-row">
+        <div class="review-label">
+          Đáp án em chọn
+        </div>
+        <div class="review-user">
+          ${escapeHTML(user || 'Chưa trả lời')}
+        </div>
+      </div>
+
+      <div class="review-row">
+        <div class="review-label">
+          Đáp án đúng
+        </div>
+        <div class="review-correct">
+          ${correct}
+        </div>
+      </div>
+
+
+      <div class="compare-box">
+
+        <div class="compare-heading">
+          🔎 Đối chiếu với bài đọc
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Statement
+          </div>
+
+          <div class="compare-text">
+            ${QUESTIONS[n]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Passage
+          </div>
+
+          <div
+            class="passage-evidence"
+            onclick="focusEvidence(${n})"
+          >
+
+            “${EVIDENCE[n]}”
+
+            <div class="evidence-help">
+              Nhấn để xem vị trí trong bài đọc
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Phân tích
+          </div>
+
+          <div class="compare-analysis">
+            ${ANALYSIS[n]}
+          </div>
+
+        </div>
+
+
+        <div class="conclusion">
+          ${CONCLUSION[n]}
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+
+function focusEvidence(n){
+
+  document
+  .querySelectorAll(
+    '.evidence-focus'
+  )
+  .forEach(
+    x=>
+    x.classList.remove(
+      'evidence-focus'
+    )
+  );
+
+
+  const targets=[
+    ...document.querySelectorAll(
+      `[data-evidence="${n}"]`
+    )
+  ];
+
+
+  if(!targets.length)return;
+
+
+  targets.forEach(
+    x=>
+    x.classList.add(
+      'evidence-focus'
+    )
+  );
+
+
+  targets[0].scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+
+  targets.forEach(
+    x=>{
+
+      x.style.animation='none';
+
+      void x.offsetWidth;
+
+      x.style.animation='';
+
+    }
+  );
+
+}
+
+
+function closeResult(){
+
+  resultOverlay.classList.add(
+    'hidden'
+  );
+
+}
+
+
+/* USER HIGHLIGHT / NOTE */
+
+const selectionMenu=
+document.getElementById('selectionMenu');
+
+const menuHighlight=
+document.getElementById('menuHighlight');
+
+const menuNote=
+document.getElementById('menuNote');
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+    zone==='passage'
+    ?
+    'passageRoot'
+    :
+    'questionsRoot'
+  );
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function saveMarkup(zone){
+
+  document
+  .querySelectorAll(
+    '.evidence-focus'
+  )
+  .forEach(
+    x=>
+    x.classList.remove(
+      'evidence-focus'
+    )
+  );
+
+
+  localStorage.setItem(
+    markupKey(zone),
+    zoneRoot(zone).innerHTML
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  ['passage','questions']
+  .forEach(
+    zone=>{
+
+      const html=
+      localStorage.getItem(
+        markupKey(zone)
+      );
+
+
+      if(html){
+
+        zoneRoot(zone).innerHTML=
+        html;
+
+      }
+
+
+      bindContext(zone);
+
+    }
+  );
+
+}
+
+
+function captureSelection(zone){
+
+  const sel=
+  window.getSelection();
+
+
+  if(
+    !sel
+    ||
+    !sel.rangeCount
+    ||
+    sel.isCollapsed
+  )return;
+
+
+  const range=
+  sel.getRangeAt(0);
+
+
+  if(
+    !zoneRoot(zone)
+    .contains(
+      range.commonAncestorContainer
+    )
+  )return;
+
+
+  savedSelection=
+  range.cloneRange();
+
+  savedZone=zone;
+
+  menuMode='selection';
+
+
+  menuHighlight.style.display='';
+  menuNote.style.display='';
+
+  menuHighlight.textContent=
+  '🖍 Highlight';
+
+  menuNote.textContent=
+  '📝 Take note';
+
+
+  const rect=
+  range.getBoundingClientRect();
+
+
+  selectionMenu.classList.add(
+    'show'
+  );
+
+
+  selectionMenu.style.left=
+  Math.max(10,rect.left)+'px';
+
+
+  selectionMenu.style.top=
+  Math.max(10,rect.top-45)+'px';
+
+}
+
+
+function addHighlight(){
+
+  if(menuMode==='delete'){
+
+    removeMark();
+    return;
+
+  }
+
+
+  if(!savedSelection)return;
+
+
+  const mark=
+  document.createElement(
+    'mark'
+  );
+
+
+  mark.className=
+  'user-highlight';
+
+
+  mark.appendChild(
+    savedSelection.extractContents()
+  );
+
+
+  savedSelection.insertNode(
+    mark
+  );
+
+
+  saveMarkup(savedZone);
+
+
+  window.getSelection()
+  .removeAllRanges();
+
+
+  selectionMenu.classList.remove(
+    'show'
+  );
+
+}
+
+
+function addNote(){
+
+  if(menuMode==='delete'){
+
+    removeMark();
+    return;
+
+  }
+
+
+  if(!savedSelection)return;
+
+
+  const text=
+  prompt('Nhập ghi chú:');
+
+
+  if(!text)return;
+
+
+  const span=
+  document.createElement(
+    'span'
+  );
+
+
+  span.className=
+  'note-anchor';
+
+  span.dataset.note=text;
+
+
+  span.appendChild(
+    savedSelection.extractContents()
+  );
+
+
+  savedSelection.insertNode(
+    span
+  );
+
+
+  saveMarkup(savedZone);
+
+
+  selectionMenu.classList.remove(
+    'show'
+  );
+
+}
+
+
+function showDelete(
+  target,
+  zone
+){
+
+  menuTarget=target;
+  menuZone=zone;
+  menuMode='delete';
+
+
+  menuHighlight.textContent=
+  '✕ Xóa';
+
+  menuNote.style.display=
+  'none';
+
+
+  const rect=
+  target.getBoundingClientRect();
+
+
+  selectionMenu.classList.add(
+    'show'
+  );
+
+
+  selectionMenu.style.left=
+  Math.max(10,rect.left)+'px';
+
+
+  selectionMenu.style.top=
+  Math.max(10,rect.top-45)+'px';
+
+}
+
+
+function removeMark(){
+
+  const parent=
+  menuTarget.parentNode;
+
+
+  while(menuTarget.firstChild){
+
+    parent.insertBefore(
+      menuTarget.firstChild,
+      menuTarget
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+  parent.normalize();
+
+  saveMarkup(menuZone);
+
+  selectionMenu.classList.remove(
+    'show'
+  );
+
+}
+
+
+function bindContext(zone){
+
+  const root=
+  zoneRoot(zone);
+
+
+  root.addEventListener(
+    'mouseup',
+    ()=>setTimeout(
+      ()=>captureSelection(zone),
+      0
+    )
+  );
+
+
+  root.addEventListener(
+    'click',
+    e=>{
+
+      const target=
+      e.target.closest(
+        '.user-highlight,.note-anchor'
+      );
+
+
+      if(target){
+
+        showDelete(
+          target,
+          zone
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+menuHighlight.onclick=
+addHighlight;
+
+menuNote.onclick=
+addNote;
+
+
+function escapeHTML(v){
+
+  return String(v)
+  .replace(
+    /[&<>"']/g,
+    c=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    })[c]
+  );
+
+}
+
+
+buildQuestions();
+prefill();
+
+</script>
+
+</body>
+</html>
