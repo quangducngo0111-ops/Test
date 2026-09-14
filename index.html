@@ -237,7 +237,7 @@ button.skill-card:hover{transform:translateY(-4px);box-shadow:0 19px 38px rgba(6
 
     <div class="section-title">
       <h2>Chọn nội dung</h2>
-      <p>4 kỹ năng Test + khu Luyện tập riêng.</p>
+      <p>Chọn nội dung bạn muốn học.</p>
     </div>
 
     <section class="skill-grid">
@@ -263,7 +263,7 @@ button.skill-card:hover{transform:translateY(-4px);box-shadow:0 19px 38px rgba(6
       </button>
       <button class="skill-card practice" type="button" id="practiceDoor">
         <div class="skill-top"><div class="skill-icon-shell">🎯</div></div>
-        <div class="skill-copy"><h3>Luyện tập</h3><p>Kho luyện tập riêng trong repo Test. Thời gian đếm xuôi, không liên quan tới Practice.</p><div class="character-circle"><img src="./4FXyF.jpg"></div></div>
+        <div class="skill-copy"><h3>Luyện tập</h3><p>Luyện từng dạng bài theo kỹ năng.</p><div class="character-circle"><img src="./4FXyF.jpg"></div></div>
         <div class="skill-footer"><div class="skill-count" id="countPractice">KHO RIÊNG</div><div class="skill-hint">Mở luyện tập →</div></div>
       </button>
     </section>
@@ -276,7 +276,7 @@ button.skill-card:hover{transform:translateY(-4px);box-shadow:0 19px 38px rgba(6
       <div id="testGrid" class="test-grid"></div>
     </section>
 
-    <div class="footer">Test dùng để đo kết quả · Luyện tập dùng để củng cố kỹ năng theo tốc độ của học sinh.</div>
+    <div class="footer">IELTS Practice Portal</div>
   </section>
 </main>
 
@@ -372,6 +372,22 @@ function buildTestCatalog(tree){
 }
 
 
+async function discoverAll(){
+  try{
+    const res=await fetch(TEST_TREE,{cache:'no-store'});
+    if(!res.ok)throw new Error('GitHub API '+res.status);
+    const data=await res.json();
+    if(data&&Array.isArray(data.tree)){
+      buildTestCatalog(data.tree);
+    }
+  }catch(err){
+    console.warn('Auto catalog unavailable, using fallback.',err);
+  }
+
+  updateCounts();
+  renderTests();
+}
+
 function updateCounts(){
   $('countListening').textContent=`${catalog.listening.length} ĐỀ`;
   $('countReading').textContent=`${catalog.reading.length} ĐỀ`;
@@ -394,7 +410,6 @@ function testCard(t,skill){
   </article>`;
 }
 function renderTests(){
-  $('practiceTabs').classList.add('hidden');$('practiceNote').classList.add('hidden');
   const list=catalog[currentSkill]||[],info=skillInfo(currentSkill);
   $('testTitle').textContent=info.title;$('testDesc').textContent=info.desc;$('testChip').textContent=`${list.length} đề`;
   $('testGrid').innerHTML=list.length?list.map(t=>testCard(t,currentSkill)).join(''):'<div class="empty">Chưa có bài ở mục này.</div>';
@@ -402,7 +417,6 @@ function renderTests(){
 }
 
 
-function renderCurrent(){renderTests()}
 function setSkill(skill,scroll=true){
   currentSkill=skill;
   renderTests();
@@ -426,12 +440,27 @@ $('studentForm').addEventListener('submit',e=>{
   $('formError').textContent='';saveStudent(s);showDashboard();
 });
 document.querySelectorAll('button.skill-card[data-skill]').forEach(btn=>btn.addEventListener('click',()=>setSkill(btn.dataset.skill,true)));
-$('practiceDoor').addEventListener('click',()=>{location.href='./Practice/'});
-$('changeStudentTop').addEventListener('click',()=>{const old=currentStudent;clearStudent();currentStudent=old;showLogin(true)});
+const practiceDoor=$('practiceDoor');
+if(practiceDoor){
+  practiceDoor.addEventListener('click',()=>{location.href='./Practice/';});
+}
+const changeStudentTop=$('changeStudentTop');
+if(changeStudentTop){
+  changeStudentTop.addEventListener('click',()=>{
+    const old=currentStudent;
+    clearStudent();
+    currentStudent=old;
+    showLogin(true);
+  });
+}
 
 async function init(){
-  currentStudent=readStudent();updateCounts();renderCurrent();
+  currentStudent=readStudent();
+  updateCounts();
+  renderTests();
+
   currentStudent?showDashboard():showLogin(false);
+
   await discoverAll();
 }
 init();
