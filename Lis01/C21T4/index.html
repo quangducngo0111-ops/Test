@@ -212,6 +212,11 @@ main.exam-main{padding:24px 0 56px}
   border:1px solid var(--line);background:#fff;color:#3b315e;padding:7px 9px;
   border-radius:8px;font-size:11px;font-weight:900
 }
+.annot-btn.remove-mode{
+  background:#fff1f3;
+  border-color:#efc4cb;
+  color:#a31e31
+}
 .annot-tip{font-size:10.5px;color:var(--muted);margin-left:auto}
 .notes-panel{
   display:none;background:#f7f8fb;border:1px solid var(--line);border-radius:10px;
@@ -418,11 +423,10 @@ mark.user-highlight{background:#fff29a;color:inherit;border-radius:3px;cursor:po
         </div>
 
         <div class="annot-bar">
-          <button class="annot-btn" onclick="addHighlight()">🖍 Highlight</button>
-          <button class="annot-btn" onclick="clearHighlight()">Xóa highlight</button>
-          <button class="annot-btn" onclick="addNote()">📝 Take note</button>
+          <button id="highlightBtn" class="annot-btn" onclick="handleHighlightAction()">🖍 Highlight</button>
+          <button id="noteBtn" class="annot-btn" onclick="handleNoteAction()">📝 Take note</button>
           <button class="annot-btn" onclick="toggleNotes()">Ghi chú (<span id="noteCount">0</span>)</button>
-          <span class="annot-tip">Bôi đen chữ trong câu hỏi rồi chọn công cụ.</span>
+          <span class="annot-tip">Bôi đen chữ để đánh dấu. Bấm vào phần đã đánh dấu để xóa.</span>
         </div>
 
         <div id="notesPanel" class="notes-panel"></div>
@@ -527,7 +531,7 @@ const p3opinions=[
 ["I","This would suit both existing and new members of a household."]
 ];
 
-let currentPart=1,startedAt=0,timeHandle=null,submitted=false,savedSelection=null,activeHighlight=null,currentAudioPart=0;
+let currentPart=1,startedAt=0,timeHandle=null,submitted=false,savedSelection=null,activeHighlight=null,activeNote=null,currentAudioPart=0;
 
 function norm(v){return String(v??"").normalize("NFKC").trim().toLowerCase().replace(/\s+/g," ")}
 function inlineInput(n){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><input class="ans" id="q${n}" data-q="${n}" type="text" autocomplete="off"></span>`}
@@ -656,6 +660,7 @@ function showPart(p){
   bindMultiLimits();
   bindAnnotations();
   renderNotes();
+  updateAnnotationButtons();
   if(submitted)markPart(p);
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -729,32 +734,220 @@ function usableSelection(){
  return savedSelection.cloneRange();
 }
 function clearSel(){window.getSelection()?.removeAllRanges();savedSelection=null}
+function updateAnnotationButtons(){
+  const hi=document.getElementById("highlightBtn");
+  const note=document.getElementById("noteBtn");
+  const hiActive=activeHighlight&&document.body.contains(activeHighlight);
+  const noteActive=activeNote&&document.body.contains(activeNote);
+
+  if(hi){
+    hi.textContent=hiActive?"✕ Xóa highlight":"🖍 Highlight";
+    hi.classList.toggle("remove-mode",!!hiActive);
+  }
+  if(note){
+    note.textContent=noteActive?"✕ Xóa note":"📝 Take note";
+    note.classList.toggle("remove-mode",!!noteActive);
+  }
+}
+
+function handleHighlightAction(){
+  if(activeHighlight&&document.body.contains(activeHighlight)){
+    clearHighlight();
+    return;
+  }
+  addHighlight();
+}
+
+function handleNoteAction(){
+  if(activeNote&&document.body.contains(activeNote)){
+    deleteNote(activeNote.dataset.noteId);
+    return;
+  }
+  addNote();
+}
+
 function addHighlight(){
- const r=usableSelection();if(!r)return;try{const m=document.createElement("mark");m.className="user-highlight";m.appendChild(r.extractContents());r.insertNode(m);activeHighlight=m;saveQuestionMarkup();clearSel()}catch(e){alert("Hãy chọn một đoạn chữ ngắn hơn.")}
+  const r=usableSelection();
+  if(!r)return;
+
+  try{
+    const m=document.createElement("mark");
+    m.className="user-highlight";
+    m.appendChild(r.extractContents());
+    r.insertNode(m);
+
+    activeHighlight=m;
+    activeNote=null;
+
+    saveQuestionMarkup();
+    clearSel();
+    updateAnnotationButtons();
+  }catch(e){
+    alert("Hãy chọn một đoạn chữ ngắn hơn.");
+  }
 }
+
 function clearHighlight(){
- if(!activeHighlight||!document.body.contains(activeHighlight)){alert("Hãy bấm vào phần đã highlight rồi chọn Xóa HL.");return}
- const p=activeHighlight.parentNode;while(activeHighlight.firstChild)p.insertBefore(activeHighlight.firstChild,activeHighlight);activeHighlight.remove();p.normalize();activeHighlight=null;saveQuestionMarkup();
+  if(!activeHighlight||!document.body.contains(activeHighlight)){
+    activeHighlight=null;
+    updateAnnotationButtons();
+    return;
+  }
+
+  const p=activeHighlight.parentNode;
+  while(activeHighlight.firstChild){
+    p.insertBefore(activeHighlight.firstChild,activeHighlight);
+  }
+  activeHighlight.remove();
+  p.normalize();
+
+  activeHighlight=null;
+  saveQuestionMarkup();
+  updateAnnotationButtons();
 }
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
 function addNote(){
- const r=usableSelection();if(!r)return;const quote=r.toString().trim(),text=prompt("Nhập ghi chú:");if(text===null||!text.trim())return;
- const id="n"+Date.now()+Math.random().toString(36).slice(2,6);const span=document.createElement("span");span.className="note-anchor";span.dataset.noteId=id;span.title="Bấm để xem/sửa ghi chú";
- try{span.appendChild(r.extractContents());r.insertNode(span);const notes=loadNotes();notes.push({id,quote,text:text.trim()});saveNotes(notes);saveQuestionMarkup();clearSel();renderNotes(true)}catch(e){alert("Hãy chọn một đoạn chữ ngắn hơn.")}
+  const r=usableSelection();
+  if(!r)return;
+
+  const quote=r.toString().trim();
+  const text=prompt("Nhập ghi chú:");
+  if(text===null||!text.trim())return;
+
+  const id="n"+Date.now()+Math.random().toString(36).slice(2,6);
+  const span=document.createElement("span");
+  span.className="note-anchor";
+  span.dataset.noteId=id;
+  span.title="Bấm để chọn ghi chú";
+
+  try{
+    span.appendChild(r.extractContents());
+    r.insertNode(span);
+
+    const notes=loadNotes();
+    notes.push({id,quote,text:text.trim()});
+    saveNotes(notes);
+
+    activeNote=span;
+    activeHighlight=null;
+
+    saveQuestionMarkup();
+    clearSel();
+    renderNotes(true);
+    updateAnnotationButtons();
+  }catch(e){
+    alert("Hãy chọn một đoạn chữ ngắn hơn.");
+  }
 }
+
 function renderNotes(force=false){
- const panel=document.getElementById("notesPanel"),notes=loadNotes();document.getElementById("noteCount").textContent=notes.length;
- panel.innerHTML=notes.length?notes.map(n=>`<div class="note-item"><div class="note-quote">“${esc(n.quote)}”</div><div>${esc(n.text)}</div><div class="note-actions"><button onclick="editNote('${n.id}')">Sửa</button><button onclick="deleteNote('${n.id}')">Xóa</button></div></div>`).join(""):`<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở Part này.</div>`;
- if(force)panel.classList.add("open");
+  const panel=document.getElementById("notesPanel"),
+        notes=loadNotes();
+
+  document.getElementById("noteCount").textContent=notes.length;
+
+  panel.innerHTML=notes.length
+    ?notes.map(n=>`
+      <div class="note-item">
+        <div class="note-quote">“${esc(n.quote)}”</div>
+        <div>${esc(n.text)}</div>
+        <div class="note-actions">
+          <button onclick="editNote('${n.id}')">Sửa</button>
+          <button onclick="deleteNote('${n.id}')">Xóa</button>
+        </div>
+      </div>`).join("")
+    :`<div style="font-size:13px;color:var(--muted)">Chưa có ghi chú ở Part này.</div>`;
+
+  if(force)panel.classList.add("open");
 }
-function toggleNotes(){document.getElementById("notesPanel").classList.toggle("open")}
-function editNote(id){const a=loadNotes(),n=a.find(x=>x.id===id);if(!n)return;const t=prompt("Sửa ghi chú:",n.text);if(t===null)return;if(!t.trim()){deleteNote(id);return}n.text=t.trim();saveNotes(a);renderNotes(true)}
+
+function toggleNotes(){
+  document.getElementById("notesPanel").classList.toggle("open");
+}
+
+function editNote(id){
+  const a=loadNotes(),
+        n=a.find(x=>x.id===id);
+  if(!n)return;
+
+  const t=prompt("Sửa ghi chú:",n.text);
+  if(t===null)return;
+
+  if(!t.trim()){
+    deleteNote(id);
+    return;
+  }
+
+  n.text=t.trim();
+  saveNotes(a);
+  renderNotes(true);
+}
+
 function deleteNote(id){
- const a=loadNotes().filter(x=>x.id!==id);saveNotes(a);document.getElementById("questions")?.querySelectorAll(`[data-note-id="${id}"]`).forEach(s=>{const p=s.parentNode;while(s.firstChild)p.insertBefore(s.firstChild,s);s.remove();p.normalize()});saveQuestionMarkup();renderNotes(true)
+  const a=loadNotes().filter(x=>x.id!==id);
+  saveNotes(a);
+
+  document.getElementById("questions")
+    ?.querySelectorAll(`[data-note-id="${id}"]`)
+    .forEach(s=>{
+      const p=s.parentNode;
+      while(s.firstChild)p.insertBefore(s.firstChild,s);
+      s.remove();
+      p.normalize();
+    });
+
+  if(activeNote&&activeNote.dataset.noteId===id){
+    activeNote=null;
+  }
+
+  saveQuestionMarkup();
+  renderNotes(true);
+  updateAnnotationButtons();
 }
-function openNote(id){const a=loadNotes(),n=a.find(x=>x.id===id);if(!n)return;const t=prompt(`Đoạn đã ghi chú:\n“${n.quote}”\n\nGhi chú:`,n.text);if(t===null)return;if(!t.trim()){deleteNote(id);return}n.text=t.trim();saveNotes(a);renderNotes(true)}
+
 function bindAnnotations(){
- const root=document.getElementById("questions");root.addEventListener("mouseup",captureSelection);root.addEventListener("keyup",captureSelection);root.addEventListener("click",e=>{const n=e.target.closest(".note-anchor");if(n){openNote(n.dataset.noteId);return}activeHighlight=e.target.closest("mark.user-highlight")||null})
+  const root=document.getElementById("questions");
+  if(!root)return;
+
+  root.addEventListener("mouseup",captureSelection);
+  root.addEventListener("keyup",captureSelection);
+
+  root.addEventListener("click",e=>{
+    const note=e.target.closest(".note-anchor");
+    const mark=e.target.closest("mark.user-highlight");
+
+    if(note){
+      activeNote=note;
+      activeHighlight=null;
+      clearSel();
+      updateAnnotationButtons();
+      return;
+    }
+
+    if(mark){
+      activeHighlight=mark;
+      activeNote=null;
+      clearSel();
+      updateAnnotationButtons();
+      return;
+    }
+
+    activeHighlight=null;
+    activeNote=null;
+    updateAnnotationButtons();
+  });
+
+  updateAnnotationButtons();
 }
 
 function getQ(n){return ssGet("q"+n)||""}
