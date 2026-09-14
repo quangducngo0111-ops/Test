@@ -20,7 +20,9 @@
   --bad:#b83345;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -30,10 +32,17 @@ html,body{
   background:var(--bg);
 }
 
-button,input{font:inherit}
-button{cursor:pointer}
+button,input{
+  font:inherit;
+}
 
-/* HEADER */
+button{
+  cursor:pointer;
+}
+
+/* =========================
+   HEADER
+========================= */
 
 .top{
   position:sticky;
@@ -97,7 +106,9 @@ button{cursor:pointer}
   border-radius:9px;
 }
 
-/* PAGE */
+/* =========================
+   PAGE
+========================= */
 
 .page{
   width:min(1350px,calc(100% - 18px));
@@ -126,9 +137,13 @@ button{cursor:pointer}
   font-size:11.5px;
 }
 
-/* PROGRESS */
+/* =========================
+   PROGRESS
+========================= */
 
-.progress-wrap{min-width:245px}
+.progress-wrap{
+  min-width:245px;
+}
 
 .progress-row{
   display:flex;
@@ -155,7 +170,9 @@ button{cursor:pointer}
   transition:width .2s ease;
 }
 
-/* WORKSPACE */
+/* =========================
+   WORKSPACE
+========================= */
 
 .workspace{
   display:grid;
@@ -180,9 +197,13 @@ button{cursor:pointer}
   background:#fff;
 }
 
-.questions{background:#fafbfe}
+.questions{
+  background:#fafbfe;
+}
 
-.content{padding:20px 23px}
+.content{
+  padding:20px 23px;
+}
 
 .passage h2{
   margin:0 0 16px;
@@ -204,7 +225,9 @@ button{cursor:pointer}
   margin-right:7px;
 }
 
-/* CLICK TARGET IN PASSAGE */
+/* =========================
+   EVIDENCE
+========================= */
 
 .evidence-source{
   border-radius:4px;
@@ -245,9 +268,13 @@ button{cursor:pointer}
   }
 }
 
-/* INSTRUCTIONS */
+/* =========================
+   INSTRUCTIONS
+========================= */
 
-.instructions{margin-bottom:13px}
+.instructions{
+  margin-bottom:13px;
+}
 
 .instructions h3{
   margin:0 0 6px;
@@ -274,9 +301,13 @@ button{cursor:pointer}
   background:#fff;
 }
 
-.legend b{color:#21164b}
+.legend b{
+  color:#21164b;
+}
 
-/* QUESTIONS */
+/* =========================
+   QUESTIONS
+========================= */
 
 .qcard{
   background:#fff;
@@ -332,7 +363,9 @@ button{cursor:pointer}
   font-weight:850;
 }
 
-.option:hover{background:#fafaff}
+.option:hover{
+  background:#fafaff;
+}
 
 .option.correct{
   border-color:#8ed6b4;
@@ -346,7 +379,9 @@ button{cursor:pointer}
   color:#9b2838;
 }
 
-/* REVIEW */
+/* =========================
+   REVIEW
+========================= */
 
 .inline-review{
   margin-top:12px;
@@ -387,8 +422,6 @@ button{cursor:pointer}
   font-weight:900;
 }
 
-/* COMPARE */
-
 .compare-box{
   margin-top:12px;
   padding:13px;
@@ -404,7 +437,9 @@ button{cursor:pointer}
   font-weight:950;
 }
 
-.compare-item{margin-top:10px}
+.compare-item{
+  margin-top:10px;
+}
 
 .compare-label{
   margin-bottom:4px;
@@ -423,8 +458,6 @@ button{cursor:pointer}
   font-size:11px;
   line-height:1.6;
 }
-
-/* CLICKABLE EVIDENCE IN REVIEW */
 
 .passage-evidence{
   position:relative;
@@ -492,7 +525,9 @@ button{cursor:pointer}
   line-height:1.55;
 }
 
-/* USER HIGHLIGHT + NOTE */
+/* =========================
+   HIGHLIGHT + NOTE
+========================= */
 
 mark.user-highlight{
   background:#fff29a;
@@ -520,7 +555,9 @@ mark.user-highlight{
   box-shadow:0 12px 30px rgba(25,18,65,.22);
 }
 
-.selection-menu.show{display:flex}
+.selection-menu.show{
+  display:flex;
+}
 
 .selection-menu button{
   border:0;
@@ -538,7 +575,9 @@ mark.user-highlight{
   background:#fff1f3;
 }
 
-/* BOTTOM */
+/* =========================
+   BOTTOM
+========================= */
 
 .bottom{
   position:sticky;
@@ -593,7 +632,9 @@ mark.user-highlight{
   font-weight:900;
 }
 
-/* RESULT */
+/* =========================
+   RESULT
+========================= */
 
 .overlay{
   position:fixed;
@@ -605,7 +646,9 @@ mark.user-highlight{
   padding:18px;
 }
 
-.overlay.hidden{display:none}
+.overlay.hidden{
+  display:none;
+}
 
 .result{
   width:min(590px,100%);
@@ -633,7 +676,9 @@ mark.user-highlight{
   font-weight:900;
 }
 
-/* START */
+/* =========================
+   START
+========================= */
 
 .start{
   position:fixed;
@@ -645,7 +690,9 @@ mark.user-highlight{
   padding:18px;
 }
 
-.start.hidden{display:none}
+.start.hidden{
+  display:none;
+}
 
 .start-card{
   width:min(460px,100%);
@@ -666,7 +713,9 @@ mark.user-highlight{
   font-size:11.5px;
 }
 
-.field{margin:9px 0}
+.field{
+  margin:9px 0;
+}
 
 .field label{
   display:block;
@@ -689,23 +738,33 @@ mark.user-highlight{
 }
 
 @media(max-width:850px){
-  .workspace{grid-template-columns:1fr}
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
 
   .passage{
     border-right:0;
     border-bottom:1px solid var(--line);
   }
 
-  .pane{max-height:none}
+  .pane{
+    max-height:none;
+  }
 
   .hero{
     align-items:stretch;
     flex-direction:column;
   }
 
-  .progress-wrap{min-width:0}
+  .progress-wrap{
+    min-width:0;
+  }
 
-  .options{grid-template-columns:1fr}
+  .options{
+    grid-template-columns:1fr;
+  }
+
 }
 </style>
 </head>
@@ -778,9 +837,15 @@ mark.user-highlight{
 
     </div>
 
-    <div class="student" id="studentInfo"></div>
+    <div
+      class="student"
+      id="studentInfo"
+    ></div>
 
-    <div class="timer" id="timer">
+    <div
+      class="timer"
+      id="timer"
+    >
       00:00
     </div>
 
@@ -796,11 +861,15 @@ mark.user-highlight{
   <section class="hero">
 
     <div>
-      <h1>True / False / Not Given 03</h1>
+
+      <h1>
+        True / False / Not Given 03
+      </h1>
 
       <p>
         The Context, Meaning and Scope of Tourism · Questions 5–10
       </p>
+
     </div>
 
 
@@ -808,7 +877,9 @@ mark.user-highlight{
 
       <div class="progress-row">
 
-        <span>Tiến độ</span>
+        <span>
+          Tiến độ
+        </span>
 
         <span id="progressText">
           0/6 câu đã trả lời
@@ -829,10 +900,7 @@ mark.user-highlight{
 
     <!-- PASSAGE -->
 
-    <div
-      class="pane passage"
-      id="passagePane"
-    >
+    <div class="pane passage">
 
       <div
         id="passageRoot"
@@ -854,27 +922,25 @@ mark.user-highlight{
 
           Tourism today has grown significantly in both economic and social importance.
 
-          In most industrialised countries over the past few years the fastest growth
-          has been seen in the area of services.
+          In most industrialised countries over the past few years
+          the fastest growth has been seen in the area of services.
 
           One of the largest segments of the service industry,
           although largely unrecognised as an entity in some of these countries,
           is travel and tourism.
 
           According to the World Travel and Tourism Council (1992),
-          Travel and tourism is the largest industry in the world on virtually
-          any economic measure including value-added capital investment,
-          employment and tax contributions.
-
-          In 1992 the industry’s gross output was estimated to be $3.5 trillion,
-          over 12 per cent of all consumer spending.
 
           <span
             class="evidence-source"
             data-evidence="5"
           >
+            Travel and tourism is the largest industry in the world
+            on virtually any economic measure including value-added capital investment,
+            employment and tax contributions.
             The travel and tourism industry is the world’s largest employer
-            with almost 130 million jobs, or almost 7 per cent of all employees.
+            with almost 130 million jobs,
+            or almost 7 per cent of all employees.
           </span>
 
           <span
@@ -885,7 +951,2579 @@ mark.user-highlight{
             producing over 6 per cent of the world’s national product.
           </span>
 
-          It also accounts for capital investment in excess of $422 billion
-          and substantial direct, indirect and personal taxes each year.
+          <span
+            class="evidence-source"
+            data-evidence="7"
+          >
+            Thus, tourism has a profound impact both on the world economy and,
+            because of the educative effect of travel and the effects on employment,
+            on society itself.
+          </span>
 
-          Thus, tourism has a profound impact both on the
+        </p>
+
+
+        <!-- D -->
+
+        <p>
+
+          <span class="para-letter">
+            D
+          </span>
+
+          <span
+            class="evidence-source"
+            data-evidence="8"
+          >
+            However, the major problems of the travel and tourism industry
+            that have hidden, or obscured, its economic impact
+            are the diversity and fragmentation of the industry itself.
+          </span>
+
+          The travel industry includes:
+          hotels, motels and other types of accommodation;
+          restaurants and other food services;
+          transportation services and facilities;
+          amusements, attractions and other leisure facilities;
+          gift shops and a large number of other enterprises.
+
+          <span
+            class="evidence-source"
+            data-evidence="9"
+          >
+            Since many of these businesses also serve local residents,
+            the impact of spending by visitors can easily be overlooked or underestimated.
+          </span>
+
+          In addition, Meis (1992) points out that the tourism industry involves
+          concepts that have remained amorphous to both analysts and decision makers.
+
+          Moreover, in all nations this problem has made it difficult
+          for the industry to develop any type of reliable or credible tourism
+          information base in order to estimate the contribution it makes
+          to regional, national and global economies.
+
+          However, the nature of this very diversity makes travel and tourism
+          ideal vehicles for economic development in a wide variety of countries,
+          regions or communities.
+
+        </p>
+
+
+        <!-- E -->
+
+        <p>
+
+          <span class="para-letter">
+            E
+          </span>
+
+          Once the exclusive province of the wealthy,
+          travel and tourism have become an institutionalised way of life
+          for most of the population.
+
+          In fact, McIntosh and Goeldner (1990) suggest that tourism
+          has become the largest commodity in international trade for many nations
+          and, for a significant number of other countries, it ranks second or third.
+
+          For example, tourism is the major source of income
+          in Bermuda, Greece, Italy, Spain, Switzerland
+          and most Caribbean countries.
+
+          In addition, Hawkins and Ritchie,
+          quoting from data published by the American Express Company,
+          suggest that the travel and tourism industry
+          is the number one ranked employer in the Bahamas,
+          Brazil, Canada, France, the former West Germany,
+          Hong Kong, Italy, Jamaica, Japan, Singapore,
+          the United Kingdom and the United States.
+
+          <span
+            class="evidence-source"
+            data-evidence="10"
+          >
+            However, because of problems of definition,
+            which directly affect statistical measurement,
+            it is not possible with any degree of certainty
+            to provide precise, valid or reliable data
+            about the extent of world-wide tourism participation
+            or its economic impact.
+          </span>
+
+          In many cases, similar difficulties arise
+          when attempts are made to measure domestic tourism.
+
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- QUESTIONS -->
+
+    <div class="pane questions">
+
+      <div
+        id="questionsRoot"
+        class="content"
+      >
+
+        <div class="instructions">
+
+          <h3>
+            Questions 5–10
+          </h3>
+
+          <p>
+            Do the following statements agree with the information given in the passage?
+          </p>
+
+          <div class="legend">
+
+            <b>TRUE</b>
+            <span>
+              if the statement agrees with the information
+            </span>
+
+            <b>FALSE</b>
+            <span>
+              if the statement contradicts the information
+            </span>
+
+            <b>NOT GIVEN</b>
+            <span>
+              if there is no information on this
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- Q5 -->
+
+        <div class="qcard" id="q5">
+
+          <div class="qhead">
+
+            <span class="qnum">
+              5
+            </span>
+
+            <div class="qtext">
+              The largest employment figures in the world are found in the travel and tourism industry.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q5"
+                value="TRUE"
+                onchange="saveAnswer(5,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q5"
+                value="FALSE"
+                onchange="saveAnswer(5,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q5"
+                value="NOT GIVEN"
+                onchange="saveAnswer(5,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review5"></div>
+
+        </div>
+
+
+        <!-- Q6 -->
+
+        <div class="qcard" id="q6">
+
+          <div class="qhead">
+
+            <span class="qnum">
+              6
+            </span>
+
+            <div class="qtext">
+              Tourism contributes over six per cent of the Australian gross national product.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q6"
+                value="TRUE"
+                onchange="saveAnswer(6,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q6"
+                value="FALSE"
+                onchange="saveAnswer(6,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q6"
+                value="NOT GIVEN"
+                onchange="saveAnswer(6,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review6"></div>
+
+        </div>
+
+
+        <!-- Q7 -->
+
+        <div class="qcard" id="q7">
+
+          <div class="qhead">
+
+            <span class="qnum">
+              7
+            </span>
+
+            <div class="qtext">
+              Tourism has a social impact because it promotes recreation.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q7"
+                value="TRUE"
+                onchange="saveAnswer(7,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q7"
+                value="FALSE"
+                onchange="saveAnswer(7,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q7"
+                value="NOT GIVEN"
+                onchange="saveAnswer(7,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review7"></div>
+
+        </div>
+
+
+        <!-- Q8 -->
+
+        <div class="qcard" id="q8">
+
+          <div class="qhead">
+
+            <span class="qnum">
+              8
+            </span>
+
+            <div class="qtext">
+              Two main features of the travel and tourism industry make its economic significance difficult to ascertain.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q8"
+                value="TRUE"
+                onchange="saveAnswer(8,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q8"
+                value="FALSE"
+                onchange="saveAnswer(8,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q8"
+                value="NOT GIVEN"
+                onchange="saveAnswer(8,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review8"></div>
+
+        </div>
+
+
+        <!-- Q9 -->
+
+        <div class="qcard" id="q9">
+
+          <div class="qhead">
+
+            <span class="qnum">
+              9
+            </span>
+
+            <div class="qtext">
+              Visitor spending is always greater than the spending of residents in tourist areas.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q9"
+                value="TRUE"
+                onchange="saveAnswer(9,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q9"
+                value="FALSE"
+                onchange="saveAnswer(9,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q9"
+                value="NOT GIVEN"
+                onchange="saveAnswer(9,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review9"></div>
+
+        </div>
+
+
+        <!-- Q10 -->
+
+        <div class="qcard" id="q10">
+
+          <div class="qhead">
+
+            <span class="qnum">
+              10
+            </span>
+
+            <div class="qtext">
+              It is easy to show statistically how tourism affects individual economies.
+            </div>
+
+          </div>
+
+          <div class="options">
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q10"
+                value="TRUE"
+                onchange="saveAnswer(10,this.value)"
+              >
+              TRUE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q10"
+                value="FALSE"
+                onchange="saveAnswer(10,this.value)"
+              >
+              FALSE
+            </label>
+
+            <label class="option">
+              <input
+                type="radio"
+                name="q10"
+                value="NOT GIVEN"
+                onchange="saveAnswer(10,this.value)"
+              >
+              NOT GIVEN
+            </label>
+
+          </div>
+
+          <div id="review10"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- BOTTOM -->
+
+<div class="bottom">
+
+  <div class="nav">
+
+    <button id="nav5" onclick="goQ(5)">
+      5
+    </button>
+
+    <button id="nav6" onclick="goQ(6)">
+      6
+    </button>
+
+    <button id="nav7" onclick="goQ(7)">
+      7
+    </button>
+
+    <button id="nav8" onclick="goQ(8)">
+      8
+    </button>
+
+    <button id="nav9" onclick="goQ(9)">
+      9
+    </button>
+
+    <button id="nav10" onclick="goQ(10)">
+      10
+    </button>
+
+  </div>
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
+</div>
+
+
+<!-- FLOATING MENU -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:#6a4db4
+    ">
+      Kết quả luyện tập
+    </div>
+
+    <div
+      id="resultStudent"
+      style="
+        margin-top:5px;
+        font-size:12px;
+        color:var(--muted)
+      "
+    ></div>
+
+    <div
+      id="resultScore"
+      class="score"
+    >
+      0 / 6
+    </div>
+
+    <div id="resultPercent"></div>
+
+    <p style="
+      font-size:11px;
+      color:var(--muted)
+    ">
+      Các câu sai được giải thích trực tiếp ngay dưới từng câu hỏi.
+    </p>
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const RESULT_ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const ATTEMPT_KEY=
+'PRACTICE_TFNG03_TOURISM_V1';
+
+
+/* =========================================================
+   KEY
+========================================================= */
+
+const KEY={
+  5:'TRUE',
+  6:'NOT GIVEN',
+  7:'NOT GIVEN',
+  8:'TRUE',
+  9:'NOT GIVEN',
+  10:'FALSE'
+};
+
+
+/* =========================================================
+   STATEMENTS
+========================================================= */
+
+const STATEMENTS={
+
+  5:
+  'The largest employment figures in the world are found in the travel and tourism industry.',
+
+  6:
+  'Tourism contributes over six per cent of the Australian gross national product.',
+
+  7:
+  'Tourism has a social impact because it promotes recreation.',
+
+  8:
+  'Two main features of the travel and tourism industry make its economic significance difficult to ascertain.',
+
+  9:
+  'Visitor spending is always greater than the spending of residents in tourist areas.',
+
+  10:
+  'It is easy to show statistically how tourism affects individual economies.'
+
+};
+
+
+/* =========================================================
+   EVIDENCE
+========================================================= */
+
+const EVIDENCE={
+
+  5:
+  'The travel and tourism industry is the world’s largest employer with almost 130 million jobs, or almost 7 per cent of all employees.',
+
+  6:
+  'This industry is the world’s leading industrial contributor, producing over 6 per cent of the world’s national product.',
+
+  7:
+  'Tourism has a profound impact ... because of the educative effect of travel and the effects on employment, on society itself.',
+
+  8:
+  'The major problems ... that have hidden, or obscured, its economic impact are the diversity and fragmentation of the industry itself.',
+
+  9:
+  'Since many of these businesses also serve local residents, the impact of spending by visitors can easily be overlooked or underestimated.',
+
+  10:
+  'Because of problems of definition ... it is not possible with any degree of certainty to provide precise, valid or reliable data about ... its economic impact.'
+
+};
+
+
+/* =========================================================
+   ANALYSIS
+========================================================= */
+
+const COMPARE={
+
+  5:
+  `
+    Statement nói ngành travel and tourism có số lượng việc làm lớn nhất thế giới.
+    Passage nói trực tiếp đây là
+    <b>“the world’s largest employer”</b>
+    với gần 130 triệu việc làm.
+    Hai thông tin tương đương nhau.
+  `,
+
+  6:
+  `
+    Passage nói travel and tourism tạo ra
+    <b>hơn 6% sản phẩm quốc gia của toàn thế giới</b>.
+    Statement lại nói riêng về
+    <b>Australian gross national product</b>.
+    Passage không cung cấp con số riêng cho Australia,
+    nên không thể xác định statement đúng hay sai.
+  `,
+
+  7:
+  `
+    Passage xác nhận tourism có tác động xã hội,
+    nhưng nguyên nhân được nêu là
+    <b>educative effect of travel</b>
+    và
+    <b>effects on employment</b>.
+    Bài không nói tác động xã hội này là do
+    <b>recreation</b>.
+    Vì vậy thông tin “because it promotes recreation”
+    không được passage xác nhận.
+  `,
+
+  8:
+  `
+    Statement nói có hai đặc điểm chính khiến
+    ý nghĩa kinh tế của ngành khó xác định.
+    Passage nêu chính xác hai vấn đề:
+    <b>diversity</b> và <b>fragmentation</b>,
+    và cho biết chúng làm economic impact bị che khuất.
+  `,
+
+  9:
+  `
+    Passage nói nhiều doanh nghiệp du lịch
+    cũng phục vụ người dân địa phương,
+    khiến chi tiêu của khách du lịch
+    có thể bị bỏ sót hoặc đánh giá thấp.
+    Tuy nhiên, bài không hề so sánh
+    số tiền khách du lịch chi tiêu
+    với số tiền cư dân địa phương chi tiêu,
+    càng không nói visitor spending
+    <b>luôn lớn hơn</b>.
+  `,
+
+  10:
+  `
+    Statement nói việc thể hiện tác động của tourism
+    bằng số liệu thống kê là <b>easy</b>.
+    Passage nói điều ngược lại:
+    do vấn đề về định nghĩa và statistical measurement,
+    <b>không thể cung cấp dữ liệu chính xác,
+    hợp lệ và đáng tin cậy với mức độ chắc chắn</b>.
+    Hai ý trái ngược nhau.
+  `
+
+};
+
+
+/* =========================================================
+   CONCLUSION
+========================================================= */
+
+const CONCLUSION={
+
+  5:
+  'TRUE — Passage xác nhận travel and tourism là ngành sử dụng nhiều lao động nhất thế giới.',
+
+  6:
+  'NOT GIVEN — Passage cho số liệu toàn cầu, không có số liệu riêng cho Australia.',
+
+  7:
+  'NOT GIVEN — Passage không nói recreation là nguyên nhân tạo ra social impact.',
+
+  8:
+  'TRUE — Diversity và fragmentation là hai yếu tố làm economic impact khó xác định.',
+
+  9:
+  'NOT GIVEN — Passage không so sánh mức chi tiêu của visitors với residents.',
+
+  10:
+  'FALSE — Passage nói việc đo lường chính xác tác động kinh tế của tourism là khó khăn.'
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let startedAt=0;
+let submitted=false;
+
+let savedSelection=null;
+let savedZone=null;
+
+let menuMode='selection';
+let menuTarget=null;
+let menuZone=null;
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+      ||
+      'null'
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const student=
+  readStudent();
+
+
+  if(student){
+
+    studentName.value=
+    student.name || '';
+
+    studentClass.value=
+    student.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name=
+  studentName.value.trim();
+
+
+  const className=
+  studentClass.value.trim();
+
+
+  if(!name || !className){
+
+    startError.textContent=
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+
+      name:name,
+
+      className:className
+
+    })
+
+  );
+
+
+  studentInfo.textContent=
+  `${name} · ${className}`;
+
+
+  start.classList.add(
+    'hidden'
+  );
+
+
+  startedAt=
+  Date.now();
+
+
+  restoreMarkup();
+
+  restoreAnswers();
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function fmt(sec){
+
+  sec=
+  Math.max(
+    0,
+    Math.floor(sec)
+  );
+
+
+  const h=
+  Math.floor(
+    sec/3600
+  );
+
+
+  const m=
+  Math.floor(
+    (sec%3600)/60
+  );
+
+
+  const s=
+  sec%60;
+
+
+  return h
+
+  ?
+
+  `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+
+  :
+
+  `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+}
+
+
+setInterval(
+
+  ()=>{
+
+    if(startedAt){
+
+      timer.textContent=
+      fmt(
+        (Date.now()-startedAt)/1000
+      );
+
+    }
+
+  },
+
+  500
+
+);
+
+
+/* =========================================================
+   ANSWERS
+========================================================= */
+
+function saveAnswer(
+  number,
+  value
+){
+
+  if(submitted){
+    return;
+  }
+
+
+  localStorage.setItem(
+    `${ATTEMPT_KEY}_q${number}`,
+    value
+  );
+
+
+  navState(
+    number
+  );
+
+
+  updateProgress();
+
+}
+
+
+function getAnswer(number){
+
+  return localStorage.getItem(
+    `${ATTEMPT_KEY}_q${number}`
+  )
+  ||
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  [5,6,7,8,9,10]
+  .forEach(
+
+    number=>{
+
+      const value=
+      getAnswer(
+        number
+      );
+
+
+      if(value){
+
+        const input=
+        document.querySelector(
+          `input[name="q${number}"][value="${value}"]`
+        );
+
+
+        if(input){
+
+          input.checked=
+          true;
+
+        }
+
+      }
+
+
+      navState(
+        number
+      );
+
+    }
+
+  );
+
+}
+
+
+function navState(number){
+
+  document
+  .getElementById(
+    'nav'+number
+  )
+  .classList
+  .toggle(
+    'answered',
+    !!getAnswer(number)
+  );
+
+}
+
+
+function updateProgress(){
+
+  const answered=
+  [5,6,7,8,9,10]
+  .filter(
+    number=>
+    getAnswer(number)
+  )
+  .length;
+
+
+  progressText.textContent=
+  `${answered}/6 câu đã trả lời`;
+
+
+  progressBar.style.width=
+  (
+    answered/6*100
+  )
+  +
+  '%';
+
+}
+
+
+function goQ(number){
+
+  document
+  .getElementById(
+    'q'+number
+  )
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+async function submitPractice(){
+
+  if(submitted){
+    return;
+  }
+
+
+  submitted=
+  true;
+
+
+  let score=0;
+
+
+  const answers={};
+
+
+  [5,6,7,8,9,10]
+  .forEach(
+
+    number=>{
+
+      const user=
+      getAnswer(
+        number
+      );
+
+
+      const correct=
+      KEY[number];
+
+
+      const ok=
+      user===correct;
+
+
+      answers[number]=
+      user || '';
+
+
+      if(ok){
+
+        score++;
+
+      }
+
+
+      const inputs=[
+        ...document.querySelectorAll(
+          `input[name="q${number}"]`
+        )
+      ];
+
+
+      inputs.forEach(
+
+        input=>{
+
+          input.disabled=
+          true;
+
+
+          const label=
+          input.closest(
+            '.option'
+          );
+
+
+          label.classList.remove(
+            'correct',
+            'wrong'
+          );
+
+
+          if(
+            input.value===correct
+          ){
+
+            label.classList.add(
+              'correct'
+            );
+
+          }
+
+
+          if(
+            input.checked
+            &&
+            !ok
+          ){
+
+            label.classList.add(
+              'wrong'
+            );
+
+          }
+
+        }
+
+      );
+
+
+      document
+      .getElementById(
+        'nav'+number
+      )
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      if(!ok){
+
+        reviewHTML(
+          number,
+          user,
+          correct
+        );
+
+      }
+
+    }
+
+  );
+
+
+  const durationSeconds=
+  Math.floor(
+    (Date.now()-startedAt)/1000
+  );
+
+
+  const student=
+  readStudent();
+
+
+  resultStudent.textContent=
+  student
+  ?
+  `${student.name} · ${student.className}`
+  :
+  '';
+
+
+  resultScore.textContent=
+  `${score} / 6`;
+
+
+  resultPercent.textContent=
+  `${Math.round(score/6*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  const details=
+  JSON.stringify({
+
+    title:
+    'The Context, Meaning and Scope of Tourism - True / False / Not Given 03',
+
+    answers:
+    answers,
+
+    correctAnswers:
+    KEY
+
+  });
+
+
+  const body=
+  new URLSearchParams({
+
+    mode:
+    'PRACTICE',
+
+    name:
+    student?.name || '',
+
+    className:
+    student?.className || '',
+
+    skill:
+    'Reading',
+
+    practiceType:
+    'True / False / Not Given',
+
+    practiceId:
+    '03',
+
+    score:
+    String(score),
+
+    total:
+    '6',
+
+    durationSeconds:
+    String(
+      durationSeconds
+    ),
+
+    details:
+    details,
+
+    submittedAt:
+    new Date()
+    .toISOString()
+
+  });
+
+
+  try{
+
+    await fetch(
+
+      RESULT_ENDPOINT,
+
+      {
+
+        method:'POST',
+
+        mode:'no-cors',
+
+        headers:{
+
+          'Content-Type':
+          'application/x-www-form-urlencoded;charset=UTF-8'
+
+        },
+
+        body:
+        body.toString()
+
+      }
+
+    );
+
+  }
+
+  catch(err){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      err
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+function reviewHTML(
+  number,
+  user,
+  correct
+){
+
+  document
+  .getElementById(
+    'review'+number
+  )
+  .innerHTML=
+  `
+    <div class="inline-review">
+
+      <div class="review-title">
+        Câu ${number}
+      </div>
+
+
+      <div class="review-row">
+
+        <div class="review-label">
+          Đáp án em chọn
+        </div>
+
+        <div class="review-user">
+          ${escapeHTML(user || 'Chưa trả lời')}
+        </div>
+
+      </div>
+
+
+      <div class="review-row">
+
+        <div class="review-label">
+          Đáp án đúng
+        </div>
+
+        <div class="review-correct">
+          ${correct}
+        </div>
+
+      </div>
+
+
+      <div class="compare-box">
+
+        <div class="compare-heading">
+          🔎 Đối chiếu với bài đọc
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Statement
+          </div>
+
+          <div class="compare-text">
+            ${STATEMENTS[number]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Passage
+          </div>
+
+          <div
+            class="passage-evidence"
+            role="button"
+            tabindex="0"
+            onclick="focusEvidence(${number})"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusEvidence(${number});}"
+          >
+
+            “${EVIDENCE[number]}”
+
+            <div class="evidence-help">
+              Nhấn để xem vị trí trong bài đọc
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="compare-item">
+
+          <div class="compare-label">
+            Phân tích
+          </div>
+
+          <div class="compare-analysis">
+            ${COMPARE[number]}
+          </div>
+
+        </div>
+
+
+        <div class="conclusion-box">
+
+          <div class="compare-label">
+            Kết luận
+          </div>
+
+          <div class="conclusion-text">
+            ${CONCLUSION[number]}
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   CLICK EVIDENCE
+========================================================= */
+
+function focusEvidence(number){
+
+  document
+  .querySelectorAll(
+    '.evidence-source.evidence-focus'
+  )
+  .forEach(
+
+    element=>{
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  const targets=[
+    ...document.querySelectorAll(
+      `[data-evidence="${number}"]`
+    )
+  ];
+
+
+  if(!targets.length){
+
+    return;
+
+  }
+
+
+  targets.forEach(
+
+    target=>{
+
+      target.classList.add(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  targets[0]
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  targets.forEach(
+
+    target=>{
+
+      target.style.animation=
+      'none';
+
+
+      void target.offsetWidth;
+
+
+      target.style.animation=
+      '';
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function closeResult(){
+
+  resultOverlay
+  .classList
+  .add(
+    'hidden'
+  );
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + NOTES
+========================================================= */
+
+const selectionMenu=
+document.getElementById(
+  'selectionMenu'
+);
+
+
+const menuHighlight=
+document.getElementById(
+  'menuHighlight'
+);
+
+
+const menuNote=
+document.getElementById(
+  'menuNote'
+);
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+
+    zone==='passage'
+    ?
+    'passageRoot'
+    :
+    'questionsRoot'
+
+  );
+
+}
+
+
+function notesKey(zone){
+
+  return `${ATTEMPT_KEY}_notes_${zone}`;
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function loadNotes(zone){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        notesKey(zone)
+      )
+      ||
+      '[]'
+    );
+
+  }catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+function saveNotes(
+  zone,
+  notes
+){
+
+  localStorage.setItem(
+
+    notesKey(zone),
+
+    JSON.stringify(
+      notes
+    )
+
+  );
+
+}
+
+
+function saveMarkup(zone){
+
+  document
+  .querySelectorAll(
+    '.evidence-source.evidence-focus'
+  )
+  .forEach(
+
+    element=>{
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    zoneRoot(zone).innerHTML
+
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  ['passage','questions']
+  .forEach(
+
+    zone=>{
+
+      const markup=
+      localStorage.getItem(
+        markupKey(zone)
+      );
+
+
+      if(markup){
+
+        zoneRoot(zone).innerHTML=
+        markup;
+
+      }
+
+
+      bindContextActions(
+        zone
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function hideSelectionMenu(){
+
+  selectionMenu
+  .classList
+  .remove(
+    'show'
+  );
+
+
+  menuTarget=null;
+  menuZone=null;
+  menuMode='selection';
+
+}
+
+
+function resetMenuButtons(){
+
+  menuHighlight.style.display='';
+  menuNote.style.display='';
+
+  menuHighlight.textContent=
+  '🖍 Highlight';
+
+  menuNote.textContent=
+  '📝 Take note';
+
+
+  menuHighlight
+  .classList
+  .remove(
+    'danger'
+  );
+
+
+  menuNote
+  .classList
+  .remove(
+    'danger'
+  );
+
+}
+
+
+function positionMenu(rect){
+
+  selectionMenu
+  .classList
+  .add(
+    'show'
+  );
+
+
+  requestAnimationFrame(
+
+    ()=>{
+
+      const width=
+      selectionMenu.offsetWidth
+      ||
+      190;
+
+
+      const left=
+      Math.min(
+
+        window.innerWidth-width-10,
+
+        Math.max(
+
+          10,
+
+          rect.left
+          +
+          rect.width/2
+          -
+          width/2
+
+        )
+
+      );
+
+
+      const top=
+      Math.max(
+        10,
+        rect.top-47
+      );
+
+
+      selectionMenu.style.left=
+      left+'px';
+
+
+      selectionMenu.style.top=
+      top+'px';
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   TEXT SELECTION
+========================================================= */
+
+function captureSelection(zone){
+
+  const selection=
+  window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    selection.rangeCount===0
+    ||
+    selection.isCollapsed
+  ){
+
+    return false;
+
+  }
+
+
+  const range=
+  selection.getRangeAt(0);
+
+
+  const root=
+  zoneRoot(zone);
+
+
+  if(
+    !root.contains(
+      range.commonAncestorContainer
+    )
+  ){
+
+    return false;
+
+  }
+
+
+  savedSelection=
+  range.cloneRange();
+
+
+  savedZone=
+  zone;
+
+
+  menuMode='selection';
+
+  menuZone=zone;
+
+  menuTarget=null;
+
+
+  resetMenuButtons();
+
+
+  positionMenu(
+    range.getBoundingClientRect()
+  );
+
+
+  return true;
+
+}
+
+
+function clearBrowserSelection(){
+
+  const selection=
+  window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection=null;
+
+  savedZone=null;
+
+}
+
+
+/* =========================================================
+   ADD HIGHLIGHT
+========================================================= */
+
+function addHighlight(){
+
+  if(
+    menuMode==='delete-highlight'
+  ){
+
+    removeHighlight();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+  savedSelection.cloneRange();
+
+
+  try{
+
+    const mark=
+    document.createElement(
+      'mark'
+    );
+
+
+    mark.className=
+    'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearBrowserSelection();
+
+
+    hideSelectionMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   ADD NOTE
+========================================================= */
+
+function addNote(){
+
+  if(
+    menuMode==='delete-note'
+  ){
+
+    removeNote();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+  savedSelection.cloneRange();
+
+
+  const quote=
+  range
+  .toString()
+  .trim();
+
+
+  const text=
+  prompt(
+    'Nhập ghi chú:'
+  );
+
+
+  if(
+    text===null
+    ||
+    !text.trim()
+  ){
+
+    return;
+
+  }
+
+
+  const id=
+  'n'
+  +
+  Date.now()
+  +
+  Math.random()
+  .toString(36)
+  .slice(2,5);
+
+
+  const span=
+  document.createElement(
+    'span'
+  );
+
+
+  span.className=
+  'note-anchor';
+
+
+  span.dataset.noteId=
+  id;
+
+
+  try{
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    const notes=
+    loadNotes(
+      savedZone
+    );
+
+
+    notes.push({
+
+      id:id,
+
+      quote:quote,
+
+      text:text.trim()
+
+    });
+
+
+    saveNotes(
+      savedZone,
+      notes
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearBrowserSelection();
+
+
+    hideSelectionMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE MENU
+========================================================= */
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget=
+  target;
+
+
+  menuZone=
+  zone;
+
+
+  resetMenuButtons();
+
+
+  if(type==='highlight'){
+
+    menuMode=
+    'delete-highlight';
+
+
+    menuHighlight.textContent=
+    '✕ Xóa highlight';
+
+
+    menuHighlight
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuNote.style.display=
+    'none';
+
+  }
+
+  else{
+
+    menuMode=
+    'delete-note';
+
+
+    menuNote.textContent=
+    '✕ Xóa note';
+
+
+    menuNote
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuHighlight.style.display=
+    'none';
+
+  }
+
+
+  clearBrowserSelection();
+
+
+  positionMenu(
+    target.getBoundingClientRect()
+  );
+
+}
+
+
+/* =========================================================
+   REMOVE HIGHLIGHT
+========================================================= */
+
+function removeHighlight(){
+
+  if(!menuTarget){
+    return;
+  }
+
+
+  const zone=
+  menuZone;
+
+
+  const parent=
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+      menuTarget.firstChild,
+      menuTarget
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    zone
+  );
+
+
+  hideSelectionMenu();
+
+
+  resetMenuButtons();
+
+}
+
+
+/* =========================================================
+   REMOVE NOTE
+========================================================= */
+
+function removeNote(){
+
+  if(!menuTarget){
+    return;
+  }
+
+
+  const zone=
+  menuZone;
+
+
+  const id=
+  menuTarget.dataset.noteId;
+
+
+  const notes=
+  loadNotes(zone)
+  .filter(
+    note=>
+    note.id!==id
+  );
+
+
+  saveNotes(
+    zone,
+    notes
+  );
+
+
+  const parent=
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+      menuTarget.firstChild,
+      menuTarget
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    zone
+  );
+
+
+  hideSelectionMenu();
+
+
+  resetMenuButtons();
+
+}
+
+
+/* =========================================================
+   BIND
+========================================================= */
+
+function bindContextActions(zone){
+
+  const root=
+  zoneRoot(zone);
+
+
+  if(!root){
+    return;
+  }
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    ()=>{
+
+      resetMenuButtons();
+
+
+      setTimeout(
+        ()=>captureSelection(zone),
+        0
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    ()=>{
+
+      resetMenuButtons();
+
+
+      setTimeout(
+        ()=>captureSelection(zone),
+        120
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event=>{
+
+      const note=
+      event.target.closest(
+        '.note-anchor'
+      );
+
+
+      const mark=
+      event.target.closest(
+        'mark.user-highlight'
+      );
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+
+        return;
+
+      }
+
+
+      if(mark){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          mark,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   MENU EVENTS
+========================================================= */
+
+menuHighlight
+.addEventListener(
+  'click',
+  addHighlight
+);
+
+
+menuNote
+.addEventListener(
+  'click',
+  addNote
+);
+
+
+document
+.addEventListener(
+
+  'mousedown',
+
+  event=>{
+
+    if(
+      !selectionMenu.contains(
+        event.target
+      )
+      &&
+      !event.target.closest(
+        'mark.user-highlight'
+      )
+      &&
+      !event.target.closest(
+        '.note-anchor'
+      )
+    ){
+
+      hideSelectionMenu();
+
+      resetMenuButtons();
+
+    }
+
+  }
+
+);
+
+
+window
+.addEventListener(
+
+  'scroll',
+
+  ()=>{
+
+    hideSelectionMenu();
+
+    resetMenuButtons();
+
+  },
+
+  true
+
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+  .replace(
+
+    /[&<>"']/g,
+
+    char=>({
+
+      '&':'&amp;',
+
+      '<':'&lt;',
+
+      '>':'&gt;',
+
+      '"':'&quot;',
+
+      "'":'&#39;'
+
+    })[char]
+
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+prefill();
+
+</script>
+
+</body>
+</html>
