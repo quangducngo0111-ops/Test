@@ -92,21 +92,20 @@ main{padding:24px 0 50px}
 
 <main class="wrap">
   <section class="hero">
-    <div class="eyebrow">Practice Mode</div>
-    <h1>Luyện từng dạng bài</h1>
-    <p>Đây là kho luyện tập riêng trong repo <b>Test</b>. Không kết nối và không phụ thuộc vào repo Home-Work.</p>
-    <div class="mode-note">⏱ Các bài Practice dùng thời gian <b>đếm xuôi</b> và không tự nộp chỉ vì hết thời gian.</div>
+    <div class="eyebrow">Luyện tập</div>
+    <h1>Kho luyện tập IELTS</h1>
+    <p>Chọn kỹ năng và bài muốn luyện.</p>
   </section>
 
   <div class="tabs" id="tabs"></div>
 
   <div class="head">
-    <div><h2 id="title">Reading</h2><p id="subtitle">Danh sách bài luyện được lấy tự động từ folder Practice.</p></div>
+    <div><h2 id="title">Reading</h2><p id="subtitle">Chọn một bài để bắt đầu luyện tập.</p></div>
     <div class="count" id="count">0 mục</div>
   </div>
 
   <section class="grid" id="grid"></section>
-  <div class="footer">Chỉ cần thêm folder/bài mới đúng cấu trúc, danh sách này sẽ tự cập nhật.</div>
+  <div class="footer">IELTS Practice</div>
 </main>
 
 <script>
@@ -163,7 +162,7 @@ function render(){
   grid.innerHTML=list.length?list.map((x,i)=>`
     <a class="card" href="${x.url}?practice=1">
       <div class="badge">${String(i+1).padStart(2,'0')}</div>
-      <div class="copy"><b>${x.title}</b><span>${x.desc} · ⏱ Đếm xuôi</span></div>
+      <div class="copy"><b>${x.title}</b><span>${x.desc}</span></div>
       <div class="arrow">→</div>
     </a>`).join(''):'<div class="empty">Chưa có bài trong mục này. Hãy tạo folder và index.html theo cấu trúc Practice.</div>';
 }
