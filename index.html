@@ -7,19 +7,30 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
-<title>IELTS Learning Portal</title>
+<title>IELTS Practice Portal</title>
 
 <style>
+
 :root{
-  --purple:#281260;
-  --purple2:#5135a6;
-  --purple3:#7256cf;
-  --ink:#202636;
-  --muted:#737b8c;
-  --line:#e4e7ef;
-  --bg:#f5f7fb;
-  --blue:#2f6fdf;
-  --green:#16845b;
+  --ink:#13204b;
+  --muted:#667085;
+  --line:#e6e9f2;
+  --bg:#eef3ff;
+
+  --purple:#7a56e8;
+  --purple2:#9270f4;
+
+  --blue:#2287e8;
+  --green:#22a55a;
+  --orange:#f28a2c;
+  --pink:#ef5ca3;
+
+  --practice:#6b55c8;
+  --progress:#3777c9;
+
+  --shadow:
+    0 18px 42px
+    rgba(57,66,115,.13);
 }
 
 *{
@@ -33,31 +44,36 @@ html{
 body{
   margin:0;
 
+  min-height:100vh;
+
+  color:var(--ink);
+
   font-family:
     Inter,
+    ui-sans-serif,
     system-ui,
     -apple-system,
+    BlinkMacSystemFont,
     "Segoe UI",
     Arial,
     sans-serif;
 
-  color:var(--ink);
-
   background:
     radial-gradient(
-      circle at 5% 0%,
-      rgba(141,105,246,.12),
-      transparent 24%
+      circle at 4% 4%,
+      rgba(205,160,255,.28),
+      transparent 27%
     ),
     radial-gradient(
-      circle at 95% 2%,
-      rgba(89,174,255,.10),
-      transparent 22%
+      circle at 94% 4%,
+      rgba(123,194,255,.28),
+      transparent 30%
     ),
     linear-gradient(
-      180deg,
-      #faf9ff,
-      #f4f7fb
+      135deg,
+      #f6f0ff 0%,
+      #eef7ff 52%,
+      #f3f7ff 100%
     );
 }
 
@@ -70,50 +86,43 @@ button{
   cursor:pointer;
 }
 
-a{
-  color:inherit;
+.hidden{
+  display:none !important;
 }
 
 
 /* =========================================================
-   CONTAINER
+   TOP BAR
 ========================================================= */
 
-.wrap{
-  width:
-    min(
-      1180px,
-      calc(100% - 24px)
-    );
-
-  margin:auto;
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.top{
+.topbar{
   position:sticky;
 
   top:0;
 
-  z-index:50;
+  z-index:60;
 
   background:
-    rgba(255,255,255,.93);
+    rgba(255,255,255,.78);
 
   backdrop-filter:
-    blur(14px);
+    blur(16px);
 
   border-bottom:
     1px solid
-    rgba(221,224,234,.9);
+    rgba(255,255,255,.82);
 }
 
-.top-inner{
-  min-height:66px;
+.topbar-inner{
+  width:
+    min(
+      1500px,
+      calc(100% - 28px)
+    );
+
+  min-height:58px;
+
+  margin:auto;
 
   display:flex;
 
@@ -122,125 +131,91 @@ a{
   justify-content:
     space-between;
 
-  gap:14px;
+  gap:16px;
 }
 
-.logo{
+.brand{
   display:flex;
 
   align-items:center;
 
-  gap:9px;
-
-  text-decoration:none;
+  gap:10px;
 }
 
-.logo-icon{
-  width:34px;
+.brand-mark{
+  width:38px;
 
-  height:34px;
+  height:38px;
 
-  display:grid;
-
-  place-items:center;
-
-  border-radius:10px;
+  border-radius:13px;
 
   background:
     linear-gradient(
-      145deg,
-      var(--purple),
-      var(--purple2)
+      135deg,
+      #845ef7,
+      #a887ff
     );
 
   color:#fff;
 
-  font-size:15px;
-
-  font-weight:950;
-
-  box-shadow:
-    0 5px 13px
-    rgba(40,18,96,.16);
-}
-
-.logo-text{
-  color:#21164b;
-
-  font-size:14px;
-
-  font-weight:950;
-}
-
-.header-user{
-  display:flex;
-
-  align-items:center;
-
-  gap:9px;
-}
-
-.header-user-copy{
-  text-align:right;
-}
-
-.header-name{
-  color:#3e3655;
-
-  font-size:10.5px;
-
-  font-weight:950;
-}
-
-.header-class{
-  margin-top:2px;
-
-  color:#9399a6;
-
-  font-size:9px;
-}
-
-.header-avatar{
-  width:36px;
-
-  height:36px;
-
-  flex:0 0 36px;
-
   display:grid;
 
   place-items:center;
 
-  overflow:hidden;
-
-  border-radius:50%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #eee9ff,
-      #dceaff
-    );
-
-  color:#5135a6;
-
-  border:
-    1px solid
-    #ddd8ee;
-
-  font-size:11px;
-
   font-weight:950;
 
-  cursor:pointer;
+  box-shadow:
+    0 8px 18px
+    rgba(108,74,197,.22);
 }
 
-.header-avatar img{
-  width:100%;
+.brand strong{
+  display:block;
 
-  height:100%;
+  font-size:14px;
 
-  object-fit:cover;
+  letter-spacing:.04em;
+}
+
+.brand small{
+  display:block;
+
+  margin-top:2px;
+
+  color:#7c8496;
+
+  font-size:10.5px;
+}
+
+.student-mini{
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  font-size:12px;
+
+  font-weight:800;
+
+  color:#44506a;
+}
+
+.student-mini button{
+  border:
+    1px solid
+    #dfe4ef;
+
+  background:#fff;
+
+  color:#26324f;
+
+  border-radius:11px;
+
+  padding:
+    8px 11px;
+
+  font-weight:800;
 }
 
 
@@ -249,8 +224,276 @@ a{
 ========================================================= */
 
 main{
+  width:
+    min(
+      1500px,
+      calc(100% - 28px)
+    );
+
+  margin:auto;
+
   padding:
-    28px 0 60px;
+    24px 0 54px;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-wrap{
+  min-height:
+    calc(100vh - 100px);
+
+  display:grid;
+
+  place-items:center;
+
+  padding:
+    26px 0;
+}
+
+.login-shell{
+  width:
+    min(
+      1000px,
+      100%
+    );
+
+  display:grid;
+
+  grid-template-columns:
+    1.08fr .92fr;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    rgba(255,255,255,.85);
+
+  border-radius:34px;
+
+  background:
+    rgba(255,255,255,.9);
+
+  box-shadow:
+    var(--shadow);
+}
+
+.login-copy{
+  padding:
+    48px 46px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff,
+      #fbf9ff
+    );
+}
+
+.eyebrow{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:
+    8px 13px;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8d68f5,
+      #a77bff
+    );
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+
+  box-shadow:
+    0 7px 18px
+    rgba(108,74,197,.2);
+}
+
+.login-copy h1{
+  margin:
+    16px 0 10px;
+
+  font-size:44px;
+
+  line-height:1.08;
+
+  letter-spacing:-.04em;
+
+  color:#12204e;
+}
+
+.login-copy p{
+  margin:0;
+
+  color:var(--muted);
+
+  font-size:14px;
+
+  line-height:1.65;
+}
+
+.form-grid{
+  display:grid;
+
+  grid-template-columns:
+    1.5fr .75fr;
+
+  gap:12px;
+
+  margin-top:28px;
+}
+
+.field label{
+  display:block;
+
+  margin-bottom:7px;
+
+  font-size:12px;
+
+  font-weight:850;
+
+  color:#39435f;
+}
+
+.field input{
+  width:100%;
+
+  height:52px;
+
+  padding:
+    0 14px;
+
+  border:
+    1px solid
+    #dfe4ef;
+
+  border-radius:12px;
+
+  background:#fff;
+
+  outline:none;
+}
+
+.field input:focus{
+  border-color:#9876f6;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(138,99,246,.1);
+}
+
+.start-btn{
+  width:100%;
+
+  margin-top:14px;
+
+  padding:
+    14px 18px;
+
+  border:0;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7b55ef,
+      #966ff7
+    );
+
+  color:#fff;
+
+  font-weight:900;
+
+  box-shadow:
+    0 12px 25px
+    rgba(108,74,197,.25);
+}
+
+.error{
+  min-height:20px;
+
+  margin-top:8px;
+
+  font-size:12px;
+
+  color:#b43e48;
+}
+
+.login-art{
+  position:relative;
+
+  min-height:520px;
+
+  display:flex;
+
+  align-items:flex-end;
+
+  justify-content:center;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 55% 35%,
+      #fff 0%,
+      #f4efff 48%,
+      #e7f3ff 100%
+    );
+
+  padding:24px;
+}
+
+.login-art:before{
+  content:"";
+
+  position:absolute;
+
+  inset:34px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.9);
+
+  border-radius:28px;
+
+  background:
+    rgba(255,255,255,.22);
+}
+
+.login-art img{
+  position:relative;
+
+  z-index:2;
+
+  max-width:80%;
+
+  max-height:470px;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 22px 28px
+      rgba(37,44,92,.17)
+    );
 }
 
 
@@ -263,412 +506,679 @@ main{
 
   overflow:hidden;
 
-  min-height:265px;
+  margin-bottom:26px;
+
+  padding:
+    30px 34px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.92);
+
+  border-radius:34px;
+
+  background:
+    linear-gradient(
+      112deg,
+      rgba(255,255,255,.93),
+      rgba(249,246,255,.91) 48%,
+      rgba(237,247,255,.94)
+    );
+
+  box-shadow:
+    var(--shadow);
 
   display:grid;
 
   grid-template-columns:
-    1.15fr .85fr;
-
-  align-items:center;
+    minmax(0,1fr)
+    290px;
 
   gap:28px;
 
-  padding:
-    34px 38px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.95);
-
-  border-radius:26px;
-
-  background:
-    linear-gradient(
-      120deg,
-      #ffffff 0%,
-      #f9f5ff 55%,
-      #eef7ff 100%
-    );
-
-  box-shadow:
-    0 15px 35px
-    rgba(35,25,75,.055);
+  align-items:center;
 }
 
-.hero::before{
-  content:"";
-
-  position:absolute;
-
-  width:250px;
-
-  height:250px;
-
-  border-radius:50%;
-
-  right:-70px;
-
-  top:-90px;
-
-  background:
-    rgba(116,88,207,.07);
-}
-
-.hero-copy{
+.hero-main{
   position:relative;
 
   z-index:2;
-}
 
-.eyebrow{
-  display:inline-flex;
-
-  align-items:center;
-
-  gap:6px;
-
-  color:#694db4;
-
-  font-size:10px;
-
-  font-weight:950;
-
-  letter-spacing:.11em;
-
-  text-transform:uppercase;
-}
-
-.hero h1{
-  margin:
-    10px 0 9px;
-
-  max-width:630px;
-
-  color:#21164b;
-
-  font-size:
-    clamp(
-      31px,
-      4.3vw,
-      47px
-    );
-
-  line-height:1.06;
-
-  letter-spacing:-.045em;
-}
-
-.hero h1 span{
-  color:#6548bd;
-}
-
-.hero p{
-  max-width:620px;
-
-  margin:0;
-
-  color:var(--muted);
-
-  font-size:12px;
-
-  line-height:1.75;
-}
-
-.hero-actions{
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:8px;
-
-  margin-top:18px;
-}
-
-.hero-btn{
-  display:inline-flex;
-
-  align-items:center;
-
-  gap:6px;
-
-  padding:
-    10px 14px;
-
-  border-radius:10px;
-
-  text-decoration:none;
-
-  font-size:10.5px;
-
-  font-weight:950;
-
-  transition:.15s ease;
-}
-
-.hero-btn.primary{
-  background:
-    linear-gradient(
-      100deg,
-      var(--purple),
-      var(--purple2)
-    );
-
-  color:#fff;
-
-  box-shadow:
-    0 7px 17px
-    rgba(40,18,96,.16);
-}
-
-.hero-btn.secondary{
-  background:#fff;
-
-  color:#4e397e;
-
-  border:
-    1px solid
-    #ded8f2;
-}
-
-.hero-btn:hover{
-  transform:
-    translateY(-1px);
-}
-
-
-/* HERO IMAGE */
-
-.hero-visual{
-  position:relative;
-
-  min-height:210px;
+  min-height:250px;
 
   display:flex;
 
-  align-items:flex-end;
+  flex-direction:column;
 
   justify-content:center;
 }
 
-.hero-visual::before{
-  content:"";
+.hero h1{
+  margin:
+    14px 0 7px;
 
-  position:absolute;
-
-  width:220px;
-
-  height:220px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(119,92,207,.12),
-      rgba(119,92,207,.02) 65%,
-      transparent 66%
+  font-size:
+    clamp(
+      48px,
+      5.4vw,
+      76px
     );
+
+  line-height:.98;
+
+  letter-spacing:-.055em;
+
+  color:#12204e;
 }
 
-.hero-character{
-  position:relative;
+.hero-sub{
+  margin:0;
 
-  z-index:2;
+  max-width:760px;
 
-  max-width:245px;
+  color:#4d5568;
 
-  max-height:225px;
+  font-size:17px;
 
-  object-fit:contain;
-
-  object-position:center bottom;
-
-  filter:
-    drop-shadow(
-      0 15px 15px
-      rgba(40,18,96,.10)
-    );
+  line-height:1.5;
 }
 
-
-/* =========================================================
-   STUDENT PROFILE STRIP
-========================================================= */
-
-.profile-strip{
-  margin-top:14px;
-
+.hero-bottom{
   display:flex;
+
+  flex-wrap:wrap;
 
   align-items:center;
 
-  justify-content:
-    space-between;
+  gap:10px;
 
-  gap:15px;
+  margin-top:22px;
+}
 
-  padding:14px 16px;
+.hero-chip{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:
+    11px 14px;
 
   border:
     1px solid
-    var(--line);
+    rgba(223,226,238,.95);
 
   border-radius:16px;
 
   background:
-    rgba(255,255,255,.92);
+    rgba(255,255,255,.94);
+
+  color:#26314a;
+
+  font-size:12px;
+
+  font-weight:800;
+
+  box-shadow:
+    0 8px 18px
+    rgba(62,71,110,.08);
 }
 
-.profile-main{
+.hero-side{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:12px;
+
+  align-items:center;
+}
+
+.hero-art-card{
+  width:100%;
+
+  max-width:240px;
+
+  padding:12px;
+
+  border-radius:27px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #f7f1e8
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,.96);
+
+  box-shadow:
+    0 16px 28px
+    rgba(52,61,100,.10);
+}
+
+.hero-art img{
+  display:block;
+
+  width:100%;
+
+  border-radius:20px;
+
+  object-fit:cover;
+
+  box-shadow:
+    0 10px 22px
+    rgba(35,41,84,.12);
+}
+
+.hero-profile-area{
+  width:100%;
+
+  max-width:240px;
+
+  display:grid;
+
+  gap:8px;
+}
+
+.profile-pill{
+  width:100%;
+
+  padding:
+    11px 14px;
+
+  border-radius:16px;
+
+  background:
+    rgba(255,255,255,.95);
+
+  border:
+    1px solid
+    rgba(220,225,237,.95);
+
+  box-shadow:
+    0 8px 20px
+    rgba(67,73,109,.07);
+
+  font-size:12px;
+
+  font-weight:800;
+
+  color:#4b3b95;
+}
+
+.profile-pill.class{
+  color:#22823e;
+
+  background:
+    rgba(248,255,248,.96);
+}
+
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+.section-title{
+  margin:
+    0 0 14px;
+
+  padding-left:7px;
+}
+
+.section-title h2{
+  margin:0;
+
+  font-size:31px;
+
+  letter-spacing:-.035em;
+
+  color:#13204b;
+}
+
+.section-title p{
+  margin:
+    5px 0 0;
+
+  color:#70778b;
+
+  font-size:12.5px;
+}
+
+.skill-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      6,
+      minmax(0,1fr)
+    );
+
+  gap:14px;
+
+  margin-bottom:28px;
+}
+
+.skill-card{
+  position:relative;
+
+  overflow:hidden;
+
+  min-height:340px;
+
+  padding:
+    17px 16px 13px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.94);
+
+  border-radius:26px;
+
+  box-shadow:
+    0 14px 30px
+    rgba(60,69,109,.11);
+
+  display:grid;
+
+  grid-template-rows:
+    auto 1fr auto;
+
+  text-align:center;
+
+  transition:.2s ease;
+}
+
+button.skill-card:hover{
+  transform:
+    translateY(-4px);
+
+  box-shadow:
+    0 19px 38px
+    rgba(60,69,109,.16);
+}
+
+.skill-card.listening{
+  background:
+    linear-gradient(
+      180deg,
+      #f4fbff,
+      #f8faff
+    );
+}
+
+.skill-card.reading{
+  background:
+    linear-gradient(
+      180deg,
+      #f3fff4,
+      #f8fff6
+    );
+}
+
+.skill-card.speaking{
+  background:
+    linear-gradient(
+      180deg,
+      #fff8ee,
+      #fffaf4
+    );
+}
+
+.skill-card.writing{
+  background:
+    linear-gradient(
+      180deg,
+      #fff1f7,
+      #fff8fb
+    );
+}
+
+.skill-card.practice{
+  background:
+    linear-gradient(
+      180deg,
+      #f2efff,
+      #faf9ff
+    );
+}
+
+.skill-card.progress{
+  background:
+    linear-gradient(
+      180deg,
+      #eef6ff,
+      #f8fbff
+    );
+}
+
+.skill-top{
   display:flex;
 
   align-items:center;
 
-  gap:12px;
+  justify-content:center;
 
-  min-width:0;
+  min-height:96px;
 }
 
-.profile-avatar{
-  position:relative;
+.skill-icon-shell{
+  width:84px;
 
-  width:52px;
+  height:84px;
 
-  height:52px;
-
-  flex:0 0 52px;
+  border-radius:50%;
 
   display:grid;
 
   place-items:center;
 
-  overflow:hidden;
+  border:
+    1px solid
+    rgba(255,255,255,.9);
 
-  border-radius:50%;
+  box-shadow:
+    0 11px 22px
+    rgba(60,69,109,.12);
 
+  font-size:43px;
+
+  background:#fff;
+}
+
+.listening .skill-icon-shell{
   background:
     linear-gradient(
       145deg,
-      #eee9ff,
-      #dceaff
+      #dff3ff,
+      #fff
     );
+}
 
-  color:#5135a6;
+.reading .skill-icon-shell{
+  background:
+    linear-gradient(
+      145deg,
+      #e4f8e7,
+      #fff
+    );
+}
+
+.speaking .skill-icon-shell{
+  background:
+    linear-gradient(
+      145deg,
+      #fff0dc,
+      #fff
+    );
+}
+
+.writing .skill-icon-shell{
+  background:
+    linear-gradient(
+      145deg,
+      #ffe4ef,
+      #fff
+    );
+}
+
+.practice .skill-icon-shell{
+  background:
+    linear-gradient(
+      145deg,
+      #e9e2ff,
+      #fff
+    );
+}
+
+.progress .skill-icon-shell{
+  background:
+    linear-gradient(
+      145deg,
+      #dcecff,
+      #fff
+    );
+}
+
+.skill-copy{
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:flex-start;
+
+  padding:
+    5px 6px 0;
+}
+
+.skill-card h3{
+  margin:
+    0 0 8px;
+
+  font-size:23px;
+
+  line-height:1.08;
+
+  letter-spacing:-.03em;
+}
+
+.listening h3{
+  color:#1886db;
+}
+
+.reading h3{
+  color:#23924a;
+}
+
+.speaking h3{
+  color:#e67f22;
+}
+
+.writing h3{
+  color:#e65398;
+}
+
+.practice h3{
+  color:#674ec5;
+}
+
+.progress h3{
+  color:#3476c5;
+}
+
+.skill-card p{
+  margin:0;
+
+  max-width:260px;
+
+  min-height:68px;
+
+  color:#394154;
+
+  font-size:12px;
+
+  line-height:1.48;
+}
+
+.character-circle{
+  width:78px;
+
+  height:78px;
+
+  margin:
+    12px auto 3px;
+
+  border-radius:50%;
+
+  display:grid;
+
+  place-items:center;
 
   border:
-    2px solid #fff;
+    1px solid
+    rgba(255,255,255,.95);
 
   box-shadow:
-    0 0 0 1px #ded9ee;
-
-  font-size:15px;
-
-  font-weight:950;
-
-  cursor:pointer;
-}
-
-.profile-avatar img{
-  width:100%;
-
-  height:100%;
-
-  object-fit:cover;
-}
-
-.profile-text{
-  min-width:0;
-}
-
-.profile-name{
-  color:#21164b;
-
-  font-size:13px;
-
-  font-weight:950;
-
-  white-space:nowrap;
+    0 9px 18px
+    rgba(67,73,109,.12);
 
   overflow:hidden;
 
-  text-overflow:ellipsis;
-}
-
-.profile-desc{
-  margin-top:3px;
-
-  color:#838a99;
-
-  font-size:9.8px;
-}
-
-.edit-profile{
-  border:
-    1px solid
-    #ddd8ee;
-
   background:#fff;
+}
 
-  color:#553e91;
+.character-circle img{
+  width:135%;
 
-  border-radius:9px;
+  height:135%;
 
+  object-fit:cover;
+
+  object-position:
+    50% 10%;
+
+  transform:
+    translateY(8px);
+}
+
+.skill-footer{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:8px;
+
+  min-height:34px;
+}
+
+.skill-count{
   padding:
-    8px 10px;
+    7px 11px;
 
-  font-size:9.5px;
+  border-radius:999px;
 
-  font-weight:900;
+  font-size:10px;
+
+  font-weight:950;
+
+  background:#eef0f5;
+
+  color:#50596c;
+}
+
+.listening .skill-count{
+  background:#e2f2ff;
+  color:#157ac8;
+}
+
+.reading .skill-count{
+  background:#e6f7ea;
+  color:#238945;
+}
+
+.speaking .skill-count{
+  background:#ffeedc;
+  color:#de741d;
+}
+
+.writing .skill-count{
+  background:#ffe4ef;
+  color:#d94f8f;
+}
+
+.practice .skill-count{
+  background:#ebe6ff;
+  color:#6047bd;
+}
+
+.progress .skill-count{
+  background:#e3efff;
+  color:#3476c5;
+}
+
+.skill-hint{
+  font-size:10px;
+
+  font-weight:850;
+
+  color:#8790a4;
 }
 
 
 /* =========================================================
-   SECTION
+   TEST SHELL
 ========================================================= */
 
-.section{
-  margin-top:27px;
+.test-shell{
+  padding:22px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.95);
+
+  border-radius:28px;
+
+  background:
+    rgba(255,255,255,.76);
+
+  box-shadow:
+    0 12px 28px
+    rgba(60,69,109,.09);
 }
 
-.section-head{
+.test-head{
   display:flex;
 
-  align-items:end;
+  align-items:center;
 
   justify-content:
     space-between;
 
-  gap:12px;
+  gap:16px;
 
-  margin-bottom:12px;
+  margin-bottom:16px;
 }
 
-.section-head h2{
+.test-head h2{
   margin:0;
 
-  color:#21164b;
+  font-size:24px;
 
-  font-size:21px;
-
-  letter-spacing:-.025em;
+  color:#13204b;
 }
 
-.section-head p{
+.test-head p{
   margin:
-    4px 0 0;
+    5px 0 0;
 
-  color:#818898;
+  color:#747b8f;
 
-  font-size:10.5px;
+  font-size:12px;
 }
 
+.test-chip{
+  padding:
+    8px 12px;
 
-/* =========================================================
-   MAIN FEATURE CARDS
-========================================================= */
+  border-radius:999px;
 
-.feature-grid{
+  background:#eee9ff;
+
+  color:#6548b8;
+
+  font-size:11px;
+
+  font-weight:900;
+}
+
+.test-grid{
   display:grid;
 
   grid-template-columns:
@@ -677,159 +1187,32 @@ main{
       minmax(0,1fr)
     );
 
-  gap:11px;
+  gap:14px;
 }
 
-.feature{
-  position:relative;
+.test-card{
+  display:flex;
 
-  overflow:hidden;
+  flex-direction:column;
 
-  min-height:155px;
+  min-height:238px;
 
-  padding:17px;
+  padding:18px;
 
   border:
     1px solid
-    var(--line);
+    #e8e9f0;
 
-  border-radius:18px;
+  border-radius:20px;
 
   background:#fff;
 
-  text-decoration:none;
-
   box-shadow:
-    0 5px 16px
-    rgba(35,25,75,.028);
-
-  transition:
-    transform .17s ease,
-    box-shadow .17s ease,
-    border-color .17s ease;
+    0 8px 18px
+    rgba(52,61,100,.055);
 }
 
-.feature:hover{
-  transform:
-    translateY(-3px);
-
-  border-color:#cec3f3;
-
-  box-shadow:
-    0 13px 28px
-    rgba(35,25,75,.075);
-}
-
-.feature::after{
-  content:"";
-
-  position:absolute;
-
-  width:90px;
-
-  height:90px;
-
-  border-radius:50%;
-
-  right:-28px;
-
-  bottom:-32px;
-
-  background:
-    rgba(100,72,189,.055);
-}
-
-.feature.highlight{
-  color:#fff;
-
-  border-color:transparent;
-
-  background:
-    linear-gradient(
-      125deg,
-      #281260,
-      #5135a6
-    );
-
-  box-shadow:
-    0 10px 25px
-    rgba(40,18,96,.18);
-}
-
-.feature.highlight::after{
-  background:
-    rgba(255,255,255,.08);
-}
-
-.feature.highlight .feature-title,
-.feature.highlight .feature-desc,
-.feature.highlight .feature-count,
-.feature.highlight .feature-arrow{
-  color:#fff;
-}
-
-.feature.highlight .feature-desc,
-.feature.highlight .feature-count{
-  opacity:.76;
-}
-
-.feature-icon{
-  width:43px;
-
-  height:43px;
-
-  display:grid;
-
-  place-items:center;
-
-  border-radius:12px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #eee9ff,
-      #e8f2ff
-    );
-
-  font-size:20px;
-}
-
-.feature.highlight .feature-icon{
-  background:
-    rgba(255,255,255,.14);
-}
-
-.feature-title{
-  margin-top:13px;
-
-  color:#21164b;
-
-  font-size:14px;
-
-  font-weight:950;
-}
-
-.feature-desc{
-  margin-top:5px;
-
-  max-width:90%;
-
-  color:#7d8493;
-
-  font-size:9.8px;
-
-  line-height:1.55;
-}
-
-.feature-bottom{
-  position:absolute;
-
-  left:17px;
-
-  right:17px;
-
-  bottom:15px;
-
+.test-card-top{
   display:flex;
 
   align-items:center;
@@ -840,385 +1223,184 @@ main{
   gap:10px;
 }
 
-.feature-count{
-  color:#8d94a2;
+.test-icon{
+  width:44px;
 
-  font-size:9px;
-
-  font-weight:850;
-}
-
-.feature-arrow{
-  color:#795ec5;
-
-  font-size:17px;
-
-  font-weight:950;
-}
-
-.feature.disabled{
-  cursor:default;
-
-  opacity:.65;
-}
-
-.feature.disabled:hover{
-  transform:none;
-
-  border-color:var(--line);
-
-  box-shadow:
-    0 5px 16px
-    rgba(35,25,75,.028);
-}
-
-
-/* =========================================================
-   TEST LIST
-========================================================= */
-
-.test-toolbar{
-  display:flex;
-
-  align-items:center;
-
-  gap:7px;
-
-  flex-wrap:wrap;
-}
-
-.filter-btn{
-  border:
-    1px solid
-    #dde0e8;
-
-  background:#fff;
-
-  color:#747b89;
-
-  border-radius:999px;
-
-  padding:
-    6px 9px;
-
-  font-size:9px;
-
-  font-weight:900;
-}
-
-.filter-btn.active{
-  color:#fff;
-
-  background:#5135a6;
-
-  border-color:#5135a6;
-}
-
-.tests{
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      3,
-      minmax(0,1fr)
-    );
-
-  gap:9px;
-}
-
-.test-card{
-  display:flex;
-
-  align-items:center;
-
-  gap:11px;
-
-  min-height:75px;
-
-  padding:11px;
-
-  text-decoration:none;
-
-  border:
-    1px solid
-    var(--line);
+  height:44px;
 
   border-radius:14px;
-
-  background:#fff;
-
-  transition:.15s ease;
-}
-
-.test-card:hover{
-  transform:
-    translateY(-2px);
-
-  border-color:#cec3f3;
-
-  box-shadow:
-    0 8px 18px
-    rgba(35,25,75,.055);
-}
-
-.test-number{
-  width:43px;
-
-  height:43px;
-
-  flex:0 0 43px;
 
   display:grid;
 
   place-items:center;
 
+  background:#f1eefb;
+
+  font-size:20px;
+}
+
+.test-label{
+  padding:
+    6px 9px;
+
+  border-radius:999px;
+
+  background:#f0ecfa;
+
+  color:#644a9c;
+
+  font-size:9px;
+
+  font-weight:950;
+
+  letter-spacing:.09em;
+
+  text-transform:uppercase;
+}
+
+.test-card h3{
+  margin:
+    14px 0 8px;
+
+  font-size:18px;
+
+  color:#1d1740;
+}
+
+.meta{
+  display:flex;
+
+  gap:6px;
+
+  flex-wrap:wrap;
+}
+
+.meta span{
+  padding:
+    5px 7px;
+
+  border:
+    1px solid
+    #ececf3;
+
+  border-radius:7px;
+
+  background:#f8f8fb;
+
+  color:#747d8e;
+
+  font-size:10px;
+
+  font-weight:700;
+}
+
+.desc{
+  flex:1;
+
+  margin:
+    12px 0 16px;
+
+  color:#6f7890;
+
+  font-size:12px;
+
+  line-height:1.55;
+}
+
+.launch{
+  width:100%;
+
+  padding:
+    11px 13px;
+
+  border:0;
+
   border-radius:11px;
 
   background:
-    #f1edff;
+    linear-gradient(
+      135deg,
+      #7453dd,
+      #8f6cf2
+    );
 
-  color:#5940a3;
+  color:#fff;
 
-  font-size:11px;
-
-  font-weight:950;
-}
-
-.test-copy{
-  flex:1;
-
-  min-width:0;
-}
-
-.test-copy b{
-  display:block;
-
-  color:#30284b;
-
-  font-size:10.7px;
-
-  font-weight:950;
-}
-
-.test-copy span{
-  display:block;
-
-  margin-top:3px;
-
-  color:#8a909e;
-
-  font-size:8.8px;
-}
-
-.test-arrow{
-  color:#9fa4af;
-
-  font-size:15px;
-
-  font-weight:950;
+  font-weight:900;
 }
 
 .empty{
   grid-column:
     1 / -1;
 
-  padding:28px;
-
-  border:
-    1px dashed
-    #d9dce5;
-
-  border-radius:14px;
-
-  background:#fff;
+  padding:38px;
 
   text-align:center;
 
-  color:#8b919f;
+  color:#7c8496;
 
-  font-size:10.5px;
+  border:
+    1px dashed
+    #dfe2eb;
+
+  border-radius:18px;
+
+  background:#fff;
+}
+
+.footer{
+  text-align:center;
+
+  color:#9aa0ad;
+
+  font-size:11px;
+
+  padding:
+    24px 0 4px;
 }
 
 
 /* =========================================================
-   PROFILE MODAL
+   RESPONSIVE
 ========================================================= */
 
-.overlay{
-  position:fixed;
+@media(max-width:1350px){
 
-  inset:0;
+  .skill-grid{
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0,1fr)
+      );
+  }
 
-  z-index:100;
-
-  display:grid;
-
-  place-items:center;
-
-  padding:18px;
-
-  background:
-    rgba(18,12,45,.63);
 }
 
-.hidden{
-  display:none !important;
-}
-
-.modal{
-  width:
-    min(
-      440px,
-      100%
-    );
-
-  padding:23px;
-
-  border-radius:19px;
-
-  background:#fff;
-
-  box-shadow:
-    0 25px 70px
-    rgba(18,10,53,.30);
-}
-
-.modal-title{
-  margin:
-    5px 0 6px;
-
-  color:#21164b;
-
-  font-size:21px;
-
-  font-weight:950;
-}
-
-.modal-desc{
-  margin:
-    0 0 15px;
-
-  color:#818897;
-
-  font-size:10.5px;
-
-  line-height:1.5;
-}
-
-.field{
-  margin-top:10px;
-}
-
-.field label{
-  display:block;
-
-  margin-bottom:5px;
-
-  color:#444a59;
-
-  font-size:10px;
-
-  font-weight:900;
-}
-
-.field input{
-  width:100%;
-
-  border:
-    1px solid
-    #d5d9e2;
-
-  border-radius:9px;
-
-  outline:none;
-
-  padding:10px;
-}
-
-.field input:focus{
-  border-color:#755ec7;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(81,53,166,.08);
-}
-
-.modal-buttons{
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:7px;
-
-  margin-top:14px;
-}
-
-.modal-btn{
-  border:0;
-
-  border-radius:9px;
-
-  padding:10px;
-
-  font-size:10px;
-
-  font-weight:950;
-}
-
-.modal-btn.cancel{
-  border:
-    1px solid
-    #dde0e8;
-
-  background:#fff;
-
-  color:#616877;
-}
-
-.modal-btn.save{
-  background:
-    linear-gradient(
-      100deg,
-      var(--purple),
-      var(--purple2)
-    );
-
-  color:#fff;
-}
-
-.modal-error{
-  margin-top:7px;
-
-  color:#b83345;
-
-  font-size:9.5px;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:900px){
+@media(max-width:980px){
 
   .hero{
     grid-template-columns:1fr;
-
-    padding:
-      28px 25px 0;
   }
 
-  .hero-visual{
-    min-height:170px;
+  .hero-side{
+    flex-direction:row;
+
+    justify-content:flex-start;
+
+    align-items:flex-start;
+
+    flex-wrap:wrap;
   }
 
-  .hero-character{
-    max-height:180px;
+  .hero-art-card{
+    max-width:210px;
   }
 
-  .feature-grid,
-  .tests{
+  .hero-profile-area{
+    max-width:260px;
+  }
+
+  .skill-grid{
     grid-template-columns:
       repeat(
         2,
@@ -1226,41 +1408,76 @@ main{
       );
   }
 
-}
-
-
-@media(max-width:610px){
-
-  .header-user-copy{
-    display:none;
+  .test-grid{
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0,1fr)
+      );
   }
 
-  .hero{
-    padding:
-      24px 20px 0;
-  }
-
-  .hero h1{
-    font-size:32px;
-  }
-
-  .feature-grid,
-  .tests{
+  .login-shell{
     grid-template-columns:1fr;
   }
 
-  .profile-strip{
-    align-items:flex-start;
+  .login-art{
+    min-height:340px;
   }
 
-  .section-head{
+}
+
+@media(max-width:700px){
+
+  main,
+  .topbar-inner{
+    width:
+      min(
+        100% - 16px,
+        1500px
+      );
+  }
+
+  .hero{
+    padding:22px;
+  }
+
+  .hero h1{
+    font-size:46px;
+  }
+
+  .hero-sub{
+    font-size:15px;
+  }
+
+  .skill-grid,
+  .test-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .login-copy{
+    padding:
+      32px 24px;
+  }
+
+  .login-copy h1{
+    font-size:36px;
+  }
+
+  .hero-side{
     flex-direction:column;
 
-    align-items:flex-start;
+    align-items:center;
   }
 
-  .feature{
-    min-height:145px;
+  .hero-art-card,
+  .hero-profile-area{
+    max-width:100%;
+
+    width:100%;
   }
 
 }
@@ -1272,57 +1489,44 @@ main{
 <body>
 
 
-<!-- =======================================================
-     HEADER
-======================================================= -->
+<header class="topbar">
 
-<header class="top">
+  <div class="topbar-inner">
 
-  <div class="wrap top-inner">
+    <div class="brand">
 
-    <a
-      class="logo"
-      href="./"
-    >
-
-      <div class="logo-icon">
+      <div class="brand-mark">
         S
       </div>
 
-      <div class="logo-text">
-        IELTS Learning
-      </div>
+      <div>
 
-    </a>
+        <strong>
+          IELTS PRACTICE
+        </strong>
 
-
-    <div class="header-user">
-
-      <div class="header-user-copy">
-
-        <div
-          class="header-name"
-          id="headerName"
-        >
-          Học sinh
-        </div>
-
-        <div
-          class="header-class"
-          id="headerClass"
-        ></div>
+        <small>
+          Test · Practice · Progress
+        </small>
 
       </div>
 
+    </div>
 
-      <div
-        class="header-avatar"
-        id="headerAvatar"
-        onclick="openAvatarPicker()"
-        title="Đổi ảnh đại diện"
+
+    <div
+      class="student-mini hidden"
+      id="studentMini"
+    >
+
+      <span id="miniInfo"></span>
+
+      <button
+        id="changeStudentTop"
+        type="button"
       >
-        HS
-      </div>
+        Đổi học sinh
+      </button>
 
     </div>
 
@@ -1331,450 +1535,95 @@ main{
 </header>
 
 
-<!-- =======================================================
-     MAIN
-======================================================= -->
-
 <main>
 
-<div class="wrap">
-
-
-  <!-- =====================================================
-       HERO
-  ====================================================== -->
-
-  <section class="hero">
-
-    <div class="hero-copy">
-
-      <div class="eyebrow">
-        ✨ IELTS Learning Portal
-      </div>
-
-
-      <h1>
-        Xin chào,
-        <span id="heroName">
-          bạn!
-        </span>
-      </h1>
-
-
-      <p>
-        Luyện tập, làm bài TEST và theo dõi tiến độ IELTS
-        của em tại một nơi.
-      </p>
-
-
-      <div class="hero-actions">
-
-        <a
-          class="hero-btn primary"
-          href="./Practice/"
-        >
-          ✏️ Bắt đầu luyện tập
-        </a>
-
-
-        <a
-          class="hero-btn secondary"
-          href="./Progress/"
-        >
-          📊 Xem tiến độ
-        </a>
-
-      </div>
-
-    </div>
-
-
-    <div class="hero-visual">
-
-      <img
-        class="hero-character"
-        src="./4FXyF.jpg"
-        alt=""
-      >
-
-    </div>
-
-  </section>
-
-
-  <!-- =====================================================
-       PROFILE
-  ====================================================== -->
-
-  <section class="profile-strip">
-
-    <div class="profile-main">
-
-      <div
-        class="profile-avatar"
-        id="profileAvatar"
-        onclick="openAvatarPicker()"
-        title="Nhấn để đổi ảnh đại diện"
-      >
-        HS
-      </div>
-
-
-      <div class="profile-text">
-
-        <div
-          class="profile-name"
-          id="profileNameDisplay"
-        >
-          Học sinh
-        </div>
-
-        <div
-          class="profile-desc"
-          id="profileClassDisplay"
-        >
-          Hồ sơ học tập
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <button
-      class="edit-profile"
-      onclick="openProfileModal()"
-    >
-      ✎ Chỉnh sửa hồ sơ
-    </button>
-
-  </section>
-
-
-  <!-- =====================================================
-       FEATURES
-  ====================================================== -->
-
-  <section class="section">
-
-    <div class="section-head">
-
-      <div>
-
-        <h2>
-          Học tập của em
-        </h2>
-
-        <p>
-          Chọn nội dung muốn tiếp tục.
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="feature-grid">
-
-
-      <!-- PROGRESS -->
-
-      <a
-        class="feature highlight"
-        href="./Progress/"
-      >
-
-        <div class="feature-icon">
-          📊
-        </div>
-
-        <div class="feature-title">
-          Tiến độ học tập
-        </div>
-
-        <div class="feature-desc">
-          Xem kết quả TEST, lịch sử làm bài và band IELTS dự đoán.
-        </div>
-
-        <div class="feature-bottom">
-
-          <div class="feature-count">
-            Kết quả của em
-          </div>
-
-          <div class="feature-arrow">
-            →
-          </div>
-
-        </div>
-
-      </a>
-
-
-      <!-- PRACTICE -->
-
-      <a
-        class="feature"
-        href="./Practice/"
-      >
-
-        <div class="feature-icon">
-          ✏️
-        </div>
-
-        <div class="feature-title">
-          Practice
-        </div>
-
-        <div class="feature-desc">
-          Luyện từng dạng bài Reading, Listening và Writing.
-        </div>
-
-        <div class="feature-bottom">
-
-          <div class="feature-count">
-            Luyện tập tự do
-          </div>
-
-          <div class="feature-arrow">
-            →
-          </div>
-
-        </div>
-
-      </a>
-
-
-      <!-- LISTENING -->
-
-      <a
-        class="feature"
-        href="#tests"
-        onclick="
-          event.preventDefault();
-          setFilter('Listening');
-          scrollToTests();
-        "
-      >
-
-        <div class="feature-icon">
-          🎧
-        </div>
-
-        <div class="feature-title">
-          Listening
-        </div>
-
-        <div class="feature-desc">
-          Làm bài Listening TEST và theo dõi kết quả theo từng lần thi.
-        </div>
-
-        <div class="feature-bottom">
-
-          <div
-            class="feature-count"
-            id="listeningCount"
-          >
-            Đang tải...
-          </div>
-
-          <div class="feature-arrow">
-            →
-          </div>
-
-        </div>
-
-      </a>
-
-
-      <!-- READING -->
-
-      <a
-        class="feature"
-        href="#tests"
-        onclick="
-          event.preventDefault();
-          setFilter('Reading');
-          scrollToTests();
-        "
-      >
-
-        <div class="feature-icon">
-          📖
-        </div>
-
-        <div class="feature-title">
-          Reading
-        </div>
-
-        <div class="feature-desc">
-          Làm bài Reading TEST và kiểm tra band quy đổi từ raw score.
-        </div>
-
-        <div class="feature-bottom">
-
-          <div
-            class="feature-count"
-            id="readingCount"
-          >
-            Đang tải...
-          </div>
-
-          <div class="feature-arrow">
-            →
-          </div>
-
-        </div>
-
-      </a>
-
-
-      <!-- WRITING -->
-
-      <a
-        class="feature"
-        href="#tests"
-        onclick="
-          event.preventDefault();
-          setFilter('Writing');
-          scrollToTests();
-        "
-      >
-
-        <div class="feature-icon">
-          ✍️
-        </div>
-
-        <div class="feature-title">
-          Writing
-        </div>
-
-        <div class="feature-desc">
-          Làm bài Writing TEST và nhận kết quả chấm khi bài đã hoàn tất.
-        </div>
-
-        <div class="feature-bottom">
-
-          <div
-            class="feature-count"
-            id="writingCount"
-          >
-            Đang tải...
-          </div>
-
-          <div class="feature-arrow">
-            →
-          </div>
-
-        </div>
-
-      </a>
-
-
-      <!-- SPEAKING -->
-
-      <div class="feature disabled">
-
-        <div class="feature-icon">
-          🎙️
-        </div>
-
-        <div class="feature-title">
-          Speaking
-        </div>
-
-        <div class="feature-desc">
-          Khu vực luyện và TEST Speaking đang được chuẩn bị.
-        </div>
-
-        <div class="feature-bottom">
-
-          <div class="feature-count">
-            Sắp có
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =====================================================
-       TESTS
-  ====================================================== -->
 
   <section
-    class="section"
-    id="tests"
+    id="loginView"
+    class="login-wrap"
   >
 
-    <div class="section-head">
+    <div class="login-shell">
 
-      <div>
+      <div class="login-copy">
 
-        <h2>
-          Các bài TEST
-        </h2>
+        <div class="eyebrow">
+          ✨ IELTS PRACTICE PORTAL
+        </div>
+
+
+        <h1>
+          Học IELTS theo cách trực quan hơn.
+        </h1>
+
 
         <p>
-          Chọn kỹ năng và bài thi muốn làm.
+          Nhập Họ tên và Lớp. Hệ thống sẽ lưu profile trên
+          trình duyệt và tự điền lại khi mở các bài luyện.
         </p>
 
+
+        <form id="studentForm">
+
+          <div class="form-grid">
+
+            <div class="field">
+
+              <label>
+                Họ và tên
+              </label>
+
+              <input
+                id="studentName"
+                autocomplete="name"
+                placeholder="Nguyễn Văn A"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Lớp
+              </label>
+
+              <input
+                id="studentClass"
+                placeholder="11A1"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="error"
+            id="formError"
+          ></div>
+
+
+          <button
+            class="start-btn"
+            type="submit"
+          >
+            Vào kho luyện thi →
+          </button>
+
+        </form>
+
       </div>
 
 
-      <div class="test-toolbar">
+      <div class="login-art">
 
-        <button
-          class="filter-btn active"
-          data-filter="All"
-          onclick="setFilter('All')"
+        <img
+          src="./4FXyF.jpg"
+          alt="Nhân vật đồng hành"
+          onerror="this.style.display='none'"
         >
-          Tất cả
-        </button>
 
-
-        <button
-          class="filter-btn"
-          data-filter="Listening"
-          onclick="setFilter('Listening')"
-        >
-          Listening
-        </button>
-
-
-        <button
-          class="filter-btn"
-          data-filter="Reading"
-          onclick="setFilter('Reading')"
-        >
-          Reading
-        </button>
-
-
-        <button
-          class="filter-btn"
-          data-filter="Writing"
-          onclick="setFilter('Writing')"
-        >
-          Writing
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div
-      class="tests"
-      id="testGrid"
-    >
-
-      <div class="empty">
-        Đang tải danh sách bài TEST...
       </div>
 
     </div>
@@ -1782,152 +1631,724 @@ main{
   </section>
 
 
-</div>
+  <section
+    id="dashboardView"
+    class="hidden"
+  >
+
+
+    <section class="hero">
+
+      <div class="hero-main">
+
+        <div class="eyebrow">
+          ✨ KHO LUYỆN THI
+        </div>
+
+
+        <h1 id="welcomeTitle">
+          Xin chào!
+        </h1>
+
+
+        <p class="hero-sub">
+          Làm Test để theo dõi trình độ · Luyện tập để củng cố
+          từng dạng bài theo tốc độ của riêng bạn.
+        </p>
+
+
+        <div class="hero-bottom">
+
+          <div class="hero-chip">
+            🎧 Listening
+          </div>
+
+          <div class="hero-chip">
+            📖 Reading
+          </div>
+
+          <div class="hero-chip">
+            💬 Speaking
+          </div>
+
+          <div class="hero-chip">
+            ✍️ Writing
+          </div>
+
+          <div class="hero-chip">
+            🎯 Luyện tập
+          </div>
+
+          <div class="hero-chip">
+            🔄 Auto cập nhật đề mới
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="hero-side">
+
+        <div class="hero-art-card">
+
+          <div class="hero-art">
+
+            <img
+              src="./4FXyF.jpg"
+              alt="Nhân vật đồng hành"
+              onerror="this.style.display='none'"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="hero-profile-area">
+
+          <div class="profile-pill">
+
+            <b>
+              👤 Học sinh:
+            </b>
+
+            <span id="profileName"></span>
+
+          </div>
+
+
+          <div class="profile-pill class">
+
+            <b>
+              📚 Lớp:
+            </b>
+
+            <span id="profileClass"></span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <div class="section-title">
+
+      <h2>
+        Chọn nội dung
+      </h2>
+
+      <p>
+        Chọn nội dung bạn muốn học.
+      </p>
+
+    </div>
+
+
+    <section class="skill-grid">
+
+
+      <button
+        class="skill-card listening"
+        type="button"
+        data-skill="listening"
+      >
+
+        <div class="skill-top">
+
+          <div class="skill-icon-shell">
+            🎧
+          </div>
+
+        </div>
+
+
+        <div class="skill-copy">
+
+          <h3>
+            Listening
+          </h3>
+
+          <p>
+            Làm full Listening Test để kiểm tra trình độ và lưu kết quả.
+          </p>
+
+          <div class="character-circle">
+
+            <img src="./4FXyF.jpg">
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-footer">
+
+          <div
+            class="skill-count"
+            id="countListening"
+          >
+            ĐỀ
+          </div>
+
+          <div class="skill-hint">
+            Xem đề →
+          </div>
+
+        </div>
+
+      </button>
+
+
+      <button
+        class="skill-card reading"
+        type="button"
+        data-skill="reading"
+      >
+
+        <div class="skill-top">
+
+          <div class="skill-icon-shell">
+            📖
+          </div>
+
+        </div>
+
+
+        <div class="skill-copy">
+
+          <h3>
+            Reading
+          </h3>
+
+          <p>
+            Làm full Reading Test với 3 passages và 40 câu hỏi.
+          </p>
+
+          <div class="character-circle">
+
+            <img src="./4FXyF.jpg">
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-footer">
+
+          <div
+            class="skill-count"
+            id="countReading"
+          >
+            ĐỀ
+          </div>
+
+          <div class="skill-hint">
+            Xem đề →
+          </div>
+
+        </div>
+
+      </button>
+
+
+      <article class="skill-card speaking">
+
+        <div class="skill-top">
+
+          <div class="skill-icon-shell">
+            💬
+          </div>
+
+        </div>
+
+
+        <div class="skill-copy">
+
+          <h3>
+            Speaking
+          </h3>
+
+          <p>
+            Khu Speaking sẽ được bổ sung sau.
+          </p>
+
+          <div class="character-circle">
+
+            <img src="./4FXyF.jpg">
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-footer">
+
+          <div class="skill-count">
+            SẮP CÓ
+          </div>
+
+          <div class="skill-hint">
+            Chưa mở
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <button
+        class="skill-card writing"
+        type="button"
+        data-skill="writing"
+      >
+
+        <div class="skill-top">
+
+          <div class="skill-icon-shell">
+            ✍️
+          </div>
+
+        </div>
+
+
+        <div class="skill-copy">
+
+          <h3>
+            Writing
+          </h3>
+
+          <p>
+            Luyện Writing trong giao diện riêng và lưu bài làm.
+          </p>
+
+          <div class="character-circle">
+
+            <img src="./4FXyF.jpg">
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-footer">
+
+          <div
+            class="skill-count"
+            id="countWriting"
+          >
+            ĐỀ
+          </div>
+
+          <div class="skill-hint">
+            Xem đề →
+          </div>
+
+        </div>
+
+      </button>
+
+
+      <button
+        class="skill-card practice"
+        type="button"
+        id="practiceDoor"
+      >
+
+        <div class="skill-top">
+
+          <div class="skill-icon-shell">
+            🎯
+          </div>
+
+        </div>
+
+
+        <div class="skill-copy">
+
+          <h3>
+            Luyện tập
+          </h3>
+
+          <p>
+            Luyện từng dạng bài theo kỹ năng.
+          </p>
+
+          <div class="character-circle">
+
+            <img src="./4FXyF.jpg">
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-footer">
+
+          <div
+            class="skill-count"
+            id="countPractice"
+          >
+            KHO RIÊNG
+          </div>
+
+          <div class="skill-hint">
+            Mở luyện tập →
+          </div>
+
+        </div>
+
+      </button>
+
+
+      <button
+        class="skill-card progress"
+        type="button"
+        id="progressDoor"
+      >
+
+        <div class="skill-top">
+
+          <div class="skill-icon-shell">
+            📊
+          </div>
+
+        </div>
+
+
+        <div class="skill-copy">
+
+          <h3>
+            Tiến độ học tập
+          </h3>
+
+          <p>
+            Xem kết quả TEST, band dự đoán và lịch sử làm bài của em.
+          </p>
+
+          <div class="character-circle">
+
+            <img src="./4FXyF.jpg">
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-footer">
+
+          <div class="skill-count">
+            KẾT QUẢ
+          </div>
+
+          <div class="skill-hint">
+            Xem tiến độ →
+          </div>
+
+        </div>
+
+      </button>
+
+    </section>
+
+
+    <section
+      class="test-shell"
+      id="testSection"
+    >
+
+      <div class="test-head">
+
+        <div>
+
+          <h2 id="testTitle">
+            Listening Tests
+          </h2>
+
+          <p id="testDesc">
+            Chọn đề muốn bắt đầu.
+          </p>
+
+        </div>
+
+
+        <div
+          class="test-chip"
+          id="testChip"
+        >
+          0 đề
+        </div>
+
+      </div>
+
+
+      <div
+        id="testGrid"
+        class="test-grid"
+      ></div>
+
+    </section>
+
+
+    <div class="footer">
+      IELTS Practice Portal
+    </div>
+
+  </section>
 
 </main>
 
 
-<!-- =======================================================
-     PROFILE MODAL
-======================================================= -->
-
-<div
-  class="overlay hidden"
-  id="profileModal"
->
-
-  <div class="modal">
-
-    <div class="eyebrow">
-      STUDENT PROFILE
-    </div>
-
-
-    <div class="modal-title">
-      Hồ sơ học sinh
-    </div>
-
-
-    <p class="modal-desc">
-      Họ tên và Lớp này được dùng để liên kết kết quả TEST
-      và trang Tiến độ học tập.
-    </p>
-
-
-    <div class="field">
-
-      <label>
-        Họ và tên
-      </label>
-
-      <input
-        id="studentNameInput"
-        placeholder="Nguyễn Văn A"
-      >
-
-    </div>
-
-
-    <div class="field">
-
-      <label>
-        Lớp
-      </label>
-
-      <input
-        id="studentClassInput"
-        placeholder="11A1"
-      >
-
-    </div>
-
-
-    <div
-      class="modal-error"
-      id="profileError"
-    ></div>
-
-
-    <div class="modal-buttons">
-
-      <button
-        class="modal-btn cancel"
-        id="cancelProfileButton"
-        onclick="closeProfileModal()"
-      >
-        Hủy
-      </button>
-
-
-      <button
-        class="modal-btn save"
-        onclick="saveProfile()"
-      >
-        Lưu hồ sơ
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =======================================================
-     AVATAR FILE INPUT
-======================================================= -->
-
-<input
-  id="avatarInput"
-  type="file"
-  accept="image/*"
-  style="display:none"
-  onchange="handleAvatarUpload(event)"
->
-
-
 <script>
 
-/* =========================================================
-   CONFIG
-========================================================= */
-
-const TREE_URL=
-'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-
-
-const PROFILE_KEY=
+const STUDENT_KEY=
 'IELTS_PRACTICE_STUDENT';
 
 
-const AVATAR_KEY=
-'IELTS_STUDENT_AVATAR';
+const TEST_TREE=
+'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
 
 
-let allTests=[];
+const FALLBACK_READING=
+Array.from(
+  {
+    length:13
+  },
+  (_,i)=>{
 
-let currentFilter='All';
+    const n=
+      String(
+        i+1
+      )
+      .padStart(
+        2,
+        '0'
+      );
 
 
-/* =========================================================
-   PROFILE
-========================================================= */
+    return{
 
-function readProfile(){
+      title:
+        `Reading Test ${n}`,
+
+      path:
+        `./Read${n}/`,
+
+      meta:[
+        '40 câu',
+        '3 passages',
+        '60 phút'
+      ],
+
+      desc:
+        'IELTS Academic Reading full test.'
+
+    };
+
+  }
+);
+
+
+const FALLBACK_LISTENING=[
+
+  {
+    title:'Listening Test 01',
+    path:'./Lis01/C21T4/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 02',
+    path:'./Lis02/V9T1/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 03',
+    path:'./Lis03/V9T2/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 04',
+    path:'./Lis04/V9T3/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 05',
+    path:'./Lis05/V9T4/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 06',
+    path:'./Lis06/V9T5/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 07',
+    path:'./Lis07/V9T6/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 08',
+    path:'./Lis08/V9T7/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 09',
+    path:'./Lis09/V9T8/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  },
+
+  {
+    title:'Listening Test 10',
+    path:'./Lis10/V9T9/',
+    meta:['40 câu','4 sections','Audio'],
+    desc:'IELTS Listening full test.'
+  }
+
+];
+
+
+const FALLBACK_WRITING=[
+
+  {
+
+    title:
+      'Writing Practice 01',
+
+    path:
+      './Wri01/',
+
+    meta:[
+      'Writing',
+      'Practice'
+    ],
+
+    desc:
+      'IELTS Writing practice.'
+
+  }
+
+];
+
+
+let catalog={
+
+  listening:
+    [...FALLBACK_LISTENING],
+
+  reading:
+    [...FALLBACK_READING],
+
+  writing:
+    [...FALLBACK_WRITING]
+
+};
+
+
+let currentSkill=
+'listening';
+
+
+let currentStudent=
+null;
+
+
+const $=
+id=>
+document.getElementById(
+  id
+);
+
+
+function normalizeStudent(v){
+
+  if(
+    !v
+    ||
+    typeof v!=='object'
+  ){
+
+    return null;
+
+  }
+
+
+  const name=
+    String(
+      v.name||''
+    )
+    .trim();
+
+
+  const className=
+    String(
+      v.className||''
+    )
+    .trim();
+
+
+  return(
+    name
+    &&
+    className
+  )
+
+  ?
+
+  {
+    name,
+    className
+  }
+
+  :
+
+  null;
+
+}
+
+
+function readStudent(){
 
   try{
 
-    return JSON.parse(
-      localStorage.getItem(
-        PROFILE_KEY
+    return normalizeStudent(
+
+      JSON.parse(
+
+        localStorage.getItem(
+          STUDENT_KEY
+        )
+
+        ||
+
+        'null'
+
       )
-      ||
-      'null'
+
     );
 
   }
 
-  catch(error){
+  catch(e){
 
     return null;
 
@@ -1936,188 +2357,15 @@ function readProfile(){
 }
 
 
-function getInitials(name){
+function saveStudent(s){
 
-  name=
-    String(
-      name||''
-    )
-    .trim();
+  currentStudent=
+    normalizeStudent(
+      s
+    );
 
 
-  if(!name){
-
-    return 'HS';
-
-  }
-
-
-  const parts=
-    name
-    .split(/\s+/)
-    .filter(Boolean);
-
-
-  if(parts.length===1){
-
-    return parts[0]
-    .slice(0,2)
-    .toUpperCase();
-
-  }
-
-
-  return(
-    parts[parts.length-2][0]
-    +
-    parts[parts.length-1][0]
-  )
-  .toUpperCase();
-
-}
-
-
-function renderProfile(){
-
-  const profile=
-    readProfile();
-
-
-  const name=
-    profile?.name
-    ||
-    'Học sinh';
-
-
-  const className=
-    profile?.className
-    ||
-    '';
-
-
-  const firstName=
-    profile?.name
-    ?
-    String(profile.name)
-      .trim()
-      .split(/\s+/)
-      .pop()
-    :
-    'bạn';
-
-
-  headerName.textContent=
-    name;
-
-
-  headerClass.textContent=
-    className
-    ?
-    `Lớp ${className}`
-    :
-    '';
-
-
-  profileNameDisplay.textContent=
-    name;
-
-
-  profileClassDisplay.textContent=
-    className
-    ?
-    `Lớp ${className}`
-    :
-    'Hồ sơ học tập';
-
-
-  heroName.textContent=
-    `${firstName}!`;
-
-
-  renderAvatar();
-
-}
-
-
-/* =========================================================
-   PROFILE MODAL
-========================================================= */
-
-function openProfileModal(){
-
-  const profile=
-    readProfile();
-
-
-  studentNameInput.value=
-    profile?.name
-    ||
-    '';
-
-
-  studentClassInput.value=
-    profile?.className
-    ||
-    '';
-
-
-  profileError.textContent=
-    '';
-
-
-  profileModal.classList.remove(
-    'hidden'
-  );
-
-}
-
-
-function closeProfileModal(){
-
-  const profile=
-    readProfile();
-
-
-  /*
-   * Lần đầu vào bắt buộc phải có hồ sơ.
-   */
-
-  if(
-    !profile?.name
-    ||
-    !profile?.className
-  ){
-
-    return;
-
-  }
-
-
-  profileModal.classList.add(
-    'hidden'
-  );
-
-}
-
-
-function saveProfile(){
-
-  const name=
-    studentNameInput.value.trim();
-
-
-  const className=
-    studentClassInput.value.trim();
-
-
-  if(
-    !name
-    ||
-    !className
-  ){
-
-    profileError.textContent=
-    'Vui lòng nhập đầy đủ Họ và tên và Lớp.';
+  if(!currentStudent){
 
     return;
 
@@ -2126,279 +2374,543 @@ function saveProfile(){
 
   localStorage.setItem(
 
-    PROFILE_KEY,
+    STUDENT_KEY,
 
-    JSON.stringify({
-
-      name:name,
-
-      className:className
-
-    })
+    JSON.stringify(
+      currentStudent
+    )
 
   );
 
-
-  /*
-   * Giữ tương thích với các trang cũ.
-   */
 
   localStorage.setItem(
     'IELTS_STUDENT_NAME',
-    name
+    currentStudent.name
   );
 
 
   localStorage.setItem(
     'IELTS_STUDENT_CLASS',
-    className
+    currentStudent.className
   );
 
 
-  profileModal.classList.add(
-    'hidden'
+  sessionStorage.setItem(
+    'IELTS_STUDENT_NAME',
+    currentStudent.name
   );
 
 
-  renderProfile();
+  sessionStorage.setItem(
+    'IELTS_STUDENT_CLASS',
+    currentStudent.className
+  );
 
 }
 
 
-/* =========================================================
-   AVATAR
-========================================================= */
+function clearStudent(){
 
-function renderAvatar(){
-
-  const profile=
-    readProfile();
-
-
-  const initials=
-    getInitials(
-      profile?.name
-    );
-
-
-  const avatar=
-    localStorage.getItem(
-      AVATAR_KEY
-    );
+  [
+    STUDENT_KEY,
+    'IELTS_STUDENT_NAME',
+    'IELTS_STUDENT_CLASS'
+  ]
+  .forEach(
+    key=>
+    localStorage.removeItem(
+      key
+    )
+  );
 
 
-  if(avatar){
+  [
+    'IELTS_STUDENT_NAME',
+    'IELTS_STUDENT_CLASS'
+  ]
+  .forEach(
+    key=>
+    sessionStorage.removeItem(
+      key
+    )
+  );
 
-    const image=
-      `
-        <img
-          src="${avatar}"
-          alt="Ảnh đại diện"
-        >
-      `;
+}
 
 
-    headerAvatar.innerHTML=
-      image;
+function showLogin(
+  prefill=true
+){
+
+  $('dashboardView')
+  .classList
+  .add(
+    'hidden'
+  );
 
 
-    profileAvatar.innerHTML=
-      image;
+  $('studentMini')
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  $('loginView')
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  if(
+    prefill
+    &&
+    currentStudent
+  ){
+
+    $('studentName').value=
+      currentStudent.name;
+
+
+    $('studentClass').value=
+      currentStudent.className;
 
   }
 
   else{
 
-    headerAvatar.textContent=
-      initials;
+    $('studentName').value=
+      '';
 
 
-    profileAvatar.textContent=
-      initials;
-
-  }
-
-}
-
-
-function openAvatarPicker(){
-
-  avatarInput.click();
-
-}
-
-
-/* =========================================================
-   AVATAR UPLOAD
-========================================================= */
-
-function handleAvatarUpload(event){
-
-  const file=
-    event.target.files?.[0];
-
-
-  if(!file){
-
-    return;
+    $('studentClass').value=
+      '';
 
   }
 
 
-  if(
-    !file.type.startsWith(
-      'image/'
-    )
-  ){
+  $('studentName')
+  .focus();
 
-    alert(
-      'Vui lòng chọn một file ảnh.'
+}
+
+
+function showDashboard(){
+
+  if(!currentStudent){
+
+    return showLogin(
+      false
     );
 
-    return;
-
   }
 
 
-  const reader=
-    new FileReader();
-
-
-  reader.onload=
-  function(){
-
-    const image=
-      new Image();
-
-
-    image.onload=
-    function(){
-
-      const sourceSize=
-        Math.min(
-          image.width,
-          image.height
-        );
-
-
-      const sx=
-        (
-          image.width
-          -
-          sourceSize
-        )
-        /
-        2;
-
-
-      const sy=
-        (
-          image.height
-          -
-          sourceSize
-        )
-        /
-        2;
-
-
-      const canvas=
-        document.createElement(
-          'canvas'
-        );
-
-
-      canvas.width=
-        320;
-
-
-      canvas.height=
-        320;
-
-
-      const context=
-        canvas.getContext(
-          '2d'
-        );
-
-
-      context.drawImage(
-
-        image,
-
-        sx,
-        sy,
-
-        sourceSize,
-        sourceSize,
-
-        0,
-        0,
-
-        320,
-        320
-
-      );
-
-
-      const data=
-        canvas.toDataURL(
-          'image/jpeg',
-          .82
-        );
-
-
-      try{
-
-        localStorage.setItem(
-          AVATAR_KEY,
-          data
-        );
-
-
-        renderAvatar();
-
-      }
-
-      catch(error){
-
-        alert(
-          'Không lưu được ảnh. Hãy chọn ảnh có dung lượng nhỏ hơn.'
-        );
-
-      }
-
-    };
-
-
-    image.src=
-      reader.result;
-
-  };
-
-
-  reader.readAsDataURL(
-    file
+  $('loginView')
+  .classList
+  .add(
+    'hidden'
   );
 
 
-  event.target.value=
-    '';
+  $('dashboardView')
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  $('studentMini')
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  const first=
+    currentStudent.name
+    .split(/\s+/)
+    .slice(-1)[0];
+
+
+  $('welcomeTitle').textContent=
+    `Xin chào, ${first}!`;
+
+
+  $('profileName').textContent=
+    currentStudent.name;
+
+
+  $('profileClass').textContent=
+    currentStudent.className;
+
+
+  $('miniInfo').textContent=
+    `${currentStudent.name} · ${currentStudent.className}`;
+
+
+  setSkill(
+    'listening',
+    false
+  );
 
 }
 
 
-/* =========================================================
-   DISCOVER TESTS
-========================================================= */
+function numFromText(s){
 
-async function loadTests(){
+  const match=
+    String(
+      s||''
+    )
+    .match(
+      /\d+/
+    );
+
+
+  return match
+  ?
+  Number(
+    match[0]
+  )
+  :
+  0;
+
+}
+
+
+function uniqueByPath(items){
+
+  const seen=
+    new Set();
+
+
+  return items.filter(
+    item=>
+      item
+      &&
+      item.path
+      &&
+      !seen.has(
+        item.path
+      )
+      &&
+      seen.add(
+        item.path
+      )
+  );
+
+}
+
+
+function buildTestCatalog(tree){
+
+  const paths=
+    tree
+
+    .filter(
+      item=>
+        item.type==='blob'
+        &&
+        /(^|\/)index\.html$/i
+        .test(
+          item.path
+        )
+    )
+
+    .map(
+      item=>
+      item.path
+    );
+
+
+  const reading=
+    paths
+
+    .filter(
+      path=>
+      /^Read\d+\/index\.html$/i
+      .test(
+        path
+      )
+    )
+
+    .map(
+      path=>{
+
+        const root=
+          path.split('/')[0];
+
+
+        const number=
+          numFromText(
+            root
+          );
+
+
+        return{
+
+          n:
+            number,
+
+          title:
+            `Reading Test ${String(number).padStart(2,'0')}`,
+
+          path:
+            `./${root}/`,
+
+          meta:[
+            '40 câu',
+            '3 passages',
+            '60 phút'
+          ],
+
+          desc:
+            'IELTS Academic Reading full test.'
+
+        };
+
+      }
+    )
+
+    .sort(
+      (a,b)=>
+      a.n-b.n
+    );
+
+
+  const groups=
+    new Map();
+
+
+  paths
+
+  .filter(
+    path=>
+      /^Lis\d+(?:\/.+)?\/index\.html$/i
+      .test(
+        path
+      )
+  )
+
+  .forEach(
+    path=>{
+
+      const root=
+        path.split('/')[0];
+
+
+      if(
+        !groups.has(
+          root
+        )
+      ){
+
+        groups.set(
+          root,
+          []
+        );
+
+      }
+
+
+      groups
+      .get(
+        root
+      )
+      .push(
+        path
+      );
+
+    }
+  );
+
+
+  const listening=[];
+
+
+  for(
+    const [root,pathsInside]
+    of groups
+  ){
+
+    const number=
+      numFromText(
+        root
+      );
+
+
+    const preferred=
+
+      pathsInside.find(
+        path=>
+        /\/(?:V9T\d+|C21T4)\/index\.html$/i
+        .test(
+          path
+        )
+      )
+
+      ||
+
+      pathsInside.find(
+        path=>
+        new RegExp(
+          `^${root}/index\\.html$`,
+          'i'
+        )
+        .test(
+          path
+        )
+      )
+
+      ||
+
+      pathsInside[0];
+
+
+    listening.push({
+
+      n:
+        number,
+
+      title:
+        `Listening Test ${String(number).padStart(2,'0')}`,
+
+      path:
+        './'
+        +
+        preferred.replace(
+          /index\.html$/i,
+          ''
+        ),
+
+      meta:[
+        '40 câu',
+        '4 sections',
+        'Audio'
+      ],
+
+      desc:
+        'IELTS Listening full test.'
+
+    });
+
+  }
+
+
+  listening.sort(
+    (a,b)=>
+    a.n-b.n
+  );
+
+
+  const writing=
+    paths
+
+    .filter(
+      path=>
+      /^(WriT1|WriT2|WriFull|Wri\d+)(?:\/.+)?\/index\.html$/i
+      .test(
+        path
+      )
+    )
+
+    .map(
+      path=>{
+
+        const parts=
+          path.split('/');
+
+
+        const root=
+          parts[0];
+
+
+        const number=
+
+          numFromText(
+            root
+          )
+
+          ||
+
+          numFromText(
+            parts.at(-2)
+          )
+
+          ||
+
+          1;
+
+
+        return{
+
+          title:
+            `Writing Practice ${String(number).padStart(2,'0')}`,
+
+          path:
+            './'
+            +
+            parts
+            .slice(
+              0,
+              -1
+            )
+            .join('/')
+            +
+            '/',
+
+          meta:[
+            'Writing',
+            'Practice'
+          ],
+
+          desc:
+            'IELTS Writing practice.'
+
+        };
+
+      }
+    );
+
+
+  if(reading.length){
+
+    catalog.reading=
+      reading;
+
+  }
+
+
+  if(listening.length){
+
+    catalog.listening=
+      listening;
+
+  }
+
+
+  if(writing.length){
+
+    catalog.writing=
+      uniqueByPath(
+        writing
+      );
+
+  }
+
+}
+
+
+async function discoverAll(){
 
   try{
 
     const response=
       await fetch(
 
-        TREE_URL,
+        TEST_TREE,
 
         {
           cache:'no-store'
@@ -2410,7 +2922,9 @@ async function loadTests(){
     if(!response.ok){
 
       throw new Error(
-        `GitHub API ${response.status}`
+        'GitHub API '
+        +
+        response.status
       );
 
     }
@@ -2420,533 +2934,522 @@ async function loadTests(){
       await response.json();
 
 
-    /*
-     * Gom tất cả index.html theo folder đầu:
-     *
-     * Lis01/...
-     * Read01/...
-     * Wri01/...
-     */
-
-    const groups={};
-
-
-    data.tree.forEach(
-      function(item){
-
-        if(
-          item.type!=='blob'
-          ||
-          !/index\.html$/i.test(
-            item.path
-          )
-        ){
-
-          return;
-
-        }
-
-
-        const match=
-          item.path.match(
-            /^(Lis|Read|Wri)(\d+)\/.*index\.html$/i
-          );
-
-
-        if(!match){
-
-          return;
-
-        }
-
-
-        const prefix=
-          match[1];
-
-
-        const number=
-          Number(
-            match[2]
-          );
-
-
-        const folder=
-          prefix
-          +
-          String(match[2]);
-
-
-        let skill;
-
-
-        if(
-          /^Lis$/i.test(prefix)
-        ){
-
-          skill=
-            'Listening';
-
-        }
-
-        else if(
-          /^Read$/i.test(prefix)
-        ){
-
-          skill=
-            'Reading';
-
-        }
-
-        else{
-
-          skill=
-            'Writing';
-
-        }
-
-
-        if(!groups[folder]){
-
-          groups[folder]={
-            folder:folder,
-            number:number,
-            skill:skill,
-            paths:[]
-          };
-
-        }
-
-
-        groups[folder].paths.push(
-          item.path
-        );
-
-      }
-
-    );
-
-
-    allTests=
-      Object.values(groups)
-      .map(
-        function(group){
-
-          /*
-           * Nếu folder có nhiều index.html,
-           * ưu tiên đường dẫn ngắn nhất.
-           */
-
-          group.paths.sort(
-            function(a,b){
-
-              const aDepth=
-                a.split('/').length;
-
-
-              const bDepth=
-                b.split('/').length;
-
-
-              if(
-                aDepth!==bDepth
-              ){
-
-                return aDepth-bDepth;
-
-              }
-
-
-              return a.localeCompare(b);
-
-            }
-          );
-
-
-          return{
-
-            skill:
-              group.skill,
-
-            number:
-              group.number,
-
-            folder:
-              group.folder,
-
-            path:
-              './'
-              +
-              group.paths[0]
-
-          };
-
-        }
+    if(
+      data
+      &&
+      Array.isArray(
+        data.tree
       )
-      .sort(
-        function(a,b){
+    ){
 
-          const order={
-            Listening:1,
-            Reading:2,
-            Writing:3
-          };
-
-
-          if(
-            order[a.skill]
-            !==
-            order[b.skill]
-          ){
-
-            return(
-              order[a.skill]
-              -
-              order[b.skill]
-            );
-
-          }
-
-
-          return a.number-b.number;
-
-        }
+      buildTestCatalog(
+        data.tree
       );
 
-
-    updateCounts();
-
-    renderTests();
+    }
 
   }
 
   catch(error){
 
     console.warn(
-      'Không tải được danh sách TEST:',
+      'Auto catalog unavailable, using fallback.',
       error
     );
 
-
-    listeningCount.textContent=
-      '—';
-
-
-    readingCount.textContent=
-      '—';
-
-
-    writingCount.textContent=
-      '—';
-
-
-    testGrid.innerHTML=
-      `
-        <div class="empty">
-          Không tải được danh sách bài TEST.
-          Hãy tải lại trang.
-        </div>
-      `;
-
   }
 
-}
 
-
-/* =========================================================
-   COUNTS
-========================================================= */
-
-function updateCounts(){
-
-  const listening=
-    allTests.filter(
-      item=>
-      item.skill==='Listening'
-    )
-    .length;
-
-
-  const reading=
-    allTests.filter(
-      item=>
-      item.skill==='Reading'
-    )
-    .length;
-
-
-  const writing=
-    allTests.filter(
-      item=>
-      item.skill==='Writing'
-    )
-    .length;
-
-
-  listeningCount.textContent=
-    `${listening} bài TEST`;
-
-
-  readingCount.textContent=
-    `${reading} bài TEST`;
-
-
-  writingCount.textContent=
-    `${writing} bài TEST`;
-
-}
-
-
-/* =========================================================
-   FILTER
-========================================================= */
-
-function setFilter(filter){
-
-  currentFilter=
-    filter;
-
-
-  document
-  .querySelectorAll(
-    '.filter-btn'
-  )
-  .forEach(
-    function(button){
-
-      button.classList.toggle(
-
-        'active',
-
-        button.dataset.filter===
-        filter
-
-      );
-
-    }
-  );
-
+  updateCounts();
 
   renderTests();
 
 }
 
 
-function scrollToTests(){
+function updateCounts(){
 
-  document
-  .getElementById(
-    'tests'
-  )
-  .scrollIntoView({
+  $('countListening').textContent=
+    `${catalog.listening.length} ĐỀ`;
 
-    behavior:'smooth',
 
-    block:'start'
+  $('countReading').textContent=
+    `${catalog.reading.length} ĐỀ`;
 
-  });
+
+  $('countWriting').textContent=
+    `${catalog.writing.length} ĐỀ`;
+
+
+  $('countPractice').textContent=
+    'KHO RIÊNG';
 
 }
 
 
-/* =========================================================
-   RENDER TESTS
-========================================================= */
+function skillInfo(skill){
 
-function renderTests(){
+  if(
+    skill==='reading'
+  ){
 
-  const items=
+    return{
 
-    currentFilter==='All'
+      title:
+        'Reading Tests',
 
-    ?
+      desc:
+        '3 passages · 40 questions · 60 minutes.',
 
-    allTests
+      icon:
+        '📖',
 
-    :
+      label:
+        'Reading'
 
-    allTests.filter(
-      item=>
-      item.skill===
-      currentFilter
-    );
-
-
-  if(!items.length){
-
-    testGrid.innerHTML=
-      `
-        <div class="empty">
-          Chưa có bài TEST trong mục này.
-        </div>
-      `;
-
-
-    return;
+    };
 
   }
 
 
-  testGrid.innerHTML=
-    items.map(
-      function(item){
+  if(
+    skill==='writing'
+  ){
 
-        const number=
-          String(
-            item.number
-          )
-          .padStart(
-            2,
-            '0'
-          );
+    return{
 
+      title:
+        'Writing Practice',
 
-        const icon=
-          item.skill==='Listening'
-          ?
-          '🎧'
-          :
-          item.skill==='Reading'
-          ?
-          '📖'
-          :
-          '✍️';
+      desc:
+        'Chọn bài Writing muốn bắt đầu.',
+
+      icon:
+        '✍️',
+
+      label:
+        'Writing'
+
+    };
+
+  }
 
 
-        return`
-          <a
-            class="test-card"
-            href="${escapeHTML(item.path)}"
-          >
+  return{
 
-            <div class="test-number">
-              ${number}
-            </div>
+    title:
+      'Listening Tests',
 
+    desc:
+      'Nghe audio, hoàn thành 40 câu hỏi và nộp kết quả.',
 
-            <div class="test-copy">
+    icon:
+      '🎧',
 
-              <b>
-                ${icon}
-                ${item.skill}
-                Test
-                ${number}
-              </b>
+    label:
+      'Listening'
 
-
-              <span>
-                Bắt đầu làm bài
-              </span>
-
-            </div>
-
-
-            <div class="test-arrow">
-              →
-            </div>
-
-          </a>
-        `;
-
-      }
-    )
-    .join('');
+  };
 
 }
 
 
-/* =========================================================
-   ESCAPE
-========================================================= */
+function testCard(
+  test,
+  skill
+){
 
-function escapeHTML(value){
+  const info=
+    skillInfo(
+      skill
+    );
 
-  return String(
-    value
-    ??
-    ''
+
+  return`
+    <article class="test-card">
+
+      <div class="test-card-top">
+
+        <div class="test-icon">
+          ${info.icon}
+        </div>
+
+        <div class="test-label">
+          ${info.label}
+        </div>
+
+      </div>
+
+
+      <h3>
+        ${test.title}
+      </h3>
+
+
+      <div class="meta">
+
+        ${
+          (test.meta||[])
+          .map(
+            item=>
+            `<span>${item}</span>`
+          )
+          .join('')
+        }
+
+      </div>
+
+
+      <p class="desc">
+        ${test.desc||''}
+      </p>
+
+
+      <button
+        class="launch"
+        type="button"
+        data-test-path="${test.path}"
+      >
+        Bắt đầu làm bài →
+      </button>
+
+    </article>
+  `;
+
+}
+
+
+function renderTests(){
+
+  const list=
+    catalog[
+      currentSkill
+    ]
+    ||
+    [];
+
+
+  const info=
+    skillInfo(
+      currentSkill
+    );
+
+
+  $('testTitle').textContent=
+    info.title;
+
+
+  $('testDesc').textContent=
+    info.desc;
+
+
+  $('testChip').textContent=
+    `${list.length} đề`;
+
+
+  $('testGrid').innerHTML=
+
+    list.length
+
+    ?
+
+    list
+    .map(
+      test=>
+      testCard(
+        test,
+        currentSkill
+      )
+    )
+    .join('')
+
+    :
+
+    `
+      <div class="empty">
+        Chưa có bài ở mục này.
+      </div>
+    `;
+
+
+  document
+  .querySelectorAll(
+    '[data-test-path]'
   )
-  .replace(
-
-    /[&<>"']/g,
-
-    function(char){
-
-      return{
-
-        '&':'&amp;',
-
-        '<':'&lt;',
-
-        '>':'&gt;',
-
-        '"':'&quot;',
-
-        "'":'&#39;'
-
-      }[char];
-
-    }
-
+  .forEach(
+    button=>
+    button.onclick=
+    ()=>
+    launchTest(
+      button.dataset.testPath
+    )
   );
 
 }
 
 
-/* =========================================================
-   CLICK OUTSIDE MODAL
-========================================================= */
+function setSkill(
+  skill,
+  scroll=true
+){
 
-profileModal.addEventListener(
-  'click',
-  function(event){
+  currentSkill=
+    skill;
 
-    if(
-      event.target===
-      profileModal
-    ){
 
-      closeProfileModal();
+  renderTests();
+
+
+  document
+  .querySelectorAll(
+    'button.skill-card[data-skill]'
+  )
+  .forEach(
+    button=>{
+
+      button.style.outline=
+
+        button.dataset.skill===skill
+
+        ?
+
+        '4px solid rgba(40,18,96,.14)'
+
+        :
+
+        'none';
 
     }
+  );
+
+
+  if(scroll){
+
+    $('testSection')
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'start'
+
+    });
 
   }
-);
+
+}
 
 
-/* =========================================================
-   INIT
-========================================================= */
+function launchTest(path){
 
-(function init(){
+  if(!currentStudent){
 
-  const profile=
-    readProfile();
-
-
-  renderProfile();
-
-
-  /*
-   * Nếu chưa từng nhập tên/lớp,
-   * tự mở form hồ sơ.
-   */
-
-  if(
-    !profile?.name
-    ||
-    !profile?.className
-  ){
-
-    profileModal.classList.remove(
-      'hidden'
+    return showLogin(
+      false
     );
 
   }
 
 
-  loadTests();
+  saveStudent(
+    currentStudent
+  );
 
-})();
+
+  const url=
+    new URL(
+      path,
+      location.href
+    );
+
+
+  url.searchParams.set(
+    'name',
+    currentStudent.name
+  );
+
+
+  url.searchParams.set(
+    'className',
+    currentStudent.className
+  );
+
+
+  url.searchParams.set(
+    'fromPortal',
+    '1'
+  );
+
+
+  location.href=
+    url.toString();
+
+}
+
+
+$('studentForm')
+.addEventListener(
+  'submit',
+  event=>{
+
+    event.preventDefault();
+
+
+    const student=
+      normalizeStudent({
+
+        name:
+          $('studentName').value,
+
+        className:
+          $('studentClass').value
+
+      });
+
+
+    if(!student){
+
+      $('formError').textContent=
+        'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+      return;
+
+    }
+
+
+    $('formError').textContent=
+      '';
+
+
+    saveStudent(
+      student
+    );
+
+
+    showDashboard();
+
+  }
+);
+
+
+document
+.querySelectorAll(
+  'button.skill-card[data-skill]'
+)
+.forEach(
+  button=>
+  button.addEventListener(
+    'click',
+    ()=>
+    setSkill(
+      button.dataset.skill,
+      true
+    )
+  )
+);
+
+
+const practiceDoor=
+$('practiceDoor');
+
+
+if(practiceDoor){
+
+  practiceDoor
+  .addEventListener(
+    'click',
+    ()=>{
+
+      location.href=
+        './Practice/';
+
+    }
+  );
+
+}
+
+
+const progressDoor=
+$('progressDoor');
+
+
+if(progressDoor){
+
+  progressDoor
+  .addEventListener(
+    'click',
+    ()=>{
+
+      location.href=
+        './Progress/';
+
+    }
+  );
+
+}
+
+
+const changeStudentTop=
+$('changeStudentTop');
+
+
+if(changeStudentTop){
+
+  changeStudentTop
+  .addEventListener(
+    'click',
+    ()=>{
+
+      const old=
+        currentStudent;
+
+
+      clearStudent();
+
+
+      currentStudent=
+        old;
+
+
+      showLogin(
+        true
+      );
+
+    }
+  );
+
+}
+
+
+async function init(){
+
+  currentStudent=
+    readStudent();
+
+
+  updateCounts();
+
+  renderTests();
+
+
+  currentStudent
+
+  ?
+
+  showDashboard()
+
+  :
+
+  showLogin(
+    false
+  );
+
+
+  await discoverAll();
+
+}
+
+
+init();
 
 </script>
 
