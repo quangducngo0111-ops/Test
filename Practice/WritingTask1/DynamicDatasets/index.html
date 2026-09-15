@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>Writing Task 1 — Dynamic Datasets</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5b43b5;
+  --ink:#172033;
+  --muted:#6f7890;
+  --line:#e3e7ef;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 0%,rgba(141,105,246,.10),transparent 24%),
+    radial-gradient(circle at 92% 4%,rgba(101,174,255,.08),transparent 22%),
+    linear-gradient(180deg,#f9f8ff,#f3f7fc);
+}
+
+.wrap{
+  width:min(1100px,calc(100% - 24px));
+  margin:auto;
+}
+
+/* HEADER */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+
+.topin{
+  min-height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.back{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  color:#3b315e;
+  text-decoration:none;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  padding:8px 11px;
+  font-size:11px;
+  font-weight:900;
+  transition:.15s ease;
+}
+
+.back:hover{
+  background:#faf9ff;
+  border-color:#cfc5f3;
+}
+
+.brand{
+  color:#21164b;
+  font-size:14px;
+  font-weight:950;
+}
+
+.student{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+}
+
+/* MAIN */
+
+main{
+  padding:28px 0 55px;
+}
+
+/* HERO */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:27px;
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:23px;
+  background:linear-gradient(120deg,#fff 0%,#f8f5ff 55%,#edf7ff 100%);
+  box-shadow:0 12px 30px rgba(35,25,75,.055);
+}
+
+.hero::after{
+  content:"📈";
+  position:absolute;
+  right:30px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:72px;
+  opacity:.08;
+  pointer-events:none;
+}
+
+.eyebrow{
+  color:#6a4db4;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:8px 0 7px;
+  color:#21164b;
+  font-size:clamp(29px,4vw,38px);
+  line-height:1.08;
+  letter-spacing:-.04em;
+}
+
+.hero p{
+  max-width:680px;
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.65;
+}
+
+/* SECTION */
+
+.section-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:14px;
+  margin:24px 0 12px;
+}
+
+.section-head h2{
+  margin:0;
+  color:#21164b;
+  font-size:22px;
+  letter-spacing:-.02em;
+}
+
+.section-head p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.count{
+  color:#6c7383;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;
+}
+
+/* CARD */
+
+.card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:92px;
+  padding:15px;
+  color:inherit;
+  text-decoration:none;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 5px 15px rgba(35,25,75,.035);
+  transition:
+    transform .16s ease,
+    border-color .16s ease,
+    box-shadow .16s ease;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+  border-color:#cbbdf7;
+  box-shadow:0 11px 25px rgba(35,25,75,.08);
+}
+
+.badge{
+  flex:0 0 52px;
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:linear-gradient(145deg,#eee9ff,#e8f2ff);
+  color:#5b43b5;
+  font-size:13px;
+  font-weight:950;
+}
+
+.copy{
+  flex:1;
+  min-width:0;
+}
+
+.copy b{
+  display:block;
+  margin-bottom:4px;
+  color:#21164b;
+  font-size:13.5px;
+  font-weight:950;
+}
+
+.copy span{
+  display:block;
+  color:var(--muted);
+  font-size:10.5px;
+  line-height:1.45;
+}
+
+.arrow{
+  color:#9ca3b2;
+  font-size:18px;
+  font-weight:900;
+}
+
+/* EMPTY */
+
+.loading,
+.empty{
+  grid-column:1/-1;
+  padding:34px 20px;
+  text-align:center;
+  border:1px dashed #d7dbe5;
+  border-radius:16px;
+  background:rgba(255,255,255,.8);
+  color:#7b8292;
+  font-size:11.5px;
+}
+
+@media(max-width:760px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .student{
+    display:none;
+  }
+
+  .hero{
+    padding:23px 20px;
+  }
+
+  .section-head{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:5px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+
+  <div class="wrap topin">
+
+    <a class="back" href="../">
+      ← Writing Task 1
+    </a>
+
+    <div class="brand">
+      📈 Dynamic Datasets
+    </div>
+
+    <div class="student" id="studentInfo"></div>
+
+  </div>
+
+</header>
+
+
+<main class="wrap">
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      IELTS Writing Task 1
+    </div>
+
+    <h1>
+      Dynamic Datasets
+    </h1>
+
+    <p>
+      Luyện mô tả các dạng biểu đồ có sự thay đổi theo thời gian.
+      Tập trung vào xu hướng, biến động, điểm nổi bật và so sánh dữ liệu.
+    </p>
+
+  </section>
+
+
+  <div class="section-head">
+
+    <div>
+
+      <h2>
+        Danh sách bài luyện
+      </h2>
+
+      <p>
+        Chọn một đề để bắt đầu viết.
+      </p>
+
+    </div>
+
+    <div class="count" id="count">
+      Đang tải...
+    </div>
+
+  </div>
+
+
+  <section class="grid" id="grid">
+
+    <div class="loading">
+      Đang tải danh sách bài...
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const TREE_URL=
+'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
+
+
+const ROOT=
+'Practice/WritingTask1/DynamicDatasets/';
+
+
+/* =========================================================
+   EXERCISE INFO
+========================================================= */
+
+const EXERCISE_INFO={
+
+  1:{
+    title:
+    'Dynamic Datasets 01',
+
+    description:
+    'International conferences in three cities · Line graph'
+  }
+
+};
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function loadStudent(){
+
+  try{
+
+    const student=
+    JSON.parse(
+      localStorage.getItem('IELTS_PRACTICE_STUDENT')
+      ||
+      'null'
+    );
+
+
+    if(
+      student?.name
+      &&
+      student?.className
+    ){
+
+      studentInfo.textContent=
+      `${student.name} · ${student.className}`;
+
+    }
+
+  }
+
+  catch(error){
+
+    console.warn(
+      'Không đọc được thông tin học sinh.',
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function loadExercises(){
+
+  try{
+
+    const response=
+    await fetch(
+      TREE_URL,
+      {
+        cache:'no-store'
+      }
+    );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        `GitHub API ${response.status}`
+      );
+
+    }
+
+
+    const data=
+    await response.json();
+
+
+    const escapedRoot=
+    ROOT.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      '\\$&'
+    );
+
+
+    /*
+     * Match:
+     *
+     * Practice/WritingTask1/DynamicDatasets/01/index.html
+     * Practice/WritingTask1/DynamicDatasets/02/index.html
+     */
+
+    const pattern=
+    new RegExp(
+      '^'
+      +
+      escapedRoot
+      +
+      '(\\d+)/index\\.html$',
+      'i'
+    );
+
+
+    const items=
+    data.tree
+
+    .filter(
+      item=>
+        item.type==='blob'
+        &&
+        pattern.test(item.path)
+    )
+
+    .map(
+      item=>{
+
+        const match=
+        item.path.match(pattern);
+
+
+        return{
+          number:Number(match[1]),
+          folder:match[1]
+        };
+
+      }
+    )
+
+    .sort(
+      (a,b)=>
+      a.number-b.number
+    );
+
+
+    renderExercises(
+      items
+    );
+
+  }
+
+  catch(error){
+
+    console.warn(
+      'Không tải được danh sách Dynamic Datasets:',
+      error
+    );
+
+
+    count.textContent=
+    '0 bài';
+
+
+    grid.innerHTML=
+    `
+      <div class="empty">
+        Không tải được danh sách bài.
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderExercises(items){
+
+  count.textContent=
+  `${items.length} bài`;
+
+
+  if(!items.length){
+
+    grid.innerHTML=
+    `
+      <div class="empty">
+        Chưa có bài Dynamic Datasets nào.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML=
+  items.map(
+    item=>{
+
+      const number=
+      String(item.number)
+      .padStart(2,'0');
+
+
+      const info=
+      EXERCISE_INFO[item.number]
+      ||
+      {
+        title:
+        `Dynamic Datasets ${number}`,
+
+        description:
+        'IELTS Writing Task 1 practice'
+      };
+
+
+      return`
+        <a
+          class="card"
+          href="./${item.folder}/"
+        >
+
+          <div class="badge">
+            ${number}
+          </div>
+
+          <div class="copy">
+
+            <b>
+              ${escapeHTML(info.title)}
+            </b>
+
+            <span>
+              ${escapeHTML(info.description)}
+            </span>
+
+          </div>
+
+          <div class="arrow">
+            →
+          </div>
+
+        </a>
+      `;
+
+    }
+  )
+  .join('');
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+  .replace(
+    /[&<>"']/g,
+    char=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    })[char]
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+loadStudent();
+
+loadExercises();
+
+</script>
+
+</body>
+</html>
