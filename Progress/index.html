@@ -1,0 +1,3181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<meta
+  http-equiv="Cache-Control"
+  content="no-cache, no-store, must-revalidate"
+>
+
+<title>Kết quả học tập</title>
+
+<style>
+
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+  --warn:#b06b12;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color:var(--ink);
+
+  background:
+    radial-gradient(
+      circle at 8% 0%,
+      rgba(141,105,246,.10),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 92% 4%,
+      rgba(93,169,255,.08),
+      transparent 22%
+    ),
+    var(--bg);
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.top{
+  position:sticky;
+
+  top:0;
+
+  z-index:30;
+
+  background:
+    rgba(255,255,255,.94);
+
+  backdrop-filter:
+    blur(12px);
+
+  border-bottom:
+    1px solid
+    var(--line);
+}
+
+.topin{
+  width:
+    min(
+      1200px,
+      calc(100% - 22px)
+    );
+
+  min-height:64px;
+
+  margin:auto;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+}
+
+.back{
+  color:#3b315e;
+
+  text-decoration:none;
+
+  border:
+    1px solid
+    var(--line);
+
+  background:#fff;
+
+  border-radius:10px;
+
+  padding:8px 11px;
+
+  font-size:11px;
+
+  font-weight:900;
+}
+
+.brand{
+  color:#21164b;
+
+  font-size:14px;
+
+  font-weight:950;
+}
+
+.student-top{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  font-weight:850;
+}
+
+.top-avatar{
+  width:30px;
+
+  height:30px;
+
+  border-radius:50%;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eee9ff,
+      #dceaff
+    );
+
+  display:grid;
+
+  place-items:center;
+
+  color:#5135a6;
+
+  font-size:10px;
+
+  font-weight:950;
+
+  border:
+    1px solid
+    #ddd8ef;
+}
+
+.top-avatar img{
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.page{
+  width:
+    min(
+      1200px,
+      calc(100% - 22px)
+    );
+
+  margin:auto;
+
+  padding:
+    25px 0 60px;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  position:relative;
+
+  overflow:hidden;
+
+  padding:25px;
+
+  border-radius:22px;
+
+  background:
+    linear-gradient(
+      120deg,
+      #fff,
+      #f8f5ff 58%,
+      #eef7ff
+    );
+
+  box-shadow:
+    0 9px 25px
+    rgba(35,25,75,.05);
+}
+
+.hero::after{
+  content:"📊";
+
+  position:absolute;
+
+  right:28px;
+
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  font-size:75px;
+
+  opacity:.07;
+}
+
+.eyebrow{
+  color:#6a4db4;
+
+  font-size:10px;
+
+  font-weight:950;
+
+  letter-spacing:.11em;
+
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:
+    7px 0 6px;
+
+  color:#21164b;
+
+  font-size:
+    clamp(
+      28px,
+      4vw,
+      38px
+    );
+
+  letter-spacing:-.04em;
+}
+
+.hero p{
+  margin:0;
+
+  max-width:670px;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+
+  line-height:1.65;
+}
+
+
+/* =========================
+   STUDENT CARD
+========================= */
+
+.student-card{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:16px;
+
+  margin-top:14px;
+
+  padding:16px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:16px;
+
+  background:#fff;
+}
+
+.student-profile{
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+
+  min-width:0;
+}
+
+
+/* =========================
+   AVATAR
+========================= */
+
+.avatar-wrap{
+  position:relative;
+
+  flex:
+    0 0 72px;
+
+  width:72px;
+
+  height:72px;
+}
+
+.avatar{
+  width:72px;
+
+  height:72px;
+
+  border-radius:50%;
+
+  overflow:hidden;
+
+  display:grid;
+
+  place-items:center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eee9ff,
+      #dceaff
+    );
+
+  border:
+    2px solid #fff;
+
+  box-shadow:
+    0 0 0 1px #ded9ee,
+    0 5px 14px rgba(40,18,96,.10);
+
+  color:#5135a6;
+
+  font-size:20px;
+
+  font-weight:950;
+
+  cursor:pointer;
+
+  user-select:none;
+}
+
+.avatar img{
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+}
+
+.avatar-edit{
+  position:absolute;
+
+  right:-1px;
+
+  bottom:1px;
+
+  width:25px;
+
+  height:25px;
+
+  border:2px solid #fff;
+
+  border-radius:50%;
+
+  background:#281260;
+
+  color:#fff;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:10px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 3px 8px
+    rgba(30,20,70,.20);
+}
+
+.avatar-input{
+  display:none;
+}
+
+.avatar-menu{
+  position:absolute;
+
+  left:0;
+
+  top:80px;
+
+  z-index:20;
+
+  width:150px;
+
+  padding:5px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:10px;
+
+  background:#fff;
+
+  box-shadow:
+    0 12px 28px
+    rgba(30,20,70,.14);
+
+  display:none;
+}
+
+.avatar-menu.show{
+  display:block;
+}
+
+.avatar-menu button{
+  width:100%;
+
+  border:0;
+
+  border-radius:7px;
+
+  background:#fff;
+
+  padding:8px 9px;
+
+  text-align:left;
+
+  color:#3f3757;
+
+  font-size:10px;
+
+  font-weight:850;
+}
+
+.avatar-menu button:hover{
+  background:#f6f4ff;
+}
+
+.avatar-menu button.remove{
+  color:#b83345;
+}
+
+
+.student-info{
+  min-width:0;
+}
+
+.student-name{
+  color:#21164b;
+
+  font-size:15px;
+
+  font-weight:950;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.student-class{
+  margin-top:3px;
+
+  color:var(--muted);
+
+  font-size:10.5px;
+}
+
+.avatar-hint{
+  margin-top:5px;
+
+  color:#949aa7;
+
+  font-size:9px;
+}
+
+.student-actions{
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+}
+
+.refresh{
+  border:
+    1px solid
+    #d8d3ec;
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#4b318e;
+
+  padding:8px 11px;
+
+  font-size:10px;
+
+  font-weight:900;
+}
+
+.refresh:hover{
+  background:#f8f5ff;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+  margin-top:22px;
+}
+
+.section-head{
+  display:flex;
+
+  align-items:end;
+
+  justify-content:
+    space-between;
+
+  gap:10px;
+
+  margin-bottom:10px;
+}
+
+.section-head h2{
+  margin:0;
+
+  color:#21164b;
+
+  font-size:18px;
+}
+
+.section-head p{
+  margin:
+    3px 0 0;
+
+  color:var(--muted);
+
+  font-size:10.5px;
+}
+
+
+/* =========================
+   OVERALL
+========================= */
+
+.overall{
+  position:relative;
+
+  overflow:hidden;
+
+  display:grid;
+
+  grid-template-columns:
+    auto 1fr;
+
+  align-items:center;
+
+  gap:18px;
+
+  padding:20px;
+
+  border-radius:17px;
+
+  background:
+    linear-gradient(
+      120deg,
+      #281260,
+      #5135a6
+    );
+
+  color:#fff;
+
+  box-shadow:
+    0 13px 30px
+    rgba(40,18,96,.18);
+}
+
+.overall-band{
+  min-width:110px;
+
+  font-size:48px;
+
+  line-height:1;
+
+  font-weight:950;
+
+  text-align:center;
+}
+
+.overall-label{
+  font-size:10px;
+
+  font-weight:900;
+
+  text-transform:uppercase;
+
+  letter-spacing:.1em;
+
+  opacity:.7;
+}
+
+.overall-copy b{
+  display:block;
+
+  margin-bottom:5px;
+
+  font-size:15px;
+}
+
+.overall-copy span{
+  display:block;
+
+  max-width:650px;
+
+  font-size:10.5px;
+
+  line-height:1.6;
+
+  opacity:.82;
+}
+
+
+/* =========================
+   SKILLS
+========================= */
+
+.skills{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
+
+  gap:10px;
+}
+
+.skill{
+  padding:15px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:15px;
+
+  background:#fff;
+
+  box-shadow:
+    0 4px 12px
+    rgba(35,25,75,.025);
+}
+
+.skill-top{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:8px;
+}
+
+.skill-name{
+  color:#3c3457;
+
+  font-size:11px;
+
+  font-weight:950;
+}
+
+.skill-icon{
+  font-size:17px;
+}
+
+.band{
+  margin:
+    9px 0 3px;
+
+  color:#21164b;
+
+  font-size:33px;
+
+  line-height:1;
+
+  font-weight:950;
+}
+
+.band-label{
+  color:#7a8191;
+
+  font-size:9px;
+
+  font-weight:850;
+}
+
+.skill-meta{
+  margin-top:12px;
+
+  padding-top:10px;
+
+  border-top:
+    1px solid
+    #eef0f4;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:7px;
+}
+
+.meta-label{
+  color:#9096a3;
+
+  font-size:8.5px;
+}
+
+.meta-value{
+  margin-top:2px;
+
+  color:#444b5b;
+
+  font-size:10.5px;
+
+  font-weight:900;
+}
+
+.trend-up{
+  color:var(--good);
+}
+
+.trend-down{
+  color:var(--bad);
+}
+
+
+/* =========================
+   RECENT
+========================= */
+
+.recent-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
+
+  gap:10px;
+}
+
+.recent-card{
+  padding:14px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:14px;
+
+  background:#fff;
+}
+
+.recent-title{
+  margin-bottom:9px;
+
+  color:#21164b;
+
+  font-size:11px;
+
+  font-weight:950;
+}
+
+.chips{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px;
+}
+
+.chip{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:4px;
+
+  padding:5px 7px;
+
+  border-radius:999px;
+
+  background:#f2efff;
+
+  color:#5135a6;
+
+  font-size:9px;
+
+  font-weight:900;
+}
+
+.no-data{
+  color:#989eaa;
+
+  font-size:10px;
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+.table-wrap{
+  overflow:auto;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:14px;
+
+  background:#fff;
+}
+
+table{
+  width:100%;
+
+  min-width:780px;
+
+  border-collapse:collapse;
+}
+
+th,
+td{
+  padding:
+    10px 12px;
+
+  text-align:left;
+
+  border-bottom:
+    1px solid
+    #eceef3;
+
+  font-size:10px;
+}
+
+th{
+  background:#fafaff;
+
+  color:#625979;
+
+  font-size:9px;
+
+  text-transform:uppercase;
+
+  letter-spacing:.04em;
+
+  font-weight:950;
+}
+
+tbody tr:last-child td{
+  border-bottom:0;
+}
+
+tbody tr:hover{
+  background:#fafbff;
+}
+
+.skill-pill{
+  display:inline-block;
+
+  padding:4px 7px;
+
+  border-radius:999px;
+
+  background:#f2efff;
+
+  color:#5135a6;
+
+  font-size:9px;
+
+  font-weight:900;
+}
+
+.band-cell{
+  color:#21164b;
+
+  font-size:12px;
+
+  font-weight:950;
+}
+
+.raw{
+  color:#4f5667;
+
+  font-weight:850;
+}
+
+.muted{
+  color:#949aa7;
+}
+
+
+/* =========================
+   RULE NOTE
+========================= */
+
+.rule-note{
+  margin-top:13px;
+
+  padding:11px 13px;
+
+  border:
+    1px solid
+    #e2ddf5;
+
+  border-radius:10px;
+
+  background:#faf9ff;
+
+  color:#736b88;
+
+  font-size:9.8px;
+
+  line-height:1.6;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+  margin-top:20px;
+
+  padding:40px 20px;
+
+  border:
+    1px dashed
+    #d6dae4;
+
+  border-radius:15px;
+
+  background:#fff;
+
+  text-align:center;
+
+  color:#777e8e;
+
+  font-size:11px;
+}
+
+.spinner{
+  width:30px;
+
+  height:30px;
+
+  margin:
+    0 auto 10px;
+
+  border:
+    3px solid
+    #e6e2f5;
+
+  border-top-color:#5135a6;
+
+  border-radius:50%;
+
+  animation:
+    spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message{
+  margin-top:20px;
+
+  padding:30px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:15px;
+
+  background:#fff;
+
+  text-align:center;
+}
+
+.message h3{
+  margin:
+    0 0 6px;
+
+  color:#21164b;
+}
+
+.message p{
+  margin:0;
+
+  color:#747b8b;
+
+  font-size:10.5px;
+
+  line-height:1.6;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+.overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:100;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:18px;
+
+  background:
+    rgba(16,12,40,.62);
+}
+
+.hidden{
+  display:none !important;
+}
+
+.login{
+  width:
+    min(
+      450px,
+      100%
+    );
+
+  padding:22px;
+
+  border-radius:18px;
+
+  background:#fff;
+
+  box-shadow:
+    0 24px 70px
+    rgba(18,10,53,.28);
+}
+
+.login h2{
+  margin:
+    5px 0 7px;
+
+  color:#21164b;
+}
+
+.login p{
+  margin:
+    0 0 14px;
+
+  color:#747b8b;
+
+  font-size:10.5px;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+
+  margin-bottom:5px;
+
+  font-size:10px;
+
+  font-weight:900;
+}
+
+.field input{
+  width:100%;
+
+  padding:10px;
+
+  border:
+    1px solid
+    #d5d9e2;
+
+  border-radius:9px;
+
+  outline:none;
+}
+
+.field input:focus{
+  border-color:#745ec7;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.08);
+}
+
+.login-btn{
+  width:100%;
+
+  margin-top:10px;
+
+  padding:10px;
+
+  border:0;
+
+  border-radius:9px;
+
+  background:
+    linear-gradient(
+      100deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  color:#fff;
+
+  font-weight:900;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+  .skills,
+  .recent-grid{
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+  }
+
+}
+
+
+@media(max-width:600px){
+
+  .student-top{
+    display:none;
+  }
+
+  .skills,
+  .recent-grid{
+    grid-template-columns:1fr;
+  }
+
+  .overall{
+    grid-template-columns:1fr;
+
+    text-align:center;
+  }
+
+  .student-card{
+    align-items:flex-start;
+
+    flex-direction:column;
+  }
+
+  .student-actions{
+    width:100%;
+  }
+
+  .refresh{
+    width:100%;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     PROFILE LOGIN
+========================= -->
+
+<div
+  class="overlay hidden"
+  id="profileOverlay"
+>
+
+  <div class="login">
+
+    <div class="eyebrow">
+      STUDENT PROFILE
+    </div>
+
+    <h2>
+      Xem kết quả học tập
+    </h2>
+
+    <p>
+      Nhập đúng Họ tên và Lớp đã sử dụng khi làm bài TEST.
+    </p>
+
+
+    <div class="field">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="profileName"
+        placeholder="Nguyễn Văn A"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="profileClass"
+        placeholder="11A1"
+      >
+
+    </div>
+
+
+    <button
+      class="login-btn"
+      onclick="saveProfileAndLoad()"
+    >
+      Xem kết quả
+    </button>
+
+
+    <div
+      id="profileError"
+      style="
+        margin-top:7px;
+        color:#b83345;
+        font-size:10px
+      "
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="top">
+
+  <div class="topin">
+
+    <a
+      class="back"
+      href="../"
+    >
+      ← Trang chủ
+    </a>
+
+
+    <div class="brand">
+      📊 Kết quả học tập
+    </div>
+
+
+    <div
+      class="student-top"
+      id="topStudentWrap"
+    >
+
+      <div
+        class="top-avatar"
+        id="topAvatar"
+      ></div>
+
+      <span id="topStudent"></span>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     PAGE
+========================= -->
+
+<main class="page">
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      IELTS TEST PERFORMANCE
+    </div>
+
+
+    <h1>
+      Tiến độ học tập
+    </h1>
+
+
+    <p>
+      Theo dõi kết quả các bài TEST và band dự đoán
+      dựa trên tối đa 5 lần thi gần nhất của từng kỹ năng.
+    </p>
+
+  </section>
+
+
+  <!-- =========================
+       STUDENT
+  ========================= -->
+
+  <section
+    class="student-card"
+    id="studentCard"
+    style="display:none"
+  >
+
+
+    <div class="student-profile">
+
+
+      <!-- AVATAR -->
+
+      <div class="avatar-wrap">
+
+        <div
+          class="avatar"
+          id="studentAvatar"
+          onclick="toggleAvatarMenu(event)"
+          title="Đổi ảnh đại diện"
+        ></div>
+
+
+        <div
+          class="avatar-edit"
+          onclick="openAvatarPicker(event)"
+          title="Đổi ảnh"
+        >
+          📷
+        </div>
+
+
+        <input
+          type="file"
+          class="avatar-input"
+          id="avatarInput"
+          accept="image/*"
+          onchange="handleAvatarUpload(event)"
+        >
+
+
+        <div
+          class="avatar-menu"
+          id="avatarMenu"
+        >
+
+          <button
+            type="button"
+            onclick="openAvatarPicker(event)"
+          >
+            📷 Đổi ảnh
+          </button>
+
+
+          <button
+            type="button"
+            class="remove"
+            onclick="removeAvatar(event)"
+          >
+            ✕ Xóa ảnh
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- STUDENT INFO -->
+
+      <div class="student-info">
+
+        <div
+          class="student-name"
+          id="studentNameDisplay"
+        ></div>
+
+
+        <div
+          class="student-class"
+          id="studentClassDisplay"
+        ></div>
+
+
+        <div class="avatar-hint">
+          Nhấn vào ảnh để thay ảnh đại diện
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="student-actions">
+
+      <button
+        class="refresh"
+        onclick="loadStats()"
+      >
+        ↻ Cập nhật kết quả
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       LOADING
+  ========================= -->
+
+  <div
+    class="loading"
+    id="loadingBox"
+  >
+
+    <div class="spinner"></div>
+
+    Đang tải kết quả TEST...
+
+  </div>
+
+
+  <!-- =========================
+       ERROR
+  ========================= -->
+
+  <div
+    class="message hidden"
+    id="errorBox"
+  >
+
+    <h3>
+      Không tải được kết quả
+    </h3>
+
+    <p id="errorText"></p>
+
+  </div>
+
+
+  <!-- =========================
+       CONTENT
+  ========================= -->
+
+  <div
+    class="hidden"
+    id="statsContent"
+  >
+
+
+    <!-- OVERALL -->
+
+    <section class="section">
+
+      <div class="overall">
+
+        <div>
+
+          <div class="overall-label">
+            Predicted Overall
+          </div>
+
+          <div
+            class="overall-band"
+            id="overallBand"
+          >
+            —
+          </div>
+
+        </div>
+
+
+        <div class="overall-copy">
+
+          <b id="overallTitle">
+            Chưa đủ dữ liệu
+          </b>
+
+          <span id="overallDescription"></span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SKILLS -->
+
+    <section class="section">
+
+      <div class="section-head">
+
+        <div>
+
+          <h2>
+            Band dự đoán theo kỹ năng
+          </h2>
+
+          <p>
+            Dựa trên tối đa 5 bài TEST gần nhất.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="skills"
+        id="skillCards"
+      ></div>
+
+    </section>
+
+
+    <!-- RECENT -->
+
+    <section class="section">
+
+      <div class="section-head">
+
+        <div>
+
+          <h2>
+            5 bài gần nhất
+          </h2>
+
+          <p>
+            Các band đang được sử dụng để tính dự đoán.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="recent-grid"
+        id="recentGrid"
+      ></div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section class="section">
+
+      <div class="section-head">
+
+        <div>
+
+          <h2>
+            Lịch sử TEST
+          </h2>
+
+          <p id="historyCount"></p>
+
+        </div>
+
+      </div>
+
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Thời gian
+              </th>
+
+              <th>
+                Kỹ năng
+              </th>
+
+              <th>
+                Bài thi
+              </th>
+
+              <th>
+                Điểm
+              </th>
+
+              <th>
+                Band
+              </th>
+
+              <th>
+                Thời gian làm
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="historyBody"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="rule-note">
+
+        <b>Cách tính:</b>
+        Practice không được tính vào band dự đoán.
+        Reading và Listening được đổi từ raw score sang IELTS band trước,
+        sau đó lấy trung bình tối đa 5 bài TEST gần nhất của từng kỹ năng.
+        Predicted Overall chỉ được hiển thị khi đã có dữ liệu
+        Reading, Listening, Writing và Speaking.
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const PROFILE_KEY=
+'IELTS_PRACTICE_STUDENT';
+
+
+const AVATAR_KEY=
+'IELTS_STUDENT_AVATAR';
+
+
+const SKILLS=[
+  'Reading',
+  'Listening',
+  'Writing',
+  'Speaking'
+];
+
+
+const SKILL_ICONS={
+
+  Reading:'📖',
+
+  Listening:'🎧',
+
+  Writing:'✍️',
+
+  Speaking:'🎙️'
+
+};
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function readProfile(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        PROFILE_KEY
+      )
+      ||
+      'null'
+    );
+
+  }
+
+  catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function saveProfileAndLoad(){
+
+  const name=
+    profileName.value.trim();
+
+
+  const className=
+    profileClass.value.trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    profileError.textContent=
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    PROFILE_KEY,
+
+    JSON.stringify({
+
+      name:name,
+
+      className:className
+
+    })
+
+  );
+
+
+  profileOverlay.classList.add(
+    'hidden'
+  );
+
+
+  loadStats();
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function getInitials(){
+
+  const profile=
+    readProfile();
+
+
+  const name=
+    String(
+      profile?.name
+      ||
+      ''
+    )
+    .trim();
+
+
+  if(!name){
+
+    return 'HS';
+
+  }
+
+
+  const parts=
+    name
+    .split(/\s+/)
+    .filter(Boolean);
+
+
+  if(parts.length===1){
+
+    return parts[0]
+    .slice(0,2)
+    .toUpperCase();
+
+  }
+
+
+  return(
+    parts[parts.length-2][0]
+    +
+    parts[parts.length-1][0]
+  )
+  .toUpperCase();
+
+}
+
+
+function loadAvatar(){
+
+  const avatar=
+    localStorage.getItem(
+      AVATAR_KEY
+    );
+
+
+  const initials=
+    getInitials();
+
+
+  if(avatar){
+
+    studentAvatar.innerHTML=
+    `
+      <img
+        src="${avatar}"
+        alt="Ảnh đại diện học sinh"
+      >
+    `;
+
+
+    topAvatar.innerHTML=
+    `
+      <img
+        src="${avatar}"
+        alt=""
+      >
+    `;
+
+  }
+
+  else{
+
+    studentAvatar.textContent=
+    initials;
+
+
+    topAvatar.textContent=
+    initials;
+
+  }
+
+}
+
+
+function toggleAvatarMenu(event){
+
+  event.stopPropagation();
+
+
+  avatarMenu.classList.toggle(
+    'show'
+  );
+
+}
+
+
+function openAvatarPicker(event){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  avatarMenu.classList.remove(
+    'show'
+  );
+
+
+  avatarInput.click();
+
+}
+
+
+/* =========================================================
+   UPLOAD + RESIZE AVATAR
+========================================================= */
+
+function handleAvatarUpload(event){
+
+  const file=
+    event.target.files?.[0];
+
+
+  if(!file){
+
+    return;
+
+  }
+
+
+  if(
+    !file.type.startsWith(
+      'image/'
+    )
+  ){
+
+    alert(
+      'Vui lòng chọn một file ảnh.'
+    );
+
+    return;
+
+  }
+
+
+  const reader=
+    new FileReader();
+
+
+  reader.onload=
+  function(){
+
+    const image=
+      new Image();
+
+
+    image.onload=
+    function(){
+
+      /*
+       * Crop vuông từ giữa ảnh.
+       */
+
+      const sourceSize=
+        Math.min(
+          image.width,
+          image.height
+        );
+
+
+      const sx=
+        (
+          image.width
+          -
+          sourceSize
+        )
+        /
+        2;
+
+
+      const sy=
+        (
+          image.height
+          -
+          sourceSize
+        )
+        /
+        2;
+
+
+      /*
+       * Resize còn 320 × 320 để tránh
+       * ảnh quá nặng và đầy localStorage.
+       */
+
+      const canvas=
+        document.createElement(
+          'canvas'
+        );
+
+
+      canvas.width=
+        320;
+
+
+      canvas.height=
+        320;
+
+
+      const ctx=
+        canvas.getContext(
+          '2d'
+        );
+
+
+      ctx.drawImage(
+
+        image,
+
+        sx,
+        sy,
+
+        sourceSize,
+        sourceSize,
+
+        0,
+        0,
+
+        320,
+        320
+
+      );
+
+
+      /*
+       * JPEG quality 0.82 giúp ảnh nhẹ,
+       * vẫn đủ rõ để làm avatar.
+       */
+
+      const compressed=
+        canvas.toDataURL(
+          'image/jpeg',
+          .82
+        );
+
+
+      try{
+
+        localStorage.setItem(
+          AVATAR_KEY,
+          compressed
+        );
+
+
+        loadAvatar();
+
+      }
+
+      catch(error){
+
+        alert(
+          'Ảnh quá lớn để lưu. Hãy thử một ảnh khác.'
+        );
+
+      }
+
+    };
+
+
+    image.src=
+      reader.result;
+
+  };
+
+
+  reader.readAsDataURL(
+    file
+  );
+
+
+  /*
+   * Reset để có thể chọn lại cùng một ảnh.
+   */
+
+  event.target.value=
+  '';
+
+}
+
+
+/* =========================================================
+   REMOVE AVATAR
+========================================================= */
+
+function removeAvatar(event){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  localStorage.removeItem(
+    AVATAR_KEY
+  );
+
+
+  avatarMenu.classList.remove(
+    'show'
+  );
+
+
+  loadAvatar();
+
+}
+
+
+/* Close menu */
+
+document.addEventListener(
+
+  'click',
+
+  function(event){
+
+    if(
+      !avatarMenu.contains(
+        event.target
+      )
+      &&
+      !studentAvatar.contains(
+        event.target
+      )
+    ){
+
+      avatarMenu.classList.remove(
+        'show'
+      );
+
+    }
+
+  }
+
+);
+
+
+/* =========================================================
+   JSONP
+========================================================= */
+
+function jsonpRequest(url){
+
+  return new Promise(
+    function(resolve,reject){
+
+      const callbackName=
+        '__studentStats_'
+        +
+        Date.now()
+        +
+        '_'
+        +
+        Math.random()
+        .toString(36)
+        .slice(2);
+
+
+      const script=
+        document.createElement(
+          'script'
+        );
+
+
+      const timeout=
+        setTimeout(
+          function(){
+
+            cleanup();
+
+
+            reject(
+              new Error(
+                'Không nhận được phản hồi từ máy chủ.'
+              )
+            );
+
+          },
+
+          20000
+
+        );
+
+
+      function cleanup(){
+
+        clearTimeout(
+          timeout
+        );
+
+
+        delete window[
+          callbackName
+        ];
+
+
+        script.remove();
+
+      }
+
+
+      window[
+        callbackName
+      ]=
+      function(data){
+
+        cleanup();
+
+        resolve(data);
+
+      };
+
+
+      script.onerror=
+      function(){
+
+        cleanup();
+
+
+        reject(
+          new Error(
+            'Không kết nối được với máy chủ.'
+          )
+        );
+
+      };
+
+
+      const separator=
+        url.includes('?')
+        ?
+        '&'
+        :
+        '?';
+
+
+      script.src=
+        url
+        +
+        separator
+        +
+        'callback='
+        +
+        encodeURIComponent(
+          callbackName
+        );
+
+
+      document.body.appendChild(
+        script
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function loadStats(){
+
+  const profile=
+    readProfile();
+
+
+  if(
+    !profile?.name
+    ||
+    !profile?.className
+  ){
+
+    profileOverlay.classList.remove(
+      'hidden'
+    );
+
+
+    loadingBox.classList.add(
+      'hidden'
+    );
+
+
+    return;
+
+  }
+
+
+  topStudent.textContent=
+  `${profile.name} · ${profile.className}`;
+
+
+  studentNameDisplay.textContent=
+  profile.name;
+
+
+  studentClassDisplay.textContent=
+  `Lớp ${profile.className}`;
+
+
+  studentCard.style.display=
+  'flex';
+
+
+  loadAvatar();
+
+
+  loadingBox.classList.remove(
+    'hidden'
+  );
+
+
+  errorBox.classList.add(
+    'hidden'
+  );
+
+
+  statsContent.classList.add(
+    'hidden'
+  );
+
+
+  try{
+
+    const url=
+
+      ENDPOINT
+
+      +
+      '?mode=studentStats'
+
+      +
+      '&name='
+      +
+      encodeURIComponent(
+        profile.name
+      )
+
+      +
+      '&className='
+      +
+      encodeURIComponent(
+        profile.className
+      );
+
+
+    const data=
+      await jsonpRequest(
+        url
+      );
+
+
+    if(
+      !data
+      ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data?.error
+        ||
+        'Không lấy được dữ liệu.'
+      );
+
+    }
+
+
+    renderStats(
+      data
+    );
+
+
+    loadingBox.classList.add(
+      'hidden'
+    );
+
+
+    statsContent.classList.remove(
+      'hidden'
+    );
+
+  }
+
+  catch(error){
+
+    loadingBox.classList.add(
+      'hidden'
+    );
+
+
+    errorText.textContent=
+    error.message
+    ||
+    String(error);
+
+
+    errorBox.classList.remove(
+      'hidden'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderStats(data){
+
+  renderOverall(
+    data.summary
+  );
+
+
+  renderSkills(
+    data.summary
+  );
+
+
+  renderRecent(
+    data.summary
+  );
+
+
+  renderHistory(
+    data.history
+    ||
+    []
+  );
+
+}
+
+
+/* =========================================================
+   OVERALL
+========================================================= */
+
+function renderOverall(summary){
+
+  const overall=
+    summary?.Overall
+    ||
+    {};
+
+
+  if(
+    overall.ready
+    &&
+    validBand(
+      overall.predictedBand
+    )
+  ){
+
+    overallBand.textContent=
+    formatBand(
+      overall.predictedBand
+    );
+
+
+    overallTitle.textContent=
+    'Predicted IELTS Overall';
+
+
+    overallDescription.textContent=
+    'Được tính từ band dự đoán của đủ 4 kỹ năng Reading, Listening, Writing và Speaking.';
+
+  }
+
+  else{
+
+    overallBand.textContent=
+    '—';
+
+
+    overallTitle.textContent=
+    'Chưa đủ dữ liệu để tính Overall';
+
+
+    const missing=
+      overall.missingSkills
+      ||
+      [];
+
+
+    if(missing.length){
+
+      overallDescription.textContent=
+      'Còn thiếu kết quả TEST: '
+      +
+      missing.join(', ')
+      +
+      '.';
+
+    }
+
+    else{
+
+      overallDescription.textContent=
+      'Hãy hoàn thành thêm các bài TEST để hệ thống có đủ dữ liệu.';
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+function renderSkills(summary){
+
+  skillCards.innerHTML=
+  SKILLS.map(
+    function(skill){
+
+      const data=
+        summary?.[skill]
+        ||
+        {};
+
+
+      const predicted=
+        validBand(
+          data.predictedBand
+        )
+        ?
+        formatBand(
+          data.predictedBand
+        )
+        :
+        '—';
+
+
+      const latest=
+        validBand(
+          data.latestBand
+        )
+        ?
+        formatBand(
+          data.latestBand
+        )
+        :
+        '—';
+
+
+      const best=
+        validBand(
+          data.bestBand
+        )
+        ?
+        formatBand(
+          data.bestBand
+        )
+        :
+        '—';
+
+
+      let trend='—';
+
+      let trendClass='';
+
+
+      if(
+        typeof data.trend==='number'
+      ){
+
+        if(data.trend>0){
+
+          trend=
+            '▲ +'
+            +
+            data.trend.toFixed(1);
+
+
+          trendClass=
+            'trend-up';
+
+        }
+
+        else if(data.trend<0){
+
+          trend=
+            '▼ '
+            +
+            data.trend.toFixed(1);
+
+
+          trendClass=
+            'trend-down';
+
+        }
+
+        else{
+
+          trend=
+            '→ 0.0';
+
+        }
+
+      }
+
+
+      return`
+        <article class="skill">
+
+          <div class="skill-top">
+
+            <div class="skill-name">
+              ${skill}
+            </div>
+
+            <div class="skill-icon">
+              ${SKILL_ICONS[skill]}
+            </div>
+
+          </div>
+
+
+          <div class="band">
+            ${predicted}
+          </div>
+
+
+          <div class="band-label">
+            Predicted band
+          </div>
+
+
+          <div class="skill-meta">
+
+            <div>
+
+              <div class="meta-label">
+                Gần nhất
+              </div>
+
+              <div class="meta-value">
+                ${latest}
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <div class="meta-label">
+                Cao nhất
+              </div>
+
+              <div class="meta-value">
+                ${best}
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <div class="meta-label">
+                TEST đã làm
+              </div>
+
+              <div class="meta-value">
+                ${Number(data.totalAttempts||0)}
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <div class="meta-label">
+                Xu hướng
+              </div>
+
+              <div class="meta-value ${trendClass}">
+                ${trend}
+              </div>
+
+            </div>
+
+          </div>
+
+        </article>
+      `;
+
+    }
+  )
+  .join('');
+
+}
+
+
+/* =========================================================
+   RECENT
+========================================================= */
+
+function renderRecent(summary){
+
+  recentGrid.innerHTML=
+  SKILLS.map(
+    function(skill){
+
+      const recent=
+        summary?.[skill]?.recent
+        ||
+        [];
+
+
+      let content;
+
+
+      if(recent.length){
+
+        content=
+        `
+          <div class="chips">
+
+            ${recent.map(
+              function(item,index){
+
+                return`
+                  <span
+                    class="chip"
+                    title="${escapeHTML(item.title || item.testId || '')}"
+                  >
+                    #${index+1}
+                    ·
+                    ${formatBand(item.band)}
+                  </span>
+                `;
+
+              }
+            ).join('')}
+
+          </div>
+        `;
+
+      }
+
+      else{
+
+        content=
+        `
+          <div class="no-data">
+            Chưa có TEST.
+          </div>
+        `;
+
+      }
+
+
+      return`
+        <div class="recent-card">
+
+          <div class="recent-title">
+            ${SKILL_ICONS[skill]} ${skill}
+          </div>
+
+          ${content}
+
+        </div>
+      `;
+
+    }
+  )
+  .join('');
+
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function renderHistory(history){
+
+  historyCount.textContent=
+  `${history.length} lần TEST được ghi nhận`;
+
+
+  if(!history.length){
+
+    historyBody.innerHTML=
+    `
+      <tr>
+
+        <td
+          colspan="6"
+          style="
+            padding:30px;
+            text-align:center;
+            color:#9096a3
+          "
+        >
+          Chưa có kết quả TEST.
+        </td>
+
+      </tr>
+    `;
+
+
+    return;
+
+  }
+
+
+  historyBody.innerHTML=
+  history.map(
+    function(item){
+
+      let scoreText='—';
+
+
+      if(
+        item.score!==null
+        &&
+        item.score!==undefined
+        &&
+        item.total!==null
+        &&
+        item.total!==undefined
+      ){
+
+        scoreText=
+          `${item.score}/${item.total}`;
+
+
+        if(
+          item.percent!==null
+          &&
+          item.percent!==undefined
+        ){
+
+          scoreText+=
+            ` (${item.percent}%)`;
+
+        }
+
+      }
+
+
+      const title=
+        item.title
+        ||
+        item.testId
+        ||
+        'IELTS Test';
+
+
+      return`
+        <tr>
+
+          <td>
+            ${formatDate(item.timestamp)}
+          </td>
+
+          <td>
+
+            <span class="skill-pill">
+              ${escapeHTML(item.skill)}
+            </span>
+
+          </td>
+
+          <td>
+            ${escapeHTML(title)}
+          </td>
+
+          <td class="raw">
+            ${scoreText}
+          </td>
+
+          <td class="band-cell">
+            ${
+              validBand(item.band)
+              ?
+              formatBand(item.band)
+              :
+              '—'
+            }
+          </td>
+
+          <td class="muted">
+            ${formatDuration(item.duration)}
+          </td>
+
+        </tr>
+      `;
+
+    }
+  )
+  .join('');
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function validBand(value){
+
+  const n=
+    Number(value);
+
+
+  return(
+    Number.isFinite(n)
+    &&
+    n>=0
+    &&
+    n<=9
+  );
+
+}
+
+
+function formatBand(value){
+
+  if(!validBand(value)){
+
+    return '—';
+
+  }
+
+
+  return Number(value)
+  .toFixed(1);
+
+}
+
+
+function formatDuration(seconds){
+
+  seconds=
+    Number(seconds)
+    ||
+    0;
+
+
+  if(seconds<=0){
+
+    return '—';
+
+  }
+
+
+  const h=
+    Math.floor(
+      seconds/3600
+    );
+
+
+  const m=
+    Math.floor(
+      (seconds%3600)/60
+    );
+
+
+  const s=
+    Math.floor(
+      seconds%60
+    );
+
+
+  if(h){
+
+    return`${h}h ${m}m`;
+
+  }
+
+
+  if(m){
+
+    return`${m}m ${s}s`;
+
+  }
+
+
+  return`${s}s`;
+
+}
+
+
+function formatDate(value){
+
+  const date=
+    new Date(
+      value
+    );
+
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return '—';
+
+  }
+
+
+  return new Intl.DateTimeFormat(
+
+    'vi-VN',
+
+    {
+
+      day:'2-digit',
+
+      month:'2-digit',
+
+      year:'numeric',
+
+      hour:'2-digit',
+
+      minute:'2-digit'
+
+    }
+
+  )
+  .format(
+    date
+  );
+
+}
+
+
+function escapeHTML(value){
+
+  return String(
+    value
+    ??
+    ''
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    function(char){
+
+      return{
+
+        '&':'&amp;',
+
+        '<':'&lt;',
+
+        '>':'&gt;',
+
+        '"':'&quot;',
+
+        "'":'&#39;'
+
+      }[char];
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+(function init(){
+
+  const profile=
+    readProfile();
+
+
+  if(
+    profile?.name
+    &&
+    profile?.className
+  ){
+
+    loadStats();
+
+  }
+
+  else{
+
+    loadingBox.classList.add(
+      'hidden'
+    );
+
+
+    profileOverlay.classList.remove(
+      'hidden'
+    );
+
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
