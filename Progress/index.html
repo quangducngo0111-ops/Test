@@ -2,32 +2,24 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0"
->
-
-<meta
-  http-equiv="Cache-Control"
-  content="no-cache, no-store, must-revalidate"
->
-
-<title>Kết quả học tập</title>
+<title>IELTS Learning Portal</title>
 
 <style>
-
 :root{
   --purple:#281260;
   --purple2:#5135a6;
-  --blue:#2f6fdf;
+  --purple3:#7256cf;
   --ink:#202636;
-  --muted:#6f7890;
+  --muted:#737b8c;
   --line:#e4e7ef;
   --bg:#f5f7fb;
-  --good:#16845b;
-  --bad:#b83345;
-  --warn:#b06b12;
+  --blue:#2f6fdf;
+  --green:#16845b;
 }
 
 *{
@@ -53,16 +45,20 @@ body{
 
   background:
     radial-gradient(
-      circle at 8% 0%,
-      rgba(141,105,246,.10),
-      transparent 25%
+      circle at 5% 0%,
+      rgba(141,105,246,.12),
+      transparent 24%
     ),
     radial-gradient(
-      circle at 92% 4%,
-      rgba(93,169,255,.08),
+      circle at 95% 2%,
+      rgba(89,174,255,.10),
       transparent 22%
     ),
-    var(--bg);
+    linear-gradient(
+      180deg,
+      #faf9ff,
+      #f4f7fb
+    );
 }
 
 button,
@@ -74,39 +70,50 @@ button{
   cursor:pointer;
 }
 
+a{
+  color:inherit;
+}
 
-/* =========================
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.wrap{
+  width:
+    min(
+      1180px,
+      calc(100% - 24px)
+    );
+
+  margin:auto;
+}
+
+
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
 .top{
   position:sticky;
 
   top:0;
 
-  z-index:30;
+  z-index:50;
 
   background:
-    rgba(255,255,255,.94);
+    rgba(255,255,255,.93);
 
   backdrop-filter:
-    blur(12px);
+    blur(14px);
 
   border-bottom:
     1px solid
-    var(--line);
+    rgba(221,224,234,.9);
 }
 
-.topin{
-  width:
-    min(
-      1200px,
-      calc(100% - 22px)
-    );
-
-  min-height:64px;
-
-  margin:auto;
+.top-inner{
+  min-height:66px;
 
   display:flex;
 
@@ -115,30 +122,49 @@ button{
   justify-content:
     space-between;
 
-  gap:12px;
+  gap:14px;
 }
 
-.back{
-  color:#3b315e;
+.logo{
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
 
   text-decoration:none;
+}
 
-  border:
-    1px solid
-    var(--line);
+.logo-icon{
+  width:34px;
 
-  background:#fff;
+  height:34px;
+
+  display:grid;
+
+  place-items:center;
 
   border-radius:10px;
 
-  padding:8px 11px;
+  background:
+    linear-gradient(
+      145deg,
+      var(--purple),
+      var(--purple2)
+    );
 
-  font-size:11px;
+  color:#fff;
 
-  font-weight:900;
+  font-size:15px;
+
+  font-weight:950;
+
+  box-shadow:
+    0 5px 13px
+    rgba(40,18,96,.16);
 }
 
-.brand{
+.logo-text{
   color:#21164b;
 
   font-size:14px;
@@ -146,28 +172,48 @@ button{
   font-weight:950;
 }
 
-.student-top{
+.header-user{
   display:flex;
 
   align-items:center;
 
-  gap:8px;
-
-  color:var(--muted);
-
-  font-size:11px;
-
-  font-weight:850;
+  gap:9px;
 }
 
-.top-avatar{
-  width:30px;
+.header-user-copy{
+  text-align:right;
+}
 
-  height:30px;
+.header-name{
+  color:#3e3655;
 
-  border-radius:50%;
+  font-size:10.5px;
+
+  font-weight:950;
+}
+
+.header-class{
+  margin-top:2px;
+
+  color:#9399a6;
+
+  font-size:9px;
+}
+
+.header-avatar{
+  width:36px;
+
+  height:36px;
+
+  flex:0 0 36px;
+
+  display:grid;
+
+  place-items:center;
 
   overflow:hidden;
+
+  border-radius:50%;
 
   background:
     linear-gradient(
@@ -176,22 +222,20 @@ button{
       #dceaff
     );
 
-  display:grid;
-
-  place-items:center;
-
   color:#5135a6;
-
-  font-size:10px;
-
-  font-weight:950;
 
   border:
     1px solid
-    #ddd8ef;
+    #ddd8ee;
+
+  font-size:11px;
+
+  font-weight:950;
+
+  cursor:pointer;
 }
 
-.top-avatar img{
+.header-avatar img{
   width:100%;
 
   height:100%;
@@ -200,69 +244,91 @@ button{
 }
 
 
-/* =========================
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
-.page{
-  width:
-    min(
-      1200px,
-      calc(100% - 22px)
-    );
-
-  margin:auto;
-
+main{
   padding:
-    25px 0 60px;
+    28px 0 60px;
 }
 
 
-/* =========================
+/* =========================================================
    HERO
-========================= */
+========================================================= */
 
 .hero{
   position:relative;
 
   overflow:hidden;
 
-  padding:25px;
+  min-height:265px;
 
-  border-radius:22px;
+  display:grid;
+
+  grid-template-columns:
+    1.15fr .85fr;
+
+  align-items:center;
+
+  gap:28px;
+
+  padding:
+    34px 38px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.95);
+
+  border-radius:26px;
 
   background:
     linear-gradient(
       120deg,
-      #fff,
-      #f8f5ff 58%,
-      #eef7ff
+      #ffffff 0%,
+      #f9f5ff 55%,
+      #eef7ff 100%
     );
 
   box-shadow:
-    0 9px 25px
-    rgba(35,25,75,.05);
+    0 15px 35px
+    rgba(35,25,75,.055);
 }
 
-.hero::after{
-  content:"📊";
+.hero::before{
+  content:"";
 
   position:absolute;
 
-  right:28px;
+  width:250px;
 
-  top:50%;
+  height:250px;
 
-  transform:
-    translateY(-50%);
+  border-radius:50%;
 
-  font-size:75px;
+  right:-70px;
 
-  opacity:.07;
+  top:-90px;
+
+  background:
+    rgba(116,88,207,.07);
+}
+
+.hero-copy{
+  position:relative;
+
+  z-index:2;
 }
 
 .eyebrow{
-  color:#6a4db4;
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  color:#694db4;
 
   font-size:10px;
 
@@ -275,38 +341,164 @@ button{
 
 .hero h1{
   margin:
-    7px 0 6px;
+    10px 0 9px;
+
+  max-width:630px;
 
   color:#21164b;
 
   font-size:
     clamp(
-      28px,
-      4vw,
-      38px
+      31px,
+      4.3vw,
+      47px
     );
 
-  letter-spacing:-.04em;
+  line-height:1.06;
+
+  letter-spacing:-.045em;
+}
+
+.hero h1 span{
+  color:#6548bd;
 }
 
 .hero p{
-  margin:0;
+  max-width:620px;
 
-  max-width:670px;
+  margin:0;
 
   color:var(--muted);
 
-  font-size:11.5px;
+  font-size:12px;
 
-  line-height:1.65;
+  line-height:1.75;
+}
+
+.hero-actions{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:8px;
+
+  margin-top:18px;
+}
+
+.hero-btn{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  padding:
+    10px 14px;
+
+  border-radius:10px;
+
+  text-decoration:none;
+
+  font-size:10.5px;
+
+  font-weight:950;
+
+  transition:.15s ease;
+}
+
+.hero-btn.primary{
+  background:
+    linear-gradient(
+      100deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  color:#fff;
+
+  box-shadow:
+    0 7px 17px
+    rgba(40,18,96,.16);
+}
+
+.hero-btn.secondary{
+  background:#fff;
+
+  color:#4e397e;
+
+  border:
+    1px solid
+    #ded8f2;
+}
+
+.hero-btn:hover{
+  transform:
+    translateY(-1px);
 }
 
 
-/* =========================
-   STUDENT CARD
-========================= */
+/* HERO IMAGE */
 
-.student-card{
+.hero-visual{
+  position:relative;
+
+  min-height:210px;
+
+  display:flex;
+
+  align-items:flex-end;
+
+  justify-content:center;
+}
+
+.hero-visual::before{
+  content:"";
+
+  position:absolute;
+
+  width:220px;
+
+  height:220px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(119,92,207,.12),
+      rgba(119,92,207,.02) 65%,
+      transparent 66%
+    );
+}
+
+.hero-character{
+  position:relative;
+
+  z-index:2;
+
+  max-width:245px;
+
+  max-height:225px;
+
+  object-fit:contain;
+
+  object-position:center bottom;
+
+  filter:
+    drop-shadow(
+      0 15px 15px
+      rgba(40,18,96,.10)
+    );
+}
+
+
+/* =========================================================
+   STUDENT PROFILE STRIP
+========================================================= */
+
+.profile-strip{
+  margin-top:14px;
+
   display:flex;
 
   align-items:center;
@@ -314,11 +506,9 @@ button{
   justify-content:
     space-between;
 
-  gap:16px;
+  gap:15px;
 
-  margin-top:14px;
-
-  padding:16px;
+  padding:14px 16px;
 
   border:
     1px solid
@@ -326,47 +516,36 @@ button{
 
   border-radius:16px;
 
-  background:#fff;
+  background:
+    rgba(255,255,255,.92);
 }
 
-.student-profile{
+.profile-main{
   display:flex;
 
   align-items:center;
 
-  gap:14px;
+  gap:12px;
 
   min-width:0;
 }
 
-
-/* =========================
-   AVATAR
-========================= */
-
-.avatar-wrap{
+.profile-avatar{
   position:relative;
 
-  flex:
-    0 0 72px;
+  width:52px;
 
-  width:72px;
+  height:52px;
 
-  height:72px;
-}
-
-.avatar{
-  width:72px;
-
-  height:72px;
-
-  border-radius:50%;
-
-  overflow:hidden;
+  flex:0 0 52px;
 
   display:grid;
 
   place-items:center;
+
+  overflow:hidden;
+
+  border-radius:50%;
 
   background:
     linear-gradient(
@@ -375,25 +554,22 @@ button{
       #dceaff
     );
 
+  color:#5135a6;
+
   border:
     2px solid #fff;
 
   box-shadow:
-    0 0 0 1px #ded9ee,
-    0 5px 14px rgba(40,18,96,.10);
+    0 0 0 1px #ded9ee;
 
-  color:#5135a6;
-
-  font-size:20px;
+  font-size:15px;
 
   font-weight:950;
 
   cursor:pointer;
-
-  user-select:none;
 }
 
-.avatar img{
+.profile-avatar img{
   width:100%;
 
   height:100%;
@@ -401,110 +577,14 @@ button{
   object-fit:cover;
 }
 
-.avatar-edit{
-  position:absolute;
-
-  right:-1px;
-
-  bottom:1px;
-
-  width:25px;
-
-  height:25px;
-
-  border:2px solid #fff;
-
-  border-radius:50%;
-
-  background:#281260;
-
-  color:#fff;
-
-  display:grid;
-
-  place-items:center;
-
-  font-size:10px;
-
-  cursor:pointer;
-
-  box-shadow:
-    0 3px 8px
-    rgba(30,20,70,.20);
-}
-
-.avatar-input{
-  display:none;
-}
-
-.avatar-menu{
-  position:absolute;
-
-  left:0;
-
-  top:80px;
-
-  z-index:20;
-
-  width:150px;
-
-  padding:5px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:10px;
-
-  background:#fff;
-
-  box-shadow:
-    0 12px 28px
-    rgba(30,20,70,.14);
-
-  display:none;
-}
-
-.avatar-menu.show{
-  display:block;
-}
-
-.avatar-menu button{
-  width:100%;
-
-  border:0;
-
-  border-radius:7px;
-
-  background:#fff;
-
-  padding:8px 9px;
-
-  text-align:left;
-
-  color:#3f3757;
-
-  font-size:10px;
-
-  font-weight:850;
-}
-
-.avatar-menu button:hover{
-  background:#f6f4ff;
-}
-
-.avatar-menu button.remove{
-  color:#b83345;
-}
-
-
-.student-info{
+.profile-text{
   min-width:0;
 }
 
-.student-name{
+.profile-name{
   color:#21164b;
 
-  font-size:15px;
+  font-size:13px;
 
   font-weight:950;
 
@@ -515,59 +595,40 @@ button{
   text-overflow:ellipsis;
 }
 
-.student-class{
+.profile-desc{
   margin-top:3px;
 
-  color:var(--muted);
+  color:#838a99;
 
-  font-size:10.5px;
+  font-size:9.8px;
 }
 
-.avatar-hint{
-  margin-top:5px;
-
-  color:#949aa7;
-
-  font-size:9px;
-}
-
-.student-actions{
-  display:flex;
-
-  align-items:center;
-
-  gap:7px;
-}
-
-.refresh{
+.edit-profile{
   border:
     1px solid
-    #d8d3ec;
-
-  border-radius:9px;
+    #ddd8ee;
 
   background:#fff;
 
-  color:#4b318e;
+  color:#553e91;
 
-  padding:8px 11px;
+  border-radius:9px;
 
-  font-size:10px;
+  padding:
+    8px 10px;
+
+  font-size:9.5px;
 
   font-weight:900;
 }
 
-.refresh:hover{
-  background:#f8f5ff;
-}
 
-
-/* =========================
+/* =========================================================
    SECTION
-========================= */
+========================================================= */
 
 .section{
-  margin-top:22px;
+  margin-top:27px;
 }
 
 .section-head{
@@ -578,9 +639,9 @@ button{
   justify-content:
     space-between;
 
-  gap:10px;
+  gap:12px;
 
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
 .section-head h2{
@@ -588,133 +649,187 @@ button{
 
   color:#21164b;
 
-  font-size:18px;
+  font-size:21px;
+
+  letter-spacing:-.025em;
 }
 
 .section-head p{
   margin:
-    3px 0 0;
+    4px 0 0;
 
-  color:var(--muted);
-
-  font-size:10.5px;
-}
-
-
-/* =========================
-   OVERALL
-========================= */
-
-.overall{
-  position:relative;
-
-  overflow:hidden;
-
-  display:grid;
-
-  grid-template-columns:
-    auto 1fr;
-
-  align-items:center;
-
-  gap:18px;
-
-  padding:20px;
-
-  border-radius:17px;
-
-  background:
-    linear-gradient(
-      120deg,
-      #281260,
-      #5135a6
-    );
-
-  color:#fff;
-
-  box-shadow:
-    0 13px 30px
-    rgba(40,18,96,.18);
-}
-
-.overall-band{
-  min-width:110px;
-
-  font-size:48px;
-
-  line-height:1;
-
-  font-weight:950;
-
-  text-align:center;
-}
-
-.overall-label{
-  font-size:10px;
-
-  font-weight:900;
-
-  text-transform:uppercase;
-
-  letter-spacing:.1em;
-
-  opacity:.7;
-}
-
-.overall-copy b{
-  display:block;
-
-  margin-bottom:5px;
-
-  font-size:15px;
-}
-
-.overall-copy span{
-  display:block;
-
-  max-width:650px;
+  color:#818898;
 
   font-size:10.5px;
-
-  line-height:1.6;
-
-  opacity:.82;
 }
 
 
-/* =========================
-   SKILLS
-========================= */
+/* =========================================================
+   MAIN FEATURE CARDS
+========================================================= */
 
-.skills{
+.feature-grid{
   display:grid;
 
   grid-template-columns:
     repeat(
-      4,
+      3,
       minmax(0,1fr)
     );
 
-  gap:10px;
+  gap:11px;
 }
 
-.skill{
-  padding:15px;
+.feature{
+  position:relative;
+
+  overflow:hidden;
+
+  min-height:155px;
+
+  padding:17px;
 
   border:
     1px solid
     var(--line);
 
-  border-radius:15px;
+  border-radius:18px;
 
   background:#fff;
 
+  text-decoration:none;
+
   box-shadow:
-    0 4px 12px
-    rgba(35,25,75,.025);
+    0 5px 16px
+    rgba(35,25,75,.028);
+
+  transition:
+    transform .17s ease,
+    box-shadow .17s ease,
+    border-color .17s ease;
 }
 
-.skill-top{
+.feature:hover{
+  transform:
+    translateY(-3px);
+
+  border-color:#cec3f3;
+
+  box-shadow:
+    0 13px 28px
+    rgba(35,25,75,.075);
+}
+
+.feature::after{
+  content:"";
+
+  position:absolute;
+
+  width:90px;
+
+  height:90px;
+
+  border-radius:50%;
+
+  right:-28px;
+
+  bottom:-32px;
+
+  background:
+    rgba(100,72,189,.055);
+}
+
+.feature.highlight{
+  color:#fff;
+
+  border-color:transparent;
+
+  background:
+    linear-gradient(
+      125deg,
+      #281260,
+      #5135a6
+    );
+
+  box-shadow:
+    0 10px 25px
+    rgba(40,18,96,.18);
+}
+
+.feature.highlight::after{
+  background:
+    rgba(255,255,255,.08);
+}
+
+.feature.highlight .feature-title,
+.feature.highlight .feature-desc,
+.feature.highlight .feature-count,
+.feature.highlight .feature-arrow{
+  color:#fff;
+}
+
+.feature.highlight .feature-desc,
+.feature.highlight .feature-count{
+  opacity:.76;
+}
+
+.feature-icon{
+  width:43px;
+
+  height:43px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eee9ff,
+      #e8f2ff
+    );
+
+  font-size:20px;
+}
+
+.feature.highlight .feature-icon{
+  background:
+    rgba(255,255,255,.14);
+}
+
+.feature-title{
+  margin-top:13px;
+
+  color:#21164b;
+
+  font-size:14px;
+
+  font-weight:950;
+}
+
+.feature-desc{
+  margin-top:5px;
+
+  max-width:90%;
+
+  color:#7d8493;
+
+  font-size:9.8px;
+
+  line-height:1.55;
+}
+
+.feature-bottom{
+  position:absolute;
+
+  left:17px;
+
+  right:17px;
+
+  bottom:15px;
+
   display:flex;
 
   align-items:center;
@@ -722,163 +837,107 @@ button{
   justify-content:
     space-between;
 
-  gap:8px;
+  gap:10px;
 }
 
-.skill-name{
-  color:#3c3457;
-
-  font-size:11px;
-
-  font-weight:950;
-}
-
-.skill-icon{
-  font-size:17px;
-}
-
-.band{
-  margin:
-    9px 0 3px;
-
-  color:#21164b;
-
-  font-size:33px;
-
-  line-height:1;
-
-  font-weight:950;
-}
-
-.band-label{
-  color:#7a8191;
+.feature-count{
+  color:#8d94a2;
 
   font-size:9px;
 
   font-weight:850;
 }
 
-.skill-meta{
-  margin-top:12px;
+.feature-arrow{
+  color:#795ec5;
 
-  padding-top:10px;
+  font-size:17px;
 
-  border-top:
-    1px solid
-    #eef0f4;
+  font-weight:950;
+}
 
-  display:grid;
+.feature.disabled{
+  cursor:default;
 
-  grid-template-columns:
-    1fr 1fr;
+  opacity:.65;
+}
+
+.feature.disabled:hover{
+  transform:none;
+
+  border-color:var(--line);
+
+  box-shadow:
+    0 5px 16px
+    rgba(35,25,75,.028);
+}
+
+
+/* =========================================================
+   TEST LIST
+========================================================= */
+
+.test-toolbar{
+  display:flex;
+
+  align-items:center;
 
   gap:7px;
+
+  flex-wrap:wrap;
 }
 
-.meta-label{
-  color:#9096a3;
+.filter-btn{
+  border:
+    1px solid
+    #dde0e8;
 
-  font-size:8.5px;
-}
+  background:#fff;
 
-.meta-value{
-  margin-top:2px;
+  color:#747b89;
 
-  color:#444b5b;
+  border-radius:999px;
 
-  font-size:10.5px;
+  padding:
+    6px 9px;
+
+  font-size:9px;
 
   font-weight:900;
 }
 
-.trend-up{
-  color:var(--good);
+.filter-btn.active{
+  color:#fff;
+
+  background:#5135a6;
+
+  border-color:#5135a6;
 }
 
-.trend-down{
-  color:var(--bad);
-}
-
-
-/* =========================
-   RECENT
-========================= */
-
-.recent-grid{
+.tests{
   display:grid;
 
   grid-template-columns:
     repeat(
-      4,
+      3,
       minmax(0,1fr)
     );
 
-  gap:10px;
+  gap:9px;
 }
 
-.recent-card{
-  padding:14px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:14px;
-
-  background:#fff;
-}
-
-.recent-title{
-  margin-bottom:9px;
-
-  color:#21164b;
-
-  font-size:11px;
-
-  font-weight:950;
-}
-
-.chips{
+.test-card{
   display:flex;
-
-  flex-wrap:wrap;
-
-  gap:5px;
-}
-
-.chip{
-  display:inline-flex;
 
   align-items:center;
 
-  gap:4px;
+  gap:11px;
 
-  padding:5px 7px;
+  min-height:75px;
 
-  border-radius:999px;
+  padding:11px;
 
-  background:#f2efff;
-
-  color:#5135a6;
-
-  font-size:9px;
-
-  font-weight:900;
-}
-
-.no-data{
-  color:#989eaa;
-
-  font-size:10px;
-}
-
-
-/* =========================
-   HISTORY
-========================= */
-
-.table-wrap{
-  overflow:auto;
+  text-decoration:none;
 
   border:
     1px solid
@@ -887,204 +946,103 @@ button{
   border-radius:14px;
 
   background:#fff;
+
+  transition:.15s ease;
 }
 
-table{
-  width:100%;
+.test-card:hover{
+  transform:
+    translateY(-2px);
 
-  min-width:780px;
+  border-color:#cec3f3;
 
-  border-collapse:collapse;
+  box-shadow:
+    0 8px 18px
+    rgba(35,25,75,.055);
 }
 
-th,
-td{
-  padding:
-    10px 12px;
+.test-number{
+  width:43px;
 
-  text-align:left;
+  height:43px;
 
-  border-bottom:
-    1px solid
-    #eceef3;
+  flex:0 0 43px;
 
-  font-size:10px;
-}
+  display:grid;
 
-th{
-  background:#fafaff;
+  place-items:center;
 
-  color:#625979;
+  border-radius:11px;
 
-  font-size:9px;
+  background:
+    #f1edff;
 
-  text-transform:uppercase;
+  color:#5940a3;
 
-  letter-spacing:.04em;
+  font-size:11px;
 
   font-weight:950;
 }
 
-tbody tr:last-child td{
-  border-bottom:0;
+.test-copy{
+  flex:1;
+
+  min-width:0;
 }
 
-tbody tr:hover{
-  background:#fafbff;
-}
+.test-copy b{
+  display:block;
 
-.skill-pill{
-  display:inline-block;
+  color:#30284b;
 
-  padding:4px 7px;
-
-  border-radius:999px;
-
-  background:#f2efff;
-
-  color:#5135a6;
-
-  font-size:9px;
-
-  font-weight:900;
-}
-
-.band-cell{
-  color:#21164b;
-
-  font-size:12px;
+  font-size:10.7px;
 
   font-weight:950;
 }
 
-.raw{
-  color:#4f5667;
+.test-copy span{
+  display:block;
 
-  font-weight:850;
+  margin-top:3px;
+
+  color:#8a909e;
+
+  font-size:8.8px;
 }
 
-.muted{
-  color:#949aa7;
+.test-arrow{
+  color:#9fa4af;
+
+  font-size:15px;
+
+  font-weight:950;
 }
 
+.empty{
+  grid-column:
+    1 / -1;
 
-/* =========================
-   RULE NOTE
-========================= */
-
-.rule-note{
-  margin-top:13px;
-
-  padding:11px 13px;
-
-  border:
-    1px solid
-    #e2ddf5;
-
-  border-radius:10px;
-
-  background:#faf9ff;
-
-  color:#736b88;
-
-  font-size:9.8px;
-
-  line-height:1.6;
-}
-
-
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-  margin-top:20px;
-
-  padding:40px 20px;
+  padding:28px;
 
   border:
     1px dashed
-    #d6dae4;
+    #d9dce5;
 
-  border-radius:15px;
-
-  background:#fff;
-
-  text-align:center;
-
-  color:#777e8e;
-
-  font-size:11px;
-}
-
-.spinner{
-  width:30px;
-
-  height:30px;
-
-  margin:
-    0 auto 10px;
-
-  border:
-    3px solid
-    #e6e2f5;
-
-  border-top-color:#5135a6;
-
-  border-radius:50%;
-
-  animation:
-    spin .8s linear infinite;
-}
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-
-/* =========================
-   MESSAGE
-========================= */
-
-.message{
-  margin-top:20px;
-
-  padding:30px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:15px;
+  border-radius:14px;
 
   background:#fff;
 
   text-align:center;
-}
 
-.message h3{
-  margin:
-    0 0 6px;
-
-  color:#21164b;
-}
-
-.message p{
-  margin:0;
-
-  color:#747b8b;
+  color:#8b919f;
 
   font-size:10.5px;
-
-  line-height:1.6;
 }
 
 
-/* =========================
-   LOGIN
-========================= */
+/* =========================================================
+   PROFILE MODAL
+========================================================= */
 
 .overlay{
   position:fixed;
@@ -1100,55 +1058,63 @@ tbody tr:hover{
   padding:18px;
 
   background:
-    rgba(16,12,40,.62);
+    rgba(18,12,45,.63);
 }
 
 .hidden{
   display:none !important;
 }
 
-.login{
+.modal{
   width:
     min(
-      450px,
+      440px,
       100%
     );
 
-  padding:22px;
+  padding:23px;
 
-  border-radius:18px;
+  border-radius:19px;
 
   background:#fff;
 
   box-shadow:
-    0 24px 70px
-    rgba(18,10,53,.28);
+    0 25px 70px
+    rgba(18,10,53,.30);
 }
 
-.login h2{
+.modal-title{
   margin:
-    5px 0 7px;
+    5px 0 6px;
 
   color:#21164b;
+
+  font-size:21px;
+
+  font-weight:950;
 }
 
-.login p{
+.modal-desc{
   margin:
-    0 0 14px;
+    0 0 15px;
 
-  color:#747b8b;
+  color:#818897;
 
   font-size:10.5px;
+
+  line-height:1.5;
 }
 
 .field{
-  margin:9px 0;
+  margin-top:10px;
 }
 
 .field label{
   display:block;
 
   margin-bottom:5px;
+
+  color:#444a59;
 
   font-size:10px;
 
@@ -1158,8 +1124,6 @@ tbody tr:hover{
 .field input{
   width:100%;
 
-  padding:10px;
-
   border:
     1px solid
     #d5d9e2;
@@ -1167,27 +1131,52 @@ tbody tr:hover{
   border-radius:9px;
 
   outline:none;
+
+  padding:10px;
 }
 
 .field input:focus{
-  border-color:#745ec7;
+  border-color:#755ec7;
 
   box-shadow:
     0 0 0 3px
     rgba(81,53,166,.08);
 }
 
-.login-btn{
-  width:100%;
+.modal-buttons{
+  display:grid;
 
-  margin-top:10px;
+  grid-template-columns:
+    1fr 1fr;
 
-  padding:10px;
+  gap:7px;
 
+  margin-top:14px;
+}
+
+.modal-btn{
   border:0;
 
   border-radius:9px;
 
+  padding:10px;
+
+  font-size:10px;
+
+  font-weight:950;
+}
+
+.modal-btn.cancel{
+  border:
+    1px solid
+    #dde0e8;
+
+  background:#fff;
+
+  color:#616877;
+}
+
+.modal-btn.save{
   background:
     linear-gradient(
       100deg,
@@ -1196,58 +1185,82 @@ tbody tr:hover{
     );
 
   color:#fff;
+}
 
-  font-weight:900;
+.modal-error{
+  margin-top:7px;
+
+  color:#b83345;
+
+  font-size:9.5px;
 }
 
 
-/* =========================
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media(max-width:900px){
 
-  .skills,
-  .recent-grid{
+  .hero{
+    grid-template-columns:1fr;
+
+    padding:
+      28px 25px 0;
+  }
+
+  .hero-visual{
+    min-height:170px;
+  }
+
+  .hero-character{
+    max-height:180px;
+  }
+
+  .feature-grid,
+  .tests{
     grid-template-columns:
       repeat(
         2,
-        1fr
+        minmax(0,1fr)
       );
   }
 
 }
 
 
-@media(max-width:600px){
+@media(max-width:610px){
 
-  .student-top{
+  .header-user-copy{
     display:none;
   }
 
-  .skills,
-  .recent-grid{
+  .hero{
+    padding:
+      24px 20px 0;
+  }
+
+  .hero h1{
+    font-size:32px;
+  }
+
+  .feature-grid,
+  .tests{
     grid-template-columns:1fr;
   }
 
-  .overall{
-    grid-template-columns:1fr;
-
-    text-align:center;
-  }
-
-  .student-card{
+  .profile-strip{
     align-items:flex-start;
+  }
 
+  .section-head{
     flex-direction:column;
+
+    align-items:flex-start;
   }
 
-  .student-actions{
-    width:100%;
-  }
-
-  .refresh{
-    width:100%;
+  .feature{
+    min-height:145px;
   }
 
 }
@@ -1255,30 +1268,549 @@ tbody tr:hover{
 </style>
 </head>
 
+
 <body>
 
 
-<!-- =========================
-     PROFILE LOGIN
-========================= -->
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
+<header class="top">
+
+  <div class="wrap top-inner">
+
+    <a
+      class="logo"
+      href="./"
+    >
+
+      <div class="logo-icon">
+        S
+      </div>
+
+      <div class="logo-text">
+        IELTS Learning
+      </div>
+
+    </a>
+
+
+    <div class="header-user">
+
+      <div class="header-user-copy">
+
+        <div
+          class="header-name"
+          id="headerName"
+        >
+          Học sinh
+        </div>
+
+        <div
+          class="header-class"
+          id="headerClass"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="header-avatar"
+        id="headerAvatar"
+        onclick="openAvatarPicker()"
+        title="Đổi ảnh đại diện"
+      >
+        HS
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
+
+<main>
+
+<div class="wrap">
+
+
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
+
+  <section class="hero">
+
+    <div class="hero-copy">
+
+      <div class="eyebrow">
+        ✨ IELTS Learning Portal
+      </div>
+
+
+      <h1>
+        Xin chào,
+        <span id="heroName">
+          bạn!
+        </span>
+      </h1>
+
+
+      <p>
+        Luyện tập, làm bài TEST và theo dõi tiến độ IELTS
+        của em tại một nơi.
+      </p>
+
+
+      <div class="hero-actions">
+
+        <a
+          class="hero-btn primary"
+          href="./Practice/"
+        >
+          ✏️ Bắt đầu luyện tập
+        </a>
+
+
+        <a
+          class="hero-btn secondary"
+          href="./Progress/"
+        >
+          📊 Xem tiến độ
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="hero-visual">
+
+      <img
+        class="hero-character"
+        src="./4FXyF.jpg"
+        alt=""
+      >
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PROFILE
+  ====================================================== -->
+
+  <section class="profile-strip">
+
+    <div class="profile-main">
+
+      <div
+        class="profile-avatar"
+        id="profileAvatar"
+        onclick="openAvatarPicker()"
+        title="Nhấn để đổi ảnh đại diện"
+      >
+        HS
+      </div>
+
+
+      <div class="profile-text">
+
+        <div
+          class="profile-name"
+          id="profileNameDisplay"
+        >
+          Học sinh
+        </div>
+
+        <div
+          class="profile-desc"
+          id="profileClassDisplay"
+        >
+          Hồ sơ học tập
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="edit-profile"
+      onclick="openProfileModal()"
+    >
+      ✎ Chỉnh sửa hồ sơ
+    </button>
+
+  </section>
+
+
+  <!-- =====================================================
+       FEATURES
+  ====================================================== -->
+
+  <section class="section">
+
+    <div class="section-head">
+
+      <div>
+
+        <h2>
+          Học tập của em
+        </h2>
+
+        <p>
+          Chọn nội dung muốn tiếp tục.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+
+      <!-- PROGRESS -->
+
+      <a
+        class="feature highlight"
+        href="./Progress/"
+      >
+
+        <div class="feature-icon">
+          📊
+        </div>
+
+        <div class="feature-title">
+          Tiến độ học tập
+        </div>
+
+        <div class="feature-desc">
+          Xem kết quả TEST, lịch sử làm bài và band IELTS dự đoán.
+        </div>
+
+        <div class="feature-bottom">
+
+          <div class="feature-count">
+            Kết quả của em
+          </div>
+
+          <div class="feature-arrow">
+            →
+          </div>
+
+        </div>
+
+      </a>
+
+
+      <!-- PRACTICE -->
+
+      <a
+        class="feature"
+        href="./Practice/"
+      >
+
+        <div class="feature-icon">
+          ✏️
+        </div>
+
+        <div class="feature-title">
+          Practice
+        </div>
+
+        <div class="feature-desc">
+          Luyện từng dạng bài Reading, Listening và Writing.
+        </div>
+
+        <div class="feature-bottom">
+
+          <div class="feature-count">
+            Luyện tập tự do
+          </div>
+
+          <div class="feature-arrow">
+            →
+          </div>
+
+        </div>
+
+      </a>
+
+
+      <!-- LISTENING -->
+
+      <a
+        class="feature"
+        href="#tests"
+        onclick="
+          event.preventDefault();
+          setFilter('Listening');
+          scrollToTests();
+        "
+      >
+
+        <div class="feature-icon">
+          🎧
+        </div>
+
+        <div class="feature-title">
+          Listening
+        </div>
+
+        <div class="feature-desc">
+          Làm bài Listening TEST và theo dõi kết quả theo từng lần thi.
+        </div>
+
+        <div class="feature-bottom">
+
+          <div
+            class="feature-count"
+            id="listeningCount"
+          >
+            Đang tải...
+          </div>
+
+          <div class="feature-arrow">
+            →
+          </div>
+
+        </div>
+
+      </a>
+
+
+      <!-- READING -->
+
+      <a
+        class="feature"
+        href="#tests"
+        onclick="
+          event.preventDefault();
+          setFilter('Reading');
+          scrollToTests();
+        "
+      >
+
+        <div class="feature-icon">
+          📖
+        </div>
+
+        <div class="feature-title">
+          Reading
+        </div>
+
+        <div class="feature-desc">
+          Làm bài Reading TEST và kiểm tra band quy đổi từ raw score.
+        </div>
+
+        <div class="feature-bottom">
+
+          <div
+            class="feature-count"
+            id="readingCount"
+          >
+            Đang tải...
+          </div>
+
+          <div class="feature-arrow">
+            →
+          </div>
+
+        </div>
+
+      </a>
+
+
+      <!-- WRITING -->
+
+      <a
+        class="feature"
+        href="#tests"
+        onclick="
+          event.preventDefault();
+          setFilter('Writing');
+          scrollToTests();
+        "
+      >
+
+        <div class="feature-icon">
+          ✍️
+        </div>
+
+        <div class="feature-title">
+          Writing
+        </div>
+
+        <div class="feature-desc">
+          Làm bài Writing TEST và nhận kết quả chấm khi bài đã hoàn tất.
+        </div>
+
+        <div class="feature-bottom">
+
+          <div
+            class="feature-count"
+            id="writingCount"
+          >
+            Đang tải...
+          </div>
+
+          <div class="feature-arrow">
+            →
+          </div>
+
+        </div>
+
+      </a>
+
+
+      <!-- SPEAKING -->
+
+      <div class="feature disabled">
+
+        <div class="feature-icon">
+          🎙️
+        </div>
+
+        <div class="feature-title">
+          Speaking
+        </div>
+
+        <div class="feature-desc">
+          Khu vực luyện và TEST Speaking đang được chuẩn bị.
+        </div>
+
+        <div class="feature-bottom">
+
+          <div class="feature-count">
+            Sắp có
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       TESTS
+  ====================================================== -->
+
+  <section
+    class="section"
+    id="tests"
+  >
+
+    <div class="section-head">
+
+      <div>
+
+        <h2>
+          Các bài TEST
+        </h2>
+
+        <p>
+          Chọn kỹ năng và bài thi muốn làm.
+        </p>
+
+      </div>
+
+
+      <div class="test-toolbar">
+
+        <button
+          class="filter-btn active"
+          data-filter="All"
+          onclick="setFilter('All')"
+        >
+          Tất cả
+        </button>
+
+
+        <button
+          class="filter-btn"
+          data-filter="Listening"
+          onclick="setFilter('Listening')"
+        >
+          Listening
+        </button>
+
+
+        <button
+          class="filter-btn"
+          data-filter="Reading"
+          onclick="setFilter('Reading')"
+        >
+          Reading
+        </button>
+
+
+        <button
+          class="filter-btn"
+          data-filter="Writing"
+          onclick="setFilter('Writing')"
+        >
+          Writing
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="tests"
+      id="testGrid"
+    >
+
+      <div class="empty">
+        Đang tải danh sách bài TEST...
+      </div>
+
+    </div>
+
+  </section>
+
+
+</div>
+
+</main>
+
+
+<!-- =======================================================
+     PROFILE MODAL
+======================================================= -->
 
 <div
   class="overlay hidden"
-  id="profileOverlay"
+  id="profileModal"
 >
 
-  <div class="login">
+  <div class="modal">
 
     <div class="eyebrow">
       STUDENT PROFILE
     </div>
 
-    <h2>
-      Xem kết quả học tập
-    </h2>
 
-    <p>
-      Nhập đúng Họ tên và Lớp đã sử dụng khi làm bài TEST.
+    <div class="modal-title">
+      Hồ sơ học sinh
+    </div>
+
+
+    <p class="modal-desc">
+      Họ tên và Lớp này được dùng để liên kết kết quả TEST
+      và trang Tiến độ học tập.
     </p>
 
 
@@ -1289,7 +1821,7 @@ tbody tr:hover{
       </label>
 
       <input
-        id="profileName"
+        id="studentNameInput"
         placeholder="Nguyễn Văn A"
       >
 
@@ -1303,431 +1835,55 @@ tbody tr:hover{
       </label>
 
       <input
-        id="profileClass"
+        id="studentClassInput"
         placeholder="11A1"
       >
 
     </div>
 
 
-    <button
-      class="login-btn"
-      onclick="saveProfileAndLoad()"
-    >
-      Xem kết quả
-    </button>
-
-
     <div
+      class="modal-error"
       id="profileError"
-      style="
-        margin-top:7px;
-        color:#b83345;
-        font-size:10px
-      "
     ></div>
+
+
+    <div class="modal-buttons">
+
+      <button
+        class="modal-btn cancel"
+        id="cancelProfileButton"
+        onclick="closeProfileModal()"
+      >
+        Hủy
+      </button>
+
+
+      <button
+        class="modal-btn save"
+        onclick="saveProfile()"
+      >
+        Lưu hồ sơ
+      </button>
+
+    </div>
 
   </div>
 
 </div>
 
 
-<!-- =========================
-     HEADER
-========================= -->
-
-<header class="top">
-
-  <div class="topin">
-
-    <a
-      class="back"
-      href="../"
-    >
-      ← Trang chủ
-    </a>
-
-
-    <div class="brand">
-      📊 Kết quả học tập
-    </div>
-
-
-    <div
-      class="student-top"
-      id="topStudentWrap"
-    >
-
-      <div
-        class="top-avatar"
-        id="topAvatar"
-      ></div>
-
-      <span id="topStudent"></span>
-
-    </div>
-
-  </div>
-
-</header>
-
-
-<!-- =========================
-     PAGE
-========================= -->
-
-<main class="page">
-
-
-  <!-- HERO -->
-
-  <section class="hero">
-
-    <div class="eyebrow">
-      IELTS TEST PERFORMANCE
-    </div>
-
-
-    <h1>
-      Tiến độ học tập
-    </h1>
-
-
-    <p>
-      Theo dõi kết quả các bài TEST và band dự đoán
-      dựa trên tối đa 5 lần thi gần nhất của từng kỹ năng.
-    </p>
-
-  </section>
-
-
-  <!-- =========================
-       STUDENT
-  ========================= -->
-
-  <section
-    class="student-card"
-    id="studentCard"
-    style="display:none"
-  >
-
-
-    <div class="student-profile">
-
-
-      <!-- AVATAR -->
-
-      <div class="avatar-wrap">
-
-        <div
-          class="avatar"
-          id="studentAvatar"
-          onclick="toggleAvatarMenu(event)"
-          title="Đổi ảnh đại diện"
-        ></div>
-
-
-        <div
-          class="avatar-edit"
-          onclick="openAvatarPicker(event)"
-          title="Đổi ảnh"
-        >
-          📷
-        </div>
-
-
-        <input
-          type="file"
-          class="avatar-input"
-          id="avatarInput"
-          accept="image/*"
-          onchange="handleAvatarUpload(event)"
-        >
-
-
-        <div
-          class="avatar-menu"
-          id="avatarMenu"
-        >
-
-          <button
-            type="button"
-            onclick="openAvatarPicker(event)"
-          >
-            📷 Đổi ảnh
-          </button>
-
-
-          <button
-            type="button"
-            class="remove"
-            onclick="removeAvatar(event)"
-          >
-            ✕ Xóa ảnh
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- STUDENT INFO -->
-
-      <div class="student-info">
-
-        <div
-          class="student-name"
-          id="studentNameDisplay"
-        ></div>
-
-
-        <div
-          class="student-class"
-          id="studentClassDisplay"
-        ></div>
-
-
-        <div class="avatar-hint">
-          Nhấn vào ảnh để thay ảnh đại diện
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="student-actions">
-
-      <button
-        class="refresh"
-        onclick="loadStats()"
-      >
-        ↻ Cập nhật kết quả
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       LOADING
-  ========================= -->
-
-  <div
-    class="loading"
-    id="loadingBox"
-  >
-
-    <div class="spinner"></div>
-
-    Đang tải kết quả TEST...
-
-  </div>
-
-
-  <!-- =========================
-       ERROR
-  ========================= -->
-
-  <div
-    class="message hidden"
-    id="errorBox"
-  >
-
-    <h3>
-      Không tải được kết quả
-    </h3>
-
-    <p id="errorText"></p>
-
-  </div>
-
-
-  <!-- =========================
-       CONTENT
-  ========================= -->
-
-  <div
-    class="hidden"
-    id="statsContent"
-  >
-
-
-    <!-- OVERALL -->
-
-    <section class="section">
-
-      <div class="overall">
-
-        <div>
-
-          <div class="overall-label">
-            Predicted Overall
-          </div>
-
-          <div
-            class="overall-band"
-            id="overallBand"
-          >
-            —
-          </div>
-
-        </div>
-
-
-        <div class="overall-copy">
-
-          <b id="overallTitle">
-            Chưa đủ dữ liệu
-          </b>
-
-          <span id="overallDescription"></span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- SKILLS -->
-
-    <section class="section">
-
-      <div class="section-head">
-
-        <div>
-
-          <h2>
-            Band dự đoán theo kỹ năng
-          </h2>
-
-          <p>
-            Dựa trên tối đa 5 bài TEST gần nhất.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="skills"
-        id="skillCards"
-      ></div>
-
-    </section>
-
-
-    <!-- RECENT -->
-
-    <section class="section">
-
-      <div class="section-head">
-
-        <div>
-
-          <h2>
-            5 bài gần nhất
-          </h2>
-
-          <p>
-            Các band đang được sử dụng để tính dự đoán.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="recent-grid"
-        id="recentGrid"
-      ></div>
-
-    </section>
-
-
-    <!-- HISTORY -->
-
-    <section class="section">
-
-      <div class="section-head">
-
-        <div>
-
-          <h2>
-            Lịch sử TEST
-          </h2>
-
-          <p id="historyCount"></p>
-
-        </div>
-
-      </div>
-
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Thời gian
-              </th>
-
-              <th>
-                Kỹ năng
-              </th>
-
-              <th>
-                Bài thi
-              </th>
-
-              <th>
-                Điểm
-              </th>
-
-              <th>
-                Band
-              </th>
-
-              <th>
-                Thời gian làm
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody id="historyBody"></tbody>
-
-        </table>
-
-      </div>
-
-
-      <div class="rule-note">
-
-        <b>Cách tính:</b>
-        Practice không được tính vào band dự đoán.
-        Reading và Listening được đổi từ raw score sang IELTS band trước,
-        sau đó lấy trung bình tối đa 5 bài TEST gần nhất của từng kỹ năng.
-        Predicted Overall chỉ được hiển thị khi đã có dữ liệu
-        Reading, Listening, Writing và Speaking.
-
-      </div>
-
-    </section>
-
-  </div>
-
-</main>
+<!-- =======================================================
+     AVATAR FILE INPUT
+======================================================= -->
+
+<input
+  id="avatarInput"
+  type="file"
+  accept="image/*"
+  style="display:none"
+  onchange="handleAvatarUpload(event)"
+>
 
 
 <script>
@@ -1736,8 +1892,8 @@ tbody tr:hover{
    CONFIG
 ========================================================= */
 
-const ENDPOINT=
-'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+const TREE_URL=
+'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
 
 
 const PROFILE_KEY=
@@ -1748,25 +1904,9 @@ const AVATAR_KEY=
 'IELTS_STUDENT_AVATAR';
 
 
-const SKILLS=[
-  'Reading',
-  'Listening',
-  'Writing',
-  'Speaking'
-];
+let allTests=[];
 
-
-const SKILL_ICONS={
-
-  Reading:'📖',
-
-  Listening:'🎧',
-
-  Writing:'✍️',
-
-  Speaking:'🎙️'
-
-};
+let currentFilter='All';
 
 
 /* =========================================================
@@ -1796,70 +1936,11 @@ function readProfile(){
 }
 
 
-function saveProfileAndLoad(){
+function getInitials(name){
 
-  const name=
-    profileName.value.trim();
-
-
-  const className=
-    profileClass.value.trim();
-
-
-  if(
-    !name
-    ||
-    !className
-  ){
-
-    profileError.textContent=
-    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
-
-    return;
-
-  }
-
-
-  localStorage.setItem(
-
-    PROFILE_KEY,
-
-    JSON.stringify({
-
-      name:name,
-
-      className:className
-
-    })
-
-  );
-
-
-  profileOverlay.classList.add(
-    'hidden'
-  );
-
-
-  loadStats();
-
-}
-
-
-/* =========================================================
-   AVATAR
-========================================================= */
-
-function getInitials(){
-
-  const profile=
-    readProfile();
-
-
-  const name=
+  name=
     String(
-      profile?.name
-      ||
-      ''
+      name||''
     )
     .trim();
 
@@ -1896,7 +1977,209 @@ function getInitials(){
 }
 
 
-function loadAvatar(){
+function renderProfile(){
+
+  const profile=
+    readProfile();
+
+
+  const name=
+    profile?.name
+    ||
+    'Học sinh';
+
+
+  const className=
+    profile?.className
+    ||
+    '';
+
+
+  const firstName=
+    profile?.name
+    ?
+    String(profile.name)
+      .trim()
+      .split(/\s+/)
+      .pop()
+    :
+    'bạn';
+
+
+  headerName.textContent=
+    name;
+
+
+  headerClass.textContent=
+    className
+    ?
+    `Lớp ${className}`
+    :
+    '';
+
+
+  profileNameDisplay.textContent=
+    name;
+
+
+  profileClassDisplay.textContent=
+    className
+    ?
+    `Lớp ${className}`
+    :
+    'Hồ sơ học tập';
+
+
+  heroName.textContent=
+    `${firstName}!`;
+
+
+  renderAvatar();
+
+}
+
+
+/* =========================================================
+   PROFILE MODAL
+========================================================= */
+
+function openProfileModal(){
+
+  const profile=
+    readProfile();
+
+
+  studentNameInput.value=
+    profile?.name
+    ||
+    '';
+
+
+  studentClassInput.value=
+    profile?.className
+    ||
+    '';
+
+
+  profileError.textContent=
+    '';
+
+
+  profileModal.classList.remove(
+    'hidden'
+  );
+
+}
+
+
+function closeProfileModal(){
+
+  const profile=
+    readProfile();
+
+
+  /*
+   * Lần đầu vào bắt buộc phải có hồ sơ.
+   */
+
+  if(
+    !profile?.name
+    ||
+    !profile?.className
+  ){
+
+    return;
+
+  }
+
+
+  profileModal.classList.add(
+    'hidden'
+  );
+
+}
+
+
+function saveProfile(){
+
+  const name=
+    studentNameInput.value.trim();
+
+
+  const className=
+    studentClassInput.value.trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    profileError.textContent=
+    'Vui lòng nhập đầy đủ Họ và tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    PROFILE_KEY,
+
+    JSON.stringify({
+
+      name:name,
+
+      className:className
+
+    })
+
+  );
+
+
+  /*
+   * Giữ tương thích với các trang cũ.
+   */
+
+  localStorage.setItem(
+    'IELTS_STUDENT_NAME',
+    name
+  );
+
+
+  localStorage.setItem(
+    'IELTS_STUDENT_CLASS',
+    className
+  );
+
+
+  profileModal.classList.add(
+    'hidden'
+  );
+
+
+  renderProfile();
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function renderAvatar(){
+
+  const profile=
+    readProfile();
+
+
+  const initials=
+    getInitials(
+      profile?.name
+    );
+
 
   const avatar=
     localStorage.getItem(
@@ -1904,70 +2187,41 @@ function loadAvatar(){
     );
 
 
-  const initials=
-    getInitials();
-
-
   if(avatar){
 
-    studentAvatar.innerHTML=
-    `
-      <img
-        src="${avatar}"
-        alt="Ảnh đại diện học sinh"
-      >
-    `;
+    const image=
+      `
+        <img
+          src="${avatar}"
+          alt="Ảnh đại diện"
+        >
+      `;
 
 
-    topAvatar.innerHTML=
-    `
-      <img
-        src="${avatar}"
-        alt=""
-      >
-    `;
+    headerAvatar.innerHTML=
+      image;
+
+
+    profileAvatar.innerHTML=
+      image;
 
   }
 
   else{
 
-    studentAvatar.textContent=
-    initials;
+    headerAvatar.textContent=
+      initials;
 
 
-    topAvatar.textContent=
-    initials;
+    profileAvatar.textContent=
+      initials;
 
   }
 
 }
 
 
-function toggleAvatarMenu(event){
-
-  event.stopPropagation();
-
-
-  avatarMenu.classList.toggle(
-    'show'
-  );
-
-}
-
-
-function openAvatarPicker(event){
-
-  if(event){
-
-    event.stopPropagation();
-
-  }
-
-
-  avatarMenu.classList.remove(
-    'show'
-  );
-
+function openAvatarPicker(){
 
   avatarInput.click();
 
@@ -1975,7 +2229,7 @@ function openAvatarPicker(event){
 
 
 /* =========================================================
-   UPLOAD + RESIZE AVATAR
+   AVATAR UPLOAD
 ========================================================= */
 
 function handleAvatarUpload(event){
@@ -2020,10 +2274,6 @@ function handleAvatarUpload(event){
     image.onload=
     function(){
 
-      /*
-       * Crop vuông từ giữa ảnh.
-       */
-
       const sourceSize=
         Math.min(
           image.width,
@@ -2051,11 +2301,6 @@ function handleAvatarUpload(event){
         2;
 
 
-      /*
-       * Resize còn 320 × 320 để tránh
-       * ảnh quá nặng và đầy localStorage.
-       */
-
       const canvas=
         document.createElement(
           'canvas'
@@ -2070,13 +2315,13 @@ function handleAvatarUpload(event){
         320;
 
 
-      const ctx=
+      const context=
         canvas.getContext(
           '2d'
         );
 
 
-      ctx.drawImage(
+      context.drawImage(
 
         image,
 
@@ -2095,12 +2340,7 @@ function handleAvatarUpload(event){
       );
 
 
-      /*
-       * JPEG quality 0.82 giúp ảnh nhẹ,
-       * vẫn đủ rõ để làm avatar.
-       */
-
-      const compressed=
+      const data=
         canvas.toDataURL(
           'image/jpeg',
           .82
@@ -2111,18 +2351,18 @@ function handleAvatarUpload(event){
 
         localStorage.setItem(
           AVATAR_KEY,
-          compressed
+          data
         );
 
 
-        loadAvatar();
+        renderAvatar();
 
       }
 
       catch(error){
 
         alert(
-          'Ảnh quá lớn để lưu. Hãy thử một ảnh khác.'
+          'Không lưu được ảnh. Hãy chọn ảnh có dung lượng nhỏ hơn.'
         );
 
       }
@@ -2141,741 +2381,404 @@ function handleAvatarUpload(event){
   );
 
 
-  /*
-   * Reset để có thể chọn lại cùng một ảnh.
-   */
-
   event.target.value=
-  '';
+    '';
 
 }
 
 
 /* =========================================================
-   REMOVE AVATAR
+   DISCOVER TESTS
 ========================================================= */
 
-function removeAvatar(event){
-
-  if(event){
-
-    event.stopPropagation();
-
-  }
-
-
-  localStorage.removeItem(
-    AVATAR_KEY
-  );
-
-
-  avatarMenu.classList.remove(
-    'show'
-  );
-
-
-  loadAvatar();
-
-}
-
-
-/* Close menu */
-
-document.addEventListener(
-
-  'click',
-
-  function(event){
-
-    if(
-      !avatarMenu.contains(
-        event.target
-      )
-      &&
-      !studentAvatar.contains(
-        event.target
-      )
-    ){
-
-      avatarMenu.classList.remove(
-        'show'
-      );
-
-    }
-
-  }
-
-);
-
-
-/* =========================================================
-   JSONP
-========================================================= */
-
-function jsonpRequest(url){
-
-  return new Promise(
-    function(resolve,reject){
-
-      const callbackName=
-        '__studentStats_'
-        +
-        Date.now()
-        +
-        '_'
-        +
-        Math.random()
-        .toString(36)
-        .slice(2);
-
-
-      const script=
-        document.createElement(
-          'script'
-        );
-
-
-      const timeout=
-        setTimeout(
-          function(){
-
-            cleanup();
-
-
-            reject(
-              new Error(
-                'Không nhận được phản hồi từ máy chủ.'
-              )
-            );
-
-          },
-
-          20000
-
-        );
-
-
-      function cleanup(){
-
-        clearTimeout(
-          timeout
-        );
-
-
-        delete window[
-          callbackName
-        ];
-
-
-        script.remove();
-
-      }
-
-
-      window[
-        callbackName
-      ]=
-      function(data){
-
-        cleanup();
-
-        resolve(data);
-
-      };
-
-
-      script.onerror=
-      function(){
-
-        cleanup();
-
-
-        reject(
-          new Error(
-            'Không kết nối được với máy chủ.'
-          )
-        );
-
-      };
-
-
-      const separator=
-        url.includes('?')
-        ?
-        '&'
-        :
-        '?';
-
-
-      script.src=
-        url
-        +
-        separator
-        +
-        'callback='
-        +
-        encodeURIComponent(
-          callbackName
-        );
-
-
-      document.body.appendChild(
-        script
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LOAD
-========================================================= */
-
-async function loadStats(){
-
-  const profile=
-    readProfile();
-
-
-  if(
-    !profile?.name
-    ||
-    !profile?.className
-  ){
-
-    profileOverlay.classList.remove(
-      'hidden'
-    );
-
-
-    loadingBox.classList.add(
-      'hidden'
-    );
-
-
-    return;
-
-  }
-
-
-  topStudent.textContent=
-  `${profile.name} · ${profile.className}`;
-
-
-  studentNameDisplay.textContent=
-  profile.name;
-
-
-  studentClassDisplay.textContent=
-  `Lớp ${profile.className}`;
-
-
-  studentCard.style.display=
-  'flex';
-
-
-  loadAvatar();
-
-
-  loadingBox.classList.remove(
-    'hidden'
-  );
-
-
-  errorBox.classList.add(
-    'hidden'
-  );
-
-
-  statsContent.classList.add(
-    'hidden'
-  );
-
+async function loadTests(){
 
   try{
 
-    const url=
+    const response=
+      await fetch(
 
-      ENDPOINT
+        TREE_URL,
 
-      +
-      '?mode=studentStats'
+        {
+          cache:'no-store'
+        }
 
-      +
-      '&name='
-      +
-      encodeURIComponent(
-        profile.name
-      )
-
-      +
-      '&className='
-      +
-      encodeURIComponent(
-        profile.className
       );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        `GitHub API ${response.status}`
+      );
+
+    }
 
 
     const data=
-      await jsonpRequest(
-        url
-      );
+      await response.json();
 
 
-    if(
-      !data
-      ||
-      !data.ok
-    ){
+    /*
+     * Gom tất cả index.html theo folder đầu:
+     *
+     * Lis01/...
+     * Read01/...
+     * Wri01/...
+     */
 
-      throw new Error(
-        data?.error
-        ||
-        'Không lấy được dữ liệu.'
-      );
+    const groups={};
 
-    }
 
+    data.tree.forEach(
+      function(item){
 
-    renderStats(
-      data
-    );
+        if(
+          item.type!=='blob'
+          ||
+          !/index\.html$/i.test(
+            item.path
+          )
+        ){
 
-
-    loadingBox.classList.add(
-      'hidden'
-    );
-
-
-    statsContent.classList.remove(
-      'hidden'
-    );
-
-  }
-
-  catch(error){
-
-    loadingBox.classList.add(
-      'hidden'
-    );
-
-
-    errorText.textContent=
-    error.message
-    ||
-    String(error);
-
-
-    errorBox.classList.remove(
-      'hidden'
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function renderStats(data){
-
-  renderOverall(
-    data.summary
-  );
-
-
-  renderSkills(
-    data.summary
-  );
-
-
-  renderRecent(
-    data.summary
-  );
-
-
-  renderHistory(
-    data.history
-    ||
-    []
-  );
-
-}
-
-
-/* =========================================================
-   OVERALL
-========================================================= */
-
-function renderOverall(summary){
-
-  const overall=
-    summary?.Overall
-    ||
-    {};
-
-
-  if(
-    overall.ready
-    &&
-    validBand(
-      overall.predictedBand
-    )
-  ){
-
-    overallBand.textContent=
-    formatBand(
-      overall.predictedBand
-    );
-
-
-    overallTitle.textContent=
-    'Predicted IELTS Overall';
-
-
-    overallDescription.textContent=
-    'Được tính từ band dự đoán của đủ 4 kỹ năng Reading, Listening, Writing và Speaking.';
-
-  }
-
-  else{
-
-    overallBand.textContent=
-    '—';
-
-
-    overallTitle.textContent=
-    'Chưa đủ dữ liệu để tính Overall';
-
-
-    const missing=
-      overall.missingSkills
-      ||
-      [];
-
-
-    if(missing.length){
-
-      overallDescription.textContent=
-      'Còn thiếu kết quả TEST: '
-      +
-      missing.join(', ')
-      +
-      '.';
-
-    }
-
-    else{
-
-      overallDescription.textContent=
-      'Hãy hoàn thành thêm các bài TEST để hệ thống có đủ dữ liệu.';
-
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   SKILLS
-========================================================= */
-
-function renderSkills(summary){
-
-  skillCards.innerHTML=
-  SKILLS.map(
-    function(skill){
-
-      const data=
-        summary?.[skill]
-        ||
-        {};
-
-
-      const predicted=
-        validBand(
-          data.predictedBand
-        )
-        ?
-        formatBand(
-          data.predictedBand
-        )
-        :
-        '—';
-
-
-      const latest=
-        validBand(
-          data.latestBand
-        )
-        ?
-        formatBand(
-          data.latestBand
-        )
-        :
-        '—';
-
-
-      const best=
-        validBand(
-          data.bestBand
-        )
-        ?
-        formatBand(
-          data.bestBand
-        )
-        :
-        '—';
-
-
-      let trend='—';
-
-      let trendClass='';
-
-
-      if(
-        typeof data.trend==='number'
-      ){
-
-        if(data.trend>0){
-
-          trend=
-            '▲ +'
-            +
-            data.trend.toFixed(1);
-
-
-          trendClass=
-            'trend-up';
+          return;
 
         }
 
-        else if(data.trend<0){
 
-          trend=
-            '▼ '
-            +
-            data.trend.toFixed(1);
+        const match=
+          item.path.match(
+            /^(Lis|Read|Wri)(\d+)\/.*index\.html$/i
+          );
 
 
-          trendClass=
-            'trend-down';
+        if(!match){
+
+          return;
+
+        }
+
+
+        const prefix=
+          match[1];
+
+
+        const number=
+          Number(
+            match[2]
+          );
+
+
+        const folder=
+          prefix
+          +
+          String(match[2]);
+
+
+        let skill;
+
+
+        if(
+          /^Lis$/i.test(prefix)
+        ){
+
+          skill=
+            'Listening';
+
+        }
+
+        else if(
+          /^Read$/i.test(prefix)
+        ){
+
+          skill=
+            'Reading';
 
         }
 
         else{
 
-          trend=
-            '→ 0.0';
+          skill=
+            'Writing';
 
         }
 
+
+        if(!groups[folder]){
+
+          groups[folder]={
+            folder:folder,
+            number:number,
+            skill:skill,
+            paths:[]
+          };
+
+        }
+
+
+        groups[folder].paths.push(
+          item.path
+        );
+
       }
 
-
-      return`
-        <article class="skill">
-
-          <div class="skill-top">
-
-            <div class="skill-name">
-              ${skill}
-            </div>
-
-            <div class="skill-icon">
-              ${SKILL_ICONS[skill]}
-            </div>
-
-          </div>
+    );
 
 
-          <div class="band">
-            ${predicted}
-          </div>
+    allTests=
+      Object.values(groups)
+      .map(
+        function(group){
+
+          /*
+           * Nếu folder có nhiều index.html,
+           * ưu tiên đường dẫn ngắn nhất.
+           */
+
+          group.paths.sort(
+            function(a,b){
+
+              const aDepth=
+                a.split('/').length;
 
 
-          <div class="band-label">
-            Predicted band
-          </div>
+              const bDepth=
+                b.split('/').length;
 
 
-          <div class="skill-meta">
+              if(
+                aDepth!==bDepth
+              ){
 
-            <div>
-
-              <div class="meta-label">
-                Gần nhất
-              </div>
-
-              <div class="meta-value">
-                ${latest}
-              </div>
-
-            </div>
-
-
-            <div>
-
-              <div class="meta-label">
-                Cao nhất
-              </div>
-
-              <div class="meta-value">
-                ${best}
-              </div>
-
-            </div>
-
-
-            <div>
-
-              <div class="meta-label">
-                TEST đã làm
-              </div>
-
-              <div class="meta-value">
-                ${Number(data.totalAttempts||0)}
-              </div>
-
-            </div>
-
-
-            <div>
-
-              <div class="meta-label">
-                Xu hướng
-              </div>
-
-              <div class="meta-value ${trendClass}">
-                ${trend}
-              </div>
-
-            </div>
-
-          </div>
-
-        </article>
-      `;
-
-    }
-  )
-  .join('');
-
-}
-
-
-/* =========================================================
-   RECENT
-========================================================= */
-
-function renderRecent(summary){
-
-  recentGrid.innerHTML=
-  SKILLS.map(
-    function(skill){
-
-      const recent=
-        summary?.[skill]?.recent
-        ||
-        [];
-
-
-      let content;
-
-
-      if(recent.length){
-
-        content=
-        `
-          <div class="chips">
-
-            ${recent.map(
-              function(item,index){
-
-                return`
-                  <span
-                    class="chip"
-                    title="${escapeHTML(item.title || item.testId || '')}"
-                  >
-                    #${index+1}
-                    ·
-                    ${formatBand(item.band)}
-                  </span>
-                `;
+                return aDepth-bDepth;
 
               }
-            ).join('')}
-
-          </div>
-        `;
-
-      }
-
-      else{
-
-        content=
-        `
-          <div class="no-data">
-            Chưa có TEST.
-          </div>
-        `;
-
-      }
 
 
-      return`
-        <div class="recent-card">
+              return a.localeCompare(b);
 
-          <div class="recent-title">
-            ${SKILL_ICONS[skill]} ${skill}
-          </div>
+            }
+          );
 
-          ${content}
 
+          return{
+
+            skill:
+              group.skill,
+
+            number:
+              group.number,
+
+            folder:
+              group.folder,
+
+            path:
+              './'
+              +
+              group.paths[0]
+
+          };
+
+        }
+      )
+      .sort(
+        function(a,b){
+
+          const order={
+            Listening:1,
+            Reading:2,
+            Writing:3
+          };
+
+
+          if(
+            order[a.skill]
+            !==
+            order[b.skill]
+          ){
+
+            return(
+              order[a.skill]
+              -
+              order[b.skill]
+            );
+
+          }
+
+
+          return a.number-b.number;
+
+        }
+      );
+
+
+    updateCounts();
+
+    renderTests();
+
+  }
+
+  catch(error){
+
+    console.warn(
+      'Không tải được danh sách TEST:',
+      error
+    );
+
+
+    listeningCount.textContent=
+      '—';
+
+
+    readingCount.textContent=
+      '—';
+
+
+    writingCount.textContent=
+      '—';
+
+
+    testGrid.innerHTML=
+      `
+        <div class="empty">
+          Không tải được danh sách bài TEST.
+          Hãy tải lại trang.
         </div>
       `;
 
-    }
-  )
-  .join('');
+  }
 
 }
 
 
 /* =========================================================
-   HISTORY
+   COUNTS
 ========================================================= */
 
-function renderHistory(history){
+function updateCounts(){
 
-  historyCount.textContent=
-  `${history.length} lần TEST được ghi nhận`;
+  const listening=
+    allTests.filter(
+      item=>
+      item.skill==='Listening'
+    )
+    .length;
 
 
-  if(!history.length){
+  const reading=
+    allTests.filter(
+      item=>
+      item.skill==='Reading'
+    )
+    .length;
 
-    historyBody.innerHTML=
-    `
-      <tr>
 
-        <td
-          colspan="6"
-          style="
-            padding:30px;
-            text-align:center;
-            color:#9096a3
-          "
-        >
-          Chưa có kết quả TEST.
-        </td>
+  const writing=
+    allTests.filter(
+      item=>
+      item.skill==='Writing'
+    )
+    .length;
 
-      </tr>
-    `;
+
+  listeningCount.textContent=
+    `${listening} bài TEST`;
+
+
+  readingCount.textContent=
+    `${reading} bài TEST`;
+
+
+  writingCount.textContent=
+    `${writing} bài TEST`;
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function setFilter(filter){
+
+  currentFilter=
+    filter;
+
+
+  document
+  .querySelectorAll(
+    '.filter-btn'
+  )
+  .forEach(
+    function(button){
+
+      button.classList.toggle(
+
+        'active',
+
+        button.dataset.filter===
+        filter
+
+      );
+
+    }
+  );
+
+
+  renderTests();
+
+}
+
+
+function scrollToTests(){
+
+  document
+  .getElementById(
+    'tests'
+  )
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'start'
+
+  });
+
+}
+
+
+/* =========================================================
+   RENDER TESTS
+========================================================= */
+
+function renderTests(){
+
+  const items=
+
+    currentFilter==='All'
+
+    ?
+
+    allTests
+
+    :
+
+    allTests.filter(
+      item=>
+      item.skill===
+      currentFilter
+    );
+
+
+  if(!items.length){
+
+    testGrid.innerHTML=
+      `
+        <div class="empty">
+          Chưa có bài TEST trong mục này.
+        </div>
+      `;
 
 
     return;
@@ -2883,228 +2786,77 @@ function renderHistory(history){
   }
 
 
-  historyBody.innerHTML=
-  history.map(
-    function(item){
+  testGrid.innerHTML=
+    items.map(
+      function(item){
 
-      let scoreText='—';
-
-
-      if(
-        item.score!==null
-        &&
-        item.score!==undefined
-        &&
-        item.total!==null
-        &&
-        item.total!==undefined
-      ){
-
-        scoreText=
-          `${item.score}/${item.total}`;
+        const number=
+          String(
+            item.number
+          )
+          .padStart(
+            2,
+            '0'
+          );
 
 
-        if(
-          item.percent!==null
-          &&
-          item.percent!==undefined
-        ){
+        const icon=
+          item.skill==='Listening'
+          ?
+          '🎧'
+          :
+          item.skill==='Reading'
+          ?
+          '📖'
+          :
+          '✍️';
 
-          scoreText+=
-            ` (${item.percent}%)`;
 
-        }
+        return`
+          <a
+            class="test-card"
+            href="${escapeHTML(item.path)}"
+          >
+
+            <div class="test-number">
+              ${number}
+            </div>
+
+
+            <div class="test-copy">
+
+              <b>
+                ${icon}
+                ${item.skill}
+                Test
+                ${number}
+              </b>
+
+
+              <span>
+                Bắt đầu làm bài
+              </span>
+
+            </div>
+
+
+            <div class="test-arrow">
+              →
+            </div>
+
+          </a>
+        `;
 
       }
-
-
-      const title=
-        item.title
-        ||
-        item.testId
-        ||
-        'IELTS Test';
-
-
-      return`
-        <tr>
-
-          <td>
-            ${formatDate(item.timestamp)}
-          </td>
-
-          <td>
-
-            <span class="skill-pill">
-              ${escapeHTML(item.skill)}
-            </span>
-
-          </td>
-
-          <td>
-            ${escapeHTML(title)}
-          </td>
-
-          <td class="raw">
-            ${scoreText}
-          </td>
-
-          <td class="band-cell">
-            ${
-              validBand(item.band)
-              ?
-              formatBand(item.band)
-              :
-              '—'
-            }
-          </td>
-
-          <td class="muted">
-            ${formatDuration(item.duration)}
-          </td>
-
-        </tr>
-      `;
-
-    }
-  )
-  .join('');
+    )
+    .join('');
 
 }
 
 
 /* =========================================================
-   HELPERS
+   ESCAPE
 ========================================================= */
-
-function validBand(value){
-
-  const n=
-    Number(value);
-
-
-  return(
-    Number.isFinite(n)
-    &&
-    n>=0
-    &&
-    n<=9
-  );
-
-}
-
-
-function formatBand(value){
-
-  if(!validBand(value)){
-
-    return '—';
-
-  }
-
-
-  return Number(value)
-  .toFixed(1);
-
-}
-
-
-function formatDuration(seconds){
-
-  seconds=
-    Number(seconds)
-    ||
-    0;
-
-
-  if(seconds<=0){
-
-    return '—';
-
-  }
-
-
-  const h=
-    Math.floor(
-      seconds/3600
-    );
-
-
-  const m=
-    Math.floor(
-      (seconds%3600)/60
-    );
-
-
-  const s=
-    Math.floor(
-      seconds%60
-    );
-
-
-  if(h){
-
-    return`${h}h ${m}m`;
-
-  }
-
-
-  if(m){
-
-    return`${m}m ${s}s`;
-
-  }
-
-
-  return`${s}s`;
-
-}
-
-
-function formatDate(value){
-
-  const date=
-    new Date(
-      value
-    );
-
-
-  if(
-    Number.isNaN(
-      date.getTime()
-    )
-  ){
-
-    return '—';
-
-  }
-
-
-  return new Intl.DateTimeFormat(
-
-    'vi-VN',
-
-    {
-
-      day:'2-digit',
-
-      month:'2-digit',
-
-      year:'numeric',
-
-      hour:'2-digit',
-
-      minute:'2-digit'
-
-    }
-
-  )
-  .format(
-    date
-  );
-
-}
-
 
 function escapeHTML(value){
 
@@ -3141,6 +2893,27 @@ function escapeHTML(value){
 
 
 /* =========================================================
+   CLICK OUTSIDE MODAL
+========================================================= */
+
+profileModal.addEventListener(
+  'click',
+  function(event){
+
+    if(
+      event.target===
+      profileModal
+    ){
+
+      closeProfileModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
    INIT
 ========================================================= */
 
@@ -3150,28 +2923,28 @@ function escapeHTML(value){
     readProfile();
 
 
+  renderProfile();
+
+
+  /*
+   * Nếu chưa từng nhập tên/lớp,
+   * tự mở form hồ sơ.
+   */
+
   if(
-    profile?.name
-    &&
-    profile?.className
+    !profile?.name
+    ||
+    !profile?.className
   ){
 
-    loadStats();
-
-  }
-
-  else{
-
-    loadingBox.classList.add(
-      'hidden'
-    );
-
-
-    profileOverlay.classList.remove(
+    profileModal.classList.remove(
       'hidden'
     );
 
   }
+
+
+  loadTests();
 
 })();
 
