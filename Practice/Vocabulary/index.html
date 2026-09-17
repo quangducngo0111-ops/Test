@@ -5,7 +5,7 @@
 
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
 >
 
 <meta
@@ -13,802 +13,8952 @@
   content="no-cache, no-store, must-revalidate"
 >
 
+<meta
+  http-equiv="Pragma"
+  content="no-cache"
+>
+
+<meta
+  http-equiv="Expires"
+  content="0"
+>
+
 <title>Vocabulary Practice</title>
+
+
+<!-- =========================================================
+     VOCABULARY DATA
+========================================================= -->
 
 <script
   src="./vocab-data.js?v=20260917-6games"
   onerror="window.VOCABULARY_LOAD_ERROR=true"
 ></script>
 
+
 <style>
+
 :root{
   --purple:#281260;
   --purple2:#6042c3;
+  --purple3:#8a6ae2;
+
   --blue:#3378e5;
   --green:#20a568;
   --red:#df4d60;
   --orange:#ee922d;
-  --yellow:#ffd95d;
+  --yellow:#ffd75c;
+
   --ink:#1e2741;
   --muted:#737c90;
   --line:#e3e7ef;
   --bg:#f4f7fb;
-  --shadow:0 14px 34px rgba(38,29,82,.09);
+
+  --shadow:
+    0 14px 34px
+    rgba(38,29,82,.09);
 }
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
 
+*{
+  box-sizing:border-box;
+}
+
+
+html{
+  scroll-behavior:smooth;
+}
+
+
+html,
 body{
   margin:0;
+
   min-height:100%;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
   color:var(--ink);
+
   background:
-    radial-gradient(circle at 4% 0%,rgba(139,99,237,.13),transparent 25%),
-    radial-gradient(circle at 96% 0%,rgba(74,168,255,.12),transparent 26%),
+    radial-gradient(
+      circle at 4% 0%,
+      rgba(139,99,237,.13),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 96% 0%,
+      rgba(74,168,255,.12),
+      transparent 26%
+    ),
     var(--bg);
 }
 
-button,select{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
+
+button,
+select{
+  font:inherit;
+}
+
+
+button{
+  cursor:pointer;
+}
+
+
+.hidden{
+  display:none !important;
+}
+
+
+/* =========================================================
+   TOP
+========================================================= */
 
 .topbar{
   position:sticky;
+
   top:0;
+
   z-index:50;
-  background:rgba(255,255,255,.94);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid var(--line);
+
+  background:
+    rgba(255,255,255,.94);
+
+  backdrop-filter:
+    blur(15px);
+
+  border-bottom:
+    1px solid
+    var(--line);
 }
 
+
 .top-inner{
-  width:min(1240px,calc(100% - 20px));
+  width:
+    min(
+      1240px,
+      calc(100% - 20px)
+    );
+
   min-height:62px;
+
   margin:auto;
+
   display:flex;
+
   align-items:center;
-  justify-content:space-between;
+
+  justify-content:
+    space-between;
+
   gap:12px;
 }
 
+
 .back{
-  padding:8px 11px;
-  border:1px solid var(--line);
+  padding:
+    8px 11px;
+
+  border:
+    1px solid
+    var(--line);
+
   border-radius:10px;
+
   background:#fff;
+
   color:#50388e;
+
   text-decoration:none;
+
   font-size:10.5px;
+
   font-weight:900;
 }
+
 
 .logo{
   display:flex;
+
   align-items:center;
+
   gap:8px;
+
   color:#24154d;
+
   font-weight:950;
 }
+
 
 .logo-icon{
   width:36px;
+
   height:36px;
+
   display:grid;
+
   place-items:center;
+
   border-radius:11px;
-  background:linear-gradient(135deg,#5b3ac2,#8c70e9);
+
+  background:
+    linear-gradient(
+      135deg,
+      #5b3ac2,
+      #8c70e9
+    );
+
   color:#fff;
+
   font-size:18px;
 }
 
+
 .student{
   color:#747d8e;
+
   font-size:10.5px;
+
   font-weight:850;
 }
 
+
+/* =========================================================
+   PAGE
+========================================================= */
+
 .page{
-  width:min(1240px,calc(100% - 20px));
+  width:
+    min(
+      1240px,
+      calc(100% - 20px)
+    );
+
   margin:auto;
-  padding:23px 0 60px;
+
+  padding:
+    23px 0 60px;
 }
 
-/* HERO */
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
   position:relative;
+
   overflow:hidden;
-  padding:28px 30px;
-  border:1px solid rgba(255,255,255,.92);
+
+  padding:
+    28px 30px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.92);
+
   border-radius:25px;
-  background:linear-gradient(120deg,#fff,#fbf8ff 55%,#eef7ff);
-  box-shadow:var(--shadow);
+
+  background:
+    linear-gradient(
+      120deg,
+      #fff,
+      #fbf8ff 55%,
+      #eef7ff
+    );
+
+  box-shadow:
+    var(--shadow);
 }
 
+
 .hero::after{
-  content:"🧠";
+  content:"🎮";
+
   position:absolute;
+
   right:28px;
-  bottom:-17px;
-  font-size:125px;
+
+  bottom:-24px;
+
+  font-size:135px;
+
   opacity:.055;
 }
 
+
 .eyebrow{
   color:#684bb6;
+
   font-size:9.5px;
+
   font-weight:950;
+
   letter-spacing:.12em;
+
   text-transform:uppercase;
 }
 
+
 .hero h1{
-  margin:8px 0 5px;
+  margin:
+    8px 0 5px;
+
   color:#21144c;
-  font-size:clamp(35px,5vw,56px);
+
+  font-size:
+    clamp(
+      35px,
+      5vw,
+      56px
+    );
+
   line-height:1;
+
   letter-spacing:-.05em;
 }
 
+
 .hero p{
   margin:0;
+
   max-width:730px;
+
   color:var(--muted);
+
   font-size:11.5px;
+
   line-height:1.65;
 }
 
-/* REVIEW */
+
+/* =========================================================
+   REVIEW
+========================================================= */
 
 .review-banner{
   margin-top:14px;
-  padding:15px 17px;
+
+  padding:
+    15px 17px;
+
   display:flex;
+
   align-items:center;
-  justify-content:space-between;
+
+  justify-content:
+    space-between;
+
   gap:14px;
-  border:1px solid #f2d8bb;
+
+  border:
+    1px solid
+    #f2d8bb;
+
   border-radius:16px;
-  background:linear-gradient(120deg,#fff9ef,#fff);
+
+  background:
+    linear-gradient(
+      120deg,
+      #fff9ef,
+      #fff
+    );
 }
+
 
 .review-main{
   display:flex;
+
   align-items:center;
+
   gap:12px;
 }
 
-.review-icon{font-size:33px}
+
+.review-icon{
+  font-size:33px;
+}
+
 
 .review-banner b{
   display:block;
+
   color:#654019;
+
   font-size:13px;
 }
 
+
 .review-banner span{
   display:block;
+
   margin-top:2px;
+
   color:#8b735d;
+
   font-size:10px;
 }
 
+
 .review-btn{
-  padding:9px 13px;
+  padding:
+    9px 13px;
+
   border:0;
+
   border-radius:9px;
+
   background:#df8629;
+
   color:#fff;
+
   font-size:10px;
+
   font-weight:950;
 }
 
-/* COMMON */
 
-.section-head{margin:25px 0 12px}
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-head{
+  margin:
+    25px 0 12px;
+}
+
+
 .section-head h2{
   margin:0;
+
   color:#202946;
+
   font-size:22px;
+
   letter-spacing:-.03em;
 }
+
+
 .section-head p{
-  margin:4px 0 0;
+  margin:
+    4px 0 0;
+
   color:#7d8595;
+
   font-size:10.5px;
 }
 
-/* CATEGORIES */
+
+/* =========================================================
+   CATEGORY
+========================================================= */
 
 .category-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
+
   gap:12px;
 }
 
+
 .category{
-  padding:17px;
   min-height:183px;
+
+  padding:17px;
+
   display:flex;
+
   flex-direction:column;
+
   align-items:flex-start;
-  border:1px solid var(--line);
+
+  border:
+    1px solid
+    var(--line);
+
   border-radius:17px;
+
   background:#fff;
-  box-shadow:0 7px 18px rgba(38,29,82,.04);
+
+  box-shadow:
+    0 7px 18px
+    rgba(38,29,82,.04);
+
   text-align:left;
+
   transition:.17s ease;
 }
 
+
 .category:hover{
-  transform:translateY(-3px);
+  transform:
+    translateY(-3px);
+
   border-color:#cec4ec;
-  box-shadow:0 12px 27px rgba(38,29,82,.08);
+
+  box-shadow:
+    0 12px 27px
+    rgba(38,29,82,.08);
 }
+
 
 .category-icon{
   width:44px;
+
   height:44px;
+
   display:grid;
+
   place-items:center;
+
   border-radius:13px;
+
   background:#f0edff;
+
   font-size:22px;
 }
 
+
 .category h3{
-  margin:11px 0 2px;
+  margin:
+    11px 0 2px;
+
   color:#29204e;
+
   font-size:14px;
 }
 
+
 .category-count{
   color:#8b92a0;
+
   font-size:9.5px;
 }
+
 
 .mastery-line{
   width:100%;
+
   margin-top:auto;
+
   padding-top:13px;
 }
 
+
 .mastery-row{
   display:flex;
-  justify-content:space-between;
+
+  justify-content:
+    space-between;
+
   margin-bottom:5px;
+
   color:#758093;
+
   font-size:9px;
+
   font-weight:850;
 }
+
 
 .mastery-bar{
   height:6px;
+
   overflow:hidden;
+
   border-radius:999px;
+
   background:#e9ecf2;
 }
 
+
 .mastery-bar i{
   display:block;
+
   height:100%;
-  background:linear-gradient(90deg,#5c3ac2,#4d82e5);
-  border-radius:inherit;
-}
 
-/* COLLECTION */
-
-.collection-head{
-  margin-bottom:15px;
-}
-
-.collection-back{
-  margin-bottom:8px;
-  padding:7px 10px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:#fff;
-  color:#533a8f;
-  font-size:9.5px;
-  font-weight:900;
-}
-
-.collection-head h1{
-  margin:0;
-  color:#241650;
-  font-size:30px;
-  letter-spacing:-.04em;
-}
-
-.collection-head p{
-  margin:5px 0 0;
-  color:#777f90;
-  font-size:10.5px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  margin-bottom:15px;
-}
-
-.stat{
-  padding:13px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#fff;
-  text-align:center;
-}
-
-.stat small{
-  display:block;
-  color:#959ba7;
-  font-size:8px;
-  font-weight:950;
-  text-transform:uppercase;
-}
-
-.stat b{
-  display:block;
-  margin-top:3px;
-  color:#2d3350;
-  font-size:19px;
-}
-
-.game-settings{
-  padding:12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#fff;
-}
-
-.game-settings span{
-  color:#6e7689;
-  font-size:10px;
-  font-weight:850;
-}
-
-.game-settings select{
-  padding:8px 10px;
-  border:1px solid #dce0e9;
-  border-radius:8px;
-  background:#fff;
-  color:#403268;
-  font-size:10px;
-  font-weight:900;
-}
-
-/* GAME CARDS */
-
-.game-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  margin-top:12px;
-}
-
-.game-card{
-  min-height:220px;
-  padding:18px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  border:1px solid var(--line);
-  border-radius:17px;
-  background:#fff;
-  box-shadow:0 7px 18px rgba(38,29,82,.04);
-  transition:.16s;
-}
-
-.game-card:hover{
-  transform:translateY(-3px);
-  border-color:#c9beeb;
-}
-
-.game-icon{font-size:44px}
-
-.game-card h3{
-  margin:10px 0 5px;
-  color:#271a50;
-  font-size:17px;
-}
-
-.game-card p{
-  margin:0;
-  color:#747d8d;
-  font-size:10px;
-  line-height:1.55;
-}
-
-.game-meta{
-  margin-top:9px;
-  color:#9198a7;
-  font-size:8.5px;
-  font-weight:850;
-}
-
-.game-play{
-  margin-top:auto;
-  padding:9px 12px;
-  border:0;
-  border-radius:9px;
-  background:linear-gradient(135deg,#432594,#7253d4);
-  color:#fff;
-  font-size:10px;
-  font-weight:950;
-}
-
-/* TOPICS */
-
-.topic-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;
-}
-
-.topic-card{
-  padding:15px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:#fff;
-  text-align:left;
-}
-
-.topic-card b{
-  display:block;
-  color:#29204d;
-  font-size:12px;
-}
-
-.topic-card span{
-  display:block;
-  margin-top:4px;
-  color:#8a91a0;
-  font-size:9px;
-}
-
-.topic-progress{
-  height:5px;
-  margin-top:10px;
-  overflow:hidden;
-  border-radius:999px;
-  background:#eaedf3;
-}
-
-.topic-progress i{
-  display:block;
-  height:100%;
-  background:#6042c3;
-}
-
-/* WORD LIST */
-
-.word-list{
-  margin-top:14px;
-  overflow:hidden;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:#fff;
-}
-
-.word-row{
-  display:grid;
-  grid-template-columns:1fr 1.3fr 110px;
-  gap:10px;
-  align-items:center;
-  padding:10px 13px;
-  border-bottom:1px solid #edf0f4;
-  font-size:10px;
-}
-
-.word-row:last-child{border-bottom:0}
-
-.word{
-  color:#2d2452;
-  font-size:11px;
-  font-weight:950;
-}
-
-.meaning{color:#596274}
-
-.word-status{
-  justify-self:end;
-  padding:5px 8px;
-  border-radius:999px;
-  font-size:8.5px;
-  font-weight:950;
-}
-
-.word-status.new{
-  background:#f0f1f4;
-  color:#7e8593;
-}
-
-.word-status.learning{
-  background:#fff2da;
-  color:#a66513;
-}
-
-.word-status.mastered{
-  background:#e3f6ec;
-  color:#168054;
-}
-
-/* GAME COMMON */
-
-.game-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:10px;
-}
-
-.game-header h2{
-  margin:0;
-  color:#25164e;
-  font-size:22px;
-}
-
-.quit{
-  padding:8px 11px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:#fff;
-  color:#674f85;
-  font-size:9.5px;
-  font-weight:900;
-}
-
-.hud{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:7px;
-  margin-bottom:9px;
-}
-
-.hud-box{
-  padding:9px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#fff;
-  text-align:center;
-}
-
-.hud-box small{
-  display:block;
-  color:#969daa;
-  font-size:7.5px;
-  font-weight:950;
-  text-transform:uppercase;
-}
-
-.hud-box b{
-  display:block;
-  margin-top:2px;
-  color:#302550;
-  font-size:15px;
-}
-
-.target{
-  padding:14px;
-  margin-bottom:9px;
-  border-radius:13px;
-  background:linear-gradient(125deg,#2a1769,#6244ba);
-  color:#fff;
-  text-align:center;
-}
-
-.target small{
-  display:block;
-  opacity:.67;
-  font-size:8px;
-  font-weight:950;
-  text-transform:uppercase;
-}
-
-.target b{
-  display:block;
-  margin-top:4px;
-  font-size:clamp(20px,4vw,31px);
-}
-
-/* WHACK */
-
-.whack-board{
-  min-height:470px;
-  padding:15px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  border:1px solid var(--line);
-  border-radius:17px;
-  background:linear-gradient(180deg,#e1f7d6,#bce4a7);
-}
-
-.hole{
-  position:relative;
-  min-height:135px;
-  overflow:hidden;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-}
-
-.ground{
-  position:absolute;
-  bottom:3px;
-  width:90%;
-  height:31px;
-  border-radius:50%;
-  background:#79583d;
-}
-
-.mole{
-  position:relative;
-  z-index:2;
-  width:90%;
-  max-width:175px;
-  min-height:105px;
-  padding:9px 7px 15px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  border:0;
-  border-radius:50% 50% 27% 27%;
-  background:linear-gradient(#ad774b,#80502f);
-  transform:translateY(150%);
-  transition:transform .22s ease;
-}
-
-.mole.show{transform:translateY(0)}
-.mole .face{font-size:34px}
-
-.mole .word-label{
-  max-width:100%;
-  padding:5px 7px;
-  border-radius:7px;
-  background:#fff;
-  color:#33261e;
-  text-align:center;
-  font-size:10px;
-  font-weight:950;
-}
-
-/* LANE GAMES */
-
-.lane-board{
-  position:relative;
-  height:520px;
-  overflow:hidden;
-  border-radius:18px;
-  border:1px solid var(--line);
-  user-select:none;
-  touch-action:none;
-}
-
-.catch-board{
-  background:
-    linear-gradient(#bee8ff 0 68%,#d6efb8 69%,#b5db90 100%);
-}
-
-.road-board{
-  background:#43464e;
-}
-
-.road-board::before{
-  content:"";
-  position:absolute;
-  inset:0;
   background:
     linear-gradient(
       90deg,
-      transparent 32%,
-      rgba(255,255,255,.6) 32%,
-      rgba(255,255,255,.6) 33%,
-      transparent 33%,
-      transparent 66%,
-      rgba(255,255,255,.6) 66%,
-      rgba(255,255,255,.6) 67%,
-      transparent 67%
+      #5c3ac2,
+      #4d82e5
     );
-  opacity:.6;
+
+  border-radius:inherit;
 }
 
-.lanes{
-  position:absolute;
-  inset:0;
+
+/* =========================================================
+   COLLECTION
+========================================================= */
+
+.collection-head{
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:
+    space-between;
+
+  gap:15px;
+
+  margin-bottom:15px;
+}
+
+
+.collection-back{
+  margin-bottom:8px;
+
+  padding:
+    7px 10px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#533a8f;
+
+  font-size:9.5px;
+
+  font-weight:900;
+}
+
+
+.collection-head h1{
+  margin:0;
+
+  color:#241650;
+
+  font-size:30px;
+
+  letter-spacing:-.04em;
+}
+
+
+.collection-head p{
+  margin:
+    5px 0 0;
+
+  color:#777f90;
+
+  font-size:10.5px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:8px;
+
+  margin-bottom:15px;
 }
 
-.driver-lanes{
-  grid-template-columns:repeat(3,1fr);
-}
 
-.lane-object{
-  position:absolute;
-  top:-110px;
-  transform:translateX(-50%);
-  z-index:5;
+.stat{
+  padding:13px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#fff;
+
   text-align:center;
-  animation:fallObject 2.7s linear forwards;
 }
 
-@keyframes fallObject{
-  from{top:-110px}
-  to{top:410px}
+
+.stat small{
+  display:block;
+
+  color:#959ba7;
+
+  font-size:8px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
 }
+
+
+.stat b{
+  display:block;
+
+  margin-top:3px;
+
+  color:#2d3350;
+
+  font-size:19px;
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.game-settings{
+  padding:12px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#fff;
+}
+
+
+.game-settings span{
+  color:#6e7689;
+
+  font-size:10px;
+
+  font-weight:850;
+}
+
+
+.game-settings select{
+  padding:
+    8px 10px;
+
+  border:
+    1px solid
+    #dce0e9;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#403268;
+
+  font-size:10px;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   6 GAME CARDS
+========================================================= */
+
+.game-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0,1fr)
+    );
+
+  gap:12px;
+
+  margin-top:12px;
+}
+
+
+.game-card{
+  min-height:225px;
+
+  padding:18px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-start;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  background:#fff;
+
+  box-shadow:
+    0 7px 18px
+    rgba(38,29,82,.04);
+
+  transition:.16s ease;
+}
+
+
+.game-card:hover{
+  transform:
+    translateY(-3px);
+
+  border-color:#c9beeb;
+
+  box-shadow:
+    0 12px 25px
+    rgba(38,29,82,.08);
+}
+
+
+.game-icon{
+  width:54px;
+
+  height:54px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:15px;
+
+  background:#f3f0ff;
+
+  font-size:32px;
+}
+
+
+.game-card h3{
+  margin:
+    11px 0 5px;
+
+  color:#271a50;
+
+  font-size:17px;
+}
+
+
+.game-card p{
+  margin:0;
+
+  color:#747d8d;
+
+  font-size:10px;
+
+  line-height:1.55;
+}
+
+
+.game-play{
+  margin-top:auto;
+
+  padding:
+    9px 12px;
+
+  border:0;
+
+  border-radius:9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #432594,
+      #7253d4
+    );
+
+  color:#fff;
+
+  font-size:10px;
+
+  font-weight:950;
+}
+
+
+.game-play:disabled{
+  opacity:.4;
+
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
+   TOPICS
+========================================================= */
+
+.topic-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
+
+  gap:10px;
+}
+
+
+.topic-card{
+  padding:15px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:14px;
+
+  background:#fff;
+
+  text-align:left;
+
+  transition:.15s;
+}
+
+
+.topic-card:hover{
+  border-color:#c8bce9;
+
+  transform:
+    translateY(-2px);
+}
+
+
+.topic-card b{
+  display:block;
+
+  color:#29204d;
+
+  font-size:12px;
+}
+
+
+.topic-card span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#8a91a0;
+
+  font-size:9px;
+}
+
+
+.topic-progress{
+  height:5px;
+
+  margin-top:10px;
+
+  overflow:hidden;
+
+  border-radius:999px;
+
+  background:#eaedf3;
+}
+
+
+.topic-progress i{
+  display:block;
+
+  height:100%;
+
+  background:#6042c3;
+}
+
+
+/* =========================================================
+   WORD LIST
+========================================================= */
+
+.word-list{
+  margin-top:14px;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:14px;
+
+  background:#fff;
+}
+
+
+.word-row{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1.3fr 110px;
+
+  gap:10px;
+
+  align-items:center;
+
+  padding:
+    10px 13px;
+
+  border-bottom:
+    1px solid
+    #edf0f4;
+
+  font-size:10px;
+}
+
+
+.word-row:last-child{
+  border-bottom:0;
+}
+
+
+.word{
+  color:#2d2452;
+
+  font-size:11px;
+
+  font-weight:950;
+}
+
+
+.meaning{
+  color:#596274;
+}
+
+
+.word-status{
+  justify-self:end;
+
+  padding:
+    5px 8px;
+
+  border-radius:999px;
+
+  font-size:8.5px;
+
+  font-weight:950;
+}
+
+
+.word-status.new{
+  background:#f0f1f4;
+
+  color:#7e8593;
+}
+
+
+.word-status.learning{
+  background:#fff2da;
+
+  color:#a66513;
+}
+
+
+.word-status.mastered{
+  background:#e3f6ec;
+
+  color:#168054;
+}
+
+
+/* =========================================================
+   GAME COMMON
+========================================================= */
+
+.game-header{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+
+  margin-bottom:10px;
+}
+
+
+.game-header h2{
+  margin:0;
+
+  color:#25164e;
+
+  font-size:22px;
+}
+
+
+.game-header p{
+  margin:
+    3px 0 0;
+
+  color:#7e8595;
+
+  font-size:9.5px;
+}
+
+
+.quit{
+  padding:
+    8px 11px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#674f85;
+
+  font-size:9.5px;
+
+  font-weight:900;
+}
+
+
+.hud{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  gap:7px;
+
+  margin-bottom:9px;
+}
+
+
+.hud-box{
+  padding:9px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:10px;
+
+  background:#fff;
+
+  text-align:center;
+}
+
+
+.hud-box small{
+  display:block;
+
+  color:#969daa;
+
+  font-size:7.5px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+
+.hud-box b{
+  display:block;
+
+  margin-top:2px;
+
+  color:#302550;
+
+  font-size:15px;
+}
+
+
+.target{
+  padding:14px;
+
+  margin-bottom:9px;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      125deg,
+      #2a1769,
+      #6244ba
+    );
+
+  color:#fff;
+
+  text-align:center;
+}
+
+
+.target small{
+  display:block;
+
+  opacity:.67;
+
+  font-size:8px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+
+.target b{
+  display:block;
+
+  margin-top:4px;
+
+  font-size:
+    clamp(
+      20px,
+      4vw,
+      31px
+    );
+}
+
+
+/* =========================================================
+   WHACK
+========================================================= */
+
+.whack-board{
+  min-height:470px;
+
+  padding:15px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:10px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #e1f7d6,
+      #bce4a7
+    );
+}
+
+
+.hole{
+  position:relative;
+
+  min-height:135px;
+
+  overflow:hidden;
+
+  display:flex;
+
+  align-items:flex-end;
+
+  justify-content:center;
+}
+
+
+.ground{
+  position:absolute;
+
+  bottom:3px;
+
+  width:90%;
+
+  height:31px;
+
+  border-radius:50%;
+
+  background:#79583d;
+}
+
+
+.mole{
+  position:relative;
+
+  z-index:2;
+
+  width:90%;
+
+  max-width:175px;
+
+  min-height:105px;
+
+  padding:
+    9px 7px 15px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:5px;
+
+  border:0;
+
+  border-radius:
+    50% 50% 27% 27%;
+
+  background:
+    linear-gradient(
+      #ad774b,
+      #80502f
+    );
+
+  transform:
+    translateY(150%);
+
+  transition:
+    transform .22s ease;
+
+  color:#fff;
+}
+
+
+.mole.show{
+  transform:
+    translateY(0);
+}
+
+
+.mole .face{
+  font-size:34px;
+}
+
+
+.mole .word-label{
+  max-width:100%;
+
+  padding:
+    5px 7px;
+
+  border-radius:7px;
+
+  background:#fff;
+
+  color:#33261e;
+
+  text-align:center;
+
+  font-size:10px;
+
+  font-weight:950;
+
+  overflow-wrap:anywhere;
+}
+
+
+/* =========================================================
+   CATCHER
+========================================================= */
+
+.catch-area{
+  position:relative;
+
+  height:520px;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  background:
+    linear-gradient(
+      #bce8ff 0%,
+      #eaf8ff 68%,
+      #d4ecb8 69%,
+      #b8da94 100%
+    );
+
+  user-select:none;
+
+  touch-action:none;
+}
+
+
+.cloud{
+  position:absolute;
+
+  opacity:.65;
+
+  font-size:54px;
+
+  pointer-events:none;
+}
+
+
+.cloud.a{
+  top:30px;
+  left:8%;
+}
+
+
+.cloud.b{
+  top:90px;
+  right:10%;
+}
+
+
+.fruit{
+  position:absolute;
+
+  z-index:4;
+
+  width:130px;
+
+  transform:
+    translate(-50%,-50%);
+
+  text-align:center;
+
+  pointer-events:none;
+}
+
 
 .fruit-icon{
-  font-size:46px;
+  font-size:42px;
 }
 
-.object-label{
-  max-width:145px;
-  padding:5px 8px;
-  border-radius:8px;
-  background:#fff;
+
+.fruit-label{
+  display:inline-block;
+
+  max-width:125px;
+
+  padding:
+    4px 7px;
+
+  border-radius:7px;
+
+  background:
+    rgba(255,255,255,.95);
+
   color:#303850;
-  font-size:9px;
+
+  font-size:9.5px;
+
   font-weight:950;
-  box-shadow:0 4px 10px rgba(0,0,0,.12);
+
+  overflow-wrap:anywhere;
 }
+
 
 .basket{
   position:absolute;
-  bottom:10px;
-  transform:translateX(-50%);
-  z-index:10;
-  font-size:65px;
-  transition:left .16s ease;
+
+  z-index:7;
+
+  left:50%;
+
+  bottom:11px;
+
+  transform:
+    translateX(-50%);
+
+  font-size:64px;
 }
 
-.driver-car{
-  position:absolute;
-  bottom:10px;
-  transform:translateX(-50%);
-  z-index:10;
-  transition:left .16s ease;
-  text-align:center;
-}
-
-.driver-car-icon{
-  font-size:62px;
-}
-
-.driver-car-label{
-  max-width:135px;
-  margin:auto;
-  padding:4px 7px;
-  border-radius:7px;
-  background:#fff;
-  color:#281260;
-  font-size:8.5px;
-  font-weight:950;
-}
-
-.road-answer{
-  min-width:125px;
-  padding:10px 8px;
-  border:3px solid #fff;
-  border-radius:10px;
-  background:#ffd85d;
-  color:#242b3c;
-  font-size:10px;
-  font-weight:950;
-  box-shadow:0 6px 15px rgba(0,0,0,.2);
-}
 
 .mobile-controls{
   display:flex;
-  justify-content
+
+  justify-content:center;
+
+  gap:10px;
+
+  margin-top:8px;
+}
+
+
+.mobile-controls button{
+  min-width:110px;
+
+  padding:9px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#513b83;
+
+  font-weight:950;
+}
+
+
+/* =========================================================
+   WORD RACER
+========================================================= */
+
+.racer-road{
+  position:relative;
+
+  height:530px;
+
+  overflow:hidden;
+
+  border:
+    6px solid
+    #353b47;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #404752 0%,
+      #404752 32.8%,
+      #f4f4f4 33%,
+      #f4f4f4 33.5%,
+      #404752 33.7%,
+      #404752 66.1%,
+      #f4f4f4 66.3%,
+      #f4f4f4 66.8%,
+      #404752 67%,
+      #404752 100%
+    );
+
+  user-select:none;
+
+  touch-action:none;
+}
+
+
+.road-line{
+  position:absolute;
+
+  top:0;
+
+  bottom:0;
+
+  width:3px;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.95) 0,
+      rgba(255,255,255,.95) 22px,
+      transparent 22px,
+      transparent 45px
+    );
+
+  opacity:.35;
+}
+
+
+.road-line.l1{
+  left:33.33%;
+}
+
+
+.road-line.l2{
+  left:66.66%;
+}
+
+
+.racer-answer{
+  position:absolute;
+
+  z-index:5;
+
+  width:29%;
+
+  min-height:66px;
+
+  padding:
+    8px 6px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  transform:
+    translate(-50%,-50%);
+
+  border:
+    3px solid
+    rgba(255,255,255,.85);
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #ecefff
+    );
+
+  color:#312558;
+
+  box-shadow:
+    0 8px 18px
+    rgba(0,0,0,.2);
+
+  text-align:center;
+
+  font-size:10px;
+
+  font-weight:950;
+
+  overflow-wrap:anywhere;
+}
+
+
+.racer-car{
+  position:absolute;
+
+  z-index:9;
+
+  bottom:16px;
+
+  left:50%;
+
+  width:29%;
+
+  max-width:180px;
+
+  min-height:110px;
+
+  transform:
+    translateX(-50%);
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:flex-end;
+
+  transition:
+    left .13s ease;
+}
+
+
+.car-icon{
+  font-size:65px;
+
+  line-height:1;
+
+  filter:
+    drop-shadow(
+      0 7px 5px
+      rgba(0,0,0,.28)
+    );
+}
+
+
+.car-prompt{
+  max-width:100%;
+
+  margin-bottom:3px;
+
+  padding:
+    5px 7px;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#35245e;
+
+  box-shadow:
+    0 4px 10px
+    rgba(0,0,0,.2);
+
+  text-align:center;
+
+  font-size:9px;
+
+  font-weight:950;
+
+  overflow-wrap:anywhere;
+}
+
+
+/* =========================================================
+   MATCH MASTER
+========================================================= */
+
+.match-board{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,minmax(0,1fr));
+
+  gap:9px;
+
+  padding:14px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f3eeff,
+      #eef8ff
+    );
+}
+
+
+.match-card{
+  position:relative;
+
+  min-height:105px;
+
+  padding:8px;
+
+  border:
+    1px solid
+    #ddd8ee;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #5c3bc0,
+      #8065dd
+    );
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  font-size:10px;
+
+  font-weight:950;
+
+  overflow-wrap:anywhere;
+
+  transition:.18s ease;
+}
+
+
+.match-card::before{
+  content:"?";
+
+  font-size:26px;
+}
+
+
+.match-card.revealed{
+  background:#fff;
+
+  color:#31264f;
+}
+
+
+.match-card.revealed::before{
+  display:none;
+}
+
+
+.match-card.matched{
+  background:#dff5e9;
+
+  color:#14744d;
+
+  border-color:#a8dfc3;
+
+  opacity:.68;
+
+  pointer-events:none;
+}
+
+
+.match-card.matched::before{
+  display:none;
+}
+
+
+/* =========================================================
+   SPEED QUIZ
+========================================================= */
+
+.quiz-panel{
+  max-width:850px;
+
+  margin:auto;
+
+  padding:20px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:18px;
+
+  background:#fff;
+
+  box-shadow:
+    var(--shadow);
+}
+
+
+.quiz-prompt{
+  padding:
+    20px;
+
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f2efff,
+      #eef7ff
+    );
+
+  color:#2e215c;
+
+  text-align:center;
+
+  font-size:
+    clamp(
+      20px,
+      4vw,
+      30px
+    );
+
+  font-weight:950;
+}
+
+
+.quiz-options{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:9px;
+
+  margin-top:13px;
+}
+
+
+.quiz-option{
+  min-height:72px;
+
+  padding:12px;
+
+  border:
+    1px solid
+    #dfe3ed;
+
+  border-radius:11px;
+
+  background:#fff;
+
+  color:#333b50;
+
+  text-align:left;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  transition:.13s;
+}
+
+
+.quiz-option:hover{
+  border-color:#9f8bdc;
+
+  background:#faf8ff;
+}
+
+
+.quiz-option.good{
+  background:#ddf4e8;
+
+  border-color:#80cea5;
+
+  color:#126c47;
+}
+
+
+.quiz-option.bad{
+  background:#ffe8eb;
+
+  border-color:#eeb1ba;
+
+  color:#9d3040;
+}
+
+
+/* =========================================================
+   BALLOON
+========================================================= */
+
+.balloon-area{
+  position:relative;
+
+  height:530px;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #c9ebff,
+      #f2fbff
+    );
+
+  user-select:none;
+}
+
+
+.balloon{
+  position:absolute;
+
+  z-index:5;
+
+  width:135px;
+
+  transform:
+    translate(-50%,-50%);
+
+  text-align:center;
+
+  cursor:pointer;
+
+  transition:
+    transform .12s ease;
+}
+
+
+.balloon:hover{
+  transform:
+    translate(-50%,-50%)
+    scale(1.06);
+}
+
+
+.balloon-shape{
+  width:90px;
+
+  min-height:110px;
+
+  margin:auto;
+
+  padding:
+    20px 8px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:
+    50% 50% 47% 47%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f78fa2,
+      #ec5875
+    );
+
+  color:#fff;
+
+  box-shadow:
+    inset
+    -8px -8px 15px
+    rgba(120,0,40,.14),
+    0 8px 14px
+    rgba(0,0,0,.12);
+
+  font-size:9.5px;
+
+  font-weight:950;
+
+  overflow-wrap:anywhere;
+}
+
+
+.balloon-string{
+  width:1px;
+
+  height:42px;
+
+  margin:auto;
+
+  background:#808080;
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+.feedback{
+  position:fixed;
+
+  z-index:110;
+
+  top:100px;
+
+  left:50%;
+
+  transform:
+    translateX(-50%)
+    translateY(-10px);
+
+  padding:
+    8px 14px;
+
+  border-radius:999px;
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:950;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:.16s;
+}
+
+
+.feedback.show{
+  opacity:1;
+
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+
+.feedback.good{
+  background:#16845b;
+}
+
+
+.feedback.bad{
+  background:#b83345;
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:120;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:17px;
+
+  background:
+    rgba(18,12,46,.68);
+
+  backdrop-filter:
+    blur(5px);
+}
+
+
+.result{
+  width:
+    min(
+      540px,
+      100%
+    );
+
+  max-height:90vh;
+
+  overflow:auto;
+
+  padding:21px;
+
+  border-radius:19px;
+
+  background:#fff;
+}
+
+
+.result-icon{
+  text-align:center;
+
+  font-size:52px;
+}
+
+
+.result h2{
+  margin:
+    3px 0 6px;
+
+  color:#24164e;
+
+  text-align:center;
+}
+
+
+.result-score{
+  color:#5b40b1;
+
+  text-align:center;
+
+  font-size:43px;
+
+  font-weight:950;
+}
+
+
+.result-stats{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:7px;
+
+  margin-top:15px;
+}
+
+
+.result-stat{
+  padding:9px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:9px;
+
+  text-align:center;
+}
+
+
+.result-stat small{
+  display:block;
+
+  color:#949aa7;
+
+  font-size:7.5px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+
+.result-stat b{
+  display:block;
+
+  margin-top:2px;
+
+  font-size:15px;
+}
+
+
+.result-review-title{
+  margin:
+    16px 0 7px;
+
+  color:#687082;
+
+  font-size:9px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+
+.review-chips{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px;
+}
+
+
+.review-chip{
+  padding:
+    5px 8px;
+
+  border-radius:999px;
+
+  background:#fff0f2;
+
+  color:#a73041;
+
+  font-size:8.5px;
+
+  font-weight:900;
+}
+
+
+.result-actions{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:7px;
+
+  margin-top:17px;
+}
+
+
+.result-actions button{
+  padding:10px;
+
+  border-radius:9px;
+
+  font-weight:950;
+}
+
+
+.secondary{
+  border:
+    1px solid
+    var(--line);
+
+  background:#fff;
+
+  color:#584676;
+}
+
+
+.primary{
+  border:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #432593,
+      #7654d5
+    );
+
+  color:#fff;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-box{
+  max-width:760px;
+
+  margin:
+    40px auto;
+
+  padding:25px;
+
+  border:
+    1px solid
+    #f0bac2;
+
+  border-radius:17px;
+
+  background:#fff;
+}
+
+
+.error-box h2{
+  color:#b83345;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+  .category-grid,
+  .topic-grid{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+
+  .game-grid{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+}
+
+
+@media(max-width:700px){
+
+  .student{
+    display:none;
+  }
+
+
+  .category-grid,
+  .topic-grid,
+  .game-grid{
+    grid-template-columns:1fr;
+  }
+
+
+  .stats{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+
+  .hud{
+    grid-template-columns:
+      repeat(3,1fr);
+  }
+
+
+  .whack-board{
+    padding:7px;
+
+    gap:5px;
+  }
+
+
+  .hole{
+    min-height:130px;
+  }
+
+
+  .mole{
+    width:98%;
+  }
+
+
+  .match-board{
+    grid-template-columns:
+      repeat(3,1fr);
+
+    gap:6px;
+  }
+
+
+  .match-card{
+    min-height:95px;
+
+    font-size:8.5px;
+  }
+
+
+  .quiz-options{
+    grid-template-columns:1fr;
+  }
+
+
+  .word-row{
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .word-status{
+    grid-column:
+      1 / -1;
+
+    justify-self:start;
+  }
+
+}
+
+
+@media(max-width:480px){
+
+  .logo span{
+    display:none;
+  }
+
+
+  .hero{
+    padding:
+      23px 19px;
+  }
+
+
+  .catch-area,
+  .racer-road,
+  .balloon-area{
+    height:500px;
+  }
+
+
+  .racer-answer{
+    width:30%;
+
+    font-size:8px;
+  }
+
+
+  .car-icon{
+    font-size:55px;
+  }
+
+
+  .car-prompt{
+    font-size:8px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TOP
+========================================================= -->
+
+<header class="topbar">
+
+  <div class="top-inner">
+
+    <a
+      class="back"
+      href="../"
+    >
+      ← Luyện tập
+    </a>
+
+
+    <div class="logo">
+
+      <div class="logo-icon">
+        🎮
+      </div>
+
+      <span>
+        Vocabulary Practice
+      </span>
+
+    </div>
+
+
+    <div
+      class="student"
+      id="studentInfo"
+    >
+      Học sinh
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     HOME
+========================================================= -->
+
+<main
+  class="page"
+  id="homeScreen"
+>
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      VOCABULARY ARCADE
+    </div>
+
+
+    <h1>
+      Học từ vựng qua game
+    </h1>
+
+
+    <p>
+      Chọn kỹ năng hoặc chủ đề em muốn luyện.
+      Một kho từ vựng có thể được luyện qua nhiều trò chơi khác nhau.
+      Những từ thường xuyên trả lời sai sẽ được hệ thống ưu tiên cho xuất hiện lại.
+    </p>
+
+  </section>
+
+
+  <section class="review-banner">
+
+    <div class="review-main">
+
+      <div class="review-icon">
+        🔥
+      </div>
+
+
+      <div>
+
+        <b>
+          Từ cần ôn của tôi
+        </b>
+
+        <span id="reviewSummary">
+          Chưa có từ cần ôn.
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="review-btn"
+      id="reviewButton"
+      onclick="openReviewCollection()"
+    >
+      Ôn ngay →
+    </button>
+
+  </section>
+
+
+  <div class="section-head">
+
+    <h2>
+      Chọn nội dung
+    </h2>
+
+    <p>
+      Chọn kỹ năng IELTS hoặc luyện theo chủ đề.
+    </p>
+
+  </div>
+
+
+  <section
+    class="category-grid"
+    id="categoryGrid"
+  ></section>
+
+</main>
+
+
+<!-- =========================================================
+     TOPICS
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="topicsScreen"
+>
+
+  <div class="collection-head">
+
+    <div>
+
+      <button
+        class="collection-back"
+        onclick="showHome()"
+      >
+        ← Vocabulary
+      </button>
+
+
+      <h1>
+        🌍 Chủ đề
+      </h1>
+
+
+      <p>
+        Chọn chủ đề em muốn luyện.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="topic-grid"
+    id="topicGrid"
+  ></div>
+
+</main>
+
+
+<!-- =========================================================
+     COLLECTION
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="collectionScreen"
+>
+
+  <div class="collection-head">
+
+    <div>
+
+      <button
+        class="collection-back"
+        id="collectionBack"
+        onclick="showHome()"
+      >
+        ← Vocabulary
+      </button>
+
+
+      <h1 id="collectionTitle">
+        Vocabulary
+      </h1>
+
+
+      <p id="collectionSubtitle"></p>
+
+    </div>
+
+  </div>
+
+
+  <section class="stats">
+
+    <div class="stat">
+      <small>Total</small>
+      <b id="statTotal">0</b>
+    </div>
+
+    <div class="stat">
+      <small>Mastered</small>
+      <b id="statMastered">0</b>
+    </div>
+
+    <div class="stat">
+      <small>Learning</small>
+      <b id="statLearning">0</b>
+    </div>
+
+    <div class="stat">
+      <small>New</small>
+      <b id="statNew">0</b>
+    </div>
+
+  </section>
+
+
+  <section class="game-settings">
+
+    <span>
+      Chiều luyện
+    </span>
+
+
+    <select id="directionSelect">
+
+      <option value="vi-en">
+        Tiếng Việt → English
+      </option>
+
+      <option value="en-vi">
+        English → Tiếng Việt
+      </option>
+
+    </select>
+
+  </section>
+
+
+  <div class="section-head">
+
+    <h2>
+      Chọn game
+    </h2>
+
+    <p id="gameRequirementText">
+      Chọn một trò chơi để bắt đầu.
+    </p>
+
+  </div>
+
+
+  <!-- =====================================================
+       6 GAMES
+  ====================================================== -->
+
+  <section class="game-grid">
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🐹
+      </div>
+
+      <h3>
+        Whack a Word
+      </h3>
+
+      <p>
+        Đập đúng con chuột đang mang từ tương ứng trước khi nó biến mất.
+      </p>
+
+      <button
+        class="game-play game-start"
+        onclick="startWhack()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🍎
+      </div>
+
+      <h3>
+        Word Catcher
+      </h3>
+
+      <p>
+        Di chuyển chiếc giỏ để hứng đúng từ và tránh những đáp án gây nhiễu.
+      </p>
+
+      <button
+        class="game-play game-start"
+        onclick="startCatcher()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🚗
+      </div>
+
+      <h3>
+        Word Racer
+      </h3>
+
+      <p>
+        Trên xe là câu hỏi. Chuyển làn và đâm vào từ hoặc nghĩa tương ứng.
+      </p>
+
+      <button
+        class="game-play game-start"
+        onclick="startRacer()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🧩
+      </div>
+
+      <h3>
+        Match Master
+      </h3>
+
+      <p>
+        Lật thẻ và ghép chính xác từ tiếng Anh với nghĩa tiếng Việt.
+      </p>
+
+      <button
+        class="game-play game-start"
+        onclick="startMatch()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        ⚡
+      </div>
+
+      <h3>
+        Speed Quiz
+      </h3>
+
+      <p>
+        Chọn đáp án chính xác càng nhanh càng tốt trước khi hết thời gian.
+      </p>
+
+      <button
+        class="game-play game-start"
+        onclick="startSpeedQuiz()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🎈
+      </div>
+
+      <h3>
+        Balloon Pop
+      </h3>
+
+      <p>
+        Bắn quả bóng đang chứa đáp án đúng trước khi nó bay khỏi màn hình.
+      </p>
+
+      <button
+        class="game-play game-start"
+        onclick="startBalloon()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+  </section>
+
+
+  <!-- WORD LIST -->
+
+  <div class="section-head">
+
+    <h2>
+      Từ trong mục này
+    </h2>
+
+    <p id="wordListDescription"></p>
+
+  </div>
+
+
+  <section
+    class="word-list"
+    id="wordList"
+  ></section>
+
+</main>
+
+
+<!-- =========================================================
+     WHACK
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="whackScreen"
+>
+
+  <div class="game-header">
+
+    <div>
+      <h2>🐹 Whack a Word</h2>
+      <p>Đập đúng từ trước khi chuột biến mất.</p>
+    </div>
+
+    <button
+      class="quit"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-box">
+      <small>Score</small>
+      <b id="whackScore">0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Time</small>
+      <b id="whackTime">45</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Lives</small>
+      <b id="whackLives">5</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Combo</small>
+      <b id="whackCombo">x0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Accuracy</small>
+      <b id="whackAccuracy">0%</b>
+    </div>
+
+  </div>
+
+
+  <section class="target">
+
+    <small>
+      Đập từ tương ứng
+    </small>
+
+    <b id="whackTarget">
+      —
+    </b>
+
+  </section>
+
+
+  <section
+    class="whack-board"
+    id="whackBoard"
+  ></section>
+
+</main>
+
+
+<!-- =========================================================
+     CATCHER
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="catchScreen"
+>
+
+  <div class="game-header">
+
+    <div>
+      <h2>🍎 Word Catcher</h2>
+      <p>Dùng phím ← → hoặc kéo giỏ.</p>
+    </div>
+
+    <button
+      class="quit"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-box">
+      <small>Score</small>
+      <b id="catchScore">0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Time</small>
+      <b id="catchTime">60</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Lives</small>
+      <b id="catchLives">5</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Combo</small>
+      <b id="catchCombo">x0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Accuracy</small>
+      <b id="catchAccuracy">0%</b>
+    </div>
+
+  </div>
+
+
+  <section class="target">
+
+    <small>
+      Hứng từ tương ứng
+    </small>
+
+    <b id="catchTarget">
+      —
+    </b>
+
+  </section>
+
+
+  <section
+    class="catch-area"
+    id="catchArea"
+  >
+
+    <div class="cloud a">☁️</div>
+    <div class="cloud b">☁️</div>
+
+    <div
+      class="basket"
+      id="basket"
+    >
+      🧺
+    </div>
+
+  </section>
+
+
+  <div class="mobile-controls">
+
+    <button onclick="moveBasket(-1)">
+      ←
+    </button>
+
+    <button onclick="moveBasket(1)">
+      →
+    </button>
+
+  </div>
+
+</main>
+
+
+<!-- =========================================================
+     RACER
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="racerScreen"
+>
+
+  <div class="game-header">
+
+    <div>
+      <h2>🚗 Word Racer</h2>
+      <p>Chuyển làn để đâm vào đáp án đúng.</p>
+    </div>
+
+    <button
+      class="quit"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-box">
+      <small>Score</small>
+      <b id="racerScore">0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Time</small>
+      <b id="racerTime">60</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Lives</small>
+      <b id="racerLives">5</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Combo</small>
+      <b id="racerCombo">x0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Accuracy</small>
+      <b id="racerAccuracy">0%</b>
+    </div>
+
+  </div>
+
+
+  <div
+    class="racer-road"
+    id="racerRoad"
+  >
+
+    <div class="road-line l1"></div>
+    <div class="road-line l2"></div>
+
+
+    <div
+      class="racer-car"
+      id="racerCar"
+    >
+
+      <div
+        class="car-prompt"
+        id="racerCarPrompt"
+      >
+        —
+      </div>
+
+      <div class="car-icon">
+        🚗
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="mobile-controls">
+
+    <button onclick="moveCar(-1)">
+      ←
+    </button>
+
+    <button onclick="moveCar(1)">
+      →
+    </button>
+
+  </div>
+
+</main>
+
+
+<!-- =========================================================
+     MATCH
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="matchScreen"
+>
+
+  <div class="game-header">
+
+    <div>
+      <h2>🧩 Match Master</h2>
+      <p>Ghép từ tiếng Anh với nghĩa tương ứng.</p>
+    </div>
+
+    <button
+      class="quit"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-box">
+      <small>Score</small>
+      <b id="matchScore">0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Time</small>
+      <b id="matchTime">75</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Pairs</small>
+      <b id="matchPairs">0/6</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Combo</small>
+      <b id="matchCombo">x0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Accuracy</small>
+      <b id="matchAccuracy">0%</b>
+    </div>
+
+  </div>
+
+
+  <section
+    class="match-board"
+    id="matchBoard"
+  ></section>
+
+</main>
+
+
+<!-- =========================================================
+     SPEED QUIZ
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="quizScreen"
+>
+
+  <div class="game-header">
+
+    <div>
+      <h2>⚡ Speed Quiz</h2>
+      <p>Chọn nhanh đáp án chính xác.</p>
+    </div>
+
+    <button
+      class="quit"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-box">
+      <small>Score</small>
+      <b id="quizScore">0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Time</small>
+      <b id="quizTime">45</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Lives</small>
+      <b id="quizLives">5</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Combo</small>
+      <b id="quizCombo">x0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Accuracy</small>
+      <b id="quizAccuracy">0%</b>
+    </div>
+
+  </div>
+
+
+  <section class="quiz-panel">
+
+    <div
+      class="quiz-prompt"
+      id="quizPrompt"
+    >
+      —
+    </div>
+
+
+    <div
+      class="quiz-options"
+      id="quizOptions"
+    ></div>
+
+  </section>
+
+</main>
+
+
+<!-- =========================================================
+     BALLOON
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="balloonScreen"
+>
+
+  <div class="game-header">
+
+    <div>
+      <h2>🎈 Balloon Pop</h2>
+      <p>Bắn quả bóng chứa đáp án đúng.</p>
+    </div>
+
+    <button
+      class="quit"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-box">
+      <small>Score</small>
+      <b id="balloonScore">0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Time</small>
+      <b id="balloonTime">60</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Lives</small>
+      <b id="balloonLives">5</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Combo</small>
+      <b id="balloonCombo">x0</b>
+    </div>
+
+    <div class="hud-box">
+      <small>Accuracy</small>
+      <b id="balloonAccuracy">0%</b>
+    </div>
+
+  </div>
+
+
+  <section class="target">
+
+    <small>
+      Bắn từ tương ứng
+    </small>
+
+    <b id="balloonTarget">
+      —
+    </b>
+
+  </section>
+
+
+  <section
+    class="balloon-area"
+    id="balloonArea"
+  ></section>
+
+</main>
+
+
+<!-- =========================================================
+     FEEDBACK
+========================================================= -->
+
+<div
+  id="feedback"
+  class="feedback"
+></div>
+
+
+<!-- =========================================================
+     RESULT
+========================================================= -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div
+      class="result-icon"
+      id="resultIcon"
+    >
+      🏆
+    </div>
+
+
+    <h2 id="resultTitle">
+      Hoàn thành
+    </h2>
+
+
+    <div
+      class="result-score"
+      id="resultScore"
+    >
+      0
+    </div>
+
+
+    <section class="result-stats">
+
+      <div class="result-stat">
+        <small>Correct</small>
+        <b id="resultCorrect">0</b>
+      </div>
+
+      <div class="result-stat">
+        <small>Accuracy</small>
+        <b id="resultAccuracy">0%</b>
+      </div>
+
+      <div class="result-stat">
+        <small>Best combo</small>
+        <b id="resultCombo">x0</b>
+      </div>
+
+    </section>
+
+
+    <div class="result-review-title">
+      Từ cần ôn lại
+    </div>
+
+
+    <div
+      class="review-chips"
+      id="resultReview"
+    ></div>
+
+
+    <div class="result-actions">
+
+      <button
+        class="secondary"
+        onclick="backToCollection()"
+      >
+        ← Chọn game
+      </button>
+
+
+      <button
+        class="primary"
+        onclick="replayGame()"
+      >
+        Chơi lại ↻
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const VOCABULARY_DATA =
+Array.isArray(
+  window.VOCABULARY_DATA
+)
+?
+window.VOCABULARY_DATA
+:
+[];
+
+
+/* =========================================================
+   META
+========================================================= */
+
+const SKILL_META = {
+
+  reading:{
+    title:"Reading",
+    icon:"📖"
+  },
+
+  listening:{
+    title:"Listening",
+    icon:"🎧"
+  },
+
+  "speaking-part-1":{
+    title:"Speaking Part 1",
+    icon:"🗣️"
+  },
+
+  "speaking-part-2":{
+    title:"Speaking Part 2",
+    icon:"🗣️"
+  },
+
+  "speaking-part-3":{
+    title:"Speaking Part 3",
+    icon:"💬"
+  },
+
+  "writing-task-1":{
+    title:"Writing Task 1",
+    icon:"📊"
+  },
+
+  "writing-task-2":{
+    title:"Writing Task 2",
+    icon:"✍️"
+  }
+
+};
+
+
+const TOPIC_LABELS = {
+
+  education:"Education",
+  environment:"Environment",
+  technology:"Technology",
+  health:"Health",
+  work:"Work",
+  business:"Business",
+  money:"Money",
+  family:"Family",
+  relationships:"Relationships",
+  travel:"Travel",
+  experience:"Experience",
+  places:"Places",
+  transport:"Transport",
+  cities:"Cities",
+  lifestyle:"Lifestyle",
+  food:"Food",
+  animals:"Animals",
+  science:"Science",
+
+  "wildlife-conservation":
+    "Wildlife Conservation",
+
+  "marine-animals":
+    "Marine Animals",
+
+  "food-security":
+    "Food Security",
+
+  agriculture:
+    "Agriculture",
+
+  population:
+    "Population",
+
+  "data-trends":
+    "Data & Trends"
+
+};
+
+
+/* =========================================================
+   GAME TITLE
+========================================================= */
+
+const GAME_NAMES = {
+
+  whack:
+    "Whack a Word",
+
+  catcher:
+    "Word Catcher",
+
+  racer:
+    "Word Racer",
+
+  match:
+    "Match Master",
+
+  quiz:
+    "Speed Quiz",
+
+  balloon:
+    "Balloon Pop"
+
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+function $(id){
+
+  return document.getElementById(
+    id
+  );
+
+}
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function getStudent(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        "IELTS_PRACTICE_STUDENT"
+      )
+
+      ||
+
+      "null"
+
+    );
+
+  }
+
+  catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function loadStudent(){
+
+  const student =
+  getStudent();
+
+
+  if(
+    student?.name
+    &&
+    student?.className
+  ){
+
+    $("studentInfo")
+    .textContent =
+    `${student.name} · ${student.className}`;
+
+  }
+
+}
+
+
+function studentScope(){
+
+  const student =
+  getStudent();
+
+
+  if(
+    !student?.name
+  ){
+
+    return "guest";
+
+  }
+
+
+  return encodeURIComponent(
+
+    (
+      student.name
+      +
+      "|"
+      +
+      (
+        student.className
+        ||
+        ""
+      )
+    )
+    .toLowerCase()
+
+  );
+
+}
+
+
+/* =========================================================
+   STORAGE KEYS
+========================================================= */
+
+function statsKey(){
+
+  return(
+    "VOCABULARY_WORD_STATS_V3_"
+    +
+    studentScope()
+  );
+
+}
+
+
+function historyKey(){
+
+  return(
+    "VOCABULARY_GAME_HISTORY_V3_"
+    +
+    studentScope()
+  );
+
+}
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentCollection =
+[];
+
+
+let currentCollectionType =
+"";
+
+
+let currentCollectionKey =
+"";
+
+
+let currentCollectionTitle =
+"";
+
+
+let currentGame =
+"";
+
+
+let lastGame =
+"";
+
+
+let gameDirection =
+"vi-en";
+
+
+let score =
+0;
+
+
+let lives =
+5;
+
+
+let combo =
+0;
+
+
+let bestCombo =
+0;
+
+
+let correct =
+0;
+
+
+let wrong =
+0;
+
+
+let attempts =
+0;
+
+
+let reviewMap =
+{};
+
+
+let currentTarget =
+null;
+
+
+let gameEnded =
+false;
+
+
+let gameTimer =
+null;
+
+
+let roundTimer =
+null;
+
+
+/* CATCHER */
+
+let fruits =
+[];
+
+
+let basketX =
+50;
+
+
+let catcherAnimation =
+null;
+
+
+let catcherLastFrame =
+0;
+
+
+let catcherChanging =
+false;
+
+
+/* RACER */
+
+let racerAnswers =
+[];
+
+
+let carLane =
+1;
+
+
+let racerAnimation =
+null;
+
+
+let racerLastFrame =
+0;
+
+
+let racerChanging =
+false;
+
+
+/* MATCH */
+
+let matchFirst =
+null;
+
+
+let matchSecond =
+null;
+
+
+let matchLocked =
+false;
+
+
+let matchPairsFound =
+0;
+
+
+let matchTotalPairs =
+6;
+
+
+/* BALLOON */
+
+let balloons =
+[];
+
+
+let balloonAnimation =
+null;
+
+
+let balloonLastFrame =
+0;
+
+
+let balloonChanging =
+false;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    character => ({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+
+    })[character]
+
+  );
+
+}
+
+
+function shuffle(array){
+
+  const result =
+  [...array];
+
+
+  for(
+    let i=result.length-1;
+    i>0;
+    i--
+  ){
+
+    const j =
+    Math.floor(
+      Math.random()
+      *
+      (
+        i+1
+      )
+    );
+
+
+    [
+      result[i],
+      result[j]
+    ]
+    =
+    [
+      result[j],
+      result[i]
+    ];
+
+  }
+
+
+  return result;
+
+}
+
+
+function randomItem(array){
+
+  return array[
+    Math.floor(
+      Math.random()
+      *
+      array.length
+    )
+  ];
+
+}
+
+
+function titleCase(value){
+
+  return String(
+    value
+  )
+  .split("-")
+  .map(
+    part =>
+    part.charAt(0)
+    .toUpperCase()
+    +
+    part.slice(1)
+  )
+  .join(" ");
+
+}
+
+
+function wordId(word){
+
+  return String(
+    word.word
+  )
+  .trim()
+  .toLowerCase();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function readStats(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        statsKey()
+      )
+
+      ||
+
+      "{}"
+
+    );
+
+  }
+
+  catch(error){
+
+    return {};
+
+  }
+
+}
+
+
+function writeStats(stats){
+
+  localStorage.setItem(
+
+    statsKey(),
+
+    JSON.stringify(
+      stats
+    )
+
+  );
+
+}
+
+
+function getWordStats(word){
+
+  const stats =
+  readStats();
+
+
+  return stats[
+    wordId(word)
+  ]
+
+  ||
+
+  {
+    seen:0,
+    correct:0,
+    wrong:0
+  };
+
+}
+
+
+function registerWordResult(
+  word,
+  isCorrect
+){
+
+  const stats =
+  readStats();
+
+
+  const id =
+  wordId(
+    word
+  );
+
+
+  const current =
+  stats[id]
+
+  ||
+
+  {
+    seen:0,
+    correct:0,
+    wrong:0
+  };
+
+
+  current.seen++;
+
+
+  if(isCorrect){
+
+    current.correct++;
+
+  }
+
+  else{
+
+    current.wrong++;
+
+  }
+
+
+  current.lastSeen =
+  new Date()
+  .toISOString();
+
+
+  stats[id] =
+  current;
+
+
+  writeStats(
+    stats
+  );
+
+}
+
+
+/* =========================================================
+   MASTERY
+========================================================= */
+
+function wordStatus(word){
+
+  const stats =
+  getWordStats(
+    word
+  );
+
+
+  if(
+    !stats.seen
+  ){
+
+    return "new";
+
+  }
+
+
+  const rate =
+  stats.correct
+  /
+  stats.seen;
+
+
+  if(
+    stats.seen >= 5
+    &&
+    rate >= .8
+  ){
+
+    return "mastered";
+
+  }
+
+
+  return "learning";
+
+}
+
+
+function collectionStats(words){
+
+  const result = {
+
+    total:
+      words.length,
+
+    mastered:
+      0,
+
+    learning:
+      0,
+
+    new:
+      0
+
+  };
+
+
+  words.forEach(
+    word => {
+
+      result[
+        wordStatus(word)
+      ]++;
+
+    }
+  );
+
+
+  result.percent =
+  result.total
+
+  ?
+
+  Math.round(
+    result.mastered
+    /
+    result.total
+    *
+    100
+  )
+
+  :
+
+  0;
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   REVIEW WORDS
+========================================================= */
+
+function getReviewWords(){
+
+  return VOCABULARY_DATA
+  .filter(
+    word => {
+
+      const stats =
+      getWordStats(
+        word
+      );
+
+
+      if(
+        !stats.seen
+        ||
+        !stats.wrong
+      ){
+
+        return false;
+
+      }
+
+
+      return(
+        stats.correct
+        /
+        stats.seen
+        <
+        .8
+      );
+
+    }
+  )
+  .sort(
+    (
+      a,
+      b
+    ) =>
+    getWordStats(b).wrong
+    -
+    getWordStats(a).wrong
+  );
+
+}
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+function renderCategories(){
+
+  const cards =
+  Object.entries(
+    SKILL_META
+  )
+  .map(
+    (
+      [
+        key,
+        meta
+      ]
+    ) => {
+
+      const words =
+      VOCABULARY_DATA
+      .filter(
+        word =>
+        (
+          word.skills
+          ||
+          []
+        )
+        .includes(
+          key
+        )
+      );
+
+
+      const stats =
+      collectionStats(
+        words
+      );
+
+
+      return`
+        <button
+          class="category"
+          onclick="openSkill('${key}')"
+        >
+
+          <div class="category-icon">
+            ${meta.icon}
+          </div>
+
+          <h3>
+            ${meta.title}
+          </h3>
+
+          <div class="category-count">
+            ${words.length} từ
+          </div>
+
+
+          <div class="mastery-line">
+
+            <div class="mastery-row">
+
+              <span>
+                Mastered
+              </span>
+
+              <strong>
+                ${stats.percent}%
+              </strong>
+
+            </div>
+
+
+            <div class="mastery-bar">
+
+              <i
+                style="width:${stats.percent}%"
+              ></i>
+
+            </div>
+
+          </div>
+
+        </button>
+      `;
+
+    }
+  );
+
+
+  const topicWords =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    Array.isArray(
+      word.topics
+    )
+    &&
+    word.topics.length
+  );
+
+
+  const topicStats =
+  collectionStats(
+    topicWords
+  );
+
+
+  cards.push(
+    `
+      <button
+        class="category"
+        onclick="openTopics()"
+      >
+
+        <div class="category-icon">
+          🌍
+        </div>
+
+        <h3>
+          Chủ đề
+        </h3>
+
+        <div class="category-count">
+          Environment · Education · Animals · ...
+        </div>
+
+
+        <div class="mastery-line">
+
+          <div class="mastery-row">
+
+            <span>
+              Mastered
+            </span>
+
+            <strong>
+              ${topicStats.percent}%
+            </strong>
+
+          </div>
+
+
+          <div class="mastery-bar">
+
+            <i
+              style="width:${topicStats.percent}%"
+            ></i>
+
+          </div>
+
+        </div>
+
+      </button>
+    `
+  );
+
+
+  $("categoryGrid")
+  .innerHTML =
+  cards.join("");
+
+
+  renderReviewBanner();
+
+}
+
+
+/* =========================================================
+   REVIEW BANNER
+========================================================= */
+
+function renderReviewBanner(){
+
+  const words =
+  getReviewWords();
+
+
+  $("reviewSummary")
+  .textContent =
+  words.length
+
+  ?
+
+  `${words.length} từ cần ôn lại`
+
+  :
+
+  "Chưa có từ cần ôn.";
+
+
+  $("reviewButton")
+  .disabled =
+  !words.length;
+
+
+  $("reviewButton")
+  .style.opacity =
+  words.length
+  ?
+  "1"
+  :
+  ".45";
+
+}
+
+
+/* =========================================================
+   SCREEN
+========================================================= */
+
+function hideAllScreens(){
+
+  [
+    "homeScreen",
+    "topicsScreen",
+    "collectionScreen",
+
+    "whackScreen",
+    "catchScreen",
+    "racerScreen",
+    "matchScreen",
+    "quizScreen",
+    "balloonScreen"
+  ]
+  .forEach(
+    id => {
+
+      $(id)
+      .classList
+      .add(
+        "hidden"
+      );
+
+    }
+  );
+
+}
+
+
+function showHome(){
+
+  clearGame();
+
+
+  hideAllScreens();
+
+
+  $("homeScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  renderCategories();
+
+}
+
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+function openSkill(key){
+
+  const meta =
+  SKILL_META[key];
+
+
+  const words =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    (
+      word.skills
+      ||
+      []
+    )
+    .includes(
+      key
+    )
+  );
+
+
+  openCollection(
+
+    words,
+
+    "skill",
+
+    key,
+
+    `${meta.icon} ${meta.title}`,
+
+    "Từ vựng dành cho kỹ năng này."
+
+  );
+
+}
+
+
+/* =========================================================
+   TOPICS
+========================================================= */
+
+function topicLabel(key){
+
+  return(
+    TOPIC_LABELS[key]
+    ||
+    titleCase(key)
+  );
+
+}
+
+
+function openTopics(){
+
+  hideAllScreens();
+
+
+  $("topicsScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  renderTopics();
+
+}
+
+
+function renderTopics(){
+
+  const topicMap =
+  {};
+
+
+  VOCABULARY_DATA
+  .forEach(
+    word => {
+
+      (
+        word.topics
+        ||
+        []
+      )
+      .forEach(
+        topic => {
+
+          if(
+            !topicMap[topic]
+          ){
+
+            topicMap[topic] =
+            [];
+
+          }
+
+
+          topicMap[topic]
+          .push(
+            word
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  $("topicGrid")
+  .innerHTML =
+  Object.entries(
+    topicMap
+  )
+  .sort(
+    (
+      a,
+      b
+    ) =>
+    topicLabel(a[0])
+    .localeCompare(
+      topicLabel(b[0])
+    )
+  )
+  .map(
+    (
+      [
+        key,
+        words
+      ]
+    ) => {
+
+      const stats =
+      collectionStats(
+        words
+      );
+
+
+      return`
+        <button
+          class="topic-card"
+          onclick="openTopic('${key}')"
+        >
+
+          <b>
+            ${escapeHTML(
+              topicLabel(key)
+            )}
+          </b>
+
+          <span>
+            ${words.length} từ ·
+            ${stats.percent}% mastered
+          </span>
+
+          <div class="topic-progress">
+
+            <i
+              style="width:${stats.percent}%"
+            ></i>
+
+          </div>
+
+        </button>
+      `;
+
+    }
+  )
+  .join("");
+
+}
+
+
+function openTopic(key){
+
+  const words =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    (
+      word.topics
+      ||
+      []
+    )
+    .includes(
+      key
+    )
+  );
+
+
+  openCollection(
+
+    words,
+
+    "topic",
+
+    key,
+
+    `🌍 ${topicLabel(key)}`,
+
+    "Từ vựng theo chủ đề."
+
+  );
+
+
+  $("collectionBack")
+  .onclick =
+  openTopics;
+
+
+  $("collectionBack")
+  .textContent =
+  "← Chủ đề";
+
+}
+
+
+/* =========================================================
+   REVIEW COLLECTION
+========================================================= */
+
+function openReviewCollection(){
+
+  const words =
+  getReviewWords();
+
+
+  if(!words.length){
+
+    return;
+
+  }
+
+
+  openCollection(
+
+    words,
+
+    "review",
+
+    "review",
+
+    "🔥 Từ cần ôn",
+
+    "Những từ em thường xuyên trả lời sai."
+
+  );
+
+}
+
+
+/* =========================================================
+   COLLECTION
+========================================================= */
+
+function openCollection(
+  words,
+  type,
+  key,
+  title,
+  subtitle
+){
+
+  currentCollection =
+  [...words];
+
+
+  currentCollectionType =
+  type;
+
+
+  currentCollectionKey =
+  key;
+
+
+  currentCollectionTitle =
+  title;
+
+
+  hideAllScreens();
+
+
+  $("collectionScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  $("collectionBack")
+  .onclick =
+  showHome;
+
+
+  $("collectionBack")
+  .textContent =
+  "← Vocabulary";
+
+
+  $("collectionTitle")
+  .textContent =
+  title;
+
+
+  $("collectionSubtitle")
+  .textContent =
+  subtitle;
+
+
+  renderCollectionStats();
+
+  renderWordList();
+
+  updateGameButtons();
+
+}
+
+
+function renderCollectionStats(){
+
+  const stats =
+  collectionStats(
+    currentCollection
+  );
+
+
+  $("statTotal")
+  .textContent =
+  stats.total;
+
+
+  $("statMastered")
+  .textContent =
+  stats.mastered;
+
+
+  $("statLearning")
+  .textContent =
+  stats.learning;
+
+
+  $("statNew")
+  .textContent =
+  stats.new;
+
+
+  $("wordListDescription")
+  .textContent =
+  `${stats.percent}% từ trong mục này đã đạt trạng thái Mastered.`;
+
+}
+
+
+function updateGameButtons(){
+
+  const playable =
+  currentCollection.length >= 4;
+
+
+  document
+  .querySelectorAll(
+    ".game-start"
+  )
+  .forEach(
+    button => {
+
+      button.disabled =
+      !playable;
+
+    }
+  );
+
+
+  $("gameRequirementText")
+  .textContent =
+  playable
+
+  ?
+
+  `${currentCollection.length} từ sẵn sàng · Từ hay sai sẽ xuất hiện nhiều hơn.`
+
+  :
+
+  `Cần ít nhất 4 từ để chơi. Mục này hiện có ${currentCollection.length} từ.`;
+
+}
+
+
+function renderWordList(){
+
+  if(
+    !currentCollection.length
+  ){
+
+    $("wordList")
+    .innerHTML =
+    `
+      <div
+        style="
+          padding:20px;
+          text-align:center;
+          color:#7d8594;
+        "
+      >
+        Chưa có từ trong mục này.
+      </div>
+    `;
+
+
+    return;
+
+  }
+
+
+  $("wordList")
+  .innerHTML =
+  currentCollection
+  .map(
+    word => {
+
+      const status =
+      wordStatus(
+        word
+      );
+
+
+      const text =
+      status ===
+      "mastered"
+
+      ?
+
+      "✓ Mastered"
+
+      :
+
+      status ===
+      "learning"
+
+      ?
+
+      "◐ Learning"
+
+      :
+
+      "○ New";
+
+
+      return`
+        <div class="word-row">
+
+          <div class="word">
+            ${escapeHTML(word.word)}
+          </div>
+
+          <div class="meaning">
+            ${escapeHTML(word.meaning)}
+          </div>
+
+          <div
+            class="word-status ${status}"
+          >
+            ${text}
+          </div>
+
+        </div>
+      `;
+
+    }
+  )
+  .join("");
+
+}
+
+
+/* =========================================================
+   ADAPTIVE PICKER
+========================================================= */
+
+function wordWeight(word){
+
+  const stats =
+  getWordStats(
+    word
+  );
+
+
+  if(
+    !stats.seen
+  ){
+
+    return 4;
+
+  }
+
+
+  return Math.min(
+
+    12,
+
+    1
+    +
+    stats.wrong*2
+
+  );
+
+}
+
+
+function weightedRandomWord(){
+
+  const pool =
+  [];
+
+
+  currentCollection
+  .forEach(
+    word => {
+
+      const weight =
+      wordWeight(
+        word
+      );
+
+
+      for(
+        let i=0;
+        i<weight;
+        i++
+      ){
+
+        pool.push(
+          word
+        );
+
+      }
+
+    }
+  );
+
+
+  return randomItem(
+    pool
+  );
+
+}
+
+
+function currentPrompt(word){
+
+  return gameDirection ===
+  "vi-en"
+
+  ?
+
+  word.meaning
+
+  :
+
+  word.word;
+
+}
+
+
+function currentAnswer(word){
+
+  return gameDirection ===
+  "vi-en"
+
+  ?
+
+  word.word
+
+  :
+
+  word.meaning;
+
+}
+
+
+function gameOptions(
+  target,
+  count=4
+){
+
+  const others =
+  shuffle(
+
+    currentCollection
+    .filter(
+      word =>
+      wordId(word)
+      !==
+      wordId(target)
+    )
+
+  )
+  .slice(
+    0,
+    count-1
+  );
+
+
+  return shuffle(
+    [
+      target,
+      ...others
+    ]
+  );
+
+}
+
+
+/* =========================================================
+   COMMON GAME
+========================================================= */
+
+function prepareGame(game){
+
+  if(
+    currentCollection.length < 4
+  ){
+
+    alert(
+      "Cần ít nhất 4 từ để chơi."
+    );
+
+
+    return false;
+
+  }
+
+
+  clearGame();
+
+
+  gameDirection =
+  $("directionSelect")
+  .value;
+
+
+  currentGame =
+  game;
+
+
+  lastGame =
+  game;
+
+
+  score =
+  0;
+
+
+  lives =
+  5;
+
+
+  combo =
+  0;
+
+
+  bestCombo =
+  0;
+
+
+  correct =
+  0;
+
+
+  wrong =
+  0;
+
+
+  attempts =
+  0;
+
+
+  reviewMap =
+  {};
+
+
+  currentTarget =
+  null;
+
+
+  gameEnded =
+  false;
+
+
+  hideAllScreens();
+
+
+  return true;
+
+}
+
+
+function accuracy(){
+
+  return attempts
+
+  ?
+
+  Math.round(
+    correct
+    /
+    attempts
+    *
+    100
+  )
+
+  :
+
+  0;
+
+}
+
+
+function correctAnswer(word){
+
+  correct++;
+
+  attempts++;
+
+  combo++;
+
+
+  bestCombo =
+  Math.max(
+    bestCombo,
+    combo
+  );
+
+
+  score +=
+  100
+  +
+  (
+    Math.min(
+      combo-1,
+      10
+    )
+    *
+    10
+  );
+
+
+  registerWordResult(
+    word,
+    true
+  );
+
+}
+
+
+function wrongAnswer(word){
+
+  wrong++;
+
+  attempts++;
+
+  combo =
+  0;
+
+
+  registerWordResult(
+    word,
+    false
+  );
+
+
+  const id =
+  wordId(
+    word
+  );
+
+
+  reviewMap[id] = {
+
+    word:
+      word.word,
+
+    meaning:
+      word.meaning,
+
+    count:
+      (
+        reviewMap[id]?.count
+        ||
+        0
+      )
+      +
+      1
+
+  };
+
+}
+
+
+function loseLife(){
+
+  lives =
+  Math.max(
+    0,
+    lives-1
+  );
+
+
+  if(
+    lives <= 0
+  ){
+
+    endGame();
+
+  }
+
+}
+
+
+function showFeedback(
+  text,
+  type
+){
+
+  const element =
+  $("feedback");
+
+
+  element.textContent =
+  text;
+
+
+  element.className =
+  `feedback ${type} show`;
+
+
+  clearTimeout(
+    element._timer
+  );
+
+
+  element._timer =
+  setTimeout(
+    ()=>{
+
+      element
+      .classList
+      .remove(
+        "show"
+      );
+
+    },
+    650
+  );
+
+}
+
+
+/* =========================================================
+   GAME 1 — WHACK
+========================================================= */
+
+function startWhack(){
+
+  if(
+    !prepareGame(
+      "whack"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  $("whackScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  createWhackBoard();
+
+
+  let seconds =
+  45;
+
+
+  updateWhackHUD(
+    seconds
+  );
+
+
+  nextWhackRound();
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      seconds--;
+
+
+      updateWhackHUD(
+        seconds
+      );
+
+
+      if(
+        seconds <= 0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+}
+
+
+function createWhackBoard(){
+
+  $("whackBoard")
+  .innerHTML =
+  Array.from(
+    {
+      length:9
+    },
+    (
+      _,
+      index
+    ) => {
+
+      return`
+        <div class="hole">
+
+          <div class="ground"></div>
+
+          <button
+            class="mole"
+            id="mole${index}"
+            type="button"
+          >
+
+            <div class="face">
+              🐹
+            </div>
+
+            <div class="word-label"></div>
+
+          </button>
+
+        </div>
+      `;
+
+    }
+  )
+  .join("");
+
+}
+
+
+function nextWhackRound(){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  currentTarget =
+  weightedRandomWord();
+
+
+  $("whackTarget")
+  .textContent =
+  currentPrompt(
+    currentTarget
+  );
+
+
+  const options =
+  gameOptions(
+    currentTarget,
+    4
+  );
+
+
+  const slots =
+  shuffle(
+    [
+      0,1,2,3,4,5,6,7,8
+    ]
+  )
+  .slice(
+    0,
+    4
+  );
+
+
+  document
+  .querySelectorAll(
+    ".mole"
+  )
+  .forEach(
+    mole => {
+
+      mole.className =
+      "mole";
+
+
+      mole.onclick =
+      null;
+
+    }
+  );
+
+
+  options.forEach(
+    (
+      word,
+      index
+    ) => {
+
+      const mole =
+      $(
+        "mole"
+        +
+        slots[index]
+      );
+
+
+      mole
+      .querySelector(
+        ".word-label"
+      )
+      .textContent =
+      currentAnswer(
+        word
+      );
+
+
+      mole.onclick =
+      ()=>{
+
+        hitMole(
+          word
+        );
+
+      };
+
+
+      requestAnimationFrame(
+        ()=>{
+
+          mole
+          .classList
+          .add(
+            "show"
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  const delay =
+  Math.max(
+    1100,
+    2500
+    -
+    correct*45
+  );
+
+
+  roundTimer =
+  setTimeout(
+    ()=>{
+
+      if(gameEnded){
+
+        return;
+
+      }
+
+
+      wrongAnswer(
+        currentTarget
+      );
+
+
+      loseLife();
+
+
+      showFeedback(
+        `⏱ ${currentAnswer(currentTarget)}`,
+        "bad"
+      );
+
+
+      updateWhackHUD();
+
+
+      if(!gameEnded){
+
+        nextWhackRound();
+
+      }
+
+    },
+    delay
+  );
+
+}
+
+
+function hitMole(word){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  document
+  .querySelectorAll(
+    ".mole"
+  )
+  .forEach(
+    mole => {
+
+      mole.onclick =
+      null;
+
+    }
+  );
+
+
+  const good =
+  wordId(word)
+  ===
+  wordId(currentTarget);
+
+
+  if(good){
+
+    correctAnswer(
+      currentTarget
+    );
+
+
+    showFeedback(
+      "✓ Chính xác!",
+      "good"
+    );
+
+  }
+
+  else{
+
+    wrongAnswer(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    showFeedback(
+      `✕ ${currentAnswer(currentTarget)}`,
+      "bad"
+    );
+
+  }
+
+
+  updateWhackHUD();
+
+
+  if(!gameEnded){
+
+    setTimeout(
+      nextWhackRound,
+      400
+    );
+
+  }
+
+}
+
+
+function updateWhackHUD(seconds){
+
+  $("whackScore").textContent =
+  score;
+
+
+  if(
+    typeof seconds ===
+    "number"
+  ){
+
+    $("whackTime").textContent =
+    Math.max(
+      0,
+      seconds
+    );
+
+  }
+
+
+  $("whackLives").textContent =
+  lives;
+
+
+  $("whackCombo").textContent =
+  `x${combo}`;
+
+
+  $("whackAccuracy").textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   GAME 2 — CATCHER
+========================================================= */
+
+const FRUIT_ICONS = [
+  "🍎",
+  "🍊",
+  "🍐",
+  "🍓",
+  "🍋",
+  "🍑",
+  "🥝",
+  "🍇"
+];
+
+
+function startCatcher(){
+
+  if(
+    !prepareGame(
+      "catcher"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  $("catchScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  basketX =
+  50;
+
+
+  renderBasket();
+
+
+  let seconds =
+  60;
+
+
+  updateCatchHUD(
+    seconds
+  );
+
+
+  nextCatchRound();
+
+
+  catcherLastFrame =
+  performance.now();
+
+
+  catcherAnimation =
+  requestAnimationFrame(
+    catcherLoop
+  );
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      seconds--;
+
+
+      updateCatchHUD(
+        seconds
+      );
+
+
+      if(
+        seconds <= 0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+}
+
+
+function nextCatchRound(){
+
+  if(
+    gameEnded
+    ||
+    catcherChanging
+  ){
+
+    return;
+
+  }
+
+
+  clearFruits();
+
+
+  currentTarget =
+  weightedRandomWord();
+
+
+  $("catchTarget")
+  .textContent =
+  currentPrompt(
+    currentTarget
+  );
+
+
+  const options =
+  gameOptions(
+    currentTarget,
+    4
+  );
+
+
+  const slots =
+  shuffle(
+    [
+      14,
+      38,
+      62,
+      86
+    ]
+  );
+
+
+  options.forEach(
+    (
+      word,
+      index
+    ) => {
+
+      createFruit(
+
+        word,
+
+        slots[index],
+
+        -30
+        -
+        index*120
+
+      );
+
+    }
+  );
+
+}
+
+
+function createFruit(
+  word,
+  x,
+  y
+){
+
+  const element =
+  document.createElement(
+    "div"
+  );
+
+
+  element.className =
+  "fruit";
+
+
+  element.innerHTML =
+  `
+    <div class="fruit-icon">
+      ${randomItem(FRUIT_ICONS)}
+    </div>
+
+    <div class="fruit-label">
+      ${escapeHTML(currentAnswer(word))}
+    </div>
+  `;
+
+
+  $("catchArea")
+  .appendChild(
+    element
+  );
+
+
+  fruits.push({
+
+    element,
+
+    word,
+
+    x,
+
+    y,
+
+    speed:
+      76
+      +
+      Math.random()*20
+      +
+      correct*1.5,
+
+    removed:false
+
+  });
+
+}
+
+
+function catcherLoop(now){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  const dt =
+  Math.min(
+    .035,
+    (
+      now-catcherLastFrame
+    )
+    /
+    1000
+  );
+
+
+  catcherLastFrame =
+  now;
+
+
+  const height =
+  $("catchArea")
+  .clientHeight;
+
+
+  fruits
+  .slice()
+  .forEach(
+    fruit => {
+
+      if(fruit.removed){
+
+        return;
+
+      }
+
+
+      fruit.y +=
+      fruit.speed*dt;
+
+
+      fruit.element.style.left =
+      fruit.x
+      +
+      "%";
+
+
+      fruit.element.style.top =
+      fruit.y
+      +
+      "px";
+
+
+      if(
+        fruit.y >
+        height-72
+
+        &&
+
+        fruit.y <
+        height-12
+
+        &&
+
+        Math.abs(
+          fruit.x
+          -
+          basketX
+        )
+        <
+        10
+      ){
+
+        catchFruit(
+          fruit
+        );
+
+
+        return;
+
+      }
+
+
+      if(
+        fruit.y >
+        height+70
+      ){
+
+        missFruit(
+          fruit
+        );
+
+      }
+
+    }
+  );
+
+
+  catcherAnimation =
+  requestAnimationFrame(
+    catcherLoop
+  );
+
+}
+
+
+function catchFruit(fruit){
+
+  if(
+    fruit.removed
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  removeFruit(
+    fruit
+  );
+
+
+  const good =
+  wordId(fruit.word)
+  ===
+  wordId(currentTarget);
+
+
+  if(good){
+
+    correctAnswer(
+      currentTarget
+    );
+
+
+    showFeedback(
+      "✓ Hứng chính xác!",
+      "good"
+    );
+
+
+    updateCatchHUD();
+
+
+    changeCatchRound();
+
+  }
+
+  else{
+
+    wrongAnswer(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    showFeedback(
+      `✕ ${currentAnswer(currentTarget)}`,
+      "bad"
+    );
+
+
+    updateCatchHUD();
+
+  }
+
+}
+
+
+function missFruit(fruit){
+
+  if(
+    fruit.removed
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  const correctFruit =
+  wordId(fruit.word)
+  ===
+  wordId(currentTarget);
+
+
+  removeFruit(
+    fruit
+  );
+
+
+  if(correctFruit){
+
+    wrongAnswer(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    showFeedback(
+      `💨 ${currentAnswer(currentTarget)}`,
+      "bad"
+    );
+
+
+    updateCatchHUD();
+
+
+    changeCatchRound();
+
+  }
+
+}
+
+
+function removeFruit(fruit){
+
+  fruit.removed =
+  true;
+
+
+  fruit.element.remove();
+
+
+  fruits =
+  fruits.filter(
+    item =>
+    item !== fruit
+  );
+
+}
+
+
+function clearFruits(){
+
+  fruits
+  .forEach(
+    fruit => {
+
+      fruit.element.remove();
+
+    }
+  );
+
+
+  fruits =
+  [];
+
+}
+
+
+function changeCatchRound(){
+
+  if(
+    catcherChanging
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  catcherChanging =
+  true;
+
+
+  setTimeout(
+    ()=>{
+
+      catcherChanging =
+      false;
+
+
+      if(!gameEnded){
+
+        nextCatchRound();
+
+      }
+
+    },
+    350
+  );
+
+}
+
+
+function moveBasket(direction){
+
+  basketX +=
+  direction*8;
+
+
+  basketX =
+  Math.max(
+    7,
+    Math.min(
+      93,
+      basketX
+    )
+  );
+
+
+  renderBasket();
+
+}
+
+
+function renderBasket(){
+
+  $("basket")
+  .style.left =
+  basketX
+  +
+  "%";
+
+}
+
+
+function updateCatchHUD(seconds){
+
+  $("catchScore").textContent =
+  score;
+
+
+  if(
+    typeof seconds ===
+    "number"
+  ){
+
+    $("catchTime").textContent =
+    Math.max(
+      0,
+      seconds
+    );
+
+  }
+
+
+  $("catchLives").textContent =
+  lives;
+
+  $("catchCombo").textContent =
+  `x${combo}`;
+
+  $("catchAccuracy").textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   GAME 3 — RACER
+========================================================= */
+
+function startRacer(){
+
+  if(
+    !prepareGame(
+      "racer"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  $("racerScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  carLane =
+  1;
+
+
+  renderCar();
+
+
+  let seconds =
+  60;
+
+
+  updateRacerHUD(
+    seconds
+  );
+
+
+  nextRacerRound();
+
+
+  racerLastFrame =
+  performance.now();
+
+
+  racerAnimation =
+  requestAnimationFrame(
+    racerLoop
+  );
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      seconds--;
+
+
+      updateRacerHUD(
+        seconds
+      );
+
+
+      if(
+        seconds <= 0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+}
+
+
+function nextRacerRound(){
+
+  if(
+    gameEnded
+    ||
+    racerChanging
+  ){
+
+    return;
+
+  }
+
+
+  clearRacerAnswers();
+
+
+  currentTarget =
+  weightedRandomWord();
+
+
+  $("racerCarPrompt")
+  .textContent =
+  currentPrompt(
+    currentTarget
+  );
+
+
+  const options =
+  gameOptions(
+    currentTarget,
+    3
+  );
+
+
+  const lanes =
+  shuffle(
+    [
+      0,
+      1,
+      2
+    ]
+  );
+
+
+  options.forEach(
+    (
+      word,
+      index
+    ) => {
+
+      const lane =
+      lanes[index];
+
+
+      const element =
+      document.createElement(
+        "div"
+      );
+
+
+      element.className =
+      "racer-answer";
+
+
+      element.textContent =
+      currentAnswer(
+        word
+      );
+
+
+      $("racerRoad")
+      .appendChild(
+        element
+      );
+
+
+      racerAnswers.push({
+
+        element,
+
+        word,
+
+        lane,
+
+        y:
+          -80,
+
+        speed:
+          130
+          +
+          correct*2,
+
+        resolved:false
+
+      });
+
+    }
+  );
+
+}
+
+
+function racerLoop(now){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  const dt =
+  Math.min(
+    .035,
+    (
+      now-racerLastFrame
+    )
+    /
+    1000
+  );
+
+
+  racerLastFrame =
+  now;
+
+
+  const roadHeight =
+  $("racerRoad")
+  .clientHeight;
+
+
+  racerAnswers
+  .forEach(
+    answer => {
+
+      if(answer.resolved){
+
+        return;
+
+      }
+
+
+      answer.y +=
+      answer.speed*dt;
+
+
+      const laneX = [
+        16.67,
+        50,
+        83.33
+      ][answer.lane];
+
+
+      answer.element.style.left =
+      laneX
+      +
+      "%";
+
+
+      answer.element.style.top =
+      answer.y
+      +
+      "px";
+
+    }
+  );
+
+
+  const trigger =
+  racerAnswers
+  .find(
+    answer =>
+    !answer.resolved
+    &&
+    answer.y >
+    roadHeight-135
+  );
+
+
+  if(
+    trigger
+    &&
+    !racerChanging
+  ){
+
+    resolveRacerRound();
+
+  }
+
+
+  racerAnimation =
+  requestAnimationFrame(
+    racerLoop
+  );
+
+}
+
+
+function resolveRacerRound(){
+
+  if(
+    racerChanging
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  racerChanging =
+  true;
+
+
+  const selected =
+  racerAnswers
+  .find(
+    answer =>
+    answer.lane ===
+    carLane
+  );
+
+
+  racerAnswers
+  .forEach(
+    answer => {
+
+      answer.resolved =
+      true;
+
+    }
+  );
+
+
+  const good =
+  selected
+  &&
+  wordId(selected.word)
+  ===
+  wordId(currentTarget);
+
+
+  if(good){
+
+    correctAnswer(
+      currentTarget
+    );
+
+
+    showFeedback(
+      "🏁 Đâm đúng từ!",
+      "good"
+    );
+
+  }
+
+  else{
+
+    wrongAnswer(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    showFeedback(
+      `💥 Đáp án: ${currentAnswer(currentTarget)}`,
+      "bad"
+    );
+
+  }
+
+
+  updateRacerHUD();
+
+
+  setTimeout(
+    ()=>{
+
+      racerChanging =
+      false;
+
+
+      if(!gameEnded){
+
+        nextRacerRound();
+
+      }
+
+    },
+    450
+  );
+
+}
+
+
+function clearRacerAnswers(){
+
+  racerAnswers
+  .forEach(
+    answer => {
+
+      answer.element.remove();
+
+    }
+  );
+
+
+  racerAnswers =
+  [];
+
+}
+
+
+function moveCar(direction){
+
+  carLane +=
+  direction;
+
+
+  carLane =
+  Math.max(
+    0,
+    Math.min(
+      2,
+      carLane
+    )
+  );
+
+
+  renderCar();
+
+}
+
+
+function renderCar(){
+
+  const positions = [
+    16.67,
+    50,
+    83.33
+  ];
+
+
+  $("racerCar")
+  .style.left =
+  positions[carLane]
+  +
+  "%";
+
+}
+
+
+function updateRacerHUD(seconds){
+
+  $("racerScore").textContent =
+  score;
+
+
+  if(
+    typeof seconds ===
+    "number"
+  ){
+
+    $("racerTime").textContent =
+    Math.max(
+      0,
+      seconds
+    );
+
+  }
+
+
+  $("racerLives").textContent =
+  lives;
+
+  $("racerCombo").textContent =
+  `x${combo}`;
+
+  $("racerAccuracy").textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   GAME 4 — MATCH MASTER
+========================================================= */
+
+function startMatch(){
+
+  if(
+    !prepareGame(
+      "match"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  $("matchScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  matchFirst =
+  null;
+
+
+  matchSecond =
+  null;
+
+
+  matchLocked =
+  false;
+
+
+  matchPairsFound =
+  0;
+
+
+  matchTotalPairs =
+  Math.min(
+    6,
+    currentCollection.length
+  );
+
+
+  createMatchBoard();
+
+
+  let seconds =
+  75;
+
+
+  updateMatchHUD(
+    seconds
+  );
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      seconds--;
+
+
+      updateMatchHUD(
+        seconds
+      );
+
+
+      if(
+        seconds <= 0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+}
+
+
+function createMatchBoard(){
+
+  const words =
+  shuffle(
+    currentCollection
+  )
+  .slice(
+    0,
+    matchTotalPairs
+  );
+
+
+  const cards =
+  [];
+
+
+  words.forEach(
+    (
+      word,
+      index
+    ) => {
+
+      cards.push({
+
+        pair:
+          index,
+
+        word,
+
+        type:
+          "word",
+
+        text:
+          word.word
+
+      });
+
+
+      cards.push({
+
+        pair:
+          index,
+
+        word,
+
+        type:
+          "meaning",
+
+        text:
+          word.meaning
+
+      });
+
+    }
+  );
+
+
+  $("matchBoard")
+  .innerHTML =
+  shuffle(
+    cards
+  )
+  .map(
+    (
+      card,
+      index
+    ) => {
+
+      return`
+        <button
+          class="match-card"
+          id="matchCard${index}"
+          data-index="${index}"
+          type="button"
+        ></button>
+      `;
+
+    }
+  )
+  .join("");
+
+
+  const shuffledCards =
+  shuffle(
+    cards
+  );
+
+
+  /*
+   * Rebuild once so DOM order and data order match.
+   */
+
+  $("matchBoard")
+  .innerHTML =
+  shuffledCards
+  .map(
+    (
+      card,
+      index
+    ) => {
+
+      return`
+        <button
+          class="match-card"
+          id="matchCard${index}"
+          type="button"
+        ></button>
+      `;
+
+    }
+  )
+  .join("");
+
+
+  shuffledCards
+  .forEach(
+    (
+      card,
+      index
+    ) => {
+
+      const element =
+      $(
+        `matchCard${index}`
+      );
+
+
+      element._cardData =
+      card;
+
+
+      element.onclick =
+      ()=>{
+
+        flipMatchCard(
+          element
+        );
+
+      };
+
+    }
+  );
+
+}
+
+
+function flipMatchCard(element){
+
+  if(
+    matchLocked
+    ||
+    gameEnded
+    ||
+    element.classList.contains(
+      "matched"
+    )
+    ||
+    element === matchFirst
+  ){
+
+    return;
+
+  }
+
+
+  const card =
+  element._cardData;
+
+
+  element.classList.add(
+    "revealed"
+  );
+
+
+  element.textContent =
+  card.text;
+
+
+  if(!matchFirst){
+
+    matchFirst =
+    element;
+
+
+    return;
+
+  }
+
+
+  matchSecond =
+  element;
+
+
+  checkMatchPair();
+
+}
+
+
+function checkMatchPair(){
+
+  matchLocked =
+  true;
+
+
+  const first =
+  matchFirst._cardData;
+
+
+  const second =
+  matchSecond._cardData;
+
+
+  const good =
+  first.pair ===
+  second.pair
+
+  &&
+
+  first.type !==
+  second.type;
+
+
+  if(good){
+
+    const word =
+    first.word;
+
+
+    correctAnswer(
+      word
+    );
+
+
+    matchPairsFound++;
+
+
+    matchFirst
+    .classList
+    .add(
+      "matched"
+    );
+
+
+    matchSecond
+    .classList
+    .add(
+      "matched"
+    );
+
+
+    showFeedback(
+      "✓ Ghép chính xác!",
+      "good"
+    );
+
+
+    matchFirst =
+    null;
+
+
+    matchSecond =
+    null;
+
+
+    matchLocked =
+    false;
+
+
+    updateMatchHUD();
+
+
+    if(
+      matchPairsFound >=
+      matchTotalPairs
+    ){
+
+      setTimeout(
+        endGame,
+        350
+      );
+
+    }
+
+
+    return;
+
+  }
+
+
+  /*
+   * Một lượt ghép sai được tính là
+   * một lỗi đối với từ đầu tiên.
+   */
+
+  wrongAnswer(
+    first.word
+  );
+
+
+  score =
+  Math.max(
+    0,
+    score-25
+  );
+
+
+  showFeedback(
+    "✕ Chưa đúng cặp",
+    "bad"
+  );
+
+
+  updateMatchHUD();
+
+
+  setTimeout(
+    ()=>{
+
+      [
+        matchFirst,
+        matchSecond
+      ]
+      .forEach(
+        card => {
+
+          if(
+            card
+            &&
+            !card.classList.contains(
+              "matched"
+            )
+          ){
+
+            card.classList.remove(
+              "revealed"
+            );
+
+
+            card.textContent =
+            "";
+
+          }
+
+        }
+      );
+
+
+      matchFirst =
+      null;
+
+
+      matchSecond =
+      null;
+
+
+      matchLocked =
+      false;
+
+    },
+    650
+  );
+
+}
+
+
+function updateMatchHUD(seconds){
+
+  $("matchScore").textContent =
+  score;
+
+
+  if(
+    typeof seconds ===
+    "number"
+  ){
+
+    $("matchTime").textContent =
+    Math.max(
+      0,
+      seconds
+    );
+
+  }
+
+
+  $("matchPairs").textContent =
+  `${matchPairsFound}/${matchTotalPairs}`;
+
+
+  $("matchCombo").textContent =
+  `x${combo}`;
+
+
+  $("matchAccuracy").textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   GAME 5 — SPEED QUIZ
+========================================================= */
+
+function startSpeedQuiz(){
+
+  if(
+    !prepareGame(
+      "quiz"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  $("quizScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  let seconds =
+  45;
+
+
+  updateQuizHUD(
+    seconds
+  );
+
+
+  nextQuizRound();
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      seconds--;
+
+
+      updateQuizHUD(
+        seconds
+      );
+
+
+      if(
+        seconds <= 0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+}
+
+
+function nextQuizRound(){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  currentTarget =
+  weightedRandomWord();
+
+
+  $("quizPrompt")
+  .textContent =
+  currentPrompt(
+    currentTarget
+  );
+
+
+  const options =
+  gameOptions(
+    currentTarget,
+    4
+  );
+
+
+  $("quizOptions")
+  .innerHTML =
+  options
+  .map(
+    (
+      word,
+      index
+    ) => {
+
+      return`
+        <button
+          class="quiz-option"
+          id="quizOption${index}"
+          type="button"
+        >
+          ${escapeHTML(
+            currentAnswer(word)
+          )}
+        </button>
+      `;
+
+    }
+  )
+  .join("");
+
+
+  options
+  .forEach(
+    (
+      word,
+      index
+    ) => {
+
+      $(
+        `quizOption${index}`
+      )
+      .onclick =
+      ()=>{
+
+        selectQuizOption(
+          word,
+          index
+        );
+
+      };
+
+    }
+  );
+
+}
+
+
+function selectQuizOption(
+  word,
+  index
+){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  document
+  .querySelectorAll(
+    ".quiz-option"
+  )
+  .forEach(
+    button => {
+
+      button.disabled =
+      true;
+
+    }
+  );
+
+
+  const good =
+  wordId(word)
+  ===
+  wordId(currentTarget);
+
+
+  const selected =
+  $(
+    `quizOption${index}`
+  );
+
+
+  if(good){
+
+    selected.classList.add(
+      "good"
+    );
+
+
+    correctAnswer(
+      currentTarget
+    );
+
+
+    showFeedback(
+      "⚡ Chính xác!",
+      "good"
+    );
+
+  }
+
+  else{
+
+    selected.classList.add(
+      "bad"
+    );
+
+
+    wrongAnswer(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    showFeedback(
+      `✕ ${currentAnswer(currentTarget)}`,
+      "bad"
+    );
+
+
+    document
+    .querySelectorAll(
+      ".quiz-option"
+    )
+    .forEach(
+      button => {
+
+        if(
+          button.textContent
+          .trim()
+          ===
+          currentAnswer(
+            currentTarget
+          )
+        ){
+
+          button.classList.add(
+            "good"
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+
+  updateQuizHUD();
+
+
+  if(!gameEnded){
+
+    setTimeout(
+      nextQuizRound,
+      380
+    );
+
+  }
+
+}
+
+
+function updateQuizHUD(seconds){
+
+  $("quizScore").textContent =
+  score;
+
+
+  if(
+    typeof seconds ===
+    "number"
+  ){
+
+    $("quizTime").textContent =
+    Math.max(
+      0,
+      seconds
+    );
+
+  }
+
+
+  $("quizLives").textContent =
+  lives;
+
+
+  $("quizCombo").textContent =
+  `x${combo}`;
+
+
+  $("quizAccuracy").textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   GAME 6 — BALLOON
+========================================================= */
+
+const BALLOON_COLORS = [
+  ["#ee6680","#dc3859"],
+  ["#5d9ff2","#3176d7"],
+  ["#8a71e8","#6245bd"],
+  ["#f1a54e","#dd7727"],
+  ["#57c999","#2c9d70"]
+];
+
+
+function startBalloon(){
+
+  if(
+    !prepareGame(
+      "balloon"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  $("balloonScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  let seconds =
+  60;
+
+
+  updateBalloonHUD(
+    seconds
+  );
+
+
+  nextBalloonRound();
+
+
+  balloonLastFrame =
+  performance.now();
+
+
+  balloonAnimation =
+  requestAnimationFrame(
+    balloonLoop
+  );
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      seconds--;
+
+
+      updateBalloonHUD(
+        seconds
+      );
+
+
+      if(
+        seconds <= 0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+}
+
+
+function nextBalloonRound(){
+
+  if(
+    gameEnded
+    ||
+    balloonChanging
+  ){
+
+    return;
+
+  }
+
+
+  clearBalloons();
+
+
+  currentTarget =
+  weightedRandomWord();
+
+
+  $("balloonTarget")
+  .textContent =
+  currentPrompt(
+    currentTarget
+  );
+
+
+  const options =
+  gameOptions(
+    currentTarget,
+    4
+  );
+
+
+  const xs =
+  shuffle(
+    [
+      15,
+      38,
+      62,
+      85
+    ]
+  );
+
+
+  const areaHeight =
+  $("balloonArea")
+  .clientHeight;
+
+
+  options.forEach(
+    (
+      word,
+      index
+    ) => {
+
+      const element =
+      document.createElement(
+        "div"
+      );
+
+
+      element.className =
+      "balloon";
+
+
+      const colors =
+      randomItem(
+        BALLOON_COLORS
+      );
+
+
+      element.innerHTML =
+      `
+        <div
+          class="balloon-shape"
+          style="
+            background:
+            linear-gradient(
+              135deg,
+              ${colors[0]},
+              ${colors[1]}
+            );
+          "
+        >
+          ${escapeHTML(
+            currentAnswer(word)
+          )}
+        </div>
+
+        <div class="balloon-string"></div>
+      `;
+
+
+      $("balloonArea")
+      .appendChild(
+        element
+      );
+
+
+      const object = {
+
+        element,
+
+        word,
+
+        x:
+          xs[index],
+
+        y:
+          areaHeight
+          +
+          130
+          +
+          index*110,
+
+        speed:
+          65
+          +
+          Math.random()*18
+          +
+          correct*1.2,
+
+        removed:false
+
+      };
+
+
+      element.onclick =
+      ()=>{
+
+        popBalloon(
+          object
+        );
+
+      };
+
+
+      balloons.push(
+        object
+      );
+
+    }
+  );
+
+}
+
+
+function balloonLoop(now){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  const dt =
+  Math.min(
+    .035,
+    (
+      now-balloonLastFrame
+    )
+    /
+    1000
+  );
+
+
+  balloonLastFrame =
+  now;
+
+
+  balloons
+  .slice()
+  .forEach(
+    balloon => {
+
+      if(balloon.removed){
+
+        return;
+
+      }
+
+
+      balloon.y -=
+      balloon.speed*dt;
+
+
+      balloon.element.style.left =
+      balloon.x
+      +
+      "%";
+
+
+      balloon.element.style.top =
+      balloon.y
+      +
+      "px";
+
+
+      if(
+        balloon.y <
+        -150
+      ){
+
+        escapedBalloon(
+          balloon
+        );
+
+      }
+
+    }
+  );
+
+
+  balloonAnimation =
+  requestAnimationFrame(
+    balloonLoop
+  );
+
+}
+
+
+function popBalloon(balloon){
+
+  if(
+    balloon.removed
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  const good =
+  wordId(balloon.word)
+  ===
+  wordId(currentTarget);
+
+
+  removeBalloon(
+    balloon
+  );
+
+
+  if(good){
+
+    correctAnswer(
+      currentTarget
+    );
+
+
+    showFeedback(
+      "🎈 POP! Chính xác!",
+      "good"
+    );
+
+
+    updateBalloonHUD();
+
+
+    changeBalloonRound();
+
+  }
+
+  else{
+
+    wrongAnswer(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    showFeedback(
+      `✕ ${currentAnswer(currentTarget)}`,
+      "bad"
+    );
+
+
+    updateBalloonHUD();
+
+  }
+
+}
+
+
+function escapedBalloon(balloon){
+
+  if(
+    balloon.removed
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  const correctBalloon =
+  wordId(balloon.word)
+  ===
+  wordId(currentTarget);
+
+
+  removeBalloon(
+    balloon
+  );
+
+
+  if(correctBalloon){
+
+    wrongAnswer(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    showFeedback(
+      `💨 Bỏ lỡ: ${currentAnswer(currentTarget)}`,
+      "bad"
+    );
+
+
+    updateBalloonHUD();
+
+
+    changeBalloonRound();
+
+  }
+
+}
+
+
+function removeBalloon(balloon){
+
+  balloon.removed =
+  true;
+
+
+  balloon.element.remove();
+
+
+  balloons =
+  balloons.filter(
+    item =>
+    item !==
+    balloon
+  );
+
+}
+
+
+function clearBalloons(){
+
+  balloons
+  .forEach(
+    balloon => {
+
+      balloon.element.remove();
+
+    }
+  );
+
+
+  balloons =
+  [];
+
+}
+
+
+function changeBalloonRound(){
+
+  if(
+    balloonChanging
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  balloonChanging =
+  true;
+
+
+  setTimeout(
+    ()=>{
+
+      balloonChanging =
+      false;
+
+
+      if(!gameEnded){
+
+        nextBalloonRound();
+
+      }
+
+    },
+    350
+  );
+
+}
+
+
+function updateBalloonHUD(seconds){
+
+  $("balloonScore").textContent =
+  score;
+
+
+  if(
+    typeof seconds ===
+    "number"
+  ){
+
+    $("balloonTime").textContent =
+    Math.max(
+      0,
+      seconds
+    );
+
+  }
+
+
+  $("balloonLives").textContent =
+  lives;
+
+
+  $("balloonCombo").textContent =
+  `x${combo}`;
+
+
+  $("balloonAccuracy").textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document
+.addEventListener(
+  "keydown",
+  event => {
+
+    if(gameEnded){
+
+      return;
+
+    }
+
+
+    if(
+      currentGame ===
+      "catcher"
+    ){
+
+      if(
+        event.key ===
+        "ArrowLeft"
+      ){
+
+        event.preventDefault();
+
+        moveBasket(
+          -1
+        );
+
+      }
+
+
+      if(
+        event.key ===
+        "ArrowRight"
+      ){
+
+        event.preventDefault();
+
+        moveBasket(
+          1
+        );
+
+      }
+
+    }
+
+
+    if(
+      currentGame ===
+      "racer"
+    ){
+
+      if(
+        event.key ===
+        "ArrowLeft"
+      ){
+
+        event.preventDefault();
+
+        moveCar(
+          -1
+        );
+
+      }
+
+
+      if(
+        event.key ===
+        "ArrowRight"
+      ){
+
+        event.preventDefault();
+
+        moveCar(
+          1
+        );
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   CATCHER POINTER
+========================================================= */
+
+function pointerBasket(event){
+
+  if(
+    currentGame !==
+    "catcher"
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  const rect =
+  $("catchArea")
+  .getBoundingClientRect();
+
+
+  basketX =
+  (
+    event.clientX
+    -
+    rect.left
+  )
+  /
+  rect.width
+  *
+  100;
+
+
+  basketX =
+  Math.max(
+    7,
+    Math.min(
+      93,
+      basketX
+    )
+  );
+
+
+  renderBasket();
+
+}
+
+
+$("catchArea")
+.addEventListener(
+  "pointerdown",
+  pointerBasket
+);
+
+
+$("catchArea")
+.addEventListener(
+  "pointermove",
+  event => {
+
+    if(
+      event.buttons
+      ||
+      event.pointerType ===
+      "touch"
+    ){
+
+      pointerBasket(
+        event
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   RACER POINTER
+========================================================= */
+
+$("racerRoad")
+.addEventListener(
+  "pointerdown",
+  event => {
+
+    if(
+      currentGame !==
+      "racer"
+      ||
+      gameEnded
+    ){
+
+      return;
+
+    }
+
+
+    const rect =
+    $("racerRoad")
+    .getBoundingClientRect();
+
+
+    const ratio =
+    (
+      event.clientX
+      -
+      rect.left
+    )
+    /
+    rect.width;
+
+
+    if(
+      ratio <
+      .333
+    ){
+
+      carLane =
+      0;
+
+    }
+
+    else if(
+      ratio <
+      .666
+    ){
+
+      carLane =
+      1;
+
+    }
+
+    else{
+
+      carLane =
+      2;
+
+    }
+
+
+    renderCar();
+
+  }
+);
+
+
+/* =========================================================
+   END GAME
+========================================================= */
+
+function endGame(){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  gameEnded =
+  true;
+
+
+  clearInterval(
+    gameTimer
+  );
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  if(catcherAnimation){
+
+    cancelAnimationFrame(
+      catcherAnimation
+    );
+
+  }
+
+
+  if(racerAnimation){
+
+    cancelAnimationFrame(
+      racerAnimation
+    );
+
+  }
+
+
+  if(balloonAnimation){
+
+    cancelAnimationFrame(
+      balloonAnimation
+    );
+
+  }
+
+
+  clearFruits();
+
+  clearRacerAnswers();
+
+  clearBalloons();
+
+
+  saveGameHistory();
+
+
+  showGameResult();
+
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function saveGameHistory(){
+
+  let history =
+  [];
+
+
+  try{
+
+    history =
+    JSON.parse(
+
+      localStorage.getItem(
+        historyKey()
+      )
+
+      ||
+
+      "[]"
+
+    );
+
+  }
+
+  catch(error){
+
+    history =
+    [];
+
+  }
+
+
+  history.unshift({
+
+    timestamp:
+      new Date()
+      .toISOString(),
+
+    collectionType:
+      currentCollectionType,
+
+    collectionKey:
+      currentCollectionKey,
+
+    collectionTitle:
+      currentCollectionTitle,
+
+    game:
+      currentGame,
+
+    direction:
+      gameDirection,
+
+    score:
+      score,
+
+    correct:
+      correct,
+
+    wrong:
+      wrong,
+
+    attempts:
+      attempts,
+
+    accuracy:
+      accuracy(),
+
+    bestCombo:
+      bestCombo
+
+  });
+
+
+  localStorage.setItem(
+
+    historyKey(),
+
+    JSON.stringify(
+      history.slice(
+        0,
+        100
+      )
+    )
+
+  );
+
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function showGameResult(){
+
+  $("resultIcon")
+  .textContent =
+  score >= 1500
+
+  ?
+
+  "🏆"
+
+  :
+
+  score >= 800
+
+  ?
+
+  "⭐"
+
+  :
+
+  "🎯";
+
+
+  $("resultTitle")
+  .textContent =
+  `Hoàn thành ${GAME_NAMES[currentGame] || "game"}!`;
+
+
+  $("resultScore")
+  .textContent =
+  score;
+
+
+  $("resultCorrect")
+  .textContent =
+  correct;
+
+
+  $("resultAccuracy")
+  .textContent =
+  `${accuracy()}%`;
+
+
+  $("resultCombo")
+  .textContent =
+  `x${bestCombo}`;
+
+
+  const review =
+  Object.values(
+    reviewMap
+  )
+  .sort(
+    (
+      a,
+      b
+    ) =>
+    b.count-a.count
+  );
+
+
+  $("resultReview")
+  .innerHTML =
+  review.length
+
+  ?
+
+  review
+  .map(
+    item => {
+
+      return`
+        <span
+          class="review-chip"
+          title="${escapeHTML(item.meaning)}"
+        >
+          ${escapeHTML(item.word)}
+          ×${item.count}
+        </span>
+      `;
+
+    }
+  )
+  .join("")
+
+  :
+
+  `
+    <span
+      style="
+        color:#168054;
+        font-size:9px;
+        font-weight:900;
+      "
+    >
+      ✓ Không có từ nào cần ôn lại.
+    </span>
+  `;
+
+
+  $("resultOverlay")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+}
+
+
+/* =========================================================
+   CLEAR GAME
+========================================================= */
+
+function clearGame(){
+
+  clearInterval(
+    gameTimer
+  );
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  if(catcherAnimation){
+
+    cancelAnimationFrame(
+      catcherAnimation
+    );
+
+  }
+
+
+  if(racerAnimation){
+
+    cancelAnimationFrame(
+      racerAnimation
+    );
+
+  }
+
+
+  if(balloonAnimation){
+
+    cancelAnimationFrame(
+      balloonAnimation
+    );
+
+  }
+
+
+  clearFruits();
+
+  clearRacerAnswers();
+
+  clearBalloons();
+
+
+  gameTimer =
+  null;
+
+
+  roundTimer =
+  null;
+
+
+  catcherAnimation =
+  null;
+
+
+  racerAnimation =
+  null;
+
+
+  balloonAnimation =
+  null;
+
+
+  catcherChanging =
+  false;
+
+
+  racerChanging =
+  false;
+
+
+  balloonChanging =
+  false;
+
+
+  matchFirst =
+  null;
+
+
+  matchSecond =
+  null;
+
+
+  matchLocked =
+  false;
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function quitGame(){
+
+  const confirmed =
+  confirm(
+    "Thoát game hiện tại? Điểm lượt này sẽ không được lưu."
+  );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  clearGame();
+
+
+  backToCollection();
+
+}
+
+
+function backToCollection(){
+
+  clearGame();
+
+
+  $("resultOverlay")
+  .classList
+  .add(
+    "hidden"
+  );
+
+
+  hideAllScreens();
+
+
+  $("collectionScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  renderCollectionStats();
+
+  renderWordList();
+
+  updateGameButtons();
+
+  renderReviewBanner();
+
+}
+
+
+function replayGame(){
+
+  $("resultOverlay")
+  .classList
+  .add(
+    "hidden"
+  );
+
+
+  const replayMap = {
+
+    whack:
+      startWhack,
+
+    catcher:
+      startCatcher,
+
+    racer:
+      startRacer,
+
+    match:
+      startMatch,
+
+    quiz:
+      startSpeedQuiz,
+
+    balloon:
+      startBalloon
+
+  };
+
+
+  const fn =
+  replayMap[lastGame];
+
+
+  if(fn){
+
+    fn();
+
+  }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showDataError(){
+
+  $("homeScreen")
+  .innerHTML =
+  `
+    <div class="error-box">
+
+      <h2>
+        ⚠️ Không tải được Vocabulary
+      </h2>
+
+      <p>
+        Kiểm tra file:
+      </p>
+
+      <code>
+        Practice/Vocabulary/vocab-data.js
+      </code>
+
+      <p>
+        Dòng đầu phải là:
+      </p>
+
+      <code>
+        window.VOCABULARY_DATA = [
+      </code>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+function init(){
+
+  if(
+    window.VOCABULARY_LOAD_ERROR
+
+    ||
+
+    !Array.isArray(
+      window.VOCABULARY_DATA
+    )
+
+    ||
+
+    !VOCABULARY_DATA.length
+  ){
+
+    showDataError();
+
+    return;
+
+  }
+
+
+  loadStudent();
+
+  renderCategories();
+
+}
+
+
+init();
+
+</script>
+
+</body>
+</html>
