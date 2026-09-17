@@ -2,20 +2,22 @@
    VOCABULARY DATABASE
 
    THÊM TỪ MỚI:
-   Chỉ cần copy 1 object và sửa nội dung.
+   Chỉ cần thêm 1 object vào mảng này.
 
-   BẮT BUỘC:
-   - word
-   - meaning
-   - skills
-   - topics
+   skills hợp lệ:
+   reading
+   listening
+   speaking-part-1
+   speaking-part-2
+   speaking-part-3
+   writing-task-1
+   writing-task-2
 
-   TÙY CHỌN:
-   - example
-   - collocation
+   topics:
+   có thể tự tạo topic mới tùy ý.
 ========================================================= */
 
-const VOCABULARY_DATA = [
+window.VOCABULARY_DATA = [
 
   /* =======================================================
      EDUCATION
@@ -24,134 +26,127 @@ const VOCABULARY_DATA = [
   {
     word:"curriculum",
     meaning:"chương trình học",
-
     skills:[
       "reading",
       "listening",
       "writing-task-2"
     ],
-
     topics:[
       "education"
     ],
-
-    example:
-      "The school introduced a new curriculum.",
-
-    collocation:
-      "school curriculum"
+    example:"The school introduced a new curriculum.",
+    collocation:"school curriculum"
   },
-
 
   {
     word:"compulsory",
     meaning:"bắt buộc",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "education"
     ],
-
-    example:
-      "Education is compulsory for children.",
-
-    collocation:
-      "compulsory education"
+    example:"Education is compulsory for children.",
+    collocation:"compulsory education"
   },
-
 
   {
     word:"tuition",
     meaning:"học phí",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3"
     ],
-
     topics:[
       "education",
       "money"
     ],
-
-    example:
-      "University tuition can be expensive.",
-
-    collocation:
-      "tuition fees"
+    example:"University tuition can be expensive.",
+    collocation:"tuition fees"
   },
-
 
   {
     word:"scholarship",
     meaning:"học bổng",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-1",
       "speaking-part-2"
     ],
-
     topics:[
       "education"
     ],
-
-    example:
-      "She received a scholarship to study abroad.",
-
-    collocation:
-      "win a scholarship"
+    example:"She received a scholarship to study abroad.",
+    collocation:"win a scholarship"
   },
-
 
   {
     word:"literacy",
     meaning:"khả năng đọc và viết",
-
     skills:[
       "reading",
       "writing-task-2"
     ],
-
     topics:[
       "education"
     ],
-
-    example:
-      "Literacy rates have improved significantly.",
-
-    collocation:
-      "literacy rate"
+    example:"Literacy rates have improved significantly.",
+    collocation:"literacy rate"
   },
-
 
   {
     word:"assessment",
     meaning:"sự đánh giá",
-
     skills:[
       "reading",
       "listening",
       "writing-task-2"
     ],
-
     topics:[
       "education"
     ],
+    example:"Continuous assessment can reduce exam pressure.",
+    collocation:"continuous assessment"
+  },
 
-    example:
-      "Continuous assessment can reduce exam pressure.",
+  {
+    word:"qualification",
+    meaning:"bằng cấp, trình độ",
+    skills:[
+      "reading",
+      "listening",
+      "speaking-part-1",
+      "writing-task-2"
+    ],
+    topics:[
+      "education",
+      "work"
+    ],
+    example:"Professional qualifications can improve job prospects.",
+    collocation:"academic qualification"
+  },
 
-    collocation:
-      "continuous assessment"
+  {
+    word:"vocational",
+    meaning:"thuộc đào tạo nghề",
+    skills:[
+      "reading",
+      "listening",
+      "speaking-part-3",
+      "writing-task-2"
+    ],
+    topics:[
+      "education",
+      "work"
+    ],
+    example:"Vocational training can prepare students for employment.",
+    collocation:"vocational training"
   },
 
 
@@ -162,115 +157,101 @@ const VOCABULARY_DATA = [
   {
     word:"biodiversity",
     meaning:"đa dạng sinh học",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "environment"
     ],
-
-    example:
-      "The forest contains remarkable biodiversity.",
-
-    collocation:
-      "protect biodiversity"
+    example:"The forest contains remarkable biodiversity.",
+    collocation:"protect biodiversity"
   },
-
 
   {
     word:"deforestation",
     meaning:"nạn phá rừng",
-
-    skills:[
-      "reading",
-      "listening",
-      "writing-task-2"
-    ],
-
-    topics:[
-      "environment"
-    ],
-
-    example:
-      "Deforestation contributes to climate change.",
-
-    collocation:
-      "reduce deforestation"
-  },
-
-
-  {
-    word:"renewable",
-    meaning:"có thể tái tạo",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
+    topics:[
+      "environment"
+    ],
+    example:"Deforestation contributes to climate change.",
+    collocation:"reduce deforestation"
+  },
 
+  {
+    word:"renewable",
+    meaning:"có thể tái tạo",
+    skills:[
+      "reading",
+      "listening",
+      "speaking-part-3",
+      "writing-task-2"
+    ],
     topics:[
       "environment",
       "technology"
     ],
-
-    example:
-      "Many countries are investing in renewable energy.",
-
-    collocation:
-      "renewable energy"
+    example:"Many countries are investing in renewable energy.",
+    collocation:"renewable energy"
   },
-
 
   {
     word:"emission",
-    meaning:"khí thải; sự phát thải",
-
+    meaning:"khí thải, sự phát thải",
     skills:[
       "reading",
       "listening",
       "writing-task-1",
       "writing-task-2"
     ],
-
     topics:[
       "environment",
       "transport"
     ],
-
-    example:
-      "Carbon emissions fell during the period.",
-
-    collocation:
-      "carbon emissions"
+    example:"Carbon emissions fell during the period.",
+    collocation:"carbon emissions"
   },
-
 
   {
     word:"conservation",
     meaning:"sự bảo tồn",
-
     skills:[
       "reading",
       "listening",
-      "speaking-part-3"
+      "speaking-part-3",
+      "writing-task-2"
     ],
-
     topics:[
       "environment"
     ],
+    example:"Wildlife conservation requires international cooperation.",
+    collocation:"wildlife conservation"
+  },
 
-    example:
-      "Wildlife conservation requires international cooperation.",
-
-    collocation:
-      "wildlife conservation"
+  {
+    word:"sustainable",
+    meaning:"bền vững",
+    skills:[
+      "reading",
+      "listening",
+      "speaking-part-3",
+      "writing-task-2"
+    ],
+    topics:[
+      "environment",
+      "technology",
+      "cities"
+    ],
+    example:"Cities need more sustainable transport systems.",
+    collocation:"sustainable development"
   },
 
 
@@ -281,93 +262,83 @@ const VOCABULARY_DATA = [
   {
     word:"automation",
     meaning:"sự tự động hóa",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "technology",
       "work"
     ],
-
-    example:
-      "Automation has transformed many industries.",
-
-    collocation:
-      "industrial automation"
+    example:"Automation has transformed many industries.",
+    collocation:"industrial automation"
   },
-
 
   {
     word:"innovation",
     meaning:"sự đổi mới",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "technology",
       "business"
     ],
-
-    example:
-      "Innovation can improve productivity.",
-
-    collocation:
-      "technological innovation"
+    example:"Innovation can improve productivity.",
+    collocation:"technological innovation"
   },
-
 
   {
     word:"device",
     meaning:"thiết bị",
-
     skills:[
       "listening",
       "speaking-part-1",
       "speaking-part-2"
     ],
-
     topics:[
       "technology"
     ],
-
-    example:
-      "I use this device every day.",
-
-    collocation:
-      "electronic device"
+    example:"I use this device every day.",
+    collocation:"electronic device"
   },
-
 
   {
     word:"accessible",
     meaning:"dễ tiếp cận",
-
     skills:[
       "reading",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "technology",
       "education"
     ],
+    example:"Online courses make education more accessible.",
+    collocation:"easily accessible"
+  },
 
-    example:
-      "Online courses make education more accessible.",
-
-    collocation:
-      "easily accessible"
+  {
+    word:"digital literacy",
+    meaning:"năng lực sử dụng công nghệ số",
+    skills:[
+      "reading",
+      "listening",
+      "speaking-part-3",
+      "writing-task-2"
+    ],
+    topics:[
+      "technology",
+      "education"
+    ],
+    example:"Digital literacy is increasingly important.",
+    collocation:"improve digital literacy"
   },
 
 
@@ -378,93 +349,84 @@ const VOCABULARY_DATA = [
   {
     word:"sedentary",
     meaning:"ít vận động",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "health",
       "lifestyle"
     ],
-
-    example:
-      "A sedentary lifestyle can cause health problems.",
-
-    collocation:
-      "sedentary lifestyle"
+    example:"A sedentary lifestyle can cause health problems.",
+    collocation:"sedentary lifestyle"
   },
-
 
   {
     word:"nutritious",
     meaning:"bổ dưỡng",
-
     skills:[
       "listening",
       "speaking-part-1",
       "speaking-part-2"
     ],
-
     topics:[
       "health",
       "food"
     ],
-
-    example:
-      "I try to eat nutritious meals.",
-
-    collocation:
-      "nutritious food"
+    example:"I try to eat nutritious meals.",
+    collocation:"nutritious food"
   },
-
 
   {
     word:"well-being",
     meaning:"sức khỏe và trạng thái hạnh phúc",
-
     skills:[
       "reading",
+      "speaking-part-2",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "health",
       "lifestyle"
     ],
-
-    example:
-      "Exercise improves mental well-being.",
-
-    collocation:
-      "mental well-being"
+    example:"Exercise improves mental well-being.",
+    collocation:"mental well-being"
   },
-
 
   {
     word:"detrimental",
     meaning:"có hại",
-
     skills:[
       "reading",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "health",
       "environment"
     ],
+    example:"Excessive screen time can be detrimental to health.",
+    collocation:"detrimental effect"
+  },
 
-    example:
-      "Excessive screen time can be detrimental to health.",
-
-    collocation:
-      "detrimental effect"
+  {
+    word:"balanced diet",
+    meaning:"chế độ ăn cân bằng",
+    skills:[
+      "listening",
+      "speaking-part-1",
+      "speaking-part-2",
+      "speaking-part-3"
+    ],
+    topics:[
+      "health",
+      "food"
+    ],
+    example:"I try to maintain a balanced diet.",
+    collocation:"maintain a balanced diet"
   },
 
 
@@ -475,67 +437,63 @@ const VOCABULARY_DATA = [
   {
     word:"occupation",
     meaning:"nghề nghiệp",
-
     skills:[
       "listening",
       "speaking-part-1"
     ],
-
     topics:[
       "work"
     ],
-
-    example:
-      "What is your current occupation?",
-
-    collocation:
-      "current occupation"
+    example:"What is your current occupation?",
+    collocation:"current occupation"
   },
-
 
   {
     word:"flexible",
     meaning:"linh hoạt",
-
     skills:[
       "listening",
       "speaking-part-1",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "work"
     ],
-
-    example:
-      "Flexible working hours are becoming more common.",
-
-    collocation:
-      "flexible working hours"
+    example:"Flexible working hours are becoming more common.",
+    collocation:"flexible working hours"
   },
-
 
   {
     word:"productivity",
     meaning:"năng suất",
-
     skills:[
       "reading",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "work",
       "business"
     ],
+    example:"Technology can increase productivity.",
+    collocation:"improve productivity"
+  },
 
-    example:
-      "Technology can increase productivity.",
-
-    collocation:
-      "improve productivity"
+  {
+    word:"workload",
+    meaning:"khối lượng công việc",
+    skills:[
+      "listening",
+      "speaking-part-1",
+      "speaking-part-2",
+      "speaking-part-3"
+    ],
+    topics:[
+      "work"
+    ],
+    example:"My workload becomes heavier at the end of the month.",
+    collocation:"heavy workload"
   },
 
 
@@ -546,88 +504,90 @@ const VOCABULARY_DATA = [
   {
     word:"close-knit",
     meaning:"gắn bó, thân thiết",
-
     skills:[
       "speaking-part-1",
       "speaking-part-2"
     ],
-
     topics:[
       "family",
       "relationships"
     ],
-
-    example:
-      "I come from a close-knit family.",
-
-    collocation:
-      "close-knit family"
+    example:"I come from a close-knit family.",
+    collocation:"close-knit family"
   },
-
 
   {
     word:"memorable",
     meaning:"đáng nhớ",
-
     skills:[
       "speaking-part-1",
       "speaking-part-2"
     ],
-
     topics:[
       "travel",
       "experience"
     ],
-
-    example:
-      "It was one of the most memorable trips of my life.",
-
-    collocation:
-      "memorable experience"
+    example:"It was one of the most memorable trips of my life.",
+    collocation:"memorable experience"
   },
-
 
   {
     word:"picturesque",
     meaning:"đẹp như tranh",
-
     skills:[
       "speaking-part-2"
     ],
-
     topics:[
       "travel",
       "places"
     ],
-
-    example:
-      "The village is extremely picturesque.",
-
-    collocation:
-      "picturesque village"
+    example:"The village is extremely picturesque.",
+    collocation:"picturesque village"
   },
-
 
   {
     word:"convenient",
     meaning:"thuận tiện",
-
     skills:[
       "listening",
       "speaking-part-1",
       "speaking-part-2"
     ],
-
     topics:[
       "transport",
       "cities"
     ],
+    example:"Public transport is convenient in my city.",
+    collocation:"highly convenient"
+  },
 
-    example:
-      "Public transport is convenient in my city.",
+  {
+    word:"vibrant",
+    meaning:"sôi động, đầy sức sống",
+    skills:[
+      "speaking-part-1",
+      "speaking-part-2"
+    ],
+    topics:[
+      "cities",
+      "places"
+    ],
+    example:"The city centre has a vibrant atmosphere.",
+    collocation:"vibrant atmosphere"
+  },
 
-    collocation:
-      "highly convenient"
+  {
+    word:"breathtaking",
+    meaning:"ngoạn mục",
+    skills:[
+      "speaking-part-2"
+    ],
+    topics:[
+      "travel",
+      "places"
+    ],
+    example:"The mountain scenery was breathtaking.",
+    collocation:"breathtaking scenery"
   },
 
 
@@ -638,101 +598,94 @@ const VOCABULARY_DATA = [
   {
     word:"fluctuate",
     meaning:"dao động",
-
     skills:[
       "writing-task-1"
     ],
-
     topics:[
-      "data"
+      "data-trends"
     ],
-
-    example:
-      "The figure fluctuated throughout the period.",
-
-    collocation:
-      "fluctuate considerably"
+    example:"The figure fluctuated throughout the period.",
+    collocation:"fluctuate considerably"
   },
-
 
   {
     word:"plummet",
     meaning:"giảm mạnh",
-
     skills:[
       "writing-task-1"
     ],
-
     topics:[
-      "data"
+      "data-trends"
     ],
-
-    example:
-      "Sales plummeted in the final quarter.",
-
-    collocation:
-      "plummet dramatically"
+    example:"Sales plummeted in the final quarter.",
+    collocation:"plummet dramatically"
   },
-
 
   {
     word:"surge",
     meaning:"tăng vọt",
-
     skills:[
       "writing-task-1"
     ],
-
     topics:[
-      "data"
+      "data-trends"
     ],
-
-    example:
-      "The number surged to 50,000.",
-
-    collocation:
-      "surge sharply"
+    example:"The number surged to 50,000.",
+    collocation:"surge sharply"
   },
-
 
   {
     word:"remain stable",
     meaning:"giữ ổn định",
-
     skills:[
       "writing-task-1"
     ],
-
     topics:[
-      "data"
+      "data-trends"
     ],
-
-    example:
-      "The figure remained stable at around 30%.",
-
-    collocation:
-      "remain relatively stable"
+    example:"The figure remained stable at around 30%.",
+    collocation:"remain relatively stable"
   },
-
 
   {
     word:"account for",
     meaning:"chiếm, cấu thành",
-
     skills:[
       "writing-task-1",
       "writing-task-2"
     ],
-
     topics:[
-      "data"
+      "data-trends"
     ],
+    example:"Women accounted for 55% of the total.",
+    collocation:"account for approximately"
+  },
 
-    example:
-      "Women accounted for 55% of the total.",
+  {
+    word:"peak",
+    meaning:"đạt đỉnh",
+    skills:[
+      "writing-task-1"
+    ],
+    topics:[
+      "data-trends"
+    ],
+    example:"The figure peaked at 75% in 2018.",
+    collocation:"peak at"
+  },
 
-    collocation:
-      "account for approximately"
+  {
+    word:"decline",
+    meaning:"giảm, sự suy giảm",
+    skills:[
+      "writing-task-1",
+      "reading"
+    ],
+    topics:[
+      "data-trends"
+    ],
+    example:"The percentage declined gradually.",
+    collocation:"gradual decline"
   },
 
 
@@ -743,48 +696,67 @@ const VOCABULARY_DATA = [
   {
     word:"congestion",
     meaning:"sự ùn tắc",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "transport",
       "cities"
     ],
-
-    example:
-      "Traffic congestion is a serious urban problem.",
-
-    collocation:
-      "traffic congestion"
+    example:"Traffic congestion is a serious urban problem.",
+    collocation:"traffic congestion"
   },
-
 
   {
     word:"infrastructure",
     meaning:"cơ sở hạ tầng",
-
     skills:[
       "reading",
       "listening",
       "speaking-part-3",
       "writing-task-2"
     ],
-
     topics:[
       "cities",
       "transport"
     ],
+    example:"The city needs better transport infrastructure.",
+    collocation:"public infrastructure"
+  },
 
-    example:
-      "The city needs better transport infrastructure.",
+  {
+    word:"commute",
+    meaning:"đi lại hằng ngày giữa nhà và nơi làm việc/học",
+    skills:[
+      "listening",
+      "speaking-part-1",
+      "speaking-part-2"
+    ],
+    topics:[
+      "transport",
+      "work"
+    ],
+    example:"I commute to work by bus.",
+    collocation:"daily commute"
+  },
 
-    collocation:
-      "public infrastructure"
+  {
+    word:"pedestrian",
+    meaning:"người đi bộ",
+    skills:[
+      "reading",
+      "listening",
+      "speaking-part-3"
+    ],
+    topics:[
+      "transport",
+      "cities"
+    ],
+    example:"The city centre has several pedestrian areas.",
+    collocation:"pedestrian zone"
   }
 
 ];
