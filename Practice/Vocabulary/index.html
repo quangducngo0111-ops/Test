@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -15,7 +17,18 @@
 
 <title>Vocabulary Practice</title>
 
-<script src="./vocab-data.js"></script>
+
+<!-- =========================================================
+     VOCAB DATA
+
+     Nếu file này không load được, JS phía dưới sẽ hiện báo lỗi.
+========================================================= -->
+
+<script
+  src="./vocab-data.js?v=20260917-2"
+  onerror="window.VOCABULARY_LOAD_ERROR=true"
+></script>
+
 
 <style>
 
@@ -26,7 +39,6 @@
   --green:#20a568;
   --red:#df4d60;
   --orange:#ee922d;
-  --yellow:#ffd95d;
 
   --ink:#1e2741;
   --muted:#737c90;
@@ -38,13 +50,16 @@
     rgba(38,29,82,.09);
 }
 
+
 *{
   box-sizing:border-box;
 }
 
+
 html{
   scroll-behavior:smooth;
 }
+
 
 html,
 body{
@@ -77,14 +92,17 @@ body{
     var(--bg);
 }
 
+
 button,
 select{
   font:inherit;
 }
 
+
 button{
   cursor:pointer;
 }
+
 
 .hidden{
   display:none !important;
@@ -103,7 +121,7 @@ button{
   z-index:50;
 
   background:
-    rgba(255,255,255,.93);
+    rgba(255,255,255,.94);
 
   backdrop-filter:
     blur(15px);
@@ -112,6 +130,7 @@ button{
     1px solid
     var(--line);
 }
+
 
 .top-inner{
   width:
@@ -134,6 +153,7 @@ button{
   gap:12px;
 }
 
+
 .back{
   padding:
     8px 11px;
@@ -155,6 +175,7 @@ button{
   font-weight:900;
 }
 
+
 .logo{
   display:flex;
 
@@ -166,6 +187,7 @@ button{
 
   font-weight:950;
 }
+
 
 .logo-icon{
   width:36px;
@@ -189,6 +211,7 @@ button{
 
   font-size:18px;
 }
+
 
 .student{
   color:#747d8e;
@@ -214,6 +237,66 @@ button{
 
   padding:
     23px 0 60px;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-box{
+  max-width:760px;
+
+  margin:
+    40px auto;
+
+  padding:25px;
+
+  border:
+    1px solid
+    #f0bac2;
+
+  border-radius:17px;
+
+  background:#fff;
+
+  box-shadow:
+    var(--shadow);
+}
+
+
+.error-box h2{
+  margin-top:0;
+
+  color:#b83345;
+}
+
+
+.error-box p{
+  color:#60697b;
+
+  line-height:1.6;
+
+  font-size:12px;
+}
+
+
+.error-code{
+  display:block;
+
+  padding:10px;
+
+  border-radius:8px;
+
+  background:#f4f5f8;
+
+  color:#352b52;
+
+  font-family:
+    Consolas,
+    monospace;
+
+  font-size:11px;
 }
 
 
@@ -247,6 +330,7 @@ button{
     var(--shadow);
 }
 
+
 .hero::after{
   content:"🧠";
 
@@ -261,6 +345,7 @@ button{
   opacity:.055;
 }
 
+
 .eyebrow{
   color:#684bb6;
 
@@ -272,6 +357,7 @@ button{
 
   text-transform:uppercase;
 }
+
 
 .hero h1{
   margin:
@@ -291,6 +377,7 @@ button{
   letter-spacing:-.05em;
 }
 
+
 .hero p{
   margin:0;
 
@@ -305,7 +392,7 @@ button{
 
 
 /* =========================================================
-   REVIEW BANNER
+   REVIEW
 ========================================================= */
 
 .review-banner{
@@ -337,6 +424,7 @@ button{
     );
 }
 
+
 .review-main{
   display:flex;
 
@@ -345,9 +433,11 @@ button{
   gap:12px;
 }
 
+
 .review-icon{
   font-size:33px;
 }
+
 
 .review-banner b{
   display:block;
@@ -356,6 +446,7 @@ button{
 
   font-size:13px;
 }
+
 
 .review-banner span{
   display:block;
@@ -366,6 +457,7 @@ button{
 
   font-size:10px;
 }
+
 
 .review-btn{
   padding:
@@ -394,6 +486,7 @@ button{
     25px 0 12px;
 }
 
+
 .section-head h2{
   margin:0;
 
@@ -403,6 +496,7 @@ button{
 
   letter-spacing:-.03em;
 }
+
 
 .section-head p{
   margin:
@@ -429,6 +523,7 @@ button{
 
   gap:12px;
 }
+
 
 .category{
   padding:17px;
@@ -458,6 +553,7 @@ button{
   transition:.17s ease;
 }
 
+
 .category:hover{
   transform:
     translateY(-3px);
@@ -468,6 +564,7 @@ button{
     0 12px 27px
     rgba(38,29,82,.08);
 }
+
 
 .category-icon{
   width:44px;
@@ -485,6 +582,7 @@ button{
   font-size:22px;
 }
 
+
 .category h3{
   margin:
     11px 0 2px;
@@ -494,11 +592,13 @@ button{
   font-size:14px;
 }
 
+
 .category-count{
   color:#8b92a0;
 
   font-size:9.5px;
 }
+
 
 .mastery-line{
   width:100%;
@@ -507,6 +607,7 @@ button{
 
   padding-top:13px;
 }
+
 
 .mastery-row{
   display:flex;
@@ -523,6 +624,7 @@ button{
   font-weight:850;
 }
 
+
 .mastery-bar{
   height:6px;
 
@@ -532,6 +634,7 @@ button{
 
   background:#e9ecf2;
 }
+
 
 .mastery-bar i{
   display:block;
@@ -566,9 +669,6 @@ button{
   margin-bottom:15px;
 }
 
-.collection-left{
-  min-width:0;
-}
 
 .collection-back{
   margin-bottom:8px;
@@ -591,6 +691,7 @@ button{
   font-weight:900;
 }
 
+
 .collection-head h1{
   margin:0;
 
@@ -600,6 +701,7 @@ button{
 
   letter-spacing:-.04em;
 }
+
 
 .collection-head p{
   margin:
@@ -626,6 +728,7 @@ button{
   margin-bottom:15px;
 }
 
+
 .stat{
   padding:
     13px;
@@ -641,6 +744,7 @@ button{
   text-align:center;
 }
 
+
 .stat small{
   display:block;
 
@@ -652,6 +756,7 @@ button{
 
   text-transform:uppercase;
 }
+
 
 .stat b{
   display:block;
@@ -665,7 +770,7 @@ button{
 
 
 /* =========================================================
-   DIRECTION
+   SETTINGS
 ========================================================= */
 
 .game-settings{
@@ -689,6 +794,7 @@ button{
   background:#fff;
 }
 
+
 .game-settings span{
   color:#6e7689;
 
@@ -696,6 +802,7 @@ button{
 
   font-weight:850;
 }
+
 
 .game-settings select{
   padding:
@@ -718,7 +825,7 @@ button{
 
 
 /* =========================================================
-   GAMES
+   GAME CARDS
 ========================================================= */
 
 .game-grid{
@@ -734,6 +841,7 @@ button{
 
   margin-top:12px;
 }
+
 
 .game-card{
   min-height:205px;
@@ -757,17 +865,13 @@ button{
   box-shadow:
     0 7px 18px
     rgba(38,29,82,.04);
-
-  text-align:left;
 }
 
-.game-card:hover{
-  border-color:#c9beeb;
-}
 
 .game-icon{
   font-size:44px;
 }
+
 
 .game-card h3{
   margin:
@@ -778,6 +882,7 @@ button{
   font-size:17px;
 }
 
+
 .game-card p{
   margin:0;
 
@@ -787,6 +892,7 @@ button{
 
   line-height:1.55;
 }
+
 
 .game-play{
   margin-top:auto;
@@ -813,6 +919,13 @@ button{
 }
 
 
+.game-play:disabled{
+  opacity:.4;
+
+  cursor:not-allowed;
+}
+
+
 /* =========================================================
    TOPICS
 ========================================================= */
@@ -828,6 +941,7 @@ button{
 
   gap:10px;
 }
+
 
 .topic-card{
   padding:15px;
@@ -845,12 +959,14 @@ button{
   transition:.15s;
 }
 
+
 .topic-card:hover{
   border-color:#c8bce9;
 
   transform:
     translateY(-2px);
 }
+
 
 .topic-card b{
   display:block;
@@ -859,6 +975,7 @@ button{
 
   font-size:12px;
 }
+
 
 .topic-card span{
   display:block;
@@ -869,6 +986,7 @@ button{
 
   font-size:9px;
 }
+
 
 .topic-progress{
   height:5px;
@@ -881,6 +999,7 @@ button{
 
   background:#eaedf3;
 }
+
 
 .topic-progress i{
   display:block;
@@ -909,6 +1028,7 @@ button{
   background:#fff;
 }
 
+
 .word-row{
   display:grid;
 
@@ -929,9 +1049,11 @@ button{
   font-size:10px;
 }
 
+
 .word-row:last-child{
   border-bottom:0;
 }
+
 
 .word{
   color:#2d2452;
@@ -941,9 +1063,11 @@ button{
   font-weight:950;
 }
 
+
 .meaning{
   color:#596274;
 }
+
 
 .word-status{
   justify-self:end;
@@ -958,17 +1082,20 @@ button{
   font-weight:950;
 }
 
+
 .word-status.new{
   background:#f0f1f4;
 
   color:#7e8593;
 }
 
+
 .word-status.learning{
   background:#fff2da;
 
   color:#a66513;
 }
+
 
 .word-status.mastered{
   background:#e3f6ec;
@@ -978,13 +1105,8 @@ button{
 
 
 /* =========================================================
-   GAME SCREEN
+   GAME
 ========================================================= */
-
-.game-screen{
-  min-height:
-    calc(100vh - 120px);
-}
 
 .game-header{
   display:flex;
@@ -999,6 +1121,7 @@ button{
   margin-bottom:10px;
 }
 
+
 .game-header h2{
   margin:0;
 
@@ -1006,6 +1129,7 @@ button{
 
   font-size:22px;
 }
+
 
 .quit{
   padding:
@@ -1026,6 +1150,7 @@ button{
   font-weight:900;
 }
 
+
 .hud{
   display:grid;
 
@@ -1036,6 +1161,7 @@ button{
 
   margin-bottom:9px;
 }
+
 
 .hud-box{
   padding:
@@ -1052,6 +1178,7 @@ button{
   text-align:center;
 }
 
+
 .hud-box small{
   display:block;
 
@@ -1064,6 +1191,7 @@ button{
   text-transform:uppercase;
 }
 
+
 .hud-box b{
   display:block;
 
@@ -1074,9 +1202,9 @@ button{
   font-size:15px;
 }
 
+
 .target{
-  padding:
-    14px;
+  padding:14px;
 
   margin-bottom:9px;
 
@@ -1094,6 +1222,7 @@ button{
   text-align:center;
 }
 
+
 .target small{
   display:block;
 
@@ -1103,10 +1232,9 @@ button{
 
   font-weight:950;
 
-  letter-spacing:.08em;
-
   text-transform:uppercase;
 }
+
 
 .target b{
   display:block;
@@ -1152,6 +1280,7 @@ button{
     );
 }
 
+
 .hole{
   position:relative;
 
@@ -1166,6 +1295,7 @@ button{
   justify-content:center;
 }
 
+
 .ground{
   position:absolute;
 
@@ -1179,6 +1309,7 @@ button{
 
   background:#79583d;
 }
+
 
 .mole{
   position:relative;
@@ -1224,14 +1355,17 @@ button{
   color:#fff;
 }
 
+
 .mole.show{
   transform:
     translateY(0);
 }
 
+
 .mole .face{
   font-size:34px;
 }
+
 
 .mole .word-label{
   max-width:100%;
@@ -1256,7 +1390,7 @@ button{
 
 
 /* =========================================================
-   CATCHER
+   CATCH
 ========================================================= */
 
 .catch-area{
@@ -1285,6 +1419,7 @@ button{
   touch-action:none;
 }
 
+
 .cloud{
   position:absolute;
 
@@ -1295,15 +1430,20 @@ button{
   pointer-events:none;
 }
 
+
 .cloud.a{
   top:30px;
+
   left:8%;
 }
 
+
 .cloud.b{
   top:90px;
+
   right:10%;
 }
+
 
 .fruit{
   position:absolute;
@@ -1320,9 +1460,11 @@ button{
   pointer-events:none;
 }
 
+
 .fruit-icon{
   font-size:42px;
 }
+
 
 .fruit-label{
   display:inline-block;
@@ -1346,6 +1488,7 @@ button{
   overflow-wrap:anywhere;
 }
 
+
 .basket{
   position:absolute;
 
@@ -1361,6 +1504,7 @@ button{
   font-size:64px;
 }
 
+
 .mobile-controls{
   display:flex;
 
@@ -1370,6 +1514,7 @@ button{
 
   margin-top:8px;
 }
+
 
 .mobile-controls button{
   width:110px;
@@ -1425,6 +1570,7 @@ button{
   transition:.16s;
 }
 
+
 .feedback.show{
   opacity:1;
 
@@ -1433,9 +1579,11 @@ button{
     translateY(0);
 }
 
+
 .feedback.good{
   background:#16845b;
 }
+
 
 .feedback.bad{
   background:#b83345;
@@ -1466,6 +1614,7 @@ button{
     blur(5px);
 }
 
+
 .result{
   width:
     min(
@@ -1484,11 +1633,13 @@ button{
   background:#fff;
 }
 
+
 .result-icon{
   text-align:center;
 
   font-size:52px;
 }
+
 
 .result h2{
   margin:
@@ -1498,6 +1649,7 @@ button{
 
   text-align:center;
 }
+
 
 .result-score{
   color:#5b40b1;
@@ -1509,6 +1661,7 @@ button{
   font-weight:950;
 }
 
+
 .result-stats{
   display:grid;
 
@@ -1519,6 +1672,7 @@ button{
 
   margin-top:15px;
 }
+
 
 .result-stat{
   padding:9px;
@@ -1532,6 +1686,7 @@ button{
   text-align:center;
 }
 
+
 .result-stat small{
   display:block;
 
@@ -1544,6 +1699,7 @@ button{
   text-transform:uppercase;
 }
 
+
 .result-stat b{
   display:block;
 
@@ -1552,7 +1708,8 @@ button{
   font-size:15px;
 }
 
-.review-title{
+
+.result-review-title{
   margin:
     16px 0 7px;
 
@@ -1565,6 +1722,7 @@ button{
   text-transform:uppercase;
 }
 
+
 .review-chips{
   display:flex;
 
@@ -1572,6 +1730,7 @@ button{
 
   gap:5px;
 }
+
 
 .review-chip{
   padding:
@@ -1588,6 +1747,7 @@ button{
   font-weight:900;
 }
 
+
 .result-actions{
   display:grid;
 
@@ -1599,6 +1759,7 @@ button{
   margin-top:17px;
 }
 
+
 .result-actions button{
   padding:10px;
 
@@ -1606,6 +1767,7 @@ button{
 
   font-weight:950;
 }
+
 
 .secondary{
   border:
@@ -1616,6 +1778,7 @@ button{
 
   color:#584676;
 }
+
 
 .primary{
   border:0;
@@ -1652,21 +1815,25 @@ button{
     display:none;
   }
 
+
   .category-grid,
   .topic-grid,
   .game-grid{
     grid-template-columns:1fr;
   }
 
+
   .stats{
     grid-template-columns:
       repeat(2,1fr);
   }
 
+
   .hud{
     grid-template-columns:
       repeat(3,1fr);
   }
+
 
   .whack-board{
     padding:7px;
@@ -1674,9 +1841,11 @@ button{
     gap:5px;
   }
 
+
   .hole{
     min-height:130px;
   }
+
 
   .mole{
     width:98%;
@@ -1685,18 +1854,22 @@ button{
       7px 3px 12px;
   }
 
+
   .mole .face{
     font-size:29px;
   }
+
 
   .mole .word-label{
     font-size:8.5px;
   }
 
+
   .word-row{
     grid-template-columns:
       1fr 1fr;
   }
+
 
   .word-status{
     grid-column:
@@ -1705,6 +1878,7 @@ button{
     justify-self:start;
   }
 
+
   .collection-head{
     display:block;
   }
@@ -1712,36 +1886,32 @@ button{
 }
 
 
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
 @media(max-width:480px){
 
   .logo span{
     display:none;
   }
 
+
   .hero{
     padding:
       23px 19px;
   }
+
 
   .catch-area{
     height:500px;
   }
 
 }
+
 </style>
+
 </head>
 
 
 <body>
 
-
-<!-- =========================================================
-     TOP
-========================================================= -->
 
 <header class="topbar">
 
@@ -1810,8 +1980,6 @@ button{
   </section>
 
 
-  <!-- REVIEW -->
-
   <section
     class="review-banner"
     id="reviewBanner"
@@ -1850,16 +2018,15 @@ button{
   </section>
 
 
-  <!-- SKILLS -->
-
   <div class="section-head">
 
     <h2>
       Chọn nội dung
     </h2>
 
+
     <p>
-      % Mastered được tính từ lịch sử học của từng học sinh trên thiết bị này.
+      Tiến độ Mastered được cập nhật tự động theo quá trình luyện.
     </p>
 
   </div>
@@ -1874,7 +2041,7 @@ button{
 
 
 <!-- =========================================================
-     TOPICS SCREEN
+     TOPICS
 ========================================================= -->
 
 <main
@@ -1884,7 +2051,7 @@ button{
 
   <div class="collection-head">
 
-    <div class="collection-left">
+    <div>
 
       <button
         class="collection-back"
@@ -1900,7 +2067,7 @@ button{
 
 
       <p>
-        Chọn một chủ đề để luyện từ vựng.
+        Chọn chủ đề em muốn luyện.
       </p>
 
     </div>
@@ -1917,7 +2084,7 @@ button{
 
 
 <!-- =========================================================
-     COLLECTION SCREEN
+     COLLECTION
 ========================================================= -->
 
 <main
@@ -1927,7 +2094,7 @@ button{
 
   <div class="collection-head">
 
-    <div class="collection-left">
+    <div>
 
       <button
         class="collection-back"
@@ -1939,7 +2106,7 @@ button{
 
 
       <h1 id="collectionTitle">
-        Reading
+        Vocabulary
       </h1>
 
 
@@ -2009,7 +2176,7 @@ button{
   <section class="game-settings">
 
     <span>
-      Chọn chiều luyện
+      Chiều luyện
     </span>
 
 
@@ -2034,17 +2201,15 @@ button{
       Chọn game
     </h2>
 
-    <p>
-      Từ hay sai sẽ tự xuất hiện thường xuyên hơn trong game.
+
+    <p id="gameRequirementText">
+      Từ hay sai sẽ xuất hiện nhiều hơn.
     </p>
 
   </div>
 
 
   <section class="game-grid">
-
-
-    <!-- WHACK -->
 
     <article class="game-card">
 
@@ -2066,6 +2231,7 @@ button{
 
       <button
         class="game-play"
+        id="playWhack"
         onclick="startWhack()"
       >
         Chơi →
@@ -2073,8 +2239,6 @@ button{
 
     </article>
 
-
-    <!-- CATCHER -->
 
     <article class="game-card">
 
@@ -2096,6 +2260,7 @@ button{
 
       <button
         class="game-play"
+        id="playCatch"
         onclick="startCatcher()"
       >
         Chơi →
@@ -2106,13 +2271,12 @@ button{
   </section>
 
 
-  <!-- WORD LIST -->
-
   <div class="section-head">
 
     <h2>
       Từ trong mục này
     </h2>
+
 
     <p id="wordListDescription"></p>
 
@@ -2128,11 +2292,11 @@ button{
 
 
 <!-- =========================================================
-     WHACK GAME
+     WHACK
 ========================================================= -->
 
 <main
-  class="page game-screen hidden"
+  class="page hidden"
   id="whackScreen"
 >
 
@@ -2156,67 +2320,28 @@ button{
   <div class="hud">
 
     <div class="hud-box">
-
-      <small>
-        Score
-      </small>
-
-      <b id="whackScore">
-        0
-      </b>
-
+      <small>Score</small>
+      <b id="whackScore">0</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Time
-      </small>
-
-      <b id="whackTime">
-        45
-      </b>
-
+      <small>Time</small>
+      <b id="whackTime">45</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Lives
-      </small>
-
-      <b id="whackLives">
-        5
-      </b>
-
+      <small>Lives</small>
+      <b id="whackLives">5</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Combo
-      </small>
-
-      <b id="whackCombo">
-        x0
-      </b>
-
+      <small>Combo</small>
+      <b id="whackCombo">x0</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Accuracy
-      </small>
-
-      <b id="whackAccuracy">
-        0%
-      </b>
-
+      <small>Accuracy</small>
+      <b id="whackAccuracy">0%</b>
     </div>
 
   </div>
@@ -2248,7 +2373,7 @@ button{
 ========================================================= -->
 
 <main
-  class="page game-screen hidden"
+  class="page hidden"
   id="catchScreen"
 >
 
@@ -2272,67 +2397,28 @@ button{
   <div class="hud">
 
     <div class="hud-box">
-
-      <small>
-        Score
-      </small>
-
-      <b id="catchScore">
-        0
-      </b>
-
+      <small>Score</small>
+      <b id="catchScore">0</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Time
-      </small>
-
-      <b id="catchTime">
-        60
-      </b>
-
+      <small>Time</small>
+      <b id="catchTime">60</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Lives
-      </small>
-
-      <b id="catchLives">
-        5
-      </b>
-
+      <small>Lives</small>
+      <b id="catchLives">5</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Combo
-      </small>
-
-      <b id="catchCombo">
-        x0
-      </b>
-
+      <small>Combo</small>
+      <b id="catchCombo">x0</b>
     </div>
 
-
     <div class="hud-box">
-
-      <small>
-        Accuracy
-      </small>
-
-      <b id="catchAccuracy">
-        0%
-      </b>
-
+      <small>Accuracy</small>
+      <b id="catchAccuracy">0%</b>
     </div>
 
   </div>
@@ -2377,15 +2463,11 @@ button{
 
   <div class="mobile-controls">
 
-    <button
-      onclick="moveBasket(-1)"
-    >
+    <button onclick="moveBasket(-1)">
       ←
     </button>
 
-    <button
-      onclick="moveBasket(1)"
-    >
+    <button onclick="moveBasket(1)">
       →
     </button>
 
@@ -2439,47 +2521,24 @@ button{
     <section class="result-stats">
 
       <div class="result-stat">
-
-        <small>
-          Correct
-        </small>
-
-        <b id="resultCorrect">
-          0
-        </b>
-
+        <small>Correct</small>
+        <b id="resultCorrect">0</b>
       </div>
 
-
       <div class="result-stat">
-
-        <small>
-          Accuracy
-        </small>
-
-        <b id="resultAccuracy">
-          0%
-        </b>
-
+        <small>Accuracy</small>
+        <b id="resultAccuracy">0%</b>
       </div>
 
-
       <div class="result-stat">
-
-        <small>
-          Best Combo
-        </small>
-
-        <b id="resultCombo">
-          x0
-        </b>
-
+        <small>Best combo</small>
+        <b id="resultCombo">x0</b>
       </div>
 
     </section>
 
 
-    <div class="review-title">
+    <div class="result-review-title">
       Từ cần ôn lại
     </div>
 
@@ -2515,6 +2574,20 @@ button{
 
 
 <script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const VOCABULARY_DATA =
+Array.isArray(
+  window.VOCABULARY_DATA
+)
+?
+window.VOCABULARY_DATA
+:
+[];
+
 
 /* =========================================================
    META
@@ -2594,81 +2667,13 @@ const TOPIC_LABELS = {
 
   food:"Food",
 
-  data:"Data & Trends"
+  "data-trends":"Data & Trends"
 
 };
 
 
 /* =========================================================
-   STORAGE
-========================================================= */
-
-const WORD_STATS_KEY =
-"VOCABULARY_WORD_STATS_V1";
-
-
-const GAME_HISTORY_KEY =
-"VOCABULARY_GAME_HISTORY_V1";
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let currentCollection = [];
-
-let currentCollectionType = "";
-
-let currentCollectionKey = "";
-
-let currentCollectionTitle = "";
-
-let currentGame = "";
-
-let lastGame = "";
-
-let gameDirection = "vi-en";
-
-let score = 0;
-
-let lives = 5;
-
-let combo = 0;
-
-let bestCombo = 0;
-
-let correct = 0;
-
-let wrong = 0;
-
-let attempts = 0;
-
-let reviewMap = {};
-
-let currentTarget = null;
-
-let gameEnded = false;
-
-let gameTimer = null;
-
-let roundTimer = null;
-
-
-/* CATCHER */
-
-let fruits = [];
-
-let basketX = 50;
-
-let catcherAnimation = null;
-
-let lastFrame = 0;
-
-let changingRound = false;
-
-
-/* =========================================================
-   BASIC HELPERS
+   DOM
 ========================================================= */
 
 function $(id){
@@ -2679,6 +2684,200 @@ function $(id){
 
 }
 
+
+/* =========================================================
+   STUDENT-SCOPED STORAGE
+========================================================= */
+
+function getStudent(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        "IELTS_PRACTICE_STUDENT"
+      )
+
+      ||
+
+      "null"
+
+    );
+
+  }
+
+  catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function studentScope(){
+
+  const student =
+  getStudent();
+
+
+  if(
+    !student?.name
+  ){
+
+    return "guest";
+
+  }
+
+
+  return encodeURIComponent(
+
+    (
+      student.name
+      +
+      "|"
+      +
+      (
+        student.className
+        ||
+        ""
+      )
+    )
+    .toLowerCase()
+
+  );
+
+}
+
+
+function statsKey(){
+
+  return(
+    "VOCABULARY_WORD_STATS_V2_"
+    +
+    studentScope()
+  );
+
+}
+
+
+function historyKey(){
+
+  return(
+    "VOCABULARY_GAME_HISTORY_V2_"
+    +
+    studentScope()
+  );
+
+}
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentCollection =
+[];
+
+
+let currentCollectionType =
+"";
+
+
+let currentCollectionKey =
+"";
+
+
+let currentCollectionTitle =
+"";
+
+
+let currentGame =
+"";
+
+
+let lastGame =
+"";
+
+
+let gameDirection =
+"vi-en";
+
+
+let score =
+0;
+
+
+let lives =
+5;
+
+
+let combo =
+0;
+
+
+let bestCombo =
+0;
+
+
+let correct =
+0;
+
+
+let wrong =
+0;
+
+
+let attempts =
+0;
+
+
+let reviewMap =
+{};
+
+
+let currentTarget =
+null;
+
+
+let gameEnded =
+false;
+
+
+let gameTimer =
+null;
+
+
+let roundTimer =
+null;
+
+
+/* CATCHER */
+
+let fruits =
+[];
+
+
+let basketX =
+50;
+
+
+let catcherAnimation =
+null;
+
+
+let lastFrame =
+0;
+
+
+let changingRound =
+false;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function escapeHTML(value){
 
@@ -2785,37 +2984,21 @@ function titleCase(value){
 
 function loadStudent(){
 
-  try{
-
-    const student =
-    JSON.parse(
-
-      localStorage.getItem(
-        "IELTS_PRACTICE_STUDENT"
-      )
-
-      ||
-
-      "null"
-
-    );
+  const student =
+  getStudent();
 
 
-    if(
-      student?.name
-      &&
-      student?.className
-    ){
+  if(
+    student?.name
+    &&
+    student?.className
+  ){
 
-      $("studentInfo")
-      .textContent =
-      `${student.name} · ${student.className}`;
-
-    }
+    $("studentInfo")
+    .textContent =
+    `${student.name} · ${student.className}`;
 
   }
-
-  catch(error){}
 
 }
 
@@ -2836,7 +3019,7 @@ function wordId(word){
 
 
 /* =========================================================
-   WORD STATS
+   STATS
 ========================================================= */
 
 function readStats(){
@@ -2846,7 +3029,7 @@ function readStats(){
     return JSON.parse(
 
       localStorage.getItem(
-        WORD_STATS_KEY
+        statsKey()
       )
 
       ||
@@ -2870,7 +3053,7 @@ function writeStats(stats){
 
   localStorage.setItem(
 
-    WORD_STATS_KEY,
+    statsKey(),
 
     JSON.stringify(
       stats
@@ -2890,7 +3073,9 @@ function getWordStats(word){
   return stats[
     wordId(word)
   ]
+
   ||
+
   {
     seen:0,
     correct:0,
@@ -2901,17 +3086,17 @@ function getWordStats(word){
 
 
 /* =========================================================
-   MASTERY RULE
+   MASTERY
 
-   New:
+   NEW:
    chưa gặp.
 
-   Learning:
-   đã gặp nhưng chưa đủ điều kiện.
+   LEARNING:
+   đã gặp nhưng chưa đủ Mastered.
 
-   Mastered:
-   gặp ít nhất 5 lần
-   và accuracy >= 80%.
+   MASTERED:
+   gặp >= 5 lần
+   accuracy >= 80%.
 ========================================================= */
 
 function wordStatus(word){
@@ -2970,7 +3155,9 @@ function registerWordResult(
 
   const current =
   stats[id]
+
   ||
+
   {
     seen:0,
     correct:0,
@@ -3011,7 +3198,7 @@ function registerWordResult(
 
 
 /* =========================================================
-   REVIEW WORDS
+   REVIEW
 ========================================================= */
 
 function getReviewWords(){
@@ -3028,14 +3215,7 @@ function getReviewWords(){
 
       if(
         stats.wrong < 1
-      ){
-
-        return false;
-
-      }
-
-
-      if(
+        ||
         !stats.seen
       ){
 
@@ -3058,15 +3238,10 @@ function getReviewWords(){
     (
       a,
       b
-    ) => {
-
-      return(
-        getWordStats(b).wrong
-        -
-        getWordStats(a).wrong
-      );
-
-    }
+    ) =>
+    getWordStats(b).wrong
+    -
+    getWordStats(a).wrong
   );
 
 }
@@ -3078,8 +3253,8 @@ function getReviewWords(){
 
 function collectionStats(words){
 
-  const result =
-  {
+  const result = {
+
     total:
       words.length,
 
@@ -3091,6 +3266,7 @@ function collectionStats(words){
 
     new:
       0
+
   };
 
 
@@ -3098,7 +3274,9 @@ function collectionStats(words){
     word => {
 
       result[
-        wordStatus(word)
+        wordStatus(
+          word
+        )
       ]++;
 
     }
@@ -3129,7 +3307,7 @@ function collectionStats(words){
 
 
 /* =========================================================
-   HOME CATEGORIES
+   CATEGORY CARDS
 ========================================================= */
 
 function renderCategories(){
@@ -3220,18 +3398,21 @@ function renderCategories(){
   );
 
 
-  /*
-   * TOPICS
-   */
+  const topicWords =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    Array.isArray(
+      word.topics
+    )
+    &&
+    word.topics.length
+  );
+
 
   const topicStats =
   collectionStats(
-    VOCABULARY_DATA.filter(
-      word =>
-      Array.isArray(word.topics)
-      &&
-      word.topics.length
-    )
+    topicWords
   );
 
 
@@ -3326,8 +3507,7 @@ function renderReviewBanner(){
 
 
   $("reviewButton")
-  .style
-  .opacity =
+  .style.opacity =
   review.length
   ?
   "1"
@@ -3338,7 +3518,7 @@ function renderReviewBanner(){
 
 
 /* =========================================================
-   SCREEN CONTROL
+   SCREENS
 ========================================================= */
 
 function hideAllScreens(){
@@ -3386,7 +3566,7 @@ function showHome(){
 
 
 /* =========================================================
-   OPEN SKILL
+   SKILL
 ========================================================= */
 
 function openSkill(key){
@@ -3411,11 +3591,17 @@ function openSkill(key){
 
 
   openCollection(
+
     words,
+
     "skill",
+
     key,
+
     `${meta.icon} ${meta.title}`,
+
     "Từ vựng dành cho kỹ năng này."
+
   );
 
 }
@@ -3424,6 +3610,17 @@ function openSkill(key){
 /* =========================================================
    TOPICS
 ========================================================= */
+
+function topicLabel(key){
+
+  return(
+    TOPIC_LABELS[key]
+    ||
+    titleCase(key)
+  );
+
+}
+
 
 function openTopics(){
 
@@ -3491,16 +3688,11 @@ function renderTopics(){
     (
       a,
       b
-    ) => {
-
-      return(
-        topicLabel(a[0])
-        .localeCompare(
-          topicLabel(b[0])
-        )
-      );
-
-    }
+    ) =>
+    topicLabel(a[0])
+    .localeCompare(
+      topicLabel(b[0])
+    )
   )
   .map(
     (
@@ -3523,11 +3715,17 @@ function renderTopics(){
         >
 
           <b>
-            ${escapeHTML(topicLabel(key))}
+            ${escapeHTML(
+              topicLabel(
+                key
+              )
+            )}
           </b>
 
+
           <span>
-            ${words.length} từ · ${stats.percent}% mastered
+            ${words.length} từ ·
+            ${stats.percent}% mastered
           </span>
 
 
@@ -3545,17 +3743,6 @@ function renderTopics(){
     }
   )
   .join("");
-
-}
-
-
-function topicLabel(key){
-
-  return(
-    TOPIC_LABELS[key]
-    ||
-    titleCase(key)
-  );
 
 }
 
@@ -3631,7 +3818,7 @@ function openReviewCollection(){
 
     "🔥 Từ cần ôn",
 
-    "Các từ em thường xuyên trả lời sai."
+    "Những từ em thường xuyên trả lời sai."
 
   );
 
@@ -3639,7 +3826,7 @@ function openReviewCollection(){
 
 
 /* =========================================================
-   OPEN COLLECTION
+   COLLECTION
 ========================================================= */
 
 function openCollection(
@@ -3649,19 +3836,6 @@ function openCollection(
   title,
   subtitle
 ){
-
-  if(
-    words.length < 4
-  ){
-
-    alert(
-      "Mục này cần ít nhất 4 từ để chơi game."
-    );
-
-    return;
-
-  }
-
 
   currentCollection =
   [...words];
@@ -3714,6 +3888,9 @@ function openCollection(
 
   renderWordList();
 
+
+  updateGameButtons();
+
 }
 
 
@@ -3756,7 +3933,63 @@ function renderCollectionStats(){
 }
 
 
+function updateGameButtons(){
+
+  const playable =
+  currentCollection.length >= 4;
+
+
+  $("playWhack")
+  .disabled =
+  !playable;
+
+
+  $("playCatch")
+  .disabled =
+  !playable;
+
+
+  $("gameRequirementText")
+  .textContent =
+  playable
+
+  ?
+
+  "Từ hay sai sẽ xuất hiện nhiều hơn trong game."
+
+  :
+
+  `Mục này hiện có ${currentCollection.length} từ. Cần ít nhất 4 từ để chơi game.`;
+
+}
+
+
 function renderWordList(){
+
+  if(
+    !currentCollection.length
+  ){
+
+    $("wordList")
+    .innerHTML =
+    `
+      <div
+        style="
+          padding:20px;
+          color:#7c8493;
+          text-align:center;
+          font-size:11px;
+        "
+      >
+        Chưa có từ trong mục này.
+      </div>
+    `;
+
+
+    return;
+
+  }
+
 
   $("wordList")
   .innerHTML =
@@ -3771,7 +4004,8 @@ function renderWordList(){
 
 
       const label =
-      status === "mastered"
+      status ===
+      "mastered"
 
       ?
 
@@ -3779,7 +4013,8 @@ function renderWordList(){
 
       :
 
-      status === "learning"
+      status ===
+      "learning"
 
       ?
 
@@ -3820,11 +4055,7 @@ function renderWordList(){
 
 
 /* =========================================================
-   GAME WORD SELECTION
-
-   Adaptive:
-   - từ sai nhiều có trọng số cao hơn
-   - từ New cũng được ưu tiên
+   ADAPTIVE WORD PICKER
 ========================================================= */
 
 function wordWeight(word){
@@ -3844,10 +4075,14 @@ function wordWeight(word){
   }
 
 
-  return(
+  return Math.min(
+
+    12,
+
     1
     +
     stats.wrong*2
+
   );
 
 }
@@ -3864,9 +4099,8 @@ function weightedRandomWord(){
     word => {
 
       const weight =
-      Math.min(
-        wordWeight(word),
-        12
+      wordWeight(
+        word
       );
 
 
@@ -3964,6 +4198,20 @@ function gameOptions(
 
 function prepareGame(game){
 
+  if(
+    currentCollection.length < 4
+  ){
+
+    alert(
+      "Cần ít nhất 4 từ để chơi game."
+    );
+
+
+    return false;
+
+  }
+
+
   clearGame();
 
 
@@ -4022,11 +4270,14 @@ function prepareGame(game){
 
   hideAllScreens();
 
+
+  return true;
+
 }
 
 
 /* =========================================================
-   COMMON SCORE
+   SCORE
 ========================================================= */
 
 function accuracy(){
@@ -4068,19 +4319,17 @@ function correctAnswer(word){
   );
 
 
-  const bonus =
-  Math.min(
-    combo-1,
-    10
-  )
-  *
-  10;
-
-
   score +=
   100
   +
-  bonus;
+  (
+    Math.min(
+      combo-1,
+      10
+    )
+    *
+    10
+  );
 
 
   registerWordResult(
@@ -4115,8 +4364,8 @@ function wrongAnswer(word){
   );
 
 
-  reviewMap[id] =
-  {
+  reviewMap[id] = {
+
     word:
       word.word,
 
@@ -4131,6 +4380,7 @@ function wrongAnswer(word){
       )
       +
       1
+
   };
 
 }
@@ -4138,7 +4388,11 @@ function wrongAnswer(word){
 
 function loseLife(){
 
-  lives--;
+  lives =
+  Math.max(
+    0,
+    lives-1
+  );
 
 
   if(
@@ -4196,14 +4450,20 @@ function showFeedback(
 
 
 /* =========================================================
-   WHACK GAME
+   WHACK A WORD
 ========================================================= */
 
 function startWhack(){
 
-  prepareGame(
-    "whack"
-  );
+  if(
+    !prepareGame(
+      "whack"
+    )
+  ){
+
+    return;
+
+  }
 
 
   $("whackScreen")
@@ -4412,10 +4672,13 @@ function nextWhackRound(){
 
   const delay =
   Math.max(
+
     1100,
+
     2500
     -
     correct*45
+
   );
 
 
@@ -4584,8 +4847,7 @@ function updateWhackHUD(seconds){
    CATCHER
 ========================================================= */
 
-const FRUIT_ICONS =
-[
+const FRUIT_ICONS = [
   "🍎",
   "🍊",
   "🍐",
@@ -4599,9 +4861,15 @@ const FRUIT_ICONS =
 
 function startCatcher(){
 
-  prepareGame(
-    "catcher"
-  );
+  if(
+    !prepareGame(
+      "catcher"
+    )
+  ){
+
+    return;
+
+  }
 
 
   $("catchScreen")
@@ -4770,11 +5038,14 @@ function createFruit(
   );
 
 
-  const fruit =
-  {
+  const fruit = {
+
     element,
+
     word,
+
     x,
+
     y,
 
     speed:
@@ -4782,9 +5053,10 @@ function createFruit(
       +
       Math.random()*20
       +
-      correct*1.8,
+      correct*1.5,
 
     removed:false
+
   };
 
 
@@ -4869,12 +5141,18 @@ function catcherLoop(now){
       if(
         fruit.y >
         height-72
+
         &&
+
         fruit.y <
         height-12
+
         &&
+
         Math.abs(
-          fruit.x-basketX
+          fruit.x
+          -
+          basketX
         )
         <
         10
@@ -4968,7 +5246,7 @@ function catchFruit(fruit){
 
 
     showFeedback(
-      "✕ Sai từ!",
+      `✕ ${currentAnswer(currentTarget)}`,
       "bad"
     );
 
@@ -5046,7 +5324,8 @@ function removeFruit(fruit){
   fruits =
   fruits.filter(
     item =>
-    item !== fruit
+    item !==
+    fruit
   );
 
 }
@@ -5174,8 +5453,7 @@ function moveBasket(direction){
 function renderBasket(){
 
   $("basket")
-  .style
-  .left =
+  .style.left =
   basketX
   +
   "%";
@@ -5362,23 +5640,28 @@ function endGame(){
 
 
 /* =========================================================
-   GAME HISTORY
+   HISTORY
 ========================================================= */
 
 function saveGameHistory(){
 
-  let history;
+  let history =
+  [];
 
 
   try{
 
     history =
     JSON.parse(
+
       localStorage.getItem(
-        GAME_HISTORY_KEY
+        historyKey()
       )
+
       ||
+
       "[]"
+
     );
 
   }
@@ -5435,7 +5718,7 @@ function saveGameHistory(){
 
   localStorage.setItem(
 
-    GAME_HISTORY_KEY,
+    historyKey(),
 
     JSON.stringify(
       history.slice(
@@ -5519,7 +5802,9 @@ function showGameResult(){
       a,
       b
     ) =>
-    b.count-a.count
+    b.count
+    -
+    a.count
   );
 
 
@@ -5572,7 +5857,7 @@ function showGameResult(){
 
 
 /* =========================================================
-   GAME NAV
+   NAVIGATION
 ========================================================= */
 
 function clearGame(){
@@ -5621,7 +5906,7 @@ function quitGame(){
 
   const confirmed =
   confirm(
-    "Thoát game hiện tại? Điểm của lượt này sẽ không được lưu."
+    "Thoát game hiện tại? Điểm lượt này sẽ không được lưu."
   );
 
 
@@ -5668,7 +5953,7 @@ function backToCollection(){
   renderWordList();
 
 
-  renderReviewBanner();
+  updateGameButtons();
 
 }
 
@@ -5701,20 +5986,75 @@ function replayGame(){
 
 
 /* =========================================================
+   ERROR
+========================================================= */
+
+function showDataError(){
+
+  $("homeScreen")
+  .innerHTML =
+  `
+    <div class="error-box">
+
+      <h2>
+        ⚠️ Không tải được dữ liệu Vocabulary
+      </h2>
+
+      <p>
+        File <b>index.html</b> đang hoạt động,
+        nhưng file <b>vocab-data.js</b> chưa được tải
+        hoặc chưa chứa dữ liệu.
+      </p>
+
+      <p>
+        Kiểm tra chính xác hai file:
+      </p>
+
+      <span class="error-code">
+        Practice/Vocabulary/index.html
+      </span>
+
+      <br>
+
+      <span class="error-code">
+        Practice/Vocabulary/vocab-data.js
+      </span>
+
+      <p>
+        Dòng đầu của vocab-data.js phải là:
+      </p>
+
+      <span class="error-code">
+        window.VOCABULARY_DATA = [
+      </span>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
    INIT
 ========================================================= */
 
 function init(){
 
   if(
-    typeof VOCABULARY_DATA ===
-    "undefined"
+    window.VOCABULARY_LOAD_ERROR
+
+    ||
+
+    !Array.isArray(
+      window.VOCABULARY_DATA
+    )
+
+    ||
+
+    !VOCABULARY_DATA.length
   ){
 
-    alert(
-      "Không tìm thấy vocab-data.js"
-    );
-
+    showDataError();
 
     return;
 
