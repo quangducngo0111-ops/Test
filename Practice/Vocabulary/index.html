@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -25,13 +27,8 @@
 
 <title>Vocabulary Practice</title>
 
-
-<!-- =========================================================
-     VOCABULARY DATA
-========================================================= -->
-
 <script
-  src="./vocab-data.js?v=20260917-6games"
+  src="./vocab-data.js?v=20260917-set01"
   onerror="window.VOCABULARY_LOAD_ERROR=true"
 ></script>
 
@@ -41,13 +38,10 @@
 :root{
   --purple:#281260;
   --purple2:#6042c3;
-  --purple3:#8a6ae2;
-
   --blue:#3378e5;
   --green:#20a568;
   --red:#df4d60;
   --orange:#ee922d;
-  --yellow:#ffd75c;
 
   --ink:#1e2741;
   --muted:#737c90;
@@ -70,7 +64,6 @@ html{
 }
 
 
-html,
 body{
   margin:0;
 
@@ -168,8 +161,7 @@ button{
     8px 11px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:10px;
 
@@ -341,92 +333,6 @@ button{
 
 
 /* =========================================================
-   REVIEW
-========================================================= */
-
-.review-banner{
-  margin-top:14px;
-
-  padding:
-    15px 17px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:
-    space-between;
-
-  gap:14px;
-
-  border:
-    1px solid
-    #f2d8bb;
-
-  border-radius:16px;
-
-  background:
-    linear-gradient(
-      120deg,
-      #fff9ef,
-      #fff
-    );
-}
-
-
-.review-main{
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-}
-
-
-.review-icon{
-  font-size:33px;
-}
-
-
-.review-banner b{
-  display:block;
-
-  color:#654019;
-
-  font-size:13px;
-}
-
-
-.review-banner span{
-  display:block;
-
-  margin-top:2px;
-
-  color:#8b735d;
-
-  font-size:10px;
-}
-
-
-.review-btn{
-  padding:
-    9px 13px;
-
-  border:0;
-
-  border-radius:9px;
-
-  background:#df8629;
-
-  color:#fff;
-
-  font-size:10px;
-
-  font-weight:950;
-}
-
-
-/* =========================================================
    SECTION
 ========================================================= */
 
@@ -475,7 +381,7 @@ button{
 
 
 .category{
-  min-height:183px;
+  min-height:180px;
 
   padding:17px;
 
@@ -486,8 +392,7 @@ button{
   align-items:flex-start;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:17px;
 
@@ -590,75 +495,168 @@ button{
 
   height:100%;
 
+  border-radius:inherit;
+
   background:
     linear-gradient(
       90deg,
       #5c3ac2,
       #4d82e5
     );
-
-  border-radius:inherit;
 }
 
 
 /* =========================================================
-   COLLECTION
+   BACK / HEAD
 ========================================================= */
 
-.collection-head{
-  display:flex;
-
-  align-items:flex-start;
-
-  justify-content:
-    space-between;
-
-  gap:15px;
-
-  margin-bottom:15px;
+.screen-head{
+  margin-bottom:16px;
 }
 
 
-.collection-back{
-  margin-bottom:8px;
+.screen-back{
+  margin-bottom:10px;
 
   padding:
-    7px 10px;
+    8px 11px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
-  border-radius:8px;
+  border-radius:9px;
 
   background:#fff;
 
   color:#533a8f;
 
-  font-size:9.5px;
+  font-size:10px;
 
   font-weight:900;
 }
 
 
-.collection-head h1{
+.screen-head h1{
   margin:0;
 
   color:#241650;
 
-  font-size:30px;
+  font-size:31px;
 
   letter-spacing:-.04em;
 }
 
 
-.collection-head p{
+.screen-head p{
   margin:
     5px 0 0;
 
   color:#777f90;
 
   font-size:10.5px;
+}
+
+
+/* =========================================================
+   SETS
+========================================================= */
+
+.set-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0,1fr)
+    );
+
+  gap:12px;
+}
+
+
+.set-card{
+  min-height:180px;
+
+  padding:18px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-start;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:17px;
+
+  background:#fff;
+
+  box-shadow:
+    0 7px 18px
+    rgba(38,29,82,.04);
+
+  text-align:left;
+
+  transition:.17s ease;
+}
+
+
+.set-card:hover{
+  transform:
+    translateY(-3px);
+
+  border-color:#cbbfeb;
+}
+
+
+.set-number{
+  min-width:50px;
+
+  height:50px;
+
+  padding:
+    0 12px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #4c2c9d,
+      #8063dc
+    );
+
+  color:#fff;
+
+  font-size:18px;
+
+  font-weight:950;
+}
+
+
+.set-card h3{
+  margin:
+    12px 0 4px;
+
+  color:#281b52;
+
+  font-size:16px;
+}
+
+
+.set-card p{
+  margin:0;
+
+  color:#7a8292;
+
+  font-size:10px;
+
+  line-height:1.5;
 }
 
 
@@ -674,7 +672,7 @@ button{
 
   gap:8px;
 
-  margin-bottom:15px;
+  margin-bottom:14px;
 }
 
 
@@ -682,8 +680,7 @@ button{
   padding:13px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:12px;
 
@@ -734,8 +731,7 @@ button{
   gap:12px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:12px;
 
@@ -757,8 +753,7 @@ button{
     8px 10px;
 
   border:
-    1px solid
-    #dce0e9;
+    1px solid #dce0e9;
 
   border-radius:8px;
 
@@ -773,7 +768,7 @@ button{
 
 
 /* =========================================================
-   6 GAME CARDS
+   GAME LIST
 ========================================================= */
 
 .game-grid{
@@ -792,7 +787,7 @@ button{
 
 
 .game-card{
-  min-height:225px;
+  min-height:220px;
 
   padding:18px;
 
@@ -803,8 +798,7 @@ button{
   align-items:flex-start;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:17px;
 
@@ -814,7 +808,7 @@ button{
     0 7px 18px
     rgba(38,29,82,.04);
 
-  transition:.16s ease;
+  transition:.16s;
 }
 
 
@@ -823,10 +817,6 @@ button{
     translateY(-3px);
 
   border-color:#c9beeb;
-
-  box-shadow:
-    0 12px 25px
-    rgba(38,29,82,.08);
 }
 
 
@@ -893,97 +883,6 @@ button{
 }
 
 
-.game-play:disabled{
-  opacity:.4;
-
-  cursor:not-allowed;
-}
-
-
-/* =========================================================
-   TOPICS
-========================================================= */
-
-.topic-grid{
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      minmax(0,1fr)
-    );
-
-  gap:10px;
-}
-
-
-.topic-card{
-  padding:15px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:14px;
-
-  background:#fff;
-
-  text-align:left;
-
-  transition:.15s;
-}
-
-
-.topic-card:hover{
-  border-color:#c8bce9;
-
-  transform:
-    translateY(-2px);
-}
-
-
-.topic-card b{
-  display:block;
-
-  color:#29204d;
-
-  font-size:12px;
-}
-
-
-.topic-card span{
-  display:block;
-
-  margin-top:4px;
-
-  color:#8a91a0;
-
-  font-size:9px;
-}
-
-
-.topic-progress{
-  height:5px;
-
-  margin-top:10px;
-
-  overflow:hidden;
-
-  border-radius:999px;
-
-  background:#eaedf3;
-}
-
-
-.topic-progress i{
-  display:block;
-
-  height:100%;
-
-  background:#6042c3;
-}
-
-
 /* =========================================================
    WORD LIST
 ========================================================= */
@@ -994,8 +893,7 @@ button{
   overflow:hidden;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:14px;
 
@@ -1007,7 +905,7 @@ button{
   display:grid;
 
   grid-template-columns:
-    1fr 1.3fr 110px;
+    1fr 1.4fr 110px;
 
   gap:10px;
 
@@ -1017,8 +915,7 @@ button{
     10px 13px;
 
   border-bottom:
-    1px solid
-    #edf0f4;
+    1px solid #edf0f4;
 
   font-size:10px;
 }
@@ -1059,21 +956,18 @@ button{
 
 .word-status.new{
   background:#f0f1f4;
-
   color:#7e8593;
 }
 
 
 .word-status.learning{
   background:#fff2da;
-
   color:#a66513;
 }
 
 
 .word-status.mastered{
   background:#e3f6ec;
-
   color:#168054;
 }
 
@@ -1115,13 +1009,12 @@ button{
 }
 
 
-.quit{
+.game-back{
   padding:
     8px 11px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:8px;
 
@@ -1151,8 +1044,7 @@ button{
   padding:9px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:10px;
 
@@ -1238,7 +1130,7 @@ button{
 ========================================================= */
 
 .whack-board{
-  min-height:470px;
+  min-height:460px;
 
   padding:15px;
 
@@ -1249,15 +1141,10 @@ button{
 
   gap:10px;
 
-  border:
-    1px solid
-    var(--line);
-
   border-radius:17px;
 
   background:
     linear-gradient(
-      180deg,
       #e1f7d6,
       #bce4a7
     );
@@ -1267,7 +1154,7 @@ button{
 .hole{
   position:relative;
 
-  min-height:135px;
+  min-height:130px;
 
   overflow:hidden;
 
@@ -1301,27 +1188,14 @@ button{
 
   width:90%;
 
-  max-width:175px;
+  min-height:100px;
 
-  min-height:105px;
-
-  padding:
-    9px 7px 15px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:5px;
+  padding:8px;
 
   border:0;
 
   border-radius:
-    50% 50% 27% 27%;
+    50% 50% 28% 28%;
 
   background:
     linear-gradient(
@@ -1329,13 +1203,12 @@ button{
       #80502f
     );
 
+  color:#fff;
+
   transform:
     translateY(150%);
 
-  transition:
-    transform .22s ease;
-
-  color:#fff;
+  transition:.2s;
 }
 
 
@@ -1345,14 +1218,12 @@ button{
 }
 
 
-.mole .face{
-  font-size:34px;
+.mole-face{
+  font-size:32px;
 }
 
 
-.mole .word-label{
-  max-width:100%;
-
+.mole-word{
   padding:
     5px 7px;
 
@@ -1362,9 +1233,7 @@ button{
 
   color:#33261e;
 
-  text-align:center;
-
-  font-size:10px;
+  font-size:9px;
 
   font-weight:950;
 
@@ -1376,53 +1245,24 @@ button{
    CATCHER
 ========================================================= */
 
-.catch-area{
+.catch-area,
+.balloon-area{
   position:relative;
 
-  height:520px;
+  height:510px;
 
   overflow:hidden;
-
-  border:
-    1px solid
-    var(--line);
 
   border-radius:17px;
 
   background:
     linear-gradient(
-      #bce8ff 0%,
-      #eaf8ff 68%,
-      #d4ecb8 69%,
-      #b8da94 100%
+      #bce8ff,
+      #f4fbff 70%,
+      #cae5a9 71%
     );
 
-  user-select:none;
-
   touch-action:none;
-}
-
-
-.cloud{
-  position:absolute;
-
-  opacity:.65;
-
-  font-size:54px;
-
-  pointer-events:none;
-}
-
-
-.cloud.a{
-  top:30px;
-  left:8%;
-}
-
-
-.cloud.b{
-  top:90px;
-  right:10%;
 }
 
 
@@ -1431,14 +1271,12 @@ button{
 
   z-index:4;
 
-  width:130px;
+  width:135px;
 
   transform:
     translate(-50%,-50%);
 
   text-align:center;
-
-  pointer-events:none;
 }
 
 
@@ -1450,19 +1288,18 @@ button{
 .fruit-label{
   display:inline-block;
 
-  max-width:125px;
+  max-width:130px;
 
   padding:
     4px 7px;
 
   border-radius:7px;
 
-  background:
-    rgba(255,255,255,.95);
+  background:#fff;
 
   color:#303850;
 
-  font-size:9.5px;
+  font-size:9px;
 
   font-weight:950;
 
@@ -1473,11 +1310,11 @@ button{
 .basket{
   position:absolute;
 
-  z-index:7;
+  z-index:8;
+
+  bottom:10px;
 
   left:50%;
-
-  bottom:11px;
 
   transform:
     translateX(-50%);
@@ -1486,71 +1323,23 @@ button{
 }
 
 
-.mobile-controls{
-  display:flex;
-
-  justify-content:center;
-
-  gap:10px;
-
-  margin-top:8px;
-}
-
-
-.mobile-controls button{
-  min-width:110px;
-
-  padding:9px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:9px;
-
-  background:#fff;
-
-  color:#513b83;
-
-  font-weight:950;
-}
-
-
 /* =========================================================
-   WORD RACER
+   RACER
 ========================================================= */
 
 .racer-road{
   position:relative;
 
-  height:530px;
+  height:520px;
 
   overflow:hidden;
 
   border:
-    6px solid
-    #353b47;
+    5px solid #30343c;
 
-  border-radius:18px;
+  border-radius:17px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #404752 0%,
-      #404752 32.8%,
-      #f4f4f4 33%,
-      #f4f4f4 33.5%,
-      #404752 33.7%,
-      #404752 66.1%,
-      #f4f4f4 66.3%,
-      #f4f4f4 66.8%,
-      #404752 67%,
-      #404752 100%
-    );
-
-  user-select:none;
-
-  touch-action:none;
+  background:#454b55;
 }
 
 
@@ -1566,22 +1355,22 @@ button{
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,.95) 0,
-      rgba(255,255,255,.95) 22px,
-      transparent 22px,
-      transparent 45px
+      #fff 0,
+      #fff 25px,
+      transparent 25px,
+      transparent 50px
     );
 
-  opacity:.35;
+  opacity:.38;
 }
 
 
-.road-line.l1{
+.road-line.one{
   left:33.33%;
 }
 
 
-.road-line.l2{
+.road-line.two{
   left:66.66%;
 }
 
@@ -1589,14 +1378,11 @@ button{
 .racer-answer{
   position:absolute;
 
-  z-index:5;
-
   width:29%;
 
-  min-height:66px;
+  min-height:70px;
 
-  padding:
-    8px 6px;
+  padding:8px;
 
   display:flex;
 
@@ -1608,95 +1394,13 @@ button{
     translate(-50%,-50%);
 
   border:
-    3px solid
-    rgba(255,255,255,.85);
+    3px solid #fff;
 
   border-radius:12px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #fff,
-      #ecefff
-    );
-
-  color:#312558;
-
-  box-shadow:
-    0 8px 18px
-    rgba(0,0,0,.2);
-
-  text-align:center;
-
-  font-size:10px;
-
-  font-weight:950;
-
-  overflow-wrap:anywhere;
-}
-
-
-.racer-car{
-  position:absolute;
-
-  z-index:9;
-
-  bottom:16px;
-
-  left:50%;
-
-  width:29%;
-
-  max-width:180px;
-
-  min-height:110px;
-
-  transform:
-    translateX(-50%);
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  justify-content:flex-end;
-
-  transition:
-    left .13s ease;
-}
-
-
-.car-icon{
-  font-size:65px;
-
-  line-height:1;
-
-  filter:
-    drop-shadow(
-      0 7px 5px
-      rgba(0,0,0,.28)
-    );
-}
-
-
-.car-prompt{
-  max-width:100%;
-
-  margin-bottom:3px;
-
-  padding:
-    5px 7px;
-
-  border-radius:8px;
-
   background:#fff;
 
-  color:#35245e;
-
-  box-shadow:
-    0 4px 10px
-    rgba(0,0,0,.2);
+  color:#312558;
 
   text-align:center;
 
@@ -1708,53 +1412,100 @@ button{
 }
 
 
+.racer-car{
+  position:absolute;
+
+  z-index:10;
+
+  bottom:12px;
+
+  left:50%;
+
+  width:29%;
+
+  transform:
+    translateX(-50%);
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  transition:
+    left .12s;
+}
+
+
+.car-prompt{
+  max-width:100%;
+
+  padding:
+    5px 7px;
+
+  margin-bottom:2px;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#332254;
+
+  text-align:center;
+
+  font-size:8.5px;
+
+  font-weight:950;
+
+  overflow-wrap:anywhere;
+}
+
+
+.car{
+  font-size:64px;
+}
+
+
 /* =========================================================
-   MATCH MASTER
+   MATCH
 ========================================================= */
 
 .match-board{
   display:grid;
 
   grid-template-columns:
-    repeat(4,minmax(0,1fr));
+    repeat(4,1fr);
 
-  gap:9px;
+  gap:8px;
 
   padding:14px;
-
-  border:
-    1px solid
-    var(--line);
 
   border-radius:17px;
 
   background:
     linear-gradient(
       135deg,
-      #f3eeff,
-      #eef8ff
+      #f1edff,
+      #edf7ff
     );
 }
 
 
 .match-card{
-  position:relative;
-
   min-height:105px;
 
   padding:8px;
 
   border:
-    1px solid
-    #ddd8ee;
+    1px solid #d9d2ee;
 
   border-radius:12px;
 
   background:
     linear-gradient(
       135deg,
-      #5c3bc0,
-      #8065dd
+      #5839bb,
+      #856bdc
     );
 
   color:#fff;
@@ -1767,55 +1518,40 @@ button{
 
   text-align:center;
 
-  font-size:10px;
+  font-size:9px;
 
   font-weight:950;
 
   overflow-wrap:anywhere;
-
-  transition:.18s ease;
 }
 
 
-.match-card::before{
+.match-card:not(.revealed)::after{
   content:"?";
-
-  font-size:26px;
+  font-size:25px;
 }
 
 
 .match-card.revealed{
   background:#fff;
 
-  color:#31264f;
-}
-
-
-.match-card.revealed::before{
-  display:none;
+  color:#30264e;
 }
 
 
 .match-card.matched{
   background:#dff5e9;
 
-  color:#14744d;
+  color:#15704c;
 
-  border-color:#a8dfc3;
-
-  opacity:.68;
+  opacity:.6;
 
   pointer-events:none;
 }
 
 
-.match-card.matched::before{
-  display:none;
-}
-
-
 /* =========================================================
-   SPEED QUIZ
+   QUIZ
 ========================================================= */
 
 .quiz-panel{
@@ -1826,21 +1562,16 @@ button{
   padding:20px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:18px;
 
   background:#fff;
-
-  box-shadow:
-    var(--shadow);
 }
 
 
-.quiz-prompt{
-  padding:
-    20px;
+.quiz-question{
+  padding:22px;
 
   border-radius:14px;
 
@@ -1855,12 +1586,7 @@ button{
 
   text-align:center;
 
-  font-size:
-    clamp(
-      20px,
-      4vw,
-      30px
-    );
+  font-size:26px;
 
   font-weight:950;
 }
@@ -1874,7 +1600,7 @@ button{
 
   gap:9px;
 
-  margin-top:13px;
+  margin-top:12px;
 }
 
 
@@ -1884,8 +1610,7 @@ button{
   padding:12px;
 
   border:
-    1px solid
-    #dfe3ed;
+    1px solid #dfe3ed;
 
   border-radius:11px;
 
@@ -1893,20 +1618,9 @@ button{
 
   color:#333b50;
 
-  text-align:left;
-
-  font-size:11px;
+  font-size:10px;
 
   font-weight:900;
-
-  transition:.13s;
-}
-
-
-.quiz-option:hover{
-  border-color:#9f8bdc;
-
-  background:#faf8ff;
 }
 
 
@@ -1914,8 +1628,6 @@ button{
   background:#ddf4e8;
 
   border-color:#80cea5;
-
-  color:#126c47;
 }
 
 
@@ -1923,8 +1635,6 @@ button{
   background:#ffe8eb;
 
   border-color:#eeb1ba;
-
-  color:#9d3040;
 }
 
 
@@ -1932,65 +1642,26 @@ button{
    BALLOON
 ========================================================= */
 
-.balloon-area{
-  position:relative;
-
-  height:530px;
-
-  overflow:hidden;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:18px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #c9ebff,
-      #f2fbff
-    );
-
-  user-select:none;
-}
-
-
 .balloon{
   position:absolute;
 
-  z-index:5;
-
-  width:135px;
+  width:140px;
 
   transform:
     translate(-50%,-50%);
 
   text-align:center;
-
-  cursor:pointer;
-
-  transition:
-    transform .12s ease;
-}
-
-
-.balloon:hover{
-  transform:
-    translate(-50%,-50%)
-    scale(1.06);
 }
 
 
 .balloon-shape{
-  width:90px;
+  width:100px;
 
-  min-height:110px;
+  min-height:115px;
 
   margin:auto;
 
-  padding:
-    20px 8px;
+  padding:20px 8px;
 
   display:flex;
 
@@ -1998,26 +1669,20 @@ button{
 
   justify-content:center;
 
+  border:0;
+
   border-radius:
-    50% 50% 47% 47%;
+    50% 50% 45% 45%;
 
   background:
     linear-gradient(
-      135deg,
-      #f78fa2,
-      #ec5875
+      #ef7f96,
+      #dd4765
     );
 
   color:#fff;
 
-  box-shadow:
-    inset
-    -8px -8px 15px
-    rgba(120,0,40,.14),
-    0 8px 14px
-    rgba(0,0,0,.12);
-
-  font-size:9.5px;
+  font-size:9px;
 
   font-weight:950;
 
@@ -2028,11 +1693,44 @@ button{
 .balloon-string{
   width:1px;
 
-  height:42px;
+  height:40px;
 
   margin:auto;
 
-  background:#808080;
+  background:#777;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls{
+  display:flex;
+
+  justify-content:center;
+
+  gap:10px;
+
+  margin-top:8px;
+}
+
+
+.controls button{
+  min-width:110px;
+
+  padding:10px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#513b83;
+
+  font-weight:950;
 }
 
 
@@ -2043,24 +1741,23 @@ button{
 .feedback{
   position:fixed;
 
-  z-index:110;
+  z-index:150;
 
-  top:100px;
+  top:85px;
 
   left:50%;
 
   transform:
-    translateX(-50%)
-    translateY(-10px);
+    translateX(-50%);
 
   padding:
-    8px 14px;
+    8px 15px;
 
   border-radius:999px;
 
   color:#fff;
 
-  font-size:11px;
+  font-size:10px;
 
   font-weight:950;
 
@@ -2068,16 +1765,12 @@ button{
 
   pointer-events:none;
 
-  transition:.16s;
+  transition:.15s;
 }
 
 
 .feedback.show{
   opacity:1;
-
-  transform:
-    translateX(-50%)
-    translateY(0);
 }
 
 
@@ -2100,7 +1793,7 @@ button{
 
   inset:0;
 
-  z-index:120;
+  z-index:200;
 
   display:grid;
 
@@ -2119,45 +1812,35 @@ button{
 .result{
   width:
     min(
-      540px,
+      520px,
       100%
     );
 
-  max-height:90vh;
-
-  overflow:auto;
-
-  padding:21px;
+  padding:22px;
 
   border-radius:19px;
 
   background:#fff;
+
+  text-align:center;
 }
 
 
 .result-icon{
-  text-align:center;
-
   font-size:52px;
 }
 
 
 .result h2{
   margin:
-    3px 0 6px;
-
-  color:#24164e;
-
-  text-align:center;
+    5px 0;
 }
 
 
 .result-score{
   color:#5b40b1;
 
-  text-align:center;
-
-  font-size:43px;
+  font-size:42px;
 
   font-weight:950;
 }
@@ -2171,7 +1854,7 @@ button{
 
   gap:7px;
 
-  margin-top:15px;
+  margin-top:14px;
 }
 
 
@@ -2179,21 +1862,18 @@ button{
   padding:9px;
 
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   border-radius:9px;
-
-  text-align:center;
 }
 
 
 .result-stat small{
   display:block;
 
-  color:#949aa7;
+  color:#959ba8;
 
-  font-size:7.5px;
+  font-size:7px;
 
   font-weight:950;
 
@@ -2204,48 +1884,7 @@ button{
 .result-stat b{
   display:block;
 
-  margin-top:2px;
-
-  font-size:15px;
-}
-
-
-.result-review-title{
-  margin:
-    16px 0 7px;
-
-  color:#687082;
-
-  font-size:9px;
-
-  font-weight:950;
-
-  text-transform:uppercase;
-}
-
-
-.review-chips{
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:5px;
-}
-
-
-.review-chip{
-  padding:
-    5px 8px;
-
-  border-radius:999px;
-
-  background:#fff0f2;
-
-  color:#a73041;
-
-  font-size:8.5px;
-
-  font-weight:900;
+  margin-top:3px;
 }
 
 
@@ -2255,14 +1894,14 @@ button{
   grid-template-columns:
     1fr 1fr;
 
-  gap:7px;
+  gap:8px;
 
-  margin-top:17px;
+  margin-top:18px;
 }
 
 
 .result-actions button{
-  padding:10px;
+  padding:11px;
 
   border-radius:9px;
 
@@ -2272,12 +1911,11 @@ button{
 
 .secondary{
   border:
-    1px solid
-    var(--line);
+    1px solid var(--line);
 
   background:#fff;
 
-  color:#584676;
+  color:#533e78;
 }
 
 
@@ -2286,9 +1924,8 @@ button{
 
   background:
     linear-gradient(
-      135deg,
-      #432593,
-      #7654d5
+      #5031ac,
+      #7355cf
     );
 
   color:#fff;
@@ -2296,40 +1933,13 @@ button{
 
 
 /* =========================================================
-   ERROR
-========================================================= */
-
-.error-box{
-  max-width:760px;
-
-  margin:
-    40px auto;
-
-  padding:25px;
-
-  border:
-    1px solid
-    #f0bac2;
-
-  border-radius:17px;
-
-  background:#fff;
-}
-
-
-.error-box h2{
-  color:#b83345;
-}
-
-
-/* =========================================================
    RESPONSIVE
 ========================================================= */
 
-@media(max-width:1000px){
+@media(max-width:950px){
 
   .category-grid,
-  .topic-grid{
+  .set-grid{
     grid-template-columns:
       repeat(2,1fr);
   }
@@ -2343,7 +1953,7 @@ button{
 }
 
 
-@media(max-width:700px){
+@media(max-width:650px){
 
   .student{
     display:none;
@@ -2351,7 +1961,7 @@ button{
 
 
   .category-grid,
-  .topic-grid,
+  .set-grid,
   .game-grid{
     grid-template-columns:1fr;
   }
@@ -2369,35 +1979,9 @@ button{
   }
 
 
-  .whack-board{
-    padding:7px;
-
-    gap:5px;
-  }
-
-
-  .hole{
-    min-height:130px;
-  }
-
-
-  .mole{
-    width:98%;
-  }
-
-
   .match-board{
     grid-template-columns:
       repeat(3,1fr);
-
-    gap:6px;
-  }
-
-
-  .match-card{
-    min-height:95px;
-
-    font-size:8.5px;
   }
 
 
@@ -2419,43 +2003,11 @@ button{
     justify-self:start;
   }
 
-}
-
-
-@media(max-width:480px){
-
-  .logo span{
-    display:none;
-  }
-
-
-  .hero{
-    padding:
-      23px 19px;
-  }
-
 
   .catch-area,
-  .racer-road,
-  .balloon-area{
-    height:500px;
-  }
-
-
-  .racer-answer{
-    width:30%;
-
-    font-size:8px;
-  }
-
-
-  .car-icon{
-    font-size:55px;
-  }
-
-
-  .car-prompt{
-    font-size:8px;
+  .balloon-area,
+  .racer-road{
+    height:490px;
   }
 
 }
@@ -2467,10 +2019,6 @@ button{
 
 <body>
 
-
-<!-- =========================================================
-     TOP
-========================================================= -->
 
 <header class="topbar">
 
@@ -2524,52 +2072,13 @@ button{
       VOCABULARY ARCADE
     </div>
 
-
     <h1>
       Học từ vựng qua game
     </h1>
 
-
     <p>
-      Chọn kỹ năng hoặc chủ đề em muốn luyện.
-      Một kho từ vựng có thể được luyện qua nhiều trò chơi khác nhau.
-      Những từ thường xuyên trả lời sai sẽ được hệ thống ưu tiên cho xuất hiện lại.
+      Chọn kỹ năng, chọn bộ từ và sau đó chọn trò chơi em muốn luyện.
     </p>
-
-  </section>
-
-
-  <section class="review-banner">
-
-    <div class="review-main">
-
-      <div class="review-icon">
-        🔥
-      </div>
-
-
-      <div>
-
-        <b>
-          Từ cần ôn của tôi
-        </b>
-
-        <span id="reviewSummary">
-          Chưa có từ cần ôn.
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <button
-      class="review-btn"
-      id="reviewButton"
-      onclick="openReviewCollection()"
-    >
-      Ôn ngay →
-    </button>
 
   </section>
 
@@ -2581,7 +2090,7 @@ button{
     </h2>
 
     <p>
-      Chọn kỹ năng IELTS hoặc luyện theo chủ đề.
+      Mỗi kỹ năng có thể có nhiều bộ từ khác nhau.
     </p>
 
   </div>
@@ -2596,50 +2105,44 @@ button{
 
 
 <!-- =========================================================
-     TOPICS
+     SET LIST
 ========================================================= -->
 
 <main
   class="page hidden"
-  id="topicsScreen"
+  id="setsScreen"
 >
 
-  <div class="collection-head">
+  <div class="screen-head">
 
-    <div>
+    <button
+      class="screen-back"
+      onclick="showHome()"
+    >
+      ← Vocabulary
+    </button>
 
-      <button
-        class="collection-back"
-        onclick="showHome()"
-      >
-        ← Vocabulary
-      </button>
+    <h1 id="setsTitle">
+      Reading
+    </h1>
 
-
-      <h1>
-        🌍 Chủ đề
-      </h1>
-
-
-      <p>
-        Chọn chủ đề em muốn luyện.
-      </p>
-
-    </div>
+    <p>
+      Chọn bộ từ muốn luyện.
+    </p>
 
   </div>
 
 
-  <div
-    class="topic-grid"
-    id="topicGrid"
-  ></div>
+  <section
+    class="set-grid"
+    id="setGrid"
+  ></section>
 
 </main>
 
 
 <!-- =========================================================
-     COLLECTION
+     GAME LIST / COLLECTION
 ========================================================= -->
 
 <main
@@ -2647,27 +2150,20 @@ button{
   id="collectionScreen"
 >
 
-  <div class="collection-head">
+  <div class="screen-head">
 
-    <div>
+    <button
+      class="screen-back"
+      id="collectionBack"
+    >
+      ← Danh sách bộ
+    </button>
 
-      <button
-        class="collection-back"
-        id="collectionBack"
-        onclick="showHome()"
-      >
-        ← Vocabulary
-      </button>
+    <h1 id="collectionTitle">
+      Reading · Bộ 01
+    </h1>
 
-
-      <h1 id="collectionTitle">
-        Vocabulary
-      </h1>
-
-
-      <p id="collectionSubtitle"></p>
-
-    </div>
+    <p id="collectionSubtitle"></p>
 
   </div>
 
@@ -2703,7 +2199,6 @@ button{
       Chiều luyện
     </span>
 
-
     <select id="directionSelect">
 
       <option value="vi-en">
@@ -2725,19 +2220,14 @@ button{
       Chọn game
     </h2>
 
-    <p id="gameRequirementText">
-      Chọn một trò chơi để bắt đầu.
+    <p>
+      Tất cả game sử dụng chính bộ từ này.
     </p>
 
   </div>
 
 
-  <!-- =====================================================
-       6 GAMES
-  ====================================================== -->
-
   <section class="game-grid">
-
 
     <article class="game-card">
 
@@ -2750,11 +2240,11 @@ button{
       </h3>
 
       <p>
-        Đập đúng con chuột đang mang từ tương ứng trước khi nó biến mất.
+        Đập con chuột mang đáp án đúng.
       </p>
 
       <button
-        class="game-play game-start"
+        class="game-play"
         onclick="startWhack()"
       >
         Chơi →
@@ -2774,11 +2264,11 @@ button{
       </h3>
 
       <p>
-        Di chuyển chiếc giỏ để hứng đúng từ và tránh những đáp án gây nhiễu.
+        Điều khiển giỏ để hứng đáp án đúng.
       </p>
 
       <button
-        class="game-play game-start"
+        class="game-play"
         onclick="startCatcher()"
       >
         Chơi →
@@ -2798,11 +2288,11 @@ button{
       </h3>
 
       <p>
-        Trên xe là câu hỏi. Chuyển làn và đâm vào từ hoặc nghĩa tương ứng.
+        Lái xe sang làn có đáp án tương ứng.
       </p>
 
       <button
-        class="game-play game-start"
+        class="game-play"
         onclick="startRacer()"
       >
         Chơi →
@@ -2822,11 +2312,11 @@ button{
       </h3>
 
       <p>
-        Lật thẻ và ghép chính xác từ tiếng Anh với nghĩa tiếng Việt.
+        Ghép từ tiếng Anh với nghĩa tiếng Việt.
       </p>
 
       <button
-        class="game-play game-start"
+        class="game-play"
         onclick="startMatch()"
       >
         Chơi →
@@ -2846,12 +2336,12 @@ button{
       </h3>
 
       <p>
-        Chọn đáp án chính xác càng nhanh càng tốt trước khi hết thời gian.
+        Chọn đáp án đúng càng nhanh càng tốt.
       </p>
 
       <button
-        class="game-play game-start"
-        onclick="startSpeedQuiz()"
+        class="game-play"
+        onclick="startQuiz()"
       >
         Chơi →
       </button>
@@ -2870,11 +2360,11 @@ button{
       </h3>
 
       <p>
-        Bắn quả bóng đang chứa đáp án đúng trước khi nó bay khỏi màn hình.
+        Bắn quả bóng chứa đáp án đúng.
       </p>
 
       <button
-        class="game-play game-start"
+        class="game-play"
         onclick="startBalloon()"
       >
         Chơi →
@@ -2885,12 +2375,10 @@ button{
   </section>
 
 
-  <!-- WORD LIST -->
-
   <div class="section-head">
 
     <h2>
-      Từ trong mục này
+      Từ trong bộ
     </h2>
 
     <p id="wordListDescription"></p>
@@ -2919,14 +2407,14 @@ button{
 
     <div>
       <h2>🐹 Whack a Word</h2>
-      <p>Đập đúng từ trước khi chuột biến mất.</p>
+      <p>Đập đúng đáp án trước khi hết thời gian.</p>
     </div>
 
     <button
-      class="quit"
-      onclick="quitGame()"
+      class="game-back"
+      onclick="backToGameList()"
     >
-      ✕ Thoát
+      ← Chọn game
     </button>
 
   </div>
@@ -2984,7 +2472,7 @@ button{
 
 
 <!-- =========================================================
-     CATCHER
+     CATCH
 ========================================================= -->
 
 <main
@@ -2996,14 +2484,14 @@ button{
 
     <div>
       <h2>🍎 Word Catcher</h2>
-      <p>Dùng phím ← → hoặc kéo giỏ.</p>
+      <p>Hứng đáp án đúng.</p>
     </div>
 
     <button
-      class="quit"
-      onclick="quitGame()"
+      class="game-back"
+      onclick="backToGameList()"
     >
-      ✕ Thoát
+      ← Chọn game
     </button>
 
   </div>
@@ -3057,9 +2545,6 @@ button{
     id="catchArea"
   >
 
-    <div class="cloud a">☁️</div>
-    <div class="cloud b">☁️</div>
-
     <div
       class="basket"
       id="basket"
@@ -3070,7 +2555,7 @@ button{
   </section>
 
 
-  <div class="mobile-controls">
+  <div class="controls">
 
     <button onclick="moveBasket(-1)">
       ←
@@ -3098,14 +2583,14 @@ button{
 
     <div>
       <h2>🚗 Word Racer</h2>
-      <p>Chuyển làn để đâm vào đáp án đúng.</p>
+      <p>Lái xe vào đáp án đúng.</p>
     </div>
 
     <button
-      class="quit"
-      onclick="quitGame()"
+      class="game-back"
+      onclick="backToGameList()"
     >
-      ✕ Thoát
+      ← Chọn game
     </button>
 
   </div>
@@ -3141,14 +2626,13 @@ button{
   </div>
 
 
-  <div
+  <section
     class="racer-road"
     id="racerRoad"
   >
 
-    <div class="road-line l1"></div>
-    <div class="road-line l2"></div>
-
+    <div class="road-line one"></div>
+    <div class="road-line two"></div>
 
     <div
       class="racer-car"
@@ -3157,21 +2641,21 @@ button{
 
       <div
         class="car-prompt"
-        id="racerCarPrompt"
+        id="racerPrompt"
       >
         —
       </div>
 
-      <div class="car-icon">
+      <div class="car">
         🚗
       </div>
 
     </div>
 
-  </div>
+  </section>
 
 
-  <div class="mobile-controls">
+  <div class="controls">
 
     <button onclick="moveCar(-1)">
       ←
@@ -3199,14 +2683,14 @@ button{
 
     <div>
       <h2>🧩 Match Master</h2>
-      <p>Ghép từ tiếng Anh với nghĩa tương ứng.</p>
+      <p>Ghép các cặp từ và nghĩa.</p>
     </div>
 
     <button
-      class="quit"
-      onclick="quitGame()"
+      class="game-back"
+      onclick="backToGameList()"
     >
-      ✕ Thoát
+      ← Chọn game
     </button>
 
   </div>
@@ -3251,7 +2735,7 @@ button{
 
 
 <!-- =========================================================
-     SPEED QUIZ
+     QUIZ
 ========================================================= -->
 
 <main
@@ -3263,14 +2747,14 @@ button{
 
     <div>
       <h2>⚡ Speed Quiz</h2>
-      <p>Chọn nhanh đáp án chính xác.</p>
+      <p>Chọn đáp án đúng thật nhanh.</p>
     </div>
 
     <button
-      class="quit"
-      onclick="quitGame()"
+      class="game-back"
+      onclick="backToGameList()"
     >
-      ✕ Thoát
+      ← Chọn game
     </button>
 
   </div>
@@ -3309,12 +2793,11 @@ button{
   <section class="quiz-panel">
 
     <div
-      class="quiz-prompt"
-      id="quizPrompt"
+      class="quiz-question"
+      id="quizQuestion"
     >
       —
     </div>
-
 
     <div
       class="quiz-options"
@@ -3343,10 +2826,10 @@ button{
     </div>
 
     <button
-      class="quit"
-      onclick="quitGame()"
+      class="game-back"
+      onclick="backToGameList()"
     >
-      ✕ Thoát
+      ← Chọn game
     </button>
 
   </div>
@@ -3403,10 +2886,6 @@ button{
 </main>
 
 
-<!-- =========================================================
-     FEEDBACK
-========================================================= -->
-
 <div
   id="feedback"
   class="feedback"
@@ -3418,8 +2897,8 @@ button{
 ========================================================= -->
 
 <div
-  id="resultOverlay"
   class="overlay hidden"
+  id="resultOverlay"
 >
 
   <div class="result">
@@ -3431,11 +2910,9 @@ button{
       🏆
     </div>
 
-
     <h2 id="resultTitle">
       Hoàn thành
     </h2>
-
 
     <div
       class="result-score"
@@ -3465,26 +2942,14 @@ button{
     </section>
 
 
-    <div class="result-review-title">
-      Từ cần ôn lại
-    </div>
-
-
-    <div
-      class="review-chips"
-      id="resultReview"
-    ></div>
-
-
     <div class="result-actions">
 
       <button
         class="secondary"
-        onclick="backToCollection()"
+        onclick="backToGameList()"
       >
         ← Chọn game
       </button>
-
 
       <button
         class="primary"
@@ -3515,10 +2980,6 @@ window.VOCABULARY_DATA
 :
 [];
 
-
-/* =========================================================
-   META
-========================================================= */
 
 const SKILL_META = {
 
@@ -3560,78 +3021,22 @@ const SKILL_META = {
 };
 
 
-const TOPIC_LABELS = {
-
-  education:"Education",
-  environment:"Environment",
-  technology:"Technology",
-  health:"Health",
-  work:"Work",
-  business:"Business",
-  money:"Money",
-  family:"Family",
-  relationships:"Relationships",
-  travel:"Travel",
-  experience:"Experience",
-  places:"Places",
-  transport:"Transport",
-  cities:"Cities",
-  lifestyle:"Lifestyle",
-  food:"Food",
-  animals:"Animals",
-  science:"Science",
-
-  "wildlife-conservation":
-    "Wildlife Conservation",
-
-  "marine-animals":
-    "Marine Animals",
-
-  "food-security":
-    "Food Security",
-
-  agriculture:
-    "Agriculture",
-
-  population:
-    "Population",
-
-  "data-trends":
-    "Data & Trends"
-
-};
-
-
-/* =========================================================
-   GAME TITLE
-========================================================= */
-
 const GAME_NAMES = {
 
-  whack:
-    "Whack a Word",
+  whack:"Whack a Word",
 
-  catcher:
-    "Word Catcher",
+  catcher:"Word Catcher",
 
-  racer:
-    "Word Racer",
+  racer:"Word Racer",
 
-  match:
-    "Match Master",
+  match:"Match Master",
 
-  quiz:
-    "Speed Quiz",
+  quiz:"Speed Quiz",
 
-  balloon:
-    "Balloon Pop"
+  balloon:"Balloon Pop"
 
 };
 
-
-/* =========================================================
-   DOM
-========================================================= */
 
 function $(id){
 
@@ -3643,14 +3048,15 @@ function $(id){
 
 
 /* =========================================================
-   STUDENT
+   STORAGE
 ========================================================= */
 
-function getStudent(){
+function studentScope(){
 
   try{
 
-    return JSON.parse(
+    const student =
+    JSON.parse(
 
       localStorage.getItem(
         "IELTS_PRACTICE_STUDENT"
@@ -3662,81 +3068,44 @@ function getStudent(){
 
     );
 
+
+    if(
+      student?.name
+    ){
+
+      return encodeURIComponent(
+
+        (
+          student.name
+          +
+          "|"
+          +
+          (
+            student.className
+            ||
+            ""
+          )
+        )
+        .toLowerCase()
+
+      );
+
+    }
+
   }
 
-  catch(error){
+  catch(error){}
 
-    return null;
 
-  }
+  return "guest";
 
 }
 
-
-function loadStudent(){
-
-  const student =
-  getStudent();
-
-
-  if(
-    student?.name
-    &&
-    student?.className
-  ){
-
-    $("studentInfo")
-    .textContent =
-    `${student.name} · ${student.className}`;
-
-  }
-
-}
-
-
-function studentScope(){
-
-  const student =
-  getStudent();
-
-
-  if(
-    !student?.name
-  ){
-
-    return "guest";
-
-  }
-
-
-  return encodeURIComponent(
-
-    (
-      student.name
-      +
-      "|"
-      +
-      (
-        student.className
-        ||
-        ""
-      )
-    )
-    .toLowerCase()
-
-  );
-
-}
-
-
-/* =========================================================
-   STORAGE KEYS
-========================================================= */
 
 function statsKey(){
 
   return(
-    "VOCABULARY_WORD_STATS_V3_"
+    "VOCABULARY_STATS_V4_"
     +
     studentScope()
   );
@@ -3744,296 +3113,7 @@ function statsKey(){
 }
 
 
-function historyKey(){
-
-  return(
-    "VOCABULARY_GAME_HISTORY_V3_"
-    +
-    studentScope()
-  );
-
-}
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let currentCollection =
-[];
-
-
-let currentCollectionType =
-"";
-
-
-let currentCollectionKey =
-"";
-
-
-let currentCollectionTitle =
-"";
-
-
-let currentGame =
-"";
-
-
-let lastGame =
-"";
-
-
-let gameDirection =
-"vi-en";
-
-
-let score =
-0;
-
-
-let lives =
-5;
-
-
-let combo =
-0;
-
-
-let bestCombo =
-0;
-
-
-let correct =
-0;
-
-
-let wrong =
-0;
-
-
-let attempts =
-0;
-
-
-let reviewMap =
-{};
-
-
-let currentTarget =
-null;
-
-
-let gameEnded =
-false;
-
-
-let gameTimer =
-null;
-
-
-let roundTimer =
-null;
-
-
-/* CATCHER */
-
-let fruits =
-[];
-
-
-let basketX =
-50;
-
-
-let catcherAnimation =
-null;
-
-
-let catcherLastFrame =
-0;
-
-
-let catcherChanging =
-false;
-
-
-/* RACER */
-
-let racerAnswers =
-[];
-
-
-let carLane =
-1;
-
-
-let racerAnimation =
-null;
-
-
-let racerLastFrame =
-0;
-
-
-let racerChanging =
-false;
-
-
-/* MATCH */
-
-let matchFirst =
-null;
-
-
-let matchSecond =
-null;
-
-
-let matchLocked =
-false;
-
-
-let matchPairsFound =
-0;
-
-
-let matchTotalPairs =
-6;
-
-
-/* BALLOON */
-
-let balloons =
-[];
-
-
-let balloonAnimation =
-null;
-
-
-let balloonLastFrame =
-0;
-
-
-let balloonChanging =
-false;
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function escapeHTML(value){
-
-  return String(
-    value ?? ""
-  )
-  .replace(
-
-    /[&<>"']/g,
-
-    character => ({
-
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-
-    })[character]
-
-  );
-
-}
-
-
-function shuffle(array){
-
-  const result =
-  [...array];
-
-
-  for(
-    let i=result.length-1;
-    i>0;
-    i--
-  ){
-
-    const j =
-    Math.floor(
-      Math.random()
-      *
-      (
-        i+1
-      )
-    );
-
-
-    [
-      result[i],
-      result[j]
-    ]
-    =
-    [
-      result[j],
-      result[i]
-    ];
-
-  }
-
-
-  return result;
-
-}
-
-
-function randomItem(array){
-
-  return array[
-    Math.floor(
-      Math.random()
-      *
-      array.length
-    )
-  ];
-
-}
-
-
-function titleCase(value){
-
-  return String(
-    value
-  )
-  .split("-")
-  .map(
-    part =>
-    part.charAt(0)
-    .toUpperCase()
-    +
-    part.slice(1)
-  )
-  .join(" ");
-
-}
-
-
-function wordId(word){
-
-  return String(
-    word.word
-  )
-  .trim()
-  .toLowerCase();
-
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function readStats(){
+function getStats(){
 
   try{
 
@@ -4060,7 +3140,7 @@ function readStats(){
 }
 
 
-function writeStats(stats){
+function saveStats(stats){
 
   localStorage.setItem(
 
@@ -4075,10 +3155,19 @@ function writeStats(stats){
 }
 
 
+function wordId(word){
+
+  return word.word
+  .trim()
+  .toLowerCase();
+
+}
+
+
 function getWordStats(word){
 
   const stats =
-  readStats();
+  getStats();
 
 
   return stats[
@@ -4096,13 +3185,13 @@ function getWordStats(word){
 }
 
 
-function registerWordResult(
+function registerResult(
   word,
-  isCorrect
+  good
 ){
 
   const stats =
-  readStats();
+  getStats();
 
 
   const id =
@@ -4111,7 +3200,7 @@ function registerWordResult(
   );
 
 
-  const current =
+  const data =
   stats[id]
 
   ||
@@ -4123,32 +3212,27 @@ function registerWordResult(
   };
 
 
-  current.seen++;
+  data.seen++;
 
 
-  if(isCorrect){
+  if(good){
 
-    current.correct++;
+    data.correct++;
 
   }
 
   else{
 
-    current.wrong++;
+    data.wrong++;
 
   }
 
 
-  current.lastSeen =
-  new Date()
-  .toISOString();
-
-
   stats[id] =
-  current;
+  data;
 
 
-  writeStats(
+  saveStats(
     stats
   );
 
@@ -4161,31 +3245,27 @@ function registerWordResult(
 
 function wordStatus(word){
 
-  const stats =
+  const data =
   getWordStats(
     word
   );
 
 
-  if(
-    !stats.seen
-  ){
+  if(!data.seen){
 
     return "new";
 
   }
 
 
-  const rate =
-  stats.correct
-  /
-  stats.seen;
-
-
   if(
-    stats.seen >= 5
+    data.seen >= 5
     &&
-    rate >= .8
+    data.correct
+    /
+    data.seen
+    >=
+    .8
   ){
 
     return "mastered";
@@ -4200,18 +3280,18 @@ function wordStatus(word){
 
 function collectionStats(words){
 
-  const result = {
+  const output = {
 
     total:
       words.length,
 
-    mastered:
+    new:
       0,
 
     learning:
       0,
 
-    new:
+    mastered:
       0
 
   };
@@ -4220,23 +3300,25 @@ function collectionStats(words){
   words.forEach(
     word => {
 
-      result[
-        wordStatus(word)
+      output[
+        wordStatus(
+          word
+        )
       ]++;
 
     }
   );
 
 
-  result.percent =
-  result.total
+  output.percent =
+  output.total
 
   ?
 
   Math.round(
-    result.mastered
+    output.mastered
     /
-    result.total
+    output.total
     *
     100
   )
@@ -4246,68 +3328,181 @@ function collectionStats(words){
   0;
 
 
-  return result;
+  return output;
 
 }
 
 
 /* =========================================================
-   REVIEW WORDS
+   GENERAL HELPERS
 ========================================================= */
 
-function getReviewWords(){
+function shuffle(array){
 
-  return VOCABULARY_DATA
-  .filter(
-    word => {
-
-      const stats =
-      getWordStats(
-        word
-      );
+  const output =
+  [...array];
 
 
-      if(
-        !stats.seen
-        ||
-        !stats.wrong
-      ){
+  for(
+    let i=
+    output.length-1;
+    i>0;
+    i--
+  ){
 
-        return false;
+    const j =
+    Math.floor(
+      Math.random()
+      *
+      (
+        i+1
+      )
+    );
 
-      }
+
+    [
+      output[i],
+      output[j]
+    ]
+    =
+    [
+      output[j],
+      output[i]
+    ];
+
+  }
 
 
-      return(
-        stats.correct
-        /
-        stats.seen
-        <
-        .8
+  return output;
+
+}
+
+
+function randomItem(array){
+
+  return array[
+    Math.floor(
+      Math.random()
+      *
+      array.length
+    )
+  ];
+
+}
+
+
+function hideScreens(){
+
+  [
+    "homeScreen",
+    "setsScreen",
+    "collectionScreen",
+    "whackScreen",
+    "catchScreen",
+    "racerScreen",
+    "matchScreen",
+    "quizScreen",
+    "balloonScreen"
+  ]
+  .forEach(
+    id => {
+
+      $(id)
+      .classList
+      .add(
+        "hidden"
       );
 
     }
-  )
-  .sort(
-    (
-      a,
-      b
-    ) =>
-    getWordStats(b).wrong
-    -
-    getWordStats(a).wrong
   );
 
 }
 
 
 /* =========================================================
-   CATEGORY
+   STATE
 ========================================================= */
 
-function renderCategories(){
+let selectedSkill =
+"";
 
-  const cards =
+
+let selectedSet =
+"";
+
+
+let currentCollection =
+[];
+
+
+let direction =
+"vi-en";
+
+
+let currentGame =
+"";
+
+
+let lastGame =
+"";
+
+
+let score =
+0;
+
+
+let correct =
+0;
+
+
+let wrong =
+0;
+
+
+let attempts =
+0;
+
+
+let combo =
+0;
+
+
+let bestCombo =
+0;
+
+
+let lives =
+5;
+
+
+let currentTarget =
+null;
+
+
+let gameEnded =
+false;
+
+
+let gameTimer =
+null;
+
+
+let roundTimer =
+null;
+
+
+let animation =
+null;
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function renderHome(){
+
+  $("categoryGrid")
+  .innerHTML =
   Object.entries(
     SKILL_META
   )
@@ -4334,6 +3529,17 @@ function renderCategories(){
       );
 
 
+      const sets =
+      new Set(
+        words
+        .map(
+          word =>
+          word.set
+        )
+        .filter(Boolean)
+      );
+
+
       const stats =
       collectionStats(
         words
@@ -4355,9 +3561,8 @@ function renderCategories(){
           </h3>
 
           <div class="category-count">
-            ${words.length} từ
+            ${sets.size} bộ · ${words.length} từ
           </div>
-
 
           <div class="mastery-line">
 
@@ -4373,6 +3578,209 @@ function renderCategories(){
 
             </div>
 
+            <div class="mastery-bar">
+
+              <i
+                style="width:${stats.percent}%"
+              ></i>
+
+            </div>
+
+          </div>
+
+        </button>
+      `;
+
+    }
+  )
+  .join("");
+
+}
+
+
+function showHome(){
+
+  stopGame();
+
+
+  hideScreens();
+
+
+  $("homeScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  renderHome();
+
+}
+
+
+/* =========================================================
+   SET LIST
+========================================================= */
+
+function openSkill(skill){
+
+  selectedSkill =
+  skill;
+
+
+  hideScreens();
+
+
+  $("setsScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  $("setsTitle")
+  .textContent =
+  `${SKILL_META[skill].icon} ${SKILL_META[skill].title}`;
+
+
+  renderSets();
+
+}
+
+
+function renderSets(){
+
+  const words =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    (
+      word.skills
+      ||
+      []
+    )
+    .includes(
+      selectedSkill
+    )
+    &&
+    word.set
+  );
+
+
+  const map =
+  {};
+
+
+  words.forEach(
+    word => {
+
+      if(
+        !map[word.set]
+      ){
+
+        map[word.set] =
+        [];
+
+      }
+
+
+      map[word.set]
+      .push(
+        word
+      );
+
+    }
+  );
+
+
+  const sets =
+  Object.entries(
+    map
+  )
+  .sort(
+    (
+      a,
+      b
+    ) =>
+    String(a[0])
+    .localeCompare(
+      String(b[0]),
+      undefined,
+      {
+        numeric:true
+      }
+    )
+  );
+
+
+  if(
+    !sets.length
+  ){
+
+    $("setGrid")
+    .innerHTML =
+    `
+      <div
+        style="
+          grid-column:1/-1;
+          padding:40px;
+          border:1px dashed #d9dde7;
+          border-radius:16px;
+          background:#fff;
+          text-align:center;
+          color:#7d8593;
+        "
+      >
+        Chưa có bộ từ cho kỹ năng này.
+      </div>
+    `;
+
+
+    return;
+
+  }
+
+
+  $("setGrid")
+  .innerHTML =
+  sets
+  .map(
+    (
+      [
+        set,
+        setWords
+      ]
+    ) => {
+
+      const stats =
+      collectionStats(
+        setWords
+      );
+
+
+      return`
+        <button
+          class="set-card"
+          onclick="openSet('${set}')"
+        >
+
+          <div class="set-number">
+            ${set}
+          </div>
+
+          <h3>
+            Bộ ${set}
+          </h3>
+
+          <p>
+            ${setWords.length} từ ·
+            ${stats.percent}% Mastered
+          </p>
+
+          <div
+            class="mastery-line"
+            style="margin-top:auto"
+          >
 
             <div class="mastery-bar">
 
@@ -4388,190 +3796,23 @@ function renderCategories(){
       `;
 
     }
-  );
-
-
-  const topicWords =
-  VOCABULARY_DATA
-  .filter(
-    word =>
-    Array.isArray(
-      word.topics
-    )
-    &&
-    word.topics.length
-  );
-
-
-  const topicStats =
-  collectionStats(
-    topicWords
-  );
-
-
-  cards.push(
-    `
-      <button
-        class="category"
-        onclick="openTopics()"
-      >
-
-        <div class="category-icon">
-          🌍
-        </div>
-
-        <h3>
-          Chủ đề
-        </h3>
-
-        <div class="category-count">
-          Environment · Education · Animals · ...
-        </div>
-
-
-        <div class="mastery-line">
-
-          <div class="mastery-row">
-
-            <span>
-              Mastered
-            </span>
-
-            <strong>
-              ${topicStats.percent}%
-            </strong>
-
-          </div>
-
-
-          <div class="mastery-bar">
-
-            <i
-              style="width:${topicStats.percent}%"
-            ></i>
-
-          </div>
-
-        </div>
-
-      </button>
-    `
-  );
-
-
-  $("categoryGrid")
-  .innerHTML =
-  cards.join("");
-
-
-  renderReviewBanner();
+  )
+  .join("");
 
 }
 
 
 /* =========================================================
-   REVIEW BANNER
+   OPEN SET
 ========================================================= */
 
-function renderReviewBanner(){
+function openSet(set){
 
-  const words =
-  getReviewWords();
-
-
-  $("reviewSummary")
-  .textContent =
-  words.length
-
-  ?
-
-  `${words.length} từ cần ôn lại`
-
-  :
-
-  "Chưa có từ cần ôn.";
+  selectedSet =
+  set;
 
 
-  $("reviewButton")
-  .disabled =
-  !words.length;
-
-
-  $("reviewButton")
-  .style.opacity =
-  words.length
-  ?
-  "1"
-  :
-  ".45";
-
-}
-
-
-/* =========================================================
-   SCREEN
-========================================================= */
-
-function hideAllScreens(){
-
-  [
-    "homeScreen",
-    "topicsScreen",
-    "collectionScreen",
-
-    "whackScreen",
-    "catchScreen",
-    "racerScreen",
-    "matchScreen",
-    "quizScreen",
-    "balloonScreen"
-  ]
-  .forEach(
-    id => {
-
-      $(id)
-      .classList
-      .add(
-        "hidden"
-      );
-
-    }
-  );
-
-}
-
-
-function showHome(){
-
-  clearGame();
-
-
-  hideAllScreens();
-
-
-  $("homeScreen")
-  .classList
-  .remove(
-    "hidden"
-  );
-
-
-  renderCategories();
-
-}
-
-
-/* =========================================================
-   SKILLS
-========================================================= */
-
-function openSkill(key){
-
-  const meta =
-  SKILL_META[key];
-
-
-  const words =
+  currentCollection =
   VOCABULARY_DATA
   .filter(
     word =>
@@ -4581,271 +3822,30 @@ function openSkill(key){
       []
     )
     .includes(
-      key
+      selectedSkill
+    )
+    &&
+    String(
+      word.set
+    )
+    ===
+    String(
+      set
     )
   );
 
 
-  openCollection(
-
-    words,
-
-    "skill",
-
-    key,
-
-    `${meta.icon} ${meta.title}`,
-
-    "Từ vựng dành cho kỹ năng này."
-
-  );
+  showGameList();
 
 }
 
 
-/* =========================================================
-   TOPICS
-========================================================= */
+function showGameList(){
 
-function topicLabel(key){
+  stopGame();
 
-  return(
-    TOPIC_LABELS[key]
-    ||
-    titleCase(key)
-  );
 
-}
-
-
-function openTopics(){
-
-  hideAllScreens();
-
-
-  $("topicsScreen")
-  .classList
-  .remove(
-    "hidden"
-  );
-
-
-  renderTopics();
-
-}
-
-
-function renderTopics(){
-
-  const topicMap =
-  {};
-
-
-  VOCABULARY_DATA
-  .forEach(
-    word => {
-
-      (
-        word.topics
-        ||
-        []
-      )
-      .forEach(
-        topic => {
-
-          if(
-            !topicMap[topic]
-          ){
-
-            topicMap[topic] =
-            [];
-
-          }
-
-
-          topicMap[topic]
-          .push(
-            word
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-  $("topicGrid")
-  .innerHTML =
-  Object.entries(
-    topicMap
-  )
-  .sort(
-    (
-      a,
-      b
-    ) =>
-    topicLabel(a[0])
-    .localeCompare(
-      topicLabel(b[0])
-    )
-  )
-  .map(
-    (
-      [
-        key,
-        words
-      ]
-    ) => {
-
-      const stats =
-      collectionStats(
-        words
-      );
-
-
-      return`
-        <button
-          class="topic-card"
-          onclick="openTopic('${key}')"
-        >
-
-          <b>
-            ${escapeHTML(
-              topicLabel(key)
-            )}
-          </b>
-
-          <span>
-            ${words.length} từ ·
-            ${stats.percent}% mastered
-          </span>
-
-          <div class="topic-progress">
-
-            <i
-              style="width:${stats.percent}%"
-            ></i>
-
-          </div>
-
-        </button>
-      `;
-
-    }
-  )
-  .join("");
-
-}
-
-
-function openTopic(key){
-
-  const words =
-  VOCABULARY_DATA
-  .filter(
-    word =>
-    (
-      word.topics
-      ||
-      []
-    )
-    .includes(
-      key
-    )
-  );
-
-
-  openCollection(
-
-    words,
-
-    "topic",
-
-    key,
-
-    `🌍 ${topicLabel(key)}`,
-
-    "Từ vựng theo chủ đề."
-
-  );
-
-
-  $("collectionBack")
-  .onclick =
-  openTopics;
-
-
-  $("collectionBack")
-  .textContent =
-  "← Chủ đề";
-
-}
-
-
-/* =========================================================
-   REVIEW COLLECTION
-========================================================= */
-
-function openReviewCollection(){
-
-  const words =
-  getReviewWords();
-
-
-  if(!words.length){
-
-    return;
-
-  }
-
-
-  openCollection(
-
-    words,
-
-    "review",
-
-    "review",
-
-    "🔥 Từ cần ôn",
-
-    "Những từ em thường xuyên trả lời sai."
-
-  );
-
-}
-
-
-/* =========================================================
-   COLLECTION
-========================================================= */
-
-function openCollection(
-  words,
-  type,
-  key,
-  title,
-  subtitle
-){
-
-  currentCollection =
-  [...words];
-
-
-  currentCollectionType =
-  type;
-
-
-  currentCollectionKey =
-  key;
-
-
-  currentCollectionTitle =
-  title;
-
-
-  hideAllScreens();
+  hideScreens();
 
 
   $("collectionScreen")
@@ -4855,36 +3855,43 @@ function openCollection(
   );
 
 
-  $("collectionBack")
-  .onclick =
-  showHome;
-
-
-  $("collectionBack")
-  .textContent =
-  "← Vocabulary";
+  const meta =
+  SKILL_META[
+    selectedSkill
+  ];
 
 
   $("collectionTitle")
   .textContent =
-  title;
+  `${meta.icon} ${meta.title} · Bộ ${selectedSet}`;
 
 
   $("collectionSubtitle")
   .textContent =
-  subtitle;
+  `${currentCollection.length} từ trong bộ này.`;
 
 
-  renderCollectionStats();
+  $("collectionBack")
+  .onclick =
+  ()=>{
 
-  renderWordList();
+    openSkill(
+      selectedSkill
+    );
 
-  updateGameButtons();
+  };
+
+
+  renderCollection();
 
 }
 
 
-function renderCollectionStats(){
+/* =========================================================
+   COLLECTION
+========================================================= */
+
+function renderCollection(){
 
   const stats =
   collectionStats(
@@ -4892,92 +3899,25 @@ function renderCollectionStats(){
   );
 
 
-  $("statTotal")
-  .textContent =
+  $("statTotal").textContent =
   stats.total;
 
 
-  $("statMastered")
-  .textContent =
+  $("statMastered").textContent =
   stats.mastered;
 
 
-  $("statLearning")
-  .textContent =
+  $("statLearning").textContent =
   stats.learning;
 
 
-  $("statNew")
-  .textContent =
+  $("statNew").textContent =
   stats.new;
 
 
   $("wordListDescription")
   .textContent =
-  `${stats.percent}% từ trong mục này đã đạt trạng thái Mastered.`;
-
-}
-
-
-function updateGameButtons(){
-
-  const playable =
-  currentCollection.length >= 4;
-
-
-  document
-  .querySelectorAll(
-    ".game-start"
-  )
-  .forEach(
-    button => {
-
-      button.disabled =
-      !playable;
-
-    }
-  );
-
-
-  $("gameRequirementText")
-  .textContent =
-  playable
-
-  ?
-
-  `${currentCollection.length} từ sẵn sàng · Từ hay sai sẽ xuất hiện nhiều hơn.`
-
-  :
-
-  `Cần ít nhất 4 từ để chơi. Mục này hiện có ${currentCollection.length} từ.`;
-
-}
-
-
-function renderWordList(){
-
-  if(
-    !currentCollection.length
-  ){
-
-    $("wordList")
-    .innerHTML =
-    `
-      <div
-        style="
-          padding:20px;
-          text-align:center;
-          color:#7d8594;
-        "
-      >
-        Chưa có từ trong mục này.
-      </div>
-    `;
-
-
-    return;
-
-  }
+  `${stats.percent}% từ đã đạt trạng thái Mastered.`;
 
 
   $("wordList")
@@ -4992,7 +3932,7 @@ function renderWordList(){
       );
 
 
-      const text =
+      const label =
       status ===
       "mastered"
 
@@ -5018,17 +3958,17 @@ function renderWordList(){
         <div class="word-row">
 
           <div class="word">
-            ${escapeHTML(word.word)}
+            ${word.word}
           </div>
 
           <div class="meaning">
-            ${escapeHTML(word.meaning)}
+            ${word.meaning}
           </div>
 
           <div
             class="word-status ${status}"
           >
-            ${text}
+            ${label}
           </div>
 
         </div>
@@ -5042,40 +3982,10 @@ function renderWordList(){
 
 
 /* =========================================================
-   ADAPTIVE PICKER
+   WORD PICKING
 ========================================================= */
 
-function wordWeight(word){
-
-  const stats =
-  getWordStats(
-    word
-  );
-
-
-  if(
-    !stats.seen
-  ){
-
-    return 4;
-
-  }
-
-
-  return Math.min(
-
-    12,
-
-    1
-    +
-    stats.wrong*2
-
-  );
-
-}
-
-
-function weightedRandomWord(){
+function weightedWord(){
 
   const pool =
   [];
@@ -5085,10 +3995,27 @@ function weightedRandomWord(){
   .forEach(
     word => {
 
-      const weight =
-      wordWeight(
+      const stats =
+      getWordStats(
         word
       );
+
+
+      const weight =
+      stats.seen
+
+      ?
+
+      Math.min(
+        12,
+        1
+        +
+        stats.wrong*2
+      )
+
+      :
+
+      4;
 
 
       for(
@@ -5114,9 +4041,9 @@ function weightedRandomWord(){
 }
 
 
-function currentPrompt(word){
+function promptFor(word){
 
-  return gameDirection ===
+  return direction ===
   "vi-en"
 
   ?
@@ -5130,9 +4057,9 @@ function currentPrompt(word){
 }
 
 
-function currentAnswer(word){
+function answerFor(word){
 
-  return gameDirection ===
+  return direction ===
   "vi-en"
 
   ?
@@ -5146,9 +4073,9 @@ function currentAnswer(word){
 }
 
 
-function gameOptions(
+function optionsFor(
   target,
-  count=4
+  amount=4
 ){
 
   const others =
@@ -5165,7 +4092,7 @@ function gameOptions(
   )
   .slice(
     0,
-    count-1
+    amount-1
   );
 
 
@@ -5190,7 +4117,7 @@ function prepareGame(game){
   ){
 
     alert(
-      "Cần ít nhất 4 từ để chơi."
+      "Bộ này cần ít nhất 4 từ."
     );
 
 
@@ -5199,10 +4126,10 @@ function prepareGame(game){
   }
 
 
-  clearGame();
+  stopGame();
 
 
-  gameDirection =
+  direction =
   $("directionSelect")
   .value;
 
@@ -5219,18 +4146,6 @@ function prepareGame(game){
   0;
 
 
-  lives =
-  5;
-
-
-  combo =
-  0;
-
-
-  bestCombo =
-  0;
-
-
   correct =
   0;
 
@@ -5243,8 +4158,16 @@ function prepareGame(game){
   0;
 
 
-  reviewMap =
-  {};
+  combo =
+  0;
+
+
+  bestCombo =
+  0;
+
+
+  lives =
+  5;
 
 
   currentTarget =
@@ -5255,7 +4178,7 @@ function prepareGame(game){
   false;
 
 
-  hideAllScreens();
+  hideScreens();
 
 
   return true;
@@ -5303,17 +4226,17 @@ function correctAnswer(word){
   score +=
   100
   +
-  (
-    Math.min(
-      combo-1,
-      10
+  Math.min(
+    100,
+    (
+      combo-1
     )
     *
     10
   );
 
 
-  registerWordResult(
+  registerResult(
     word,
     true
   );
@@ -5331,36 +4254,10 @@ function wrongAnswer(word){
   0;
 
 
-  registerWordResult(
+  registerResult(
     word,
     false
   );
-
-
-  const id =
-  wordId(
-    word
-  );
-
-
-  reviewMap[id] = {
-
-    word:
-      word.word,
-
-    meaning:
-      word.meaning,
-
-    count:
-      (
-        reviewMap[id]?.count
-        ||
-        0
-      )
-      +
-      1
-
-  };
 
 }
 
@@ -5375,7 +4272,8 @@ function loseLife(){
 
 
   if(
-    lives <= 0
+    lives ===
+    0
   ){
 
     endGame();
@@ -5385,35 +4283,33 @@ function loseLife(){
 }
 
 
-function showFeedback(
+function feedback(
   text,
   type
 ){
 
-  const element =
+  const box =
   $("feedback");
 
 
-  element.textContent =
+  box.textContent =
   text;
 
 
-  element.className =
+  box.className =
   `feedback ${type} show`;
 
 
   clearTimeout(
-    element._timer
+    box._timer
   );
 
 
-  element._timer =
+  box._timer =
   setTimeout(
     ()=>{
 
-      element
-      .classList
-      .remove(
+      box.classList.remove(
         "show"
       );
 
@@ -5425,7 +4321,28 @@ function showFeedback(
 
 
 /* =========================================================
-   GAME 1 — WHACK
+   BACK TO GAME LIST
+========================================================= */
+
+function backToGameList(){
+
+  stopGame();
+
+
+  $("resultOverlay")
+  .classList
+  .add(
+    "hidden"
+  );
+
+
+  showGameList();
+
+}
+
+
+/* =========================================================
+   WHACK
 ========================================================= */
 
 function startWhack(){
@@ -5442,25 +4359,54 @@ function startWhack(){
 
 
   $("whackScreen")
-  .classList
-  .remove(
+  .classList.remove(
     "hidden"
   );
 
 
-  createWhackBoard();
+  $("whackBoard")
+  .innerHTML =
+  Array.from(
+    {
+      length:9
+    },
+    (
+      _,
+      i
+    ) => `
+      <div class="hole">
+
+        <div class="ground"></div>
+
+        <button
+          class="mole"
+          id="mole${i}"
+        >
+
+          <div class="mole-face">
+            🐹
+          </div>
+
+          <div class="mole-word"></div>
+
+        </button>
+
+      </div>
+    `
+  )
+  .join("");
 
 
   let seconds =
   45;
 
 
-  updateWhackHUD(
+  updateWhack(
     seconds
   );
 
 
-  nextWhackRound();
+  nextWhack();
 
 
   gameTimer =
@@ -5470,7 +4416,7 @@ function startWhack(){
       seconds--;
 
 
-      updateWhackHUD(
+      updateWhack(
         seconds
       );
 
@@ -5490,49 +4436,7 @@ function startWhack(){
 }
 
 
-function createWhackBoard(){
-
-  $("whackBoard")
-  .innerHTML =
-  Array.from(
-    {
-      length:9
-    },
-    (
-      _,
-      index
-    ) => {
-
-      return`
-        <div class="hole">
-
-          <div class="ground"></div>
-
-          <button
-            class="mole"
-            id="mole${index}"
-            type="button"
-          >
-
-            <div class="face">
-              🐹
-            </div>
-
-            <div class="word-label"></div>
-
-          </button>
-
-        </div>
-      `;
-
-    }
-  )
-  .join("");
-
-}
-
-
-function nextWhackRound(){
+function nextWhack(){
 
   if(gameEnded){
 
@@ -5547,24 +4451,24 @@ function nextWhackRound(){
 
 
   currentTarget =
-  weightedRandomWord();
+  weightedWord();
 
 
   $("whackTarget")
   .textContent =
-  currentPrompt(
+  promptFor(
     currentTarget
   );
 
 
   const options =
-  gameOptions(
+  optionsFor(
     currentTarget,
     4
   );
 
 
-  const slots =
+  const positions =
   shuffle(
     [
       0,1,2,3,4,5,6,7,8
@@ -5586,7 +4490,6 @@ function nextWhackRound(){
       mole.className =
       "mole";
 
-
       mole.onclick =
       null;
 
@@ -5602,18 +4505,16 @@ function nextWhackRound(){
 
       const mole =
       $(
-        "mole"
-        +
-        slots[index]
+        `mole${positions[index]}`
       );
 
 
       mole
       .querySelector(
-        ".word-label"
+        ".mole-word"
       )
       .textContent =
-      currentAnswer(
+      answerFor(
         word
       );
 
@@ -5621,9 +4522,60 @@ function nextWhackRound(){
       mole.onclick =
       ()=>{
 
-        hitMole(
-          word
+        const good =
+        wordId(word)
+        ===
+        wordId(currentTarget);
+
+
+        clearTimeout(
+          roundTimer
         );
+
+
+        if(good){
+
+          correctAnswer(
+            currentTarget
+          );
+
+
+          feedback(
+            "✓ Chính xác!",
+            "good"
+          );
+
+        }
+
+        else{
+
+          wrongAnswer(
+            currentTarget
+          );
+
+
+          loseLife();
+
+
+          feedback(
+            `✕ ${answerFor(currentTarget)}`,
+            "bad"
+          );
+
+        }
+
+
+        updateWhack();
+
+
+        if(!gameEnded){
+
+          setTimeout(
+            nextWhack,
+            350
+          );
+
+        }
 
       };
 
@@ -5631,9 +4583,7 @@ function nextWhackRound(){
       requestAnimationFrame(
         ()=>{
 
-          mole
-          .classList
-          .add(
+          mole.classList.add(
             "show"
           );
 
@@ -5641,15 +4591,6 @@ function nextWhackRound(){
       );
 
     }
-  );
-
-
-  const delay =
-  Math.max(
-    1100,
-    2500
-    -
-    correct*45
   );
 
 
@@ -5672,110 +4613,34 @@ function nextWhackRound(){
       loseLife();
 
 
-      showFeedback(
-        `⏱ ${currentAnswer(currentTarget)}`,
+      feedback(
+        `⏱ ${answerFor(currentTarget)}`,
         "bad"
       );
 
 
-      updateWhackHUD();
+      updateWhack();
 
 
       if(!gameEnded){
 
-        nextWhackRound();
+        nextWhack();
 
       }
 
     },
-    delay
+    Math.max(
+      1200,
+      2600
+      -
+      correct*35
+    )
   );
 
 }
 
 
-function hitMole(word){
-
-  if(gameEnded){
-
-    return;
-
-  }
-
-
-  clearTimeout(
-    roundTimer
-  );
-
-
-  document
-  .querySelectorAll(
-    ".mole"
-  )
-  .forEach(
-    mole => {
-
-      mole.onclick =
-      null;
-
-    }
-  );
-
-
-  const good =
-  wordId(word)
-  ===
-  wordId(currentTarget);
-
-
-  if(good){
-
-    correctAnswer(
-      currentTarget
-    );
-
-
-    showFeedback(
-      "✓ Chính xác!",
-      "good"
-    );
-
-  }
-
-  else{
-
-    wrongAnswer(
-      currentTarget
-    );
-
-
-    loseLife();
-
-
-    showFeedback(
-      `✕ ${currentAnswer(currentTarget)}`,
-      "bad"
-    );
-
-  }
-
-
-  updateWhackHUD();
-
-
-  if(!gameEnded){
-
-    setTimeout(
-      nextWhackRound,
-      400
-    );
-
-  }
-
-}
-
-
-function updateWhackHUD(seconds){
+function updateWhack(seconds){
 
   $("whackScore").textContent =
   score;
@@ -5810,19 +4675,19 @@ function updateWhackHUD(seconds){
 
 
 /* =========================================================
-   GAME 2 — CATCHER
+   CATCHER
 ========================================================= */
 
-const FRUIT_ICONS = [
-  "🍎",
-  "🍊",
-  "🍐",
-  "🍓",
-  "🍋",
-  "🍑",
-  "🥝",
-  "🍇"
-];
+let fruits =
+[];
+
+
+let basketX =
+50;
+
+
+let lastFrame =
+0;
 
 
 function startCatcher(){
@@ -5839,8 +4704,7 @@ function startCatcher(){
 
 
   $("catchScreen")
-  .classList
-  .remove(
+  .classList.remove(
     "hidden"
   );
 
@@ -5856,21 +4720,21 @@ function startCatcher(){
   60;
 
 
-  updateCatchHUD(
+  updateCatch(
     seconds
   );
 
 
-  nextCatchRound();
+  nextCatch();
 
 
-  catcherLastFrame =
+  lastFrame =
   performance.now();
 
 
-  catcherAnimation =
+  animation =
   requestAnimationFrame(
-    catcherLoop
+    catchLoop
   );
 
 
@@ -5881,7 +4745,7 @@ function startCatcher(){
       seconds--;
 
 
-      updateCatchHUD(
+      updateCatch(
         seconds
       );
 
@@ -5901,41 +4765,30 @@ function startCatcher(){
 }
 
 
-function nextCatchRound(){
-
-  if(
-    gameEnded
-    ||
-    catcherChanging
-  ){
-
-    return;
-
-  }
-
+function nextCatch(){
 
   clearFruits();
 
 
   currentTarget =
-  weightedRandomWord();
+  weightedWord();
 
 
   $("catchTarget")
   .textContent =
-  currentPrompt(
+  promptFor(
     currentTarget
   );
 
 
   const options =
-  gameOptions(
+  optionsFor(
     currentTarget,
     4
   );
 
 
-  const slots =
+  const xs =
   shuffle(
     [
       14,
@@ -5949,20 +4802,57 @@ function nextCatchRound(){
   options.forEach(
     (
       word,
-      index
+      i
     ) => {
 
-      createFruit(
+      const element =
+      document.createElement(
+        "div"
+      );
+
+
+      element.className =
+      "fruit";
+
+
+      element.innerHTML =
+      `
+        <div class="fruit-icon">
+          🍎
+        </div>
+
+        <div class="fruit-label">
+          ${answerFor(word)}
+        </div>
+      `;
+
+
+      $("catchArea")
+      .appendChild(
+        element
+      );
+
+
+      fruits.push({
+
+        element,
 
         word,
 
-        slots[index],
+        x:
+          xs[i],
 
-        -30
-        -
-        index*120
+        y:
+          -50
+          -
+          i*120,
 
-      );
+        speed:
+          80
+          +
+          correct*1.2
+
+      });
 
     }
   );
@@ -5970,65 +4860,7 @@ function nextCatchRound(){
 }
 
 
-function createFruit(
-  word,
-  x,
-  y
-){
-
-  const element =
-  document.createElement(
-    "div"
-  );
-
-
-  element.className =
-  "fruit";
-
-
-  element.innerHTML =
-  `
-    <div class="fruit-icon">
-      ${randomItem(FRUIT_ICONS)}
-    </div>
-
-    <div class="fruit-label">
-      ${escapeHTML(currentAnswer(word))}
-    </div>
-  `;
-
-
-  $("catchArea")
-  .appendChild(
-    element
-  );
-
-
-  fruits.push({
-
-    element,
-
-    word,
-
-    x,
-
-    y,
-
-    speed:
-      76
-      +
-      Math.random()*20
-      +
-      correct*1.5,
-
-    removed:false
-
-  });
-
-}
-
-
-function catcherLoop(now){
+function catchLoop(now){
 
   if(gameEnded){
 
@@ -6041,14 +4873,14 @@ function catcherLoop(now){
   Math.min(
     .035,
     (
-      now-catcherLastFrame
+      now-lastFrame
     )
     /
     1000
   );
 
 
-  catcherLastFrame =
+  lastFrame =
   now;
 
 
@@ -6057,209 +4889,152 @@ function catcherLoop(now){
   .clientHeight;
 
 
-  fruits
-  .slice()
-  .forEach(
-    fruit => {
+  for(
+    const fruit
+    of
+    [...fruits]
+  ){
 
-      if(fruit.removed){
-
-        return;
-
-      }
+    fruit.y +=
+    fruit.speed*dt;
 
 
-      fruit.y +=
-      fruit.speed*dt;
+    fruit.element.style.left =
+    fruit.x
+    +
+    "%";
 
 
-      fruit.element.style.left =
-      fruit.x
-      +
-      "%";
+    fruit.element.style.top =
+    fruit.y
+    +
+    "px";
 
 
-      fruit.element.style.top =
-      fruit.y
-      +
-      "px";
+    if(
+      fruit.y >
+      height-80
+      &&
+      Math.abs(
+        fruit.x-basketX
+      )
+      <
+      11
+    ){
+
+      const good =
+      wordId(fruit.word)
+      ===
+      wordId(currentTarget);
 
 
-      if(
-        fruit.y >
-        height-72
+      removeFruit(
+        fruit
+      );
 
-        &&
 
-        fruit.y <
-        height-12
+      if(good){
 
-        &&
-
-        Math.abs(
-          fruit.x
-          -
-          basketX
-        )
-        <
-        10
-      ){
-
-        catchFruit(
-          fruit
+        correctAnswer(
+          currentTarget
         );
 
 
-        return;
+        feedback(
+          "✓ Hứng đúng!",
+          "good"
+        );
+
+
+        updateCatch();
+
+
+        setTimeout(
+          nextCatch,
+          300
+        );
 
       }
 
+      else{
 
-      if(
-        fruit.y >
-        height+70
-      ){
+        wrongAnswer(
+          currentTarget
+        );
 
-        missFruit(
-          fruit
+
+        loseLife();
+
+
+        feedback(
+          `✕ ${answerFor(currentTarget)}`,
+          "bad"
+        );
+
+
+        updateCatch();
+
+      }
+
+    }
+
+
+    if(
+      fruit.y >
+      height+70
+    ){
+
+      const wasCorrect =
+      wordId(fruit.word)
+      ===
+      wordId(currentTarget);
+
+
+      removeFruit(
+        fruit
+      );
+
+
+      if(wasCorrect){
+
+        wrongAnswer(
+          currentTarget
+        );
+
+
+        loseLife();
+
+
+        feedback(
+          `💨 ${answerFor(currentTarget)}`,
+          "bad"
+        );
+
+
+        updateCatch();
+
+
+        setTimeout(
+          nextCatch,
+          300
         );
 
       }
 
     }
-  );
+
+  }
 
 
-  catcherAnimation =
+  animation =
   requestAnimationFrame(
-    catcherLoop
+    catchLoop
   );
-
-}
-
-
-function catchFruit(fruit){
-
-  if(
-    fruit.removed
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  removeFruit(
-    fruit
-  );
-
-
-  const good =
-  wordId(fruit.word)
-  ===
-  wordId(currentTarget);
-
-
-  if(good){
-
-    correctAnswer(
-      currentTarget
-    );
-
-
-    showFeedback(
-      "✓ Hứng chính xác!",
-      "good"
-    );
-
-
-    updateCatchHUD();
-
-
-    changeCatchRound();
-
-  }
-
-  else{
-
-    wrongAnswer(
-      currentTarget
-    );
-
-
-    loseLife();
-
-
-    showFeedback(
-      `✕ ${currentAnswer(currentTarget)}`,
-      "bad"
-    );
-
-
-    updateCatchHUD();
-
-  }
-
-}
-
-
-function missFruit(fruit){
-
-  if(
-    fruit.removed
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  const correctFruit =
-  wordId(fruit.word)
-  ===
-  wordId(currentTarget);
-
-
-  removeFruit(
-    fruit
-  );
-
-
-  if(correctFruit){
-
-    wrongAnswer(
-      currentTarget
-    );
-
-
-    loseLife();
-
-
-    showFeedback(
-      `💨 ${currentAnswer(currentTarget)}`,
-      "bad"
-    );
-
-
-    updateCatchHUD();
-
-
-    changeCatchRound();
-
-  }
 
 }
 
 
 function removeFruit(fruit){
-
-  fruit.removed =
-  true;
-
 
   fruit.element.remove();
 
@@ -6267,7 +5042,8 @@ function removeFruit(fruit){
   fruits =
   fruits.filter(
     item =>
-    item !== fruit
+    item !==
+    fruit
   );
 
 }
@@ -6275,13 +5051,9 @@ function removeFruit(fruit){
 
 function clearFruits(){
 
-  fruits
-  .forEach(
-    fruit => {
-
-      fruit.element.remove();
-
-    }
+  fruits.forEach(
+    fruit =>
+    fruit.element.remove()
   );
 
 
@@ -6291,47 +5063,10 @@ function clearFruits(){
 }
 
 
-function changeCatchRound(){
-
-  if(
-    catcherChanging
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  catcherChanging =
-  true;
-
-
-  setTimeout(
-    ()=>{
-
-      catcherChanging =
-      false;
-
-
-      if(!gameEnded){
-
-        nextCatchRound();
-
-      }
-
-    },
-    350
-  );
-
-}
-
-
-function moveBasket(direction){
+function moveBasket(dir){
 
   basketX +=
-  direction*8;
+  dir*8;
 
 
   basketX =
@@ -6360,7 +5095,7 @@ function renderBasket(){
 }
 
 
-function updateCatchHUD(seconds){
+function updateCatch(seconds){
 
   $("catchScore").textContent =
   score;
@@ -6383,8 +5118,10 @@ function updateCatchHUD(seconds){
   $("catchLives").textContent =
   lives;
 
+
   $("catchCombo").textContent =
   `x${combo}`;
+
 
   $("catchAccuracy").textContent =
   `${accuracy()}%`;
@@ -6393,8 +5130,16 @@ function updateCatchHUD(seconds){
 
 
 /* =========================================================
-   GAME 3 — RACER
+   RACER
 ========================================================= */
+
+let racerObjects =
+[];
+
+
+let carLane =
+1;
+
 
 function startRacer(){
 
@@ -6410,8 +5155,7 @@ function startRacer(){
 
 
   $("racerScreen")
-  .classList
-  .remove(
+  .classList.remove(
     "hidden"
   );
 
@@ -6427,19 +5171,19 @@ function startRacer(){
   60;
 
 
-  updateRacerHUD(
+  updateRacer(
     seconds
   );
 
 
-  nextRacerRound();
+  nextRacer();
 
 
-  racerLastFrame =
+  lastFrame =
   performance.now();
 
 
-  racerAnimation =
+  animation =
   requestAnimationFrame(
     racerLoop
   );
@@ -6452,7 +5196,7 @@ function startRacer(){
       seconds--;
 
 
-      updateRacerHUD(
+      updateRacer(
         seconds
       );
 
@@ -6472,59 +5216,34 @@ function startRacer(){
 }
 
 
-function nextRacerRound(){
+function nextRacer(){
 
-  if(
-    gameEnded
-    ||
-    racerChanging
-  ){
-
-    return;
-
-  }
-
-
-  clearRacerAnswers();
+  clearRacer();
 
 
   currentTarget =
-  weightedRandomWord();
+  weightedWord();
 
 
-  $("racerCarPrompt")
+  $("racerPrompt")
   .textContent =
-  currentPrompt(
+  promptFor(
     currentTarget
   );
 
 
   const options =
-  gameOptions(
+  optionsFor(
     currentTarget,
     3
-  );
-
-
-  const lanes =
-  shuffle(
-    [
-      0,
-      1,
-      2
-    ]
   );
 
 
   options.forEach(
     (
       word,
-      index
+      lane
     ) => {
-
-      const lane =
-      lanes[index];
-
 
       const element =
       document.createElement(
@@ -6537,7 +5256,7 @@ function nextRacerRound(){
 
 
       element.textContent =
-      currentAnswer(
+      answerFor(
         word
       );
 
@@ -6548,7 +5267,7 @@ function nextRacerRound(){
       );
 
 
-      racerAnswers.push({
+      racerObjects.push({
 
         element,
 
@@ -6556,15 +5275,12 @@ function nextRacerRound(){
 
         lane,
 
-        y:
-          -80,
+        y:-70,
 
         speed:
-          130
+          135
           +
-          correct*2,
-
-        resolved:false
+          correct*1.5
 
       });
 
@@ -6587,52 +5303,41 @@ function racerLoop(now){
   Math.min(
     .035,
     (
-      now-racerLastFrame
+      now-lastFrame
     )
     /
     1000
   );
 
 
-  racerLastFrame =
+  lastFrame =
   now;
 
 
-  const roadHeight =
+  const height =
   $("racerRoad")
   .clientHeight;
 
 
-  racerAnswers
-  .forEach(
-    answer => {
+  racerObjects.forEach(
+    object => {
 
-      if(answer.resolved){
-
-        return;
-
-      }
+      object.y +=
+      object.speed*dt;
 
 
-      answer.y +=
-      answer.speed*dt;
-
-
-      const laneX = [
+      object.element.style.left =
+      [
         16.67,
         50,
         83.33
-      ][answer.lane];
-
-
-      answer.element.style.left =
-      laneX
+      ][object.lane]
       +
       "%";
 
 
-      answer.element.style.top =
-      answer.y
+      object.element.style.top =
+      object.y
       +
       "px";
 
@@ -6640,29 +5345,78 @@ function racerLoop(now){
   );
 
 
-  const trigger =
-  racerAnswers
-  .find(
-    answer =>
-    !answer.resolved
-    &&
-    answer.y >
-    roadHeight-135
-  );
-
-
   if(
-    trigger
+    racerObjects.length
     &&
-    !racerChanging
+    racerObjects[0].y >
+    height-135
   ){
 
-    resolveRacerRound();
+    const selected =
+    racerObjects.find(
+      object =>
+      object.lane ===
+      carLane
+    );
+
+
+    const good =
+    selected
+    &&
+    wordId(
+      selected.word
+    )
+    ===
+    wordId(
+      currentTarget
+    );
+
+
+    if(good){
+
+      correctAnswer(
+        currentTarget
+      );
+
+
+      feedback(
+        "🏁 Chính xác!",
+        "good"
+      );
+
+    }
+
+    else{
+
+      wrongAnswer(
+        currentTarget
+      );
+
+
+      loseLife();
+
+
+      feedback(
+        `💥 ${answerFor(currentTarget)}`,
+        "bad"
+      );
+
+    }
+
+
+    updateRacer();
+
+
+    if(!gameEnded){
+
+      nextRacer();
+
+    }
 
   }
 
 
-  racerAnimation =
+  animation =
   requestAnimationFrame(
     racerLoop
   );
@@ -6670,128 +5424,24 @@ function racerLoop(now){
 }
 
 
-function resolveRacerRound(){
+function clearRacer(){
 
-  if(
-    racerChanging
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  racerChanging =
-  true;
-
-
-  const selected =
-  racerAnswers
-  .find(
-    answer =>
-    answer.lane ===
-    carLane
+  racerObjects.forEach(
+    object =>
+    object.element.remove()
   );
 
 
-  racerAnswers
-  .forEach(
-    answer => {
-
-      answer.resolved =
-      true;
-
-    }
-  );
-
-
-  const good =
-  selected
-  &&
-  wordId(selected.word)
-  ===
-  wordId(currentTarget);
-
-
-  if(good){
-
-    correctAnswer(
-      currentTarget
-    );
-
-
-    showFeedback(
-      "🏁 Đâm đúng từ!",
-      "good"
-    );
-
-  }
-
-  else{
-
-    wrongAnswer(
-      currentTarget
-    );
-
-
-    loseLife();
-
-
-    showFeedback(
-      `💥 Đáp án: ${currentAnswer(currentTarget)}`,
-      "bad"
-    );
-
-  }
-
-
-  updateRacerHUD();
-
-
-  setTimeout(
-    ()=>{
-
-      racerChanging =
-      false;
-
-
-      if(!gameEnded){
-
-        nextRacerRound();
-
-      }
-
-    },
-    450
-  );
-
-}
-
-
-function clearRacerAnswers(){
-
-  racerAnswers
-  .forEach(
-    answer => {
-
-      answer.element.remove();
-
-    }
-  );
-
-
-  racerAnswers =
+  racerObjects =
   [];
 
 }
 
 
-function moveCar(direction){
+function moveCar(dir){
 
   carLane +=
-  direction;
+  dir;
 
 
   carLane =
@@ -6811,23 +5461,20 @@ function moveCar(direction){
 
 function renderCar(){
 
-  const positions = [
+  $("racerCar")
+  .style.left =
+  [
     16.67,
     50,
     83.33
-  ];
-
-
-  $("racerCar")
-  .style.left =
-  positions[carLane]
+  ][carLane]
   +
   "%";
 
 }
 
 
-function updateRacerHUD(seconds){
+function updateRacer(seconds){
 
   $("racerScore").textContent =
   score;
@@ -6850,8 +5497,10 @@ function updateRacerHUD(seconds){
   $("racerLives").textContent =
   lives;
 
+
   $("racerCombo").textContent =
   `x${combo}`;
+
 
   $("racerAccuracy").textContent =
   `${accuracy()}%`;
@@ -6860,8 +5509,20 @@ function updateRacerHUD(seconds){
 
 
 /* =========================================================
-   GAME 4 — MATCH MASTER
+   MATCH
 ========================================================= */
+
+let firstMatch =
+null;
+
+
+let matchLocked =
+false;
+
+
+let pairsFound =
+0;
+
 
 function startMatch(){
 
@@ -6877,17 +5538,12 @@ function startMatch(){
 
 
   $("matchScreen")
-  .classList
-  .remove(
+  .classList.remove(
     "hidden"
   );
 
 
-  matchFirst =
-  null;
-
-
-  matchSecond =
+  firstMatch =
   null;
 
 
@@ -6895,15 +5551,8 @@ function startMatch(){
   false;
 
 
-  matchPairsFound =
+  pairsFound =
   0;
-
-
-  matchTotalPairs =
-  Math.min(
-    6,
-    currentCollection.length
-  );
 
 
   createMatchBoard();
@@ -6913,7 +5562,7 @@ function startMatch(){
   75;
 
 
-  updateMatchHUD(
+  updateMatch(
     seconds
   );
 
@@ -6925,7 +5574,7 @@ function startMatch(){
       seconds--;
 
 
-      updateMatchHUD(
+      updateMatch(
         seconds
       );
 
@@ -6953,7 +5602,7 @@ function createMatchBoard(){
   )
   .slice(
     0,
-    matchTotalPairs
+    6
   );
 
 
@@ -6964,18 +5613,14 @@ function createMatchBoard(){
   words.forEach(
     (
       word,
-      index
+      pair
     ) => {
 
       cards.push({
 
-        pair:
-          index,
+        pair,
 
         word,
-
-        type:
-          "word",
 
         text:
           word.word
@@ -6985,13 +5630,9 @@ function createMatchBoard(){
 
       cards.push({
 
-        pair:
-          index,
+        pair,
 
         word,
-
-        type:
-          "meaning",
 
         text:
           word.meaning
@@ -7002,85 +5643,50 @@ function createMatchBoard(){
   );
 
 
-  $("matchBoard")
-  .innerHTML =
-  shuffle(
-    cards
-  )
-  .map(
-    (
-      card,
-      index
-    ) => {
-
-      return`
-        <button
-          class="match-card"
-          id="matchCard${index}"
-          data-index="${index}"
-          type="button"
-        ></button>
-      `;
-
-    }
-  )
-  .join("");
-
-
-  const shuffledCards =
+  const mixed =
   shuffle(
     cards
   );
 
 
-  /*
-   * Rebuild once so DOM order and data order match.
-   */
-
   $("matchBoard")
   .innerHTML =
-  shuffledCards
+  mixed
   .map(
     (
       card,
       index
-    ) => {
-
-      return`
-        <button
-          class="match-card"
-          id="matchCard${index}"
-          type="button"
-        ></button>
-      `;
-
-    }
+    ) => `
+      <button
+        class="match-card"
+        id="match${index}"
+      ></button>
+    `
   )
   .join("");
 
 
-  shuffledCards
-  .forEach(
+  mixed.forEach(
     (
       card,
       index
     ) => {
 
-      const element =
+      const button =
       $(
-        `matchCard${index}`
+        `match${index}`
       );
 
 
-      element._cardData =
+      button._data =
       card;
 
 
-      element.onclick =
+      button.onclick =
       ()=>{
 
-        flipMatchCard(
-          element
+        flipMatch(
+          button
         );
 
       };
@@ -7091,18 +5697,17 @@ function createMatchBoard(){
 }
 
 
-function flipMatchCard(element){
+function flipMatch(button){
 
   if(
     matchLocked
     ||
-    gameEnded
-    ||
-    element.classList.contains(
+    button.classList.contains(
       "matched"
     )
     ||
-    element === matchFirst
+    button ===
+    firstMatch
   ){
 
     return;
@@ -7110,23 +5715,19 @@ function flipMatchCard(element){
   }
 
 
-  const card =
-  element._cardData;
-
-
-  element.classList.add(
+  button.classList.add(
     "revealed"
   );
 
 
-  element.textContent =
-  card.text;
+  button.textContent =
+  button._data.text;
 
 
-  if(!matchFirst){
+  if(!firstMatch){
 
-    matchFirst =
-    element;
+    firstMatch =
+    button;
 
 
     return;
@@ -7134,78 +5735,41 @@ function flipMatchCard(element){
   }
 
 
-  matchSecond =
-  element;
+  const second =
+  button;
 
 
-  checkMatchPair();
+  const good =
+  firstMatch._data.pair
+  ===
+  second._data.pair;
 
-}
-
-
-function checkMatchPair(){
 
   matchLocked =
   true;
 
 
-  const first =
-  matchFirst._cardData;
-
-
-  const second =
-  matchSecond._cardData;
-
-
-  const good =
-  first.pair ===
-  second.pair
-
-  &&
-
-  first.type !==
-  second.type;
-
-
   if(good){
 
-    const word =
-    first.word;
-
-
     correctAnswer(
-      word
+      firstMatch._data.word
     );
 
 
-    matchPairsFound++;
+    pairsFound++;
 
 
-    matchFirst
-    .classList
-    .add(
+    firstMatch.classList.add(
       "matched"
     );
 
 
-    matchSecond
-    .classList
-    .add(
+    second.classList.add(
       "matched"
     );
 
 
-    showFeedback(
-      "✓ Ghép chính xác!",
-      "good"
-    );
-
-
-    matchFirst =
-    null;
-
-
-    matchSecond =
+    firstMatch =
     null;
 
 
@@ -7213,104 +5777,87 @@ function checkMatchPair(){
     false;
 
 
-    updateMatchHUD();
+    updateMatch();
+
+
+    feedback(
+      "✓ Ghép đúng!",
+      "good"
+    );
 
 
     if(
-      matchPairsFound >=
-      matchTotalPairs
+      pairsFound >=
+      6
     ){
 
       setTimeout(
         endGame,
-        350
+        300
       );
 
     }
 
-
-    return;
-
   }
 
+  else{
 
-  /*
-   * Một lượt ghép sai được tính là
-   * một lỗi đối với từ đầu tiên.
-   */
-
-  wrongAnswer(
-    first.word
-  );
+    wrongAnswer(
+      firstMatch._data.word
+    );
 
 
-  score =
-  Math.max(
-    0,
-    score-25
-  );
+    updateMatch();
 
 
-  showFeedback(
-    "✕ Chưa đúng cặp",
-    "bad"
-  );
+    feedback(
+      "✕ Chưa đúng",
+      "bad"
+    );
 
 
-  updateMatchHUD();
+    setTimeout(
+      ()=>{
+
+        firstMatch
+        .classList
+        .remove(
+          "revealed"
+        );
 
 
-  setTimeout(
-    ()=>{
-
-      [
-        matchFirst,
-        matchSecond
-      ]
-      .forEach(
-        card => {
-
-          if(
-            card
-            &&
-            !card.classList.contains(
-              "matched"
-            )
-          ){
-
-            card.classList.remove(
-              "revealed"
-            );
+        second
+        .classList
+        .remove(
+          "revealed"
+        );
 
 
-            card.textContent =
-            "";
-
-          }
-
-        }
-      );
+        firstMatch.textContent =
+        "";
 
 
-      matchFirst =
-      null;
+        second.textContent =
+        "";
 
 
-      matchSecond =
-      null;
+        firstMatch =
+        null;
 
 
-      matchLocked =
-      false;
+        matchLocked =
+        false;
 
-    },
-    650
-  );
+      },
+      600
+    );
+
+  }
 
 }
 
 
-function updateMatchHUD(seconds){
+function updateMatch(seconds){
 
   $("matchScore").textContent =
   score;
@@ -7331,7 +5878,7 @@ function updateMatchHUD(seconds){
 
 
   $("matchPairs").textContent =
-  `${matchPairsFound}/${matchTotalPairs}`;
+  `${pairsFound}/6`;
 
 
   $("matchCombo").textContent =
@@ -7345,10 +5892,10 @@ function updateMatchHUD(seconds){
 
 
 /* =========================================================
-   GAME 5 — SPEED QUIZ
+   QUIZ
 ========================================================= */
 
-function startSpeedQuiz(){
+function startQuiz(){
 
   if(
     !prepareGame(
@@ -7362,8 +5909,7 @@ function startSpeedQuiz(){
 
 
   $("quizScreen")
-  .classList
-  .remove(
+  .classList.remove(
     "hidden"
   );
 
@@ -7372,12 +5918,12 @@ function startSpeedQuiz(){
   45;
 
 
-  updateQuizHUD(
+  updateQuiz(
     seconds
   );
 
 
-  nextQuizRound();
+  nextQuiz();
 
 
   gameTimer =
@@ -7387,7 +5933,7 @@ function startSpeedQuiz(){
       seconds--;
 
 
-      updateQuizHUD(
+      updateQuiz(
         seconds
       );
 
@@ -7407,28 +5953,21 @@ function startSpeedQuiz(){
 }
 
 
-function nextQuizRound(){
-
-  if(gameEnded){
-
-    return;
-
-  }
-
+function nextQuiz(){
 
   currentTarget =
-  weightedRandomWord();
+  weightedWord();
 
 
-  $("quizPrompt")
+  $("quizQuestion")
   .textContent =
-  currentPrompt(
+  promptFor(
     currentTarget
   );
 
 
   const options =
-  gameOptions(
+  optionsFor(
     currentTarget,
     4
   );
@@ -7441,42 +5980,108 @@ function nextQuizRound(){
     (
       word,
       index
-    ) => {
-
-      return`
-        <button
-          class="quiz-option"
-          id="quizOption${index}"
-          type="button"
-        >
-          ${escapeHTML(
-            currentAnswer(word)
-          )}
-        </button>
-      `;
-
-    }
+    ) => `
+      <button
+        class="quiz-option"
+        id="quiz${index}"
+      >
+        ${answerFor(word)}
+      </button>
+    `
   )
   .join("");
 
 
-  options
-  .forEach(
+  options.forEach(
     (
       word,
       index
     ) => {
 
       $(
-        `quizOption${index}`
+        `quiz${index}`
       )
       .onclick =
       ()=>{
 
-        selectQuizOption(
-          word,
-          index
+        const good =
+        wordId(word)
+        ===
+        wordId(currentTarget);
+
+
+        document
+        .querySelectorAll(
+          ".quiz-option"
+        )
+        .forEach(
+          button =>
+          button.disabled =
+          true
         );
+
+
+        if(good){
+
+          correctAnswer(
+            currentTarget
+          );
+
+
+          $(
+            `quiz${index}`
+          )
+          .classList
+          .add(
+            "good"
+          );
+
+
+          feedback(
+            "⚡ Chính xác!",
+            "good"
+          );
+
+        }
+
+        else{
+
+          wrongAnswer(
+            currentTarget
+          );
+
+
+          loseLife();
+
+
+          $(
+            `quiz${index}`
+          )
+          .classList
+          .add(
+            "bad"
+          );
+
+
+          feedback(
+            `✕ ${answerFor(currentTarget)}`,
+            "bad"
+          );
+
+        }
+
+
+        updateQuiz();
+
+
+        if(!gameEnded){
+
+          setTimeout(
+            nextQuiz,
+            350
+          );
+
+        }
 
       };
 
@@ -7486,128 +6091,7 @@ function nextQuizRound(){
 }
 
 
-function selectQuizOption(
-  word,
-  index
-){
-
-  if(gameEnded){
-
-    return;
-
-  }
-
-
-  document
-  .querySelectorAll(
-    ".quiz-option"
-  )
-  .forEach(
-    button => {
-
-      button.disabled =
-      true;
-
-    }
-  );
-
-
-  const good =
-  wordId(word)
-  ===
-  wordId(currentTarget);
-
-
-  const selected =
-  $(
-    `quizOption${index}`
-  );
-
-
-  if(good){
-
-    selected.classList.add(
-      "good"
-    );
-
-
-    correctAnswer(
-      currentTarget
-    );
-
-
-    showFeedback(
-      "⚡ Chính xác!",
-      "good"
-    );
-
-  }
-
-  else{
-
-    selected.classList.add(
-      "bad"
-    );
-
-
-    wrongAnswer(
-      currentTarget
-    );
-
-
-    loseLife();
-
-
-    showFeedback(
-      `✕ ${currentAnswer(currentTarget)}`,
-      "bad"
-    );
-
-
-    document
-    .querySelectorAll(
-      ".quiz-option"
-    )
-    .forEach(
-      button => {
-
-        if(
-          button.textContent
-          .trim()
-          ===
-          currentAnswer(
-            currentTarget
-          )
-        ){
-
-          button.classList.add(
-            "good"
-          );
-
-        }
-
-      }
-    );
-
-  }
-
-
-  updateQuizHUD();
-
-
-  if(!gameEnded){
-
-    setTimeout(
-      nextQuizRound,
-      380
-    );
-
-  }
-
-}
-
-
-function updateQuizHUD(seconds){
+function updateQuiz(seconds){
 
   $("quizScore").textContent =
   score;
@@ -7642,16 +6126,11 @@ function updateQuizHUD(seconds){
 
 
 /* =========================================================
-   GAME 6 — BALLOON
+   BALLOON
 ========================================================= */
 
-const BALLOON_COLORS = [
-  ["#ee6680","#dc3859"],
-  ["#5d9ff2","#3176d7"],
-  ["#8a71e8","#6245bd"],
-  ["#f1a54e","#dd7727"],
-  ["#57c999","#2c9d70"]
-];
+let balloons =
+[];
 
 
 function startBalloon(){
@@ -7668,8 +6147,7 @@ function startBalloon(){
 
 
   $("balloonScreen")
-  .classList
-  .remove(
+  .classList.remove(
     "hidden"
   );
 
@@ -7678,19 +6156,19 @@ function startBalloon(){
   60;
 
 
-  updateBalloonHUD(
+  updateBalloon(
     seconds
   );
 
 
-  nextBalloonRound();
+  nextBalloon();
 
 
-  balloonLastFrame =
+  lastFrame =
   performance.now();
 
 
-  balloonAnimation =
+  animation =
   requestAnimationFrame(
     balloonLoop
   );
@@ -7703,7 +6181,7 @@ function startBalloon(){
       seconds--;
 
 
-      updateBalloonHUD(
+      updateBalloon(
         seconds
       );
 
@@ -7723,35 +6201,24 @@ function startBalloon(){
 }
 
 
-function nextBalloonRound(){
-
-  if(
-    gameEnded
-    ||
-    balloonChanging
-  ){
-
-    return;
-
-  }
-
+function nextBalloon(){
 
   clearBalloons();
 
 
   currentTarget =
-  weightedRandomWord();
+  weightedWord();
 
 
   $("balloonTarget")
   .textContent =
-  currentPrompt(
+  promptFor(
     currentTarget
   );
 
 
   const options =
-  gameOptions(
+  optionsFor(
     currentTarget,
     4
   );
@@ -7768,7 +6235,7 @@ function nextBalloonRound(){
   );
 
 
-  const areaHeight =
+  const height =
   $("balloonArea")
   .clientHeight;
 
@@ -7789,29 +6256,11 @@ function nextBalloonRound(){
       "balloon";
 
 
-      const colors =
-      randomItem(
-        BALLOON_COLORS
-      );
-
-
       element.innerHTML =
       `
-        <div
-          class="balloon-shape"
-          style="
-            background:
-            linear-gradient(
-              135deg,
-              ${colors[0]},
-              ${colors[1]}
-            );
-          "
-        >
-          ${escapeHTML(
-            currentAnswer(word)
-          )}
-        </div>
+        <button class="balloon-shape">
+          ${answerFor(word)}
+        </button>
 
         <div class="balloon-string"></div>
       `;
@@ -7823,7 +6272,7 @@ function nextBalloonRound(){
       );
 
 
-      const object = {
+      const balloon = {
 
         element,
 
@@ -7833,36 +6282,81 @@ function nextBalloonRound(){
           xs[index],
 
         y:
-          areaHeight
+          height
           +
-          130
+          100
           +
-          index*110,
+          index*100,
 
         speed:
           65
           +
-          Math.random()*18
-          +
-          correct*1.2,
-
-        removed:false
+          correct*1.2
 
       };
 
 
-      element.onclick =
+      element
+      .querySelector(
+        "button"
+      )
+      .onclick =
       ()=>{
 
-        popBalloon(
-          object
-        );
+        const good =
+        wordId(word)
+        ===
+        wordId(currentTarget);
+
+
+        if(good){
+
+          correctAnswer(
+            currentTarget
+          );
+
+
+          feedback(
+            "🎈 Chính xác!",
+            "good"
+          );
+
+
+          updateBalloon();
+
+
+          setTimeout(
+            nextBalloon,
+            250
+          );
+
+        }
+
+        else{
+
+          wrongAnswer(
+            currentTarget
+          );
+
+
+          loseLife();
+
+
+          feedback(
+            `✕ ${answerFor(currentTarget)}`,
+            "bad"
+          );
+
+
+          updateBalloon();
+
+        }
 
       };
 
 
       balloons.push(
-        object
+        balloon
       );
 
     }
@@ -7884,61 +6378,93 @@ function balloonLoop(now){
   Math.min(
     .035,
     (
-      now-balloonLastFrame
+      now-lastFrame
     )
     /
     1000
   );
 
 
-  balloonLastFrame =
+  lastFrame =
   now;
 
 
-  balloons
-  .slice()
-  .forEach(
-    balloon => {
+  for(
+    const balloon
+    of
+    [...balloons]
+  ){
 
-      if(balloon.removed){
-
-        return;
-
-      }
+    balloon.y -=
+    balloon.speed*dt;
 
 
-      balloon.y -=
-      balloon.speed*dt;
+    balloon.element.style.left =
+    balloon.x
+    +
+    "%";
 
 
-      balloon.element.style.left =
-      balloon.x
-      +
-      "%";
+    balloon.element.style.top =
+    balloon.y
+    +
+    "px";
 
 
-      balloon.element.style.top =
-      balloon.y
-      +
-      "px";
+    if(
+      balloon.y <
+      -120
+    ){
+
+      const good =
+      wordId(balloon.word)
+      ===
+      wordId(currentTarget);
 
 
-      if(
-        balloon.y <
-        -150
-      ){
+      balloon.element.remove();
 
-        escapedBalloon(
-          balloon
+
+      balloons =
+      balloons.filter(
+        item =>
+        item !==
+        balloon
+      );
+
+
+      if(good){
+
+        wrongAnswer(
+          currentTarget
+        );
+
+
+        loseLife();
+
+
+        feedback(
+          `💨 ${answerFor(currentTarget)}`,
+          "bad"
+        );
+
+
+        updateBalloon();
+
+
+        setTimeout(
+          nextBalloon,
+          250
         );
 
       }
 
     }
-  );
+
+  }
 
 
-  balloonAnimation =
+  animation =
   requestAnimationFrame(
     balloonLoop
   );
@@ -7946,151 +6472,11 @@ function balloonLoop(now){
 }
 
 
-function popBalloon(balloon){
-
-  if(
-    balloon.removed
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  const good =
-  wordId(balloon.word)
-  ===
-  wordId(currentTarget);
-
-
-  removeBalloon(
-    balloon
-  );
-
-
-  if(good){
-
-    correctAnswer(
-      currentTarget
-    );
-
-
-    showFeedback(
-      "🎈 POP! Chính xác!",
-      "good"
-    );
-
-
-    updateBalloonHUD();
-
-
-    changeBalloonRound();
-
-  }
-
-  else{
-
-    wrongAnswer(
-      currentTarget
-    );
-
-
-    loseLife();
-
-
-    showFeedback(
-      `✕ ${currentAnswer(currentTarget)}`,
-      "bad"
-    );
-
-
-    updateBalloonHUD();
-
-  }
-
-}
-
-
-function escapedBalloon(balloon){
-
-  if(
-    balloon.removed
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  const correctBalloon =
-  wordId(balloon.word)
-  ===
-  wordId(currentTarget);
-
-
-  removeBalloon(
-    balloon
-  );
-
-
-  if(correctBalloon){
-
-    wrongAnswer(
-      currentTarget
-    );
-
-
-    loseLife();
-
-
-    showFeedback(
-      `💨 Bỏ lỡ: ${currentAnswer(currentTarget)}`,
-      "bad"
-    );
-
-
-    updateBalloonHUD();
-
-
-    changeBalloonRound();
-
-  }
-
-}
-
-
-function removeBalloon(balloon){
-
-  balloon.removed =
-  true;
-
-
-  balloon.element.remove();
-
-
-  balloons =
-  balloons.filter(
-    item =>
-    item !==
-    balloon
-  );
-
-}
-
-
 function clearBalloons(){
 
-  balloons
-  .forEach(
-    balloon => {
-
-      balloon.element.remove();
-
-    }
+  balloons.forEach(
+    balloon =>
+    balloon.element.remove()
   );
 
 
@@ -8100,44 +6486,7 @@ function clearBalloons(){
 }
 
 
-function changeBalloonRound(){
-
-  if(
-    balloonChanging
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  balloonChanging =
-  true;
-
-
-  setTimeout(
-    ()=>{
-
-      balloonChanging =
-      false;
-
-
-      if(!gameEnded){
-
-        nextBalloonRound();
-
-      }
-
-    },
-    350
-  );
-
-}
-
-
-function updateBalloonHUD(seconds){
+function updateBalloon(seconds){
 
   $("balloonScore").textContent =
   score;
@@ -8188,16 +6537,14 @@ document
 
 
     if(
-      currentGame ===
-      "catcher"
+      event.key ===
+      "ArrowLeft"
     ){
 
       if(
-        event.key ===
-        "ArrowLeft"
+        currentGame ===
+        "catcher"
       ){
-
-        event.preventDefault();
 
         moveBasket(
           -1
@@ -8207,14 +6554,12 @@ document
 
 
       if(
-        event.key ===
-        "ArrowRight"
+        currentGame ===
+        "racer"
       ){
 
-        event.preventDefault();
-
-        moveBasket(
-          1
+        moveCar(
+          -1
         );
 
       }
@@ -8223,30 +6568,26 @@ document
 
 
     if(
-      currentGame ===
-      "racer"
+      event.key ===
+      "ArrowRight"
     ){
 
       if(
-        event.key ===
-        "ArrowLeft"
+        currentGame ===
+        "catcher"
       ){
 
-        event.preventDefault();
-
-        moveCar(
-          -1
+        moveBasket(
+          1
         );
 
       }
 
 
       if(
-        event.key ===
-        "ArrowRight"
+        currentGame ===
+        "racer"
       ){
-
-        event.preventDefault();
 
         moveCar(
           1
@@ -8261,156 +6602,7 @@ document
 
 
 /* =========================================================
-   CATCHER POINTER
-========================================================= */
-
-function pointerBasket(event){
-
-  if(
-    currentGame !==
-    "catcher"
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  const rect =
-  $("catchArea")
-  .getBoundingClientRect();
-
-
-  basketX =
-  (
-    event.clientX
-    -
-    rect.left
-  )
-  /
-  rect.width
-  *
-  100;
-
-
-  basketX =
-  Math.max(
-    7,
-    Math.min(
-      93,
-      basketX
-    )
-  );
-
-
-  renderBasket();
-
-}
-
-
-$("catchArea")
-.addEventListener(
-  "pointerdown",
-  pointerBasket
-);
-
-
-$("catchArea")
-.addEventListener(
-  "pointermove",
-  event => {
-
-    if(
-      event.buttons
-      ||
-      event.pointerType ===
-      "touch"
-    ){
-
-      pointerBasket(
-        event
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   RACER POINTER
-========================================================= */
-
-$("racerRoad")
-.addEventListener(
-  "pointerdown",
-  event => {
-
-    if(
-      currentGame !==
-      "racer"
-      ||
-      gameEnded
-    ){
-
-      return;
-
-    }
-
-
-    const rect =
-    $("racerRoad")
-    .getBoundingClientRect();
-
-
-    const ratio =
-    (
-      event.clientX
-      -
-      rect.left
-    )
-    /
-    rect.width;
-
-
-    if(
-      ratio <
-      .333
-    ){
-
-      carLane =
-      0;
-
-    }
-
-    else if(
-      ratio <
-      .666
-    ){
-
-      carLane =
-      1;
-
-    }
-
-    else{
-
-      carLane =
-      2;
-
-    }
-
-
-    renderCar();
-
-  }
-);
-
-
-/* =========================================================
-   END GAME
+   END
 ========================================================= */
 
 function endGame(){
@@ -8426,6 +6618,16 @@ function endGame(){
   true;
 
 
+  stopTimersOnly();
+
+
+  showResult();
+
+}
+
+
+function stopTimersOnly(){
+
   clearInterval(
     gameTimer
   );
@@ -8436,137 +6638,43 @@ function endGame(){
   );
 
 
-  if(catcherAnimation){
+  if(animation){
 
     cancelAnimationFrame(
-      catcherAnimation
+      animation
     );
 
   }
 
 
-  if(racerAnimation){
-
-    cancelAnimationFrame(
-      racerAnimation
-    );
-
-  }
+  gameTimer =
+  null;
 
 
-  if(balloonAnimation){
-
-    cancelAnimationFrame(
-      balloonAnimation
-    );
-
-  }
+  roundTimer =
+  null;
 
 
-  clearFruits();
-
-  clearRacerAnswers();
-
-  clearBalloons();
-
-
-  saveGameHistory();
-
-
-  showGameResult();
+  animation =
+  null;
 
 }
 
 
-/* =========================================================
-   HISTORY
-========================================================= */
+function stopGame(){
 
-function saveGameHistory(){
-
-  let history =
-  [];
+  stopTimersOnly();
 
 
-  try{
+  clearFruits();
 
-    history =
-    JSON.parse(
+  clearRacer();
 
-      localStorage.getItem(
-        historyKey()
-      )
-
-      ||
-
-      "[]"
-
-    );
-
-  }
-
-  catch(error){
-
-    history =
-    [];
-
-  }
+  clearBalloons();
 
 
-  history.unshift({
-
-    timestamp:
-      new Date()
-      .toISOString(),
-
-    collectionType:
-      currentCollectionType,
-
-    collectionKey:
-      currentCollectionKey,
-
-    collectionTitle:
-      currentCollectionTitle,
-
-    game:
-      currentGame,
-
-    direction:
-      gameDirection,
-
-    score:
-      score,
-
-    correct:
-      correct,
-
-    wrong:
-      wrong,
-
-    attempts:
-      attempts,
-
-    accuracy:
-      accuracy(),
-
-    bestCombo:
-      bestCombo
-
-  });
-
-
-  localStorage.setItem(
-
-    historyKey(),
-
-    JSON.stringify(
-      history.slice(
-        0,
-        100
-      )
-    )
-
-  );
+  gameEnded =
+  true;
 
 }
 
@@ -8575,11 +6683,11 @@ function saveGameHistory(){
    RESULT
 ========================================================= */
 
-function showGameResult(){
+function showResult(){
 
   $("resultIcon")
   .textContent =
-  score >= 1500
+  score >= 1200
 
   ?
 
@@ -8587,7 +6695,7 @@ function showGameResult(){
 
   :
 
-  score >= 800
+  score >= 600
 
   ?
 
@@ -8623,58 +6731,6 @@ function showGameResult(){
   `x${bestCombo}`;
 
 
-  const review =
-  Object.values(
-    reviewMap
-  )
-  .sort(
-    (
-      a,
-      b
-    ) =>
-    b.count-a.count
-  );
-
-
-  $("resultReview")
-  .innerHTML =
-  review.length
-
-  ?
-
-  review
-  .map(
-    item => {
-
-      return`
-        <span
-          class="review-chip"
-          title="${escapeHTML(item.meaning)}"
-        >
-          ${escapeHTML(item.word)}
-          ×${item.count}
-        </span>
-      `;
-
-    }
-  )
-  .join("")
-
-  :
-
-  `
-    <span
-      style="
-        color:#168054;
-        font-size:9px;
-        font-weight:900;
-      "
-    >
-      ✓ Không có từ nào cần ôn lại.
-    </span>
-  `;
-
-
   $("resultOverlay")
   .classList
   .remove(
@@ -8685,160 +6741,8 @@ function showGameResult(){
 
 
 /* =========================================================
-   CLEAR GAME
+   REPLAY
 ========================================================= */
-
-function clearGame(){
-
-  clearInterval(
-    gameTimer
-  );
-
-
-  clearTimeout(
-    roundTimer
-  );
-
-
-  if(catcherAnimation){
-
-    cancelAnimationFrame(
-      catcherAnimation
-    );
-
-  }
-
-
-  if(racerAnimation){
-
-    cancelAnimationFrame(
-      racerAnimation
-    );
-
-  }
-
-
-  if(balloonAnimation){
-
-    cancelAnimationFrame(
-      balloonAnimation
-    );
-
-  }
-
-
-  clearFruits();
-
-  clearRacerAnswers();
-
-  clearBalloons();
-
-
-  gameTimer =
-  null;
-
-
-  roundTimer =
-  null;
-
-
-  catcherAnimation =
-  null;
-
-
-  racerAnimation =
-  null;
-
-
-  balloonAnimation =
-  null;
-
-
-  catcherChanging =
-  false;
-
-
-  racerChanging =
-  false;
-
-
-  balloonChanging =
-  false;
-
-
-  matchFirst =
-  null;
-
-
-  matchSecond =
-  null;
-
-
-  matchLocked =
-  false;
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function quitGame(){
-
-  const confirmed =
-  confirm(
-    "Thoát game hiện tại? Điểm lượt này sẽ không được lưu."
-  );
-
-
-  if(!confirmed){
-
-    return;
-
-  }
-
-
-  clearGame();
-
-
-  backToCollection();
-
-}
-
-
-function backToCollection(){
-
-  clearGame();
-
-
-  $("resultOverlay")
-  .classList
-  .add(
-    "hidden"
-  );
-
-
-  hideAllScreens();
-
-
-  $("collectionScreen")
-  .classList
-  .remove(
-    "hidden"
-  );
-
-
-  renderCollectionStats();
-
-  renderWordList();
-
-  updateGameButtons();
-
-  renderReviewBanner();
-
-}
-
 
 function replayGame(){
 
@@ -8849,7 +6753,7 @@ function replayGame(){
   );
 
 
-  const replayMap = {
+  const games = {
 
     whack:
       startWhack,
@@ -8864,7 +6768,7 @@ function replayGame(){
       startMatch,
 
     quiz:
-      startSpeedQuiz,
+      startQuiz,
 
     balloon:
       startBalloon
@@ -8872,52 +6776,13 @@ function replayGame(){
   };
 
 
-  const fn =
-  replayMap[lastGame];
+  if(
+    games[lastGame]
+  ){
 
-
-  if(fn){
-
-    fn();
+    games[lastGame]();
 
   }
-
-}
-
-
-/* =========================================================
-   ERROR
-========================================================= */
-
-function showDataError(){
-
-  $("homeScreen")
-  .innerHTML =
-  `
-    <div class="error-box">
-
-      <h2>
-        ⚠️ Không tải được Vocabulary
-      </h2>
-
-      <p>
-        Kiểm tra file:
-      </p>
-
-      <code>
-        Practice/Vocabulary/vocab-data.js
-      </code>
-
-      <p>
-        Dòng đầu phải là:
-      </p>
-
-      <code>
-        window.VOCABULARY_DATA = [
-      </code>
-
-    </div>
-  `;
 
 }
 
@@ -8930,28 +6795,67 @@ function init(){
 
   if(
     window.VOCABULARY_LOAD_ERROR
-
     ||
-
-    !Array.isArray(
-      window.VOCABULARY_DATA
-    )
-
-    ||
-
     !VOCABULARY_DATA.length
   ){
 
-    showDataError();
+    $("homeScreen")
+    .innerHTML =
+    `
+      <div
+        style="
+          padding:30px;
+          background:#fff;
+          border-radius:18px;
+          margin-top:20px;
+        "
+      >
+        <h2>
+          Không tải được vocab-data.js
+        </h2>
+      </div>
+    `;
+
 
     return;
 
   }
 
 
-  loadStudent();
+  try{
 
-  renderCategories();
+    const student =
+    JSON.parse(
+
+      localStorage.getItem(
+        "IELTS_PRACTICE_STUDENT"
+      )
+
+      ||
+
+      "null"
+
+    );
+
+
+    if(
+      student?.name
+      &&
+      student?.className
+    ){
+
+      $("studentInfo")
+      .textContent =
+      `${student.name} · ${student.className}`;
+
+    }
+
+  }
+
+  catch(error){}
+
+
+  renderHome();
 
 }
 
