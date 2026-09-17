@@ -1,69 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0"
->
-
-<title>Listening Part 3 · Thor Heyerdahl</title>
+<title>Listening Part 3 01 — Thor Heyerdahl</title>
 
 <style>
-
 :root{
-  --ink:#1b2440;
-  --muted:#697285;
-  --line:#e2e6ee;
-  --purple:#6245c1;
-  --purple2:#8367dd;
-  --blue:#2f7de1;
-  --green:#168b59;
-  --red:#c3414d;
-  --orange:#d77a20;
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
   --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+  --soft:#f8f7ff;
 }
 
 *{
   box-sizing:border-box;
 }
 
-html{
-  scroll-behavior:smooth;
-}
-
+html,
 body{
   margin:0;
+  min-height:100%;
 
   font-family:
     Inter,
     system-ui,
     -apple-system,
-    BlinkMacSystemFont,
     "Segoe UI",
     Arial,
     sans-serif;
 
   color:var(--ink);
-
-  background:
-    radial-gradient(
-      circle at 5% 0%,
-      rgba(151,112,240,.13),
-      transparent 25%
-    ),
-    radial-gradient(
-      circle at 95% 0%,
-      rgba(98,179,255,.12),
-      transparent 24%
-    ),
-    var(--bg);
+  background:var(--bg);
 }
 
 button,
-select,
-input{
+input,
+select{
   font:inherit;
 }
 
@@ -80,99 +61,102 @@ button{
    HEADER
 ========================================================= */
 
-.topbar{
+.top{
   position:sticky;
-
   top:0;
-
   z-index:30;
 
   background:
-    rgba(255,255,255,.94);
-
-  backdrop-filter:
-    blur(13px);
-
-  border-bottom:
-    1px solid
-    var(--line);
-}
-
-.top-inner{
-  width:
-    min(
-      1250px,
-      calc(100% - 22px)
+    linear-gradient(
+      100deg,
+      #1c0e49,
+      #281260,
+      #37217e
     );
 
-  min-height:60px;
+  color:#fff;
+
+  box-shadow:
+    0 8px 22px
+    rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1180px,calc(100% - 18px));
+  min-height:62px;
 
   margin:auto;
 
   display:flex;
-
   align-items:center;
+  justify-content:space-between;
 
-  justify-content:
-    space-between;
+  gap:10px;
+}
 
-  gap:12px;
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  min-width:0;
 }
 
 .back{
-  padding:
-    8px 10px;
+  color:#fff;
+  text-decoration:none;
 
   border:
     1px solid
-    var(--line);
+    rgba(255,255,255,.25);
+
+  padding:7px 10px;
 
   border-radius:9px;
 
-  background:#fff;
-
-  color:#4e397f;
-
-  text-decoration:none;
-
-  font-size:10px;
-
+  font-size:11px;
   font-weight:900;
+
+  white-space:nowrap;
 }
 
-.header-title{
-  color:#24194d;
-
-  font-size:13px;
-
+.brand{
   font-weight:950;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-.header-right{
-  display:flex;
+.student{
+  font-size:11px;
+  font-weight:800;
 
-  align-items:center;
+  background:
+    rgba(255,255,255,.1);
 
-  gap:10px;
+  border:
+    1px solid
+    rgba(255,255,255,.18);
 
-  color:#747c8d;
+  padding:7px 10px;
 
-  font-size:10px;
-
-  font-weight:850;
+  border-radius:999px;
 }
 
 .timer{
-  padding:
-    6px 9px;
+  font-variant-numeric:
+    tabular-nums;
 
-  border-radius:8px;
-
-  background:#f0edff;
-
-  color:#6045ad;
-
+  font-size:19px;
   font-weight:950;
+
+  background:
+    rgba(255,255,255,.13);
+
+  padding:8px 11px;
+
+  border-radius:9px;
 }
 
 
@@ -181,201 +165,100 @@ button{
 ========================================================= */
 
 .page{
-  width:
-    min(
-      1250px,
-      calc(100% - 22px)
-    );
+  width:min(1180px,calc(100% - 18px));
 
   margin:auto;
 
   padding:
-    22px 0 60px;
+    18px 0 50px;
 }
-
-
-/* =========================================================
-   TITLE
-========================================================= */
 
 .hero{
-  padding:22px;
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
 
-  border:
-    1px solid
-    rgba(255,255,255,.94);
+  gap:18px;
 
-  border-radius:19px;
-
-  background:
-    linear-gradient(
-      120deg,
-      #fff,
-      #faf7ff 58%,
-      #eef7ff
-    );
-
-  box-shadow:
-    0 8px 22px
-    rgba(40,30,80,.045);
-}
-
-.eyebrow{
-  color:#6548b4;
-
-  font-size:9px;
-
-  font-weight:950;
-
-  letter-spacing:.1em;
-
-  text-transform:uppercase;
+  margin-bottom:13px;
 }
 
 .hero h1{
-  margin:
-    6px 0 3px;
+  margin:0;
+
+  color:#21164b;
 
   font-size:27px;
 
-  letter-spacing:-.035em;
+  letter-spacing:-.03em;
 }
 
 .hero p{
-  margin:0;
+  margin:
+    4px 0 0;
 
-  color:#778091;
+  color:var(--muted);
 
-  font-size:10.5px;
+  font-size:11.5px;
 }
 
 
 /* =========================================================
-   AUDIO PLAYER
+   PROGRESS
 ========================================================= */
 
-.audio-card{
-  margin-top:12px;
-
-  padding:15px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:15px;
-
-  background:#fff;
+.progress-wrap{
+  min-width:260px;
 }
 
-.audio-title{
+.progress-row{
   display:flex;
-
-  align-items:center;
-
-  justify-content:
-    space-between;
+  justify-content:space-between;
 
   gap:10px;
 
-  margin-bottom:11px;
+  margin-bottom:5px;
+
+  color:var(--muted);
+
+  font-size:10.5px;
+  font-weight:850;
 }
 
-.audio-title b{
-  font-size:11px;
+.progress{
+  height:7px;
+
+  background:#e5e8ef;
+
+  border-radius:999px;
+
+  overflow:hidden;
 }
 
-.audio-title span{
-  color:#8a919e;
+.progress i{
+  display:block;
 
-  font-size:9px;
-}
+  width:0;
+  height:100%;
 
-.audio-controls{
-  display:grid;
-
-  grid-template-columns:
-    auto auto auto 1fr auto auto;
-
-  align-items:center;
-
-  gap:8px;
-}
-
-.audio-btn{
-  min-width:39px;
-
-  padding:
-    7px 9px;
-
-  border:
-    1px solid
-    #dadde6;
-
-  border-radius:8px;
-
-  background:#fff;
-
-  color:#493878;
-
-  font-size:10px;
-
-  font-weight:900;
-}
-
-.play-btn{
   background:
     linear-gradient(
-      135deg,
-      #6245c1,
-      #8164dc
+      90deg,
+      var(--purple2),
+      var(--blue)
     );
 
-  color:#fff;
-
-  border-color:transparent;
-}
-
-.seek{
-  width:100%;
-}
-
-.audio-time{
-  min-width:76px;
-
-  color:#747c8d;
-
-  text-align:center;
-
-  font-size:9px;
-
-  font-weight:850;
-}
-
-.speed{
-  padding:7px;
-
-  border:
-    1px solid #dadde6;
-
-  border-radius:8px;
-
-  background:#fff;
-
-  font-size:9px;
-
-  font-weight:850;
+  transition:
+    width .2s ease;
 }
 
 
 /* =========================================================
-   QUESTION SECTIONS
+   AUDIO
 ========================================================= */
 
-.question-section{
-  margin-top:14px;
-
-  padding:18px;
+.audio-panel{
+  background:#fff;
 
   border:
     1px solid
@@ -383,79 +266,347 @@ button{
 
   border-radius:16px;
 
-  background:#fff;
+  padding:14px 15px;
+
+  margin-bottom:12px;
+
+  box-shadow:
+    0 6px 18px
+    rgba(35,25,75,.04);
 }
 
-.question-section h2{
-  margin:
-    0 0 5px;
+.audio-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-  font-size:15px;
+  gap:12px;
 }
 
-.instruction{
-  margin:
-    0 0 15px;
+.audio-title{
+  display:flex;
+  align-items:center;
 
-  color:#687184;
+  gap:10px;
+}
+
+.audio-icon{
+  width:38px;
+  height:38px;
+
+  border-radius:11px;
+
+  background:#eee9ff;
+
+  color:#5135a6;
+
+  display:grid;
+  place-items:center;
+
+  font-size:18px;
+}
+
+.audio-title b{
+  display:block;
+
+  color:#21164b;
+
+  font-size:12px;
+}
+
+.audio-title span{
+  display:block;
+
+  margin-top:2px;
+
+  color:var(--muted);
 
   font-size:10px;
-
-  line-height:1.55;
 }
 
-.instruction em{
-  color:#514170;
+.audio-time{
+  font-size:11px;
+  font-weight:950;
 
+  color:#281260;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+.audio-controls{
+  display:grid;
+
+  grid-template-columns:
+    auto
+    auto
+    1fr
+    auto
+    auto
+    auto;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:12px;
+}
+
+.audio-btn{
+  border:
+    1px solid
+    #dddfe8;
+
+  background:#fff;
+
+  color:#32255c;
+
+  border-radius:9px;
+
+  min-height:36px;
+
+  padding:0 10px;
+
+  font-size:11px;
+  font-weight:900;
+}
+
+.audio-btn:hover{
+  background:#f7f5ff;
+}
+
+.audio-btn.primary{
+  width:42px;
+
+  background:#281260;
+
+  color:#fff;
+
+  border-color:#281260;
+
+  font-size:14px;
+}
+
+.seek{
+  width:100%;
+
+  accent-color:#5135a6;
+}
+
+.speed-wrap,
+.volume-wrap{
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
   font-weight:850;
 }
 
-.question{
-  padding:
-    14px 0;
-
-  border-bottom:
+.speed-wrap select{
+  border:
     1px solid
-    #edf0f4;
-}
+    #d9dde7;
 
-.question:last-child{
-  border-bottom:0;
-}
+  background:#fff;
 
-.q-title{
-  margin-bottom:10px;
+  border-radius:8px;
 
-  color:#242b40;
+  padding:7px 6px;
 
-  font-size:11px;
+  color:#33265d;
 
   font-weight:900;
+}
+
+.volume{
+  width:80px;
+
+  accent-color:#5135a6;
+}
+
+.practice-note{
+  margin-top:8px;
+
+  padding:7px 9px;
+
+  background:#f8f7ff;
+
+  border-radius:8px;
+
+  color:#6f7890;
+
+  font-size:9.7px;
+
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   PAPER
+========================================================= */
+
+.paper{
+  background:#fff;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 8px 24px
+    rgba(35,25,75,.045);
+}
+
+.paper-inner{
+  padding:
+    22px 28px 26px;
+}
+
+.instructions{
+  margin-bottom:20px;
+}
+
+.instructions h3{
+  margin:
+    0 0 7px;
+
+  color:#21164b;
+
+  font-size:17px;
+}
+
+.instructions p{
+  margin:3px 0;
+
+  color:#5f6677;
+
+  font-size:11.5px;
 
   line-height:1.55;
 }
 
-.q-number{
-  color:#5f43b0;
+.rule{
+  display:inline-block;
+
+  margin-top:7px;
+
+  padding:7px 10px;
+
+  border-radius:8px;
+
+  background:#f0ecff;
+
+  color:#5c43b2;
+
+  font-size:10.5px;
+  font-weight:900;
+}
+
+
+/* =========================================================
+   QUESTION BLOCK
+========================================================= */
+
+.question-block{
+  width:min(860px,100%);
+
+  margin:
+    0 auto 18px;
+
+  padding:
+    20px 22px;
+
+  border:
+    1px solid
+    #dfe3eb;
+
+  background:#fff;
+
+  border-radius:12px;
+}
+
+.question-block + .question-block{
+  margin-top:14px;
+}
+
+.question-title{
+  margin:
+    0 0 5px;
+
+  color:#21164b;
+
+  font-size:14px;
+  font-weight:950;
+}
+
+.question-instruction{
+  margin:
+    0 0 17px;
+
+  color:#626a7a;
+
+  font-size:11px;
+
+  line-height:1.55;
+}
+
+.main-question{
+  margin-bottom:14px;
+
+  font-size:12.5px;
+  font-weight:900;
+
+  line-height:1.6;
+}
+
+.qno{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  min-width:29px;
+  height:24px;
 
   margin-right:5px;
+
+  padding:0 6px;
+
+  border-radius:6px;
+
+  background:#eee9ff;
+
+  color:#4b318e;
+
+  font-size:10px;
+  font-weight:950;
 }
 
 .options{
   display:grid;
 
-  gap:6px;
+  gap:7px;
 }
 
 .option{
-  display:flex;
+  display:grid;
 
-  align-items:flex-start;
+  grid-template-columns:
+    24px 20px 1fr;
 
-  gap:8px;
+  align-items:start;
 
-  padding:
-    8px 10px;
+  gap:5px;
+
+  padding:9px 11px;
 
   border:
     1px solid
@@ -467,168 +618,49 @@ button{
 
   cursor:pointer;
 
-  transition:.12s;
+  transition:.12s ease;
 }
 
 .option:hover{
-  border-color:#c8bbee;
+  border-color:#c9bdeb;
 
-  background:#fcfbff;
+  background:#faf9ff;
 }
 
 .option.selected{
-  border-color:#765bc9;
+  border-color:#745bc6;
 
   background:#f2efff;
 }
 
 .option input{
-  margin-top:2px;
+  margin:
+    3px 0 0;
 
-  accent-color:#6649bc;
+  accent-color:#5135a6;
 }
 
 .letter{
-  width:16px;
+  color:#4c367f;
 
-  color:#49377c;
-
-  font-size:10px;
-
+  font-size:11px;
   font-weight:950;
 }
 
 .option-text{
-  font-size:10.5px;
+  color:#343b4b;
 
-  line-height:1.45;
+  font-size:11.5px;
+
+  line-height:1.5;
 }
 
-
-/* =========================================================
-   SUBMIT
-========================================================= */
-
-.submit-area{
-  margin-top:15px;
-
-  padding:16px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:
-    space-between;
-
-  gap:12px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:14px;
-
-  background:#fff;
+.question-block.submitted-correct{
+  border-color:#9ed7bb;
 }
 
-.answer-status{
-  color:#7d8595;
-
-  font-size:10px;
-}
-
-.submit-btn{
-  padding:
-    10px 18px;
-
-  border:0;
-
-  border-radius:9px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #6144bd,
-      #8568df
-    );
-
-  color:#fff;
-
-  font-size:10.5px;
-
-  font-weight:950;
-}
-
-
-/* =========================================================
-   RESULT
-========================================================= */
-
-.result{
-  margin-top:16px;
-
-  padding:20px;
-
-  border-radius:16px;
-
-  color:#fff;
-
-  background:
-    linear-gradient(
-      125deg,
-      #29166d,
-      #6348bd
-    );
-}
-
-.result-grid{
-  display:grid;
-
-  grid-template-columns:
-    auto 1fr;
-
-  gap:18px;
-
-  align-items:center;
-}
-
-.score{
-  min-width:100px;
-
-  text-align:center;
-}
-
-.score-big{
-  font-size:42px;
-
-  font-weight:950;
-
-  line-height:1;
-}
-
-.score-small{
-  margin-top:4px;
-
-  opacity:.7;
-
-  font-size:9px;
-
-  font-weight:850;
-}
-
-.result-copy b{
-  display:block;
-
-  margin-bottom:5px;
-
-  font-size:14px;
-}
-
-.result-copy span{
-  font-size:10px;
-
-  opacity:.78;
+.question-block.submitted-wrong{
+  border-color:#e9b8bf;
 }
 
 
@@ -636,124 +668,217 @@ button{
    REVIEW
 ========================================================= */
 
-.review-section{
-  margin-top:18px;
-}
+.review-list{
+  width:min(860px,100%);
 
-.review-section h2{
   margin:
-    0 0 5px;
-
-  font-size:18px;
+    14px auto 0;
 }
 
-.review-intro{
-  margin:
-    0 0 12px;
+.inline-review{
+  margin-top:10px;
 
-  color:#747c8d;
-
-  font-size:10px;
-}
-
-.review-card{
-  margin-bottom:9px;
-
-  padding:14px;
+  padding:12px;
 
   border:
     1px solid
-    #ead6d8;
+    #f0d0d5;
 
   border-left:
     4px solid
-    #cf4a55;
+    var(--bad);
 
-  border-radius:11px;
+  border-radius:9px;
 
-  background:#fff;
+  background:#fffafb;
+
+  font-size:11px;
+
+  line-height:1.6;
 }
 
-.review-q{
-  font-size:11px;
+.review-title{
+  color:#21164b;
 
   font-weight:950;
 
-  line-height:1.5;
+  margin-bottom:7px;
 }
 
-.review-line{
-  margin-top:7px;
+.review-row{
+  display:grid;
 
-  font-size:9.8px;
+  grid-template-columns:
+    120px 1fr;
 
-  line-height:1.55;
+  gap:5px 8px;
+
+  margin:4px 0;
 }
 
-.review-line b{
-  color:#4a4259;
+.review-label{
+  color:var(--muted);
+
+  font-weight:800;
 }
 
-.wrong{
-  color:#c13f4b;
+.review-user{
+  color:var(--bad);
 
   font-weight:900;
 }
 
-.correct{
-  color:#16895a;
+.review-correct{
+  color:var(--good);
 
   font-weight:900;
 }
 
-.evidence{
-  margin-top:9px;
+.explain-box{
+  margin-top:11px;
 
-  padding:9px 10px;
+  padding:11px;
+
+  background:#f8f7ff;
 
   border:
-    1px solid #e1ddf0;
+    1px solid
+    #ddd6fb;
+
+  border-radius:9px;
+}
+
+.explain-label{
+  margin-bottom:4px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.explain-text{
+  padding:8px 9px;
+
+  background:#fff;
+
+  border:
+    1px solid
+    #e5e7ee;
+
+  border-radius:7px;
+
+  line-height:1.65;
+}
+
+.transcript-evidence{
+  position:relative;
+
+  margin-top:5px;
+
+  padding:
+    10px 36px 10px 10px;
+
+  background:#eef3ff;
+
+  border:
+    1px solid
+    #d6dffb;
+
+  border-left:
+    3px solid
+    #5773d9;
+
+  border-radius:7px;
+
+  color:#293a70;
+
+  line-height:1.65;
+
+  cursor:pointer;
+
+  transition:.15s ease;
+}
+
+.transcript-evidence:hover{
+  background:#e5ecff;
+
+  transform:
+    translateY(-1px);
+}
+
+.transcript-evidence::after{
+  content:"▶";
+
+  position:absolute;
+
+  right:12px;
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  font-size:13px;
+  font-weight:950;
+
+  color:#5135a6;
+}
+
+.evidence-help{
+  margin-top:5px;
+
+  color:#7b8292;
+
+  font-size:9.5px;
+}
+
+.review-actions{
+  display:flex;
+
+  gap:7px;
+
+  flex-wrap:wrap;
+
+  margin-top:8px;
+}
+
+.review-btn{
+  border:
+    1px solid
+    #d9d3f1;
+
+  background:#fff;
+
+  color:#4b318e;
 
   border-radius:8px;
 
-  background:#faf9ff;
+  padding:7px 9px;
 
-  color:#554777;
-
-  font-size:9.7px;
-
-  line-height:1.6;
-
-  cursor:pointer;
+  font-size:10px;
+  font-weight:900;
 }
 
-.evidence:hover{
-  background:#f4f0ff;
+.review-btn:hover{
+  background:#f4f1ff;
 }
 
-.analysis{
+.conclusion{
   margin-top:8px;
 
-  color:#606879;
-
-  font-size:9.8px;
-
-  line-height:1.6;
-}
-
-.all-correct{
-  padding:18px;
+  padding:8px 9px;
 
   border:
-    1px solid #cfe9dc;
+    1px solid
+    #bde5ce;
 
-  border-radius:12px;
+  border-radius:7px;
 
-  background:#f5fff9;
+  background:#f2fff8;
 
-  color:#19734f;
-
-  font-size:11px;
+  color:#126b48;
 
   font-weight:900;
 }
@@ -763,128 +888,365 @@ button{
    TRANSCRIPT
 ========================================================= */
 
-.transcript-section{
-  margin-top:18px;
+.transcript-panel{
+  width:min(860px,100%);
 
-  padding:18px;
+  margin:
+    18px auto 0;
 
   border:
     1px solid
     var(--line);
 
-  border-radius:15px;
+  border-radius:12px;
 
   background:#fff;
+
+  overflow:hidden;
 }
 
-.transcript-section h2{
-  margin:
-    0 0 5px;
+.transcript-head{
+  display:flex;
 
-  font-size:17px;
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  padding:12px 14px;
+
+  background:#faf9ff;
+
+  border-bottom:
+    1px solid
+    var(--line);
 }
 
-.transcript-note{
-  margin:
-    0 0 13px;
+.transcript-head b{
+  color:#281260;
 
-  color:#818897;
+  font-size:12px;
+}
+
+.transcript-head span{
+  color:#7b8292;
 
   font-size:9.5px;
 }
 
-.transcript p{
-  margin:
-    0 0 10px;
+.transcript-body{
+  max-height:540px;
 
-  color:#434b5b;
+  overflow:auto;
 
-  font-size:10px;
+  padding:12px 14px;
 
-  line-height:1.7;
+  scroll-behavior:smooth;
+}
+
+.tline{
+  padding:8px 9px;
+
+  border-radius:8px;
+
+  font-size:11px;
+
+  line-height:1.65;
+
+  transition:.25s ease;
+}
+
+.tline + .tline{
+  margin-top:2px;
 }
 
 .speaker{
-  color:#30215f;
+  font-weight:950;
+
+  color:#281260;
+
+  margin-right:6px;
+}
+
+.answer-word{
+  background:#fff0a3;
+
+  color:#332750;
+
+  padding:1px 3px;
+
+  border-radius:3px;
 
   font-weight:950;
 }
 
-.cue{
-  padding:
-    1px 3px;
-
-  border-radius:4px;
-
-  background:#f1edff;
-
-  color:#5840a5;
-
+.tline.cue{
   cursor:pointer;
 }
 
-.cue:hover{
-  background:#dfd7ff;
+.tline.cue:hover{
+  background:#f7f5ff;
+}
+
+.tline.transcript-focus{
+  background:#fff1a8;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(245,190,35,.22),
+    0 0 18px
+    rgba(245,190,35,.30);
+
+  animation:
+    transcriptPulse .85s ease 2;
+}
+
+@keyframes transcriptPulse{
+
+  50%{
+    box-shadow:
+      0 0 0 6px
+      rgba(245,190,35,.30),
+      0 0 24px
+      rgba(245,190,35,.55);
+  }
+
 }
 
 
 /* =========================================================
-   MODAL
+   HIGHLIGHT + TAKE NOTE
 ========================================================= */
 
+mark.user-highlight{
+  background:#fff29a;
+
+  color:inherit;
+
+  border-radius:3px;
+
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+
+  border-bottom:
+    2px dotted
+    #e28b19;
+
+  border-radius:2px;
+
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+
+  z-index:90;
+
+  display:none;
+
+  gap:5px;
+
+  padding:6px;
+
+  background:#21164b;
+
+  border-radius:10px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+
+  background:#fff;
+
+  color:#35285e;
+
+  border-radius:7px;
+
+  padding:7px 9px;
+
+  font-size:10.5px;
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+
+  background:#fff1f3;
+}
+
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottom{
+  position:sticky;
+
+  bottom:0;
+
+  z-index:20;
+
+  width:min(1180px,calc(100% - 18px));
+
+  margin:auto;
+
+  padding:
+    9px 0 6px;
+
+  background:
+    linear-gradient(
+      to top,
+      var(--bg) 75%,
+      rgba(245,247,251,.88)
+    );
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px;
+
+  flex:1;
+}
+
+.nav button{
+  width:34px;
+  height:31px;
+
+  border:
+    1px solid
+    var(--line);
+
+  background:#fff;
+
+  border-radius:7px;
+
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7 !important;
+
+  border-color:#8ed6b4 !important;
+}
+
+.nav button.wrong{
+  background:#f4ddd8 !important;
+
+  border-color:#f0b5bd !important;
+}
+
+.submit,
+.btn{
+  border:0;
+
+  background:
+    linear-gradient(
+      100deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  color:#fff;
+
+  border-radius:9px;
+
+  padding:10px 15px;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   START + RESULT
+========================================================= */
+
+.start,
 .overlay{
   position:fixed;
 
   inset:0;
 
-  z-index:100;
+  z-index:120;
 
   display:grid;
-
   place-items:center;
 
   padding:18px;
 
   background:
-    rgba(17,12,40,.64);
+    rgba(16,12,40,.64);
 }
 
-.modal{
-  width:min(430px,100%);
+.overlay{
+  z-index:110;
+}
+
+.start-card,
+.result{
+  width:min(500px,100%);
+
+  max-height:88vh;
+
+  overflow:auto;
 
   padding:22px;
 
-  border-radius:17px;
-
   background:#fff;
 
+  border-radius:19px;
+
   box-shadow:
-    0 25px 70px
-    rgba(20,12,55,.30);
+    0 24px 70px
+    rgba(18,10,53,.28);
 }
 
-.modal h2{
+.start-card h2{
   margin:
-    5px 0 7px;
+    5px 0 6px;
 
-  color:#25194d;
-
-  font-size:20px;
+  color:#21164b;
 }
 
-.modal p{
+.start-card p{
   margin:
-    0 0 13px;
+    0 0 14px;
 
-  color:#788090;
+  color:var(--muted);
 
-  font-size:10px;
-
-  line-height:1.5;
+  font-size:11.5px;
 }
 
 .field{
-  margin-top:9px;
+  margin:9px 0;
 }
 
 .field label{
@@ -892,8 +1254,7 @@ button{
 
   margin-bottom:5px;
 
-  font-size:9.5px;
-
+  font-size:10.5px;
   font-weight:900;
 }
 
@@ -903,34 +1264,44 @@ button{
   padding:10px;
 
   border:
-    1px solid #d8dce5;
+    1px solid
+    #d5d9e2;
 
-  border-radius:8px;
-
-  outline:none;
+  border-radius:9px;
 }
 
-.start-btn{
+.start-card .btn{
   width:100%;
 
-  margin-top:11px;
+  margin-top:10px;
+}
 
-  padding:10px;
+.score{
+  margin:
+    7px 0;
 
-  border:0;
+  color:#21164b;
 
-  border-radius:8px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #6245c1,
-      #8567df
-    );
-
-  color:#fff;
-
+  font-size:38px;
   font-weight:950;
+}
+
+.result h2{
+  margin:
+    0 0 5px;
+
+  color:#21164b;
+}
+
+.result p{
+  margin:
+    4px 0;
+
+  color:#6f7890;
+
+  font-size:11px;
+
+  line-height:1.55;
 }
 
 
@@ -938,42 +1309,56 @@ button{
    MOBILE
 ========================================================= */
 
-@media(max-width:700px){
+@media(max-width:760px){
 
-  .header-right span:first-child{
+  .hero{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+  .paper-inner{
+    padding:
+      16px 10px 22px;
+  }
+
+  .student{
     display:none;
+  }
+
+  .question-block{
+    padding:
+      16px 13px;
   }
 
   .audio-controls{
     grid-template-columns:
-      repeat(3,auto);
-
-    gap:7px;
+      auto
+      auto
+      1fr
+      auto;
   }
 
-  .seek{
+  .speed-wrap{
     grid-column:
-      1 / -1;
+      1 / 3;
   }
 
-  .result-grid{
-    grid-template-columns:1fr;
+  .volume-wrap{
+    grid-column:
+      3 / 5;
 
-    text-align:center;
+    justify-content:flex-end;
   }
 
-  .submit-area{
-    flex-direction:column;
-
-    align-items:stretch;
-  }
-
-  .submit-btn{
-    width:100%;
+  .volume{
+    width:95px;
   }
 
 }
-
 </style>
 </head>
 
@@ -981,27 +1366,45 @@ button{
 <body>
 
 
-<!-- =====================================================
-     PROFILE MODAL
-===================================================== -->
+<!-- =========================================================
+     AUDIO
+========================================================= -->
+
+<audio
+  id="practiceAudio"
+  preload="metadata"
+  src="./Cam10-Test2-Section3.mp3"
+></audio>
+
+
+<!-- =========================================================
+     START
+========================================================= -->
 
 <div
-  class="overlay hidden"
-  id="profileOverlay"
+  id="start"
+  class="start"
 >
 
-  <div class="modal">
+  <div class="start-card">
 
-    <div class="eyebrow">
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      color:#6a4db4
+    ">
       LISTENING PRACTICE
     </div>
 
+
     <h2>
-      Trước khi bắt đầu
+      Part 3 · Practice 01
     </h2>
 
+
     <p>
-      Nhập đúng Họ tên và Lớp để hệ thống lưu lịch sử Practice của em.
+      Thor Heyerdahl · Questions 21–30
     </p>
 
 
@@ -1012,7 +1415,7 @@ button{
       </label>
 
       <input
-        id="profileName"
+        id="studentName"
         placeholder="Nguyễn Văn A"
       >
 
@@ -1026,7 +1429,7 @@ button{
       </label>
 
       <input
-        id="profileClass"
+        id="studentClass"
         placeholder="11A1"
       >
 
@@ -1034,10 +1437,82 @@ button{
 
 
     <button
-      class="start-btn"
-      onclick="saveProfile()"
+      class="btn"
+      onclick="startPractice()"
     >
-      Bắt đầu luyện tập
+      Bắt đầu luyện
+    </button>
+
+
+    <div
+      id="startError"
+      style="
+        margin-top:7px;
+        color:#b83345;
+        font-size:10.5px
+      "
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     RESULT
+========================================================= -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      color:#6a4db4
+    ">
+      PRACTICE RESULT
+    </div>
+
+
+    <h2>
+      Listening Part 3
+    </h2>
+
+
+    <p id="resultStudent"></p>
+
+
+    <div
+      class="score"
+      id="resultScore"
+    >
+      0 / 10
+    </div>
+
+
+    <p id="resultPercent"></p>
+
+
+    <p>
+      Sau khi đóng cửa sổ này, hệ thống chỉ hiển thị
+      phần chữa cho những câu chưa đúng.
+    </p>
+
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+      style="
+        width:100%;
+        margin-top:10px
+      "
+    >
+      Xem chữa bài
     </button>
 
   </div>
@@ -1045,38 +1520,42 @@ button{
 </div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      HEADER
-===================================================== -->
+========================================================= -->
 
-<header class="topbar">
+<header class="top">
 
-  <div class="top-inner">
+  <div class="topin">
 
-    <a
-      class="back"
-      href="../"
-    >
-      ← Part 3
-    </a>
+    <div class="left">
+
+      <a
+        class="back"
+        href="../"
+      >
+        ← Part 3
+      </a>
 
 
-    <div class="header-title">
-      🎧 Thor Heyerdahl
+      <div class="brand">
+        🎧 Listening Part 3 · 01
+      </div>
+
     </div>
 
 
-    <div class="header-right">
+    <div
+      class="student"
+      id="studentInfo"
+    ></div>
 
-      <span id="studentInfo"></span>
 
-      <span
-        class="timer"
-        id="timer"
-      >
-        00:00
-      </span>
-
+    <div
+      class="timer"
+      id="timer"
+    >
+      00:00
     </div>
 
   </div>
@@ -1084,55 +1563,104 @@ button{
 </header>
 
 
-<!-- =====================================================
-     PAGE
-===================================================== -->
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
 <main class="page">
 
 
+  <!-- HERO -->
+
   <section class="hero">
 
-    <div class="eyebrow">
-      LISTENING · PART 3 · PRACTICE 01
+    <div>
+
+      <h1>
+        Listening Part 3 · Practice 01
+      </h1>
+
+      <p>
+        Thor Heyerdahl · Questions 21–30
+      </p>
+
     </div>
 
-    <h1>
-      Thor Heyerdahl
-    </h1>
 
-    <p>
-      Questions 21–30 · Multiple Choice · Academic Discussion
-    </p>
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+
+        <span>
+          Tiến độ
+        </span>
+
+        <span id="progressText">
+          0/10 câu đã trả lời
+        </span>
+
+      </div>
+
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
 
   </section>
 
 
-  <!-- AUDIO -->
+  <!-- =====================================================
+       AUDIO PLAYER
+  ====================================================== -->
 
-  <section class="audio-card">
+  <section class="audio-panel">
 
-    <div class="audio-title">
+    <div class="audio-head">
 
-      <b>
-        🎧 Cam10 · Test 2 · Section 3
-      </b>
+      <div class="audio-title">
 
-      <span>
-        Audio length: approximately 7:31
-      </span>
+        <div class="audio-icon">
+          🎧
+        </div>
+
+
+        <div>
+
+          <b id="audioStatusTitle">
+            Audio luyện tập
+          </b>
+
+          <span id="audioStatusText">
+            Có thể nghe lại, tua và đổi tốc độ tùy ý
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="audio-time"
+        id="audioTime"
+      >
+        00:00 / 00:00
+      </div>
 
     </div>
 
 
-    <audio
-      id="audio"
-      preload="metadata"
-      src="./Cam10-Test2-Section3.mp3"
-    ></audio>
-
-
     <div class="audio-controls">
+
+      <button
+        class="audio-btn primary"
+        id="playPauseBtn"
+        onclick="togglePlay()"
+      >
+        ▶
+      </button>
+
 
       <button
         class="audio-btn"
@@ -1142,13 +1670,17 @@ button{
       </button>
 
 
-      <button
-        class="audio-btn play-btn"
-        id="playButton"
-        onclick="toggleAudio()"
+      <input
+        class="seek"
+        id="seekBar"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="0.1"
+        oninput="seekPreview(this.value)"
+        onchange="seekCommit(this.value)"
       >
-        ▶
-      </button>
 
 
       <button
@@ -1159,1263 +1691,1428 @@ button{
       </button>
 
 
-      <input
-        class="seek"
-        id="seek"
-        type="range"
-        min="0"
-        max="100"
-        value="0"
-        step="0.1"
-      >
+      <div class="speed-wrap">
 
+        <span>
+          Tốc độ
+        </span>
 
-      <div
-        class="audio-time"
-        id="audioTime"
-      >
-        00:00 / 00:00
-      </div>
-
-
-      <select
-        class="speed"
-        id="speed"
-      >
-
-        <option value="0.75">
-          0.75×
-        </option>
-
-        <option
-          value="1"
-          selected
+        <select
+          id="speedSelect"
+          onchange="setSpeed(this.value)"
         >
-          1×
-        </option>
 
-        <option value="1.25">
-          1.25×
-        </option>
+          <option value="0.5">
+            0.5×
+          </option>
 
-        <option value="1.5">
-          1.5×
-        </option>
+          <option value="0.75">
+            0.75×
+          </option>
 
-      </select>
+          <option
+            value="1"
+            selected
+          >
+            1×
+          </option>
 
+          <option value="1.25">
+            1.25×
+          </option>
+
+          <option value="1.5">
+            1.5×
+          </option>
+
+          <option value="2">
+            2×
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="volume-wrap">
+
+        <span>
+          Âm lượng
+        </span>
+
+        <input
+          class="volume"
+          id="volumeSlider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+          oninput="setVolume(this.value)"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="practice-note">
+      Đây là chế độ luyện tập: có thể dừng, nghe lại,
+      tua tới/lùi và thay đổi tốc độ bất cứ lúc nào.
+      Sau khi nộp bài, phần chữa sẽ cho phép nhảy thẳng
+      tới đoạn audio và transcript chứa đáp án.
     </div>
 
   </section>
 
 
   <!-- =====================================================
-       QUESTIONS 21-22
+       PAPER
   ====================================================== -->
 
-  <section class="question-section">
-
-    <h2>
-      Questions 21 and 22
-    </h2>
-
-    <p class="instruction">
-      <em>Choose TWO letters, A–E.</em>
-    </p>
-
-
-    <div class="question">
-
-      <div class="q-title">
-        <span class="q-number">
-          21–22
-        </span>
-
-        Which TWO hobbies was Thor Heyerdahl very interested in as a youth?
-      </div>
-
-
-      <div
-        class="options"
-        data-pair="21-22"
-      >
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q21_22"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            camping
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q21_22"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            climbing
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q21_22"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            collecting
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q21_22"
-            value="D"
-          >
-
-          <span class="letter">
-            D
-          </span>
-
-          <span class="option-text">
-            hunting
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q21_22"
-            value="E"
-          >
-
-          <span class="letter">
-            E
-          </span>
-
-          <span class="option-text">
-            reading
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =====================================================
-       QUESTIONS 23-24
-  ====================================================== -->
-
-  <section class="question-section">
-
-    <h2>
-      Questions 23 and 24
-    </h2>
-
-    <p class="instruction">
-      <em>Choose TWO letters, A–E.</em>
-    </p>
-
-
-    <div class="question">
-
-      <div class="q-title">
-
-        <span class="q-number">
-          23–24
-        </span>
-
-        Which do the speakers say are the TWO reasons why Heyerdahl went to live on an island?
-
-      </div>
-
-
-      <div
-        class="options"
-        data-pair="23-24"
-      >
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q23_24"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            to examine ancient carvings
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q23_24"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            to experience an isolated place
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q23_24"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            to formulate a new theory
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q23_24"
-            value="D"
-          >
-
-          <span class="letter">
-            D
-          </span>
-
-          <span class="option-text">
-            to learn survival skills
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="checkbox"
-            name="q23_24"
-            value="E"
-          >
-
-          <span class="letter">
-            E
-          </span>
-
-          <span class="option-text">
-            to study the impact of an extreme environment
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =====================================================
-       QUESTIONS 25-30
-  ====================================================== -->
-
-  <section class="question-section">
-
-    <h2>
-      Questions 25–30
-    </h2>
-
-    <p class="instruction">
-      Choose the correct letter,
-      <b>A, B or C.</b>
-    </p>
-
-
-    <div style="
-      margin-bottom:7px;
-      font-size:12px;
-      font-weight:950;
-      color:#322457;
-    ">
-      The later life of Thor Heyerdahl
-    </div>
-
-
-    <!-- Q25 -->
-
-    <div class="question">
-
-      <div class="q-title">
-
-        <span class="q-number">
-          25
-        </span>
-
-        According to Victor and Olivia, academics thought that Polynesian migration from the east was impossible due to
-
-      </div>
-
-
-      <div class="options">
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q25"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            the fact that Eastern countries were far away.
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q25"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            the lack of materials for boat building.
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q25"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            the direction of the winds and currents.
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-
-    <!-- Q26 -->
-
-    <div class="question">
-
-      <div class="q-title">
-
-        <span class="q-number">
-          26
-        </span>
-
-        Which do the speakers agree was the main reason for Heyerdahl’s raft journey?
-
-      </div>
-
-
-      <div class="options">
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q26"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            to overcome a research setback
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q26"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            to demonstrate a personal quality
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q26"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            to test a new theory
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-
-    <!-- Q27 -->
-
-    <div class="question">
-
-      <div class="q-title">
-
-        <span class="q-number">
-          27
-        </span>
-
-        What was most important to Heyerdahl about his raft journey?
-
-      </div>
-
-
-      <div class="options">
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q27"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            the fact that he was the first person to do it
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q27"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            the speed of crossing the Pacific
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q27"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            the use of authentic construction methods
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-
-    <!-- Q28 -->
-
-    <div class="question">
-
-      <div class="q-title">
-
-        <span class="q-number">
-          28
-        </span>
-
-        Why did Heyerdahl go to Easter Island?
-
-      </div>
-
-
-      <div class="options">
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q28"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            to build a stone statue
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q28"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            to sail a reed boat
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q28"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            to learn the local language
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-
-    <!-- Q29 -->
-
-    <div class="question">
-
-      <div class="q-title">
-
-        <span class="q-number">
-          29
-        </span>
-
-        In Olivia’s opinion, Heyerdahl’s greatest influence was on
-
-      </div>
-
-
-      <div class="options">
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q29"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            theories about Polynesian origins.
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q29"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            the development of archaeological methodology.
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q29"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            establishing archaeology as an academic subject.
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-
-    <!-- Q30 -->
-
-    <div class="question">
-
-      <div class="q-title">
-
-        <span class="q-number">
-          30
-        </span>
-
-        Which criticism do the speakers make of William Oliver’s textbook?
-
-      </div>
-
-
-      <div class="options">
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q30"
-            value="A"
-          >
-
-          <span class="letter">
-            A
-          </span>
-
-          <span class="option-text">
-            Its style is out of date.
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q30"
-            value="B"
-          >
-
-          <span class="letter">
-            B
-          </span>
-
-          <span class="option-text">
-            Its content is over-simplified.
-          </span>
-
-        </label>
-
-
-        <label class="option">
-
-          <input
-            type="radio"
-            name="q30"
-            value="C"
-          >
-
-          <span class="letter">
-            C
-          </span>
-
-          <span class="option-text">
-            Its methodology is flawed.
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- SUBMIT -->
-
-  <section class="submit-area">
+  <section class="paper">
 
     <div
-      class="answer-status"
-      id="answerStatus"
+      class="paper-inner"
+      id="questionsRoot"
     >
-      0/10 answers completed
-    </div>
 
 
-    <button
-      class="submit-btn"
-      id="submitButton"
-      onclick="submitPractice()"
-    >
-      Submit answers
-    </button>
+      <!-- =================================================
+           QUESTIONS 21–22
+      ================================================== -->
 
-  </section>
+      <section
+        class="question-block"
+        id="questionGroup21"
+      >
+
+        <div class="question-title">
+          Questions 21 and 22
+        </div>
 
 
-  <!-- RESULT -->
+        <p class="question-instruction">
+          <b>Choose TWO letters, A–E.</b>
+        </p>
 
-  <section
-    class="result hidden"
-    id="resultBox"
-  >
 
-    <div class="result-grid">
+        <div class="main-question">
 
-      <div class="score">
+          <span class="qno">
+            21–22
+          </span>
+
+          Which TWO hobbies was Thor Heyerdahl very interested in as a youth?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="A"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              camping
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="B"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              climbing
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="C"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              collecting
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="D"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              D
+            </span>
+
+            <span class="option-text">
+              hunting
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="E"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              E
+            </span>
+
+            <span class="option-text">
+              reading
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           QUESTIONS 23–24
+      ================================================== -->
+
+      <section
+        class="question-block"
+        id="questionGroup23"
+      >
+
+        <div class="question-title">
+          Questions 23 and 24
+        </div>
+
+
+        <p class="question-instruction">
+          <b>Choose TWO letters, A–E.</b>
+        </p>
+
+
+        <div class="main-question">
+
+          <span class="qno">
+            23–24
+          </span>
+
+          Which do the speakers say are the TWO reasons why Heyerdahl went to live on an island?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="A"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              to examine ancient carvings
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="B"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              to experience an isolated place
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="C"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              to formulate a new theory
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="D"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              D
+            </span>
+
+            <span class="option-text">
+              to learn survival skills
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="E"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              E
+            </span>
+
+            <span class="option-text">
+              to study the impact of an extreme environment
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           QUESTIONS 25–30
+      ================================================== -->
+
+      <section class="question-block">
+
+        <div class="question-title">
+          Questions 25–30
+        </div>
+
+
+        <p class="question-instruction">
+          Choose the correct letter,
+          <b>A, B or C.</b>
+        </p>
+
+
+        <div style="
+          margin-bottom:4px;
+          font-size:13px;
+          font-weight:950;
+          color:#21164b
+        ">
+          The later life of Thor Heyerdahl
+        </div>
+
+      </section>
+
+
+      <!-- Q25 -->
+
+      <section
+        class="question-block"
+        id="question25"
+      >
+
+        <div class="main-question">
+
+          <span class="qno">
+            25
+          </span>
+
+          According to Victor and Olivia, academics thought that Polynesian migration from the east was impossible due to
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q25"
+              value="A"
+              onchange="singleChanged(25)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              the fact that Eastern countries were far away.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q25"
+              value="B"
+              onchange="singleChanged(25)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              the lack of materials for boat building.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q25"
+              value="C"
+              onchange="singleChanged(25)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              the direction of the winds and currents.
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- Q26 -->
+
+      <section
+        class="question-block"
+        id="question26"
+      >
+
+        <div class="main-question">
+
+          <span class="qno">
+            26
+          </span>
+
+          Which do the speakers agree was the main reason for Heyerdahl’s raft journey?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q26"
+              value="A"
+              onchange="singleChanged(26)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              to overcome a research setback
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q26"
+              value="B"
+              onchange="singleChanged(26)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              to demonstrate a personal quality
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q26"
+              value="C"
+              onchange="singleChanged(26)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              to test a new theory
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- Q27 -->
+
+      <section
+        class="question-block"
+        id="question27"
+      >
+
+        <div class="main-question">
+
+          <span class="qno">
+            27
+          </span>
+
+          What was most important to Heyerdahl about his raft journey?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q27"
+              value="A"
+              onchange="singleChanged(27)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              the fact that he was the first person to do it
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q27"
+              value="B"
+              onchange="singleChanged(27)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              the speed of crossing the Pacific
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q27"
+              value="C"
+              onchange="singleChanged(27)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              the use of authentic construction methods
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- Q28 -->
+
+      <section
+        class="question-block"
+        id="question28"
+      >
+
+        <div class="main-question">
+
+          <span class="qno">
+            28
+          </span>
+
+          Why did Heyerdahl go to Easter Island?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q28"
+              value="A"
+              onchange="singleChanged(28)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              to build a stone statue
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q28"
+              value="B"
+              onchange="singleChanged(28)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              to sail a reed boat
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q28"
+              value="C"
+              onchange="singleChanged(28)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              to learn the local language
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- Q29 -->
+
+      <section
+        class="question-block"
+        id="question29"
+      >
+
+        <div class="main-question">
+
+          <span class="qno">
+            29
+          </span>
+
+          In Olivia’s opinion, Heyerdahl’s greatest influence was on
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q29"
+              value="A"
+              onchange="singleChanged(29)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              theories about Polynesian origins.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q29"
+              value="B"
+              onchange="singleChanged(29)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              the development of archaeological methodology.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q29"
+              value="C"
+              onchange="singleChanged(29)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              establishing archaeology as an academic subject.
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- Q30 -->
+
+      <section
+        class="question-block"
+        id="question30"
+      >
+
+        <div class="main-question">
+
+          <span class="qno">
+            30
+          </span>
+
+          Which criticism do the speakers make of William Oliver’s textbook?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q30"
+              value="A"
+              onchange="singleChanged(30)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              Its style is out of date.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q30"
+              value="B"
+              onchange="singleChanged(30)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              Its content is over-simplified.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q30"
+              value="C"
+              onchange="singleChanged(30)"
+            >
+
+            <span></span>
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              Its methodology is flawed.
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           WRONG ANSWERS
+      ================================================== -->
+
+      <div
+        id="reviewList"
+        class="review-list"
+      ></div>
+
+
+      <!-- =================================================
+           TRANSCRIPT
+      ================================================== -->
+
+      <div
+        id="transcriptPanel"
+        class="transcript-panel hidden"
+      >
+
+        <div class="transcript-head">
+
+          <b>
+            📝 Transcript
+          </b>
+
+          <span>
+            Nhấn vào dòng chứa đáp án để nghe lại
+          </span>
+
+        </div>
+
 
         <div
-          class="score-big"
-          id="scoreBig"
+          class="transcript-body"
+          id="transcriptRoot"
         >
-          0/10
-        </div>
 
-        <div class="score-small">
-          PRACTICE SCORE
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Right, well, for our presentation shall I start with the early life of Thor Heyerdahl?
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q21-22"
+            onclick="playSegment('21-22',true)"
+          >
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Sure. Why don’t you begin with describing the type of boy he was,
+            especially his passion for
+
+            <span class="answer-word">
+              collecting things
+            </span>.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            That’s right, he had his own little museum.
+            And I think it’s unusual for children to develop their own values
+            and not join in their parents’ hobbies;
+            I’m thinking of how Heyerdahl wouldn’t go hunting with his dad,
+            for example.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Yeah, he preferred to learn about nature by listening to his mother
+            read to him. And quite early on he knew he wanted to become an explorer
+            when he grew up. That came from his camping trips he went on in Norway
+            I think …
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            onclick="playSegment('21-22',true)"
+          >
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            No, it was
+
+            <span class="answer-word">
+              climbing
+            </span>
+
+            that he spent his time on as a young man.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q23-24"
+            onclick="playSegment('23-24',true)"
+          >
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Oh, right … After university he married a classmate and together,
+            they decided to
+
+            <span class="answer-word">
+              experience living on a small island
+            </span>,
+
+            to find out how
+
+            <span class="answer-word">
+              harsh weather conditions shaped people’s lifestyles
+            </span>.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            As part of their preparation before they left home,
+            they learnt basic survival skills like building a shelter.
+            I guess they needed that knowledge in order to live wild in a remote
+            location with few inhabitants, cut off by the sea,
+            which is what they were aiming to do.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            An important part of your talk should be the radical theory Heyerdahl
+            formed from examining mysterious ancient carvings that he happened
+            to find on the island. I think you should finish with that.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            OK.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            All right, Victor, so after your part I’ll talk about Thor Heyerdahl’s
+            adult life, continuing from the theory he had about Polynesian migration.
+            Up until that time of course, academics had believed that humans first
+            migrated to the islands in Polynesia from Asia, in the west.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q25"
+            onclick="playSegment(25,true)"
+          >
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Yes, they thought that travel from the east was impossible,
+            because of the
+
+            <span class="answer-word">
+              huge, empty stretch of ocean
+            </span>
+
+            that lies between the islands and the nearest inhabited land.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Yes, but Heyerdahl spent ages studying the cloud movements,
+            ocean currents and wind patterns to find if it was actually possible.
+            And another argument was that there was no tradition of large
+            ship-building in the communities lying to the east of Polynesia.
+            But Heyerdahl knew they made lots of coastal voyages in locally
+            built canoes.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Yes, or sailing on rafts, as was shown by the long voyage that
+            Heyerdahl did next. It was an incredibly risky journey to undertake
+            – sometimes I wonder if he did that trip for private reasons,
+            you know? To show others that he could have spectacular adventures.
+            What do you think, Olivia?
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q26"
+            onclick="playSegment(26,true)"
+          >
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Well, I think it was more a matter of
+
+            <span class="answer-word">
+              simply trying out his idea,
+              to see if migration from the east was possible
+            </span>.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Yes, that’s probably it.
+            And the poor guy suffered a bit at that time because
+            the war forced him to stop his work for some years …
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Yes. When he got started again and planned his epic voyage,
+            do you think it was important to him that he achieve it
+            before anyone else did?
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q27"
+            onclick="playSegment(27,true)"
+          >
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Um, I haven’t read anywhere that that was his motivation.
+            The most important factor seems to have been that
+
+            <span class="answer-word">
+              he use only ancient techniques and local materials
+              to build his raft
+            </span>.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Yes. I wonder how fast it went.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Well, it took them 97 days from South America to the Pacific Island.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Mm. And after that, Heyerdahl went to Easter Island, didn’t he?
+            We should mention the purpose of that trip.
+            I think he sailed there in a boat made out of reeds.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            No, that was later on in Egypt, Olivia.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Oh, yes, that’s right.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q28"
+            onclick="playSegment(28,true)"
+          >
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            But what he wanted to do was talk to the local people about their
+            old stone carvings and then
+
+            <span class="answer-word">
+              make one himself
+            </span>
+
+            to learn more about the process.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q29"
+            onclick="playSegment(29,true)"
+          >
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            I see. Well, what a great life.
+            Even though many of his theories have been disproven,
+            he certainly left a lasting impression on many disciplines,
+            didn’t he? To my mind, he was first person to establish
+            what modern academics call
+
+            <span class="answer-word">
+              practical archaeology
+            </span>.
+
+            I mean, that they try to recreate something from the past today,
+            like he did with his raft trip.
+            It’s unfortunate that his ideas about where Polynesians originated
+            from have been completely discredited.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q30"
+            onclick="playSegment(30,true)"
+          >
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Yes. Right, well, I’ll prepare a PowerPoint slide at the end that
+            acknowledges our sources. I mainly used
+            <em>The Life and Work of Thor Heyerdahl</em>
+            by William Oliver. I thought the research methods he used were very
+            sound, although I must say I found the
+
+            <span class="answer-word">
+              overall tone somewhat old-fashioned
+            </span>.
+
+            I think they need to do a new, revised edition.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Yeah, I agree.
+            What about the subject matter – I found it really challenging!
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Well, it’s a complex issue …
+
+          </div>
+
         </div>
 
       </div>
-
-
-      <div class="result-copy">
-
-        <b id="resultTitle"></b>
-
-        <span id="resultText"></span>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- REVIEW -->
-
-  <section
-    class="review-section hidden"
-    id="reviewSection"
-  >
-
-    <h2>
-      Review incorrect answers
-    </h2>
-
-    <p class="review-intro">
-      Chỉ những câu chưa đúng được hiển thị bên dưới.
-      Nhấn vào đoạn transcript để nghe lại phần liên quan.
-    </p>
-
-
-    <div id="reviewList"></div>
-
-  </section>
-
-
-  <!-- TRANSCRIPT -->
-
-  <section
-    class="transcript-section hidden"
-    id="transcriptSection"
-  >
-
-    <h2>
-      Full transcript
-    </h2>
-
-    <p class="transcript-note">
-      Các đoạn được đánh dấu có thể nhấn để nghe lại.
-    </p>
-
-
-    <div class="transcript">
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-        Right, well, for our presentation shall I start with the early life of Thor Heyerdahl?
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        Sure. Why don’t you begin with describing the type of boy he was,
-        especially his passion for
-
-        <span
-          class="cue"
-          onclick="seekTo(35)"
-        >
-          collecting things
-        </span>.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        That’s right, he had his own little museum.
-        And I think it’s unusual for children to develop their own values
-        and not join in their parents’ hobbies; I’m thinking of how
-        Heyerdahl wouldn’t go hunting with his dad, for example.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        Yeah, he preferred to learn about nature by listening to his mother
-        read to him. And quite early on he knew he wanted to become an explorer
-        when he grew up. That came from his camping trips he went on in Norway
-        I think …
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        No, it was
-
-        <span
-          class="cue"
-          onclick="seekTo(70)"
-        >
-          climbing that he spent his time on as a young man
-        </span>.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        Oh, right … After university he married a classmate and together,
-        they decided to
-
-        <span
-          class="cue"
-          onclick="seekTo(92)"
-        >
-          experience living on a small island, to find out how harsh weather
-          conditions shaped people’s lifestyles
-        </span>.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        As part of their preparation before they left home,
-        they learnt basic survival skills like building a shelter.
-        I guess they needed that knowledge in order to live wild in a
-        remote location with few inhabitants, cut off by the sea,
-        which is what they were aiming to do.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        An important part of your talk should be the radical theory Heyerdahl
-        formed from examining mysterious ancient carvings that he happened
-        to find on the island. I think you should finish with that.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-        OK.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        All right, Victor, so after your part I’ll talk about Thor Heyerdahl’s
-        adult life, continuing from the theory he had about Polynesian migration.
-        Up until that time of course, academics had believed that humans first
-        migrated to the islands in Polynesia from Asia, in the west.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        Yes, they thought that travel from the east was impossible,
-
-        <span
-          class="cue"
-          onclick="seekTo(190)"
-        >
-          because of the huge, empty stretch of ocean that lies between
-          the islands and the nearest inhabited land
-        </span>.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        Yes, but Heyerdahl spent ages studying the cloud movements,
-        ocean currents and wind patterns to find if it was actually possible.
-        And another argument was that there was no tradition of large ship-building
-        in the communities lying to the east of Polynesia.
-        But Heyerdahl knew they made lots of coastal voyages in locally built canoes.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        Yes, or sailing on rafts, as was shown by the long voyage that Heyerdahl
-        did next. It was an incredibly risky journey to undertake – sometimes
-        I wonder if he did that trip for private reasons, you know?
-        To show others that he could have spectacular adventures.
-        What do you think, Olivia?
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        Well, I think it was more a matter of
-
-        <span
-          class="cue"
-          onclick="seekTo(245)"
-        >
-          simply trying out his idea, to see if migration from the east was possible
-        </span>.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        Yes, that’s probably it. And the poor guy suffered a bit at that time
-        because the war forced him to stop his work for some years …
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        Yes. When he got started again and planned his epic voyage,
-        do you think it was important to him that he achieve it
-        before anyone else did?
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        Um, I haven’t read anywhere that that was his motivation.
-        The most important factor seems to have been that
-
-        <span
-          class="cue"
-          onclick="seekTo(294)"
-        >
-          he use only ancient techniques and local materials to build his raft
-        </span>.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-        Yes. I wonder how fast it went.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-        Well, it took them 97 days from South America to the Pacific Island.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        Mm. And after that, Heyerdahl went to Easter Island, didn’t he?
-        We should mention the purpose of that trip.
-        I think he sailed there in a boat made out of reeds.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-        No, that was later on in Egypt, Olivia.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-        Oh, yes, that’s right.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        But what he wanted to do was talk to the local people about
-        their old stone carvings and then
-
-        <span
-          class="cue"
-          onclick="seekTo(340)"
-        >
-          make one himself to learn more about the process
-        </span>.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-
-        I see. Well, what a great life. Even though many of his theories
-        have been disproven, he certainly left a lasting impression on many
-        disciplines, didn’t he? To my mind, he was first person to establish
-        what modern academics call
-
-        <span
-          class="cue"
-          onclick="seekTo(382)"
-        >
-          practical archaeology – they try to recreate something from
-          the past today
-        </span>,
-
-        like he did with his raft trip.
-        It’s unfortunate that his ideas about where Polynesians originated
-        from have been completely discredited.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-
-        Yes. Right, well, I’ll prepare a PowerPoint slide at the end that
-        acknowledges our sources. I mainly used
-        <em>The Life and Work of Thor Heyerdahl</em>
-        by William Oliver. I thought the research methods he used were very sound,
-        although I must say
-
-        <span
-          class="cue"
-          onclick="seekTo(420)"
-        >
-          I found the overall tone somewhat old-fashioned
-        </span>.
-
-        I think they need to do a new, revised edition.
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          OLIVIA:
-        </span>
-        Yeah, I agree. What about the subject matter – I found it really challenging!
-      </p>
-
-
-      <p>
-        <span class="speaker">
-          VICTOR:
-        </span>
-        Well, it’s a complex issue …
-      </p>
 
     </div>
 
@@ -2424,231 +3121,486 @@ button{
 </main>
 
 
+<!-- =========================================================
+     BOTTOM NAV
+========================================================= -->
+
+<div class="bottom">
+
+  <div class="nav">
+
+    <button id="nav21" onclick="goQ(21)">
+      21
+    </button>
+
+    <button id="nav22" onclick="goQ(22)">
+      22
+    </button>
+
+    <button id="nav23" onclick="goQ(23)">
+      23
+    </button>
+
+    <button id="nav24" onclick="goQ(24)">
+      24
+    </button>
+
+    <button id="nav25" onclick="goQ(25)">
+      25
+    </button>
+
+    <button id="nav26" onclick="goQ(26)">
+      26
+    </button>
+
+    <button id="nav27" onclick="goQ(27)">
+      27
+    </button>
+
+    <button id="nav28" onclick="goQ(28)">
+      28
+    </button>
+
+    <button id="nav29" onclick="goQ(29)">
+      29
+    </button>
+
+    <button id="nav30" onclick="goQ(30)">
+      30
+    </button>
+
+  </div>
+
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
+</div>
+
+
+<!-- =========================================================
+     HIGHLIGHT / NOTE MENU
+========================================================= -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
 <script>
 
 /* =========================================================
    CONFIG
 ========================================================= */
 
-const ENDPOINT=
+const RESULT_ENDPOINT =
 'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
 
 
-const PROFILE_KEY=
-'IELTS_PRACTICE_STUDENT';
+const ATTEMPT_KEY =
+'PRACTICE_LISTENING_PART3_01_V2';
 
 
-const ATTEMPT_KEY=
-'PRACTICE_LISTENING_PART3_01_V1';
+const COMPLETED_KEY =
+`${ATTEMPT_KEY}_completed`;
 
 
-const ANSWERS={
+const NUMBERS =
+[
+  21,22,23,24,25,26,27,28,29,30
+];
 
-  pair21_22:[
+
+/* =========================================================
+   ANSWERS
+========================================================= */
+
+const PAIR_KEYS = {
+
+  '21-22':[
     'B',
     'C'
   ],
 
-  pair23_24:[
+  '23-24':[
     'B',
     'E'
-  ],
+  ]
+
+};
+
+
+const SINGLE_KEYS = {
 
   25:'A',
-
   26:'C',
-
   27:'C',
-
   28:'A',
-
   29:'B',
-
   30:'A'
 
 };
 
 
-const REVIEW_DATA={
+const DISPLAY_KEY = {
+
+  '21-22':
+  'B, C',
+
+  '23-24':
+  'B, E',
+
+  25:
+  'A',
+
+  26:
+  'C',
+
+  27:
+  'C',
+
+  28:
+  'A',
+
+  29:
+  'B',
+
+  30:
+  'A'
+
+};
+
+
+/* =========================================================
+   ORIGINAL QUESTIONS
+========================================================= */
+
+const QUESTION_TEXT = {
+
+  '21-22':
+  `
+    Which TWO hobbies was Thor Heyerdahl very interested in as a youth?
+  `,
+
+  '23-24':
+  `
+    Which do the speakers say are the TWO reasons why Heyerdahl went to live on an island?
+  `,
+
+  25:
+  `
+    According to Victor and Olivia, academics thought that Polynesian migration
+    from the east was impossible due to the distance from inhabited land.
+  `,
+
+  26:
+  `
+    Which do the speakers agree was the main reason for Heyerdahl’s raft journey?
+  `,
+
+  27:
+  `
+    What was most important to Heyerdahl about his raft journey?
+  `,
+
+  28:
+  `
+    Why did Heyerdahl go to Easter Island?
+  `,
+
+  29:
+  `
+    In Olivia’s opinion, Heyerdahl’s greatest influence was on what area?
+  `,
+
+  30:
+  `
+    Which criticism do the speakers make of William Oliver’s textbook?
+  `
+
+};
+
+
+/* =========================================================
+   TRANSCRIPT EVIDENCE
+========================================================= */
+
+const TRANSCRIPT_SNIPPET = {
+
+  '21-22':
+  `
+    Olivia mentions Heyerdahl’s “passion for collecting things”.
+    Victor later corrects the camping idea:
+    “No, it was climbing that he spent his time on as a young man.”
+  `,
+
+  '23-24':
+  `
+    They wanted to “experience living on a small island”
+    and find out how “harsh weather conditions shaped people’s lifestyles”.
+  `,
+
+  25:
+  `
+    “They thought that travel from the east was impossible,
+    because of the huge, empty stretch of ocean that lies between
+    the islands and the nearest inhabited land.”
+  `,
+
+  26:
+  `
+    Olivia says the journey was “simply trying out his idea,
+    to see if migration from the east was possible”.
+  `,
+
+  27:
+  `
+    “The most important factor seems to have been that he use only
+    ancient techniques and local materials to build his raft.”
+  `,
+
+  28:
+  `
+    Heyerdahl wanted to talk to local people about their stone carvings
+    and “make one himself to learn more about the process”.
+  `,
+
+  29:
+  `
+    Olivia says he established what modern academics call
+    “practical archaeology”.
+  `,
+
+  30:
+  `
+    Victor says the research methods were sound,
+    but “the overall tone [was] somewhat old-fashioned”.
+  `
+
+};
+
+
+/* =========================================================
+   EXPLANATION
+========================================================= */
+
+const EXPLANATION = {
+
+  '21-22':
+  `
+    Đáp án đúng là <b>B. climbing</b> và <b>C. collecting</b>.
+    “Camping” là distractor: Olivia đoán camping,
+    nhưng Victor sửa lại bằng “No, it was climbing...”.
+    “Hunting” cũng bị loại vì Heyerdahl không tham gia sở thích săn bắn của bố.
+  `,
+
+  '23-24':
+  `
+    Đáp án là <b>B</b> và <b>E</b>.
+    Mục tiêu là trải nghiệm một nơi biệt lập và tìm hiểu
+    thời tiết khắc nghiệt ảnh hưởng đến lối sống như thế nào.
+    Survival skills chỉ là phần chuẩn bị trước chuyến đi,
+    không phải lý do chính để sống trên đảo.
+  `,
+
+  25:
+  `
+    Đáp án <b>A</b>.
+    Victor nói trở ngại mà giới học thuật nghĩ là không thể vượt qua
+    chính là khoảng đại dương khổng lồ giữa Polynesia
+    và vùng đất có người sinh sống gần nhất.
+    Winds và currents sau đó là những yếu tố Heyerdahl nghiên cứu
+    để kiểm tra lại giả định này.
+  `,
+
+  26:
+  `
+    Đáp án <b>C</b>.
+    Victor đề xuất khả năng Heyerdahl muốn chứng minh bản thân,
+    nhưng Olivia cho rằng mục đích chính là thử nghiệm ý tưởng của ông.
+    Victor đồng ý: “Yes, that’s probably it.”
+  `,
+
+  27:
+  `
+    Đáp án <b>C</b>.
+    Điểm quan trọng nhất là sử dụng kỹ thuật cổ
+    và vật liệu địa phương để dựng chiếc bè,
+    tức dùng phương pháp xây dựng xác thực.
+  `,
+
+  28:
+  `
+    Đáp án <b>A</b>.
+    “Reed boat” là distractor và Victor trực tiếp sửa:
+    chuyến đi bằng thuyền sậy là việc sau đó tại Ai Cập.
+    Ở Easter Island, Heyerdahl muốn tự làm một tượng đá.
+  `,
+
+  29:
+  `
+    Đáp án <b>B</b>.
+    Olivia nhấn mạnh “practical archaeology”:
+    tái tạo một vật hoặc hoạt động trong quá khứ
+    để hiểu cách nó được thực hiện.
+    Đây là ảnh hưởng đến phương pháp khảo cổ học.
+  `,
+
+  30:
+  `
+    Đáp án <b>A</b>.
+    Victor nói rõ phương pháp nghiên cứu của sách là “very sound”,
+    nên C không đúng. Điểm bị phê bình là “overall tone somewhat old-fashioned”,
+    tức phong cách đã lỗi thời.
+  `
+
+};
+
+
+/* =========================================================
+   AUDIO CUES
+   seconds
+========================================================= */
+
+const CUES = {
 
   '21-22':{
-
-    question:
-      'Which TWO hobbies was Thor Heyerdahl very interested in as a youth?',
-
-    correct:
-      'B, C',
-
-    time:
-      35,
-
-    evidence:
-      'Olivia mentions his passion for collecting things, and Victor corrects her by saying it was climbing that he spent his time on as a young man.',
-
-    analysis:
-      'Collecting and climbing are the two hobbies. Hunting is explicitly rejected because he would not join his father, while camping is corrected by Victor.'
-
+    start:30,
+    end:96
   },
-
 
   '23-24':{
-
-    question:
-      'Which TWO reasons did Heyerdahl have for going to live on an island?',
-
-    correct:
-      'B, E',
-
-    time:
-      92,
-
-    evidence:
-      'They wanted to experience living on a small island and find out how harsh weather conditions shaped people’s lifestyles.',
-
-    analysis:
-      'The reasons were isolation and studying the effect of an extreme environment. Survival skills were preparation for the trip, not the purpose of it.'
-
+    start:90,
+    end:160
   },
-
 
   25:{
-
-    question:
-      'Why did academics think migration from the east was impossible?',
-
-    correct:
-      'A',
-
-    time:
-      190,
-
-    evidence:
-      'Victor says there was a huge, empty stretch of ocean between the islands and the nearest inhabited land.',
-
-    analysis:
-      'The key idea is distance. Winds and currents were things Heyerdahl later studied to challenge the assumption.'
-
+    start:178,
+    end:226
   },
-
 
   26:{
-
-    question:
-      'What was the main reason for Heyerdahl’s raft journey?',
-
-    correct:
-      'C',
-
-    time:
-      245,
-
-    evidence:
-      'Olivia says it was a matter of simply trying out his idea to see if migration from the east was possible.',
-
-    analysis:
-      'The raft journey was an experiment designed to test his theory.'
-
+    start:225,
+    end:270
   },
-
 
   27:{
-
-    question:
-      'What was most important to Heyerdahl about his raft journey?',
-
-    correct:
-      'C',
-
-    time:
-      294,
-
-    evidence:
-      'Victor says the most important factor was using only ancient techniques and local materials to build the raft.',
-
-    analysis:
-      'The emphasis is on authentic construction methods rather than speed or being the first person.'
-
+    start:270,
+    end:320
   },
-
 
   28:{
-
-    question:
-      'Why did Heyerdahl go to Easter Island?',
-
-    correct:
-      'A',
-
-    time:
-      340,
-
-    evidence:
-      'He wanted to talk to local people about the old stone carvings and then make one himself to learn more about the process.',
-
-    analysis:
-      'Making a stone statue was part of his practical investigation. The reed boat belonged to a later project in Egypt.'
-
+    start:318,
+    end:370
   },
-
 
   29:{
-
-    question:
-      'In Olivia’s opinion, what was Heyerdahl’s greatest influence?',
-
-    correct:
-      'B',
-
-    time:
-      382,
-
-    evidence:
-      'Olivia describes him as establishing what modern academics call practical archaeology: recreating something from the past today.',
-
-    analysis:
-      'This relates to archaeological methodology, not the origin theory itself, which she says was discredited.'
-
+    start:368,
+    end:418
   },
 
-
   30:{
-
-    question:
-      'What criticism do the speakers make of William Oliver’s textbook?',
-
-    correct:
-      'A',
-
-    time:
-      420,
-
-    evidence:
-      'Victor says the research methods were sound but that the overall tone was somewhat old-fashioned.',
-
-    analysis:
-      'They criticise the book’s style, not its methodology or the complexity of its subject matter.'
-
+    start:414,
+    end:451
   }
 
 };
 
 
 /* =========================================================
-   PROFILE
+   STATE
 ========================================================= */
 
-function readProfile(){
+let startedAt = 0;
+
+let submitted = false;
+
+let segmentEnd = null;
+
+let seekPreviewing = false;
+
+let savedSelection = null;
+
+let savedZone = null;
+
+let menuTarget = null;
+
+let menuZone = null;
+
+let menuMode = 'selection';
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const practiceAudio =
+document.getElementById(
+  'practiceAudio'
+);
+
+
+const selectionMenu =
+document.getElementById(
+  'selectionMenu'
+);
+
+
+const menuHighlight =
+document.getElementById(
+  'menuHighlight'
+);
+
+
+const menuNote =
+document.getElementById(
+  'menuNote'
+);
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function readStudent(){
 
   try{
 
     return JSON.parse(
-      localStorage.getItem(PROFILE_KEY)
+
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+
       ||
+
       'null'
+
     );
 
   }
-
   catch(e){
 
     return null;
@@ -2658,50 +3610,90 @@ function readProfile(){
 }
 
 
-function initProfile(){
+function prefill(){
 
-  const profile=
-    readProfile();
+  const student =
+  readStudent();
 
+
+  if(student){
+
+    studentName.value =
+    student.name || '';
+
+
+    studentClass.value =
+    student.className || '';
+
+  }
+
+}
+
+
+/* =========================================================
+   RESET FINISHED ATTEMPT
+========================================================= */
+
+function resetFinishedAttempt(){
 
   if(
-    profile?.name
-    &&
-    profile?.className
+    localStorage.getItem(
+      COMPLETED_KEY
+    )
+    !==
+    '1'
   ){
-
-    profileName.value=
-      profile.name;
-
-
-    profileClass.value=
-      profile.className;
-
-
-    studentInfo.textContent=
-      `${profile.name} · ${profile.className}`;
-
 
     return;
 
   }
 
 
-  profileOverlay.classList.remove(
-    'hidden'
+  NUMBERS.forEach(
+    number => {
+
+      localStorage.removeItem(
+        `${ATTEMPT_KEY}_q${number}`
+      );
+
+    }
+  );
+
+
+  localStorage.removeItem(
+    `${ATTEMPT_KEY}_pair21-22`
+  );
+
+
+  localStorage.removeItem(
+    `${ATTEMPT_KEY}_pair23-24`
+  );
+
+
+  localStorage.removeItem(
+    `${ATTEMPT_KEY}_markup_questions`
+  );
+
+
+  localStorage.removeItem(
+    COMPLETED_KEY
   );
 
 }
 
 
-function saveProfile(){
+/* =========================================================
+   START
+========================================================= */
 
-  const name=
-    profileName.value.trim();
+async function startPractice(){
+
+  const name =
+  studentName.value.trim();
 
 
-  const className=
-    profileClass.value.trim();
+  const className =
+  studentClass.value.trim();
 
 
   if(
@@ -2710,18 +3702,20 @@ function saveProfile(){
     !className
   ){
 
-    alert(
-      'Vui lòng nhập đầy đủ Họ tên và Lớp.'
-    );
+    startError.textContent =
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
 
     return;
 
   }
 
 
+  resetFinishedAttempt();
+
+
   localStorage.setItem(
 
-    PROFILE_KEY,
+    'IELTS_PRACTICE_STUDENT',
 
     JSON.stringify({
 
@@ -2734,13 +3728,51 @@ function saveProfile(){
   );
 
 
-  studentInfo.textContent=
-    `${name} · ${className}`;
+  studentInfo.textContent =
+  `${name} · ${className}`;
 
 
-  profileOverlay.classList.add(
+  restoreMarkup();
+
+  restoreAnswers();
+
+  updateProgress();
+
+
+  start
+  .classList
+  .add(
     'hidden'
   );
+
+
+  startedAt =
+  Date.now();
+
+
+  submitted =
+  false;
+
+
+  audioStatusTitle.textContent =
+  'Audio luyện tập';
+
+
+  audioStatusText.textContent =
+  'Có thể nghe lại, tua và đổi tốc độ tùy ý';
+
+
+  try{
+
+    await practiceAudio.play();
+
+  }
+  catch(e){
+
+    audioStatusText.textContent =
+    'Nhấn nút ▶ để bắt đầu nghe.';
+
+  }
 
 }
 
@@ -2749,26 +3781,58 @@ function saveProfile(){
    TIMER
 ========================================================= */
 
-const startedAt=
-  Date.now();
+function fmt(sec){
+
+  sec =
+  Math.max(
+    0,
+    Math.floor(
+      sec || 0
+    )
+  );
 
 
-let submitted=
-  false;
+  const hours =
+  Math.floor(
+    sec / 3600
+  );
+
+
+  const minutes =
+  Math.floor(
+    (sec % 3600) / 60
+  );
+
+
+  const seconds =
+  sec % 60;
+
+
+  return hours
+
+  ?
+
+  `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`
+
+  :
+
+  `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+
+}
 
 
 setInterval(
-  function(){
 
-    if(submitted){
+  ()=>{
 
-      return;
+    if(
+      startedAt
+      &&
+      !submitted
+    ){
 
-    }
-
-
-    const seconds=
-      Math.floor(
+      timer.textContent =
+      fmt(
         (
           Date.now()
           -
@@ -2778,91 +3842,179 @@ setInterval(
         1000
       );
 
-
-    timer.textContent=
-      formatTime(
-        seconds
-      );
+    }
 
   },
-  1000
+
+  500
+
 );
-
-
-function formatTime(seconds){
-
-  const mins=
-    Math.floor(
-      seconds/60
-    );
-
-
-  const secs=
-    seconds%60;
-
-
-  return(
-    String(mins)
-    .padStart(2,'0')
-    +
-    ':'
-    +
-    String(secs)
-    .padStart(2,'0')
-  );
-
-}
 
 
 /* =========================================================
-   AUDIO
+   AUDIO PLAYER
 ========================================================= */
 
-audio.addEventListener(
+practiceAudio
+.addEventListener(
+
   'loadedmetadata',
-  updateAudio
+
+  ()=>{
+
+    seekBar.max =
+    practiceAudio.duration || 100;
+
+
+    audioTime.textContent =
+    `${fmt(practiceAudio.currentTime)} / ${fmt(practiceAudio.duration)}`;
+
+  }
+
 );
 
 
-audio.addEventListener(
+practiceAudio
+.addEventListener(
+
   'timeupdate',
-  updateAudio
+
+  ()=>{
+
+    if(
+      !seekPreviewing
+    ){
+
+      seekBar.value =
+      practiceAudio.currentTime;
+
+    }
+
+
+    if(
+      segmentEnd !== null
+      &&
+      practiceAudio.currentTime >= segmentEnd
+    ){
+
+      practiceAudio.pause();
+
+
+      segmentEnd =
+      null;
+
+
+      audioStatusText.textContent =
+      'Đã phát xong đoạn đối chiếu. Có thể tiếp tục nghe hoặc tua tự do.';
+
+    }
+
+
+    audioTime.textContent =
+    `${fmt(practiceAudio.currentTime)} / ${fmt(practiceAudio.duration)}`;
+
+
+    playPauseBtn.textContent =
+    practiceAudio.paused
+    ?
+    '▶'
+    :
+    '❚❚';
+
+  }
+
 );
 
 
-audio.addEventListener(
+practiceAudio
+.addEventListener(
+
   'play',
-  function(){
 
-    playButton.textContent=
-      '❚❚';
+  ()=>{
+
+    playPauseBtn.textContent =
+    '❚❚';
 
   }
+
 );
 
 
-audio.addEventListener(
+practiceAudio
+.addEventListener(
+
   'pause',
-  function(){
 
-    playButton.textContent=
-      '▶';
+  ()=>{
+
+    playPauseBtn.textContent =
+    '▶';
 
   }
+
 );
 
 
-function toggleAudio(){
+practiceAudio
+.addEventListener(
 
-  if(audio.paused){
+  'ended',
 
-    audio.play();
+  ()=>{
+
+    segmentEnd =
+    null;
+
+
+    audioStatusText.textContent =
+    'Audio đã hết. Có thể tua lại và nghe tiếp.';
+
+  }
+
+);
+
+
+practiceAudio
+.addEventListener(
+
+  'error',
+
+  ()=>{
+
+    audioStatusTitle.textContent =
+    'Không tải được audio';
+
+
+    audioStatusText.textContent =
+    'Kiểm tra file Cam10-Test2-Section3.mp3 trong cùng thư mục.';
+
+  }
+
+);
+
+
+function togglePlay(){
+
+  segmentEnd =
+  null;
+
+
+  if(
+    practiceAudio.paused
+  ){
+
+    practiceAudio
+    .play()
+    .catch(
+      ()=>{}
+    );
 
   }
 
   else{
 
-    audio.pause();
+    practiceAudio.pause();
 
   }
 
@@ -2871,150 +4023,350 @@ function toggleAudio(){
 
 function skipAudio(seconds){
 
-  audio.currentTime=
+  segmentEnd =
+  null;
+
+
+  practiceAudio.currentTime =
+  Math.min(
+
     Math.max(
       0,
-      Math.min(
-        audio.duration||0,
-        audio.currentTime
-        +
-        seconds
-      )
-    );
+      practiceAudio.currentTime
+      +
+      seconds
+    ),
 
-}
+    practiceAudio.duration
+    ||
+    Infinity
 
-
-function updateAudio(){
-
-  const duration=
-    Number.isFinite(
-      audio.duration
-    )
-    ?
-    audio.duration
-    :
-    0;
-
-
-  if(duration){
-
-    seek.value=
-      (
-        audio.currentTime
-        /
-        duration
-      )
-      *
-      100;
-
-  }
-
-
-  audioTime.textContent=
-    formatAudioTime(
-      audio.currentTime
-    )
-    +
-    ' / '
-    +
-    formatAudioTime(
-      duration
-    );
-
-}
-
-
-seek.addEventListener(
-  'input',
-  function(){
-
-    if(
-      !Number.isFinite(
-        audio.duration
-      )
-    ){
-
-      return;
-
-    }
-
-
-    audio.currentTime=
-      Number(seek.value)
-      /
-      100
-      *
-      audio.duration;
-
-  }
-);
-
-
-speed.addEventListener(
-  'change',
-  function(){
-
-    audio.playbackRate=
-      Number(
-        speed.value
-      );
-
-  }
-);
-
-
-function formatAudioTime(seconds){
-
-  seconds=
-    Math.floor(
-      Number(seconds)||0
-    );
-
-
-  const m=
-    Math.floor(
-      seconds/60
-    );
-
-
-  const s=
-    seconds%60;
-
-
-  return(
-    String(m)
-    .padStart(2,'0')
-    +
-    ':'
-    +
-    String(s)
-    .padStart(2,'0')
   );
 
 }
 
 
-function seekTo(seconds){
+function seekPreview(value){
 
-  audio.currentTime=
-    seconds;
-
-
-  audio.play();
+  seekPreviewing =
+  true;
 
 
-  window.scrollTo({
-    top:
-      document.querySelector(
-        '.audio-card'
+  audioTime.textContent =
+  `${fmt(Number(value))} / ${fmt(practiceAudio.duration)}`;
+
+}
+
+
+function seekCommit(value){
+
+  seekPreviewing =
+  false;
+
+
+  segmentEnd =
+  null;
+
+
+  practiceAudio.currentTime =
+  Number(
+    value
+  );
+
+}
+
+
+function setSpeed(value){
+
+  practiceAudio.playbackRate =
+  Number(
+    value
+  );
+
+
+  audioStatusText.textContent =
+  `Tốc độ ${value}× · Có thể tua và nghe lại tùy ý`;
+
+}
+
+
+function setVolume(value){
+
+  practiceAudio.volume =
+  Number(
+    value
+  );
+
+}
+
+
+/* =========================================================
+   ANSWER HELPERS
+========================================================= */
+
+function pairName(key){
+
+  return key === '21-22'
+  ?
+  'pair21'
+  :
+  'pair23';
+
+}
+
+
+function pairStorageKey(key){
+
+  return `${ATTEMPT_KEY}_pair${key}`;
+
+}
+
+
+function getPair(key){
+
+  try{
+
+    const value =
+    JSON.parse(
+      localStorage.getItem(
+        pairStorageKey(key)
       )
-      .offsetTop
-      -
-      75,
+      ||
+      '[]'
+    );
 
-    behavior:'smooth'
-  });
+
+    return Array.isArray(value)
+    ?
+    value
+    :
+    [];
+
+  }
+  catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+function setPair(
+  key,
+  values
+){
+
+  localStorage.setItem(
+
+    pairStorageKey(key),
+
+    JSON.stringify(
+      values
+    )
+
+  );
+
+}
+
+
+function pairChanged(key){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  const name =
+  pairName(key);
+
+
+  const checked =
+  [
+    ...document.querySelectorAll(
+      `input[name="${name}"]:checked`
+    )
+  ];
+
+
+  if(
+    checked.length > 2
+  ){
+
+    checked[
+      checked.length - 1
+    ]
+    .checked =
+    false;
+
+
+    alert(
+      'Chỉ chọn TWO đáp án.'
+    );
+
+  }
+
+
+  const values =
+  [
+    ...document.querySelectorAll(
+      `input[name="${name}"]:checked`
+    )
+  ]
+  .map(
+    input =>
+    input.value
+  );
+
+
+  setPair(
+    key,
+    values
+  );
+
+
+  updateOptionUI();
+
+  updateProgress();
+
+  updateNav();
+
+}
+
+
+function singleChanged(number){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  const input =
+  document.querySelector(
+    `input[name="q${number}"]:checked`
+  );
+
+
+  localStorage.setItem(
+
+    `${ATTEMPT_KEY}_q${number}`,
+
+    input
+    ?
+    input.value
+    :
+    ''
+
+  );
+
+
+  updateOptionUI();
+
+  updateProgress();
+
+  updateNav();
+
+}
+
+
+function getSingle(number){
+
+  return localStorage.getItem(
+    `${ATTEMPT_KEY}_q${number}`
+  )
+  ||
+  '';
+
+}
+
+
+/* =========================================================
+   RESTORE ANSWERS
+========================================================= */
+
+function restoreAnswers(){
+
+  [
+    '21-22',
+    '23-24'
+  ]
+  .forEach(
+    key => {
+
+      const values =
+      getPair(
+        key
+      );
+
+
+      const name =
+      pairName(
+        key
+      );
+
+
+      document
+      .querySelectorAll(
+        `input[name="${name}"]`
+      )
+      .forEach(
+        input => {
+
+          input.checked =
+          values.includes(
+            input.value
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  [
+    25,26,27,28,29,30
+  ]
+  .forEach(
+    number => {
+
+      const value =
+      getSingle(
+        number
+      );
+
+
+      if(!value){
+
+        return;
+
+      }
+
+
+      const input =
+      document.querySelector(
+        `input[name="q${number}"][value="${value}"]`
+      );
+
+
+      if(input){
+
+        input.checked =
+        true;
+
+      }
+
+    }
+  );
+
+
+  updateOptionUI();
+
+  updateNav();
 
 }
 
@@ -3023,219 +4375,254 @@ function seekTo(seconds){
    OPTION UI
 ========================================================= */
 
-document
-.querySelectorAll(
-  '.option input'
-)
-.forEach(
-  input=>{
+function updateOptionUI(){
 
-    input.addEventListener(
-      'change',
-      function(){
+  document
+  .querySelectorAll(
+    '.option'
+  )
+  .forEach(
+    option => {
 
-        if(
-          input.type==='radio'
-        ){
-
-          document
-          .querySelectorAll(
-            `input[name="${input.name}"]`
-          )
-          .forEach(
-            item=>{
-
-              item
-              .closest('.option')
-              .classList
-              .toggle(
-                'selected',
-                item.checked
-              );
-
-            }
-          );
-
-        }
-
-        else{
-
-          const checked=
-            [
-              ...document.querySelectorAll(
-                `input[name="${input.name}"]:checked`
-              )
-            ];
+      const input =
+      option.querySelector(
+        'input'
+      );
 
 
-          if(
-            checked.length>2
-          ){
+      option
+      .classList
+      .toggle(
+        'selected',
+        !!input?.checked
+      );
 
-            input.checked=
-              false;
+    }
+  );
 
-
-            alert(
-              'Choose TWO answers only.'
-            );
-
-          }
-
-
-          document
-          .querySelectorAll(
-            `input[name="${input.name}"]`
-          )
-          .forEach(
-            item=>{
-
-              item
-              .closest('.option')
-              .classList
-              .toggle(
-                'selected',
-                item.checked
-              );
-
-            }
-          );
-
-        }
-
-
-        updateAnswerStatus();
-
-      }
-    );
-
-  }
-);
+}
 
 
 /* =========================================================
-   ANSWERS
+   PROGRESS
 ========================================================= */
 
-function selectedValues(name){
+function answeredCount(){
 
-  return[
-    ...document.querySelectorAll(
-      `input[name="${name}"]:checked`
+  const pair21 =
+  Math.min(
+    getPair(
+      '21-22'
     )
+    .length,
+    2
+  );
+
+
+  const pair23 =
+  Math.min(
+    getPair(
+      '23-24'
+    )
+    .length,
+    2
+  );
+
+
+  const singles =
+  [
+    25,26,27,28,29,30
   ]
-  .map(
-    item=>item.value
-  );
-
-}
-
-
-function selectedOne(name){
-
-  return(
-    document.querySelector(
-      `input[name="${name}"]:checked`
-    )
-    ?.value
-    ||
-    ''
-  );
-
-}
-
-
-function getResponses(){
-
-  return{
-
-    pair21_22:
-      selectedValues(
-        'q21_22'
-      ),
-
-    pair23_24:
-      selectedValues(
-        'q23_24'
-      ),
-
-    25:
-      selectedOne('q25'),
-
-    26:
-      selectedOne('q26'),
-
-    27:
-      selectedOne('q27'),
-
-    28:
-      selectedOne('q28'),
-
-    29:
-      selectedOne('q29'),
-
-    30:
-      selectedOne('q30')
-
-  };
-
-}
-
-
-function completedCount(){
-
-  const responses=
-    getResponses();
-
-
-  return(
-    Math.min(
-      responses.pair21_22.length,
-      2
-    )
-    +
-    Math.min(
-      responses.pair23_24.length,
-      2
-    )
-    +
-    [25,26,27,28,29,30]
-    .filter(
-      q=>responses[q]
-    )
-    .length
-  );
-
-}
-
-
-function updateAnswerStatus(){
-
-  answerStatus.textContent=
-    `${completedCount()}/10 answers completed`;
-
-}
-
-
-/* =========================================================
-   SCORING
-========================================================= */
-
-function intersectionScore(
-  selected,
-  correct
-){
-
-  return selected.filter(
-    answer=>
-      correct.includes(
-        answer
-      )
+  .filter(
+    number =>
+    !!getSingle(number)
   )
   .length;
 
+
+  return(
+    pair21
+    +
+    pair23
+    +
+    singles
+  );
+
 }
 
+
+function updateProgress(){
+
+  const answered =
+  answeredCount();
+
+
+  progressText.textContent =
+  `${answered}/10 câu đã trả lời`;
+
+
+  progressBar.style.width =
+  `${answered/10*100}%`;
+
+}
+
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+function updateNav(){
+
+  NUMBERS.forEach(
+    number => {
+
+      const button =
+      document.getElementById(
+        'nav' + number
+      );
+
+
+      if(!button){
+
+        return;
+
+      }
+
+
+      let answered =
+      false;
+
+
+      if(
+        number === 21
+        ||
+        number === 22
+      ){
+
+        const count =
+        getPair(
+          '21-22'
+        )
+        .length;
+
+
+        answered =
+        number === 21
+        ?
+        count >= 1
+        :
+        count >= 2;
+
+      }
+
+      else if(
+        number === 23
+        ||
+        number === 24
+      ){
+
+        const count =
+        getPair(
+          '23-24'
+        )
+        .length;
+
+
+        answered =
+        number === 23
+        ?
+        count >= 1
+        :
+        count >= 2;
+
+      }
+
+      else{
+
+        answered =
+        !!getSingle(
+          number
+        );
+
+      }
+
+
+      button
+      .classList
+      .toggle(
+        'answered',
+        answered
+      );
+
+    }
+  );
+
+}
+
+
+function goQ(number){
+
+  let target;
+
+
+  if(
+    number === 21
+    ||
+    number === 22
+  ){
+
+    target =
+    document.getElementById(
+      'questionGroup21'
+    );
+
+  }
+
+  else if(
+    number === 23
+    ||
+    number === 24
+  ){
+
+    target =
+    document.getElementById(
+      'questionGroup23'
+    );
+
+  }
+
+  else{
+
+    target =
+    document.getElementById(
+      'question' + number
+    );
+
+  }
+
+
+  if(!target){
+
+    return;
+
+  }
+
+
+  target
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+}
+
+
+/* =========================================================
+   SCORE HELPERS
+========================================================= */
 
 function sameSet(
   a,
@@ -3243,7 +4630,7 @@ function sameSet(
 ){
 
   if(
-    a.length!==b.length
+    a.length !== b.length
   ){
 
     return false;
@@ -3268,6 +4655,23 @@ function sameSet(
 }
 
 
+function pairScore(
+  selected,
+  correct
+){
+
+  return selected
+  .filter(
+    value =>
+    correct.includes(
+      value
+    )
+  )
+  .length;
+
+}
+
+
 /* =========================================================
    SUBMIT
 ========================================================= */
@@ -3281,25 +4685,21 @@ async function submitPractice(){
   }
 
 
-  const responses=
-    getResponses();
-
-
-  const completed=
-    completedCount();
+  const answered =
+  answeredCount();
 
 
   if(
-    completed<10
+    answered < 10
   ){
 
-    const proceed=
-      confirm(
-        `You have completed ${completed}/10 answers. Submit anyway?`
-      );
+    const yes =
+    confirm(
+      `Bạn mới trả lời ${answered}/10 câu. Vẫn nộp bài?`
+    );
 
 
-    if(!proceed){
+    if(!yes){
 
       return;
 
@@ -3308,472 +4708,408 @@ async function submitPractice(){
   }
 
 
-  submitted=
-    true;
+  submitted =
+  true;
 
 
-  audio.pause();
+  practiceAudio.pause();
 
 
-  submitButton.disabled=
-    true;
+  localStorage.setItem(
+    COMPLETED_KEY,
+    '1'
+  );
 
 
-  const pair1=
-    intersectionScore(
-      responses.pair21_22,
-      ANSWERS.pair21_22
+  let score =
+  0;
+
+
+  const answers = {};
+
+
+  reviewList.innerHTML =
+  '';
+
+
+  /* ---------------------------------
+     QUESTIONS 21–22
+  --------------------------------- */
+
+  const pair21 =
+  getPair(
+    '21-22'
+  );
+
+
+  answers['21-22'] =
+  pair21;
+
+
+  const pair21Score =
+  pairScore(
+    pair21,
+    PAIR_KEYS[
+      '21-22'
+    ]
+  );
+
+
+  score +=
+  pair21Score;
+
+
+  markPairNav(
+    21,
+    22,
+    pair21,
+    PAIR_KEYS[
+      '21-22'
+    ]
+  );
+
+
+  if(
+    !sameSet(
+      pair21,
+      PAIR_KEYS[
+        '21-22'
+      ]
+    )
+  ){
+
+    renderReview(
+      '21-22',
+      pair21.length
+      ?
+      pair21.join(', ')
+      :
+      'Chưa trả lời'
     );
 
+  }
 
-  const pair2=
-    intersectionScore(
-      responses.pair23_24,
-      ANSWERS.pair23_24
+
+  /* ---------------------------------
+     QUESTIONS 23–24
+  --------------------------------- */
+
+  const pair23 =
+  getPair(
+    '23-24'
+  );
+
+
+  answers['23-24'] =
+  pair23;
+
+
+  const pair23Score =
+  pairScore(
+    pair23,
+    PAIR_KEYS[
+      '23-24'
+    ]
+  );
+
+
+  score +=
+  pair23Score;
+
+
+  markPairNav(
+    23,
+    24,
+    pair23,
+    PAIR_KEYS[
+      '23-24'
+    ]
+  );
+
+
+  if(
+    !sameSet(
+      pair23,
+      PAIR_KEYS[
+        '23-24'
+      ]
+    )
+  ){
+
+    renderReview(
+      '23-24',
+      pair23.length
+      ?
+      pair23.join(', ')
+      :
+      'Chưa trả lời'
     );
 
-
-  let score=
-    pair1
-    +
-    pair2;
+  }
 
 
-  [25,26,27,28,29,30]
+  /* ---------------------------------
+     QUESTIONS 25–30
+  --------------------------------- */
+
+  [
+    25,26,27,28,29,30
+  ]
   .forEach(
-    q=>{
+    number => {
 
-      if(
-        responses[q]
-        ===
-        ANSWERS[q]
-      ){
+      const user =
+      getSingle(
+        number
+      );
+
+
+      answers[number] =
+      user;
+
+
+      const ok =
+      user ===
+      SINGLE_KEYS[number];
+
+
+      if(ok){
 
         score++;
 
       }
 
+
+      const button =
+      document.getElementById(
+        'nav' + number
+      );
+
+
+      button
+      .classList
+      .remove(
+        'answered'
+      );
+
+
+      button
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      const block =
+      document.getElementById(
+        'question' + number
+      );
+
+
+      block
+      ?.classList
+      .add(
+        ok
+        ?
+        'submitted-correct'
+        :
+        'submitted-wrong'
+      );
+
+
+      if(!ok){
+
+        renderReview(
+          number,
+          user || 'Chưa trả lời'
+        );
+
+      }
+
     }
+
   );
 
 
-  showResult(
-    score,
-    responses
-  );
+  /* DISABLE INPUTS */
 
-
-  await savePracticeResult(
-    score,
-    responses
-  );
-
-}
-
-
-/* =========================================================
-   RESULT UI
-========================================================= */
-
-function showResult(
-  score,
-  responses
-){
-
-  scoreBig.textContent=
-    `${score}/10`;
-
-
-  if(score>=9){
-
-    resultTitle.textContent=
-      'Excellent work.';
-
-
-    resultText.textContent=
-      'Bạn đã xử lý rất tốt các distractor và paraphrase trong Part 3.';
-
-  }
-
-  else if(score>=7){
-
-    resultTitle.textContent=
-      'Good performance.';
-
-
-    resultText.textContent=
-      'Kết quả khá tốt. Hãy review các câu sai để nhận diện rõ hơn cách người nói sửa hoặc phủ định thông tin.';
-
-  }
-
-  else{
-
-    resultTitle.textContent=
-      'Review the key details.';
-
-
-    resultText.textContent=
-      'Nghe lại các đoạn liên quan bên dưới và chú ý những chỗ người nói đổi ý, phủ định hoặc diễn đạt lại đáp án.';
-
-  }
-
-
-  resultBox.classList.remove(
-    'hidden'
-  );
-
-
-  buildWrongReview(
-    responses
-  );
-
-
-  reviewSection.classList.remove(
-    'hidden'
-  );
-
-
-  transcriptSection.classList.remove(
-    'hidden'
-  );
-
-
-  resultBox.scrollIntoView({
-    behavior:'smooth',
-    block:'center'
-  });
-
-}
-
-
-/* =========================================================
-   WRONG-ONLY REVIEW
-========================================================= */
-
-function buildWrongReview(
-  responses
-){
-
-  const wrong=[];
-
-
-  if(
-    !sameSet(
-      responses.pair21_22,
-      ANSWERS.pair21_22
-    )
-  ){
-
-    wrong.push({
-
-      id:'21-22',
-
-      selected:
-        responses.pair21_22.length
-        ?
-        responses.pair21_22.join(', ')
-        :
-        'No answer'
-
-    });
-
-  }
-
-
-  if(
-    !sameSet(
-      responses.pair23_24,
-      ANSWERS.pair23_24
-    )
-  ){
-
-    wrong.push({
-
-      id:'23-24',
-
-      selected:
-        responses.pair23_24.length
-        ?
-        responses.pair23_24.join(', ')
-        :
-        'No answer'
-
-    });
-
-  }
-
-
-  [25,26,27,28,29,30]
+  document
+  .querySelectorAll(
+    '#questionsRoot input'
+  )
   .forEach(
-    q=>{
+    input => {
 
-      if(
-        responses[q]
-        !==
-        ANSWERS[q]
-      ){
-
-        wrong.push({
-
-          id:String(q),
-
-          selected:
-            responses[q]
-            ||
-            'No answer'
-
-        });
-
-      }
+      input.disabled =
+      true;
 
     }
   );
 
 
-  if(!wrong.length){
+  /* OPEN TRANSCRIPT */
 
-    reviewList.innerHTML=
-      `
-        <div class="all-correct">
-          ✓ All answers are correct. No incorrect answers to review.
-        </div>
-      `;
-
-
-    return;
-
-  }
+  transcriptPanel
+  .classList
+  .remove(
+    'hidden'
+  );
 
 
-  reviewList.innerHTML=
-    wrong.map(
-      item=>{
-
-        const data=
-          REVIEW_DATA[
-            item.id
-          ];
+  bindContextActions(
+    'transcript'
+  );
 
 
-        return`
-          <article class="review-card">
-
-            <div class="review-q">
-              Question ${item.id}: ${data.question}
-            </div>
+  audioStatusTitle.textContent =
+  'Chế độ chữa bài';
 
 
-            <div class="review-line">
-
-              <b>
-                Your answer:
-              </b>
-
-              <span class="wrong">
-                ${item.selected}
-              </span>
-
-            </div>
+  audioStatusText.textContent =
+  'Có thể tua tự do hoặc nhấn vào transcript/giải thích để nghe đúng đoạn chứa đáp án.';
 
 
-            <div class="review-line">
-
-              <b>
-                Correct answer:
-              </b>
-
-              <span class="correct">
-                ${data.correct}
-              </span>
-
-            </div>
-
-
-            <div
-              class="evidence"
-              onclick="seekTo(${data.time})"
-            >
-              🎧 <b>Transcript evidence:</b>
-              “${data.evidence}”
-              <br>
-              <span style="opacity:.7">
-                Click to listen again
-              </span>
-            </div>
-
-
-            <div class="analysis">
-              <b>Phân tích:</b>
-              ${data.analysis}
-            </div>
-
-          </article>
-        `;
-
-      }
+  const durationSeconds =
+  Math.floor(
+    (
+      Date.now()
+      -
+      startedAt
     )
-    .join('');
-
-}
-
-
-/* =========================================================
-   SAVE PRACTICE
-========================================================= */
-
-async function savePracticeResult(
-  score,
-  responses
-){
-
-  const profile=
-    readProfile()
-    ||
-    {};
+    /
+    1000
+  );
 
 
-  const duration=
-    Math.floor(
-      (
-        Date.now()
-        -
-        startedAt
-      )
-      /
-      1000
-    );
+  const student =
+  readStudent();
 
 
-  const details=
+  resultStudent.textContent =
+  student
+  ?
+  `${student.name} · ${student.className}`
+  :
+  '';
+
+
+  resultScore.textContent =
+  `${score} / 10`;
+
+
+  resultPercent.textContent =
+  `${Math.round(score/10*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  /* SEND PRACTICE */
+
+  const body =
+  new URLSearchParams({
+
+    mode:
+    'PRACTICE',
+
+    name:
+    student?.name || '',
+
+    className:
+    student?.className || '',
+
+    skill:
+    'Listening',
+
+    practiceType:
+    'Part 3',
+
+    practiceId:
+    '01',
+
+    score:
+    String(score),
+
+    total:
+    '10',
+
+    durationSeconds:
+    String(
+      durationSeconds
+    ),
+
+    details:
     JSON.stringify({
 
       title:
-        'Thor Heyerdahl',
+      'Thor Heyerdahl - Listening Part 3 Practice 01',
 
       source:
-        'Cambridge IELTS 10 Test 2 Section 3',
-
-      questions:
-        '21-30',
-
-      answers:
-        responses,
-
-      correctAnswers:
-        ANSWERS,
+      'Cambridge IELTS 10 Test 2 Section 3',
 
       audio:
-        'Cam10-Test2-Section3.mp3'
+      'Cam10-Test2-Section3.mp3',
 
-    });
+      answers:
+      answers,
 
+      correctAnswers:{
+        '21-22':['B','C'],
+        '23-24':['B','E'],
+        25:'A',
+        26:'C',
+        27:'C',
+        28:'A',
+        29:'B',
+        30:'A'
+      }
 
-  const body=
-    new URLSearchParams();
+    }),
 
-
-  body.set(
-    'mode',
-    'PRACTICE'
-  );
-
-
-  body.set(
-    'name',
-    profile.name||''
-  );
-
-
-  body.set(
-    'className',
-    profile.className||''
-  );
-
-
-  body.set(
-    'skill',
-    'Listening'
-  );
-
-
-  body.set(
-    'practiceType',
-    'Part 3'
-  );
-
-
-  body.set(
-    'practiceId',
-    '01'
-  );
-
-
-  body.set(
-    'score',
-    score
-  );
-
-
-  body.set(
-    'total',
-    10
-  );
-
-
-  body.set(
-    'durationSeconds',
-    duration
-  );
-
-
-  body.set(
-    'details',
-    details
-  );
-
-
-  body.set(
-    'attemptId',
-    ATTEMPT_KEY
-    +
-    '_'
-    +
-    Date.now()
-  );
-
-
-  body.set(
-    'submittedAt',
+    submittedAt:
     new Date()
     .toISOString()
-  );
+
+  });
 
 
   try{
 
     await fetch(
-      ENDPOINT,
-      {
-        method:'POST',
 
-        mode:'no-cors',
+      RESULT_ENDPOINT,
+
+      {
+        method:
+        'POST',
+
+        mode:
+        'no-cors',
 
         headers:{
           'Content-Type':
-            'application/x-www-form-urlencoded;charset=UTF-8'
+          'application/x-www-form-urlencoded;charset=UTF-8'
         },
 
         body:
-          body.toString()
+        body.toString()
       }
+
     );
 
   }
-
   catch(error){
 
     console.warn(
-      'Practice result could not be sent.',
+      'Không gửi được kết quả Practice:',
       error
     );
 
@@ -3783,12 +5119,1310 @@ async function savePracticeResult(
 
 
 /* =========================================================
+   PAIR NAV RESULT
+========================================================= */
+
+function markPairNav(
+  first,
+  second,
+  selected,
+  correct
+){
+
+  const positions =
+  [
+    first,
+    second
+  ];
+
+
+  positions.forEach(
+    (
+      number,
+      index
+    ) => {
+
+      const value =
+      selected[index]
+      ||
+      '';
+
+
+      const ok =
+      correct.includes(
+        value
+      );
+
+
+      const button =
+      document.getElementById(
+        'nav' + number
+      );
+
+
+      button
+      .classList
+      .remove(
+        'answered'
+      );
+
+
+      button
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+    }
+
+  );
+
+
+  const block =
+  first === 21
+  ?
+  document.getElementById(
+    'questionGroup21'
+  )
+  :
+  document.getElementById(
+    'questionGroup23'
+  );
+
+
+  block
+  ?.classList
+  .add(
+    sameSet(
+      selected,
+      correct
+    )
+    ?
+    'submitted-correct'
+    :
+    'submitted-wrong'
+  );
+
+}
+
+
+/* =========================================================
+   WRONG ANSWER REVIEW
+========================================================= */
+
+function renderReview(
+  number,
+  user
+){
+
+  reviewList
+  .insertAdjacentHTML(
+
+    'beforeend',
+
+    `
+      <div class="inline-review">
+
+        <div class="review-title">
+          ${
+            String(number).includes('-')
+            ?
+            `Questions ${number}`
+            :
+            `Question ${number}`
+          }
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án em chọn
+          </div>
+
+          <div class="review-user">
+            ${escapeHTML(user || 'Chưa trả lời')}
+          </div>
+
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án đúng
+          </div>
+
+          <div class="review-correct">
+            ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+
+        <div class="explain-box">
+
+          <div class="explain-label">
+            Original prompt
+          </div>
+
+          <div class="explain-text">
+            ${QUESTION_TEXT[number]}
+          </div>
+
+
+          <div
+            class="explain-label"
+            style="margin-top:9px"
+          >
+            Transcript
+          </div>
+
+
+          <div
+            class="transcript-evidence"
+            onclick="reviewCue('${number}')"
+          >
+
+            ${TRANSCRIPT_SNIPPET[number]}
+
+            <div class="evidence-help">
+              Nhấn để tua đến đúng đoạn audio
+              và mở dòng transcript tương ứng
+            </div>
+
+          </div>
+
+
+          <div class="review-actions">
+
+            <button
+              class="review-btn"
+              onclick="playSegment('${number}',false)"
+            >
+              ▶ Nghe đoạn chứa đáp án
+            </button>
+
+
+            <button
+              class="review-btn"
+              onclick="showTranscriptCue('${number}')"
+            >
+              📝 Xem trong transcript
+            </button>
+
+          </div>
+
+
+          <div
+            class="explain-label"
+            style="margin-top:9px"
+          >
+            Phân tích
+          </div>
+
+
+          <div class="explain-text">
+            ${EXPLANATION[number]}
+          </div>
+
+
+          <div class="conclusion">
+            Kết luận: ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+      </div>
+    `
+
+  );
+
+}
+
+
+/* =========================================================
+   REVIEW CUE
+========================================================= */
+
+function reviewCue(number){
+
+  showTranscriptCue(
+    number
+  );
+
+
+  playSegment(
+    number,
+    true
+  );
+
+}
+
+
+/* =========================================================
+   PLAY SEGMENT
+========================================================= */
+
+function playSegment(
+  number,
+  keepTranscriptVisible = false
+){
+
+  const cue =
+  CUES[number];
+
+
+  if(!cue){
+
+    return;
+
+  }
+
+
+  segmentEnd =
+  cue.end;
+
+
+  practiceAudio.currentTime =
+  cue.start;
+
+
+  practiceAudio
+  .play()
+  .catch(
+    ()=>{}
+  );
+
+
+  audioStatusTitle.textContent =
+  `Đang nghe lại ${
+    String(number).includes('-')
+    ?
+    'Questions '
+    :
+    'Question '
+  }${number}`;
+
+
+  audioStatusText.textContent =
+  `Đoạn ${fmt(cue.start)} – ${fmt(cue.end)} · tốc độ ${practiceAudio.playbackRate}×`;
+
+
+  if(
+    keepTranscriptVisible
+  ){
+
+    showTranscriptCue(
+      number
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TRANSCRIPT SCROLL
+========================================================= */
+
+function transcriptId(number){
+
+  if(
+    number === 21
+    ||
+    number === 22
+    ||
+    number === '21'
+    ||
+    number === '22'
+    ||
+    number === '21-22'
+  ){
+
+    return 'transcript-q21-22';
+
+  }
+
+
+  if(
+    number === 23
+    ||
+    number === 24
+    ||
+    number === '23'
+    ||
+    number === '24'
+    ||
+    number === '23-24'
+  ){
+
+    return 'transcript-q23-24';
+
+  }
+
+
+  return(
+    'transcript-q'
+    +
+    number
+  );
+
+}
+
+
+function showTranscriptCue(number){
+
+  transcriptPanel
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  document
+  .querySelectorAll(
+    '.tline.transcript-focus'
+  )
+  .forEach(
+    element => {
+
+      element
+      .classList
+      .remove(
+        'transcript-focus'
+      );
+
+    }
+  );
+
+
+  const line =
+  document.getElementById(
+    transcriptId(number)
+  );
+
+
+  if(!line){
+
+    return;
+
+  }
+
+
+  line
+  .classList
+  .add(
+    'transcript-focus'
+  );
+
+
+  line
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  line.style.animation =
+  'none';
+
+
+  void line.offsetWidth;
+
+
+  line.style.animation =
+  '';
+
+}
+
+
+/* =========================================================
+   CLOSE RESULT
+========================================================= */
+
+function closeResult(){
+
+  resultOverlay
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  const firstReview =
+  reviewList
+  .querySelector(
+    '.inline-review'
+  );
+
+
+  if(firstReview){
+
+    reviewList
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'start'
+
+    });
+
+  }
+
+  else{
+
+    transcriptPanel
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'start'
+
+    });
+
+  }
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + TAKE NOTE
+========================================================= */
+
+function zoneRoot(zone){
+
+  return zone === 'transcript'
+
+  ?
+
+  document.getElementById(
+    'transcriptRoot'
+  )
+
+  :
+
+  document.getElementById(
+    'questionsRoot'
+  );
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+/*
+ * Lưu annotation trước khi nộp.
+ */
+
+function saveMarkup(zone){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  const root =
+  zoneRoot(zone);
+
+
+  if(!root){
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    root.innerHTML
+
+  );
+
+}
+
+
+/* =========================================================
+   RESTORE HIGHLIGHTS / NOTES
+========================================================= */
+
+function restoreMarkup(){
+
+  const markup =
+  localStorage.getItem(
+    markupKey(
+      'questions'
+    )
+  );
+
+
+  if(markup){
+
+    questionsRoot.innerHTML =
+    markup;
+
+  }
+
+
+  bindContextActions(
+    'questions'
+  );
+
+
+  bindContextActions(
+    'transcript'
+  );
+
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function resetMenu(){
+
+  menuMode =
+  'selection';
+
+
+  menuTarget =
+  null;
+
+
+  menuZone =
+  null;
+
+
+  menuHighlight.style.display =
+  '';
+
+
+  menuNote.style.display =
+  '';
+
+
+  menuHighlight.textContent =
+  '🖍 Highlight';
+
+
+  menuNote.textContent =
+  '📝 Take note';
+
+
+  menuHighlight
+  .classList
+  .remove(
+    'danger'
+  );
+
+
+  menuNote
+  .classList
+  .remove(
+    'danger'
+  );
+
+}
+
+
+function hideMenu(){
+
+  selectionMenu
+  .classList
+  .remove(
+    'show'
+  );
+
+
+  resetMenu();
+
+}
+
+
+function showMenu(rect){
+
+  selectionMenu
+  .classList
+  .add(
+    'show'
+  );
+
+
+  requestAnimationFrame(
+
+    ()=>{
+
+      const width =
+      selectionMenu.offsetWidth
+      ||
+      180;
+
+
+      const left =
+      Math.min(
+
+        window.innerWidth
+        -
+        width
+        -
+        10,
+
+        Math.max(
+
+          10,
+
+          rect.left
+          +
+          rect.width/2
+          -
+          width/2
+
+        )
+
+      );
+
+
+      selectionMenu.style.left =
+      left + 'px';
+
+
+      selectionMenu.style.top =
+      Math.max(
+        10,
+        rect.top - 47
+      )
+      +
+      'px';
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   CAPTURE SELECTION
+========================================================= */
+
+function captureSelection(zone){
+
+  const selection =
+  window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    !selection.rangeCount
+    ||
+    selection.isCollapsed
+  ){
+
+    return;
+
+  }
+
+
+  const range =
+  selection.getRangeAt(0);
+
+
+  const root =
+  zoneRoot(zone);
+
+
+  if(
+    !root
+    ||
+    !root.contains(
+      range.commonAncestorContainer
+    )
+  ){
+
+    return;
+
+  }
+
+
+  savedSelection =
+  range.cloneRange();
+
+
+  savedZone =
+  zone;
+
+
+  resetMenu();
+
+
+  showMenu(
+    range
+    .getBoundingClientRect()
+  );
+
+}
+
+
+function clearSelection(){
+
+  const selection =
+  window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection =
+  null;
+
+
+  savedZone =
+  null;
+
+}
+
+
+/* =========================================================
+   ADD HIGHLIGHT
+========================================================= */
+
+function addHighlight(){
+
+  if(
+    menuMode ===
+    'delete-highlight'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+    savedSelection.cloneRange();
+
+
+    const mark =
+    document.createElement(
+      'mark'
+    );
+
+
+    mark.className =
+    'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+  catch(error){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   ADD NOTE
+========================================================= */
+
+function addNote(){
+
+  if(
+    menuMode ===
+    'delete-note'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const note =
+  prompt(
+    'Nhập ghi chú:'
+  );
+
+
+  if(
+    note === null
+    ||
+    !note.trim()
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+    savedSelection.cloneRange();
+
+
+    const span =
+    document.createElement(
+      'span'
+    );
+
+
+    span.className =
+    'note-anchor';
+
+
+    span.dataset.note =
+    note.trim();
+
+
+    span.title =
+    note.trim();
+
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+  catch(error){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE ANNOTATION
+========================================================= */
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget =
+  target;
+
+
+  menuZone =
+  zone;
+
+
+  clearSelection();
+
+
+  if(
+    type ===
+    'highlight'
+  ){
+
+    menuMode =
+    'delete-highlight';
+
+
+    menuHighlight.textContent =
+    '✕ Xóa highlight';
+
+
+    menuHighlight
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuNote.style.display =
+    'none';
+
+  }
+
+  else{
+
+    menuMode =
+    'delete-note';
+
+
+    menuNote.textContent =
+    '✕ Xóa note';
+
+
+    menuNote
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuHighlight.style.display =
+    'none';
+
+  }
+
+
+  showMenu(
+    target
+    .getBoundingClientRect()
+  );
+
+}
+
+
+function removeMark(){
+
+  if(!menuTarget){
+
+    return;
+
+  }
+
+
+  const parent =
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    menuZone
+  );
+
+
+  hideMenu();
+
+}
+
+
+/* =========================================================
+   BIND CONTEXT ACTIONS
+========================================================= */
+
+function bindContextActions(zone){
+
+  const root =
+  zoneRoot(zone);
+
+
+  if(
+    !root
+    ||
+    root.dataset.contextBound === '1'
+  ){
+
+    return;
+
+  }
+
+
+  root.dataset.contextBound =
+  '1';
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        0
+
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        120
+
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event => {
+
+      const highlight =
+      event.target.closest(
+        'mark.user-highlight'
+      );
+
+
+      const note =
+      event.target.closest(
+        '.note-anchor'
+      );
+
+
+      if(highlight){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   MENU BUTTONS
+========================================================= */
+
+menuHighlight
+.addEventListener(
+  'click',
+  addHighlight
+);
+
+
+menuNote
+.addEventListener(
+  'click',
+  addNote
+);
+
+
+document
+.addEventListener(
+
+  'mousedown',
+
+  event => {
+
+    if(
+      !selectionMenu.contains(
+        event.target
+      )
+
+      &&
+
+      !event.target.closest(
+        '.user-highlight'
+      )
+
+      &&
+
+      !event.target.closest(
+        '.note-anchor'
+      )
+    ){
+
+      hideMenu();
+
+    }
+
+  }
+
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value
+    ??
+    ''
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    character => ({
+
+      '&':'&amp;',
+
+      '<':'&lt;',
+
+      '>':'&gt;',
+
+      '"':'&quot;',
+
+      "'":'&#39;'
+
+    })[character]
+
+  );
+
+}
+
+
+/* =========================================================
    INIT
 ========================================================= */
 
-initProfile();
+prefill();
 
-updateAnswerStatus();
+
+bindContextActions(
+  'questions'
+);
+
+
+bindContextActions(
+  'transcript'
+);
 
 </script>
 
