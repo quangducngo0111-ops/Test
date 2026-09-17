@@ -2,12 +2,21 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 
-<title>Listening Note Completion 01 — Hiring a Public Room</title>
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<meta
+  http-equiv="Cache-Control"
+  content="no-cache, no-store, must-revalidate"
+>
+
+<title>Listening Part 3 01 — Thor Heyerdahl</title>
 
 <style>
+
 :root{
   --purple:#281260;
   --purple2:#5135a6;
@@ -25,20 +34,39 @@
   box-sizing:border-box;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 html,
 body{
   margin:0;
+
   min-height:100%;
+
   font-family:
     Inter,
     system-ui,
     -apple-system,
+    BlinkMacSystemFont,
     "Segoe UI",
     Arial,
     sans-serif;
 
   color:var(--ink);
-  background:var(--bg);
+
+  background:
+    radial-gradient(
+      circle at 6% 0%,
+      rgba(133,94,220,.08),
+      transparent 23%
+    ),
+    radial-gradient(
+      circle at 94% 0%,
+      rgba(68,138,230,.08),
+      transparent 23%
+    ),
+    var(--bg);
 }
 
 button,
@@ -51,14 +79,20 @@ button{
   cursor:pointer;
 }
 
+.hidden{
+  display:none !important;
+}
 
-/* =========================
+
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
 .top{
   position:sticky;
+
   top:0;
+
   z-index:30;
 
   background:
@@ -88,15 +122,20 @@ button{
   margin:auto;
 
   display:flex;
+
   align-items:center;
-  justify-content:space-between;
+
+  justify-content:
+    space-between;
 
   gap:10px;
 }
 
 .left{
   display:flex;
+
   align-items:center;
+
   gap:9px;
 
   min-width:0;
@@ -104,17 +143,20 @@ button{
 
 .back{
   color:#fff;
+
   text-decoration:none;
 
   border:
     1px solid
     rgba(255,255,255,.25);
 
-  padding:7px 10px;
+  padding:
+    7px 10px;
 
   border-radius:9px;
 
   font-size:11px;
+
   font-weight:900;
 
   white-space:nowrap;
@@ -132,6 +174,7 @@ button{
 
 .student{
   font-size:11px;
+
   font-weight:800;
 
   background:
@@ -141,7 +184,8 @@ button{
     1px solid
     rgba(255,255,255,.18);
 
-  padding:7px 10px;
+  padding:
+    7px 10px;
 
   border-radius:999px;
 }
@@ -151,20 +195,22 @@ button{
     tabular-nums;
 
   font-size:19px;
+
   font-weight:950;
 
   background:
     rgba(255,255,255,.13);
 
-  padding:8px 11px;
+  padding:
+    8px 11px;
 
   border-radius:9px;
 }
 
 
-/* =========================
+/* =========================================================
    PAGE
-========================= */
+========================================================= */
 
 .page{
   width:
@@ -176,18 +222,35 @@ button{
   margin:auto;
 
   padding:
-    18px 0 50px;
+    18px 0 70px;
 }
 
 .hero{
   display:flex;
+
   align-items:end;
+
   justify-content:
     space-between;
 
   gap:18px;
 
   margin-bottom:13px;
+
+  padding:
+    18px 20px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:15px;
+
+  background:#fff;
+
+  box-shadow:
+    0 6px 18px
+    rgba(35,25,75,.035);
 }
 
 .hero h1{
@@ -210,9 +273,9 @@ button{
 }
 
 
-/* =========================
+/* =========================================================
    PROGRESS
-========================= */
+========================================================= */
 
 .progress-wrap{
   min-width:260px;
@@ -220,6 +283,7 @@ button{
 
 .progress-row{
   display:flex;
+
   justify-content:
     space-between;
 
@@ -230,6 +294,7 @@ button{
   color:var(--muted);
 
   font-size:10.5px;
+
   font-weight:850;
 }
 
@@ -247,6 +312,7 @@ button{
   display:block;
 
   width:0;
+
   height:100%;
 
   background:
@@ -261,22 +327,23 @@ button{
 }
 
 
-/* =========================
-   AUDIO PLAYER
-========================= */
+/* =========================================================
+   AUDIO
+========================================================= */
 
 .audio-panel{
-  background:#fff;
+  margin-bottom:12px;
+
+  padding:
+    14px 15px;
 
   border:
     1px solid
     var(--line);
 
-  border-radius:16px;
+  border-radius:15px;
 
-  padding:14px 15px;
-
-  margin-bottom:12px;
+  background:#fff;
 
   box-shadow:
     0 6px 18px
@@ -285,7 +352,9 @@ button{
 
 .audio-head{
   display:flex;
+
   align-items:center;
+
   justify-content:
     space-between;
 
@@ -294,6 +363,7 @@ button{
 
 .audio-title{
   display:flex;
+
   align-items:center;
 
   gap:10px;
@@ -301,6 +371,7 @@ button{
 
 .audio-icon{
   width:38px;
+
   height:38px;
 
   border-radius:11px;
@@ -310,6 +381,7 @@ button{
   color:#5135a6;
 
   display:grid;
+
   place-items:center;
 
   font-size:18px;
@@ -335,6 +407,7 @@ button{
 
 .audio-time{
   font-size:11px;
+
   font-weight:950;
 
   color:#281260;
@@ -349,7 +422,7 @@ button{
   grid-template-columns:
     auto
     auto
-    1fr
+    minmax(120px,1fr)
     auto
     auto
     auto;
@@ -362,21 +435,23 @@ button{
 }
 
 .audio-btn{
+  min-height:36px;
+
+  padding:
+    0 10px;
+
   border:
     1px solid
     #dddfe8;
+
+  border-radius:9px;
 
   background:#fff;
 
   color:#32255c;
 
-  border-radius:9px;
-
-  min-height:36px;
-
-  padding:0 10px;
-
   font-size:11px;
+
   font-weight:900;
 }
 
@@ -386,6 +461,8 @@ button{
 
 .audio-btn.primary{
   width:42px;
+
+  padding:0;
 
   background:#281260;
 
@@ -399,12 +476,15 @@ button{
 .seek{
   width:100%;
 
+  min-width:0;
+
   accent-color:#5135a6;
 }
 
 .speed-wrap,
 .volume-wrap{
   display:flex;
+
   align-items:center;
 
   gap:5px;
@@ -412,19 +492,23 @@ button{
   color:#6f7890;
 
   font-size:9.5px;
+
   font-weight:850;
+
+  white-space:nowrap;
 }
 
 .speed-wrap select{
+  padding:
+    7px 6px;
+
   border:
     1px solid
     #d9dde7;
 
-  background:#fff;
-
   border-radius:8px;
 
-  padding:7px 6px;
+  background:#fff;
 
   color:#33265d;
 
@@ -440,7 +524,8 @@ button{
 .practice-note{
   margin-top:8px;
 
-  padding:7px 9px;
+  padding:
+    7px 9px;
 
   background:#f8f7ff;
 
@@ -454,18 +539,18 @@ button{
 }
 
 
-/* =========================
+/* =========================================================
    PAPER
-========================= */
+========================================================= */
 
 .paper{
-  background:#fff;
-
   border:
     1px solid
     var(--line);
 
-  border-radius:17px;
+  border-radius:16px;
+
+  background:#fff;
 
   overflow:hidden;
 
@@ -476,178 +561,100 @@ button{
 
 .paper-inner{
   padding:
-    22px 28px 26px;
+    22px 28px 28px;
 }
 
 
-/* =========================
-   INSTRUCTIONS
-========================= */
+/* =========================================================
+   QUESTIONS
+========================================================= */
 
-.instructions{
-  margin-bottom:17px;
-}
+.question-block{
+  width:
+    min(
+      880px,
+      100%
+    );
 
-.instructions h3{
   margin:
-    0 0 7px;
+    0 auto 14px;
+
+  padding:
+    19px 21px;
+
+  border:
+    1px solid
+    #dfe3eb;
+
+  border-radius:12px;
+
+  background:#fff;
+
+  transition:
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.question-title{
+  margin:
+    0 0 5px;
 
   color:#21164b;
 
-  font-size:17px;
+  font-size:14px;
+
+  font-weight:950;
 }
 
-.instructions p{
-  margin:3px 0;
+.question-instruction{
+  margin:
+    0 0 16px;
 
-  color:#5f6677;
+  color:#626a7a;
 
-  font-size:11.5px;
+  font-size:11px;
 
   line-height:1.55;
 }
 
-.rule{
-  display:inline-block;
-
-  margin-top:7px;
-
-  padding:7px 10px;
-
-  border-radius:8px;
-
-  background:#f0ecff;
-
-  color:#5c43b2;
-
-  font-size:10.5px;
-  font-weight:900;
-}
-
-
-/* =========================
-   NOTES
-========================= */
-
-.notes{
-  width:min(850px,100%);
-
-  margin:0 auto;
-
-  border:
-    1px solid
-    #d9dde6;
-
-  padding:20px 24px;
-
-  background:#fff;
-}
-
-.notes-title{
+.section-heading{
   margin:
-    0 0 18px;
+    0 0 12px;
 
-  text-align:center;
+  color:#21164b;
 
-  font-size:18px;
+  font-size:14px;
+
   font-weight:950;
-
-  letter-spacing:.02em;
-
-  color:#202636;
 }
 
-.example{
-  margin-bottom:17px;
+.main-question{
+  margin-bottom:14px;
+
+  color:#2d3445;
 
   font-size:12.5px;
 
-  line-height:1.7;
-}
-
-.example-label{
-  display:block;
-
-  margin-bottom:4px;
-
-  font-size:10px;
-  font-weight:950;
-  font-style:italic;
-}
-
-.example-answer{
-  display:inline-block;
-
-  min-width:72px;
-
-  text-align:center;
-
-  border-bottom:
-    1px dotted
-    #717888;
-
-  font-weight:950;
-  font-style:italic;
-}
-
-.section-title{
-  margin:
-    19px 0 8px;
-
-  font-size:13px;
-  font-weight:950;
-}
-
-.note-line{
-  position:relative;
-
-  padding-left:18px;
-
-  margin:8px 0;
-
-  font-size:12.5px;
-
-  line-height:1.85;
-}
-
-.note-line::before{
-  content:"●";
-
-  position:absolute;
-
-  left:0;
-  top:0;
-
-  color:#2c3140;
-
-  font-size:8px;
-}
-
-.subline{
-  padding-left:35px;
-}
-
-.subline::before{
-  content:"+";
-
-  left:18px;
-
-  font-size:12px;
   font-weight:900;
+
+  line-height:1.6;
 }
 
 .qno{
   display:inline-flex;
 
   align-items:center;
+
   justify-content:center;
 
-  min-width:22px;
-  height:22px;
+  min-width:31px;
 
-  margin:0 3px;
+  height:24px;
 
-  padding:0 5px;
+  margin-right:5px;
+
+  padding:
+    0 6px;
 
   border-radius:6px;
 
@@ -656,87 +663,133 @@ button{
   color:#4b318e;
 
   font-size:10px;
+
   font-weight:950;
-
-  vertical-align:middle;
 }
 
-.answer{
-  display:inline-block;
 
-  width:132px;
+/* =========================================================
+   OPTIONS — FIXED
+========================================================= */
 
-  margin:
-    0 3px 0 0;
+.options{
+  display:grid;
 
-  vertical-align:middle;
+  gap:7px;
 }
 
-.answer.small{
-  width:92px;
-}
+.option{
+  display:grid;
 
-.answer input{
+  grid-template-columns:
+    20px 24px minmax(0,1fr);
+
+  align-items:start;
+
+  gap:7px;
+
   width:100%;
 
-  padding:7px 8px;
+  padding:
+    10px 12px;
 
   border:
     1px solid
-    #cbd1dc;
+    #e3e6ed;
 
-  border-radius:7px;
-
-  outline:none;
+  border-radius:9px;
 
   background:#fff;
 
-  color:#202636;
+  cursor:pointer;
 
-  font-size:11px;
-  font-weight:850;
+  transition:
+    border-color .12s ease,
+    background .12s ease,
+    transform .12s ease;
 }
 
-.answer input:focus{
-  border-color:#6a55bf;
+.option:hover{
+  border-color:#c8bbee;
 
-  box-shadow:
-    0 0 0 3px
-    rgba(81,53,166,.08);
+  background:#fcfbff;
 }
 
-.answer input.correct{
-  border-color:#8ed6b4;
+.option.selected{
+  border-color:#765bc9;
 
-  background:#f4fcf7;
-
-  color:#126b48;
+  background:#f2efff;
 }
 
-.answer input.wrong{
-  border-color:#efb7bf;
+.option input{
+  width:15px;
 
-  background:#fff7f8;
-
-  color:#9b2838;
-}
-
-
-/* =========================
-   REVIEW
-========================= */
-
-.review-list{
-  width:min(850px,100%);
+  height:15px;
 
   margin:
-    14px auto 0;
+    2px 0 0;
+
+  accent-color:#5135a6;
+}
+
+.option input:disabled{
+  cursor:not-allowed;
+}
+
+.letter{
+  color:#4c367f;
+
+  font-size:11.5px;
+
+  font-weight:950;
+
+  line-height:1.5;
+}
+
+.option-text{
+  min-width:0;
+
+  color:#343b4b;
+
+  font-size:11.5px;
+
+  line-height:1.5;
+
+  overflow-wrap:anywhere;
+}
+
+.question-block.submitted-correct{
+  border-color:#9ed7bb;
+
+  background:#fbfffd;
+}
+
+.question-block.submitted-wrong{
+  border-color:#e9b8bf;
+
+  background:#fffdfd;
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+.review-list{
+  width:
+    min(
+      880px,
+      100%
+    );
+
+  margin:
+    16px auto 0;
 }
 
 .inline-review{
   margin-top:10px;
 
-  padding:12px;
+  padding:13px;
 
   border:
     1px solid
@@ -756,22 +809,24 @@ button{
 }
 
 .review-title{
+  margin-bottom:7px;
+
   color:#21164b;
 
   font-weight:950;
-
-  margin-bottom:7px;
 }
 
 .review-row{
   display:grid;
 
   grid-template-columns:
-    110px 1fr;
+    120px 1fr;
 
-  gap:5px 8px;
+  gap:
+    5px 8px;
 
-  margin:4px 0;
+  margin:
+    4px 0;
 }
 
 .review-label{
@@ -797,13 +852,13 @@ button{
 
   padding:11px;
 
-  background:#f8f7ff;
-
   border:
     1px solid
     #ddd6fb;
 
   border-radius:9px;
+
+  background:#f8f7ff;
 }
 
 .explain-label{
@@ -812,15 +867,15 @@ button{
   color:#6f7890;
 
   font-size:9.5px;
+
   font-weight:950;
 
   text-transform:uppercase;
 }
 
 .explain-text{
-  padding:8px 9px;
-
-  background:#fff;
+  padding:
+    8px 9px;
 
   border:
     1px solid
@@ -828,11 +883,10 @@ button{
 
   border-radius:7px;
 
+  background:#fff;
+
   line-height:1.65;
 }
-
-
-/* CLICKABLE TRANSCRIPT EVIDENCE */
 
 .transcript-evidence{
   position:relative;
@@ -841,8 +895,6 @@ button{
 
   padding:
     10px 36px 10px 10px;
-
-  background:#eef3ff;
 
   border:
     1px solid
@@ -853,6 +905,8 @@ button{
     #5773d9;
 
   border-radius:7px;
+
+  background:#eef3ff;
 
   color:#293a70;
 
@@ -876,15 +930,17 @@ button{
   position:absolute;
 
   right:12px;
+
   top:50%;
 
   transform:
     translateY(-50%);
 
-  font-size:13px;
-  font-weight:950;
-
   color:#5135a6;
+
+  font-size:13px;
+
+  font-weight:950;
 }
 
 .evidence-help{
@@ -898,27 +954,29 @@ button{
 .review-actions{
   display:flex;
 
-  gap:7px;
-
   flex-wrap:wrap;
+
+  gap:7px;
 
   margin-top:8px;
 }
 
 .review-btn{
+  padding:
+    7px 9px;
+
   border:
     1px solid
     #d9d3f1;
+
+  border-radius:8px;
 
   background:#fff;
 
   color:#4b318e;
 
-  border-radius:8px;
-
-  padding:7px 9px;
-
   font-size:10px;
+
   font-weight:900;
 }
 
@@ -929,7 +987,8 @@ button{
 .conclusion{
   margin-top:8px;
 
-  padding:8px 9px;
+  padding:
+    8px 9px;
 
   border:
     1px solid
@@ -945,12 +1004,16 @@ button{
 }
 
 
-/* =========================
-   FULL TRANSCRIPT
-========================= */
+/* =========================================================
+   TRANSCRIPT
+========================================================= */
 
 .transcript-panel{
-  width:min(850px,100%);
+  width:
+    min(
+      880px,
+      100%
+    );
 
   margin:
     18px auto 0;
@@ -966,10 +1029,6 @@ button{
   overflow:hidden;
 }
 
-.transcript-panel.hidden{
-  display:none;
-}
-
 .transcript-head{
   display:flex;
 
@@ -980,13 +1039,14 @@ button{
 
   gap:10px;
 
-  padding:12px 14px;
-
-  background:#faf9ff;
+  padding:
+    12px 14px;
 
   border-bottom:
     1px solid
     var(--line);
+
+  background:#faf9ff;
 }
 
 .transcript-head b{
@@ -1002,23 +1062,27 @@ button{
 }
 
 .transcript-body{
-  max-height:480px;
+  max-height:560px;
 
   overflow:auto;
 
-  padding:12px 14px;
+  padding:
+    12px 14px;
 
   scroll-behavior:smooth;
 }
 
 .tline{
-  padding:8px 9px;
+  padding:
+    8px 9px;
 
   border-radius:8px;
 
+  color:#434b5b;
+
   font-size:11px;
 
-  line-height:1.6;
+  line-height:1.7;
 
   transition:.25s ease;
 }
@@ -1028,21 +1092,22 @@ button{
 }
 
 .speaker{
-  font-weight:950;
+  margin-right:6px;
 
   color:#281260;
 
-  margin-right:6px;
+  font-weight:950;
 }
 
 .answer-word{
+  padding:
+    1px 3px;
+
+  border-radius:3px;
+
   background:#fff0a3;
 
   color:#332750;
-
-  padding:1px 3px;
-
-  border-radius:3px;
 
   font-weight:950;
 }
@@ -1065,8 +1130,7 @@ button{
     rgba(245,190,35,.30);
 
   animation:
-    transcriptPulse
-    .85s ease 2;
+    transcriptPulse .85s ease 2;
 }
 
 @keyframes transcriptPulse{
@@ -1082,28 +1146,30 @@ button{
 }
 
 
-/* =========================
+/* =========================================================
    HIGHLIGHT + NOTE
-========================= */
+========================================================= */
 
 mark.user-highlight{
+  padding:0;
+
+  border-radius:3px;
+
   background:#fff29a;
 
   color:inherit;
-
-  border-radius:3px;
 
   cursor:pointer;
 }
 
 .note-anchor{
-  background:#ffe6a6;
-
   border-bottom:
     2px dotted
     #e28b19;
 
   border-radius:2px;
+
+  background:#ffe6a6;
 
   cursor:pointer;
 }
@@ -1119,9 +1185,9 @@ mark.user-highlight{
 
   padding:6px;
 
-  background:#21164b;
-
   border-radius:10px;
+
+  background:#21164b;
 
   box-shadow:
     0 12px 30px
@@ -1133,32 +1199,34 @@ mark.user-highlight{
 }
 
 .selection-menu button{
+  padding:
+    7px 9px;
+
   border:0;
+
+  border-radius:7px;
 
   background:#fff;
 
   color:#35285e;
 
-  border-radius:7px;
-
-  padding:7px 9px;
-
   font-size:10.5px;
+
   font-weight:900;
 
   white-space:nowrap;
 }
 
 .selection-menu button.danger{
-  color:#a31e31;
-
   background:#fff1f3;
+
+  color:#a31e31;
 }
 
 
-/* =========================
-   BOTTOM
-========================= */
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
 
 .bottom{
   position:sticky;
@@ -1176,19 +1244,20 @@ mark.user-highlight{
   margin:auto;
 
   padding:
-    9px 0 6px;
+    9px 0 7px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
 
   background:
     linear-gradient(
       to top,
-      var(--bg) 75%,
-      rgba(245,247,251,.88)
+      var(--bg) 76%,
+      rgba(245,247,251,.86)
     );
-
-  display:flex;
-  align-items:center;
-
-  gap:10px;
 }
 
 .nav{
@@ -1202,42 +1271,55 @@ mark.user-highlight{
 }
 
 .nav button{
-  width:31px;
+  width:34px;
+
   height:31px;
+
+  padding:0;
 
   border:
     1px solid
     var(--line);
 
-  background:#fff;
-
   border-radius:7px;
 
+  background:#fff;
+
   font-size:10px;
+
   font-weight:900;
 }
 
 .nav button.answered{
-  background:#e7efff;
-
   border-color:#c4d5ff;
+
+  background:#e7efff;
 }
 
 .nav button.correct{
-  background:#dff0e7;
+  border-color:#8ed6b4 !important;
 
-  border-color:#8ed6b4;
+  background:#dff0e7 !important;
+
+  color:#126b48;
 }
 
 .nav button.wrong{
-  background:#f4ddd8;
+  border-color:#f0b5bd !important;
 
-  border-color:#f0b5bd;
+  background:#f4ddd8 !important;
+
+  color:#9b2838;
 }
 
 .submit,
 .btn{
+  padding:
+    10px 15px;
+
   border:0;
+
+  border-radius:9px;
 
   background:
     linear-gradient(
@@ -1248,17 +1330,19 @@ mark.user-highlight{
 
   color:#fff;
 
-  border-radius:9px;
-
-  padding:10px 15px;
-
   font-weight:900;
 }
 
+.submit:disabled{
+  opacity:.55;
 
-/* =========================
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
    START + RESULT
-========================= */
+========================================================= */
 
 .start,
 .overlay{
@@ -1269,6 +1353,7 @@ mark.user-highlight{
   z-index:120;
 
   display:grid;
+
   place-items:center;
 
   padding:18px;
@@ -1281,13 +1366,13 @@ mark.user-highlight{
   z-index:110;
 }
 
-.hidden{
-  display:none !important;
-}
-
 .start-card,
 .result{
-  width:min(500px,100%);
+  width:
+    min(
+      500px,
+      100%
+    );
 
   max-height:88vh;
 
@@ -1295,9 +1380,9 @@ mark.user-highlight{
 
   padding:22px;
 
-  background:#fff;
-
   border-radius:19px;
+
+  background:#fff;
 
   box-shadow:
     0 24px 70px
@@ -1321,7 +1406,8 @@ mark.user-highlight{
 }
 
 .field{
-  margin:9px 0;
+  margin:
+    9px 0;
 }
 
 .field label{
@@ -1330,6 +1416,7 @@ mark.user-highlight{
   margin-bottom:5px;
 
   font-size:10.5px;
+
   font-weight:900;
 }
 
@@ -1343,6 +1430,16 @@ mark.user-highlight{
     #d5d9e2;
 
   border-radius:9px;
+
+  outline:none;
+}
+
+.field input:focus{
+  border-color:#765bc9;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.08);
 }
 
 .start-card .btn{
@@ -1358,42 +1455,34 @@ mark.user-highlight{
   color:#21164b;
 
   font-size:38px;
+
   font-weight:950;
 }
 
+.result h2{
+  margin:
+    0 0 5px;
 
-/* =========================
+  color:#21164b;
+}
+
+.result p{
+  margin:
+    4px 0;
+
+  color:#6f7890;
+
+  font-size:11px;
+
+  line-height:1.55;
+}
+
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
-@media(max-width:760px){
-
-  .hero{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .progress-wrap{
-    min-width:0;
-  }
-
-  .paper-inner{
-    padding:
-      16px 10px 22px;
-  }
-
-  .notes{
-    padding:
-      16px 13px;
-  }
-
-  .student{
-    display:none;
-  }
-
-  .answer{
-    width:115px;
-  }
+@media(max-width:800px){
 
   .audio-controls{
     grid-template-columns:
@@ -1412,35 +1501,85 @@ mark.user-highlight{
     grid-column:
       3 / 5;
 
-    justify-content:
-      flex-end;
-  }
-
-  .volume{
-    width:95px;
+    justify-content:flex-end;
   }
 
 }
+
+
+@media(max-width:700px){
+
+  .hero{
+    flex-direction:column;
+
+    align-items:stretch;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+  .paper-inner{
+    padding:
+      15px 9px 22px;
+  }
+
+  .student{
+    display:none;
+  }
+
+  .brand{
+    font-size:11px;
+  }
+
+  .timer{
+    font-size:15px;
+  }
+
+  .question-block{
+    padding:
+      15px 12px;
+  }
+
+  .option{
+    grid-template-columns:
+      18px 20px minmax(0,1fr);
+
+    padding:
+      9px 9px;
+  }
+
+  .option-text{
+    font-size:11px;
+  }
+
+  .review-row{
+    grid-template-columns:1fr;
+  }
+
+}
+
 </style>
 </head>
+
 
 <body>
 
 
-<!-- =========================
-     AUDIO FILE
-========================= -->
+<!-- =========================================================
+     AUDIO
+========================================================= -->
 
 <audio
   id="practiceAudio"
   preload="metadata"
-  src="./Cam11-Test1-Section1.mp3"
+  src="./Cam10-Test2-Section3.mp3"
 ></audio>
 
 
-<!-- =========================
-     START
-========================= -->
+<!-- =========================================================
+     START MODAL
+========================================================= -->
 
 <div
   id="start"
@@ -1453,17 +1592,19 @@ mark.user-highlight{
       font-size:10px;
       font-weight:950;
       letter-spacing:.1em;
-      color:#6a4db4
+      color:#6a4db4;
     ">
       LISTENING PRACTICE
     </div>
 
+
     <h2>
-      Note Completion 01
+      Part 3 · Practice 01
     </h2>
 
+
     <p>
-      Hiring a Public Room · Questions 1–10
+      Thor Heyerdahl · Questions 21–30
     </p>
 
 
@@ -1508,7 +1649,7 @@ mark.user-highlight{
       style="
         margin-top:7px;
         color:#b83345;
-        font-size:10.5px
+        font-size:10.5px;
       "
     ></div>
 
@@ -1517,9 +1658,71 @@ mark.user-highlight{
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
+     RESULT MODAL
+========================================================= -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.1em;
+      color:#6a4db4;
+    ">
+      PRACTICE RESULT
+    </div>
+
+
+    <h2>
+      Listening Part 3
+    </h2>
+
+
+    <p id="resultStudent"></p>
+
+
+    <div
+      class="score"
+      id="resultScore"
+    >
+      0 / 10
+    </div>
+
+
+    <p id="resultPercent"></p>
+
+
+    <p>
+      Sau khi đóng cửa sổ này, hệ thống chỉ chữa
+      những câu em làm chưa đúng.
+    </p>
+
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+      style="
+        width:100%;
+        margin-top:10px;
+      "
+    >
+      Xem chữa bài
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
      HEADER
-========================= -->
+========================================================= -->
 
 <header class="top">
 
@@ -1531,11 +1734,12 @@ mark.user-highlight{
         class="back"
         href="../"
       >
-        ← Note Completion
+        ← Part 3
       </a>
 
+
       <div class="brand">
-        🎧 Note Completion 01
+        🎧 Listening Part 3 · 01
       </div>
 
     </div>
@@ -1559,9 +1763,9 @@ mark.user-highlight{
 </header>
 
 
-<!-- =========================
-     MAIN
-========================= -->
+<!-- =========================================================
+     PAGE
+========================================================= -->
 
 <main class="page">
 
@@ -1573,11 +1777,12 @@ mark.user-highlight{
     <div>
 
       <h1>
-        Note Completion 01
+        Listening Part 3 · Practice 01
       </h1>
 
+
       <p>
-        Hiring a Public Room · Questions 1–10
+        Thor Heyerdahl · Questions 21–30
       </p>
 
     </div>
@@ -1597,8 +1802,11 @@ mark.user-highlight{
 
       </div>
 
+
       <div class="progress">
+
         <i id="progressBar"></i>
+
       </div>
 
     </div>
@@ -1606,9 +1814,9 @@ mark.user-highlight{
   </section>
 
 
-  <!-- =========================
-       PRACTICE AUDIO PLAYER
-  ========================= -->
+  <!-- =====================================================
+       AUDIO
+  ====================================================== -->
 
   <section class="audio-panel">
 
@@ -1619,6 +1827,7 @@ mark.user-highlight{
         <div class="audio-icon">
           🎧
         </div>
+
 
         <div>
 
@@ -1691,6 +1900,7 @@ mark.user-highlight{
           Tốc độ
         </span>
 
+
         <select
           id="speedSelect"
           onchange="setSpeed(this.value)"
@@ -1734,6 +1944,7 @@ mark.user-highlight{
           Âm lượng
         </span>
 
+
         <input
           class="volume"
           id="volumeSlider"
@@ -1751,18 +1962,18 @@ mark.user-highlight{
 
 
     <div class="practice-note">
-      Đây là chế độ luyện tập: học sinh có thể dừng,
-      nghe lại, tua tới/lùi và thay đổi tốc độ bất cứ lúc nào.
-      Sau khi nộp bài, phần chữa sẽ cho phép nhảy thẳng
-      đến đoạn audio chứa đáp án và đối chiếu transcript.
+      Đây là chế độ luyện tập: em có thể dừng, nghe lại,
+      tua ±10 giây, kéo thanh audio và đổi tốc độ.
+      Sau khi nộp, nhấn vào transcript hoặc phần chữa
+      để nghe lại đúng đoạn chứa đáp án.
     </div>
 
   </section>
 
 
-  <!-- =========================
-       PAPER
-  ========================= -->
+  <!-- =====================================================
+       QUESTION PAPER
+  ====================================================== -->
 
   <section class="paper">
 
@@ -1772,356 +1983,821 @@ mark.user-highlight{
     >
 
 
-      <!-- INSTRUCTIONS -->
+      <!-- =================================================
+           Q21–22
+      ================================================== -->
 
-      <div class="instructions">
+      <section
+        class="question-block"
+        id="questionGroup21"
+      >
 
-        <h3>
-          Questions 1–10
-        </h3>
+        <div class="question-title">
+          Questions 21 and 22
+        </div>
 
-        <p>
-          Complete the notes below.
+
+        <p class="question-instruction">
+          <b>Choose TWO letters, A–E.</b>
         </p>
 
-        <p>
-          Write
-          <b>ONE WORD AND/OR A NUMBER</b>
-          for each answer.
+
+        <div class="main-question">
+
+          <span class="qno">
+            21–22
+          </span>
+
+          Which TWO hobbies was Thor Heyerdahl very interested in as a youth?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="A"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              camping
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="B"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              climbing
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="C"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              collecting
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="D"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span class="letter">
+              D
+            </span>
+
+            <span class="option-text">
+              hunting
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair21"
+              value="E"
+              onchange="pairChanged('21-22')"
+            >
+
+            <span class="letter">
+              E
+            </span>
+
+            <span class="option-text">
+              reading
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           Q23–24
+      ================================================== -->
+
+      <section
+        class="question-block"
+        id="questionGroup23"
+      >
+
+        <div class="question-title">
+          Questions 23 and 24
+        </div>
+
+
+        <p class="question-instruction">
+          <b>Choose TWO letters, A–E.</b>
         </p>
 
-        <div class="rule">
-          ONE WORD AND/OR A NUMBER
-        </div>
 
-      </div>
-
-
-      <!-- =========================
-           NOTES
-      ========================= -->
-
-      <div class="notes">
-
-        <div class="notes-title">
-          HIRING A PUBLIC ROOM
-        </div>
-
-
-        <!-- EXAMPLE -->
-
-        <div class="example">
-
-          <span class="example-label">
-            Example
-          </span>
-
-          ● the Main Hall – seats
-
-          <span class="example-answer">
-            200
-          </span>
-
-        </div>
-
-
-        <!-- ROOM AND COST -->
-
-        <div class="section-title">
-          Room and cost
-        </div>
-
-
-        <div class="note-line">
-
-          the
+        <div class="main-question">
 
           <span class="qno">
-            1
+            23–24
           </span>
 
-          <span class="answer">
-
-            <input
-              id="a1"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(1,this.value)"
-            >
-
-          </span>
-
-          Room – seats 100
+          Which do the speakers say are the TWO reasons why Heyerdahl went to live on an island?
 
         </div>
 
 
-        <div class="note-line">
+        <div class="options">
 
-          Cost of Main Hall for Saturday evening:
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="A"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              to examine ancient carvings
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="B"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              to experience an isolated place
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="C"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              to formulate a new theory
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="D"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span class="letter">
+              D
+            </span>
+
+            <span class="option-text">
+              to learn survival skills
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="checkbox"
+              name="pair23"
+              value="E"
+              onchange="pairChanged('23-24')"
+            >
+
+            <span class="letter">
+              E
+            </span>
+
+            <span class="option-text">
+              to study the impact of an extreme environment
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           Q25–30 HEADING
+      ================================================== -->
+
+      <section class="question-block">
+
+        <div class="question-title">
+          Questions 25–30
+        </div>
+
+
+        <p class="question-instruction">
+          Choose the correct letter,
+          <b>A, B or C.</b>
+        </p>
+
+
+        <div class="section-heading">
+          The later life of Thor Heyerdahl
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           Q25
+      ================================================== -->
+
+      <section
+        class="question-block"
+        id="question25"
+      >
+
+        <div class="main-question">
 
           <span class="qno">
-            2
+            25
           </span>
 
-          £
-
-          <span class="answer small">
-
-            <input
-              id="a2"
-              type="text"
-              inputmode="numeric"
-              autocomplete="off"
-              oninput="saveAnswer(2,this.value)"
-            >
-
-          </span>
+          According to Victor and Olivia, academics thought that Polynesian migration from the east was impossible due to
 
         </div>
 
 
-        <div class="note-line subline">
+        <div class="options">
 
-          £250 deposit
+          <label class="option">
 
-          (
+            <input
+              type="radio"
+              name="q25"
+              value="A"
+              onchange="singleChanged(25)"
+            >
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              the fact that Eastern countries were far away.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q25"
+              value="B"
+              onchange="singleChanged(25)"
+            >
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              the lack of materials for boat building.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q25"
+              value="C"
+              onchange="singleChanged(25)"
+            >
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              the direction of the winds and currents.
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           Q26
+      ================================================== -->
+
+      <section
+        class="question-block"
+        id="question26"
+      >
+
+        <div class="main-question">
 
           <span class="qno">
-            3
+            26
           </span>
 
-          <span class="answer">
-
-            <input
-              id="a3"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(3,this.value)"
-            >
-
-          </span>
-
-          payment is required)
+          Which do the speakers agree was the main reason for Heyerdahl’s raft journey?
 
         </div>
 
 
-        <div class="note-line">
+        <div class="options">
 
-          Cost includes use of tables and chairs and also
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q26"
+              value="A"
+              onchange="singleChanged(26)"
+            >
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              to overcome a research setback
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q26"
+              value="B"
+              onchange="singleChanged(26)"
+            >
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              to demonstrate a personal quality
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q26"
+              value="C"
+              onchange="singleChanged(26)"
+            >
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              to test a new theory
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           Q27
+      ================================================== -->
+
+      <section
+        class="question-block"
+        id="question27"
+      >
+
+        <div class="main-question">
 
           <span class="qno">
-            4
+            27
           </span>
 
-          <span class="answer">
+          What was most important to Heyerdahl about his raft journey?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
 
             <input
-              id="a4"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(4,this.value)"
+              type="radio"
+              name="q27"
+              value="A"
+              onchange="singleChanged(27)"
             >
 
-          </span>
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              the fact that he was the first person to do it
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q27"
+              value="B"
+              onchange="singleChanged(27)"
+            >
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              the speed of crossing the Pacific
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q27"
+              value="C"
+              onchange="singleChanged(27)"
+            >
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              the use of authentic construction methods
+            </span>
+
+          </label>
 
         </div>
 
-
-        <div class="note-line">
-          Additional charge for use of the kitchen: £25
-        </div>
+      </section>
 
 
-        <!-- BEFORE -->
+      <!-- =================================================
+           Q28
+      ================================================== -->
 
-        <div class="section-title">
-          Before the event
-        </div>
+      <section
+        class="question-block"
+        id="question28"
+      >
 
-
-        <div class="note-line">
-
-          Will need a
+        <div class="main-question">
 
           <span class="qno">
-            5
+            28
           </span>
 
-          <span class="answer">
-
-            <input
-              id="a5"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(5,this.value)"
-            >
-
-          </span>
-
-          licence
+          Why did Heyerdahl go to Easter Island?
 
         </div>
 
 
-        <div class="note-line">
+        <div class="options">
 
-          Need to contact caretaker (Mr Evans) in advance to arrange
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q28"
+              value="A"
+              onchange="singleChanged(28)"
+            >
+
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              to build a stone statue
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q28"
+              value="B"
+              onchange="singleChanged(28)"
+            >
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              to sail a reed boat
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q28"
+              value="C"
+              onchange="singleChanged(28)"
+            >
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              to learn the local language
+            </span>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           Q29
+      ================================================== -->
+
+      <section
+        class="question-block"
+        id="question29"
+      >
+
+        <div class="main-question">
 
           <span class="qno">
-            6
+            29
           </span>
 
-          <span class="answer">
+          In Olivia’s opinion, Heyerdahl’s greatest influence was on
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
 
             <input
-              id="a6"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(6,this.value)"
+              type="radio"
+              name="q29"
+              value="A"
+              onchange="singleChanged(29)"
             >
 
-          </span>
+            <span class="letter">
+              A
+            </span>
+
+            <span class="option-text">
+              theories about Polynesian origins.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q29"
+              value="B"
+              onchange="singleChanged(29)"
+            >
+
+            <span class="letter">
+              B
+            </span>
+
+            <span class="option-text">
+              the development of archaeological methodology.
+            </span>
+
+          </label>
+
+
+          <label class="option">
+
+            <input
+              type="radio"
+              name="q29"
+              value="C"
+              onchange="singleChanged(29)"
+            >
+
+            <span class="letter">
+              C
+            </span>
+
+            <span class="option-text">
+              establishing archaeology as an academic subject.
+            </span>
+
+          </label>
 
         </div>
 
-
-        <!-- DURING -->
-
-        <div class="section-title">
-          During the event
-        </div>
+      </section>
 
 
-        <div class="note-line">
-          The building is no smoking
-        </div>
+      <!-- =================================================
+           Q30
+      ================================================== -->
 
+      <section
+        class="question-block"
+        id="question30"
+      >
 
-        <div class="note-line">
-
-          The band should use the
+        <div class="main-question">
 
           <span class="qno">
-            7
+            30
           </span>
 
-          <span class="answer">
+          Which criticism do the speakers make of William Oliver’s textbook?
+
+        </div>
+
+
+        <div class="options">
+
+          <label class="option">
 
             <input
-              id="a7"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(7,this.value)"
+              type="radio"
+              name="q30"
+              value="A"
+              onchange="singleChanged(30)"
             >
 
-          </span>
+            <span class="letter">
+              A
+            </span>
 
-          door at the back
+            <span class="option-text">
+              Its style is out of date.
+            </span>
 
-        </div>
-
-
-        <div class="note-line">
-          Don’t touch the system that controls the volume
-        </div>
-
-
-        <div class="note-line">
-          For microphones, contact the caretaker
-        </div>
+          </label>
 
 
-        <!-- AFTER -->
-
-        <div class="section-title">
-          After the event
-        </div>
-
-
-        <div class="note-line">
-
-          Need to know the
-
-          <span class="qno">
-            8
-          </span>
-
-          <span class="answer">
+          <label class="option">
 
             <input
-              id="a8"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(8,this.value)"
+              type="radio"
+              name="q30"
+              value="B"
+              onchange="singleChanged(30)"
             >
 
-          </span>
+            <span class="letter">
+              B
+            </span>
 
-          for the cleaning cupboard
+            <span class="option-text">
+              Its content is over-simplified.
+            </span>
 
-        </div>
+          </label>
 
 
-        <div class="note-line">
-
-          The
-
-          <span class="qno">
-            9
-          </span>
-
-          <span class="answer">
+          <label class="option">
 
             <input
-              id="a9"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(9,this.value)"
+              type="radio"
+              name="q30"
+              value="C"
+              onchange="singleChanged(30)"
             >
 
-          </span>
+            <span class="letter">
+              C
+            </span>
 
-          must be washed and rubbish placed in black bags
+            <span class="option-text">
+              Its methodology is flawed.
+            </span>
 
-        </div>
-
-
-        <div class="note-line">
-
-          All
-
-          <span class="qno">
-            10
-          </span>
-
-          <span class="answer">
-
-            <input
-              id="a10"
-              type="text"
-              autocomplete="off"
-              oninput="saveAnswer(10,this.value)"
-            >
-
-          </span>
-
-          must be taken down
+          </label>
 
         </div>
 
-
-        <div class="note-line">
-          Chairs and tables must be piled up
-        </div>
-
-      </div>
+      </section>
 
 
-      <!-- =========================
-           WRONG ANSWER REVIEWS
-      ========================= -->
+      <!-- =================================================
+           WRONG ANSWER REVIEW
+      ================================================== -->
 
       <div
         id="reviewList"
@@ -2129,9 +2805,9 @@ mark.user-highlight{
       ></div>
 
 
-      <!-- =========================
-           FULL TRANSCRIPT
-      ========================= -->
+      <!-- =================================================
+           TRANSCRIPT
+      ================================================== -->
 
       <div
         id="transcriptPanel"
@@ -2141,11 +2817,12 @@ mark.user-highlight{
         <div class="transcript-head">
 
           <b>
-            📝 Transcript
+            📝 Full transcript
           </b>
 
+
           <span>
-            Nhấn vào dòng có đáp án để nghe lại đoạn tương ứng
+            Nhấn vào dòng có đáp án để nghe lại
           </span>
 
         </div>
@@ -2160,70 +2837,30 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              OFFICIAL:
+              VICTOR:
             </span>
 
-            Hello?
+            Right, well, for our presentation shall I start with the early life of Thor Heyerdahl?
 
           </div>
 
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Oh, hello. I wanted to enquire about hiring a room
-            in the Village Hall, for the evening of September the first.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Let me just see … Yes, we have both rooms available
-            that evening. There’s our Main Hall - that’s got seating
-            for 200 people. Or there’s the Charlton Room …
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Sorry?
-
-          </div>
-
-
-          <!-- Q1 -->
 
           <div
             class="tline cue"
-            id="transcript-q1"
-            onclick="playSegment(1,true)"
+            id="transcript-q21-22"
+            onclick="playSegment('21-22',true)"
           >
 
             <span class="speaker">
-              OFFICIAL:
+              OLIVIA:
             </span>
 
-            The
+            Sure. Why don’t you begin with describing the type of boy he was,
+            especially his passion for
 
             <span class="answer-word">
-              Charlton
-            </span>
-
-            Room - C-H-A-R-L-T-O-N.
-            That’s got seating for up to one hundred.
+              collecting things
+            </span>.
 
           </div>
 
@@ -2231,13 +2868,13 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              WOMAN:
+              VICTOR:
             </span>
 
-            Well, we’re organising a dinner to raise money
-            for a charity, and we’re hoping for at least 150 people,
-            so I think we’ll go for the Main Hall.
-            How much would that cost?
+            That’s right, he had his own little museum.
+            And I think it’s unusual for children to develop their own values
+            and not join in their parents’ hobbies; I’m thinking of how
+            Heyerdahl wouldn’t go hunting with his dad, for example.
 
           </div>
 
@@ -2245,129 +2882,59 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              OFFICIAL:
+              OLIVIA:
             </span>
 
-            Let’s see. You wanted it for the evening of September 1st?
+            Yeah, he preferred to learn about nature by listening to his mother
+            read to him. And quite early on he knew he wanted to become an explorer
+            when he grew up. That came from his camping trips he went on in Norway
+            I think …
 
           </div>
 
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Yes, that’s a Saturday.
-
-          </div>
-
-
-          <!-- Q2 -->
 
           <div
             class="tline cue"
-            id="transcript-q2"
-            onclick="playSegment(2,true)"
+            onclick="playSegment('21-22',true)"
           >
 
             <span class="speaker">
-              OFFICIAL:
+              VICTOR:
             </span>
 
-            So from six pm to midnight that’d be
+            No, it was
 
             <span class="answer-word">
-              £115
+              climbing
             </span>
 
-            - that’s the weekend price,
-            it’s £75 on weekdays.
+            that he spent his time on as a young man.
 
           </div>
 
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            That’s all right.
-
-          </div>
-
-
-          <!-- Q3 -->
 
           <div
             class="tline cue"
-            id="transcript-q3"
-            onclick="playSegment(3,true)"
+            id="transcript-q23-24"
+            onclick="playSegment('23-24',true)"
           >
 
             <span class="speaker">
-              OFFICIAL:
+              OLIVIA:
             </span>
 
-            And I have to tell you there’s also a deposit of £250,
-            which is returnable of course as long as there’s no damage.
-            But we do insist that this is
+            Oh, right … After university he married a classmate and together,
+            they decided to
 
             <span class="answer-word">
-              paid in cash
+              experience living on a small island
             </span>,
 
-            we don’t take cards for that.
-            You can pay the actual rent of the room however you like though
-            - cash, credit card, cheque …
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Oh, well I suppose that’s OK.
-            So does the charge include use of tables and chairs and so on?
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Oh, yes.
-
-          </div>
-
-
-          <!-- Q4 -->
-
-          <div
-            class="tline cue"
-            id="transcript-q4"
-            onclick="playSegment(4,true)"
-          >
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            And what about
+            to find out how
 
             <span class="answer-word">
-              parking
-            </span>
-
-            ?
+              harsh weather conditions shaped people’s lifestyles
+            </span>.
 
           </div>
 
@@ -2375,12 +2942,14 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              OFFICIAL:
+              VICTOR:
             </span>
 
-            Yeah, that’s all included.
-            The only thing that isn’t included is …
-            you said you were organising a dinner?
+            As part of their preparation before they left home,
+            they learnt basic survival skills like building a shelter.
+            I guess they needed that knowledge in order to live wild in a remote
+            location with few inhabitants, cut off by the sea,
+            which is what they were aiming to do.
 
           </div>
 
@@ -2388,10 +2957,12 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              WOMAN:
+              OLIVIA:
             </span>
 
-            Yeah.
+            An important part of your talk should be the radical theory Heyerdahl
+            formed from examining mysterious ancient carvings that he happened
+            to find on the island. I think you should finish with that.
 
           </div>
 
@@ -2399,206 +2970,7 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Well, you’ll have to pay extra for the kitchen
-            if you want to use that. It’s £25.
-            It’s got very good facilities -
-            good quality cookers and fridges and so on.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            OK, well I suppose that’s all right.
-            We can cover the cost in our entry charges.
-
-          </div>
-
-
-          <!-- Q5 -->
-
-          <div
-            class="tline cue"
-            id="transcript-q5"
-            onclick="playSegment(5,true)"
-          >
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Right. So I’ll make a note of that.
-            Now there are just one or two things
-            you need to think about before the event.
-            For example, you’ll have to see about getting a licence
-            if you’re planning to have any
-
-            <span class="answer-word">
-              music
-            </span>
-
-            during the meal.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Oh, really?
-
-          </div>
-
-
-          <!-- Q6 -->
-
-          <div
-            class="tline cue"
-            id="transcript-q6"
-            onclick="playSegment(6,true)"
-          >
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            It’s quite straightforward,
-            I’ll give you the details later on.
-            And about a week or ten days before your event
-            you’ll need to contact the caretaker,
-            that’s Mr Evans,
-            to make the arrangements for
-
-            <span class="answer-word">
-              entry
-            </span>
-
-            - he’ll sort that out with you.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            And do I give him the payment as well?
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            No, you do that directly with me.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Right. Now is there anything I need to know
-            about what happens during the event?
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Well, as you’ll be aware,
-            of course the building is no smoking throughout.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Of course.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Now, are you having a band?
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Yes.
-
-          </div>
-
-
-          <!-- Q7 -->
-
-          <div
-            class="tline cue"
-            id="transcript-q7"
-            onclick="playSegment(7,true)"
-          >
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Well, they’ll have a lot of equipment,
-            so rather than using the front door
-            they should park their van round the back
-            and use the
-
-            <span class="answer-word">
-              stage door
-            </span>
-
-            there.
-            You can open that from inside
-            but don’t forget to lock it at the end.
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
+              VICTOR:
             </span>
 
             OK.
@@ -2609,71 +2981,35 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              OFFICIAL:
+              OLIVIA:
             </span>
 
-            And talking of bands,
-            I’m sure I don’t need to tell you this,
-            but you must make sure that no one fiddles about
-            with the black box by the fire door -
-            that’s a system that cuts in
-            when the volume reaches a certain level.
-            It’s a legal requirement.
+            All right, Victor, so after your part I’ll talk about Thor Heyerdahl’s
+            adult life, continuing from the theory he had about Polynesian migration:
+            Up until that time of course, academics had believed that humans first
+            migrated to the islands in Polynesia from Asia, in the west.
 
           </div>
 
-
-          <div class="tline">
-
-            <span class="speaker">
-              WOMAN:
-            </span>
-
-            Sure. Anyway, we want people to be able to talk
-            to one another so we don’t want anything too loud.
-            Oh, that reminds me,
-            we’ll be having speeches -
-            are there any microphones available?
-
-          </div>
-
-
-          <div class="tline">
-
-            <span class="speaker">
-              OFFICIAL:
-            </span>
-
-            Yeah. Just let the caretaker know,
-            he’ll get those for you.
-            Right, now when the event is over
-            we do ask that the premises are left in good condition.
-
-          </div>
-
-
-          <!-- Q8 -->
 
           <div
             class="tline cue"
-            id="transcript-q8"
-            onclick="playSegment(8,true)"
+            id="transcript-q25"
+            onclick="playSegment(25,true)"
           >
 
             <span class="speaker">
-              OFFICIAL:
+              VICTOR:
             </span>
 
-            So there’s a locked cupboard
-            and you’ll be informed of the
+            Yes, they thought that travel from the east was impossible,
+            because of the
 
             <span class="answer-word">
-              code
+              huge, empty stretch of ocean
             </span>
 
-            you need to open that.
-            It’s got all the cleaning equipment,
-            brushes and detergent and so on.
+            that lies between the islands and the nearest inhabited land.
 
           </div>
 
@@ -2681,63 +3017,96 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              WOMAN:
+              OLIVIA:
             </span>
 
-            Right. So what do we need to do
-            after everyone’s gone?
-            Sweep the floors I suppose?
+            Yes, but Heyerdahl spent ages studying the cloud movements,
+            ocean currents and wind patterns to find if it was actually possible.
+            And another argument was that there was no tradition of large
+            ship-building in the communities lying to the east of Polynesia.
+            But Heyerdahl knew they made lots of coastal voyages in locally
+            built canoes.
 
           </div>
 
 
-          <!-- Q9 -->
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Yes, or sailing on rafts, as was shown by the long voyage that
+            Heyerdahl did next. It was an incredibly risky journey to undertake -
+            sometimes I wonder if he did that trip for private reasons, you know?
+            To show others that he could have spectacular adventures.
+            What do you think, Olivia?
+
+          </div>
+
 
           <div
             class="tline cue"
-            id="transcript-q9"
-            onclick="playSegment(9,true)"
+            id="transcript-q26"
+            onclick="playSegment(26,true)"
           >
 
             <span class="speaker">
-              OFFICIAL:
+              OLIVIA:
             </span>
 
-            Well, actually
+            Well, I think it was more a matter of
 
             <span class="answer-word">
-              they have to be washed, not just swept
+              simply trying out his idea,
+              to see if migration from the east was possible
             </span>.
 
-            Then you’ll be provided with black plastic bags,
-            so all the rubbish must be collected up
-            and left outside the door.
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Yes, that’s probably it.
+            And the poor guy suffered a bit at that time because the war
+            forced him to stop his work for some years …
 
           </div>
 
 
-          <!-- Q10 -->
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Yes. When he got started again and planned his epic voyage,
+            do you think it was important to him that he achieve it
+            before anyone else did?
+
+          </div>
+
 
           <div
             class="tline cue"
-            id="transcript-q10"
-            onclick="playSegment(10,true)"
+            id="transcript-q27"
+            onclick="playSegment(27,true)"
           >
 
             <span class="speaker">
-              WOMAN:
+              VICTOR:
             </span>
 
-            Of course.
-            We’ll make sure everything’s left tidy.
-            Oh, and I forgot to ask,
-            I presume we can have
+            Um, I haven’t read anywhere that that was his motivation.
+            The most important factor seems to have been that
 
             <span class="answer-word">
-              decorations
-            </span>
-
-            in the room?
+              he use only ancient techniques and local materials to build his raft
+            </span>.
 
           </div>
 
@@ -2745,10 +3114,10 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              OFFICIAL:
+              OLIVIA:
             </span>
 
-            Yes, but you must take them down afterwards.
+            Yes. I wonder how fast it went.
 
           </div>
 
@@ -2756,10 +3125,10 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              WOMAN:
+              VICTOR:
             </span>
 
-            Sure.
+            Well, it took them 97 days from South America to the Pacific Island.
 
           </div>
 
@@ -2767,11 +3136,12 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              OFFICIAL:
+              OLIVIA:
             </span>
 
-            And the chairs and tables should be stacked up neatly
-            at the back of the room.
+            Mm. And after that, Heyerdahl went to Easter Island, didn’t he?
+            We should mention the purpose of that trip.
+            I think he sailed there in a boat made out of reeds.
 
           </div>
 
@@ -2779,10 +3149,118 @@ mark.user-highlight{
           <div class="tline">
 
             <span class="speaker">
-              WOMAN:
+              VICTOR:
             </span>
 
-            I’ll make sure I’ve got a few people to help me.
+            No, that was later on in Egypt, Olivia.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Oh, yes, that’s right.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q28"
+            onclick="playSegment(28,true)"
+          >
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            But what he wanted to do was talk to the local people about their
+            old stone carvings and then
+
+            <span class="answer-word">
+              make one himself
+            </span>
+
+            to learn more about the process.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q29"
+            onclick="playSegment(29,true)"
+          >
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            I see. Well, what a great life.
+            Even though many of his theories have been disproven,
+            he certainly left a lasting impression on many disciplines, didn’t he?
+            To my mind, he was first person to establish what modern academics call
+
+            <span class="answer-word">
+              practical archaeology
+            </span>.
+
+            I mean, that they try to recreate something from the past today,
+            like he did with his raft trip.
+            It’s unfortunate that his ideas about where Polynesians originated
+            from have been completely discredited.
+
+          </div>
+
+
+          <div
+            class="tline cue"
+            id="transcript-q30"
+            onclick="playSegment(30,true)"
+          >
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Yes. Right, well, I’ll prepare a PowerPoint slide at the end that
+            acknowledges our sources. I mainly used
+            <em>The Life and Work of Thor Heyerdahl</em>
+            by William Oliver. I thought the research methods he used were very
+            sound, although I must say I found the
+
+            <span class="answer-word">
+              overall tone somewhat old-fashioned
+            </span>.
+
+            I think they need to do a new, revised edition.
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              OLIVIA:
+            </span>
+
+            Yeah, I agree.
+            What about the subject matter - I found it really challenging!
+
+          </div>
+
+
+          <div class="tline">
+
+            <span class="speaker">
+              VICTOR:
+            </span>
+
+            Well, it’s a complex issue …
 
           </div>
 
@@ -2797,52 +3275,91 @@ mark.user-highlight{
 </main>
 
 
-<!-- =========================
+<!-- =========================================================
      BOTTOM NAV
-========================= -->
+========================================================= -->
 
 <div class="bottom">
 
   <div class="nav">
 
-    <button id="nav1" onclick="goQ(1)">
-      1
+    <button
+      id="nav21"
+      onclick="goQ(21)"
+    >
+      21
     </button>
 
-    <button id="nav2" onclick="goQ(2)">
-      2
+
+    <button
+      id="nav22"
+      onclick="goQ(22)"
+    >
+      22
     </button>
 
-    <button id="nav3" onclick="goQ(3)">
-      3
+
+    <button
+      id="nav23"
+      onclick="goQ(23)"
+    >
+      23
     </button>
 
-    <button id="nav4" onclick="goQ(4)">
-      4
+
+    <button
+      id="nav24"
+      onclick="goQ(24)"
+    >
+      24
     </button>
 
-    <button id="nav5" onclick="goQ(5)">
-      5
+
+    <button
+      id="nav25"
+      onclick="goQ(25)"
+    >
+      25
     </button>
 
-    <button id="nav6" onclick="goQ(6)">
-      6
+
+    <button
+      id="nav26"
+      onclick="goQ(26)"
+    >
+      26
     </button>
 
-    <button id="nav7" onclick="goQ(7)">
-      7
+
+    <button
+      id="nav27"
+      onclick="goQ(27)"
+    >
+      27
     </button>
 
-    <button id="nav8" onclick="goQ(8)">
-      8
+
+    <button
+      id="nav28"
+      onclick="goQ(28)"
+    >
+      28
     </button>
 
-    <button id="nav9" onclick="goQ(9)">
-      9
+
+    <button
+      id="nav29"
+      onclick="goQ(29)"
+    >
+      29
     </button>
 
-    <button id="nav10" onclick="goQ(10)">
-      10
+
+    <button
+      id="nav30"
+      onclick="goQ(30)"
+    >
+      30
     </button>
 
   </div>
@@ -2850,6 +3367,7 @@ mark.user-highlight{
 
   <button
     class="submit"
+    id="submitButton"
     onclick="submitPractice()"
   >
     Nộp bài
@@ -2858,9 +3376,9 @@ mark.user-highlight{
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
      HIGHLIGHT MENU
-========================= -->
+========================================================= -->
 
 <div
   id="selectionMenu"
@@ -2874,70 +3392,13 @@ mark.user-highlight{
     🖍 Highlight
   </button>
 
+
   <button
     id="menuNote"
     type="button"
   >
     📝 Take note
   </button>
-
-</div>
-
-
-<!-- =========================
-     RESULT
-========================= -->
-
-<div
-  id="resultOverlay"
-  class="overlay hidden"
->
-
-  <div class="result">
-
-    <div style="
-      font-size:10px;
-      font-weight:950;
-      letter-spacing:.1em;
-      color:#6a4db4
-    ">
-      KẾT QUẢ LUYỆN TẬP
-    </div>
-
-    <div
-      id="resultStudent"
-      style="
-        margin-top:5px;
-        color:#6f7890;
-        font-size:12px
-      "
-    ></div>
-
-    <div
-      id="resultScore"
-      class="score"
-    >
-      0 / 10
-    </div>
-
-    <div id="resultPercent"></div>
-
-    <p style="
-      color:#6f7890;
-      font-size:11px
-    ">
-      Các câu sai có transcript và nút nghe đúng đoạn audio.
-      Toàn bộ transcript cũng được mở để đối chiếu.
-    </p>
-
-    <button
-      class="btn"
-      onclick="closeResult()"
-    >
-      Xem lại bài
-    </button>
-
-  </div>
 
 </div>
 
@@ -2953,278 +3414,275 @@ const RESULT_ENDPOINT =
 
 
 const ATTEMPT_KEY =
-'PRACTICE_LISTENING_NOTE_COMPLETION_01_HIRING_PUBLIC_ROOM_V2';
+'PRACTICE_LISTENING_PART3_01_V3';
 
 
 const COMPLETED_KEY =
-ATTEMPT_KEY
-+
-'_completed';
+`${ATTEMPT_KEY}_completed`;
 
 
-const NUMBERS = [
-  1,2,3,4,5,6,7,8,9,10
+const NUMBERS =
+[
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30
 ];
 
 
 /* =========================================================
-   ANSWERS
+   KEYS
 ========================================================= */
 
-const KEYS = {
+const PAIR_KEYS = {
 
-  1:[
-    'charlton'
+  '21-22':[
+    'B',
+    'C'
   ],
 
-  2:[
-    '115',
-    '£115',
-    'one hundred and fifteen',
-    'one hundred fifteen'
-  ],
-
-  3:[
-    'cash'
-  ],
-
-  4:[
-    'parking'
-  ],
-
-  5:[
-    'music'
-  ],
-
-  6:[
-    'entry'
-  ],
-
-  7:[
-    'stage'
-  ],
-
-  8:[
-    'code'
-  ],
-
-  9:[
-    'floor',
-    'floors'
-  ],
-
-  10:[
-    'decoration',
-    'decorations'
+  '23-24':[
+    'B',
+    'E'
   ]
+
+};
+
+
+const SINGLE_KEYS = {
+
+  25:'A',
+
+  26:'C',
+
+  27:'C',
+
+  28:'A',
+
+  29:'B',
+
+  30:'A'
 
 };
 
 
 const DISPLAY_KEY = {
 
-  1:
-  'Charlton',
+  '21-22':
+  'B, C',
 
-  2:
-  '115',
+  '23-24':
+  'B, E',
 
-  3:
-  'cash',
+  25:'A',
 
-  4:
-  'parking',
+  26:'C',
 
-  5:
-  'music',
+  27:'C',
 
-  6:
-  'entry',
+  28:'A',
 
-  7:
-  'stage',
+  29:'B',
 
-  8:
-  'code',
-
-  9:
-  'floor / floors',
-
-  10:
-  'decoration / decorations'
+  30:'A'
 
 };
 
 
 /* =========================================================
-   QUESTIONS
+   ORIGINAL PROMPT
 ========================================================= */
 
 const QUESTION_TEXT = {
 
-  1:
-  'the 1 ______ Room – seats 100',
+  '21-22':
+  `
+    Which TWO hobbies was Thor Heyerdahl very interested in as a youth?
+  `,
 
-  2:
-  'Cost of Main Hall for Saturday evening: 2 £______',
+  '23-24':
+  `
+    Which do the speakers say are the TWO reasons why Heyerdahl went to live on an island?
+  `,
 
-  3:
-  '+ £250 deposit (3 ______ payment is required)',
+  25:
+  `
+    According to Victor and Olivia, academics thought that Polynesian
+    migration from the east was impossible due to...
+  `,
 
-  4:
-  'Cost includes use of tables and chairs and also 4 ______',
+  26:
+  `
+    Which do the speakers agree was the main reason for Heyerdahl’s raft journey?
+  `,
 
-  5:
-  'Will need a 5 ______ licence',
+  27:
+  `
+    What was most important to Heyerdahl about his raft journey?
+  `,
 
-  6:
-  'Need to contact caretaker (Mr Evans) in advance to arrange 6 ______',
+  28:
+  `
+    Why did Heyerdahl go to Easter Island?
+  `,
 
-  7:
-  'The band should use the 7 ______ door at the back',
+  29:
+  `
+    In Olivia’s opinion, Heyerdahl’s greatest influence was on...
+  `,
 
-  8:
-  'Need to know the 8 ______ for the cleaning cupboard',
-
-  9:
-  'The 9 ______ must be washed and rubbish placed in black bags',
-
-  10:
-  'All 10 ______ must be taken down'
+  30:
+  `
+    Which criticism do the speakers make of William Oliver’s textbook?
+  `
 
 };
 
 
 /* =========================================================
-   TRANSCRIPT EXCERPTS
+   TRANSCRIPT EVIDENCE
 ========================================================= */
 
 const TRANSCRIPT_SNIPPET = {
 
-  1:
-  'OFFICIAL: The Charlton Room - C-H-A-R-L-T-O-N. That’s got seating for up to one hundred.',
+  '21-22':
+  `
+    Olivia mentions Heyerdahl’s “passion for collecting things”.
+    Victor later corrects the camping idea:
+    “No, it was climbing that he spent his time on as a young man.”
+  `,
 
-  2:
-  'OFFICIAL: So from six pm to midnight that’d be £115 - that’s the weekend price, it’s £75 on weekdays.',
+  '23-24':
+  `
+    They wanted to “experience living on a small island”
+    and find out how “harsh weather conditions shaped people’s lifestyles”.
+  `,
 
-  3:
-  'OFFICIAL: ... there’s also a deposit of £250 ... we do insist that this is paid in cash, we don’t take cards for that.',
+  25:
+  `
+    “They thought that travel from the east was impossible,
+    because of the huge, empty stretch of ocean that lies between
+    the islands and the nearest inhabited land.”
+  `,
 
-  4:
-  'WOMAN: And what about parking? OFFICIAL: Yeah, that’s all included.',
+  26:
+  `
+    Olivia says it was “simply trying out his idea,
+    to see if migration from the east was possible”.
+  `,
 
-  5:
-  'OFFICIAL: ... you’ll have to see about getting a licence if you’re planning to have any music during the meal.',
+  27:
+  `
+    “The most important factor seems to have been that he use only
+    ancient techniques and local materials to build his raft.”
+  `,
 
-  6:
-  'OFFICIAL: ... contact the caretaker, that’s Mr Evans, to make the arrangements for entry - he’ll sort that out with you.',
+  28:
+  `
+    Heyerdahl wanted to talk to local people about their stone carvings
+    and then “make one himself to learn more about the process”.
+  `,
 
-  7:
-  'OFFICIAL: ... they should park their van round the back and use the stage door there.',
+  29:
+  `
+    Olivia says he established what modern academics call
+    “practical archaeology”.
+  `,
 
-  8:
-  'OFFICIAL: ... there’s a locked cupboard and you’ll be informed of the code you need to open that.',
-
-  9:
-  'WOMAN: Sweep the floors I suppose? OFFICIAL: Well, actually they have to be washed, not just swept.',
-
-  10:
-  'WOMAN: ... I presume we can have decorations in the room? OFFICIAL: Yes, but you must take them down afterwards.'
+  30:
+  `
+    Victor says the research methods were sound,
+    but “the overall tone [was] somewhat old-fashioned”.
+  `
 
 };
 
 
 /* =========================================================
-   EXPLANATIONS
+   ANALYSIS
 ========================================================= */
 
 const EXPLANATION = {
 
-  1:
+  '21-22':
   `
-    Tên phòng được đánh vần ngay trong audio:
-    <b>C-H-A-R-L-T-O-N</b>.
-    Vì vậy đáp án là
-    <b>Charlton</b>.
+    Đáp án đúng là <b>B. climbing</b> và <b>C. collecting</b>.
+    Olivia nói Heyerdahl có niềm đam mê sưu tầm và có bảo tàng nhỏ của riêng mình.
+    “Camping” là distractor vì Olivia đoán rằng niềm yêu thích khám phá đến từ
+    camping, nhưng Victor sửa lại bằng câu:
+    “No, it was climbing...”.
+    Hunting cũng bị loại vì Heyerdahl không thích đi săn cùng bố.
   `,
 
-  2:
+  '23-24':
   `
-    Câu hỏi hỏi giá thuê vào
-    <b>Saturday evening</b>.
-    Audio nói mức weekend price
-    từ 6pm đến midnight là
-    <b>£115</b>,
-    còn £75 là weekday.
+    Đáp án đúng là <b>B</b> và <b>E</b>.
+    Hai người muốn trải nghiệm cuộc sống ở một hòn đảo biệt lập
+    và tìm hiểu điều kiện thời tiết khắc nghiệt ảnh hưởng đến lối sống
+    của con người như thế nào.
+    “Survival skills” chỉ là kỹ năng họ học để chuẩn bị trước khi đi,
+    không phải mục đích chính của chuyến đi.
   `,
 
-  3:
+  25:
   `
-    Khoản £250 là deposit
-    và audio nhấn mạnh khoản này phải được
-    <b>paid in cash</b>.
-    Thẻ không được chấp nhận cho deposit.
+    Đáp án đúng là <b>A</b>.
+    Victor nói các học giả cho rằng hành trình từ phía đông là không thể
+    vì có một khoảng đại dương khổng lồ, trống trải giữa Polynesia
+    và vùng đất có người sinh sống gần nhất.
+    Winds và currents là những yếu tố Heyerdahl nghiên cứu sau đó,
+    không phải nguyên nhân chính khiến học giả bác bỏ giả thuyết.
   `,
 
-  4:
+  26:
   `
-    Sau khi hỏi tables and chairs,
-    người phụ nữ hỏi thêm
-    <b>parking</b>
-    và người phụ trách xác nhận
-    “that’s all included”.
+    Đáp án đúng là <b>C</b>.
+    Victor suy đoán rằng Heyerdahl có thể muốn chứng minh bản thân,
+    nhưng Olivia cho rằng ông chỉ đơn giản muốn thử nghiệm ý tưởng
+    xem việc di cư từ phía đông có thực sự khả thi hay không.
+    Victor đồng ý với Olivia.
   `,
 
-  5:
+  27:
   `
-    Audio nói nếu có
-    <b>music</b>
-    trong bữa ăn thì phải xin licence.
-    Vì vậy cụm hoàn chỉnh là
-    <b>music licence</b>.
+    Đáp án đúng là <b>C</b>.
+    Victor nói yếu tố quan trọng nhất là Heyerdahl sử dụng
+    kỹ thuật cổ xưa và vật liệu địa phương để đóng chiếc bè.
+    Điều này tương ứng với “authentic construction methods”.
   `,
 
-  6:
+  28:
   `
-    Người thuê cần liên hệ Mr Evans trước sự kiện
-    để “make the arrangements for
-    <b>entry</b>”.
+    Đáp án đúng là <b>A</b>.
+    Olivia nhầm rằng Heyerdahl tới Easter Island để đi thuyền sậy,
+    nhưng Victor sửa rằng việc đó diễn ra sau này ở Ai Cập.
+    Tại Easter Island, ông muốn tự làm một bức tượng đá
+    để hiểu rõ quá trình chế tác.
   `,
 
-  7:
+  29:
   `
-    Ban nhạc có nhiều thiết bị
-    nên được hướng dẫn dùng
-    <b>stage door</b>
-    ở phía sau.
+    Đáp án đúng là <b>B</b>.
+    Olivia cho rằng ảnh hưởng lớn nhất của Heyerdahl
+    là thứ mà giới học thuật hiện đại gọi là
+    “practical archaeology”:
+    tái tạo một thứ trong quá khứ để tìm hiểu cách nó hoạt động.
+    Đây là đóng góp về phương pháp khảo cổ học.
   `,
 
-  8:
+  30:
   `
-    Cleaning cupboard bị khóa
-    và người thuê sẽ được cung cấp
-    <b>code</b>
-    để mở.
-  `,
-
-  9:
-  `
-    Audio có distractor
-    “sweep the floors”,
-    sau đó sửa lại:
-    “they have to be
-    <b>washed</b>,
-    not just swept”.
-    Danh từ cần điền là
-    <b>floor/floors</b>.
-  `,
-
-  10:
-  `
-    Người phụ nữ hỏi có được dùng
-    <b>decorations</b>
-    không và được trả lời có,
-    nhưng phải tháo xuống sau sự kiện.
+    Đáp án đúng là <b>A</b>.
+    Victor nói rõ phương pháp nghiên cứu của William Oliver
+    là “very sound”, nên không thể là methodology flawed.
+    Điều bị phê bình là “overall tone somewhat old-fashioned”,
+    tức phong cách trình bày đã lỗi thời.
   `
 
 };
@@ -3232,59 +3690,49 @@ const EXPLANATION = {
 
 /* =========================================================
    AUDIO CUES
-   start / end = seconds
+   Có thể tinh chỉnh thêm nếu audio lệch vài giây.
 ========================================================= */
 
 const CUES = {
 
-  1:{
-    start:138,
-    end:154
+  '21-22':{
+    start:25,
+    end:95
   },
 
-  2:{
-    start:172,
-    end:188
+  '23-24':{
+    start:88,
+    end:158
   },
 
-  3:{
-    start:188,
-    end:218
+  25:{
+    start:173,
+    end:225
   },
 
-  4:{
-    start:216,
-    end:239
+  26:{
+    start:225,
+    end:272
   },
 
-  5:{
-    start:255,
-    end:276
+  27:{
+    start:270,
+    end:320
   },
 
-  6:{
-    start:272,
-    end:296
+  28:{
+    start:317,
+    end:369
   },
 
-  7:{
-    start:346,
-    end:370
+  29:{
+    start:367,
+    end:419
   },
 
-  8:{
-    start:401,
-    end:424
-  },
-
-  9:{
-    start:421,
-    end:447
-  },
-
-  10:{
-    start:445,
-    end:463
+  30:{
+    start:412,
+    end:451
   }
 
 };
@@ -3294,23 +3742,40 @@ const CUES = {
    STATE
 ========================================================= */
 
-let startedAt = 0;
+let startedAt =
+0;
 
-let submitted = false;
 
-let segmentEnd = null;
+let submitted =
+false;
 
-let seekPreviewing = false;
 
-let savedSelection = null;
+let segmentEnd =
+null;
 
-let savedZone = null;
 
-let menuTarget = null;
+let seekPreviewing =
+false;
 
-let menuZone = null;
 
-let menuMode = 'selection';
+let savedSelection =
+null;
+
+
+let savedZone =
+null;
+
+
+let menuTarget =
+null;
+
+
+let menuZone =
+null;
+
+
+let menuMode =
+'selection';
 
 
 /* =========================================================
@@ -3341,49 +3806,10 @@ document.getElementById(
 );
 
 
-/* =========================================================
-   ANSWER CHECK
-========================================================= */
-
-function normalizeAnswer(value){
-
-  return String(
-    value || ''
-  )
-  .trim()
-  .toLowerCase()
-  .replace(
-    /[£,]/g,
-    ''
-  )
-  .replace(
-    /\s+/g,
-    ' '
-  );
-
-}
-
-
-function isCorrect(
-  number,
-  value
-){
-
-  const answer =
-  normalizeAnswer(
-    value
-  );
-
-
-  return KEYS[number]
-  .some(
-    key =>
-    normalizeAnswer(key)
-    ===
-    answer
-  );
-
-}
+const questionsRoot =
+document.getElementById(
+  'questionsRoot'
+);
 
 
 /* =========================================================
@@ -3407,6 +3833,7 @@ function readStudent(){
     );
 
   }
+
   catch(e){
 
     return null;
@@ -3424,10 +3851,19 @@ function prefill(){
 
   if(student){
 
-    studentName.value =
+    document
+    .getElementById(
+      'studentName'
+    )
+    .value =
     student.name || '';
 
-    studentClass.value =
+
+    document
+    .getElementById(
+      'studentClass'
+    )
+    .value =
     student.className || '';
 
   }
@@ -3436,7 +3872,7 @@ function prefill(){
 
 
 /* =========================================================
-   RESET OLD COMPLETED ATTEMPT
+   RESET COMPLETED ATTEMPT
 ========================================================= */
 
 function resetFinishedAttempt(){
@@ -3454,7 +3890,15 @@ function resetFinishedAttempt(){
   }
 
 
-  NUMBERS.forEach(
+  [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ]
+  .forEach(
     number => {
 
       localStorage.removeItem(
@@ -3462,6 +3906,16 @@ function resetFinishedAttempt(){
       );
 
     }
+  );
+
+
+  localStorage.removeItem(
+    `${ATTEMPT_KEY}_pair21-22`
+  );
+
+
+  localStorage.removeItem(
+    `${ATTEMPT_KEY}_pair23-24`
   );
 
 
@@ -3484,11 +3938,21 @@ function resetFinishedAttempt(){
 async function startPractice(){
 
   const name =
-  studentName.value.trim();
+  document
+  .getElementById(
+    'studentName'
+  )
+  .value
+  .trim();
 
 
   const className =
-  studentClass.value.trim();
+  document
+  .getElementById(
+    'studentClass'
+  )
+  .value
+  .trim();
 
 
   if(
@@ -3497,8 +3961,13 @@ async function startPractice(){
     !className
   ){
 
-    startError.textContent =
+    document
+    .getElementById(
+      'startError'
+    )
+    .textContent =
     'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
 
     return;
 
@@ -3523,18 +3992,30 @@ async function startPractice(){
   );
 
 
-  studentInfo.textContent =
+  document
+  .getElementById(
+    'studentInfo'
+  )
+  .textContent =
   `${name} · ${className}`;
 
 
   restoreMarkup();
 
+
   restoreAnswers();
+
 
   updateProgress();
 
 
-  start
+  updateNav();
+
+
+  document
+  .getElementById(
+    'start'
+  )
   .classList
   .add(
     'hidden'
@@ -3549,11 +4030,19 @@ async function startPractice(){
   false;
 
 
-  audioStatusTitle.textContent =
+  document
+  .getElementById(
+    'audioStatusTitle'
+  )
+  .textContent =
   'Audio luyện tập';
 
 
-  audioStatusText.textContent =
+  document
+  .getElementById(
+    'audioStatusText'
+  )
+  .textContent =
   'Có thể nghe lại, tua và đổi tốc độ tùy ý';
 
 
@@ -3562,9 +4051,14 @@ async function startPractice(){
     await practiceAudio.play();
 
   }
+
   catch(e){
 
-    audioStatusText.textContent =
+    document
+    .getElementById(
+      'audioStatusText'
+    )
+    .textContent =
     'Nhấn nút ▶ để bắt đầu nghe.';
 
   }
@@ -3589,18 +4083,22 @@ function fmt(sec){
 
   const hours =
   Math.floor(
-    sec / 3600
+    sec/3600
   );
 
 
   const minutes =
   Math.floor(
-    (sec % 3600) / 60
+    (
+      sec%3600
+    )
+    /
+    60
   );
 
 
   const seconds =
-  sec % 60;
+  sec%60;
 
 
   return hours
@@ -3626,7 +4124,11 @@ setInterval(
       !submitted
     ){
 
-      timer.textContent =
+      document
+      .getElementById(
+        'timer'
+      )
+      .textContent =
       fmt(
         (
           Date.now()
@@ -3657,11 +4159,23 @@ practiceAudio
 
   ()=>{
 
+    const seekBar =
+    document.getElementById(
+      'seekBar'
+    );
+
+
     seekBar.max =
-    practiceAudio.duration || 100;
+    practiceAudio.duration
+    ||
+    100;
 
 
-    audioTime.textContent =
+    document
+    .getElementById(
+      'audioTime'
+    )
+    .textContent =
     `${fmt(practiceAudio.currentTime)} / ${fmt(practiceAudio.duration)}`;
 
   }
@@ -3676,6 +4190,12 @@ practiceAudio
 
   ()=>{
 
+    const seekBar =
+    document.getElementById(
+      'seekBar'
+    );
+
+
     if(
       !seekPreviewing
     ){
@@ -3685,11 +4205,6 @@ practiceAudio
 
     }
 
-
-    /*
-     * Khi đang nghe riêng một đoạn chữa bài,
-     * tự dừng khi đến cuối đoạn.
-     */
 
     if(
       segmentEnd !== null
@@ -3704,17 +4219,29 @@ practiceAudio
       null;
 
 
-      audioStatusText.textContent =
+      document
+      .getElementById(
+        'audioStatusText'
+      )
+      .textContent =
       'Đã phát xong đoạn đối chiếu. Có thể tiếp tục nghe hoặc tua tự do.';
 
     }
 
 
-    audioTime.textContent =
+    document
+    .getElementById(
+      'audioTime'
+    )
+    .textContent =
     `${fmt(practiceAudio.currentTime)} / ${fmt(practiceAudio.duration)}`;
 
 
-    playPauseBtn.textContent =
+    document
+    .getElementById(
+      'playPauseBtn'
+    )
+    .textContent =
     practiceAudio.paused
     ?
     '▶'
@@ -3733,7 +4260,11 @@ practiceAudio
 
   ()=>{
 
-    playPauseBtn.textContent =
+    document
+    .getElementById(
+      'playPauseBtn'
+    )
+    .textContent =
     '❚❚';
 
   }
@@ -3748,7 +4279,11 @@ practiceAudio
 
   ()=>{
 
-    playPauseBtn.textContent =
+    document
+    .getElementById(
+      'playPauseBtn'
+    )
+    .textContent =
     '▶';
 
   }
@@ -3767,7 +4302,11 @@ practiceAudio
     null;
 
 
-    audioStatusText.textContent =
+    document
+    .getElementById(
+      'audioStatusText'
+    )
+    .textContent =
     'Audio đã hết. Có thể tua lại và nghe tiếp.';
 
   }
@@ -3782,19 +4321,25 @@ practiceAudio
 
   ()=>{
 
-    audioStatusTitle.textContent =
+    document
+    .getElementById(
+      'audioStatusTitle'
+    )
+    .textContent =
     'Không tải được audio';
 
 
-    audioStatusText.textContent =
-    'Kiểm tra file Cam11-Test1-Section1.mp3 trong cùng thư mục.';
+    document
+    .getElementById(
+      'audioStatusText'
+    )
+    .textContent =
+    'Kiểm tra file Cam10-Test2-Section3.mp3 trong cùng thư mục.';
 
   }
 
 );
 
-
-/* PLAY / PAUSE */
 
 function togglePlay(){
 
@@ -3823,37 +4368,38 @@ function togglePlay(){
 }
 
 
-/* SKIP +/- */
-
 function skipAudio(seconds){
 
   segmentEnd =
   null;
 
 
+  const duration =
+  Number.isFinite(
+    practiceAudio.duration
+  )
+  ?
+  practiceAudio.duration
+  :
+  Infinity;
+
+
   practiceAudio.currentTime =
   Math.min(
 
     Math.max(
-
       0,
-
       practiceAudio.currentTime
       +
       seconds
-
     ),
 
-    practiceAudio.duration
-    ||
-    Infinity
+    duration
 
   );
 
 }
 
-
-/* DRAG SEEK BAR */
 
 function seekPreview(value){
 
@@ -3861,7 +4407,11 @@ function seekPreview(value){
   true;
 
 
-  audioTime.textContent =
+  document
+  .getElementById(
+    'audioTime'
+  )
+  .textContent =
   `${fmt(Number(value))} / ${fmt(practiceAudio.duration)}`;
 
 }
@@ -3885,8 +4435,6 @@ function seekCommit(value){
 }
 
 
-/* SPEED */
-
 function setSpeed(value){
 
   practiceAudio.playbackRate =
@@ -3895,13 +4443,15 @@ function setSpeed(value){
   );
 
 
-  audioStatusText.textContent =
+  document
+  .getElementById(
+    'audioStatusText'
+  )
+  .textContent =
   `Tốc độ ${value}× · Có thể tua và nghe lại tùy ý`;
 
 }
 
-
-/* VOLUME */
 
 function setVolume(value){
 
@@ -3914,13 +4464,88 @@ function setVolume(value){
 
 
 /* =========================================================
-   ANSWERS
+   ANSWERS — PAIRS
 ========================================================= */
 
-function saveAnswer(
-  number,
-  value
+function pairName(key){
+
+  return key ===
+  '21-22'
+
+  ?
+
+  'pair21'
+
+  :
+
+  'pair23';
+
+}
+
+
+function pairStorageKey(key){
+
+  return(
+    `${ATTEMPT_KEY}_pair${key}`
+  );
+
+}
+
+
+function getPair(key){
+
+  try{
+
+    const value =
+    JSON.parse(
+
+      localStorage.getItem(
+        pairStorageKey(key)
+      )
+
+      ||
+
+      '[]'
+
+    );
+
+
+    return Array.isArray(value)
+    ?
+    value
+    :
+    [];
+
+  }
+
+  catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+function setPair(
+  key,
+  values
 ){
+
+  localStorage.setItem(
+
+    pairStorageKey(key),
+
+    JSON.stringify(
+      values
+    )
+
+  );
+
+}
+
+
+function pairChanged(key){
 
   if(submitted){
 
@@ -3929,63 +4554,237 @@ function saveAnswer(
   }
 
 
-  localStorage.setItem(
-
-    `${ATTEMPT_KEY}_q${number}`,
-
-    value
-
+  const name =
+  pairName(
+    key
   );
 
 
-  navState(
-    number
+  const selected =
+  [
+    ...document.querySelectorAll(
+      `input[name="${name}"]:checked`
+    )
+  ];
+
+
+  if(
+    selected.length>2
+  ){
+
+    selected[
+      selected.length-1
+    ]
+    .checked =
+    false;
+
+
+    alert(
+      'Chỉ chọn TWO đáp án.'
+    );
+
+  }
+
+
+  const values =
+  [
+    ...document.querySelectorAll(
+      `input[name="${name}"]:checked`
+    )
+  ]
+  .map(
+    input =>
+    input.value
   );
+
+
+  setPair(
+    key,
+    values
+  );
+
+
+  updateOptionUI();
 
 
   updateProgress();
 
-}
 
-
-function getAnswer(number){
-
-  return localStorage.getItem(
-
-    `${ATTEMPT_KEY}_q${number}`
-
-  )
-
-  ||
-
-  '';
+  updateNav();
 
 }
 
+
+/* =========================================================
+   ANSWERS — SINGLE
+========================================================= */
+
+function singleChanged(number){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  const input =
+  document.querySelector(
+    `input[name="q${number}"]:checked`
+  );
+
+
+  localStorage.setItem(
+
+    `${ATTEMPT_KEY}_q${number}`,
+
+    input
+    ?
+    input.value
+    :
+    ''
+
+  );
+
+
+  updateOptionUI();
+
+
+  updateProgress();
+
+
+  updateNav();
+
+}
+
+
+function getSingle(number){
+
+  return(
+    localStorage.getItem(
+      `${ATTEMPT_KEY}_q${number}`
+    )
+    ||
+    ''
+  );
+
+}
+
+
+/* =========================================================
+   RESTORE ANSWERS
+========================================================= */
 
 function restoreAnswers(){
 
-  NUMBERS.forEach(
+  [
+    '21-22',
+    '23-24'
+  ]
+  .forEach(
+    key => {
+
+      const values =
+      getPair(
+        key
+      );
+
+
+      const name =
+      pairName(
+        key
+      );
+
+
+      document
+      .querySelectorAll(
+        `input[name="${name}"]`
+      )
+      .forEach(
+        input => {
+
+          input.checked =
+          values.includes(
+            input.value
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ]
+  .forEach(
     number => {
 
+      const value =
+      getSingle(
+        number
+      );
+
+
+      if(!value){
+
+        return;
+
+      }
+
+
       const input =
-      document.getElementById(
-        'a' + number
+      document.querySelector(
+        `input[name="q${number}"][value="${value}"]`
       );
 
 
       if(input){
 
-        input.value =
-        getAnswer(
-          number
-        );
+        input.checked =
+        true;
 
       }
 
+    }
+  );
 
-      navState(
-        number
+
+  updateOptionUI();
+
+}
+
+
+/* =========================================================
+   OPTION VISUAL
+========================================================= */
+
+function updateOptionUI(){
+
+  document
+  .querySelectorAll(
+    '.option'
+  )
+  .forEach(
+    option => {
+
+      const input =
+      option.querySelector(
+        'input'
+      );
+
+
+      option
+      .classList
+      .toggle(
+        'selected',
+        !!input?.checked
       );
 
     }
@@ -3994,29 +4793,55 @@ function restoreAnswers(){
 }
 
 
-function navState(number){
+/* =========================================================
+   PROGRESS
+========================================================= */
 
-  const button =
-  document.getElementById(
-    'nav' + number
+function answeredCount(){
+
+  const pair21 =
+  Math.min(
+    getPair(
+      '21-22'
+    )
+    .length,
+    2
   );
 
 
-  if(button){
+  const pair23 =
+  Math.min(
+    getPair(
+      '23-24'
+    )
+    .length,
+    2
+  );
 
-    button
-    .classList
-    .toggle(
 
-      'answered',
+  const singles =
+  [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ]
+  .filter(
+    number =>
+    !!getSingle(number)
+  )
+  .length;
 
-      !!normalizeAnswer(
-        getAnswer(number)
-      )
 
-    );
-
-  }
+  return(
+    pair21
+    +
+    pair23
+    +
+    singles
+  );
 
 }
 
@@ -4024,42 +4849,174 @@ function navState(number){
 function updateProgress(){
 
   const answered =
-  NUMBERS
-  .filter(
-    number =>
-    normalizeAnswer(
-      getAnswer(number)
-    )
+  answeredCount();
+
+
+  document
+  .getElementById(
+    'progressText'
   )
-  .length;
-
-
-  progressText.textContent =
+  .textContent =
   `${answered}/10 câu đã trả lời`;
 
 
-  progressBar.style.width =
+  document
+  .getElementById(
+    'progressBar'
+  )
+  .style
+  .width =
   `${answered/10*100}%`;
+
+}
+
+
+/* =========================================================
+   NAV
+========================================================= */
+
+function updateNav(){
+
+  NUMBERS.forEach(
+    number => {
+
+      const button =
+      document.getElementById(
+        'nav'
+        +
+        number
+      );
+
+
+      if(!button){
+
+        return;
+
+      }
+
+
+      let answered =
+      false;
+
+
+      if(
+        number===21
+        ||
+        number===22
+      ){
+
+        const count =
+        getPair(
+          '21-22'
+        )
+        .length;
+
+
+        answered =
+        number===21
+        ?
+        count>=1
+        :
+        count>=2;
+
+      }
+
+      else if(
+        number===23
+        ||
+        number===24
+      ){
+
+        const count =
+        getPair(
+          '23-24'
+        )
+        .length;
+
+
+        answered =
+        number===23
+        ?
+        count>=1
+        :
+        count>=2;
+
+      }
+
+      else{
+
+        answered =
+        !!getSingle(
+          number
+        );
+
+      }
+
+
+      button
+      .classList
+      .toggle(
+        'answered',
+        answered
+      );
+
+    }
+  );
 
 }
 
 
 function goQ(number){
 
-  const input =
-  document.getElementById(
-    'a' + number
-  );
+  let target;
 
 
-  if(!input){
+  if(
+    number===21
+    ||
+    number===22
+  ){
+
+    target =
+    document.getElementById(
+      'questionGroup21'
+    );
+
+  }
+
+  else if(
+    number===23
+    ||
+    number===24
+  ){
+
+    target =
+    document.getElementById(
+      'questionGroup23'
+    );
+
+  }
+
+  else{
+
+    target =
+    document.getElementById(
+      'question'
+      +
+      number
+    );
+
+  }
+
+
+  if(!target){
 
     return;
 
   }
 
 
-  input
+  target
   .scrollIntoView({
 
     behavior:'smooth',
@@ -4068,13 +5025,62 @@ function goQ(number){
 
   });
 
+}
 
-  setTimeout(
 
-    ()=>input.focus(),
+/* =========================================================
+   SCORE HELPERS
+========================================================= */
 
-    300
+function sameSet(
+  a,
+  b
+){
 
+  if(
+    a.length
+    !==
+    b.length
+  ){
+
+    return false;
+
+  }
+
+
+  return(
+    [
+      ...a
+    ]
+    .sort()
+    .join(',')
+
+    ===
+
+    [
+      ...b
+    ]
+    .sort()
+    .join(',')
+  );
+
+}
+
+
+function pairScore(
+  selected,
+  correct
+){
+
+  return(
+    selected
+    .filter(
+      value =>
+      correct.includes(
+        value
+      )
+    )
+    .length
   );
 
 }
@@ -4093,7 +5099,41 @@ async function submitPractice(){
   }
 
 
+  const answered =
+  answeredCount();
+
+
+  if(
+    answered<10
+  ){
+
+    const confirmSubmit =
+    confirm(
+      `Bạn mới trả lời ${answered}/10 câu. Vẫn nộp bài?`
+    );
+
+
+    if(!confirmSubmit){
+
+      return;
+
+    }
+
+  }
+
+
   submitted =
+  true;
+
+
+  practiceAudio.pause();
+
+
+  document
+  .getElementById(
+    'submitButton'
+  )
+  .disabled =
   true;
 
 
@@ -4111,28 +5151,153 @@ async function submitPractice(){
   {};
 
 
-  reviewList.innerHTML =
+  document
+  .getElementById(
+    'reviewList'
+  )
+  .innerHTML =
   '';
 
 
-  NUMBERS.forEach(
+  /* ---------------------------------------
+     Q21–22
+  --------------------------------------- */
+
+  const pair21 =
+  getPair(
+    '21-22'
+  );
+
+
+  answers['21-22'] =
+  pair21;
+
+
+  score +=
+  pairScore(
+    pair21,
+    PAIR_KEYS[
+      '21-22'
+    ]
+  );
+
+
+  markPairResult(
+    21,
+    22,
+    pair21,
+    PAIR_KEYS[
+      '21-22'
+    ]
+  );
+
+
+  if(
+    !sameSet(
+      pair21,
+      PAIR_KEYS[
+        '21-22'
+      ]
+    )
+  ){
+
+    renderReview(
+      '21-22',
+
+      pair21.length
+      ?
+      pair21.join(', ')
+      :
+      'Chưa trả lời'
+    );
+
+  }
+
+
+  /* ---------------------------------------
+     Q23–24
+  --------------------------------------- */
+
+  const pair23 =
+  getPair(
+    '23-24'
+  );
+
+
+  answers['23-24'] =
+  pair23;
+
+
+  score +=
+  pairScore(
+    pair23,
+    PAIR_KEYS[
+      '23-24'
+    ]
+  );
+
+
+  markPairResult(
+    23,
+    24,
+    pair23,
+    PAIR_KEYS[
+      '23-24'
+    ]
+  );
+
+
+  if(
+    !sameSet(
+      pair23,
+      PAIR_KEYS[
+        '23-24'
+      ]
+    )
+  ){
+
+    renderReview(
+      '23-24',
+
+      pair23.length
+      ?
+      pair23.join(', ')
+      :
+      'Chưa trả lời'
+    );
+
+  }
+
+
+  /* ---------------------------------------
+     Q25–30
+  --------------------------------------- */
+
+  [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ]
+  .forEach(
     number => {
 
       const user =
-      getAnswer(
+      getSingle(
         number
       );
 
 
-      const ok =
-      isCorrect(
-        number,
-        user
-      );
-
-
       answers[number] =
-      user || '';
+      user;
+
+
+      const ok =
+      user
+      ===
+      SINGLE_KEYS[number];
 
 
       if(ok){
@@ -4142,17 +5307,22 @@ async function submitPractice(){
       }
 
 
-      const input =
+      const nav =
       document.getElementById(
-        'a' + number
+        'nav'
+        +
+        number
       );
 
 
-      input.disabled =
-      true;
+      nav
+      .classList
+      .remove(
+        'answered'
+      );
 
 
-      input
+      nav
       .classList
       .add(
         ok
@@ -4163,25 +5333,34 @@ async function submitPractice(){
       );
 
 
-      document
-      .getElementById(
-        'nav' + number
-      )
-      .classList
-      .add(
-        ok
-        ?
-        'correct'
-        :
-        'wrong'
+      const block =
+      document.getElementById(
+        'question'
+        +
+        number
       );
+
+
+      if(block){
+
+        block
+        .classList
+        .add(
+          ok
+          ?
+          'submitted-correct'
+          :
+          'submitted-wrong'
+        );
+
+      }
 
 
       if(!ok){
 
         renderReview(
           number,
-          user
+          user || 'Chưa trả lời'
         );
 
       }
@@ -4190,23 +5369,53 @@ async function submitPractice(){
   );
 
 
-  /*
-   * Mở transcript sau khi nộp.
-   */
+  /* DISABLE ANSWERS */
 
-  transcriptPanel
+  document
+  .querySelectorAll(
+    '#questionsRoot input'
+  )
+  .forEach(
+    input => {
+
+      input.disabled =
+      true;
+
+    }
+  );
+
+
+  /* TRANSCRIPT */
+
+  document
+  .getElementById(
+    'transcriptPanel'
+  )
   .classList
   .remove(
     'hidden'
   );
 
 
-  audioStatusTitle.textContent =
+  bindContextActions(
+    'transcript'
+  );
+
+
+  document
+  .getElementById(
+    'audioStatusTitle'
+  )
+  .textContent =
   'Chế độ chữa bài';
 
 
-  audioStatusText.textContent =
-  'Có thể tua tự do hoặc nhấn vào transcript/giải thích để nghe đúng đoạn chứa đáp án.';
+  document
+  .getElementById(
+    'audioStatusText'
+  )
+  .textContent =
+  'Có thể tua tự do hoặc nhấn transcript/giải thích để nghe đúng đoạn chứa đáp án.';
 
 
   const durationSeconds =
@@ -4225,32 +5434,47 @@ async function submitPractice(){
   readStudent();
 
 
-  resultStudent.textContent =
+  document
+  .getElementById(
+    'resultStudent'
+  )
+  .textContent =
   student
-
   ?
-
   `${student.name} · ${student.className}`
-
   :
-
   '';
 
 
-  resultScore.textContent =
+  document
+  .getElementById(
+    'resultScore'
+  )
+  .textContent =
   `${score} / 10`;
 
 
-  resultPercent.textContent =
+  document
+  .getElementById(
+    'resultPercent'
+  )
+  .textContent =
   `${Math.round(score/10*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
 
 
-  resultOverlay
+  document
+  .getElementById(
+    'resultOverlay'
+  )
   .classList
   .remove(
     'hidden'
   );
 
+
+  /* ---------------------------------------
+     SEND PRACTICE RESULT
+  --------------------------------------- */
 
   const body =
   new URLSearchParams({
@@ -4268,7 +5492,7 @@ async function submitPractice(){
     'Listening',
 
     practiceType:
-    'Note Completion',
+    'Part 3',
 
     practiceId:
     '01',
@@ -4288,16 +5512,42 @@ async function submitPractice(){
     JSON.stringify({
 
       title:
-      'Hiring a Public Room - Listening Note Completion 01',
+      'Thor Heyerdahl - Listening Part 3 Practice 01',
+
+      source:
+      'Cambridge IELTS 10 Test 2 Section 3',
 
       audio:
-      'Cam11-Test1-Section1.mp3',
+      'Cam10-Test2-Section3.mp3',
 
       answers:
       answers,
 
-      correctAnswers:
-      DISPLAY_KEY
+      correctAnswers:{
+
+        '21-22':[
+          'B',
+          'C'
+        ],
+
+        '23-24':[
+          'B',
+          'E'
+        ],
+
+        25:'A',
+
+        26:'C',
+
+        27:'C',
+
+        28:'A',
+
+        29:'B',
+
+        30:'A'
+
+      }
 
     }),
 
@@ -4315,7 +5565,6 @@ async function submitPractice(){
       RESULT_ENDPOINT,
 
       {
-
         method:
         'POST',
 
@@ -4323,15 +5572,12 @@ async function submitPractice(){
         'no-cors',
 
         headers:{
-
           'Content-Type':
           'application/x-www-form-urlencoded;charset=UTF-8'
-
         },
 
         body:
         body.toString()
-
       }
 
     );
@@ -4351,6 +5597,108 @@ async function submitPractice(){
 
 
 /* =========================================================
+   PAIR RESULT
+========================================================= */
+
+function markPairResult(
+  first,
+  second,
+  selected,
+  correct
+){
+
+  const fullyCorrect =
+  sameSet(
+    selected,
+    correct
+  );
+
+
+  const buttons =
+  [
+    document.getElementById(
+      'nav'
+      +
+      first
+    ),
+
+    document.getElementById(
+      'nav'
+      +
+      second
+    )
+  ];
+
+
+  /*
+   * Hai câu dạng chọn TWO:
+   * mỗi đáp án đúng = 1 điểm.
+   */
+
+  let correctCount =
+  pairScore(
+    selected,
+    correct
+  );
+
+
+  buttons.forEach(
+    (
+      button,
+      index
+    ) => {
+
+      button
+      .classList
+      .remove(
+        'answered'
+      );
+
+
+      button
+      .classList
+      .add(
+        index<correctCount
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+    }
+  );
+
+
+  const block =
+  first===21
+  ?
+  document.getElementById(
+    'questionGroup21'
+  )
+  :
+  document.getElementById(
+    'questionGroup23'
+  );
+
+
+  if(block){
+
+    block
+    .classList
+    .add(
+      fullyCorrect
+      ?
+      'submitted-correct'
+      :
+      'submitted-wrong'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
    WRONG ANSWER REVIEW
 ========================================================= */
 
@@ -4358,6 +5706,12 @@ function renderReview(
   number,
   user
 ){
+
+  const reviewList =
+  document.getElementById(
+    'reviewList'
+  );
+
 
   reviewList
   .insertAdjacentHTML(
@@ -4368,7 +5722,15 @@ function renderReview(
       <div class="inline-review">
 
         <div class="review-title">
-          Câu ${number}
+
+          ${
+            String(number).includes('-')
+            ?
+            `Questions ${number}`
+            :
+            `Question ${number}`
+          }
+
         </div>
 
 
@@ -4401,8 +5763,9 @@ function renderReview(
         <div class="explain-box">
 
           <div class="explain-label">
-            Notes
+            Original prompt
           </div>
+
 
           <div class="explain-text">
             ${QUESTION_TEXT[number]}
@@ -4411,7 +5774,7 @@ function renderReview(
 
           <div
             class="explain-label"
-            style="margin-top:9px"
+            style="margin-top:10px"
           >
             Transcript
           </div>
@@ -4419,13 +5782,14 @@ function renderReview(
 
           <div
             class="transcript-evidence"
-            onclick="reviewCue(${number})"
+            onclick="reviewCue('${number}')"
           >
 
             ${TRANSCRIPT_SNIPPET[number]}
 
+
             <div class="evidence-help">
-              Nhấn để tua đến đúng đoạn audio
+              Nhấn để tua tới đúng đoạn audio
               và mở dòng transcript tương ứng
             </div>
 
@@ -4436,7 +5800,8 @@ function renderReview(
 
             <button
               class="review-btn"
-              onclick="playSegment(${number},false)"
+              type="button"
+              onclick="playSegment('${number}',false)"
             >
               ▶ Nghe đoạn chứa đáp án
             </button>
@@ -4444,7 +5809,8 @@ function renderReview(
 
             <button
               class="review-btn"
-              onclick="showTranscriptCue(${number})"
+              type="button"
+              onclick="showTranscriptCue('${number}')"
             >
               📝 Xem trong transcript
             </button>
@@ -4454,7 +5820,7 @@ function renderReview(
 
           <div
             class="explain-label"
-            style="margin-top:9px"
+            style="margin-top:10px"
           >
             Phân tích
           </div>
@@ -4466,7 +5832,7 @@ function renderReview(
 
 
           <div class="conclusion">
-            Điền: ${DISPLAY_KEY[number]}
+            Kết luận: ${DISPLAY_KEY[number]}
           </div>
 
         </div>
@@ -4480,7 +5846,7 @@ function renderReview(
 
 
 /* =========================================================
-   REVIEW CUE
+   REVIEW AUDIO CUE
 ========================================================= */
 
 function reviewCue(number){
@@ -4499,12 +5865,12 @@ function reviewCue(number){
 
 
 /* =========================================================
-   PLAY EXACT ANSWER SEGMENT
+   PLAY EXACT SEGMENT
 ========================================================= */
 
 function playSegment(
   number,
-  keepTranscriptVisible = false
+  keepTranscriptVisible=false
 ){
 
   const cue =
@@ -4533,11 +5899,25 @@ function playSegment(
   );
 
 
-  audioStatusTitle.textContent =
-  `Đang nghe lại câu ${number}`;
+  document
+  .getElementById(
+    'audioStatusTitle'
+  )
+  .textContent =
+  `Đang nghe lại ${
+    String(number).includes('-')
+    ?
+    'Questions '
+    :
+    'Question '
+  }${number}`;
 
 
-  audioStatusText.textContent =
+  document
+  .getElementById(
+    'audioStatusText'
+  )
+  .textContent =
   `Đoạn ${fmt(cue.start)} – ${fmt(cue.end)} · tốc độ ${practiceAudio.playbackRate}×`;
 
 
@@ -4555,10 +5935,65 @@ function playSegment(
 
 
 /* =========================================================
-   SCROLL TO TRANSCRIPT
+   TRANSCRIPT CUE
 ========================================================= */
 
+function transcriptId(number){
+
+  if(
+    number===21
+    ||
+    number===22
+    ||
+    number==='21'
+    ||
+    number==='22'
+    ||
+    number==='21-22'
+  ){
+
+    return(
+      'transcript-q21-22'
+    );
+
+  }
+
+
+  if(
+    number===23
+    ||
+    number===24
+    ||
+    number==='23'
+    ||
+    number==='24'
+    ||
+    number==='23-24'
+  ){
+
+    return(
+      'transcript-q23-24'
+    );
+
+  }
+
+
+  return(
+    'transcript-q'
+    +
+    number
+  );
+
+}
+
+
 function showTranscriptCue(number){
+
+  const transcriptPanel =
+  document.getElementById(
+    'transcriptPanel'
+  );
+
 
   transcriptPanel
   .classList
@@ -4586,7 +6021,7 @@ function showTranscriptCue(number){
 
   const line =
   document.getElementById(
-    'transcript-q' + number
+    transcriptId(number)
   );
 
 
@@ -4614,10 +6049,6 @@ function showTranscriptCue(number){
   });
 
 
-  /*
-   * Restart animation mỗi lần click.
-   */
-
   line.style.animation =
   'none';
 
@@ -4637,31 +6068,34 @@ function showTranscriptCue(number){
 
 function closeResult(){
 
-  resultOverlay
+  document
+  .getElementById(
+    'resultOverlay'
+  )
   .classList
   .add(
     'hidden'
   );
 
 
-  const firstWrong =
-  NUMBERS.find(
-    number =>
-    !isCorrect(
-      number,
-      getAnswer(number)
-    )
+  const firstReview =
+  document
+  .getElementById(
+    'reviewList'
+  )
+  .querySelector(
+    '.inline-review'
   );
 
 
-  if(firstWrong){
+  if(firstReview){
 
-    reviewList
+    firstReview
     .scrollIntoView({
 
       behavior:'smooth',
 
-      block:'start'
+      block:'center'
 
     });
 
@@ -4669,7 +6103,10 @@ function closeResult(){
 
   else{
 
-    transcriptPanel
+    document
+    .getElementById(
+      'transcriptPanel'
+    )
     .scrollIntoView({
 
       behavior:'smooth',
@@ -4689,18 +6126,16 @@ function closeResult(){
 
 function zoneRoot(zone){
 
-  return zone === 'transcript'
-
-  ?
-
-  document.getElementById(
-    'transcriptRoot'
-  )
-
-  :
-
-  document.getElementById(
-    'questionsRoot'
+  return(
+    zone==='transcript'
+    ?
+    document.getElementById(
+      'transcriptRoot'
+    )
+    :
+    document.getElementById(
+      'questionsRoot'
+    )
   );
 
 }
@@ -4708,15 +6143,16 @@ function zoneRoot(zone){
 
 function markupKey(zone){
 
-  return `${ATTEMPT_KEY}_markup_${zone}`;
+  return(
+    `${ATTEMPT_KEY}_markup_${zone}`
+  );
 
 }
 
 
-/*
- * Chỉ lưu annotation trước khi nộp.
- * Không lưu phần review động vào localStorage.
- */
+/* =========================================================
+   SAVE MARKUP
+========================================================= */
 
 function saveMarkup(zone){
 
@@ -4727,19 +6163,53 @@ function saveMarkup(zone){
   }
 
 
+  /*
+   * Transcript chưa mở trước submit,
+   * nên chủ yếu lưu markup phần Questions.
+   */
+
+  if(
+    zone==='transcript'
+  ){
+
+    return;
+
+  }
+
+
+  const root =
+  zoneRoot(zone);
+
+
+  if(!root){
+
+    return;
+
+  }
+
+
   localStorage.setItem(
 
     markupKey(zone),
 
-    zoneRoot(zone)
-    .innerHTML
+    root.innerHTML
 
   );
 
 }
 
 
+/* =========================================================
+   RESTORE MARKUP
+========================================================= */
+
 function restoreMarkup(){
+
+  const root =
+  document.getElementById(
+    'questionsRoot'
+  );
+
 
   const markup =
   localStorage.getItem(
@@ -4751,7 +6221,7 @@ function restoreMarkup(){
 
   if(markup){
 
-    questionsRoot.innerHTML =
+    root.innerHTML =
     markup;
 
   }
@@ -4769,7 +6239,9 @@ function restoreMarkup(){
 }
 
 
-/* MENU RESET */
+/* =========================================================
+   RESET MENU
+========================================================= */
 
 function resetMenu(){
 
@@ -4831,6 +6303,10 @@ function hideMenu(){
 }
 
 
+/* =========================================================
+   SHOW SELECTION MENU
+========================================================= */
+
 function showMenu(rect){
 
   selectionMenu
@@ -4848,6 +6324,12 @@ function showMenu(rect){
       selectionMenu.offsetWidth
       ||
       180;
+
+
+      const height =
+      selectionMenu.offsetHeight
+      ||
+      40;
 
 
       const left =
@@ -4874,15 +6356,34 @@ function showMenu(rect){
       );
 
 
+      let top =
+      rect.top
+      -
+      height
+      -
+      8;
+
+
+      if(
+        top<8
+      ){
+
+        top =
+        rect.bottom
+        +
+        8;
+
+      }
+
+
       selectionMenu.style.left =
-      left + 'px';
+      left
+      +
+      'px';
 
 
       selectionMenu.style.top =
-      Math.max(
-        10,
-        rect.top - 47
-      )
+      top
       +
       'px';
 
@@ -4893,7 +6394,9 @@ function showMenu(rect){
 }
 
 
-/* CAPTURE SELECTED TEXT */
+/* =========================================================
+   CAPTURE SELECTION
+========================================================= */
 
 function captureSelection(zone){
 
@@ -4935,6 +6438,29 @@ function captureSelection(zone){
   }
 
 
+  /*
+   * Không cho highlight input/button.
+   */
+
+  const common =
+  range.commonAncestorContainer.nodeType===1
+  ?
+  range.commonAncestorContainer
+  :
+  range.commonAncestorContainer.parentElement;
+
+
+  if(
+    common?.closest(
+      'button,input,select'
+    )
+  ){
+
+    return;
+
+  }
+
+
   savedSelection =
   range.cloneRange();
 
@@ -4953,6 +6479,10 @@ function captureSelection(zone){
 
 }
 
+
+/* =========================================================
+   CLEAR BROWSER SELECTION
+========================================================= */
 
 function clearSelection(){
 
@@ -4977,12 +6507,14 @@ function clearSelection(){
 }
 
 
-/* ADD HIGHLIGHT */
+/* =========================================================
+   ADD HIGHLIGHT
+========================================================= */
 
 function addHighlight(){
 
   if(
-    menuMode ===
+    menuMode===
     'delete-highlight'
   ){
 
@@ -5053,12 +6585,14 @@ function addHighlight(){
 }
 
 
-/* ADD NOTE */
+/* =========================================================
+   TAKE NOTE
+========================================================= */
 
 function addNote(){
 
   if(
-    menuMode ===
+    menuMode===
     'delete-note'
   ){
 
@@ -5087,7 +6621,7 @@ function addNote(){
 
 
   if(
-    note === null
+    note===null
     ||
     !note.trim()
   ){
@@ -5116,10 +6650,6 @@ function addNote(){
     span.dataset.note =
     note.trim();
 
-
-    /*
-     * Hover vào note cũng xem được nội dung note.
-     */
 
     span.title =
     note.trim();
@@ -5158,7 +6688,9 @@ function addNote(){
 }
 
 
-/* DELETE EXISTING ANNOTATION */
+/* =========================================================
+   DELETE EXISTING MARK
+========================================================= */
 
 function showDeleteMenu(
   target,
@@ -5178,7 +6710,7 @@ function showDeleteMenu(
 
 
   if(
-    type ===
+    type===
     'highlight'
   ){
 
@@ -5277,7 +6809,9 @@ function removeMark(){
 }
 
 
-/* BIND ANNOTATION EVENTS */
+/* =========================================================
+   CONTEXT EVENTS
+========================================================= */
 
 function bindContextActions(zone){
 
@@ -5288,7 +6822,7 @@ function bindContextActions(zone){
   if(
     !root
     ||
-    root.dataset.contextBound === '1'
+    root.dataset.contextBound==='1'
   ){
 
     return;
@@ -5393,7 +6927,9 @@ function bindContextActions(zone){
 }
 
 
-/* MENU BUTTONS */
+/* =========================================================
+   MENU EVENTS
+========================================================= */
 
 menuHighlight
 .addEventListener(
@@ -5451,6 +6987,8 @@ function escapeHTML(value){
 
   return String(
     value
+    ??
+    ''
   )
   .replace(
 
@@ -5490,6 +7028,15 @@ bindContextActions(
 bindContextActions(
   'transcript'
 );
+
+
+updateOptionUI();
+
+
+updateProgress();
+
+
+updateNav();
 
 </script>
 
