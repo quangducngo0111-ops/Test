@@ -28,7 +28,7 @@
 <title>Vocabulary Practice</title>
 
 <script
-  src="./vocab-data.js?v=20260917-flappy-v5"
+  src="./vocab-data.js?v=20260917-flappy-natural"
   onerror="window.VOCABULARY_LOAD_ERROR=true"
 ></script>
 
@@ -595,7 +595,7 @@ button{
 
 
 /* =========================================================
-   GAME SETTINGS
+   SETTINGS
 ========================================================= */
 
 .game-settings{
@@ -807,7 +807,7 @@ button{
 
 
 /* =========================================================
-   GAME COMMON
+   COMMON GAME
 ========================================================= */
 
 .game-header{
@@ -927,12 +927,11 @@ button{
 
   margin-top:4px;
 
-  font-size:
-    clamp(
-      20px,
-      4vw,
-      31px
-    );
+  font-size:clamp(
+    20px,
+    4vw,
+    31px
+  );
 }
 
 
@@ -1260,9 +1259,7 @@ button{
 
   padding:8px;
 
-  border:
-    1px solid #d9d2ee;
-
+  border:1px solid #d9d2ee;
   border-radius:12px;
 
   background:
@@ -1308,7 +1305,7 @@ button{
 
 
 /* =========================================================
-   FLAPPY KAKAPO
+   FLAPPY
 ========================================================= */
 
 .flappy-stage{
@@ -1397,13 +1394,11 @@ button{
 
   0%,
   100%{
-    transform:
-      translateX(0);
+    transform:translateX(0);
   }
 
   50%{
-    transform:
-      translateX(-28px);
+    transform:translateX(-28px);
   }
 
 }
@@ -1456,13 +1451,12 @@ button{
       #456e2b
     );
 
-  border-top:
-    4px solid #9ece67;
+  border-top:4px solid #9ece67;
 }
 
 
 /* =========================================================
-   FLAPPY SPEED EFFECT
+   SPEED LINES
 ========================================================= */
 
 .speed-line{
@@ -1470,7 +1464,7 @@ button{
 
   z-index:3;
 
-  width:80px;
+  width:75px;
   height:2px;
 
   border-radius:999px;
@@ -1527,7 +1521,7 @@ button{
 
 
 /* =========================================================
-   BIRD
+   KAKAPO
 ========================================================= */
 
 .kakapo{
@@ -1537,7 +1531,7 @@ button{
 
   left:19%;
 
-  width:145px;
+  width:150px;
 
   transform:
     translate(-50%,-50%);
@@ -1545,6 +1539,8 @@ button{
   text-align:center;
 
   pointer-events:none;
+
+  --bird-angle:0deg;
 }
 
 .kakapo-word{
@@ -1554,16 +1550,13 @@ button{
 
   display:inline-block;
 
-  max-width:145px;
+  max-width:150px;
 
-  padding:
-    5px 8px;
+  padding:5px 8px;
 
-  margin-bottom:-2px;
+  margin-bottom:-3px;
 
-  border:
-    2px solid #49316b;
-
+  border:2px solid #49316b;
   border-radius:9px;
 
   background:
@@ -1581,10 +1574,15 @@ button{
   overflow-wrap:anywhere;
 }
 
+
+/* =========================================================
+   BIRD IMAGE
+========================================================= */
+
 .kakapo-bird-wrap{
   position:relative;
 
-  width:106px;
+  width:108px;
   height:96px;
 
   margin:auto;
@@ -1595,9 +1593,6 @@ button{
   background:transparent;
   border:none;
   box-shadow:none;
-
-  animation:
-    kakapoIdle .7s ease-in-out infinite;
 }
 
 .kakapo-bird-img{
@@ -1605,8 +1600,8 @@ button{
 
   z-index:7;
 
-  width:100px;
-  height:92px;
+  width:102px;
+  height:94px;
 
   display:block;
 
@@ -1619,19 +1614,31 @@ button{
   box-shadow:none;
 
   /*
-    QUAN TRỌNG:
-    KHÔNG LẬT ẢNH.
-    Ảnh kakapo.png cần quay đầu sang phải.
+  Không lật ảnh.
+  Ảnh PNG phải quay đầu sang phải.
   */
 
   transform:
-    scaleX(1);
+    rotate(
+      var(
+        --bird-angle,
+        0deg
+      )
+    );
+
+  transform-origin:center;
 
   filter:
     drop-shadow(
       0 9px 8px
-      rgba(0,0,0,.20)
+      rgba(0,0,0,.18)
     );
+
+  will-change:
+    transform;
+
+  transition:
+    filter .12s ease;
 }
 
 .kakapo-bird-fallback{
@@ -1647,296 +1654,241 @@ button{
 
 
 /* =========================================================
-   FAKE WING
+   SUBTLE IDLE MOTION
 ========================================================= */
 
-.kakapo-wing{
-  position:absolute;
-
-  z-index:9;
-
-  left:20px;
-  top:43px;
-
-  width:53px;
-  height:23px;
-
-  border-radius:
-    100% 15% 90% 20%;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(130,174,69,.92),
-      rgba(61,106,38,.95)
-    );
-
-  transform-origin:
-    right center;
-
-  opacity:.82;
-
+.kakapo-bird-wrap{
   animation:
-    wingIdle .4s ease-in-out infinite alternate;
+    naturalIdle 1.15s ease-in-out infinite;
 }
 
-.kakapo-wing::after{
-  content:"";
+@keyframes naturalIdle{
 
-  position:absolute;
+  0%,
+  100%{
+    transform:
+      translateY(0)
+      scale(1);
+  }
 
-  left:7px;
-  top:6px;
+  50%{
+    transform:
+      translateY(-3px)
+      scale(1.008);
+  }
 
-  width:32px;
-  height:10px;
-
-  border-radius:50%;
-
-  border-top:
-    2px solid
-    rgba(234,244,173,.55);
 }
 
 
 /* =========================================================
-   FLAP FX
+   NATURAL FLAP
 ========================================================= */
-
-.kakapo.flap .kakapo-wing{
-  animation:
-    wingFlap .12s ease-in-out 3;
-}
 
 .kakapo.flap .kakapo-bird-wrap{
   animation:
-    bodyFlap .25s ease;
+    naturalFlap .24s cubic-bezier(.2,.8,.3,1);
 }
 
-.kakapo.flap .kakapo-bird-img{
-  animation:
-    imageFlap .25s ease;
+@keyframes naturalFlap{
+
+  0%{
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+  35%{
+    transform:
+      translateY(-7px)
+      scaleX(1.025)
+      scaleY(.975);
+  }
+
+  70%{
+    transform:
+      translateY(-3px)
+      scaleX(.985)
+      scaleY(1.02);
+  }
+
+  100%{
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
 }
 
-.flap-ring{
+
+/* =========================================================
+   WIND STREAKS
+========================================================= */
+
+.flight-streak{
   position:absolute;
 
   z-index:3;
 
-  left:38%;
-  top:65%;
+  left:-18px;
+
+  height:2px;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.9)
+    );
+
+  opacity:0;
+
+  pointer-events:none;
+}
+
+.flight-streak.one{
+  top:45px;
+
+  width:44px;
+}
+
+.flight-streak.two{
+  top:59px;
+
+  width:31px;
+}
+
+.flight-streak.three{
+  top:70px;
+
+  width:23px;
+}
+
+.kakapo.flap .flight-streak.one{
+  animation:
+    streakFly .31s ease-out;
+}
+
+.kakapo.flap .flight-streak.two{
+  animation:
+    streakFly .36s .02s ease-out;
+}
+
+.kakapo.flap .flight-streak.three{
+  animation:
+    streakFly .41s .04s ease-out;
+}
+
+@keyframes streakFly{
+
+  0%{
+    opacity:.85;
+
+    transform:
+      translateX(20px)
+      scaleX(.4);
+  }
+
+  100%{
+    opacity:0;
+
+    transform:
+      translateX(-42px)
+      scaleX(1.4);
+  }
+
+}
+
+
+/* =========================================================
+   FLAP RING
+========================================================= */
+
+.flap-ring{
+  position:absolute;
+
+  z-index:2;
+
+  left:37%;
+  top:61%;
 
   width:18px;
   height:18px;
 
   border:
     2px solid
-    rgba(255,255,255,.9);
+    rgba(255,255,255,.75);
 
   border-radius:50%;
 
   opacity:0;
+
+  pointer-events:none;
 }
 
 .kakapo.flap .flap-ring{
   animation:
-    flapRing .35s ease;
-}
-
-.flap-feather{
-  position:absolute;
-
-  z-index:3;
-
-  left:25px;
-  top:65px;
-
-  width:10px;
-  height:5px;
-
-  border-radius:
-    100% 10%;
-
-  background:
-    #f0f7d3;
-
-  opacity:0;
-}
-
-.kakapo.flap .f1{
-  animation:
-    feather1 .5s ease;
-}
-
-.kakapo.flap .f2{
-  animation:
-    feather2 .55s ease;
-}
-
-
-/* =========================================================
-   BIRD ANIMATION
-========================================================= */
-
-@keyframes kakapoIdle{
-
-  0%{
-    transform:
-      translateY(0)
-      rotate(-2deg);
-  }
-
-  50%{
-    transform:
-      translateY(-3px)
-      rotate(2deg);
-  }
-
-  100%{
-    transform:
-      translateY(0)
-      rotate(-2deg);
-  }
-
-}
-
-@keyframes wingIdle{
-
-  from{
-    transform:
-      rotate(13deg);
-  }
-
-  to{
-    transform:
-      rotate(-8deg);
-  }
-
-}
-
-@keyframes wingFlap{
-
-  0%{
-    transform:
-      rotate(15deg)
-      scaleY(.8);
-  }
-
-  50%{
-    transform:
-      rotate(-58deg)
-      scaleY(1.2);
-  }
-
-  100%{
-    transform:
-      rotate(16deg)
-      scaleY(.85);
-  }
-
-}
-
-@keyframes bodyFlap{
-
-  0%{
-    transform:
-      translateY(0)
-      rotate(0);
-  }
-
-  45%{
-    transform:
-      translateY(-8px)
-      rotate(-7deg)
-      scale(1.04);
-  }
-
-  100%{
-    transform:
-      translateY(0)
-      rotate(0);
-  }
-
-}
-
-@keyframes imageFlap{
-
-  0%{
-    transform:
-      scaleX(1)
-      rotate(0);
-  }
-
-  50%{
-    transform:
-      scaleX(1)
-      rotate(-5deg);
-  }
-
-  100%{
-    transform:
-      scaleX(1)
-      rotate(0);
-  }
-
+    flapRing .32s ease;
 }
 
 @keyframes flapRing{
 
   0%{
-    opacity:.9;
+    opacity:.75;
 
     transform:
-      scale(.2);
+      scale(.3);
   }
 
   100%{
     opacity:0;
 
     transform:
-      scale(3);
+      scale(2.4);
   }
 
 }
 
-@keyframes feather1{
 
-  0%{
-    opacity:1;
+/* =========================================================
+   SHADOW UNDER BIRD
+========================================================= */
 
-    transform:
-      translate(0,0)
-      rotate(0);
-  }
+.kakapo-shadow{
+  position:absolute;
 
-  100%{
-    opacity:0;
+  z-index:2;
 
-    transform:
-      translate(-45px,28px)
-      rotate(150deg);
-  }
+  left:50%;
 
+  bottom:-5px;
+
+  width:58px;
+  height:12px;
+
+  transform:
+    translateX(-50%);
+
+  border-radius:50%;
+
+  background:
+    rgba(38,52,49,.17);
+
+  filter:
+    blur(5px);
+
+  transition:
+    transform .15s ease,
+    opacity .15s ease;
 }
 
-@keyframes feather2{
+.kakapo.flap .kakapo-shadow{
+  transform:
+    translateX(-50%)
+    scale(.72);
 
-  0%{
-    opacity:1;
-
-    transform:
-      translate(0,0)
-      rotate(0);
-  }
-
-  100%{
-    opacity:0;
-
-    transform:
-      translate(-30px,43px)
-      rotate(-120deg);
-  }
-
+  opacity:.45;
 }
 
 
@@ -2033,8 +1985,7 @@ button{
   width:108px;
   min-height:45px;
 
-  padding:
-    6px 7px;
+  padding:6px 7px;
 
   display:flex;
   align-items:center;
@@ -2463,12 +2414,12 @@ button{
   }
 
   .kakapo-bird-wrap{
-    width:86px;
+    width:88px;
     height:80px;
   }
 
   .kakapo-bird-img{
-    width:84px;
+    width:85px;
     height:78px;
   }
 
@@ -2476,14 +2427,6 @@ button{
     max-width:112px;
 
     font-size:7.8px;
-  }
-
-  .kakapo-wing{
-    left:16px;
-    top:35px;
-
-    width:44px;
-    height:19px;
   }
 
 }
@@ -2883,15 +2826,8 @@ button{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🐹 Whack a Word
-      </h2>
-
-      <p>
-        Đập đúng đáp án trước khi chuột biến mất.
-      </p>
-
+      <h2>🐹 Whack a Word</h2>
+      <p>Đập đúng đáp án trước khi chuột biến mất.</p>
     </div>
 
     <button
@@ -2967,15 +2903,8 @@ button{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🍎 Word Catcher
-      </h2>
-
-      <p>
-        Hứng đáp án đúng.
-      </p>
-
+      <h2>🍎 Word Catcher</h2>
+      <p>Hứng đáp án đúng.</p>
     </div>
 
     <button
@@ -3073,15 +3002,8 @@ button{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🚗 Word Racer
-      </h2>
-
-      <p>
-        Lái xe vào đáp án đúng.
-      </p>
-
+      <h2>🚗 Word Racer</h2>
+      <p>Lái xe vào đáp án đúng.</p>
     </div>
 
     <button
@@ -3181,15 +3103,8 @@ button{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🧩 Match Master
-      </h2>
-
-      <p>
-        Ghép các cặp từ và nghĩa.
-      </p>
-
+      <h2>🧩 Match Master</h2>
+      <p>Ghép các cặp từ và nghĩa.</p>
     </div>
 
     <button
@@ -3348,12 +3263,15 @@ button{
 
       <div class="kakapo-bird-wrap">
 
-        <div class="kakapo-wing"></div>
+        <div class="flight-streak one"></div>
+        <div class="flight-streak two"></div>
+        <div class="flight-streak three"></div>
+
 
         <img
           id="kakapoBirdImg"
           class="kakapo-bird-img"
-          src="./kakapo.png?v=2"
+          src="./kakapo.png?v=3"
           alt="Kākāpō"
           draggable="false"
           onerror="
@@ -3371,14 +3289,12 @@ button{
           🦜
         </div>
 
+
+        <div class="flap-ring"></div>
+
+        <div class="kakapo-shadow"></div>
+
       </div>
-
-
-      <div class="flap-ring"></div>
-
-      <div class="flap-feather f1"></div>
-
-      <div class="flap-feather f2"></div>
 
     </div>
 
@@ -3413,15 +3329,8 @@ button{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🎈 Balloon Pop
-      </h2>
-
-      <p>
-        Bắn quả bóng chứa đáp án đúng.
-      </p>
-
+      <h2>🎈 Balloon Pop</h2>
+      <p>Bắn quả bóng chứa đáp án đúng.</p>
     </div>
 
     <button
@@ -3725,7 +3634,7 @@ function studentScope(){
 function statsKey(){
 
   return(
-    "VOCABULARY_STATS_V8_"
+    "VOCABULARY_STATS_V9_"
     +
     studentScope()
   );
@@ -4060,7 +3969,7 @@ function hideScreens(){
 
 
 /* =========================================================
-   GLOBAL GAME STATE
+   STATE
 ========================================================= */
 
 let selectedSkill =
@@ -4751,7 +4660,7 @@ function optionsFor(
 
 
 /* =========================================================
-   COMMON GAME
+   COMMON
 ========================================================= */
 
 function prepareGame(game){
@@ -4989,34 +4898,21 @@ function backToGameList(){
 
 function startWhack(){
 
-  if(
-    !prepareGame(
-      "whack"
-    )
-  ){
-
+  if(!prepareGame("whack")){
     return;
-
   }
 
 
   $("whackScreen")
   .classList
-  .remove(
-    "hidden"
-  );
+  .remove("hidden");
 
 
   $("whackBoard")
   .innerHTML =
   Array.from(
-    {
-      length:9
-    },
-    (
-      _,
-      i
-    ) => `
+    {length:9},
+    (_,i)=>`
       <div class="hole">
 
         <div class="ground-hole"></div>
@@ -5064,9 +4960,7 @@ function startWhack(){
       );
 
 
-      if(
-        seconds <= 0
-      ){
+      if(seconds <= 0){
 
         endGame();
 
@@ -5082,9 +4976,7 @@ function startWhack(){
 function nextWhack(){
 
   if(gameEnded){
-
     return;
-
   }
 
 
@@ -5113,9 +5005,7 @@ function nextWhack(){
 
   const positions =
   shuffle(
-    [
-      0,1,2,3,4,5,6,7,8
-    ]
+    [0,1,2,3,4,5,6,7,8]
   )
   .slice(
     0,
@@ -5128,11 +5018,10 @@ function nextWhack(){
     ".mole"
   )
   .forEach(
-    mole => {
+    mole=>{
 
       mole.className =
       "mole";
-
 
       mole.onclick =
       null;
@@ -5145,7 +5034,7 @@ function nextWhack(){
     (
       word,
       index
-    ) => {
+    )=>{
 
       const mole =
       $(
@@ -5245,9 +5134,7 @@ function nextWhack(){
     ()=>{
 
       if(gameEnded){
-
         return;
-
       }
 
 
@@ -5288,8 +5175,7 @@ function nextWhack(){
 
 function updateWhack(seconds){
 
-  $("whackScore")
-  .textContent =
+  $("whackScore").textContent =
   score;
 
 
@@ -5298,8 +5184,7 @@ function updateWhack(seconds){
     "number"
   ){
 
-    $("whackTime")
-    .textContent =
+    $("whackTime").textContent =
     Math.max(
       0,
       seconds
@@ -5308,18 +5193,15 @@ function updateWhack(seconds){
   }
 
 
-  $("whackLives")
-  .textContent =
+  $("whackLives").textContent =
   lives;
 
 
-  $("whackCombo")
-  .textContent =
+  $("whackCombo").textContent =
   `x${combo}`;
 
 
-  $("whackAccuracy")
-  .textContent =
+  $("whackAccuracy").textContent =
   `${accuracy()}%`;
 
 }
@@ -5339,22 +5221,14 @@ let basketX =
 
 function startCatcher(){
 
-  if(
-    !prepareGame(
-      "catcher"
-    )
-  ){
-
+  if(!prepareGame("catcher")){
     return;
-
   }
 
 
   $("catchScreen")
   .classList
-  .remove(
-    "hidden"
-  );
+  .remove("hidden");
 
 
   basketX =
@@ -5398,9 +5272,7 @@ function startCatcher(){
       );
 
 
-      if(
-        seconds <= 0
-      ){
+      if(seconds <= 0){
 
         endGame();
 
@@ -5422,8 +5294,7 @@ function nextCatch(){
   weightedWord();
 
 
-  $("catchTarget")
-  .textContent =
+  $("catchTarget").textContent =
   promptFor(
     currentTarget
   );
@@ -5438,12 +5309,7 @@ function nextCatch(){
 
   const xs =
   shuffle(
-    [
-      14,
-      38,
-      62,
-      86
-    ]
+    [14,38,62,86]
   );
 
 
@@ -5451,7 +5317,7 @@ function nextCatch(){
     (
       word,
       i
-    ) => {
+    )=>{
 
       const element =
       document.createElement(
@@ -5511,9 +5377,7 @@ function nextCatch(){
 function catchLoop(now){
 
   if(gameEnded){
-
     return;
-
   }
 
 
@@ -5749,8 +5613,7 @@ function renderBasket(){
 
 function updateCatch(seconds){
 
-  $("catchScore")
-  .textContent =
+  $("catchScore").textContent =
   score;
 
 
@@ -5759,8 +5622,7 @@ function updateCatch(seconds){
     "number"
   ){
 
-    $("catchTime")
-    .textContent =
+    $("catchTime").textContent =
     Math.max(
       0,
       seconds
@@ -5769,18 +5631,15 @@ function updateCatch(seconds){
   }
 
 
-  $("catchLives")
-  .textContent =
+  $("catchLives").textContent =
   lives;
 
 
-  $("catchCombo")
-  .textContent =
+  $("catchCombo").textContent =
   `x${combo}`;
 
 
-  $("catchAccuracy")
-  .textContent =
+  $("catchAccuracy").textContent =
   `${accuracy()}%`;
 
 }
@@ -5804,22 +5663,14 @@ false;
 
 function startRacer(){
 
-  if(
-    !prepareGame(
-      "racer"
-    )
-  ){
-
+  if(!prepareGame("racer")){
     return;
-
   }
 
 
   $("racerScreen")
   .classList
-  .remove(
-    "hidden"
-  );
+  .remove("hidden");
 
 
   carLane =
@@ -5867,9 +5718,7 @@ function startRacer(){
       );
 
 
-      if(
-        seconds <= 0
-      ){
+      if(seconds <= 0){
 
         endGame();
 
@@ -5911,11 +5760,7 @@ function nextRacer(){
 
   const lanes =
   shuffle(
-    [
-      0,
-      1,
-      2
-    ]
+    [0,1,2]
   );
 
 
@@ -5923,7 +5768,7 @@ function nextRacer(){
     (
       word,
       index
-    ) => {
+    )=>{
 
       const element =
       document.createElement(
@@ -5975,9 +5820,7 @@ function nextRacer(){
 function racerLoop(now){
 
   if(gameEnded){
-
     return;
-
   }
 
 
@@ -6003,7 +5846,7 @@ function racerLoop(now){
 
   racerObjects
   .forEach(
-    object => {
+    object=>{
 
       object.y +=
       object.speed*dt;
@@ -6170,8 +6013,7 @@ function renderCar(){
 
 function updateRacer(seconds){
 
-  $("racerScore")
-  .textContent =
+  $("racerScore").textContent =
   score;
 
 
@@ -6180,8 +6022,7 @@ function updateRacer(seconds){
     "number"
   ){
 
-    $("racerTime")
-    .textContent =
+    $("racerTime").textContent =
     Math.max(
       0,
       seconds
@@ -6190,18 +6031,15 @@ function updateRacer(seconds){
   }
 
 
-  $("racerLives")
-  .textContent =
+  $("racerLives").textContent =
   lives;
 
 
-  $("racerCombo")
-  .textContent =
+  $("racerCombo").textContent =
   `x${combo}`;
 
 
-  $("racerAccuracy")
-  .textContent =
+  $("racerAccuracy").textContent =
   `${accuracy()}%`;
 
 }
@@ -6229,22 +6067,14 @@ let matchTotalPairs =
 
 function startMatch(){
 
-  if(
-    !prepareGame(
-      "match"
-    )
-  ){
-
+  if(!prepareGame("match")){
     return;
-
   }
 
 
   $("matchScreen")
   .classList
-  .remove(
-    "hidden"
-  );
+  .remove("hidden");
 
 
   firstMatch =
@@ -6290,9 +6120,7 @@ function startMatch(){
       );
 
 
-      if(
-        seconds <= 0
-      ){
+      if(seconds <= 0){
 
         endGame();
 
@@ -6321,12 +6149,11 @@ function createMatchBoard(){
   [];
 
 
-  words
-  .forEach(
+  words.forEach(
     (
       word,
       pair
-    ) => {
+    )=>{
 
       cards.push({
 
@@ -6372,7 +6199,7 @@ function createMatchBoard(){
     (
       card,
       index
-    ) => `
+    )=>`
       <button
         class="match-card"
         id="match${index}"
@@ -6382,12 +6209,11 @@ function createMatchBoard(){
   .join("");
 
 
-  mixed
-  .forEach(
+  mixed.forEach(
     (
       card,
       index
-    ) => {
+    )=>{
 
       const button =
       $(
@@ -6594,8 +6420,7 @@ function flipMatch(button){
 
 function updateMatch(seconds){
 
-  $("matchScore")
-  .textContent =
+  $("matchScore").textContent =
   score;
 
 
@@ -6604,8 +6429,7 @@ function updateMatch(seconds){
     "number"
   ){
 
-    $("matchTime")
-    .textContent =
+    $("matchTime").textContent =
     Math.max(
       0,
       seconds
@@ -6614,25 +6438,22 @@ function updateMatch(seconds){
   }
 
 
-  $("matchPairs")
-  .textContent =
+  $("matchPairs").textContent =
   `${pairsFound}/${matchTotalPairs}`;
 
 
-  $("matchCombo")
-  .textContent =
+  $("matchCombo").textContent =
   `x${combo}`;
 
 
-  $("matchAccuracy")
-  .textContent =
+  $("matchAccuracy").textContent =
   `${accuracy()}%`;
 
 }
 
 
 /* =========================================================
-   FLAPPY KAKAPO
+   FLAPPY
 ========================================================= */
 
 let flappyBirdY =
@@ -6659,10 +6480,6 @@ let flappyRoundStarted =
 0;
 
 
-/*
-Tốc độ nhanh hơn bản trước.
-*/
-
 const FLAPPY_SPEED =
 135;
 
@@ -6675,10 +6492,6 @@ const FLAPPY_JUMP =
 -195;
 
 
-/*
-Option đầu tiên bắt đầu chạy gần như ngay lập tức.
-*/
-
 const FLAPPY_START_DELAY =
 250;
 
@@ -6689,22 +6502,10 @@ const FLAPPY_START_DELAY =
 
 function startFlappy(){
 
-  if(
-    !prepareGame(
-      "flappy"
-    )
-  ){
-
+  if(!prepareGame("flappy")){
     return;
-
   }
 
-
-  /*
-  Flappy luôn là:
-  English trên chim
-  → nghĩa tiếng Việt
-  */
 
   direction =
   "en-vi";
@@ -6712,9 +6513,7 @@ function startFlappy(){
 
   $("flappyScreen")
   .classList
-  .remove(
-    "hidden"
-  );
+  .remove("hidden");
 
 
   const stage =
@@ -6778,9 +6577,7 @@ function startFlappy(){
       );
 
 
-      if(
-        seconds <= 0
-      ){
+      if(seconds <= 0){
 
         endGame();
 
@@ -6794,7 +6591,7 @@ function startFlappy(){
 
 
 /* =========================================================
-   SPAWN QUESTION
+   SPAWN
 ========================================================= */
 
 function spawnFlappyQuestion(
@@ -6802,9 +6599,7 @@ function spawnFlappyQuestion(
 ){
 
   if(gameEnded){
-
     return;
-
   }
 
 
@@ -6843,11 +6638,6 @@ function spawnFlappyQuestion(
   );
 
 
-  /*
-  Vị trí Y random,
-  không thẳng hàng.
-  */
-
   const safeTop =
   80;
 
@@ -6860,7 +6650,7 @@ function spawnFlappyQuestion(
   [];
 
 
-  let attemptsToPlace =
+  let tries =
   0;
 
 
@@ -6868,7 +6658,7 @@ function spawnFlappyQuestion(
     ys.length <
     3
     &&
-    attemptsToPlace <
+    tries <
     100
   ){
 
@@ -6879,7 +6669,7 @@ function spawnFlappyQuestion(
     );
 
 
-    const farEnough =
+    const valid =
     ys.every(
       existing =>
       Math.abs(
@@ -6890,7 +6680,7 @@ function spawnFlappyQuestion(
     );
 
 
-    if(farEnough){
+    if(valid){
 
       ys.push(
         y
@@ -6899,7 +6689,7 @@ function spawnFlappyQuestion(
     }
 
 
-    attemptsToPlace++;
+    tries++;
 
   }
 
@@ -6928,10 +6718,6 @@ function spawnFlappyQuestion(
   );
 
 
-  /*
-  X cũng lệch nhau.
-  */
-
   const xs = [
 
     width+100,
@@ -6943,12 +6729,11 @@ function spawnFlappyQuestion(
   ];
 
 
-  options
-  .forEach(
+  options.forEach(
     (
       word,
       index
-    ) => {
+    )=>{
 
       const element =
       document.createElement(
@@ -7038,9 +6823,7 @@ function spawnFlappyQuestion(
 function flappyLoop(now){
 
   if(gameEnded){
-
     return;
-
   }
 
 
@@ -7067,14 +6850,6 @@ function flappyLoop(now){
   stage.clientHeight;
 
 
-  /*
-  =======================================================
-  CHIM BAY LIÊN TỤC
-
-  Không reset Y sau mỗi từ.
-  =======================================================
-  */
-
   if(
     !flappyCrashLock
   ){
@@ -7094,9 +6869,7 @@ function flappyLoop(now){
 
 
   /*
-  Chạm trần:
-  chỉ chặn lại,
-  không chết.
+  Ceiling
   */
 
   if(
@@ -7122,7 +6895,7 @@ function flappyLoop(now){
 
 
   /*
-  RƠI XUỐNG ĐẤT
+  Ground
   */
 
   if(
@@ -7157,9 +6930,7 @@ function flappyLoop(now){
 
 
   /*
-  =======================================================
-  MOVE OPTIONS
-  =======================================================
+  Move options
   */
 
   if(
@@ -7177,7 +6948,7 @@ function flappyLoop(now){
 
     flappyAnswers
     .forEach(
-      answer => {
+      answer=>{
 
         answer.x -=
         FLAPPY_SPEED
@@ -7219,7 +6990,7 @@ function flappyLoop(now){
 
     flappyAnswers
     .forEach(
-      answer => {
+      answer=>{
 
         answer.element.style.left =
         answer.x
@@ -7239,9 +7010,7 @@ function flappyLoop(now){
 
 
   /*
-  =======================================================
-  COLLISION
-  =======================================================
+  Collision
   */
 
   if(
@@ -7266,7 +7035,7 @@ function flappyLoop(now){
 
 
   /*
-  Bỏ lỡ tất cả.
+  Miss all
   */
 
   if(
@@ -7302,10 +7071,12 @@ function flappyLoop(now){
 
 function findFlappyCollision(){
 
+  const image =
+  $("kakapoBirdImg");
+
+
   const bird =
-  $("kakapoBirdImg")
-  .style
-  .display ===
+  image.style.display ===
   "none"
 
   ?
@@ -7315,14 +7086,9 @@ function findFlappyCollision(){
 
   :
 
-  $("kakapoBirdImg")
+  image
   .getBoundingClientRect();
 
-
-  /*
-  Hitbox nhỏ hơn ảnh thật
-  để điều khiển không quá khó.
-  */
 
   const birdBox = {
 
@@ -7348,9 +7114,7 @@ function findFlappyCollision(){
   ){
 
     if(answer.hit){
-
       continue;
-
     }
 
 
@@ -7399,7 +7163,7 @@ function findFlappyCollision(){
 
 
 /* =========================================================
-   HIT ANSWER
+   FLAPPY RESULT
 ========================================================= */
 
 function resolveFlappyCollision(answer){
@@ -7455,13 +7219,6 @@ function resolveFlappyCollision(answer){
     );
 
 
-    /*
-    Không reset chim.
-
-    Nếu đang rơi quá nhanh thì hãm nhẹ,
-    giúp chuyển sang từ tiếp theo mượt hơn.
-    */
-
     if(
       flappyVelocity >
       95
@@ -7502,12 +7259,6 @@ function resolveFlappyCollision(answer){
   updateFlappy();
 
 
-  /*
-  Sau 180ms sinh đáp án mới.
-
-  KHÔNG ĐƯA CHIM VỀ GIỮA.
-  */
-
   if(!gameEnded){
 
     setTimeout(
@@ -7527,7 +7278,7 @@ function resolveFlappyCollision(answer){
 
 
 /* =========================================================
-   MISS ANSWERS
+   MISS
 ========================================================= */
 
 function flappyMissAll(){
@@ -7642,7 +7393,7 @@ function flappyGroundCrash(){
 
 
   boom.textContent =
-  "💥";
+  "💨";
 
 
   $("flappyStage")
@@ -7671,15 +7422,9 @@ function flappyGroundCrash(){
 
 
       if(gameEnded){
-
         return;
-
       }
 
-
-      /*
-      Chỉ chạm đất mới reset vị trí.
-      */
 
       flappyBirdY =
       $("flappyStage")
@@ -7687,10 +7432,6 @@ function flappyGroundCrash(){
       *
       .43;
 
-
-      /*
-      Cho lực bay lên nhẹ sau khi hồi sinh.
-      */
 
       flappyVelocity =
       -100;
@@ -7742,10 +7483,6 @@ function flap(){
   $("kakapo");
 
 
-  /*
-  Restart animation.
-  */
-
   bird
   .classList
   .remove(
@@ -7779,19 +7516,56 @@ function flap(){
       );
 
     },
-    340
+    310
   );
 
 }
 
 
+/* =========================================================
+   BIRD ROTATION BY VELOCITY
+========================================================= */
+
 function renderKakapo(){
 
-  $("kakapo")
-  .style.top =
+  const bird =
+  $("kakapo");
+
+
+  bird.style.top =
   flappyBirdY
   +
   "px";
+
+
+  /*
+  Khi bay lên:
+  góc âm → ngẩng đầu.
+
+  Khi rơi:
+  góc dương → chúi xuống.
+  */
+
+  const angle =
+  Math.max(
+    -12,
+    Math.min(
+      20,
+      flappyVelocity
+      *
+      .055
+    )
+  );
+
+
+  bird
+  .style
+  .setProperty(
+    "--bird-angle",
+    angle
+    +
+    "deg"
+  );
 
 }
 
@@ -7813,8 +7587,7 @@ function clearFlappyAnswers(){
 
 function updateFlappy(seconds){
 
-  $("flappyScore")
-  .textContent =
+  $("flappyScore").textContent =
   score;
 
 
@@ -7823,8 +7596,7 @@ function updateFlappy(seconds){
     "number"
   ){
 
-    $("flappyTime")
-    .textContent =
+    $("flappyTime").textContent =
     Math.max(
       0,
       seconds
@@ -7833,18 +7605,15 @@ function updateFlappy(seconds){
   }
 
 
-  $("flappyLives")
-  .textContent =
+  $("flappyLives").textContent =
   lives;
 
 
-  $("flappyCombo")
-  .textContent =
+  $("flappyCombo").textContent =
   `x${combo}`;
 
 
-  $("flappyAccuracy")
-  .textContent =
+  $("flappyAccuracy").textContent =
   `${accuracy()}%`;
 
 }
@@ -7860,22 +7629,14 @@ let balloons =
 
 function startBalloon(){
 
-  if(
-    !prepareGame(
-      "balloon"
-    )
-  ){
-
+  if(!prepareGame("balloon")){
     return;
-
   }
 
 
   $("balloonScreen")
   .classList
-  .remove(
-    "hidden"
-  );
+  .remove("hidden");
 
 
   let seconds =
@@ -7912,9 +7673,7 @@ function startBalloon(){
       );
 
 
-      if(
-        seconds <= 0
-      ){
+      if(seconds <= 0){
 
         endGame();
 
@@ -7952,12 +7711,7 @@ function nextBalloon(){
 
   const xs =
   shuffle(
-    [
-      15,
-      38,
-      62,
-      85
-    ]
+    [15,38,62,85]
   );
 
 
@@ -7966,12 +7720,11 @@ function nextBalloon(){
   .clientHeight;
 
 
-  options
-  .forEach(
+  options.forEach(
     (
       word,
       index
-    ) => {
+    )=>{
 
       const element =
       document.createElement(
@@ -8123,9 +7876,7 @@ function nextBalloon(){
 function balloonLoop(now){
 
   if(gameEnded){
-
     return;
-
   }
 
 
@@ -8151,9 +7902,7 @@ function balloonLoop(now){
   ){
 
     if(balloon.removed){
-
       continue;
-
     }
 
 
@@ -8259,8 +8008,7 @@ function clearBalloons(){
 
 function updateBalloon(seconds){
 
-  $("balloonScore")
-  .textContent =
+  $("balloonScore").textContent =
   score;
 
 
@@ -8269,8 +8017,7 @@ function updateBalloon(seconds){
     "number"
   ){
 
-    $("balloonTime")
-    .textContent =
+    $("balloonTime").textContent =
     Math.max(
       0,
       seconds
@@ -8279,18 +8026,15 @@ function updateBalloon(seconds){
   }
 
 
-  $("balloonLives")
-  .textContent =
+  $("balloonLives").textContent =
   lives;
 
 
-  $("balloonCombo")
-  .textContent =
+  $("balloonCombo").textContent =
   `x${combo}`;
 
 
-  $("balloonAccuracy")
-  .textContent =
+  $("balloonAccuracy").textContent =
   `${accuracy()}%`;
 
 }
@@ -8303,12 +8047,10 @@ function updateBalloon(seconds){
 document
 .addEventListener(
   "keydown",
-  event => {
+  event=>{
 
     if(gameEnded){
-
       return;
-
     }
 
 
@@ -8417,7 +8159,7 @@ document
 $("flappyStage")
 .addEventListener(
   "pointerdown",
-  event => {
+  event=>{
 
     if(
       currentGame ===
@@ -8444,7 +8186,7 @@ $("flappyStage")
 $("catchArea")
 .addEventListener(
   "pointerdown",
-  event => {
+  event=>{
 
     if(
       currentGame !==
@@ -8498,7 +8240,7 @@ $("catchArea")
 $("racerRoad")
 .addEventListener(
   "pointerdown",
-  event => {
+  event=>{
 
     if(
       currentGame !==
@@ -8568,9 +8310,7 @@ $("racerRoad")
 function endGame(){
 
   if(gameEnded){
-
     return;
-
   }
 
 
