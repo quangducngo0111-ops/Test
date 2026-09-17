@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Listening Part 3 Practice</title>
+
+<style>
+:root{
+  --ink:#16204a;
+  --muted:#6f7890;
+  --line:#e3e7ef;
+  --purple:#6d4dd4;
+  --purple2:#8d70ed;
+  --bg:#f5f7fc;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color:var(--ink);
+
+  background:
+    radial-gradient(
+      circle at 5% 0%,
+      rgba(159,123,245,.15),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 95% 0%,
+      rgba(101,179,255,.13),
+      transparent 24%
+    ),
+    var(--bg);
+}
+
+.wrap{
+  width:min(1100px,calc(100% - 24px));
+  margin:auto;
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px);
+
+  border-bottom:1px solid var(--line);
+}
+
+.top{
+  min-height:62px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:12px;
+}
+
+.back{
+  padding:8px 11px;
+
+  border:1px solid var(--line);
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#4d397f;
+
+  text-decoration:none;
+
+  font-size:10.5px;
+  font-weight:900;
+}
+
+.brand{
+  color:#21164d;
+
+  font-size:14px;
+  font-weight:950;
+}
+
+.student{
+  color:#7c8391;
+
+  font-size:10px;
+  font-weight:850;
+}
+
+main{
+  padding:26px 0 55px;
+}
+
+.hero{
+  padding:28px;
+
+  border:1px solid rgba(255,255,255,.9);
+  border-radius:23px;
+
+  background:
+    linear-gradient(
+      120deg,
+      #fff,
+      #faf7ff 58%,
+      #eef7ff
+    );
+
+  box-shadow:
+    0 10px 28px
+    rgba(40,30,90,.05);
+}
+
+.eyebrow{
+  color:#6849ba;
+
+  font-size:10px;
+  font-weight:950;
+
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.hero h1{
+  margin:7px 0 5px;
+
+  font-size:36px;
+
+  letter-spacing:-.04em;
+}
+
+.hero p{
+  margin:0;
+
+  color:var(--muted);
+
+  font-size:11px;
+  line-height:1.65;
+}
+
+.list{
+  display:grid;
+  gap:10px;
+
+  margin-top:18px;
+}
+
+.card{
+  display:flex;
+  align-items:center;
+
+  gap:14px;
+
+  padding:15px;
+
+  border:1px solid var(--line);
+  border-radius:15px;
+
+  background:#fff;
+
+  text-decoration:none;
+
+  transition:.15s;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+
+  border-color:#cfc4ef;
+
+  box-shadow:
+    0 9px 22px
+    rgba(45,35,90,.06);
+}
+
+.num{
+  width:48px;
+  height:48px;
+
+  flex:0 0 48px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:12px;
+
+  background:#eee9ff;
+
+  color:#6045ad;
+
+  font-size:12px;
+  font-weight:950;
+}
+
+.copy{
+  flex:1;
+}
+
+.copy b{
+  display:block;
+
+  color:#261d4a;
+
+  font-size:12px;
+}
+
+.copy span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#808796;
+
+  font-size:9.8px;
+}
+
+.arrow{
+  color:#7157bd;
+
+  font-size:18px;
+  font-weight:950;
+}
+
+.empty{
+  margin-top:18px;
+
+  padding:30px;
+
+  border:1px dashed #d7dbe4;
+  border-radius:15px;
+
+  background:#fff;
+
+  color:#858b98;
+
+  text-align:center;
+
+  font-size:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap top">
+
+    <a
+      class="back"
+      href="../"
+    >
+      ← Listening
+    </a>
+
+    <div class="brand">
+      🎧 Listening Part 3
+    </div>
+
+    <div
+      class="student"
+      id="student"
+    ></div>
+
+  </div>
+</header>
+
+
+<main>
+<div class="wrap">
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      LISTENING PRACTICE
+    </div>
+
+    <h1>
+      Part 3
+    </h1>
+
+    <p>
+      Luyện nghe hội thoại trong bối cảnh học thuật.
+      Tập trung vào multiple choice, chọn nhiều đáp án
+      và phân biệt thông tin gây nhiễu.
+    </p>
+
+  </section>
+
+
+  <div
+    class="list"
+    id="exerciseList"
+  ></div>
+
+</div>
+</main>
+
+
+<script>
+
+const TREE_URL=
+'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
+
+const ROOT=
+'Practice/Listening/Part3/';
+
+const PROFILE_KEY=
+'IELTS_PRACTICE_STUDENT';
+
+
+const EXERCISE_INFO={
+
+  1:{
+    title:'Listening Part 3 · Practice 01',
+    description:'Thor Heyerdahl · Questions 21–30 · Multiple Choice'
+  }
+
+};
+
+
+function renderStudent(){
+
+  try{
+
+    const profile=
+      JSON.parse(
+        localStorage.getItem(PROFILE_KEY)
+        ||
+        'null'
+      );
+
+
+    if(
+      profile?.name
+      &&
+      profile?.className
+    ){
+
+      student.textContent=
+        `${profile.name} · ${profile.className}`;
+
+    }
+
+  }
+
+  catch(e){}
+
+}
+
+
+async function loadExercises(){
+
+  try{
+
+    const response=
+      await fetch(
+        TREE_URL,
+        {
+          cache:'no-store'
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error();
+
+    }
+
+
+    const data=
+      await response.json();
+
+
+    const numbers=
+      new Set();
+
+
+    data.tree.forEach(
+      item=>{
+
+        if(
+          item.type!=='blob'
+        ){
+
+          return;
+
+        }
+
+
+        const match=
+          item.path.match(
+            /^Practice\/Listening\/Part3\/(\d+)\/index\.html$/i
+          );
+
+
+        if(match){
+
+          numbers.add(
+            Number(match[1])
+          );
+
+        }
+
+      }
+    );
+
+
+    const list=
+      [...numbers]
+      .sort(
+        (a,b)=>a-b
+      );
+
+
+    renderExercises(
+      list
+    );
+
+  }
+
+  catch(error){
+
+    renderExercises(
+      [1]
+    );
+
+  }
+
+}
+
+
+function renderExercises(list){
+
+  if(!list.length){
+
+    exerciseList.innerHTML=
+      `
+        <div class="empty">
+          Chưa có bài luyện tập.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  exerciseList.innerHTML=
+    list.map(
+      number=>{
+
+        const info=
+          EXERCISE_INFO[number]
+          ||
+          {
+            title:
+              `Listening Part 3 · Practice ${String(number).padStart(2,'0')}`,
+
+            description:
+              'Listening Part 3 practice'
+          };
+
+
+        return`
+          <a
+            class="card"
+            href="./${String(number).padStart(2,'0')}/"
+          >
+
+            <div class="num">
+              ${String(number).padStart(2,'0')}
+            </div>
+
+            <div class="copy">
+
+              <b>
+                ${info.title}
+              </b>
+
+              <span>
+                ${info.description}
+              </span>
+
+            </div>
+
+            <div class="arrow">
+              →
+            </div>
+
+          </a>
+        `;
+
+      }
+    )
+    .join('');
+
+}
+
+
+renderStudent();
+
+loadExercises();
+
+</script>
+
+</body>
+</html>
