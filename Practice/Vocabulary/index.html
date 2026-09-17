@@ -15,7 +15,7 @@
 <title>Vocabulary Practice</title>
 
 <script
-  src="./vocab-data.js?v=20260917-flappy-v2"
+  src="./vocab-data.js?v=20260917-flappy-v4"
   onerror="window.VOCABULARY_LOAD_ERROR=true"
 ></script>
 
@@ -87,7 +87,7 @@ button{
 
 
 /* =========================================================
-   TOP BAR
+   TOP
 ========================================================= */
 
 .topbar{
@@ -96,7 +96,6 @@ button{
   z-index:50;
 
   background:rgba(255,255,255,.94);
-
   backdrop-filter:blur(15px);
 
   border-bottom:1px solid var(--line);
@@ -109,7 +108,6 @@ button{
   );
 
   min-height:62px;
-
   margin:auto;
 
   display:flex;
@@ -196,7 +194,6 @@ button{
 
 .hero{
   position:relative;
-
   overflow:hidden;
 
   padding:28px 30px;
@@ -219,12 +216,10 @@ button{
   content:"🎮";
 
   position:absolute;
-
   right:28px;
   bottom:-24px;
 
   font-size:135px;
-
   opacity:.055;
 }
 
@@ -324,8 +319,7 @@ button{
   background:#fff;
 
   box-shadow:
-    0 7px 18px
-    rgba(38,29,82,.04);
+    0 7px 18px rgba(38,29,82,.04);
 
   text-align:left;
 
@@ -338,8 +332,7 @@ button{
   border-color:#cec4ec;
 
   box-shadow:
-    0 12px 27px
-    rgba(38,29,82,.08);
+    0 12px 27px rgba(38,29,82,.08);
 }
 
 .category-icon{
@@ -374,7 +367,6 @@ button{
   width:100%;
 
   margin-top:auto;
-
   padding-top:13px;
 }
 
@@ -392,7 +384,6 @@ button{
 
 .mastery-bar{
   height:6px;
-
   overflow:hidden;
 
   border-radius:999px;
@@ -417,7 +408,7 @@ button{
 
 
 /* =========================================================
-   HEAD
+   SCREEN HEAD
 ========================================================= */
 
 .screen-head{
@@ -489,8 +480,7 @@ button{
   background:#fff;
 
   box-shadow:
-    0 7px 18px
-    rgba(38,29,82,.04);
+    0 7px 18px rgba(38,29,82,.04);
 
   text-align:left;
 
@@ -634,7 +624,7 @@ button{
 
 
 /* =========================================================
-   GAME LIST
+   GAME CARDS
 ========================================================= */
 
 .game-grid{
@@ -666,8 +656,7 @@ button{
   background:#fff;
 
   box-shadow:
-    0 7px 18px
-    rgba(38,29,82,.04);
+    0 7px 18px rgba(38,29,82,.04);
 
   transition:.16s;
 }
@@ -1211,7 +1200,6 @@ button{
   max-width:100%;
 
   padding:5px 7px;
-
   margin-bottom:2px;
 
   border-radius:8px;
@@ -1311,29 +1299,27 @@ button{
 
 
 /* =========================================================
-   FLAPPY KAKAPO V2
+   FLAPPY KAKAPO
 ========================================================= */
 
 .flappy-stage{
   position:relative;
 
-  height:540px;
+  height:550px;
 
   overflow:hidden;
 
-  border:
-    1px solid #c9ddea;
-
+  border:1px solid #c9ddea;
   border-radius:20px;
 
   background:
     linear-gradient(
       180deg,
-      #8ed2fb 0%,
-      #c9ebff 54%,
-      #e4f6ff 73%,
-      #cde4a1 74%,
-      #95bd67 100%
+      #73c6f5 0%,
+      #a8ddf8 43%,
+      #dbf1fd 70%,
+      #d5e9aa 71%,
+      #98c36c 100%
     );
 
   box-shadow:
@@ -1349,20 +1335,20 @@ button{
 .flappy-sun{
   position:absolute;
 
-  top:34px;
+  top:35px;
   right:7%;
 
-  width:70px;
-  height:70px;
+  width:72px;
+  height:72px;
 
   border-radius:50%;
 
   background:
-    rgba(255,236,133,.82);
+    rgba(255,236,133,.86);
 
   box-shadow:
-    0 0 35px
-    rgba(255,225,92,.38);
+    0 0 42px
+    rgba(255,225,92,.42);
 
   pointer-events:none;
 }
@@ -1370,38 +1356,62 @@ button{
 .flappy-cloud{
   position:absolute;
 
+  z-index:1;
+
   color:#fff;
 
-  font-size:52px;
+  font-size:54px;
 
-  opacity:.72;
+  opacity:.68;
 
   pointer-events:none;
+
+  animation:
+    cloudFloat 8s ease-in-out infinite;
 }
 
 .flappy-cloud.c1{
-  top:30px;
+  top:35px;
   left:7%;
 }
 
 .flappy-cloud.c2{
-  top:155px;
-  right:13%;
+  top:165px;
+  right:10%;
+
+  animation-delay:-3s;
 }
 
 .flappy-cloud.c3{
-  top:285px;
-  left:45%;
+  top:290px;
+  left:48%;
+
+  animation-delay:-5s;
+}
+
+@keyframes cloudFloat{
+
+  0%,
+  100%{
+    transform:translateX(0);
+  }
+
+  50%{
+    transform:translateX(20px);
+  }
+
 }
 
 .flappy-hills{
   position:absolute;
 
+  z-index:2;
+
   left:0;
   right:0;
   bottom:0;
 
-  height:105px;
+  height:110px;
 
   pointer-events:none;
 
@@ -1423,14 +1433,102 @@ button{
     );
 }
 
+.flappy-ground{
+  position:absolute;
+
+  z-index:3;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  height:46px;
+
+  background:
+    linear-gradient(
+      #5e9138,
+      #416d27
+    );
+
+  border-top:
+    5px solid #92c665;
+}
+
+.flappy-speed-line{
+  position:absolute;
+
+  z-index:2;
+
+  width:65px;
+  height:2px;
+
+  border-radius:99px;
+
+  background:
+    rgba(255,255,255,.42);
+
+  animation:
+    speedLine 2s linear infinite;
+
+  pointer-events:none;
+}
+
+.flappy-speed-line.s1{
+  top:120px;
+  left:70%;
+}
+
+.flappy-speed-line.s2{
+  top:245px;
+  left:44%;
+
+  animation-delay:-.8s;
+}
+
+.flappy-speed-line.s3{
+  top:355px;
+  left:83%;
+
+  animation-delay:-1.4s;
+}
+
+@keyframes speedLine{
+
+  from{
+    transform:
+      translateX(100px)
+      scaleX(.6);
+
+    opacity:0;
+  }
+
+  20%{
+    opacity:.8;
+  }
+
+  to{
+    transform:
+      translateX(-550px)
+      scaleX(1.1);
+
+    opacity:0;
+  }
+
+}
+
+
+/* =========================================================
+   KAKAPO
+========================================================= */
+
 .kakapo{
   position:absolute;
 
-  z-index:15;
+  z-index:20;
 
-  left:20%;
+  left:19%;
 
-  width:122px;
+  width:145px;
 
   transform:
     translate(-50%,-50%);
@@ -1438,14 +1536,403 @@ button{
   text-align:center;
 
   pointer-events:none;
-
-  transition:
-    filter .15s;
 }
+
+.kakapo-word{
+  position:relative;
+
+  z-index:10;
+
+  display:inline-block;
+
+  max-width:145px;
+
+  padding:
+    5px 8px;
+
+  margin-bottom:-4px;
+
+  border:
+    2px solid #4f326f;
+
+  border-radius:9px;
+
+  background:
+    rgba(255,255,255,.97);
+
+  color:#2e184c;
+
+  box-shadow:
+    0 4px 10px
+    rgba(38,21,67,.18);
+
+  font-size:9px;
+  font-weight:950;
+
+  overflow-wrap:anywhere;
+}
+
+.kakapo-bird-wrap{
+  position:relative;
+
+  width:104px;
+  height:104px;
+
+  margin:auto;
+
+  display:grid;
+  place-items:center;
+
+  filter:
+    drop-shadow(
+      0 9px 7px
+      rgba(0,0,0,.22)
+    );
+
+  animation:
+    birdHover .75s ease-in-out infinite;
+}
+
+
+/*
+Ảnh nguồn hiện quay sai chiều.
+scaleX(-1) ép đầu quay sang PHẢI.
+*/
+
+.kakapo-bird-img{
+  position:relative;
+
+  z-index:4;
+
+  width:100px;
+  height:100px;
+
+  object-fit:contain;
+
+  transform:
+    scaleX(-1);
+
+  transform-origin:center;
+}
+
+.kakapo-bird-fallback{
+  position:relative;
+
+  z-index:4;
+
+  font-size:68px;
+
+  /*
+  Emoji cũng ép hướng ngược lại.
+  */
+  transform:
+    scaleX(-1);
+}
+
+
+/* =========================================================
+   FAKE WINGS
+========================================================= */
+
+.kakapo-wing{
+  position:absolute;
+
+  z-index:5;
+
+  left:20px;
+  top:42px;
+
+  width:50px;
+  height:23px;
+
+  border-radius:
+    100% 15% 90% 15%;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(134,177,72,.94),
+      rgba(68,112,42,.95)
+    );
+
+  transform-origin:
+    right center;
+
+  opacity:.92;
+
+  animation:
+    wingIdle .55s ease-in-out infinite;
+}
+
+.kakapo-wing::after{
+  content:"";
+
+  position:absolute;
+
+  left:7px;
+  top:5px;
+
+  width:31px;
+  height:11px;
+
+  border-radius:50%;
+
+  border-top:
+    2px solid
+    rgba(227,239,168,.6);
+}
+
+.kakapo.flap .kakapo-wing{
+  animation:
+    wingFlap .16s ease-in-out 2;
+}
+
+.kakapo.flap .kakapo-bird-wrap{
+  animation:
+    birdFlap .25s ease;
+}
+
+.kakapo.flap .kakapo-bird-img{
+  animation:
+    birdBodyFlap .25s ease;
+}
+
+
+/* =========================================================
+   FLAP FX
+========================================================= */
+
+.flap-burst{
+  position:absolute;
+
+  z-index:2;
+
+  left:43%;
+  top:65%;
+
+  width:20px;
+  height:20px;
+
+  border-radius:50%;
+
+  border:
+    2px solid
+    rgba(255,255,255,.9);
+
+  opacity:0;
+
+  pointer-events:none;
+}
+
+.kakapo.flap .flap-burst{
+  animation:
+    flapBurst .3s ease;
+}
+
+.flap-feather{
+  position:absolute;
+
+  z-index:2;
+
+  left:27px;
+  top:65px;
+
+  width:10px;
+  height:5px;
+
+  border-radius:
+    100% 10%;
+
+  background:
+    rgba(244,255,225,.9);
+
+  opacity:0;
+
+  pointer-events:none;
+}
+
+.kakapo.flap .flap-feather.f1{
+  animation:
+    featherFly .5s ease;
+}
+
+.kakapo.flap .flap-feather.f2{
+  animation:
+    featherFly2 .55s ease;
+}
+
+
+/* =========================================================
+   BIRD ANIMATION
+========================================================= */
+
+@keyframes birdHover{
+
+  0%,
+  100%{
+    transform:
+      translateY(0)
+      rotate(-2deg);
+  }
+
+  50%{
+    transform:
+      translateY(-3px)
+      rotate(2deg);
+  }
+
+}
+
+@keyframes wingIdle{
+
+  0%,
+  100%{
+    transform:
+      rotate(16deg)
+      scaleY(.9);
+  }
+
+  50%{
+    transform:
+      rotate(-8deg)
+      scaleY(1.12);
+  }
+
+}
+
+@keyframes wingFlap{
+
+  0%{
+    transform:
+      rotate(20deg)
+      scaleY(.8);
+  }
+
+  50%{
+    transform:
+      rotate(-55deg)
+      scaleY(1.2);
+  }
+
+  100%{
+    transform:
+      rotate(18deg)
+      scaleY(.9);
+  }
+
+}
+
+@keyframes birdFlap{
+
+  0%{
+    transform:
+      translateY(0)
+      rotate(0);
+  }
+
+  45%{
+    transform:
+      translateY(-7px)
+      rotate(-7deg)
+      scale(1.04);
+  }
+
+  100%{
+    transform:
+      translateY(0)
+      rotate(0);
+  }
+
+}
+
+@keyframes birdBodyFlap{
+
+  0%{
+    transform:
+      scaleX(-1)
+      rotate(0);
+  }
+
+  45%{
+    transform:
+      scaleX(-1)
+      rotate(6deg);
+  }
+
+  100%{
+    transform:
+      scaleX(-1)
+      rotate(0);
+  }
+
+}
+
+@keyframes flapBurst{
+
+  0%{
+    opacity:1;
+
+    transform:
+      scale(.2);
+  }
+
+  100%{
+    opacity:0;
+
+    transform:
+      scale(2.8);
+  }
+
+}
+
+@keyframes featherFly{
+
+  0%{
+    opacity:1;
+
+    transform:
+      translate(0,0)
+      rotate(0);
+  }
+
+  100%{
+    opacity:0;
+
+    transform:
+      translate(-40px,24px)
+      rotate(140deg);
+  }
+
+}
+
+@keyframes featherFly2{
+
+  0%{
+    opacity:.9;
+
+    transform:
+      translate(0,0)
+      rotate(0);
+  }
+
+  100%{
+    opacity:0;
+
+    transform:
+      translate(-30px,39px)
+      rotate(-100deg);
+  }
+
+}
+
+
+/* =========================================================
+   KAKAPO CRASH
+========================================================= */
 
 .kakapo.crash{
   animation:
-    kakapoCrash .45s ease;
+    kakapoCrash .55s ease;
 }
 
 @keyframes kakapoCrash{
@@ -1456,10 +1943,10 @@ button{
       rotate(0);
   }
 
-  40%{
+  45%{
     transform:
       translate(-50%,-50%)
-      rotate(32deg)
+      rotate(28deg)
       scale(.9);
   }
 
@@ -1472,65 +1959,68 @@ button{
 
 }
 
-.kakapo-word{
-  position:relative;
+.flappy-ground-hit{
+  position:absolute;
 
-  z-index:2;
+  z-index:35;
 
-  display:inline-block;
-
-  max-width:130px;
-
-  padding:
-    5px 8px;
-
-  margin-bottom:-2px;
-
-  border:
-    2px solid #503673;
-
-  border-radius:8px;
-
-  background:
-    rgba(255,255,255,.96);
-
-  color:#30184f;
-
-  box-shadow:
-    0 4px 10px
-    rgba(38,21,67,.16);
-
-  font-size:9px;
-  font-weight:950;
-
-  overflow-wrap:anywhere;
-}
-
-.kakapo-bird{
-  font-size:66px;
-
-  line-height:1;
-
-  filter:
-    drop-shadow(
-      0 8px 5px
-      rgba(0,0,0,.18)
-    );
+  left:19%;
+  bottom:38px;
 
   transform:
-    rotate(-7deg);
+    translateX(-50%);
+
+  font-size:40px;
+
+  pointer-events:none;
+
+  animation:
+    groundHit .65s ease forwards;
 }
+
+@keyframes groundHit{
+
+  0%{
+    opacity:1;
+
+    transform:
+      translateX(-50%)
+      scale(.4);
+  }
+
+  65%{
+    opacity:1;
+
+    transform:
+      translateX(-50%)
+      scale(1.4);
+  }
+
+  100%{
+    opacity:0;
+
+    transform:
+      translateX(-50%)
+      scale(1.9);
+  }
+
+}
+
+
+/* =========================================================
+   FLAPPY OPTIONS
+========================================================= */
 
 .flappy-answer{
   position:absolute;
 
   z-index:9;
 
-  width:120px;
-  min-height:56px;
+  width:105px;
+  min-height:47px;
 
   padding:
-    7px 8px;
+    6px 7px;
 
   display:flex;
   align-items:center;
@@ -1541,60 +2031,39 @@ button{
 
   border:
     2px solid
-    rgba(255,255,255,.95);
+    rgba(255,255,255,.96);
 
-  border-radius:15px;
+  border-radius:13px;
 
   background:
     linear-gradient(
       135deg,
       rgba(255,255,255,.98),
-      rgba(244,242,255,.96)
+      rgba(245,243,255,.97)
     );
 
-  color:#352354;
+  color:#362454;
 
   box-shadow:
     0 7px 16px
-    rgba(54,41,92,.16);
+    rgba(54,41,92,.17);
 
   text-align:center;
 
-  font-size:8.5px;
+  font-size:8px;
   font-weight:950;
+
+  line-height:1.28;
 
   overflow-wrap:anywhere;
 
   pointer-events:none;
 
   transition:
-    background .15s,
-    border-color .15s,
-    transform .15s;
-}
-
-.flappy-answer.good{
-  background:#daf5e7;
-
-  border-color:#70c89b;
-
-  color:#126a47;
-
-  transform:
-    translate(-50%,-50%)
-    scale(1.1);
-}
-
-.flappy-answer.bad{
-  background:#ffe1e5;
-
-  border-color:#e98593;
-
-  color:#9c3042;
-
-  transform:
-    translate(-50%,-50%)
-    scale(1.1);
+    background .12s,
+    border-color .12s,
+    transform .12s,
+    opacity .12s;
 }
 
 .flappy-answer::after{
@@ -1603,10 +2072,10 @@ button{
   position:absolute;
 
   left:50%;
-  bottom:-7px;
+  bottom:-6px;
 
-  width:12px;
-  height:12px;
+  width:10px;
+  height:10px;
 
   transform:
     translateX(-50%)
@@ -1623,13 +2092,37 @@ button{
     rgba(255,255,255,.9);
 }
 
+.flappy-answer.good{
+  background:#d9f7e8;
+
+  border-color:#65c899;
+
+  color:#126c48;
+
+  transform:
+    translate(-50%,-50%)
+    scale(1.14);
+}
+
+.flappy-answer.bad{
+  background:#ffe0e4;
+
+  border-color:#eb8492;
+
+  color:#9d3040;
+
+  transform:
+    translate(-50%,-50%)
+    scale(1.14);
+}
+
 .flappy-instruction{
   position:absolute;
 
-  z-index:4;
+  z-index:7;
 
   left:50%;
-  bottom:16px;
+  bottom:55px;
 
   transform:
     translateX(-50%);
@@ -1650,53 +2143,6 @@ button{
   white-space:nowrap;
 
   pointer-events:none;
-}
-
-.flappy-ground-hit{
-  position:absolute;
-
-  z-index:30;
-
-  left:20%;
-  bottom:50px;
-
-  transform:
-    translateX(-50%);
-
-  font-size:38px;
-
-  pointer-events:none;
-
-  animation:
-    groundHit .6s ease forwards;
-}
-
-@keyframes groundHit{
-
-  0%{
-    opacity:1;
-
-    transform:
-      translateX(-50%)
-      scale(.5);
-  }
-
-  70%{
-    opacity:1;
-
-    transform:
-      translateX(-50%)
-      scale(1.35);
-  }
-
-  100%{
-    opacity:0;
-
-    transform:
-      translateX(-50%)
-      scale(1.7);
-  }
-
 }
 
 
@@ -1775,9 +2221,7 @@ button{
 
   padding:10px;
 
-  border:
-    1px solid var(--line);
-
+  border:1px solid var(--line);
   border-radius:9px;
 
   background:#fff;
@@ -2025,26 +2469,42 @@ button{
   }
 
   .flappy-answer{
-    width:102px;
-    min-height:50px;
+    width:92px;
+    min-height:43px;
 
-    padding:6px;
+    padding:5px;
 
-    font-size:7.5px;
+    font-size:7.2px;
   }
 
   .kakapo{
-    width:105px;
+    width:118px;
+
+    left:20%;
   }
 
-  .kakapo-bird{
-    font-size:57px;
+  .kakapo-bird-wrap{
+    width:87px;
+    height:87px;
+  }
+
+  .kakapo-bird-img{
+    width:84px;
+    height:84px;
   }
 
   .kakapo-word{
     max-width:112px;
 
-    font-size:8px;
+    font-size:7.8px;
+  }
+
+  .kakapo-wing{
+    left:18px;
+    top:35px;
+
+    width:43px;
+    height:20px;
   }
 
 }
@@ -2093,7 +2553,9 @@ button{
 </header>
 
 
-<!-- HOME -->
+<!-- =========================================================
+     HOME
+========================================================= -->
 
 <main
   class="page"
@@ -2138,7 +2600,9 @@ button{
 </main>
 
 
-<!-- SET LIST -->
+<!-- =========================================================
+     SETS
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2173,7 +2637,9 @@ button{
 </main>
 
 
-<!-- GAME LIST -->
+<!-- =========================================================
+     GAME LIST
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2201,23 +2667,54 @@ button{
   <section class="stats">
 
     <div class="stat">
-      <small>Total</small>
-      <b id="statTotal">0</b>
+
+      <small>
+        Total
+      </small>
+
+      <b id="statTotal">
+        0
+      </b>
+
     </div>
 
-    <div class="stat">
-      <small>Mastered</small>
-      <b id="statMastered">0</b>
-    </div>
 
     <div class="stat">
-      <small>Learning</small>
-      <b id="statLearning">0</b>
+
+      <small>
+        Mastered
+      </small>
+
+      <b id="statMastered">
+        0
+      </b>
+
     </div>
 
+
     <div class="stat">
-      <small>New</small>
-      <b id="statNew">0</b>
+
+      <small>
+        Learning
+      </small>
+
+      <b id="statLearning">
+        0
+      </b>
+
+    </div>
+
+
+    <div class="stat">
+
+      <small>
+        New
+      </small>
+
+      <b id="statNew">
+        0
+      </b>
+
     </div>
 
   </section>
@@ -2258,6 +2755,7 @@ button{
 
 
   <section class="game-grid">
+
 
     <article class="game-card">
 
@@ -2366,7 +2864,7 @@ button{
       </h3>
 
       <p>
-        Điều khiển kākāpō bay va vào đúng nghĩa của từ đang mang.
+        Điều khiển kākāpō bay liên tục và va vào đúng nghĩa.
       </p>
 
       <button
@@ -2424,7 +2922,9 @@ button{
 </main>
 
 
-<!-- WHACK -->
+<!-- =========================================================
+     WHACK
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2506,7 +3006,9 @@ button{
 </main>
 
 
-<!-- CATCHER -->
+<!-- =========================================================
+     CATCHER
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2610,7 +3112,9 @@ button{
 </main>
 
 
-<!-- RACER -->
+<!-- =========================================================
+     RACER
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2715,7 +3219,9 @@ button{
 </main>
 
 
-<!-- MATCH -->
+<!-- =========================================================
+     MATCH
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2784,7 +3290,9 @@ button{
 </main>
 
 
-<!-- FLAPPY -->
+<!-- =========================================================
+     FLAPPY KAKAPO
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2800,7 +3308,7 @@ button{
       </h2>
 
       <p>
-        Bay vào đúng nghĩa. Rơi xuống đất sẽ mất 1 mạng.
+        Bay liên tục, va vào đúng nghĩa. Rơi xuống đất sẽ mất 1 mạng.
       </p>
 
     </div>
@@ -2865,7 +3373,13 @@ button{
     </div>
 
 
+    <div class="flappy-speed-line s1"></div>
+    <div class="flappy-speed-line s2"></div>
+    <div class="flappy-speed-line s3"></div>
+
+
     <div class="flappy-hills"></div>
+    <div class="flappy-ground"></div>
 
 
     <div
@@ -2880,9 +3394,40 @@ button{
         —
       </div>
 
-      <div class="kakapo-bird">
-        🦜
+
+      <div class="kakapo-bird-wrap">
+
+        <div class="kakapo-wing"></div>
+
+        <img
+          id="kakapoBirdImg"
+          class="kakapo-bird-img"
+          src="./kakapo.png"
+          alt="Kākāpō"
+          onerror="
+            this.style.display='none';
+            document.getElementById('kakapoBirdFallback').style.display='block';
+          "
+        >
+
+        <div
+          id="kakapoBirdFallback"
+          class="kakapo-bird-fallback"
+          style="display:none"
+        >
+          🦜
+        </div>
+
       </div>
+
+
+      <div
+        class="flap-burst"
+        id="flapBurst"
+      ></div>
+
+      <div class="flap-feather f1"></div>
+      <div class="flap-feather f2"></div>
 
     </div>
 
@@ -2905,7 +3450,9 @@ button{
 </main>
 
 
-<!-- BALLOON -->
+<!-- =========================================================
+     BALLOON
+========================================================= -->
 
 <main
   class="page hidden"
@@ -2987,13 +3534,19 @@ button{
 </main>
 
 
+<!-- =========================================================
+     FEEDBACK
+========================================================= -->
+
 <div
   id="feedback"
   class="feedback"
 ></div>
 
 
-<!-- RESULT -->
+<!-- =========================================================
+     RESULT
+========================================================= -->
 
 <div
   class="overlay hidden"
@@ -3166,7 +3719,7 @@ function escapeHTML(value){
 
 
 /* =========================================================
-   STORAGE
+   STUDENT / STORAGE
 ========================================================= */
 
 function studentScope(){
@@ -3221,7 +3774,7 @@ function studentScope(){
 function statsKey(){
 
   return(
-    "VOCABULARY_STATS_V6_"
+    "VOCABULARY_STATS_V7_"
     +
     studentScope()
   );
@@ -3400,13 +3953,17 @@ function collectionStats(words){
 
   const output = {
 
-    total:words.length,
+    total:
+      words.length,
 
-    new:0,
+    new:
+      0,
 
-    learning:0,
+    learning:
+      0,
 
-    mastered:0
+    mastered:
+      0
 
   };
 
@@ -3552,7 +4109,7 @@ function hideScreens(){
 
 
 /* =========================================================
-   STATE
+   GLOBAL GAME STATE
 ========================================================= */
 
 let selectedSkill =
@@ -3762,6 +4319,8 @@ function openSkill(skill){
   selectedSkill =
   skill;
 
+
+  stopGame();
 
   hideScreens();
 
@@ -4116,7 +4675,7 @@ function renderCollection(){
 
 
 /* =========================================================
-   WORD PICKER
+   WORD SELECTION
 ========================================================= */
 
 function weightedWord(){
@@ -4455,10 +5014,6 @@ function feedback(
 
 }
 
-
-/* =========================================================
-   BACK
-========================================================= */
 
 function backToGameList(){
 
@@ -6128,7 +6683,7 @@ function updateMatch(seconds){
 
 
 /* =========================================================
-   FLAPPY KAKAPO V2
+   FLAPPY KAKAPO V4
 ========================================================= */
 
 let flappyBirdY =
@@ -6147,24 +6702,41 @@ let flappyResolving =
 false;
 
 
-let flappyReadUntil =
-0;
-
-
 let flappyRoundStart =
 0;
 
 
+let flappySpawnTime =
+0;
+
+
+let flappyCrashLock =
+false;
+
+
+/*
+Nhanh hơn bản trước.
+*/
+
 const FLAPPY_SPEED =
-60;
+112;
 
 
 const FLAPPY_GRAVITY =
-355;
+370;
 
 
 const FLAPPY_JUMP =
--180;
+-190;
+
+
+/*
+Chỉ delay đầu game 350ms,
+không reset chim giữa các từ.
+*/
+
+const FLAPPY_FIRST_READ_DELAY =
+350;
 
 
 function startFlappy(){
@@ -6187,8 +6759,29 @@ function startFlappy(){
   );
 
 
+  const stage =
+  $("flappyStage");
+
+
+  flappyBirdY =
+  stage.clientHeight
+  *
+  .46;
+
+
+  flappyVelocity =
+  0;
+
+
   flappyResolving =
   false;
+
+
+  flappyCrashLock =
+  false;
+
+
+  renderKakapo();
 
 
   let seconds =
@@ -6200,7 +6793,15 @@ function startFlappy(){
   );
 
 
-  nextFlappyRound();
+  /*
+  firstRound = true
+  vị trí chim chỉ set ở startFlappy,
+  không set lại ở các câu sau.
+  */
+
+  spawnFlappyQuestion(
+    true
+  );
 
 
   lastFrame =
@@ -6240,7 +6841,13 @@ function startFlappy(){
 }
 
 
-function nextFlappyRound(){
+/* =========================================================
+   SPAWN QUESTION
+========================================================= */
+
+function spawnFlappyQuestion(
+  firstRound=false
+){
 
   if(gameEnded){
 
@@ -6260,6 +6867,10 @@ function nextFlappyRound(){
   weightedWord();
 
 
+  /*
+  Luôn hiện ENGLISH trên người chim.
+  */
+
   $("kakapoWord")
   .textContent =
   currentTarget.word;
@@ -6277,20 +6888,6 @@ function nextFlappyRound(){
   stage.clientHeight;
 
 
-  flappyBirdY =
-  Math.min(
-    height*.52,
-    height-150
-  );
-
-
-  flappyVelocity =
-  0;
-
-
-  renderKakapo();
-
-
   const options =
   optionsFor(
     currentTarget,
@@ -6299,31 +6896,133 @@ function nextFlappyRound(){
 
 
   /*
-   * Không còn thẳng hàng.
-   *
-   * Mỗi option:
-   * - X khác nhau
-   * - Y khác nhau
-   * - khoảng cách khác nhau
-   */
+  Các option KHÔNG thẳng hàng.
 
-  const yZones =
+  Option 1 gần hơn.
+  Option 2 xa hơn.
+  Option 3 xa hơn nữa.
+
+  Đồng thời Y random.
+  */
+
+  const safeTop =
+  75;
+
+
+  const safeBottom =
+  height-120;
+
+
+  const y1 =
+  randomBetween(
+    safeTop,
+    safeBottom
+  );
+
+
+  let y2 =
+  randomBetween(
+    safeTop,
+    safeBottom
+  );
+
+
+  let y3 =
+  randomBetween(
+    safeTop,
+    safeBottom
+  );
+
+
+  /*
+  Cố tình tránh 3 option quá gần nhau theo trục Y.
+  */
+
+  if(
+    Math.abs(
+      y2-y1
+    )
+    <
+    85
+  ){
+
+    y2 =
+    y2 <
+    height/2
+
+    ?
+
+    Math.min(
+      safeBottom,
+      y2+115
+    )
+
+    :
+
+    Math.max(
+      safeTop,
+      y2-115
+    );
+
+  }
+
+
+  if(
+    Math.abs(
+      y3-y2
+    )
+    <
+    80
+  ){
+
+    y3 =
+    y3 <
+    height/2
+
+    ?
+
+    Math.min(
+      safeBottom,
+      y3+105
+    )
+
+    :
+
+    Math.max(
+      safeTop,
+      y3-105
+    );
+
+  }
+
+
+  const yValues =
   shuffle(
     [
-      height*.22,
-      height*.45,
-      height*.68
+      y1,
+      y2,
+      y3
     ]
   );
 
 
-  const baseXs = [
+  const xValues = [
 
-    width+110,
+    width+115,
 
-    width+255,
+    width+330
+    +
+    randomBetween(
+      -25,
+      45
+    ),
 
-    width+410
+    width+545
+    +
+    randomBetween(
+      -35,
+      45
+    )
 
   ];
 
@@ -6362,34 +7061,24 @@ function nextFlappyRound(){
         word,
 
         x:
-          baseXs[index]
-          +
-          randomBetween(
-            -25,
-            35
-          ),
+          xValues[index],
 
         baseY:
-          yZones[index]
-          +
-          randomBetween(
-            -25,
-            25
-          ),
+          yValues[index],
 
         y:
-          yZones[index],
+          yValues[index],
 
         amplitude:
           randomBetween(
-            7,
-            16
+            5,
+            13
           ),
 
         frequency:
           randomBetween(
-            1.4,
-            2.3
+            1.5,
+            2.4
           ),
 
         phase:
@@ -6407,22 +7096,27 @@ function nextFlappyRound(){
   );
 
 
-  /*
-   * Cho 1.2 giây đọc từ trước khi
-   * option bắt đầu tiến tới.
-   */
-
-  flappyReadUntil =
-  performance.now()
-  +
-  1200;
-
-
   flappyRoundStart =
   performance.now();
 
+
+  flappySpawnTime =
+  performance.now()
+  +
+  (
+    firstRound
+    ?
+    FLAPPY_FIRST_READ_DELAY
+    :
+    80
+  );
+
 }
 
+
+/* =========================================================
+   MAIN FLAPPY LOOP
+========================================================= */
 
 function flappyLoop(now){
 
@@ -6457,11 +7151,17 @@ function flappyLoop(now){
 
 
   /*
-   * PHYSICS
-   */
+  ========================================================
+  BIRD PHYSICS
+
+  QUAN TRỌNG:
+  Chim vẫn tiếp tục bay kể cả khi vừa chọn đúng.
+  Không reset Y.
+  ========================================================
+  */
 
   if(
-    !flappyResolving
+    !flappyCrashLock
   ){
 
     flappyVelocity +=
@@ -6479,17 +7179,16 @@ function flappyLoop(now){
 
 
   /*
-   * Trần:
-   * không mất mạng, chỉ chặn.
-   */
+  Chạm trần không mất mạng.
+  */
 
   if(
     flappyBirdY <
-    55
+    48
   ){
 
     flappyBirdY =
-    55;
+    48;
 
 
     if(
@@ -6498,7 +7197,7 @@ function flappyLoop(now){
     ){
 
       flappyVelocity =
-      0;
+      10;
 
     }
 
@@ -6506,19 +7205,20 @@ function flappyLoop(now){
 
 
   /*
-   * MẶT ĐẤT:
-   * chạm xuống là mất 1 mạng.
-   */
+  ========================================================
+  RƠI XUỐNG ĐẤT
+  ========================================================
+  */
 
   if(
     flappyBirdY >
-    height-78
+    height-70
     &&
-    !flappyResolving
+    !flappyCrashLock
   ){
 
     flappyBirdY =
-    height-78;
+    height-70;
 
 
     renderKakapo();
@@ -6542,16 +7242,28 @@ function flappyLoop(now){
 
 
   /*
-   * Option đứng yên 1.2 giây
-   * cho học sinh đọc từ.
-   */
+  ========================================================
+  MOVE OPTIONS
+
+  Sau khoảng delay rất ngắn,
+  option bắt đầu chạy sang trái.
+  ========================================================
+  */
 
   if(
     now >=
-    flappyReadUntil
-    &&
-    !flappyResolving
+    flappySpawnTime
   ){
+
+    const elapsed =
+    (
+      now
+      -
+      flappyRoundStart
+    )
+    /
+    1000;
+
 
     flappyAnswers
     .forEach(
@@ -6561,20 +7273,6 @@ function flappyLoop(now){
         FLAPPY_SPEED
         *
         dt;
-
-
-        /*
-         * Bay nhấp nhô nhẹ.
-         */
-
-        const elapsed =
-        (
-          now
-          -
-          flappyRoundStart
-        )
-        /
-        1000;
 
 
         answer.y =
@@ -6631,11 +7329,15 @@ function flappyLoop(now){
 
 
   /*
-   * VA CHẠM THẬT.
-   */
+  ========================================================
+  COLLISION
+  ========================================================
+  */
 
   if(
     !flappyResolving
+    &&
+    !flappyCrashLock
   ){
 
     const collided =
@@ -6654,19 +7356,22 @@ function flappyLoop(now){
 
 
   /*
-   * Nếu toàn bộ đáp án đã bay qua bên trái
-   * mà học sinh không chạm gì.
-   */
+  ========================================================
+  MISS ALL OPTIONS
+  ========================================================
+  */
 
   if(
     !flappyResolving
+    &&
+    !flappyCrashLock
     &&
     flappyAnswers.length
     &&
     flappyAnswers.every(
       answer =>
       answer.x <
-      -100
+      -90
     )
   ){
 
@@ -6683,6 +7388,10 @@ function flappyLoop(now){
 }
 
 
+/* =========================================================
+   COLLISION DETECTION
+========================================================= */
+
 function findFlappyCollision(){
 
   const bird =
@@ -6691,23 +7400,22 @@ function findFlappyCollision(){
 
 
   /*
-   * Hitbox chim hẹp hơn DOM thật một chút
-   * để điều khiển dễ hơn.
-   */
+  Hitbox nhỏ hơn hình chim để chơi dễ hơn.
+  */
 
   const birdBox = {
 
     left:
-      bird.left+22,
+      bird.left+27,
 
     right:
-      bird.right-22,
+      bird.right-20,
 
     top:
-      bird.top+28,
+      bird.top+31,
 
     bottom:
-      bird.bottom-8
+      bird.bottom-16
 
   };
 
@@ -6731,27 +7439,28 @@ function findFlappyCollision(){
 
 
     const touching =
-    birdBox.left
-    <
-    rect.right
 
-    &&
+      birdBox.left
+      <
+      rect.right
 
-    birdBox.right
-    >
-    rect.left
+      &&
 
-    &&
+      birdBox.right
+      >
+      rect.left
 
-    birdBox.top
-    <
-    rect.bottom
+      &&
 
-    &&
+      birdBox.top
+      <
+      rect.bottom
 
-    birdBox.bottom
-    >
-    rect.top;
+      &&
+
+      birdBox.bottom
+      >
+      rect.top;
 
 
     if(touching){
@@ -6768,10 +7477,16 @@ function findFlappyCollision(){
 }
 
 
+/* =========================================================
+   HIT OPTION
+========================================================= */
+
 function resolveFlappyCollision(answer){
 
   if(
     flappyResolving
+    ||
+    flappyCrashLock
     ||
     gameEnded
   ){
@@ -6818,6 +7533,22 @@ function resolveFlappyCollision(answer){
       "good"
     );
 
+
+    /*
+    Boost nhẹ để chim có cảm giác
+    xuyên qua đáp án rồi tiếp tục bay.
+    */
+
+    if(
+      flappyVelocity >
+      60
+    ){
+
+      flappyVelocity =
+      60;
+
+    }
+
   }
 
   else{
@@ -6838,7 +7569,7 @@ function resolveFlappyCollision(answer){
 
 
     feedback(
-      `✕ Nghĩa đúng: ${currentTarget.meaning}`,
+      `✕ Đúng: ${currentTarget.meaning}`,
       "bad"
     );
 
@@ -6848,11 +7579,25 @@ function resolveFlappyCollision(answer){
   updateFlappy();
 
 
+  /*
+  QUAN TRỌNG:
+  chỉ đổi từ + spawn option mới.
+
+  KHÔNG reset flappyBirdY.
+  KHÔNG reset velocity.
+  */
+
   if(!gameEnded){
 
     setTimeout(
-      nextFlappyRound,
-      650
+      ()=>{
+
+        spawnFlappyQuestion(
+          false
+        );
+
+      },
+      220
     );
 
   }
@@ -6860,10 +7605,16 @@ function resolveFlappyCollision(answer){
 }
 
 
-function flappyGroundCrash(){
+/* =========================================================
+   MISS ALL
+========================================================= */
+
+function flappyMissAll(){
 
   if(
     flappyResolving
+    ||
+    flappyCrashLock
     ||
     gameEnded
   ){
@@ -6871,6 +7622,66 @@ function flappyGroundCrash(){
     return;
 
   }
+
+
+  flappyResolving =
+  true;
+
+
+  wrongAnswer(
+    currentTarget
+  );
+
+
+  loseLife();
+
+
+  updateFlappy();
+
+
+  feedback(
+    `💨 Bỏ lỡ! ${currentTarget.meaning}`,
+    "bad"
+  );
+
+
+  if(!gameEnded){
+
+    setTimeout(
+      ()=>{
+
+        spawnFlappyQuestion(
+          false
+        );
+
+      },
+      180
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   GROUND CRASH
+========================================================= */
+
+function flappyGroundCrash(){
+
+  if(
+    flappyCrashLock
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  flappyCrashLock =
+  true;
 
 
   flappyResolving =
@@ -6920,10 +7731,14 @@ function flappyGroundCrash(){
 
 
   feedback(
-    `💥 Rơi xuống đất! -1 ❤️`,
+    "💥 Rơi xuống đất! -1 ❤️",
     "bad"
   );
 
+
+  /*
+  Chỉ khi chạm đất mới reset vị trí.
+  */
 
   setTimeout(
     ()=>{
@@ -6938,64 +7753,52 @@ function flappyGroundCrash(){
       boom.remove();
 
 
-      if(!gameEnded){
+      if(gameEnded){
 
-        nextFlappyRound();
+        return;
 
       }
 
+
+      const stage =
+      $("flappyStage");
+
+
+      flappyBirdY =
+      stage.clientHeight
+      *
+      .42;
+
+
+      /*
+      Sau khi hồi sinh, cho chim lực bay nhẹ lên.
+      */
+
+      flappyVelocity =
+      -95;
+
+
+      flappyCrashLock =
+      false;
+
+
+      renderKakapo();
+
+
+      spawnFlappyQuestion(
+        false
+      );
+
     },
-    750
+    650
   );
 
 }
 
 
-function flappyMissAll(){
-
-  if(
-    flappyResolving
-    ||
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  flappyResolving =
-  true;
-
-
-  wrongAnswer(
-    currentTarget
-  );
-
-
-  loseLife();
-
-
-  updateFlappy();
-
-
-  feedback(
-    `💨 Bỏ lỡ! ${currentTarget.meaning}`,
-    "bad"
-  );
-
-
-  if(!gameEnded){
-
-    setTimeout(
-      nextFlappyRound,
-      650
-    );
-
-  }
-
-}
-
+/* =========================================================
+   FLAP
+========================================================= */
 
 function flap(){
 
@@ -7005,7 +7808,7 @@ function flap(){
     ||
     gameEnded
     ||
-    flappyResolving
+    flappyCrashLock
   ){
 
     return;
@@ -7015,6 +7818,51 @@ function flap(){
 
   flappyVelocity =
   FLAPPY_JUMP;
+
+
+  const bird =
+  $("kakapo");
+
+
+  /*
+  Restart animation mỗi lần nhấn.
+  */
+
+  bird
+  .classList
+  .remove(
+    "flap"
+  );
+
+
+  void bird.offsetWidth;
+
+
+  bird
+  .classList
+  .add(
+    "flap"
+  );
+
+
+  clearTimeout(
+    bird._flapTimer
+  );
+
+
+  bird._flapTimer =
+  setTimeout(
+    ()=>{
+
+      bird
+      .classList
+      .remove(
+        "flap"
+      );
+
+    },
+    300
+  );
 
 }
 
@@ -7252,7 +8100,9 @@ function nextBalloon(){
         speed:
           65
           +
-          correct*1.2
+          correct*1.2,
+
+        removed:false
 
       };
 
@@ -7263,6 +8113,32 @@ function nextBalloon(){
       )
       .onclick =
       ()=>{
+
+        if(
+          balloon.removed
+          ||
+          gameEnded
+        ){
+
+          return;
+
+        }
+
+
+        balloon.removed =
+        true;
+
+
+        element.remove();
+
+
+        balloons =
+        balloons.filter(
+          item =>
+          item !==
+          balloon
+        );
+
 
         const good =
         wordId(word)
@@ -7356,6 +8232,15 @@ function balloonLoop(now){
     [...balloons]
   ){
 
+    if(
+      balloon.removed
+    ){
+
+      continue;
+
+    }
+
+
     balloon.y -=
     balloon.speed*dt;
 
@@ -7381,6 +8266,10 @@ function balloonLoop(now){
       wordId(balloon.word)
       ===
       wordId(currentTarget);
+
+
+      balloon.removed =
+      true;
 
 
       balloon.element.remove();
@@ -7515,6 +8404,7 @@ document
 
         event.preventDefault();
 
+
         moveBasket(
           -1
         );
@@ -7528,6 +8418,7 @@ document
       ){
 
         event.preventDefault();
+
 
         moveCar(
           -1
@@ -7550,6 +8441,7 @@ document
 
         event.preventDefault();
 
+
         moveBasket(
           1
         );
@@ -7563,6 +8455,7 @@ document
       ){
 
         event.preventDefault();
+
 
         moveCar(
           1
@@ -7588,6 +8481,7 @@ document
 
       event.preventDefault();
 
+
       flap();
 
     }
@@ -7597,7 +8491,7 @@ document
 
 
 /* =========================================================
-   FLAPPY CLICK
+   FLAPPY POINTER
 ========================================================= */
 
 $("flappyStage")
@@ -7614,6 +8508,7 @@ $("flappyStage")
 
       event.preventDefault();
 
+
       flap();
 
     }
@@ -7623,7 +8518,7 @@ $("flappyStage")
 
 
 /* =========================================================
-   CATCHER CLICK
+   CATCHER POINTER
 ========================================================= */
 
 $("catchArea")
@@ -7676,8 +8571,67 @@ $("catchArea")
 );
 
 
+$("catchArea")
+.addEventListener(
+  "pointermove",
+  event => {
+
+    if(
+      currentGame !==
+      "catcher"
+      ||
+      gameEnded
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      event.buttons
+      ||
+      event.pointerType ===
+      "touch"
+    ){
+
+      const rect =
+      $("catchArea")
+      .getBoundingClientRect();
+
+
+      basketX =
+      (
+        event.clientX
+        -
+        rect.left
+      )
+      /
+      rect.width
+      *
+      100;
+
+
+      basketX =
+      Math.max(
+        7,
+        Math.min(
+          93,
+          basketX
+        )
+      );
+
+
+      renderBasket();
+
+    }
+
+  }
+);
+
+
 /* =========================================================
-   RACER CLICK
+   RACER POINTER
 ========================================================= */
 
 $("racerRoad")
@@ -7824,6 +8778,10 @@ function stopGame(){
   false;
 
 
+  flappyCrashLock =
+  false;
+
+
   gameEnded =
   true;
 
@@ -7906,17 +8864,23 @@ function replayGame(){
 
   const games = {
 
-    whack:startWhack,
+    whack:
+      startWhack,
 
-    catcher:startCatcher,
+    catcher:
+      startCatcher,
 
-    racer:startRacer,
+    racer:
+      startRacer,
 
-    match:startMatch,
+    match:
+      startMatch,
 
-    flappy:startFlappy,
+    flappy:
+      startFlappy,
 
-    balloon:startBalloon
+    balloon:
+      startBalloon
 
   };
 
@@ -7955,9 +8919,16 @@ function init(){
           margin-top:20px;
         "
       >
+
         <h2>
           Không tải được vocab-data.js
         </h2>
+
+        <p>
+          Kiểm tra:
+          Practice/Vocabulary/vocab-data.js
+        </p>
+
       </div>
     `;
 
