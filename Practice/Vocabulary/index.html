@@ -8,30 +8,42 @@
   content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
 >
 
-<title>Vocabulary Arcade</title>
+<meta
+  http-equiv="Cache-Control"
+  content="no-cache, no-store, must-revalidate"
+>
+
+<title>Vocabulary Practice</title>
+
+<script src="./vocab-data.js"></script>
 
 <style>
+
 :root{
   --purple:#281260;
-  --purple2:#5c3ac5;
-  --blue:#3678e8;
-  --green:#22a968;
-  --red:#e64f62;
-  --orange:#f39b33;
-  --yellow:#ffd85b;
+  --purple2:#6042c3;
+  --blue:#3378e5;
+  --green:#20a568;
+  --red:#df4d60;
+  --orange:#ee922d;
+  --yellow:#ffd95d;
 
-  --ink:#1d2640;
-  --muted:#71798d;
-  --line:#e4e7ef;
-  --bg:#f4f7fc;
+  --ink:#1e2741;
+  --muted:#737c90;
+  --line:#e3e7ef;
+  --bg:#f4f7fb;
 
   --shadow:
-    0 16px 40px
-    rgba(37,28,82,.10);
+    0 14px 34px
+    rgba(38,29,82,.09);
 }
 
 *{
   box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
 }
 
 html,
@@ -53,14 +65,14 @@ body{
 
   background:
     radial-gradient(
-      circle at 0 0,
-      rgba(145,99,239,.15),
-      transparent 27%
+      circle at 4% 0%,
+      rgba(139,99,237,.13),
+      transparent 25%
     ),
     radial-gradient(
-      circle at 100% 0,
-      rgba(73,167,255,.15),
-      transparent 27%
+      circle at 96% 0%,
+      rgba(74,168,255,.12),
+      transparent 26%
     ),
     var(--bg);
 }
@@ -80,10 +92,10 @@ button{
 
 
 /* =========================================================
-   TOP
+   TOP BAR
 ========================================================= */
 
-.top{
+.topbar{
   position:sticky;
 
   top:0;
@@ -91,10 +103,10 @@ button{
   z-index:50;
 
   background:
-    rgba(255,255,255,.92);
+    rgba(255,255,255,.93);
 
   backdrop-filter:
-    blur(14px);
+    blur(15px);
 
   border-bottom:
     1px solid
@@ -104,7 +116,7 @@ button{
 .top-inner{
   width:
     min(
-      1200px,
+      1240px,
       calc(100% - 20px)
     );
 
@@ -134,11 +146,11 @@ button{
 
   background:#fff;
 
-  color:#4b3789;
+  color:#50388e;
 
   text-decoration:none;
 
-  font-size:11px;
+  font-size:10.5px;
 
   font-weight:900;
 }
@@ -148,9 +160,9 @@ button{
 
   align-items:center;
 
-  gap:9px;
+  gap:8px;
 
-  color:#24154f;
+  color:#24154d;
 
   font-weight:950;
 }
@@ -169,8 +181,8 @@ button{
   background:
     linear-gradient(
       135deg,
-      var(--purple2),
-      #8e70ef
+      #5b3ac2,
+      #8c70e9
     );
 
   color:#fff;
@@ -179,7 +191,7 @@ button{
 }
 
 .student{
-  color:#767e90;
+  color:#747d8e;
 
   font-size:10.5px;
 
@@ -194,7 +206,7 @@ button{
 .page{
   width:
     min(
-      1200px,
+      1240px,
       calc(100% - 20px)
     );
 
@@ -206,7 +218,7 @@ button{
 
 
 /* =========================================================
-   HOME
+   HERO
 ========================================================= */
 
 .hero{
@@ -215,13 +227,13 @@ button{
   overflow:hidden;
 
   padding:
-    30px 32px;
+    28px 30px;
 
   border:
     1px solid
     rgba(255,255,255,.92);
 
-  border-radius:27px;
+  border-radius:25px;
 
   background:
     linear-gradient(
@@ -236,23 +248,23 @@ button{
 }
 
 .hero::after{
-  content:"🎮";
+  content:"🧠";
 
   position:absolute;
 
-  right:30px;
+  right:28px;
 
-  bottom:-15px;
+  bottom:-17px;
 
-  font-size:130px;
+  font-size:125px;
 
-  opacity:.06;
+  opacity:.055;
 }
 
 .eyebrow{
-  color:#6e52bf;
+  color:#684bb6;
 
-  font-size:10px;
+  font-size:9.5px;
 
   font-weight:950;
 
@@ -265,177 +277,163 @@ button{
   margin:
     8px 0 5px;
 
+  color:#21144c;
+
   font-size:
     clamp(
-      34px,
-      6vw,
-      60px
+      35px,
+      5vw,
+      56px
     );
 
   line-height:1;
 
   letter-spacing:-.05em;
-
-  color:#211449;
 }
 
 .hero p{
   margin:0;
 
-  max-width:680px;
+  max-width:730px;
 
   color:var(--muted);
 
-  font-size:12px;
+  font-size:11.5px;
 
   line-height:1.65;
 }
 
 
 /* =========================================================
-   SETTINGS
+   REVIEW BANNER
 ========================================================= */
 
-.settings{
-  margin-top:15px;
+.review-banner{
+  margin-top:14px;
 
-  padding:15px;
+  padding:
+    15px 17px;
 
   display:flex;
 
-  flex-wrap:wrap;
+  align-items:center;
 
-  align-items:end;
+  justify-content:
+    space-between;
 
-  gap:12px;
+  gap:14px;
 
   border:
     1px solid
-    var(--line);
+    #f2d8bb;
 
   border-radius:16px;
 
-  background:#fff;
+  background:
+    linear-gradient(
+      120deg,
+      #fff9ef,
+      #fff
+    );
 }
 
-.setting{
-  flex:
-    1 1 210px;
+.review-main{
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
 }
 
-.setting label{
+.review-icon{
+  font-size:33px;
+}
+
+.review-banner b{
   display:block;
 
-  margin-bottom:5px;
+  color:#654019;
 
-  color:#626a7d;
-
-  font-size:9px;
-
-  font-weight:950;
-
-  text-transform:uppercase;
+  font-size:13px;
 }
 
-.setting select{
-  width:100%;
+.review-banner span{
+  display:block;
 
-  height:40px;
+  margin-top:2px;
 
+  color:#8b735d;
+
+  font-size:10px;
+}
+
+.review-btn{
   padding:
-    0 10px;
+    9px 13px;
 
-  border:
-    1px solid
-    #dfe3eb;
+  border:0;
 
   border-radius:9px;
 
-  background:#fff;
+  background:#df8629;
 
-  color:#2e3650;
-
-  outline:none;
-
-  font-size:11px;
-
-  font-weight:850;
-}
-
-.setting-info{
-  flex:
-    1 1 180px;
-
-  padding:
-    10px 12px;
-
-  border-radius:10px;
-
-  background:#f6f4ff;
-
-  color:#57428d;
+  color:#fff;
 
   font-size:10px;
 
-  font-weight:850;
+  font-weight:950;
 }
 
 
 /* =========================================================
-   GAME CARDS
+   SECTION
 ========================================================= */
 
-.section-title{
+.section-head{
   margin:
     25px 0 12px;
 }
 
-.section-title h2{
+.section-head h2{
   margin:0;
 
-  color:#202a48;
+  color:#202946;
 
-  font-size:23px;
+  font-size:22px;
 
   letter-spacing:-.03em;
 }
 
-.section-title p{
+.section-head p{
   margin:
     4px 0 0;
 
-  color:#7b8292;
+  color:#7d8595;
 
   font-size:10.5px;
 }
 
-.game-grid{
+
+/* =========================================================
+   CATEGORY GRID
+========================================================= */
+
+.category-grid{
   display:grid;
 
   grid-template-columns:
-    repeat(2,minmax(0,1fr));
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
 
-  gap:14px;
+  gap:12px;
 }
 
-.game-card{
-  position:relative;
+.category{
+  padding:17px;
 
-  overflow:hidden;
-
-  min-height:280px;
-
-  padding:23px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.9);
-
-  border-radius:23px;
-
-  box-shadow:
-    0 11px 27px
-    rgba(37,28,82,.08);
+  min-height:183px;
 
   display:flex;
 
@@ -443,118 +441,539 @@ button{
 
   align-items:flex-start;
 
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  background:#fff;
+
+  box-shadow:
+    0 7px 18px
+    rgba(38,29,82,.04);
+
   text-align:left;
 
-  transition:.2s ease;
+  transition:.17s ease;
+}
+
+.category:hover{
+  transform:
+    translateY(-3px);
+
+  border-color:#cec4ec;
+
+  box-shadow:
+    0 12px 27px
+    rgba(38,29,82,.08);
+}
+
+.category-icon{
+  width:44px;
+
+  height:44px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:13px;
+
+  background:#f0edff;
+
+  font-size:22px;
+}
+
+.category h3{
+  margin:
+    11px 0 2px;
+
+  color:#29204e;
+
+  font-size:14px;
+}
+
+.category-count{
+  color:#8b92a0;
+
+  font-size:9.5px;
+}
+
+.mastery-line{
+  width:100%;
+
+  margin-top:auto;
+
+  padding-top:13px;
+}
+
+.mastery-row{
+  display:flex;
+
+  justify-content:
+    space-between;
+
+  margin-bottom:5px;
+
+  color:#758093;
+
+  font-size:9px;
+
+  font-weight:850;
+}
+
+.mastery-bar{
+  height:6px;
+
+  overflow:hidden;
+
+  border-radius:999px;
+
+  background:#e9ecf2;
+}
+
+.mastery-bar i{
+  display:block;
+
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #5c3ac2,
+      #4d82e5
+    );
+
+  border-radius:inherit;
+}
+
+
+/* =========================================================
+   COLLECTION
+========================================================= */
+
+.collection-head{
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:
+    space-between;
+
+  gap:15px;
+
+  margin-bottom:15px;
+}
+
+.collection-left{
+  min-width:0;
+}
+
+.collection-back{
+  margin-bottom:8px;
+
+  padding:
+    7px 10px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#533a8f;
+
+  font-size:9.5px;
+
+  font-weight:900;
+}
+
+.collection-head h1{
+  margin:0;
+
+  color:#241650;
+
+  font-size:30px;
+
+  letter-spacing:-.04em;
+}
+
+.collection-head p{
+  margin:
+    5px 0 0;
+
+  color:#777f90;
+
+  font-size:10.5px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:8px;
+
+  margin-bottom:15px;
+}
+
+.stat{
+  padding:
+    13px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#fff;
+
+  text-align:center;
+}
+
+.stat small{
+  display:block;
+
+  color:#959ba7;
+
+  font-size:8px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.stat b{
+  display:block;
+
+  margin-top:3px;
+
+  color:#2d3350;
+
+  font-size:19px;
+}
+
+
+/* =========================================================
+   DIRECTION
+========================================================= */
+
+.game-settings{
+  padding:12px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#fff;
+}
+
+.game-settings span{
+  color:#6e7689;
+
+  font-size:10px;
+
+  font-weight:850;
+}
+
+.game-settings select{
+  padding:
+    8px 10px;
+
+  border:
+    1px solid
+    #dce0e9;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#403268;
+
+  font-size:10px;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   GAMES
+========================================================= */
+
+.game-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
+  gap:12px;
+
+  margin-top:12px;
+}
+
+.game-card{
+  min-height:205px;
+
+  padding:18px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-start;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:17px;
+
+  background:#fff;
+
+  box-shadow:
+    0 7px 18px
+    rgba(38,29,82,.04);
+
+  text-align:left;
 }
 
 .game-card:hover{
-  transform:
-    translateY(-4px);
-
-  box-shadow:
-    0 17px 36px
-    rgba(37,28,82,.13);
+  border-color:#c9beeb;
 }
 
-.game-card.whack{
-  background:
-    linear-gradient(
-      145deg,
-      #f4edff,
-      #fff
-    );
-}
-
-.game-card.catch{
-  background:
-    linear-gradient(
-      145deg,
-      #eaf8ff,
-      #fff
-    );
-}
-
-.game-emoji{
-  font-size:67px;
-
-  line-height:1;
+.game-icon{
+  font-size:44px;
 }
 
 .game-card h3{
   margin:
-    16px 0 7px;
+    10px 0 5px;
 
-  color:#26194f;
+  color:#271a50;
 
-  font-size:24px;
-
-  letter-spacing:-.035em;
+  font-size:17px;
 }
 
 .game-card p{
   margin:0;
 
-  max-width:450px;
+  color:#747d8d;
 
-  color:#6e7688;
+  font-size:10px;
 
-  font-size:11px;
-
-  line-height:1.6;
+  line-height:1.55;
 }
 
-.game-meta{
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:6px;
-
-  margin-top:14px;
-}
-
-.game-meta span{
-  padding:
-    6px 9px;
-
-  border-radius:999px;
-
-  background:rgba(255,255,255,.8);
-
-  border:
-    1px solid
-    rgba(214,218,231,.9);
-
-  color:#60697d;
-
-  font-size:9px;
-
-  font-weight:900;
-}
-
-.play{
+.game-play{
   margin-top:auto;
 
   padding:
-    10px 15px;
+    9px 12px;
 
   border:0;
 
-  border-radius:10px;
+  border-radius:9px;
 
   background:
     linear-gradient(
       135deg,
-      #452599,
-      #7655d9
+      #432594,
+      #7253d4
     );
 
   color:#fff;
 
+  font-size:10px;
+
+  font-weight:950;
+}
+
+
+/* =========================================================
+   TOPICS
+========================================================= */
+
+.topic-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
+
+  gap:10px;
+}
+
+.topic-card{
+  padding:15px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:14px;
+
+  background:#fff;
+
+  text-align:left;
+
+  transition:.15s;
+}
+
+.topic-card:hover{
+  border-color:#c8bce9;
+
+  transform:
+    translateY(-2px);
+}
+
+.topic-card b{
+  display:block;
+
+  color:#29204d;
+
+  font-size:12px;
+}
+
+.topic-card span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#8a91a0;
+
+  font-size:9px;
+}
+
+.topic-progress{
+  height:5px;
+
+  margin-top:10px;
+
+  overflow:hidden;
+
+  border-radius:999px;
+
+  background:#eaedf3;
+}
+
+.topic-progress i{
+  display:block;
+
+  height:100%;
+
+  background:#6042c3;
+}
+
+
+/* =========================================================
+   WORD LIST
+========================================================= */
+
+.word-list{
+  margin-top:14px;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:14px;
+
+  background:#fff;
+}
+
+.word-row{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1.3fr 110px;
+
+  gap:10px;
+
+  align-items:center;
+
+  padding:
+    10px 13px;
+
+  border-bottom:
+    1px solid
+    #edf0f4;
+
+  font-size:10px;
+}
+
+.word-row:last-child{
+  border-bottom:0;
+}
+
+.word{
+  color:#2d2452;
+
   font-size:11px;
 
   font-weight:950;
+}
+
+.meaning{
+  color:#596274;
+}
+
+.word-status{
+  justify-self:end;
+
+  padding:
+    5px 8px;
+
+  border-radius:999px;
+
+  font-size:8.5px;
+
+  font-weight:950;
+}
+
+.word-status.new{
+  background:#f0f1f4;
+
+  color:#7e8593;
+}
+
+.word-status.learning{
+  background:#fff2da;
+
+  color:#a66513;
+}
+
+.word-status.mastered{
+  background:#e3f6ec;
+
+  color:#168054;
 }
 
 
@@ -564,7 +983,7 @@ button{
 
 .game-screen{
   min-height:
-    calc(100vh - 125px);
+    calc(100vh - 120px);
 }
 
 .game-header{
@@ -577,121 +996,97 @@ button{
 
   gap:12px;
 
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 
-.game-title{
-  min-width:0;
-}
-
-.game-title h2{
+.game-header h2{
   margin:0;
 
-  color:#25164f;
+  color:#25164e;
 
   font-size:22px;
 }
 
-.game-title p{
-  margin:
-    3px 0 0;
-
-  color:#7a8293;
-
-  font-size:10px;
-}
-
-.quit-btn{
+.quit{
   padding:
     8px 11px;
 
   border:
     1px solid
-    #dddfe7;
+    var(--line);
 
-  border-radius:9px;
+  border-radius:8px;
 
   background:#fff;
 
-  color:#654d87;
+  color:#674f85;
 
-  font-size:10px;
+  font-size:9.5px;
 
   font-weight:900;
 }
-
-
-/* =========================================================
-   HUD
-========================================================= */
 
 .hud{
   display:grid;
 
   grid-template-columns:
-    repeat(5,minmax(0,1fr));
+    repeat(5,1fr);
 
-  gap:8px;
+  gap:7px;
 
-  margin-bottom:10px;
+  margin-bottom:9px;
 }
 
-.hud-card{
+.hud-box{
   padding:
-    10px 12px;
+    9px;
 
   border:
     1px solid
     var(--line);
 
-  border-radius:11px;
+  border-radius:10px;
 
   background:#fff;
 
   text-align:center;
 }
 
-.hud-label{
-  color:#959ba7;
+.hud-box small{
+  display:block;
 
-  font-size:8px;
+  color:#969daa;
+
+  font-size:7.5px;
 
   font-weight:950;
 
   text-transform:uppercase;
 }
 
-.hud-value{
+.hud-box b{
+  display:block;
+
   margin-top:2px;
 
-  color:#29204b;
+  color:#302550;
 
-  font-size:16px;
-
-  font-weight:950;
-
-  font-variant-numeric:
-    tabular-nums;
+  font-size:15px;
 }
 
-
-/* =========================================================
-   TARGET
-========================================================= */
-
 .target{
-  margin-bottom:10px;
-
   padding:
-    15px 18px;
+    14px;
 
-  border-radius:14px;
+  margin-bottom:9px;
+
+  border-radius:13px;
 
   background:
     linear-gradient(
       125deg,
-      #2b1769,
-      #6546bf
+      #2a1769,
+      #6244ba
     );
 
   color:#fff;
@@ -699,96 +1094,90 @@ button{
   text-align:center;
 }
 
-.target-label{
-  opacity:.68;
+.target small{
+  display:block;
 
-  font-size:8.5px;
+  opacity:.67;
+
+  font-size:8px;
 
   font-weight:950;
 
-  text-transform:uppercase;
-
   letter-spacing:.08em;
+
+  text-transform:uppercase;
 }
 
-.target-word{
-  margin-top:5px;
+.target b{
+  display:block;
+
+  margin-top:4px;
 
   font-size:
     clamp(
-      22px,
+      20px,
       4vw,
-      35px
+      31px
     );
-
-  line-height:1.15;
-
-  font-weight:950;
 }
 
 
 /* =========================================================
-   WHACK GAME
+   WHACK
 ========================================================= */
 
 .whack-board{
+  min-height:470px;
+
+  padding:15px;
+
   display:grid;
 
   grid-template-columns:
     repeat(3,1fr);
 
-  gap:12px;
-
-  padding:18px;
+  gap:10px;
 
   border:
     1px solid
     var(--line);
 
-  border-radius:18px;
+  border-radius:17px;
 
   background:
     linear-gradient(
       180deg,
-      #dcf6cf,
-      #bce9a9
+      #e1f7d6,
+      #bce4a7
     );
-
-  min-height:490px;
 }
 
 .hole{
   position:relative;
 
-  min-height:130px;
+  min-height:135px;
+
+  overflow:hidden;
 
   display:flex;
 
   align-items:flex-end;
 
   justify-content:center;
-
-  overflow:hidden;
 }
 
-.hole-ground{
+.ground{
   position:absolute;
 
   bottom:3px;
 
   width:90%;
 
-  height:32px;
+  height:31px;
 
   border-radius:50%;
 
-  background:
-    #79573c;
-
-  box-shadow:
-    inset
-    0 7px 8px
-    rgba(0,0,0,.15);
+  background:#79583d;
 }
 
 .mole{
@@ -798,12 +1187,12 @@ button{
 
   width:90%;
 
-  max-width:180px;
+  max-width:175px;
 
-  min-height:104px;
+  min-height:105px;
 
   padding:
-    10px 8px 16px;
+    9px 7px 15px;
 
   display:flex;
 
@@ -818,28 +1207,21 @@ button{
   border:0;
 
   border-radius:
-    50% 50% 28% 28%;
+    50% 50% 27% 27%;
 
   background:
     linear-gradient(
-      180deg,
-      #a97145,
-      #815231
+      #ad774b,
+      #80502f
     );
-
-  color:#fff;
-
-  box-shadow:
-    0 9px 16px
-    rgba(76,47,29,.23);
 
   transform:
     translateY(150%);
 
   transition:
-    transform .25s ease;
+    transform .22s ease;
 
-  cursor:pointer;
+  color:#fff;
 }
 
 .mole.show{
@@ -847,11 +1229,11 @@ button{
     translateY(0);
 }
 
-.mole-face{
-  font-size:36px;
+.mole .face{
+  font-size:34px;
 }
 
-.mole-word{
+.mole .word-label{
   max-width:100%;
 
   padding:
@@ -859,44 +1241,28 @@ button{
 
   border-radius:7px;
 
-  background:
-    rgba(255,255,255,.93);
+  background:#fff;
 
-  color:#38271f;
+  color:#33261e;
 
   text-align:center;
 
-  font-size:
-    clamp(
-      9px,
-      1.5vw,
-      11px
-    );
+  font-size:10px;
 
   font-weight:950;
-
-  line-height:1.25;
 
   overflow-wrap:anywhere;
 }
 
-.mole.good-hit{
-  background:#23955c;
-}
-
-.mole.bad-hit{
-  background:#c94856;
-}
-
 
 /* =========================================================
-   FRUIT CATCHER
+   CATCHER
 ========================================================= */
 
-.catch-game-area{
+.catch-area{
   position:relative;
 
-  height:530px;
+  height:520px;
 
   overflow:hidden;
 
@@ -904,97 +1270,78 @@ button{
     1px solid
     var(--line);
 
-  border-radius:18px;
+  border-radius:17px;
 
   background:
     linear-gradient(
-      180deg,
-      #bfe9ff 0%,
-      #e8f7ff 66%,
-      #d5efb5 67%,
-      #b6dd91 100%
+      #bce8ff 0%,
+      #eaf8ff 68%,
+      #d4ecb8 69%,
+      #b8da94 100%
     );
 
-  touch-action:none;
-
   user-select:none;
+
+  touch-action:none;
 }
 
 .cloud{
   position:absolute;
 
-  font-size:56px;
+  opacity:.65;
 
-  opacity:.7;
+  font-size:54px;
 
   pointer-events:none;
 }
 
-.cloud.one{
+.cloud.a{
   top:30px;
-  left:7%;
+  left:8%;
 }
 
-.cloud.two{
-  top:85px;
-  right:8%;
+.cloud.b{
+  top:90px;
+  right:10%;
 }
 
 .fruit{
   position:absolute;
 
-  z-index:5;
+  z-index:4;
 
-  width:135px;
-
-  min-height:80px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:2px;
+  width:130px;
 
   transform:
     translate(-50%,-50%);
+
+  text-align:center;
 
   pointer-events:none;
 }
 
 .fruit-icon{
-  font-size:43px;
-
-  line-height:1;
+  font-size:42px;
 }
 
-.fruit-word{
-  max-width:130px;
+.fruit-label{
+  display:inline-block;
+
+  max-width:125px;
 
   padding:
-    5px 7px;
+    4px 7px;
 
   border-radius:7px;
 
   background:
-    rgba(255,255,255,.94);
+    rgba(255,255,255,.95);
 
-  color:#2c3550;
+  color:#303850;
 
-  box-shadow:
-    0 4px 11px
-    rgba(0,0,0,.08);
-
-  font-size:10px;
+  font-size:9.5px;
 
   font-weight:950;
-
-  line-height:1.25;
-
-  text-align:center;
 
   overflow-wrap:anywhere;
 }
@@ -1002,61 +1349,42 @@ button{
 .basket{
   position:absolute;
 
-  z-index:8;
+  z-index:7;
 
   left:50%;
 
-  bottom:13px;
-
-  width:130px;
-
-  height:63px;
+  bottom:11px;
 
   transform:
     translateX(-50%);
 
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  font-size:65px;
-
-  filter:
-    drop-shadow(
-      0 7px 5px
-      rgba(0,0,0,.15)
-    );
+  font-size:64px;
 }
 
-.catch-controls{
+.mobile-controls{
   display:flex;
 
   justify-content:center;
 
-  gap:12px;
+  gap:10px;
 
-  margin-top:10px;
+  margin-top:8px;
 }
 
-.catch-controls button{
+.mobile-controls button{
   width:110px;
 
-  padding:
-    10px;
+  padding:9px;
 
   border:
     1px solid
-    #dadde6;
+    var(--line);
 
-  border-radius:10px;
+  border-radius:9px;
 
   background:#fff;
 
-  color:#453477;
-
-  font-size:17px;
+  color:#513b83;
 
   font-weight:950;
 }
@@ -1069,33 +1397,32 @@ button{
 .feedback{
   position:fixed;
 
-  z-index:100;
+  z-index:110;
+
+  top:100px;
 
   left:50%;
-
-  top:110px;
 
   transform:
     translateX(-50%)
     translateY(-10px);
 
   padding:
-    9px 15px;
+    8px 14px;
 
   border-radius:999px;
 
   color:#fff;
 
-  font-size:12px;
+  font-size:11px;
 
   font-weight:950;
 
-  pointer-events:none;
-
   opacity:0;
 
-  transition:
-    .18s ease;
+  pointer-events:none;
+
+  transition:.16s;
 }
 
 .feedback.show{
@@ -1130,10 +1457,10 @@ button{
 
   place-items:center;
 
-  padding:18px;
+  padding:17px;
 
   background:
-    rgba(19,13,48,.68);
+    rgba(18,12,46,.68);
 
   backdrop-filter:
     blur(5px);
@@ -1142,7 +1469,7 @@ button{
 .result{
   width:
     min(
-      560px,
+      540px,
       100%
     );
 
@@ -1150,42 +1477,34 @@ button{
 
   overflow:auto;
 
-  padding:23px;
+  padding:21px;
 
-  border-radius:20px;
+  border-radius:19px;
 
   background:#fff;
-
-  box-shadow:
-    0 25px 80px
-    rgba(15,10,45,.32);
 }
 
 .result-icon{
   text-align:center;
 
-  font-size:58px;
+  font-size:52px;
 }
 
 .result h2{
   margin:
-    5px 0;
+    3px 0 6px;
 
-  color:#23154e;
+  color:#24164e;
 
   text-align:center;
-
-  font-size:25px;
 }
 
 .result-score{
+  color:#5b40b1;
+
   text-align:center;
 
-  color:#5b40b4;
-
-  font-size:45px;
-
-  line-height:1;
+  font-size:43px;
 
   font-weight:950;
 }
@@ -1198,17 +1517,17 @@ button{
 
   gap:7px;
 
-  margin-top:17px;
+  margin-top:15px;
 }
 
 .result-stat{
-  padding:10px;
+  padding:9px;
 
   border:
     1px solid
     var(--line);
 
-  border-radius:10px;
+  border-radius:9px;
 
   text-align:center;
 }
@@ -1216,9 +1535,9 @@ button{
 .result-stat small{
   display:block;
 
-  color:#9298a5;
+  color:#949aa7;
 
-  font-size:8px;
+  font-size:7.5px;
 
   font-weight:950;
 
@@ -1230,43 +1549,41 @@ button{
 
   margin-top:2px;
 
-  color:#2b3350;
-
-  font-size:16px;
+  font-size:15px;
 }
 
 .review-title{
   margin:
-    18px 0 7px;
+    16px 0 7px;
 
-  color:#4c5263;
+  color:#687082;
 
-  font-size:10px;
+  font-size:9px;
 
   font-weight:950;
 
   text-transform:uppercase;
 }
 
-.review-words{
+.review-chips{
   display:flex;
 
   flex-wrap:wrap;
 
-  gap:6px;
+  gap:5px;
 }
 
 .review-chip{
   padding:
-    6px 9px;
+    5px 8px;
 
   border-radius:999px;
 
-  background:#fff1f3;
+  background:#fff0f2;
 
-  color:#a52e40;
+  color:#a73041;
 
-  font-size:9px;
+  font-size:8.5px;
 
   font-weight:900;
 }
@@ -1277,16 +1594,15 @@ button{
   grid-template-columns:
     1fr 1fr;
 
-  gap:8px;
+  gap:7px;
 
-  margin-top:18px;
+  margin-top:17px;
 }
 
 .result-actions button{
-  padding:
-    11px;
+  padding:10px;
 
-  border-radius:10px;
+  border-radius:9px;
 
   font-weight:950;
 }
@@ -1294,11 +1610,11 @@ button{
 .secondary{
   border:
     1px solid
-    #dadde6;
+    var(--line);
 
   background:#fff;
 
-  color:#554576;
+  color:#584676;
 }
 
 .primary{
@@ -1307,8 +1623,8 @@ button{
   background:
     linear-gradient(
       135deg,
-      #452599,
-      #7655d9
+      #432593,
+      #7654d5
     );
 
   color:#fff;
@@ -1316,17 +1632,35 @@ button{
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
-@media(max-width:760px){
+@media(max-width:1000px){
+
+  .category-grid,
+  .topic-grid{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+}
+
+
+@media(max-width:700px){
 
   .student{
     display:none;
   }
 
+  .category-grid,
+  .topic-grid,
   .game-grid{
     grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:
+      repeat(2,1fr);
   }
 
   .hud{
@@ -1334,91 +1668,73 @@ button{
       repeat(3,1fr);
   }
 
-  .hud-card:nth-child(4),
-  .hud-card:nth-child(5){
-    grid-column:auto;
-  }
-
   .whack-board{
-    gap:6px;
+    padding:7px;
 
-    padding:9px;
-
-    min-height:470px;
+    gap:5px;
   }
 
   .hole{
-    min-height:135px;
+    min-height:130px;
   }
 
   .mole{
     width:98%;
 
-    min-height:100px;
-
     padding:
-      8px 4px 14px;
+      7px 3px 12px;
   }
 
-  .mole-face{
-    font-size:31px;
+  .mole .face{
+    font-size:29px;
   }
 
-  .catch-game-area{
-    height:510px;
+  .mole .word-label{
+    font-size:8.5px;
   }
 
-  .fruit{
-    width:105px;
+  .word-row{
+    grid-template-columns:
+      1fr 1fr;
   }
 
-  .fruit-word{
-    max-width:104px;
+  .word-status{
+    grid-column:
+      1 / -1;
 
-    font-size:9px;
+    justify-self:start;
   }
 
-  .basket{
-    width:105px;
-
-    font-size:58px;
+  .collection-head{
+    display:block;
   }
 
 }
 
 
-@media(max-width:500px){
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
 
-  .logo span:last-child{
+@media(max-width:480px){
+
+  .logo span{
     display:none;
   }
 
   .hero{
     padding:
-      24px 20px;
+      23px 19px;
   }
 
-  .hud{
-    gap:5px;
-  }
-
-  .hud-card{
-    padding:
-      8px 5px;
-  }
-
-  .hud-value{
-    font-size:14px;
-  }
-
-  .result-stats{
-    grid-template-columns:
-      repeat(2,1fr);
+  .catch-area{
+    height:500px;
   }
 
 }
 </style>
 </head>
+
 
 <body>
 
@@ -1427,13 +1743,13 @@ button{
      TOP
 ========================================================= -->
 
-<header class="top">
+<header class="topbar">
 
   <div class="top-inner">
 
     <a
-      href="../"
       class="back"
+      href="../"
     >
       ← Luyện tập
     </a>
@@ -1446,7 +1762,7 @@ button{
       </div>
 
       <span>
-        Vocabulary Arcade
+        Vocabulary Practice
       </span>
 
     </div>
@@ -1476,85 +1792,250 @@ button{
   <section class="hero">
 
     <div class="eyebrow">
-      VOCABULARY GAME
+      VOCABULARY PRACTICE
     </div>
 
 
     <h1>
-      Học từ vựng bằng game
+      Học từ vựng qua game
     </h1>
 
 
     <p>
-      Một bộ từ – nhiều trò chơi.
-      Chọn game em thích, ghi điểm cao và ôn lại
-      những từ mình thường xuyên trả lời sai.
+      Chọn kỹ năng hoặc chủ đề em muốn luyện.
+      Hệ thống sẽ tự ghi nhớ những từ đã thuộc,
+      những từ đang học và những từ thường xuyên trả lời sai.
     </p>
 
   </section>
 
 
-  <!-- SETTINGS -->
+  <!-- REVIEW -->
 
-  <section class="settings">
+  <section
+    class="review-banner"
+    id="reviewBanner"
+  >
 
-    <div class="setting">
+    <div class="review-main">
 
-      <label>
-        Bộ từ vựng
-      </label>
-
-
-      <select
-        id="setSelect"
-        onchange="updateSetInfo()"
-      ></select>
-
-    </div>
+      <div class="review-icon">
+        🔥
+      </div>
 
 
-    <div class="setting">
+      <div>
 
-      <label>
-        Kiểu câu hỏi
-      </label>
+        <b>
+          Từ cần ôn của tôi
+        </b>
 
+        <span id="reviewSummary">
+          Chưa có từ cần ôn.
+        </span>
 
-      <select id="directionSelect">
-
-        <option value="vi-en">
-          Tiếng Việt → English
-        </option>
-
-        <option value="en-vi">
-          English → Tiếng Việt
-        </option>
-
-      </select>
+      </div>
 
     </div>
 
 
-    <div
-      class="setting-info"
-      id="setInfo"
+    <button
+      class="review-btn"
+      id="reviewButton"
+      onclick="openReviewCollection()"
     >
-      20 từ
+      Ôn ngay →
+    </button>
+
+  </section>
+
+
+  <!-- SKILLS -->
+
+  <div class="section-head">
+
+    <h2>
+      Chọn nội dung
+    </h2>
+
+    <p>
+      % Mastered được tính từ lịch sử học của từng học sinh trên thiết bị này.
+    </p>
+
+  </div>
+
+
+  <section
+    class="category-grid"
+    id="categoryGrid"
+  ></section>
+
+</main>
+
+
+<!-- =========================================================
+     TOPICS SCREEN
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="topicsScreen"
+>
+
+  <div class="collection-head">
+
+    <div class="collection-left">
+
+      <button
+        class="collection-back"
+        onclick="showHome()"
+      >
+        ← Vocabulary
+      </button>
+
+
+      <h1>
+        🌍 Chủ đề
+      </h1>
+
+
+      <p>
+        Chọn một chủ đề để luyện từ vựng.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="topic-grid"
+    id="topicGrid"
+  ></div>
+
+</main>
+
+
+<!-- =========================================================
+     COLLECTION SCREEN
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="collectionScreen"
+>
+
+  <div class="collection-head">
+
+    <div class="collection-left">
+
+      <button
+        class="collection-back"
+        id="collectionBack"
+        onclick="showHome()"
+      >
+        ← Vocabulary
+      </button>
+
+
+      <h1 id="collectionTitle">
+        Reading
+      </h1>
+
+
+      <p id="collectionSubtitle"></p>
+
+    </div>
+
+  </div>
+
+
+  <section class="stats">
+
+    <div class="stat">
+
+      <small>
+        Total
+      </small>
+
+      <b id="statTotal">
+        0
+      </b>
+
+    </div>
+
+
+    <div class="stat">
+
+      <small>
+        Mastered
+      </small>
+
+      <b id="statMastered">
+        0
+      </b>
+
+    </div>
+
+
+    <div class="stat">
+
+      <small>
+        Learning
+      </small>
+
+      <b id="statLearning">
+        0
+      </b>
+
+    </div>
+
+
+    <div class="stat">
+
+      <small>
+        New
+      </small>
+
+      <b id="statNew">
+        0
+      </b>
+
     </div>
 
   </section>
 
 
-  <!-- GAMES -->
+  <section class="game-settings">
 
-  <div class="section-title">
+    <span>
+      Chọn chiều luyện
+    </span>
+
+
+    <select id="directionSelect">
+
+      <option value="vi-en">
+        Tiếng Việt → English
+      </option>
+
+      <option value="en-vi">
+        English → Tiếng Việt
+      </option>
+
+    </select>
+
+  </section>
+
+
+  <div class="section-head">
 
     <h2>
       Chọn game
     </h2>
 
     <p>
-      Điểm cao nhất được lưu ngay trên thiết bị.
+      Từ hay sai sẽ tự xuất hiện thường xuyên hơn trong game.
     </p>
 
   </div>
@@ -1565,9 +2046,9 @@ button{
 
     <!-- WHACK -->
 
-    <article class="game-card whack">
+    <article class="game-card">
 
-      <div class="game-emoji">
+      <div class="game-icon">
         🐹
       </div>
 
@@ -1578,43 +2059,26 @@ button{
 
 
       <p>
-        Đập đúng con chuột đang mang từ phù hợp với câu hỏi.
-        Càng trả lời liên tiếp chính xác, combo càng cao.
+        Đập đúng con chuột mang từ tương ứng.
+        Trả lời liên tiếp chính xác để tăng combo.
       </p>
 
 
-      <div class="game-meta">
-
-        <span>
-          ⏱ 45 giây
-        </span>
-
-        <span>
-          ❤️ 5 mạng
-        </span>
-
-        <span id="whackBest">
-          🏆 Best: 0
-        </span>
-
-      </div>
-
-
       <button
-        class="play"
+        class="game-play"
         onclick="startWhack()"
       >
-        Chơi ngay →
+        Chơi →
       </button>
 
     </article>
 
 
-    <!-- CATCH -->
+    <!-- CATCHER -->
 
-    <article class="game-card catch">
+    <article class="game-card">
 
-      <div class="game-emoji">
+      <div class="game-icon">
         🍎
       </div>
 
@@ -1625,38 +2089,40 @@ button{
 
 
       <p>
-        Di chuyển chiếc giỏ để hứng đúng từ đang rơi.
-        Tránh hứng những đáp án gây nhiễu.
+        Điều khiển chiếc giỏ để hứng đúng từ
+        và tránh những đáp án gây nhiễu.
       </p>
 
 
-      <div class="game-meta">
-
-        <span>
-          ⏱ 60 giây
-        </span>
-
-        <span>
-          ❤️ 5 mạng
-        </span>
-
-        <span id="catchBest">
-          🏆 Best: 0
-        </span>
-
-      </div>
-
-
       <button
-        class="play"
+        class="game-play"
         onclick="startCatcher()"
       >
-        Chơi ngay →
+        Chơi →
       </button>
 
     </article>
 
   </section>
+
+
+  <!-- WORD LIST -->
+
+  <div class="section-head">
+
+    <h2>
+      Từ trong mục này
+    </h2>
+
+    <p id="wordListDescription"></p>
+
+  </div>
+
+
+  <section
+    class="word-list"
+    id="wordList"
+  ></section>
 
 </main>
 
@@ -1672,21 +2138,13 @@ button{
 
   <div class="game-header">
 
-    <div class="game-title">
-
-      <h2>
-        🐹 Whack a Word
-      </h2>
-
-      <p>
-        Đập đúng từ trước khi chuột biến mất.
-      </p>
-
-    </div>
+    <h2>
+      🐹 Whack a Word
+    </h2>
 
 
     <button
-      class="quit-btn"
+      class="quit"
       onclick="quitGame()"
     >
       ✕ Thoát
@@ -1697,114 +2155,96 @@ button{
 
   <div class="hud">
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Score
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="whackScore"
-      >
+      <b id="whackScore">
         0
-      </div>
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Time
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="whackTime"
-      >
+      <b id="whackTime">
         45
-      </div>
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Lives
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="whackLives"
-      >
-        ❤️❤️❤️❤️❤️
-      </div>
+      <b id="whackLives">
+        5
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Combo
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="whackCombo"
-      >
+      <b id="whackCombo">
         x0
-      </div>
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Accuracy
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="whackAccuracy"
-      >
+      <b id="whackAccuracy">
         0%
-      </div>
+      </b>
 
     </div>
 
   </div>
 
 
-  <div class="target">
+  <section class="target">
 
-    <div class="target-label">
+    <small>
       Đập từ tương ứng
-    </div>
+    </small>
 
-    <div
-      class="target-word"
-      id="whackTarget"
-    >
+    <b id="whackTarget">
       —
-    </div>
+    </b>
 
-  </div>
+  </section>
 
 
-  <div
+  <section
     class="whack-board"
     id="whackBoard"
-  ></div>
+  ></section>
 
 </main>
 
 
 <!-- =========================================================
-     FRUIT CATCHER
+     CATCHER
 ========================================================= -->
 
 <main
@@ -1814,21 +2254,13 @@ button{
 
   <div class="game-header">
 
-    <div class="game-title">
-
-      <h2>
-        🍎 Word Catcher
-      </h2>
-
-      <p>
-        Dùng ← → hoặc kéo/ngón tay để di chuyển giỏ.
-      </p>
-
-    </div>
+    <h2>
+      🍎 Word Catcher
+    </h2>
 
 
     <button
-      class="quit-btn"
+      class="quit"
       onclick="quitGame()"
     >
       ✕ Thoát
@@ -1839,114 +2271,96 @@ button{
 
   <div class="hud">
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Score
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="catchScore"
-      >
+      <b id="catchScore">
         0
-      </div>
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Time
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="catchTime"
-      >
+      <b id="catchTime">
         60
-      </div>
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Lives
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="catchLives"
-      >
-        ❤️❤️❤️❤️❤️
-      </div>
+      <b id="catchLives">
+        5
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Combo
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="catchCombo"
-      >
+      <b id="catchCombo">
         x0
-      </div>
+      </b>
 
     </div>
 
 
-    <div class="hud-card">
+    <div class="hud-box">
 
-      <div class="hud-label">
+      <small>
         Accuracy
-      </div>
+      </small>
 
-      <div
-        class="hud-value"
-        id="catchAccuracy"
-      >
+      <b id="catchAccuracy">
         0%
-      </div>
+      </b>
 
     </div>
 
   </div>
 
 
-  <div class="target">
+  <section class="target">
 
-    <div class="target-label">
+    <small>
       Hứng từ tương ứng
-    </div>
+    </small>
 
-    <div
-      class="target-word"
-      id="catchTarget"
-    >
+    <b id="catchTarget">
       —
-    </div>
+    </b>
 
-  </div>
+  </section>
 
 
-  <div
-    class="catch-game-area"
+  <section
+    class="catch-area"
     id="catchArea"
   >
 
-    <div class="cloud one">
+    <div class="cloud a">
       ☁️
     </div>
 
-    <div class="cloud two">
+    <div class="cloud b">
       ☁️
     </div>
 
@@ -1958,19 +2372,19 @@ button{
       🧺
     </div>
 
-  </div>
+  </section>
 
 
-  <div class="catch-controls">
+  <div class="mobile-controls">
 
     <button
-      onpointerdown="moveBasket(-1)"
+      onclick="moveBasket(-1)"
     >
       ←
     </button>
 
     <button
-      onpointerdown="moveBasket(1)"
+      onclick="moveBasket(1)"
     >
       →
     </button>
@@ -1985,10 +2399,9 @@ button{
 ========================================================= -->
 
 <div
-  class="feedback"
   id="feedback"
->
-</div>
+  class="feedback"
+></div>
 
 
 <!-- =========================================================
@@ -1996,8 +2409,8 @@ button{
 ========================================================= -->
 
 <div
-  class="overlay hidden"
   id="resultOverlay"
+  class="overlay hidden"
 >
 
   <div class="result">
@@ -2011,7 +2424,7 @@ button{
 
 
     <h2 id="resultTitle">
-      Hoàn thành!
+      Hoàn thành
     </h2>
 
 
@@ -2023,7 +2436,7 @@ button{
     </div>
 
 
-    <div class="result-stats">
+    <section class="result-stats">
 
       <div class="result-stat">
 
@@ -2054,7 +2467,7 @@ button{
       <div class="result-stat">
 
         <small>
-          Best combo
+          Best Combo
         </small>
 
         <b id="resultCombo">
@@ -2063,46 +2476,7 @@ button{
 
       </div>
 
-
-      <div class="result-stat">
-
-        <small>
-          Attempts
-        </small>
-
-        <b id="resultAttempts">
-          0
-        </b>
-
-      </div>
-
-
-      <div class="result-stat">
-
-        <small>
-          High score
-        </small>
-
-        <b id="resultBest">
-          0
-        </b>
-
-      </div>
-
-
-      <div class="result-stat">
-
-        <small>
-          Set
-        </small>
-
-        <b id="resultSet">
-          —
-        </b>
-
-      </div>
-
-    </div>
+    </section>
 
 
     <div class="review-title">
@@ -2111,8 +2485,8 @@ button{
 
 
     <div
-      class="review-words"
-      id="reviewWords"
+      class="review-chips"
+      id="resultReview"
     ></div>
 
 
@@ -2120,7 +2494,7 @@ button{
 
       <button
         class="secondary"
-        onclick="returnHome()"
+        onclick="backToCollection()"
       >
         ← Chọn game
       </button>
@@ -2143,405 +2517,205 @@ button{
 <script>
 
 /* =========================================================
-   VOCABULARY DATA
-
-   Muốn đổi/thêm từ chỉ sửa phần này.
+   META
 ========================================================= */
 
-const VOCAB_SETS = {
+const SKILL_META = {
 
-  education:{
+  reading:{
+    title:"Reading",
+    icon:"📖"
+  },
 
-    name:
-    'Education',
+  listening:{
+    title:"Listening",
+    icon:"🎧"
+  },
 
-    words:[
+  "speaking-part-1":{
+    title:"Speaking Part 1",
+    icon:"🗣️"
+  },
 
-      {
-        word:'curriculum',
-        meaning:'chương trình học'
-      },
+  "speaking-part-2":{
+    title:"Speaking Part 2",
+    icon:"🗣️"
+  },
 
-      {
-        word:'compulsory',
-        meaning:'bắt buộc'
-      },
+  "speaking-part-3":{
+    title:"Speaking Part 3",
+    icon:"💬"
+  },
 
-      {
-        word:'tuition',
-        meaning:'học phí'
-      },
+  "writing-task-1":{
+    title:"Writing Task 1",
+    icon:"📊"
+  },
 
-      {
-        word:'scholarship',
-        meaning:'học bổng'
-      },
-
-      {
-        word:'literacy',
-        meaning:'khả năng đọc và viết'
-      },
-
-      {
-        word:'assessment',
-        meaning:'sự đánh giá'
-      },
-
-      {
-        word:'academic',
-        meaning:'thuộc học thuật'
-      },
-
-      {
-        word:'graduate',
-        meaning:'tốt nghiệp'
-      },
-
-      {
-        word:'undergraduate',
-        meaning:'sinh viên đại học'
-      },
-
-      {
-        word:'vocational',
-        meaning:'thuộc đào tạo nghề'
-      },
-
-      {
-        word:'qualification',
-        meaning:'bằng cấp, chứng chỉ'
-      },
-
-      {
-        word:'discipline',
-        meaning:'kỷ luật'
-      },
-
-      {
-        word:'attendance',
-        meaning:'sự chuyên cần'
-      },
-
-      {
-        word:'assignment',
-        meaning:'bài tập được giao'
-      },
-
-      {
-        word:'lecture',
-        meaning:'bài giảng'
-      },
-
-      {
-        word:'seminar',
-        meaning:'hội thảo học thuật'
-      },
-
-      {
-        word:'enroll',
-        meaning:'đăng ký nhập học'
-      },
-
-      {
-        word:'educator',
-        meaning:'nhà giáo'
-      },
-
-      {
-        word:'achievement',
-        meaning:'thành tích'
-      },
-
-      {
-        word:'knowledge',
-        meaning:'kiến thức'
-      }
-
-    ]
-
+  "writing-task-2":{
+    title:"Writing Task 2",
+    icon:"✍️"
   }
 
 };
 
 
+const TOPIC_LABELS = {
+
+  education:"Education",
+
+  environment:"Environment",
+
+  technology:"Technology",
+
+  health:"Health",
+
+  work:"Work",
+
+  business:"Business",
+
+  money:"Money",
+
+  family:"Family",
+
+  relationships:"Relationships",
+
+  travel:"Travel",
+
+  experience:"Experience",
+
+  places:"Places",
+
+  transport:"Transport",
+
+  cities:"Cities",
+
+  lifestyle:"Lifestyle",
+
+  food:"Food",
+
+  data:"Data & Trends"
+
+};
+
+
 /* =========================================================
-   CONFIG
+   STORAGE
 ========================================================= */
 
-const HISTORY_KEY =
-'VOCABULARY_ARCADE_HISTORY_V1';
+const WORD_STATS_KEY =
+"VOCABULARY_WORD_STATS_V1";
 
 
-const BEST_KEY =
-'VOCABULARY_ARCADE_BEST_V1';
-
-
-const FRUITS =
-[
-  '🍎',
-  '🍊',
-  '🍋',
-  '🍐',
-  '🍑',
-  '🍓',
-  '🥝',
-  '🍇'
-];
+const GAME_HISTORY_KEY =
+"VOCABULARY_GAME_HISTORY_V1";
 
 
 /* =========================================================
-   GLOBAL STATE
+   STATE
 ========================================================= */
 
-let currentGame =
-null;
+let currentCollection = [];
 
+let currentCollectionType = "";
 
-let lastGame =
-null;
+let currentCollectionKey = "";
 
+let currentCollectionTitle = "";
 
-let gameWords =
-[];
+let currentGame = "";
 
+let lastGame = "";
 
-let gameDirection =
-'vi-en';
+let gameDirection = "vi-en";
 
+let score = 0;
 
-let score =
-0;
+let lives = 5;
 
+let combo = 0;
 
-let lives =
-5;
+let bestCombo = 0;
 
+let correct = 0;
 
-let combo =
-0;
+let wrong = 0;
 
+let attempts = 0;
 
-let bestCombo =
-0;
+let reviewMap = {};
 
+let currentTarget = null;
 
-let correct =
-0;
+let gameEnded = false;
 
+let gameTimer = null;
 
-let wrong =
-0;
-
-
-let attempts =
-0;
-
-
-let reviewMap =
-{};
-
-
-let currentTarget =
-null;
-
-
-let gameTimer =
-null;
-
-
-let roundTimer =
-null;
-
-
-let gameEnded =
-false;
+let roundTimer = null;
 
 
 /* CATCHER */
 
-let catchAnimation =
-null;
+let fruits = [];
 
+let basketX = 50;
 
-let fruitObjects =
-[];
+let catcherAnimation = null;
 
+let lastFrame = 0;
 
-let basketX =
-50;
-
-
-let catcherRoundChanging =
-false;
-
-
-let lastFrameTime =
-0;
+let changingRound = false;
 
 
 /* =========================================================
-   INIT
+   BASIC HELPERS
 ========================================================= */
 
-function init(){
+function $(id){
 
-  populateSets();
-
-
-  loadStudent();
-
-
-  updateSetInfo();
-
-
-  updateBestScores();
-
-}
-
-
-function populateSets(){
-
-  const select =
-  document.getElementById(
-    'setSelect'
+  return document.getElementById(
+    id
   );
 
+}
 
-  select.innerHTML =
-  Object.entries(
-    VOCAB_SETS
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
   )
-  .map(
-    ([key,set]) =>
-    `
-      <option value="${key}">
-        ${set.name}
-      </option>
-    `
-  )
-  .join('');
+  .replace(
 
-}
+    /[&<>"']/g,
 
+    character => ({
 
-function loadStudent(){
+      "&":"&amp;",
 
-  try{
+      "<":"&lt;",
 
-    const student =
-    JSON.parse(
+      ">":"&gt;",
 
-      localStorage.getItem(
-        'IELTS_PRACTICE_STUDENT'
-      )
+      '"':"&quot;",
 
-      ||
+      "'":"&#39;"
 
-      'null'
+    })[character]
 
-    );
-
-
-    if(
-      student?.name
-      &&
-      student?.className
-    ){
-
-      document
-      .getElementById(
-        'studentInfo'
-      )
-      .textContent =
-      `${student.name} · ${student.className}`;
-
-    }
-
-  }
-
-  catch(e){}
-
-}
-
-
-function getCurrentSet(){
-
-  const key =
-  document
-  .getElementById(
-    'setSelect'
-  )
-  .value;
-
-
-  return{
-    key:key,
-    ...VOCAB_SETS[key]
-  };
-
-}
-
-
-function updateSetInfo(){
-
-  const set =
-  getCurrentSet();
-
-
-  document
-  .getElementById(
-    'setInfo'
-  )
-  .textContent =
-  `${set.words.length} từ · ${set.name}`;
-
-}
-
-
-/* =========================================================
-   WORD HELPERS
-========================================================= */
-
-function getPrompt(item){
-
-  return gameDirection ===
-  'vi-en'
-
-  ?
-
-  item.meaning
-
-  :
-
-  item.word;
-
-}
-
-
-function getAnswer(item){
-
-  return gameDirection ===
-  'vi-en'
-
-  ?
-
-  item.word
-
-  :
-
-  item.meaning;
+  );
 
 }
 
 
 function shuffle(array){
 
-  const arr =
+  const result =
   [...array];
 
 
   for(
-    let i=arr.length-1;
+    let i=result.length-1;
     i>0;
     i--
   ){
@@ -2557,19 +2731,19 @@ function shuffle(array){
 
 
     [
-      arr[i],
-      arr[j]
+      result[i],
+      result[j]
     ]
     =
     [
-      arr[j],
-      arr[i]
+      result[j],
+      result[i]
     ];
 
   }
 
 
-  return arr;
+  return result;
 
 }
 
@@ -2587,18 +2761,1184 @@ function randomItem(array){
 }
 
 
-function getOptions(
+function titleCase(value){
+
+  return String(
+    value
+  )
+  .split("-")
+  .map(
+    part =>
+    part.charAt(0)
+    .toUpperCase()
+    +
+    part.slice(1)
+  )
+  .join(" ");
+
+}
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function loadStudent(){
+
+  try{
+
+    const student =
+    JSON.parse(
+
+      localStorage.getItem(
+        "IELTS_PRACTICE_STUDENT"
+      )
+
+      ||
+
+      "null"
+
+    );
+
+
+    if(
+      student?.name
+      &&
+      student?.className
+    ){
+
+      $("studentInfo")
+      .textContent =
+      `${student.name} · ${student.className}`;
+
+    }
+
+  }
+
+  catch(error){}
+
+}
+
+
+/* =========================================================
+   WORD ID
+========================================================= */
+
+function wordId(word){
+
+  return String(
+    word.word
+  )
+  .trim()
+  .toLowerCase();
+
+}
+
+
+/* =========================================================
+   WORD STATS
+========================================================= */
+
+function readStats(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        WORD_STATS_KEY
+      )
+
+      ||
+
+      "{}"
+
+    );
+
+  }
+
+  catch(error){
+
+    return {};
+
+  }
+
+}
+
+
+function writeStats(stats){
+
+  localStorage.setItem(
+
+    WORD_STATS_KEY,
+
+    JSON.stringify(
+      stats
+    )
+
+  );
+
+}
+
+
+function getWordStats(word){
+
+  const stats =
+  readStats();
+
+
+  return stats[
+    wordId(word)
+  ]
+  ||
+  {
+    seen:0,
+    correct:0,
+    wrong:0
+  };
+
+}
+
+
+/* =========================================================
+   MASTERY RULE
+
+   New:
+   chưa gặp.
+
+   Learning:
+   đã gặp nhưng chưa đủ điều kiện.
+
+   Mastered:
+   gặp ít nhất 5 lần
+   và accuracy >= 80%.
+========================================================= */
+
+function wordStatus(word){
+
+  const stats =
+  getWordStats(
+    word
+  );
+
+
+  if(
+    !stats.seen
+  ){
+
+    return "new";
+
+  }
+
+
+  const accuracy =
+  stats.correct
+  /
+  stats.seen;
+
+
+  if(
+    stats.seen >= 5
+    &&
+    accuracy >= .8
+  ){
+
+    return "mastered";
+
+  }
+
+
+  return "learning";
+
+}
+
+
+function registerWordResult(
+  word,
+  isCorrect
+){
+
+  const stats =
+  readStats();
+
+
+  const id =
+  wordId(
+    word
+  );
+
+
+  const current =
+  stats[id]
+  ||
+  {
+    seen:0,
+    correct:0,
+    wrong:0
+  };
+
+
+  current.seen++;
+
+
+  if(isCorrect){
+
+    current.correct++;
+
+  }
+
+  else{
+
+    current.wrong++;
+
+  }
+
+
+  current.lastSeen =
+  new Date()
+  .toISOString();
+
+
+  stats[id] =
+  current;
+
+
+  writeStats(
+    stats
+  );
+
+}
+
+
+/* =========================================================
+   REVIEW WORDS
+========================================================= */
+
+function getReviewWords(){
+
+  return VOCABULARY_DATA
+  .filter(
+    word => {
+
+      const stats =
+      getWordStats(
+        word
+      );
+
+
+      if(
+        stats.wrong < 1
+      ){
+
+        return false;
+
+      }
+
+
+      if(
+        !stats.seen
+      ){
+
+        return false;
+
+      }
+
+
+      return(
+        stats.correct
+        /
+        stats.seen
+        <
+        .8
+      );
+
+    }
+  )
+  .sort(
+    (
+      a,
+      b
+    ) => {
+
+      return(
+        getWordStats(b).wrong
+        -
+        getWordStats(a).wrong
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   COLLECTION STATS
+========================================================= */
+
+function collectionStats(words){
+
+  const result =
+  {
+    total:
+      words.length,
+
+    mastered:
+      0,
+
+    learning:
+      0,
+
+    new:
+      0
+  };
+
+
+  words.forEach(
+    word => {
+
+      result[
+        wordStatus(word)
+      ]++;
+
+    }
+  );
+
+
+  result.percent =
+  result.total
+
+  ?
+
+  Math.round(
+    result.mastered
+    /
+    result.total
+    *
+    100
+  )
+
+  :
+
+  0;
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   HOME CATEGORIES
+========================================================= */
+
+function renderCategories(){
+
+  const cards =
+  Object.entries(
+    SKILL_META
+  )
+  .map(
+    (
+      [
+        key,
+        meta
+      ]
+    ) => {
+
+      const words =
+      VOCABULARY_DATA
+      .filter(
+        word =>
+        (
+          word.skills
+          ||
+          []
+        )
+        .includes(
+          key
+        )
+      );
+
+
+      const stats =
+      collectionStats(
+        words
+      );
+
+
+      return`
+        <button
+          class="category"
+          onclick="openSkill('${key}')"
+        >
+
+          <div class="category-icon">
+            ${meta.icon}
+          </div>
+
+
+          <h3>
+            ${meta.title}
+          </h3>
+
+
+          <div class="category-count">
+            ${words.length} từ
+          </div>
+
+
+          <div class="mastery-line">
+
+            <div class="mastery-row">
+
+              <span>
+                Mastered
+              </span>
+
+              <strong>
+                ${stats.percent}%
+              </strong>
+
+            </div>
+
+
+            <div class="mastery-bar">
+
+              <i
+                style="width:${stats.percent}%"
+              ></i>
+
+            </div>
+
+          </div>
+
+        </button>
+      `;
+
+    }
+  );
+
+
+  /*
+   * TOPICS
+   */
+
+  const topicStats =
+  collectionStats(
+    VOCABULARY_DATA.filter(
+      word =>
+      Array.isArray(word.topics)
+      &&
+      word.topics.length
+    )
+  );
+
+
+  cards.push(
+    `
+      <button
+        class="category"
+        onclick="openTopics()"
+      >
+
+        <div class="category-icon">
+          🌍
+        </div>
+
+
+        <h3>
+          Chủ đề
+        </h3>
+
+
+        <div class="category-count">
+          Environment · Education · Technology · ...
+        </div>
+
+
+        <div class="mastery-line">
+
+          <div class="mastery-row">
+
+            <span>
+              Mastered
+            </span>
+
+            <strong>
+              ${topicStats.percent}%
+            </strong>
+
+          </div>
+
+
+          <div class="mastery-bar">
+
+            <i
+              style="width:${topicStats.percent}%"
+            ></i>
+
+          </div>
+
+        </div>
+
+      </button>
+    `
+  );
+
+
+  $("categoryGrid")
+  .innerHTML =
+  cards.join("");
+
+
+  renderReviewBanner();
+
+}
+
+
+/* =========================================================
+   REVIEW BANNER
+========================================================= */
+
+function renderReviewBanner(){
+
+  const review =
+  getReviewWords();
+
+
+  $("reviewSummary")
+  .textContent =
+  review.length
+
+  ?
+
+  `${review.length} từ cần ôn lại`
+
+  :
+
+  "Chưa có từ cần ôn.";
+
+
+  $("reviewButton")
+  .disabled =
+  !review.length;
+
+
+  $("reviewButton")
+  .style
+  .opacity =
+  review.length
+  ?
+  "1"
+  :
+  ".45";
+
+}
+
+
+/* =========================================================
+   SCREEN CONTROL
+========================================================= */
+
+function hideAllScreens(){
+
+  [
+    "homeScreen",
+    "topicsScreen",
+    "collectionScreen",
+    "whackScreen",
+    "catchScreen"
+  ]
+  .forEach(
+    id => {
+
+      $(id)
+      .classList
+      .add(
+        "hidden"
+      );
+
+    }
+  );
+
+}
+
+
+function showHome(){
+
+  clearGame();
+
+
+  hideAllScreens();
+
+
+  $("homeScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  renderCategories();
+
+}
+
+
+/* =========================================================
+   OPEN SKILL
+========================================================= */
+
+function openSkill(key){
+
+  const meta =
+  SKILL_META[key];
+
+
+  const words =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    (
+      word.skills
+      ||
+      []
+    )
+    .includes(
+      key
+    )
+  );
+
+
+  openCollection(
+    words,
+    "skill",
+    key,
+    `${meta.icon} ${meta.title}`,
+    "Từ vựng dành cho kỹ năng này."
+  );
+
+}
+
+
+/* =========================================================
+   TOPICS
+========================================================= */
+
+function openTopics(){
+
+  hideAllScreens();
+
+
+  $("topicsScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  renderTopics();
+
+}
+
+
+function renderTopics(){
+
+  const topicMap =
+  {};
+
+
+  VOCABULARY_DATA
+  .forEach(
+    word => {
+
+      (
+        word.topics
+        ||
+        []
+      )
+      .forEach(
+        topic => {
+
+          if(
+            !topicMap[topic]
+          ){
+
+            topicMap[topic] =
+            [];
+
+          }
+
+
+          topicMap[topic]
+          .push(
+            word
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  $("topicGrid")
+  .innerHTML =
+  Object.entries(
+    topicMap
+  )
+  .sort(
+    (
+      a,
+      b
+    ) => {
+
+      return(
+        topicLabel(a[0])
+        .localeCompare(
+          topicLabel(b[0])
+        )
+      );
+
+    }
+  )
+  .map(
+    (
+      [
+        key,
+        words
+      ]
+    ) => {
+
+      const stats =
+      collectionStats(
+        words
+      );
+
+
+      return`
+        <button
+          class="topic-card"
+          onclick="openTopic('${key}')"
+        >
+
+          <b>
+            ${escapeHTML(topicLabel(key))}
+          </b>
+
+          <span>
+            ${words.length} từ · ${stats.percent}% mastered
+          </span>
+
+
+          <div class="topic-progress">
+
+            <i
+              style="width:${stats.percent}%"
+            ></i>
+
+          </div>
+
+        </button>
+      `;
+
+    }
+  )
+  .join("");
+
+}
+
+
+function topicLabel(key){
+
+  return(
+    TOPIC_LABELS[key]
+    ||
+    titleCase(key)
+  );
+
+}
+
+
+function openTopic(key){
+
+  const words =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    (
+      word.topics
+      ||
+      []
+    )
+    .includes(
+      key
+    )
+  );
+
+
+  openCollection(
+
+    words,
+
+    "topic",
+
+    key,
+
+    `🌍 ${topicLabel(key)}`,
+
+    "Từ vựng theo chủ đề."
+
+  );
+
+
+  $("collectionBack")
+  .onclick =
+  openTopics;
+
+
+  $("collectionBack")
+  .textContent =
+  "← Chủ đề";
+
+}
+
+
+/* =========================================================
+   REVIEW COLLECTION
+========================================================= */
+
+function openReviewCollection(){
+
+  const words =
+  getReviewWords();
+
+
+  if(!words.length){
+
+    return;
+
+  }
+
+
+  openCollection(
+
+    words,
+
+    "review",
+
+    "review",
+
+    "🔥 Từ cần ôn",
+
+    "Các từ em thường xuyên trả lời sai."
+
+  );
+
+}
+
+
+/* =========================================================
+   OPEN COLLECTION
+========================================================= */
+
+function openCollection(
+  words,
+  type,
+  key,
+  title,
+  subtitle
+){
+
+  if(
+    words.length < 4
+  ){
+
+    alert(
+      "Mục này cần ít nhất 4 từ để chơi game."
+    );
+
+    return;
+
+  }
+
+
+  currentCollection =
+  [...words];
+
+
+  currentCollectionType =
+  type;
+
+
+  currentCollectionKey =
+  key;
+
+
+  currentCollectionTitle =
+  title;
+
+
+  hideAllScreens();
+
+
+  $("collectionScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  $("collectionBack")
+  .onclick =
+  showHome;
+
+
+  $("collectionBack")
+  .textContent =
+  "← Vocabulary";
+
+
+  $("collectionTitle")
+  .textContent =
+  title;
+
+
+  $("collectionSubtitle")
+  .textContent =
+  subtitle;
+
+
+  renderCollectionStats();
+
+
+  renderWordList();
+
+}
+
+
+/* =========================================================
+   COLLECTION RENDER
+========================================================= */
+
+function renderCollectionStats(){
+
+  const stats =
+  collectionStats(
+    currentCollection
+  );
+
+
+  $("statTotal")
+  .textContent =
+  stats.total;
+
+
+  $("statMastered")
+  .textContent =
+  stats.mastered;
+
+
+  $("statLearning")
+  .textContent =
+  stats.learning;
+
+
+  $("statNew")
+  .textContent =
+  stats.new;
+
+
+  $("wordListDescription")
+  .textContent =
+  `${stats.percent}% từ trong mục này đã đạt trạng thái Mastered.`;
+
+}
+
+
+function renderWordList(){
+
+  $("wordList")
+  .innerHTML =
+  currentCollection
+  .map(
+    word => {
+
+      const status =
+      wordStatus(
+        word
+      );
+
+
+      const label =
+      status === "mastered"
+
+      ?
+
+      "✓ Mastered"
+
+      :
+
+      status === "learning"
+
+      ?
+
+      "◐ Learning"
+
+      :
+
+      "○ New";
+
+
+      return`
+        <div class="word-row">
+
+          <div class="word">
+            ${escapeHTML(word.word)}
+          </div>
+
+
+          <div class="meaning">
+            ${escapeHTML(word.meaning)}
+          </div>
+
+
+          <div
+            class="word-status ${status}"
+          >
+            ${label}
+          </div>
+
+        </div>
+      `;
+
+    }
+  )
+  .join("");
+
+}
+
+
+/* =========================================================
+   GAME WORD SELECTION
+
+   Adaptive:
+   - từ sai nhiều có trọng số cao hơn
+   - từ New cũng được ưu tiên
+========================================================= */
+
+function wordWeight(word){
+
+  const stats =
+  getWordStats(
+    word
+  );
+
+
+  if(
+    !stats.seen
+  ){
+
+    return 4;
+
+  }
+
+
+  return(
+    1
+    +
+    stats.wrong*2
+  );
+
+}
+
+
+function weightedRandomWord(){
+
+  const pool =
+  [];
+
+
+  currentCollection
+  .forEach(
+    word => {
+
+      const weight =
+      Math.min(
+        wordWeight(word),
+        12
+      );
+
+
+      for(
+        let i=0;
+        i<weight;
+        i++
+      ){
+
+        pool.push(
+          word
+        );
+
+      }
+
+    }
+  );
+
+
+  return randomItem(
+    pool
+  );
+
+}
+
+
+function currentPrompt(word){
+
+  return gameDirection ===
+  "vi-en"
+
+  ?
+
+  word.meaning
+
+  :
+
+  word.word;
+
+}
+
+
+function currentAnswer(word){
+
+  return gameDirection ===
+  "vi-en"
+
+  ?
+
+  word.word
+
+  :
+
+  word.meaning;
+
+}
+
+
+function gameOptions(
   target,
   count=4
 ){
 
-  const distractors =
+  const others =
   shuffle(
 
-    gameWords.filter(
-      item =>
-      item.word !==
-      target.word
+    currentCollection
+    .filter(
+      word =>
+      wordId(word)
+      !==
+      wordId(target)
     )
 
   )
@@ -2611,7 +3951,7 @@ function getOptions(
   return shuffle(
     [
       target,
-      ...distractors
+      ...others
     ]
   );
 
@@ -2619,7 +3959,7 @@ function getOptions(
 
 
 /* =========================================================
-   GAME COMMON
+   PREPARE GAME
 ========================================================= */
 
 function prepareGame(game){
@@ -2627,8 +3967,9 @@ function prepareGame(game){
   clearGame();
 
 
-  const set =
-  getCurrentSet();
+  gameDirection =
+  $("directionSelect")
+  .value;
 
 
   currentGame =
@@ -2637,18 +3978,6 @@ function prepareGame(game){
 
   lastGame =
   game;
-
-
-  gameWords =
-  [...set.words];
-
-
-  gameDirection =
-  document
-  .getElementById(
-    'directionSelect'
-  )
-  .value;
 
 
   score =
@@ -2691,98 +4020,37 @@ function prepareGame(game){
   false;
 
 
-  document
-  .getElementById(
-    'homeScreen'
-  )
-  .classList
-  .add(
-    'hidden'
-  );
-
-
-  document
-  .getElementById(
-    'whackScreen'
-  )
-  .classList
-  .add(
-    'hidden'
-  );
-
-
-  document
-  .getElementById(
-    'catchScreen'
-  )
-  .classList
-  .add(
-    'hidden'
-  );
+  hideAllScreens();
 
 }
 
 
-function loseLife(){
+/* =========================================================
+   COMMON SCORE
+========================================================= */
 
-  lives =
-  Math.max(
-    0,
-    lives-1
-  );
+function accuracy(){
 
+  return attempts
 
-  combo =
+  ?
+
+  Math.round(
+    correct
+    /
+    attempts
+    *
+    100
+  )
+
+  :
+
   0;
 
-
-  if(
-    lives<=0
-  ){
-
-    endGame();
-
-  }
-
 }
 
 
-function markReview(item){
-
-  if(!item){
-
-    return;
-
-  }
-
-
-  reviewMap[
-    item.word
-  ]
-  =
-  {
-    word:
-    item.word,
-
-    meaning:
-    item.meaning,
-
-    count:
-    (
-      reviewMap[
-        item.word
-      ]?.count
-      ||
-      0
-    )
-    +
-    1
-  };
-
-}
-
-
-function addCorrect(){
+function correctAnswer(word){
 
   correct++;
 
@@ -2814,12 +4082,16 @@ function addCorrect(){
   +
   bonus;
 
+
+  registerWordResult(
+    word,
+    true
+  );
+
 }
 
 
-function addWrong(
-  word
-){
+function wrongAnswer(word){
 
   wrong++;
 
@@ -2831,75 +4103,89 @@ function addWrong(
   0;
 
 
-  markReview(
+  registerWordResult(
+    word,
+    false
+  );
+
+
+  const id =
+  wordId(
     word
   );
 
+
+  reviewMap[id] =
+  {
+    word:
+      word.word,
+
+    meaning:
+      word.meaning,
+
+    count:
+      (
+        reviewMap[id]?.count
+        ||
+        0
+      )
+      +
+      1
+  };
+
 }
 
 
-function accuracy(){
+function loseLife(){
 
-  if(!attempts){
+  lives--;
 
-    return 0;
+
+  if(
+    lives <= 0
+  ){
+
+    endGame();
 
   }
 
-
-  return Math.round(
-    correct
-    /
-    attempts
-    *
-    100
-  );
-
 }
 
 
-function livesText(){
+/* =========================================================
+   FEEDBACK
+========================================================= */
 
-  return(
-    '❤️'
-    .repeat(lives)
-    ||
-    '—'
-  );
-
-}
-
-
-function feedbackMessage(
+function showFeedback(
   text,
   type
 ){
 
-  const box =
-  document.getElementById(
-    'feedback'
-  );
+  const element =
+  $("feedback");
 
 
-  box.textContent =
+  element.textContent =
   text;
 
 
-  box.className =
+  element.className =
   `feedback ${type} show`;
 
 
   clearTimeout(
-    box._timer
+    element._timer
   );
 
 
-  box._timer =
+  element._timer =
   setTimeout(
     ()=>{
 
-      box.classList.remove(
-        'show'
+      element
+      .classList
+      .remove(
+        "show"
       );
 
     },
@@ -2910,55 +4196,52 @@ function feedbackMessage(
 
 
 /* =========================================================
-   WHACK A WORD
+   WHACK GAME
 ========================================================= */
 
 function startWhack(){
 
   prepareGame(
-    'whack'
+    "whack"
   );
 
 
-  document
-  .getElementById(
-    'whackScreen'
-  )
+  $("whackScreen")
   .classList
   .remove(
-    'hidden'
+    "hidden"
   );
 
 
   createWhackBoard();
 
 
-  let timeLeft =
+  let seconds =
   45;
 
 
   updateWhackHUD(
-    timeLeft
+    seconds
   );
 
 
-  startWhackRound();
+  nextWhackRound();
 
 
   gameTimer =
   setInterval(
     ()=>{
 
-      timeLeft--;
+      seconds--;
 
 
       updateWhackHUD(
-        timeLeft
+        seconds
       );
 
 
       if(
-        timeLeft<=0
+        seconds <= 0
       ){
 
         endGame();
@@ -2974,48 +4257,48 @@ function startWhack(){
 
 function createWhackBoard(){
 
-  const board =
-  document.getElementById(
-    'whackBoard'
-  );
-
-
-  board.innerHTML =
+  $("whackBoard")
+  .innerHTML =
   Array.from(
     {
       length:9
     },
-    (_,index)=>
-    `
-      <div class="hole">
+    (
+      _,
+      index
+    ) => {
 
-        <div class="hole-ground"></div>
+      return`
+        <div class="hole">
 
-        <button
-          class="mole"
-          id="mole${index}"
-          type="button"
-        >
+          <div class="ground"></div>
 
-          <div class="mole-face">
-            🐹
-          </div>
 
-          <div
-            class="mole-word"
-          ></div>
+          <button
+            class="mole"
+            id="mole${index}"
+            type="button"
+          >
 
-        </button>
+            <div class="face">
+              🐹
+            </div>
 
-      </div>
-    `
+            <div class="word-label"></div>
+
+          </button>
+
+        </div>
+      `;
+
+    }
   )
-  .join('');
+  .join("");
 
 }
 
 
-function startWhackRound(){
+function nextWhackRound(){
 
   if(gameEnded){
 
@@ -3030,29 +4313,24 @@ function startWhackRound(){
 
 
   currentTarget =
-  randomItem(
-    gameWords
-  );
+  weightedRandomWord();
 
 
-  document
-  .getElementById(
-    'whackTarget'
-  )
+  $("whackTarget")
   .textContent =
-  getPrompt(
+  currentPrompt(
     currentTarget
   );
 
 
   const options =
-  getOptions(
+  gameOptions(
     currentTarget,
     4
   );
 
 
-  const positions =
+  const slots =
   shuffle(
     [
       0,1,2,3,4,5,6,7,8
@@ -3066,13 +4344,13 @@ function startWhackRound(){
 
   document
   .querySelectorAll(
-    '.mole'
+    ".mole"
   )
   .forEach(
-    mole=>{
+    mole => {
 
       mole.className =
-      'mole';
+      "mole";
 
 
       mole.onclick =
@@ -3086,40 +4364,30 @@ function startWhackRound(){
     (
       word,
       index
-    )=>{
+    ) => {
 
       const mole =
-      document.getElementById(
-        'mole'
+      $(
+        "mole"
         +
-        positions[index]
+        slots[index]
       );
 
 
       mole
       .querySelector(
-        '.mole-word'
+        ".word-label"
       )
       .textContent =
-      getAnswer(
+      currentAnswer(
         word
       );
-
-
-      mole.dataset.correct =
-      word.word ===
-      currentTarget.word
-      ?
-      '1'
-      :
-      '0';
 
 
       mole.onclick =
       ()=>{
 
         hitMole(
-          mole,
           word
         );
 
@@ -3129,8 +4397,10 @@ function startWhackRound(){
       requestAnimationFrame(
         ()=>{
 
-          mole.classList.add(
-            'show'
+          mole
+          .classList
+          .add(
+            "show"
           );
 
         }
@@ -3139,10 +4409,6 @@ function startWhackRound(){
     }
   );
 
-
-  /*
-   * Game càng về sau càng nhanh.
-   */
 
   const delay =
   Math.max(
@@ -3164,7 +4430,7 @@ function startWhackRound(){
       }
 
 
-      addWrong(
+      wrongAnswer(
         currentTarget
       );
 
@@ -3172,9 +4438,9 @@ function startWhackRound(){
       loseLife();
 
 
-      feedbackMessage(
-        '⏱ Quá chậm!',
-        'bad'
+      showFeedback(
+        `⏱ ${currentAnswer(currentTarget)}`,
+        "bad"
       );
 
 
@@ -3183,7 +4449,7 @@ function startWhackRound(){
 
       if(!gameEnded){
 
-        startWhackRound();
+        nextWhackRound();
 
       }
 
@@ -3194,18 +4460,9 @@ function startWhackRound(){
 }
 
 
-function hitMole(
-  mole,
-  word
-){
+function hitMole(word){
 
-  if(
-    gameEnded
-    ||
-    !mole.classList.contains(
-      'show'
-    )
-  ){
+  if(gameEnded){
 
     return;
 
@@ -3219,43 +4476,41 @@ function hitMole(
 
   document
   .querySelectorAll(
-    '.mole'
+    ".mole"
   )
   .forEach(
-    item=>{
+    mole => {
 
-      item.onclick =
+      mole.onclick =
       null;
 
     }
   );
 
 
-  const good =
-  word.word ===
-  currentTarget.word;
+  const isCorrect =
+  wordId(word)
+  ===
+  wordId(currentTarget);
 
 
-  if(good){
+  if(isCorrect){
 
-    addCorrect();
-
-
-    mole.classList.add(
-      'good-hit'
+    correctAnswer(
+      currentTarget
     );
 
 
-    feedbackMessage(
-      `✓ +${100 + Math.min(combo-1,10)*10}`,
-      'good'
+    showFeedback(
+      "✓ Chính xác!",
+      "good"
     );
 
   }
 
   else{
 
-    addWrong(
+    wrongAnswer(
       currentTarget
     );
 
@@ -3263,14 +4518,9 @@ function hitMole(
     loseLife();
 
 
-    mole.classList.add(
-      'bad-hit'
-    );
-
-
-    feedbackMessage(
-      `✕ ${getAnswer(currentTarget)}`,
-      'bad'
+    showFeedback(
+      `✕ ${currentAnswer(currentTarget)}`,
+      "bad"
     );
 
   }
@@ -3279,71 +4529,51 @@ function hitMole(
   updateWhackHUD();
 
 
-  if(gameEnded){
+  if(!gameEnded){
 
-    return;
+    setTimeout(
+      nextWhackRound,
+      400
+    );
 
   }
-
-
-  setTimeout(
-    startWhackRound,
-    450
-  );
 
 }
 
 
-function updateWhackHUD(
-  time
-){
+function updateWhackHUD(seconds){
 
-  document
-  .getElementById(
-    'whackScore'
-  )
+  $("whackScore")
   .textContent =
   score;
 
 
   if(
-    typeof time ===
-    'number'
+    typeof seconds ===
+    "number"
   ){
 
-    document
-    .getElementById(
-      'whackTime'
-    )
+    $("whackTime")
     .textContent =
     Math.max(
       0,
-      time
+      seconds
     );
 
   }
 
 
-  document
-  .getElementById(
-    'whackLives'
-  )
+  $("whackLives")
   .textContent =
-  livesText();
+  lives;
 
 
-  document
-  .getElementById(
-    'whackCombo'
-  )
+  $("whackCombo")
   .textContent =
   `x${combo}`;
 
 
-  document
-  .getElementById(
-    'whackAccuracy'
-  )
+  $("whackAccuracy")
   .textContent =
   `${accuracy()}%`;
 
@@ -3351,23 +4581,33 @@ function updateWhackHUD(
 
 
 /* =========================================================
-   FRUIT CATCHER
+   CATCHER
 ========================================================= */
+
+const FRUIT_ICONS =
+[
+  "🍎",
+  "🍊",
+  "🍐",
+  "🍓",
+  "🍋",
+  "🍑",
+  "🥝",
+  "🍇"
+];
+
 
 function startCatcher(){
 
   prepareGame(
-    'catch'
+    "catcher"
   );
 
 
-  document
-  .getElementById(
-    'catchScreen'
-  )
+  $("catchScreen")
   .classList
   .remove(
-    'hidden'
+    "hidden"
   );
 
 
@@ -3378,32 +4618,32 @@ function startCatcher(){
   renderBasket();
 
 
-  let timeLeft =
+  let seconds =
   60;
 
 
   updateCatchHUD(
-    timeLeft
+    seconds
   );
 
 
-  startFruitRound();
+  nextCatchRound();
 
 
   gameTimer =
   setInterval(
     ()=>{
 
-      timeLeft--;
+      seconds--;
 
 
       updateCatchHUD(
-        timeLeft
+        seconds
       );
 
 
       if(
-        timeLeft<=0
+        seconds <= 0
       ){
 
         endGame();
@@ -3415,11 +4655,11 @@ function startCatcher(){
   );
 
 
-  lastFrameTime =
+  lastFrame =
   performance.now();
 
 
-  catchAnimation =
+  catcherAnimation =
   requestAnimationFrame(
     catcherLoop
   );
@@ -3427,12 +4667,12 @@ function startCatcher(){
 }
 
 
-function startFruitRound(){
+function nextCatchRound(){
 
   if(
     gameEnded
     ||
-    catcherRoundChanging
+    changingRound
   ){
 
     return;
@@ -3444,29 +4684,24 @@ function startFruitRound(){
 
 
   currentTarget =
-  randomItem(
-    gameWords
-  );
+  weightedRandomWord();
 
 
-  document
-  .getElementById(
-    'catchTarget'
-  )
+  $("catchTarget")
   .textContent =
-  getPrompt(
+  currentPrompt(
     currentTarget
   );
 
 
   const options =
-  getOptions(
+  gameOptions(
     currentTarget,
     4
   );
 
 
-  const xSlots =
+  const slots =
   shuffle(
     [
       14,
@@ -3481,14 +4716,18 @@ function startFruitRound(){
     (
       word,
       index
-    )=>{
+    ) => {
 
       createFruit(
+
         word,
-        xSlots[index],
-        -40
+
+        slots[index],
+
+        -30
         -
-        index*115
+        index*120
+
       );
 
     }
@@ -3503,69 +4742,81 @@ function createFruit(
   y
 ){
 
-  const area =
-  document.getElementById(
-    'catchArea'
-  );
-
-
   const element =
   document.createElement(
-    'div'
+    "div"
   );
 
 
   element.className =
-  'fruit';
+  "fruit";
 
 
   element.innerHTML =
   `
     <div class="fruit-icon">
-      ${randomItem(FRUITS)}
+      ${randomItem(FRUIT_ICONS)}
     </div>
 
-    <div class="fruit-word">
-      ${escapeHTML(getAnswer(word))}
+    <div class="fruit-label">
+      ${escapeHTML(currentAnswer(word))}
     </div>
   `;
 
 
-  area.appendChild(
+  $("catchArea")
+  .appendChild(
     element
   );
 
 
-  const object =
+  const fruit =
   {
     element,
     word,
     x,
     y,
+
     speed:
-      75
+      76
       +
-      Math.random()*22
+      Math.random()*20
       +
       correct*1.8,
 
-    caught:false
+    removed:false
   };
 
 
-  fruitObjects.push(
-    object
+  fruits.push(
+    fruit
   );
 
 
   renderFruit(
-    object
+    fruit
   );
 
 }
 
 
-function catcherLoop(time){
+function renderFruit(fruit){
+
+  fruit.element.style.left =
+  fruit.x
+  +
+  "%";
+
+
+  fruit.element.style.top =
+  fruit.y
+  +
+  "px";
+
+}
+
+
+function catcherLoop(now){
 
   if(gameEnded){
 
@@ -3578,35 +4829,28 @@ function catcherLoop(time){
   Math.min(
     .035,
     (
-      time-lastFrameTime
+      now-lastFrame
     )
     /
     1000
   );
 
 
-  lastFrameTime =
-  time;
+  lastFrame =
+  now;
 
 
-  const area =
-  document.getElementById(
-    'catchArea'
-  );
+  const height =
+  $("catchArea")
+  .clientHeight;
 
 
-  const areaHeight =
-  area.clientHeight;
-
-
-  fruitObjects
+  fruits
   .slice()
   .forEach(
-    fruit=>{
+    fruit => {
 
-      if(
-        fruit.caught
-      ){
+      if(fruit.removed){
 
         return;
 
@@ -3624,14 +4868,16 @@ function catcherLoop(time){
 
       if(
         fruit.y >
-        areaHeight-65
+        height-72
         &&
         fruit.y <
-        areaHeight-10
+        height-12
         &&
-        fruitHitsBasket(
-          fruit
+        Math.abs(
+          fruit.x-basketX
         )
+        <
+        10
       ){
 
         catchFruit(
@@ -3646,10 +4892,10 @@ function catcherLoop(time){
 
       if(
         fruit.y >
-        areaHeight+80
+        height+70
       ){
 
-        fruitPassed(
+        missedFruit(
           fruit
         );
 
@@ -3659,7 +4905,7 @@ function catcherLoop(time){
   );
 
 
-  catchAnimation =
+  catcherAnimation =
   requestAnimationFrame(
     catcherLoop
   );
@@ -3667,42 +4913,10 @@ function catcherLoop(time){
 }
 
 
-function renderFruit(fruit){
-
-  fruit.element.style.left =
-  fruit.x
-  +
-  '%';
-
-
-  fruit.element.style.top =
-  fruit.y
-  +
-  'px';
-
-}
-
-
-function fruitHitsBasket(fruit){
-
-  const distance =
-  Math.abs(
-    fruit.x
-    -
-    basketX
-  );
-
-
-  return distance <
-  10;
-
-}
-
-
 function catchFruit(fruit){
 
   if(
-    fruit.caught
+    fruit.removed
     ||
     gameEnded
   ){
@@ -3712,47 +4926,40 @@ function catchFruit(fruit){
   }
 
 
-  fruit.caught =
-  true;
-
-
-  const good =
-  fruit.word.word ===
-  currentTarget.word;
-
-
-  fruit.element.remove();
-
-
-  fruitObjects =
-  fruitObjects.filter(
-    item =>
-    item !==
+  removeFruit(
     fruit
   );
 
 
-  if(good){
+  const isCorrect =
+  wordId(fruit.word)
+  ===
+  wordId(currentTarget);
 
-    addCorrect();
+
+  if(isCorrect){
+
+    correctAnswer(
+      currentTarget
+    );
 
 
-    feedbackMessage(
-      '✓ Hứng chính xác!',
-      'good'
+    showFeedback(
+      "✓ Hứng chính xác!",
+      "good"
     );
 
 
     updateCatchHUD();
 
 
-    changeFruitRound();
+    changeCatchRound();
 
   }
 
   else{
 
-    addWrong(
+    wrongAnswer(
       currentTarget
     );
 
@@ -3760,9 +4967,9 @@ function catchFruit(fruit){
     loseLife();
 
 
-    feedbackMessage(
-      '✕ Sai từ!',
-      'bad'
+    showFeedback(
+      "✕ Sai từ!",
+      "bad"
     );
 
 
@@ -3773,10 +4980,10 @@ function catchFruit(fruit){
 }
 
 
-function fruitPassed(fruit){
+function missedFruit(fruit){
 
   if(
-    fruit.caught
+    fruit.removed
     ||
     gameEnded
   ){
@@ -3786,29 +4993,20 @@ function fruitPassed(fruit){
   }
 
 
-  fruit.caught =
-  true;
+  const wasCorrect =
+  wordId(fruit.word)
+  ===
+  wordId(currentTarget);
 
 
-  fruit.element.remove();
-
-
-  fruitObjects =
-  fruitObjects.filter(
-    item =>
-    item !==
+  removeFruit(
     fruit
   );
 
 
-  const wasCorrect =
-  fruit.word.word ===
-  currentTarget.word;
-
-
   if(wasCorrect){
 
-    addWrong(
+    wrongAnswer(
       currentTarget
     );
 
@@ -3816,9 +5014,9 @@ function fruitPassed(fruit){
     loseLife();
 
 
-    feedbackMessage(
-      '💨 Bỏ lỡ từ đúng!',
-      'bad'
+    showFeedback(
+      `💨 ${currentAnswer(currentTarget)}`,
+      "bad"
     );
 
 
@@ -3827,7 +5025,7 @@ function fruitPassed(fruit){
 
     if(!gameEnded){
 
-      changeFruitRound();
+      changeCatchRound();
 
     }
 
@@ -3836,10 +5034,46 @@ function fruitPassed(fruit){
 }
 
 
-function changeFruitRound(){
+function removeFruit(fruit){
+
+  fruit.removed =
+  true;
+
+
+  fruit.element.remove();
+
+
+  fruits =
+  fruits.filter(
+    item =>
+    item !== fruit
+  );
+
+}
+
+
+function clearFruits(){
+
+  fruits
+  .forEach(
+    fruit => {
+
+      fruit.element.remove();
+
+    }
+  );
+
+
+  fruits =
+  [];
+
+}
+
+
+function changeCatchRound(){
 
   if(
-    catcherRoundChanging
+    changingRound
     ||
     gameEnded
   ){
@@ -3849,20 +5083,20 @@ function changeFruitRound(){
   }
 
 
-  catcherRoundChanging =
+  changingRound =
   true;
 
 
   setTimeout(
     ()=>{
 
-      catcherRoundChanging =
+      changingRound =
       false;
 
 
       if(!gameEnded){
 
-        startFruitRound();
+        nextCatchRound();
 
       }
 
@@ -3873,73 +5107,39 @@ function changeFruitRound(){
 }
 
 
-function clearFruits(){
+function updateCatchHUD(seconds){
 
-  fruitObjects.forEach(
-    fruit=>{
-
-      fruit.element.remove();
-
-    }
-  );
-
-
-  fruitObjects =
-  [];
-
-}
-
-
-function updateCatchHUD(
-  time
-){
-
-  document
-  .getElementById(
-    'catchScore'
-  )
+  $("catchScore")
   .textContent =
   score;
 
 
   if(
-    typeof time ===
-    'number'
+    typeof seconds ===
+    "number"
   ){
 
-    document
-    .getElementById(
-      'catchTime'
-    )
+    $("catchTime")
     .textContent =
     Math.max(
       0,
-      time
+      seconds
     );
 
   }
 
 
-  document
-  .getElementById(
-    'catchLives'
-  )
+  $("catchLives")
   .textContent =
-  livesText();
+  lives;
 
 
-  document
-  .getElementById(
-    'catchCombo'
-  )
+  $("catchCombo")
   .textContent =
   `x${combo}`;
 
 
-  document
-  .getElementById(
-    'catchAccuracy'
-  )
+  $("catchAccuracy")
   .textContent =
   `${accuracy()}%`;
 
@@ -3947,7 +5147,7 @@ function updateCatchHUD(
 
 
 /* =========================================================
-   BASKET CONTROL
+   BASKET
 ========================================================= */
 
 function moveBasket(direction){
@@ -3973,27 +5173,24 @@ function moveBasket(direction){
 
 function renderBasket(){
 
-  document
-  .getElementById(
-    'basket'
-  )
+  $("basket")
   .style
   .left =
   basketX
   +
-  '%';
+  "%";
 
 }
 
 
 document
 .addEventListener(
-  'keydown',
-  event=>{
+  "keydown",
+  event => {
 
     if(
       currentGame !==
-      'catch'
+      "catcher"
       ||
       gameEnded
     ){
@@ -4005,7 +5202,7 @@ document
 
     if(
       event.key ===
-      'ArrowLeft'
+      "ArrowLeft"
     ){
 
       event.preventDefault();
@@ -4020,7 +5217,7 @@ document
 
     if(
       event.key ===
-      'ArrowRight'
+      "ArrowRight"
     ){
 
       event.preventDefault();
@@ -4036,19 +5233,11 @@ document
 );
 
 
-const catchArea =
-document.getElementById(
-  'catchArea'
-);
-
-
-function moveBasketFromPointer(
-  event
-){
+function pointerBasket(event){
 
   if(
     currentGame !==
-    'catch'
+    "catcher"
     ||
     gameEnded
   ){
@@ -4059,7 +5248,7 @@ function moveBasketFromPointer(
 
 
   const rect =
-  catchArea
+  $("catchArea")
   .getBoundingClientRect();
 
 
@@ -4090,17 +5279,12 @@ function moveBasketFromPointer(
 }
 
 
-catchArea
+$("catchArea")
 .addEventListener(
-  'pointerdown',
-  event=>{
+  "pointerdown",
+  event => {
 
-    catchArea.setPointerCapture(
-      event.pointerId
-    );
-
-
-    moveBasketFromPointer(
+    pointerBasket(
       event
     );
 
@@ -4108,19 +5292,19 @@ catchArea
 );
 
 
-catchArea
+$("catchArea")
 .addEventListener(
-  'pointermove',
-  event=>{
+  "pointermove",
+  event => {
 
     if(
       event.buttons
       ||
       event.pointerType ===
-      'touch'
+      "touch"
     ){
 
-      moveBasketFromPointer(
+      pointerBasket(
         event
       );
 
@@ -4157,12 +5341,10 @@ function endGame(){
   );
 
 
-  if(
-    catchAnimation
-  ){
+  if(catcherAnimation){
 
     cancelAnimationFrame(
-      catchAnimation
+      catcherAnimation
     );
 
   }
@@ -4171,123 +5353,89 @@ function endGame(){
   clearFruits();
 
 
-  saveGameResult();
+  saveGameHistory();
 
 
-  showResult();
+  showGameResult();
 
 }
 
 
 /* =========================================================
-   STORAGE
+   GAME HISTORY
 ========================================================= */
 
-function readJSON(
-  key,
-  fallback
-){
+function saveGameHistory(){
+
+  let history;
+
 
   try{
 
-    return JSON.parse(
+    history =
+    JSON.parse(
       localStorage.getItem(
-        key
+        GAME_HISTORY_KEY
       )
       ||
-      JSON.stringify(
-        fallback
-      )
+      "[]"
     );
 
   }
 
-  catch(e){
+  catch(error){
 
-    return fallback;
+    history =
+    [];
 
   }
-
-}
-
-
-function saveGameResult(){
-
-  const set =
-  getCurrentSet();
-
-
-  const student =
-  readJSON(
-    'IELTS_PRACTICE_STUDENT',
-    {}
-  );
-
-
-  const history =
-  readJSON(
-    HISTORY_KEY,
-    []
-  );
 
 
   history.unshift({
 
     timestamp:
-    new Date()
-    .toISOString(),
+      new Date()
+      .toISOString(),
 
-    name:
-    student?.name || '',
+    collectionType:
+      currentCollectionType,
 
-    className:
-    student?.className || '',
+    collectionKey:
+      currentCollectionKey,
 
-    set:
-    set.key,
-
-    setName:
-    set.name,
+    collectionTitle:
+      currentCollectionTitle,
 
     game:
-    currentGame,
+      currentGame,
 
     direction:
-    gameDirection,
+      gameDirection,
 
     score:
-    score,
+      score,
 
     correct:
-    correct,
+      correct,
 
     wrong:
-    wrong,
+      wrong,
 
     attempts:
-    attempts,
+      attempts,
 
     accuracy:
-    accuracy(),
+      accuracy(),
 
     bestCombo:
-    bestCombo,
-
-    reviewWords:
-    Object.values(
-      reviewMap
-    )
+      bestCombo
 
   });
 
 
-  /*
-   * Chỉ giữ 100 lượt gần nhất.
-   */
-
   localStorage.setItem(
 
-    HISTORY_KEY,
+    GAME_HISTORY_KEY,
 
     JSON.stringify(
       history.slice(
@@ -4298,192 +5446,68 @@ function saveGameResult(){
 
   );
 
-
-  const best =
-  readJSON(
-    BEST_KEY,
-    {}
-  );
-
-
-  const id =
-  `${set.key}_${currentGame}`;
-
-
-  best[id] =
-  Math.max(
-    Number(
-      best[id]
-      ||
-      0
-    ),
-    score
-  );
-
-
-  localStorage.setItem(
-
-    BEST_KEY,
-
-    JSON.stringify(
-      best
-    )
-
-  );
-
-
-  updateBestScores();
-
-}
-
-
-function updateBestScores(){
-
-  const best =
-  readJSON(
-    BEST_KEY,
-    {}
-  );
-
-
-  const setKey =
-  document
-  .getElementById(
-    'setSelect'
-  )
-  ?.value
-  ||
-  'education';
-
-
-  document
-  .getElementById(
-    'whackBest'
-  )
-  .textContent =
-  `🏆 Best: ${best[`${setKey}_whack`] || 0}`;
-
-
-  document
-  .getElementById(
-    'catchBest'
-  )
-  .textContent =
-  `🏆 Best: ${best[`${setKey}_catch`] || 0}`;
-
 }
 
 
 /* =========================================================
-   RESULT UI
+   RESULT
 ========================================================= */
 
-function showResult(){
+function showGameResult(){
 
-  const set =
-  getCurrentSet();
-
-
-  const best =
-  readJSON(
-    BEST_KEY,
-    {}
-  );
-
-
-  const id =
-  `${set.key}_${currentGame}`;
-
-
-  document
-  .getElementById(
-    'resultIcon'
-  )
+  $("resultIcon")
   .textContent =
-  score>=1500
+  score >= 1500
+
   ?
-  '🏆'
+
+  "🏆"
+
   :
-  score>=800
+
+  score >= 800
+
   ?
-  '⭐'
+
+  "⭐"
+
   :
-  '🎯';
+
+  "🎯";
 
 
-  document
-  .getElementById(
-    'resultTitle'
-  )
+  $("resultTitle")
   .textContent =
   currentGame ===
-  'whack'
+  "whack"
 
   ?
 
-  'Hoàn thành Whack a Word!'
+  "Hoàn thành Whack a Word!"
 
   :
 
-  'Hoàn thành Word Catcher!';
+  "Hoàn thành Word Catcher!";
 
 
-  document
-  .getElementById(
-    'resultScore'
-  )
+  $("resultScore")
   .textContent =
   score;
 
 
-  document
-  .getElementById(
-    'resultCorrect'
-  )
+  $("resultCorrect")
   .textContent =
   correct;
 
 
-  document
-  .getElementById(
-    'resultAccuracy'
-  )
+  $("resultAccuracy")
   .textContent =
   `${accuracy()}%`;
 
 
-  document
-  .getElementById(
-    'resultCombo'
-  )
+  $("resultCombo")
   .textContent =
   `x${bestCombo}`;
-
-
-  document
-  .getElementById(
-    'resultAttempts'
-  )
-  .textContent =
-  attempts;
-
-
-  document
-  .getElementById(
-    'resultBest'
-  )
-  .textContent =
-  best[id]
-  ||
-  score;
-
-
-  document
-  .getElementById(
-    'resultSet'
-  )
-  .textContent =
-  set.name;
 
 
   const review =
@@ -4494,43 +5518,42 @@ function showResult(){
     (
       a,
       b
-    )=>
+    ) =>
     b.count-a.count
   );
 
 
-  document
-  .getElementById(
-    'reviewWords'
-  )
+  $("resultReview")
   .innerHTML =
-
   review.length
 
   ?
 
   review
   .map(
-    item=>
-    `
-      <span
-        class="review-chip"
-        title="${escapeHTML(item.meaning)}"
-      >
-        ${escapeHTML(item.word)}
-        ×${item.count}
-      </span>
-    `
+    item => {
+
+      return`
+        <span
+          class="review-chip"
+          title="${escapeHTML(item.meaning)}"
+        >
+          ${escapeHTML(item.word)}
+          ×${item.count}
+        </span>
+      `;
+
+    }
   )
-  .join('')
+  .join("")
 
   :
 
   `
     <span
       style="
-        color:#18845a;
-        font-size:10px;
+        color:#168054;
+        font-size:9px;
         font-weight:900;
       "
     >
@@ -4539,44 +5562,18 @@ function showResult(){
   `;
 
 
-  document
-  .getElementById(
-    'resultOverlay'
-  )
+  $("resultOverlay")
   .classList
   .remove(
-    'hidden'
+    "hidden"
   );
 
 }
 
 
 /* =========================================================
-   NAVIGATION
+   GAME NAV
 ========================================================= */
-
-function quitGame(){
-
-  const yes =
-  confirm(
-    'Thoát game hiện tại? Điểm của lượt này sẽ không được lưu.'
-  );
-
-
-  if(!yes){
-
-    return;
-
-  }
-
-
-  clearGame();
-
-
-  returnHome();
-
-}
-
 
 function clearGame(){
 
@@ -4590,12 +5587,10 @@ function clearGame(){
   );
 
 
-  if(
-    catchAnimation
-  ){
+  if(catcherAnimation){
 
     cancelAnimationFrame(
-      catchAnimation
+      catcherAnimation
     );
 
   }
@@ -4612,85 +5607,84 @@ function clearGame(){
   null;
 
 
-  catchAnimation =
+  catcherAnimation =
   null;
 
 
-  catcherRoundChanging =
+  changingRound =
   false;
 
 }
 
 
-function returnHome(){
+function quitGame(){
+
+  const confirmed =
+  confirm(
+    "Thoát game hiện tại? Điểm của lượt này sẽ không được lưu."
+  );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
 
   clearGame();
 
 
-  currentGame =
-  null;
+  backToCollection();
+
+}
 
 
-  document
-  .getElementById(
-    'resultOverlay'
-  )
+function backToCollection(){
+
+  clearGame();
+
+
+  $("resultOverlay")
   .classList
   .add(
-    'hidden'
+    "hidden"
   );
 
 
-  document
-  .getElementById(
-    'whackScreen'
-  )
-  .classList
-  .add(
-    'hidden'
-  );
+  hideAllScreens();
 
 
-  document
-  .getElementById(
-    'catchScreen'
-  )
-  .classList
-  .add(
-    'hidden'
-  );
-
-
-  document
-  .getElementById(
-    'homeScreen'
-  )
+  $("collectionScreen")
   .classList
   .remove(
-    'hidden'
+    "hidden"
   );
 
 
-  updateBestScores();
+  renderCollectionStats();
+
+
+  renderWordList();
+
+
+  renderReviewBanner();
 
 }
 
 
 function replayGame(){
 
-  document
-  .getElementById(
-    'resultOverlay'
-  )
+  $("resultOverlay")
   .classList
   .add(
-    'hidden'
+    "hidden"
   );
 
 
   if(
     lastGame ===
-    'whack'
+    "whack"
   ){
 
     startWhack();
@@ -4707,43 +5701,37 @@ function replayGame(){
 
 
 /* =========================================================
-   ESCAPE HTML
+   INIT
 ========================================================= */
 
-function escapeHTML(value){
+function init(){
 
-  return String(
-    value ?? ''
-  )
-  .replace(
+  if(
+    typeof VOCABULARY_DATA ===
+    "undefined"
+  ){
 
-    /[&<>"']/g,
+    alert(
+      "Không tìm thấy vocab-data.js"
+    );
 
-    character=>({
 
-      '&':'&amp;',
+    return;
 
-      '<':'&lt;',
+  }
 
-      '>':'&gt;',
 
-      '"':'&quot;',
+  loadStudent();
 
-      "'":'&#39;'
 
-    })[character]
-
-  );
+  renderCategories();
 
 }
 
 
-/* =========================================================
-   START
-========================================================= */
-
 init();
 
 </script>
+
 </body>
 </html>
