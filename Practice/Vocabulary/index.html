@@ -1,0 +1,4749 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+>
+
+<title>Vocabulary Arcade</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5c3ac5;
+  --blue:#3678e8;
+  --green:#22a968;
+  --red:#e64f62;
+  --orange:#f39b33;
+  --yellow:#ffd85b;
+
+  --ink:#1d2640;
+  --muted:#71798d;
+  --line:#e4e7ef;
+  --bg:#f4f7fc;
+
+  --shadow:
+    0 16px 40px
+    rgba(37,28,82,.10);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+
+  min-height:100%;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color:var(--ink);
+
+  background:
+    radial-gradient(
+      circle at 0 0,
+      rgba(145,99,239,.15),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 100% 0,
+      rgba(73,167,255,.15),
+      transparent 27%
+    ),
+    var(--bg);
+}
+
+button,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none !important;
+}
+
+
+/* =========================================================
+   TOP
+========================================================= */
+
+.top{
+  position:sticky;
+
+  top:0;
+
+  z-index:50;
+
+  background:
+    rgba(255,255,255,.92);
+
+  backdrop-filter:
+    blur(14px);
+
+  border-bottom:
+    1px solid
+    var(--line);
+}
+
+.top-inner{
+  width:
+    min(
+      1200px,
+      calc(100% - 20px)
+    );
+
+  min-height:62px;
+
+  margin:auto;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+}
+
+.back{
+  padding:
+    8px 11px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:10px;
+
+  background:#fff;
+
+  color:#4b3789;
+
+  text-decoration:none;
+
+  font-size:11px;
+
+  font-weight:900;
+}
+
+.logo{
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
+
+  color:#24154f;
+
+  font-weight:950;
+}
+
+.logo-icon{
+  width:36px;
+
+  height:36px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple2),
+      #8e70ef
+    );
+
+  color:#fff;
+
+  font-size:18px;
+}
+
+.student{
+  color:#767e90;
+
+  font-size:10.5px;
+
+  font-weight:850;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+  width:
+    min(
+      1200px,
+      calc(100% - 20px)
+    );
+
+  margin:auto;
+
+  padding:
+    23px 0 60px;
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.hero{
+  position:relative;
+
+  overflow:hidden;
+
+  padding:
+    30px 32px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.92);
+
+  border-radius:27px;
+
+  background:
+    linear-gradient(
+      120deg,
+      #fff,
+      #fbf8ff 55%,
+      #eef7ff
+    );
+
+  box-shadow:
+    var(--shadow);
+}
+
+.hero::after{
+  content:"🎮";
+
+  position:absolute;
+
+  right:30px;
+
+  bottom:-15px;
+
+  font-size:130px;
+
+  opacity:.06;
+}
+
+.eyebrow{
+  color:#6e52bf;
+
+  font-size:10px;
+
+  font-weight:950;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:
+    8px 0 5px;
+
+  font-size:
+    clamp(
+      34px,
+      6vw,
+      60px
+    );
+
+  line-height:1;
+
+  letter-spacing:-.05em;
+
+  color:#211449;
+}
+
+.hero p{
+  margin:0;
+
+  max-width:680px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  line-height:1.65;
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.settings{
+  margin-top:15px;
+
+  padding:15px;
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  align-items:end;
+
+  gap:12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:16px;
+
+  background:#fff;
+}
+
+.setting{
+  flex:
+    1 1 210px;
+}
+
+.setting label{
+  display:block;
+
+  margin-bottom:5px;
+
+  color:#626a7d;
+
+  font-size:9px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.setting select{
+  width:100%;
+
+  height:40px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    #dfe3eb;
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#2e3650;
+
+  outline:none;
+
+  font-size:11px;
+
+  font-weight:850;
+}
+
+.setting-info{
+  flex:
+    1 1 180px;
+
+  padding:
+    10px 12px;
+
+  border-radius:10px;
+
+  background:#f6f4ff;
+
+  color:#57428d;
+
+  font-size:10px;
+
+  font-weight:850;
+}
+
+
+/* =========================================================
+   GAME CARDS
+========================================================= */
+
+.section-title{
+  margin:
+    25px 0 12px;
+}
+
+.section-title h2{
+  margin:0;
+
+  color:#202a48;
+
+  font-size:23px;
+
+  letter-spacing:-.03em;
+}
+
+.section-title p{
+  margin:
+    4px 0 0;
+
+  color:#7b8292;
+
+  font-size:10.5px;
+}
+
+.game-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:14px;
+}
+
+.game-card{
+  position:relative;
+
+  overflow:hidden;
+
+  min-height:280px;
+
+  padding:23px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.9);
+
+  border-radius:23px;
+
+  box-shadow:
+    0 11px 27px
+    rgba(37,28,82,.08);
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-start;
+
+  text-align:left;
+
+  transition:.2s ease;
+}
+
+.game-card:hover{
+  transform:
+    translateY(-4px);
+
+  box-shadow:
+    0 17px 36px
+    rgba(37,28,82,.13);
+}
+
+.game-card.whack{
+  background:
+    linear-gradient(
+      145deg,
+      #f4edff,
+      #fff
+    );
+}
+
+.game-card.catch{
+  background:
+    linear-gradient(
+      145deg,
+      #eaf8ff,
+      #fff
+    );
+}
+
+.game-emoji{
+  font-size:67px;
+
+  line-height:1;
+}
+
+.game-card h3{
+  margin:
+    16px 0 7px;
+
+  color:#26194f;
+
+  font-size:24px;
+
+  letter-spacing:-.035em;
+}
+
+.game-card p{
+  margin:0;
+
+  max-width:450px;
+
+  color:#6e7688;
+
+  font-size:11px;
+
+  line-height:1.6;
+}
+
+.game-meta{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:6px;
+
+  margin-top:14px;
+}
+
+.game-meta span{
+  padding:
+    6px 9px;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.8);
+
+  border:
+    1px solid
+    rgba(214,218,231,.9);
+
+  color:#60697d;
+
+  font-size:9px;
+
+  font-weight:900;
+}
+
+.play{
+  margin-top:auto;
+
+  padding:
+    10px 15px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #452599,
+      #7655d9
+    );
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:950;
+}
+
+
+/* =========================================================
+   GAME SCREEN
+========================================================= */
+
+.game-screen{
+  min-height:
+    calc(100vh - 125px);
+}
+
+.game-header{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+
+  margin-bottom:12px;
+}
+
+.game-title{
+  min-width:0;
+}
+
+.game-title h2{
+  margin:0;
+
+  color:#25164f;
+
+  font-size:22px;
+}
+
+.game-title p{
+  margin:
+    3px 0 0;
+
+  color:#7a8293;
+
+  font-size:10px;
+}
+
+.quit-btn{
+  padding:
+    8px 11px;
+
+  border:
+    1px solid
+    #dddfe7;
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#654d87;
+
+  font-size:10px;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   HUD
+========================================================= */
+
+.hud{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:8px;
+
+  margin-bottom:10px;
+}
+
+.hud-card{
+  padding:
+    10px 12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:11px;
+
+  background:#fff;
+
+  text-align:center;
+}
+
+.hud-label{
+  color:#959ba7;
+
+  font-size:8px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.hud-value{
+  margin-top:2px;
+
+  color:#29204b;
+
+  font-size:16px;
+
+  font-weight:950;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* =========================================================
+   TARGET
+========================================================= */
+
+.target{
+  margin-bottom:10px;
+
+  padding:
+    15px 18px;
+
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      125deg,
+      #2b1769,
+      #6546bf
+    );
+
+  color:#fff;
+
+  text-align:center;
+}
+
+.target-label{
+  opacity:.68;
+
+  font-size:8.5px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+
+  letter-spacing:.08em;
+}
+
+.target-word{
+  margin-top:5px;
+
+  font-size:
+    clamp(
+      22px,
+      4vw,
+      35px
+    );
+
+  line-height:1.15;
+
+  font-weight:950;
+}
+
+
+/* =========================================================
+   WHACK GAME
+========================================================= */
+
+.whack-board{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:12px;
+
+  padding:18px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #dcf6cf,
+      #bce9a9
+    );
+
+  min-height:490px;
+}
+
+.hole{
+  position:relative;
+
+  min-height:130px;
+
+  display:flex;
+
+  align-items:flex-end;
+
+  justify-content:center;
+
+  overflow:hidden;
+}
+
+.hole-ground{
+  position:absolute;
+
+  bottom:3px;
+
+  width:90%;
+
+  height:32px;
+
+  border-radius:50%;
+
+  background:
+    #79573c;
+
+  box-shadow:
+    inset
+    0 7px 8px
+    rgba(0,0,0,.15);
+}
+
+.mole{
+  position:relative;
+
+  z-index:2;
+
+  width:90%;
+
+  max-width:180px;
+
+  min-height:104px;
+
+  padding:
+    10px 8px 16px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:5px;
+
+  border:0;
+
+  border-radius:
+    50% 50% 28% 28%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #a97145,
+      #815231
+    );
+
+  color:#fff;
+
+  box-shadow:
+    0 9px 16px
+    rgba(76,47,29,.23);
+
+  transform:
+    translateY(150%);
+
+  transition:
+    transform .25s ease;
+
+  cursor:pointer;
+}
+
+.mole.show{
+  transform:
+    translateY(0);
+}
+
+.mole-face{
+  font-size:36px;
+}
+
+.mole-word{
+  max-width:100%;
+
+  padding:
+    5px 7px;
+
+  border-radius:7px;
+
+  background:
+    rgba(255,255,255,.93);
+
+  color:#38271f;
+
+  text-align:center;
+
+  font-size:
+    clamp(
+      9px,
+      1.5vw,
+      11px
+    );
+
+  font-weight:950;
+
+  line-height:1.25;
+
+  overflow-wrap:anywhere;
+}
+
+.mole.good-hit{
+  background:#23955c;
+}
+
+.mole.bad-hit{
+  background:#c94856;
+}
+
+
+/* =========================================================
+   FRUIT CATCHER
+========================================================= */
+
+.catch-game-area{
+  position:relative;
+
+  height:530px;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #bfe9ff 0%,
+      #e8f7ff 66%,
+      #d5efb5 67%,
+      #b6dd91 100%
+    );
+
+  touch-action:none;
+
+  user-select:none;
+}
+
+.cloud{
+  position:absolute;
+
+  font-size:56px;
+
+  opacity:.7;
+
+  pointer-events:none;
+}
+
+.cloud.one{
+  top:30px;
+  left:7%;
+}
+
+.cloud.two{
+  top:85px;
+  right:8%;
+}
+
+.fruit{
+  position:absolute;
+
+  z-index:5;
+
+  width:135px;
+
+  min-height:80px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:2px;
+
+  transform:
+    translate(-50%,-50%);
+
+  pointer-events:none;
+}
+
+.fruit-icon{
+  font-size:43px;
+
+  line-height:1;
+}
+
+.fruit-word{
+  max-width:130px;
+
+  padding:
+    5px 7px;
+
+  border-radius:7px;
+
+  background:
+    rgba(255,255,255,.94);
+
+  color:#2c3550;
+
+  box-shadow:
+    0 4px 11px
+    rgba(0,0,0,.08);
+
+  font-size:10px;
+
+  font-weight:950;
+
+  line-height:1.25;
+
+  text-align:center;
+
+  overflow-wrap:anywhere;
+}
+
+.basket{
+  position:absolute;
+
+  z-index:8;
+
+  left:50%;
+
+  bottom:13px;
+
+  width:130px;
+
+  height:63px;
+
+  transform:
+    translateX(-50%);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:65px;
+
+  filter:
+    drop-shadow(
+      0 7px 5px
+      rgba(0,0,0,.15)
+    );
+}
+
+.catch-controls{
+  display:flex;
+
+  justify-content:center;
+
+  gap:12px;
+
+  margin-top:10px;
+}
+
+.catch-controls button{
+  width:110px;
+
+  padding:
+    10px;
+
+  border:
+    1px solid
+    #dadde6;
+
+  border-radius:10px;
+
+  background:#fff;
+
+  color:#453477;
+
+  font-size:17px;
+
+  font-weight:950;
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+.feedback{
+  position:fixed;
+
+  z-index:100;
+
+  left:50%;
+
+  top:110px;
+
+  transform:
+    translateX(-50%)
+    translateY(-10px);
+
+  padding:
+    9px 15px;
+
+  border-radius:999px;
+
+  color:#fff;
+
+  font-size:12px;
+
+  font-weight:950;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  transition:
+    .18s ease;
+}
+
+.feedback.show{
+  opacity:1;
+
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+.feedback.good{
+  background:#16845b;
+}
+
+.feedback.bad{
+  background:#b83345;
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:120;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:18px;
+
+  background:
+    rgba(19,13,48,.68);
+
+  backdrop-filter:
+    blur(5px);
+}
+
+.result{
+  width:
+    min(
+      560px,
+      100%
+    );
+
+  max-height:90vh;
+
+  overflow:auto;
+
+  padding:23px;
+
+  border-radius:20px;
+
+  background:#fff;
+
+  box-shadow:
+    0 25px 80px
+    rgba(15,10,45,.32);
+}
+
+.result-icon{
+  text-align:center;
+
+  font-size:58px;
+}
+
+.result h2{
+  margin:
+    5px 0;
+
+  color:#23154e;
+
+  text-align:center;
+
+  font-size:25px;
+}
+
+.result-score{
+  text-align:center;
+
+  color:#5b40b4;
+
+  font-size:45px;
+
+  line-height:1;
+
+  font-weight:950;
+}
+
+.result-stats{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:7px;
+
+  margin-top:17px;
+}
+
+.result-stat{
+  padding:10px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:10px;
+
+  text-align:center;
+}
+
+.result-stat small{
+  display:block;
+
+  color:#9298a5;
+
+  font-size:8px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.result-stat b{
+  display:block;
+
+  margin-top:2px;
+
+  color:#2b3350;
+
+  font-size:16px;
+}
+
+.review-title{
+  margin:
+    18px 0 7px;
+
+  color:#4c5263;
+
+  font-size:10px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.review-words{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:6px;
+}
+
+.review-chip{
+  padding:
+    6px 9px;
+
+  border-radius:999px;
+
+  background:#fff1f3;
+
+  color:#a52e40;
+
+  font-size:9px;
+
+  font-weight:900;
+}
+
+.result-actions{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:8px;
+
+  margin-top:18px;
+}
+
+.result-actions button{
+  padding:
+    11px;
+
+  border-radius:10px;
+
+  font-weight:950;
+}
+
+.secondary{
+  border:
+    1px solid
+    #dadde6;
+
+  background:#fff;
+
+  color:#554576;
+}
+
+.primary{
+  border:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #452599,
+      #7655d9
+    );
+
+  color:#fff;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px){
+
+  .student{
+    display:none;
+  }
+
+  .game-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hud{
+    grid-template-columns:
+      repeat(3,1fr);
+  }
+
+  .hud-card:nth-child(4),
+  .hud-card:nth-child(5){
+    grid-column:auto;
+  }
+
+  .whack-board{
+    gap:6px;
+
+    padding:9px;
+
+    min-height:470px;
+  }
+
+  .hole{
+    min-height:135px;
+  }
+
+  .mole{
+    width:98%;
+
+    min-height:100px;
+
+    padding:
+      8px 4px 14px;
+  }
+
+  .mole-face{
+    font-size:31px;
+  }
+
+  .catch-game-area{
+    height:510px;
+  }
+
+  .fruit{
+    width:105px;
+  }
+
+  .fruit-word{
+    max-width:104px;
+
+    font-size:9px;
+  }
+
+  .basket{
+    width:105px;
+
+    font-size:58px;
+  }
+
+}
+
+
+@media(max-width:500px){
+
+  .logo span:last-child{
+    display:none;
+  }
+
+  .hero{
+    padding:
+      24px 20px;
+  }
+
+  .hud{
+    gap:5px;
+  }
+
+  .hud-card{
+    padding:
+      8px 5px;
+  }
+
+  .hud-value{
+    font-size:14px;
+  }
+
+  .result-stats{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================================================
+     TOP
+========================================================= -->
+
+<header class="top">
+
+  <div class="top-inner">
+
+    <a
+      href="../"
+      class="back"
+    >
+      ← Luyện tập
+    </a>
+
+
+    <div class="logo">
+
+      <div class="logo-icon">
+        🎮
+      </div>
+
+      <span>
+        Vocabulary Arcade
+      </span>
+
+    </div>
+
+
+    <div
+      class="student"
+      id="studentInfo"
+    >
+      Học sinh
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     HOME
+========================================================= -->
+
+<main
+  class="page"
+  id="homeScreen"
+>
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      VOCABULARY GAME
+    </div>
+
+
+    <h1>
+      Học từ vựng bằng game
+    </h1>
+
+
+    <p>
+      Một bộ từ – nhiều trò chơi.
+      Chọn game em thích, ghi điểm cao và ôn lại
+      những từ mình thường xuyên trả lời sai.
+    </p>
+
+  </section>
+
+
+  <!-- SETTINGS -->
+
+  <section class="settings">
+
+    <div class="setting">
+
+      <label>
+        Bộ từ vựng
+      </label>
+
+
+      <select
+        id="setSelect"
+        onchange="updateSetInfo()"
+      ></select>
+
+    </div>
+
+
+    <div class="setting">
+
+      <label>
+        Kiểu câu hỏi
+      </label>
+
+
+      <select id="directionSelect">
+
+        <option value="vi-en">
+          Tiếng Việt → English
+        </option>
+
+        <option value="en-vi">
+          English → Tiếng Việt
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div
+      class="setting-info"
+      id="setInfo"
+    >
+      20 từ
+    </div>
+
+  </section>
+
+
+  <!-- GAMES -->
+
+  <div class="section-title">
+
+    <h2>
+      Chọn game
+    </h2>
+
+    <p>
+      Điểm cao nhất được lưu ngay trên thiết bị.
+    </p>
+
+  </div>
+
+
+  <section class="game-grid">
+
+
+    <!-- WHACK -->
+
+    <article class="game-card whack">
+
+      <div class="game-emoji">
+        🐹
+      </div>
+
+
+      <h3>
+        Whack a Word
+      </h3>
+
+
+      <p>
+        Đập đúng con chuột đang mang từ phù hợp với câu hỏi.
+        Càng trả lời liên tiếp chính xác, combo càng cao.
+      </p>
+
+
+      <div class="game-meta">
+
+        <span>
+          ⏱ 45 giây
+        </span>
+
+        <span>
+          ❤️ 5 mạng
+        </span>
+
+        <span id="whackBest">
+          🏆 Best: 0
+        </span>
+
+      </div>
+
+
+      <button
+        class="play"
+        onclick="startWhack()"
+      >
+        Chơi ngay →
+      </button>
+
+    </article>
+
+
+    <!-- CATCH -->
+
+    <article class="game-card catch">
+
+      <div class="game-emoji">
+        🍎
+      </div>
+
+
+      <h3>
+        Word Catcher
+      </h3>
+
+
+      <p>
+        Di chuyển chiếc giỏ để hứng đúng từ đang rơi.
+        Tránh hứng những đáp án gây nhiễu.
+      </p>
+
+
+      <div class="game-meta">
+
+        <span>
+          ⏱ 60 giây
+        </span>
+
+        <span>
+          ❤️ 5 mạng
+        </span>
+
+        <span id="catchBest">
+          🏆 Best: 0
+        </span>
+
+      </div>
+
+
+      <button
+        class="play"
+        onclick="startCatcher()"
+      >
+        Chơi ngay →
+      </button>
+
+    </article>
+
+  </section>
+
+</main>
+
+
+<!-- =========================================================
+     WHACK GAME
+========================================================= -->
+
+<main
+  class="page game-screen hidden"
+  id="whackScreen"
+>
+
+  <div class="game-header">
+
+    <div class="game-title">
+
+      <h2>
+        🐹 Whack a Word
+      </h2>
+
+      <p>
+        Đập đúng từ trước khi chuột biến mất.
+      </p>
+
+    </div>
+
+
+    <button
+      class="quit-btn"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Score
+      </div>
+
+      <div
+        class="hud-value"
+        id="whackScore"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Time
+      </div>
+
+      <div
+        class="hud-value"
+        id="whackTime"
+      >
+        45
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Lives
+      </div>
+
+      <div
+        class="hud-value"
+        id="whackLives"
+      >
+        ❤️❤️❤️❤️❤️
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Combo
+      </div>
+
+      <div
+        class="hud-value"
+        id="whackCombo"
+      >
+        x0
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Accuracy
+      </div>
+
+      <div
+        class="hud-value"
+        id="whackAccuracy"
+      >
+        0%
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="target">
+
+    <div class="target-label">
+      Đập từ tương ứng
+    </div>
+
+    <div
+      class="target-word"
+      id="whackTarget"
+    >
+      —
+    </div>
+
+  </div>
+
+
+  <div
+    class="whack-board"
+    id="whackBoard"
+  ></div>
+
+</main>
+
+
+<!-- =========================================================
+     FRUIT CATCHER
+========================================================= -->
+
+<main
+  class="page game-screen hidden"
+  id="catchScreen"
+>
+
+  <div class="game-header">
+
+    <div class="game-title">
+
+      <h2>
+        🍎 Word Catcher
+      </h2>
+
+      <p>
+        Dùng ← → hoặc kéo/ngón tay để di chuyển giỏ.
+      </p>
+
+    </div>
+
+
+    <button
+      class="quit-btn"
+      onclick="quitGame()"
+    >
+      ✕ Thoát
+    </button>
+
+  </div>
+
+
+  <div class="hud">
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Score
+      </div>
+
+      <div
+        class="hud-value"
+        id="catchScore"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Time
+      </div>
+
+      <div
+        class="hud-value"
+        id="catchTime"
+      >
+        60
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Lives
+      </div>
+
+      <div
+        class="hud-value"
+        id="catchLives"
+      >
+        ❤️❤️❤️❤️❤️
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Combo
+      </div>
+
+      <div
+        class="hud-value"
+        id="catchCombo"
+      >
+        x0
+      </div>
+
+    </div>
+
+
+    <div class="hud-card">
+
+      <div class="hud-label">
+        Accuracy
+      </div>
+
+      <div
+        class="hud-value"
+        id="catchAccuracy"
+      >
+        0%
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="target">
+
+    <div class="target-label">
+      Hứng từ tương ứng
+    </div>
+
+    <div
+      class="target-word"
+      id="catchTarget"
+    >
+      —
+    </div>
+
+  </div>
+
+
+  <div
+    class="catch-game-area"
+    id="catchArea"
+  >
+
+    <div class="cloud one">
+      ☁️
+    </div>
+
+    <div class="cloud two">
+      ☁️
+    </div>
+
+
+    <div
+      class="basket"
+      id="basket"
+    >
+      🧺
+    </div>
+
+  </div>
+
+
+  <div class="catch-controls">
+
+    <button
+      onpointerdown="moveBasket(-1)"
+    >
+      ←
+    </button>
+
+    <button
+      onpointerdown="moveBasket(1)"
+    >
+      →
+    </button>
+
+  </div>
+
+</main>
+
+
+<!-- =========================================================
+     FEEDBACK
+========================================================= -->
+
+<div
+  class="feedback"
+  id="feedback"
+>
+</div>
+
+
+<!-- =========================================================
+     RESULT
+========================================================= -->
+
+<div
+  class="overlay hidden"
+  id="resultOverlay"
+>
+
+  <div class="result">
+
+    <div
+      class="result-icon"
+      id="resultIcon"
+    >
+      🏆
+    </div>
+
+
+    <h2 id="resultTitle">
+      Hoàn thành!
+    </h2>
+
+
+    <div
+      class="result-score"
+      id="resultScore"
+    >
+      0
+    </div>
+
+
+    <div class="result-stats">
+
+      <div class="result-stat">
+
+        <small>
+          Correct
+        </small>
+
+        <b id="resultCorrect">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="result-stat">
+
+        <small>
+          Accuracy
+        </small>
+
+        <b id="resultAccuracy">
+          0%
+        </b>
+
+      </div>
+
+
+      <div class="result-stat">
+
+        <small>
+          Best combo
+        </small>
+
+        <b id="resultCombo">
+          x0
+        </b>
+
+      </div>
+
+
+      <div class="result-stat">
+
+        <small>
+          Attempts
+        </small>
+
+        <b id="resultAttempts">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="result-stat">
+
+        <small>
+          High score
+        </small>
+
+        <b id="resultBest">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="result-stat">
+
+        <small>
+          Set
+        </small>
+
+        <b id="resultSet">
+          —
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <div class="review-title">
+      Từ cần ôn lại
+    </div>
+
+
+    <div
+      class="review-words"
+      id="reviewWords"
+    ></div>
+
+
+    <div class="result-actions">
+
+      <button
+        class="secondary"
+        onclick="returnHome()"
+      >
+        ← Chọn game
+      </button>
+
+
+      <button
+        class="primary"
+        onclick="replayGame()"
+      >
+        Chơi lại ↻
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   VOCABULARY DATA
+
+   Muốn đổi/thêm từ chỉ sửa phần này.
+========================================================= */
+
+const VOCAB_SETS = {
+
+  education:{
+
+    name:
+    'Education',
+
+    words:[
+
+      {
+        word:'curriculum',
+        meaning:'chương trình học'
+      },
+
+      {
+        word:'compulsory',
+        meaning:'bắt buộc'
+      },
+
+      {
+        word:'tuition',
+        meaning:'học phí'
+      },
+
+      {
+        word:'scholarship',
+        meaning:'học bổng'
+      },
+
+      {
+        word:'literacy',
+        meaning:'khả năng đọc và viết'
+      },
+
+      {
+        word:'assessment',
+        meaning:'sự đánh giá'
+      },
+
+      {
+        word:'academic',
+        meaning:'thuộc học thuật'
+      },
+
+      {
+        word:'graduate',
+        meaning:'tốt nghiệp'
+      },
+
+      {
+        word:'undergraduate',
+        meaning:'sinh viên đại học'
+      },
+
+      {
+        word:'vocational',
+        meaning:'thuộc đào tạo nghề'
+      },
+
+      {
+        word:'qualification',
+        meaning:'bằng cấp, chứng chỉ'
+      },
+
+      {
+        word:'discipline',
+        meaning:'kỷ luật'
+      },
+
+      {
+        word:'attendance',
+        meaning:'sự chuyên cần'
+      },
+
+      {
+        word:'assignment',
+        meaning:'bài tập được giao'
+      },
+
+      {
+        word:'lecture',
+        meaning:'bài giảng'
+      },
+
+      {
+        word:'seminar',
+        meaning:'hội thảo học thuật'
+      },
+
+      {
+        word:'enroll',
+        meaning:'đăng ký nhập học'
+      },
+
+      {
+        word:'educator',
+        meaning:'nhà giáo'
+      },
+
+      {
+        word:'achievement',
+        meaning:'thành tích'
+      },
+
+      {
+        word:'knowledge',
+        meaning:'kiến thức'
+      }
+
+    ]
+
+  }
+
+};
+
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const HISTORY_KEY =
+'VOCABULARY_ARCADE_HISTORY_V1';
+
+
+const BEST_KEY =
+'VOCABULARY_ARCADE_BEST_V1';
+
+
+const FRUITS =
+[
+  '🍎',
+  '🍊',
+  '🍋',
+  '🍐',
+  '🍑',
+  '🍓',
+  '🥝',
+  '🍇'
+];
+
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let currentGame =
+null;
+
+
+let lastGame =
+null;
+
+
+let gameWords =
+[];
+
+
+let gameDirection =
+'vi-en';
+
+
+let score =
+0;
+
+
+let lives =
+5;
+
+
+let combo =
+0;
+
+
+let bestCombo =
+0;
+
+
+let correct =
+0;
+
+
+let wrong =
+0;
+
+
+let attempts =
+0;
+
+
+let reviewMap =
+{};
+
+
+let currentTarget =
+null;
+
+
+let gameTimer =
+null;
+
+
+let roundTimer =
+null;
+
+
+let gameEnded =
+false;
+
+
+/* CATCHER */
+
+let catchAnimation =
+null;
+
+
+let fruitObjects =
+[];
+
+
+let basketX =
+50;
+
+
+let catcherRoundChanging =
+false;
+
+
+let lastFrameTime =
+0;
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+function init(){
+
+  populateSets();
+
+
+  loadStudent();
+
+
+  updateSetInfo();
+
+
+  updateBestScores();
+
+}
+
+
+function populateSets(){
+
+  const select =
+  document.getElementById(
+    'setSelect'
+  );
+
+
+  select.innerHTML =
+  Object.entries(
+    VOCAB_SETS
+  )
+  .map(
+    ([key,set]) =>
+    `
+      <option value="${key}">
+        ${set.name}
+      </option>
+    `
+  )
+  .join('');
+
+}
+
+
+function loadStudent(){
+
+  try{
+
+    const student =
+    JSON.parse(
+
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+
+      ||
+
+      'null'
+
+    );
+
+
+    if(
+      student?.name
+      &&
+      student?.className
+    ){
+
+      document
+      .getElementById(
+        'studentInfo'
+      )
+      .textContent =
+      `${student.name} · ${student.className}`;
+
+    }
+
+  }
+
+  catch(e){}
+
+}
+
+
+function getCurrentSet(){
+
+  const key =
+  document
+  .getElementById(
+    'setSelect'
+  )
+  .value;
+
+
+  return{
+    key:key,
+    ...VOCAB_SETS[key]
+  };
+
+}
+
+
+function updateSetInfo(){
+
+  const set =
+  getCurrentSet();
+
+
+  document
+  .getElementById(
+    'setInfo'
+  )
+  .textContent =
+  `${set.words.length} từ · ${set.name}`;
+
+}
+
+
+/* =========================================================
+   WORD HELPERS
+========================================================= */
+
+function getPrompt(item){
+
+  return gameDirection ===
+  'vi-en'
+
+  ?
+
+  item.meaning
+
+  :
+
+  item.word;
+
+}
+
+
+function getAnswer(item){
+
+  return gameDirection ===
+  'vi-en'
+
+  ?
+
+  item.word
+
+  :
+
+  item.meaning;
+
+}
+
+
+function shuffle(array){
+
+  const arr =
+  [...array];
+
+
+  for(
+    let i=arr.length-1;
+    i>0;
+    i--
+  ){
+
+    const j =
+    Math.floor(
+      Math.random()
+      *
+      (
+        i+1
+      )
+    );
+
+
+    [
+      arr[i],
+      arr[j]
+    ]
+    =
+    [
+      arr[j],
+      arr[i]
+    ];
+
+  }
+
+
+  return arr;
+
+}
+
+
+function randomItem(array){
+
+  return array[
+    Math.floor(
+      Math.random()
+      *
+      array.length
+    )
+  ];
+
+}
+
+
+function getOptions(
+  target,
+  count=4
+){
+
+  const distractors =
+  shuffle(
+
+    gameWords.filter(
+      item =>
+      item.word !==
+      target.word
+    )
+
+  )
+  .slice(
+    0,
+    count-1
+  );
+
+
+  return shuffle(
+    [
+      target,
+      ...distractors
+    ]
+  );
+
+}
+
+
+/* =========================================================
+   GAME COMMON
+========================================================= */
+
+function prepareGame(game){
+
+  clearGame();
+
+
+  const set =
+  getCurrentSet();
+
+
+  currentGame =
+  game;
+
+
+  lastGame =
+  game;
+
+
+  gameWords =
+  [...set.words];
+
+
+  gameDirection =
+  document
+  .getElementById(
+    'directionSelect'
+  )
+  .value;
+
+
+  score =
+  0;
+
+
+  lives =
+  5;
+
+
+  combo =
+  0;
+
+
+  bestCombo =
+  0;
+
+
+  correct =
+  0;
+
+
+  wrong =
+  0;
+
+
+  attempts =
+  0;
+
+
+  reviewMap =
+  {};
+
+
+  currentTarget =
+  null;
+
+
+  gameEnded =
+  false;
+
+
+  document
+  .getElementById(
+    'homeScreen'
+  )
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  document
+  .getElementById(
+    'whackScreen'
+  )
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  document
+  .getElementById(
+    'catchScreen'
+  )
+  .classList
+  .add(
+    'hidden'
+  );
+
+}
+
+
+function loseLife(){
+
+  lives =
+  Math.max(
+    0,
+    lives-1
+  );
+
+
+  combo =
+  0;
+
+
+  if(
+    lives<=0
+  ){
+
+    endGame();
+
+  }
+
+}
+
+
+function markReview(item){
+
+  if(!item){
+
+    return;
+
+  }
+
+
+  reviewMap[
+    item.word
+  ]
+  =
+  {
+    word:
+    item.word,
+
+    meaning:
+    item.meaning,
+
+    count:
+    (
+      reviewMap[
+        item.word
+      ]?.count
+      ||
+      0
+    )
+    +
+    1
+  };
+
+}
+
+
+function addCorrect(){
+
+  correct++;
+
+
+  attempts++;
+
+
+  combo++;
+
+
+  bestCombo =
+  Math.max(
+    bestCombo,
+    combo
+  );
+
+
+  const bonus =
+  Math.min(
+    combo-1,
+    10
+  )
+  *
+  10;
+
+
+  score +=
+  100
+  +
+  bonus;
+
+}
+
+
+function addWrong(
+  word
+){
+
+  wrong++;
+
+
+  attempts++;
+
+
+  combo =
+  0;
+
+
+  markReview(
+    word
+  );
+
+}
+
+
+function accuracy(){
+
+  if(!attempts){
+
+    return 0;
+
+  }
+
+
+  return Math.round(
+    correct
+    /
+    attempts
+    *
+    100
+  );
+
+}
+
+
+function livesText(){
+
+  return(
+    '❤️'
+    .repeat(lives)
+    ||
+    '—'
+  );
+
+}
+
+
+function feedbackMessage(
+  text,
+  type
+){
+
+  const box =
+  document.getElementById(
+    'feedback'
+  );
+
+
+  box.textContent =
+  text;
+
+
+  box.className =
+  `feedback ${type} show`;
+
+
+  clearTimeout(
+    box._timer
+  );
+
+
+  box._timer =
+  setTimeout(
+    ()=>{
+
+      box.classList.remove(
+        'show'
+      );
+
+    },
+    650
+  );
+
+}
+
+
+/* =========================================================
+   WHACK A WORD
+========================================================= */
+
+function startWhack(){
+
+  prepareGame(
+    'whack'
+  );
+
+
+  document
+  .getElementById(
+    'whackScreen'
+  )
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  createWhackBoard();
+
+
+  let timeLeft =
+  45;
+
+
+  updateWhackHUD(
+    timeLeft
+  );
+
+
+  startWhackRound();
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      timeLeft--;
+
+
+      updateWhackHUD(
+        timeLeft
+      );
+
+
+      if(
+        timeLeft<=0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+}
+
+
+function createWhackBoard(){
+
+  const board =
+  document.getElementById(
+    'whackBoard'
+  );
+
+
+  board.innerHTML =
+  Array.from(
+    {
+      length:9
+    },
+    (_,index)=>
+    `
+      <div class="hole">
+
+        <div class="hole-ground"></div>
+
+        <button
+          class="mole"
+          id="mole${index}"
+          type="button"
+        >
+
+          <div class="mole-face">
+            🐹
+          </div>
+
+          <div
+            class="mole-word"
+          ></div>
+
+        </button>
+
+      </div>
+    `
+  )
+  .join('');
+
+}
+
+
+function startWhackRound(){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  currentTarget =
+  randomItem(
+    gameWords
+  );
+
+
+  document
+  .getElementById(
+    'whackTarget'
+  )
+  .textContent =
+  getPrompt(
+    currentTarget
+  );
+
+
+  const options =
+  getOptions(
+    currentTarget,
+    4
+  );
+
+
+  const positions =
+  shuffle(
+    [
+      0,1,2,3,4,5,6,7,8
+    ]
+  )
+  .slice(
+    0,
+    4
+  );
+
+
+  document
+  .querySelectorAll(
+    '.mole'
+  )
+  .forEach(
+    mole=>{
+
+      mole.className =
+      'mole';
+
+
+      mole.onclick =
+      null;
+
+    }
+  );
+
+
+  options.forEach(
+    (
+      word,
+      index
+    )=>{
+
+      const mole =
+      document.getElementById(
+        'mole'
+        +
+        positions[index]
+      );
+
+
+      mole
+      .querySelector(
+        '.mole-word'
+      )
+      .textContent =
+      getAnswer(
+        word
+      );
+
+
+      mole.dataset.correct =
+      word.word ===
+      currentTarget.word
+      ?
+      '1'
+      :
+      '0';
+
+
+      mole.onclick =
+      ()=>{
+
+        hitMole(
+          mole,
+          word
+        );
+
+      };
+
+
+      requestAnimationFrame(
+        ()=>{
+
+          mole.classList.add(
+            'show'
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  /*
+   * Game càng về sau càng nhanh.
+   */
+
+  const delay =
+  Math.max(
+    1100,
+    2500
+    -
+    correct*45
+  );
+
+
+  roundTimer =
+  setTimeout(
+    ()=>{
+
+      if(gameEnded){
+
+        return;
+
+      }
+
+
+      addWrong(
+        currentTarget
+      );
+
+
+      loseLife();
+
+
+      feedbackMessage(
+        '⏱ Quá chậm!',
+        'bad'
+      );
+
+
+      updateWhackHUD();
+
+
+      if(!gameEnded){
+
+        startWhackRound();
+
+      }
+
+    },
+    delay
+  );
+
+}
+
+
+function hitMole(
+  mole,
+  word
+){
+
+  if(
+    gameEnded
+    ||
+    !mole.classList.contains(
+      'show'
+    )
+  ){
+
+    return;
+
+  }
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  document
+  .querySelectorAll(
+    '.mole'
+  )
+  .forEach(
+    item=>{
+
+      item.onclick =
+      null;
+
+    }
+  );
+
+
+  const good =
+  word.word ===
+  currentTarget.word;
+
+
+  if(good){
+
+    addCorrect();
+
+
+    mole.classList.add(
+      'good-hit'
+    );
+
+
+    feedbackMessage(
+      `✓ +${100 + Math.min(combo-1,10)*10}`,
+      'good'
+    );
+
+  }
+
+  else{
+
+    addWrong(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    mole.classList.add(
+      'bad-hit'
+    );
+
+
+    feedbackMessage(
+      `✕ ${getAnswer(currentTarget)}`,
+      'bad'
+    );
+
+  }
+
+
+  updateWhackHUD();
+
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  setTimeout(
+    startWhackRound,
+    450
+  );
+
+}
+
+
+function updateWhackHUD(
+  time
+){
+
+  document
+  .getElementById(
+    'whackScore'
+  )
+  .textContent =
+  score;
+
+
+  if(
+    typeof time ===
+    'number'
+  ){
+
+    document
+    .getElementById(
+      'whackTime'
+    )
+    .textContent =
+    Math.max(
+      0,
+      time
+    );
+
+  }
+
+
+  document
+  .getElementById(
+    'whackLives'
+  )
+  .textContent =
+  livesText();
+
+
+  document
+  .getElementById(
+    'whackCombo'
+  )
+  .textContent =
+  `x${combo}`;
+
+
+  document
+  .getElementById(
+    'whackAccuracy'
+  )
+  .textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   FRUIT CATCHER
+========================================================= */
+
+function startCatcher(){
+
+  prepareGame(
+    'catch'
+  );
+
+
+  document
+  .getElementById(
+    'catchScreen'
+  )
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  basketX =
+  50;
+
+
+  renderBasket();
+
+
+  let timeLeft =
+  60;
+
+
+  updateCatchHUD(
+    timeLeft
+  );
+
+
+  startFruitRound();
+
+
+  gameTimer =
+  setInterval(
+    ()=>{
+
+      timeLeft--;
+
+
+      updateCatchHUD(
+        timeLeft
+      );
+
+
+      if(
+        timeLeft<=0
+      ){
+
+        endGame();
+
+      }
+
+    },
+    1000
+  );
+
+
+  lastFrameTime =
+  performance.now();
+
+
+  catchAnimation =
+  requestAnimationFrame(
+    catcherLoop
+  );
+
+}
+
+
+function startFruitRound(){
+
+  if(
+    gameEnded
+    ||
+    catcherRoundChanging
+  ){
+
+    return;
+
+  }
+
+
+  clearFruits();
+
+
+  currentTarget =
+  randomItem(
+    gameWords
+  );
+
+
+  document
+  .getElementById(
+    'catchTarget'
+  )
+  .textContent =
+  getPrompt(
+    currentTarget
+  );
+
+
+  const options =
+  getOptions(
+    currentTarget,
+    4
+  );
+
+
+  const xSlots =
+  shuffle(
+    [
+      14,
+      38,
+      62,
+      86
+    ]
+  );
+
+
+  options.forEach(
+    (
+      word,
+      index
+    )=>{
+
+      createFruit(
+        word,
+        xSlots[index],
+        -40
+        -
+        index*115
+      );
+
+    }
+  );
+
+}
+
+
+function createFruit(
+  word,
+  x,
+  y
+){
+
+  const area =
+  document.getElementById(
+    'catchArea'
+  );
+
+
+  const element =
+  document.createElement(
+    'div'
+  );
+
+
+  element.className =
+  'fruit';
+
+
+  element.innerHTML =
+  `
+    <div class="fruit-icon">
+      ${randomItem(FRUITS)}
+    </div>
+
+    <div class="fruit-word">
+      ${escapeHTML(getAnswer(word))}
+    </div>
+  `;
+
+
+  area.appendChild(
+    element
+  );
+
+
+  const object =
+  {
+    element,
+    word,
+    x,
+    y,
+    speed:
+      75
+      +
+      Math.random()*22
+      +
+      correct*1.8,
+
+    caught:false
+  };
+
+
+  fruitObjects.push(
+    object
+  );
+
+
+  renderFruit(
+    object
+  );
+
+}
+
+
+function catcherLoop(time){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  const dt =
+  Math.min(
+    .035,
+    (
+      time-lastFrameTime
+    )
+    /
+    1000
+  );
+
+
+  lastFrameTime =
+  time;
+
+
+  const area =
+  document.getElementById(
+    'catchArea'
+  );
+
+
+  const areaHeight =
+  area.clientHeight;
+
+
+  fruitObjects
+  .slice()
+  .forEach(
+    fruit=>{
+
+      if(
+        fruit.caught
+      ){
+
+        return;
+
+      }
+
+
+      fruit.y +=
+      fruit.speed*dt;
+
+
+      renderFruit(
+        fruit
+      );
+
+
+      if(
+        fruit.y >
+        areaHeight-65
+        &&
+        fruit.y <
+        areaHeight-10
+        &&
+        fruitHitsBasket(
+          fruit
+        )
+      ){
+
+        catchFruit(
+          fruit
+        );
+
+
+        return;
+
+      }
+
+
+      if(
+        fruit.y >
+        areaHeight+80
+      ){
+
+        fruitPassed(
+          fruit
+        );
+
+      }
+
+    }
+  );
+
+
+  catchAnimation =
+  requestAnimationFrame(
+    catcherLoop
+  );
+
+}
+
+
+function renderFruit(fruit){
+
+  fruit.element.style.left =
+  fruit.x
+  +
+  '%';
+
+
+  fruit.element.style.top =
+  fruit.y
+  +
+  'px';
+
+}
+
+
+function fruitHitsBasket(fruit){
+
+  const distance =
+  Math.abs(
+    fruit.x
+    -
+    basketX
+  );
+
+
+  return distance <
+  10;
+
+}
+
+
+function catchFruit(fruit){
+
+  if(
+    fruit.caught
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  fruit.caught =
+  true;
+
+
+  const good =
+  fruit.word.word ===
+  currentTarget.word;
+
+
+  fruit.element.remove();
+
+
+  fruitObjects =
+  fruitObjects.filter(
+    item =>
+    item !==
+    fruit
+  );
+
+
+  if(good){
+
+    addCorrect();
+
+
+    feedbackMessage(
+      '✓ Hứng chính xác!',
+      'good'
+    );
+
+
+    updateCatchHUD();
+
+
+    changeFruitRound();
+
+  }
+
+  else{
+
+    addWrong(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    feedbackMessage(
+      '✕ Sai từ!',
+      'bad'
+    );
+
+
+    updateCatchHUD();
+
+  }
+
+}
+
+
+function fruitPassed(fruit){
+
+  if(
+    fruit.caught
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  fruit.caught =
+  true;
+
+
+  fruit.element.remove();
+
+
+  fruitObjects =
+  fruitObjects.filter(
+    item =>
+    item !==
+    fruit
+  );
+
+
+  const wasCorrect =
+  fruit.word.word ===
+  currentTarget.word;
+
+
+  if(wasCorrect){
+
+    addWrong(
+      currentTarget
+    );
+
+
+    loseLife();
+
+
+    feedbackMessage(
+      '💨 Bỏ lỡ từ đúng!',
+      'bad'
+    );
+
+
+    updateCatchHUD();
+
+
+    if(!gameEnded){
+
+      changeFruitRound();
+
+    }
+
+  }
+
+}
+
+
+function changeFruitRound(){
+
+  if(
+    catcherRoundChanging
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  catcherRoundChanging =
+  true;
+
+
+  setTimeout(
+    ()=>{
+
+      catcherRoundChanging =
+      false;
+
+
+      if(!gameEnded){
+
+        startFruitRound();
+
+      }
+
+    },
+    400
+  );
+
+}
+
+
+function clearFruits(){
+
+  fruitObjects.forEach(
+    fruit=>{
+
+      fruit.element.remove();
+
+    }
+  );
+
+
+  fruitObjects =
+  [];
+
+}
+
+
+function updateCatchHUD(
+  time
+){
+
+  document
+  .getElementById(
+    'catchScore'
+  )
+  .textContent =
+  score;
+
+
+  if(
+    typeof time ===
+    'number'
+  ){
+
+    document
+    .getElementById(
+      'catchTime'
+    )
+    .textContent =
+    Math.max(
+      0,
+      time
+    );
+
+  }
+
+
+  document
+  .getElementById(
+    'catchLives'
+  )
+  .textContent =
+  livesText();
+
+
+  document
+  .getElementById(
+    'catchCombo'
+  )
+  .textContent =
+  `x${combo}`;
+
+
+  document
+  .getElementById(
+    'catchAccuracy'
+  )
+  .textContent =
+  `${accuracy()}%`;
+
+}
+
+
+/* =========================================================
+   BASKET CONTROL
+========================================================= */
+
+function moveBasket(direction){
+
+  basketX +=
+  direction*8;
+
+
+  basketX =
+  Math.max(
+    7,
+    Math.min(
+      93,
+      basketX
+    )
+  );
+
+
+  renderBasket();
+
+}
+
+
+function renderBasket(){
+
+  document
+  .getElementById(
+    'basket'
+  )
+  .style
+  .left =
+  basketX
+  +
+  '%';
+
+}
+
+
+document
+.addEventListener(
+  'keydown',
+  event=>{
+
+    if(
+      currentGame !==
+      'catch'
+      ||
+      gameEnded
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      event.key ===
+      'ArrowLeft'
+    ){
+
+      event.preventDefault();
+
+
+      moveBasket(
+        -1
+      );
+
+    }
+
+
+    if(
+      event.key ===
+      'ArrowRight'
+    ){
+
+      event.preventDefault();
+
+
+      moveBasket(
+        1
+      );
+
+    }
+
+  }
+);
+
+
+const catchArea =
+document.getElementById(
+  'catchArea'
+);
+
+
+function moveBasketFromPointer(
+  event
+){
+
+  if(
+    currentGame !==
+    'catch'
+    ||
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  const rect =
+  catchArea
+  .getBoundingClientRect();
+
+
+  basketX =
+  (
+    event.clientX
+    -
+    rect.left
+  )
+  /
+  rect.width
+  *
+  100;
+
+
+  basketX =
+  Math.max(
+    7,
+    Math.min(
+      93,
+      basketX
+    )
+  );
+
+
+  renderBasket();
+
+}
+
+
+catchArea
+.addEventListener(
+  'pointerdown',
+  event=>{
+
+    catchArea.setPointerCapture(
+      event.pointerId
+    );
+
+
+    moveBasketFromPointer(
+      event
+    );
+
+  }
+);
+
+
+catchArea
+.addEventListener(
+  'pointermove',
+  event=>{
+
+    if(
+      event.buttons
+      ||
+      event.pointerType ===
+      'touch'
+    ){
+
+      moveBasketFromPointer(
+        event
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   END GAME
+========================================================= */
+
+function endGame(){
+
+  if(gameEnded){
+
+    return;
+
+  }
+
+
+  gameEnded =
+  true;
+
+
+  clearInterval(
+    gameTimer
+  );
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  if(
+    catchAnimation
+  ){
+
+    cancelAnimationFrame(
+      catchAnimation
+    );
+
+  }
+
+
+  clearFruits();
+
+
+  saveGameResult();
+
+
+  showResult();
+
+}
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function readJSON(
+  key,
+  fallback
+){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        key
+      )
+      ||
+      JSON.stringify(
+        fallback
+      )
+    );
+
+  }
+
+  catch(e){
+
+    return fallback;
+
+  }
+
+}
+
+
+function saveGameResult(){
+
+  const set =
+  getCurrentSet();
+
+
+  const student =
+  readJSON(
+    'IELTS_PRACTICE_STUDENT',
+    {}
+  );
+
+
+  const history =
+  readJSON(
+    HISTORY_KEY,
+    []
+  );
+
+
+  history.unshift({
+
+    timestamp:
+    new Date()
+    .toISOString(),
+
+    name:
+    student?.name || '',
+
+    className:
+    student?.className || '',
+
+    set:
+    set.key,
+
+    setName:
+    set.name,
+
+    game:
+    currentGame,
+
+    direction:
+    gameDirection,
+
+    score:
+    score,
+
+    correct:
+    correct,
+
+    wrong:
+    wrong,
+
+    attempts:
+    attempts,
+
+    accuracy:
+    accuracy(),
+
+    bestCombo:
+    bestCombo,
+
+    reviewWords:
+    Object.values(
+      reviewMap
+    )
+
+  });
+
+
+  /*
+   * Chỉ giữ 100 lượt gần nhất.
+   */
+
+  localStorage.setItem(
+
+    HISTORY_KEY,
+
+    JSON.stringify(
+      history.slice(
+        0,
+        100
+      )
+    )
+
+  );
+
+
+  const best =
+  readJSON(
+    BEST_KEY,
+    {}
+  );
+
+
+  const id =
+  `${set.key}_${currentGame}`;
+
+
+  best[id] =
+  Math.max(
+    Number(
+      best[id]
+      ||
+      0
+    ),
+    score
+  );
+
+
+  localStorage.setItem(
+
+    BEST_KEY,
+
+    JSON.stringify(
+      best
+    )
+
+  );
+
+
+  updateBestScores();
+
+}
+
+
+function updateBestScores(){
+
+  const best =
+  readJSON(
+    BEST_KEY,
+    {}
+  );
+
+
+  const setKey =
+  document
+  .getElementById(
+    'setSelect'
+  )
+  ?.value
+  ||
+  'education';
+
+
+  document
+  .getElementById(
+    'whackBest'
+  )
+  .textContent =
+  `🏆 Best: ${best[`${setKey}_whack`] || 0}`;
+
+
+  document
+  .getElementById(
+    'catchBest'
+  )
+  .textContent =
+  `🏆 Best: ${best[`${setKey}_catch`] || 0}`;
+
+}
+
+
+/* =========================================================
+   RESULT UI
+========================================================= */
+
+function showResult(){
+
+  const set =
+  getCurrentSet();
+
+
+  const best =
+  readJSON(
+    BEST_KEY,
+    {}
+  );
+
+
+  const id =
+  `${set.key}_${currentGame}`;
+
+
+  document
+  .getElementById(
+    'resultIcon'
+  )
+  .textContent =
+  score>=1500
+  ?
+  '🏆'
+  :
+  score>=800
+  ?
+  '⭐'
+  :
+  '🎯';
+
+
+  document
+  .getElementById(
+    'resultTitle'
+  )
+  .textContent =
+  currentGame ===
+  'whack'
+
+  ?
+
+  'Hoàn thành Whack a Word!'
+
+  :
+
+  'Hoàn thành Word Catcher!';
+
+
+  document
+  .getElementById(
+    'resultScore'
+  )
+  .textContent =
+  score;
+
+
+  document
+  .getElementById(
+    'resultCorrect'
+  )
+  .textContent =
+  correct;
+
+
+  document
+  .getElementById(
+    'resultAccuracy'
+  )
+  .textContent =
+  `${accuracy()}%`;
+
+
+  document
+  .getElementById(
+    'resultCombo'
+  )
+  .textContent =
+  `x${bestCombo}`;
+
+
+  document
+  .getElementById(
+    'resultAttempts'
+  )
+  .textContent =
+  attempts;
+
+
+  document
+  .getElementById(
+    'resultBest'
+  )
+  .textContent =
+  best[id]
+  ||
+  score;
+
+
+  document
+  .getElementById(
+    'resultSet'
+  )
+  .textContent =
+  set.name;
+
+
+  const review =
+  Object.values(
+    reviewMap
+  )
+  .sort(
+    (
+      a,
+      b
+    )=>
+    b.count-a.count
+  );
+
+
+  document
+  .getElementById(
+    'reviewWords'
+  )
+  .innerHTML =
+
+  review.length
+
+  ?
+
+  review
+  .map(
+    item=>
+    `
+      <span
+        class="review-chip"
+        title="${escapeHTML(item.meaning)}"
+      >
+        ${escapeHTML(item.word)}
+        ×${item.count}
+      </span>
+    `
+  )
+  .join('')
+
+  :
+
+  `
+    <span
+      style="
+        color:#18845a;
+        font-size:10px;
+        font-weight:900;
+      "
+    >
+      ✓ Không có từ nào cần ôn lại.
+    </span>
+  `;
+
+
+  document
+  .getElementById(
+    'resultOverlay'
+  )
+  .classList
+  .remove(
+    'hidden'
+  );
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function quitGame(){
+
+  const yes =
+  confirm(
+    'Thoát game hiện tại? Điểm của lượt này sẽ không được lưu.'
+  );
+
+
+  if(!yes){
+
+    return;
+
+  }
+
+
+  clearGame();
+
+
+  returnHome();
+
+}
+
+
+function clearGame(){
+
+  clearInterval(
+    gameTimer
+  );
+
+
+  clearTimeout(
+    roundTimer
+  );
+
+
+  if(
+    catchAnimation
+  ){
+
+    cancelAnimationFrame(
+      catchAnimation
+    );
+
+  }
+
+
+  clearFruits();
+
+
+  gameTimer =
+  null;
+
+
+  roundTimer =
+  null;
+
+
+  catchAnimation =
+  null;
+
+
+  catcherRoundChanging =
+  false;
+
+}
+
+
+function returnHome(){
+
+  clearGame();
+
+
+  currentGame =
+  null;
+
+
+  document
+  .getElementById(
+    'resultOverlay'
+  )
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  document
+  .getElementById(
+    'whackScreen'
+  )
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  document
+  .getElementById(
+    'catchScreen'
+  )
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  document
+  .getElementById(
+    'homeScreen'
+  )
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  updateBestScores();
+
+}
+
+
+function replayGame(){
+
+  document
+  .getElementById(
+    'resultOverlay'
+  )
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  if(
+    lastGame ===
+    'whack'
+  ){
+
+    startWhack();
+
+  }
+
+  else{
+
+    startCatcher();
+
+  }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ''
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    character=>({
+
+      '&':'&amp;',
+
+      '<':'&lt;',
+
+      '>':'&gt;',
+
+      '"':'&quot;',
+
+      "'":'&#39;'
+
+    })[character]
+
+  );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+init();
+
+</script>
+</body>
+</html>
