@@ -234,6 +234,23 @@ button:disabled{cursor:not-allowed;opacity:.55}
 
 .audio-box audio{width:100%}
 
+/* Keep the full-audio player available while students scroll the script */
+#part1Panel{
+  overflow:visible;
+}
+#part1Panel .audio-box{
+  position:sticky;
+  top:76px;
+  z-index:28;
+  box-shadow:0 10px 26px rgba(40,27,83,.12);
+}
+@media(max-width:720px){
+  #part1Panel .audio-box{
+    top:72px;
+  }
+}
+
+
 .practice-audio-tools{
   display:flex;
   align-items:center;
@@ -552,12 +569,6 @@ button:disabled{cursor:not-allowed;opacity:.55}
   font-size:11px;
   line-height:1.6;
 }
-.answer-key{
-  margin-top:6px;
-  color:#16845b;
-  font-size:9px;
-  font-weight:900;
-}
 
 .result-card{
   margin-bottom:15px;
@@ -665,7 +676,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
       <div class="phase-num">2</div>
       <div>
         <strong>Dictation</strong>
-        <span>Nghe các đoạn chứa đáp án Q1–Q10.</span>
+        <span>Nghe chép chính tả 10 đoạn trọng tâm.</span>
       </div>
     </div>
   </section>
@@ -759,11 +770,11 @@ button:disabled{cursor:not-allowed;opacity:.55}
       <div>
         <h2>Phần 2 · Dictation</h2>
         <p>
-          Mỗi mục sẽ tự phát đúng đoạn cần luyện từ cùng một file audio gốc.
-          Nghe và chép lại chính xác câu/đoạn chứa thông tin của Questions 1–10.
+          Mỗi mục tự phát một đoạn ngắn từ cùng file audio gốc.
+          Nghe lại bao nhiêu lần tùy ý và chép chính xác những gì bạn nghe được.
         </p>
       </div>
-      <div class="badge">10 đoạn luyện</div>
+      <div class="badge">10 dictations</div>
     </div>
 
     <div class="panel-body">
@@ -1176,8 +1187,7 @@ function renderPart2(){
     <article class="dictation-card" data-q="${item.q}">
       <div class="dictation-top">
         <div>
-          <div class="q-label">IELTS Q${item.q}</div>
-          <div class="q-context">${escapeHTML(item.context)}</div>
+          <div class="q-label">Dictation ${String(item.q).padStart(2,"0")}</div>
         </div>
         <div class="duration">${item.duration}</div>
       </div>
@@ -1273,7 +1283,7 @@ function renderPart2(){
       <textarea
         class="dictation-input"
         id="dictationQ${item.q}"
-        placeholder="Chép lại toàn bộ câu/đoạn bạn nghe được..."
+        placeholder="Chép lại chính xác những gì bạn nghe được..."
         spellcheck="false"
       ></textarea>
 
@@ -1284,7 +1294,6 @@ function renderPart2(){
         </div>
 
         <div class="transcript">${escapeHTML(item.transcript)}</div>
-        <div class="answer-key">Thông tin cho Q${item.q}: ${escapeHTML(item.key)}</div>
       </div>
     </article>
   `).join("");
@@ -1324,12 +1333,12 @@ function setMainAudioSpeed(speed,button){
   }
 }
 
-const dictationAudio = new Audio(AUDIO_FILE);
-dictationAudio.preload = "metadata";
+const dictationAudio = $("part1Audio");
 
 let activeDictationQ = null;
 let dictationTicker = null;
 let dictationSpeed = 1;
+let dictationActionToken = 0;
 
 function getDictationItem(q){
   return dictationItems.find(item=>item.q===q);
@@ -1340,6 +1349,55 @@ function formatTime(seconds){
   const minutes=Math.floor(safe/60);
   const secs=Math.floor(safe%60);
   return `${minutes}:${String(secs).padStart(2,"0")}`;
+}
+
+function waitForAudioMetadata(){
+  if(dictationAudio.readyState>=1 && Number.isFinite(dictationAudio.duration)){
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve,reject)=>{
+    const done=()=>{
+      cleanup();
+      resolve();
+    };
+
+    const fail=()=>{
+      cleanup();
+      reject(new Error("Không tải được audio."));
+    };
+
+    const cleanup=()=>{
+      dictationAudio.removeEventListener("loadedmetadata",done);
+      dictationAudio.removeEventListener("error",fail);
+    };
+
+    dictationAudio.addEventListener("loadedmetadata",done,{once:true});
+    dictationAudio.addEventListener("error",fail,{once:true});
+    dictationAudio.load();
+  });
+}
+
+function waitForSeek(target){
+  if(Math.abs(dictationAudio.currentTime-target)<.04 && !dictationAudio.seeking){
+    return Promise.resolve();
+  }
+
+  return new Promise(resolve=>{
+    let settled=false;
+
+    const finish=()=>{
+      if(settled) return;
+      settled=true;
+      dictationAudio.removeEventListener("seeked",finish);
+      clearTimeout(timer);
+      resolve();
+    };
+
+    const timer=setTimeout(finish,700);
+    dictationAudio.addEventListener("seeked",finish,{once:true});
+    dictationAudio.currentTime=target;
+  });
 }
 
 function updateClipUI(q){
@@ -1406,7 +1464,7 @@ function startDictationTicker(){
     const item=getDictationItem(activeDictationQ);
     if(!item) return;
 
-    if(dictationAudio.currentTime>=item.end-.03){
+    if(dictationAudio.currentTime>=item.end-.025){
       dictationAudio.pause();
       dictationAudio.currentTime=item.end;
       updateClipUI(item.q);
@@ -1416,12 +1474,14 @@ function startDictationTicker(){
     }
 
     updateClipUI(item.q);
-  },30);
+  },25);
 }
 
-function prepareClip(q,position=null){
+async function positionClip(q,relative=0){
   const item=getDictationItem(q);
   if(!item) return null;
+
+  await waitForAudioMetadata();
 
   if(activeDictationQ!==null && activeDictationQ!==q){
     const previous=activeDictationQ;
@@ -1432,19 +1492,18 @@ function prepareClip(q,position=null){
   activeDictationQ=q;
   dictationAudio.playbackRate=dictationSpeed;
 
-  let target=
-    position===null
-    ?
-    item.start
-    :
-    item.start+Number(position);
-
-  target=Math.max(
-    item.start,
-    Math.min(item.end,target)
+  const safeRelative=Math.max(
+    0,
+    Math.min(item.end-item.start,Number(relative)||0)
   );
 
+  const target=item.start+safeRelative;
+
+  /* Critical: wait until the browser has actually completed the seek
+     before playback begins. This prevents a clip from starting at the
+     previous position / beginning of the MP3 on slower connections. */
   dictationAudio.currentTime=target;
+  await waitForSeek(target);
 
   updateClipUI(q);
   updatePlayButtons();
@@ -1452,15 +1511,12 @@ function prepareClip(q,position=null){
   return item;
 }
 
-function toggleClip(q){
+async function toggleClip(q){
   const item=getDictationItem(q);
   if(!item) return;
 
-  if(
-    activeDictationQ===q
-    &&
-    !dictationAudio.paused
-  ){
+  if(activeDictationQ===q && !dictationAudio.paused){
+    dictationActionToken++;
     dictationAudio.pause();
     stopDictationTicker();
     updatePlayButtons();
@@ -1468,13 +1524,12 @@ function toggleClip(q){
     return;
   }
 
+  const token=++dictationActionToken;
+
   let relative=0;
 
   if(activeDictationQ===q){
-    relative=Math.max(
-      0,
-      dictationAudio.currentTime-item.start
-    );
+    relative=Math.max(0,dictationAudio.currentTime-item.start);
 
     if(
       dictationAudio.currentTime>=item.end-.05
@@ -1485,54 +1540,95 @@ function toggleClip(q){
     }
   }
 
-  prepareClip(q,relative);
+  try{
+    await positionClip(q,relative);
+    if(token!==dictationActionToken) return;
 
-  dictationAudio
-  .play()
-  .then(()=>{
+    await dictationAudio.play();
+    if(token!==dictationActionToken){
+      dictationAudio.pause();
+      return;
+    }
+
     startDictationTicker();
     updatePlayButtons();
-  })
-  .catch(()=>{});
+  }
+  catch(error){
+    toast("Không thể phát audio. Hãy thử lại.");
+  }
 }
 
-function replayClip(q){
-  prepareClip(q,0);
+async function replayClip(q){
+  const token=++dictationActionToken;
 
-  dictationAudio
-  .play()
-  .then(()=>{
+  try{
+    await positionClip(q,0);
+    if(token!==dictationActionToken) return;
+
+    await dictationAudio.play();
+    if(token!==dictationActionToken){
+      dictationAudio.pause();
+      return;
+    }
+
     startDictationTicker();
     updatePlayButtons();
-  })
-  .catch(()=>{});
+  }
+  catch(error){
+    toast("Không thể phát audio. Hãy thử lại.");
+  }
 }
 
-function seekClip(q,seconds){
+async function seekClip(q,seconds){
   const item=getDictationItem(q);
   if(!item) return;
 
-  let relative=0;
+  dictationActionToken++;
+  const wasPlaying=activeDictationQ===q && !dictationAudio.paused;
 
+  let relative=0;
   if(activeDictationQ===q){
     relative=dictationAudio.currentTime-item.start;
   }
 
   relative=Math.max(
     0,
-    Math.min(
-      item.end-item.start,
-      relative+seconds
-    )
+    Math.min(item.end-item.start,relative+seconds)
   );
 
-  prepareClip(q,relative);
-  updateClipUI(q);
+  try{
+    await positionClip(q,relative);
+
+    if(wasPlaying && relative<item.end-item.start-.05){
+      await dictationAudio.play();
+      startDictationTicker();
+    }
+
+    updatePlayButtons();
+  }
+  catch(error){
+    toast("Không thể tua audio. Hãy thử lại.");
+  }
 }
 
-function scrubClip(q,value){
-  prepareClip(q,Number(value));
-  updateClipUI(q);
+async function scrubClip(q,value){
+  dictationActionToken++;
+  const wasPlaying=activeDictationQ===q && !dictationAudio.paused;
+
+  try{
+    await positionClip(q,Number(value));
+
+    const item=getDictationItem(q);
+    if(wasPlaying && Number(value)<item.end-item.start-.05){
+      await dictationAudio.play();
+      startDictationTicker();
+    }
+
+    updatePlayButtons();
+  }
+  catch(error){
+    toast("Không thể tua audio. Hãy thử lại.");
+  }
 }
 
 function setClipSpeed(q,speed,button){
@@ -1558,8 +1654,14 @@ dictationAudio.addEventListener("pause",()=>{
   }
 });
 
-dictationAudio.addEventListener("seeked",()=>{
+dictationAudio.addEventListener("timeupdate",()=>{
   if(activeDictationQ!==null){
+    const item=getDictationItem(activeDictationQ);
+    if(item && dictationAudio.currentTime>=item.end){
+      dictationAudio.pause();
+      dictationAudio.currentTime=item.end;
+      stopDictationTicker();
+    }
     updateClipUI(activeDictationQ);
   }
 });
@@ -1699,7 +1801,11 @@ function showPart2(){
   const fullAudio=$("part1Audio");
   if(fullAudio){
     fullAudio.pause();
+    fullAudio.playbackRate=1;
   }
+  dictationSpeed=1;
+  activeDictationQ=null;
+  stopDictationTicker();
 
   $("part1Panel").classList.add("hidden");
   $("part2Panel").classList.remove("hidden");
