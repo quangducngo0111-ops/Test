@@ -187,19 +187,6 @@ button:disabled{
   font-weight:850;
 }
 
-.music-toggle{
-  padding:8px 10px;
-
-  border:1px solid var(--line);
-  border-radius:10px;
-
-  background:#fff;
-  color:#4e397e;
-
-  font-size:10px;
-  font-weight:950;
-}
-
 
 /* =========================================================
    PAGE
@@ -3712,15 +3699,6 @@ button:disabled{
 
     <div class="top-actions">
 
-      <button
-        class="music-toggle"
-        id="musicToggle"
-        type="button"
-        onclick="toggleMusic()"
-      >
-        🔊 Nhạc
-      </button>
-
       <div
         class="student"
         id="studentInfo"
@@ -5447,193 +5425,6 @@ const GAME_INTROS = {
   }
 
 };
-
-
-/* =========================================================
-   AUDIO
-========================================================= */
-
-const GAME_MUSIC = {
-
-  whack:
-    "./audio/whack.mp3",
-
-  catcher:
-    "./audio/catcher.mp3",
-
-  racer:
-    "./audio/racer.mp3",
-
-  match:
-    "./audio/match.mp3",
-
-  flappy:
-    "./audio/flappy.mp3",
-
-  balloon:
-    "./audio/balloon.mp3",
-
-  shark:
-    "./audio/shark.mp3",
-
-  monkey:
-    "./audio/monkey.mp3"
-
-};
-
-
-const bgMusic =
-new Audio();
-
-
-bgMusic.loop =
-true;
-
-
-bgMusic.preload =
-"auto";
-
-
-bgMusic.volume =
-.28;
-
-
-let musicEnabled =
-localStorage.getItem(
-  "VOCABULARY_MUSIC_ENABLED"
-)
-!==
-"false";
-
-
-function updateMusicButton(){
-
-  $("musicToggle")
-  .textContent =
-  musicEnabled
-
-  ?
-
-  "🔊 Nhạc"
-
-  :
-
-  "🔇 Nhạc";
-
-}
-
-
-function startGameMusic(game){
-
-  stopGameMusic();
-
-
-  if(
-    !musicEnabled
-    ||
-    !GAME_MUSIC[
-      game
-    ]
-  ){
-
-    return;
-
-  }
-
-
-  bgMusic.src =
-  GAME_MUSIC[
-    game
-  ];
-
-
-  bgMusic.currentTime =
-  0;
-
-
-  const promise =
-  bgMusic.play();
-
-
-  if(
-    promise
-    &&
-    typeof promise.catch ===
-    "function"
-  ){
-
-    promise.catch(
-      ()=>{}
-    );
-
-  }
-
-}
-
-
-function stopGameMusic(){
-
-  try{
-
-    bgMusic.pause();
-
-    bgMusic.currentTime =
-    0;
-
-  }
-
-  catch(error){}
-
-}
-
-
-function toggleMusic(){
-
-  musicEnabled =
-  !musicEnabled;
-
-
-  localStorage.setItem(
-    "VOCABULARY_MUSIC_ENABLED",
-    String(
-      musicEnabled
-    )
-  );
-
-
-  updateMusicButton();
-
-
-  if(
-    !musicEnabled
-  ){
-
-    stopGameMusic();
-
-    return;
-
-  }
-
-
-  if(
-    currentGame
-    &&
-    !gameEnded
-    &&
-    $("gameIntroOverlay")
-    .classList
-    .contains(
-      "hidden"
-    )
-  ){
-
-    startGameMusic(
-      currentGame
-    );
-
-  }
-
-}
 
 
 /* =========================================================
@@ -13087,9 +12878,6 @@ function replayGame(){
 
 function init(){
 
-  updateMusicButton();
-
-
   if(
     window.VOCABULARY_LOAD_ERROR
     ||
@@ -13166,6 +12954,6 @@ function init(){
 init();
 
 </script>
-
+<script src="./audio/audio-engine.js?v=20260918-audio-v4"></script>
 </body>
 </html>
