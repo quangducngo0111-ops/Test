@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Intensive Listening · Bài 01 · Self-drive Tours in the USA</title>
+
+<style>
+:root{
+  --purple:#2b1766;
+  --purple2:#6f52d7;
+  --blue:#3478e5;
+  --green:#16845b;
+  --green2:#e3f6ec;
+  --red:#c93f52;
+  --red2:#ffe7ea;
+  --amber:#b87818;
+  --amber2:#fff4dd;
+  --ink:#202741;
+  --muted:#727b8d;
+  --line:#e1e6ee;
+  --bg:#f5f7fb;
+  --card:#fff;
+  --shadow:0 16px 38px rgba(40,27,83,.08);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 0 0,rgba(111,82,215,.12),transparent 28%),
+    radial-gradient(circle at 100% 0,rgba(52,120,229,.10),transparent 26%),
+    var(--bg);
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+.hidden{display:none!important}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+}
+.top-inner{
+  width:min(1180px,calc(100% - 24px));
+  min-height:64px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.back{
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  color:#543998;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:900;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#23134f;
+  font-weight:950;
+}
+.brand-icon{
+  width:38px;height:38px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,#4f2da6,#7c61dc);
+  color:#fff;
+  font-size:20px;
+}
+.student{
+  color:#788093;
+  font-size:10.5px;
+  font-weight:850;
+}
+.page{
+  width:min(1180px,calc(100% - 24px));
+  margin:auto;
+  padding:26px 0 70px;
+}
+
+.hero{
+  padding:28px 30px;
+  border:1px solid rgba(255,255,255,.9);
+  border-radius:24px;
+  background:linear-gradient(120deg,#fff,#faf8ff 56%,#edf7ff);
+  box-shadow:var(--shadow);
+}
+.eyebrow{
+  color:#694db6;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.hero h1{
+  margin:8px 0 7px;
+  color:#21134d;
+  font-size:clamp(31px,5vw,50px);
+  line-height:1.04;
+  letter-spacing:-.045em;
+}
+.hero p{
+  max-width:820px;
+  margin:0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+
+.phase-nav{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:18px 0;
+}
+.phase-step{
+  padding:13px 15px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+}
+.phase-num{
+  width:31px;height:31px;
+  flex:none;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:#eeeaf9;
+  color:#6044ad;
+  font-size:11px;
+  font-weight:950;
+}
+.phase-step strong{
+  display:block;
+  color:#30254d;
+  font-size:11px;
+}
+.phase-step span{
+  display:block;
+  margin-top:2px;
+  color:#8790a0;
+  font-size:9px;
+}
+.phase-step.active{
+  border-color:#cfc4ed;
+  background:#fbf9ff;
+}
+.phase-step.active .phase-num{
+  background:#5c3cb6;
+  color:#fff;
+}
+.phase-step.done{
+  border-color:#bfe3cf;
+  background:#f5fff9;
+}
+.phase-step.done .phase-num{
+  background:#16845b;
+  color:#fff;
+}
+
+.panel{
+  margin-top:15px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+.panel-head{
+  padding:19px 21px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(120deg,#fcfbff,#f8fbff);
+}
+.panel-head h2{
+  margin:0;
+  color:#261650;
+  font-size:21px;
+  letter-spacing:-.03em;
+}
+.panel-head p{
+  margin:5px 0 0;
+  max-width:780px;
+  color:#798294;
+  font-size:10px;
+  line-height:1.6;
+}
+.badge{
+  flex:none;
+  padding:6px 9px;
+  border-radius:999px;
+  background:#f0ecfb;
+  color:#6345af;
+  font-size:8.5px;
+  font-weight:950;
+}
+.panel-body{padding:20px}
+
+.audio-box{
+  padding:14px;
+  margin-bottom:18px;
+  border:1px solid #dce4ee;
+  border-radius:14px;
+  background:#f9fbfe;
+}
+.audio-box strong{
+  display:block;
+  margin-bottom:7px;
+  color:#34405a;
+  font-size:10px;
+}
+
+.audio-box audio{width:100%}
+
+.practice-audio-tools{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:9px;
+}
+.practice-audio-tools .tool-label{
+  color:#7c8495;
+  font-size:8.5px;
+  font-weight:900;
+  margin-right:2px;
+}
+.practice-audio-btn{
+  padding:7px 9px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  color:#5b4681;
+  font-size:8.5px;
+  font-weight:900;
+}
+.practice-audio-btn:hover{
+  border-color:#bbaae7;
+  background:#faf8ff;
+}
+.practice-audio-btn.active{
+  border-color:#9d88dd;
+  background:#f0ebff;
+  color:#51339e;
+}
+
+
+.script{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.turn{
+  display:grid;
+  grid-template-columns:125px 1fr;
+  gap:13px;
+  padding:11px 12px;
+  border-radius:12px;
+  background:#fafbfe;
+  border:1px solid #edf0f5;
+}
+.speaker{
+  color:#5a3aa6;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.04em;
+}
+.line{
+  color:#343c50;
+  font-size:11px;
+  line-height:2.25;
+}
+.cloze{
+  height:31px;
+  width:var(--input-width,96px);
+  min-width:76px;
+  max-width:190px;
+  margin:0 4px;
+  padding:4px 7px;
+  vertical-align:middle;
+  border:0;
+  border-bottom:2px solid #8368d6;
+  border-radius:6px 6px 2px 2px;
+  outline:none;
+  background:#f2effc;
+  color:#2e2054;
+  text-align:center;
+  font-size:10.5px;
+  font-weight:900;
+  transition:.15s;
+}
+.cloze:focus{
+  border-color:#3878de;
+  background:#edf5ff;
+  box-shadow:0 0 0 3px rgba(52,120,229,.08);
+}
+.cloze.correct{
+  border-color:#16845b;
+  background:#e9f9f0;
+}
+.cloze.wrong{
+  border-color:#c93f52;
+  background:#fff0f2;
+}
+
+.action-bar{
+  position:sticky;
+  bottom:12px;
+  z-index:20;
+  margin-top:18px;
+  padding:11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.95);
+  box-shadow:0 12px 30px rgba(39,28,74,.12);
+  backdrop-filter:blur(12px);
+}
+.action-info{
+  color:#788194;
+  font-size:9.5px;
+  font-weight:850;
+}
+.primary{
+  padding:11px 15px;
+  border:0;
+  border-radius:10px;
+  background:linear-gradient(135deg,#4e2da5,#7355d0);
+  color:#fff;
+  font-size:10px;
+  font-weight:950;
+}
+.secondary{
+  padding:10px 13px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  color:#5b4681;
+  font-size:10px;
+  font-weight:900;
+}
+
+.locked-note{
+  padding:16px;
+  margin-bottom:15px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:1px solid #f0d9a8;
+  border-radius:13px;
+  background:#fff9ed;
+  color:#745322;
+}
+.locked-note b{
+  display:block;
+  font-size:11px;
+}
+.locked-note span{
+  display:block;
+  margin-top:2px;
+  font-size:9px;
+  color:#8b744d;
+}
+
+.dictation-intro{
+  margin-bottom:14px;
+  padding:13px 15px;
+  border-radius:13px;
+  background:#f6f3ff;
+  color:#584483;
+  font-size:10px;
+  line-height:1.65;
+}
+.dictation-list{
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+}
+.dictation-card{
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#fff;
+}
+.dictation-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.q-label{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:5px;
+  color:#5e42ad;
+  font-size:9px;
+  font-weight:950;
+}
+.q-context{
+  color:#3a4358;
+  font-size:11px;
+  font-weight:850;
+}
+.duration{
+  flex:none;
+  padding:5px 7px;
+  border-radius:999px;
+  background:#f1f3f7;
+  color:#818899;
+  font-size:8px;
+  font-weight:900;
+}
+.clip-controls{
+  margin:11px 0;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.play-clip{
+  padding:8px 10px;
+  border:0;
+  border-radius:8px;
+  background:#3f2a83;
+  color:#fff;
+  font-size:9px;
+  font-weight:950;
+}
+.speed-btn{
+  padding:7px 9px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  color:#6c7586;
+  font-size:8.5px;
+  font-weight:900;
+}
+.speed-btn.active{
+  border-color:#baa9e8;
+  background:#f2edff;
+  color:#563a9e;
+}
+.dictation-input{
+  width:100%;
+  min-height:78px;
+  resize:vertical;
+  padding:11px 12px;
+  border:1px solid #dce1ea;
+  border-radius:11px;
+  outline:none;
+  color:#30384b;
+  background:#fbfcfe;
+  font-size:11px;
+  line-height:1.55;
+}
+.dictation-input:focus{
+  border-color:#9b86db;
+  box-shadow:0 0 0 3px rgba(111,82,215,.08);
+}
+.dictation-input[readonly]{
+  resize:none;
+  background:#f4f5f7;
+  color:#616b7a;
+}
+
+.review{
+  margin-top:12px;
+  padding:12px;
+  border-radius:11px;
+  background:#f7f9fc;
+  border:1px solid #e6eaf0;
+}
+.review-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+}
+.review-head strong{
+  color:#34405a;
+  font-size:9.5px;
+}
+.accuracy-pill{
+  padding:4px 7px;
+  border-radius:999px;
+  background:#e7f6ee;
+  color:#14754d;
+  font-size:8.5px;
+  font-weight:950;
+}
+.transcript{
+  color:#242c3f;
+  font-size:11px;
+  line-height:1.6;
+}
+.answer-key{
+  margin-top:6px;
+  color:#16845b;
+  font-size:9px;
+  font-weight:900;
+}
+
+.result-card{
+  margin-bottom:15px;
+  padding:18px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:14px;
+  align-items:center;
+  border:1px solid #bee2ce;
+  border-radius:15px;
+  background:linear-gradient(120deg,#effcf5,#fbfffd);
+}
+.result-score{
+  width:74px;height:74px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:#16845b;
+  color:#fff;
+  font-size:18px;
+  font-weight:950;
+}
+.result-card h3{
+  margin:0;
+  color:#1d6749;
+  font-size:16px;
+}
+.result-card p{
+  margin:4px 0 0;
+  color:#638273;
+  font-size:9.5px;
+  line-height:1.55;
+}
+
+.toast{
+  position:fixed;
+  z-index:200;
+  left:50%;
+  top:84px;
+  transform:translateX(-50%) translateY(-8px);
+  padding:9px 14px;
+  border-radius:999px;
+  background:#24184b;
+  color:#fff;
+  font-size:9.5px;
+  font-weight:900;
+  opacity:0;
+  pointer-events:none;
+  transition:.18s;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:720px){
+  .student{display:none}
+  .hero{padding:22px 18px}
+  .phase-nav{grid-template-columns:1fr}
+  .turn{grid-template-columns:1fr;gap:5px}
+  .line{line-height:2.45}
+  .panel-body{padding:14px}
+  .panel-head{padding:16px;flex-direction:column}
+  .action-bar{align-items:flex-start;flex-direction:column}
+  .primary{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="top-inner">
+    <a class="back" href="../">← Intensive Listening</a>
+
+    <div class="brand">
+      <div class="brand-icon">🎧</div>
+      <span>Intensive Listening</span>
+    </div>
+
+    <div class="student" id="studentInfo">Học sinh</div>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <div class="eyebrow">INTENSIVE LISTENING · BÀI 01 · CAMBRIDGE 10 TEST 1 SECTION 1</div>
+    <h1>Bài 01 · Self-drive Tours in the USA</h1>
+    <p>
+      Bài luyện nghe 2 giai đoạn: hoàn thành audioscript trước, sau đó chuyển sang dictation
+      từ chính những câu chứa thông tin của Questions 1–10.
+    </p>
+  </section>
+
+  <section class="phase-nav">
+    <div class="phase-step active" id="step1">
+      <div class="phase-num" id="step1Num">1</div>
+      <div>
+        <strong>Audioscript Gap-fill</strong>
+        <span>Điền từ A2–B1 bị khuyết.</span>
+      </div>
+    </div>
+
+    <div class="phase-step" id="step2">
+      <div class="phase-num">2</div>
+      <div>
+        <strong>Dictation</strong>
+        <span>Nghe các đoạn chứa đáp án Q1–Q10.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="part1Panel">
+    <div class="panel-head">
+      <div>
+        <h2>Phần 1 · Audioscript Gap-fill</h2>
+        <p>
+          Nghe toàn bộ đoạn hội thoại và điền các từ A2–B1 bị khuyết. Bạn có thể tua, nghe lại và giảm tốc độ audio tùy ý.
+          Sau khi nộp, chỉ phần audioscript này bị khóa; sang Phần 2 vẫn có đầy đủ điều khiển audio.
+        </p>
+      </div>
+      <div class="badge" id="gapCountBadge">0 blanks</div>
+    </div>
+
+    <div class="panel-body">
+      <div class="audio-box">
+        <strong>🎧 Audio toàn bài · có thể tua và nghe lại không giới hạn</strong>
+
+        <audio
+          id="part1Audio"
+          controls
+          preload="metadata"
+          src="./audio/part1-full.mp3"
+        ></audio>
+
+        <div class="practice-audio-tools">
+          <span class="tool-label">Tua nhanh:</span>
+
+          <button
+            class="practice-audio-btn"
+            type="button"
+            onclick="seekAudio('part1Audio',-5)"
+          >
+            ↶ 5 giây
+          </button>
+
+          <button
+            class="practice-audio-btn"
+            type="button"
+            onclick="seekAudio('part1Audio',5)"
+          >
+            5 giây ↷
+          </button>
+
+          <span class="tool-label">Tốc độ:</span>
+
+          <button
+            class="practice-audio-btn"
+            type="button"
+            data-main-speed=".5"
+            onclick="setMainAudioSpeed(.5,this)"
+          >
+            0.5×
+          </button>
+
+          <button
+            class="practice-audio-btn"
+            type="button"
+            data-main-speed=".75"
+            onclick="setMainAudioSpeed(.75,this)"
+          >
+            0.75×
+          </button>
+
+          <button
+            class="practice-audio-btn active"
+            type="button"
+            data-main-speed="1"
+            onclick="setMainAudioSpeed(1,this)"
+          >
+            1×
+          </button>
+        </div>
+      </div>
+
+      <div class="script" id="scriptContainer"></div>
+
+      <div class="action-bar">
+        <div class="action-info" id="part1Progress">0/0 ô đã điền</div>
+        <button class="primary" id="submitPart1Btn" type="button">
+          Nộp Phần 1 & sang Dictation →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel hidden" id="part2Panel">
+    <div class="panel-head">
+      <div>
+        <h2>Phần 2 · Dictation</h2>
+        <p>
+          Mỗi audio là một đoạn được cắt từ bài nghe gốc và chứa thông tin dùng để trả lời
+          Questions 1–10. Nghe và chép lại chính xác câu/đoạn bạn nghe được.
+        </p>
+      </div>
+      <div class="badge">10 clips</div>
+    </div>
+
+    <div class="panel-body">
+      <div class="locked-note">
+        <div style="font-size:24px">🔒</div>
+        <div>
+          <b>Phần 1 đã được khóa</b>
+          <span>Audioscript Gap-fill sẽ không hiển thị lại cho đến khi bạn hoàn thành Phần 2.</span>
+        </div>
+      </div>
+
+      <div class="dictation-intro">
+        <b>Cách làm:</b> nghe từng clip bao nhiêu lần cũng được, có thể tua tiến/lùi và giảm xuống
+        0.5× hoặc 0.75× → nhập toàn bộ câu bạn nghe được → nộp Phần 2.
+        Sau khi nộp, transcript chuẩn của từng clip mới được mở để bạn tự so sánh.
+      </div>
+
+      <div class="result-card hidden" id="part2Result">
+        <div class="result-score" id="part2ScoreCircle">0%</div>
+        <div>
+          <h3>Dictation đã hoàn thành</h3>
+          <p id="part2ResultText"></p>
+        </div>
+      </div>
+
+      <div class="dictation-list" id="dictationList"></div>
+
+      <div class="action-bar" id="part2Actions">
+        <div class="action-info" id="part2Progress">0/10 đoạn đã nhập</div>
+        <button class="primary" id="submitPart2Btn" type="button">
+          Nộp Dictation & xem transcript
+        </button>
+      </div>
+
+      <div class="action-bar hidden" id="resetActions">
+        <div class="action-info">Bài đã hoàn thành. Bạn có thể bắt đầu một lượt học mới.</div>
+        <button class="secondary" id="resetBtn" type="button">
+          ↻ Làm lại toàn bộ bài
+        </button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   LESSON DATA
+========================================================= */
+
+const LESSON_ID = "INTENSIVE_LISTENING_01_SELFDRIVE_V1";
+
+const transcriptTurns = [
+  {speaker:"TRAVEL AGENT", text:"Good morning. World Tours. My name is Jamie. How can I help you?"},
+  {speaker:"ANDREA", text:"Good morning. I want some [[information]] on [[self-drive]] tours in the USA. Could you send me a [[brochure]]?"},
+  {speaker:"TRAVEL AGENT", text:"Of course. Could you I have your name please?"},
+  {speaker:"ANDREA", text:"Andrea Brown."},
+  {speaker:"TRAVEL AGENT", text:"Thank you. And your [[address]]?"},
+  {speaker:"ANDREA", text:"24, Ardleigh Road."},
+  {speaker:"TRAVEL AGENT", text:"Can you spell that?"},
+  {speaker:"ANDREA", text:"A-R-D-L-E-I-G-H Road."},
+  {speaker:"TRAVEL AGENT", text:"Postcode?"},
+  {speaker:"ANDREA", text:"BH5 2OP"},
+  {speaker:"TRAVEL AGENT", text:"Thanks. And can I have your phone number?"},
+  {speaker:"ANDREA", text:"Is a [[mobile]] alright?"},
+  {speaker:"TRAVEL AGENT", text:"Fine."},
+  {speaker:"ANDREA", text:"It’s 07786643091."},
+  {speaker:"TRAVEL AGENT", text:"Thank you. And can I ask you where you heard about World Tours? From a friend? Or did you see an advert somewhere?"},
+  {speaker:"ANDREA", text:"No, I read about you in the [[newspaper]]."},
+  {speaker:"TRAVEL AGENT", text:"OK, I’ll get the brochures in the post to you but can I give you some [[information]] over the phone. What kinds of things do you want to do on your holiday?"},
+  {speaker:"ANDREA", text:"I’m [[interested]] in going to California with my [[family]]. I’ve got two children and we want to [[hire]] a car."},
+  {speaker:"TRAVEL AGENT", text:"OK. We have a couple of self-drive tours there visiting [[different]] places of interest in California. The first one begins in Los Angeles and there’s plenty of time to visit some of the [[theme]] parks there."},
+  {speaker:"ANDREA", text:"That’s something on my children’s list so I’d want to include that."},
+  {speaker:"TRAVEL AGENT", text:"Good. Then you [[drive]] to San Francisco. From San Francisco you can drive to Yosemite Park where you [[spend]] a couple of nights. You can [[choose]] to stay in a lodge or on the [[campsite]]."},
+  {speaker:"ANDREA", text:"I don’t like the idea of staying in a [[tent]]. It’d be too hot."},
+  {speaker:"TRAVEL AGENT", text:"Right. And the tour ends in Las Vegas."},
+  {speaker:"ANDREA", text:"OK."},
+  {speaker:"TRAVEL AGENT", text:"The other trip we can arrange is [[slightly]] different. It starts in San Francisco. Then you drive [[south]] to Cambria."},
+  {speaker:"ANDREA", text:"Someone told me there’s a really nice [[castle]] near Cambria. Will we go near that?"},
+  {speaker:"TRAVEL AGENT", text:"Hearst Castle is on that road so you could stop there."},
+  {speaker:"ANDREA", text:"Good. I’d like to do that. Does this trip also go into the [[desert]]?"},
+  {speaker:"TRAVEL AGENT", text:"No, it [[continues]] to Santa Monica where most people like to stop and do some [[shopping]]."},
+  {speaker:"ANDREA", text:"We have enough of that at home so that doesn’t interest us."},
+  {speaker:"TRAVEL AGENT", text:"OK. Well you could go straight on to San Diego."},
+  {speaker:"ANDREA", text:"That’s good for [[beaches]] isn’t it?"},
+  {speaker:"TRAVEL AGENT", text:"That’s right, that’s a good place to [[relax]] and your children might like to [[visit]] the zoo before flying home."},
+  {speaker:"ANDREA", text:"I don’t think so. We want some time for [[sunbathing]] and swimming."},
+  {speaker:"ANDREA", text:"So how many days are the trips and how much do they [[cost]]?"},
+  {speaker:"TRAVEL AGENT", text:"The first one I told you about is a self-drive tour through California which lasts twelve days and [[covers]] 2,020 kilometres. The shortest [[journey]] is 206 km and the [[longest]] is 632 kilometres. The cost is £525 per person. That [[includes]] accommodation, car [[rental]] and a [[flight]] but no meals."},
+  {speaker:"ANDREA", text:"OK. And the other trip?"},
+  {speaker:"TRAVEL AGENT", text:"That lasts nine days but you spend only three days on the road. You cover about 980 kilometres altogether."},
+  {speaker:"ANDREA", text:"So is that [[cheaper]] then?"},
+  {speaker:"TRAVEL AGENT", text:"Yes, it’s almost a hundred pounds cheaper. It’s £429 per person, which is a good deal."},
+  {speaker:"ANDREA", text:"So that covers accommodation and car hire. What about flights?"},
+  {speaker:"TRAVEL AGENT", text:"They aren’t included. But these hotels offer [[dinner]] in the [[price]]."},
+  {speaker:"ANDREA", text:"OK. Well, thank you very much. I’ll be in touch when I’ve had a chance to look at the brochure."},
+  {speaker:"TRAVEL AGENT", text:"I’m pleased to help. Goodbye."},
+  {speaker:"ANDREA", text:"Goodbye."}
+];
+
+const dictationItems = [
+  {
+    q:1,
+    context:"Address · 24 ______ Road",
+    file:"./audio/dictation-q01.mp3",
+    duration:"2.35s",
+    transcript:"24, Ardleigh Road.",
+    key:"Ardleigh"
+  },
+  {
+    q:2,
+    context:"Heard about company from",
+    file:"./audio/dictation-q02.mp3",
+    duration:"2.40s",
+    transcript:"No, I read about you in the newspaper.",
+    key:"newspaper"
+  },
+  {
+    q:3,
+    context:"Los Angeles · ______ parks",
+    file:"./audio/dictation-q03.mp3",
+    duration:"6.53s",
+    transcript:"The first one begins in Los Angeles and there’s plenty of time to visit some of the theme parks there.",
+    key:"theme"
+  },
+  {
+    q:4,
+    context:"Yosemite Park · lodge, not a ______",
+    file:"./audio/dictation-q04.mp3",
+    duration:"5.05s",
+    transcript:"I don’t like the idea of staying in a tent. It’d be too hot.",
+    key:"tent"
+  },
+  {
+    q:5,
+    context:"On the way to Cambria",
+    file:"./audio/dictation-q05.mp3",
+    duration:"8.10s",
+    transcript:"Someone told me there’s a really nice castle near Cambria. Will we go near that?",
+    key:"castle"
+  },
+  {
+    q:6,
+    context:"San Diego · wants time on the ______",
+    file:"./audio/dictation-q06.mp3",
+    duration:"2.20s",
+    transcript:"That’s good for beaches isn’t it?",
+    key:"beach / beaches"
+  },
+  {
+    q:7,
+    context:"Trip One · Total distance",
+    file:"./audio/dictation-q07.mp3",
+    duration:"9.30s",
+    transcript:"The first one I told you about is a self-drive tour through California which lasts twelve days and covers 2,020 kilometres.",
+    key:"2020"
+  },
+  {
+    q:8,
+    context:"Trip One · Includes one ______",
+    file:"./audio/dictation-q08.mp3",
+    duration:"3.50s",
+    transcript:"That includes accommodation, car rental and a flight but no meals.",
+    key:"flight"
+  },
+  {
+    q:9,
+    context:"Trip Two · Price per person",
+    file:"./audio/dictation-q09.mp3",
+    duration:"3.54s",
+    transcript:"It’s £429 per person, which is a good deal.",
+    key:"429"
+  },
+  {
+    q:10,
+    context:"Trip Two · Includes",
+    file:"./audio/dictation-q10.mp3",
+    duration:"3.93s",
+    transcript:"But these hotels offer dinner in the price.",
+    key:"dinner"
+  }
+];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,ch=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[ch]);
+}
+
+function normalize(value){
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/[’‘]/g,"'")
+    .replace(/£/g,"")
+    .replace(/,/g,"")
+    .replace(/[^a-z0-9'\-\s]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function studentScope(){
+  try{
+    const student=JSON.parse(localStorage.getItem("IELTS_PRACTICE_STUDENT")||"null");
+    if(student?.name){
+      return encodeURIComponent(
+        (student.name+"|"+(student.className||"")).toLowerCase()
+      );
+    }
+  }catch(error){}
+  return "guest";
+}
+
+function stateKey(){
+  return LESSON_ID+"_"+studentScope();
+}
+
+function loadState(){
+  try{
+    return JSON.parse(localStorage.getItem(stateKey())||"{}");
+  }catch(error){
+    return {};
+  }
+}
+
+function saveState(patch){
+  const current=loadState();
+  localStorage.setItem(stateKey(),JSON.stringify({...current,...patch}));
+}
+
+function toast(message){
+  const box=$("toast");
+  box.textContent=message;
+  box.classList.add("show");
+  clearTimeout(box._timer);
+  box._timer=setTimeout(()=>box.classList.remove("show"),1800);
+}
+
+function words(value){
+  const n=normalize(value);
+  return n ? n.split(" ") : [];
+}
+
+function levenshteinWords(a,b){
+  const x=words(a);
+  const y=words(b);
+  const rows=x.length+1;
+  const cols=y.length+1;
+  const dp=Array.from({length:rows},()=>Array(cols).fill(0));
+
+  for(let i=0;i<rows;i++) dp[i][0]=i;
+  for(let j=0;j<cols;j++) dp[0][j]=j;
+
+  for(let i=1;i<rows;i++){
+    for(let j=1;j<cols;j++){
+      const cost=x[i-1]===y[j-1]?0:1;
+      dp[i][j]=Math.min(
+        dp[i-1][j]+1,
+        dp[i][j-1]+1,
+        dp[i-1][j-1]+cost
+      );
+    }
+  }
+  return {
+    distance:dp[x.length][y.length],
+    expected:y.length
+  };
+}
+
+function dictationAccuracy(student,expected){
+  const result=levenshteinWords(student,expected);
+  if(!result.expected) return 100;
+  return Math.max(
+    0,
+    Math.round((1-result.distance/result.expected)*100)
+  );
+}
+
+
+/* =========================================================
+   PART 1 RENDER
+========================================================= */
+
+let clozeAnswers=[];
+
+function renderClozeLine(text){
+  const regex=/\[\[(.+?)\]\]/g;
+  let output="";
+  let lastIndex=0;
+  let match;
+
+  while((match=regex.exec(text))!==null){
+    output+=escapeHTML(text.slice(lastIndex,match.index));
+
+    const answer=match[1];
+    const index=clozeAnswers.length;
+    clozeAnswers.push(answer);
+
+    const width=Math.min(
+      190,
+      Math.max(82,answer.length*9+34)
+    );
+
+    output+=`
+      <input
+        class="cloze"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        data-cloze-index="${index}"
+        data-answer="${escapeHTML(answer)}"
+        aria-label="Blank ${index+1}"
+        style="--input-width:${width}px"
+      >
+    `;
+
+    lastIndex=regex.lastIndex;
+  }
+
+  output+=escapeHTML(text.slice(lastIndex));
+  return output;
+}
+
+function renderPart1(){
+  clozeAnswers=[];
+
+  $("scriptContainer").innerHTML=transcriptTurns.map(turn=>`
+    <div class="turn">
+      <div class="speaker">${escapeHTML(turn.speaker)}</div>
+      <div class="line">${renderClozeLine(turn.text)}</div>
+    </div>
+  `).join("");
+
+  $("gapCountBadge").textContent=`${clozeAnswers.length} blanks`;
+
+  document.querySelectorAll(".cloze").forEach(input=>{
+    input.addEventListener("input",updatePart1Progress);
+  });
+
+  updatePart1Progress();
+}
+
+function updatePart1Progress(){
+  const inputs=[...document.querySelectorAll(".cloze")];
+  const filled=inputs.filter(i=>i.value.trim()).length;
+  $("part1Progress").textContent=`${filled}/${inputs.length} ô đã điền`;
+}
+
+function submitPart1(){
+  const inputs=[...document.querySelectorAll(".cloze")];
+  let correct=0;
+
+  inputs.forEach(input=>{
+    const good=normalize(input.value)===normalize(input.dataset.answer);
+    if(good){
+      correct++;
+      input.classList.add("correct");
+    }else{
+      input.classList.add("wrong");
+    }
+  });
+
+  saveState({
+    part1Locked:true,
+    part1Score:correct,
+    part1Total:inputs.length,
+    part1SubmittedAt:new Date().toISOString()
+  });
+
+  toast(`Phần 1: ${correct}/${inputs.length} · Audioscript đã khóa`);
+
+  setTimeout(()=>{
+    showPart2();
+  },650);
+}
+
+
+/* =========================================================
+   PART 2
+========================================================= */
+
+function renderPart2(){
+  $("dictationList").innerHTML=dictationItems.map(item=>`
+    <article class="dictation-card" data-q="${item.q}">
+      <div class="dictation-top">
+        <div>
+          <div class="q-label">IELTS Q${item.q}</div>
+          <div class="q-context">${escapeHTML(item.context)}</div>
+        </div>
+        <div class="duration">${item.duration}</div>
+      </div>
+
+      <audio
+        id="audioQ${item.q}"
+        controls
+        preload="metadata"
+        src="${item.file}"
+        style="width:100%;margin-top:11px"
+      ></audio>
+
+      <div class="clip-controls">
+
+        <button
+          class="speed-btn"
+          type="button"
+          onclick="seekAudio('audioQ${item.q}',-3)"
+        >
+          ↶ 3s
+        </button>
+
+        <button
+          class="speed-btn"
+          type="button"
+          onclick="replayClip(${item.q})"
+        >
+          ↻ Nghe lại
+        </button>
+
+        <button
+          class="speed-btn"
+          type="button"
+          onclick="seekAudio('audioQ${item.q}',3)"
+        >
+          3s ↷
+        </button>
+
+        <span style="font-size:8px;color:#8991a0;font-weight:900;margin-left:3px">
+          Tốc độ:
+        </span>
+
+        <button
+          class="speed-btn"
+          type="button"
+          data-speed-q="${item.q}"
+          data-speed=".5"
+          onclick="setClipSpeed(${item.q},.5,this)"
+        >
+          0.5×
+        </button>
+
+        <button
+          class="speed-btn"
+          type="button"
+          data-speed-q="${item.q}"
+          data-speed=".75"
+          onclick="setClipSpeed(${item.q},.75,this)"
+        >
+          0.75×
+        </button>
+
+        <button
+          class="speed-btn active"
+          type="button"
+          data-speed-q="${item.q}"
+          data-speed="1"
+          onclick="setClipSpeed(${item.q},1,this)"
+        >
+          1×
+        </button>
+      </div>
+
+      <textarea
+        class="dictation-input"
+        id="dictationQ${item.q}"
+        placeholder="Chép lại toàn bộ câu/đoạn bạn nghe được..."
+        spellcheck="false"
+      ></textarea>
+
+      <div class="review hidden" id="reviewQ${item.q}">
+        <div class="review-head">
+          <strong>Audioscript chuẩn</strong>
+          <span class="accuracy-pill" id="accuracyQ${item.q}">0%</span>
+        </div>
+
+        <div class="transcript">${escapeHTML(item.transcript)}</div>
+        <div class="answer-key">Thông tin cho Q${item.q}: ${escapeHTML(item.key)}</div>
+      </div>
+    </article>
+  `).join("");
+
+  dictationItems.forEach(item=>{
+    $(`dictationQ${item.q}`).addEventListener("input",updatePart2Progress);
+  });
+
+  updatePart2Progress();
+}
+
+
+function seekAudio(id,seconds){
+  const audio=$(id);
+  if(!audio) return;
+
+  const duration=Number.isFinite(audio.duration)
+    ? audio.duration
+    : Infinity;
+
+  audio.currentTime=Math.max(
+    0,
+    Math.min(duration,audio.currentTime+seconds)
+  );
+}
+
+function setMainAudioSpeed(speed,button){
+  const audio=$("part1Audio");
+  if(audio) audio.playbackRate=speed;
+
+  document.querySelectorAll("[data-main-speed]").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  if(button){
+    button.classList.add("active");
+  }
+}
+
+function replayClip(q){
+  const audio=$(`audioQ${q}`);
+  if(!audio) return;
+
+  stopOtherClips(q);
+  audio.currentTime=0;
+  audio.play().catch(()=>{});
+}
+
+function stopOtherClips(exceptQ){
+  dictationItems.forEach(item=>{
+    if(item.q===exceptQ) return;
+    const audio=$(`audioQ${item.q}`);
+    if(audio && !audio.paused){
+      audio.pause();
+      audio.currentTime=0;
+    }
+  });
+}
+
+function playClip(q){
+  const audio=$(`audioQ${q}`);
+  if(!audio) return;
+
+  stopOtherClips(q);
+
+  if(!audio.paused){
+    audio.pause();
+    audio.currentTime=0;
+    return;
+  }
+
+  audio.currentTime=0;
+  audio.play().catch(()=>{});
+}
+
+function setClipSpeed(q,speed,button){
+  const audio=$(`audioQ${q}`);
+  if(audio) audio.playbackRate=speed;
+
+  document.querySelectorAll(`[data-speed-q="${q}"]`).forEach(btn=>{
+    btn.classList.remove("active");
+  });
+  button.classList.add("active");
+}
+
+function updatePart2Progress(){
+  const filled=dictationItems.filter(
+    item=>$(`dictationQ${item.q}`)?.value.trim()
+  ).length;
+
+  $("part2Progress").textContent=`${filled}/${dictationItems.length} đoạn đã nhập`;
+}
+
+function submitPart2(){
+  let totalAccuracy=0;
+  let completed=0;
+  const answers={};
+
+  dictationItems.forEach(item=>{
+    const textarea=$(`dictationQ${item.q}`);
+    const value=textarea.value.trim();
+    const accuracy=dictationAccuracy(value,item.transcript);
+
+    answers[item.q]=value;
+    totalAccuracy+=accuracy;
+    if(value) completed++;
+
+    textarea.readOnly=true;
+    $(`accuracyQ${item.q}`).textContent=`${accuracy}%`;
+    $(`reviewQ${item.q}`).classList.remove("hidden");
+  });
+
+  const average=Math.round(totalAccuracy/dictationItems.length);
+
+  saveState({
+    part2Submitted:true,
+    part2Average:average,
+    part2Answers:answers,
+    part2Completed:completed,
+    completedAt:new Date().toISOString()
+  });
+
+  saveProgressRecord(average);
+
+  $("part2ScoreCircle").textContent=`${average}%`;
+  $("part2ResultText").textContent=
+    `Độ chính xác trung bình theo từ: ${average}%. `+
+    `Bạn đã nhập ${completed}/${dictationItems.length} đoạn. `+
+    `Transcript chuẩn đã được mở bên dưới để đối chiếu.`;
+
+  $("part2Result").classList.remove("hidden");
+  $("part2Actions").classList.add("hidden");
+  $("resetActions").classList.remove("hidden");
+
+  window.scrollTo({
+    top:$("part2Panel").offsetTop-75,
+    behavior:"smooth"
+  });
+
+  toast("Đã mở transcript để đối chiếu");
+}
+
+function restorePart2Review(state){
+  const saved=state.part2Answers||{};
+
+  dictationItems.forEach(item=>{
+    const textarea=$(`dictationQ${item.q}`);
+    textarea.value=saved[item.q]||"";
+    textarea.readOnly=true;
+
+    const accuracy=dictationAccuracy(textarea.value,item.transcript);
+    $(`accuracyQ${item.q}`).textContent=`${accuracy}%`;
+    $(`reviewQ${item.q}`).classList.remove("hidden");
+  });
+
+  const average=state.part2Average??0;
+
+  $("part2ScoreCircle").textContent=`${average}%`;
+  $("part2ResultText").textContent=
+    `Độ chính xác trung bình theo từ: ${average}%. Transcript chuẩn đang hiển thị để bạn đối chiếu.`;
+
+  $("part2Result").classList.remove("hidden");
+  $("part2Actions").classList.add("hidden");
+  $("resetActions").classList.remove("hidden");
+}
+
+
+/* =========================================================
+   PROGRESS SAVE
+========================================================= */
+
+function saveProgressRecord(dictationAverage){
+  const key="LISTENING_PRACTICE_RESULTS_V1_"+studentScope();
+
+  let records=[];
+  try{
+    records=JSON.parse(localStorage.getItem(key)||"[]");
+    if(!Array.isArray(records)) records=[];
+  }catch(error){
+    records=[];
+  }
+
+  const state=loadState();
+
+  records.push({
+    lessonId:LESSON_ID,
+    title:"Intensive Listening · Bài 01 · Self-drive Tours in the USA",
+    source:"Cambridge 10 · Test 1 · Section 1",
+    part1Score:state.part1Score??0,
+    part1Total:state.part1Total??0,
+    dictationAverage,
+    completedAt:new Date().toISOString()
+  });
+
+  localStorage.setItem(key,JSON.stringify(records.slice(-100)));
+}
+
+
+/* =========================================================
+   PHASE CONTROL
+========================================================= */
+
+function showPart1(){
+  $("part1Panel").classList.remove("hidden");
+  $("part2Panel").classList.add("hidden");
+
+  $("step1").classList.add("active");
+  $("step1").classList.remove("done");
+  $("step2").classList.remove("active");
+
+  renderPart1();
+}
+
+function showPart2(){
+  const state=loadState();
+
+  $("part1Panel").classList.add("hidden");
+  $("part2Panel").classList.remove("hidden");
+
+  $("step1").classList.remove("active");
+  $("step1").classList.add("done");
+  $("step1Num").textContent="✓";
+  $("step2").classList.add("active");
+
+  renderPart2();
+
+  if(state.part2Submitted){
+    restorePart2Review(state);
+  }
+
+  window.scrollTo({
+    top:$("part2Panel").offsetTop-75,
+    behavior:"smooth"
+  });
+}
+
+function resetLesson(){
+  const ok=confirm(
+    "Làm lại sẽ mở lại Phần 1 và xóa câu trả lời của lượt hiện tại. Tiếp tục?"
+  );
+
+  if(!ok) return;
+
+  dictationItems.forEach(item=>{
+    const audio=$(`audioQ${item.q}`);
+    if(audio){
+      audio.pause();
+      audio.currentTime=0;
+    }
+  });
+
+  localStorage.removeItem(stateKey());
+  location.reload();
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+function init(){
+  try{
+    const student=JSON.parse(localStorage.getItem("IELTS_PRACTICE_STUDENT")||"null");
+    if(student?.name){
+      $("studentInfo").textContent=
+        student.name+(student.className?` · ${student.className}`:"");
+    }
+  }catch(error){}
+
+  $("submitPart1Btn").addEventListener("click",submitPart1);
+  $("submitPart2Btn").addEventListener("click",submitPart2);
+  $("resetBtn").addEventListener("click",resetLesson);
+
+  const state=loadState();
+
+  if(state.part1Locked){
+    showPart2();
+  }else{
+    showPart1();
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>
