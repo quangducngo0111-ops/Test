@@ -10,25 +10,14 @@
   content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
 >
 
-<meta
-  http-equiv="Cache-Control"
-  content="no-cache, no-store, must-revalidate"
->
-
-<meta
-  http-equiv="Pragma"
-  content="no-cache"
->
-
-<meta
-  http-equiv="Expires"
-  content="0"
->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <title>Vocabulary Practice</title>
 
 <script
-  src="./vocab-data.js?v=20260917-games-v10"
+  src="./vocab-data.js?v=20260918-shark-music"
   onerror="window.VOCABULARY_LOAD_ERROR=true"
 ></script>
 
@@ -184,11 +173,31 @@ button:disabled{
   font-size:18px;
 }
 
+.top-actions{
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+}
+
 .student{
   color:#747d8e;
 
   font-size:10.5px;
   font-weight:850;
+}
+
+.music-toggle{
+  padding:8px 10px;
+
+  border:1px solid var(--line);
+  border-radius:10px;
+
+  background:#fff;
+  color:#4e397e;
+
+  font-size:10px;
+  font-weight:950;
 }
 
 
@@ -214,7 +223,6 @@ button:disabled{
 
 .hero{
   position:relative;
-
   overflow:hidden;
 
   padding:28px 30px;
@@ -285,7 +293,7 @@ button:disabled{
 
 
 /* =========================================================
-   COMMON SECTIONS
+   COMMON
 ========================================================= */
 
 .section-head{
@@ -417,11 +425,6 @@ button:disabled{
   font-size:9.5px;
 }
 
-
-/* =========================================================
-   MASTERY
-========================================================= */
-
 .mastery-line{
   width:100%;
 
@@ -469,7 +472,7 @@ button:disabled{
 
 
 /* =========================================================
-   SET CARDS
+   SETS
 ========================================================= */
 
 .set-grid{
@@ -552,7 +555,7 @@ button:disabled{
 
 
 /* =========================================================
-   COMPLETION BANNER
+   COMPLETION
 ========================================================= */
 
 .completion-banner{
@@ -566,8 +569,7 @@ button:disabled{
 
   gap:15px;
 
-  border:
-    1px solid #bde4cf;
+  border:1px solid #bde4cf;
 
   border-radius:16px;
 
@@ -577,9 +579,6 @@ button:disabled{
       #ecfff4,
       #f6fffa
     );
-
-  box-shadow:
-    0 8px 20px rgba(32,165,104,.08);
 }
 
 .completion-banner strong{
@@ -609,7 +608,6 @@ button:disabled{
   border-radius:10px;
 
   background:#16845b;
-
   color:#fff;
 
   font-size:10px;
@@ -875,7 +873,7 @@ button:disabled{
 
 
 /* =========================================================
-   GAME COMMON
+   COMMON GAME
 ========================================================= */
 
 .game-header{
@@ -1002,11 +1000,6 @@ button:disabled{
   );
 }
 
-
-/* =========================================================
-   CONTROLS
-========================================================= */
-
 .controls{
   display:flex;
   justify-content:center;
@@ -1104,8 +1097,7 @@ button:disabled{
 
   color:#fff;
 
-  transform:
-    translateY(150%);
+  transform:translateY(150%);
 
   transition:.2s;
 }
@@ -1657,8 +1649,6 @@ button:disabled{
   font-size:53px;
 
   opacity:.65;
-
-  pointer-events:none;
 }
 
 .flappy-cloud.c1{
@@ -1867,7 +1857,6 @@ button:disabled{
   background:transparent;
 
   border:0;
-
   box-shadow:none;
 
   transform:
@@ -2228,20 +2217,61 @@ button:disabled{
 .shark-ocean{
   position:relative;
 
-  height:530px;
+  height:540px;
 
   overflow:hidden;
 
-  border-radius:18px;
+  border-radius:20px;
 
   background:
     linear-gradient(
       180deg,
-      #aee9ff 0 24%,
-      #37b9df 25%,
-      #1778b2 70%,
-      #105282 100%
+      #9ce4ff 0 24%,
+      #36b9dc 24%,
+      #1682bd 62%,
+      #0e5687 100%
     );
+
+  isolation:isolate;
+}
+
+.shark-ocean::after{
+  content:"";
+
+  position:absolute;
+
+  z-index:2;
+
+  left:-10%;
+  right:-10%;
+
+  top:23%;
+
+  height:18px;
+
+  background:
+    repeating-radial-gradient(
+      ellipse at center,
+      rgba(255,255,255,.72) 0 7px,
+      transparent 8px 24px
+    );
+
+  opacity:.5;
+
+  animation:
+    oceanWave 2.2s linear infinite;
+}
+
+@keyframes oceanWave{
+
+  from{
+    transform:translateX(0);
+  }
+
+  to{
+    transform:translateX(48px);
+  }
+
 }
 
 .shark-sky{
@@ -2253,13 +2283,45 @@ button:disabled{
   left:0;
   right:0;
 
-  height:25%;
+  height:24%;
 
   background:
     linear-gradient(
-      #8fdcff,
-      #d7f4ff
+      #79d3fa,
+      #cef3ff
     );
+}
+
+.shark-sun{
+  position:absolute;
+
+  z-index:2;
+
+  top:25px;
+  right:8%;
+
+  width:65px;
+  height:65px;
+
+  border-radius:50%;
+
+  background:#ffe890;
+
+  box-shadow:
+    0 0 40px rgba(255,221,99,.55);
+}
+
+.shark-cloud{
+  position:absolute;
+
+  z-index:2;
+
+  top:23px;
+  left:8%;
+
+  font-size:52px;
+
+  opacity:.65;
 }
 
 .shore{
@@ -2268,20 +2330,20 @@ button:disabled{
   z-index:6;
 
   right:0;
-  top:23%;
+  top:22%;
 
   width:13%;
-  height:77%;
+  height:78%;
 
   background:
     linear-gradient(
       90deg,
-      #e7cc85,
-      #f4dfa4
+      #e2c579,
+      #f7e3a9
     );
 
   border-left:
-    8px solid rgba(255,255,255,.55);
+    7px solid rgba(255,255,255,.55);
 }
 
 .shore::after{
@@ -2289,150 +2351,160 @@ button:disabled{
 
   position:absolute;
 
-  top:20px;
+  top:30px;
   left:50%;
 
   transform:
     translateX(-50%);
 
-  font-size:58px;
+  font-size:57px;
 }
+
+.shore-label{
+  position:absolute;
+
+  z-index:10;
+
+  right:1%;
+
+  bottom:18px;
+
+  width:11%;
+
+  color:#695228;
+
+  text-align:center;
+
+  font-size:9px;
+  font-weight:950;
+}
+
+
+/* SWIMMER */
 
 .swimmer{
   position:absolute;
 
-  z-index:15;
+  z-index:18;
 
-  top:56%;
-  left:14%;
+  top:59%;
+
+  left:28%;
+
+  width:78px;
+  height:65px;
 
   transform:
     translate(-50%,-50%);
 
-  font-size:55px;
-
   transition:
-    left .45s ease;
+    left .35s cubic-bezier(.2,.8,.3,1);
 
-  animation:
-    swimmerMove .7s ease-in-out infinite alternate;
+  pointer-events:none;
 }
 
-@keyframes swimmerMove{
-
-  from{
-    transform:
-      translate(-50%,-50%)
-      rotate(-4deg);
-  }
-
-  to{
-    transform:
-      translate(-50%,-55%)
-      rotate(4deg);
-  }
-
-}
-
-.shark{
+.swimmer-body{
   position:absolute;
 
-  z-index:12;
+  z-index:3;
 
-  top:65%;
-  left:5%;
+  left:8px;
+  top:0;
 
+  display:block;
+
+  font-size:57px;
+
+  /* Emoji mặc định quay trái -> lật sang phải */
   transform:
-    translate(-50%,-50%);
+    scaleX(-1);
 
-  font-size:68px;
+  transform-origin:center;
 
-  transition:
-    left .45s ease;
-
-  filter:
-    drop-shadow(
-      0 9px 6px rgba(0,0,0,.18)
-    );
+  animation:
+    swimStroke .52s ease-in-out infinite;
 }
 
-.shark-water-line{
+.swimmer-splash{
   position:absolute;
 
   z-index:2;
 
-  left:0;
-  right:0;
+  left:-8px;
+  top:26px;
 
-  top:24%;
-
-  height:5px;
-
-  background:
-    rgba(255,255,255,.55);
-}
-
-.shark-buoy{
-  position:absolute;
-
-  z-index:20;
-
-  width:150px;
-
-  transform:
-    translate(-50%,-50%);
-
-  border:0;
-
-  background:transparent;
-
-  text-align:center;
+  font-size:29px;
 
   animation:
-    buoyBob .75s ease-in-out infinite alternate;
+    splashPulse .46s ease-in-out infinite alternate;
 }
 
-.shark-buoy-icon{
-  font-size:53px;
+.swimmer.fast .swimmer-body{
+  animation-duration:.26s;
 }
 
-.shark-buoy-text{
-  display:block;
+.swimmer.fast .swimmer-splash{
+  font-size:37px;
 
-  margin-top:-6px;
-
-  padding:6px 8px;
-
-  border-radius:10px;
-
-  background:#fff;
-  color:#243554;
-
-  box-shadow:
-    0 7px 18px rgba(14,62,93,.16);
-
-  font-size:9px;
-  font-weight:950;
-
-  overflow-wrap:anywhere;
+  animation-duration:.2s;
 }
 
-.shark-buoy.wrong .shark-buoy-text{
-  background:#ffe1e5;
-  color:#9b3040;
+.swimmer.panic{
+  animation:
+    swimmerPanic .15s ease-in-out 8 alternate;
 }
 
-.shark-buoy.good .shark-buoy-text{
-  background:#ddf7e9;
-  color:#14704b;
+@keyframes swimStroke{
+
+  0%{
+    transform:
+      scaleX(-1)
+      translateY(2px)
+      rotate(-5deg);
+  }
+
+  50%{
+    transform:
+      scaleX(-1)
+      translateY(-5px)
+      rotate(4deg);
+  }
+
+  100%{
+    transform:
+      scaleX(-1)
+      translateY(2px)
+      rotate(-5deg);
+  }
+
 }
 
-@keyframes buoyBob{
+@keyframes splashPulse{
+
+  from{
+    opacity:.45;
+
+    transform:
+      translateX(7px)
+      scale(.75);
+  }
+
+  to{
+    opacity:1;
+
+    transform:
+      translateX(-3px)
+      scale(1.05);
+  }
+
+}
+
+@keyframes swimmerPanic{
 
   from{
     transform:
       translate(-50%,-50%)
-      translateY(-4px);
+      translateY(-3px);
   }
 
   to{
@@ -2443,12 +2515,131 @@ button:disabled{
 
 }
 
+
+/* SHARK */
+
+.shark{
+  position:absolute;
+
+  z-index:15;
+
+  top:67%;
+
+  left:7%;
+
+  width:96px;
+  height:70px;
+
+  transform:
+    translate(-50%,-50%);
+
+  transition:
+    left .42s linear;
+
+  pointer-events:none;
+}
+
+.shark-body{
+  position:absolute;
+
+  z-index:3;
+
+  left:0;
+  top:0;
+
+  display:block;
+
+  font-size:72px;
+
+  /* Cá mập emoji mặc định quay trái -> lật sang phải */
+  transform:
+    scaleX(-1);
+
+  transform-origin:center;
+
+  filter:
+    drop-shadow(
+      0 8px 6px rgba(0,0,0,.22)
+    );
+
+  animation:
+    sharkSwim .68s ease-in-out infinite;
+}
+
+.shark-splash{
+  position:absolute;
+
+  z-index:2;
+
+  left:-14px;
+  top:24px;
+
+  font-size:29px;
+
+  animation:
+    splashPulse .48s ease-in-out infinite alternate;
+}
+
+.shark.danger .shark-body{
+  animation-duration:.32s;
+}
+
+.shark.bite{
+  animation:
+    sharkBite .22s ease-in-out 4 alternate;
+}
+
+@keyframes sharkSwim{
+
+  0%{
+    transform:
+      scaleX(-1)
+      translateY(2px)
+      rotate(-3deg);
+  }
+
+  50%{
+    transform:
+      scaleX(-1)
+      translateY(-4px)
+      rotate(3deg);
+  }
+
+  100%{
+    transform:
+      scaleX(-1)
+      translateY(2px)
+      rotate(-3deg);
+  }
+
+}
+
+@keyframes sharkBite{
+
+  from{
+    transform:
+      translate(-50%,-50%)
+      translateX(-3px);
+  }
+
+  to{
+    transform:
+      translate(-50%,-50%)
+      translateX(7px)
+      scale(1.08);
+  }
+
+}
+
+
+/* SHARK PROGRESS */
+
 .shark-progress{
   position:absolute;
 
-  z-index:25;
+  z-index:30;
 
-  top:15px;
+  top:14px;
   left:50%;
 
   width:68%;
@@ -2461,7 +2652,7 @@ button:disabled{
   border-radius:12px;
 
   background:
-    rgba(7,45,73,.7);
+    rgba(7,45,73,.72);
 
   color:#fff;
 }
@@ -2494,6 +2685,8 @@ button:disabled{
 
   width:0;
 
+  border-radius:inherit;
+
   background:
     linear-gradient(
       90deg,
@@ -2501,12 +2694,184 @@ button:disabled{
       #ffe170
     );
 
-  border-radius:inherit;
+  transition:
+    width .35s ease;
+}
+
+.shark-danger-meter{
+  position:absolute;
+
+  z-index:25;
+
+  left:18px;
+  bottom:18px;
+
+  min-width:150px;
+
+  padding:8px 10px;
+
+  border-radius:10px;
+
+  background:
+    rgba(5,43,68,.72);
+
+  color:#fff;
+
+  font-size:9px;
+  font-weight:900;
+}
+
+.shark-danger-meter strong{
+  color:#ffd66c;
+}
+
+
+/* LIFE BUOY - CSS, không dùng emoji */
+
+.shark-buoy{
+  position:absolute;
+
+  z-index:24;
+
+  width:140px;
+
+  padding:0;
+
+  transform:
+    translate(-50%,-50%);
+
+  border:0;
+
+  background:transparent;
+
+  text-align:center;
+
+  animation:
+    buoyFloat .75s ease-in-out infinite alternate;
+}
+
+.life-ring{
+  position:relative;
+
+  width:56px;
+  height:56px;
+
+  margin:0 auto 4px;
+
+  border-radius:50%;
+
+  background:
+    conic-gradient(
+      #ef4f4f 0deg 45deg,
+      #fff 45deg 90deg,
+      #ef4f4f 90deg 135deg,
+      #fff 135deg 180deg,
+      #ef4f4f 180deg 225deg,
+      #fff 225deg 270deg,
+      #ef4f4f 270deg 315deg,
+      #fff 315deg 360deg
+    );
+
+  border:
+    3px solid rgba(117,34,34,.16);
+
+  box-shadow:
+    0 7px 13px rgba(6,72,104,.24);
+}
+
+.life-ring::after{
+  content:"";
+
+  position:absolute;
+
+  inset:14px;
+
+  border-radius:50%;
+
+  background:
+    #1682bd;
+
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.16);
+}
+
+.life-ring::before{
+  content:"";
+
+  position:absolute;
+
+  inset:-5px;
+
+  border:
+    2px solid rgba(255,255,255,.8);
+
+  border-radius:50%;
+}
+
+.shark-buoy-text{
+  display:block;
+
+  width:100%;
+
+  padding:6px 7px;
+
+  border-radius:10px;
+
+  background:#fff;
+  color:#243554;
+
+  box-shadow:
+    0 7px 18px rgba(14,62,93,.18);
+
+  font-size:8.5px;
+  font-weight:950;
+
+  line-height:1.3;
+
+  overflow-wrap:anywhere;
+}
+
+.shark-buoy.good .life-ring{
+  box-shadow:
+    0 0 0 5px rgba(42,200,132,.28),
+    0 7px 13px rgba(6,72,104,.24);
+}
+
+.shark-buoy.good .shark-buoy-text{
+  background:#ddf7e9;
+  color:#14704b;
+}
+
+.shark-buoy.wrong .life-ring{
+  opacity:.45;
+}
+
+.shark-buoy.wrong .shark-buoy-text{
+  background:#ffe1e5;
+  color:#9b3040;
+}
+
+@keyframes buoyFloat{
+
+  from{
+    transform:
+      translate(-50%,-50%)
+      translateY(-4px)
+      rotate(-2deg);
+  }
+
+  to{
+    transform:
+      translate(-50%,-50%)
+      translateY(5px)
+      rotate(2deg);
+  }
+
 }
 
 
 /* =========================================================
-   MONKEY CODE LOCK
+   MONKEY
 ========================================================= */
 
 .monkey-scene{
@@ -2614,8 +2979,7 @@ button:disabled{
   background:#704735;
 
   transition:
-    transform .7s ease,
-    filter .3s;
+    transform .7s ease;
 }
 
 .monkey-door.open{
@@ -2661,6 +3025,7 @@ button:disabled{
 
 .monkey-character.safe{
   left:76%;
+
   opacity:.3;
 }
 
@@ -2696,8 +3061,7 @@ button:disabled{
 
   border-radius:16px;
 
-  background:
-    #fffdf4;
+  background:#fffdf4;
 
   box-shadow:
     0 12px 30px rgba(65,69,83,.13);
@@ -2753,9 +3117,6 @@ button:disabled{
       #eaedf2,
       #cfd4dd
     );
-
-  box-shadow:
-    inset 0 2px 6px rgba(0,0,0,.09);
 }
 
 .lock-question{
@@ -3045,7 +3406,7 @@ button:disabled{
 
 
 /* =========================================================
-   OVERLAY / RESULT
+   OVERLAY
 ========================================================= */
 
 .overlay{
@@ -3063,8 +3424,7 @@ button:disabled{
   background:
     rgba(18,12,46,.68);
 
-  backdrop-filter:
-    blur(5px);
+  backdrop-filter:blur(5px);
 }
 
 .result{
@@ -3277,13 +3637,11 @@ button:disabled{
 
   .flappy-answer{
     width:94px;
-
     font-size:7px;
   }
 
   .kakapo{
     left:20%;
-
     width:120px;
   }
 
@@ -3293,7 +3651,28 @@ button:disabled{
   }
 
   .shark-buoy{
-    width:110px;
+    width:105px;
+  }
+
+  .life-ring{
+    width:48px;
+    height:48px;
+  }
+
+  .life-ring::after{
+    inset:12px;
+  }
+
+  .swimmer{
+    width:65px;
+  }
+
+  .swimmer-body{
+    font-size:48px;
+  }
+
+  .shark-body{
+    font-size:62px;
   }
 
 }
@@ -3301,6 +3680,7 @@ button:disabled{
 </style>
 
 </head>
+
 
 <body>
 
@@ -3330,11 +3710,24 @@ button:disabled{
     </div>
 
 
-    <div
-      class="student"
-      id="studentInfo"
-    >
-      Học sinh
+    <div class="top-actions">
+
+      <button
+        class="music-toggle"
+        id="musicToggle"
+        type="button"
+        onclick="toggleMusic()"
+      >
+        🔊 Nhạc
+      </button>
+
+      <div
+        class="student"
+        id="studentInfo"
+      >
+        Học sinh
+      </div>
+
     </div>
 
   </div>
@@ -3543,7 +3936,6 @@ button:disabled{
 
   <section class="game-grid">
 
-
     <article class="game-card">
 
       <div class="game-icon">
@@ -3605,7 +3997,7 @@ button:disabled{
       </h3>
 
       <p>
-        Đua trên phố với các xe khác. Trả lời đúng để kích hoạt tăng tốc.
+        Đua trên phố với các xe khác. Trả lời đúng để tăng tốc.
       </p>
 
       <button
@@ -3777,15 +4169,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🐹 Whack a Word
-      </h2>
-
-      <p>
-        Đập đúng đáp án trước khi chuột biến mất.
-      </p>
-
+      <h2>🐹 Whack a Word</h2>
+      <p>Đập đúng đáp án trước khi chuột biến mất.</p>
     </div>
 
     <button
@@ -3830,9 +4215,7 @@ button:disabled{
 
   <section class="target">
 
-    <small>
-      Đập từ tương ứng
-    </small>
+    <small>Đập từ tương ứng</small>
 
     <b id="whackTarget">
       —
@@ -3861,15 +4244,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🍎 Word Catcher
-      </h2>
-
-      <p>
-        Hứng đáp án đúng.
-      </p>
-
+      <h2>🍎 Word Catcher</h2>
+      <p>Hứng đáp án đúng.</p>
     </div>
 
     <button
@@ -3914,9 +4290,7 @@ button:disabled{
 
   <section class="target">
 
-    <small>
-      Hứng từ tương ứng
-    </small>
+    <small>Hứng từ tương ứng</small>
 
     <b id="catchTarget">
       —
@@ -4026,6 +4400,7 @@ button:disabled{
     <div class="city-left"></div>
     <div class="city-right"></div>
 
+
     <div class="road-inner">
 
       <div class="road-line one"></div>
@@ -4053,9 +4428,7 @@ button:disabled{
       </div>
 
       <div class="race-track">
-
         <i id="raceProgressFill"></i>
-
       </div>
 
     </div>
@@ -4139,15 +4512,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🧩 Match Master
-      </h2>
-
-      <p>
-        Ghép các cặp từ và nghĩa.
-      </p>
-
+      <h2>🧩 Match Master</h2>
+      <p>Ghép các cặp từ và nghĩa.</p>
     </div>
 
     <button
@@ -4280,6 +4646,7 @@ button:disabled{
       ☁️
     </div>
 
+
     <div class="speed-line s1"></div>
     <div class="speed-line s2"></div>
     <div class="speed-line s3"></div>
@@ -4364,15 +4731,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-
-      <h2>
-        🎈 Balloon Pop
-      </h2>
-
-      <p>
-        Bắn quả bóng chứa đáp án đúng.
-      </p>
-
+      <h2>🎈 Balloon Pop</h2>
+      <p>Bắn quả bóng chứa đáp án đúng.</p>
     </div>
 
     <button
@@ -4454,7 +4814,7 @@ button:disabled{
       </h2>
 
       <p>
-        Chọn phao đúng để bơi thật nhanh vào bờ.
+        Chọn đúng phao để bơi nhanh về phía bờ.
       </p>
 
     </div>
@@ -4519,7 +4879,11 @@ button:disabled{
 
     <div class="shark-sky"></div>
 
-    <div class="shark-water-line"></div>
+    <div class="shark-sun"></div>
+
+    <div class="shark-cloud">
+      ☁️
+    </div>
 
 
     <div class="shark-progress">
@@ -4527,7 +4891,7 @@ button:disabled{
       <div class="shark-progress-row">
 
         <span>
-          🦈 SHARK
+          🦈
         </span>
 
         <span>
@@ -4553,7 +4917,15 @@ button:disabled{
       class="shark"
       id="sharkCharacter"
     >
-      🦈
+
+      <span class="shark-splash">
+        💦
+      </span>
+
+      <span class="shark-body">
+        🦈
+      </span>
+
     </div>
 
 
@@ -4561,11 +4933,35 @@ button:disabled{
       class="swimmer"
       id="swimmerCharacter"
     >
-      🏊
+
+      <span class="swimmer-splash">
+        💦
+      </span>
+
+      <span class="swimmer-body">
+        🏊
+      </span>
+
     </div>
 
 
     <div class="shore"></div>
+
+
+    <div class="shore-label">
+      BỜ
+    </div>
+
+
+    <div
+      class="shark-danger-meter"
+      id="sharkDangerMeter"
+    >
+      Cá mập cách bạn:
+      <strong id="sharkDistanceText">
+        20
+      </strong>
+    </div>
 
 
     <div id="sharkBuoys"></div>
@@ -4703,7 +5099,7 @@ button:disabled{
 
 
 <!-- =========================================================
-     GAME INTRO
+     INTRO
 ========================================================= -->
 
 <div
@@ -4790,11 +5186,9 @@ button:disabled{
       🏆
     </div>
 
-
     <h2 id="resultTitle">
       Hoàn thành
     </h2>
-
 
     <div
       class="result-score"
@@ -4802,7 +5196,6 @@ button:disabled{
     >
       0
     </div>
-
 
     <div
       class="result-progress"
@@ -4839,7 +5232,6 @@ button:disabled{
         ← Chọn game
       </button>
 
-
       <button
         class="primary"
         id="resultReplayBtn"
@@ -4847,7 +5239,6 @@ button:disabled{
       >
         Chơi lại ↻
       </button>
-
 
       <button
         class="primary hidden"
@@ -4957,7 +5348,6 @@ const GAME_INTROS = {
 
   },
 
-
   catcher:{
 
     icon:"🍎",
@@ -4971,7 +5361,6 @@ const GAME_INTROS = {
       "• Dùng phím ← → hoặc chạm vào vị trí muốn đặt giỏ.<br>• Hứng đúng để hoàn thành từ.<br>• Hứng sai hoặc để đáp án đúng rơi mất sẽ mất mạng."
 
   },
-
 
   racer:{
 
@@ -4987,7 +5376,6 @@ const GAME_INTROS = {
 
   },
 
-
   match:{
 
     icon:"🧩",
@@ -5001,7 +5389,6 @@ const GAME_INTROS = {
       "• Mỗi lượt có tối đa 6 cặp.<br>• Ghép đúng sẽ hoàn thành từ đó.<br>• Ghép sai, hai thẻ sẽ úp lại để em thử tiếp.<br>• Khi ghép hết một bảng, game tự tạo bảng tiếp theo."
 
   },
-
 
   flappy:{
 
@@ -5017,7 +5404,6 @@ const GAME_INTROS = {
 
   },
 
-
   balloon:{
 
     icon:"🎈",
@@ -5032,7 +5418,6 @@ const GAME_INTROS = {
 
   },
 
-
   shark:{
 
     icon:"🦈",
@@ -5040,13 +5425,12 @@ const GAME_INTROS = {
     title:"Shark Escape",
 
     description:
-      "Người bơi đang bị cá mập đuổi. Chọn đúng phao nghĩa để giúp người bơi tăng tốc vào bờ.",
+      "Người bơi đang bị cá mập đuổi. Chọn đúng phao để tăng tốc bơi vào bờ.",
 
     rules:
-      "• Mỗi lượt xuất hiện một từ tiếng Anh.<br>• Chọn chiếc phao mang nghĩa đúng.<br>• Trả lời đúng: người bơi tiến nhanh về bờ và cá mập bị bỏ xa.<br>• Trả lời sai: cá mập áp sát nhanh hơn.<br>• Nếu cá mập bắt kịp, em mất 1 mạng."
+      "• Mỗi lượt xuất hiện một từ tiếng Anh.<br>• Chọn chiếc phao mang nghĩa đúng.<br>• Trả lời đúng: người bơi tăng tốc về phía bờ và tạo khoảng cách với cá mập.<br>• Trả lời sai: cá mập áp sát nhanh hơn.<br>• Kể cả không trả lời, cá mập vẫn liên tục bơi tới.<br>• Nếu cá mập bắt kịp, em mất 1 mạng."
 
   },
-
 
   monkey:{
 
@@ -5055,14 +5439,201 @@ const GAME_INTROS = {
     title:"Monkey Code Lock",
 
     description:
-      "Chú khỉ đang chết rét ngoài trời. Giải mật mã của chiếc vali-lock để mở cửa nhà.",
+      "Chú khỉ đang chết rét ngoài trời. Giải mật mã để mở cửa nhà.",
 
     rules:
-      "• Mỗi bánh khóa tương ứng với một từ tiếng Anh.<br>• Bấm ▲ / ▼ để xoay bánh đến nghĩa đúng.<br>• Nhấn KIỂM TRA MẬT MÃ.<br>• Ô đúng sẽ chuyển xanh và được khóa lại.<br>• Ô sai chuyển đỏ để em biết chính xác vị trí cần sửa.<br>• Đúng toàn bộ mật mã thì cửa sẽ mở."
+      "• Mỗi bánh khóa tương ứng với một từ tiếng Anh.<br>• Bấm ▲ / ▼ để xoay bánh đến nghĩa đúng.<br>• Nhấn KIỂM TRA MẬT MÃ.<br>• Ô đúng sẽ chuyển xanh và được khóa lại.<br>• Ô sai chuyển đỏ để em biết vị trí cần sửa.<br>• Đúng toàn bộ mật mã thì cửa sẽ mở."
 
   }
 
 };
+
+
+/* =========================================================
+   AUDIO
+========================================================= */
+
+const GAME_MUSIC = {
+
+  whack:
+    "./audio/whack.mp3",
+
+  catcher:
+    "./audio/catcher.mp3",
+
+  racer:
+    "./audio/racer.mp3",
+
+  match:
+    "./audio/match.mp3",
+
+  flappy:
+    "./audio/flappy.mp3",
+
+  balloon:
+    "./audio/balloon.mp3",
+
+  shark:
+    "./audio/shark.mp3",
+
+  monkey:
+    "./audio/monkey.mp3"
+
+};
+
+
+const bgMusic =
+new Audio();
+
+
+bgMusic.loop =
+true;
+
+
+bgMusic.preload =
+"auto";
+
+
+bgMusic.volume =
+.28;
+
+
+let musicEnabled =
+localStorage.getItem(
+  "VOCABULARY_MUSIC_ENABLED"
+)
+!==
+"false";
+
+
+function updateMusicButton(){
+
+  $("musicToggle")
+  .textContent =
+  musicEnabled
+
+  ?
+
+  "🔊 Nhạc"
+
+  :
+
+  "🔇 Nhạc";
+
+}
+
+
+function startGameMusic(game){
+
+  stopGameMusic();
+
+
+  if(
+    !musicEnabled
+    ||
+    !GAME_MUSIC[
+      game
+    ]
+  ){
+
+    return;
+
+  }
+
+
+  bgMusic.src =
+  GAME_MUSIC[
+    game
+  ];
+
+
+  bgMusic.currentTime =
+  0;
+
+
+  const promise =
+  bgMusic.play();
+
+
+  if(
+    promise
+    &&
+    typeof promise.catch ===
+    "function"
+  ){
+
+    promise.catch(
+      ()=>{}
+    );
+
+  }
+
+}
+
+
+function stopGameMusic(){
+
+  try{
+
+    bgMusic.pause();
+
+    bgMusic.currentTime =
+    0;
+
+  }
+
+  catch(error){}
+
+}
+
+
+function toggleMusic(){
+
+  musicEnabled =
+  !musicEnabled;
+
+
+  localStorage.setItem(
+    "VOCABULARY_MUSIC_ENABLED",
+    String(
+      musicEnabled
+    )
+  );
+
+
+  updateMusicButton();
+
+
+  if(
+    !musicEnabled
+  ){
+
+    stopGameMusic();
+
+    return;
+
+  }
+
+
+  if(
+    currentGame
+    &&
+    !gameEnded
+    &&
+    $("gameIntroOverlay")
+    .classList
+    .contains(
+      "hidden"
+    )
+  ){
+
+    startGameMusic(
+      currentGame
+    );
+
+  }
+
+}
 
 
 /* =========================================================
@@ -5088,13 +5659,9 @@ function escapeHTML(value){
     character => ({
 
       "&":"&amp;",
-
       "<":"&lt;",
-
       ">":"&gt;",
-
       '"':"&quot;",
-
       "'":"&#39;"
 
     })[character]
@@ -5229,7 +5796,7 @@ function studentScope(){
 
 
 /* =========================================================
-   LIFETIME STATS
+   STATS
 ========================================================= */
 
 function statsKey(){
@@ -5586,7 +6153,7 @@ function resetCurrentLearningFromResult(){
 
 
 /* =========================================================
-   WORD STATUS
+   STATUS
 ========================================================= */
 
 function wordStatus(word){
@@ -5713,7 +6280,7 @@ function hideScreens(){
 
 
 /* =========================================================
-   GLOBAL GAME STATE
+   GLOBAL STATE
 ========================================================= */
 
 let selectedSkill =
@@ -6050,30 +6617,26 @@ function renderSets(){
         set,
         setWords
       ]
-    ) => {
+    ) => `
+      <button
+        class="set-card"
+        onclick="openSet('${set}')"
+      >
 
-      return`
-        <button
-          class="set-card"
-          onclick="openSet('${set}')"
-        >
+        <div class="set-number">
+          ${set}
+        </div>
 
-          <div class="set-number">
-            ${set}
-          </div>
+        <h3>
+          Bộ ${set}
+        </h3>
 
-          <h3>
-            Bộ ${set}
-          </h3>
+        <p>
+          ${setWords.length} từ
+        </p>
 
-          <p>
-            ${setWords.length} từ
-          </p>
-
-        </button>
-      `;
-
-    }
+      </button>
+    `
   )
   .join("");
 
@@ -6142,10 +6705,6 @@ function showGameList(){
   ];
 
 
-  const remaining =
-  remainingWords().length;
-
-
   $("collectionTitle")
   .textContent =
   `${meta.icon} ${meta.title} · Bộ ${selectedSet}`;
@@ -6153,7 +6712,7 @@ function showGameList(){
 
   $("collectionSubtitle")
   .textContent =
-  `${currentCollection.length} từ · Đã học ${learnedCount()} · Còn ${remaining} từ`;
+  `${currentCollection.length} từ · Đã học ${learnedCount()} · Còn ${remainingWords().length} từ`;
 
 
   $("collectionBack")
@@ -6173,7 +6732,7 @@ function showGameList(){
 
 
 /* =========================================================
-   RENDER COLLECTION
+   COLLECTION
 ========================================================= */
 
 function renderCollection(){
@@ -6309,7 +6868,7 @@ function renderCollection(){
 
 
 /* =========================================================
-   WORD PICKING
+   WORD PICK
 ========================================================= */
 
 function weightedWord(){
@@ -6331,8 +6890,7 @@ function weightedWord(){
   [];
 
 
-  remaining
-  .forEach(
+  remaining.forEach(
     word => {
 
       const stats =
@@ -6606,7 +7164,7 @@ function feedback(
 
 
 /* =========================================================
-   PREPARE / INTRO
+   PREPARE GAME
 ========================================================= */
 
 function prepareGame(game){
@@ -6785,6 +7343,16 @@ function beginPendingGame(){
   null;
 
 
+  /*
+  Đây là click trực tiếp của người dùng,
+  nên trình duyệt cho phép phát audio.
+  */
+
+  startGameMusic(
+    currentGame
+  );
+
+
   fn();
 
 }
@@ -6930,7 +7498,9 @@ function beginWhack(){
 
 function nextWhack(){
 
-  if(gameEnded){
+  if(
+    gameEnded
+  ){
 
     return;
 
@@ -7131,7 +7701,9 @@ function nextWhack(){
   setTimeout(
     ()=>{
 
-      if(gameEnded){
+      if(
+        gameEnded
+      ){
 
         return;
 
@@ -7410,7 +7982,9 @@ function nextCatch(){
 
 function catchLoop(now){
 
-  if(gameEnded){
+  if(
+    gameEnded
+  ){
 
     return;
 
@@ -7626,8 +8200,7 @@ function removeFruit(fruit){
 
 function clearFruits(){
 
-  fruits
-  .forEach(
+  fruits.forEach(
     fruit =>
     fruit.element.remove()
   );
@@ -7711,7 +8284,7 @@ function updateCatch(seconds){
 
 
 /* =========================================================
-   STREET RACER
+   RACER
 ========================================================= */
 
 let racerObjects =
@@ -8042,14 +8615,11 @@ function racerLoop(now){
   );
 
 
-  racerObjects
-  .forEach(
+  racerObjects.forEach(
     object => {
 
       object.y +=
-      worldSpeed
-      *
-      dt;
+      worldSpeed*dt;
 
 
       object.element.style.left =
@@ -8072,10 +8642,7 @@ function racerLoop(now){
 
 
   racerNpc.forEach(
-    (
-      npc,
-      index
-    ) => {
+    npc => {
 
       npc.y +=
       (
@@ -8140,8 +8707,7 @@ function racerLoop(now){
 
 
     const selected =
-    racerObjects
-    .find(
+    racerObjects.find(
       object =>
       object.lane ===
       carLane
@@ -8337,17 +8903,15 @@ function updateRacerVisuals(){
   );
 
 
-  const position =
-  all.indexOf(
-    racerProgress
-  )
-  +
-  1;
-
-
   $("racerPosition")
   .textContent =
-  position
+  (
+    all.indexOf(
+      racerProgress
+    )
+    +
+    1
+  )
   +
   "/4";
 
@@ -8356,8 +8920,7 @@ function updateRacerVisuals(){
 
 function clearRacer(){
 
-  racerObjects
-  .forEach(
+  racerObjects.forEach(
     object =>
     object.element.remove()
   );
@@ -9087,7 +9650,7 @@ function spawnFlappyQuestion(
   );
 
 
-  let ys =
+  const ys =
   shuffle(
     [
       height*.20,
@@ -9171,9 +9734,7 @@ function spawnFlappyQuestion(
           *
           Math.PI
           *
-          2,
-
-        hit:false
+          2
 
       });
 
@@ -10348,15 +10909,15 @@ function updateBalloon(seconds){
 
 
 /* =========================================================
-   SHARK ESCAPE
+   SHARK ESCAPE V2
 ========================================================= */
 
-let sharkProgress =
-0;
-
-
-let sharkGap =
+let sharkSwimmerX =
 28;
+
+
+let sharkX =
+7;
 
 
 let sharkRoundLocked =
@@ -10366,6 +10927,22 @@ false;
 let sharkPressureTimer =
 null;
 
+
+let sharkCaughtLock =
+false;
+
+
+const SHARK_SHORE_X =
+84;
+
+
+const SHARK_CATCH_DISTANCE =
+6;
+
+
+/* =========================================================
+   START
+========================================================= */
 
 function startShark(){
 
@@ -10384,16 +10961,23 @@ function beginShark(){
   "en-vi";
 
 
-  sharkProgress =
-  0;
-
-
-  sharkGap =
+  sharkSwimmerX =
   28;
+
+
+  sharkX =
+  7;
 
 
   sharkRoundLocked =
   false;
+
+
+  sharkCaughtLock =
+  false;
+
+
+  resetSharkVisualState();
 
 
   updateSharkPositions();
@@ -10411,18 +10995,85 @@ function beginShark(){
   nextSharkRound();
 
 
+  /*
+  Cá mập tự bơi tới mỗi 0.5 giây.
+
+  0.35% / 0.5s
+  = khoảng 0.7% màn hình / giây.
+
+  Nếu học sinh đứng im,
+  khoảng 20 giây cá mập sẽ bắt kịp.
+  */
+
+  sharkPressureTimer =
+  setInterval(
+    ()=>{
+
+      if(
+        gameEnded
+        ||
+        currentGame !==
+        "shark"
+        ||
+        sharkCaughtLock
+      ){
+
+        return;
+
+      }
+
+
+      sharkX +=
+      .35;
+
+
+      const distance =
+      sharkSwimmerX
+      -
+      sharkX;
+
+
+      /*
+      Càng gần người thì cá mập tăng tốc nhẹ.
+      */
+
+      if(
+        distance <
+        13
+      ){
+
+        sharkX +=
+        .15;
+
+      }
+
+
+      if(
+        distance <
+        9
+      ){
+
+        sharkX +=
+        .12;
+
+      }
+
+
+      updateSharkPositions();
+
+
+      checkSharkDanger();
+
+    },
+    500
+  );
+
+
   gameTimer =
   setInterval(
     ()=>{
 
       seconds--;
-
-
-      sharkGap -=
-      .45;
-
-
-      checkSharkDanger();
 
 
       updateShark(
@@ -10448,6 +11099,10 @@ function beginShark(){
 
 }
 
+
+/* =========================================================
+   ROUND
+========================================================= */
 
 function nextSharkRound(){
 
@@ -10493,24 +11148,30 @@ function nextSharkRound(){
   );
 
 
-  const positions = [
+  /*
+  Phao lệch cả X lẫn Y,
+  không nằm thẳng hàng.
+  */
 
-    {
-      x:40,
-      y:42
-    },
+  const positions =
+  shuffle(
+    [
+      {
+        x:46,
+        y:41
+      },
 
-    {
-      x:57,
-      y:62
-    },
+      {
+        x:60,
+        y:62
+      },
 
-    {
-      x:72,
-      y:43
-    }
-
-  ];
+      {
+        x:73,
+        y:46
+      }
+    ]
+  );
 
 
   $("sharkBuoys")
@@ -10530,6 +11191,10 @@ function nextSharkRound(){
       );
 
 
+      button.type =
+      "button";
+
+
       button.className =
       "shark-buoy";
 
@@ -10546,11 +11211,14 @@ function nextSharkRound(){
       "%";
 
 
+      /*
+      PHAO CSS.
+      Không dùng emoji nên không bị lỗi hình.
+      */
+
       button.innerHTML =
       `
-        <div class="shark-buoy-icon">
-          🛟
-        </div>
+        <div class="life-ring"></div>
 
         <span class="shark-buoy-text">
           ${escapeHTML(word.meaning)}
@@ -10580,6 +11248,10 @@ function nextSharkRound(){
 }
 
 
+/* =========================================================
+   CHOOSE BUOY
+========================================================= */
+
 function chooseSharkBuoy(
   button,
   word
@@ -10589,6 +11261,8 @@ function chooseSharkBuoy(
     gameEnded
     ||
     sharkRoundLocked
+    ||
+    sharkCaughtLock
     ||
     button.disabled
   ){
@@ -10625,29 +11299,66 @@ function chooseSharkBuoy(
     );
 
 
-    sharkProgress =
+    /*
+    Người tăng tốc mạnh về phía bờ.
+    */
+
+    sharkSwimmerX =
     Math.min(
-      100,
-      sharkProgress
+      SHARK_SHORE_X,
+      sharkSwimmerX
       +
-      11
+      7.5
       +
       Math.min(
-        6,
-        combo
+        combo,
+        3
       )
+      *
+      .5
     );
 
 
-    sharkGap =
-    Math.min(
-      32,
-      sharkGap+4
+    /*
+    Cá mập tụt lại một chút.
+    */
+
+    sharkX =
+    Math.max(
+      4,
+      sharkX-1.8
+    );
+
+
+    $("swimmerCharacter")
+    .classList
+    .add(
+      "fast"
+    );
+
+
+    clearTimeout(
+      $("swimmerCharacter")._fastTimer
+    );
+
+
+    $("swimmerCharacter")._fastTimer =
+    setTimeout(
+      ()=>{
+
+        $("swimmerCharacter")
+        .classList
+        .remove(
+          "fast"
+        );
+
+      },
+      800
     );
 
 
     feedback(
-      "🏊 Bơi nhanh hơn!",
+      "🏊 Chính xác! Tăng tốc!",
       "good"
     );
 
@@ -10662,34 +11373,36 @@ function chooseSharkBuoy(
 
       setTimeout(
         ()=>endGame(true),
-        500
+        600
       );
+
+      return;
 
     }
 
-    else if(
-      sharkProgress >=
-      100
+
+    if(
+      sharkSwimmerX >=
+      SHARK_SHORE_X
     ){
 
       setTimeout(
         ()=>endGame(
           false,
-          "🏝️ Em đã bơi vào bờ!"
+          "🏝️ Đã bơi kịp vào bờ!"
         ),
-        500
+        700
       );
+
+      return;
 
     }
 
-    else{
 
-      setTimeout(
-        nextSharkRound,
-        550
-      );
-
-    }
+    setTimeout(
+      nextSharkRound,
+      550
+    );
 
   }
 
@@ -10711,17 +11424,24 @@ function chooseSharkBuoy(
     );
 
 
-    sharkGap -=
-    7;
+    /*
+    Sai -> cá mập lao nhanh tới.
+    */
+
+    sharkX +=
+    4.6;
 
 
     feedback(
-      "🦈 Cá mập đang áp sát!",
+      "🦈 Sai rồi! Cá mập đang áp sát!",
       "bad"
     );
 
 
     updateShark();
+
+
+    updateSharkPositions();
 
 
     checkSharkDanger();
@@ -10731,9 +11451,62 @@ function chooseSharkBuoy(
 }
 
 
+/* =========================================================
+   SHARK DANGER
+========================================================= */
+
 function checkSharkDanger(){
 
   if(
+    gameEnded
+    ||
+    sharkCaughtLock
+  ){
+
+    return;
+
+  }
+
+
+  const distance =
+  sharkSwimmerX
+  -
+  sharkX;
+
+
+  $("sharkCharacter")
+  .classList
+  .toggle(
+    "danger",
+    distance <
+    11
+  );
+
+
+  if(
+    distance >
+    SHARK_CATCH_DISTANCE
+  ){
+
+    return;
+
+  }
+
+
+  sharkCaught();
+
+}
+
+
+/* =========================================================
+   SHARK CATCH
+========================================================= */
+
+function sharkCaught(){
+
+  if(
+    sharkCaughtLock
+    ||
     gameEnded
   ){
 
@@ -10742,16 +11515,12 @@ function checkSharkDanger(){
   }
 
 
-  if(
-    sharkGap >
-    3
-  ){
+  sharkCaughtLock =
+  true;
 
-    updateSharkPositions();
 
-    return;
-
-  }
+  sharkRoundLocked =
+  true;
 
 
   wrongAnswer(
@@ -10759,7 +11528,22 @@ function checkSharkDanger(){
   );
 
 
+  const ended =
   loseLife();
+
+
+  $("sharkCharacter")
+  .classList
+  .add(
+    "bite"
+  );
+
+
+  $("swimmerCharacter")
+  .classList
+  .add(
+    "panic"
+  );
 
 
   feedback(
@@ -10768,69 +11552,161 @@ function checkSharkDanger(){
   );
 
 
-  sharkGap =
-  24;
-
-
-  sharkProgress =
-  Math.max(
-    0,
-    sharkProgress-7
-  );
-
-
   updateShark();
 
 
-  updateSharkPositions();
+  if(ended){
 
-
-  if(!gameEnded){
-
-    setTimeout(
-      nextSharkRound,
-      400
-    );
+    return;
 
   }
+
+
+  setTimeout(
+    ()=>{
+
+      $("sharkCharacter")
+      .classList
+      .remove(
+        "bite"
+      );
+
+
+      $("swimmerCharacter")
+      .classList
+      .remove(
+        "panic"
+      );
+
+
+      /*
+      Sau khi mất mạng:
+      người lùi nhẹ,
+      cá mập được đưa ra xa lại.
+      */
+
+      sharkSwimmerX =
+      Math.max(
+        28,
+        sharkSwimmerX-3
+      );
+
+
+      sharkX =
+      Math.max(
+        5,
+        sharkSwimmerX-21
+      );
+
+
+      sharkCaughtLock =
+      false;
+
+
+      updateSharkPositions();
+
+
+      nextSharkRound();
+
+    },
+    900
+  );
+
+}
+
+
+/* =========================================================
+   SHARK VISUALS
+========================================================= */
+
+function resetSharkVisualState(){
+
+  $("sharkCharacter")
+  .classList
+  .remove(
+    "danger",
+    "bite"
+  );
+
+
+  $("swimmerCharacter")
+  .classList
+  .remove(
+    "fast",
+    "panic"
+  );
 
 }
 
 
 function updateSharkPositions(){
 
-  const swimmerLeft =
-  14
-  +
-  sharkProgress*.70;
+  if(
+    !$("swimmerCharacter")
+    ||
+    !$("sharkCharacter")
+  ){
+
+    return;
+
+  }
 
 
-  const sharkLeft =
-  Math.max(
-    4,
-    swimmerLeft
-    -
-    sharkGap
+  sharkSwimmerX =
+  Math.min(
+    SHARK_SHORE_X,
+    Math.max(
+      18,
+      sharkSwimmerX
+    )
+  );
+
+
+  sharkX =
+  Math.min(
+    sharkSwimmerX-1,
+    Math.max(
+      3,
+      sharkX
+    )
   );
 
 
   $("swimmerCharacter")
   .style.left =
-  swimmerLeft
+  sharkSwimmerX
   +
   "%";
 
 
   $("sharkCharacter")
   .style.left =
-  sharkLeft
+  sharkX
   +
   "%";
 
 
+  const progress =
+  Math.max(
+    0,
+    Math.min(
+      100,
+      (
+        sharkSwimmerX-28
+      )
+      /
+      (
+        SHARK_SHORE_X-28
+      )
+      *
+      100
+    )
+  );
+
+
   $("sharkProgressFill")
   .style.width =
-  sharkProgress
+  progress
   +
   "%";
 
@@ -10838,10 +11714,58 @@ function updateSharkPositions(){
   $("sharkProgressText")
   .textContent =
   Math.round(
-    sharkProgress
+    progress
   )
   +
   "%";
+
+
+  const distance =
+  Math.max(
+    0,
+    sharkSwimmerX
+    -
+    sharkX
+  );
+
+
+  $("sharkDistanceText")
+  .textContent =
+  distance.toFixed(
+    1
+  );
+
+
+  $("sharkCharacter")
+  .classList
+  .toggle(
+    "danger",
+    distance <
+    11
+  );
+
+
+  $("sharkDangerMeter")
+  .style.background =
+  distance <
+  9
+
+  ?
+
+  "rgba(156,32,47,.86)"
+
+  :
+
+  distance <
+  13
+
+  ?
+
+  "rgba(177,103,18,.82)"
+
+  :
+
+  "rgba(5,43,68,.72)";
 
 }
 
@@ -10885,15 +11809,21 @@ function updateShark(seconds){
 
 function clearSharkBuoys(){
 
-  $("sharkBuoys")
-  .innerHTML =
-  "";
+  if(
+    $("sharkBuoys")
+  ){
+
+    $("sharkBuoys")
+    .innerHTML =
+    "";
+
+  }
 
 }
 
 
 /* =========================================================
-   MONKEY CODE LOCK
+   MONKEY
 ========================================================= */
 
 let monkeySlots =
@@ -11290,10 +12220,6 @@ function checkMonkeyCode(){
   false;
 
 
-  let allSolved =
-  true;
-
-
   monkeySlots.forEach(
     (
       slot,
@@ -11359,10 +12285,6 @@ function checkMonkeyCode(){
         true;
 
 
-        allSolved =
-        false;
-
-
         wrongAnswer(
           slot.target
         );
@@ -11387,7 +12309,7 @@ function checkMonkeyCode(){
   );
 
 
-  allSolved =
+  const allSolved =
   monkeySlots.every(
     slot =>
     slot.solved
@@ -11397,9 +12319,7 @@ function checkMonkeyCode(){
   updateMonkey();
 
 
-  if(
-    anyWrong
-  ){
+  if(anyWrong){
 
     loseLife();
 
@@ -11424,9 +12344,7 @@ function checkMonkeyCode(){
   }
 
 
-  if(
-    allSolved
-  ){
+  if(allSolved){
 
     $("monkeyMessage")
     .textContent =
@@ -11653,7 +12571,7 @@ document
 
 
 /* =========================================================
-   POINTER CONTROLS
+   POINTERS
 ========================================================= */
 
 $("flappyStage")
@@ -11909,6 +12827,9 @@ function stopGame(){
   stopTimersOnly();
 
 
+  stopGameMusic();
+
+
   clearFruits();
 
   clearRacer();
@@ -11931,6 +12852,10 @@ function stopGame(){
 
 
   flappyCrashLock =
+  false;
+
+
+  sharkCaughtLock =
   false;
 
 
@@ -11969,6 +12894,9 @@ function endGame(
 
 
   stopTimersOnly();
+
+
+  stopGameMusic();
 
 
   showResult(
@@ -12158,6 +13086,9 @@ function replayGame(){
 ========================================================= */
 
 function init(){
+
+  updateMusicButton();
+
 
   if(
     window.VOCABULARY_LOAD_ERROR
