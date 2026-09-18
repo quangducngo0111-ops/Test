@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>Intensive Listening · Bài 01 · Self-drive Tours in the USA · v5</title>
+<title>Intensive Listening · Bài 01 · Self-drive Tours in the USA</title>
 
 <style>
 :root{
@@ -240,76 +240,14 @@ button:disabled{cursor:not-allowed;opacity:.55}
 }
 #part1Panel .audio-box{
   position:sticky;
-  top:76px;
-  z-index:28;
-  box-shadow:0 10px 26px rgba(40,27,83,.12);
-}
-
-
-/* =========================================================
-   GAP-FILL MINI DICTIONARY
-========================================================= */
-.lookup-hint{
-  margin:10px 0 0;
-  padding:9px 11px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  border:1px dashed #cfc5ec;
-  border-radius:10px;
-  background:#fbf9ff;
-  color:#665783;
-  font-size:9px;
-  line-height:1.45;
-}
-.lookup-hint b{color:#51369a}
-
-.dictionary-popup{
-  position:fixed;
-  z-index:500;
-  width:min(300px,calc(100vw - 24px));
-  padding:12px 13px;
-  border:1px solid #d8d0ee;
-  border-radius:13px;
-  background:rgba(255,255,255,.98);
-  box-shadow:0 14px 34px rgba(45,31,88,.18);
+  top:72px;
+  z-index:40;
+  margin-bottom:18px;
+  border-color:#cec4eb;
+  background:rgba(249,251,254,.97);
+  box-shadow:0 12px 30px rgba(40,27,83,.16);
   backdrop-filter:blur(10px);
 }
-.dictionary-popup.hidden{display:none!important}
-.dictionary-word{
-  color:#372268;
-  font-size:12px;
-  font-weight:950;
-  line-height:1.3;
-  word-break:break-word;
-}
-.dictionary-meaning{
-  margin-top:5px;
-  color:#353d50;
-  font-size:10px;
-  line-height:1.55;
-}
-.dictionary-note{
-  margin-top:5px;
-  color:#8a91a0;
-  font-size:8px;
-  line-height:1.4;
-}
-.dictionary-close{
-  position:absolute;
-  top:7px;
-  right:8px;
-  width:24px;
-  height:24px;
-  padding:0;
-  border:0;
-  border-radius:50%;
-  background:#f1eef8;
-  color:#665388;
-  font-size:13px;
-  font-weight:900;
-}
-
 @media(max-width:720px){
   #part1Panel .audio-box{
     top:72px;
@@ -689,72 +627,6 @@ button:disabled{cursor:not-allowed;opacity:.55}
   transform:translateX(-50%) translateY(0);
 }
 
-
-
-/* =========================================================
-   GAP-FILL MINI DICTIONARY
-========================================================= */
-.lookup-hint{
-  margin:10px 0 0;
-  padding:9px 11px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  border:1px dashed #cfc5ec;
-  border-radius:10px;
-  background:#fbf9ff;
-  color:#665783;
-  font-size:9px;
-  line-height:1.45;
-}
-.lookup-hint b{color:#51369a}
-
-.dictionary-popup{
-  position:fixed;
-  z-index:500;
-  width:min(300px,calc(100vw - 24px));
-  padding:12px 13px;
-  border:1px solid #d8d0ee;
-  border-radius:13px;
-  background:rgba(255,255,255,.98);
-  box-shadow:0 14px 34px rgba(45,31,88,.18);
-  backdrop-filter:blur(10px);
-}
-.dictionary-popup.hidden{display:none!important}
-.dictionary-word{
-  color:#372268;
-  font-size:12px;
-  font-weight:950;
-  line-height:1.3;
-  word-break:break-word;
-}
-.dictionary-meaning{
-  margin-top:5px;
-  color:#353d50;
-  font-size:10px;
-  line-height:1.55;
-}
-.dictionary-note{
-  margin-top:5px;
-  color:#8a91a0;
-  font-size:8px;
-  line-height:1.4;
-}
-.dictionary-close{
-  position:absolute;
-  top:7px;
-  right:8px;
-  width:24px;
-  height:24px;
-  padding:0;
-  border:0;
-  border-radius:50%;
-  background:#f1eef8;
-  color:#665388;
-  font-size:13px;
-  font-weight:900;
-}
-
 @media(max-width:720px){
   .student{display:none}
   .hero{padding:22px 18px}
@@ -766,6 +638,68 @@ button:disabled{cursor:not-allowed;opacity:.55}
   .action-bar{align-items:flex-start;flex-direction:column}
   .primary{width:100%}
 }
+
+/* =========================================================
+   INSTANT EN → VI LOOKUP FOR GAP-FILL SCRIPT
+========================================================= */
+.script{
+  position:relative;
+}
+
+.word-lookup-tip{
+  margin:0 0 12px;
+  padding:10px 12px;
+  border:1px solid #dcd5f3;
+  border-radius:11px;
+  background:#faf8ff;
+  color:#665585;
+  font-size:9.5px;
+  line-height:1.55;
+}
+.word-lookup-tip b{
+  color:#503695;
+}
+
+.lookup-popover{
+  position:fixed;
+  z-index:250;
+  width:min(320px,calc(100vw - 24px));
+  padding:12px 13px;
+  border:1px solid #d8dfea;
+  border-radius:13px;
+  background:#fff;
+  box-shadow:0 16px 38px rgba(36,24,75,.18);
+}
+.lookup-popover.hidden{
+  display:none;
+}
+.lookup-selected{
+  color:#51379d;
+  font-size:10.5px;
+  font-weight:950;
+  overflow-wrap:anywhere;
+}
+.lookup-divider{
+  height:1px;
+  margin:8px 0;
+  background:#edf0f5;
+}
+.lookup-meaning{
+  color:#31394d;
+  font-size:11px;
+  line-height:1.55;
+}
+.lookup-loading{
+  color:#8a91a0;
+  font-size:9.5px;
+}
+.lookup-source{
+  margin-top:7px;
+  color:#9aa1af;
+  font-size:7.5px;
+  font-weight:800;
+}
+
 </style>
 </head>
 
@@ -886,9 +820,8 @@ button:disabled{cursor:not-allowed;opacity:.55}
         </div>
       </div>
 
-      <div class="lookup-hint">
-        <span>📖</span>
-        <span><b>Tra từ nhanh:</b> bôi đen một từ hoặc cụm từ trong audioscript để xem nghĩa tiếng Việt.</span>
+      <div class="word-lookup-tip">
+        <b>Tra từ nhanh:</b> bôi đen bất kỳ từ hoặc cụm từ tiếng Anh nào trong audioscript để xem nghĩa tiếng Việt.
       </div>
 
       <div class="script" id="scriptContainer"></div>
@@ -926,7 +859,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
       <div class="dictation-intro">
         <b>Cách làm:</b> nghe từng đoạn bao nhiêu lần cũng được, có thể tua tiến/lùi và giảm xuống
         0.5× hoặc 0.75× → nhập toàn bộ câu bạn nghe được → nộp Phần 2.
-        Sau khi nộp, transcript chuẩn của từng clip mới được mở để bạn tự so sánh.
+        Sau khi nộp, transcript chuẩn của từng đoạn mới được mở để bạn tự so sánh.
       </div>
 
       <div class="result-card hidden" id="part2Result">
@@ -940,7 +873,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
       <div class="dictation-list" id="dictationList"></div>
 
       <div class="action-bar" id="part2Actions">
-        <div class="action-info" id="part2Progress">0/10 đoạn đã nhập</div>
+        <div class="action-info" id="part2Progress">0/18 đoạn đã nhập</div>
         <button class="primary" id="submitPart2Btn" type="button">
           Nộp Dictation & xem transcript
         </button>
@@ -957,14 +890,14 @@ button:disabled{cursor:not-allowed;opacity:.55}
 
 </main>
 
-<div class="dictionary-popup hidden" id="dictionaryPopup" role="status" aria-live="polite">
-  <button class="dictionary-close" id="dictionaryClose" type="button" aria-label="Đóng">×</button>
-  <div class="dictionary-word" id="dictionaryWord"></div>
-  <div class="dictionary-meaning" id="dictionaryMeaning"></div>
-  <div class="dictionary-note" id="dictionaryNote">Bôi đen từ/cụm khác để tra tiếp.</div>
-</div>
-
 <div class="toast" id="toast"></div>
+
+<div class="lookup-popover hidden" id="lookupPopover" role="dialog" aria-live="polite">
+  <div class="lookup-selected" id="lookupSelected"></div>
+  <div class="lookup-divider"></div>
+  <div class="lookup-meaning" id="lookupMeaning"></div>
+  <div class="lookup-source" id="lookupSource"></div>
+</div>
 
 <script>
 /* =========================================================
@@ -1026,93 +959,111 @@ const AUDIO_FILE = "./Cam10-Test1-Section1.mp3";
 const dictationItems = [
   {
     q:1,
-    context:"Address · 24 ______ Road",
-    start:120.45,
-    end:122.80,
-    duration:"2.35s",
-    transcript:"24, Ardleigh Road.",
-    key:"Ardleigh"
+    start:133.07,
+    end:136.82,
+    transcript:"Thanks. And can I have your phone number?"
   },
   {
     q:2,
-    context:"Heard about company from",
-    start:150.35,
-    end:152.75,
-    duration:"2.40s",
-    transcript:"No, I read about you in the newspaper.",
-    key:"newspaper"
+    start:137.37,
+    end:138.89,
+    transcript:"Is a mobile alright?"
   },
   {
     q:3,
-    context:"Los Angeles · ______ parks",
-    start:170.85,
-    end:177.38,
-    duration:"6.53s",
-    transcript:"The first one begins in Los Angeles and there’s plenty of time to visit some of the theme parks there.",
-    key:"theme"
+    start:153.07,
+    end:155.28,
+    transcript:"No, I read about you in the newspaper."
   },
   {
     q:4,
-    context:"Yosemite Park · lodge, not a ______",
-    start:190.00,
-    end:195.05,
-    duration:"5.05s",
-    transcript:"I don’t like the idea of staying in a tent. It’d be too hot.",
-    key:"tent"
+    start:156.00,
+    end:163.65,
+    transcript:"OK, I’ll get the brochures in the post to you but can I give you some information over the phone. What kinds of things do you want to do on your holiday?"
   },
   {
     q:5,
-    context:"On the way to Cambria",
-    start:206.00,
-    end:214.10,
-    duration:"8.10s",
-    transcript:"Someone told me there’s a really nice castle near Cambria. Will we go near that?",
-    key:"castle"
+    start:182.99,
+    end:189.65,
+    transcript:"That’s something on my children’s list so I’d want to include that."
   },
   {
     q:6,
-    context:"San Diego · wants time on the ______",
-    start:240.55,
-    end:242.75,
-    duration:"2.20s",
-    transcript:"That’s good for beaches isn’t it?",
-    key:"beach / beaches"
+    start:198.99,
+    end:203.64,
+    transcript:"I don’t like the idea of staying in a tent. It’d be too hot."
   },
   {
     q:7,
-    context:"Trip One · Total distance",
-    start:294.50,
-    end:303.80,
-    duration:"9.30s",
-    transcript:"The first one I told you about is a self-drive tour through California which lasts twelve days and covers 2,020 kilometres.",
-    key:"2020"
+    start:240.71,
+    end:243.53,
+    transcript:"That’s good for beaches isn’t it?"
   },
   {
     q:8,
-    context:"Trip One · Includes one ______",
-    start:311.15,
-    end:314.65,
-    duration:"3.50s",
-    transcript:"That includes accommodation, car rental and a flight but no meals.",
-    key:"flight"
+    start:243.87,
+    end:253.11,
+    transcript:"That’s right, that’s a good place to relax and your children might like to visit the zoo before flying home."
   },
   {
     q:9,
-    context:"Trip Two · Price per person",
-    start:333.28,
-    end:336.82,
-    duration:"3.54s",
-    transcript:"It’s £429 per person, which is a good deal.",
-    key:"429"
+    start:256.53,
+    end:263.06,
+    transcript:"I don’t think so. We want some time for sunbathing and swimming."
   },
   {
     q:10,
-    context:"Trip Two · Includes",
-    start:342.05,
-    end:345.98,
-    duration:"3.93s",
-    transcript:"But these hotels offer dinner in the price.",
-    key:"dinner"
+    start:283.41,
+    end:287.23,
+    transcript:"So how many days are the trips and how much do they cost?"
+  },
+  {
+    q:11,
+    start:314.87,
+    end:316.38,
+    transcript:"OK. And the other trip?"
+  },
+  {
+    q:12,
+    start:316.74,
+    end:325.62,
+    transcript:"That lasts nine days but you spend only three days on the road. You cover about 980 kilometres altogether."
+  },
+  {
+    q:13,
+    start:325.96,
+    end:328.99,
+    transcript:"So is that cheaper then?"
+  },
+  {
+    q:14,
+    start:329.54,
+    end:336.65,
+    transcript:"Yes, it’s almost a hundred pounds cheaper. It’s £429 per person, which is a good deal."
+  },
+  {
+    q:15,
+    start:337.32,
+    end:340.28,
+    transcript:"So that covers accommodation and car hire. What about flights?"
+  },
+  {
+    q:16,
+    start:340.54,
+    end:345.81,
+    transcript:"They aren’t included. But these hotels offer dinner in the price."
+  },
+  {
+    q:17,
+    start:346.57,
+    end:351.69,
+    transcript:"OK. Well, thank you very much. I’ll be in touch when I’ve had a chance to look at the brochure."
+  },
+  {
+    q:18,
+    start:351.93,
+    end:353.52,
+    transcript:"I’m pleased to help. Goodbye."
   }
 ];
 
@@ -1224,277 +1175,236 @@ function dictationAccuracy(student,expected){
 }
 
 
+
 /* =========================================================
-   GAP-FILL MINI DICTIONARY
+   UNIVERSAL WORD / PHRASE LOOKUP
+   - Any selected English word/phrase in Part 1 can be looked up.
+   - Translation results are cached locally.
+   - Google endpoint first, MyMemory as fallback.
 ========================================================= */
 
-const GAP_DICTIONARY = {
-  "information":"thông tin",
-  "self-drive":"tự lái xe; chuyến đi tự lái",
-  "self-drive tour":"chuyến du lịch tự lái xe",
-  "self-drive tours":"các chuyến du lịch tự lái xe",
-  "brochure":"tờ giới thiệu; tài liệu quảng bá",
-  "address":"địa chỉ",
-  "postcode":"mã bưu chính",
-  "mobile":"điện thoại di động",
-  "phone number":"số điện thoại",
-  "heard about":"biết đến; nghe nói về",
-  "advert":"quảng cáo",
-  "newspaper":"báo; báo giấy",
-  "in the post":"qua đường bưu điện",
-  "over the phone":"qua điện thoại",
-  "holiday":"kỳ nghỉ",
-  "interested":"quan tâm; hứng thú",
-  "interested in":"quan tâm đến; hứng thú với",
-  "family":"gia đình",
-  "children":"trẻ em; con cái",
-  "hire":"thuê",
-  "hire a car":"thuê ô tô",
-  "couple":"một vài; hai",
-  "a couple of":"một vài; hai",
-  "different":"khác nhau",
-  "places of interest":"địa điểm tham quan; nơi đáng chú ý",
-  "plenty of":"nhiều; dồi dào",
-  "theme park":"công viên chủ đề",
-  "theme parks":"các công viên chủ đề",
-  "include":"bao gồm; đưa vào",
-  "drive":"lái xe",
-  "spend":"dành; trải qua (thời gian)",
-  "a couple of nights":"một vài đêm; hai đêm",
-  "choose":"lựa chọn",
-  "stay":"ở; lưu trú",
-  "lodge":"nhà nghỉ; khu nhà nghỉ",
-  "campsite":"khu cắm trại",
-  "tent":"lều",
-  "too hot":"quá nóng",
-  "tour":"chuyến du lịch",
-  "ends":"kết thúc",
-  "arrange":"sắp xếp; tổ chức",
-  "slightly":"hơi; một chút",
-  "south":"phía nam; về phía nam",
-  "road":"đường",
-  "stop":"dừng; ghé lại",
-  "desert":"sa mạc",
-  "continues":"tiếp tục",
-  "shopping":"việc mua sắm",
-  "straight on":"đi thẳng; tiếp tục thẳng",
-  "beach":"bãi biển",
-  "beaches":"các bãi biển",
-  "relax":"thư giãn",
-  "visit":"tham quan; ghé thăm",
-  "zoo":"sở thú",
-  "flying home":"bay về nhà",
-  "sunbathing":"tắm nắng",
-  "swimming":"bơi lội",
-  "cost":"có giá; chi phí",
-  "lasts":"kéo dài",
-  "covers":"bao phủ; đi qua tổng quãng đường",
-  "kilometres":"ki-lô-mét",
-  "shortest":"ngắn nhất",
-  "journey":"hành trình; chặng đường",
-  "longest":"dài nhất",
-  "per person":"mỗi người",
-  "accommodation":"chỗ ở; nơi lưu trú",
-  "car rental":"dịch vụ thuê ô tô",
-  "rental":"việc thuê; dịch vụ cho thuê",
-  "flight":"chuyến bay",
-  "meals":"các bữa ăn",
-  "road":"đường; hành trình bằng đường bộ",
-  "altogether":"tổng cộng",
-  "cheaper":"rẻ hơn",
-  "almost":"gần như; xấp xỉ",
-  "pounds":"bảng Anh",
-  "good deal":"mức giá/hợp đồng có lợi",
-  "car hire":"dịch vụ thuê ô tô",
-  "flights":"các chuyến bay",
-  "included":"được bao gồm",
-  "offer":"cung cấp",
-  "dinner":"bữa tối",
-  "price":"giá",
-  "chance":"cơ hội; dịp",
-  "look at":"xem; xem xét",
-  "pleased":"vui; hài lòng",
-  "goodbye":"tạm biệt",
-  "alright":"ổn; được",
-  "fine":"được; ổn",
-  "really nice":"rất đẹp; rất tốt",
-  "enough":"đủ",
-  "at home":"ở nhà",
-  "interest":"làm ai hứng thú; sự quan tâm",
-  "before":"trước khi",
-  "through":"qua; xuyên qua",
-  "which":"mà; cái mà",
-  "where":"nơi mà; ở đâu",
-  "somewhere":"ở đâu đó",
-  "something":"một điều gì đó",
-  "someone":"ai đó"
-};
+const LOOKUP_CACHE_KEY = "INTENSIVE_LISTENING_LOOKUP_CACHE_V2";
+let lookupRequestId = 0;
 
-const GAP_DICTIONARY_FORMS = {
-  "child":"children",
-  "hired":"hire",
-  "hiring":"hire",
-  "visited":"visit",
-  "visiting":"visit",
-  "staying":"stay",
-  "spent":"spend",
-  "choosing":"choose",
-  "driving":"drive",
-  "included":"included",
-  "includes":"include",
-  "including":"include",
-  "continued":"continues",
-  "continue":"continues",
-  "cheapest":"cheaper",
-  "flights":"flights",
-  "beaches":"beaches",
-  "meals":"meals",
-  "kilometers":"kilometres",
-  "kilometer":"kilometres",
-  "kilometre":"kilometres",
-  "tours":"tour"
-};
+function loadLookupCache(){
+  try{
+    const value=JSON.parse(localStorage.getItem(LOOKUP_CACHE_KEY)||"{}");
+    return value && typeof value==="object" ? value : {};
+  }catch(error){
+    return {};
+  }
+}
 
-function normalizeLookup(value){
+const lookupCache=loadLookupCache();
+
+function saveLookupCache(){
+  try{
+    const entries=Object.entries(lookupCache);
+    const trimmed=entries.slice(-500);
+    localStorage.setItem(
+      LOOKUP_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(trimmed))
+    );
+  }catch(error){}
+}
+
+function cleanSelectedText(value){
   return String(value||"")
-    .toLowerCase()
-    .replace(/[’‘]/g,"'")
-    .replace(/^\s+|\s+$/g,"")
-    .replace(/^[\s.,!?;:()\[\]{}“”"']+|[\s.,!?;:()\[\]{}“”"']+$/g,"")
-    .replace(/\s+/g," ");
+    .replace(/\s+/g," ")
+    .replace(/^[\s“”"'‘’.,!?;:()[\]{}]+|[\s“”"'‘’.,!?;:()[\]{}]+$/g,"")
+    .trim();
 }
 
-function lookupGapMeaning(raw){
-  const term=normalizeLookup(raw);
-  if(!term) return null;
-
-  if(GAP_DICTIONARY[term]){
-    return GAP_DICTIONARY[term];
-  }
-
-  const form=GAP_DICTIONARY_FORMS[term];
-  if(form && GAP_DICTIONARY[form]){
-    return GAP_DICTIONARY[form];
-  }
-
-  if(term.endsWith("'s")){
-    const base=term.slice(0,-2);
-    if(GAP_DICTIONARY[base]){
-      return GAP_DICTIONARY[base];
-    }
-  }
-
-  if(term.split(" ").length===1){
-    const candidates=[];
-
-    if(term.endsWith("es")) candidates.push(term.slice(0,-2));
-    if(term.endsWith("s")) candidates.push(term.slice(0,-1));
-    if(term.endsWith("ed")) candidates.push(term.slice(0,-2));
-    if(term.endsWith("ing")) candidates.push(term.slice(0,-3));
-
-    for(const candidate of candidates){
-      if(GAP_DICTIONARY[candidate]){
-        return GAP_DICTIONARY[candidate];
-      }
-    }
-  }
-
-  return null;
+function hideLookup(){
+  $("lookupPopover")?.classList.add("hidden");
 }
 
-function hideDictionaryPopup(){
-  const popup=$("dictionaryPopup");
-  if(popup) popup.classList.add("hidden");
-}
+function placeLookup(range){
+  const pop=$("lookupPopover");
+  if(!pop) return;
 
-function positionDictionaryPopup(rect){
-  const popup=$("dictionaryPopup");
-  if(!popup || !rect) return;
+  const rect=range.getBoundingClientRect();
 
-  popup.classList.remove("hidden");
+  pop.classList.remove("hidden");
 
   requestAnimationFrame(()=>{
-    const gap=8;
-    const width=popup.offsetWidth;
-    const height=popup.offsetHeight;
+    const box=pop.getBoundingClientRect();
 
-    let left=rect.left+(rect.width/2)-(width/2);
-    left=Math.max(12,Math.min(window.innerWidth-width-12,left));
+    let left=rect.left+(rect.width/2)-(box.width/2);
+    left=Math.max(12,Math.min(window.innerWidth-box.width-12,left));
 
-    let top=rect.bottom+gap;
+    let top=rect.bottom+8;
 
-    if(top+height>window.innerHeight-12){
-      top=rect.top-height-gap;
+    if(top+box.height>window.innerHeight-10){
+      top=rect.top-box.height-8;
     }
 
-    top=Math.max(12,top);
+    top=Math.max(10,top);
 
-    popup.style.left=`${left}px`;
-    popup.style.top=`${top}px`;
+    pop.style.left=`${left}px`;
+    pop.style.top=`${top}px`;
   });
 }
 
-function handleGapSelection(){
-  setTimeout(()=>{
-    const selection=window.getSelection();
-    if(!selection || selection.rangeCount===0 || selection.isCollapsed){
-      return;
-    }
+async function translateWithGoogle(text){
+  const url=
+    "https://translate.googleapis.com/translate_a/single"
+    +"?client=gtx&sl=en&tl=vi&dt=t&q="
+    +encodeURIComponent(text);
 
-    const text=selection.toString().trim();
-    if(!text || text.length>60){
-      hideDictionaryPopup();
-      return;
-    }
+  const response=await fetch(url,{
+    method:"GET",
+    mode:"cors",
+    cache:"no-store"
+  });
 
-    const range=selection.getRangeAt(0);
-    const container=$("scriptContainer");
-    const common=range.commonAncestorContainer;
-    const node=common.nodeType===Node.TEXT_NODE ? common.parentNode : common;
+  if(!response.ok){
+    throw new Error("Google translation failed");
+  }
 
-    if(!container || !node || !container.contains(node)){
-      hideDictionaryPopup();
-      return;
-    }
+  const data=await response.json();
 
-    const meaning=lookupGapMeaning(text);
+  const translated=
+    Array.isArray(data?.[0])
+    ? data[0].map(part=>part?.[0]||"").join("").trim()
+    : "";
 
-    $("dictionaryWord").textContent=text;
-    $("dictionaryMeaning").textContent=meaning || "Chưa có nghĩa cho từ/cụm này. Hãy thử bôi đen một từ hoặc cụm ngắn hơn.";
-    $("dictionaryNote").textContent=meaning
-      ? "Nghĩa được lưu riêng cho bài luyện này."
-      : "Gợi ý: chọn 1 từ hoặc cụm 2–3 từ.";
+  if(!translated){
+    throw new Error("Empty translation");
+  }
 
-    positionDictionaryPopup(range.getBoundingClientRect());
-  },0);
+  return {
+    meaning:translated,
+    source:"Dịch Anh → Việt"
+  };
 }
 
-function initGapDictionary(){
-  const container=$("scriptContainer");
-  if(!container) return;
+async function translateWithMyMemory(text){
+  const url=
+    "https://api.mymemory.translated.net/get?q="
+    +encodeURIComponent(text)
+    +"&langpair=en|vi";
 
-  container.addEventListener("mouseup",handleGapSelection);
-  container.addEventListener("touchend",handleGapSelection,{passive:true});
-
-  $("dictionaryClose")?.addEventListener("click",()=>{
-    hideDictionaryPopup();
-    window.getSelection()?.removeAllRanges();
+  const response=await fetch(url,{
+    method:"GET",
+    mode:"cors",
+    cache:"no-store"
   });
 
-  document.addEventListener("keydown",event=>{
-    if(event.key==="Escape") hideDictionaryPopup();
-  });
+  if(!response.ok){
+    throw new Error("Fallback translation failed");
+  }
 
-  document.addEventListener("pointerdown",event=>{
-    const popup=$("dictionaryPopup");
-    if(!popup || popup.classList.contains("hidden")) return;
-    if(popup.contains(event.target)) return;
-    if(container.contains(event.target)) return;
-    hideDictionaryPopup();
-  });
+  const data=await response.json();
+  const translated=String(data?.responseData?.translatedText||"").trim();
 
-  window.addEventListener("resize",hideDictionaryPopup);
+  if(!translated){
+    throw new Error("Empty fallback translation");
+  }
+
+  return {
+    meaning:translated,
+    source:"Dịch Anh → Việt"
+  };
 }
+
+async function translateSelection(text){
+  const key=text.toLowerCase();
+
+  if(lookupCache[key]){
+    return lookupCache[key];
+  }
+
+  let result;
+
+  try{
+    result=await translateWithGoogle(text);
+  }catch(error){
+    result=await translateWithMyMemory(text);
+  }
+
+  lookupCache[key]=result;
+  saveLookupCache();
+
+  return result;
+}
+
+async function showLookupForSelection(){
+  const selection=window.getSelection();
+
+  if(!selection || selection.rangeCount===0 || selection.isCollapsed){
+    return;
+  }
+
+  const range=selection.getRangeAt(0);
+  const script=$("scriptContainer");
+
+  if(
+    !script
+    ||
+    !script.contains(range.commonAncestorContainer)
+  ){
+    return;
+  }
+
+  const text=cleanSelectedText(selection.toString());
+
+  if(!text || text.length>180){
+    return;
+  }
+
+  const requestId=++lookupRequestId;
+
+  $("lookupSelected").textContent=text;
+  $("lookupMeaning").innerHTML='<span class="lookup-loading">Đang tra nghĩa…</span>';
+  $("lookupSource").textContent="";
+
+  placeLookup(range);
+
+  try{
+    const result=await translateSelection(text);
+
+    if(requestId!==lookupRequestId) return;
+
+    $("lookupMeaning").textContent=result.meaning;
+    $("lookupSource").textContent=result.source;
+  }catch(error){
+    if(requestId!==lookupRequestId) return;
+
+    $("lookupMeaning").textContent=
+      "Chưa lấy được nghĩa lúc này. Hãy bôi lại từ sau vài giây.";
+    $("lookupSource").textContent=
+      "Cần kết nối Internet để tra từ không giới hạn.";
+  }
+}
+
+document.addEventListener("mouseup",event=>{
+  if(event.target.closest?.(".lookup-popover")) return;
+
+  setTimeout(showLookupForSelection,20);
+});
+
+document.addEventListener("touchend",event=>{
+  if(event.target.closest?.(".lookup-popover")) return;
+
+  setTimeout(showLookupForSelection,80);
+});
+
+document.addEventListener("pointerdown",event=>{
+  const pop=$("lookupPopover");
+
+  if(
+    pop
+    &&
+    !pop.contains(event.target)
+    &&
+    !event.target.closest?.("#scriptContainer")
+  ){
+    hideLookup();
+  }
+});
+
+window.addEventListener("resize",hideLookup);
 
 
 /* =========================================================
@@ -1606,7 +1516,7 @@ function renderPart2(){
         <div>
           <div class="q-label">Dictation ${String(item.q).padStart(2,"0")}</div>
         </div>
-        <div class="duration">${item.duration}</div>
+        <div class="duration">${formatTime(item.end-item.start)}</div>
       </div>
 
       <div class="clip-player">
@@ -2277,8 +2187,6 @@ function init(){
   $("submitPart1Btn").addEventListener("click",submitPart1);
   $("submitPart2Btn").addEventListener("click",submitPart2);
   $("resetBtn").addEventListener("click",resetLesson);
-
-  initGapDictionary();
 
   const state=loadState();
 
