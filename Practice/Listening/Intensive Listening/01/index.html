@@ -466,6 +466,38 @@ button:disabled{cursor:not-allowed;opacity:.55}
   background:#f2edff;
   color:#563a9e;
 }
+
+.clip-player{
+  margin-top:11px;
+  padding:10px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:9px;
+  border:1px solid #e1e6ee;
+  border-radius:11px;
+  background:#f9fbfe;
+}
+.clip-progress{
+  width:100%;
+  accent-color:#6448b8;
+  cursor:pointer;
+}
+.clip-time{
+  min-width:78px;
+  color:#7d8595;
+  font-size:8px;
+  font-weight:900;
+  text-align:right;
+}
+@media(max-width:620px){
+  .clip-player{
+    grid-template-columns:1fr;
+  }
+  .clip-time{
+    text-align:left;
+  }
+}
 .dictation-input{
   width:100%;
   min-height:78px;
@@ -658,7 +690,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
           id="part1Audio"
           controls
           preload="metadata"
-          src="./audio/Cam10-Test1-Section1.mp3"
+          src="./Cam10-Test1-Section1.mp3"
         ></audio>
 
         <div class="practice-audio-tools">
@@ -727,11 +759,11 @@ button:disabled{cursor:not-allowed;opacity:.55}
       <div>
         <h2>Phần 2 · Dictation</h2>
         <p>
-          Mỗi audio là một đoạn được cắt từ bài nghe gốc và chứa thông tin dùng để trả lời
-          Questions 1–10. Nghe và chép lại chính xác câu/đoạn bạn nghe được.
+          Mỗi mục sẽ tự phát đúng đoạn cần luyện từ cùng một file audio gốc.
+          Nghe và chép lại chính xác câu/đoạn chứa thông tin của Questions 1–10.
         </p>
       </div>
-      <div class="badge">10 clips</div>
+      <div class="badge">10 đoạn luyện</div>
     </div>
 
     <div class="panel-body">
@@ -744,7 +776,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
       </div>
 
       <div class="dictation-intro">
-        <b>Cách làm:</b> nghe từng clip bao nhiêu lần cũng được, có thể tua tiến/lùi và giảm xuống
+        <b>Cách làm:</b> nghe từng đoạn bao nhiêu lần cũng được, có thể tua tiến/lùi và giảm xuống
         0.5× hoặc 0.75× → nhập toàn bộ câu bạn nghe được → nộp Phần 2.
         Sau khi nộp, transcript chuẩn của từng clip mới được mở để bạn tự so sánh.
       </div>
@@ -834,11 +866,14 @@ const transcriptTurns = [
   {speaker:"ANDREA", text:"Goodbye."}
 ];
 
+const AUDIO_FILE = "./Cam10-Test1-Section1.mp3";
+
 const dictationItems = [
   {
     q:1,
     context:"Address · 24 ______ Road",
-    file:"./audio/dictation-q01.mp3",
+    start:120.45,
+    end:122.80,
     duration:"2.35s",
     transcript:"24, Ardleigh Road.",
     key:"Ardleigh"
@@ -846,7 +881,8 @@ const dictationItems = [
   {
     q:2,
     context:"Heard about company from",
-    file:"./audio/dictation-q02.mp3",
+    start:150.35,
+    end:152.75,
     duration:"2.40s",
     transcript:"No, I read about you in the newspaper.",
     key:"newspaper"
@@ -854,7 +890,8 @@ const dictationItems = [
   {
     q:3,
     context:"Los Angeles · ______ parks",
-    file:"./audio/dictation-q03.mp3",
+    start:170.85,
+    end:177.38,
     duration:"6.53s",
     transcript:"The first one begins in Los Angeles and there’s plenty of time to visit some of the theme parks there.",
     key:"theme"
@@ -862,7 +899,8 @@ const dictationItems = [
   {
     q:4,
     context:"Yosemite Park · lodge, not a ______",
-    file:"./audio/dictation-q04.mp3",
+    start:190.00,
+    end:195.05,
     duration:"5.05s",
     transcript:"I don’t like the idea of staying in a tent. It’d be too hot.",
     key:"tent"
@@ -870,7 +908,8 @@ const dictationItems = [
   {
     q:5,
     context:"On the way to Cambria",
-    file:"./audio/dictation-q05.mp3",
+    start:206.00,
+    end:214.10,
     duration:"8.10s",
     transcript:"Someone told me there’s a really nice castle near Cambria. Will we go near that?",
     key:"castle"
@@ -878,7 +917,8 @@ const dictationItems = [
   {
     q:6,
     context:"San Diego · wants time on the ______",
-    file:"./audio/dictation-q06.mp3",
+    start:240.55,
+    end:242.75,
     duration:"2.20s",
     transcript:"That’s good for beaches isn’t it?",
     key:"beach / beaches"
@@ -886,7 +926,8 @@ const dictationItems = [
   {
     q:7,
     context:"Trip One · Total distance",
-    file:"./audio/dictation-q07.mp3",
+    start:294.50,
+    end:303.80,
     duration:"9.30s",
     transcript:"The first one I told you about is a self-drive tour through California which lasts twelve days and covers 2,020 kilometres.",
     key:"2020"
@@ -894,7 +935,8 @@ const dictationItems = [
   {
     q:8,
     context:"Trip One · Includes one ______",
-    file:"./audio/dictation-q08.mp3",
+    start:311.15,
+    end:314.65,
     duration:"3.50s",
     transcript:"That includes accommodation, car rental and a flight but no meals.",
     key:"flight"
@@ -902,7 +944,8 @@ const dictationItems = [
   {
     q:9,
     context:"Trip Two · Price per person",
-    file:"./audio/dictation-q09.mp3",
+    start:333.28,
+    end:336.82,
     duration:"3.54s",
     transcript:"It’s £429 per person, which is a good deal.",
     key:"429"
@@ -910,7 +953,8 @@ const dictationItems = [
   {
     q:10,
     context:"Trip Two · Includes",
-    file:"./audio/dictation-q10.mp3",
+    start:342.05,
+    end:345.98,
     duration:"3.93s",
     transcript:"But these hotels offer dinner in the price.",
     key:"dinner"
@@ -1138,20 +1182,39 @@ function renderPart2(){
         <div class="duration">${item.duration}</div>
       </div>
 
-      <audio
-        id="audioQ${item.q}"
-        controls
-        preload="metadata"
-        src="${item.file}"
-        style="width:100%;margin-top:11px"
-      ></audio>
+      <div class="clip-player">
+        <button
+          class="play-clip"
+          id="playBtnQ${item.q}"
+          type="button"
+          onclick="toggleClip(${item.q})"
+        >
+          ▶ Nghe đoạn
+        </button>
+
+        <input
+          class="clip-progress"
+          id="clipProgressQ${item.q}"
+          type="range"
+          min="0"
+          max="${(item.end-item.start).toFixed(2)}"
+          step=".05"
+          value="0"
+          oninput="scrubClip(${item.q},this.value)"
+          aria-label="Tiến độ đoạn nghe Q${item.q}"
+        >
+
+        <span class="clip-time" id="clipTimeQ${item.q}">
+          0:00 / ${formatTime(item.end-item.start)}
+        </span>
+      </div>
 
       <div class="clip-controls">
 
         <button
           class="speed-btn"
           type="button"
-          onclick="seekAudio('audioQ${item.q}',-3)"
+          onclick="seekClip(${item.q},-3)"
         >
           ↶ 3s
         </button>
@@ -1167,7 +1230,7 @@ function renderPart2(){
         <button
           class="speed-btn"
           type="button"
-          onclick="seekAudio('audioQ${item.q}',3)"
+          onclick="seekClip(${item.q},3)"
         >
           3s ↷
         </button>
@@ -1261,51 +1324,246 @@ function setMainAudioSpeed(speed,button){
   }
 }
 
-function replayClip(q){
-  const audio=$(`audioQ${q}`);
-  if(!audio) return;
+const dictationAudio = new Audio(AUDIO_FILE);
+dictationAudio.preload = "metadata";
 
-  stopOtherClips(q);
-  audio.currentTime=0;
-  audio.play().catch(()=>{});
+let activeDictationQ = null;
+let dictationTicker = null;
+let dictationSpeed = 1;
+
+function getDictationItem(q){
+  return dictationItems.find(item=>item.q===q);
 }
 
-function stopOtherClips(exceptQ){
+function formatTime(seconds){
+  const safe=Math.max(0,Number(seconds)||0);
+  const minutes=Math.floor(safe/60);
+  const secs=Math.floor(safe%60);
+  return `${minutes}:${String(secs).padStart(2,"0")}`;
+}
+
+function updateClipUI(q){
+  const item=getDictationItem(q);
+  if(!item) return;
+
+  const progress=$(`clipProgressQ${q}`);
+  const time=$(`clipTimeQ${q}`);
+
+  let relative=0;
+
+  if(activeDictationQ===q){
+    relative=Math.max(
+      0,
+      Math.min(
+        item.end-item.start,
+        dictationAudio.currentTime-item.start
+      )
+    );
+  }
+
+  if(progress){
+    progress.value=relative.toFixed(2);
+  }
+
+  if(time){
+    time.textContent=
+      `${formatTime(relative)} / ${formatTime(item.end-item.start)}`;
+  }
+}
+
+function updatePlayButtons(){
   dictationItems.forEach(item=>{
-    if(item.q===exceptQ) return;
-    const audio=$(`audioQ${item.q}`);
-    if(audio && !audio.paused){
-      audio.pause();
-      audio.currentTime=0;
-    }
+    const button=$(`playBtnQ${item.q}`);
+    if(!button) return;
+
+    const playing=
+      activeDictationQ===item.q
+      &&
+      !dictationAudio.paused;
+
+    button.textContent=
+      playing
+      ?
+      "❚❚ Tạm dừng"
+      :
+      "▶ Nghe đoạn";
   });
 }
 
-function playClip(q){
-  const audio=$(`audioQ${q}`);
-  if(!audio) return;
+function stopDictationTicker(){
+  if(dictationTicker){
+    clearInterval(dictationTicker);
+    dictationTicker=null;
+  }
+}
 
-  stopOtherClips(q);
+function startDictationTicker(){
+  stopDictationTicker();
 
-  if(!audio.paused){
-    audio.pause();
-    audio.currentTime=0;
+  dictationTicker=setInterval(()=>{
+    if(activeDictationQ===null) return;
+
+    const item=getDictationItem(activeDictationQ);
+    if(!item) return;
+
+    if(dictationAudio.currentTime>=item.end-.03){
+      dictationAudio.pause();
+      dictationAudio.currentTime=item.end;
+      updateClipUI(item.q);
+      updatePlayButtons();
+      stopDictationTicker();
+      return;
+    }
+
+    updateClipUI(item.q);
+  },30);
+}
+
+function prepareClip(q,position=null){
+  const item=getDictationItem(q);
+  if(!item) return null;
+
+  if(activeDictationQ!==null && activeDictationQ!==q){
+    const previous=activeDictationQ;
+    dictationAudio.pause();
+    updateClipUI(previous);
+  }
+
+  activeDictationQ=q;
+  dictationAudio.playbackRate=dictationSpeed;
+
+  let target=
+    position===null
+    ?
+    item.start
+    :
+    item.start+Number(position);
+
+  target=Math.max(
+    item.start,
+    Math.min(item.end,target)
+  );
+
+  dictationAudio.currentTime=target;
+
+  updateClipUI(q);
+  updatePlayButtons();
+
+  return item;
+}
+
+function toggleClip(q){
+  const item=getDictationItem(q);
+  if(!item) return;
+
+  if(
+    activeDictationQ===q
+    &&
+    !dictationAudio.paused
+  ){
+    dictationAudio.pause();
+    stopDictationTicker();
+    updatePlayButtons();
+    updateClipUI(q);
     return;
   }
 
-  audio.currentTime=0;
-  audio.play().catch(()=>{});
+  let relative=0;
+
+  if(activeDictationQ===q){
+    relative=Math.max(
+      0,
+      dictationAudio.currentTime-item.start
+    );
+
+    if(
+      dictationAudio.currentTime>=item.end-.05
+      ||
+      dictationAudio.currentTime<item.start
+    ){
+      relative=0;
+    }
+  }
+
+  prepareClip(q,relative);
+
+  dictationAudio
+  .play()
+  .then(()=>{
+    startDictationTicker();
+    updatePlayButtons();
+  })
+  .catch(()=>{});
+}
+
+function replayClip(q){
+  prepareClip(q,0);
+
+  dictationAudio
+  .play()
+  .then(()=>{
+    startDictationTicker();
+    updatePlayButtons();
+  })
+  .catch(()=>{});
+}
+
+function seekClip(q,seconds){
+  const item=getDictationItem(q);
+  if(!item) return;
+
+  let relative=0;
+
+  if(activeDictationQ===q){
+    relative=dictationAudio.currentTime-item.start;
+  }
+
+  relative=Math.max(
+    0,
+    Math.min(
+      item.end-item.start,
+      relative+seconds
+    )
+  );
+
+  prepareClip(q,relative);
+  updateClipUI(q);
+}
+
+function scrubClip(q,value){
+  prepareClip(q,Number(value));
+  updateClipUI(q);
 }
 
 function setClipSpeed(q,speed,button){
-  const audio=$(`audioQ${q}`);
-  if(audio) audio.playbackRate=speed;
+  dictationSpeed=speed;
+  dictationAudio.playbackRate=speed;
 
-  document.querySelectorAll(`[data-speed-q="${q}"]`).forEach(btn=>{
+  document
+  .querySelectorAll(`[data-speed-q="${q}"]`)
+  .forEach(btn=>{
     btn.classList.remove("active");
   });
-  button.classList.add("active");
+
+  if(button){
+    button.classList.add("active");
+  }
 }
+
+dictationAudio.addEventListener("pause",()=>{
+  updatePlayButtons();
+
+  if(activeDictationQ!==null){
+    updateClipUI(activeDictationQ);
+  }
+});
+
+dictationAudio.addEventListener("seeked",()=>{
+  if(activeDictationQ!==null){
+    updateClipUI(activeDictationQ);
+  }
+});
+
 
 function updatePart2Progress(){
   const filled=dictationItems.filter(
@@ -1438,6 +1696,11 @@ function showPart1(){
 function showPart2(){
   const state=loadState();
 
+  const fullAudio=$("part1Audio");
+  if(fullAudio){
+    fullAudio.pause();
+  }
+
   $("part1Panel").classList.add("hidden");
   $("part2Panel").classList.remove("hidden");
 
@@ -1465,13 +1728,10 @@ function resetLesson(){
 
   if(!ok) return;
 
-  dictationItems.forEach(item=>{
-    const audio=$(`audioQ${item.q}`);
-    if(audio){
-      audio.pause();
-      audio.currentTime=0;
-    }
-  });
+  dictationAudio.pause();
+  dictationAudio.currentTime=0;
+  activeDictationQ=null;
+  stopDictationTicker();
 
   localStorage.removeItem(stateKey());
   location.reload();
