@@ -659,7 +659,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
     <h1>Bài 01 · Self-drive Tours in the USA</h1>
     <p>
       Bài luyện nghe 2 giai đoạn: hoàn thành audioscript trước, sau đó chuyển sang dictation
-      từ chính những câu chứa thông tin của Questions 1–10.
+      với 10 câu/đoạn được chọn riêng để luyện nghe sâu, không phụ thuộc vào câu hỏi của đề.
     </p>
   </section>
 
@@ -770,7 +770,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
       <div>
         <h2>Phần 2 · Dictation</h2>
         <p>
-          Mỗi mục tự phát một đoạn ngắn từ cùng file audio gốc.
+          Mỗi mục là một câu/đoạn độc lập được chọn từ audio gốc, ưu tiên nội dung rõ ràng và không có tên riêng.
           Nghe lại bao nhiêu lần tùy ý và chép chính xác những gì bạn nghe được.
         </p>
       </div>
@@ -827,7 +827,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
    LESSON DATA
 ========================================================= */
 
-const LESSON_ID = "INTENSIVE_LISTENING_01_SELFDRIVE_V1";
+const LESSON_ID = "INTENSIVE_LISTENING_01_SELFDRIVE_V2";
 
 const transcriptTurns = [
   {speaker:"TRAVEL AGENT", text:"Good morning. World Tours. My name is Jamie. How can I help you?"},
@@ -882,73 +882,73 @@ const AUDIO_FILE = "./Cam10-Test1-Section1.mp3";
 const dictationItems = [
   {
     q:1,
-    start:112.56,
-    end:114.42,
-    duration:"1.86s",
-    transcript:"Of course. Could I have your name please?"
-  },
-  {
-    q:2,
-    start:116.65,
-    end:118.65,
-    duration:"2.00s",
-    transcript:"Thank you. And your address?"
-  },
-  {
-    q:3,
-    start:120.68,
-    end:122.62,
-    duration:"1.94s",
-    transcript:"Can you spell that?"
-  },
-  {
-    q:4,
-    start:133.07,
-    end:136.82,
-    duration:"3.75s",
-    transcript:"Thanks. And can I have your phone number?"
-  },
-  {
-    q:5,
-    start:137.37,
-    end:138.89,
-    duration:"1.52s",
+    start:137.28,
+    end:138.98,
+    duration:"1.70s",
     transcript:"Is a mobile alright?"
   },
   {
-    q:6,
-    start:153.07,
-    end:155.28,
-    duration:"2.21s",
+    q:2,
+    start:152.96,
+    end:155.40,
+    duration:"2.44s",
     transcript:"No, I read about you in the newspaper."
   },
   {
+    q:3,
+    start:167.78,
+    end:171.34,
+    duration:"3.56s",
+    transcript:"I've got two children and we want to hire a car."
+  },
+  {
+    q:4,
+    start:183.02,
+    end:187.08,
+    duration:"4.06s",
+    transcript:"That's something on my children's list so I'd want to include that."
+  },
+  {
+    q:5,
+    start:195.44,
+    end:198.46,
+    duration:"3.02s",
+    transcript:"You can choose to stay in a lodge or on the campsite."
+  },
+  {
+    q:6,
+    start:198.90,
+    end:203.72,
+    duration:"4.82s",
+    transcript:"I don't like the idea of staying in a tent. It'd be too hot."
+  },
+  {
     q:7,
-    start:283.41,
-    end:287.23,
-    duration:"3.82s",
-    transcript:"So how many days are the trips and how much do they cost?"
+    start:233.36,
+    end:237.20,
+    duration:"3.84s",
+    transcript:"We have enough of that at home so that doesn't interest us."
   },
   {
     q:8,
-    start:314.87,
-    end:316.38,
-    duration:"1.51s",
-    transcript:"OK. And the other trip?"
+    start:248.82,
+    end:253.18,
+    duration:"4.36s",
+    transcript:"I don't think so. We want some time for sunbathing and swimming."
   },
   {
     q:9,
-    start:337.32,
-    end:345.81,
-    duration:"8.49s",
-    transcript:"So that covers accommodation and car hire. What about flights? They aren’t included. But these hotels offer dinner in the price."
+    start:290.70,
+    end:294.36,
+    duration:"3.66s",
+    transcript:"So how many days are the trips and how much do they cost?"
   },
   {
     q:10,
-    start:346.57,
-    end:352.80,
-    duration:"6.23s",
-    transcript:"OK. Well, thank you very much. I’ll be in touch when I’ve had a chance to look at the brochure."
+    start:342.14,
+    end:345.92,
+    duration:"3.78s",
+    transcript:"They aren't included. But these hotels offer dinner in the price."
   }
 ];
 
@@ -1191,7 +1191,7 @@ function renderPart2(){
           step=".05"
           value="0"
           oninput="scrubClip(${item.q},this.value)"
-          aria-label="Tiến độ đoạn nghe Q${item.q}"
+          aria-label="Tiến độ Dictation ${item.q}"
         >
 
         <span class="clip-time" id="clipTimeQ${item.q}">
