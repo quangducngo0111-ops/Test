@@ -1,193 +1,3313 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<title>Reading · Note Completion 02 · The story of silk</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>Note Completion 02 — The Story of Silk</title>
+
 <style>
-:root{--p:#5b3bb0;--p2:#7356cf;--ink:#222a3d;--muted:#737d90;--line:#e2e6ee;--bg:#f5f7fb;--green:#16845b;--red:#c73e51}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);background:var(--bg)}
-button,input{font:inherit}.hidden{display:none!important}
-.start{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:18px;background:#20173599;backdrop-filter:blur(9px)}
-.start-card{width:min(470px,100%);padding:25px;border-radius:20px;background:#fff;box-shadow:0 24px 60px #17102f33}
-.start-card .k{font-size:9px;font-weight:950;letter-spacing:.12em;color:#6a4db4}.start-card h2{margin:7px 0 4px;color:#251650;font-size:28px}.start-card p{margin:0 0 16px;color:var(--muted);font-size:11px}
-.field{margin-top:10px}.field label{display:block;margin-bottom:5px;font-size:9px;font-weight:900}.field input{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;outline:none}
-.btn,.submit{border:0;border-radius:9px;background:linear-gradient(135deg,#4d2ca3,#7557d1);color:white;font-weight:950;cursor:pointer}.btn{margin-top:14px;padding:11px 15px}.submit{padding:10px 15px}
-.top{position:sticky;top:0;z-index:80;border-bottom:1px solid var(--line);background:#fffffff2;backdrop-filter:blur(12px)}
-.topin{width:min(1480px,calc(100% - 24px));min-height:62px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.left{display:flex;align-items:center;gap:9px}.back{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#543998;text-decoration:none;font-size:9px;font-weight:900}.brand{font-size:12px;font-weight:950;color:#281653}.student{font-size:10px;font-weight:850;color:#778092}.timer{padding:7px 9px;border-radius:9px;background:#f0ecfb;color:#6044ad;font-size:10px;font-weight:950}
-.page{width:min(1480px,calc(100% - 24px));margin:auto;padding:18px 0 80px}
-.hero{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(120deg,#fff,#faf8ff 55%,#eef7ff);box-shadow:0 14px 34px #2c1f5814}
-.hero .k{font-size:8px;font-weight:950;letter-spacing:.12em;color:#6c50b6}.hero h1{margin:6px 0 4px;color:#23144e;font-size:28px}.hero p{margin:0;color:#788194;font-size:10px}
-.progress-wrap{min-width:230px}.progress-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:9px;font-weight:850;color:#6f7890}.progress{height:8px;border-radius:999px;background:#e9edf3;overflow:hidden}.progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#6545b7,#3478e5)}
-.workspace{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(420px,.7fr);gap:14px;margin-top:14px;align-items:start}
-.card{border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 14px 34px #2c1f5810;overflow:hidden}
-.card-head{padding:15px 18px;border-bottom:1px solid var(--line)}.card-head h2{margin:0;color:#281852;font-size:18px}.card-head p{margin:4px 0 0;color:#7b8496;font-size:9px;line-height:1.5}
-.passage{padding:22px 24px 28px;font-family:Georgia,Times New Roman,serif;font-size:15px;line-height:1.85;color:#292e39}.passage h2{margin:0 0 3px;font-size:27px}.subtitle{margin:0 0 20px;color:#697180;font-size:13px;font-style:italic}.passage p{margin:0 0 18px}
-mark.hl{background:#fff09a;border-radius:2px}.note{margin:7px 0 14px;padding:8px 10px;border-left:3px solid #7658ca;background:#f5f1ff;color:#534174;font:10px/1.5 Inter,system-ui}
-.side{position:sticky;top:76px}.instructions{padding:14px 16px;border-bottom:1px solid var(--line);background:#fbfcfe}.instructions b{font-size:11px;color:#302452}.instructions p{margin:3px 0;color:#737c8f;font-size:9px}.rule{margin-top:8px;padding:7px 9px;border-radius:8px;background:#f1edfc;color:#5c40a6;font-size:9px;font-weight:950}
-.notes{max-height:calc(100vh - 260px);overflow:auto;padding:17px}.notes h3{margin:0 0 12px;color:#201547;font-size:16px}.group{margin:13px 0}.group-title{margin-bottom:6px;color:#4b3b74;font-size:10px;font-weight:950}
-.row{position:relative;padding:7px 8px 7px 18px;color:#3c4456;font-size:10.5px;line-height:1.8}.row:before{content:"•";position:absolute;left:4px;color:#6550a5;font-weight:950}.sub{padding-left:34px}.sub:before{content:"–";left:19px}
-.qno{color:#51379d;font-weight:950}.answer{width:125px;margin:0 3px;padding:5px 7px;border:0;border-bottom:2px solid #8065d0;border-radius:6px 6px 2px 2px;outline:none;background:#f2effc;color:#2e2054;text-align:center;font-size:10px;font-weight:900}
-.answer:focus{border-color:#3478e5;background:#edf5ff}.answer.correct{border-color:var(--green);background:#e5f7ee}.answer.wrong{border-color:var(--red);background:#ffe9ed}
-.bottom{position:sticky;bottom:10px;z-index:60;margin-top:12px;padding:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:14px;background:#fffffff5;box-shadow:0 12px 28px #2519481f;backdrop-filter:blur(10px)}
-.nav{display:flex;gap:5px;flex-wrap:wrap}.nav button{width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:#5d6678;font-size:9px;font-weight:950}.nav button.answered{background:#f2effb;color:#54399c}.nav button.correct{background:#e7f7ee;color:#13734c}.nav button.wrong{background:#ffedf0;color:#ae3145}
-.review{margin-top:14px}.review-list{padding:16px;display:flex;flex-direction:column;gap:10px}.review-item{padding:13px;border:1px solid #e5e8ef;border-radius:12px;background:#fafbfe}.review-title{font-size:10px;font-weight:950;color:#3e2b79}.review-grid{display:grid;grid-template-columns:130px 1fr;gap:6px 10px;margin-top:8px;font-size:9.5px}.lab{color:#81899a;font-weight:850}.bad{color:#b02f43;font-weight:900}.good{color:#14784f;font-weight:950}.evidence{margin-top:9px;padding:10px;border-left:3px solid #6d51bd;border-radius:6px;background:#f5f2fd;color:#4b455f;font-size:9.5px;line-height:1.55}
-.menu{position:fixed;z-index:200;display:none;gap:5px;padding:6px;border:1px solid #dddfea;border-radius:10px;background:#fff;box-shadow:0 10px 28px #19133329}.menu.show{display:flex}.menu button{padding:7px 9px;border:0;border-radius:7px;background:#f5f2fd;color:#594198;font-size:8px;font-weight:900;cursor:pointer}
-.overlay{position:fixed;inset:0;z-index:400;display:grid;place-items:center;padding:18px;background:#18123094;backdrop-filter:blur(8px)}.result{width:min(450px,100%);padding:24px;border-radius:20px;background:#fff;text-align:center}.result .k{font-size:9px;font-weight:950;letter-spacing:.1em;color:#6a4db4}.score{margin:12px 0 3px;color:#241650;font-size:42px;font-weight:950}
-@media(max-width:980px){.workspace{grid-template-columns:1fr}.side{position:static}.notes{max-height:none}}@media(max-width:680px){.student{display:none}.hero{flex-direction:column}.progress-wrap{width:100%;min-width:0}.passage{padding:18px 15px;font-size:14px}.bottom{flex-direction:column;align-items:flex-start}.submit{width:100%}}
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:linear-gradient(
+    100deg,
+    #1c0e49,
+    #281260,
+    #37217e
+  );
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1400px,calc(100% - 18px));
+  min-height:62px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:tabular-nums;
+  font-size:19px;
+  font-weight:950;
+  background:rgba(255,255,255,.13);
+  padding:8px 11px;
+  border-radius:9px;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+  width:min(1400px,calc(100% - 18px));
+  margin:auto;
+  padding:18px 0 46px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+  color:#21164b;
+  font-size:27px;
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-wrap{
+  min-width:245px;
+}
+
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--muted);
+  font-size:10.5px;
+  font-weight:850;
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+  background:#e5e8ef;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(
+    90deg,
+    var(--purple2),
+    var(--blue)
+  );
+  transition:width .2s ease;
+}
+
+
+/* =========================
+   WORKSPACE
+========================= */
+
+.workspace{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(35,25,75,.05);
+}
+
+.pane{
+  min-width:0;
+  overflow:auto;
+  max-height:calc(100vh - 205px);
+  scroll-behavior:smooth;
+}
+
+.passage{
+  border-right:1px solid var(--line);
+  background:#fff;
+}
+
+.questions{
+  background:#fafbfe;
+}
+
+.content{
+  padding:20px 23px;
+}
+
+.passage h2{
+  margin:0 0 15px;
+  color:#21164b;
+  font-size:21px;
+  text-align:center;
+}
+
+.passage p{
+  font-size:13.5px;
+  line-height:1.78;
+  margin:0 0 16px;
+  text-align:justify;
+}
+
+
+/* =========================
+   EVIDENCE
+========================= */
+
+.evidence-source{
+  border-radius:4px;
+  transition:
+    background .3s ease,
+    box-shadow .3s ease,
+    font-weight .3s ease;
+}
+
+.evidence-source.evidence-focus{
+  background:#fff1a8;
+  box-shadow:
+    0 0 0 3px rgba(245,190,35,.25),
+    0 0 18px rgba(245,190,35,.35);
+  font-weight:800;
+  padding:2px 3px;
+  margin:-2px -3px;
+  animation:evidencePulse .85s ease 2;
+}
+
+@keyframes evidencePulse{
+
+  0%{
+    box-shadow:
+      0 0 0 2px rgba(245,190,35,.15),
+      0 0 4px rgba(245,190,35,.1);
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 6px rgba(245,190,35,.30),
+      0 0 24px rgba(245,190,35,.55);
+  }
+
+  100%{
+    box-shadow:
+      0 0 0 3px rgba(245,190,35,.25),
+      0 0 18px rgba(245,190,35,.35);
+  }
+
+}
+
+
+/* =========================
+   INSTRUCTIONS
+========================= */
+
+.instructions{
+  margin-bottom:13px;
+}
+
+.instructions h3{
+  margin:0 0 6px;
+  color:#21164b;
+  font-size:17px;
+}
+
+.instructions p{
+  margin:3px 0;
+  color:var(--muted);
+  font-size:11.5px;
+  line-height:1.55;
+}
+
+.rule{
+  display:inline-block;
+  padding:7px 10px;
+  margin:7px 0 14px;
+  border-radius:8px;
+  background:#f0ecff;
+  color:#5c43b2;
+  font-size:10.5px;
+  font-weight:900;
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+.note-box{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:16px;
+}
+
+.note-title{
+  font-size:17px;
+  font-weight:950;
+  color:#21164b;
+  margin-bottom:15px;
+}
+
+.note-section{
+  margin-top:20px;
+}
+
+.note-section:first-of-type{
+  margin-top:0;
+}
+
+.note-section-title{
+  font-size:12px;
+  font-weight:950;
+  margin-bottom:10px;
+  color:#3f3562;
+  line-height:1.55;
+}
+
+.note-line{
+  position:relative;
+  margin:9px 0;
+  padding-left:16px;
+  font-size:12px;
+  line-height:1.8;
+}
+
+.note-line::before{
+  content:"–";
+  position:absolute;
+  left:0;
+  color:#6f7890;
+}
+
+
+/* =========================
+   QUESTION NUMBER
+========================= */
+
+.qno{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:23px;
+  height:23px;
+  margin:0 4px;
+  padding:0 5px;
+  border-radius:6px;
+  background:#eee9ff;
+  color:#4b318e;
+  font-size:10px;
+  font-weight:950;
+  vertical-align:middle;
+}
+
+
+/* =========================
+   ANSWER INPUT
+========================= */
+
+.answer{
+  display:inline-block;
+  width:125px;
+  vertical-align:middle;
+  margin:0 4px 0 1px;
+}
+
+.answer input{
+  width:100%;
+  padding:7px 8px;
+  border:1px solid #cdd3df;
+  border-radius:7px;
+  outline:none;
+  background:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+
+.answer input:focus{
+  border-color:#6a55bf;
+  box-shadow:0 0 0 3px rgba(81,53,166,.08);
+}
+
+.answer input.correct{
+  border-color:#8ed6b4;
+  background:#f4fcf7;
+  color:#126b48;
+}
+
+.answer input.wrong{
+  border-color:#efb7bf;
+  background:#fff7f8;
+  color:#9b2838;
+}
+
+
+/* =========================
+   REVIEW
+========================= */
+
+.review-list{
+  margin-top:14px;
+}
+
+.inline-review{
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #f0d0d5;
+  border-left:4px solid var(--bad);
+  border-radius:9px;
+  background:#fffafb;
+  font-size:11px;
+  line-height:1.55;
+}
+
+.review-title{
+  font-weight:950;
+  color:#21164b;
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:5px 8px;
+  margin:4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+  font-weight:900;
+}
+
+.compare-box{
+  margin-top:12px;
+  padding:13px;
+  background:#f8f7ff;
+  border:1px solid #ddd6fb;
+  border-radius:10px;
+}
+
+.compare-heading{
+  color:#281260;
+  font-weight:950;
+  margin-bottom:10px;
+}
+
+.compare-item{
+  margin-top:10px;
+}
+
+.compare-label{
+  margin-bottom:4px;
+  color:#6f7890;
+  font-size:9.5px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.compare-text,
+.compare-analysis{
+  padding:9px 10px;
+  background:#fff;
+  border:1px solid #e5e7ee;
+  border-radius:7px;
+  line-height:1.6;
+}
+
+.passage-evidence{
+  position:relative;
+  padding:10px 35px 10px 10px;
+  background:#eef3ff;
+  border:1px solid #d6dffb;
+  border-left:3px solid #5773d9;
+  border-radius:7px;
+  color:#293a70;
+  font-style:italic;
+  line-height:1.6;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.passage-evidence:hover{
+  background:#e5ecff;
+  transform:translateY(-1px);
+}
+
+.passage-evidence::after{
+  content:"↗";
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:16px;
+  font-style:normal;
+  font-weight:950;
+  color:#5b43b5;
+}
+
+.evidence-help{
+  margin-top:5px;
+  color:#7b8292;
+  font-size:9.5px;
+  font-style:normal;
+}
+
+.conclusion{
+  margin-top:10px;
+  padding:9px 10px;
+  border:1px solid #bde5ce;
+  background:#f2fff8;
+  border-radius:7px;
+  color:#126b48;
+  font-weight:900;
+}
+
+
+/* =========================
+   USER HIGHLIGHT / NOTE
+========================= */
+
+mark.user-highlight{
+  background:#fff29a;
+  color:inherit;
+  border-radius:3px;
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+  border-bottom:2px dotted #e28b19;
+  border-radius:2px;
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+  z-index:90;
+  display:none;
+  gap:5px;
+  padding:6px;
+  background:#21164b;
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+  background:#fff;
+  color:#35285e;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:10.5px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+  background:#fff1f3;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  width:min(1400px,calc(100% - 18px));
+  margin:auto;
+  padding:9px 0 6px;
+  background:linear-gradient(
+    to top,
+    var(--bg) 75%,
+    rgba(245,247,251,.88)
+  );
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+  gap:5px;
+  flex:1;
+}
+
+.nav button{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+  border-color:#f0b5bd;
+}
+
+.submit,
+.btn{
+  border:0;
+  background:linear-gradient(
+    100deg,
+    var(--purple),
+    var(--purple2)
+  );
+  color:#fff;
+  border-radius:9px;
+  padding:10px 15px;
+  font-weight:900;
+}
+
+
+/* =========================
+   OVERLAYS
+========================= */
+
+.overlay,
+.start{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(15,11,35,.62);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.start{
+  z-index:120;
+}
+
+.hidden{
+  display:none;
+}
+
+.result,
+.start-card{
+  width:min(590px,100%);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.start-card{
+  width:min(460px,100%);
+}
+
+.score{
+  font-size:38px;
+  font-weight:950;
+  color:#21164b;
+  margin:7px 0;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  font-size:10.5px;
+  font-weight:900;
+}
+
+.field input{
+  width:100%;
+  padding:10px;
+  border:1px solid #d5d9e2;
+  border-radius:9px;
+}
+
+.start-card .btn{
+  width:100%;
+  margin-top:10px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .passage{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .pane{
+    max-height:none;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+}
 </style>
 </head>
+
 <body>
 
+
+<!-- =========================
+     START
+========================= -->
+
 <div id="start" class="start">
+
   <div class="start-card">
-    <div class="k">READING PRACTICE</div>
-    <h2>Note Completion 02</h2>
-    <p>The story of silk · Questions 1–9 · ONE WORD ONLY</p>
-    <div class="field"><label>Họ và tên</label><input id="studentName" placeholder="Nguyễn Văn A"></div>
-    <div class="field"><label>Lớp</label><input id="studentClass" placeholder="11A1"></div>
-    <button class="btn" onclick="startPractice()">Bắt đầu luyện</button>
-    <div id="startError" style="margin-top:7px;color:#b83345;font-size:10px"></div>
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      color:#6a4db4;
+      letter-spacing:.08em
+    ">
+      READING PRACTICE
+    </div>
+
+    <h2>
+      Note Completion 02
+    </h2>
+
+    <p style="
+      font-size:11.5px;
+      color:#6f7890
+    ">
+      The Story of Silk · Questions 1–9
+    </p>
+
+    <div class="field">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+
+    </div>
+
+    <div class="field">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+
+    </div>
+
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
+      Bắt đầu luyện
+    </button>
+
+    <div
+      id="startError"
+      style="
+        font-size:10px;
+        color:#b83345;
+        margin-top:7px
+      "
+    ></div>
+
   </div>
+
 </div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
 
 <header class="top">
+
   <div class="topin">
-    <div class="left"><a class="back" href="../">← Note Completion</a><div class="brand">📖 Note Completion 02</div></div>
-    <div class="student" id="studentInfo"></div>
-    <div class="timer" id="timer">00:00</div>
+
+    <div class="left">
+
+      <a
+        class="back"
+        href="../"
+      >
+        ← Note Completion
+      </a>
+
+      <div class="brand">
+        📖 Note Completion 02
+      </div>
+
+    </div>
+
+    <div
+      id="studentInfo"
+      class="student"
+    ></div>
+
+    <div
+      id="timer"
+      class="timer"
+    >
+      00:00
+    </div>
+
   </div>
+
 </header>
 
+
+<!-- =========================
+     MAIN
+========================= -->
+
 <main class="page">
+
   <section class="hero">
-    <div><div class="k">READING · NOTE COMPLETION · BÀI 02</div><h1>The story of silk</h1><p>The history of the world’s most luxurious fabric, from ancient China to the present day.</p></div>
-    <div class="progress-wrap"><div class="progress-row"><span>Tiến độ</span><span id="progressText">0/9 câu đã trả lời</span></div><div class="progress"><i id="progressBar"></i></div></div>
+
+    <div>
+
+      <h1>
+        Note Completion 02
+      </h1>
+
+      <p>
+        The Story of Silk · Questions 1–9
+      </p>
+
+    </div>
+
+
+    <div class="progress-wrap">
+
+      <div class="progress-row">
+
+        <span>
+          Tiến độ
+        </span>
+
+        <span id="progressText">
+          0/9 câu đã trả lời
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
   </section>
+
 
   <section class="workspace">
-    <article class="card">
-      <div class="card-head"><h2>Reading Passage 1</h2><p>You should spend about 20 minutes on Questions 1–13 which are based on Reading Passage 1 below.</p></div>
-      <div class="passage" id="passage">
-        <h2>The story of silk</h2>
-        <div class="subtitle">The history of the world’s most luxurious fabric, from ancient China to the present day</div>
-        <p>Silk is a fine, smooth material produced from the cocoons - soft protective shells - that are made by mulberry silkworms (insect larvae). Legend has it that it was Lei Tzu, wife of the Yellow Emperor, ruler of China in about 3000 BC, who discovered silkworms. One account of the story goes that as she was taking a walk in her husband’s gardens, she discovered that silkworms were responsible for the destruction of several mulberry trees. She collected a number of cocoons and sat down to have a rest. It just so happened that while she was sipping some tea, one of the cocoons that she had collected landed in the hot tea and started to unravel into a fine thread. Lei Tzu found that she could wind this thread around her fingers. Subsequently, she persuaded her husband to allow her to rear silkworms on a grove of mulberry trees. She also devised a special reel to draw the fibres from the cocoon into a single thread so that they would be strong enough to be woven into fabric. While it is unknown just how much of this is true, it is certainly known that silk cultivation has existed in China for several millennia.</p>
-        <p>Originally, silkworm farming was solely restricted to women, and it was they who were responsible for the growing, harvesting and weaving. Silk quickly grew into a symbol of status, and originally, only royalty were entitled to have clothes made of silk. The rules were gradually relaxed over the years until finally during the Qing Dynasty (1644—1911 AD), even peasants, the lowest caste, were also entitled to wear silk. Sometime during the Han Dynasty (206 BC-220 AD), silk was so prized that it was also used as a unit of currency. Government officials were paid their salary in silk, and farmers paid their taxes in grain and silk. Silk was also used as diplomatic gifts by the emperor. Fishing lines, bowstrings, musical instruments and paper were all made using silk. The earliest indication of silk paper being used was discovered in the tomb of a noble who is estimated to have died around 168 AD.</p>
-        <p>Demand for this exotic fabric eventually created the lucrative trade route now known as the Silk Road, taking silk westward and bringing gold, silver and wool to the East. It was named the Silk Road after its most precious commodity, which was considered to be worth more than gold. The Silk Road stretched over 6,000 kilometres from Eastern China to the Mediterranean Sea, following the Great Wall of China, climbing the Pamir mountain range, crossing modern-day Afghanistan and going on to the Middle East, with a major trading market in Damascus. From there, the merchandise was shipped across the Mediterranean Sea. Few merchants travelled the entire route; goods were handled mostly by a series of middlemen.</p>
-        <p>With the mulberry silkworm being native to China, the country was the world’s sole producer of silk for many hundreds of years. The secret of silk-making eventually reached the rest of the world via the Byzantine Empire, which ruled over the Mediterranean region of southern Europe, North Africa and the Middle East during the period 330—1453 AD. According to another legend, monks working for the Byzantine emperor Justinian smuggle silkworm eggs to Constantinople (Istanbul in modern-day Turkey) in 550 AD, concealed inside hollow bamboo walking canes. The Byzantines were as secretive as the Chinese, however, and for many centuries the weaving and trading of silk fabric was a strict imperial monopoly. Then in the seventh century, the Arabs conquered Persia, capturing their magnificent silks in the process.</p>
-        <p>Silk production thus spread through Africa, Sicily and Spain as the Arabs swept, through these lands. Andalusia in southern Spain was Europe’s main silk-producing centre in the tenth century. By the thirteenth century, however, Italy had become Europe’s leader in silk production and export. Venetian merchants traded extensively in silk and encouraged silk growers to settle in Italy. Even now, silk processed in the province of Como in northern Italy enjoys an esteemed reputation.</p>
-        <p>The nineteenth century and industrialisation saw the downfall of the European silk industry. Cheaper Japanese silk, trade in which was greatly facilitated by the opening of the Suez Canal, was one of the many factors driving the trend. Then in the twentieth century, new manmade fibres, such as nylon, started to be used in what had traditionally been silk products, such as stockings and parachutes. The two world wars, which interrupted the supply of raw material from Japan, also stifled the European silk industry. After the Second World War, Japan’s silk production was restored, with improved production and quality of raw silk. Japan was to remain the world’s biggest producer of raw silk, and practically the only major exporter of raw silk, until the 1970s. However, in more recent decades, China has gradually recaptured its position as the world’s biggest producer and exporter of raw silk and silk yarn. Today, around 125,000 metric tons of silk are produced in the world, and almost two thirds of that production takes place in China.</p>
-      </div>
-    </article>
 
-    <aside class="card side">
-      <div class="instructions"><b>Questions 1–9</b><p>Complete the notes below.</p><p>Choose ONE WORD ONLY from the passage for each answer.</p><div class="rule">WRITE ONE WORD ONLY</div></div>
-      <div class="notes">
-        <h3>THE STORY OF SILK</h3>
-        <div class="group">
-          <div class="group-title">Early silk production in China</div>
-          <div class="row">Around 3000 BC, according to legend:</div>
-          <div class="row sub">silkworm cocoon fell into emperor’s wife’s <span class="qno">1</span> <input class="answer" id="a1"></div>
-          <div class="row sub">emperor’s wife invented a <span class="qno">2</span> <input class="answer" id="a2"> to pull out silk fibres</div>
-          <div class="row">Only <span class="qno">3</span> <input class="answer" id="a3"> were allowed to produce silk</div>
-          <div class="row">Only <span class="qno">4</span> <input class="answer" id="a4"> were allowed to wear silk</div>
-          <div class="row">Silk used as a form of <span class="qno">5</span> <input class="answer" id="a5"></div>
-          <div class="row sub">e.g. farmers’ taxes consisted partly of silk</div>
-          <div class="row">Silk used for many purposes</div>
-          <div class="row sub">e.g. evidence found of <span class="qno">6</span> <input class="answer" id="a6"> made from silk around 168 AD</div>
-        </div>
-        <div class="group">
-          <div class="group-title">Silk reaches rest of world</div>
-          <div class="row">Merchants use Silk Road to take silk westward and bring back <span class="qno">7</span> <input class="answer" id="a7"> and precious metals</div>
-          <div class="row">550 AD: <span class="qno">8</span> <input class="answer" id="a8"> hide silkworm eggs in canes and take them to Constantinople</div>
-          <div class="row">Silk production spreads across Middle East and Europe</div>
-          <div class="row">20th century: <span class="qno">9</span> <input class="answer" id="a9"> and other manmade fibres cause decline in silk production</div>
-        </div>
+
+    <!-- =========================
+         PASSAGE
+    ========================= -->
+
+    <div class="pane passage">
+
+      <div
+        id="passageRoot"
+        class="content"
+      >
+        <h2>
+          The Story of Silk
+        </h2>
+
+        <p>
+          Silk is a fine, smooth material produced from the cocoons - soft protective shells -
+          that are made by mulberry silkworms (insect larvae). Legend has it that it was Lei Tzu,
+          wife of the Yellow Emperor, ruler of China in about 3000 BC, who discovered silkworms.
+          One account of the story goes that as she was taking a walk in her husband’s gardens,
+          she discovered that silkworms were responsible for the destruction of several mulberry trees.
+          She collected a number of cocoons and sat down to have a rest. It just so happened that
+
+          <span
+            class="evidence-source"
+            data-evidence="1"
+          >
+            while she was sipping some tea, one of the cocoons that she had collected landed in the hot tea
+            and started to unravel into a fine thread.
+          </span>
+
+          Lei Tzu found that she could wind this thread around her fingers. Subsequently, she persuaded
+          her husband to allow her to rear silkworms on a grove of mulberry trees.
+
+          <span
+            class="evidence-source"
+            data-evidence="2"
+          >
+            She also devised a special reel to draw the fibres from the cocoon into a single thread
+            so that they would be strong enough to be woven into fabric.
+          </span>
+
+          While it is unknown just how much of this is true, it is certainly known that silk cultivation
+          has existed in China for several millennia.
+        </p>
+
+        <p>
+          <span
+            class="evidence-source"
+            data-evidence="3"
+          >
+            Originally, silkworm farming was solely restricted to women, and it was they who were responsible
+            for the growing, harvesting and weaving.
+          </span>
+
+          <span
+            class="evidence-source"
+            data-evidence="4"
+          >
+            Silk quickly grew into a symbol of status, and originally, only royalty were entitled
+            to have clothes made of silk.
+          </span>
+
+          The rules were gradually relaxed over the years until finally during the Qing Dynasty
+          (1644—1911 AD), even peasants, the lowest caste, were also entitled to wear silk.
+
+          <span
+            class="evidence-source"
+            data-evidence="5"
+          >
+            Sometime during the Han Dynasty (206 BC-220 AD), silk was so prized that it was also used
+            as a unit of currency.
+          </span>
+
+          Government officials were paid their salary in silk, and farmers paid their taxes in grain and silk.
+          Silk was also used as diplomatic gifts by the emperor. Fishing lines, bowstrings, musical instruments
+          and paper were all made using silk.
+
+          <span
+            class="evidence-source"
+            data-evidence="6"
+          >
+            The earliest indication of silk paper being used was discovered in the tomb of a noble
+            who is estimated to have died around 168 AD.
+          </span>
+        </p>
+
+        <p>
+          Demand for this exotic fabric eventually created the lucrative trade route now known as the Silk Road,
+
+          <span
+            class="evidence-source"
+            data-evidence="7"
+          >
+            taking silk westward and bringing gold, silver and wool to the East.
+          </span>
+
+          It was named the Silk Road after its most precious commodity, which was considered to be worth more
+          than gold. The Silk Road stretched over 6,000 kilometres from Eastern China to the Mediterranean Sea,
+          following the Great Wall of China, climbing the Pamir mountain range, crossing modern-day Afghanistan
+          and going on to the Middle East, with a major trading market in Damascus. From there, the merchandise
+          was shipped across the Mediterranean Sea. Few merchants travelled the entire route; goods were handled
+          mostly by a series of middlemen.
+        </p>
+
+        <p>
+          With the mulberry silkworm being native to China, the country was the world’s sole producer of silk
+          for many hundreds of years. The secret of silk-making eventually reached the rest of the world via
+          the Byzantine Empire, which ruled over the Mediterranean region of southern Europe, North Africa and
+          the Middle East during the period 330—1453 AD.
+
+          <span
+            class="evidence-source"
+            data-evidence="8"
+          >
+            According to another legend, monks working for the Byzantine emperor Justinian smuggle silkworm eggs
+            to Constantinople (Istanbul in modern-day Turkey) in 550 AD, concealed inside hollow bamboo walking canes.
+          </span>
+
+          The Byzantines were as secretive as the Chinese, however, and for many centuries the weaving and trading
+          of silk fabric was a strict imperial monopoly. Then in the seventh century, the Arabs conquered Persia,
+          capturing their magnificent silks in the process.
+        </p>
+
+        <p>
+          Silk production thus spread through Africa, Sicily and Spain as the Arabs swept, through these lands.
+          Andalusia in southern Spain was Europe’s main silk-producing centre in the tenth century. By the thirteenth
+          century, however, Italy had become Europe’s leader in silk production and export. Venetian merchants traded
+          extensively in silk and encouraged silk growers to settle in Italy. Even now, silk processed in the province
+          of Como in northern Italy enjoys an esteemed reputation.
+        </p>
+
+        <p>
+          The nineteenth century and industrialisation saw the downfall of the European silk industry. Cheaper Japanese
+          silk, trade in which was greatly facilitated by the opening of the Suez Canal, was one of the many factors
+          driving the trend.
+
+          <span
+            class="evidence-source"
+            data-evidence="9"
+          >
+            Then in the twentieth century, new manmade fibres, such as nylon, started to be used in what had traditionally
+            been silk products, such as stockings and parachutes.
+          </span>
+
+          The two world wars, which interrupted the supply of raw material from Japan, also stifled the European silk
+          industry. After the Second World War, Japan’s silk production was restored, with improved production and
+          quality of raw silk. Japan was to remain the world’s biggest producer of raw silk, and practically the only
+          major exporter of raw silk, until the 1970s. However, in more recent decades, China has gradually recaptured
+          its position as the world’s biggest producer and exporter of raw silk and silk yarn. Today, around 125,000
+          metric tons of silk are produced in the world, and almost two thirds of that production takes place in China.
+        </p>
+
       </div>
-    </aside>
+
+    </div>
+
+
+    <!-- =========================
+         QUESTIONS
+    ========================= -->
+
+    <div class="pane questions">
+
+      <div
+        id="questionsRoot"
+        class="content"
+      >
+        <div class="instructions">
+
+          <h3>
+            Questions 1–9
+          </h3>
+
+          <p>
+            Complete the notes below.
+          </p>
+
+          <p>
+            Choose
+            <b>ONE WORD ONLY</b>
+            from the passage for each answer.
+          </p>
+
+          <div class="rule">
+            ONE WORD ONLY
+          </div>
+
+        </div>
+
+
+        <div class="note-box">
+
+          <div class="note-title">
+            THE STORY OF SILK
+          </div>
+
+
+          <div class="note-section">
+
+            <div class="note-section-title">
+              Early silk production in China
+            </div>
+
+            <div class="note-line">
+              <b>Around 3000 BC, according to legend:</b>
+            </div>
+
+            <div class="note-line">
+              silkworm cocoon fell into emperor’s wife’s
+
+              <span class="qno">
+                1
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a1"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(1,this.value)"
+                >
+              </span>
+            </div>
+
+            <div class="note-line">
+              emperor’s wife invented a
+
+              <span class="qno">
+                2
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a2"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(2,this.value)"
+                >
+              </span>
+
+              to pull out silk fibres
+            </div>
+
+            <div class="note-line">
+              Only
+
+              <span class="qno">
+                3
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a3"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(3,this.value)"
+                >
+              </span>
+
+              were allowed to produce silk
+            </div>
+
+            <div class="note-line">
+              Only
+
+              <span class="qno">
+                4
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a4"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(4,this.value)"
+                >
+              </span>
+
+              were allowed to wear silk
+            </div>
+
+            <div class="note-line">
+              Silk used as a form of
+
+              <span class="qno">
+                5
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a5"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(5,this.value)"
+                >
+              </span>
+            </div>
+
+            <div class="note-line">
+              e.g. farmers’ taxes consisted partly of silk
+            </div>
+
+            <div class="note-line">
+              Silk used for many purposes
+            </div>
+
+            <div class="note-line">
+              e.g. evidence found of
+
+              <span class="qno">
+                6
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a6"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(6,this.value)"
+                >
+              </span>
+
+              made from silk around 168 AD
+            </div>
+
+          </div>
+
+
+          <div class="note-section">
+
+            <div class="note-section-title">
+              Silk reaches rest of world
+            </div>
+
+            <div class="note-line">
+              Merchants use Silk Road to take silk westward and bring back
+
+              <span class="qno">
+                7
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a7"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(7,this.value)"
+                >
+              </span>
+
+              and precious metals
+            </div>
+
+            <div class="note-line">
+              550 AD:
+
+              <span class="qno">
+                8
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a8"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(8,this.value)"
+                >
+              </span>
+
+              hide silkworm eggs in canes and take them to Constantinople
+            </div>
+
+            <div class="note-line">
+              Silk production spreads across Middle East and Europe
+            </div>
+
+            <div class="note-line">
+              20th century:
+
+              <span class="qno">
+                9
+              </span>
+
+              <span class="answer">
+                <input
+                  id="a9"
+                  type="text"
+                  autocomplete="off"
+                  oninput="saveAnswer(9,this.value)"
+                >
+              </span>
+
+              and other manmade fibres cause decline in silk production
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="reviewList"
+          class="review-list"
+        ></div>
+
+      </div>
+
+    </div>
+
   </section>
 
-  <section class="card review hidden" id="reviewCard"><div class="card-head"><h2>Chữa bài</h2><p>Chỉ các câu sai hoặc chưa trả lời được hiển thị bên dưới.</p></div><div class="review-list" id="reviewList"></div></section>
-
-  <div class="bottom">
-    <div class="nav" id="nav"></div>
-    <button class="submit" onclick="submitPractice()">Nộp bài</button>
-  </div>
 </main>
 
-<div id="selectionMenu" class="menu"><button id="menuHighlight">🖍 Highlight</button><button id="menuNote">📝 Take note</button></div>
 
-<div id="resultOverlay" class="overlay hidden">
-  <div class="result"><div class="k">KẾT QUẢ LUYỆN TẬP</div><div id="resultStudent" style="margin-top:5px;color:#6f7890;font-size:11px"></div><div id="resultScore" class="score">0 / 9</div><div id="resultPercent"></div><p style="color:#737c8f;font-size:10px">Các câu sai có đáp án đúng và bằng chứng trong passage.</p><button class="btn" onclick="closeResult()">Xem lại bài</button></div>
+<!-- =========================
+     BOTTOM
+========================= -->
+
+<div class="bottom">
+
+  
+  <div class="nav">
+
+    <button id="nav1" onclick="goQ(1)">1</button>
+    <button id="nav2" onclick="goQ(2)">2</button>
+    <button id="nav3" onclick="goQ(3)">3</button>
+    <button id="nav4" onclick="goQ(4)">4</button>
+    <button id="nav5" onclick="goQ(5)">5</button>
+    <button id="nav6" onclick="goQ(6)">6</button>
+    <button id="nav7" onclick="goQ(7)">7</button>
+    <button id="nav8" onclick="goQ(8)">8</button>
+    <button id="nav9" onclick="goQ(9)">9</button>
+
+  </div>
+
+  <button
+    class="submit"
+    onclick="submitPractice()"
+  >
+    Nộp bài
+  </button>
+
 </div>
 
+
+<!-- =========================
+     SELECTION MENU
+========================= -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
+<!-- =========================
+     RESULT
+========================= -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      color:#6a4db4;
+      letter-spacing:.08em
+    ">
+      KẾT QUẢ LUYỆN TẬP
+    </div>
+
+    <div
+      id="resultStudent"
+      style="
+        margin-top:5px;
+        font-size:12px;
+        color:#6f7890
+      "
+    ></div>
+
+    <div
+      id="resultScore"
+      class="score"
+    >
+      0 / 9
+    </div>
+
+    <div id="resultPercent"></div>
+
+    <p style="
+      font-size:11px;
+      color:#6f7890
+    ">
+      Các câu sai được giải thích bên dưới phần Notes.
+    </p>
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
+</div>
+
+
 <script>
-const RESULT_ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
-const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
-const ATTEMPT_KEY='PRACTICE_READING_NOTE_COMPLETION_02_STORY_OF_SILK_V1';
-const NUMBERS=[1,2,3,4,5,6,7,8,9];
-const KEY={1:'tea',2:'reel',3:'women',4:'royalty',5:'currency',6:'paper',7:'wool',8:'monks',9:'nylon'};
-const EVIDENCE={
-1:'...while she was sipping some tea, one of the cocoons that she had collected landed in the hot tea...',
-2:'She also devised a special reel to draw the fibres from the cocoon into a single thread...',
-3:'Originally, silkworm farming was solely restricted to women...',
-4:'...originally, only royalty were entitled to have clothes made of silk.',
-5:'...silk was so prized that it was also used as a unit of currency.',
-6:'Fishing lines, bowstrings, musical instruments and paper were all made using silk.',
-7:'...taking silk westward and bringing gold, silver and wool to the East.',
-8:'According to another legend, monks working for the Byzantine emperor Justinian smuggle silkworm eggs to Constantinople...',
-9:'...new manmade fibres, such as nylon, started to be used in what had traditionally been silk products...'
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const RESULT_ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const ATTEMPT_KEY=
+'PRACTICE_NOTECOMPLETION02_STORYOFSILK_V1';
+
+
+/* =========================================================
+   ANSWER KEY
+========================================================= */
+
+const KEYS={
+
+  1:['tea'],
+  2:['reel'],
+  3:['women'],
+  4:['royalty'],
+  5:['currency'],
+  6:['paper'],
+  7:['wool'],
+  8:['monks'],
+  9:['nylon']
+
 };
-let startedAt=null,timerHandle=null,submitted=false,savedRange=null;
 
-function readStudent(){try{const s=JSON.parse(localStorage.getItem(STUDENT_KEY)||'null');return s&&s.name&&s.className?s:null}catch(e){return null}}
-function saveStudent(name,className){const s={name:name.trim(),className:className.trim()};localStorage.setItem(STUDENT_KEY,JSON.stringify(s));return s}
-function fmt(sec){sec=Math.max(0,Math.floor(sec));return `${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`}
-function startTimer(){startedAt=Date.now();clearInterval(timerHandle);timerHandle=setInterval(()=>timer.textContent=fmt((Date.now()-startedAt)/1000),500)}
+
+const DISPLAY_KEY={
+
+  1:'tea',
+  2:'reel',
+  3:'women',
+  4:'royalty',
+  5:'currency',
+  6:'paper',
+  7:'wool',
+  8:'monks',
+  9:'nylon'
+
+};
+
+
+/* =========================================================
+   NOTES TEXT
+========================================================= */
+
+const NOTE_TEXT={
+
+  1:'silkworm cocoon fell into emperor’s wife’s 1 ______',
+  2:'emperor’s wife invented a 2 ______ to pull out silk fibres',
+  3:'Only 3 ______ were allowed to produce silk',
+  4:'Only 4 ______ were allowed to wear silk',
+  5:'Silk used as a form of 5 ______',
+  6:'evidence found of 6 ______ made from silk around 168 AD',
+  7:'Merchants use Silk Road to take silk westward and bring back 7 ______ and precious metals',
+  8:'550 AD: 8 ______ hide silkworm eggs in canes and take them to Constantinople',
+  9:'20th century: 9 ______ and other manmade fibres cause decline in silk production'
+
+};
+
+
+/* =========================================================
+   EVIDENCE
+========================================================= */
+
+const EVIDENCE={
+
+  1:'While she was sipping some tea, one of the cocoons that she had collected landed in the hot tea and started to unravel into a fine thread.',
+  2:'She also devised a special reel to draw the fibres from the cocoon into a single thread.',
+  3:'Originally, silkworm farming was solely restricted to women.',
+  4:'Silk quickly grew into a symbol of status, and originally, only royalty were entitled to have clothes made of silk.',
+  5:'Silk was so prized that it was also used as a unit of currency.',
+  6:'The earliest indication of silk paper being used was discovered in the tomb of a noble who is estimated to have died around 168 AD.',
+  7:'Taking silk westward and bringing gold, silver and wool to the East.',
+  8:'Monks working for the Byzantine emperor Justinian smuggle silkworm eggs to Constantinople in 550 AD, concealed inside hollow bamboo walking canes.',
+  9:'New manmade fibres, such as nylon, started to be used in what had traditionally been silk products.'
+
+};
+
+
+/* =========================================================
+   ANALYSIS
+========================================================= */
+
+const ANALYSIS={
+
+  1:
+  `
+    Notes hỏi vật mà chiếc kén rơi vào.
+    Passage nói Lei Tzu đang <b>“sipping some tea”</b> và chiếc kén
+    <b>“landed in the hot tea”</b>.
+    Vì vậy đáp án cần lấy nguyên văn từ passage là <b>tea</b>.
+  `,
+
+  2:
+  `
+    Notes diễn đạt hành động <b>“pull out silk fibres”</b>.
+    Passage cho biết Lei Tzu <b>“devised a special reel to draw the fibres”</b>.
+    “draw the fibres” tương ứng với “pull out silk fibres”,
+    nên đáp án là <b>reel</b>.
+  `,
+
+  3:
+  `
+    Passage nói <b>“silkworm farming was solely restricted to women”</b>.
+    “solely restricted to” tương ứng với “only ... were allowed” trong notes.
+    Vì vậy đáp án là <b>women</b>.
+  `,
+
+  4:
+  `
+    Passage nói ban đầu <b>“only royalty were entitled to have clothes made of silk”</b>.
+    “were entitled to” được chuyển thành “were allowed to” trong notes.
+    Vì vậy đáp án là <b>royalty</b>.
+  `,
+
+  5:
+  `
+    Passage nêu silk được dùng <b>“as a unit of currency”</b>.
+    Notes rút gọn thành “used as a form of ___”.
+    Từ cần điền là <b>currency</b>.
+  `,
+
+  6:
+  `
+    Passage nói bằng chứng sớm nhất về <b>“silk paper”</b>
+    được tìm thấy trong ngôi mộ của một quý tộc qua đời khoảng năm 168 AD.
+    Vì notes hỏi vật được làm từ silk, đáp án là <b>paper</b>.
+  `,
+
+  7:
+  `
+    Passage nói Silk Road đưa silk về phía tây và mang
+    <b>“gold, silver and wool”</b> về phía đông.
+    Notes đã gom gold và silver thành <b>“precious metals”</b>,
+    nên phần còn thiếu là <b>wool</b>.
+  `,
+
+  8:
+  `
+    Passage cho biết <b>monks</b> làm việc cho Byzantine emperor Justinian
+    đã giấu silkworm eggs trong những cây gậy tre rỗng và đưa chúng tới Constantinople.
+    Vì vậy đáp án là <b>monks</b>.
+  `,
+
+  9:
+  `
+    Passage nói trong thế kỷ 20 xuất hiện các
+    <b>“new manmade fibres, such as nylon”</b>.
+    Notes dùng “nylon and other manmade fibres”,
+    nên đáp án là <b>nylon</b>.
+  `
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let startedAt=0;
+
+let submitted=false;
+
+let savedSelection=null;
+
+let savedZone=null;
+
+let menuMode='selection';
+
+let menuTarget=null;
+
+let menuZone=null;
+
+
+/* =========================================================
+   ANSWER CHECK
+========================================================= */
+
+function normalize(value){
+
+  return String(
+    value || ''
+  )
+  .trim()
+  .toLowerCase()
+  .replace(
+    /\s+/g,
+    ' '
+  );
+
+}
+
+
+function isCorrect(
+  number,
+  value
+){
+
+  const answer=
+  normalize(
+    value
+  );
+
+
+  return KEYS[number]
+  .some(
+    key =>
+    normalize(key)
+    ===
+    answer
+  );
+
+}
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+
+      ||
+
+      'null'
+
+    );
+
+  }
+
+  catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const student=
+  readStudent();
+
+
+  if(student){
+
+    studentName.value=
+    student.name || '';
+
+    studentClass.value=
+    student.className || '';
+
+  }
+
+}
+
+
 function startPractice(){
- const name=studentName.value.trim(),cls=studentClass.value.trim();
- if(!name||!cls){startError.textContent='Vui lòng nhập đầy đủ họ tên và lớp.';return}
- const s=saveStudent(name,cls);studentInfo.textContent=`${s.name} · ${s.className}`;start.classList.add('hidden');startTimer()
+
+  const name=
+  studentName.value.trim();
+
+
+  const className=
+  studentClass.value.trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    startError.textContent=
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+
+      name:name,
+
+      className:className
+
+    })
+
+  );
+
+
+  studentInfo.textContent=
+  `${name} · ${className}`;
+
+
+  start
+  .classList
+  .add(
+    'hidden'
+  );
+
+
+  startedAt=
+  Date.now();
+
+
+  restoreMarkup();
+
+  restoreAnswers();
+
+  updateProgress();
+
 }
-function norm(v){return String(v||'').toLowerCase().trim().replace(/[.,;:!?'"“”‘’]/g,'').replace(/\s+/g,' ')}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function fmt(sec){
+
+  sec=
+  Math.max(
+    0,
+    Math.floor(sec)
+  );
+
+
+  const hours=
+  Math.floor(
+    sec/3600
+  );
+
+
+  const minutes=
+  Math.floor(
+    (sec%3600)/60
+  );
+
+
+  const seconds=
+  sec%60;
+
+
+  return hours
+
+  ?
+
+  `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`
+
+  :
+
+  `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+
+}
+
+
+setInterval(
+
+  ()=>{
+
+    if(startedAt){
+
+      timer.textContent=
+      fmt(
+        (
+          Date.now()
+          -
+          startedAt
+        )
+        /
+        1000
+      );
+
+    }
+
+  },
+
+  500
+
+);
+
+
+/* =========================================================
+   ANSWERS
+========================================================= */
+
+function saveAnswer(
+  number,
+  value
+){
+
+  if(submitted){
+    return;
+  }
+
+
+  localStorage.setItem(
+
+    `${ATTEMPT_KEY}_q${number}`,
+
+    value
+
+  );
+
+
+  navState(
+    number
+  );
+
+
+  updateProgress();
+
+}
+
+
+function getAnswer(number){
+
+  return localStorage.getItem(
+
+    `${ATTEMPT_KEY}_q${number}`
+
+  )
+
+  ||
+
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ]
+  .forEach(
+
+    number => {
+
+      const input=
+      document.getElementById(
+        'a' + number
+      );
+
+
+      if(input){
+
+        input.value=
+        getAnswer(
+          number
+        );
+
+      }
+
+
+      navState(
+        number
+      );
+
+    }
+
+  );
+
+}
+
+
+function navState(number){
+
+  document
+  .getElementById(
+    'nav' + number
+  )
+  .classList
+  .toggle(
+
+    'answered',
+
+    !!normalize(
+      getAnswer(number)
+    )
+
+  );
+
+}
+
+
 function updateProgress(){
- let n=0;NUMBERS.forEach(i=>{const a=document.getElementById('a'+i),b=document.getElementById('nav'+i),has=!!a.value.trim();if(has)n++;b.classList.toggle('answered',has)});
- progressText.textContent=`${n}/9 câu đã trả lời`;progressBar.style.width=`${n/9*100}%`
+
+  const answered=
+  [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ]
+  .filter(
+
+    number =>
+    normalize(
+      getAnswer(number)
+    )
+
+  )
+  .length;
+
+
+  progressText.textContent=
+  `${answered}/9 câu đã trả lời`;
+
+
+  progressBar.style.width=
+  (
+    answered
+    /
+    9
+    *
+    100
+  )
+  +
+  '%';
+
 }
-function goQ(i){const a=document.getElementById('a'+i);a.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>a.focus(),300)}
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderReview(i,user){
- reviewList.insertAdjacentHTML('beforeend',`<div class="review-item"><div class="review-title">Câu ${i}</div><div class="review-grid"><div class="lab">Đáp án của em</div><div class="bad">${esc(user||'Chưa trả lời')}</div><div class="lab">Đáp án đúng</div><div class="good">${KEY[i]}</div></div><div class="evidence">${esc(EVIDENCE[i])}</div></div>`)
+
+
+function goQ(number){
+
+  const input=
+  document.getElementById(
+    'a' + number
+  );
+
+
+  if(!input){
+    return;
+  }
+
+
+  input.scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  setTimeout(
+
+    ()=>input.focus(),
+
+    300
+
+  );
+
 }
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
 async function submitPractice(){
- if(submitted)return;submitted=true;let score=0;const answers={};reviewList.innerHTML='';
- NUMBERS.forEach(i=>{const a=document.getElementById('a'+i),user=norm(a.value),ok=user===KEY[i];answers[i]=user;if(ok)score++;a.disabled=true;a.classList.add(ok?'correct':'wrong');const b=document.getElementById('nav'+i);b.classList.remove('answered');b.classList.add(ok?'correct':'wrong');if(!ok)renderReview(i,user)});
- reviewCard.classList.remove('hidden');if(score===9)reviewList.innerHTML='<div class="review-item"><div class="review-title">Hoàn thành chính xác 9/9 câu.</div></div>';
- const duration=Math.floor((Date.now()-startedAt)/1000);clearInterval(timerHandle);const s=readStudent();resultStudent.textContent=s?`${s.name} · ${s.className}`:'';resultScore.textContent=`${score} / 9`;resultPercent.textContent=`${Math.round(score/9*100)}% đúng · Thời gian ${fmt(duration)}`;resultOverlay.classList.remove('hidden');
- const body=new URLSearchParams({mode:'PRACTICE',name:s?.name||'',className:s?.className||'',skill:'Reading',practiceType:'Note Completion',practiceId:'02',score:String(score),total:'9',durationSeconds:String(duration),details:JSON.stringify({title:'The story of silk - Reading Note Completion 02',answers,correctAnswers:KEY}),submittedAt:new Date().toISOString()});
- try{await fetch(RESULT_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()})}catch(e){console.warn(e)}
+
+  if(submitted){
+    return;
+  }
+
+
+  submitted=
+  true;
+
+
+  let score=
+  0;
+
+
+  const answers=
+  {};
+
+
+  reviewList.innerHTML=
+  '';
+
+
+  [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ]
+  .forEach(
+
+    number => {
+
+      const user=
+      getAnswer(
+        number
+      );
+
+
+      const ok=
+      isCorrect(
+        number,
+        user
+      );
+
+
+      answers[number]=
+      user || '';
+
+
+      if(ok){
+
+        score++;
+
+      }
+
+
+      const input=
+      document.getElementById(
+        'a' + number
+      );
+
+
+      input.disabled=
+      true;
+
+
+      input.classList.add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      document
+      .getElementById(
+        'nav' + number
+      )
+      .classList
+      .add(
+        ok
+        ?
+        'correct'
+        :
+        'wrong'
+      );
+
+
+      if(!ok){
+
+        renderReview(
+          number,
+          user
+        );
+
+      }
+
+    }
+
+  );
+
+
+  const durationSeconds=
+  Math.floor(
+    (
+      Date.now()
+      -
+      startedAt
+    )
+    /
+    1000
+  );
+
+
+  const student=
+  readStudent();
+
+
+  resultStudent.textContent=
+  student
+  ?
+  `${student.name} · ${student.className}`
+  :
+  '';
+
+
+  resultScore.textContent=
+  `${score} / 9`;
+
+
+  resultPercent.textContent=
+  `${Math.round(score/9*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+
+
+  resultOverlay
+  .classList
+  .remove(
+    'hidden'
+  );
+
+
+  const details=
+  JSON.stringify({
+
+    title:
+    'The Megafires of California - Note Completion 02',
+
+    answers:
+    answers,
+
+    correctAnswers:
+    DISPLAY_KEY
+
+  });
+
+
+  const body=
+  new URLSearchParams({
+
+    mode:
+    'PRACTICE',
+
+    name:
+    student?.name || '',
+
+    className:
+    student?.className || '',
+
+    skill:
+    'Reading',
+
+    practiceType:
+    'Note Completion',
+
+    practiceId:
+    '02',
+
+    score:
+    String(score),
+
+    total:
+    '9',
+
+    durationSeconds:
+    String(
+      durationSeconds
+    ),
+
+    details:
+    details,
+
+    submittedAt:
+    new Date()
+    .toISOString()
+
+  });
+
+
+  try{
+
+    await fetch(
+
+      RESULT_ENDPOINT,
+
+      {
+
+        method:
+        'POST',
+
+        mode:
+        'no-cors',
+
+        headers:{
+
+          'Content-Type':
+          'application/x-www-form-urlencoded;charset=UTF-8'
+
+        },
+
+        body:
+        body.toString()
+
+      }
+
+    );
+
+  }
+
+  catch(err){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      err
+    );
+
+  }
+
 }
-function closeResult(){resultOverlay.classList.add('hidden');reviewCard.scrollIntoView({behavior:'smooth',block:'start'})}
 
-nav.innerHTML=NUMBERS.map(i=>`<button id="nav${i}" onclick="goQ(${i})">${i}</button>`).join('');
-NUMBERS.forEach(i=>document.getElementById('a'+i).addEventListener('input',updateProgress));
 
-const passage=document.getElementById('passage'),menu=document.getElementById('selectionMenu');
-function showMenu(){
- const s=window.getSelection();if(!s||s.isCollapsed||!s.rangeCount){menu.classList.remove('show');return}
- const r=s.getRangeAt(0),node=r.commonAncestorContainer.nodeType===1?r.commonAncestorContainer:r.commonAncestorContainer.parentElement;
- if(!passage.contains(node)){menu.classList.remove('show');return}
- savedRange=r.cloneRange();const rect=r.getBoundingClientRect();menu.style.left=Math.min(innerWidth-220,Math.max(8,rect.left))+'px';menu.style.top=Math.max(70,rect.top-45)+'px';menu.classList.add('show')
+/* =========================================================
+   REVIEW
+========================================================= */
+
+function renderReview(
+  number,
+  user
+){
+
+  reviewList
+  .insertAdjacentHTML(
+
+    'beforeend',
+
+    `
+      <div class="inline-review">
+
+        <div class="review-title">
+          Câu ${number}
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án em chọn
+          </div>
+
+          <div class="review-user">
+            ${escapeHTML(user || 'Chưa trả lời')}
+          </div>
+
+        </div>
+
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án đúng
+          </div>
+
+          <div class="review-correct">
+            ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-box">
+
+          <div class="compare-heading">
+            🔎 Đối chiếu với bài đọc
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Notes
+            </div>
+
+            <div class="compare-text">
+              ${NOTE_TEXT[number]}
+            </div>
+
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Passage
+            </div>
+
+            <div
+              class="passage-evidence"
+              role="button"
+              tabindex="0"
+              onclick="focusEvidence(${number})"
+              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusEvidence(${number});}"
+            >
+
+              “${EVIDENCE[number]}”
+
+              <div class="evidence-help">
+                Nhấn để xem vị trí trong bài đọc
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Phân tích
+            </div>
+
+            <div class="compare-analysis">
+              ${ANALYSIS[number]}
+            </div>
+
+          </div>
+
+
+          <div class="conclusion">
+            Điền: ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+      </div>
+    `
+
+  );
+
 }
-passage.addEventListener('mouseup',()=>setTimeout(showMenu,0));
-menuHighlight.onclick=()=>{if(!savedRange)return;try{const m=document.createElement('mark');m.className='hl';savedRange.surroundContents(m)}catch(e){}menu.classList.remove('show');window.getSelection()?.removeAllRanges()};
-menuNote.onclick=()=>{if(!savedRange)return;const t=savedRange.toString().trim(),n=prompt(`Ghi chú cho: "${t}"`);if(!n)return;try{const m=document.createElement('mark');m.className='hl';savedRange.surroundContents(m);const d=document.createElement('div');d.className='note';d.textContent='📝 '+n;m.parentNode.insertBefore(d,m.nextSibling)}catch(e){}menu.classList.remove('show');window.getSelection()?.removeAllRanges()};
-document.addEventListener('mousedown',e=>{if(!menu.contains(e.target))menu.classList.remove('show')});
 
-const existing=readStudent();if(existing){studentName.value=existing.name;studentClass.value=existing.className;studentInfo.textContent=`${existing.name} · ${existing.className}`}
-updateProgress();
+
+/* =========================================================
+   CLICK EVIDENCE
+========================================================= */
+
+function focusEvidence(number){
+
+  document
+  .querySelectorAll(
+    '.evidence-source.evidence-focus'
+  )
+  .forEach(
+
+    element => {
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  const targets=
+  [
+    ...document.querySelectorAll(
+      `[data-evidence="${number}"]`
+    )
+  ];
+
+
+  if(
+    !targets.length
+  ){
+
+    return;
+
+  }
+
+
+  targets.forEach(
+
+    target => {
+
+      target.classList.add(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  targets[0]
+  .scrollIntoView({
+
+    behavior:'smooth',
+
+    block:'center'
+
+  });
+
+
+  targets.forEach(
+
+    target => {
+
+      target.style.animation=
+      'none';
+
+
+      void target.offsetWidth;
+
+
+      target.style.animation=
+      '';
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function closeResult(){
+
+  resultOverlay
+  .classList
+  .add(
+    'hidden'
+  );
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT / NOTE
+========================================================= */
+
+const selectionMenu=
+document.getElementById(
+  'selectionMenu'
+);
+
+
+const menuHighlight=
+document.getElementById(
+  'menuHighlight'
+);
+
+
+const menuNote=
+document.getElementById(
+  'menuNote'
+);
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+
+    zone === 'passage'
+
+    ?
+
+    'passageRoot'
+
+    :
+
+    'questionsRoot'
+
+  );
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function saveMarkup(zone){
+
+  document
+  .querySelectorAll(
+    '.evidence-source.evidence-focus'
+  )
+  .forEach(
+
+    element => {
+
+      element.classList.remove(
+        'evidence-focus'
+      );
+
+    }
+
+  );
+
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    zoneRoot(zone)
+    .innerHTML
+
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  [
+    'passage',
+    'questions'
+  ]
+  .forEach(
+
+    zone => {
+
+      const html=
+      localStorage.getItem(
+        markupKey(zone)
+      );
+
+
+      if(html){
+
+        zoneRoot(zone)
+        .innerHTML=
+        html;
+
+      }
+
+
+      bindContext(
+        zone
+      );
+
+    }
+
+  );
+
+}
+
+
+function resetMenu(){
+
+  menuMode=
+  'selection';
+
+
+  menuTarget=
+  null;
+
+
+  menuZone=
+  null;
+
+
+  menuHighlight.style.display=
+  '';
+
+
+  menuNote.style.display=
+  '';
+
+
+  menuHighlight.textContent=
+  '🖍 Highlight';
+
+
+  menuNote.textContent=
+  '📝 Take note';
+
+
+  menuHighlight
+  .classList
+  .remove(
+    'danger'
+  );
+
+
+  menuNote
+  .classList
+  .remove(
+    'danger'
+  );
+
+}
+
+
+function hideMenu(){
+
+  selectionMenu
+  .classList
+  .remove(
+    'show'
+  );
+
+
+  resetMenu();
+
+}
+
+
+function showMenu(rect){
+
+  selectionMenu
+  .classList
+  .add(
+    'show'
+  );
+
+
+  requestAnimationFrame(
+
+    ()=>{
+
+      const width=
+      selectionMenu.offsetWidth
+      ||
+      180;
+
+
+      const left=
+      Math.min(
+
+        window.innerWidth
+        -
+        width
+        -
+        10,
+
+        Math.max(
+
+          10,
+
+          rect.left
+          +
+          rect.width/2
+          -
+          width/2
+
+        )
+
+      );
+
+
+      selectionMenu.style.left=
+      left + 'px';
+
+
+      selectionMenu.style.top=
+      Math.max(
+        10,
+        rect.top - 47
+      )
+      +
+      'px';
+
+    }
+
+  );
+
+}
+
+
+function captureSelection(zone){
+
+  const selection=
+  window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    selection.rangeCount===0
+    ||
+    selection.isCollapsed
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+  selection.getRangeAt(0);
+
+
+  if(
+    !zoneRoot(zone)
+    .contains(
+      range.commonAncestorContainer
+    )
+  ){
+
+    return;
+
+  }
+
+
+  savedSelection=
+  range.cloneRange();
+
+
+  savedZone=
+  zone;
+
+
+  resetMenu();
+
+
+  showMenu(
+    range.getBoundingClientRect()
+  );
+
+}
+
+
+function clearSelection(){
+
+  const selection=
+  window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection=
+  null;
+
+
+  savedZone=
+  null;
+
+}
+
+
+function addHighlight(){
+
+  if(
+    menuMode === 'delete-highlight'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range=
+    savedSelection.cloneRange();
+
+
+    const mark=
+    document.createElement(
+      'mark'
+    );
+
+
+    mark.className=
+    'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function addNote(){
+
+  if(
+    menuMode === 'delete-note'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const text=
+  prompt(
+    'Nhập ghi chú:'
+  );
+
+
+  if(
+    text === null
+    ||
+    !text.trim()
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range=
+    savedSelection.cloneRange();
+
+
+    const span=
+    document.createElement(
+      'span'
+    );
+
+
+    span.className=
+    'note-anchor';
+
+
+    span.dataset.note=
+    text.trim();
+
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget=
+  target;
+
+
+  menuZone=
+  zone;
+
+
+  clearSelection();
+
+
+  if(
+    type === 'highlight'
+  ){
+
+    menuMode=
+    'delete-highlight';
+
+
+    menuHighlight.textContent=
+    '✕ Xóa highlight';
+
+
+    menuHighlight
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuNote.style.display=
+    'none';
+
+  }
+
+  else{
+
+    menuMode=
+    'delete-note';
+
+
+    menuNote.textContent=
+    '✕ Xóa note';
+
+
+    menuNote
+    .classList
+    .add(
+      'danger'
+    );
+
+
+    menuHighlight.style.display=
+    'none';
+
+  }
+
+
+  showMenu(
+    target
+    .getBoundingClientRect()
+  );
+
+}
+
+
+function removeMark(){
+
+  if(!menuTarget){
+    return;
+  }
+
+
+  const parent=
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    menuZone
+  );
+
+
+  hideMenu();
+
+}
+
+
+function bindContext(zone){
+
+  const root=
+  zoneRoot(zone);
+
+
+  if(!root){
+    return;
+  }
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        0
+
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    ()=>{
+
+      setTimeout(
+
+        ()=>captureSelection(zone),
+
+        120
+
+      );
+
+    }
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event => {
+
+      const highlight=
+      event.target.closest(
+        'mark.user-highlight'
+      );
+
+
+      const note=
+      event.target.closest(
+        '.note-anchor'
+      );
+
+
+      if(highlight){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+menuHighlight
+.addEventListener(
+  'click',
+  addHighlight
+);
+
+
+menuNote
+.addEventListener(
+  'click',
+  addNote
+);
+
+
+document
+.addEventListener(
+
+  'mousedown',
+
+  event => {
+
+    if(
+      !selectionMenu.contains(
+        event.target
+      )
+      &&
+      !event.target.closest(
+        '.user-highlight'
+      )
+      &&
+      !event.target.closest(
+        '.note-anchor'
+      )
+    ){
+
+      hideMenu();
+
+    }
+
+  }
+
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(
+    value
+  )
+  .replace(
+
+    /[&<>"']/g,
+
+    char => ({
+
+      '&':'&amp;',
+
+      '<':'&lt;',
+
+      '>':'&gt;',
+
+      '"':'&quot;',
+
+      "'":'&#39;'
+
+    })[char]
+
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+prefill();
+
 </script>
+
 </body>
 </html>
