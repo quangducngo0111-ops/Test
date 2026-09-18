@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>Intensive Listening</title>
+
+<style>
+:root{
+  --purple:#2c1768;
+  --purple2:#7153d6;
+  --blue:#3478e5;
+  --green:#16845b;
+  --ink:#202741;
+  --muted:#778094;
+  --line:#e2e6ee;
+  --bg:#f5f7fb;
+  --shadow:0 14px 34px rgba(38,29,82,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 5% 0,rgba(111,82,215,.13),transparent 26%),
+    radial-gradient(circle at 96% 0,rgba(52,120,229,.11),transparent 26%),
+    var(--bg);
+}
+a{text-decoration:none}
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:30;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+}
+.top-inner{
+  width:min(1180px,calc(100% - 24px));
+  min-height:64px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.back{
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  color:#543998;
+  font-size:10.5px;
+  font-weight:900;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#251650;
+  font-size:13px;
+  font-weight:950;
+}
+.brand-icon{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:linear-gradient(135deg,#5030a9,#8064dc);
+  color:#fff;
+  font-size:19px;
+}
+.student{
+  color:#7b8393;
+  font-size:10.5px;
+  font-weight:850;
+}
+.page{
+  width:min(1180px,calc(100% - 24px));
+  margin:auto;
+  padding:25px 0 60px;
+}
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:28px 30px;
+  border:1px solid rgba(255,255,255,.94);
+  border-radius:24px;
+  background:linear-gradient(120deg,#fff,#faf8ff 58%,#edf7ff);
+  box-shadow:var(--shadow);
+}
+.hero::after{
+  content:"🎧";
+  position:absolute;
+  right:28px;
+  bottom:-25px;
+  font-size:140px;
+  opacity:.055;
+}
+.eyebrow{
+  color:#6b4db5;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.hero h1{
+  margin:8px 0 6px;
+  color:#21134d;
+  font-size:clamp(34px,5vw,52px);
+  line-height:1;
+  letter-spacing:-.045em;
+}
+.hero p{
+  max-width:760px;
+  margin:0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+.section-head{
+  margin:25px 0 12px;
+}
+.section-head h2{
+  margin:0;
+  color:#202946;
+  font-size:21px;
+  letter-spacing:-.03em;
+}
+.section-head p{
+  margin:4px 0 0;
+  color:#80889a;
+  font-size:10px;
+}
+.lesson-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.lesson-card{
+  min-height:230px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 7px 18px rgba(38,29,82,.04);
+  transition:.17s ease;
+}
+.lesson-card:hover{
+  transform:translateY(-3px);
+  border-color:#c9bdea;
+}
+.lesson-top{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.lesson-number{
+  min-width:54px;
+  height:54px;
+  padding:0 11px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:linear-gradient(135deg,#4b2a9d,#7c5ddb);
+  color:#fff;
+  font-size:17px;
+  font-weight:950;
+}
+.status{
+  padding:5px 8px;
+  border-radius:999px;
+  background:#f0f1f4;
+  color:#7b8391;
+  font-size:8px;
+  font-weight:950;
+}
+.status.progress{
+  background:#fff2d9;
+  color:#9c6617;
+}
+.status.done{
+  background:#e4f6ec;
+  color:#16754e;
+}
+.lesson-card h3{
+  margin:13px 0 5px;
+  color:#291c53;
+  font-size:17px;
+}
+.source{
+  color:#775bb7;
+  font-size:9px;
+  font-weight:900;
+}
+.lesson-card p{
+  margin:9px 0 0;
+  color:#737c8e;
+  font-size:10px;
+  line-height:1.55;
+}
+.tags{
+  margin-top:12px;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.tag{
+  padding:5px 7px;
+  border-radius:999px;
+  background:#f4f1fc;
+  color:#654aa8;
+  font-size:8px;
+  font-weight:900;
+}
+.start{
+  margin-top:auto;
+  padding-top:15px;
+  color:#51359a;
+  font-size:10px;
+  font-weight:950;
+}
+.empty{
+  min-height:230px;
+  padding:18px;
+  border:1px dashed #d9dde7;
+  border-radius:18px;
+  background:rgba(255,255,255,.55);
+  color:#9aa1ae;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:10px;
+  line-height:1.6;
+}
+@media(max-width:850px){
+  .lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .student{display:none}
+  .hero{padding:22px 18px}
+  .lesson-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="top-inner">
+
+    <a class="back" href="../">
+      ← Listening
+    </a>
+
+    <div class="brand">
+      <div class="brand-icon">🎧</div>
+      <span>Intensive Listening</span>
+    </div>
+
+    <div class="student" id="studentInfo">
+      Học sinh
+    </div>
+
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <div class="eyebrow">LISTENING PRACTICE · DEEP PRACTICE</div>
+
+    <h1>Intensive Listening</h1>
+
+    <p>
+      Luyện nghe sâu qua audioscript gap-fill và dictation. Học sinh được nghe lại,
+      tua audio và giảm tốc độ để tập trung vào nhận diện âm, từ vựng và chi tiết thông tin.
+    </p>
+  </section>
+
+  <div class="section-head">
+    <h2>Bài luyện tập</h2>
+    <p id="lessonSummary">1 bài · bắt đầu từ Bài 01</p>
+  </div>
+
+  <section class="lesson-grid">
+
+    <a class="lesson-card" href="./01/">
+      <div class="lesson-top">
+        <div class="lesson-number">01</div>
+        <div class="status" id="lesson01Status">Chưa làm</div>
+      </div>
+
+      <h3>Self-drive Tours in the USA</h3>
+
+      <div class="source">
+        Cambridge 10 · Test 1 · Section 1
+      </div>
+
+      <p>
+        Luyện nghe hội thoại theo 2 bước: hoàn thành audioscript có từ bị khuyết,
+        sau đó nghe chép chính tả các đoạn chứa thông tin Questions 1–10.
+      </p>
+
+      <div class="tags">
+        <span class="tag">Gap-fill</span>
+        <span class="tag">Dictation</span>
+        <span class="tag">Section 1</span>
+      </div>
+
+      <div class="start" id="lesson01Action">
+        Bắt đầu luyện →
+      </div>
+    </a>
+
+    <div class="empty">
+      Bài 02<br>
+      Sẽ được bổ sung sau
+    </div>
+
+    <div class="empty">
+      Bài 03<br>
+      Sẽ được bổ sung sau
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+const LESSON_01_ID =
+"INTENSIVE_LISTENING_01_SELFDRIVE_V1";
+
+function studentScope(){
+  try{
+    const student =
+    JSON.parse(
+      localStorage.getItem(
+        "IELTS_PRACTICE_STUDENT"
+      )
+      ||
+      "null"
+    );
+
+    if(student?.name){
+      return encodeURIComponent(
+        (
+          student.name
+          +
+          "|"
+          +
+          (
+            student.className
+            ||
+            ""
+          )
+        )
+        .toLowerCase()
+      );
+    }
+  }
+  catch(error){}
+
+  return "guest";
+}
+
+function lessonStateKey(){
+  return LESSON_01_ID
+  +
+  "_"
+  +
+  studentScope();
+}
+
+function renderStudent(){
+  try{
+    const student =
+    JSON.parse(
+      localStorage.getItem(
+        "IELTS_PRACTICE_STUDENT"
+      )
+      ||
+      "null"
+    );
+
+    if(student?.name){
+      document
+      .getElementById(
+        "studentInfo"
+      )
+      .textContent =
+      student.name
+      +
+      (
+        student.className
+        ?
+        ` · ${student.className}`
+        :
+        ""
+      );
+    }
+  }
+  catch(error){}
+}
+
+function renderLessonStatus(){
+  let state = {};
+
+  try{
+    state =
+    JSON.parse(
+      localStorage.getItem(
+        lessonStateKey()
+      )
+      ||
+      "{}"
+    );
+  }
+  catch(error){}
+
+  const badge =
+  document.getElementById(
+    "lesson01Status"
+  );
+
+  const action =
+  document.getElementById(
+    "lesson01Action"
+  );
+
+  if(state.part2Submitted){
+    badge.textContent =
+    "Đã hoàn thành";
+
+    badge.className =
+    "status done";
+
+    action.textContent =
+    "Xem lại / luyện lại →";
+
+    return;
+  }
+
+  if(state.part1Locked){
+    badge.textContent =
+    "Đang làm";
+
+    badge.className =
+    "status progress";
+
+    action.textContent =
+    "Tiếp tục Phần 2 →";
+
+    return;
+  }
+
+  badge.textContent =
+  "Chưa làm";
+
+  badge.className =
+  "status";
+
+  action.textContent =
+  "Bắt đầu luyện →";
+}
+
+renderStudent();
+renderLessonStatus();
+</script>
+
+</body>
+</html>
