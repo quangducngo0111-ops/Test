@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Reading Passage 2 — 01 | European Transport Systems 1990-2010</title>
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+/* HEADER */
+.top{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+.topin{
+  width:min(1400px,calc(100% - 18px));
+  min-height:62px;margin:auto;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.left{display:flex;align-items:center;gap:9px;min-width:0}
+.back{
+  color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;border-radius:9px;font-size:11px;font-weight:900;white-space:nowrap;
+}
+.brand{font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.student{
+  font-size:11px;font-weight:800;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);padding:7px 10px;border-radius:999px;
+}
+.timer{
+  font-variant-numeric:tabular-nums;font-size:19px;font-weight:950;
+  background:rgba(255,255,255,.13);padding:8px 11px;border-radius:9px;
+}
+
+/* PAGE */
+.page{width:min(1400px,calc(100% - 18px));margin:auto;padding:18px 0 46px}
+.hero{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:13px}
+.hero h1{margin:0;color:#21164b;font-size:27px;letter-spacing:-.03em}
+.hero p{margin:4px 0 0;color:var(--muted);font-size:11.5px}
+.progress-wrap{min-width:245px}
+.progress-row{
+  display:flex;justify-content:space-between;gap:10px;color:var(--muted);
+  font-size:10.5px;font-weight:850;margin-bottom:5px;
+}
+.progress{height:7px;background:#e5e8ef;border-radius:999px;overflow:hidden}
+.progress i{
+  display:block;width:0;height:100%;
+  background:linear-gradient(90deg,var(--purple2),var(--blue));transition:width .2s ease;
+}
+
+/* WORKSPACE */
+.workspace{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:calc(100vh - 190px);
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;
+  box-shadow:0 8px 24px rgba(35,25,75,.05);
+}
+.pane{min-width:0;overflow:auto;max-height:calc(100vh - 205px);scroll-behavior:smooth}
+.passage{border-right:1px solid var(--line);background:#fff}
+.questions{background:#fafbfe}
+.content{padding:20px 23px}
+.passage-title{text-align:center;margin-bottom:18px}
+.passage-title .label{
+  font-size:10px;font-weight:950;letter-spacing:.09em;color:#6a4db4;text-transform:uppercase;
+}
+.passage-title h2{margin:5px 0 5px;color:#21164b;font-size:21px}
+.passage-title p{margin:0;color:var(--muted);font-size:11px;text-align:center;line-height:1.5}
+.passage-paragraph{
+  position:relative;
+  padding:0 0 0 34px;
+  margin:0 0 17px;
+  font-size:13.4px;line-height:1.78;text-align:justify;
+  border-radius:8px;
+}
+.paragraph-letter{
+  position:absolute;left:0;top:0;
+  width:24px;height:24px;border-radius:7px;
+  display:grid;place-items:center;
+  background:#eee9ff;color:#4b318e;font-size:10.5px;font-weight:950;
+}
+
+/* EVIDENCE */
+.evidence-source{border-radius:4px;transition:background .3s ease,box-shadow .3s ease,font-weight .3s ease}
+.evidence-source.evidence-focus{
+  background:#fff1a8;
+  box-shadow:0 0 0 3px rgba(245,190,35,.25),0 0 18px rgba(245,190,35,.35);
+  font-weight:800;padding:2px 3px;margin:-2px -3px;
+  animation:evidencePulse .85s ease 2;
+}
+.passage-paragraph.evidence-source.evidence-focus{padding:7px 8px 7px 42px;margin:-7px -8px 10px}
+.passage-paragraph.evidence-source.evidence-focus .paragraph-letter{left:8px;top:7px}
+@keyframes evidencePulse{
+  0%{box-shadow:0 0 0 2px rgba(245,190,35,.15),0 0 4px rgba(245,190,35,.1)}
+  50%{box-shadow:0 0 0 6px rgba(245,190,35,.30),0 0 24px rgba(245,190,35,.55)}
+  100%{box-shadow:0 0 0 3px rgba(245,190,35,.25),0 0 18px rgba(245,190,35,.35)}
+}
+
+/* QUESTIONS */
+.instructions{margin-bottom:13px}
+.instructions h3{margin:0 0 6px;color:#21164b;font-size:17px}
+.instructions p{margin:3px 0;color:var(--muted);font-size:11.5px;line-height:1.55}
+.rule{
+  display:inline-block;padding:7px 10px;margin:7px 0 10px;border-radius:8px;
+  background:#f0ecff;color:#5c43b2;font-size:10.5px;font-weight:900;
+}
+.question-section + .question-section{margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.heading-list{
+  margin:11px 0 14px;padding:12px 14px;border:1px solid #ddd8f2;
+  border-radius:12px;background:#fff;
+}
+.heading-list-title{font-size:12px;font-weight:950;color:#21164b;margin-bottom:9px}
+.heading-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.heading-item{font-size:10.8px;line-height:1.45;color:#4d5363}
+.heading-item b{display:inline-block;width:28px;color:#5c43b2}
+.example{
+  display:flex;justify-content:space-between;gap:14px;align-items:center;
+  padding:9px 11px;margin:10px 0 8px;border-radius:9px;background:#f4f5f8;
+  color:#62697a;font-size:11px;font-weight:800;
+}
+.question-card{
+  margin:8px 0;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;
+  transition:.15s ease;
+}
+.question-card:focus-within{border-color:#c5b8f2;box-shadow:0 0 0 3px rgba(81,53,166,.05)}
+.question-card.correct-card{border-color:#9ddbbc;background:#f8fffb}
+.question-card.wrong-card{border-color:#efbdc4;background:#fffafb}
+.question-row{display:flex;align-items:center;gap:9px}
+.qno{
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 30px;height:30px;
+  border-radius:8px;background:#eee9ff;color:#4b318e;font-size:10.5px;font-weight:950;
+}
+.qcopy{flex:1;min-width:0;font-size:11.7px;line-height:1.55;color:#303747}
+.qcopy b{color:#21164b}
+.answer-select{
+  width:210px;max-width:44%;padding:8px 9px;border:1px solid #cdd3df;border-radius:8px;
+  outline:none;background:#fff;color:#2d3342;font-size:10.8px;font-weight:800;
+}
+.answer-select:focus{border-color:#6a55bf;box-shadow:0 0 0 3px rgba(81,53,166,.08)}
+.answer-select.correct{border-color:#8ed6b4;background:#f4fcf7;color:#126b48}
+.answer-select.wrong{border-color:#efb7bf;background:#fff7f8;color:#9b2838}
+.tf-wrap{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.tf-button{
+  border:1px solid #d9dde7;background:#fff;color:#646b7c;border-radius:8px;
+  padding:7px 10px;font-size:10px;font-weight:950;transition:.12s ease;
+}
+.tf-button:hover{border-color:#bfb1ec;color:#4b318e}
+.tf-button.selected{background:#eee9ff;border-color:#cbbcf7;color:#4b318e}
+.tf-button:disabled{cursor:default;opacity:.92}
+.tf-wrap.correct .tf-button.selected{background:#e8f7ef;border-color:#8ed6b4;color:#126b48}
+.tf-wrap.wrong .tf-button.selected{background:#fff0f2;border-color:#efb7bf;color:#9b2838}
+
+/* REVIEW */
+.review-list{margin-top:14px}
+.inline-review{
+  margin-top:10px;padding:12px;border:1px solid #f0d0d5;border-left:4px solid var(--bad);
+  border-radius:9px;background:#fffafb;font-size:11px;line-height:1.55;
+}
+.review-title{font-weight:950;color:#21164b;margin-bottom:7px}
+.review-row{display:grid;grid-template-columns:105px 1fr;gap:5px 8px;margin:4px 0}
+.review-label{color:var(--muted);font-weight:800}
+.review-user{color:var(--bad);font-weight:900}
+.review-correct{color:var(--good);font-weight:900}
+.compare-box{margin-top:12px;padding:13px;background:#f8f7ff;border:1px solid #ddd6fb;border-radius:10px}
+.compare-heading{color:#281260;font-weight:950;margin-bottom:10px}
+.compare-item{margin-top:10px}
+.compare-label{
+  margin-bottom:4px;color:#6f7890;font-size:9.5px;font-weight:950;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.compare-text,.compare-analysis{
+  padding:9px 10px;background:#fff;border:1px solid #e5e7ee;border-radius:7px;line-height:1.6;
+}
+.passage-evidence{
+  position:relative;padding:10px 35px 10px 10px;background:#eef3ff;
+  border:1px solid #d6dffb;border-left:3px solid #5773d9;border-radius:7px;
+  color:#293a70;font-style:italic;line-height:1.6;cursor:pointer;transition:.15s ease;
+}
+.passage-evidence:hover{background:#e5ecff;transform:translateY(-1px)}
+.passage-evidence::after{
+  content:"↗";position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:16px;font-style:normal;font-weight:950;color:#5b43b5;
+}
+.evidence-help{margin-top:5px;color:#7b8292;font-size:9.5px;font-style:normal}
+.conclusion{
+  margin-top:10px;padding:9px 10px;border:1px solid #bde5ce;background:#f2fff8;
+  border-radius:7px;color:#126b48;font-weight:900;
+}
+
+/* HIGHLIGHT / NOTE */
+mark.user-highlight{background:#fff29a;color:inherit;border-radius:3px;cursor:pointer}
+.note-anchor{background:#ffe6a6;border-bottom:2px dotted #e28b19;border-radius:2px;cursor:pointer}
+.selection-menu{
+  position:fixed;z-index:90;display:none;gap:5px;padding:6px;background:#21164b;
+  border-radius:10px;box-shadow:0 12px 30px rgba(25,18,65,.22);
+}
+.selection-menu.show{display:flex}
+.selection-menu button{
+  border:0;background:#fff;color:#35285e;border-radius:7px;padding:7px 9px;
+  font-size:10.5px;font-weight:900;white-space:nowrap;
+}
+.selection-menu button.danger{color:#a31e31;background:#fff1f3}
+
+/* BOTTOM */
+.bottom{
+  position:sticky;bottom:0;z-index:20;width:min(1400px,calc(100% - 18px));margin:auto;
+  padding:9px 0 6px;background:linear-gradient(to top,var(--bg) 75%,rgba(245,247,251,.88));
+  display:flex;align-items:center;gap:10px;
+}
+.nav{display:flex;gap:5px;flex:1;overflow-x:auto;padding-bottom:2px}
+.nav button{
+  flex:0 0 31px;width:31px;height:31px;border:1px solid var(--line);background:#fff;
+  border-radius:7px;font-size:9.5px;font-weight:900;
+}
+.nav button.answered{background:#e7efff;border-color:#c4d5ff}
+.nav button.correct{background:#dff0e7;border-color:#8ed6b4}
+.nav button.wrong{background:#f4ddd8;border-color:#f0b5bd}
+.submit,.btn{
+  border:0;background:linear-gradient(100deg,var(--purple),var(--purple2));color:#fff;
+  border-radius:9px;padding:10px 15px;font-weight:900;
+}
+
+/* OVERLAYS */
+.overlay,.start{
+  position:fixed;inset:0;z-index:100;background:rgba(15,11,35,.62);
+  display:grid;place-items:center;padding:18px;
+}
+.start{z-index:120}.hidden{display:none}
+.result,.start-card{
+  width:min(590px,100%);max-height:88vh;overflow:auto;background:#fff;
+  border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+.start-card{width:min(460px,100%)}
+.score{font-size:38px;font-weight:950;color:#21164b;margin:7px 0}
+.field{margin:9px 0}.field label{display:block;margin-bottom:5px;font-size:10.5px;font-weight:900}
+.field input{width:100%;padding:10px;border:1px solid #d5d9e2;border-radius:9px}
+.start-card .btn{width:100%;margin-top:10px}
+
+@media(max-width:900px){
+  .workspace{grid-template-columns:1fr}
+  .passage{border-right:0;border-bottom:1px solid var(--line)}
+  .pane{max-height:none}
+  .hero{flex-direction:column;align-items:stretch}
+  .progress-wrap{min-width:0}
+  .heading-grid{grid-template-columns:1fr}
+  .question-row{align-items:flex-start;flex-wrap:wrap}
+  .answer-select{width:100%;max-width:none;margin-left:39px}
+}
+@media(max-width:620px){
+  .student{display:none}
+  .brand{font-size:12px}
+  .content{padding:16px}
+  .passage-paragraph{font-size:12.8px}
+  .bottom{align-items:flex-end}
+}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div id="start" class="start">
+  <div class="start-card">
+    <div style="font-size:10px;font-weight:950;color:#6a4db4;letter-spacing:.08em">READING PRACTICE</div>
+    <h2>Reading Passage 2 — Bài 01</h2>
+    <p style="font-size:11.5px;color:#6f7890">European Transport Systems 1990-2010 · Questions 14–26</p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input id="studentName" placeholder="Nguyễn Văn A">
+    </div>
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass" placeholder="11A1">
+    </div>
+
+    <button class="btn" onclick="startPractice()">Bắt đầu luyện</button>
+    <div id="startError" style="font-size:10px;color:#b83345;margin-top:7px"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="top">
+  <div class="topin">
+    <div class="left">
+      <a class="back" href="../">← Reading Passage 2</a>
+      <div class="brand">📖 Reading Passage 2 — 01</div>
+    </div>
+    <div id="studentInfo" class="student"></div>
+    <div id="timer" class="timer">00:00</div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div>
+      <h1>Reading Passage 2 — Bài 01</h1>
+      <p>European Transport Systems 1990-2010 · Questions 14–26</p>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span>Tiến độ</span>
+        <span id="progressText">0/13 câu đã trả lời</span>
+      </div>
+      <div class="progress"><i id="progressBar"></i></div>
+    </div>
+  </section>
+
+  <section class="workspace">
+    <!-- PASSAGE -->
+    <div class="pane passage">
+      <div id="passageRoot" class="content">
+        <div class="passage-title">
+          <div class="label">Reading Passage 2</div>
+          <h2>EUROPEAN TRANSPORT SYSTEMS 1990-2010</h2>
+          <p><b>What have been the trends and what are the prospects for European transport systems?</b></p>
+          <p>You should spend about 20 minutes on Questions 14–26.</p>
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="14">
+          <span class="paragraph-letter">A</span>
+          It is difficult to conceive of vigorous economic growth without an efficient transport system.
+          <span class="evidence-source" data-evidence="22">Although modern information technologies can reduce the demand for physical transport by facilitating teleworking and teleservices, the requirement for transport continues to increase.</span>
+          There are two key factors behind this trend. For passenger transport, the determining factor is the spectacular growth in car use. The number of cars on European Union (EU) roads saw an increase of three million cars each year from 1990 to 2010, and in the next decade the EU will see a further substantial increase in its fleet.
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="15">
+          <span class="paragraph-letter">B</span>
+          As far as goods transport is concerned, growth is due to a large extent to changes in the European economy and its system of production. In the last 20 years, as internal frontiers have been abolished, the EU has moved from a ‘stock’ economy to a ‘flow’ economy.
+          <span class="evidence-source" data-evidence="23">This phenomenon has been emphasised by the relocation of some industries, particularly those which are labour intensive, to reduce production costs, even though the production site is hundreds or even thousands of kilometres away from the final assembly plant or away from users.</span>
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="16 24">
+          <span class="paragraph-letter">C</span>
+          The strong economic growth expected in countries which are candidates for entry to the EU will also increase transport flows, in particular road haulage traffic. In 1998, some of these countries already exported more than twice their 1990 volumes and imported more than five times their 1990 volumes. And although many candidate countries inherited a transport system which encourages rail, the distribution between modes has tipped sharply in favour of road transport since the 1990s. Between 1990 and 1998, road haulage increased by 19.4%, while during the same period rail haulage decreased by 43.5%, although – and this could benefit the enlarged EU – it is still on average at a much higher level than in existing member states.
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="17 25">
+          <span class="paragraph-letter">D</span>
+          However, a new imperative-sustainable development – offers an opportunity for adapting the EU’s common transport policy. This objective, agreed by the Gothenburg European Council, has to be achieved by integrating environmental considerations into Community policies, and shifting the balance between modes of transport lies at the heart of its strategy. The ambitious objective can only be fully achieved by 2020, but proposed measures are nonetheless a first essential step towards a sustainable transport system which will ideally be in place in 30 years’ time, that is by 2040.
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="18">
+          <span class="paragraph-letter">E</span>
+          In 1998, energy consumption in the transport sector was to blame for 28% of emissions of CO2, the leading greenhouse gas.
+          <span class="evidence-source" data-evidence="26">According to the latest estimates, if nothing is done to reverse the traffic growth trend, CO2 emissions from transport can be expected to increase by around 50% to 1,113 billion tonnes by 2020, compared with the 739 billion tonnes recorded in 1990.</span>
+          Once again, road transport is the main culprit since it alone accounts for 84% of the CO2 emissions attributable to transport. Using alternative fuels and improving energy efficiency is thus both an ecological necessity and a technological challenge.
+        </div>
+
+        <div class="passage-paragraph">
+          <span class="paragraph-letter">F</span>
+          At the same time greater efforts must be made to achieve a modal shift. Such a change cannot be achieved overnight, all the less so after over half a century of constant deterioration in favour of road. This has reached such a pitch that today rail freight services are facing marginalisation, with just 8% of market share, and with international goods trains struggling along at an average speed of 18km/h. Three possible options have emerged.
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="19">
+          <span class="paragraph-letter">G</span>
+          The first approach would consist of focusing on road transport solely through pricing. This option would not be accompanied by complementary measures in the other modes of transport. In the short term it might curb the growth in road transport through the better loading ratio of goods vehicles and occupancy rates of passenger vehicles expected as a result of the increase in the price of transport. However, the lack of measures available to revitalise other modes of transport would make it impossible for more sustainable modes of transport to take up the baton.
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="20">
+          <span class="paragraph-letter">H</span>
+          The second approach also concentrates on road transport pricing but is accompanied by measures to increase the efficiency of the other modes (better quality of services, logistics, technology). However, this approach does not include investment in new infrastructure, nor does it guarantee better regional cohesion. It could help to achieve greater uncoupling than the first approach, but road transport would keep the lion’s share of the market and continue to concentrate on saturated arteries, despite being the most polluting of the modes. It is therefore not enough to guarantee the necessary shift of the balance.
+        </div>
+
+        <div class="passage-paragraph evidence-source" data-evidence="21">
+          <span class="paragraph-letter">I</span>
+          The third approach, which is not new, comprises a series of measures ranging from pricing to revitalising alternative modes of transport and targeting investment in the trans-European network. This integrated approach would allow the market shares of the other modes to return to their 1998 levels and thus make a shift of balance. It is far more ambitious than it looks, bearing in mind the historical imbalance in favour of roads for the last fifty years, but would achieve a marked break in the link between road transport growth and economic growth, without placing restrictions on the mobility of people and goods.
+        </div>
+      </div>
+    </div>
+
+    <!-- QUESTIONS -->
+    <div class="pane questions">
+      <div id="questionsRoot" class="content">
+
+        <section class="question-section">
+          <div class="instructions">
+            <h3>Questions 14–21</h3>
+            <p>Reading Passage 2 has nine paragraphs, A–I.</p>
+            <p>Choose the correct heading for paragraphs A–E and G–I from the list of headings below.</p>
+            <p>Write the correct number, <b>i–xi</b>.</p>
+            <div class="rule">MATCHING HEADINGS</div>
+          </div>
+
+          <div class="heading-list">
+            <div class="heading-list-title">List of Headings</div>
+            <div class="heading-grid">
+              <div class="heading-item"><b>i</b> A fresh and important long-term goal</div>
+              <div class="heading-item"><b>ii</b> Charging for roads and improving other transport methods</div>
+              <div class="heading-item"><b>iii</b> Changes affecting the distances goods may be transported</div>
+              <div class="heading-item"><b>iv</b> Taking all the steps necessary to change transport patterns</div>
+              <div class="heading-item"><b>v</b> The environmental costs of road transport</div>
+              <div class="heading-item"><b>vi</b> The escalating cost of rail transport</div>
+              <div class="heading-item"><b>vii</b> The need to achieve transport rebalance</div>
+              <div class="heading-item"><b>viii</b> The rapid growth of private transport</div>
+              <div class="heading-item"><b>ix</b> Plans to develop major road networks</div>
+              <div class="heading-item"><b>x</b> Restricting road use through charging policies alone</div>
+              <div class="heading-item"><b>xi</b> Transport trends in countries awaiting EU admission</div>
+            </div>
+          </div>
+
+          <div class="example"><span>Example: Paragraph F</span><b>vii</b></div>
+
+          <div class="question-card" id="q14">
+            <div class="question-row">
+              <span class="qno">14</span><div class="qcopy"><b>Paragraph A</b></div>
+              <select id="a14" class="answer-select" onchange="saveAnswer(14,this.value)"></select>
+            </div>
+          </div>
+          <div class="question-card" id="q15">
+            <div class="question-row">
+              <span class="qno">15</span><div class="qcopy"><b>Paragraph B</b></div>
+              <select id="a15" class="answer-select" onchange="saveAnswer(15,this.value)"></select>
+            </div>
+          </div>
+          <div class="question-card" id="q16">
+            <div class="question-row">
+              <span class="qno">16</span><div class="qcopy"><b>Paragraph C</b></div>
+              <select id="a16" class="answer-select" onchange="saveAnswer(16,this.value)"></select>
+            </div>
+          </div>
+          <div class="question-card" id="q17">
+            <div class="question-row">
+              <span class="qno">17</span><div class="qcopy"><b>Paragraph D</b></div>
+              <select id="a17" class="answer-select" onchange="saveAnswer(17,this.value)"></select>
+            </div>
+          </div>
+          <div class="question-card" id="q18">
+            <div class="question-row">
+              <span class="qno">18</span><div class="qcopy"><b>Paragraph E</b></div>
+              <select id="a18" class="answer-select" onchange="saveAnswer(18,this.value)"></select>
+            </div>
+          </div>
+          <div class="question-card" id="q19">
+            <div class="question-row">
+              <span class="qno">19</span><div class="qcopy"><b>Paragraph G</b></div>
+              <select id="a19" class="answer-select" onchange="saveAnswer(19,this.value)"></select>
+            </div>
+          </div>
+          <div class="question-card" id="q20">
+            <div class="question-row">
+              <span class="qno">20</span><div class="qcopy"><b>Paragraph H</b></div>
+              <select id="a20" class="answer-select" onchange="saveAnswer(20,this.value)"></select>
+            </div>
+          </div>
+          <div class="question-card" id="q21">
+            <div class="question-row">
+              <span class="qno">21</span><div class="qcopy"><b>Paragraph I</b></div>
+              <select id="a21" class="answer-select" onchange="saveAnswer(21,this.value)"></select>
+            </div>
+          </div>
+        </section>
+
+        <section class="question-section">
+          <div class="instructions">
+            <h3>Questions 22–26</h3>
+            <p>Do the following statements agree with the information given in Reading Passage 2?</p>
+            <p><b>TRUE</b> if the statement agrees with the information.</p>
+            <p><b>FALSE</b> if the statement contradicts the information.</p>
+            <p><b>NOT GIVEN</b> if there is no information on this.</p>
+            <div class="rule">TRUE / FALSE / NOT GIVEN</div>
+          </div>
+
+          <div class="question-card" id="q22">
+            <div class="question-row"><span class="qno">22</span><div class="qcopy">The need for transport is growing, despite technological developments.</div></div>
+            <div class="tf-wrap" id="tf22"></div>
+          </div>
+          <div class="question-card" id="q23">
+            <div class="question-row"><span class="qno">23</span><div class="qcopy">To reduce production costs, some industries have been moved closer to their relevant consumers.</div></div>
+            <div class="tf-wrap" id="tf23"></div>
+          </div>
+          <div class="question-card" id="q24">
+            <div class="question-row"><span class="qno">24</span><div class="qcopy">Cars are prohibitively expensive in some EU candidate countries.</div></div>
+            <div class="tf-wrap" id="tf24"></div>
+          </div>
+          <div class="question-card" id="q25">
+            <div class="question-row"><span class="qno">25</span><div class="qcopy">The Gothenburg European Council was set up 30 years ago.</div></div>
+            <div class="tf-wrap" id="tf25"></div>
+          </div>
+          <div class="question-card" id="q26">
+            <div class="question-row"><span class="qno">26</span><div class="qcopy">By the end of this decade, CO2 emissions from transport are predicted to reach 739 billion tonnes.</div></div>
+            <div class="tf-wrap" id="tf26"></div>
+          </div>
+        </section>
+
+        <div id="reviewList" class="review-list"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="bottom">
+  <div id="nav" class="nav"></div>
+  <button class="submit" onclick="submitPractice()">Nộp bài</button>
+</div>
+
+<div id="selectionMenu" class="selection-menu">
+  <button id="menuHighlight" type="button">🖍 Highlight</button>
+  <button id="menuNote" type="button">📝 Take note</button>
+</div>
+
+<div id="resultOverlay" class="overlay hidden">
+  <div class="result">
+    <div style="font-size:10px;font-weight:950;color:#6a4db4;letter-spacing:.08em">KẾT QUẢ LUYỆN TẬP</div>
+    <div id="resultStudent" style="margin-top:5px;font-size:12px;color:#6f7890"></div>
+    <div id="resultScore" class="score">0 / 13</div>
+    <div id="resultPercent"></div>
+    <p style="font-size:11px;color:#6f7890">Các câu sai được giải thích bên dưới phần câu hỏi.</p>
+    <button class="btn" onclick="closeResult()">Xem lại bài</button>
+  </div>
+</div>
+
+<script>
+/* CONFIG */
+const RESULT_ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+const ATTEMPT_KEY='PRACTICE_READINGPASSAGE2_01_EUROPEAN_TRANSPORT_V1';
+const QUESTION_NUMBERS=[14,15,16,17,18,19,20,21,22,23,24,25,26];
+const HEADING_NUMBERS=[14,15,16,17,18,19,20,21];
+const TFNG_NUMBERS=[22,23,24,25,26];
+const ROMAN=['i','ii','iii','iv','v','vi','vii','viii','ix','x','xi'];
+const TFNG=['TRUE','FALSE','NOT GIVEN'];
+
+/* ANSWER KEY */
+const KEYS={
+  14:['viii'],15:['iii'],16:['xi'],17:['i'],18:['v'],19:['x'],20:['ii'],21:['iv'],
+  22:['TRUE'],23:['FALSE'],24:['NOT GIVEN'],25:['NOT GIVEN'],26:['FALSE']
+};
+
+const DISPLAY_KEY={
+  14:'viii — The rapid growth of private transport',
+  15:'iii — Changes affecting the distances goods may be transported',
+  16:'xi — Transport trends in countries awaiting EU admission',
+  17:'i — A fresh and important long-term goal',
+  18:'v — The environmental costs of road transport',
+  19:'x — Restricting road use through charging policies alone',
+  20:'ii — Charging for roads and improving other transport methods',
+  21:'iv — Taking all the steps necessary to change transport patterns',
+  22:'TRUE',23:'FALSE',24:'NOT GIVEN',25:'NOT GIVEN',26:'FALSE'
+};
+
+const QUESTION_TEXT={
+  14:'Paragraph A',15:'Paragraph B',16:'Paragraph C',17:'Paragraph D',18:'Paragraph E',
+  19:'Paragraph G',20:'Paragraph H',21:'Paragraph I',
+  22:'The need for transport is growing, despite technological developments.',
+  23:'To reduce production costs, some industries have been moved closer to their relevant consumers.',
+  24:'Cars are prohibitively expensive in some EU candidate countries.',
+  25:'The Gothenburg European Council was set up 30 years ago.',
+  26:'By the end of this decade, CO2 emissions from transport are predicted to reach 739 billion tonnes.'
+};
+
+const EVIDENCE={
+  14:'For passenger transport, the determining factor is the spectacular growth in car use. The number of cars on EU roads increased by three million each year from 1990 to 2010.',
+  15:'The EU has moved from a “stock” economy to a “flow” economy, while some industries have been relocated hundreds or thousands of kilometres from final assembly plants or users.',
+  16:'Candidate countries experienced strong growth in trade, while the distribution between transport modes tipped sharply in favour of road transport after 1990.',
+  17:'Sustainable development becomes a new imperative, with an ambitious objective and a sustainable transport system ideally in place by 2040.',
+  18:'Transport produced a major share of CO2 emissions, with road transport alone accounting for 84% of transport-related CO2 emissions.',
+  19:'The first approach focuses on road transport solely through pricing and does not include complementary measures for other modes.',
+  20:'The second approach combines road pricing with measures to increase the efficiency of other transport modes.',
+  21:'The third approach combines pricing, revitalising alternative modes, and targeted investment in the trans-European network.',
+  22:'Although modern information technologies can reduce the demand for physical transport ... the requirement for transport continues to increase.',
+  23:'Some industries are relocated to reduce production costs even though the production site is hundreds or thousands of kilometres away from the final assembly plant or users.',
+  24:'Paragraph C discusses transport flows and the shift from rail to road in candidate countries, but gives no information about car prices.',
+  25:'Paragraph D says the objective was agreed by the Gothenburg European Council, but gives no date for when the Council itself was established.',
+  26:'CO2 emissions are expected to rise to 1,113 billion tonnes by 2020, compared with 739 billion tonnes recorded in 1990.'
+};
+
+const ANALYSIS={
+  14:'Đoạn A tập trung vào sự tăng trưởng rất mạnh của việc sử dụng ô tô cá nhân. Vì vậy heading phù hợp là <b>viii</b>.',
+  15:'Đoạn B nói về thay đổi trong hệ thống sản xuất và việc di dời nhà máy khiến hàng hóa có thể phải đi quãng đường rất xa. Heading phù hợp là <b>iii</b>.',
+  16:'Đoạn C mô tả xu hướng vận tải ở các nước đang chờ gia nhập EU, đặc biệt là sự dịch chuyển mạnh sang vận tải đường bộ. Heading phù hợp là <b>xi</b>.',
+  17:'Đoạn D đưa ra mục tiêu phát triển bền vững mới và dài hạn, hướng tới hệ thống giao thông bền vững vào năm 2040. Heading phù hợp là <b>i</b>.',
+  18:'Đoạn E tập trung vào phát thải CO2 và tác động môi trường của vận tải đường bộ. Heading phù hợp là <b>v</b>.',
+  19:'Đoạn G mô tả phương án chỉ dùng chính sách giá đối với đường bộ, không có biện pháp bổ trợ cho các phương thức khác. Heading phù hợp là <b>x</b>.',
+  20:'Đoạn H vẫn dùng định giá đường bộ nhưng đồng thời nâng hiệu quả của các phương thức vận tải khác. Heading phù hợp là <b>ii</b>.',
+  21:'Đoạn I là phương án tích hợp nhiều biện pháp: định giá, phục hồi phương thức thay thế và đầu tư hạ tầng. Heading phù hợp là <b>iv</b>.',
+  22:'Passage nói công nghệ thông tin có thể làm giảm nhu cầu vận chuyển vật lý, <b>nhưng nhu cầu vận tải nói chung vẫn tiếp tục tăng</b>. Statement đồng ý với passage → <b>TRUE</b>.',
+  23:'Passage nói các cơ sở sản xuất có thể nằm <b>cách xa hàng trăm hoặc hàng nghìn kilomet</b> so với nơi lắp ráp hoặc người dùng, trái với “moved closer”. → <b>FALSE</b>.',
+  24:'Passage có nói về tỷ trọng đường bộ và đường sắt tại các nước ứng viên EU, nhưng <b>không hề cho biết giá ô tô có quá đắt hay không</b>. → <b>NOT GIVEN</b>.',
+  25:'Passage chỉ cho biết mục tiêu được Gothenburg European Council đồng thuận; <b>không có thông tin Hội đồng được thành lập khi nào</b>. → <b>NOT GIVEN</b>.',
+  26:'Con số <b>739 billion tonnes</b> thuộc năm 1990; dự báo cho 2020 là <b>1,113 billion tonnes</b>. Statement dùng sai mốc số liệu. → <b>FALSE</b>.'
+};
+
+let startedAt=0;
+let submitted=false;
+let savedSelection=null;
+let savedZone=null;
+let menuMode='selection';
+let menuTarget=null;
+let menuZone=null;
+
+function normalize(value){return String(value||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function isCorrect(number,value){
+  const answer=normalize(value);
+  return KEYS[number].some(key=>normalize(key)===answer);
+}
+
+/* BUILD CONTROLS */
+function buildControls(){
+  HEADING_NUMBERS.forEach(number=>{
+    const select=document.getElementById('a'+number);
+    if(!select) return;
+    select.innerHTML='<option value="">— Chọn heading —</option>'+ROMAN.map(r=>`<option value="${r}">${r}</option>`).join('');
+  });
+
+  TFNG_NUMBERS.forEach(number=>{
+    const root=document.getElementById('tf'+number);
+    if(!root) return;
+    root.innerHTML=TFNG.map(value=>`<button type="button" class="tf-button" data-value="${value}" onclick="chooseTFNG(${number},'${value}')">${value}</button>`).join('');
+  });
+
+  nav.innerHTML=QUESTION_NUMBERS.map(number=>`<button id="nav${number}" onclick="goQ(${number})">${number}</button>`).join('');
+}
+
+function chooseTFNG(number,value){
+  if(submitted) return;
+  saveAnswer(number,value);
+  renderTFNGState(number);
+}
+
+function renderTFNGState(number){
+  const value=getAnswer(number);
+  const root=document.getElementById('tf'+number);
+  if(!root) return;
+  root.querySelectorAll('.tf-button').forEach(button=>{
+    button.classList.toggle('selected',normalize(button.dataset.value)===normalize(value));
+  });
+}
+
+/* STUDENT */
+function readStudent(){
+  try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){return null}
+}
+function prefill(){
+  const student=readStudent();
+  if(student){studentName.value=student.name||'';studentClass.value=student.className||'';}
+}
+function startPractice(){
+  const name=studentName.value.trim();
+  const className=studentClass.value.trim();
+  if(!name||!className){startError.textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return;}
+  localStorage.setItem('IELTS_PRACTICE_STUDENT',JSON.stringify({name,className}));
+  studentInfo.textContent=`${name} · ${className}`;
+  start.classList.add('hidden');
+  startedAt=Date.now();
+  restoreMarkup();
+  buildControls();
+  restoreAnswers();
+  updateProgress();
+}
+
+/* TIMER */
+function fmt(sec){
+  sec=Math.max(0,Math.floor(sec));
+  const hours=Math.floor(sec/3600),minutes=Math.floor((sec%3600)/60),seconds=sec%60;
+  return hours
+    ? `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`
+    : `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+}
+setInterval(()=>{
+  if(startedAt){timer.textContent=fmt((Date.now()-startedAt)/1000);}
+},500);
+
+/* ANSWERS */
+function saveAnswer(number,value){
+  if(submitted) return;
+  localStorage.setItem(`${ATTEMPT_KEY}_q${number}`,value);
+  navState(number);
+  updateProgress();
+}
+function getAnswer(number){return localStorage.getItem(`${ATTEMPT_KEY}_q${number}`)||''}
+function restoreAnswers(){
+  QUESTION_NUMBERS.forEach(number=>{
+    const value=getAnswer(number);
+    if(HEADING_NUMBERS.includes(number)){
+      const select=document.getElementById('a'+number);
+      if(select) select.value=value;
+    }else{
+      renderTFNGState(number);
+    }
+    navState(number);
+  });
+}
+function navState(number){
+  const button=document.getElementById('nav'+number);
+  if(button) button.classList.toggle('answered',!!normalize(getAnswer(number)));
+}
+function updateProgress(){
+  const answered=QUESTION_NUMBERS.filter(number=>normalize(getAnswer(number))).length;
+  progressText.textContent=`${answered}/13 câu đã trả lời`;
+  progressBar.style.width=(answered/13*100)+'%';
+}
+function goQ(number){
+  const target=document.getElementById('q'+number);
+  if(!target) return;
+  target.scrollIntoView({behavior:'smooth',block:'center'});
+  if(HEADING_NUMBERS.includes(number)){
+    setTimeout(()=>document.getElementById('a'+number)?.focus(),300);
+  }
+}
+
+/* SUBMIT */
+async function submitPractice(){
+  if(submitted) return;
+  submitted=true;
+  let score=0;
+  const answers={};
+  reviewList.innerHTML='';
+
+  QUESTION_NUMBERS.forEach(number=>{
+    const user=getAnswer(number);
+    const ok=isCorrect(number,user);
+    answers[number]=user||'';
+    if(ok) score++;
+
+    const card=document.getElementById('q'+number);
+    card?.classList.add(ok?'correct-card':'wrong-card');
+
+    if(HEADING_NUMBERS.includes(number)){
+      const select=document.getElementById('a'+number);
+      if(select){select.disabled=true;select.classList.add(ok?'correct':'wrong');}
+    }else{
+      const root=document.getElementById('tf'+number);
+      if(root){
+        root.classList.add(ok?'correct':'wrong');
+        root.querySelectorAll('button').forEach(button=>button.disabled=true);
+      }
+    }
+
+    const navButton=document.getElementById('nav'+number);
+    navButton?.classList.add(ok?'correct':'wrong');
+    if(!ok) renderReview(number,user);
+  });
+
+  const durationSeconds=Math.floor((Date.now()-startedAt)/1000);
+  const student=readStudent();
+  resultStudent.textContent=student?`${student.name} · ${student.className}`:'';
+  resultScore.textContent=`${score} / 13`;
+  resultPercent.textContent=`${Math.round(score/13*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+  resultOverlay.classList.remove('hidden');
+
+  const details=JSON.stringify({
+    title:'European Transport Systems 1990-2010 - Reading Passage 2 - 01',
+    answers,
+    correctAnswers:DISPLAY_KEY
+  });
+
+  const body=new URLSearchParams({
+    mode:'PRACTICE',
+    name:student?.name||'',
+    className:student?.className||'',
+    skill:'Reading',
+    practiceType:'Reading Passage 2',
+    practiceId:'01',
+    score:String(score),
+    total:'13',
+    durationSeconds:String(durationSeconds),
+    details,
+    submittedAt:new Date().toISOString()
+  });
+
+  try{
+    await fetch(RESULT_ENDPOINT,{
+      method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+      body:body.toString()
+    });
+  }catch(err){console.warn('Không gửi được kết quả Practice:',err)}
+}
+
+/* REVIEW */
+function renderReview(number,user){
+  reviewList.insertAdjacentHTML('beforeend',`
+    <div class="inline-review">
+      <div class="review-title">Câu ${number}</div>
+      <div class="review-row"><div class="review-label">Câu hỏi</div><div>${escapeHTML(QUESTION_TEXT[number])}</div></div>
+      <div class="review-row"><div class="review-label">Đáp án em chọn</div><div class="review-user">${escapeHTML(user||'Chưa trả lời')}</div></div>
+      <div class="review-row"><div class="review-label">Đáp án đúng</div><div class="review-correct">${DISPLAY_KEY[number]}</div></div>
+      <div class="compare-box">
+        <div class="compare-heading">🔎 Đối chiếu với bài đọc</div>
+        <div class="compare-item">
+          <div class="compare-label">Passage</div>
+          <div class="passage-evidence" role="button" tabindex="0"
+            onclick="focusEvidence(${number})"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusEvidence(${number});}">
+            “${EVIDENCE[number]}”
+            <div class="evidence-help">Nhấn để xem vị trí trong bài đọc</div>
+          </div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-label">Phân tích</div>
+          <div class="compare-analysis">${ANALYSIS[number]}</div>
+        </div>
+        <div class="conclusion">Đáp án: ${DISPLAY_KEY[number]}</div>
+      </div>
+    </div>`);
+}
+
+/* CLICK EVIDENCE */
+function focusEvidence(number){
+  document.querySelectorAll('.evidence-source.evidence-focus').forEach(element=>element.classList.remove('evidence-focus'));
+  const targets=[...document.querySelectorAll(`[data-evidence~="${number}"]`)];
+  if(!targets.length) return;
+  targets.forEach(target=>target.classList.add('evidence-focus'));
+  targets[0].scrollIntoView({behavior:'smooth',block:'center'});
+  targets.forEach(target=>{
+    target.style.animation='none';
+    void target.offsetWidth;
+    target.style.animation='';
+  });
+}
+
+function closeResult(){resultOverlay.classList.add('hidden')}
+
+/* HIGHLIGHT / NOTE */
+const selectionMenu=document.getElementById('selectionMenu');
+const menuHighlight=document.getElementById('menuHighlight');
+const menuNote=document.getElementById('menuNote');
+
+function zoneRoot(zone){return document.getElementById(zone==='passage'?'passageRoot':'questionsRoot')}
+function markupKey(zone){return `${ATTEMPT_KEY}_markup_${zone}`}
+function saveMarkup(zone){
+  document.querySelectorAll('.evidence-source.evidence-focus').forEach(element=>element.classList.remove('evidence-focus'));
+  localStorage.setItem(markupKey(zone),zoneRoot(zone).innerHTML);
+}
+function restoreMarkup(){
+  ['passage','questions'].forEach(zone=>{
+    const html=localStorage.getItem(markupKey(zone));
+    if(html) zoneRoot(zone).innerHTML=html;
+    bindContext(zone);
+  });
+}
+function resetMenu(){
+  menuMode='selection';menuTarget=null;menuZone=null;
+  menuHighlight.style.display='';menuNote.style.display='';
+  menuHighlight.textContent='🖍 Highlight';menuNote.textContent='📝 Take note';
+  menuHighlight.classList.remove('danger');menuNote.classList.remove('danger');
+}
+function hideMenu(){selectionMenu.classList.remove('show');resetMenu()}
+function showMenu(rect){
+  selectionMenu.classList.add('show');
+  requestAnimationFrame(()=>{
+    const width=selectionMenu.offsetWidth||180;
+    const left=Math.min(window.innerWidth-width-10,Math.max(10,rect.left+rect.width/2-width/2));
+    selectionMenu.style.left=left+'px';
+    selectionMenu.style.top=Math.max(10,rect.top-47)+'px';
+  });
+}
+function captureSelection(zone){
+  const selection=window.getSelection();
+  if(!selection||selection.rangeCount===0||selection.isCollapsed) return;
+  const range=selection.getRangeAt(0);
+  if(!zoneRoot(zone).contains(range.commonAncestorContainer)) return;
+  savedSelection=range.cloneRange();savedZone=zone;resetMenu();showMenu(range.getBoundingClientRect());
+}
+function clearSelection(){
+  const selection=window.getSelection();
+  if(selection) selection.removeAllRanges();
+  savedSelection=null;savedZone=null;
+}
+function addHighlight(){
+  if(menuMode==='delete-highlight'){removeMark();return;}
+  if(!savedSelection||!savedZone) return;
+  try{
+    const range=savedSelection.cloneRange();
+    const mark=document.createElement('mark');mark.className='user-highlight';
+    mark.appendChild(range.extractContents());range.insertNode(mark);
+    saveMarkup(savedZone);clearSelection();hideMenu();
+  }catch(e){alert('Hãy chọn một đoạn chữ ngắn hơn.')}
+}
+function addNote(){
+  if(menuMode==='delete-note'){removeMark();return;}
+  if(!savedSelection||!savedZone) return;
+  const text=prompt('Nhập ghi chú:');
+  if(text===null||!text.trim()) return;
+  try{
+    const range=savedSelection.cloneRange();
+    const span=document.createElement('span');span.className='note-anchor';span.dataset.note=text.trim();
+    span.appendChild(range.extractContents());range.insertNode(span);
+    saveMarkup(savedZone);clearSelection();hideMenu();
+  }catch(e){alert('Hãy chọn một đoạn chữ ngắn hơn.')}
+}
+function showDeleteMenu(target,zone,type){
+  menuTarget=target;menuZone=zone;clearSelection();
+  if(type==='highlight'){
+    menuMode='delete-highlight';menuHighlight.textContent='✕ Xóa highlight';
+    menuHighlight.classList.add('danger');menuNote.style.display='none';
+  }else{
+    menuMode='delete-note';menuNote.textContent='✕ Xóa note';
+    menuNote.classList.add('danger');menuHighlight.style.display='none';
+  }
+  showMenu(target.getBoundingClientRect());
+}
+function removeMark(){
+  if(!menuTarget) return;
+  const parent=menuTarget.parentNode;
+  while(menuTarget.firstChild) parent.insertBefore(menuTarget.firstChild,menuTarget);
+  menuTarget.remove();parent.normalize();saveMarkup(menuZone);hideMenu();
+}
+function bindContext(zone){
+  const root=zoneRoot(zone);if(!root) return;
+  root.addEventListener('mouseup',()=>setTimeout(()=>captureSelection(zone),0));
+  root.addEventListener('touchend',()=>setTimeout(()=>captureSelection(zone),120));
+  root.addEventListener('click',event=>{
+    const highlight=event.target.closest('mark.user-highlight');
+    const note=event.target.closest('.note-anchor');
+    if(highlight){event.stopPropagation();showDeleteMenu(highlight,zone,'highlight');return;}
+    if(note){event.stopPropagation();showDeleteMenu(note,zone,'note');}
+  });
+}
+menuHighlight.addEventListener('click',addHighlight);
+menuNote.addEventListener('click',addNote);
+document.addEventListener('mousedown',event=>{
+  if(!selectionMenu.contains(event.target)&&!event.target.closest('.user-highlight')&&!event.target.closest('.note-anchor')) hideMenu();
+});
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[char]);
+}
+
+/* INIT */
+buildControls();
+prefill();
+</script>
+</body>
+</html>
