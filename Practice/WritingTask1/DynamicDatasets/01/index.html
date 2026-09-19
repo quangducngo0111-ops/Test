@@ -1168,6 +1168,11 @@ mark.user-highlight{
           <summary>Bản sửa nhanh các lỗi chắc chắn</summary>
           <pre id="correctedVersion" class="corrected-text"></pre>
         </details>
+
+        <details id="academicVersionWrap" class="corrected-wrap hidden">
+          <summary>Bản diễn đạt học thuật đề xuất</summary>
+          <pre id="academicVersion" class="corrected-text"></pre>
+        </details>
       </div>
 
 
@@ -2092,7 +2097,12 @@ function buildDetailedIssues(text){
     {regex:/\bon contrast\b/gi,category:'Word choice',replace:'in contrast',explanation:'The fixed expression is “in contrast”.'},
     {regex:/\bgrew up\b/gi,category:'Word choice',replace:'grew',explanation:'For figures/data, use “grew/increased”. “Grow up” usually means becoming an adult.'},
     {regex:/\bwas fluctuated\b/gi,category:'Grammar',replace:'fluctuated',explanation:'“Fluctuate” is normally intransitive when describing data: “the figure fluctuated”.'},
-    {regex:/\bwere fluctuated\b/gi,category:'Grammar',replace:'fluctuated',explanation:'“Fluctuate” is normally intransitive when describing data.'}
+    {regex:/\bwere fluctuated\b/gi,category:'Grammar',replace:'fluctuated',explanation:'“Fluctuate” is normally intransitive when describing data.'},
+    {regex:/\bmost highest\b/gi,category:'Grammar',replace:'highest',explanation:'Do not combine “most” with the superlative “highest”. Use “highest” only.'},
+    {regex:/\bmost lowest\b/gi,category:'Grammar',replace:'lowest',explanation:'Do not combine “most” with the superlative “lowest”. Use “lowest” only.'},
+    {regex:/\bhaved\b/gi,category:'Grammar',replace:'had',explanation:'The past form of “have” is “had”, not “haved”.'},
+    {regex:/\bgoed\b/gi,category:'Grammar',replace:'went',explanation:'The past form of “go” is “went”.'},
+    {regex:/\bgrowed\b/gi,category:'Grammar',replace:'grew',explanation:'The past form of “grow” is “grew”, not “growed”.'}
   ];
 
   exactRules.forEach(rule=>{
@@ -2204,6 +2214,138 @@ function buildDetailedIssues(text){
     });
   }
 
+
+
+  // High-confidence IELTS Task 1 phrasing. These are not all grammatical errors,
+  // but they are common non-academic expressions that should be flagged clearly.
+  const task1PhraseRules=[
+    {
+      regex:/\b(City\s+[A-Z](?:\s+and\s+City\s+[A-Z])?)\s+went\s+down\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure${subject.includes(' and ') ? 's' : ''} for ${subject} decreased`,
+      explanation:'In IELTS Task 1, describe the figure/number rather than saying a city “went down”. “Decreased” is more precise and academic.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z](?:\s+and\s+City\s+[A-Z])?)\s+went\s+up\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure${subject.includes(' and ') ? 's' : ''} for ${subject} increased`,
+      explanation:'For data, “the figure increased/rose” is more precise than “the city went up”.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+dropped\s+quickly\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure for ${subject} fell sharply`,
+      explanation:'“Fell sharply” is a more natural academic expression for a rapid decrease in a chart.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+went\s+down\s+a\s+little\s+bit\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure for ${subject} decreased slightly`,
+      explanation:'“A little bit” is informal. In IELTS Task 1, use “slightly”.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+started\s+from\s+(\d+(?:\.\d+)?)\b/g,
+      category:'Word choice',
+      replacement:(m,subject,value)=>`the figure for ${subject} started at ${value}`,
+      explanation:'For a numerical starting point, “started at” or “stood at” is more natural than “started from”.',
+      autoFix:false
+    },
+    {
+      regex:/\bwent\s+up\s+continually\b/gi,
+      category:'Word choice',
+      replacement:()=>`rose steadily`,
+      explanation:'“Rose steadily” is the usual Task 1 expression for a sustained upward trend. “Continually” is less natural here.',
+      autoFix:false
+    },
+    {
+      regex:/\b(increased|decreased|rose|fell|grew|dropped)\s+a\s+lot\b/gi,
+      category:'Word choice',
+      replacement:(m,verb)=>`${verb} considerably`,
+      explanation:'“A lot” is informal in academic writing. Use an adverb such as “considerably” or “significantly”.',
+      autoFix:false
+    },
+    {
+      regex:/\ba\s+little\s+bit\b/gi,
+      category:'Word choice',
+      replacement:()=>`slightly`,
+      explanation:'“A little bit” is informal. “Slightly” is more appropriate in IELTS Academic Writing Task 1.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+(increased|decreased|rose|fell|dropped|grew)\b/g,
+      category:'Word choice',
+      replacement:(m,subject,verb)=>`the figure for ${subject} ${verb}`,
+      explanation:'In Task 1, it is usually more precise to make the figure/number the grammatical subject rather than the city itself.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+and\s+(City\s+[A-Z])\s+both\s+dropped\b/g,
+      category:'Word choice',
+      replacement:(m,a,b)=>`the figures for ${a} and ${b} both fell`,
+      explanation:'Describe the figures rather than the cities themselves, and use “fell” for a decrease in chart data.',
+      autoFix:false
+    },
+    {
+      regex:/\bgrew\s+back\s+to\b/gi,
+      category:'Word choice',
+      replacement:()=>`recovered to`,
+      explanation:'For data returning to an earlier level, “recovered to” or “rose back to” is more natural than “grew back to”.',
+      autoFix:false
+    },
+    {
+      regex:/\bwent\s+up\s+to\b/gi,
+      category:'Word choice',
+      replacement:()=>`rose to`,
+      explanation:'“Rose to” is more concise and academic than “went up to” in Task 1.',
+      autoFix:false
+    },
+    {
+      regex:/\bthen\s+down\s+to\b/gi,
+      category:'Word choice',
+      replacement:()=>`then fell to`,
+      explanation:'Use an explicit trend verb such as “fell” rather than the elliptical phrase “then down to”.',
+      autoFix:false
+    },
+    {
+      regex:/\ba\s+lot\b/gi,
+      category:'Word choice',
+      replacement:()=>`considerably / significantly`,
+      explanation:'“A lot” is informal in academic Task 1 writing. Use “considerably”, “significantly”, or a more precise description.',
+      autoFix:false
+    },
+    {
+      regex:/\bat\s+the\s+end\b/gi,
+      category:'Word choice',
+      replacement:()=>`by the end of the period`,
+      explanation:'“At the end” can be vague in Task 1. Use a precise time reference such as “by 2010” or “by the end of the period”.',
+      autoFix:false
+    }
+  ];
+
+  task1PhraseRules.forEach(rule=>{
+    const regex=new RegExp(rule.regex.source,rule.regex.flags);
+    let match;
+    while((match=regex.exec(raw))){
+      const replacement=typeof rule.replacement==='function'
+        ? rule.replacement(...match)
+        : rule.replacement;
+      addDetailedIssue(issues,{
+        category:rule.category,
+        original:match[0],
+        correction:replacement,
+        explanation:rule.explanation,
+        sentence:findSentenceContext(raw,match.index,match.index+match[0].length),
+        start:match.index,
+        end:match.index+match[0].length,
+        autoFix:rule.autoFix===true
+      });
+      if(match[0].length===0) regex.lastIndex++;
+    }
+  });
 
   const hostedMost=/\bhosted\s+the\s+most\s+conferences\s+at\s+(\d+(?:\.\d+)?)\b/gi;
   let hm;
@@ -2389,6 +2531,7 @@ function buildDetailedIssues(text){
 
   const spellingMap={
     incresed:'increased',increasd:'increased',increse:'increase',increaed:'increased',
+    groed:'grew',growed:'grew',haved:'had',
     decreaed:'decreased',decreasd:'decreased',decrese:'decrease',
     flactuated:'fluctuated',flucuated:'fluctuated',fluctation:'fluctuation',
     comparision:'comparison',comparsion:'comparison',seperate:'separate',occured:'occurred',
@@ -2590,6 +2733,9 @@ const CONTEXTUAL_SPELLING_OVERRIDES={
   increse:'increase',
   incresed:'increased',
   increasd:'increased',
+  groed:'grew',
+  growed:'grew',
+  haved:'had',
   decrese:'decrease',
   decreasd:'decreased',
   signifcant:'significant',
@@ -3172,6 +3318,70 @@ function buildCorrectedVersion(text,issues){
 }
 
 
+
+function buildAcademicVersion(text){
+
+  let output=String(text || '');
+
+  const safeRules=[
+    [/\bmost highest\b/gi,'highest'],
+    [/\bmost lowest\b/gi,'lowest'],
+    [/\bhaved\b/gi,'had'],
+    [/\bgroed\b/gi,'grew'],
+    [/\bgrowed\b/gi,'grew'],
+    [/\bincresed\b/gi,'increased'],
+    [/\bdecrese\b/gi,'decrease'],
+    [/\b(City\s+[A-Z])\s+and\s+(City\s+[A-Z])\s+both\s+dropped\b/g,(m,a,b)=>`the figures for ${a} and ${b} both fell`],
+    [/\b(City\s+[A-Z])\s+and\s+(City\s+[A-Z])\s+went\s+down\b/g,(m,a,b)=>`the figures for ${a} and ${b} decreased`],
+    [/\b(City\s+[A-Z])\s+and\s+(City\s+[A-Z])\s+went\s+up\b/g,(m,a,b)=>`the figures for ${a} and ${b} increased`],
+    [/(?<!for )(?<!and )\b(City\s+[A-Z])\s+went\s+down\s+a\s+little\s+bit\b/g,(m,city)=>`the figure for ${city} decreased slightly`],
+    [/(?<!for )(?<!and )\b(City\s+[A-Z])\s+dropped\s+quickly\b/g,(m,city)=>`the figure for ${city} fell sharply`],
+    [/(?<!for )(?<!and )\b(City\s+[A-Z])\s+started\s+from\s+(\d+(?:\.\d+)?)\b/g,(m,city,value)=>`the figure for ${city} started at ${value}`],
+    [/(?<!for )(?<!and )\b(City\s+[A-Z])\s+went\s+up\b/g,(m,city)=>`the figure for ${city} increased`],
+    [/(?<!for )(?<!and )\b(City\s+[A-Z])\s+went\s+down\b/g,(m,city)=>`the figure for ${city} decreased`],
+    [/(?<!for )(?<!and )\b(City\s+[A-Z])\s+(increased|decreased|rose|fell|dropped|grew)\b/g,(m,city,verb)=>`the figure for ${city} ${verb}`],
+    [/\bwent\s+up\s+continually\b/gi,'rose steadily'],
+    [/\bwent\s+up\s+to\b/gi,'rose to'],
+    [/\bthen\s+down\s+to\b/gi,'then fell to'],
+    [/\bgrew\s+back\s+to\b/gi,'recovered to'],
+    [/\b(increased|decreased|rose|fell|grew|dropped)\s+a\s+lot\b/gi,(m,verb)=>`${verb} considerably`],
+    [/\ba\s+little\s+bit\b/gi,'slightly'],
+    [/\bat\s+the\s+end\b/gi,'by the end of the period']
+  ];
+
+  safeRules.forEach(([regex,replacement])=>{
+    output=output.replace(regex,replacement);
+  });
+
+  // Task 1 wording around figures and end-points.
+  output=output.replace(
+    /\bAt the end,\s*(City\s+[A-Z])\s+had\s+the\s+highest\s+number\s+of\s+conferences\b/g,
+    (m,city)=>`By the end of the period, ${city} had the highest number of conferences`
+  );
+
+  output=output.replace(
+    /\b(City\s+[A-Z])'s\s+numbers\b/g,
+    (m,city)=>`the figure for ${city}`
+  );
+
+  // Clean spaces and capitalise paragraph starts.
+  output=output.replace(/\s+([,.!?;:])/g,'$1');
+  output=output.replace(/ {2,}/g,' ');
+  output=output.replace(
+    /(^|\n\s*\n)(\s*)([a-z])/g,
+    (match,boundary,spaces,letter)=>boundary+spaces+letter.toUpperCase()
+  );
+
+  output=output.replace(
+    /(^|[.!?]\s+)([a-z])/g,
+    (match,boundary,letter)=>boundary+letter.toUpperCase()
+  );
+
+  return output;
+
+}
+
+
 function issueClass(category){
 
   const value=String(category || '').toLowerCase();
@@ -3219,7 +3429,7 @@ function renderDetailedReview(grade){
     proofreadingStatus.innerHTML='Đang quét grammar & spelling và kiểm tra lại gợi ý theo ngữ cảnh…';
   }
   else if(languageToolReviewStatus==='done'){
-    proofreadingStatus.innerHTML=`Bộ dò đã tìm cảnh báo và bộ kiểm tra ngữ cảnh chỉ giữ lại ${languageIssues.length} lỗi/gợi ý có độ tin cậy cao. Gợi ý chính tả không còn lấy máy móc phương án gần chữ nhất.`;
+    proofreadingStatus.innerHTML=`Đã chạy 3 lớp kiểm tra: contextual/local rules + bộ dò ngoài + AI nếu backend có phản hồi. Hệ thống giữ lại ${languageIssues.length} cảnh báo từ bộ dò ngoài có đủ độ tin cậy và bổ sung các lỗi Task 1 phổ biến bằng rule theo ngữ cảnh.`;
   }
   else if(languageToolReviewStatus==='error'){
     proofreadingStatus.innerHTML=`Không gọi được bộ dò ngoài (${escapeHTML(languageToolReviewError)}). Đang dùng AI + contextual/local rules; bài vẫn được chấm bình thường.`;
@@ -3231,6 +3441,7 @@ function renderDetailedReview(grade){
   if(!issues.length){
     detailedIssues.innerHTML=`<div class="no-issues">Chưa phát hiện lỗi cụ thể. Điều này không đồng nghĩa bài hoàn toàn không có lỗi; các lỗi phụ thuộc ngữ cảnh vẫn cần AI/giáo viên kiểm tra.</div>`;
     correctedVersionWrap.classList.add('hidden');
+    academicVersionWrap.classList.add('hidden');
     return;
   }
 
@@ -3271,6 +3482,16 @@ function renderDetailedReview(grade){
   }
   else{
     correctedVersionWrap.classList.add('hidden');
+  }
+
+  const academic=buildAcademicVersion(corrected);
+
+  if(academic!==essay.value && academic!==corrected){
+    academicVersion.textContent=academic;
+    academicVersionWrap.classList.remove('hidden');
+  }
+  else{
+    academicVersionWrap.classList.add('hidden');
   }
 
 }
