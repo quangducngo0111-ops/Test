@@ -2712,6 +2712,48 @@ button:disabled{
   color:#ffd66c;
 }
 
+.shark-ocean::before{
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  z-index:45;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgba(214,42,53,.42) 100%
+    );
+
+  opacity:0;
+
+  transition:opacity .25s ease;
+}
+
+.shark-ocean.danger-flash::before{
+  opacity:1;
+
+  animation:
+    dangerPulse .55s ease-in-out infinite alternate;
+}
+
+@keyframes dangerPulse{
+
+  from{
+    opacity:.35;
+  }
+
+  to{
+    opacity:.85;
+  }
+
+}
+
 
 /* LIFE BUOY - CSS, không dùng emoji */
 
@@ -2893,6 +2935,33 @@ button:disabled{
   background:#fff;
 
   opacity:.85;
+}
+
+.monkey-scene{
+  --frost:0;
+}
+
+.monkey-scene::before{
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  z-index:50;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 30%,
+      rgba(150,205,255,0) 45%,
+      rgba(110,180,255,.85) 100%
+    );
+
+  opacity:var(--frost,0);
+
+  transition:opacity .3s ease;
 }
 
 .monkey-house{
@@ -4469,6 +4538,10 @@ button:disabled{
       ←
     </button>
 
+    <button onclick="activateNitro()" style="background:linear-gradient(135deg,#ff7a3d,#ff3d6a);color:#fff;border:0;">
+      🔥 NITRO
+    </button>
+
     <button onclick="moveCar(1)">
       →
     </button>
@@ -5350,7 +5423,7 @@ const GAME_INTROS = {
       "Đua trên đường phố và chọn đúng làn mang đáp án phù hợp.",
 
     rules:
-      "• Dùng ← → hoặc chạm vào làn muốn chuyển.<br>• Xe sẽ gặp 3 đáp án trên 3 làn đường.<br>• Chọn đúng sẽ kích hoạt BOOST, tăng tốc và giúp vượt xe đối thủ.<br>• Chọn sai sẽ mất mạng và mất tăng tốc."
+      "• Dùng ← → hoặc chạm vào làn muốn chuyển.<br>• Xe sẽ gặp 3 đáp án trên 3 làn đường.<br>• Chọn đúng sẽ kích hoạt BOOST, tăng tốc và giúp vượt xe đối thủ.<br>• Chọn sai sẽ mất mạng và mất tăng tốc.<br>• Gom đủ NITRO từ combo để bung tốc độ tối đa bất cứ lúc nào."
 
   },
 
@@ -5406,7 +5479,7 @@ const GAME_INTROS = {
       "Người bơi đang bị cá mập đuổi. Chọn đúng phao để tăng tốc bơi vào bờ.",
 
     rules:
-      "• Mỗi lượt xuất hiện một từ tiếng Anh.<br>• Chọn chiếc phao mang nghĩa đúng.<br>• Trả lời đúng: người bơi tăng tốc về phía bờ và tạo khoảng cách với cá mập.<br>• Trả lời sai: cá mập áp sát nhanh hơn.<br>• Kể cả không trả lời, cá mập vẫn liên tục bơi tới.<br>• Nếu cá mập bắt kịp, em mất 1 mạng."
+      "• Mỗi lượt xuất hiện một từ tiếng Anh.<br>• Chọn chiếc phao mang nghĩa đúng.<br>• Trả lời đúng: người bơi tăng tốc về phía bờ và tạo khoảng cách với cá mập.<br>• Trả lời sai: cá mập áp sát nhanh hơn.<br>• Dòng nước xoáy bất chợt có thể đẩy cả hai — hãy chú ý cảnh báo!<br>• Nếu cá mập bắt kịp, em mất 1 mạng."
 
   },
 
@@ -5420,7 +5493,7 @@ const GAME_INTROS = {
       "Chú khỉ đang chết rét ngoài trời. Giải mật mã để mở cửa nhà.",
 
     rules:
-      "• Mỗi bánh khóa tương ứng với một từ tiếng Anh.<br>• Bấm ▲ / ▼ để xoay bánh đến nghĩa đúng.<br>• Nhấn KIỂM TRA MẬT MÃ.<br>• Ô đúng sẽ chuyển xanh và được khóa lại.<br>• Ô sai chuyển đỏ để em biết vị trí cần sửa.<br>• Đúng toàn bộ mật mã thì cửa sẽ mở."
+      "• Mỗi bánh khóa tương ứng với một từ tiếng Anh.<br>• Bấm ▲ / ▼ để xoay bánh đến nghĩa đúng.<br>• Chú ý NHIỆT ĐỘ — khỉ càng lạnh thì càng nguy hiểm, trả lời đúng để sưởi ấm.<br>• Nhấn KIỂM TRA MẬT MÃ khi đã chắc chắn.<br>• Ô đúng sẽ chuyển xanh và được khóa lại, ô sai chuyển đỏ.<br>• Đúng toàn bộ mật mã thì cửa sẽ mở."
 
   }
 
@@ -5529,6 +5602,159 @@ function randomBetween(
       max-min
     )
   );
+
+}
+
+
+/* =========================================================
+   SCREEN SHAKE + CONFETTI (shared juice helpers)
+========================================================= */
+
+function shakeElement(element,strength=8){
+
+  if(!element){
+
+    return;
+
+  }
+
+
+  element.style.transition =
+  "none";
+
+
+  const start =
+  performance.now();
+
+  const duration =
+  360;
+
+
+  function frame(now){
+
+    const t =
+    (now-start)/duration;
+
+
+    if(t>=1){
+
+      element.style.transform =
+      "";
+
+      element.style.transition =
+      "";
+
+      return;
+
+    }
+
+
+    const decay =
+    1-t;
+
+    const dx =
+    (Math.random()*2-1)*strength*decay;
+
+    const dy =
+    (Math.random()*2-1)*strength*decay*.5;
+
+
+    element.style.transform =
+    `translate(${dx}px,${dy}px)`;
+
+
+    requestAnimationFrame(frame);
+
+  }
+
+
+  requestAnimationFrame(frame);
+
+}
+
+
+function burstConfetti(container,amount=22){
+
+  if(!container){
+
+    return;
+
+  }
+
+
+  const colors =
+  ["#ffd166","#06d6a0","#ef476f","#118ab2","#a78bfa","#fff"];
+
+
+  for(let i=0;i<amount;i++){
+
+    const piece =
+    document.createElement("div");
+
+
+    piece.style.position =
+    "absolute";
+
+    piece.style.left =
+    randomBetween(20,80)+"%";
+
+    piece.style.top =
+    randomBetween(10,40)+"%";
+
+    piece.style.width =
+    randomBetween(6,11)+"px";
+
+    piece.style.height =
+    piece.style.width;
+
+    piece.style.background =
+    colors[Math.floor(Math.random()*colors.length)];
+
+    piece.style.borderRadius =
+    Math.random()>.5 ? "50%" : "2px";
+
+    piece.style.zIndex =
+    "60";
+
+    piece.style.pointerEvents =
+    "none";
+
+    piece.style.opacity =
+    "1";
+
+
+    const dx =
+    randomBetween(-140,140);
+
+    const dy =
+    randomBetween(120,260);
+
+    const rot =
+    randomBetween(-360,360);
+
+
+    piece.animate(
+      [
+        {
+          transform:"translate(0,0) rotate(0deg)",
+          opacity:1
+        },
+        {
+          transform:`translate(${dx}px,${dy}px) rotate(${rot}deg)`,
+          opacity:0
+        }
+      ],
+      {
+        duration:randomBetween(700,1200),
+        easing:"cubic-bezier(.2,.7,.3,1)"
+      }
+    ).onfinish =
+    ()=>piece.remove();
+
+
+    container.appendChild(piece);
+
+  }
 
 }
 
@@ -5654,6 +5880,18 @@ function wordId(word){
 }
 
 
+function statsWordId(word){
+
+  return [
+    selectedSkill || "all",
+    selectedSet || "all",
+    wordId(word)
+  ]
+  .join("::");
+
+}
+
+
 function getWordStats(word){
 
   const stats =
@@ -5661,7 +5899,7 @@ function getWordStats(word){
 
 
   return stats[
-    wordId(word)
+    statsWordId(word)
   ]
 
   ||
@@ -5685,7 +5923,7 @@ function registerResult(
 
 
   const id =
-  wordId(
+  statsWordId(
     word
   );
 
@@ -6140,6 +6378,14 @@ null;
 
 let roundTimer =
 null;
+
+
+let whackRoundLocked =
+false;
+
+
+let catchResolving =
+false;
 
 
 let animation =
@@ -7139,9 +7385,17 @@ function beginPendingGame(){
   nên trình duyệt cho phép phát audio.
   */
 
-  startGameMusic(
-    currentGame
-  );
+  if(
+    typeof startGameMusic
+    ===
+    "function"
+  ){
+
+    startGameMusic(
+      currentGame
+    );
+
+  }
 
 
   fn();
@@ -7211,6 +7465,10 @@ function startWhack(){
 
 
 function beginWhack(){
+
+  whackRoundLocked =
+  false;
+
 
   $("whackBoard")
   .innerHTML =
@@ -7296,6 +7554,10 @@ function nextWhack(){
     return;
 
   }
+
+
+  whackRoundLocked =
+  false;
 
 
   if(
@@ -7388,6 +7650,21 @@ function nextWhack(){
 
       mole.onclick =
       ()=>{
+
+        if(
+          whackRoundLocked
+          ||
+          gameEnded
+        ){
+
+          return;
+
+        }
+
+
+        whackRoundLocked =
+        true;
+
 
         clearTimeout(
           roundTimer
@@ -7595,6 +7872,10 @@ function startCatcher(){
 
 function beginCatcher(){
 
+  catchResolving =
+  false;
+
+
   basketX =
   50;
 
@@ -7663,6 +7944,10 @@ function nextCatch(){
     return;
 
   }
+
+
+  catchResolving =
+  false;
 
 
   if(
@@ -7846,12 +8131,29 @@ function catchLoop(now){
       );
 
 
+      if(
+        good
+        &&
+        catchResolving
+      ){
+
+        continue;
+
+      }
+
+
       removeFruit(
         fruit
       );
 
 
       if(good){
+
+        catchResolving =
+        true;
+
+
+        clearFruits();
 
         const complete =
         correctAnswer(
@@ -7932,6 +8234,22 @@ function catchLoop(now){
 
 
       if(correctFruit){
+
+        if(
+          catchResolving
+        ){
+
+          continue;
+
+        }
+
+
+        catchResolving =
+        true;
+
+
+        clearFruits();
+
 
         wrongAnswer(
           currentTarget
@@ -8110,6 +8428,10 @@ let opponentProgress =
 ];
 
 
+let racerNitro =
+0;
+
+
 function startRacer(){
 
   launchGame(
@@ -8132,6 +8454,10 @@ function beginRacer(){
 
 
   racerBoost =
+  0;
+
+
+  racerNitro =
   0;
 
 
@@ -8174,6 +8500,8 @@ function beginRacer(){
 
 
   renderCar();
+
+  updateNitroBadge();
 
 
   let seconds =
@@ -8347,6 +8675,97 @@ function nextRacer(){
 
     }
   );
+
+}
+
+
+function activateNitro(){
+
+  if(
+    gameEnded
+    ||
+    currentGame !==
+    "racer"
+    ||
+    racerNitro <
+    40
+  ){
+
+    return;
+
+  }
+
+
+  racerNitro =
+  Math.max(
+    0,
+    racerNitro-40
+  );
+
+
+  racerBoost =
+  Math.max(
+    racerBoost,
+    1.8
+  );
+
+
+  score +=
+  40;
+
+
+  feedback(
+    "🔥 NITRO!",
+    "good"
+  );
+
+
+  updateNitroBadge();
+
+
+  updateRacer();
+
+}
+
+
+function updateNitroBadge(){
+
+  const badge =
+  $("racerBoostBadge");
+
+
+  if(!badge){
+
+    return;
+
+  }
+
+
+  if(
+    racerBoost >
+    .12
+  ){
+
+    badge.textContent =
+    racerBoost >
+    1.2
+
+    ?
+
+    "🔥 NITRO!"
+
+    :
+
+    "⚡ BOOST";
+
+  }
+
+  else{
+
+    badge.textContent =
+    `NITRO ${Math.round(racerNitro)}%`;
+
+  }
 
 }
 
@@ -8526,7 +8945,19 @@ function racerLoop(now){
 
 
       racerBoost =
-      1;
+      Math.max(
+        racerBoost,
+        1
+      );
+
+
+      racerNitro =
+      Math.min(
+        100,
+        racerNitro
+        +
+        20
+      );
 
 
       racerProgress =
@@ -8601,10 +9032,23 @@ function racerLoop(now){
       0;
 
 
+      racerNitro =
+      Math.max(
+        0,
+        racerNitro-15
+      );
+
+
       racerProgress =
       Math.max(
         0,
         racerProgress-3
+      );
+
+
+      shakeElement(
+        $("racerRoad"),
+        10
       );
 
 
@@ -8659,18 +9103,7 @@ function updateRacerVisuals(){
   " km/h";
 
 
-  $("racerBoostBadge")
-  .textContent =
-  racerBoost >
-  .12
-
-  ?
-
-  "⚡ BOOST"
-
-  :
-
-  "NORMAL";
+  updateNitroBadge();
 
 
   $("raceProgressFill")
@@ -9298,10 +9731,6 @@ function startFlappy(){
 
 
 function beginFlappy(){
-
-  direction =
-  "en-vi";
-
 
   const stage =
   $("flappyStage");
@@ -10433,6 +10862,10 @@ function nextBalloon(){
         }
 
 
+        balloon.removed =
+        true;
+
+
         const good =
         wordId(word)
         ===
@@ -10442,6 +10875,9 @@ function nextBalloon(){
 
 
         if(good){
+
+          clearBalloons();
+
 
           const complete =
           correctAnswer(
@@ -10723,6 +11159,10 @@ let sharkCaughtLock =
 false;
 
 
+let sharkCurrentTimer =
+null;
+
+
 const SHARK_SHORE_X =
 84;
 
@@ -10747,10 +11187,6 @@ function startShark(){
 
 
 function beginShark(){
-
-  direction =
-  "en-vi";
-
 
   sharkSwimmerX =
   28;
@@ -10860,6 +11296,14 @@ function beginShark(){
   );
 
 
+  /*
+  Dòng nước xoáy ngẫu nhiên tạo kịch tính:
+  đẩy cả hai một chút, có cảnh báo trước.
+  */
+
+  scheduleSharkCurrent();
+
+
   gameTimer =
   setInterval(
     ()=>{
@@ -10886,6 +11330,160 @@ function beginShark(){
 
     },
     1000
+  );
+
+}
+
+
+function scheduleSharkCurrent(){
+
+  clearTimeout(
+    sharkCurrentTimer
+  );
+
+
+  sharkCurrentTimer =
+  setTimeout(
+    ()=>{
+
+      if(
+        gameEnded
+        ||
+        currentGame !==
+        "shark"
+      ){
+
+        return;
+
+      }
+
+
+      triggerSharkCurrent();
+
+
+      scheduleSharkCurrent();
+
+    },
+    randomBetween(
+      9000,
+      15000
+    )
+  );
+
+}
+
+
+function triggerSharkCurrent(){
+
+  const warning =
+  document.createElement(
+    "div"
+  );
+
+
+  warning.textContent =
+  "🌊 DÒNG XOÁY!";
+
+
+  warning.style.position =
+  "absolute";
+
+  warning.style.zIndex =
+  "40";
+
+  warning.style.left =
+  "50%";
+
+  warning.style.top =
+  "12%";
+
+  warning.style.transform =
+  "translateX(-50%)";
+
+  warning.style.padding =
+  "8px 14px";
+
+  warning.style.borderRadius =
+  "999px";
+
+  warning.style.background =
+  "rgba(214,64,69,.88)";
+
+  warning.style.color =
+  "#fff";
+
+  warning.style.fontWeight =
+  "950";
+
+  warning.style.fontSize =
+  "10px";
+
+  warning.style.letterSpacing =
+  ".04em";
+
+
+  $("sharkOcean")
+  .appendChild(
+    warning
+  );
+
+
+  shakeElement(
+    $("sharkOcean"),
+    6
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      if(
+        gameEnded
+      ){
+
+        warning.remove();
+
+        return;
+
+      }
+
+
+      const push =
+      randomBetween(
+        -4,
+        6
+      );
+
+
+      sharkSwimmerX =
+      Math.max(
+        18,
+        Math.min(
+          SHARK_SHORE_X,
+          sharkSwimmerX+push
+        )
+      );
+
+
+      sharkX =
+      Math.max(
+        3,
+        sharkX
+        +
+        push*.6
+      );
+
+
+      updateSharkPositions();
+
+
+      checkSharkDanger();
+
+
+      warning.remove();
+
+    },
+    900
   );
 
 }
@@ -11223,6 +11821,12 @@ function chooseSharkBuoy(
     4.6;
 
 
+    shakeElement(
+      $("sharkOcean"),
+      8
+    );
+
+
     feedback(
       "🦈 Sai rồi! Cá mập đang áp sát!",
       "bad"
@@ -11271,6 +11875,15 @@ function checkSharkDanger(){
     "danger",
     distance <
     11
+  );
+
+
+  $("sharkOcean")
+  .classList
+  .toggle(
+    "danger-flash",
+    distance <
+    8
   );
 
 
@@ -11334,6 +11947,12 @@ function sharkCaught(){
   .classList
   .add(
     "panic"
+  );
+
+
+  shakeElement(
+    $("sharkOcean"),
+    14
   );
 
 
@@ -11425,6 +12044,13 @@ function resetSharkVisualState(){
   .remove(
     "fast",
     "panic"
+  );
+
+
+  $("sharkOcean")
+  .classList
+  .remove(
+    "danger-flash"
   );
 
 }
@@ -11621,6 +12247,14 @@ let monkeySlots =
 [];
 
 
+let monkeyFreeze =
+0;
+
+
+let monkeyFreezeTimer =
+null;
+
+
 function startMonkey(){
 
   launchGame(
@@ -11634,11 +12268,14 @@ function startMonkey(){
 
 function beginMonkey(){
 
-  direction =
-  "en-vi";
+  monkeyFreeze =
+  0;
 
 
   createSnow();
+
+
+  ensureMonkeyFreezeUI();
 
 
   $("monkeyDoor")
@@ -11665,6 +12302,51 @@ function beginMonkey(){
 
 
   createMonkeyCode();
+
+
+  clearInterval(
+    monkeyFreezeTimer
+  );
+
+
+  monkeyFreezeTimer =
+  setInterval(
+    ()=>{
+
+      if(
+        gameEnded
+        ||
+        currentGame !==
+        "monkey"
+      ){
+
+        return;
+
+      }
+
+
+      monkeyFreeze =
+      Math.min(
+        100,
+        monkeyFreeze+2.2
+      );
+
+
+      updateMonkeyFreezeUI();
+
+
+      if(
+        monkeyFreeze >=
+        100
+      ){
+
+        monkeyFreezeOut();
+
+      }
+
+    },
+    600
+  );
 
 
   gameTimer =
@@ -11694,6 +12376,229 @@ function beginMonkey(){
     },
     1000
   );
+
+}
+
+
+function ensureMonkeyFreezeUI(){
+
+  if(
+    $("monkeyFreezeMeter")
+  ){
+
+    return;
+
+  }
+
+
+  const meter =
+  document.createElement(
+    "div"
+  );
+
+
+  meter.id =
+  "monkeyFreezeMeter";
+
+
+  meter.style.position =
+  "absolute";
+
+  meter.style.zIndex =
+  "30";
+
+  meter.style.left =
+  "16px";
+
+  meter.style.top =
+  "16px";
+
+  meter.style.minWidth =
+  "180px";
+
+  meter.style.padding =
+  "9px 11px";
+
+  meter.style.borderRadius =
+  "12px";
+
+  meter.style.background =
+  "rgba(15,40,74,.72)";
+
+  meter.style.color =
+  "#fff";
+
+  meter.style.fontSize =
+  "9px";
+
+  meter.style.fontWeight =
+  "900";
+
+
+  meter.innerHTML =
+  `
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+      <span>🥶 NHIỆT ĐỘ KHỈ</span>
+      <span id="monkeyFreezeText">0%</span>
+    </div>
+    <div style="height:7px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.2)">
+      <i id="monkeyFreezeFill" style="display:block;height:100%;width:0%;border-radius:inherit;background:linear-gradient(90deg,#72f2bd,#ffcf5c,#ff5c6c);transition:width .3s ease"></i>
+    </div>
+  `;
+
+
+  $("monkeyScene")
+  .appendChild(
+    meter
+  );
+
+}
+
+
+function updateMonkeyFreezeUI(){
+
+  const fill =
+  $("monkeyFreezeFill");
+
+
+  const text =
+  $("monkeyFreezeText");
+
+
+  if(fill){
+
+    fill.style.width =
+    monkeyFreeze
+    +
+    "%";
+
+  }
+
+
+  if(text){
+
+    text.textContent =
+    Math.round(monkeyFreeze)
+    +
+    "%";
+
+  }
+
+
+  const scene =
+  $("monkeyScene");
+
+
+  if(scene){
+
+    scene.style.setProperty(
+      "--frost",
+      Math.min(
+        .55,
+        monkeyFreeze/100*.55
+      )
+    );
+
+
+    scene.style.boxShadow =
+    monkeyFreeze >
+    60
+
+    ?
+
+    `inset 0 0 ${20+monkeyFreeze}px rgba(120,190,255,${.15+monkeyFreeze/300})`
+
+    :
+
+    "";
+
+  }
+
+
+  const character =
+  $("monkeyCharacter");
+
+
+  if(character){
+
+    character.style.animationDuration =
+    Math.max(
+      .08,
+      .18-monkeyFreeze*.001
+    )
+    +
+    "s";
+
+  }
+
+}
+
+
+function monkeyFreezeOut(){
+
+  if(
+    gameEnded
+  ){
+
+    return;
+
+  }
+
+
+  monkeyFreeze =
+  55;
+
+
+  updateMonkeyFreezeUI();
+
+
+  shakeElement(
+    $("monkeyScene"),
+    10
+  );
+
+
+  wrongAnswer(
+    currentTarget
+    ||
+    monkeySlots[0]?.target
+    ||
+    {word:"cold"}
+  );
+
+
+  const ended =
+  loseLife();
+
+
+  feedback(
+    "🥶 Khỉ lạnh cóng! -1 ❤️",
+    "bad"
+  );
+
+
+  updateMonkey();
+
+
+  if(ended){
+
+    return;
+
+  }
+
+}
+
+
+function warmMonkey(amount){
+
+  monkeyFreeze =
+  Math.max(
+    0,
+    monkeyFreeze-amount
+  );
+
+
+  updateMonkeyFreezeUI();
 
 }
 
@@ -12010,6 +12915,9 @@ function checkMonkeyCode(){
   let anyWrong =
   false;
 
+  let anyNewlySolved =
+  false;
+
 
   monkeySlots.forEach(
     (
@@ -12050,8 +12958,17 @@ function checkMonkeyCode(){
         true;
 
 
+        anyNewlySolved =
+        true;
+
+
         correctAnswer(
           slot.target
+        );
+
+
+        warmMonkey(
+          16
         );
 
 
@@ -12081,6 +12998,13 @@ function checkMonkeyCode(){
         );
 
 
+        monkeyFreeze =
+        Math.min(
+          100,
+          monkeyFreeze+6
+        );
+
+
         column
         .classList
         .remove(
@@ -12107,12 +13031,21 @@ function checkMonkeyCode(){
   );
 
 
+  updateMonkeyFreezeUI();
+
+
   updateMonkey();
 
 
   if(anyWrong){
 
     loseLife();
+
+
+    shakeElement(
+      document.querySelector(".code-paper"),
+      6
+    );
 
 
     $("monkeyMessage")
@@ -12131,6 +13064,17 @@ function checkMonkeyCode(){
       return;
 
     }
+
+  }
+
+  else if(
+    anyNewlySolved
+  ){
+
+    feedback(
+      "🔥 Ấm hơn rồi!",
+      "good"
+    );
 
   }
 
@@ -12159,6 +13103,12 @@ function checkMonkeyCode(){
     feedback(
       "🔓 MỞ KHÓA THÀNH CÔNG!",
       "good"
+    );
+
+
+    burstConfetti(
+      $("monkeyScene"),
+      26
     );
 
 
@@ -12230,6 +13180,15 @@ function clearMonkey(){
 
   monkeySlots =
   [];
+
+
+  clearInterval(
+    monkeyFreezeTimer
+  );
+
+
+  monkeyFreezeTimer =
+  null;
 
 
   if(
@@ -12333,6 +13292,30 @@ document
         );
 
       }
+
+    }
+
+
+    if(
+      currentGame ===
+      "racer"
+      &&
+      (
+        event.code ===
+        "Space"
+        ||
+        event.key ===
+        "n"
+        ||
+        event.key ===
+        "N"
+      )
+    ){
+
+      event.preventDefault();
+
+
+      activateNitro();
 
     }
 
@@ -12582,6 +13565,16 @@ function stopTimersOnly(){
   );
 
 
+  clearTimeout(
+    sharkCurrentTimer
+  );
+
+
+  clearInterval(
+    monkeyFreezeTimer
+  );
+
+
   if(animation){
 
     cancelAnimationFrame(
@@ -12603,6 +13596,14 @@ function stopTimersOnly(){
   null;
 
 
+  sharkCurrentTimer =
+  null;
+
+
+  monkeyFreezeTimer =
+  null;
+
+
   animation =
   null;
 
@@ -12618,7 +13619,15 @@ function stopGame(){
   stopTimersOnly();
 
 
-  stopGameMusic();
+  if(
+    typeof stopGameMusic
+    ===
+    "function"
+  ){
+
+    stopGameMusic();
+
+  }
 
 
   clearFruits();
@@ -12687,7 +13696,15 @@ function endGame(
   stopTimersOnly();
 
 
-  stopGameMusic();
+  if(
+    typeof stopGameMusic
+    ===
+    "function"
+  ){
+
+    stopGameMusic();
+
+  }
 
 
   showResult(
@@ -12811,6 +13828,21 @@ function showResult(
   .remove(
     "hidden"
   );
+
+
+  if(
+    resultCompletedSet
+    ||
+    bestCombo >=
+    5
+  ){
+
+    burstConfetti(
+      $("resultOverlay").querySelector(".result"),
+      30
+    );
+
+  }
 
 }
 
