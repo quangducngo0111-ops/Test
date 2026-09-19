@@ -577,6 +577,18 @@ mark.user-highlight{
   margin-bottom:9px;
 }
 
+.proofreading-status{
+  margin:-2px 0 10px;
+  font-size:9.5px;
+  line-height:1.5;
+  color:#68757f;
+}
+
+.proofreading-status a{
+  color:#5135a6;
+  font-weight:850;
+}
+
 .issue-pill{
   padding:5px 8px;
   border-radius:999px;
@@ -1149,6 +1161,7 @@ mark.user-highlight{
       <div class="feedback-box">
         <h4>Lỗi cụ thể &amp; gợi ý sửa</h4>
         <div id="issueSummary" class="issue-summary"></div>
+        <div id="proofreadingStatus" class="proofreading-status"></div>
         <div id="detailedIssues" class="issue-list"></div>
 
         <details id="correctedVersionWrap" class="corrected-wrap hidden">
@@ -1188,6 +1201,10 @@ const RESULT_ENDPOINT=
 'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
 
 
+const LANGUAGE_TOOL_ENDPOINT=
+'https://api.languagetool.org/v2/check';
+
+
 const ATTEMPT_KEY=
 'PRACTICE_WRITING_TASK1_DYNAMIC_DATASETS_01_V2';
 
@@ -1207,6 +1224,14 @@ let savedSelection=null;
 let menuTarget=null;
 
 let menuMode='selection';
+
+
+let languageToolIssuesCache=null;
+let languageToolReviewPromise=null;
+let languageToolReviewStatus='idle';
+let languageToolReviewError='';
+let languageToolReviewText='';
+let lastRenderedGrade=null;
 
 
 /* =========================================================
@@ -2091,6 +2116,110 @@ function buildDetailedIssues(text){
     }
   });
 
+
+  // Common Task 1 subject–verb agreement: singular visual nouns need a singular verb.
+  const visualAgreement=/\b(the\s+(?:(?:line|bar|pie)\s+(?:graph|chart)|table|diagram|map))\s+(illustrate|show|compare|present|depict)\b/gi;
+  const singularVerb={illustrate:'illustrates',show:'shows',compare:'compares',present:'presents',depict:'depicts'};
+  let va;
+  while((va=visualAgreement.exec(raw))){
+    const verb=va[2].toLowerCase();
+    const fixedVerb=singularVerb[verb] || verb+'s';
+    const verbStart=va.index+va[0].toLowerCase().lastIndexOf(va[2].toLowerCase());
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:va[2],
+      correction:/^[A-Z]/.test(va[2]) ? titleCaseFirst(fixedVerb) : fixedVerb,
+      explanation:'The subject is singular (for example, “the line graph”), so the verb needs the third-person singular form.',
+      sentence:findSentenceContext(raw,va.index,va.index+va[0].length),
+      start:verbStart,
+      end:verbStart+va[2].length,
+      autoFix:true
+    });
+  }
+
+
+  // Infinitive after “to”: catch frequent irregular/past-form mistakes.
+  const badInfinitives={
+    became:'become',rose:'rise',fell:'fall',grew:'grow',dropped:'drop',
+    increased:'increase',decreased:'decrease',declined:'decline',recovered:'recover',
+    fluctuated:'fluctuate',reached:'reach',remained:'remain'
+  };
+  const badInfinitive=/\bto\s+(became|rose|fell|grew|dropped|increased|decreased|declined|recovered|fluctuated|reached|remained)\b/gi;
+  let bi;
+  while((bi=badInfinitive.exec(raw))){
+    const wrong=bi[1];
+    const correction=badInfinitives[wrong.toLowerCase()] || wrong;
+    const wordStart=bi.index+bi[0].toLowerCase().lastIndexOf(wrong.toLowerCase());
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:wrong,
+      correction:correction,
+      explanation:'After infinitive “to”, use the base form of the verb.',
+      sentence:findSentenceContext(raw,bi.index,bi.index+bi[0].length),
+      start:wordStart,
+      end:wordStart+wrong.length,
+      autoFix:true
+    });
+  }
+
+
+  // “before/after + verb” without a new subject normally takes the -ing form.
+  const sequenceVerb=/\b(before|after)\s+(rise|fall|drop|increase|decrease|decline|grow|recover|fluctuate)\s+(again|further|slightly|sharply|gradually|significantly|dramatically)?\b/gi;
+  const gerunds={rise:'rising',fall:'falling',drop:'dropping',increase:'increasing',decrease:'decreasing',decline:'declining',grow:'growing',recover:'recovering',fluctuate:'fluctuating'};
+  let sv;
+  while((sv=sequenceVerb.exec(raw))){
+    const verb=sv[2];
+    const correction=gerunds[verb.toLowerCase()] || verb+'ing';
+    const verbStart=sv.index+sv[0].toLowerCase().indexOf(verb.toLowerCase());
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:verb,
+      correction:correction,
+      explanation:'When “before/after” is followed directly by a verb and there is no new subject, use the -ing form.',
+      sentence:findSentenceContext(raw,sv.index,sv.index+sv[0].length),
+      start:verbStart,
+      end:verbStart+verb.length,
+      autoFix:true
+    });
+  }
+
+
+  // Common Task 1 wording: data/figures change; cities themselves do not literally “drop”.
+  const cityTrend=/\b(City\s+[A-Z])\s+(slightly|sharply|gradually|significantly|dramatically)\s+(rose|fell|dropped|increased|decreased|declined)\b/g;
+  let cityMatch;
+  while((cityMatch=cityTrend.exec(raw))){
+    const city=cityMatch[1];
+    const adv=cityMatch[2];
+    const verb=cityMatch[3];
+    addDetailedIssue(issues,{
+      category:'Word choice',
+      original:cityMatch[0],
+      correction:`the figure for ${city} ${verb} ${adv}`,
+      explanation:'In Task 1, make the figure/number the thing that rises or falls. This is clearer and more natural than saying the city itself “dropped”.',
+      sentence:findSentenceContext(raw,cityMatch.index,cityMatch.index+cityMatch[0].length),
+      start:cityMatch.index,
+      end:cityMatch.index+cityMatch[0].length,
+      autoFix:false
+    });
+  }
+
+
+  const hostedMost=/\bhosted\s+the\s+most\s+conferences\s+at\s+(\d+(?:\.\d+)?)\b/gi;
+  let hm;
+  while((hm=hostedMost.exec(raw))){
+    addDetailedIssue(issues,{
+      category:'Word choice',
+      original:hm[0],
+      correction:`hosted the highest number of conferences, at ${hm[1]}`,
+      explanation:'“The highest number of …” is a more precise academic way to report a numerical maximum.',
+      sentence:findSentenceContext(raw,hm.index,hm.index+hm[0].length),
+      start:hm.index,
+      end:hm.index+hm[0].length,
+      autoFix:false
+    });
+  }
+
+
   const adverbToAdjective={
     dramatically:'dramatic',
     significantly:'significant',
@@ -2267,7 +2396,14 @@ function buildDetailedIssues(text){
     persentage:'percentage',precentage:'percentage',becuase:'because',wich:'which',
     recieve:'receive',untill:'until',alot:'a lot',begining:'beginning',
     goverment:'government',enviroment:'environment',developement:'development',
-    tendancy:'tendency',statictics:'statistics',statisticly:'statistically'
+    tendancy:'tendency',statictics:'statistics',statisticly:'statistically',
+    ilustrate:'illustrate',illustate:'illustrate',illustrte:'illustrate',
+    comparred:'compared',comparied:'compared',fluctueted:'fluctuated',
+    conferencees:'conferences',conferances:'conferences',conferenses:'conferences',
+    gradualy:'gradually',sligtly:'slightly',sharpley:'sharply',
+    overal:'overall',conversly:'conversely',similary:'similarly',
+    experieced:'experienced',experenced:'experienced',
+    highestt:'highest',numberr:'number',periodd:'period'
   };
 
   Object.entries(spellingMap).forEach(([wrong,right])=>{
@@ -2386,6 +2522,173 @@ function extractAIDetailedIssues(task,grade){
 }
 
 
+function languageToolCategory(match){
+
+  const issueType=String(match?.rule?.issueType || '').toLowerCase();
+  const categoryId=String(match?.rule?.category?.id || '').toLowerCase();
+  const categoryName=String(match?.rule?.category?.name || '').toLowerCase();
+  const ruleId=String(match?.rule?.id || '').toLowerCase();
+
+  if(
+    issueType.includes('misspell')
+    || categoryId.includes('typo')
+    || categoryName.includes('typo')
+    || ruleId.includes('morfologik')
+  ){
+    return 'Spelling';
+  }
+
+  if(
+    issueType.includes('style')
+    || issueType.includes('uncategorized')
+    || categoryId.includes('style')
+    || categoryName.includes('style')
+  ){
+    return 'Word choice';
+  }
+
+  if(
+    issueType.includes('typographical')
+    || categoryId.includes('punct')
+    || categoryName.includes('punct')
+  ){
+    return 'Mechanics';
+  }
+
+  return 'Grammar';
+
+}
+
+
+async function fetchLanguageToolIssues(text){
+
+  const raw=String(text || '').trim();
+
+  if(!raw){
+    return [];
+  }
+
+  const body=new URLSearchParams({
+    text:raw,
+    language:'en-GB'
+  });
+
+  const response=await fetch(
+    LANGUAGE_TOOL_ENDPOINT,
+    {
+      method:'POST',
+      mode:'cors',
+      headers:{
+        'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body:body.toString()
+    }
+  );
+
+  if(!response.ok){
+    throw new Error('LanguageTool HTTP '+response.status);
+  }
+
+  const data=await response.json();
+  const output=[];
+
+  (Array.isArray(data?.matches) ? data.matches : [])
+  .forEach(match=>{
+
+    const start=Number(match.offset);
+    const length=Number(match.length);
+
+    if(
+      !Number.isInteger(start)
+      || !Number.isInteger(length)
+      || length<=0
+    ){
+      return;
+    }
+
+    const end=start+length;
+    const original=raw.slice(start,end);
+
+    if(!original){
+      return;
+    }
+
+    const replacements=(Array.isArray(match.replacements) ? match.replacements : [])
+      .map(item=>String(item?.value || '').trim())
+      .filter(Boolean)
+      .slice(0,3);
+
+    const category=languageToolCategory(match);
+    const firstReplacement=replacements[0] || '';
+
+    addDetailedIssue(output,{
+      category:category,
+      original:original,
+      correction:replacements.join(' / '),
+      explanation:String(match.message || match.shortMessage || 'Language issue detected.'),
+      sentence:findSentenceContext(raw,start,end),
+      start:start,
+      end:end,
+      source:'languagetool',
+      autoFix:(category==='Spelling' && replacements.length===1 && !!firstReplacement)
+    });
+
+  });
+
+  return output;
+
+}
+
+
+function startLanguageToolReview(text){
+
+  const raw=String(text || '');
+
+  languageToolReviewText=raw;
+  languageToolIssuesCache=null;
+  languageToolReviewError='';
+  languageToolReviewStatus='checking';
+
+  languageToolReviewPromise=fetchLanguageToolIssues(raw)
+  .then(issues=>{
+
+    if(languageToolReviewText!==raw){
+      return issues;
+    }
+
+    languageToolIssuesCache=issues;
+    languageToolReviewStatus='done';
+
+    if(lastRenderedGrade){
+      renderDetailedReview(lastRenderedGrade);
+    }
+
+    return issues;
+
+  })
+  .catch(error=>{
+
+    if(languageToolReviewText!==raw){
+      return [];
+    }
+
+    languageToolIssuesCache=[];
+    languageToolReviewStatus='error';
+    languageToolReviewError=error?.message || 'LanguageTool unavailable';
+
+    if(lastRenderedGrade){
+      renderDetailedReview(lastRenderedGrade);
+    }
+
+    return [];
+
+  });
+
+  return languageToolReviewPromise;
+
+}
+
+
 function mergeDetailedIssues(aiIssues,localIssues){
 
   const merged=[];
@@ -2395,7 +2698,7 @@ function mergeDetailedIssues(aiIssues,localIssues){
     ...(Array.isArray(localIssues)?localIssues:[])
   ].forEach(issue=>addDetailedIssue(merged,issue));
 
-  return merged.slice(0,30);
+  return merged.slice(0,60);
 
 }
 
@@ -2455,8 +2758,16 @@ function issueClass(category){
 function renderDetailedReview(grade){
 
   const localIssues=buildDetailedIssues(essay.value);
+  const aiIssues=Array.isArray(grade?.detailedIssues) ? grade.detailedIssues : [];
+  const languageIssues=Array.isArray(languageToolIssuesCache) ? languageToolIssuesCache : [];
+
+  const externalIssues=[
+    ...aiIssues,
+    ...languageIssues
+  ];
+
   const issues=mergeDetailedIssues(
-    grade?.detailedIssues,
+    externalIssues,
     localIssues
   );
 
@@ -2476,8 +2787,21 @@ function renderDetailedReview(grade){
   .map(([label,count])=>`<span class="issue-pill">${escapeHTML(label)}: ${count}</span>`)
   .join('');
 
+  if(languageToolReviewStatus==='checking'){
+    proofreadingStatus.innerHTML='Đang quét thêm grammar & spelling bằng LanguageTool…';
+  }
+  else if(languageToolReviewStatus==='done'){
+    proofreadingStatus.innerHTML=`Đã đối chiếu thêm ${languageIssues.length} cảnh báo từ <a href="https://languagetool.org/" target="_blank" rel="noopener">LanguageTool</a>. Hệ thống vẫn hợp nhất với rule local và AI để giảm bỏ sót.`;
+  }
+  else if(languageToolReviewStatus==='error'){
+    proofreadingStatus.innerHTML=`Không gọi được LanguageTool (${escapeHTML(languageToolReviewError)}). Đang dùng AI/local rules; bài vẫn được chấm bình thường.`;
+  }
+  else{
+    proofreadingStatus.textContent='';
+  }
+
   if(!issues.length){
-    detailedIssues.innerHTML=`<div class="no-issues">Không phát hiện lỗi cụ thể trong bộ quy tắc cục bộ. Hãy lưu ý: điều này không có nghĩa bài hoàn toàn không có lỗi; AI/giáo viên vẫn có thể phát hiện thêm lỗi phụ thuộc ngữ cảnh.</div>`;
+    detailedIssues.innerHTML=`<div class="no-issues">Chưa phát hiện lỗi cụ thể. Điều này không đồng nghĩa bài hoàn toàn không có lỗi; các lỗi phụ thuộc ngữ cảnh vẫn cần AI/giáo viên kiểm tra.</div>`;
     correctedVersionWrap.classList.add('hidden');
     return;
   }
@@ -2490,11 +2814,18 @@ function renderDetailedReview(grade){
       ? `<div class="issue-row"><div class="issue-label">Trong câu</div><div>${escapeHTML(issue.sentence)}</div></div>`
       : '';
 
+    const sourceLabel=
+      issue.source==='ai'
+      ? ' · AI'
+      : issue.source==='languagetool'
+      ? ' · LT'
+      : '';
+
     return `
       <div class="issue-card ${issueClass(issue.category)}">
         <div class="issue-top">
           <div class="issue-type">${escapeHTML(issue.category)}</div>
-          <div class="issue-index">Lỗi ${index+1}${issue.source==='ai'?' · AI':''}</div>
+          <div class="issue-index">Lỗi ${index+1}${sourceLabel}</div>
         </div>
         ${sentence}
         <div class="issue-row"><div class="issue-label">Cụm gốc</div><div class="issue-original">${escapeHTML(issue.original)}</div></div>
@@ -2504,7 +2835,7 @@ function renderDetailedReview(grade){
     `;
   }).join('');
 
-  const corrected=buildCorrectedVersion(essay.value,localIssues);
+  const corrected=buildCorrectedVersion(essay.value,issues);
 
   if(corrected!==essay.value){
     correctedVersion.textContent=corrected;
@@ -3820,6 +4151,9 @@ function renderGrade(
   );
 
 
+  lastRenderedGrade=grade;
+
+
   renderDetailedReview(
     grade
   );
@@ -3848,7 +4182,7 @@ function renderGrade(
 
 
     gradeNote.textContent=
-    'Điểm local chỉ nên dùng để luyện tập, tập trung vào ngữ pháp, từ vựng, cấu trúc và lỗi phổ biến.';
+    'Điểm local chỉ nên dùng để luyện tập. Phần lỗi ngôn ngữ được đối chiếu thêm bằng LanguageTool khi dịch vụ khả dụng.';
 
   }
 
@@ -4072,6 +4406,11 @@ async function submitPractice(){
   true;
 
 
+  // Normalise leading/trailing whitespace so proofreading offsets stay aligned.
+  essay.value=
+  text;
+
+
   saveEssay();
 
 
@@ -4142,6 +4481,13 @@ async function submitPractice(){
 
   resultOverlay.classList.remove(
     'hidden'
+  );
+
+
+  // Run a dedicated proofreading engine in parallel.
+  // This does not replace the AI grader; it supplements grammar/spelling coverage.
+  startLanguageToolReview(
+    text
   );
 
 
