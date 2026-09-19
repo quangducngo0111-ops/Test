@@ -110,13 +110,14 @@ textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,159,.12
 
 <div id="resultOverlay" class="result-overlay hidden">
   <div class="modal">
-    <div class="task-label">Writing result</div>
+    <div class="task-label">Writing Test result</div>
     <h2>Estimated IELTS Writing Band</h2>
-    <div id="gradingPending" class="pending">Đã nộp bài. Hệ thống đang chấm và phân tích bài viết…</div>
+    <div id="gradingPending" class="pending">Đã nộp bài. Hệ thống đang thử chấm bằng AI; nếu dịch vụ AI không phản hồi, bài sẽ tự chuyển sang chấm cục bộ.</div>
     <div id="gradingError" class="error hidden"></div>
+    <div id="gradingSource" class="hint hidden" style="margin:10px 0"></div>
     <div id="gradeResult" class="hidden">
       <div id="overallBand" class="score-big">–</div>
-      <div class="small">Estimated band for practice purposes</div>
+      <div class="small" id="resultModeText">Automated assessment for this test</div>
       <div class="score-grid">
         <div class="score-card">
           <h3>Task 1</h3>
@@ -145,7 +146,7 @@ textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,159,.12
 
 <script>
 const GRADER_URL='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
-const PREFIX='IELTS_WRITE01_V2_';
+const PREFIX='IELTS_WRITING_TEST01_V3_';
 let currentTask=1, started=false, submitted=false, startedAt=0, timerHandle=null, secondsLeft=3600;
 let student={name:'',className:''};
 
@@ -175,8 +176,14 @@ function showTask(n){
   $('writerTitle').textContent='Your answer — Task '+n; updateCount();
 }
 function getPortalStudent(){
-  const p=new URLSearchParams(location.search); let saved=null;
-  try{saved=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){}
+  const p=new URLSearchParams(location.search);
+  let saved=null;
+  try{
+    saved=JSON.parse(
+      localStorage.getItem('IELTS_TEST_STUDENT')
+      || 'null'
+    );
+  }catch(e){}
   return {
     name:(p.get('name')||'').trim()||(saved&&saved.name)||localStorage.getItem('IELTS_STUDENT_NAME')||'',
     className:(p.get('className')||'').trim()||(saved&&saved.className)||localStorage.getItem('IELTS_STUDENT_CLASS')||'',
@@ -186,7 +193,9 @@ function getPortalStudent(){
 function startExam(){
   const name=$('studentName').value.trim(), cls=$('studentClass').value.trim();
   if(!name||!cls){$('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';$('startError').classList.remove('hidden');return}
-  student={name,className:cls}; started=true; startedAt=Date.now(); secondsLeft=3600;
+  student={name,className:cls};
+  localStorage.setItem('IELTS_TEST_STUDENT',JSON.stringify(student));
+  started=true; startedAt=Date.now(); secondsLeft=3600;
   $('studentInfo').textContent=name+' · '+cls; $('startOverlay').classList.add('hidden');
   restoreDraft(); timerHandle=setInterval(tick,1000); tick();
 }
@@ -199,62 +208,557 @@ function tick(){
   if(secondsLeft<=0){clearInterval(timerHandle);submitExam(true);return}
   secondsLeft--;
 }
-function makeAttemptId(){return 'W'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function makeAttemptId(){
+  return 'W'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+}
+
 function postGrade(payload){
   const body=new URLSearchParams(payload);
-  return fetch(GRADER_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
+  return fetch(GRADER_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:body.toString()
+  });
 }
+
 function jsonpResult(attemptId){
   return new Promise((resolve,reject)=>{
     const cb='__wrGrade'+Date.now()+Math.random().toString(36).slice(2,6);
     const script=document.createElement('script');
-    const timer=setTimeout(()=>{cleanup();reject(new Error('timeout'))},12000);
-    function cleanup(){clearTimeout(timer);delete window[cb];script.remove()}
-    window[cb]=data=>{cleanup();resolve(data)};
-    script.onerror=()=>{cleanup();reject(new Error('network'))};
-    script.src=GRADER_URL+'?mode=writingResult&attemptId='+encodeURIComponent(attemptId)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+    const timeout=setTimeout(()=>{
+      cleanup();
+      reject(new Error('timeout'));
+    },3500);
+
+    function cleanup(){
+      clearTimeout(timeout);
+      delete window[cb];
+      script.remove();
+    }
+
+    window[cb]=data=>{
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror=()=>{
+      cleanup();
+      reject(new Error('network'));
+    };
+
+    script.src=
+      GRADER_URL+
+      '?mode=writingResult&attemptId='+
+      encodeURIComponent(attemptId)+
+      '&callback='+
+      encodeURIComponent(cb)+
+      '&_='+
+      Date.now();
+
     document.body.appendChild(script);
   });
 }
-async function pollGrade(attemptId){
-  for(let i=0;i<60;i++){
-    await new Promise(r=>setTimeout(r,3000));
+
+function validGrade(g){
+  return !!(
+    g &&
+    g.task1 &&
+    g.task2 &&
+    Number.isFinite(Number(g.overall))
+  );
+}
+
+function list(id,items){
+  $(id).innerHTML=(items||[])
+    .map(x=>'<li>'+escapeHtml(x)+'</li>')
+    .join('');
+}
+
+function escapeHtml(s){
+  return String(s||'').replace(
+    /[&<>"']/g,
+    m=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[m])
+  );
+}
+
+function bandRound(value){
+  const v=Math.max(3,Math.min(8,Number(value)||3));
+  return Math.round(v*2)/2;
+}
+
+function getWords(text){
+  return String(text||'').match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g)||[];
+}
+
+function getSentences(text){
+  return String(text||'')
+    .replace(/\n+/g,' ')
+    .match(/[^.!?]+[.!?]+|[^.!?]+$/g)
+    ?.map(x=>x.trim())
+    .filter(Boolean)
+    || [];
+}
+
+function getParagraphs(text){
+  return String(text||'')
+    .trim()
+    .split(/\n\s*\n+/)
+    .map(x=>x.trim())
+    .filter(Boolean);
+}
+
+function uniquePush(arr,msg){
+  if(msg && !arr.includes(msg)) arr.push(msg);
+}
+
+function localLanguageReview(text){
+  const raw=String(text||'');
+  const words=getWords(raw);
+  const lowerWords=words.map(w=>w.toLowerCase());
+  const wordTotal=words.length;
+  const sentences=getSentences(raw);
+  const paragraphs=getParagraphs(raw);
+
+  const grammarIssues=[];
+  const lexicalIssues=[];
+  const mechanicsIssues=[];
+
+  const grammarRules=[
+    [/\bi am agree\b/gi,'Use “I agree”, not “I am agree”.'],
+    [/\bpeople is\b/gi,'“People” is plural: use “people are”.'],
+    [/\bpeople has\b/gi,'“People” is plural: use “people have”.'],
+    [/\bthere have\b/gi,'Check the structure “there is/are/has been/have been”.'],
+    [/\bmore better\b/gi,'Avoid the double comparative “more better”; use “better”.'],
+    [/\bmore easier\b/gi,'Avoid the double comparative “more easier”; use “easier”.'],
+    [/\bmore cheaper\b/gi,'Avoid the double comparative “more cheaper”; use “cheaper”.'],
+    [/\bmore faster\b/gi,'Avoid the double comparative “more faster”; use “faster”.'],
+    [/\bdiscuss about\b/gi,'“Discuss” normally takes a direct object: “discuss the issue”, not “discuss about”.'],
+    [/\bdespite of\b/gi,'Use “despite” or “in spite of”, not “despite of”.'],
+    [/\bchilds\b/gi,'The plural of “child” is “children”.'],
+    [/\bpeoples\b/gi,'Use “people” for the usual plural meaning.'],
+    [/\binformations\b/gi,'“Information” is normally uncountable.'],
+    [/\badvices\b/gi,'“Advice” is normally uncountable.'],
+    [/\bequipments\b/gi,'“Equipment” is normally uncountable.'],
+    [/\bfurnitures\b/gi,'“Furniture” is normally uncountable.'],
+    [/\bmake research\b/gi,'Prefer “do/conduct research” rather than “make research”.'],
+    [/\bdo a decision\b/gi,'Use “make a decision”.'],
+    [/\bstrong rain\b/gi,'The usual collocation is “heavy rain”.'],
+    [/\bbig amount\b/gi,'Prefer “large amount”.'],
+    [/\bbig number\b/gi,'Prefer “large number”.'],
+    [/\baccording to me\b/gi,'In formal writing, prefer “in my view/opinion” rather than “according to me”.']
+  ];
+
+  grammarRules.forEach(([re,msg])=>{
+    const matches=raw.match(re);
+    if(matches && matches.length){
+      uniquePush(grammarIssues,msg+' ('+matches.length+' occurrence'+(matches.length>1?'s':'')+')');
+    }
+  });
+
+  const repeated=raw.match(/\b([A-Za-z]+)\s+\1\b/gi)||[];
+  if(repeated.length){
+    uniquePush(grammarIssues,'Repeated word detected: '+repeated.slice(0,3).join(', ')+'.');
+  }
+
+  const althoughBut=(raw.match(/\balthough\b[^.!?]{0,140}\bbut\b/gi)||[]).length;
+  if(althoughBut){
+    uniquePush(grammarIssues,'Avoid pairing “although” with “but” in the same clause structure.');
+  }
+
+  const becauseSo=(raw.match(/\bbecause\b[^.!?]{0,140}\bso\b/gi)||[]).length;
+  if(becauseSo){
+    uniquePush(grammarIssues,'Check “because … so …”; in formal English, usually choose one connector.');
+  }
+
+  const badSpace=(raw.match(/\s+[,.!?;:]/g)||[]).length;
+  if(badSpace){
+    uniquePush(mechanicsIssues,'Remove spaces before punctuation marks ('+badSpace+' detected).');
+  }
+
+  const doubleSpace=(raw.match(/ {2,}/g)||[]).length;
+  if(doubleSpace){
+    uniquePush(mechanicsIssues,'Remove repeated spaces ('+doubleSpace+' detected).');
+  }
+
+  sentences.forEach((s,i)=>{
+    const first=(s.match(/[A-Za-z]/)||[])[0];
+    if(first && first===first.toLowerCase() && i<5){
+      uniquePush(mechanicsIssues,'Some sentences appear to begin with a lowercase letter.');
+    }
+  });
+
+  if(raw.trim() && !/[.!?]["')\]]?$/.test(raw.trim())){
+    uniquePush(mechanicsIssues,'The response does not end with terminal punctuation.');
+  }
+
+  const contractions=(raw.match(/\b(?:don't|doesn't|didn't|can't|won't|isn't|aren't|wasn't|weren't|it's|they're|we're|i'm|i've|we've|they've|shouldn't|wouldn't|couldn't)\b/gi)||[]).length;
+  if(contractions){
+    uniquePush(lexicalIssues,'Formal IELTS writing usually avoids contractions ('+contractions+' detected).');
+  }
+
+  const informal=(raw.match(/\b(?:kids|stuff|a lot of|lots of|things)\b/gi)||[]);
+  if(informal.length){
+    uniquePush(lexicalIssues,'Consider more formal/precise alternatives for: '+[...new Set(informal.map(x=>x.toLowerCase()))].slice(0,5).join(', ')+'.');
+  }
+
+  const stop=new Set([
+    'the','a','an','and','or','but','if','to','of','in','on','at','for','from','with','by',
+    'is','are','was','were','be','been','being','it','this','that','these','those','as',
+    'i','we','you','they','he','she','them','their','our','my','your','his','her',
+    'do','does','did','have','has','had','can','could','will','would','should','may','might',
+    'more','most','some','many','much','very','also','than','so','because'
+  ]);
+
+  const content=lowerWords.filter(w=>w.length>2&&!stop.has(w));
+  const freq={};
+  content.forEach(w=>freq[w]=(freq[w]||0)+1);
+  const repeatedContent=Object.entries(freq)
+    .filter(([w,c])=>c>=Math.max(4,Math.ceil(wordTotal*0.025)))
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,5);
+
+  if(repeatedContent.length){
+    uniquePush(
+      lexicalIssues,
+      'Frequent repetition: '+
+      repeatedContent.map(([w,c])=>w+' ×'+c).join(', ')+
+      '. Consider paraphrasing where natural.'
+    );
+  }
+
+  const uniqueContent=new Set(content).size;
+  const diversity=content.length?uniqueContent/content.length:0;
+  const connectors=(raw.match(/\b(?:however|therefore|moreover|furthermore|consequently|nevertheless|whereas|while|although|because|thus|hence|overall|in contrast|in comparison|on the other hand|for example|for instance|in addition|as a result)\b/gi)||[]).length;
+  const complex=(raw.match(/\b(?:although|whereas|while|because|which|who|that|if|unless|despite|since|when|where)\b/gi)||[]).length;
+
+  return {
+    raw,words,wordTotal,sentences,paragraphs,
+    grammarIssues,lexicalIssues,mechanicsIssues,
+    diversity,connectors,complex
+  };
+}
+
+function scoreGrammar(a){
+  if(a.wordTotal<40) return 3.5;
+  const issueCount=a.grammarIssues.length+a.mechanicsIssues.length;
+  const density=issueCount/Math.max(1,a.wordTotal)*100;
+  let score=6.5;
+  if(density>5) score=4.5;
+  else if(density>3) score=5.0;
+  else if(density>2) score=5.5;
+  else if(density>1) score=6.0;
+  else score=6.5;
+
+  if(a.complex>=4 && density<=1.5) score+=0.5;
+  return bandRound(score);
+}
+
+function scoreLexical(a){
+  if(a.wordTotal<40) return 3.5;
+  let score=5.0;
+  if(a.diversity>=0.72) score=7.0;
+  else if(a.diversity>=0.62) score=6.5;
+  else if(a.diversity>=0.52) score=6.0;
+  else if(a.diversity>=0.42) score=5.5;
+
+  if(a.lexicalIssues.length>=2) score-=0.5;
+  return bandRound(score);
+}
+
+function scoreCoherence(a,taskNo){
+  if(a.wordTotal<40) return 3.5;
+  let score=5.0;
+  const p=a.paragraphs.length;
+  const s=a.sentences.length;
+
+  if(taskNo===1){
+    if(p>=3&&p<=5) score+=0.5;
+  }else{
+    if(p>=4&&p<=6) score+=0.5;
+  }
+
+  if(a.connectors>=3) score+=0.5;
+  if(a.connectors>=6) score+=0.5;
+  if(s>=7) score+=0.5;
+
+  return bandRound(Math.min(score,7));
+}
+
+function scoreTaskCriterion(a,taskNo){
+  if(taskNo===1){
+    let score=a.wordTotal>=150?5.5:(a.wordTotal>=120?5.0:4.0);
+    if(/\b(?:overall|in general|generally|it is clear|it can be seen)\b/i.test(a.raw)) score+=0.5;
+    if(/\b(?:whereas|while|compared with|compared to|in contrast|respectively|more than|less than|higher|lower|increased|decreased|remained)\b/i.test(a.raw)) score+=0.5;
+    return bandRound(Math.min(score,7));
+  }
+
+  let score=a.wordTotal>=250?5.5:(a.wordTotal>=200?5.0:4.0);
+  const addressesWhy=/\b(?:because|reason|motivat|pressure|ambition|goal|reward|competition|necessity|responsib)\w*/i.test(a.raw);
+  const addressesEvaluation=/\b(?:not always|benefit|drawback|advantage|disadvantage|harm|balance|excess|burnout|positive|negative)\w*/i.test(a.raw);
+  const conclusion=/\b(?:in conclusion|to conclude|overall|in summary)\b/i.test(a.raw);
+  if(addressesWhy) score+=0.5;
+  if(addressesEvaluation) score+=0.5;
+  if(conclusion) score+=0.5;
+  return bandRound(Math.min(score,7));
+}
+
+function localTaskGrade(text,taskNo){
+  const a=localLanguageReview(text);
+  const grammar=scoreGrammar(a);
+  const lexical=scoreLexical(a);
+  const coherence=scoreCoherence(a,taskNo);
+  const taskScore=scoreTaskCriterion(a,taskNo);
+  const band=bandRound((grammar+lexical+coherence+taskScore)/4);
+
+  const strengths=[];
+  const improvements=[];
+
+  if(a.wordTotal>=(taskNo===1?150:250)){
+    strengths.push('Meets the recommended minimum length ('+a.wordTotal+' words).');
+  }else{
+    improvements.push(
+      'Word count is '+a.wordTotal+
+      '; aim for at least '+(taskNo===1?150:250)+' words.'
+    );
+  }
+
+  if(a.paragraphs.length>=(taskNo===1?3:4)){
+    strengths.push('The response is divided into multiple paragraphs.');
+  }else{
+    improvements.push('Use clearer paragraphing to separate the main stages/ideas.');
+  }
+
+  if(a.connectors>=3){
+    strengths.push('Uses a range of linking expressions ('+a.connectors+' detected).');
+  }else{
+    improvements.push('Use linking expressions selectively to make relationships between ideas clearer.');
+  }
+
+  if(a.diversity>=0.52){
+    strengths.push('Vocabulary shows reasonable variety in this automated scan.');
+  }
+
+  a.grammarIssues.forEach(x=>improvements.push('Grammar: '+x));
+  a.mechanicsIssues.forEach(x=>improvements.push('Mechanics: '+x));
+  a.lexicalIssues.forEach(x=>improvements.push('Word choice/style: '+x));
+
+  if(!a.grammarIssues.length&&!a.mechanicsIssues.length){
+    strengths.push('No common rule-based grammar/punctuation pattern was flagged.');
+  }
+
+  if(taskNo===1){
+    if(!/\b(?:overall|in general|generally|it is clear|it can be seen)\b/i.test(a.raw)){
+      improvements.push('Task 1: include a clear overview of the main changes/features.');
+    }
+  }else{
+    if(!/\b(?:in conclusion|to conclude|overall|in summary)\b/i.test(a.raw)){
+      improvements.push('Task 2: make the final position/conclusion explicit.');
+    }
+  }
+
+  return {
+    analysis:a,
+    taskCriterion:taskScore,
+    coherence,
+    lexical,
+    grammar,
+    band,
+    strengths:strengths.slice(0,6),
+    improvements:improvements.slice(0,8)
+  };
+}
+
+function buildLocalGrade(task1Text,task2Text){
+  const t1=localTaskGrade(task1Text,1);
+  const t2=localTaskGrade(task2Text,2);
+  const overall=bandRound((t1.band+t2.band*2)/3);
+
+  return {
+    overall,
+    _source:'local',
+    task1:{
+      taskAchievement:t1.taskCriterion,
+      coherenceCohesion:t1.coherence,
+      lexicalResource:t1.lexical,
+      grammar:t1.grammar,
+      band:t1.band,
+      strengths:t1.strengths,
+      improvements:t1.improvements
+    },
+    task2:{
+      taskResponse:t2.taskCriterion,
+      coherenceCohesion:t2.coherence,
+      lexicalResource:t2.lexical,
+      grammar:t2.grammar,
+      band:t2.band,
+      strengths:t2.strengths,
+      improvements:t2.improvements
+    },
+    overallComment:
+      'Local diagnostic only: this result is generated in the browser without an AI token. '+
+      'It can check length, structure, repetition, several common grammar/collocation patterns, '+
+      'punctuation and vocabulary variety, but it cannot reliably judge meaning, argument quality, '+
+      'all spelling errors, nuanced grammar, or IELTS band descriptors like a trained examiner/AI grader.'
+  };
+}
+
+function renderGrade(g,source='ai',reason=''){
+  $('gradingPending').classList.add('hidden');
+  $('gradingError').classList.add('hidden');
+  $('gradeResult').classList.remove('hidden');
+  $('gradingSource').classList.remove('hidden');
+
+  if(source==='local'){
+    $('resultModeText').textContent='Local diagnostic score — not an official IELTS band';
+    $('gradingSource').textContent=
+      'AI grader unavailable. A local rule-based diagnostic was used instead.'+
+      (reason?' Reason: '+reason:'');
+  }else{
+    $('resultModeText').textContent='AI-assisted estimated score for this test';
+    $('gradingSource').textContent='Source: AI grader via Apps Script.';
+  }
+
+  $('overallBand').textContent=Number(g.overall).toFixed(1);
+  $('t1ta').textContent=g.task1.taskAchievement;
+  $('t1cc').textContent=g.task1.coherenceCohesion;
+  $('t1lr').textContent=g.task1.lexicalResource;
+  $('t1gr').textContent=g.task1.grammar;
+  $('t1band').textContent=g.task1.band;
+  $('t2tr').textContent=g.task2.taskResponse;
+  $('t2cc').textContent=g.task2.coherenceCohesion;
+  $('t2lr').textContent=g.task2.lexicalResource;
+  $('t2gr').textContent=g.task2.grammar;
+  $('t2band').textContent=g.task2.band;
+  $('overallComment').textContent=g.overallComment||'';
+  list('t1strengths',g.task1.strengths);
+  list('t1improvements',g.task1.improvements);
+  list('t2strengths',g.task2.strengths);
+  list('t2improvements',g.task2.improvements);
+}
+
+function renderLocalGrade(task1Text,task2Text,reason=''){
+  const grade=buildLocalGrade(task1Text,task2Text);
+  renderGrade(grade,'local',reason);
+}
+
+function showGradeError(msg){
+  $('gradingPending').classList.add('hidden');
+  $('gradingError').textContent=msg;
+  $('gradingError').classList.remove('hidden');
+}
+
+async function pollGrade(attemptId,task1Text,task2Text){
+  let lastError='AI grader did not return a completed result.';
+
+  for(let i=0;i<4;i++){
+    await new Promise(r=>setTimeout(r,1200));
+
     try{
       const r=await jsonpResult(attemptId);
-      if(r&&r.status==='DONE'){renderGrade(r.grade);return}
-      if(r&&r.status==='ERROR'){throw new Error(r.error||'Grading error')}
-    }catch(e){if(i===59)showGradeError('Không lấy được kết quả chấm. Bài viết vẫn đã được lưu trên Google Sheet.')} 
+
+      if(r&&r.status==='DONE'){
+        if(validGrade(r.grade)){
+          renderGrade(r.grade,'ai');
+          return;
+        }
+        renderLocalGrade(task1Text,task2Text,'AI returned an invalid grade format.');
+        return;
+      }
+
+      if(r&&r.status==='ERROR'){
+        renderLocalGrade(
+          task1Text,
+          task2Text,
+          r.error||'Apps Script reported a grading error.'
+        );
+        return;
+      }
+
+      if(r&&r.status){
+        lastError='Backend status: '+r.status;
+      }
+    }catch(e){
+      lastError=e&&e.message?e.message:'network/timeout';
+    }
   }
+
+  renderLocalGrade(task1Text,task2Text,lastError);
 }
-function list(id,items){$ (id).innerHTML=(items||[]).map(x=>'<li>'+escapeHtml(x)+'</li>').join('')}
-function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function renderGrade(g){
-  $('gradingPending').classList.add('hidden');$('gradeResult').classList.remove('hidden');
-  $('overallBand').textContent=Number(g.overall).toFixed(1);
-  $('t1ta').textContent=g.task1.taskAchievement;$('t1cc').textContent=g.task1.coherenceCohesion;$('t1lr').textContent=g.task1.lexicalResource;$('t1gr').textContent=g.task1.grammar;$('t1band').textContent=g.task1.band;
-  $('t2tr').textContent=g.task2.taskResponse;$('t2cc').textContent=g.task2.coherenceCohesion;$('t2lr').textContent=g.task2.lexicalResource;$('t2gr').textContent=g.task2.grammar;$('t2band').textContent=g.task2.band;
-  $('overallComment').textContent=g.overallComment||'';
-  list('t1strengths',g.task1.strengths);list('t1improvements',g.task1.improvements);list('t2strengths',g.task2.strengths);list('t2improvements',g.task2.improvements);
-}
-function showGradeError(msg){$('gradingPending').classList.add('hidden');$('gradingError').textContent=msg;$('gradingError').classList.remove('hidden')}
+
 async function submitExam(auto=false){
-  if(submitted)return;
-  const t1=$('task1Essay').value.trim(),t2=$('task2Essay').value.trim();
-  if(!auto&&!confirm('Submit both Writing tasks now? You will not be able to edit after submitting.'))return;
-  submitted=true;clearInterval(timerHandle);saveDraft();
-  $('task1Essay').disabled=true;$('task2Essay').disabled=true;$('submitBtn').disabled=true;
+  if(submitted) return;
+
+  const t1=$('task1Essay').value.trim();
+  const t2=$('task2Essay').value.trim();
+
+  if(!auto&&!confirm(
+    'Submit both Writing tasks now? You will not be able to edit after submitting.'
+  )) return;
+
+  submitted=true;
+  clearInterval(timerHandle);
+  saveDraft();
+
+  $('task1Essay').disabled=true;
+  $('task2Essay').disabled=true;
+  $('submitBtn').disabled=true;
   $('resultOverlay').classList.remove('hidden');
+
   const attemptId=makeAttemptId();
   const duration=Math.round((Date.now()-startedAt)/1000);
+
+  const submissionSnapshot={
+    attemptId,
+    examType:'TEST',
+    testId:'01',
+    name:student.name,
+    className:student.className,
+    task1:t1,
+    task2:t2,
+    task1Words:wordCount(t1),
+    task2Words:wordCount(t2),
+    durationSeconds:duration,
+    submittedAt:new Date().toISOString()
+  };
+
+  localStorage.setItem(
+    PREFIX+'lastSubmission',
+    JSON.stringify(submissionSnapshot)
+  );
+
   try{
     await postGrade({
-      mode:'writingGrade',attemptId,name:student.name,className:student.className,
-      task1:t1,task2:t2,task1Words:String(wordCount(t1)),task2Words:String(wordCount(t2)),
-      durationSeconds:String(duration),submittedAt:new Date().toISOString()
+      mode:'writingGrade',
+      examType:'TEST',
+      skill:'Writing',
+      testId:'01',
+      attemptId,
+      name:student.name,
+      className:student.className,
+      task1:t1,
+      task2:t2,
+      task1Words:String(wordCount(t1)),
+      task2Words:String(wordCount(t2)),
+      durationSeconds:String(duration),
+      submittedAt:submissionSnapshot.submittedAt
     });
+
     clearDraft();
-    pollGrade(attemptId);
-  }catch(e){showGradeError('Không gửi được bài để chấm. Vui lòng kiểm tra Apps Script.')} 
+    pollGrade(attemptId,t1,t2);
+  }catch(e){
+    renderLocalGrade(
+      t1,
+      t2,
+      'Could not reach Apps Script: '+(e&&e.message?e.message:'network error')
+    );
+  }
 }
 $('task1Tab').onclick=()=>showTask(1);$('task2Tab').onclick=()=>showTask(2);
 $('task1Essay').addEventListener('input',()=>{updateCount();saveDraft()});$('task2Essay').addEventListener('input',()=>{updateCount();saveDraft()});
