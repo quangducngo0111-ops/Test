@@ -1206,7 +1206,7 @@ const LANGUAGE_TOOL_ENDPOINT=
 
 
 const ATTEMPT_KEY=
-'PRACTICE_WRITING_TASK1_DYNAMIC_DATASETS_01_V2';
+'PRACTICE_WRITING_TASK1_DYNAMIC_DATASETS_01_V3_CONTEXTUAL';
 
 
 /* =========================================================
@@ -2052,6 +2052,7 @@ function addDetailedIssue(
     end:Number.isInteger(issue.end) ? issue.end : null,
     autoFix:issue.autoFix===true,
     source:issue.source || 'local',
+    confidence:Number.isFinite(Number(issue.confidence)) ? Number(issue.confidence) : null,
     _key:key
   });
 
@@ -2403,7 +2404,10 @@ function buildDetailedIssues(text){
     gradualy:'gradually',sligtly:'slightly',sharpley:'sharply',
     overal:'overall',conversly:'conversely',similary:'similarly',
     experieced:'experienced',experenced:'experienced',
-    highestt:'highest',numberr:'number',periodd:'period'
+    highestt:'highest',numberr:'number',periodd:'period',
+    altho:'although',altough:'although',althogh:'although',
+    hiest:'highest',higest:'highest',hightest:'highest',
+    decarte:'decade',decad:'decade',decdae:'decade'
   };
 
   Object.entries(spellingMap).forEach(([wrong,right])=>{
@@ -2560,6 +2564,335 @@ function languageToolCategory(match){
 }
 
 
+/* =========================================================
+   CONTEXT-AWARE SPELLING VALIDATOR
+
+   LanguageTool is used as a detector, not as the final judge.
+   For spelling, we rank candidates against the sentence context
+   and suppress low-confidence suggestions instead of showing
+   misleading nearest-word guesses.
+========================================================= */
+
+const CONTEXTUAL_SPELLING_OVERRIDES={
+  altho:'although',
+  altough:'although',
+  althogh:'although',
+  althought:'although',
+  hiest:'highest',
+  higest:'highest',
+  hightest:'highest',
+  decarte:'decade',
+  decdae:'decade',
+  decad:'decade',
+  ilustrate:'illustrate',
+  illustate:'illustrate',
+  illustrte:'illustrate',
+  increse:'increase',
+  incresed:'increased',
+  increasd:'increased',
+  decrese:'decrease',
+  decreasd:'decreased',
+  signifcant:'significant',
+  signifcantly:'significantly',
+  signficantly:'significantly',
+  sligtly:'slightly',
+  sharpley:'sharply',
+  gradualy:'gradually',
+  experieced:'experienced',
+  experenced:'experienced',
+  flactuated:'fluctuated',
+  flucuated:'fluctuated',
+  comparision:'comparison',
+  seperate:'separate',
+  occured:'occurred',
+  becuase:'because',
+  wich:'which',
+  enviroment:'environment',
+  goverment:'government'
+};
+
+
+const CONTEXTUAL_LEXICON=[
+  'although','though','whereas','while','however','therefore','moreover','overall',
+  'highest','lowest','higher','lower','largest','smallest','greatest','least',
+  'decade','year','years','period','century','month','months',
+  'increase','increased','increasing','decrease','decreased','decreasing',
+  'rise','rose','rising','fall','fell','fallen','decline','declined','drop','dropped',
+  'fluctuate','fluctuated','fluctuation','stable','steadily','gradually','slightly',
+  'sharply','dramatically','significantly','approximately','respectively',
+  'illustrate','illustrates','illustrated','show','shows','shown','indicate','indicates',
+  'conference','conferences','number','figure','figures','percentage','percentages',
+  'proportion','proportions','amount','amounts','total','average','trend','trends',
+  'experienced','experience','compared','comparison','contrast','similar','similarly',
+  'city','cities','event','events','international','between','during','before','after',
+  'reaching','reached','remaining','remained','recovering','recovered','become','became',
+  'present','period','data','graph','line','chart','information','approximately',
+  'considerably','considerable','dramatic','significant','steady','gradual','slight',
+  'from','to','at','by','with','the','a','an','and','but','despite','because'
+];
+
+
+function levenshteinDistance(a,b){
+
+  const left=String(a || '').toLowerCase();
+  const right=String(b || '').toLowerCase();
+
+  if(left===right) return 0;
+  if(!left) return right.length;
+  if(!right) return left.length;
+
+  let previous=Array.from(
+    {length:right.length+1},
+    (_,index)=>index
+  );
+
+  for(let i=1;i<=left.length;i++){
+
+    const current=[i];
+
+    for(let j=1;j<=right.length;j++){
+
+      const cost=left[i-1]===right[j-1] ? 0 : 1;
+
+      current[j]=Math.min(
+        previous[j]+1,
+        current[j-1]+1,
+        previous[j-1]+cost
+      );
+
+    }
+
+    previous=current;
+
+  }
+
+  return previous[right.length];
+
+}
+
+
+function similarityScore(a,b){
+
+  const left=String(a || '').toLowerCase();
+  const right=String(b || '').toLowerCase();
+  const maxLength=Math.max(left.length,right.length,1);
+
+  return 1-
+  levenshteinDistance(left,right)/maxLength;
+
+}
+
+
+function uniqueStrings(values){
+
+  const seen=new Set();
+
+  return (values || [])
+  .map(value=>String(value || '').trim())
+  .filter(Boolean)
+  .filter(value=>{
+    const key=value.toLowerCase();
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+}
+
+
+function contextualBoost(candidate,original,sentence,startInSentence){
+
+  const word=String(candidate || '').toLowerCase();
+  const wrong=String(original || '').toLowerCase();
+  const context=String(sentence || '').toLowerCase();
+  let score=0;
+
+  // Exact contextual aliases get very high trust.
+  if(CONTEXTUAL_SPELLING_OVERRIDES[wrong]===word){
+    score+=0.55;
+  }
+
+  // IELTS Task 1 phrases: "the highest number/figure/percentage".
+  if(
+    /\bthe\s+[a-z'-]+\s+(number|figure|figures|percentage|proportion|amount|level|rate)\b/i.test(context)
+    && ['highest','lowest','largest','smallest','greatest'].includes(word)
+  ){
+    score+=0.38;
+  }
+
+  // Time expressions: "over/during the next decade".
+  if(
+    /\b(over|during|within|throughout)\s+(the\s+)?(next|following|previous|last|past)?\s*[a-z'-]+\b/i.test(context)
+    && ['decade','year','years','period','century'].includes(word)
+  ){
+    score+=0.34;
+  }
+
+  if(
+    /\b(next|following|previous|last|past)\s+[a-z'-]+\b/i.test(context)
+    && ['decade','year','years','period','century'].includes(word)
+  ){
+    score+=0.25;
+  }
+
+  // Concession connector at the start of a clause.
+  if(
+    ['although','though','whereas','while'].includes(word)
+    && (
+      /^\s*[a-z'-]+\b/i.test(context)
+      || /,\s*[a-z'-]+\b/i.test(context)
+    )
+  ){
+    score+=0.25;
+  }
+
+  // Common graph-reporting vocabulary.
+  if(
+    ['illustrate','illustrates','increase','increased','decrease','decreased','fluctuated','experienced'].includes(word)
+    && /(graph|chart|figure|number|city|conference|trend|data)/i.test(context)
+  ){
+    score+=0.12;
+  }
+
+  // A candidate that is implausibly different should not win just on context.
+  if(similarityScore(wrong,word)<0.45){
+    score-=0.25;
+  }
+
+  return score;
+
+}
+
+
+function chooseContextualSpellingCandidate({
+  raw,
+  start,
+  end,
+  original,
+  replacements
+}){
+
+  const wrong=String(original || '').trim();
+  const lowerWrong=wrong.toLowerCase();
+  const sentence=findSentenceContext(raw,start,end);
+
+  const explicit=CONTEXTUAL_SPELLING_OVERRIDES[lowerWrong];
+
+  if(explicit){
+
+    const correction=/^[A-Z]/.test(wrong)
+      ? titleCaseFirst(explicit)
+      : explicit;
+
+    return{
+      correction:correction,
+      confidence:0.99,
+      autoFix:true,
+      explanation:`Context-aware spelling check: “${wrong}” is corrected to “${correction}” in this sentence.`
+    };
+
+  }
+
+  const ltCandidates=uniqueStrings(replacements).slice(0,8);
+
+  // Add nearby IELTS/common candidates. Only consider words with a reasonably
+  // close spelling so the lexicon cannot force an unrelated correction.
+  const lexicalCandidates=CONTEXTUAL_LEXICON.filter(candidate=>{
+    const lengthGap=Math.abs(candidate.length-lowerWrong.length);
+    if(lengthGap>3) return false;
+    return similarityScore(lowerWrong,candidate)>=0.48;
+  });
+
+  const candidates=uniqueStrings([
+    ...ltCandidates,
+    ...lexicalCandidates
+  ]);
+
+  let best=null;
+
+  candidates.forEach(candidate=>{
+
+    const lowerCandidate=candidate.toLowerCase();
+    const similarity=similarityScore(lowerWrong,lowerCandidate);
+
+    let score=similarity*0.70;
+
+    if(
+      ltCandidates.some(item=>item.toLowerCase()===lowerCandidate)
+    ){
+      score+=0.08;
+    }
+
+    score+=contextualBoost(
+      lowerCandidate,
+      lowerWrong,
+      sentence,
+      start
+    );
+
+    // Prefer normal lowercase lexical words to unusual proper-name guesses.
+    if(/^[A-Z][a-z]+$/.test(candidate) && !/^[A-Z]/.test(wrong)){
+      score-=0.20;
+    }
+
+    // Tiny/very short candidates are frequently bad typo suggestions.
+    if(candidate.length<=3 && wrong.length>=5){
+      score-=0.18;
+    }
+
+    if(!best || score>best.score){
+      best={candidate,score,similarity};
+    }
+
+  });
+
+  if(!best){
+    return null;
+  }
+
+  // High precision over high recall: do not show a correction unless context
+  // plus spelling similarity make it reasonably trustworthy.
+  if(best.score<0.78){
+    return null;
+  }
+
+  const correction=/^[A-Z]/.test(wrong)
+    ? titleCaseFirst(best.candidate)
+    : best.candidate.toLowerCase();
+
+  return{
+    correction:correction,
+    confidence:Math.min(0.98,best.score),
+    autoFix:best.score>=0.90,
+    explanation:`Context-aware spelling check selected “${correction}” as the most plausible correction for this sentence.`
+  };
+
+}
+
+
+function chooseNonSpellingSuggestion(replacements){
+
+  const candidates=uniqueStrings(replacements);
+
+  if(candidates.length===1){
+    return{
+      correction:candidates[0],
+      confidence:0.86,
+      autoFix:false
+    };
+  }
+
+  // For grammar/style warnings with several alternatives, avoid pretending
+  // that the first suggestion is definitely correct.
+  return{
+    correction:'',
+    confidence:0.55,
+    autoFix:false
+  };
+
+}
+
+
 async function fetchLanguageToolIssues(text){
 
   const raw=String(text || '').trim();
@@ -2616,21 +2949,60 @@ async function fetchLanguageToolIssues(text){
     const replacements=(Array.isArray(match.replacements) ? match.replacements : [])
       .map(item=>String(item?.value || '').trim())
       .filter(Boolean)
-      .slice(0,3);
+      .slice(0,8);
 
     const category=languageToolCategory(match);
-    const firstReplacement=replacements[0] || '';
+    const sentence=findSentenceContext(raw,start,end);
+
+    if(category==='Spelling'){
+
+      const validated=chooseContextualSpellingCandidate({
+        raw:raw,
+        start:start,
+        end:end,
+        original:original,
+        replacements:replacements
+      });
+
+      // LanguageTool only flags a suspicious token. If our contextual
+      // validator is not confident, hide it rather than teach a bad correction.
+      if(!validated){
+        return;
+      }
+
+      addDetailedIssue(output,{
+        category:'Spelling',
+        original:original,
+        correction:validated.correction,
+        explanation:validated.explanation,
+        sentence:sentence,
+        start:start,
+        end:end,
+        source:'contextual',
+        confidence:validated.confidence,
+        autoFix:validated.autoFix
+      });
+
+      return;
+    }
+
+    const suggestion=chooseNonSpellingSuggestion(replacements);
 
     addDetailedIssue(output,{
       category:category,
       original:original,
-      correction:replacements.join(' / '),
-      explanation:String(match.message || match.shortMessage || 'Language issue detected.'),
-      sentence:findSentenceContext(raw,start,end),
+      correction:suggestion.correction,
+      explanation:String(
+        match.message
+        || match.shortMessage
+        || 'Language issue detected.'
+      ),
+      sentence:sentence,
       start:start,
       end:end,
-      source:'languagetool',
-      autoFix:(category==='Spelling' && replacements.length===1 && !!firstReplacement)
+      source:'contextual',
+      confidence:suggestion.confidence,
+      autoFix:false
     });
 
   });
@@ -2691,12 +3063,68 @@ function startLanguageToolReview(text){
 
 function mergeDetailedIssues(aiIssues,localIssues){
 
-  const merged=[];
-
-  [
+  const all=[
     ...(Array.isArray(aiIssues)?aiIssues:[]),
     ...(Array.isArray(localIssues)?localIssues:[])
-  ].forEach(issue=>addDetailedIssue(merged,issue));
+  ];
+
+  const sourcePriority={
+    ai:4,
+    local:3,
+    contextual:2,
+    languagetool:1
+  };
+
+  const chosen=new Map();
+  const withoutLocation=[];
+
+  all.forEach(issue=>{
+
+    if(!issue || !issue.original) return;
+
+    if(Number.isInteger(issue.start)){
+
+      const locationKey=[
+        issue.start,
+        issue.end,
+        String(issue.original).toLowerCase()
+      ].join('|');
+
+      const existing=chosen.get(locationKey);
+
+      const currentPriority=sourcePriority[issue.source] || 0;
+      const existingPriority=sourcePriority[existing?.source] || 0;
+      const currentConfidence=Number(issue.confidence || 0);
+      const existingConfidence=Number(existing?.confidence || 0);
+
+      if(
+        !existing
+        || currentPriority>existingPriority
+        || (
+          currentPriority===existingPriority
+          && currentConfidence>existingConfidence
+        )
+      ){
+        chosen.set(locationKey,issue);
+      }
+
+      return;
+    }
+
+    addDetailedIssue(withoutLocation,issue);
+
+  });
+
+  const merged=[
+    ...chosen.values(),
+    ...withoutLocation
+  ];
+
+  merged.sort((a,b)=>{
+    const ai=Number.isInteger(a.start) ? a.start : Number.MAX_SAFE_INTEGER;
+    const bi=Number.isInteger(b.start) ? b.start : Number.MAX_SAFE_INTEGER;
+    return ai-bi;
+  });
 
   return merged.slice(0,60);
 
@@ -2788,13 +3216,13 @@ function renderDetailedReview(grade){
   .join('');
 
   if(languageToolReviewStatus==='checking'){
-    proofreadingStatus.innerHTML='Đang quét thêm grammar & spelling bằng LanguageTool…';
+    proofreadingStatus.innerHTML='Đang quét grammar & spelling và kiểm tra lại gợi ý theo ngữ cảnh…';
   }
   else if(languageToolReviewStatus==='done'){
-    proofreadingStatus.innerHTML=`Đã đối chiếu thêm ${languageIssues.length} cảnh báo từ <a href="https://languagetool.org/" target="_blank" rel="noopener">LanguageTool</a>. Hệ thống vẫn hợp nhất với rule local và AI để giảm bỏ sót.`;
+    proofreadingStatus.innerHTML=`Bộ dò đã tìm cảnh báo và bộ kiểm tra ngữ cảnh chỉ giữ lại ${languageIssues.length} lỗi/gợi ý có độ tin cậy cao. Gợi ý chính tả không còn lấy máy móc phương án gần chữ nhất.`;
   }
   else if(languageToolReviewStatus==='error'){
-    proofreadingStatus.innerHTML=`Không gọi được LanguageTool (${escapeHTML(languageToolReviewError)}). Đang dùng AI/local rules; bài vẫn được chấm bình thường.`;
+    proofreadingStatus.innerHTML=`Không gọi được bộ dò ngoài (${escapeHTML(languageToolReviewError)}). Đang dùng AI + contextual/local rules; bài vẫn được chấm bình thường.`;
   }
   else{
     proofreadingStatus.textContent='';
@@ -2817,8 +3245,8 @@ function renderDetailedReview(grade){
     const sourceLabel=
       issue.source==='ai'
       ? ' · AI'
-      : issue.source==='languagetool'
-      ? ' · LT'
+      : issue.source==='contextual'
+      ? ' · Context'
       : '';
 
     return `
@@ -4182,7 +4610,7 @@ function renderGrade(
 
 
     gradeNote.textContent=
-    'Điểm local chỉ nên dùng để luyện tập. Phần lỗi ngôn ngữ được đối chiếu thêm bằng LanguageTool khi dịch vụ khả dụng.';
+    'Điểm local chỉ nên dùng để luyện tập. Phần lỗi ngôn ngữ dùng bộ dò ngoài làm tín hiệu, sau đó xác thực lại theo ngữ cảnh trước khi hiển thị gợi ý sửa.';
 
   }
 
@@ -4658,7 +5086,7 @@ async function submitPractice(){
       'DETAILED_LANGUAGE_REVIEW',
 
       gradingInstructions:
-      'Return specific grammar, spelling and word-choice issues where possible. For each issue include category, original phrase, suggested correction and a short explanation. Do not rewrite the whole essay unless necessary.',
+      'Proofread in sentence context, not by nearest spelling alone. Return only definite or high-confidence grammar, spelling, word-form and collocation errors. For each issue include category, original phrase, exactly one best correction, sentence/context and a short explanation. Examples: altho -> although, hiest -> highest in “the highest number”, decarte -> decade in “over the next decade”. If uncertain, omit the correction rather than inventing alternatives. Do not rewrite the whole essay unless necessary.',
 
       skill:
       'Writing Task 1',
