@@ -91,7 +91,7 @@ const CAR_Z = 4;
 
 
 // Cổng xuất hiện ở phía xa.
-const GATE_START_Z = -50;
+const GATE_START_Z = -38;
 
 
 // Vị trí tính va chạm.
@@ -1097,11 +1097,11 @@ function createTextTexture(
 
 
   canvas.width =
-  1024;
+  1536;
 
 
   canvas.height =
-  420;
+  512;
 
 
   const ctx =
@@ -1159,7 +1159,7 @@ function createTextTexture(
 
 
   ctx.font =
-  "bold 58px Arial";
+  "bold 82px Arial";
 
 
   const lines =
