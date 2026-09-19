@@ -1,5 +1,3 @@
-import * as THREE from "three";
-
 /* =========================================================
    VOCABULARY RACER 3D
    Three.js
