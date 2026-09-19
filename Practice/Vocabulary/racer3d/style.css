@@ -1,0 +1,243 @@
+/* =========================================================
+   VOCABULARY RACER 3D
+========================================================= */
+
+:root {
+  --panel: rgba(10, 18, 36, 0.78);
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background: #09111f;
+  color: #fff;
+}
+
+button { font: inherit; }
+
+#game-shell,
+#game-container {
+  position: fixed;
+  inset: 0;
+}
+
+#game-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hud {
+  position: fixed;
+  z-index: 10;
+  top: 18px;
+  left: 50%;
+  width: min(980px, calc(100% - 28px));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.hud-card {
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 16px;
+  background: var(--panel);
+  box-shadow: 0 16px 40px rgba(0,0,0,.24);
+  backdrop-filter: blur(10px);
+}
+
+.target-card {
+  width: min(620px,100%);
+  margin: 0 auto 10px;
+  padding: 13px 18px 11px;
+  text-align: center;
+}
+
+.target-card strong {
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(21px,3vw,34px);
+  line-height: 1.05;
+}
+
+.hud-label {
+  color: #b9c6dd;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.hint {
+  display: block;
+  margin-top: 6px;
+  color: #d7dfed;
+  font-size: 11px;
+}
+
+.hud-row {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 8px;
+}
+
+.mini {
+  padding: 9px 12px;
+  text-align: center;
+}
+
+.mini strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 17px;
+}
+
+.feedback {
+  position: fixed;
+  z-index: 15;
+  left: 50%;
+  top: 150px;
+  transform: translate(-50%,-14px);
+  max-width: min(560px,calc(100% - 30px));
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(10,18,36,.84);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+
+.feedback.show {
+  opacity: 1;
+  transform: translate(-50%,0);
+}
+
+.feedback.good { background: rgba(22,133,91,.92); }
+.feedback.bad { background: rgba(173,44,64,.94); }
+
+.mobile-controls {
+  position: fixed;
+  z-index: 12;
+  left: 50%;
+  bottom: 22px;
+  display: flex;
+  gap: 12px;
+  transform: translateX(-50%);
+}
+
+.mobile-controls button {
+  width: 76px;
+  height: 58px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 15px;
+  background: rgba(10,18,36,.7);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(0,0,0,.22);
+  backdrop-filter: blur(10px);
+  font-size: 28px;
+  font-weight: 950;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.mobile-controls button:active { transform: scale(.95); }
+
+.modal-screen {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 40%, rgba(42,95,163,.25), rgba(2,7,16,.78) 60%);
+  backdrop-filter: blur(5px);
+}
+
+.hidden { display: none !important; }
+
+.modal-card {
+  width: min(560px,100%);
+  padding: 30px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 24px;
+  background: rgba(8,15,30,.9);
+  box-shadow: 0 30px 90px rgba(0,0,0,.42);
+  text-align: center;
+}
+
+.modal-card h1,
+.modal-card h2 {
+  margin: 8px 0 12px;
+  font-size: clamp(27px,5vw,42px);
+}
+
+.modal-card p {
+  margin: 0 auto;
+  max-width: 470px;
+  color: #c8d2e3;
+  line-height: 1.65;
+}
+
+.eyebrow {
+  color: #70b8ff;
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: .16em;
+}
+
+.instruction-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+  margin: 22px 0;
+}
+
+.instruction-grid div {
+  padding: 14px 8px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.06);
+}
+
+.instruction-grid b {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 21px;
+}
+
+.instruction-grid span {
+  color: #c9d3e2;
+  font-size: 11px;
+}
+
+.primary-btn {
+  min-width: 210px;
+  padding: 13px 20px;
+  border: 0;
+  border-radius: 13px;
+  background: linear-gradient(135deg,#4a83ff,#6954e8);
+  color: #fff;
+  box-shadow: 0 12px 25px rgba(55,81,206,.32);
+  font-weight: 950;
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+
+.primary-btn:hover { filter: brightness(1.08); }
+
+@media (max-width: 650px) {
+  .hud { top: 10px; }
+  .hud-row { grid-template-columns: repeat(2,1fr); }
+  .target-card { margin-bottom: 6px; }
+  .feedback { top: 195px; font-size: 12px; }
+  .mobile-controls { bottom: 14px; }
+  .mobile-controls button { width: 70px; height: 54px; }
+  .instruction-grid { grid-template-columns: 1fr; }
+}
