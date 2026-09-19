@@ -1,196 +1,4863 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
 
-  <title>Vocabulary Racer 3D</title>
+<title>Vocabulary Racer 3D</title>
 
-  <link
-    rel="stylesheet"
-    href="./style.css?v=3"
-  >
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 
-  <!-- Three.js -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"
-  ></script>
+<style>
+
+/* =========================================================
+   BASE
+========================================================= */
+
+:root{
+  --navy:#06111f;
+  --panel:rgba(5,15,29,.90);
+  --blue:#4387ff;
+  --purple:#7557e8;
+  --green:#21bf75;
+  --red:#e84e63;
+  --yellow:#ffd34d;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+
+  background:#07111f;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+button{
+  font:inherit;
+}
+
+
+/* =========================================================
+   GAME
+========================================================= */
+
+#game{
+  position:fixed;
+  inset:0;
+}
+
+#game canvas{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+
+/* =========================================================
+   TOP HUD
+========================================================= */
+
+.hud{
+  position:fixed;
+  z-index:30;
+
+  top:12px;
+  left:50%;
+
+  width:min(
+    1000px,
+    calc(100% - 24px)
+  );
+
+  transform:translateX(-50%);
+
+  pointer-events:none;
+}
+
+
+.question-card{
+  width:min(
+    650px,
+    100%
+  );
+
+  margin:0 auto 8px;
+
+  padding:9px 18px 10px;
+
+  border:1px solid rgba(255,255,255,.14);
+
+  border-radius:15px;
+
+  background:rgba(4,13,26,.91);
+
+  color:#fff;
+
+  text-align:center;
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.22);
+
+  backdrop-filter:blur(8px);
+}
+
+
+.question-label{
+  display:block;
+
+  color:#78b7ff;
+
+  font-size:9px;
+  font-weight:950;
+
+  letter-spacing:.16em;
+}
+
+
+#targetWord{
+  display:block;
+
+  margin-top:2px;
+
+  font-size:
+    clamp(
+      23px,
+      3vw,
+      35px
+    );
+
+  line-height:1.15;
+}
+
+
+.question-card small{
+  display:block;
+
+  margin-top:3px;
+
+  color:#9fadc1;
+
+  font-size:9px;
+}
+
+
+.hud-row{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5,1fr);
+
+  gap:6px;
+}
+
+
+.hud-box{
+  padding:7px 6px;
+
+  border:1px solid rgba(255,255,255,.1);
+
+  border-radius:10px;
+
+  background:rgba(5,15,29,.86);
+
+  color:#fff;
+
+  text-align:center;
+}
+
+
+.hud-box span{
+  display:block;
+
+  color:#8294ad;
+
+  font-size:7px;
+  font-weight:950;
+
+  letter-spacing:.08em;
+}
+
+
+.hud-box strong{
+  display:block;
+
+  margin-top:2px;
+
+  font-size:14px;
+}
+
+
+#position{
+  color:var(--yellow);
+}
+
+
+/* =========================================================
+   OPPONENT LABELS
+========================================================= */
+
+.opponent-label{
+  position:fixed;
+
+  z-index:25;
+
+  top:145px;
+
+  padding:6px 10px;
+
+  border-radius:999px;
+
+  background:rgba(4,13,26,.67);
+
+  color:#fff;
+
+  font-size:8px;
+  font-weight:950;
+
+  pointer-events:none;
+
+  opacity:.82;
+}
+
+.opponent-label.left{
+  left:18px;
+}
+
+.opponent-label.right{
+  right:18px;
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+#feedback{
+  position:fixed;
+
+  z-index:60;
+
+  top:158px;
+  left:50%;
+
+  max-width:calc(100% - 30px);
+
+  padding:10px 18px;
+
+  transform:
+    translate(-50%,-8px);
+
+  border-radius:999px;
+
+  color:#fff;
+
+  text-align:center;
+
+  font-size:12px;
+  font-weight:950;
+
+  opacity:0;
+
+  transition:
+    opacity .18s ease,
+    transform .18s ease;
+
+  pointer-events:none;
+}
+
+
+#feedback.show{
+  opacity:1;
+
+  transform:
+    translate(-50%,0);
+}
+
+
+#feedback.good{
+  background:
+    rgba(22,145,88,.96);
+}
+
+
+#feedback.bad{
+  background:
+    rgba(185,48,67,.96);
+}
+
+
+/* =========================================================
+   BOOST
+========================================================= */
+
+#boostFlash{
+  position:fixed;
+
+  z-index:15;
+
+  inset:0;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  box-shadow:
+    inset 0 0 100px
+    rgba(64,156,255,.65);
+
+  transition:opacity .16s;
+}
+
+
+#boostFlash.active{
+  opacity:1;
+}
+
+
+/* =========================================================
+   BOTTOM SPEEDOMETER
+========================================================= */
+
+.dashboard-ui{
+  position:fixed;
+
+  z-index:35;
+
+  left:50%;
+  bottom:15px;
+
+  width:200px;
+
+  padding:8px 13px;
+
+  transform:translateX(-50%);
+
+  border:1px solid rgba(255,255,255,.12);
+
+  border-radius:14px;
+
+  background:rgba(4,13,26,.80);
+
+  color:#fff;
+
+  text-align:center;
+
+  pointer-events:none;
+}
+
+
+.dashboard-ui small{
+  display:block;
+
+  color:#8193aa;
+
+  font-size:7px;
+  font-weight:950;
+
+  letter-spacing:.1em;
+}
+
+
+.nitro-track{
+  height:5px;
+
+  margin-top:5px;
+
+  overflow:hidden;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.12);
+}
+
+
+#nitroFill{
+  display:block;
+
+  width:0%;
+  height:100%;
+
+  border-radius:inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #42c7ff,
+      #7863ff
+    );
+
+  transition:width .1s linear;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls{
+  position:fixed;
+
+  z-index:45;
+
+  bottom:15px;
+  left:18px;
+
+  display:flex;
+
+  gap:8px;
+}
+
+
+.controls button{
+  width:62px;
+  height:50px;
+
+  border:1px solid rgba(255,255,255,.16);
+
+  border-radius:12px;
+
+  background:rgba(5,15,29,.88);
+
+  color:#fff;
+
+  font-size:24px;
+  font-weight:950;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+}
+
+
+.controls button:active{
+  transform:scale(.94);
+}
+
+
+.back-button{
+  position:fixed;
+
+  z-index:45;
+
+  right:18px;
+  bottom:15px;
+
+  padding:9px 12px;
+
+  border:1px solid rgba(255,255,255,.15);
+
+  border-radius:10px;
+
+  background:rgba(5,15,29,.84);
+
+  color:#dbe6f5;
+
+  text-decoration:none;
+
+  font-size:9px;
+  font-weight:900;
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal{
+  position:fixed;
+
+  z-index:100;
+
+  inset:0;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:20px;
+
+  background:rgba(2,8,16,.79);
+
+  backdrop-filter:blur(5px);
+}
+
+
+.modal.hidden{
+  display:none;
+}
+
+
+.modal-card{
+  width:min(
+    610px,
+    100%
+  );
+
+  padding:30px;
+
+  border:1px solid rgba(255,255,255,.14);
+
+  border-radius:23px;
+
+  background:#091527;
+
+  color:#fff;
+
+  text-align:center;
+
+  box-shadow:
+    0 30px 85px
+    rgba(0,0,0,.45);
+}
+
+
+.eyebrow{
+  color:#68b8ff;
+
+  font-size:10px;
+  font-weight:950;
+
+  letter-spacing:.16em;
+}
+
+
+.modal h1{
+  margin:7px 0 12px;
+
+  font-size:
+    clamp(
+      31px,
+      5vw,
+      46px
+    );
+}
+
+
+.modal h2{
+  margin:8px 0 10px;
+
+  font-size:34px;
+}
+
+
+.modal p{
+  max-width:500px;
+
+  margin:auto;
+
+  color:#bdc8d8;
+
+  font-size:13px;
+  line-height:1.65;
+}
+
+
+.rules{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:8px;
+
+  margin:23px 0;
+}
+
+
+.rule{
+  padding:14px 8px;
+
+  border-radius:13px;
+
+  background:#111f34;
+}
+
+
+.rule b{
+  display:block;
+
+  margin-bottom:4px;
+
+  font-size:22px;
+}
+
+
+.rule span{
+  color:#bdc7d5;
+
+  font-size:10px;
+}
+
+
+.primary{
+  min-width:220px;
+
+  padding:14px 22px;
+
+  border:0;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3980ff,
+      #7455e8
+    );
+
+  color:#fff;
+
+  font-weight:950;
+
+  cursor:pointer;
+}
+
+
+.result-icon{
+  margin-top:12px;
+
+  font-size:56px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:650px){
+
+  .hud{
+    top:7px;
+  }
+
+  .question-card{
+    padding:7px 10px;
+  }
+
+  #targetWord{
+    font-size:21px;
+  }
+
+  .hud-row{
+    gap:3px;
+  }
+
+  .hud-box{
+    padding:5px 1px;
+  }
+
+  .hud-box span{
+    font-size:5.5px;
+  }
+
+  .hud-box strong{
+    font-size:10px;
+  }
+
+  .opponent-label{
+    display:none;
+  }
+
+  #feedback{
+    top:136px;
+
+    font-size:10px;
+  }
+
+  .rules{
+    grid-template-columns:1fr;
+  }
+
+  .modal-card{
+    padding:21px;
+  }
+
+  .dashboard-ui{
+    width:150px;
+  }
+
+  .controls button{
+    width:54px;
+  }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
-<div id="game-shell">
 
-  <!-- Three.js -->
-  <div id="game-container"></div>
+<div id="game"></div>
 
-
-  <!-- HUD -->
-  <header class="hud">
-
-    <div class="target-card">
-      <span>TỪ MỤC TIÊU</span>
-
-      <strong id="target-word">
-        Ready
-      </strong>
-
-      <small>
-        ← / → để đổi làn
-      </small>
-    </div>
+<div id="boostFlash"></div>
 
 
-    <div class="hud-row">
+<!-- =====================================================
+     HUD
+====================================================== -->
 
-      <div class="hud-box">
-        <span>ĐIỂM</span>
-        <b id="score">0</b>
-      </div>
+<header class="hud">
 
-      <div class="hud-box">
-        <span>MẠNG</span>
-        <b id="lives">❤️❤️❤️</b>
-      </div>
+  <div class="question-card">
 
-      <div class="hud-box">
-        <span>TỐC ĐỘ</span>
-        <b id="speed">0 km/h</b>
-      </div>
+    <span class="question-label">
+      TỪ MỤC TIÊU
+    </span>
 
-      <div class="hud-box">
-        <span>COMBO</span>
-        <b id="combo">x0</b>
-      </div>
+    <strong id="targetWord">
+      Ready
+    </strong>
 
-    </div>
-
-  </header>
-
-
-  <!-- Feedback -->
-  <div
-    id="feedback"
-    class="feedback"
-  ></div>
-
-
-  <!-- Mobile -->
-  <div class="mobile-controls">
-
-    <button
-      id="left-btn"
-      type="button"
-    >
-      ←
-    </button>
-
-    <button
-      id="right-btn"
-      type="button"
-    >
-      →
-    </button>
+    <small>
+      ← → Chuyển sang làn có nghĩa đúng
+    </small>
 
   </div>
 
 
-  <!-- Start screen -->
-  <section
-    id="start-screen"
-    class="modal-screen"
-  >
+  <div class="hud-row">
 
-    <div class="modal-card">
-
-      <div class="eyebrow">
-        THREE.JS VOCABULARY GAME
-      </div>
-
-      <h1>
-        🏎️ Vocabulary Racer 3D
-      </h1>
-
-      <p>
-        Bạn đang ngồi trong xe đua.
-        Hãy chuyển sang làn có
-        <strong>nghĩa đúng</strong>
-        trước khi xe lao qua cổng từ vựng.
-      </p>
-
-
-      <div class="instruction-grid">
-
-        <div>
-          <b>← →</b>
-          <span>Đổi làn</span>
-        </div>
-
-        <div>
-          <b>✅</b>
-          <span>Đúng: Boost</span>
-        </div>
-
-        <div>
-          <b>💥</b>
-          <span>Sai: mất mạng</span>
-        </div>
-
-      </div>
-
-
-      <button
-        id="start-btn"
-        class="primary-btn"
-        type="button"
-      >
-        BẮT ĐẦU ĐUA
-      </button>
-
+    <div class="hud-box">
+      <span>ĐIỂM</span>
+      <strong id="score">0</strong>
     </div>
 
-  </section>
-
-
-  <!-- Game over -->
-  <section
-    id="game-over-screen"
-    class="modal-screen hidden"
-  >
-
-    <div class="modal-card">
-
-      <div class="eyebrow">
-        KẾT QUẢ
-      </div>
-
-      <h2 id="game-over-title">
-        GAME OVER
-      </h2>
-
-      <p id="final-summary"></p>
-
-      <button
-        id="restart-btn"
-        class="primary-btn"
-        type="button"
-      >
-        CHƠI LẠI
-      </button>
-
+    <div class="hud-box">
+      <span>TỐC ĐỘ</span>
+      <strong id="speed">0 km/h</strong>
     </div>
 
-  </section>
+    <div class="hud-box">
+      <span>VỊ TRÍ</span>
+      <strong id="position">2/3</strong>
+    </div>
+
+    <div class="hud-box">
+      <span>COMBO</span>
+      <strong id="combo">x0</strong>
+    </div>
+
+    <div class="hud-box">
+      <span>TIẾN ĐỘ</span>
+      <strong id="progress">0/12</strong>
+    </div>
+
+  </div>
+
+</header>
+
+
+<div class="opponent-label left">
+  🔵 BLUE RACER
+</div>
+
+<div class="opponent-label right">
+  🔴 RED RACER
+</div>
+
+
+<div id="feedback"></div>
+
+
+<!-- =====================================================
+     CONTROLS
+====================================================== -->
+
+<div class="controls">
+
+  <button
+    id="leftButton"
+    type="button"
+  >
+    ←
+  </button>
+
+  <button
+    id="rightButton"
+    type="button"
+  >
+    →
+  </button>
 
 </div>
 
 
-<script src="./game.js?v=3"></script>
+<div class="dashboard-ui">
+
+  <small>
+    NITRO BOOST
+  </small>
+
+  <div class="nitro-track">
+    <i id="nitroFill"></i>
+  </div>
+
+</div>
+
+
+<a
+  class="back-button"
+  href="../"
+>
+  ← Vocabulary
+</a>
+
+
+<!-- =====================================================
+     START
+====================================================== -->
+
+<section
+  id="startScreen"
+  class="modal"
+>
+
+  <div class="modal-card">
+
+    <div class="eyebrow">
+      VOCABULARY RACING
+    </div>
+
+    <h1>
+      🏎️ Vocabulary Racer 3D
+    </h1>
+
+    <p>
+      Bạn đang đua với hai đối thủ.
+      Chọn đúng nghĩa để tăng tốc và vượt lên.
+      Nếu chọn sai, xe của bạn chậm lại và
+      một đối thủ sẽ tăng tốc vượt bạn.
+    </p>
+
+
+    <div class="rules">
+
+      <div class="rule">
+
+        <b>
+          ← →
+        </b>
+
+        <span>
+          Chọn 1 trong 3 làn
+        </span>
+
+      </div>
+
+
+      <div class="rule">
+
+        <b>
+          ⚡
+        </b>
+
+        <span>
+          Đúng = tăng tốc
+        </span>
+
+      </div>
+
+
+      <div class="rule">
+
+        <b>
+          🏎️
+        </b>
+
+        <span>
+          Sai = đối thủ vượt
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="startButton"
+      class="primary"
+      type="button"
+    >
+      BẮT ĐẦU ĐUA
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     RESULT
+====================================================== -->
+
+<section
+  id="resultScreen"
+  class="modal hidden"
+>
+
+  <div class="modal-card">
+
+    <div class="eyebrow">
+      RACE RESULT
+    </div>
+
+    <div
+      id="resultIcon"
+      class="result-icon"
+    >
+      🏁
+    </div>
+
+    <h2 id="resultTitle">
+      Hoàn thành!
+    </h2>
+
+    <p id="resultText"></p>
+
+    <br>
+
+    <button
+      id="restartButton"
+      class="primary"
+      type="button"
+    >
+      ĐUA LẠI
+    </button>
+
+  </div>
+
+</section>
+
+
+<script>
+
+/* =========================================================
+   VOCABULARY
+========================================================= */
+
+const VOCABULARY = [
+
+  {
+    word:"critically endangered",
+    meaning:"cực kỳ nguy cấp, có nguy cơ tuyệt chủng rất cao"
+  },
+
+  {
+    word:"nocturnal",
+    meaning:"hoạt động về đêm"
+  },
+
+  {
+    word:"solitary",
+    meaning:"sống đơn độc"
+  },
+
+  {
+    word:"home range",
+    meaning:"phạm vi sinh sống của một cá thể động vật"
+  },
+
+  {
+    word:"forage",
+    meaning:"tìm kiếm thức ăn"
+  },
+
+  {
+    word:"forest clearance",
+    meaning:"việc phát quang, phá rừng"
+  },
+
+  {
+    word:"predator-free",
+    meaning:"không có động vật săn mồi"
+  },
+
+  {
+    word:"genetic diversity",
+    meaning:"đa dạng di truyền"
+  },
+
+  {
+    word:"renewable energy",
+    meaning:"năng lượng tái tạo"
+  },
+
+  {
+    word:"artificial lighting",
+    meaning:"hệ thống chiếu sáng nhân tạo"
+  },
+
+  {
+    word:"year-round production",
+    meaning:"sản xuất quanh năm"
+  },
+
+  {
+    word:"cutting-edge technology",
+    meaning:"công nghệ tiên tiến nhất"
+  }
+
+];
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+/*
+  5 lanes:
+
+  BLUE | ANSWER | ANSWER | ANSWER | RED
+*/
+
+const ANSWER_LANES = [
+  -3.5,
+  0,
+  3.5
+];
+
+
+const OPPONENT_LANES = [
+  -7,
+  7
+];
+
+
+const TOTAL_QUESTIONS =
+12;
+
+
+/*
+  Tốc độ ban đầu chậm.
+*/
+
+const BASE_SPEED =
+4.8;
+
+
+const MAX_SPEED =
+7;
+
+
+/*
+  Khoảng 10 giây đọc câu đầu.
+*/
+
+const FIRST_DISTANCE =
+52;
+
+
+const NEXT_DISTANCE =
+55;
+
+
+const BOOST_TIME =
+1.7;
+
+
+const SLOW_TIME =
+1.35;
+
+
+const BOOST_MULTIPLIER =
+1.42;
+
+
+const SLOW_MULTIPLIER =
+0.72;
+
+
+/* =========================================================
+   HTML
+========================================================= */
+
+const gameContainer =
+document.getElementById(
+  "game"
+);
+
+
+const targetWordElement =
+document.getElementById(
+  "targetWord"
+);
+
+
+const scoreElement =
+document.getElementById(
+  "score"
+);
+
+
+const speedElement =
+document.getElementById(
+  "speed"
+);
+
+
+const positionElement =
+document.getElementById(
+  "position"
+);
+
+
+const comboElement =
+document.getElementById(
+  "combo"
+);
+
+
+const progressElement =
+document.getElementById(
+  "progress"
+);
+
+
+const feedbackElement =
+document.getElementById(
+  "feedback"
+);
+
+
+const boostFlash =
+document.getElementById(
+  "boostFlash"
+);
+
+
+const nitroFill =
+document.getElementById(
+  "nitroFill"
+);
+
+
+const startScreen =
+document.getElementById(
+  "startScreen"
+);
+
+
+const resultScreen =
+document.getElementById(
+  "resultScreen"
+);
+
+
+const resultIcon =
+document.getElementById(
+  "resultIcon"
+);
+
+
+const resultTitle =
+document.getElementById(
+  "resultTitle"
+);
+
+
+const resultText =
+document.getElementById(
+  "resultText"
+);
+
+
+const startButton =
+document.getElementById(
+  "startButton"
+);
+
+
+const restartButton =
+document.getElementById(
+  "restartButton"
+);
+
+
+const leftButton =
+document.getElementById(
+  "leftButton"
+);
+
+
+const rightButton =
+document.getElementById(
+  "rightButton"
+);
+
+
+/* =========================================================
+   SCENE
+========================================================= */
+
+const scene =
+new THREE.Scene();
+
+
+scene.background =
+new THREE.Color(
+  0x91d5fa
+);
+
+
+scene.fog =
+new THREE.Fog(
+
+  0x91d5fa,
+
+  75,
+
+  210
+
+);
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+const camera =
+new THREE.PerspectiveCamera(
+
+  61,
+
+  window.innerWidth /
+  window.innerHeight,
+
+  .1,
+
+  500
+
+);
+
+
+scene.add(
+  camera
+);
+
+
+/* =========================================================
+   RENDERER
+========================================================= */
+
+const renderer =
+new THREE.WebGLRenderer({
+
+  antialias:true,
+
+  powerPreference:
+  "high-performance"
+
+});
+
+
+/*
+  Giới hạn resolution để giảm giật.
+*/
+
+renderer.setPixelRatio(
+
+  Math.min(
+
+    window.devicePixelRatio,
+
+    1.15
+
+  )
+
+);
+
+
+renderer.setSize(
+
+  window.innerWidth,
+
+  window.innerHeight
+
+);
+
+
+/*
+  Không dùng shadow.
+*/
+
+renderer.shadowMap.enabled =
+false;
+
+
+renderer.outputColorSpace =
+THREE.SRGBColorSpace;
+
+
+gameContainer.appendChild(
+  renderer.domElement
+);
+
+
+/* =========================================================
+   LIGHT
+========================================================= */
+
+scene.add(
+
+  new THREE.HemisphereLight(
+
+    0xffffff,
+
+    0x526b4b,
+
+    2
+
+  )
+
+);
+
+
+const sun =
+new THREE.DirectionalLight(
+
+  0xffffff,
+
+  1.45
+
+);
+
+
+sun.position.set(
+
+  -10,
+
+  18,
+
+  10
+
+);
+
+
+scene.add(
+  sun
+);
+
+
+/* =========================================================
+   ROAD TEXTURE
+========================================================= */
+
+function createRoadTexture(){
+
+  const canvas =
+  document.createElement(
+    "canvas"
+  );
+
+
+  canvas.width =
+  512;
+
+
+  canvas.height =
+  1024;
+
+
+  const ctx =
+  canvas.getContext(
+    "2d"
+  );
+
+
+  /*
+    Asphalt.
+  */
+
+  ctx.fillStyle =
+  "#363a42";
+
+
+  ctx.fillRect(
+
+    0,
+
+    0,
+
+    canvas.width,
+
+    canvas.height
+
+  );
+
+
+  /*
+    Road edges.
+  */
+
+  ctx.fillStyle =
+  "#ffffff";
+
+
+  ctx.fillRect(
+    4,
+    0,
+    7,
+    canvas.height
+  );
+
+
+  ctx.fillRect(
+    canvas.width - 11,
+    0,
+    7,
+    canvas.height
+  );
+
+
+  /*
+    5 lanes.
+  */
+
+  ctx.strokeStyle =
+  "rgba(255,255,255,.68)";
+
+
+  ctx.lineWidth =
+  4;
+
+
+  ctx.setLineDash(
+    [
+      42,
+      34
+    ]
+  );
+
+
+  [
+    .2,
+    .4,
+    .6,
+    .8
+  ]
+  .forEach(
+    ratio => {
+
+      ctx.beginPath();
+
+
+      ctx.moveTo(
+
+        canvas.width *
+        ratio,
+
+        0
+
+      );
+
+
+      ctx.lineTo(
+
+        canvas.width *
+        ratio,
+
+        canvas.height
+
+      );
+
+
+      ctx.stroke();
+
+    }
+  );
+
+
+  /*
+    Asphalt detail.
+  */
+
+  ctx.setLineDash([]);
+
+
+  for(
+    let i = 0;
+    i < 40;
+    i++
+  ){
+
+    ctx.fillStyle =
+    "rgba(255,255,255,.018)";
+
+
+    ctx.fillRect(
+
+      0,
+
+      Math.random() *
+      canvas.height,
+
+      canvas.width,
+
+      1
+
+    );
+
+  }
+
+
+  const texture =
+  new THREE.CanvasTexture(
+    canvas
+  );
+
+
+  texture.colorSpace =
+  THREE.SRGBColorSpace;
+
+
+  texture.wrapS =
+  THREE.RepeatWrapping;
+
+
+  texture.wrapT =
+  THREE.RepeatWrapping;
+
+
+  texture.repeat.set(
+
+    1,
+
+    28
+
+  );
+
+
+  return texture;
+
+}
+
+
+/* =========================================================
+   WORLD
+========================================================= */
+
+function createWorld(){
+
+  /*
+    Grass.
+  */
+
+  const grass =
+  new THREE.Mesh(
+
+    new THREE.PlaneGeometry(
+
+      120,
+
+      4000
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0x52984f
+
+    })
+
+  );
+
+
+  grass.rotation.x =
+  -Math.PI / 2;
+
+
+  grass.position.set(
+
+    0,
+
+    -.04,
+
+    -1900
+
+  );
+
+
+  scene.add(
+    grass
+  );
+
+
+  /*
+    Road.
+  */
+
+  const road =
+  new THREE.Mesh(
+
+    new THREE.PlaneGeometry(
+
+      18,
+
+      4000
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      map:
+      createRoadTexture()
+
+    })
+
+  );
+
+
+  road.rotation.x =
+  -Math.PI / 2;
+
+
+  road.position.set(
+
+    0,
+
+    0,
+
+    -1900
+
+  );
+
+
+  scene.add(
+    road
+  );
+
+
+  createScenery();
+
+}
+
+
+/* =========================================================
+   TREE
+========================================================= */
+
+function createTree(){
+
+  const group =
+  new THREE.Group();
+
+
+  const trunk =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+      .22,
+      1.45,
+      .22
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0x745037
+
+    })
+
+  );
+
+
+  trunk.position.y =
+  .72;
+
+
+  group.add(
+    trunk
+  );
+
+
+  const crown =
+  new THREE.Mesh(
+
+    new THREE.ConeGeometry(
+
+      .85,
+
+      2.4,
+
+      5
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0x24723c
+
+    })
+
+  );
+
+
+  crown.position.y =
+  2.4;
+
+
+  group.add(
+    crown
+  );
+
+
+  return group;
+
+}
+
+
+/* =========================================================
+   REFLECTOR
+========================================================= */
+
+function createRoadPost(){
+
+  const group =
+  new THREE.Group();
+
+
+  const pole =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      .1,
+
+      .75,
+
+      .1
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0xefefef
+
+    })
+
+  );
+
+
+  pole.position.y =
+  .375;
+
+
+  group.add(
+    pole
+  );
+
+
+  const light =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      .15,
+
+      .15,
+
+      .05
+
+    ),
+
+    new THREE.MeshBasicMaterial({
+
+      color:0xffd45c
+
+    })
+
+  );
+
+
+  light.position.y =
+  .65;
+
+
+  group.add(
+    light
+  );
+
+
+  return group;
+
+}
+
+
+/* =========================================================
+   SCENERY
+========================================================= */
+
+function createScenery(){
+
+  /*
+    Chỉ tạo vật thể thưa,
+    tránh lag.
+  */
+
+  for(
+    let z = -15;
+    z > -900;
+    z -= 28
+  ){
+
+    const leftTree =
+    createTree();
+
+
+    leftTree.position.set(
+
+      -11,
+
+      0,
+
+      z
+
+    );
+
+
+    scene.add(
+      leftTree
+    );
+
+
+    const rightTree =
+    createTree();
+
+
+    rightTree.position.set(
+
+      11,
+
+      0,
+
+      z - 12
+
+    );
+
+
+    scene.add(
+      rightTree
+    );
+
+
+    /*
+      Road posts.
+    */
+
+    const leftPost =
+    createRoadPost();
+
+
+    leftPost.position.set(
+
+      -9.4,
+
+      0,
+
+      z - 7
+
+    );
+
+
+    scene.add(
+      leftPost
+    );
+
+
+    const rightPost =
+    createRoadPost();
+
+
+    rightPost.position.set(
+
+      9.4,
+
+      0,
+
+      z - 19
+
+    );
+
+
+    scene.add(
+      rightPost
+    );
+
+  }
+
+
+  /*
+    Mountains.
+  */
+
+  for(
+    let i = 0;
+    i < 5;
+    i++
+  ){
+
+    const mountain =
+    new THREE.Mesh(
+
+      new THREE.ConeGeometry(
+
+        18,
+
+        28,
+
+        5
+
+      ),
+
+      new THREE.MeshLambertMaterial({
+
+        color:
+        i % 2
+        ?
+        0x708995
+        :
+        0x829ca7
+
+      })
+
+    );
+
+
+    mountain.position.set(
+
+      i % 2
+      ?
+      38 + i * 4
+      :
+      -38 - i * 4,
+
+      8,
+
+      -160 -
+      i * 70
+
+    );
+
+
+    scene.add(
+      mountain
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   PLAYER POSITION
+========================================================= */
+
+const player =
+new THREE.Group();
+
+
+player.position.set(
+
+  0,
+
+  0,
+
+  5
+
+);
+
+
+scene.add(
+  player
+);
+
+
+/* =========================================================
+   COCKPIT
+========================================================= */
+
+let steeringWheel;
+
+
+function createCockpit(){
+
+  const cockpit =
+  new THREE.Group();
+
+
+  /*
+    Car hood.
+  */
+
+  const hood =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      4.1,
+
+      .15,
+
+      2.6
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0xe23c43
+
+    })
+
+  );
+
+
+  hood.position.set(
+
+    0,
+
+    -.92,
+
+    -3.45
+
+  );
+
+
+  cockpit.add(
+    hood
+  );
+
+
+  /*
+    Dashboard.
+  */
+
+  const dashboard =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      6,
+
+      .5,
+
+      1
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0x11161e
+
+    })
+
+  );
+
+
+  dashboard.position.set(
+
+    0,
+
+    -1.22,
+
+    -2
+
+  );
+
+
+  cockpit.add(
+    dashboard
+  );
+
+
+  /*
+    Steering wheel.
+  */
+
+  steeringWheel =
+  new THREE.Mesh(
+
+    new THREE.TorusGeometry(
+
+      .38,
+
+      .065,
+
+      9,
+
+      26
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0x101218
+
+    })
+
+  );
+
+
+  steeringWheel.position.set(
+
+    -.76,
+
+    -.65,
+
+    -1.55
+
+  );
+
+
+  steeringWheel.rotation.x =
+  Math.PI / 2;
+
+
+  cockpit.add(
+    steeringWheel
+  );
+
+
+  /*
+    Windshield pillars.
+  */
+
+  const pillarMaterial =
+  new THREE.MeshLambertMaterial({
+
+    color:0x161a21
+
+  });
+
+
+  const left =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      .13,
+
+      3,
+
+      .16
+
+    ),
+
+    pillarMaterial
+
+  );
+
+
+  left.position.set(
+
+    -2.7,
+
+    .15,
+
+    -2.5
+
+  );
+
+
+  left.rotation.z =
+  -.18;
+
+
+  cockpit.add(
+    left
+  );
+
+
+  const right =
+  left.clone();
+
+
+  right.position.x =
+  2.7;
+
+
+  right.rotation.z =
+  .18;
+
+
+  cockpit.add(
+    right
+  );
+
+
+  camera.add(
+    cockpit
+  );
+
+}
+
+
+/* =========================================================
+   OPPONENT CAR
+========================================================= */
+
+function createOpponentCar(
+  color
+){
+
+  const group =
+  new THREE.Group();
+
+
+  /*
+    Body.
+  */
+
+  const body =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      1.7,
+
+      .48,
+
+      3
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color
+
+    })
+
+  );
+
+
+  body.position.y =
+  .55;
+
+
+  group.add(
+    body
+  );
+
+
+  /*
+    Cabin.
+  */
+
+  const cabin =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      1.25,
+
+      .58,
+
+      1.35
+
+    ),
+
+    new THREE.MeshLambertMaterial({
+
+      color:0x203247
+
+    })
+
+  );
+
+
+  cabin.position.set(
+
+    0,
+
+    1.03,
+
+    .1
+
+  );
+
+
+  group.add(
+    cabin
+  );
+
+
+  /*
+    Rear lights.
+  */
+
+  [
+    -.5,
+    .5
+  ]
+  .forEach(
+    x => {
+
+      const light =
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          .28,
+
+          .13,
+
+          .04
+
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+          color:0xff3434
+
+        })
+
+      );
+
+
+      light.position.set(
+
+        x,
+
+        .62,
+
+        1.51
+
+      );
+
+
+      group.add(
+        light
+      );
+
+    }
+  );
+
+
+  /*
+    Wheels.
+  */
+
+  const wheelMaterial =
+  new THREE.MeshLambertMaterial({
+
+    color:0x101216
+
+  });
+
+
+  [
+    [-.92,.34,-.9],
+    [.92,.34,-.9],
+    [-.92,.34,.9],
+    [.92,.34,.9]
+  ]
+  .forEach(
+    position => {
+
+      const wheel =
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          .22,
+
+          .48,
+
+          .5
+
+        ),
+
+        wheelMaterial
+
+      );
+
+
+      wheel.position.set(
+
+        position[0],
+
+        position[1],
+
+        position[2]
+
+      );
+
+
+      group.add(
+        wheel
+      );
+
+    }
+  );
+
+
+  scene.add(
+    group
+  );
+
+
+  return group;
+
+}
+
+
+/* =========================================================
+   OPPONENTS
+========================================================= */
+
+const blueOpponent = {
+
+  mesh:
+    createOpponentCar(
+      0x327bff
+    ),
+
+  x:
+    OPPONENT_LANES[0],
+
+  relativeZ:
+    -3,
+
+  targetZ:
+    -3,
+
+  overtake:
+    0
+
+};
+
+
+const redOpponent = {
+
+  mesh:
+    createOpponentCar(
+      0xee3d46
+    ),
+
+  x:
+    OPPONENT_LANES[1],
+
+  relativeZ:
+    2,
+
+  targetZ:
+    2,
+
+  overtake:
+    0
+
+};
+
+
+const opponents = [
+
+  blueOpponent,
+
+  redOpponent
+
+];
+
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+function wrapText(
+  context,
+  text,
+  maxWidth
+){
+
+  const words =
+  String(text)
+  .split(" ");
+
+
+  const lines =
+  [];
+
+
+  let line =
+  "";
+
+
+  words.forEach(
+    word => {
+
+      const attempt =
+      line
+      ?
+      `${line} ${word}`
+      :
+      word;
+
+
+      if(
+
+        context.measureText(
+          attempt
+        ).width >
+        maxWidth
+
+        &&
+
+        line
+
+      ){
+
+        lines.push(
+          line
+        );
+
+
+        line =
+        word;
+
+      }
+
+      else{
+
+        line =
+        attempt;
+
+      }
+
+    }
+  );
+
+
+  if(
+    line
+  ){
+
+    lines.push(
+      line
+    );
+
+  }
+
+
+  return lines.slice(
+    0,
+    4
+  );
+
+}
+
+
+/* =========================================================
+   ANSWER TEXTURE
+========================================================= */
+
+function createAnswerTexture(
+  text,
+  lane
+){
+
+  const canvas =
+  document.createElement(
+    "canvas"
+  );
+
+
+  /*
+    Chỉ 1024x420:
+    rõ nhưng nhẹ.
+  */
+
+  canvas.width =
+  1024;
+
+
+  canvas.height =
+  420;
+
+
+  const context =
+  canvas.getContext(
+    "2d"
+  );
+
+
+  /*
+    White sign.
+  */
+
+  context.fillStyle =
+  "#ffffff";
+
+
+  context.fillRect(
+
+    0,
+
+    0,
+
+    canvas.width,
+
+    canvas.height
+
+  );
+
+
+  /*
+    Colored header.
+  */
+
+  const laneColors = [
+
+    "#397dde",
+
+    "#7155d9",
+
+    "#26936d"
+
+  ];
+
+
+  context.fillStyle =
+  laneColors[
+    lane
+  ];
+
+
+  context.fillRect(
+
+    0,
+
+    0,
+
+    canvas.width,
+
+    55
+
+  );
+
+
+  context.textAlign =
+  "center";
+
+
+  context.textBaseline =
+  "middle";
+
+
+  context.fillStyle =
+  "#ffffff";
+
+
+  context.font =
+  "900 27px Arial";
+
+
+  const laneNames = [
+
+    "LEFT",
+
+    "CENTER",
+
+    "RIGHT"
+
+  ];
+
+
+  context.fillText(
+
+    laneNames[
+      lane
+    ],
+
+    canvas.width / 2,
+
+    28
+
+  );
+
+
+  /*
+    Border.
+  */
+
+  context.strokeStyle =
+  "#18263f";
+
+
+  context.lineWidth =
+  12;
+
+
+  context.strokeRect(
+
+    6,
+
+    6,
+
+    canvas.width - 12,
+
+    canvas.height - 12
+
+  );
+
+
+  /*
+    Adaptive font.
+  */
+
+  let fontSize =
+  65;
+
+
+  if(
+    text.length >
+    38
+  ){
+
+    fontSize =
+    56;
+
+  }
+
+
+  if(
+    text.length >
+    60
+  ){
+
+    fontSize =
+    47;
+
+  }
+
+
+  if(
+    text.length >
+    82
+  ){
+
+    fontSize =
+    40;
+
+  }
+
+
+  context.font =
+  `900 ${fontSize}px Arial`;
+
+
+  context.fillStyle =
+  "#111b30";
+
+
+  const lines =
+  wrapText(
+
+    context,
+
+    text,
+
+    880
+
+  );
+
+
+  const lineHeight =
+  fontSize *
+  1.13;
+
+
+  const totalHeight =
+  lines.length *
+  lineHeight;
+
+
+  const startY =
+
+  252
+
+  -
+
+  totalHeight / 2
+
+  +
+
+  lineHeight / 2;
+
+
+  lines.forEach(
+    (
+      line,
+      index
+    ) => {
+
+      context.fillText(
+
+        line,
+
+        canvas.width / 2,
+
+        startY +
+        index *
+        lineHeight
+
+      );
+
+    }
+  );
+
+
+  const texture =
+  new THREE.CanvasTexture(
+    canvas
+  );
+
+
+  texture.colorSpace =
+  THREE.SRGBColorSpace;
+
+
+  texture.anisotropy =
+  Math.min(
+
+    renderer
+    .capabilities
+    .getMaxAnisotropy(),
+
+    4
+
+  );
+
+
+  return texture;
+
+}
+
+
+/* =========================================================
+   ANSWER GATE
+========================================================= */
+
+function createGate(
+  text,
+  lane
+){
+
+  const group =
+  new THREE.Group();
+
+
+  const frameMaterial =
+  new THREE.MeshLambertMaterial({
+
+    color:0x283d60
+
+  });
+
+
+  /*
+    Poles.
+  */
+
+  [
+    -1.45,
+    1.45
+  ]
+  .forEach(
+    x => {
+
+      const pole =
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          .14,
+
+          3.35,
+
+          .18
+
+        ),
+
+        frameMaterial
+
+      );
+
+
+      pole.position.set(
+
+        x,
+
+        1.675,
+
+        0
+
+      );
+
+
+      group.add(
+        pole
+      );
+
+    }
+  );
+
+
+  /*
+    Sign.
+  */
+
+  const sign =
+  new THREE.Mesh(
+
+    new THREE.PlaneGeometry(
+
+      3,
+
+      1.55
+
+    ),
+
+    new THREE.MeshBasicMaterial({
+
+      map:
+      createAnswerTexture(
+        text,
+        lane
+      ),
+
+      side:
+      THREE.DoubleSide
+
+    })
+
+  );
+
+
+  sign.position.set(
+
+    0,
+
+    2.2,
+
+    .1
+
+  );
+
+
+  group.add(
+    sign
+  );
+
+
+  /*
+    Yellow lane marker.
+  */
+
+  const marker =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+      2.65,
+
+      .13,
+
+      .5
+
+    ),
+
+    new THREE.MeshBasicMaterial({
+
+      color:0xffcf40
+
+    })
+
+  );
+
+
+  marker.position.y =
+  .07;
+
+
+  group.add(
+    marker
+  );
+
+
+  group.position.x =
+  ANSWER_LANES[
+    lane
+  ];
+
+
+  return group;
+
+}
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let selectedLane =
+1;
+
+
+let score =
+0;
+
+
+let combo =
+0;
+
+
+let bestCombo =
+0;
+
+
+let correctAnswers =
+0;
+
+
+let questionNumber =
+0;
+
+
+let elapsed =
+0;
+
+
+let currentSpeed =
+BASE_SPEED;
+
+
+let boostTimer =
+0;
+
+
+let slowTimer =
+0;
+
+
+let shakeTimer =
+0;
+
+
+let currentWord =
+null;
+
+
+let currentAnswers =
+[];
+
+
+let gateGroup =
+null;
+
+
+let roundResolved =
+false;
+
+
+let gameRunning =
+false;
+
+
+let wordDeck =
+[];
+
+
+let feedbackTimer =
+null;
+
+
+let hudTimer =
+0;
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(
+  source
+){
+
+  const array =
+  [...source];
+
+
+  for(
+    let i =
+    array.length - 1;
+    i > 0;
+    i--
+  ){
+
+    const j =
+    Math.floor(
+
+      Math.random() *
+      (
+        i + 1
+      )
+
+    );
+
+
+    [
+      array[i],
+      array[j]
+    ]
+    =
+    [
+      array[j],
+      array[i]
+    ];
+
+  }
+
+
+  return array;
+
+}
+
+
+/* =========================================================
+   WORD DECK
+========================================================= */
+
+function resetWordDeck(){
+
+  wordDeck =
+  shuffle(
+    VOCABULARY
+  );
+
+}
+
+
+function getNextWord(){
+
+  if(
+    wordDeck.length ===
+    0
+  ){
+
+    resetWordDeck();
+
+  }
+
+
+  return wordDeck.shift();
+
+}
+
+
+/* =========================================================
+   OPTIONS
+========================================================= */
+
+function createOptions(
+  target
+){
+
+  const wrongAnswers =
+  shuffle(
+
+    VOCABULARY
+    .filter(
+      word =>
+      word.word !==
+      target.word
+    )
+
+  )
+  .slice(
+    0,
+    2
+  );
+
+
+  return shuffle(
+    [
+      target,
+      ...wrongAnswers
+    ]
+  );
+
+}
+
+
+/* =========================================================
+   REMOVE QUESTION
+========================================================= */
+
+function removeGate(){
+
+  if(
+    !gateGroup
+  ){
+
+    return;
+
+  }
+
+
+  gateGroup.traverse(
+    object => {
+
+      if(
+        object.geometry
+      ){
+
+        object.geometry.dispose();
+
+      }
+
+
+      if(
+        object.material
+      ){
+
+        const materials =
+        Array.isArray(
+          object.material
+        )
+        ?
+        object.material
+        :
+        [object.material];
+
+
+        materials.forEach(
+          material => {
+
+            if(
+              material.map
+            ){
+
+              material.map.dispose();
+
+            }
+
+
+            material.dispose();
+
+          }
+        );
+
+      }
+
+    }
+  );
+
+
+  scene.remove(
+    gateGroup
+  );
+
+
+  gateGroup =
+  null;
+
+}
+
+
+/* =========================================================
+   CREATE QUESTION
+========================================================= */
+
+function createQuestion(
+  first = false
+){
+
+  removeGate();
+
+
+  roundResolved =
+  false;
+
+
+  currentWord =
+  getNextWord();
+
+
+  targetWordElement.textContent =
+  currentWord.word;
+
+
+  currentAnswers =
+  createOptions(
+    currentWord
+  );
+
+
+  gateGroup =
+  new THREE.Group();
+
+
+  currentAnswers.forEach(
+    (
+      answer,
+      lane
+    ) => {
+
+      const gate =
+      createGate(
+
+        answer.meaning,
+
+        lane
+
+      );
+
+
+      gate.userData.word =
+      answer;
+
+
+      gateGroup.add(
+        gate
+      );
+
+    }
+  );
+
+
+  /*
+    Cổng đứng YÊN.
+
+    Xe + camera chạy tới cổng.
+  */
+
+  gateGroup.position.z =
+
+  player.position.z
+
+  -
+
+  (
+    first
+    ?
+    FIRST_DISTANCE
+    :
+    NEXT_DISTANCE
+  );
+
+
+  scene.add(
+    gateGroup
+  );
+
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+function moveLeft(){
+
+  if(
+    !gameRunning
+  ){
+
+    return;
+
+  }
+
+
+  selectedLane =
+  Math.max(
+
+    0,
+
+    selectedLane - 1
+
+  );
+
+}
+
+
+function moveRight(){
+
+  if(
+    !gameRunning
+  ){
+
+    return;
+
+  }
+
+
+  selectedLane =
+  Math.min(
+
+    2,
+
+    selectedLane + 1
+
+  );
+
+}
+
+
+leftButton.addEventListener(
+  "pointerdown",
+  moveLeft
+);
+
+
+rightButton.addEventListener(
+  "pointerdown",
+  moveRight
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+
+      event.key ===
+      "ArrowLeft"
+
+      ||
+
+      event.key.toLowerCase() ===
+      "a"
+
+    ){
+
+      event.preventDefault();
+
+      moveLeft();
+
+    }
+
+
+    if(
+
+      event.key ===
+      "ArrowRight"
+
+      ||
+
+      event.key.toLowerCase() ===
+      "d"
+
+    ){
+
+      event.preventDefault();
+
+      moveRight();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+function showFeedback(
+  message,
+  type
+){
+
+  feedbackElement.textContent =
+  message;
+
+
+  feedbackElement.className =
+  `${type} show`;
+
+
+  clearTimeout(
+    feedbackTimer
+  );
+
+
+  feedbackTimer =
+  setTimeout(
+    () => {
+
+      feedbackElement.className =
+      "";
+
+    },
+
+    1450
+
+  );
+
+}
+
+
+/* =========================================================
+   PLAYER LANE
+========================================================= */
+
+function getPlayerLane(){
+
+  let nearestLane =
+  0;
+
+
+  let smallestDistance =
+  Infinity;
+
+
+  ANSWER_LANES.forEach(
+    (
+      laneX,
+      index
+    ) => {
+
+      const distance =
+      Math.abs(
+
+        player.position.x -
+        laneX
+
+      );
+
+
+      if(
+        distance <
+        smallestDistance
+      ){
+
+        smallestDistance =
+        distance;
+
+
+        nearestLane =
+        index;
+
+      }
+
+    }
+  );
+
+
+  return nearestLane;
+
+}
+
+
+/* =========================================================
+   POSITION
+========================================================= */
+
+function getPosition(){
+
+  /*
+    relativeZ < 0
+    nghĩa là đối thủ đang phía trước.
+  */
+
+  const opponentsAhead =
+  opponents.filter(
+    opponent =>
+    opponent.relativeZ <
+    -1
+  )
+  .length;
+
+
+  return 1 +
+  opponentsAhead;
+
+}
+
+
+/* =========================================================
+   CORRECT
+========================================================= */
+
+function correctAnswer(){
+
+  correctAnswers++;
+
+
+  combo++;
+
+
+  bestCombo =
+  Math.max(
+
+    bestCombo,
+
+    combo
+
+  );
+
+
+  const comboBonus =
+  Math.min(
+
+    combo *
+    10,
+
+    80
+
+  );
+
+
+  score +=
+  100 +
+  comboBonus;
+
+
+  boostTimer =
+  BOOST_TIME;
+
+
+  slowTimer =
+  0;
+
+
+  /*
+    Đúng:
+    xe mình tăng tốc,
+    đối thủ tụt dần lại.
+  */
+
+  opponents.forEach(
+    opponent => {
+
+      opponent.targetZ =
+      Math.min(
+
+        9,
+
+        opponent.targetZ +
+        5
+
+      );
+
+    }
+  );
+
+
+  boostFlash.classList.add(
+    "active"
+  );
+
+
+  showFeedback(
+
+    `⚡ CHÍNH XÁC! +${100 + comboBonus} · BOOST!`,
+
+    "good"
+
+  );
+
+
+  updateHUD();
+
+}
+
+
+/* =========================================================
+   WRONG
+========================================================= */
+
+function wrongAnswer(){
+
+  combo =
+  0;
+
+
+  boostTimer =
+  0;
+
+
+  slowTimer =
+  SLOW_TIME;
+
+
+  shakeTimer =
+  .55;
+
+
+  boostFlash.classList.remove(
+    "active"
+  );
+
+
+  /*
+    Chọn xe đang ở sau nhiều nhất.
+
+    Nó sẽ lao lên vượt người chơi.
+  */
+
+  const opponent =
+  [...opponents]
+  .sort(
+    (
+      a,
+      b
+    ) =>
+    b.relativeZ -
+    a.relativeZ
+  )[0];
+
+
+  /*
+    Đưa xe tới phía trước player.
+  */
+
+  opponent.targetZ =
+  -11;
+
+
+  opponent.overtake =
+  1.5;
+
+
+  showFeedback(
+
+    `🏎️ Sai! ${currentWord.meaning} · Đối thủ vượt lên!`,
+
+    "bad"
+
+  );
+
+
+  updateHUD();
+
+}
+
+
+/* =========================================================
+   RESOLVE QUESTION
+========================================================= */
+
+function resolveQuestion(){
+
+  if(
+    roundResolved
+  ){
+
+    return;
+
+  }
+
+
+  roundResolved =
+  true;
+
+
+  questionNumber++;
+
+
+  const lane =
+  getPlayerLane();
+
+
+  const answer =
+  currentAnswers[
+    lane
+  ];
+
+
+  if(
+    answer.word ===
+    currentWord.word
+  ){
+
+    correctAnswer();
+
+  }
+
+  else{
+
+    wrongAnswer();
+
+  }
+
+
+  updateHUD();
+
+}
+
+
+/* =========================================================
+   HUD
+========================================================= */
+
+function updateHUD(){
+
+  scoreElement.textContent =
+  score;
+
+
+  speedElement.textContent =
+  `${Math.round(
+    currentSpeed *
+    11
+  )} km/h`;
+
+
+  positionElement.textContent =
+  `${getPosition()}/3`;
+
+
+  comboElement.textContent =
+  `x${combo}`;
+
+
+  progressElement.textContent =
+  `${questionNumber}/${TOTAL_QUESTIONS}`;
+
+
+  const boostPercent =
+
+  boostTimer > 0
+
+  ?
+
+  Math.min(
+
+    100,
+
+    boostTimer /
+    BOOST_TIME *
+    100
+
+  )
+
+  :
+
+  0;
+
+
+  nitroFill.style.width =
+  `${boostPercent}%`;
+
+}
+
+
+/* =========================================================
+   RESET OPPONENTS
+========================================================= */
+
+function resetOpponents(){
+
+  blueOpponent.relativeZ =
+  -2.5;
+
+
+  blueOpponent.targetZ =
+  -2.5;
+
+
+  blueOpponent.overtake =
+  0;
+
+
+  redOpponent.relativeZ =
+  2.5;
+
+
+  redOpponent.targetZ =
+  2.5;
+
+
+  redOpponent.overtake =
+  0;
+
+}
+
+
+/* =========================================================
+   RESET GAME
+========================================================= */
+
+function resetGame(){
+
+  selectedLane =
+  1;
+
+
+  score =
+  0;
+
+
+  combo =
+  0;
+
+
+  bestCombo =
+  0;
+
+
+  correctAnswers =
+  0;
+
+
+  questionNumber =
+  0;
+
+
+  elapsed =
+  0;
+
+
+  currentSpeed =
+  BASE_SPEED;
+
+
+  boostTimer =
+  0;
+
+
+  slowTimer =
+  0;
+
+
+  shakeTimer =
+  0;
+
+
+  player.position.set(
+
+    0,
+
+    0,
+
+    5
+
+  );
+
+
+  camera.position.set(
+
+    0,
+
+    1.65,
+
+    5.05
+
+  );
+
+
+  resetWordDeck();
+
+
+  resetOpponents();
+
+
+  createQuestion(
+    true
+  );
+
+
+  updateHUD();
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+function startGame(){
+
+  resetGame();
+
+
+  gameRunning =
+  true;
+
+
+  startScreen.classList.add(
+    "hidden"
+  );
+
+
+  resultScreen.classList.add(
+    "hidden"
+  );
+
+}
+
+
+/* =========================================================
+   FINISH
+========================================================= */
+
+function finishGame(){
+
+  gameRunning =
+  false;
+
+
+  boostFlash.classList.remove(
+    "active"
+  );
+
+
+  const position =
+  getPosition();
+
+
+  if(
+    position ===
+    1
+  ){
+
+    resultIcon.textContent =
+    "🏆";
+
+
+    resultTitle.textContent =
+    "Bạn về nhất!";
+
+  }
+
+  else if(
+    position ===
+    2
+  ){
+
+    resultIcon.textContent =
+    "🥈";
+
+
+    resultTitle.textContent =
+    "Bạn về nhì!";
+
+  }
+
+  else{
+
+    resultIcon.textContent =
+    "🏁";
+
+
+    resultTitle.textContent =
+    "Hoàn thành cuộc đua!";
+
+  }
+
+
+  const accuracy =
+
+  questionNumber
+
+  ?
+
+  Math.round(
+
+    correctAnswers /
+    questionNumber *
+    100
+
+  )
+
+  :
+
+  0;
+
+
+  resultText.textContent =
+
+  `Điểm ${score} · Đúng ${correctAnswers}/${questionNumber} · Chính xác ${accuracy}% · Combo cao nhất x${bestCombo}.`;
+
+
+  resultScreen.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+startButton.addEventListener(
+  "click",
+  startGame
+);
+
+
+restartButton.addEventListener(
+  "click",
+  startGame
+);
+
+
+/* =========================================================
+   SPEED
+========================================================= */
+
+function updateSpeed(
+  delta
+){
+
+  elapsed +=
+  delta;
+
+
+  /*
+    Tốc độ tăng rất chậm.
+  */
+
+  const normalSpeed =
+  Math.min(
+
+    MAX_SPEED,
+
+    BASE_SPEED +
+    elapsed *
+    .015
+
+  );
+
+
+  if(
+    boostTimer >
+    0
+  ){
+
+    boostTimer -=
+    delta;
+
+
+    currentSpeed =
+    THREE.MathUtils.lerp(
+
+      currentSpeed,
+
+      normalSpeed *
+      BOOST_MULTIPLIER,
+
+      Math.min(
+        1,
+
+        delta *
+        4
+
+      )
+
+    );
+
+  }
+
+  else if(
+    slowTimer >
+    0
+  ){
+
+    slowTimer -=
+    delta;
+
+
+    currentSpeed =
+    THREE.MathUtils.lerp(
+
+      currentSpeed,
+
+      normalSpeed *
+      SLOW_MULTIPLIER,
+
+      Math.min(
+        1,
+
+        delta *
+        4
+
+      )
+
+    );
+
+  }
+
+  else{
+
+    currentSpeed =
+    THREE.MathUtils.lerp(
+
+      currentSpeed,
+
+      normalSpeed,
+
+      Math.min(
+        1,
+
+        delta *
+        2
+
+      )
+
+    );
+
+
+    boostFlash.classList.remove(
+      "active"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+function updatePlayer(
+  delta
+){
+
+  /*
+    Lane switching.
+  */
+
+  const destinationX =
+  ANSWER_LANES[
+    selectedLane
+  ];
+
+
+  player.position.x =
+  THREE.MathUtils.lerp(
+
+    player.position.x,
+
+    destinationX,
+
+    Math.min(
+      1,
+
+      delta *
+      6.5
+
+    )
+
+  );
+
+
+  /*
+    TRUE forward movement.
+
+    Không còn kéo cổng về phía xe.
+  */
+
+  player.position.z -=
+
+  currentSpeed *
+  delta;
+
+}
+
+
+/* =========================================================
+   OPPONENTS
+========================================================= */
+
+function updateOpponents(
+  delta
+){
+
+  opponents.forEach(
+    (
+      opponent,
+      index
+    ) => {
+
+      const animationSpeed =
+
+      opponent.overtake > 0
+
+      ?
+
+      4
+
+      :
+
+      1.8;
+
+
+      opponent.relativeZ =
+      THREE.MathUtils.lerp(
+
+        opponent.relativeZ,
+
+        opponent.targetZ,
+
+        Math.min(
+
+          1,
+
+          delta *
+          animationSpeed
+
+        )
+
+      );
+
+
+      if(
+        opponent.overtake >
+        0
+      ){
+
+        opponent.overtake -=
+        delta;
+
+      }
+
+
+      opponent.mesh.position.x =
+      opponent.x;
+
+
+      opponent.mesh.position.z =
+
+      player.position.z
+
+      +
+
+      opponent.relativeZ;
+
+
+      /*
+        Suspension.
+  */
+
+      opponent.mesh.position.y =
+
+      Math.sin(
+
+        performance.now() *
+        .004
+
+        +
+
+        index
+
+      )
+
+      *
+      .015;
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+function updateCamera(
+  delta
+){
+
+  /*
+    Follow player lane.
+  */
+
+  camera.position.x =
+  THREE.MathUtils.lerp(
+
+    camera.position.x,
+
+    player.position.x,
+
+    Math.min(
+      1,
+
+      delta *
+      8
+
+    )
+
+  );
+
+
+  camera.position.z =
+  player.position.z +
+  .05;
+
+
+  /*
+    Road vibration.
+  */
+
+  const roadShake =
+
+  Math.sin(
+
+    performance.now() *
+    .009
+
+  )
+
+  *
+  .008;
+
+
+  let crashShake =
+  0;
+
+
+  let crashRoll =
+  0;
+
+
+  if(
+    shakeTimer >
+    0
+  ){
+
+    shakeTimer -=
+    delta;
+
+
+    crashShake =
+
+    Math.sin(
+
+      performance.now() *
+      .075
+
+    )
+
+    *
+    .045;
+
+
+    crashRoll =
+
+    Math.sin(
+
+      performance.now() *
+      .06
+
+    )
+
+    *
+    .04;
+
+  }
+
+
+  camera.position.y =
+
+  1.65
+
+  +
+
+  roadShake
+
+  +
+
+  crashShake;
+
+
+  /*
+    Look forward.
+  */
+
+  camera.lookAt(
+
+    camera.position.x,
+
+    1.3,
+
+    player.position.z -
+    40
+
+  );
+
+
+  /*
+    Lean during lane change.
+  */
+
+  const laneDifference =
+
+  ANSWER_LANES[
+    selectedLane
+  ]
+
+  -
+
+  player.position.x;
+
+
+  camera.rotation.z =
+
+  THREE.MathUtils.lerp(
+
+    camera.rotation.z,
+
+    -laneDifference *
+    .014
+
+    +
+
+    crashRoll,
+
+    Math.min(
+      1,
+
+      delta *
+      6
+
+    )
+
+  );
+
+
+  /*
+    Steering wheel.
+  */
+
+  if(
+    steeringWheel
+  ){
+
+    steeringWheel.rotation.z =
+    THREE.MathUtils.lerp(
+
+      steeringWheel.rotation.z,
+
+      laneDifference *
+      -.12,
+
+      Math.min(
+        1,
+
+        delta *
+        7
+
+      )
+
+    );
+
+  }
+
+
+  /*
+    FOV boost.
+  */
+
+  const targetFov =
+
+  boostTimer >
+  0
+
+  ?
+
+  67
+
+  :
+
+  61;
+
+
+  if(
+    Math.abs(
+      camera.fov -
+      targetFov
+    )
+    >
+    .05
+  ){
+
+    camera.fov =
+    THREE.MathUtils.lerp(
+
+      camera.fov,
+
+      targetFov,
+
+      Math.min(
+        1,
+
+        delta *
+        4
+
+      )
+
+    );
+
+
+    camera.updateProjectionMatrix();
+
+  }
+
+}
+
+
+/* =========================================================
+   GATE
+========================================================= */
+
+function updateGate(){
+
+  if(
+    !gateGroup
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    Gate đứng yên.
+    Player chạy tới.
+  */
+
+  const distance =
+
+  player.position.z
+
+  -
+
+  gateGroup.position.z;
+
+
+  /*
+    Chạm cổng.
+  */
+
+  if(
+
+    !roundResolved
+
+    &&
+
+    distance <=
+    1.6
+
+  ){
+
+    resolveQuestion();
+
+  }
+
+
+  /*
+    Đã đi qua cổng.
+  */
+
+  if(
+
+    roundResolved
+
+    &&
+
+    player.position.z <
+    gateGroup.position.z -
+    7
+
+  ){
+
+    if(
+      questionNumber >=
+      TOTAL_QUESTIONS
+    ){
+
+      finishGame();
+
+      return;
+
+    }
+
+
+    createQuestion(
+      false
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   GAME LOOP
+========================================================= */
+
+const clock =
+new THREE.Clock();
+
+
+function animate(){
+
+  requestAnimationFrame(
+    animate
+  );
+
+
+  const delta =
+  Math.min(
+
+    clock.getDelta(),
+
+    .04
+
+  );
+
+
+  if(
+    gameRunning
+  ){
+
+    updateSpeed(
+      delta
+    );
+
+
+    updatePlayer(
+      delta
+    );
+
+
+    updateOpponents(
+      delta
+    );
+
+
+    updateCamera(
+      delta
+    );
+
+
+    updateGate();
+
+
+    /*
+      Không update DOM 60 lần/s.
+      Chỉ khoảng 10 lần/s.
+    */
+
+    hudTimer +=
+    delta;
+
+
+    if(
+      hudTimer >=
+      .1
+    ){
+
+      hudTimer =
+      0;
+
+
+      updateHUD();
+
+    }
+
+  }
+
+
+  renderer.render(
+
+    scene,
+
+    camera
+
+  );
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    camera.aspect =
+
+    window.innerWidth
+
+    /
+
+    window.innerHeight;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+
+      window.innerWidth,
+
+      window.innerHeight
+
+    );
+
+
+    renderer.setPixelRatio(
+
+      Math.min(
+
+        window.devicePixelRatio,
+
+        1.15
+
+      )
+
+    );
+
+  }
+);
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+createWorld();
+
+
+createCockpit();
+
+
+resetOpponents();
+
+
+updateHUD();
+
+
+animate();
+
+</script>
 
 </body>
 </html>
