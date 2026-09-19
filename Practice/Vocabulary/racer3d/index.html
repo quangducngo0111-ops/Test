@@ -2,7 +2,6 @@
 <html lang="vi">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -12,258 +11,137 @@
 
   <title>Vocabulary Racer 3D</title>
 
-  <!-- CSS -->
   <link
     rel="stylesheet"
-    href="./style.css"
+    href="./style.css?v=3"
   >
 
-  <!--
-    THREE.JS
-    Quan trọng:
-    game.js hiện KHÔNG có import,
-    nên phải load THREE trước ở đây.
-  -->
+  <!-- Three.js -->
   <script
     src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"
   ></script>
-
 </head>
-
 
 <body>
 
-
 <div id="game-shell">
 
-
-  <!-- =====================================================
-       THREE.JS CANVAS
-  ====================================================== -->
-
-  <div
-    id="game-container"
-    aria-label="Vocabulary Racer 3D"
-  ></div>
+  <!-- Three.js -->
+  <div id="game-container"></div>
 
 
-
-  <!-- =====================================================
-       HUD
-  ====================================================== -->
-
+  <!-- HUD -->
   <header class="hud">
 
-
-    <div class="hud-card target-card">
-
-      <span class="hud-label">
-        TỪ MỤC TIÊU
-      </span>
+    <div class="target-card">
+      <span>TỪ MỤC TIÊU</span>
 
       <strong id="target-word">
         Ready
       </strong>
 
-      <span class="hint">
+      <small>
         ← / → để đổi làn
-      </span>
-
+      </small>
     </div>
-
 
 
     <div class="hud-row">
 
-
-      <div class="hud-card mini">
-
-        <span class="hud-label">
-          ĐIỂM
-        </span>
-
-        <strong id="score">
-          0
-        </strong>
-
+      <div class="hud-box">
+        <span>ĐIỂM</span>
+        <b id="score">0</b>
       </div>
 
-
-
-      <div class="hud-card mini">
-
-        <span class="hud-label">
-          MẠNG
-        </span>
-
-        <strong id="lives">
-          ❤️❤️❤️
-        </strong>
-
+      <div class="hud-box">
+        <span>MẠNG</span>
+        <b id="lives">❤️❤️❤️</b>
       </div>
 
-
-
-      <div class="hud-card mini">
-
-        <span class="hud-label">
-          TỐC ĐỘ
-        </span>
-
-        <strong id="speed">
-          0 km/h
-        </strong>
-
+      <div class="hud-box">
+        <span>TỐC ĐỘ</span>
+        <b id="speed">0 km/h</b>
       </div>
 
-
-
-      <div class="hud-card mini">
-
-        <span class="hud-label">
-          COMBO
-        </span>
-
-        <strong id="combo">
-          x0
-        </strong>
-
+      <div class="hud-box">
+        <span>COMBO</span>
+        <b id="combo">x0</b>
       </div>
-
 
     </div>
-
 
   </header>
 
 
-
-  <!-- =====================================================
-       FEEDBACK
-  ====================================================== -->
-
+  <!-- Feedback -->
   <div
     id="feedback"
     class="feedback"
-    aria-live="polite"
   ></div>
 
 
-
-  <!-- =====================================================
-       MOBILE CONTROLS
-  ====================================================== -->
-
+  <!-- Mobile -->
   <div class="mobile-controls">
-
 
     <button
       id="left-btn"
       type="button"
-      aria-label="Chuyển sang làn trái"
     >
       ←
     </button>
 
-
     <button
       id="right-btn"
       type="button"
-      aria-label="Chuyển sang làn phải"
     >
       →
     </button>
 
-
   </div>
 
 
-
-  <!-- =====================================================
-       START SCREEN
-  ====================================================== -->
-
+  <!-- Start screen -->
   <section
     id="start-screen"
     class="modal-screen"
   >
 
-
     <div class="modal-card">
-
 
       <div class="eyebrow">
         THREE.JS VOCABULARY GAME
       </div>
 
-
       <h1>
         🏎️ Vocabulary Racer 3D
       </h1>
 
-
       <p>
-
-        Xe tự động lao về phía trước.
-
-        Hãy đổi sang làn có
-
-        <strong>
-          nghĩa đúng
-        </strong>
-
-        trước khi đi qua cổng từ vựng.
-
+        Bạn đang ngồi trong xe đua.
+        Hãy chuyển sang làn có
+        <strong>nghĩa đúng</strong>
+        trước khi xe lao qua cổng từ vựng.
       </p>
-
 
 
       <div class="instruction-grid">
 
-
         <div>
-
-          <b>
-            ← →
-          </b>
-
-          <span>
-            Đổi làn
-          </span>
-
+          <b>← →</b>
+          <span>Đổi làn</span>
         </div>
 
-
-
         <div>
-
-          <b>
-            ✅
-          </b>
-
-          <span>
-            Đúng: + điểm & boost
-          </span>
-
+          <b>✅</b>
+          <span>Đúng: Boost</span>
         </div>
 
-
-
         <div>
-
-          <b>
-            💥
-          </b>
-
-          <span>
-            Sai: mất 1 mạng
-          </span>
-
+          <b>💥</b>
+          <span>Sai: mất mạng</span>
         </div>
-
 
       </div>
-
 
 
       <button
@@ -274,40 +152,28 @@
         BẮT ĐẦU ĐUA
       </button>
 
-
     </div>
-
 
   </section>
 
 
-
-  <!-- =====================================================
-       GAME OVER
-  ====================================================== -->
-
+  <!-- Game over -->
   <section
     id="game-over-screen"
     class="modal-screen hidden"
   >
 
-
     <div class="modal-card">
-
 
       <div class="eyebrow">
         KẾT QUẢ
       </div>
 
-
       <h2 id="game-over-title">
-        Game Over
+        GAME OVER
       </h2>
 
-
-      <p id="final-summary">
-      </p>
-
+      <p id="final-summary"></p>
 
       <button
         id="restart-btn"
@@ -317,27 +183,14 @@
         CHƠI LẠI
       </button>
 
-
     </div>
 
-
   </section>
-
 
 </div>
 
 
-
-<!-- =======================================================
-     GAME JAVASCRIPT
-
-     Không dùng type="module".
-     THREE đã được load ở HEAD phía trên.
-======================================================= -->
-
-<script src="./js?v=20260919-2"></script>
-
+<script src="./game.js?v=3"></script>
 
 </body>
-
 </html>
