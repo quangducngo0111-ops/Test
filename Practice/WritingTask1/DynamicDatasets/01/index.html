@@ -472,10 +472,98 @@ mark.user-highlight{
   font-weight:950;
 }
 
+
 .result-copy{
   color:#6f7890;
   font-size:11px;
   line-height:1.6;
+}
+
+.grading-source{
+  margin-top:7px;
+  padding:8px 10px;
+  border-radius:8px;
+  background:#f5f7fb;
+  color:#697286;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.pending{
+  margin-top:14px;
+  padding:14px;
+  border-radius:10px;
+  background:#eef4ff;
+  color:#3556a8;
+  font-size:11px;
+  font-weight:900;
+  text-align:center;
+}
+
+.grade-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+
+.grade-card{
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fafbfe;
+}
+
+.grade-card span{
+  display:block;
+  color:#737b8c;
+  font-size:9.5px;
+  font-weight:850;
+  line-height:1.35;
+}
+
+.grade-card b{
+  display:block;
+  margin-top:4px;
+  color:#21164b;
+  font-size:20px;
+  font-weight:950;
+}
+
+.feedback-box{
+  margin-top:11px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+}
+
+.feedback-box h4{
+  margin:0 0 7px;
+  color:#21164b;
+  font-size:12px;
+}
+
+.feedback-box ul{
+  margin:0;
+  padding-left:18px;
+  color:#4e5668;
+  font-size:10.5px;
+  line-height:1.6;
+}
+
+.feedback-box p{
+  margin:0;
+  color:#4e5668;
+  font-size:10.5px;
+  line-height:1.6;
+}
+
+.grade-note{
+  margin-top:10px;
+  color:#8a6170;
+  font-size:9.5px;
+  line-height:1.5;
 }
 
 
@@ -839,7 +927,7 @@ mark.user-highlight{
       color:#6a4db4;
       letter-spacing:.1em
     ">
-      BÀI ĐÃ ĐƯỢC LƯU
+      KẾT QUẢ CHẤM BÀI
     </div>
 
 
@@ -850,16 +938,95 @@ mark.user-highlight{
 
     <div
       class="result-number"
-      id="resultWords"
+      id="resultBand"
     >
-      0 từ
+      Đang chấm...
+    </div>
+
+
+    <div
+      class="result-copy"
+      id="resultModeText"
+    >
+      Hệ thống đang thử AI grader.
     </div>
 
 
     <div
       class="result-copy"
       id="resultInfo"
+      style="margin-top:7px"
     ></div>
+
+
+    <div
+      class="grading-source hidden"
+      id="gradingSource"
+    ></div>
+
+
+    <div
+      class="pending"
+      id="gradingPending"
+    >
+      Đang chấm bài và phân tích ngữ pháp, từ vựng, cấu trúc...
+    </div>
+
+
+    <div
+      id="gradeResult"
+      class="hidden"
+    >
+
+      <div class="grade-grid">
+
+        <div class="grade-card">
+          <span>Task Achievement</span>
+          <b id="gradeTA">–</b>
+        </div>
+
+        <div class="grade-card">
+          <span>Coherence &amp; Cohesion</span>
+          <b id="gradeCC">–</b>
+        </div>
+
+        <div class="grade-card">
+          <span>Lexical Resource</span>
+          <b id="gradeLR">–</b>
+        </div>
+
+        <div class="grade-card">
+          <span>Grammar</span>
+          <b id="gradeGR">–</b>
+        </div>
+
+      </div>
+
+
+      <div class="feedback-box">
+        <h4>Nhận xét tổng quan</h4>
+        <p id="overallComment"></p>
+      </div>
+
+
+      <div class="feedback-box">
+        <h4>Điểm tốt</h4>
+        <ul id="strengthsList"></ul>
+      </div>
+
+
+      <div class="feedback-box">
+        <h4>Cần cải thiện</h4>
+        <ul id="improvementsList"></ul>
+      </div>
+
+
+      <div
+        class="grade-note"
+        id="gradeNote"
+      ></div>
+
+    </div>
 
 
     <button
@@ -885,7 +1052,7 @@ const RESULT_ENDPOINT=
 
 
 const ATTEMPT_KEY=
-'PRACTICE_WRITING_TASK1_DYNAMIC_DATASETS_01_V1';
+'PRACTICE_WRITING_TASK1_DYNAMIC_DATASETS_01_V2';
 
 
 /* =========================================================
@@ -1245,12 +1412,1879 @@ function updateStats(){
 
 
 /* =========================================================
+   GRADING HELPERS
+========================================================= */
+
+function makeAttemptId(){
+
+  return 'WP1'
+  +
+  Date.now().toString(36)
+  +
+  Math.random().toString(36).slice(2,8);
+
+}
+
+
+function delay(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+
+}
+
+
+function postForm(payload){
+
+  return fetch(
+
+    RESULT_ENDPOINT,
+
+    {
+
+      method:
+      'POST',
+
+      mode:
+      'no-cors',
+
+      headers:{
+
+        'Content-Type':
+        'application/x-www-form-urlencoded;charset=UTF-8'
+
+      },
+
+      body:
+      new URLSearchParams(payload).toString()
+
+    }
+
+  );
+
+}
+
+
+function jsonpGradeResult(attemptId){
+
+  return new Promise(
+
+    (resolve,reject)=>{
+
+      const callback=
+      '__writingPracticeGrade'
+      +
+      Date.now()
+      +
+      Math.random().toString(36).slice(2,6);
+
+
+      const script=
+      document.createElement(
+        'script'
+      );
+
+
+      const timeout=
+      setTimeout(
+
+        ()=>{
+
+          cleanup();
+
+          reject(
+            new Error(
+              'timeout'
+            )
+          );
+
+        },
+
+        2800
+
+      );
+
+
+      function cleanup(){
+
+        clearTimeout(
+          timeout
+        );
+
+        try{
+          delete window[callback];
+        }catch(e){}
+
+        script.remove();
+
+      }
+
+
+      window[callback]=
+      data=>{
+
+        cleanup();
+
+        resolve(
+          data
+        );
+
+      };
+
+
+      script.onerror=
+      ()=>{
+
+        cleanup();
+
+        reject(
+          new Error(
+            'network'
+          )
+        );
+
+      };
+
+
+      script.src=
+      RESULT_ENDPOINT
+      +
+      '?mode=writingResult'
+      +
+      '&attemptId='
+      +
+      encodeURIComponent(
+        attemptId
+      )
+      +
+      '&callback='
+      +
+      encodeURIComponent(
+        callback
+      )
+      +
+      '&_='
+      +
+      Date.now();
+
+
+      document.body.appendChild(
+        script
+      );
+
+    }
+
+  );
+
+}
+
+
+function pickTask1Grade(grade){
+
+  if(
+    !grade
+    ||
+    typeof grade!=='object'
+  ){
+
+    return null;
+
+  }
+
+
+  const task=
+  grade.task1
+  &&
+  typeof grade.task1==='object'
+
+  ?
+
+  grade.task1
+
+  :
+
+  grade;
+
+
+  const band=
+  Number(
+    task.band
+    ??
+    grade.overall
+  );
+
+
+  const taskAchievement=
+  Number(
+    task.taskAchievement
+    ??
+    task.taskResponse
+    ??
+    task.achievement
+  );
+
+
+  const coherenceCohesion=
+  Number(
+    task.coherenceCohesion
+    ??
+    task.coherence
+  );
+
+
+  const lexicalResource=
+  Number(
+    task.lexicalResource
+    ??
+    task.lexical
+  );
+
+
+  const grammar=
+  Number(
+    task.grammar
+    ??
+    task.grammaticalRangeAccuracy
+  );
+
+
+  if(
+    !Number.isFinite(band)
+    ||
+    !Number.isFinite(taskAchievement)
+    ||
+    !Number.isFinite(coherenceCohesion)
+    ||
+    !Number.isFinite(lexicalResource)
+    ||
+    !Number.isFinite(grammar)
+  ){
+
+    return null;
+
+  }
+
+
+  return{
+
+    band:
+    band,
+
+    taskAchievement:
+    taskAchievement,
+
+    coherenceCohesion:
+    coherenceCohesion,
+
+    lexicalResource:
+    lexicalResource,
+
+    grammar:
+    grammar,
+
+    strengths:
+    Array.isArray(task.strengths)
+    ?
+    task.strengths
+    :
+    [],
+
+    improvements:
+    Array.isArray(task.improvements)
+    ?
+    task.improvements
+    :
+    [],
+
+    overallComment:
+    grade.overallComment
+    ||
+    task.overallComment
+    ||
+    task.comment
+    ||
+    ''
+
+  };
+
+}
+
+
+function bandRound(value){
+
+  const number=
+  Math.max(
+    3,
+    Math.min(
+      8,
+      Number(value) || 3
+    )
+  );
+
+
+  return Math.round(
+    number*2
+  )
+  /
+  2;
+
+}
+
+
+function getWords(text){
+
+  return String(
+    text || ''
+  )
+  .match(
+    /[A-Za-z]+(?:['’-][A-Za-z]+)*/g
+  )
+  ||
+  [];
+
+}
+
+
+function getSentences(text){
+
+  return String(
+    text || ''
+  )
+  .replace(
+    /\n+/g,
+    ' '
+  )
+  .match(
+    /[^.!?]+[.!?]+|[^.!?]+$/g
+  )
+  ?.map(
+    sentence=>sentence.trim()
+  )
+  .filter(Boolean)
+  ||
+  [];
+
+}
+
+
+function getParagraphs(text){
+
+  return String(
+    text || ''
+  )
+  .trim()
+  .split(
+    /\n\s*\n+/
+  )
+  .map(
+    paragraph=>paragraph.trim()
+  )
+  .filter(Boolean);
+
+}
+
+
+function uniquePush(
+  array,
+  message
+){
+
+  if(
+    message
+    &&
+    !array.includes(
+      message
+    )
+  ){
+
+    array.push(
+      message
+    );
+
+  }
+
+}
+
+
+function localLanguageReview(text){
+
+  const raw=
+  String(
+    text || ''
+  );
+
+
+  const words=
+  getWords(
+    raw
+  );
+
+
+  const lowerWords=
+  words.map(
+    word=>word.toLowerCase()
+  );
+
+
+  const wordTotal=
+  words.length;
+
+
+  const sentences=
+  getSentences(
+    raw
+  );
+
+
+  const paragraphs=
+  getParagraphs(
+    raw
+  );
+
+
+  const grammarIssues=[];
+
+  const lexicalIssues=[];
+
+  const mechanicsIssues=[];
+
+
+  const grammarRules=[
+
+    [
+      /\bi am agree\b/gi,
+      'Use “I agree”, not “I am agree”.'
+    ],
+
+    [
+      /\bpeople is\b/gi,
+      '“People” is plural: use “people are”.'
+    ],
+
+    [
+      /\bpeople has\b/gi,
+      '“People” is plural: use “people have”.'
+    ],
+
+    [
+      /\bthere have\b/gi,
+      'Check “there is/are/has been/have been”.'
+    ],
+
+    [
+      /\bmore better\b/gi,
+      'Avoid “more better”; use “better”.'
+    ],
+
+    [
+      /\bmore easier\b/gi,
+      'Avoid “more easier”; use “easier”.'
+    ],
+
+    [
+      /\bmore cheaper\b/gi,
+      'Avoid “more cheaper”; use “cheaper”.'
+    ],
+
+    [
+      /\bmore faster\b/gi,
+      'Avoid “more faster”; use “faster”.'
+    ],
+
+    [
+      /\bdiscuss about\b/gi,
+      'Use “discuss the issue”, not “discuss about the issue”.'
+    ],
+
+    [
+      /\bdespite of\b/gi,
+      'Use “despite” or “in spite of”, not “despite of”.'
+    ],
+
+    [
+      /\bchilds\b/gi,
+      'The plural of “child” is “children”.'
+    ],
+
+    [
+      /\bpeoples\b/gi,
+      'Use “people” for the usual plural meaning.'
+    ],
+
+    [
+      /\binformations\b/gi,
+      '“Information” is normally uncountable.'
+    ],
+
+    [
+      /\badvices\b/gi,
+      '“Advice” is normally uncountable.'
+    ],
+
+    [
+      /\bequipments\b/gi,
+      '“Equipment” is normally uncountable.'
+    ],
+
+    [
+      /\bfurnitures\b/gi,
+      '“Furniture” is normally uncountable.'
+    ],
+
+    [
+      /\bmake research\b/gi,
+      'Prefer “do/conduct research”.'
+    ],
+
+    [
+      /\bdo a decision\b/gi,
+      'Use “make a decision”.'
+    ],
+
+    [
+      /\bstrong rain\b/gi,
+      'The usual collocation is “heavy rain”.'
+    ],
+
+    [
+      /\bbig amount\b/gi,
+      'Prefer “large amount”.'
+    ],
+
+    [
+      /\bbig number\b/gi,
+      'Prefer “large number”.'
+    ],
+
+    [
+      /\baccording to me\b/gi,
+      'In formal writing, prefer “in my view/opinion”.'
+    ]
+
+  ];
+
+
+  grammarRules.forEach(
+
+    ([regex,message])=>{
+
+      const matches=
+      raw.match(
+        regex
+      );
+
+
+      if(
+        matches
+        &&
+        matches.length
+      ){
+
+        uniquePush(
+
+          grammarIssues,
+
+          message
+          +
+          ' ('
+          +
+          matches.length
+          +
+          ' occurrence'
+          +
+          (
+            matches.length>1
+            ?
+            's'
+            :
+            ''
+          )
+          +
+          ')'
+
+        );
+
+      }
+
+    }
+
+  );
+
+
+  const repeated=
+  raw.match(
+    /\b([A-Za-z]+)\s+\1\b/gi
+  )
+  ||
+  [];
+
+
+  if(
+    repeated.length
+  ){
+
+    uniquePush(
+
+      grammarIssues,
+
+      'Repeated word detected: '
+      +
+      repeated
+      .slice(
+        0,
+        3
+      )
+      .join(
+        ', '
+      )
+      +
+      '.'
+
+    );
+
+  }
+
+
+  if(
+    (
+      raw.match(
+        /\balthough\b[^.!?]{0,140}\bbut\b/gi
+      )
+      ||
+      []
+    )
+    .length
+  ){
+
+    uniquePush(
+
+      grammarIssues,
+
+      'Avoid pairing “although” with “but” in the same clause structure.'
+
+    );
+
+  }
+
+
+  if(
+    (
+      raw.match(
+        /\bbecause\b[^.!?]{0,140}\bso\b/gi
+      )
+      ||
+      []
+    )
+    .length
+  ){
+
+    uniquePush(
+
+      grammarIssues,
+
+      'Check “because … so …”; normally choose one connector.'
+
+    );
+
+  }
+
+
+  const badSpace=
+  (
+    raw.match(
+      /\s+[,.!?;:]/g
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  if(
+    badSpace
+  ){
+
+    uniquePush(
+
+      mechanicsIssues,
+
+      'Remove spaces before punctuation marks ('
+      +
+      badSpace
+      +
+      ' detected).'
+
+    );
+
+  }
+
+
+  const doubleSpace=
+  (
+    raw.match(
+      / {2,}/g
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  if(
+    doubleSpace
+  ){
+
+    uniquePush(
+
+      mechanicsIssues,
+
+      'Remove repeated spaces ('
+      +
+      doubleSpace
+      +
+      ' detected).'
+
+    );
+
+  }
+
+
+  sentences.forEach(
+
+    (
+      sentence,
+      index
+    )=>{
+
+      const first=
+      (
+        sentence.match(
+          /[A-Za-z]/
+        )
+        ||
+        []
+      )[0];
+
+
+      if(
+        first
+        &&
+        first===first.toLowerCase()
+        &&
+        index<5
+      ){
+
+        uniquePush(
+
+          mechanicsIssues,
+
+          'Some sentences appear to begin with a lowercase letter.'
+
+        );
+
+      }
+
+    }
+
+  );
+
+
+  if(
+    raw.trim()
+    &&
+    !/[.!?]["')\]]?$/.test(
+      raw.trim()
+    )
+  ){
+
+    uniquePush(
+
+      mechanicsIssues,
+
+      'The response does not end with terminal punctuation.'
+
+    );
+
+  }
+
+
+  const contractions=
+  (
+    raw.match(
+      /\b(?:don't|doesn't|didn't|can't|won't|isn't|aren't|wasn't|weren't|it's|they're|we're|i'm|i've|we've|they've|shouldn't|wouldn't|couldn't)\b/gi
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  if(
+    contractions
+  ){
+
+    uniquePush(
+
+      lexicalIssues,
+
+      'Formal IELTS writing usually avoids contractions ('
+      +
+      contractions
+      +
+      ' detected).'
+
+    );
+
+  }
+
+
+  const informal=
+  raw.match(
+    /\b(?:kids|stuff|a lot of|lots of|things)\b/gi
+  )
+  ||
+  [];
+
+
+  if(
+    informal.length
+  ){
+
+    uniquePush(
+
+      lexicalIssues,
+
+      'Consider more formal/precise alternatives for: '
+      +
+      [
+        ...
+        new Set(
+          informal.map(
+            value=>value.toLowerCase()
+          )
+        )
+      ]
+      .slice(
+        0,
+        5
+      )
+      .join(
+        ', '
+      )
+      +
+      '.'
+
+    );
+
+  }
+
+
+  const stop=
+  new Set([
+
+    'the','a','an','and','or','but','if','to','of','in','on','at','for','from','with','by',
+
+    'is','are','was','were','be','been','being','it','this','that','these','those','as',
+
+    'i','we','you','they','he','she','them','their','our','my','your','his','her',
+
+    'do','does','did','have','has','had','can','could','will','would','should','may','might',
+
+    'more','most','some','many','much','very','also','than','so','because'
+
+  ]);
+
+
+  const content=
+  lowerWords.filter(
+
+    word=>
+    word.length>2
+    &&
+    !stop.has(
+      word
+    )
+
+  );
+
+
+  const frequency=
+  {};
+
+
+  content.forEach(
+
+    word=>
+    frequency[word]=
+    (
+      frequency[word]
+      ||
+      0
+    )
+    +
+    1
+
+  );
+
+
+  const repeatedContent=
+  Object.entries(
+    frequency
+  )
+  .filter(
+
+    (
+      [
+        word,
+        count
+      ]
+    )=>
+    count
+    >=
+    Math.max(
+      4,
+      Math.ceil(
+        wordTotal*0.025
+      )
+    )
+
+  )
+  .sort(
+    (
+      a,
+      b
+    )=>
+    b[1]-a[1]
+  )
+  .slice(
+    0,
+    5
+  );
+
+
+  if(
+    repeatedContent.length
+  ){
+
+    uniquePush(
+
+      lexicalIssues,
+
+      'Frequent repetition: '
+      +
+      repeatedContent
+      .map(
+        (
+          [
+            word,
+            count
+          ]
+        )=>
+        word
+        +
+        ' ×'
+        +
+        count
+      )
+      .join(
+        ', '
+      )
+      +
+      '. Consider paraphrasing where natural.'
+
+    );
+
+  }
+
+
+  const uniqueContent=
+  new Set(
+    content
+  )
+  .size;
+
+
+  const diversity=
+  content.length
+  ?
+  uniqueContent/content.length
+  :
+  0;
+
+
+  const connectors=
+  (
+    raw.match(
+      /\b(?:however|therefore|moreover|furthermore|consequently|nevertheless|whereas|while|although|because|thus|hence|overall|in contrast|in comparison|on the other hand|for example|for instance|in addition|as a result)\b/gi
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  const complex=
+  (
+    raw.match(
+      /\b(?:although|whereas|while|because|which|who|that|if|unless|despite|since|when|where)\b/gi
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  return{
+
+    raw:
+    raw,
+
+    wordTotal:
+    wordTotal,
+
+    sentences:
+    sentences,
+
+    paragraphs:
+    paragraphs,
+
+    grammarIssues:
+    grammarIssues,
+
+    lexicalIssues:
+    lexicalIssues,
+
+    mechanicsIssues:
+    mechanicsIssues,
+
+    diversity:
+    diversity,
+
+    connectors:
+    connectors,
+
+    complex:
+    complex
+
+  };
+
+}
+
+
+function scoreGrammar(analysis){
+
+  if(
+    analysis.wordTotal<40
+  ){
+
+    return 3.5;
+
+  }
+
+
+  const issueCount=
+  analysis.grammarIssues.length
+  +
+  analysis.mechanicsIssues.length;
+
+
+  const density=
+  issueCount
+  /
+  Math.max(
+    1,
+    analysis.wordTotal
+  )
+  *
+  100;
+
+
+  let score=
+  6.5;
+
+
+  if(
+    density>5
+  ){
+
+    score=
+    4.5;
+
+  }
+
+  else if(
+    density>3
+  ){
+
+    score=
+    5.0;
+
+  }
+
+  else if(
+    density>2
+  ){
+
+    score=
+    5.5;
+
+  }
+
+  else if(
+    density>1
+  ){
+
+    score=
+    6.0;
+
+  }
+
+
+  if(
+    analysis.complex>=4
+    &&
+    density<=1.5
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    score
+  );
+
+}
+
+
+function scoreLexical(analysis){
+
+  if(
+    analysis.wordTotal<40
+  ){
+
+    return 3.5;
+
+  }
+
+
+  let score=
+  5.0;
+
+
+  if(
+    analysis.diversity>=0.72
+  ){
+
+    score=
+    7.0;
+
+  }
+
+  else if(
+    analysis.diversity>=0.62
+  ){
+
+    score=
+    6.5;
+
+  }
+
+  else if(
+    analysis.diversity>=0.52
+  ){
+
+    score=
+    6.0;
+
+  }
+
+  else if(
+    analysis.diversity>=0.42
+  ){
+
+    score=
+    5.5;
+
+  }
+
+
+  if(
+    analysis.lexicalIssues.length>=2
+  ){
+
+    score-=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    score
+  );
+
+}
+
+
+function scoreCoherence(
+  analysis
+){
+
+  if(
+    analysis.wordTotal<40
+  ){
+
+    return 3.5;
+
+  }
+
+
+  let score=
+  5.0;
+
+
+  if(
+    analysis.paragraphs.length>=3
+    &&
+    analysis.paragraphs.length<=5
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    analysis.connectors>=3
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    analysis.connectors>=6
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    analysis.sentences.length>=7
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    Math.min(
+      score,
+      7
+    )
+  );
+
+}
+
+
+function scoreTaskAchievement(
+  analysis
+){
+
+  let score=
+  analysis.wordTotal>=150
+  ?
+  5.5
+  :
+  (
+    analysis.wordTotal>=120
+    ?
+    5.0
+    :
+    4.0
+  );
+
+
+  if(
+    /\b(?:overall|in general|generally|it is clear|it can be seen)\b/i.test(
+      analysis.raw
+    )
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    /\b(?:whereas|while|compared with|compared to|in contrast|respectively|more than|less than|higher|lower|increased|decreased|remained|rose|fell|declined|grew|peaked|fluctuated)\b/i.test(
+      analysis.raw
+    )
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    Math.min(
+      score,
+      7
+    )
+  );
+
+}
+
+
+function buildLocalTask1Grade(text){
+
+  const analysis=
+  localLanguageReview(
+    text
+  );
+
+
+  const grammar=
+  scoreGrammar(
+    analysis
+  );
+
+
+  const lexicalResource=
+  scoreLexical(
+    analysis
+  );
+
+
+  const coherenceCohesion=
+  scoreCoherence(
+    analysis
+  );
+
+
+  const taskAchievement=
+  scoreTaskAchievement(
+    analysis
+  );
+
+
+  const band=
+  bandRound(
+    (
+      grammar
+      +
+      lexicalResource
+      +
+      coherenceCohesion
+      +
+      taskAchievement
+    )
+    /
+    4
+  );
+
+
+  const strengths=[];
+
+  const improvements=[];
+
+
+  if(
+    analysis.wordTotal>=150
+  ){
+
+    strengths.push(
+      `Bài đạt yêu cầu tối thiểu 150 từ (${analysis.wordTotal} từ).`
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      `Bài hiện có ${analysis.wordTotal} từ; nên đạt ít nhất 150 từ.`
+    );
+
+  }
+
+
+  if(
+    analysis.paragraphs.length>=3
+  ){
+
+    strengths.push(
+      'Bài đã được chia thành nhiều đoạn.'
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      'Nên chia bài rõ hơn thành mở bài, overview và các body paragraph.'
+    );
+
+  }
+
+
+  if(
+    /\b(?:overall|in general|generally|it is clear|it can be seen)\b/i.test(
+      analysis.raw
+    )
+  ){
+
+    strengths.push(
+      'Có dấu hiệu của phần overview.'
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      'Task 1 cần một overview rõ ràng nêu các xu hướng/đặc điểm chính.'
+    );
+
+  }
+
+
+  if(
+    analysis.connectors>=3
+  ){
+
+    strengths.push(
+      `Có sử dụng từ/cụm liên kết (${analysis.connectors} lượt được phát hiện).`
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      'Nên dùng từ nối có chọn lọc để liên kết các so sánh và xu hướng.'
+    );
+
+  }
+
+
+  if(
+    analysis.diversity>=0.52
+  ){
+
+    strengths.push(
+      'Từ vựng có mức độ đa dạng tương đối tốt trong phép kiểm tra tự động.'
+    );
+
+  }
+
+
+  analysis.grammarIssues.forEach(
+
+    issue=>
+    improvements.push(
+      'Ngữ pháp: '
+      +
+      issue
+    )
+
+  );
+
+
+  analysis.mechanicsIssues.forEach(
+
+    issue=>
+    improvements.push(
+      'Dấu câu/trình bày: '
+      +
+      issue
+    )
+
+  );
+
+
+  analysis.lexicalIssues.forEach(
+
+    issue=>
+    improvements.push(
+      'Từ vựng/cách dùng từ: '
+      +
+      issue
+    )
+
+  );
+
+
+  if(
+    !analysis.grammarIssues.length
+    &&
+    !analysis.mechanicsIssues.length
+  ){
+
+    strengths.push(
+      'Không phát hiện lỗi phổ biến nào trong bộ quy tắc ngữ pháp/dấu câu cục bộ.'
+    );
+
+  }
+
+
+  return{
+
+    band:
+    band,
+
+    taskAchievement:
+    taskAchievement,
+
+    coherenceCohesion:
+    coherenceCohesion,
+
+    lexicalResource:
+    lexicalResource,
+
+    grammar:
+    grammar,
+
+    strengths:
+    strengths.slice(
+      0,
+      6
+    ),
+
+    improvements:
+    improvements.slice(
+      0,
+      9
+    ),
+
+    overallComment:
+    'Đây là chấm dự phòng ngay trên trình duyệt. Hệ thống kiểm tra độ dài, cấu trúc đoạn/câu, từ nối, mức độ lặp từ, một số lỗi ngữ pháp/collocation phổ biến và dấu câu. Nó không thể đánh giá đầy đủ độ chính xác của số liệu trong biểu đồ, ý nghĩa, mọi lỗi ngữ pháp hay toàn bộ IELTS Band Descriptors như giáo viên/AI grader.'
+
+  };
+
+}
+
+
+function renderList(
+  id,
+  items
+){
+
+  document
+  .getElementById(
+    id
+  )
+  .innerHTML=
+  (
+    items
+    &&
+    items.length
+    ?
+    items
+    :
+    [
+      'Chưa có nhận xét cụ thể.'
+    ]
+  )
+  .map(
+
+    item=>
+    '<li>'
+    +
+    escapeHTML(
+      item
+    )
+    +
+    '</li>'
+
+  )
+  .join(
+    ''
+  );
+
+}
+
+
+function renderGrade(
+  grade,
+  source,
+  reason
+){
+
+  gradingPending.classList.add(
+    'hidden'
+  );
+
+
+  gradeResult.classList.remove(
+    'hidden'
+  );
+
+
+  gradingSource.classList.remove(
+    'hidden'
+  );
+
+
+  resultBand.textContent=
+  'Band '
+  +
+  Number(
+    grade.band
+  )
+  .toFixed(
+    1
+  );
+
+
+  gradeTA.textContent=
+  grade.taskAchievement;
+
+
+  gradeCC.textContent=
+  grade.coherenceCohesion;
+
+
+  gradeLR.textContent=
+  grade.lexicalResource;
+
+
+  gradeGR.textContent=
+  grade.grammar;
+
+
+  overallComment.textContent=
+  grade.overallComment
+  ||
+  '';
+
+
+  renderList(
+    'strengthsList',
+    grade.strengths
+  );
+
+
+  renderList(
+    'improvementsList',
+    grade.improvements
+  );
+
+
+  if(
+    source==='local'
+  ){
+
+    resultModeText.textContent=
+    'Local diagnostic score — không phải IELTS band chính thức.';
+
+
+    gradingSource.textContent=
+    'AI grader không khả dụng nên hệ thống đã chuyển sang chấm dự phòng trên trình duyệt.'
+    +
+    (
+      reason
+      ?
+      ' Lý do: '
+      +
+      reason
+      :
+      ''
+    );
+
+
+    gradeNote.textContent=
+    'Điểm local chỉ nên dùng để luyện tập, tập trung vào ngữ pháp, từ vựng, cấu trúc và lỗi phổ biến.';
+
+  }
+
+  else{
+
+    resultModeText.textContent=
+    'Điểm ước lượng từ AI grader cho bài luyện tập.';
+
+
+    gradingSource.textContent=
+    'Nguồn chấm: AI grader qua Apps Script.';
+
+
+    gradeNote.textContent=
+    'Điểm AI vẫn là điểm ước lượng phục vụ luyện tập, không phải điểm IELTS chính thức.';
+
+  }
+
+}
+
+
+function renderLocalGrade(
+  text,
+  reason
+){
+
+  renderGrade(
+
+    buildLocalTask1Grade(
+      text
+    ),
+
+    'local',
+
+    reason
+    ||
+    ''
+
+  );
+
+}
+
+
+async function pollGrade(
+  attemptId,
+  text
+){
+
+  let lastReason=
+  'AI grader chưa trả kết quả hoàn tất.';
+
+
+  for(
+    let attempt=0;
+    attempt<3;
+    attempt++
+  ){
+
+    await delay(
+      1000
+    );
+
+
+    try{
+
+      const response=
+      await jsonpGradeResult(
+        attemptId
+      );
+
+
+      if(
+        response
+        &&
+        response.status==='DONE'
+      ){
+
+        const taskGrade=
+        pickTask1Grade(
+          response.grade
+        );
+
+
+        if(
+          taskGrade
+        ){
+
+          renderGrade(
+            taskGrade,
+            'ai',
+            ''
+          );
+
+          return;
+
+        }
+
+
+        renderLocalGrade(
+          text,
+          'AI trả dữ liệu chấm không đúng định dạng.'
+        );
+
+        return;
+
+      }
+
+
+      if(
+        response
+        &&
+        response.status==='ERROR'
+      ){
+
+        renderLocalGrade(
+
+          text,
+
+          response.error
+          ||
+          'Apps Script báo lỗi khi chấm.'
+
+        );
+
+        return;
+
+      }
+
+
+      if(
+        response
+        &&
+        response.status
+      ){
+
+        lastReason=
+        'Backend status: '
+        +
+        response.status;
+
+      }
+
+    }
+
+    catch(error){
+
+      lastReason=
+      error
+      &&
+      error.message
+      ?
+      error.message
+      :
+      'network/timeout';
+
+    }
+
+  }
+
+
+  renderLocalGrade(
+    text,
+    lastReason
+  );
+
+}
+
+
+/* =========================================================
    SUBMIT
 ========================================================= */
 
 async function submitPractice(){
 
-  if(submitted){
+  if(
+    submitted
+  ){
 
     return;
 
@@ -1261,7 +3295,9 @@ async function submitPractice(){
   essay.value.trim();
 
 
-  if(!text){
+  if(
+    !text
+  ){
 
     alert(
       'Em chưa viết nội dung bài.'
@@ -1324,8 +3360,12 @@ async function submitPractice(){
   );
 
 
-  resultWords.textContent=
-  `${words} từ`;
+  resultBand.textContent=
+  'Đang chấm...';
+
+
+  resultModeText.textContent=
+  'Hệ thống đang thử AI grader.';
 
 
   resultInfo.innerHTML=
@@ -1336,17 +3376,45 @@ async function submitPractice(){
 
     <br>
 
-    ${paragraphs} đoạn
-
+    ${words} từ
     ·
-
+    ${paragraphs} đoạn
+    ·
     Thời gian ${fmt(durationSeconds)}
   `;
+
+
+  gradingPending.classList.remove(
+    'hidden'
+  );
+
+
+  gradeResult.classList.add(
+    'hidden'
+  );
+
+
+  gradingSource.classList.add(
+    'hidden'
+  );
 
 
   resultOverlay.classList.remove(
     'hidden'
   );
+
+
+  const attemptId=
+  makeAttemptId();
+
+
+  const submittedAt=
+  new Date()
+  .toISOString();
+
+
+  const taskPrompt=
+  'The line graph provides information about the number of international conferences that took place in three different cities. Provide an overview of the information by identifying and describing the key details, and include comparisons where appropriate.';
 
 
   const details=
@@ -1365,7 +3433,7 @@ async function submitPractice(){
     'Line graph',
 
     task:
-    'The line graph provides information about the number of international conferences that took place in three different cities. Provide an overview of the information by identifying and describing the key details, and include comparisons where appropriate.',
+    taskPrompt,
 
     essay:
     text,
@@ -1377,80 +3445,96 @@ async function submitPractice(){
     paragraphs,
 
     chart:
-    'chart.png'
+    'chart.png',
+
+    attemptId:
+    attemptId
 
   });
 
 
-  const body=
-  new URLSearchParams({
+  localStorage.setItem(
 
-    mode:
-    'PRACTICE',
+    ATTEMPT_KEY
+    +
+    '_last_submission',
 
-    name:
-    student?.name || '',
+    JSON.stringify({
 
-    className:
-    student?.className || '',
+      attemptId:
+      attemptId,
 
-    skill:
-    'Writing Task 1',
+      name:
+      student?.name || '',
 
-    practiceType:
-    'Dynamic Datasets',
+      className:
+      student?.className || '',
 
-    practiceId:
-    '01',
+      essay:
+      text,
 
-    score:
-    '',
+      wordCount:
+      words,
 
-    total:
-    '',
+      paragraphCount:
+      paragraphs,
 
-    durationSeconds:
-    String(
-      durationSeconds
-    ),
+      durationSeconds:
+      durationSeconds,
 
-    details:
-    details,
+      submittedAt:
+      submittedAt
 
-    submittedAt:
-    new Date()
-    .toISOString()
+    })
 
-  });
+  );
 
+
+  /*
+    1) Giữ nguyên luồng lưu kết quả Practice cũ.
+    Việc này không phụ thuộc AI grader.
+  */
 
   try{
 
-    await fetch(
+    await postForm({
 
-      RESULT_ENDPOINT,
+      mode:
+      'PRACTICE',
 
-      {
+      name:
+      student?.name || '',
 
-        method:
-        'POST',
+      className:
+      student?.className || '',
 
-        mode:
-        'no-cors',
+      skill:
+      'Writing Task 1',
 
-        headers:{
+      practiceType:
+      'Dynamic Datasets',
 
-          'Content-Type':
-          'application/x-www-form-urlencoded;charset=UTF-8'
+      practiceId:
+      '01',
 
-        },
+      score:
+      '',
 
-        body:
-        body.toString()
+      total:
+      '',
 
-      }
+      durationSeconds:
+      String(
+        durationSeconds
+      ),
 
-    );
+      details:
+      details,
+
+      submittedAt:
+      submittedAt
+
+    });
 
   }
 
@@ -1459,6 +3543,98 @@ async function submitPractice(){
     console.warn(
       'Không gửi được Writing Practice:',
       error
+    );
+
+  }
+
+
+  /*
+    2) Thử AI grader.
+    Nếu API/quota/token/backend lỗi, pollGrade sẽ tự
+    chuyển sang local diagnostic.
+  */
+
+  try{
+
+    await postForm({
+
+      mode:
+      'writingGrade',
+
+      examType:
+      'PRACTICE',
+
+      gradingScope:
+      'TASK1',
+
+      skill:
+      'Writing Task 1',
+
+      practiceType:
+      'Dynamic Datasets',
+
+      practiceId:
+      '01',
+
+      attemptId:
+      attemptId,
+
+      name:
+      student?.name || '',
+
+      className:
+      student?.className || '',
+
+      task1Prompt:
+      taskPrompt,
+
+      task1:
+      text,
+
+      task2:
+      '',
+
+      task1Words:
+      String(
+        words
+      ),
+
+      durationSeconds:
+      String(
+        durationSeconds
+      ),
+
+      submittedAt:
+      submittedAt
+
+    });
+
+
+    pollGrade(
+      attemptId,
+      text
+    );
+
+  }
+
+  catch(error){
+
+    renderLocalGrade(
+
+      text,
+
+      'Không kết nối được Apps Script: '
+      +
+      (
+        error
+        &&
+        error.message
+        ?
+        error.message
+        :
+        'network error'
+      )
+
     );
 
   }
