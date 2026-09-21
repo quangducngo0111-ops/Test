@@ -22,7 +22,6 @@ window.VOCAB_MANIFEST = [
   "./data/topics/education/05.js",
   "./data/topics/education/06.js"
 
-];
   /* =========================
      ENVIRONMENT · 6 SETS
   ========================= */
@@ -33,3 +32,14 @@ window.VOCAB_MANIFEST = [
   "./data/topics/environment/04.js",
   "./data/topics/environment/05.js",
   "./data/topics/environment/06.js"
+
+  /* =========================
+     HEALTH · 6 SETS
+  ========================= */
+
+  "./data/topics/health/01.js",
+  "./data/topics/health/02.js",
+  "./data/topics/health/03.js",
+  "./data/topics/health/04.js",
+  "./data/topics/health/05.js",
+  "./data/topics/health/06.js"
