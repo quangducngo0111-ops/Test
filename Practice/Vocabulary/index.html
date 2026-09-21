@@ -21,6 +21,13 @@
   onerror="window.VOCABULARY_LOAD_ERROR=true"
 ></script>
 
+<!-- Danh sách các bộ từ mới tách riêng.
+     Giữ vocab-data.js cũ để link/dữ liệu Bộ 01 không bị ảnh hưởng. -->
+<script
+  src="./data/manifest.js?v=20260921-v1"
+  onerror="window.VOCAB_MANIFEST_LOAD_ERROR=true"
+></script>
+
 <style>
 
 :root{
@@ -3141,6 +3148,42 @@ button:disabled{
 
 
 <!-- =========================================================
+     TOPIC VOCABULARY
+========================================================= -->
+
+<main
+  class="page hidden"
+  id="topicsScreen"
+>
+
+  <div class="screen-head">
+
+    <button
+      class="screen-back"
+      onclick="showHome()"
+    >
+      ← Vocabulary
+    </button>
+
+    <h1>
+      🧠 Từ vựng theo chủ đề
+    </h1>
+
+    <p>
+      Chọn chủ đề muốn học. Mỗi chủ đề có thể có nhiều Bộ 01, 02, 03...
+    </p>
+
+  </div>
+
+  <section
+    class="category-grid"
+    id="topicGrid"
+  ></section>
+
+</main>
+
+
+<!-- =========================================================
      SETS
 ========================================================= -->
 
@@ -3153,7 +3196,8 @@ button:disabled{
 
     <button
       class="screen-back"
-      onclick="showHome()"
+      id="setsBack"
+      type="button"
     >
       ← Vocabulary
     </button>
@@ -3360,7 +3404,7 @@ button:disabled{
       <button
         class="game-play"
         data-game-button
-        onclick="window.location.href='./racer3d/'"
+        onclick="startRacer()"
       >
         Chơi →
       </button>
@@ -4384,7 +4428,7 @@ button:disabled{
    DATA
 ========================================================= */
 
-const VOCABULARY_DATA =
+let VOCABULARY_DATA =
 Array.isArray(
   window.VOCABULARY_DATA
 )
@@ -4432,6 +4476,66 @@ const SKILL_META = {
   }
 
 };
+
+
+const TOPIC_META = {
+
+  "topic-economy":{
+    title:"Kinh tế",
+    icon:"💰"
+  },
+
+  "topic-education":{
+    title:"Giáo dục",
+    icon:"🎓"
+  },
+
+  "topic-environment":{
+    title:"Môi trường",
+    icon:"🌱"
+  },
+
+  "topic-technology":{
+    title:"Công nghệ",
+    icon:"💻"
+  },
+
+  "topic-health":{
+    title:"Sức khỏe",
+    icon:"🩺"
+  },
+
+  "topic-work":{
+    title:"Việc làm & Nghề nghiệp",
+    icon:"💼"
+  },
+
+  "topic-society":{
+    title:"Xã hội",
+    icon:"👥"
+  },
+
+  "topic-transport":{
+    title:"Giao thông & Đô thị",
+    icon:"🏙️"
+  }
+
+};
+
+
+function getSkillMeta(skill){
+
+  return
+  SKILL_META[skill]
+  ||
+  TOPIC_META[skill]
+  ||
+  {
+    title:skill,
+    icon:"📚"
+  };
+
+}
 
 
 const GAME_NAMES = {
@@ -5349,6 +5453,7 @@ function hideScreens(){
 
   [
     "homeScreen",
+    "topicsScreen",
     "setsScreen",
     "collectionScreen",
     "whackScreen",
@@ -5468,103 +5573,279 @@ false;
 
 
 /* =========================================================
-   HOME
+   ROUTING + HOME
 ========================================================= */
 
-function renderHome(){
+function setRoute(params={}, replace=false){
 
-  $("categoryGrid")
-  .innerHTML =
-  Object.entries(
-    SKILL_META
-  )
-  .map(
-    (
-      [
-        key,
-        meta
-      ]
-    ) => {
+  try{
 
-      const words =
-      VOCABULARY_DATA
-      .filter(
-        word =>
-        (
-          word.skills
-          ||
-          []
-        )
-        .includes(
-          key
-        )
-      );
+    const url =
+    new URL(
+      window.location.href
+    );
 
 
-      const sets =
-      new Set(
-        words
-        .map(
-          word =>
-          word.set
-        )
-        .filter(Boolean)
-      );
+    [
+      "view",
+      "skill",
+      "set"
+    ]
+    .forEach(
+      key =>
+      url.searchParams.delete(key)
+    );
 
 
-      return`
-        <button
-          class="category"
-          onclick="openSkill('${key}')"
-        >
+    Object.entries(
+      params
+    )
+    .forEach(
+      ([key,value]) => {
 
-          <div class="category-icon">
-            ${meta.icon}
-          </div>
+        if(
+          value !== undefined
+          &&
+          value !== null
+          &&
+          value !== ""
+        ){
 
-          <h3>
-            ${meta.title}
-          </h3>
+          url.searchParams.set(
+            key,
+            String(value)
+          );
 
-          <div class="category-count">
-            ${sets.size} bộ · ${words.length} từ
-          </div>
+        }
 
-          <div class="mastery-line">
+      }
+    );
 
-            <div class="mastery-row">
 
-              <span>
-                Vocabulary sets
-              </span>
+    const method =
+    replace
+    ?
+    "replaceState"
+    :
+    "pushState";
 
-              <strong>
-                ${sets.size}
-              </strong>
 
-            </div>
+    history[method](
+      {},
+      "",
+      url.pathname
+      +
+      url.search
+      +
+      url.hash
+    );
 
-            <div class="mastery-bar">
+  }
 
-              <i
-                style="width:${sets.size ? 100 : 0}%"
-              ></i>
-
-            </div>
-
-          </div>
-
-        </button>
-      `;
-
-    }
-  )
-  .join("");
+  catch(error){}
 
 }
 
 
-function showHome(){
+function countSkillWords(skill){
+
+  const words =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    (
+      word.skills
+      ||
+      []
+    )
+    .includes(skill)
+  );
+
+
+  const sets =
+  new Set(
+    words
+    .map(
+      word =>
+      word.set
+    )
+    .filter(Boolean)
+  );
+
+
+  return{
+    words,
+    sets
+  };
+
+}
+
+
+function categoryCard(
+  key,
+  meta,
+  action,
+  customCount="",
+  customLabel="Vocabulary sets"
+){
+
+  const data =
+  countSkillWords(key);
+
+
+  const countText =
+  customCount
+  ||
+  `${data.sets.size} bộ · ${data.words.length} từ`;
+
+
+  return`
+    <button
+      class="category"
+      onclick="${action}"
+    >
+
+      <div class="category-icon">
+        ${meta.icon}
+      </div>
+
+      <h3>
+        ${meta.title}
+      </h3>
+
+      <div class="category-count">
+        ${countText}
+      </div>
+
+      <div class="mastery-line">
+
+        <div class="mastery-row">
+
+          <span>
+            ${customLabel}
+          </span>
+
+          <strong>
+            ${data.sets.size}
+          </strong>
+
+        </div>
+
+        <div class="mastery-bar">
+          <i style="width:${data.sets.size ? 100 : 0}%"></i>
+        </div>
+
+      </div>
+
+    </button>
+  `;
+
+}
+
+
+function renderHome(){
+
+  const normalCards =
+  Object.entries(
+    SKILL_META
+  )
+  .map(
+    ([key,meta]) =>
+    categoryCard(
+      key,
+      meta,
+      `openSkill('${key}')`
+    )
+  );
+
+
+  const topicWords =
+  VOCABULARY_DATA
+  .filter(
+    word =>
+    (
+      word.skills
+      ||
+      []
+    )
+    .some(
+      skill =>
+      String(skill)
+      .startsWith(
+        "topic-"
+      )
+    )
+  );
+
+
+  const topicSets =
+  new Set(
+    topicWords
+    .flatMap(
+      word =>
+      (
+        word.skills
+        ||
+        []
+      )
+      .filter(
+        skill =>
+        String(skill)
+        .startsWith(
+          "topic-"
+        )
+      )
+      .map(
+        skill =>
+        `${skill}::${word.set || ""}`
+      )
+    )
+  );
+
+
+  normalCards.push(`
+    <button
+      class="category"
+      onclick="openTopics()"
+    >
+
+      <div class="category-icon">
+        🧠
+      </div>
+
+      <h3>
+        Từ vựng theo chủ đề
+      </h3>
+
+      <div class="category-count">
+        ${Object.keys(TOPIC_META).length} chủ đề · ${topicWords.length} từ
+      </div>
+
+      <div class="mastery-line">
+
+        <div class="mastery-row">
+          <span>Topic sets</span>
+          <strong>${topicSets.size}</strong>
+        </div>
+
+        <div class="mastery-bar">
+          <i style="width:${topicSets.size ? 100 : 0}%"></i>
+        </div>
+
+      </div>
+
+    </button>
+  `);
+
+
+  $("categoryGrid")
+  .innerHTML =
+  normalCards.join("");
+
+}
+
+
+function showHome(sync=true){
 
   stopGame();
 
@@ -5580,6 +5861,59 @@ function showHome(){
 
   renderHome();
 
+
+  if(sync){
+    setRoute({});
+  }
+
+}
+
+
+/* =========================================================
+   TOPICS
+========================================================= */
+
+function renderTopics(){
+
+  $("topicGrid")
+  .innerHTML =
+  Object.entries(
+    TOPIC_META
+  )
+  .map(
+    ([key,meta]) =>
+    categoryCard(
+      key,
+      meta,
+      `openSkill('${key}')`
+    )
+  )
+  .join("");
+
+}
+
+
+function openTopics(sync=true){
+
+  stopGame();
+
+  hideScreens();
+
+
+  $("topicsScreen")
+  .classList
+  .remove(
+    "hidden"
+  );
+
+
+  renderTopics();
+
+
+  if(sync){
+    setRoute({view:"topics"});
+  }
+
 }
 
 
@@ -5587,10 +5921,26 @@ function showHome(){
    SETS
 ========================================================= */
 
-function openSkill(skill){
+function openSkill(skill, sync=true){
+
+  if(
+    !SKILL_META[skill]
+    &&
+    !TOPIC_META[skill]
+  ){
+
+    showHome(sync);
+    return;
+
+  }
+
 
   selectedSkill =
   skill;
+
+
+  selectedSet =
+  "";
 
 
   stopGame();
@@ -5605,12 +5955,47 @@ function openSkill(skill){
   );
 
 
+  const meta =
+  getSkillMeta(skill);
+
+
   $("setsTitle")
   .textContent =
-  `${SKILL_META[skill].icon} ${SKILL_META[skill].title}`;
+  `${meta.icon} ${meta.title}`;
+
+
+  $("setsBack")
+  .textContent =
+  String(skill).startsWith("topic-")
+  ?
+  "← Chủ đề"
+  :
+  "← Vocabulary";
+
+
+  $("setsBack")
+  .onclick =
+  ()=>{
+
+    if(
+      String(selectedSkill)
+      .startsWith("topic-")
+    ){
+      openTopics();
+    }
+    else{
+      showHome();
+    }
+
+  };
 
 
   renderSets();
+
+
+  if(sync){
+    setRoute({skill});
+  }
 
 }
 
@@ -5747,7 +6132,7 @@ function renderSets(){
    OPEN SET
 ========================================================= */
 
-function openSet(set){
+function openSet(set, sync=true){
 
   selectedSet =
   set;
@@ -5778,6 +6163,14 @@ function openSet(set){
 
   showGameList();
 
+
+  if(sync){
+    setRoute({
+      skill:selectedSkill,
+      set:selectedSet
+    });
+  }
+
 }
 
 
@@ -5800,9 +6193,9 @@ function showGameList(){
 
 
   const meta =
-  SKILL_META[
+  getSkillMeta(
     selectedSkill
-  ];
+  );
 
 
   $("collectionTitle")
@@ -10975,14 +11368,280 @@ function replayGame(){
 
 
 /* =========================================================
+   DATA LOADER
+========================================================= */
+
+function loadVocabularyScript(src){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const script =
+      document.createElement(
+        "script"
+      );
+
+
+      const separator =
+      String(src).includes("?")
+      ?
+      "&"
+      :
+      "?";
+
+
+      script.src =
+      src
+      +
+      separator
+      +
+      "v=20260921";
+
+
+      script.onload =
+      ()=>resolve(src);
+
+
+      script.onerror =
+      ()=>reject(
+        new Error(
+          "Không tải được " + src
+        )
+      );
+
+
+      document.head
+      .appendChild(script);
+
+    }
+  );
+
+}
+
+
+function dedupeVocabularyData(words){
+
+  const seen =
+  new Set();
+
+
+  return(
+    Array.isArray(words)
+    ?
+    words
+    :
+    []
+  )
+  .filter(
+    item => {
+
+      if(
+        !item
+        ||
+        !item.word
+      ){
+        return false;
+      }
+
+
+      const skills =
+      Array.isArray(item.skills)
+      ?
+      item.skills.join(",")
+      :
+      "";
+
+
+      const key =
+      item.id
+      ||
+      [
+        skills,
+        item.set || "",
+        String(item.word).trim().toLowerCase(),
+        String(item.meaning || "").trim().toLowerCase()
+      ]
+      .join("::");
+
+
+      if(seen.has(key)){
+        return false;
+      }
+
+
+      seen.add(key);
+      return true;
+
+    }
+  );
+
+}
+
+
+async function loadExtraVocabularyData(){
+
+  window.VOCABULARY_DATA =
+  Array.isArray(
+    window.VOCABULARY_DATA
+  )
+  ?
+  window.VOCABULARY_DATA
+  :
+  [];
+
+
+  const files =
+  Array.isArray(
+    window.VOCAB_MANIFEST
+  )
+  ?
+  window.VOCAB_MANIFEST
+  :
+  [];
+
+
+  for(
+    const file of files
+  ){
+
+    try{
+
+      await loadVocabularyScript(
+        file
+      );
+
+    }
+
+    catch(error){
+
+      console.warn(
+        error.message
+      );
+
+    }
+
+  }
+
+
+  window.VOCABULARY_DATA =
+  dedupeVocabularyData(
+    window.VOCABULARY_DATA
+  );
+
+
+  VOCABULARY_DATA =
+  window.VOCABULARY_DATA;
+
+}
+
+
+/* =========================================================
+   DEEP LINK
+========================================================= */
+
+function routeFromUrl(){
+
+  const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+  const view =
+  params.get("view")
+  ||
+  "";
+
+
+  const skill =
+  params.get("skill")
+  ||
+  "";
+
+
+  const set =
+  params.get("set")
+  ||
+  "";
+
+
+  if(
+    skill
+    &&
+    (
+      SKILL_META[skill]
+      ||
+      TOPIC_META[skill]
+    )
+  ){
+
+    openSkill(
+      skill,
+      false
+    );
+
+
+    if(set){
+
+      const exists =
+      VOCABULARY_DATA
+      .some(
+        word =>
+        (
+          word.skills
+          ||
+          []
+        )
+        .includes(skill)
+        &&
+        String(word.set)
+        ===
+        String(set)
+      );
+
+
+      if(exists){
+        openSet(
+          set,
+          false
+        );
+      }
+
+    }
+
+
+    return;
+
+  }
+
+
+  if(view === "topics"){
+    openTopics(false);
+    return;
+  }
+
+
+  showHome(false);
+
+}
+
+
+window.addEventListener(
+  "popstate",
+  routeFromUrl
+);
+
+
+/* =========================================================
    INIT
 ========================================================= */
 
-function init(){
+async function init(){
+
+  await loadExtraVocabularyData();
+
 
   if(
-    window.VOCABULARY_LOAD_ERROR
-    ||
     !VOCABULARY_DATA.length
   ){
 
@@ -10999,11 +11658,11 @@ function init(){
       >
 
         <h2>
-          Không tải được vocab-data.js
+          Chưa tải được dữ liệu từ vựng
         </h2>
 
         <p>
-          Kiểm tra file Practice/Vocabulary/vocab-data.js
+          Kiểm tra vocab-data.js cũ hoặc các file trong Vocabulary/data/.
         </p>
 
       </div>
@@ -11048,7 +11707,7 @@ function init(){
   catch(error){}
 
 
-  renderHome();
+  routeFromUrl();
 
 }
 
