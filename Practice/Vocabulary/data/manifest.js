@@ -55,7 +55,6 @@ window.VOCAB_MANIFEST = [
   "./data/topics/health/05.js",
   "./data/topics/health/06.js",
 
-];
   /* =========================
      WORK & CAREERS · 6 SETS
   ========================= */
@@ -66,7 +65,7 @@ window.VOCAB_MANIFEST = [
   "./data/topics/work/04.js",
   "./data/topics/work/05.js",
   "./data/topics/work/06.js",
-    
+
   /* =========================
      SOCIETY · 6 SETS
   ========================= */
@@ -76,4 +75,6 @@ window.VOCAB_MANIFEST = [
   "./data/topics/society/03.js",
   "./data/topics/society/04.js",
   "./data/topics/society/05.js",
-  "./data/topics/society/06.js",
+  "./data/topics/society/06.js"
+
+];
