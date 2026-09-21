@@ -3153,7 +3153,8 @@ button:disabled{
 
     <button
       class="screen-back"
-      onclick="showHome()"
+      type="button"
+      onclick="goVocabularyHome()"
     >
       ← Vocabulary
     </button>
@@ -4514,15 +4515,16 @@ const TOPIC_META = {
 
 function getSkillMeta(skill){
 
-  return
-  SKILL_META[skill]
-  ||
-  TOPIC_META[skill]
-  ||
-  {
-    title:skill,
-    icon:"📚"
-  };
+  return (
+    SKILL_META[skill]
+    ||
+    TOPIC_META[skill]
+    ||
+    {
+      title:skill,
+      icon:"📚"
+    }
+  );
 
 }
 
@@ -5836,7 +5838,20 @@ function renderHome(){
 
 function showHome(sync=true){
 
-  stopGame();
+  // Điều hướng về trang Vocabulary phải luôn hoạt động,
+  // kể cả khi một game đang có timer/animation lỗi.
+  try{
+    stopGame();
+  }
+  catch(error){
+    console.warn("Không dừng được game hoàn toàn khi về Vocabulary:", error);
+  }
+
+
+  selectedSkill = "";
+  selectedSet = "";
+  currentCollection = [];
+
 
   hideScreens();
 
@@ -5855,7 +5870,27 @@ function showHome(sync=true){
     setRoute({});
   }
 
+
+  try{
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+  }
+  catch(error){
+    window.scrollTo(0,0);
+  }
+
 }
+
+
+function goVocabularyHome(){
+  showHome(true);
+}
+
+// Đảm bảo các nút onclick trong HTML luôn gọi được hàm này.
+window.showHome = showHome;
+window.goVocabularyHome = goVocabularyHome;
 
 
 /* =========================================================
@@ -5973,7 +6008,7 @@ function openSkill(skill, sync=true){
       openTopics();
     }
     else{
-      showHome();
+      goVocabularyHome();
     }
 
   };
