@@ -16,17 +16,6 @@
 
 <title>Vocabulary Practice</title>
 
-<script
-  src="./vocab-data.js?v=20260918-shark-music"
-  onerror="window.VOCABULARY_LOAD_ERROR=true"
-></script>
-
-<!-- Danh sách các bộ từ mới tách riêng.
-     Giữ vocab-data.js cũ để link/dữ liệu Bộ 01 không bị ảnh hưởng. -->
-<script
-  src="./data/manifest.js?v=20260921-v1"
-  onerror="window.VOCAB_MANIFEST_LOAD_ERROR=true"
-></script>
 
 <style>
 
@@ -4428,14 +4417,7 @@ button:disabled{
    DATA
 ========================================================= */
 
-let VOCABULARY_DATA =
-Array.isArray(
-  window.VOCABULARY_DATA
-)
-?
-window.VOCABULARY_DATA
-:
-[];
+let VOCABULARY_DATA = [];
 
 
 const SKILL_META = {
@@ -11478,6 +11460,63 @@ function dedupeVocabularyData(words){
 }
 
 
+async function loadBaseVocabularyData(){
+
+  // Luôn reset rồi nạp vocab-data.js cũ trước.
+  // Đây là nguồn chứa Reading Bộ 01 hiện tại.
+  window.VOCABULARY_DATA = [];
+
+  try{
+
+    await loadVocabularyScript(
+      "./vocab-data.js?v=20260921-base-fix"
+    );
+
+  }
+
+  catch(error){
+
+    console.error(
+      "Không tải được vocab-data.js cũ:",
+      error
+    );
+
+  }
+
+
+  VOCABULARY_DATA =
+  Array.isArray(window.VOCABULARY_DATA)
+  ? window.VOCABULARY_DATA
+  : [];
+
+}
+
+
+async function loadManifestFile(){
+
+  window.VOCAB_MANIFEST = [];
+
+  try{
+
+    await loadVocabularyScript(
+      "./data/manifest.js?v=20260921-manifest-fix"
+    );
+
+  }
+
+  catch(error){
+
+    // data/ là phần mở rộng. Nếu chưa upload thì Bộ 01 vẫn chạy.
+    console.warn(
+      "Chưa tải được data/manifest.js. Chỉ dùng dữ liệu cũ.",
+      error
+    );
+
+  }
+
+}
+
+
 async function loadExtraVocabularyData(){
 
   window.VOCABULARY_DATA =
@@ -11638,6 +11677,11 @@ window.addEventListener(
 
 async function init(){
 
+  // 1) Nạp dữ liệu cũ trước để Reading Bộ 01 luôn còn.
+  await loadBaseVocabularyData();
+
+  // 2) Nạp manifest và các bộ mới sau.
+  await loadManifestFile();
   await loadExtraVocabularyData();
 
 
@@ -11662,7 +11706,7 @@ async function init(){
         </h2>
 
         <p>
-          Kiểm tra vocab-data.js cũ hoặc các file trong Vocabulary/data/.
+          Kiểm tra file Practice/Vocabulary/vocab-data.js. File data/ chỉ là phần mở rộng cho các bộ mới.
         </p>
 
       </div>
