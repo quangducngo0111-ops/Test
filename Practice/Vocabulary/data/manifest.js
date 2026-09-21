@@ -20,7 +20,7 @@ window.VOCAB_MANIFEST = [
   "./data/topics/education/03.js",
   "./data/topics/education/04.js",
   "./data/topics/education/05.js",
-  "./data/topics/education/06.js"
+  "./data/topics/education/06.js",
 
   /* =========================
      ENVIRONMENT · 6 SETS
@@ -31,7 +31,18 @@ window.VOCAB_MANIFEST = [
   "./data/topics/environment/03.js",
   "./data/topics/environment/04.js",
   "./data/topics/environment/05.js",
-  "./data/topics/environment/06.js"
+  "./data/topics/environment/06.js",
+
+  /* =========================
+     TECHNOLOGY · 6 SETS
+  ========================= */
+
+  "./data/topics/technology/01.js",
+  "./data/topics/technology/02.js",
+  "./data/topics/technology/03.js",
+  "./data/topics/technology/04.js",
+  "./data/topics/technology/05.js",
+  "./data/topics/technology/06.js",
 
   /* =========================
      HEALTH · 6 SETS
@@ -43,3 +54,5 @@ window.VOCAB_MANIFEST = [
   "./data/topics/health/04.js",
   "./data/topics/health/05.js",
   "./data/topics/health/06.js"
+
+];
