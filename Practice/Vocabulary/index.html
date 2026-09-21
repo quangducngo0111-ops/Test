@@ -16,6 +16,10 @@
 
 <title>Vocabulary Practice</title>
 
+<script
+  src="./vocab-data.js?v=20260921-base-static"
+  onerror="window.VOCABULARY_BASE_LOAD_ERROR=true"
+></script>
 
 <style>
 
@@ -4417,7 +4421,10 @@ button:disabled{
    DATA
 ========================================================= */
 
-let VOCABULARY_DATA = [];
+let VOCABULARY_DATA =
+Array.isArray(window.VOCABULARY_DATA)
+? window.VOCABULARY_DATA
+: [];
 
 
 const SKILL_META = {
@@ -11462,14 +11469,35 @@ function dedupeVocabularyData(words){
 
 async function loadBaseVocabularyData(){
 
-  // Luôn reset rồi nạp vocab-data.js cũ trước.
-  // Đây là nguồn chứa Reading Bộ 01 hiện tại.
-  window.VOCABULARY_DATA = [];
+  /*
+    vocab-data.js được nạp tĩnh ở <head> TRƯỚC code này.
+    Tuyệt đối không reset window.VOCABULARY_DATA, vì đó chính là
+    dữ liệu cũ đang chứa Reading Bộ 01.
+  */
+
+  if(
+    Array.isArray(window.VOCABULARY_DATA)
+    &&
+    window.VOCABULARY_DATA.length
+  ){
+
+    VOCABULARY_DATA =
+    window.VOCABULARY_DATA;
+
+    return;
+
+  }
+
+
+  /*
+    Nếu vì lý do cache/mạng mà script tĩnh chưa tải được, thử lại một lần.
+    Vẫn KHÔNG xóa dữ liệu đang có.
+  */
 
   try{
 
     await loadVocabularyScript(
-      "./vocab-data.js?v=20260921-base-fix"
+      "./vocab-data.js?v=20260921-base-retry"
     );
 
   }
