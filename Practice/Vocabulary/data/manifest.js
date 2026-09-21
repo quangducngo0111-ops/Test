@@ -23,3 +23,13 @@ window.VOCAB_MANIFEST = [
   "./data/topics/education/06.js"
 
 ];
+  /* =========================
+     ENVIRONMENT · 6 SETS
+  ========================= */
+
+  "./data/topics/environment/01.js",
+  "./data/topics/environment/02.js",
+  "./data/topics/environment/03.js",
+  "./data/topics/environment/04.js",
+  "./data/topics/environment/05.js",
+  "./data/topics/environment/06.js"
