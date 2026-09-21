@@ -56,3 +56,13 @@ window.VOCAB_MANIFEST = [
   "./data/topics/health/06.js"
 
 ];
+  /* =========================
+     WORK & CAREERS · 6 SETS
+  ========================= */
+
+  "./data/topics/work/01.js",
+  "./data/topics/work/02.js",
+  "./data/topics/work/03.js",
+  "./data/topics/work/04.js",
+  "./data/topics/work/05.js",
+  "./data/topics/work/06.js"
