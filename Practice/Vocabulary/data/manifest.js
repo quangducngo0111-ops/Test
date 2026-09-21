@@ -75,6 +75,17 @@ window.VOCAB_MANIFEST = [
   "./data/topics/society/03.js",
   "./data/topics/society/04.js",
   "./data/topics/society/05.js",
-  "./data/topics/society/06.js"
+  "./data/topics/society/06.js",
+
+  /* =========================
+     TRANSPORT & URBAN · 6 SETS
+  ========================= */
+
+  "./data/topics/transport/01.js",
+  "./data/topics/transport/02.js",
+  "./data/topics/transport/03.js",
+  "./data/topics/transport/04.js",
+  "./data/topics/transport/05.js",
+  "./data/topics/transport/06.js"
 
 ];
