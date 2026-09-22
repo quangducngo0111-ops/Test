@@ -2065,6 +2065,29 @@ mark.user-highlight{
   <button class="submit" id="submitButton" onclick="submitPractice()">Nộp bài</button>
 </div>
 
+
+<!-- =========================================================
+     HIGHLIGHT + TAKE NOTE MENU
+========================================================= -->
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+</div>
+
 <script>
 const RESULT_ENDPOINT =
 'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
@@ -2111,7 +2134,18 @@ let startTime = null;
 let timerHandle = null;
 let student = null;
 
+/* Highlight / Take note state */
+let savedSelection = null;
+let savedZone = null;
+let menuTarget = null;
+let menuZone = null;
+let menuMode = 'selection';
+
 const practiceAudio = document.getElementById('practiceAudio');
+const selectionMenu = document.getElementById('selectionMenu');
+const menuHighlight = document.getElementById('menuHighlight');
+const menuNote = document.getElementById('menuNote');
+const questionsRoot = document.getElementById('questionsRoot');
 const seekBar = document.getElementById('seekBar');
 const playPauseBtn = document.getElementById('playPauseBtn');
 
@@ -2139,6 +2173,7 @@ function startPractice(){
   startTime=Date.now();
   timerHandle=setInterval(updateTimer,1000);
 
+  restoreMarkup();
   restoreAnswers();
   updateProgress();
   updateNav();
@@ -2441,6 +2476,436 @@ function closeResult(){
 }
 
 
+
+/* =========================================================
+   HIGHLIGHT + TAKE NOTE
+========================================================= */
+
+function zoneRoot(zone){
+  return zone === 'questions'
+    ? document.getElementById('questionsRoot')
+    : null;
+}
+
+function markupKey(zone){
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+}
+
+function saveMarkup(zone){
+  if(submitted) return;
+
+  const root = zoneRoot(zone);
+  if(!root) return;
+
+  localStorage.setItem(
+    markupKey(zone),
+    root.innerHTML
+  );
+}
+
+function restoreMarkup(){
+  const root = zoneRoot('questions');
+  if(!root) return;
+
+  const markup = localStorage.getItem(
+    markupKey('questions')
+  );
+
+  if(markup){
+    root.innerHTML = markup;
+  }
+
+  bindContextActions('questions');
+}
+
+function resetMenu(){
+  if(!selectionMenu || !menuHighlight || !menuNote) return;
+
+  menuMode = 'selection';
+  menuTarget = null;
+  menuZone = null;
+
+  menuHighlight.style.display = '';
+  menuNote.style.display = '';
+
+  menuHighlight.textContent = '🖍 Highlight';
+  menuNote.textContent = '📝 Take note';
+
+  menuHighlight.classList.remove('danger');
+  menuNote.classList.remove('danger');
+}
+
+function hideMenu(){
+  if(!selectionMenu) return;
+
+  selectionMenu.classList.remove('show');
+  resetMenu();
+}
+
+function showMenu(rect){
+  if(!selectionMenu || !rect) return;
+
+  selectionMenu.classList.add('show');
+
+  requestAnimationFrame(()=>{
+    const width =
+      selectionMenu.offsetWidth || 180;
+
+    const height =
+      selectionMenu.offsetHeight || 40;
+
+    const left =
+      Math.min(
+        window.innerWidth - width - 10,
+        Math.max(
+          10,
+          rect.left + rect.width / 2 - width / 2
+        )
+      );
+
+    let top =
+      rect.top - height - 8;
+
+    if(top < 8){
+      top = rect.bottom + 8;
+    }
+
+    selectionMenu.style.left = `${left}px`;
+    selectionMenu.style.top = `${top}px`;
+  });
+}
+
+function captureSelection(zone){
+  const selection = window.getSelection();
+
+  if(
+    !selection ||
+    !selection.rangeCount ||
+    selection.isCollapsed
+  ){
+    return;
+  }
+
+  const range =
+    selection.getRangeAt(0);
+
+  const root =
+    zoneRoot(zone);
+
+  if(
+    !root ||
+    !root.contains(range.commonAncestorContainer)
+  ){
+    return;
+  }
+
+  const common =
+    range.commonAncestorContainer.nodeType === 1
+      ? range.commonAncestorContainer
+      : range.commonAncestorContainer.parentElement;
+
+  /*
+   * Không cho highlight/note trên các control tương tác.
+   * Đồng thời tránh bọc lại text đã có mark/note.
+   */
+  if(
+    common?.closest(
+      'button,input,select,option,mark.user-highlight,.note-anchor'
+    )
+  ){
+    return;
+  }
+
+  const text =
+    selection.toString().trim();
+
+  if(!text){
+    return;
+  }
+
+  savedSelection =
+    range.cloneRange();
+
+  savedZone =
+    zone;
+
+  resetMenu();
+
+  showMenu(
+    range.getBoundingClientRect()
+  );
+}
+
+function clearSelection(){
+  const selection =
+    window.getSelection();
+
+  if(selection){
+    selection.removeAllRanges();
+  }
+
+  savedSelection = null;
+  savedZone = null;
+}
+
+function addHighlight(){
+  if(
+    menuMode === 'delete-highlight'
+  ){
+    removeMark();
+    return;
+  }
+
+  if(
+    !savedSelection ||
+    !savedZone
+  ){
+    return;
+  }
+
+  try{
+    const range =
+      savedSelection.cloneRange();
+
+    const mark =
+      document.createElement('mark');
+
+    mark.className =
+      'user-highlight';
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+    range.insertNode(mark);
+
+    saveMarkup(savedZone);
+    clearSelection();
+    hideMenu();
+  }
+  catch(error){
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+  }
+}
+
+function addNote(){
+  if(
+    menuMode === 'delete-note'
+  ){
+    removeMark();
+    return;
+  }
+
+  if(
+    !savedSelection ||
+    !savedZone
+  ){
+    return;
+  }
+
+  const note =
+    prompt('Nhập ghi chú:');
+
+  if(
+    note === null ||
+    !note.trim()
+  ){
+    return;
+  }
+
+  try{
+    const range =
+      savedSelection.cloneRange();
+
+    const span =
+      document.createElement('span');
+
+    span.className =
+      'note-anchor';
+
+    span.dataset.note =
+      note.trim();
+
+    span.title =
+      note.trim();
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+    range.insertNode(span);
+
+    saveMarkup(savedZone);
+    clearSelection();
+    hideMenu();
+  }
+  catch(error){
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+  }
+}
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+  menuTarget = target;
+  menuZone = zone;
+
+  clearSelection();
+
+  if(type === 'highlight'){
+    menuMode = 'delete-highlight';
+
+    menuHighlight.textContent =
+      '✕ Xóa highlight';
+
+    menuHighlight
+      .classList
+      .add('danger');
+
+    menuNote.style.display = 'none';
+  }
+  else{
+    menuMode = 'delete-note';
+
+    menuNote.textContent =
+      '✕ Xóa note';
+
+    menuNote
+      .classList
+      .add('danger');
+
+    menuHighlight.style.display = 'none';
+  }
+
+  showMenu(
+    target.getBoundingClientRect()
+  );
+}
+
+function removeMark(){
+  if(!menuTarget) return;
+
+  const parent =
+    menuTarget.parentNode;
+
+  while(menuTarget.firstChild){
+    parent.insertBefore(
+      menuTarget.firstChild,
+      menuTarget
+    );
+  }
+
+  menuTarget.remove();
+  parent.normalize();
+
+  saveMarkup(menuZone);
+  hideMenu();
+}
+
+function bindContextActions(zone){
+  const root =
+    zoneRoot(zone);
+
+  if(
+    !root ||
+    root.dataset.contextBound === '1'
+  ){
+    return;
+  }
+
+  root.dataset.contextBound = '1';
+
+  root.addEventListener(
+    'mouseup',
+    ()=>{
+      setTimeout(
+        ()=>captureSelection(zone),
+        0
+      );
+    }
+  );
+
+  root.addEventListener(
+    'touchend',
+    ()=>{
+      setTimeout(
+        ()=>captureSelection(zone),
+        120
+      );
+    }
+  );
+
+  root.addEventListener(
+    'click',
+    event=>{
+      const highlight =
+        event.target.closest(
+          'mark.user-highlight'
+        );
+
+      const note =
+        event.target.closest(
+          '.note-anchor'
+        );
+
+      if(highlight){
+        event.stopPropagation();
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+        return;
+      }
+
+      if(note){
+        event.stopPropagation();
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+      }
+    }
+  );
+}
+
+menuHighlight?.addEventListener(
+  'click',
+  addHighlight
+);
+
+menuNote?.addEventListener(
+  'click',
+  addNote
+);
+
+document.addEventListener(
+  'mousedown',
+  event=>{
+    if(
+      selectionMenu &&
+      !selectionMenu.contains(event.target)
+      &&
+      !event.target.closest('.user-highlight')
+      &&
+      !event.target.closest('.note-anchor')
+    ){
+      hideMenu();
+    }
+  }
+);
+
+
 function openMapLightbox(){
   const lightbox=document.getElementById('mapLightbox');
   if(!lightbox) return;
@@ -2480,6 +2945,8 @@ document.addEventListener('keydown',event=>{
     if(saved?.name) document.getElementById('studentName').value=saved.name;
     if(saved?.className) document.getElementById('studentClass').value=saved.className;
   }catch(e){}
+
+  bindContextActions('questions');
 })();
 </script>
 </body>
