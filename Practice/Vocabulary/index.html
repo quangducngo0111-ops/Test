@@ -1480,75 +1480,265 @@ button:disabled{
 }
 
 /* =========================================================
-   MATCH
+   ALIEN ESCAPE
 ========================================================= */
 
-.match-board{
-  display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:8px;
-
-  padding:14px;
-
-  border-radius:17px;
-
+.alien-stage{
+  position:relative;
+  height:560px;
+  overflow:hidden;
+  border:1px solid #1b2b58;
+  border-radius:20px;
   background:
-    linear-gradient(
-      135deg,
-      #f1edff,
-      #edf7ff
-    );
+    radial-gradient(circle at 50% 45%,rgba(73,108,190,.18),transparent 28%),
+    radial-gradient(circle at 15% 20%,rgba(95,221,255,.12),transparent 20%),
+    radial-gradient(circle at 85% 80%,rgba(155,93,229,.16),transparent 22%),
+    linear-gradient(180deg,#071127,#030815 68%,#050a18);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);
+  touch-action:none;
+  user-select:none;
 }
 
-.match-card{
-  min-height:105px;
+.alien-stage::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.34;
+  background-image:
+    linear-gradient(rgba(82,117,180,.22) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(82,117,180,.22) 1px,transparent 1px);
+  background-size:42px 42px;
+  pointer-events:none;
+}
 
-  padding:8px;
+.alien-stage::after{
+  content:"";
+  position:absolute;
+  inset:8% 7%;
+  border:2px solid rgba(77,224,255,.14);
+  border-radius:24px;
+  box-shadow:
+    inset 0 0 30px rgba(77,224,255,.035),
+    0 0 30px rgba(77,224,255,.025);
+  pointer-events:none;
+}
 
-  border:1px solid #d9d2ee;
-  border-radius:12px;
+.alien-stars{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.72;
+  background-image:
+    radial-gradient(circle at 7% 14%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 22% 67%,#8fe8ff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 35% 28%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 48% 83%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 64% 12%,#a8b8ff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 74% 54%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 91% 28%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 88% 88%,#8fe8ff 0 1px,transparent 1.5px);
+}
 
-  background:
-    linear-gradient(
-      135deg,
-      #5839bb,
-      #856bdc
-    );
+.alien-lane{
+  position:absolute;
+  border:2px solid rgba(117,145,211,.12);
+  border-radius:18px;
+  pointer-events:none;
+}
 
-  color:#fff;
+.alien-lane.l1{left:22%;top:19%;width:56%;height:16%;}
+.alien-lane.l2{left:22%;bottom:19%;width:56%;height:16%;}
+.alien-lane.l3{left:22%;top:35%;width:16%;height:30%;}
+.alien-lane.l4{right:22%;top:35%;width:16%;height:30%;}
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
+.alien-question{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:7;
+  width:min(46%,430px);
+  transform:translate(-50%,-50%);
+  padding:13px 16px;
+  border:1px solid rgba(140,169,255,.25);
+  border-radius:16px;
+  background:rgba(5,12,31,.86);
+  box-shadow:0 10px 30px rgba(0,0,0,.28);
+  backdrop-filter:blur(8px);
   text-align:center;
+  pointer-events:none;
+}
 
+.alien-question small{
+  display:block;
+  margin-bottom:5px;
+  color:#7fdfff;
   font-size:9px;
   font-weight:950;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
 
+.alien-question strong{
+  display:block;
+  color:#fff;
+  font-size:clamp(13px,2vw,20px);
+  line-height:1.35;
   overflow-wrap:anywhere;
 }
 
-.match-card:not(.revealed)::after{
-  content:"?";
-  font-size:25px;
-}
-
-.match-card.revealed{
-  background:#fff;
-  color:#30264e;
-}
-
-.match-card.matched{
-  background:#dff5e9;
-  color:#15704c;
-
-  opacity:.6;
-
+.alien-answer{
+  position:absolute;
+  z-index:5;
+  width:29%;
+  min-height:78px;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(116,216,255,.28);
+  border-radius:15px;
+  background:linear-gradient(145deg,rgba(17,36,77,.96),rgba(10,19,48,.96));
+  box-shadow:0 8px 22px rgba(0,0,0,.28),inset 0 0 18px rgba(91,190,255,.045);
+  color:#eef7ff;
+  text-align:center;
+  font-size:clamp(9px,1.4vw,13px);
+  line-height:1.25;
+  font-weight:900;
+  overflow-wrap:anywhere;
   pointer-events:none;
+  transition:.18s ease;
+}
+
+.alien-answer::before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border:1px dashed rgba(121,229,255,.13);
+  border-radius:10px;
+}
+
+.alien-answer.a0{left:4%;top:4%;}
+.alien-answer.a1{right:4%;top:4%;}
+.alien-answer.a2{left:4%;bottom:4%;}
+.alien-answer.a3{right:4%;bottom:4%;}
+
+.alien-answer.correct-flash{
+  border-color:#5cf2aa;
+  background:linear-gradient(145deg,rgba(21,105,78,.96),rgba(7,56,44,.96));
+  box-shadow:0 0 24px rgba(92,242,170,.26);
+}
+
+.alien-answer.wrong-flash{
+  border-color:#ff7c91;
+  background:linear-gradient(145deg,rgba(111,30,51,.96),rgba(58,12,27,.96));
+}
+
+.astronaut-player,
+.alien-enemy{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:10;
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:translate(-50%,-50%);
+  filter:drop-shadow(0 5px 8px rgba(0,0,0,.5));
+  will-change:left,top,transform;
+  pointer-events:none;
+}
+
+.astronaut-player{
+  font-size:37px;
+}
+
+.astronaut-player::after{
+  content:"";
+  position:absolute;
+  width:34px;
+  height:12px;
+  left:50%;
+  top:36px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:rgba(76,216,255,.23);
+  filter:blur(5px);
+  z-index:-1;
+}
+
+.alien-enemy{
+  font-size:33px;
+  animation:alienBob .55s ease-in-out infinite alternate;
+}
+
+.alien-enemy.fast{
+  filter:drop-shadow(0 0 10px rgba(255,91,188,.38));
+}
+
+@keyframes alienBob{
+  from{transform:translate(-50%,-50%) rotate(-4deg) scale(.97);}
+  to{transform:translate(-50%,-50%) rotate(4deg) scale(1.04);}
+}
+
+.alien-stage.hit .astronaut-player{
+  animation:astronautHit .16s linear 3;
+}
+
+@keyframes astronautHit{
+  0%{transform:translate(-50%,-50%) translateX(-3px);}
+  50%{transform:translate(-50%,-50%) translateX(3px);}
+  100%{transform:translate(-50%,-50%) translateX(0);}
+}
+
+.alien-controls{
+  display:grid;
+  grid-template-columns:repeat(3,52px);
+  grid-template-rows:repeat(2,48px);
+  gap:7px;
+  justify-content:center;
+  margin:12px auto 0;
+}
+
+.alien-controls button{
+  min-width:48px;
+  min-height:44px;
+  padding:0;
+  border:1px solid #d9dfeb;
+  border-radius:12px;
+  background:#fff;
+  color:#313b53;
+  font-size:18px;
+  font-weight:950;
+  box-shadow:0 3px 10px rgba(30,44,80,.07);
+  touch-action:none;
+}
+
+.alien-controls button:active{
+  transform:translateY(1px) scale(.97);
+  background:#f2f6ff;
+}
+
+.alien-controls .up{grid-column:2;grid-row:1;}
+.alien-controls .left{grid-column:1;grid-row:2;}
+.alien-controls .down{grid-column:2;grid-row:2;}
+.alien-controls .right{grid-column:3;grid-row:2;}
+
+.alien-help{
+  margin-top:8px;
+  color:#7c8599;
+  font-size:10px;
+  text-align:center;
+}
+
+@media (max-width:700px){
+  .alien-stage{height:500px;border-radius:16px;}
+  .alien-answer{width:38%;min-height:76px;padding:8px;font-size:9px;}
+  .alien-question{width:58%;padding:10px 12px;}
+  .astronaut-player,.alien-enemy{width:42px;height:42px;}
+  .astronaut-player{font-size:32px;}
+  .alien-enemy{font-size:29px;}
 }
 
 
@@ -3716,15 +3906,15 @@ button:disabled{
     <article class="game-card">
 
       <div class="game-icon">
-        🧩
+        👨‍🚀
       </div>
 
       <h3>
-        Match Master
+        Alien Escape
       </h3>
 
       <p>
-        Ghép chính xác từ tiếng Anh với nghĩa tiếng Việt.
+        Điều khiển astronaut tới đúng đáp án trước khi aliens bắt kịp.
       </p>
 
       <button
@@ -4139,7 +4329,7 @@ button:disabled{
 
 
 <!-- =========================================================
-     MATCH
+     ALIEN ESCAPE
 ========================================================= -->
 
 <main
@@ -4150,8 +4340,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-      <h2>🧩 Match Master</h2>
-      <p>Ghép các cặp từ và nghĩa.</p>
+      <h2>👨‍🚀 Alien Escape</h2>
+      <p>Chạy tới đúng đáp án ở 4 góc trước khi aliens bắt kịp.</p>
     </div>
 
     <button
@@ -4177,8 +4367,8 @@ button:disabled{
     </div>
 
     <div class="hud-box">
-      <small>Pairs</small>
-      <b id="matchPairs">0/6</b>
+      <small>Lives</small>
+      <b id="matchLives">5</b>
     </div>
 
     <div class="hud-box">
@@ -4195,9 +4385,43 @@ button:disabled{
 
 
   <section
-    class="match-board"
+    class="alien-stage"
     id="matchBoard"
-  ></section>
+    aria-label="Alien Escape game map"
+  >
+
+    <div class="alien-stars"></div>
+    <div class="alien-lane l1"></div>
+    <div class="alien-lane l2"></div>
+    <div class="alien-lane l3"></div>
+    <div class="alien-lane l4"></div>
+
+    <div class="alien-answer a0" id="alienAnswer0">—</div>
+    <div class="alien-answer a1" id="alienAnswer1">—</div>
+    <div class="alien-answer a2" id="alienAnswer2">—</div>
+    <div class="alien-answer a3" id="alienAnswer3">—</div>
+
+    <div class="alien-question">
+      <small id="alienQuestionLabel">Tìm đáp án đúng</small>
+      <strong id="alienQuestion">—</strong>
+    </div>
+
+    <div class="astronaut-player" id="alienAstronaut">👨‍🚀</div>
+    <div id="alienEnemies"></div>
+
+  </section>
+
+
+  <div class="alien-controls" aria-label="Điều khiển astronaut">
+    <button class="up" data-alien-control="up" type="button" aria-label="Đi lên">↑</button>
+    <button class="left" data-alien-control="left" type="button" aria-label="Sang trái">←</button>
+    <button class="down" data-alien-control="down" type="button" aria-label="Đi xuống">↓</button>
+    <button class="right" data-alien-control="right" type="button" aria-label="Sang phải">→</button>
+  </div>
+
+  <div class="alien-help">
+    Dùng phím mũi tên / WASD hoặc giữ các nút điều hướng · Chạm đúng góc để trả lời
+  </div>
 
 </main>
 
@@ -5081,7 +5305,7 @@ const GAME_NAMES = {
 
   racer:"Street Word Racer",
 
-  match:"Match Master",
+  match:"Alien Escape",
 
   flappy:"Flappy Kākāpō",
 
@@ -5140,15 +5364,15 @@ const GAME_INTROS = {
 
   match:{
 
-    icon:"🧩",
+    icon:"👨‍🚀",
 
-    title:"Match Master",
+    title:"Alien Escape",
 
     description:
-      "Lật thẻ và tìm cặp từ tiếng Anh – nghĩa tiếng Việt.",
+      "Điều khiển astronaut tới đúng đáp án ở 4 góc trong khi aliens liên tục truy đuổi.",
 
     rules:
-      "• Mỗi lượt có tối đa 6 cặp.<br>• Ghép đúng sẽ hoàn thành từ đó.<br>• Ghép sai, hai thẻ sẽ úp lại để em thử tiếp.<br>• Khi ghép hết một bảng, game tự tạo bảng tiếp theo."
+      "• Dùng phím mũi tên / WASD hoặc giữ nút điều hướng để di chuyển.<br>• Mỗi lượt có 4 đáp án ở 4 góc của bản đồ.<br>• Chạm đúng đáp án: hoàn thành từ và chuyển sang câu mới.<br>• Chạm sai đáp án hoặc bị alien bắt: mất 1 mạng.<br>• Combo càng cao, aliens càng nhanh và đông hơn.<br>• Hết 120 giây hoặc hết mạng thì game kết thúc."
 
   },
 
@@ -10607,417 +10831,743 @@ function updateRacer(seconds){
 }
 
 /* =========================================================
-   MATCH
+   ALIEN ESCAPE
 ========================================================= */
 
-let firstMatch =
-null;
+let alienEscapeStarted = false;
+let alienEscapeFrameId = null;
+let alienEscapeLastFrame = 0;
+let alienEscapeRoundLocked = false;
+let alienEscapeSeconds = 120;
 
+let alienPlayer = {
+  x:0.5,
+  y:0.5
+};
 
-let matchLocked =
-false;
+let alienEnemies = [];
+let alienAnswers = [];
 
+const alienControlState = {
+  up:false,
+  down:false,
+  left:false,
+  right:false
+};
 
-let pairsFound =
-0;
+const ALIEN_PLAYER_SPEED = 0.34;
+const ALIEN_BASE_SPEED = 0.072;
+const ALIEN_PLAYER_RADIUS = 0.037;
+const ALIEN_HIT_RADIUS = 0.066;
 
-
-let matchTotalPairs =
-0;
-
+const ALIEN_ANSWER_ZONES = [
+  {x:0.18,y:0.13},
+  {x:0.82,y:0.13},
+  {x:0.18,y:0.87},
+  {x:0.82,y:0.87}
+];
 
 function startMatch(){
 
   launchGame(
     "match",
     "matchScreen",
-    beginMatch
+    beginAlienEscape
   );
 
 }
 
 
-function beginMatch(){
+function beginAlienEscape(){
 
-  firstMatch =
-  null;
+  clearAlienEscape();
 
+  alienEscapeStarted = true;
+  alienEscapeRoundLocked = false;
+  alienEscapeSeconds = 120;
 
-  matchLocked =
-  false;
-
-
-  pairsFound =
-  0;
-
-
-  createMatchBoard();
-
-
-  let seconds =
-  120;
-
-
-  updateMatch(
-    seconds
-  );
-
+  setupAlienControls();
+  startAlienEscapeRound();
+  updateMatch(alienEscapeSeconds);
 
   gameTimer =
   setInterval(
     ()=>{
 
-      seconds--;
-
-
-      updateMatch(
-        seconds
-      );
-
+      alienEscapeSeconds--;
+      updateMatch(alienEscapeSeconds);
 
       if(
-        seconds <=
-        0
+        alienEscapeSeconds <= 0
       ){
-
         endGame(
+          isSetComplete(),
           isSetComplete()
+          ? "Hoàn thành bộ từ!"
+          : "Hết giờ!"
         );
-
       }
 
     },
     1000
   );
 
+  alienEscapeLastFrame =
+  performance.now();
+
+  alienEscapeFrameId =
+  requestAnimationFrame(
+    alienEscapeLoop
+  );
+
 }
 
 
-function createMatchBoard(){
+function clearAlienEscape(){
+
+  alienEscapeStarted = false;
+  alienEscapeRoundLocked = false;
+
+  if(alienEscapeFrameId){
+    cancelAnimationFrame(
+      alienEscapeFrameId
+    );
+  }
+
+  alienEscapeFrameId = null;
+  alienEscapeLastFrame = 0;
+
+  Object.keys(
+    alienControlState
+  )
+  .forEach(
+    key =>
+    alienControlState[key] = false
+  );
+
+  const enemies =
+  $("alienEnemies");
+
+  if(enemies){
+    enemies.innerHTML = "";
+  }
+
+}
+
+
+function setupAlienControls(){
+
+  document
+  .querySelectorAll(
+    "[data-alien-control]"
+  )
+  .forEach(
+    button => {
+
+      const dir =
+      button.dataset.alienControl;
+
+      const press =
+      event => {
+        event.preventDefault();
+        alienControlState[dir] = true;
+      };
+
+      const release =
+      event => {
+        event.preventDefault();
+        alienControlState[dir] = false;
+      };
+
+      button.onpointerdown = press;
+      button.onpointerup = release;
+      button.onpointercancel = release;
+      button.onpointerleave = release;
+
+    }
+  );
+
+}
+
+
+function startAlienEscapeRound(
+  keepTarget=false
+){
+
+  if(
+    gameEnded
+    ||
+    !alienEscapeStarted
+  ){
+    return;
+  }
 
   if(
     isSetComplete()
   ){
+    endGame(true);
+    return;
+  }
 
-    endGame(
-      true
+  alienEscapeRoundLocked = false;
+
+  if(
+    !keepTarget
+    ||
+    !currentTarget
+    ||
+    isLearned(currentTarget)
+  ){
+    currentTarget =
+    randomItem(
+      remainingWords()
+    );
+  }
+
+  if(!currentTarget){
+    endGame(true);
+    return;
+  }
+
+  alienPlayer = {
+    x:0.5,
+    y:0.5
+  };
+
+  alienAnswers =
+  optionsFor(
+    currentTarget,
+    4
+  );
+
+  while(
+    alienAnswers.length < 4
+  ){
+    alienAnswers.push(
+      currentTarget
+    );
+  }
+
+  const answerNodes =
+  [0,1,2,3]
+  .map(
+    index =>
+    $(
+      `alienAnswer${index}`
+    )
+  );
+
+  answerNodes
+  .forEach(
+    (
+      node,
+      index
+    ) => {
+
+      node.classList.remove(
+        "correct-flash",
+        "wrong-flash"
+      );
+
+      node.textContent =
+      answerFor(
+        alienAnswers[index]
+      );
+
+    }
+  );
+
+  $("alienQuestionLabel")
+  .textContent =
+  direction === "vi-en"
+  ?
+  "Tìm cụm tiếng Anh"
+  :
+  "Tìm nghĩa tiếng Việt";
+
+  $("alienQuestion")
+  .textContent =
+  promptFor(
+    currentTarget
+  );
+
+  spawnAliens();
+  renderAlienEscape();
+
+}
+
+
+function spawnAliens(){
+
+  const count =
+  Math.min(
+    4,
+    2
+    +
+    Math.floor(
+      combo / 4
+    )
+  );
+
+  const spawnPoints =
+  shuffle([
+    {x:0.08,y:0.50},
+    {x:0.92,y:0.50},
+    {x:0.50,y:0.08},
+    {x:0.50,y:0.92}
+  ]);
+
+  alienEnemies =
+  spawnPoints
+  .slice(
+    0,
+    count
+  )
+  .map(
+    (
+      point,
+      index
+    ) => ({
+      x:point.x,
+      y:point.y,
+      speed:
+        ALIEN_BASE_SPEED
+        +
+        Math.min(
+          0.055,
+          combo * 0.003
+        )
+        +
+        index * 0.004
+    })
+  );
+
+  $("alienEnemies")
+  .innerHTML =
+  alienEnemies
+  .map(
+    (
+      enemy,
+      index
+    ) => `
+      <div
+        class="alien-enemy ${index > 1 ? "fast" : ""}"
+        id="alienEnemy${index}"
+      >
+        👽
+      </div>
+    `
+  )
+  .join("");
+
+}
+
+
+function alienEscapeLoop(timestamp){
+
+  if(
+    !alienEscapeStarted
+    ||
+    gameEnded
+    ||
+    currentGame !== "match"
+  ){
+    alienEscapeFrameId = null;
+    return;
+  }
+
+  const dt =
+  Math.min(
+    0.035,
+    Math.max(
+      0,
+      (
+        timestamp
+        -
+        alienEscapeLastFrame
+      )
+      /
+      1000
+    )
+  );
+
+  alienEscapeLastFrame =
+  timestamp;
+
+  if(!alienEscapeRoundLocked){
+    moveAlienPlayer(dt);
+    moveAlienEnemies(dt);
+    checkAlienAnswerCollision();
+    checkAlienEnemyCollision();
+    renderAlienEscape();
+  }
+
+  alienEscapeFrameId =
+  requestAnimationFrame(
+    alienEscapeLoop
+  );
+
+}
+
+
+function moveAlienPlayer(dt){
+
+  let dx = 0;
+  let dy = 0;
+
+  if(alienControlState.left) dx--;
+  if(alienControlState.right) dx++;
+  if(alienControlState.up) dy--;
+  if(alienControlState.down) dy++;
+
+  if(
+    dx === 0
+    &&
+    dy === 0
+  ){
+    return;
+  }
+
+  const length =
+  Math.hypot(
+    dx,
+    dy
+  )
+  ||
+  1;
+
+  alienPlayer.x +=
+  dx
+  /
+  length
+  *
+  ALIEN_PLAYER_SPEED
+  *
+  dt;
+
+  alienPlayer.y +=
+  dy
+  /
+  length
+  *
+  ALIEN_PLAYER_SPEED
+  *
+  dt;
+
+  alienPlayer.x =
+  Math.max(
+    0.055,
+    Math.min(
+      0.945,
+      alienPlayer.x
+    )
+  );
+
+  alienPlayer.y =
+  Math.max(
+    0.065,
+    Math.min(
+      0.935,
+      alienPlayer.y
+    )
+  );
+
+}
+
+
+function moveAlienEnemies(dt){
+
+  alienEnemies
+  .forEach(
+    enemy => {
+
+      const dx =
+      alienPlayer.x
+      -
+      enemy.x;
+
+      const dy =
+      alienPlayer.y
+      -
+      enemy.y;
+
+      const length =
+      Math.hypot(
+        dx,
+        dy
+      )
+      ||
+      1;
+
+      enemy.x +=
+      dx
+      /
+      length
+      *
+      enemy.speed
+      *
+      dt;
+
+      enemy.y +=
+      dy
+      /
+      length
+      *
+      enemy.speed
+      *
+      dt;
+
+    }
+  );
+
+}
+
+
+function checkAlienAnswerCollision(){
+
+  if(alienEscapeRoundLocked){
+    return;
+  }
+
+  for(
+    let index=0;
+    index<ALIEN_ANSWER_ZONES.length;
+    index++
+  ){
+
+    const zone =
+    ALIEN_ANSWER_ZONES[index];
+
+    const inside =
+    Math.abs(
+      alienPlayer.x
+      -
+      zone.x
+    )
+    <
+    0.155
+    &&
+    Math.abs(
+      alienPlayer.y
+      -
+      zone.y
+    )
+    <
+    0.105;
+
+    if(!inside){
+      continue;
+    }
+
+    resolveAlienAnswer(
+      index
     );
 
     return;
 
   }
 
-
-  firstMatch =
-  null;
-
-
-  matchLocked =
-  false;
-
-
-  pairsFound =
-  0;
-
-
-  const words =
-  shuffle(
-    remainingWords()
-  )
-  .slice(
-    0,
-    6
-  );
-
-
-  matchTotalPairs =
-  words.length;
-
-
-  const cards =
-  [];
-
-
-  words.forEach(
-    (
-      word,
-      pair
-    ) => {
-
-      cards.push({
-
-        pair,
-
-        word,
-
-        type:"word",
-
-        text:
-          word.word
-
-      });
-
-
-      cards.push({
-
-        pair,
-
-        word,
-
-        type:"meaning",
-
-        text:
-          word.meaning
-
-      });
-
-    }
-  );
-
-
-  const mixed =
-  shuffle(
-    cards
-  );
-
-
-  $("matchBoard")
-  .innerHTML =
-  mixed
-  .map(
-    (
-      card,
-      index
-    ) => `
-      <button
-        class="match-card"
-        id="match${index}"
-      ></button>
-    `
-  )
-  .join("");
-
-
-  mixed.forEach(
-    (
-      card,
-      index
-    ) => {
-
-      const button =
-      $(
-        `match${index}`
-      );
-
-
-      button._data =
-      card;
-
-
-      button.onclick =
-      ()=>{
-
-        flipMatch(
-          button
-        );
-
-      };
-
-    }
-  );
-
-
-  updateMatch();
-
 }
 
 
-function flipMatch(button){
+function resolveAlienAnswer(index){
 
   if(
-    matchLocked
+    alienEscapeRoundLocked
     ||
-    button
-    .classList
-    .contains(
-      "matched"
-    )
-    ||
-    button ===
-    firstMatch
+    !currentTarget
   ){
-
     return;
-
   }
 
+  alienEscapeRoundLocked = true;
 
-  button
-  .classList
-  .add(
-    "revealed"
-  );
-
-
-  button.textContent =
-  button._data.text;
-
-
-  if(!firstMatch){
-
-    firstMatch =
-    button;
-
-    return;
-
-  }
-
-
-  const first =
-  firstMatch;
-
-
-  const second =
-  button;
-
+  const picked =
+  alienAnswers[index];
 
   const good =
-  first._data.pair
+  wordId(picked)
   ===
-  second._data.pair
+  wordId(currentTarget);
 
-  &&
+  const node =
+  $(
+    `alienAnswer${index}`
+  );
 
-  first._data.type
-  !==
-  second._data.type;
-
-
-  matchLocked =
-  true;
-
+  node.classList.add(
+    good
+    ?
+    "correct-flash"
+    :
+    "wrong-flash"
+  );
 
   if(good){
 
     const complete =
     correctAnswer(
-      first._data.word
+      currentTarget
     );
-
-
-    pairsFound++;
-
-
-    first
-    .classList
-    .add(
-      "matched"
-    );
-
-
-    second
-    .classList
-    .add(
-      "matched"
-    );
-
 
     feedback(
-      "✓ Ghép đúng!",
+      "✓ Đúng! Thoát khỏi aliens!",
       "good"
     );
 
-
-    firstMatch =
-    null;
-
-
-    matchLocked =
-    false;
-
-
     updateMatch();
 
-
     if(complete){
-
       setTimeout(
         ()=>endGame(true),
-        550
+        450
       );
-
       return;
-
     }
 
-
-    if(
-      pairsFound >=
-      matchTotalPairs
-    ){
-
-      setTimeout(
-        createMatchBoard,
-        650
-      );
-
-    }
+    setTimeout(
+      ()=>startAlienEscapeRound(false),
+      430
+    );
 
   }
 
   else{
 
     wrongAnswer(
-      first._data.word
+      currentTarget
     );
 
-
-    updateMatch();
-
+    const dead =
+    loseLife();
 
     feedback(
-      "✕ Chưa đúng",
+      "✕ Sai góc! Mất 1 mạng.",
       "bad"
     );
 
+    updateMatch();
+
+    if(dead){
+      return;
+    }
 
     setTimeout(
-      ()=>{
-
-        first
-        .classList
-        .remove(
-          "revealed"
-        );
-
-
-        second
-        .classList
-        .remove(
-          "revealed"
-        );
-
-
-        first.textContent =
-        "";
-
-
-        second.textContent =
-        "";
-
-
-        firstMatch =
-        null;
-
-
-        matchLocked =
-        false;
-
-      },
-      1000
+      ()=>startAlienEscapeRound(true),
+      560
     );
 
   }
+
+}
+
+
+function checkAlienEnemyCollision(){
+
+  if(alienEscapeRoundLocked){
+    return;
+  }
+
+  const caught =
+  alienEnemies
+  .some(
+    enemy =>
+    Math.hypot(
+      alienPlayer.x
+      -
+      enemy.x,
+      alienPlayer.y
+      -
+      enemy.y
+    )
+    <
+    ALIEN_HIT_RADIUS
+  );
+
+  if(!caught){
+    return;
+  }
+
+  alienEscapeRoundLocked = true;
+
+  $("matchBoard")
+  .classList
+  .add(
+    "hit"
+  );
+
+  wrongAnswer(
+    currentTarget
+  );
+
+  const dead =
+  loseLife();
+
+  feedback(
+    "👽 Alien bắt được bạn! Mất 1 mạng.",
+    "bad"
+  );
+
+  updateMatch();
+
+  setTimeout(
+    ()=>{
+      const board =
+      $("matchBoard");
+      if(board){
+        board.classList.remove("hit");
+      }
+    },
+    520
+  );
+
+  if(dead){
+    return;
+  }
+
+  setTimeout(
+    ()=>startAlienEscapeRound(true),
+    650
+  );
+
+}
+
+
+function renderAlienEscape(){
+
+  const astronaut =
+  $("alienAstronaut");
+
+  if(astronaut){
+    astronaut.style.left =
+    `${alienPlayer.x * 100}%`;
+
+    astronaut.style.top =
+    `${alienPlayer.y * 100}%`;
+  }
+
+  alienEnemies
+  .forEach(
+    (
+      enemy,
+      index
+    ) => {
+
+      const node =
+      $(
+        `alienEnemy${index}`
+      );
+
+      if(node){
+        node.style.left =
+        `${enemy.x * 100}%`;
+
+        node.style.top =
+        `${enemy.y * 100}%`;
+      }
+
+    }
+  );
 
 }
 
@@ -11028,37 +11578,141 @@ function updateMatch(seconds){
   .textContent =
   score;
 
-
   if(
     typeof seconds ===
     "number"
   ){
-
     $("matchTime")
     .textContent =
     Math.max(
       0,
       seconds
     );
-
   }
 
-
-  $("matchPairs")
+  $("matchLives")
   .textContent =
-  `${pairsFound}/${matchTotalPairs}`;
-
+  lives;
 
   $("matchCombo")
   .textContent =
   `x${combo}`;
-
 
   $("matchAccuracy")
   .textContent =
   `${accuracy()}%`;
 
 }
+
+
+function setAlienKeyboardControl(
+  key,
+  value
+){
+
+  if(
+    key === "arrowup"
+    ||
+    key === "w"
+  ){
+    alienControlState.up = value;
+    return true;
+  }
+
+  if(
+    key === "arrowdown"
+    ||
+    key === "s"
+  ){
+    alienControlState.down = value;
+    return true;
+  }
+
+  if(
+    key === "arrowleft"
+    ||
+    key === "a"
+  ){
+    alienControlState.left = value;
+    return true;
+  }
+
+  if(
+    key === "arrowright"
+    ||
+    key === "d"
+  ){
+    alienControlState.right = value;
+    return true;
+  }
+
+  return false;
+
+}
+
+
+window.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      currentGame !== "match"
+      ||
+      !alienEscapeStarted
+      ||
+      gameEnded
+    ){
+      return;
+    }
+
+    const target =
+    event.target;
+
+    if(
+      target
+      &&
+      ["INPUT","TEXTAREA","SELECT"]
+      .includes(target.tagName)
+    ){
+      return;
+    }
+
+    if(
+      setAlienKeyboardControl(
+        String(event.key).toLowerCase(),
+        true
+      )
+    ){
+      event.preventDefault();
+    }
+
+  }
+);
+
+
+window.addEventListener(
+  "keyup",
+  event => {
+
+    if(
+      currentGame !== "match"
+      ||
+      !alienEscapeStarted
+    ){
+      return;
+    }
+
+    if(
+      setAlienKeyboardControl(
+        String(event.key).toLowerCase(),
+        false
+      )
+    ){
+      event.preventDefault();
+    }
+
+  }
+);
 
 
 /* =========================================================
@@ -13563,6 +14217,8 @@ function stopGame(){
 
   clearRacer();
 
+  clearAlienEscape();
+
   clearFlappyAnswers();
 
   clearBalloons();
@@ -13623,6 +14279,12 @@ function endGame(
 
 
   stopTimersOnly();
+
+  if(
+    currentGame === "match"
+  ){
+    clearAlienEscape();
+  }
 
 
   if(
