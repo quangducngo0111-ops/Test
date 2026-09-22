@@ -1951,6 +1951,24 @@ mark.user-highlight{
   }
 }
 
+
+.note-anchor.note-pin{
+  display:inline-grid;
+  place-items:center;
+  min-width:21px;
+  height:21px;
+  margin:0 3px;
+  padding:0 4px;
+  border:1px solid #e8be67;
+  border-radius:999px;
+  background:#fff3cb;
+  color:#8d5a00;
+  font-size:11px;
+  line-height:1;
+  vertical-align:middle;
+  cursor:pointer;
+}
+
 </style>
 </head>
 <body>
@@ -2083,6 +2101,15 @@ mark.user-highlight{
       id="studentNotesCount"
       class="notes-count"
     >0</span>
+  </div>
+
+  <div style="
+    margin-top:5px;
+    color:#7b8292;
+    font-size:9.5px;
+    line-height:1.45;
+  ">
+    Ghi chú được lưu tự động. Với đoạn chữ phức tạp, biểu tượng 📝 sẽ được đặt ngay cạnh vị trí đã chọn.
   </div>
 
   <div
@@ -2312,6 +2339,7 @@ let student = null;
 
 /* Highlight / Take note state */
 let savedSelection = null;
+let savedSelectionText = '';
 let savedZone = null;
 let menuTarget = null;
 let menuZone = null;
@@ -2806,6 +2834,9 @@ function captureSelection(zone){
   savedSelection =
     range.cloneRange();
 
+  savedSelectionText =
+    text;
+
   savedZone =
     zone;
 
@@ -2825,6 +2856,7 @@ function clearSelection(){
   }
 
   savedSelection = null;
+  savedSelectionText = '';
   savedZone = null;
 }
 
@@ -2931,6 +2963,8 @@ function renderStudentNotes(){
 
       const selectedText =
         escapeHTML(
+          node.dataset.selectedText
+          ||
           node.textContent.trim()
         );
 
@@ -3062,20 +3096,77 @@ function deleteNoteById(noteId){
   const parent =
     node.parentNode;
 
-  while(node.firstChild){
-    parent.insertBefore(
-      node.firstChild,
-      node
-    );
+  if(node.classList.contains('note-pin')){
+    node.remove();
+  }
+  else{
+    while(node.firstChild){
+      parent.insertBefore(
+        node.firstChild,
+        node
+      );
+    }
+
+    node.remove();
   }
 
-  node.remove();
   parent.normalize();
 
   saveMarkup('questions');
   renderStudentNotes();
 }
 
+
+function rangeTouchesExistingMarkup(range){
+  const root = zoneRoot('questions');
+  if(!root) return false;
+
+  const nodes = [
+    ...root.querySelectorAll(
+      'mark.user-highlight,.note-anchor'
+    )
+  ];
+
+  return nodes.some(node=>{
+    try{
+      return range.intersectsNode(node);
+    }catch(error){
+      return false;
+    }
+  });
+}
+
+function insertNotePin(range, note, noteId, selectedText){
+  const pinRange =
+    range.cloneRange();
+
+  pinRange.collapse(false);
+
+  const pin =
+    document.createElement('span');
+
+  pin.className =
+    'note-anchor note-pin';
+
+  pin.dataset.note =
+    note;
+
+  pin.dataset.noteId =
+    noteId;
+
+  pin.dataset.selectedText =
+    selectedText;
+
+  pin.title =
+    note;
+
+  pin.textContent =
+    '📝';
+
+  pinRange.insertNode(pin);
+
+  return pin;
+}
 
 function addNote(){
   if(
@@ -3092,6 +3183,11 @@ function addNote(){
     return;
   }
 
+  const selectedText =
+    savedSelectionText
+    ||
+    savedSelection.toString().trim();
+
   const note =
     prompt('Nhập ghi chú:');
 
@@ -3102,30 +3198,62 @@ function addNote(){
     return;
   }
 
+  const noteId =
+    `note_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+
+  const noteText =
+    note.trim();
+
+  const range =
+    savedSelection.cloneRange();
+
   try{
-    const range =
-      savedSelection.cloneRange();
+    /*
+     * Chỉ bọc trực tiếp khi selection nằm gọn trong
+     * một text node và không đè lên highlight/note cũ.
+     * Các selection phức tạp sẽ dùng note pin để tránh
+     * lỗi Range/DOM.
+     */
+    const simpleTextRange =
+      range.startContainer === range.endContainer
+      &&
+      range.startContainer.nodeType === Node.TEXT_NODE
+      &&
+      !rangeTouchesExistingMarkup(range);
 
-    const span =
-      document.createElement('span');
+    if(simpleTextRange){
+      const span =
+        document.createElement('span');
 
-    span.className =
-      'note-anchor';
+      span.className =
+        'note-anchor';
 
-    span.dataset.note =
-      note.trim();
+      span.dataset.note =
+        noteText;
 
-    span.dataset.noteId =
-      `note_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+      span.dataset.noteId =
+        noteId;
 
-    span.title =
-      note.trim();
+      span.dataset.selectedText =
+        selectedText;
 
-    span.appendChild(
-      range.extractContents()
-    );
+      span.title =
+        noteText;
 
-    range.insertNode(span);
+      span.appendChild(
+        range.extractContents()
+      );
+
+      range.insertNode(span);
+    }
+    else{
+      insertNotePin(
+        range,
+        noteText,
+        noteId,
+        selectedText
+      );
+    }
 
     saveMarkup(savedZone);
     clearSelection();
@@ -3133,9 +3261,33 @@ function addNote(){
     renderStudentNotes();
   }
   catch(error){
-    alert(
-      'Hãy chọn một đoạn chữ ngắn hơn.'
-    );
+    /*
+     * Fallback cuối cùng: không báo lỗi nữa.
+     * Chèn một note pin tại cuối vùng chọn.
+     */
+    try{
+      insertNotePin(
+        savedSelection.cloneRange(),
+        noteText,
+        noteId,
+        selectedText
+      );
+
+      saveMarkup(savedZone);
+      clearSelection();
+      hideMenu();
+      renderStudentNotes();
+    }
+    catch(finalError){
+      console.error(
+        'Không thể tạo ghi chú:',
+        finalError
+      );
+
+      alert(
+        'Không thể tạo ghi chú tại vị trí này. Hãy chọn một đoạn chữ khác.'
+      );
+    }
   }
 }
 
@@ -3185,14 +3337,20 @@ function removeMark(){
   const parent =
     menuTarget.parentNode;
 
-  while(menuTarget.firstChild){
-    parent.insertBefore(
-      menuTarget.firstChild,
-      menuTarget
-    );
+  if(menuTarget.classList.contains('note-pin')){
+    menuTarget.remove();
+  }
+  else{
+    while(menuTarget.firstChild){
+      parent.insertBefore(
+        menuTarget.firstChild,
+        menuTarget
+      );
+    }
+
+    menuTarget.remove();
   }
 
-  menuTarget.remove();
   parent.normalize();
 
   saveMarkup(menuZone);
