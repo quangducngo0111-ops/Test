@@ -1801,6 +1801,156 @@ mark.user-highlight{
   }
 }
 
+
+/* =========================================================
+   STUDENT NOTES PANEL
+========================================================= */
+.notes-panel{
+  margin-bottom:12px;
+  padding:12px 14px;
+  border:1px solid #e2def3;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(35,25,75,.04);
+}
+
+.notes-panel.empty{
+  display:none;
+}
+
+.notes-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.notes-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#21164b;
+  font-size:12px;
+  font-weight:950;
+}
+
+.notes-title-icon{
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  background:#fff3d6;
+  color:#9a5a00;
+  font-size:15px;
+}
+
+.notes-count{
+  min-width:27px;
+  height:24px;
+  padding:0 7px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#eee9ff;
+  color:#5135a6;
+  font-size:10px;
+  font-weight:950;
+}
+
+.notes-list{
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+}
+
+.note-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:start;
+  padding:10px 11px;
+  border:1px solid #eee7cf;
+  border-left:4px solid #e5a42a;
+  border-radius:10px;
+  background:#fffdf7;
+}
+
+.note-card-main{
+  min-width:0;
+}
+
+.note-source{
+  margin-bottom:3px;
+  color:#7d6b3a;
+  font-size:9.5px;
+  font-weight:900;
+  line-height:1.45;
+}
+
+.note-text{
+  color:#343b4b;
+  font-size:11px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+
+.note-actions{
+  display:flex;
+  gap:5px;
+}
+
+.note-action{
+  min-width:30px;
+  height:30px;
+  padding:0 8px;
+  border:1px solid #ded7bf;
+  border-radius:8px;
+  background:#fff;
+  color:#6b5a2c;
+  font-size:10px;
+  font-weight:900;
+}
+
+.note-action:hover{
+  background:#fff8e8;
+}
+
+.note-action.danger{
+  color:#a31e31;
+  border-color:#efc9cf;
+}
+
+.note-anchor{
+  position:relative;
+  border-bottom:2px dotted #e28b19;
+  border-radius:2px;
+  background:#ffe6a6;
+  cursor:pointer;
+}
+
+.note-anchor.note-focus{
+  animation:notePulse .9s ease 2;
+  box-shadow:0 0 0 4px rgba(226,139,25,.18);
+}
+
+@keyframes notePulse{
+  50%{
+    background:#ffd66f;
+    box-shadow:0 0 0 7px rgba(226,139,25,.25);
+  }
+}
+
+@media(max-width:700px){
+  .note-card{
+    grid-template-columns:1fr;
+  }
+
+  .note-actions{
+    justify-content:flex-end;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1915,7 +2065,33 @@ mark.user-highlight{
     </div>
   </section>
 
-  <section class="paper">
+  
+<!-- =========================================================
+     STUDENT NOTES
+========================================================= -->
+<section
+  id="studentNotesPanel"
+  class="notes-panel empty"
+>
+  <div class="notes-head">
+    <div class="notes-title">
+      <span class="notes-title-icon">📝</span>
+      <span>Ghi chú của em</span>
+    </div>
+
+    <span
+      id="studentNotesCount"
+      class="notes-count"
+    >0</span>
+  </div>
+
+  <div
+    id="studentNotesList"
+    class="notes-list"
+  ></div>
+</section>
+
+<section class="paper">
     <div class="paper-inner" id="questionsRoot">
 
       <section class="question-block" id="questionGroup11">
@@ -2146,6 +2322,9 @@ const selectionMenu = document.getElementById('selectionMenu');
 const menuHighlight = document.getElementById('menuHighlight');
 const menuNote = document.getElementById('menuNote');
 const questionsRoot = document.getElementById('questionsRoot');
+const studentNotesPanel = document.getElementById('studentNotesPanel');
+const studentNotesList = document.getElementById('studentNotesList');
+const studentNotesCount = document.getElementById('studentNotesCount');
 const seekBar = document.getElementById('seekBar');
 const playPauseBtn = document.getElementById('playPauseBtn');
 
@@ -2516,6 +2695,7 @@ function restoreMarkup(){
   }
 
   bindContextActions('questions');
+  renderStudentNotes();
 }
 
 function resetMenu(){
@@ -2690,6 +2870,213 @@ function addHighlight(){
   }
 }
 
+
+function ensureNoteIds(){
+  const root = zoneRoot('questions');
+  if(!root) return;
+
+  let changed = false;
+
+  root
+    .querySelectorAll('.note-anchor')
+    .forEach((node,index)=>{
+      if(!node.dataset.noteId){
+        node.dataset.noteId =
+          `note_${Date.now()}_${index}`;
+        changed = true;
+      }
+    });
+
+  if(changed){
+    saveMarkup('questions');
+  }
+}
+
+function renderStudentNotes(){
+  if(
+    !studentNotesPanel ||
+    !studentNotesList ||
+    !studentNotesCount
+  ){
+    return;
+  }
+
+  const root =
+    zoneRoot('questions');
+
+  if(!root){
+    return;
+  }
+
+  ensureNoteIds();
+
+  const notes =
+    [...root.querySelectorAll('.note-anchor')];
+
+  studentNotesCount.textContent =
+    String(notes.length);
+
+  if(!notes.length){
+    studentNotesPanel.classList.add('empty');
+    studentNotesList.innerHTML = '';
+    return;
+  }
+
+  studentNotesPanel.classList.remove('empty');
+
+  studentNotesList.innerHTML =
+    notes.map((node,index)=>{
+      const id =
+        node.dataset.noteId || '';
+
+      const selectedText =
+        escapeHTML(
+          node.textContent.trim()
+        );
+
+      const noteText =
+        escapeHTML(
+          node.dataset.note || ''
+        );
+
+      return `
+        <article class="note-card">
+          <div class="note-card-main">
+            <div class="note-source">
+              #${index + 1} · “${selectedText}”
+            </div>
+            <div class="note-text">
+              ${noteText}
+            </div>
+          </div>
+
+          <div class="note-actions">
+            <button
+              type="button"
+              class="note-action"
+              title="Đi tới vị trí ghi chú"
+              onclick="focusNote('${id}')"
+            >↗</button>
+
+            <button
+              type="button"
+              class="note-action"
+              title="Sửa ghi chú"
+              onclick="editNote('${id}')"
+            >✎</button>
+
+            <button
+              type="button"
+              class="note-action danger"
+              title="Xóa ghi chú"
+              onclick="deleteNoteById('${id}')"
+            >×</button>
+          </div>
+        </article>
+      `;
+    }).join('');
+}
+
+function findNoteById(noteId){
+  const root =
+    zoneRoot('questions');
+
+  if(!root || !noteId){
+    return null;
+  }
+
+  return [
+    ...root.querySelectorAll('.note-anchor')
+  ].find(
+    node => node.dataset.noteId === noteId
+  ) || null;
+}
+
+function focusNote(noteId){
+  const node =
+    findNoteById(noteId);
+
+  if(!node){
+    return;
+  }
+
+  node.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+  node.classList.remove('note-focus');
+
+  void node.offsetWidth;
+
+  node.classList.add('note-focus');
+
+  setTimeout(
+    ()=>node.classList.remove('note-focus'),
+    1900
+  );
+}
+
+function editNote(noteId){
+  const node =
+    findNoteById(noteId);
+
+  if(!node){
+    return;
+  }
+
+  const current =
+    node.dataset.note || '';
+
+  const updated =
+    prompt(
+      'Sửa ghi chú:',
+      current
+    );
+
+  if(
+    updated === null ||
+    !updated.trim()
+  ){
+    return;
+  }
+
+  node.dataset.note =
+    updated.trim();
+
+  node.title =
+    updated.trim();
+
+  saveMarkup('questions');
+  renderStudentNotes();
+}
+
+function deleteNoteById(noteId){
+  const node =
+    findNoteById(noteId);
+
+  if(!node){
+    return;
+  }
+
+  const parent =
+    node.parentNode;
+
+  while(node.firstChild){
+    parent.insertBefore(
+      node.firstChild,
+      node
+    );
+  }
+
+  node.remove();
+  parent.normalize();
+
+  saveMarkup('questions');
+  renderStudentNotes();
+}
+
+
 function addNote(){
   if(
     menuMode === 'delete-note'
@@ -2728,6 +3115,9 @@ function addNote(){
     span.dataset.note =
       note.trim();
 
+    span.dataset.noteId =
+      `note_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+
     span.title =
       note.trim();
 
@@ -2740,6 +3130,7 @@ function addNote(){
     saveMarkup(savedZone);
     clearSelection();
     hideMenu();
+    renderStudentNotes();
   }
   catch(error){
     alert(
@@ -2806,6 +3197,7 @@ function removeMark(){
 
   saveMarkup(menuZone);
   hideMenu();
+  renderStudentNotes();
 }
 
 function bindContextActions(zone){
@@ -2947,6 +3339,7 @@ document.addEventListener('keydown',event=>{
   }catch(e){}
 
   bindContextActions('questions');
+  renderStudentNotes();
 })();
 </script>
 </body>
