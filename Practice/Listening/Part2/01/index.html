@@ -1982,6 +1982,56 @@ mark.user-highlight{
   }
 }
 
+
+/* =========================================================
+   INLINE NOTE NAVIGATION
+========================================================= */
+.note-jump-marker{
+  width:22px;
+  height:22px;
+  margin:0 3px;
+  padding:0;
+  border:1px solid #cbbcf1;
+  border-radius:999px;
+  display:inline-grid;
+  place-items:center;
+  vertical-align:middle;
+  background:#f5f1ff;
+  color:#5135a6;
+  cursor:pointer;
+  box-shadow:0 2px 7px rgba(81,53,166,.12);
+  transform:translateY(-1px);
+}
+
+.note-jump-marker::before{
+  content:"📝";
+  font-size:11px;
+  line-height:1;
+}
+
+.note-jump-marker:hover{
+  background:#eae2ff;
+  border-color:#8f77d1;
+  transform:translateY(-2px);
+}
+
+.note-jump-marker:focus-visible{
+  outline:3px solid rgba(81,53,166,.18);
+  outline-offset:2px;
+}
+
+.note-card.note-card-focus{
+  animation:noteCardPulse .9s ease 2;
+}
+
+@keyframes noteCardPulse{
+  50%{
+    border-color:#8f77d1;
+    background:#f8f5ff;
+    box-shadow:0 0 0 5px rgba(81,53,166,.14);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2122,7 +2172,7 @@ mark.user-highlight{
     font-size:9.5px;
     line-height:1.45;
   ">
-    Ghi chú được lưu tự động tại đây. Nhấn ↗ để quay lại đúng câu đã ghi chú.
+    Ghi chú được lưu tự động. Nút 📝 cạnh từ đã note đưa tới đúng ghi chú; nút ↗ trong ghi chú đưa quay lại câu hỏi.
   </div>
 
   <div
@@ -2354,6 +2404,7 @@ let student = null;
 let savedSelection = null;
 let savedSelectionText = '';
 let savedNoteTargetId = '';
+let savedNoteCharEnd = null;
 let savedZone = null;
 let menuTarget = null;
 let menuZone = null;
@@ -2863,6 +2914,31 @@ function captureSelection(zone){
   savedNoteTargetId =
     questionBlock?.id || '';
 
+  savedNoteCharEnd =
+    null;
+
+  if(questionBlock){
+    try{
+      const locatorRange =
+        document.createRange();
+
+      locatorRange.selectNodeContents(
+        questionBlock
+      );
+
+      locatorRange.setEnd(
+        range.endContainer,
+        range.endOffset
+      );
+
+      savedNoteCharEnd =
+        locatorRange.toString().length;
+    }
+    catch(error){
+      savedNoteCharEnd = null;
+    }
+  }
+
   savedZone =
     zone;
 
@@ -2884,6 +2960,7 @@ function clearSelection(){
   savedSelection = null;
   savedSelectionText = '';
   savedNoteTargetId = '';
+  savedNoteCharEnd = null;
   savedZone = null;
 }
 
@@ -3028,6 +3105,7 @@ function migrateLegacyNotesFromMarkup(){
         note:
           noteText,
         targetId,
+        charEnd:null,
         createdAt:
           Date.now() + index
       });
@@ -3090,6 +3168,11 @@ function renderStudentNotes(){
   if(!notes.length){
     studentNotesPanel.classList.add('empty');
     studentNotesList.innerHTML = '';
+
+    zoneRoot('questions')
+      ?.querySelectorAll('.note-jump-marker')
+      .forEach(marker=>marker.remove());
+
     return;
   }
 
@@ -3123,7 +3206,10 @@ function renderStudentNotes(){
         : 'Trong bài';
 
       return `
-        <article class="note-card">
+        <article
+          class="note-card"
+          id="studentNoteCard-${id}"
+        >
           <div class="note-card-main">
             <div class="note-source">
               #${index + 1} · ${questionLabel} · “${selectedText}”
@@ -3159,6 +3245,329 @@ function renderStudentNotes(){
         </article>
       `;
     }).join('');
+
+  renderNoteJumpMarkers();
+}
+
+function scrollToNoteCard(noteId){
+  const card =
+    document.getElementById(
+      `studentNoteCard-${noteId}`
+    );
+
+  if(!card){
+    return;
+  }
+
+  card.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+  card.classList.remove(
+    'note-card-focus'
+  );
+
+  void card.offsetWidth;
+
+  card.classList.add(
+    'note-card-focus'
+  );
+
+  setTimeout(
+    ()=>card.classList.remove(
+      'note-card-focus'
+    ),
+    1800
+  );
+}
+
+function createNoteJumpMarker(noteId){
+  const button =
+    document.createElement('button');
+
+  button.type =
+    'button';
+
+  button.className =
+    'note-jump-marker';
+
+  button.dataset.noteId =
+    noteId;
+
+  button.setAttribute(
+    'aria-label',
+    'Đi tới ghi chú'
+  );
+
+  button.title =
+    'Đi tới ghi chú';
+
+  button.addEventListener(
+    'click',
+    event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      scrollToNoteCard(noteId);
+    }
+  );
+
+  return button;
+}
+
+function insertMarkerAtCharacterOffset(
+  block,
+  charEnd,
+  noteId
+){
+  if(
+    !block
+    ||
+    !Number.isFinite(charEnd)
+  ){
+    return false;
+  }
+
+  const walker =
+    document.createTreeWalker(
+      block,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node){
+          const parent =
+            node.parentElement;
+
+          if(
+            !parent
+            ||
+            parent.closest(
+              'button,input,select,option,.note-jump-marker'
+            )
+          ){
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+  let total = 0;
+  let node = null;
+
+  while(
+    (node = walker.nextNode())
+  ){
+    const length =
+      node.nodeValue?.length || 0;
+
+    if(
+      total + length >= charEnd
+    ){
+      const offset =
+        Math.max(
+          0,
+          Math.min(
+            length,
+            charEnd - total
+          )
+        );
+
+      const marker =
+        createNoteJumpMarker(noteId);
+
+      const range =
+        document.createRange();
+
+      range.setStart(
+        node,
+        offset
+      );
+
+      range.collapse(true);
+
+      const highlight =
+        node.parentElement?.closest(
+          'mark.user-highlight'
+        );
+
+      if(
+        highlight
+        &&
+        block.contains(highlight)
+      ){
+        highlight.insertAdjacentElement(
+          'afterend',
+          marker
+        );
+      }
+      else{
+        range.insertNode(marker);
+      }
+
+      return true;
+    }
+
+    total += length;
+  }
+
+  return false;
+}
+
+function insertMarkerBySelectedText(
+  block,
+  selectedText,
+  noteId
+){
+  if(
+    !block
+    ||
+    !selectedText
+  ){
+    return false;
+  }
+
+  const walker =
+    document.createTreeWalker(
+      block,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node){
+          const parent =
+            node.parentElement;
+
+          if(
+            !parent
+            ||
+            parent.closest(
+              'button,input,select,option,.note-jump-marker'
+            )
+          ){
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+  let node = null;
+
+  while(
+    (node = walker.nextNode())
+  ){
+    const text =
+      node.nodeValue || '';
+
+    const index =
+      text.indexOf(selectedText);
+
+    if(index !== -1){
+      const marker =
+        createNoteJumpMarker(noteId);
+
+      const range =
+        document.createRange();
+
+      range.setStart(
+        node,
+        index + selectedText.length
+      );
+
+      range.collapse(true);
+
+      const highlight =
+        node.parentElement?.closest(
+          'mark.user-highlight'
+        );
+
+      if(
+        highlight
+        &&
+        block.contains(highlight)
+      ){
+        highlight.insertAdjacentElement(
+          'afterend',
+          marker
+        );
+      }
+      else{
+        range.insertNode(marker);
+      }
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function renderNoteJumpMarkers(){
+  const root =
+    zoneRoot('questions');
+
+  if(!root){
+    return;
+  }
+
+  root
+    .querySelectorAll(
+      '.note-jump-marker'
+    )
+    .forEach(
+      marker=>marker.remove()
+    );
+
+  const notes =
+    readStudentNotes();
+
+  notes.forEach(item=>{
+    const block =
+      item.targetId
+        ? document.getElementById(
+            item.targetId
+          )
+        : null;
+
+    if(!block){
+      return;
+    }
+
+    let inserted =
+      insertMarkerAtCharacterOffset(
+        block,
+        Number(item.charEnd),
+        item.id
+      );
+
+    if(!inserted){
+      inserted =
+        insertMarkerBySelectedText(
+          block,
+          item.selectedText || '',
+          item.id
+        );
+    }
+
+    if(!inserted){
+      const target =
+        block.querySelector(
+          '.main-question'
+        )
+        ||
+        block.querySelector(
+          '.question-title'
+        )
+        ||
+        block;
+
+      target.appendChild(
+        createNoteJumpMarker(
+          item.id
+        )
+      );
+    }
+  });
 }
 
 function findStoredNote(noteId){
@@ -3283,6 +3692,10 @@ function addNote(){
       note.trim(),
     targetId:
       savedNoteTargetId,
+    charEnd:
+      Number.isFinite(savedNoteCharEnd)
+        ? savedNoteCharEnd
+        : null,
     createdAt:
       Date.now()
   });
