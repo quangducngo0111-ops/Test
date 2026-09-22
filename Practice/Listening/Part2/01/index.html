@@ -1639,6 +1639,168 @@ mark.user-highlight{
   .map-label{font-size:10.8px}
 }
 
+
+/* =========================================================
+   PART 2 — PLAN LABELLING · OPTIMISED LAYOUT
+========================================================= */
+.plan-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(285px,.75fr);
+  gap:18px;
+  align-items:start;
+  margin-top:12px;
+}
+
+.plan-column{
+  min-width:0;
+}
+
+.plan-card{
+  width:100%;
+  max-width:540px;
+  margin:0 auto;
+  padding:10px;
+  position:relative;
+}
+
+.plan-card img{
+  width:100%;
+  max-height:405px;
+  object-fit:contain;
+  cursor:zoom-in;
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+
+.plan-card img:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(35,25,75,.10);
+}
+
+.plan-zoom-hint{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin-top:7px;
+  color:#7b8292;
+  font-size:9.5px;
+  font-weight:850;
+  text-align:center;
+}
+
+.map-answer-panel{
+  min-width:0;
+  padding:13px;
+  border:1px solid #dfe3eb;
+  border-radius:12px;
+  background:#faf9ff;
+}
+
+.map-answer-title{
+  margin:0 0 4px;
+  color:#21164b;
+  font-size:12.5px;
+  font-weight:950;
+}
+
+.map-answer-subtitle{
+  margin:0 0 11px;
+  color:#7b8292;
+  font-size:9.7px;
+  line-height:1.5;
+}
+
+.map-answer-list{
+  margin-top:0;
+  gap:8px;
+}
+
+.map-row{
+  grid-template-columns:38px minmax(0,1fr) 74px;
+  gap:8px;
+  padding:9px 9px;
+}
+
+.map-label{
+  font-size:11px;
+  line-height:1.35;
+}
+
+.map-select{
+  min-width:0;
+}
+
+/* Image lightbox */
+.map-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:180;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(12,9,28,.82);
+  backdrop-filter:blur(5px);
+}
+
+.map-lightbox.open{
+  display:flex;
+}
+
+.map-lightbox-card{
+  position:relative;
+  width:min(1120px,96vw);
+  max-height:92vh;
+  padding:14px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 30px 90px rgba(0,0,0,.35);
+}
+
+.map-lightbox img{
+  display:block;
+  width:100%;
+  max-height:calc(92vh - 28px);
+  object-fit:contain;
+  border-radius:10px;
+  background:#fff;
+}
+
+.map-lightbox-close{
+  position:absolute;
+  top:-12px;
+  right:-12px;
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#281260;
+  color:#fff;
+  font-size:20px;
+  font-weight:950;
+  box-shadow:0 8px 22px rgba(0,0,0,.25);
+}
+
+@media(max-width:760px){
+  .plan-layout{
+    grid-template-columns:1fr;
+  }
+
+  .plan-card{
+    max-width:620px;
+  }
+
+  .map-answer-panel{
+    padding:11px;
+  }
+
+  .map-row{
+    grid-template-columns:38px minmax(0,1fr) 72px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1803,44 +1965,71 @@ mark.user-highlight{
         </p>
         <div class="section-heading">Ground floor plan of theatre</div>
 
-        <div class="plan-card">
-          <img src="./theatre-plan.png" alt="Ground floor plan of theatre">
-        </div>
+        <div class="plan-layout">
 
-        <div class="map-answer-list">
-          <div class="map-row" id="mapRow17">
-            <span class="qno">17</span>
-            <span class="map-label">box office</span>
-            <select class="map-select" id="q17" onchange="singleChanged(17)">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option>
-              <option>E</option><option>F</option><option>G</option>
-            </select>
-          </div><div class="map-row" id="mapRow18">
-            <span class="qno">18</span>
-            <span class="map-label">theatre manager's office</span>
-            <select class="map-select" id="q18" onchange="singleChanged(18)">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option>
-              <option>E</option><option>F</option><option>G</option>
-            </select>
-          </div><div class="map-row" id="mapRow19">
-            <span class="qno">19</span>
-            <span class="map-label">lighting box</span>
-            <select class="map-select" id="q19" onchange="singleChanged(19)">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option>
-              <option>E</option><option>F</option><option>G</option>
-            </select>
-          </div><div class="map-row" id="mapRow20">
-            <span class="qno">20</span>
-            <span class="map-label">artistic director's office</span>
-            <select class="map-select" id="q20" onchange="singleChanged(20)">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option>
-              <option>E</option><option>F</option><option>G</option>
-            </select>
+          <div class="plan-column">
+            <div class="plan-card">
+              <img
+                src="./theatre-plan.png"
+                alt="Ground floor plan of theatre"
+                onclick="openMapLightbox()"
+                title="Click để phóng to"
+              >
+              <div class="plan-zoom-hint">
+                🔍 Click vào sơ đồ để phóng to
+              </div>
+            </div>
           </div>
+
+          <aside class="map-answer-panel">
+            <div class="map-answer-title">Questions 17–20</div>
+            <p class="map-answer-subtitle">
+              Chọn chữ cái A–G tương ứng với vị trí đúng trên sơ đồ.
+            </p>
+
+            <div class="map-answer-list">
+              <div class="map-row" id="mapRow17">
+                <span class="qno">17</span>
+                <span class="map-label">box office</span>
+                <select class="map-select" id="q17" onchange="singleChanged(17)">
+                  <option value="">—</option>
+                  <option>A</option><option>B</option><option>C</option><option>D</option>
+                  <option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+
+              <div class="map-row" id="mapRow18">
+                <span class="qno">18</span>
+                <span class="map-label">theatre manager's office</span>
+                <select class="map-select" id="q18" onchange="singleChanged(18)">
+                  <option value="">—</option>
+                  <option>A</option><option>B</option><option>C</option><option>D</option>
+                  <option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+
+              <div class="map-row" id="mapRow19">
+                <span class="qno">19</span>
+                <span class="map-label">lighting box</span>
+                <select class="map-select" id="q19" onchange="singleChanged(19)">
+                  <option value="">—</option>
+                  <option>A</option><option>B</option><option>C</option><option>D</option>
+                  <option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+
+              <div class="map-row" id="mapRow20">
+                <span class="qno">20</span>
+                <span class="map-label">artistic director's office</span>
+                <select class="map-select" id="q20" onchange="singleChanged(20)">
+                  <option value="">—</option>
+                  <option>A</option><option>B</option><option>C</option><option>D</option>
+                  <option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+            </div>
+          </aside>
+
         </div>
       </section>
 
@@ -1850,6 +2039,24 @@ mark.user-highlight{
   </section>
 
 </main>
+
+
+<div
+  id="mapLightbox"
+  class="map-lightbox"
+  onclick="closeMapLightbox(event)"
+  aria-hidden="true"
+>
+  <div class="map-lightbox-card" role="dialog" aria-modal="true" aria-label="Phóng to sơ đồ">
+    <button
+      type="button"
+      class="map-lightbox-close"
+      onclick="closeMapLightbox(event,true)"
+      aria-label="Đóng"
+    >×</button>
+    <img src="./theatre-plan.png" alt="Ground floor plan of theatre enlarged">
+  </div>
+</div>
 
 <div class="bottom">
   <div class="nav">
@@ -2232,6 +2439,40 @@ function closeResult(){
   const firstReview=document.getElementById('reviewList').querySelector('.inline-review');
   if(firstReview) firstReview.scrollIntoView({behavior:'smooth',block:'center'});
 }
+
+
+function openMapLightbox(){
+  const lightbox=document.getElementById('mapLightbox');
+  if(!lightbox) return;
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+
+function closeMapLightbox(event,force=false){
+  const lightbox=document.getElementById('mapLightbox');
+  if(!lightbox) return;
+
+  const clickedBackdrop =
+    event
+    && event.target === lightbox;
+
+  if(!force && event && !clickedBackdrop) return;
+
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){
+    const lightbox=document.getElementById('mapLightbox');
+    if(lightbox?.classList.contains('open')){
+      closeMapLightbox(null,true);
+    }
+  }
+});
+
 
 (function init(){
   try{
