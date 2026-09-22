@@ -1969,6 +1969,19 @@ mark.user-highlight{
   cursor:pointer;
 }
 
+
+.question-block.note-question-focus{
+  animation:noteQuestionPulse .9s ease 2;
+}
+
+@keyframes noteQuestionPulse{
+  50%{
+    border-color:#e5a42a;
+    background:#fffaf0;
+    box-shadow:0 0 0 5px rgba(229,164,42,.15);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2109,7 +2122,7 @@ mark.user-highlight{
     font-size:9.5px;
     line-height:1.45;
   ">
-    Ghi chú được lưu tự động. Với đoạn chữ phức tạp, biểu tượng 📝 sẽ được đặt ngay cạnh vị trí đã chọn.
+    Ghi chú được lưu tự động tại đây. Nhấn ↗ để quay lại đúng câu đã ghi chú.
   </div>
 
   <div
@@ -2340,6 +2353,7 @@ let student = null;
 /* Highlight / Take note state */
 let savedSelection = null;
 let savedSelectionText = '';
+let savedNoteTargetId = '';
 let savedZone = null;
 let menuTarget = null;
 let menuZone = null;
@@ -2722,6 +2736,7 @@ function restoreMarkup(){
     root.innerHTML = markup;
   }
 
+  migrateLegacyNotesFromMarkup();
   bindContextActions('questions');
   renderStudentNotes();
 }
@@ -2818,7 +2833,7 @@ function captureSelection(zone){
    */
   if(
     common?.closest(
-      'button,input,select,option,mark.user-highlight,.note-anchor'
+      'button,input,select,option'
     )
   ){
     return;
@@ -2836,6 +2851,17 @@ function captureSelection(zone){
 
   savedSelectionText =
     text;
+
+  const startElement =
+    range.startContainer.nodeType === Node.ELEMENT_NODE
+      ? range.startContainer
+      : range.startContainer.parentElement;
+
+  const questionBlock =
+    startElement?.closest('.question-block');
+
+  savedNoteTargetId =
+    questionBlock?.id || '';
 
   savedZone =
     zone;
@@ -2857,6 +2883,7 @@ function clearSelection(){
 
   savedSelection = null;
   savedSelectionText = '';
+  savedNoteTargetId = '';
   savedZone = null;
 }
 
@@ -2903,36 +2930,36 @@ function addHighlight(){
 }
 
 
-function ensureNoteIds(){
-  const root = zoneRoot('questions');
-  if(!root) return;
 
-  let changed = false;
+const NOTES_KEY =
+  `${ATTEMPT_KEY}_student_notes_v2`;
 
-  root
-    .querySelectorAll('.note-anchor')
-    .forEach((node,index)=>{
-      if(!node.dataset.noteId){
-        node.dataset.noteId =
-          `note_${Date.now()}_${index}`;
-        changed = true;
-      }
-    });
+function readStudentNotes(){
+  try{
+    const data =
+      JSON.parse(
+        localStorage.getItem(NOTES_KEY)
+        ||
+        '[]'
+      );
 
-  if(changed){
-    saveMarkup('questions');
+    return Array.isArray(data)
+      ? data
+      : [];
+  }
+  catch(error){
+    return [];
   }
 }
 
-function renderStudentNotes(){
-  if(
-    !studentNotesPanel ||
-    !studentNotesList ||
-    !studentNotesCount
-  ){
-    return;
-  }
+function writeStudentNotes(notes){
+  localStorage.setItem(
+    NOTES_KEY,
+    JSON.stringify(notes)
+  );
+}
 
+function migrateLegacyNotesFromMarkup(){
   const root =
     zoneRoot('questions');
 
@@ -2940,10 +2967,122 @@ function renderStudentNotes(){
     return;
   }
 
-  ensureNoteIds();
+  const legacy =
+    [...root.querySelectorAll('.note-anchor')];
+
+  if(!legacy.length){
+    return;
+  }
 
   const notes =
-    [...root.querySelectorAll('.note-anchor')];
+    readStudentNotes();
+
+  const knownIds =
+    new Set(
+      notes.map(item=>item.id)
+    );
+
+  let changed = false;
+
+  legacy.forEach((node,index)=>{
+    const id =
+      node.dataset.noteId
+      ||
+      `legacy_${Date.now()}_${index}`;
+
+    const selectedText =
+      (
+        node.dataset.selectedText
+        ||
+        node.textContent
+        ||
+        ''
+      )
+      .replace('📝','')
+      .trim();
+
+    const noteText =
+      (
+        node.dataset.note
+        ||
+        node.title
+        ||
+        ''
+      )
+      .trim();
+
+    const targetId =
+      node.closest('.question-block')?.id
+      ||
+      '';
+
+    if(
+      noteText
+      &&
+      !knownIds.has(id)
+    ){
+      notes.push({
+        id,
+        selectedText:
+          selectedText || 'Đoạn đã ghi chú',
+        note:
+          noteText,
+        targetId,
+        createdAt:
+          Date.now() + index
+      });
+
+      knownIds.add(id);
+    }
+
+    const parent =
+      node.parentNode;
+
+    if(node.classList.contains('note-pin')){
+      node.remove();
+    }
+    else{
+      while(node.firstChild){
+        parent.insertBefore(
+          node.firstChild,
+          node
+        );
+      }
+
+      node.remove();
+    }
+
+    parent?.normalize?.();
+    changed = true;
+  });
+
+  if(changed){
+    writeStudentNotes(notes);
+
+    /*
+     * Xóa note-anchor cũ khỏi markup đã lưu để lần sau
+     * không restore lại DOM phức tạp.
+     */
+    localStorage.setItem(
+      markupKey('questions'),
+      root.innerHTML
+    );
+  }
+}
+
+function renderStudentNotes(){
+  if(
+    !studentNotesPanel
+    ||
+    !studentNotesList
+    ||
+    !studentNotesCount
+  ){
+    return;
+  }
+
+  const notes =
+    readStudentNotes();
 
   studentNotesCount.textContent =
     String(notes.length);
@@ -2957,28 +3096,39 @@ function renderStudentNotes(){
   studentNotesPanel.classList.remove('empty');
 
   studentNotesList.innerHTML =
-    notes.map((node,index)=>{
+    notes.map((item,index)=>{
       const id =
-        node.dataset.noteId || '';
+        escapeHTML(item.id);
 
       const selectedText =
         escapeHTML(
-          node.dataset.selectedText
+          item.selectedText
           ||
-          node.textContent.trim()
+          'Đoạn đã ghi chú'
         );
 
       const noteText =
         escapeHTML(
-          node.dataset.note || ''
+          item.note
+          ||
+          ''
         );
+
+      const questionLabel =
+        item.targetId
+        ? escapeHTML(
+            item.targetId
+              .replace('questionGroup','Questions ')
+          )
+        : 'Trong bài';
 
       return `
         <article class="note-card">
           <div class="note-card-main">
             <div class="note-source">
-              #${index + 1} · “${selectedText}”
+              #${index + 1} · ${questionLabel} · “${selectedText}”
             </div>
+
             <div class="note-text">
               ${noteText}
             </div>
@@ -2988,7 +3138,7 @@ function renderStudentNotes(){
             <button
               type="button"
               class="note-action"
-              title="Đi tới vị trí ghi chú"
+              title="Đi tới câu đã ghi chú"
               onclick="focusNote('${id}')"
             >↗</button>
 
@@ -3011,284 +3161,137 @@ function renderStudentNotes(){
     }).join('');
 }
 
-function findNoteById(noteId){
-  const root =
-    zoneRoot('questions');
-
-  if(!root || !noteId){
-    return null;
-  }
-
-  return [
-    ...root.querySelectorAll('.note-anchor')
-  ].find(
-    node => node.dataset.noteId === noteId
-  ) || null;
+function findStoredNote(noteId){
+  return readStudentNotes()
+    .find(item=>item.id === noteId)
+    || null;
 }
 
 function focusNote(noteId){
-  const node =
-    findNoteById(noteId);
+  const item =
+    findStoredNote(noteId);
 
-  if(!node){
+  if(!item){
     return;
   }
 
-  node.scrollIntoView({
+  const target =
+    item.targetId
+      ? document.getElementById(item.targetId)
+      : document.getElementById('questionsRoot');
+
+  if(!target){
+    return;
+  }
+
+  target.scrollIntoView({
     behavior:'smooth',
     block:'center'
   });
 
-  node.classList.remove('note-focus');
+  target.classList.remove('note-question-focus');
 
-  void node.offsetWidth;
+  void target.offsetWidth;
 
-  node.classList.add('note-focus');
+  target.classList.add('note-question-focus');
 
   setTimeout(
-    ()=>node.classList.remove('note-focus'),
-    1900
+    ()=>target.classList.remove('note-question-focus'),
+    1800
   );
 }
 
 function editNote(noteId){
-  const node =
-    findNoteById(noteId);
+  const notes =
+    readStudentNotes();
 
-  if(!node){
+  const index =
+    notes.findIndex(
+      item=>item.id === noteId
+    );
+
+  if(index < 0){
     return;
   }
-
-  const current =
-    node.dataset.note || '';
 
   const updated =
     prompt(
       'Sửa ghi chú:',
-      current
+      notes[index].note || ''
     );
 
   if(
-    updated === null ||
+    updated === null
+    ||
     !updated.trim()
   ){
     return;
   }
 
-  node.dataset.note =
+  notes[index].note =
     updated.trim();
 
-  node.title =
-    updated.trim();
-
-  saveMarkup('questions');
+  writeStudentNotes(notes);
   renderStudentNotes();
 }
 
 function deleteNoteById(noteId){
-  const node =
-    findNoteById(noteId);
-
-  if(!node){
-    return;
-  }
-
-  const parent =
-    node.parentNode;
-
-  if(node.classList.contains('note-pin')){
-    node.remove();
-  }
-  else{
-    while(node.firstChild){
-      parent.insertBefore(
-        node.firstChild,
-        node
+  const notes =
+    readStudentNotes()
+      .filter(
+        item=>item.id !== noteId
       );
-    }
 
-    node.remove();
-  }
-
-  parent.normalize();
-
-  saveMarkup('questions');
+  writeStudentNotes(notes);
   renderStudentNotes();
 }
 
-
-function rangeTouchesExistingMarkup(range){
-  const root = zoneRoot('questions');
-  if(!root) return false;
-
-  const nodes = [
-    ...root.querySelectorAll(
-      'mark.user-highlight,.note-anchor'
-    )
-  ];
-
-  return nodes.some(node=>{
-    try{
-      return range.intersectsNode(node);
-    }catch(error){
-      return false;
-    }
-  });
-}
-
-function insertNotePin(range, note, noteId, selectedText){
-  const pinRange =
-    range.cloneRange();
-
-  pinRange.collapse(false);
-
-  const pin =
-    document.createElement('span');
-
-  pin.className =
-    'note-anchor note-pin';
-
-  pin.dataset.note =
-    note;
-
-  pin.dataset.noteId =
-    noteId;
-
-  pin.dataset.selectedText =
-    selectedText;
-
-  pin.title =
-    note;
-
-  pin.textContent =
-    '📝';
-
-  pinRange.insertNode(pin);
-
-  return pin;
-}
-
 function addNote(){
+  /*
+   * Note mới KHÔNG sửa DOM của đề nữa.
+   * Chỉ lưu text đã chọn + vị trí câu hỏi vào localStorage.
+   * Vì vậy selection dài/ngắn, có highlight hay spans đều không lỗi.
+   */
   if(
-    menuMode === 'delete-note'
-  ){
-    removeMark();
-    return;
-  }
-
-  if(
-    !savedSelection ||
+    !savedSelectionText
+    ||
     !savedZone
   ){
     return;
   }
 
-  const selectedText =
-    savedSelectionText
-    ||
-    savedSelection.toString().trim();
-
   const note =
     prompt('Nhập ghi chú:');
 
   if(
-    note === null ||
+    note === null
+    ||
     !note.trim()
   ){
     return;
   }
 
-  const noteId =
-    `note_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+  const notes =
+    readStudentNotes();
 
-  const noteText =
-    note.trim();
+  notes.push({
+    id:
+      `note_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,
+    selectedText:
+      savedSelectionText,
+    note:
+      note.trim(),
+    targetId:
+      savedNoteTargetId,
+    createdAt:
+      Date.now()
+  });
 
-  const range =
-    savedSelection.cloneRange();
+  writeStudentNotes(notes);
 
-  try{
-    /*
-     * Chỉ bọc trực tiếp khi selection nằm gọn trong
-     * một text node và không đè lên highlight/note cũ.
-     * Các selection phức tạp sẽ dùng note pin để tránh
-     * lỗi Range/DOM.
-     */
-    const simpleTextRange =
-      range.startContainer === range.endContainer
-      &&
-      range.startContainer.nodeType === Node.TEXT_NODE
-      &&
-      !rangeTouchesExistingMarkup(range);
-
-    if(simpleTextRange){
-      const span =
-        document.createElement('span');
-
-      span.className =
-        'note-anchor';
-
-      span.dataset.note =
-        noteText;
-
-      span.dataset.noteId =
-        noteId;
-
-      span.dataset.selectedText =
-        selectedText;
-
-      span.title =
-        noteText;
-
-      span.appendChild(
-        range.extractContents()
-      );
-
-      range.insertNode(span);
-    }
-    else{
-      insertNotePin(
-        range,
-        noteText,
-        noteId,
-        selectedText
-      );
-    }
-
-    saveMarkup(savedZone);
-    clearSelection();
-    hideMenu();
-    renderStudentNotes();
-  }
-  catch(error){
-    /*
-     * Fallback cuối cùng: không báo lỗi nữa.
-     * Chèn một note pin tại cuối vùng chọn.
-     */
-    try{
-      insertNotePin(
-        savedSelection.cloneRange(),
-        noteText,
-        noteId,
-        selectedText
-      );
-
-      saveMarkup(savedZone);
-      clearSelection();
-      hideMenu();
-      renderStudentNotes();
-    }
-    catch(finalError){
-      console.error(
-        'Không thể tạo ghi chú:',
-        finalError
-      );
-
-      alert(
-        'Không thể tạo ghi chú tại vị trí này. Hãy chọn một đoạn chữ khác.'
-      );
-    }
-  }
+  clearSelection();
+  hideMenu();
+  renderStudentNotes();
 }
 
 function showDeleteMenu(
@@ -3496,6 +3499,7 @@ document.addEventListener('keydown',event=>{
     if(saved?.className) document.getElementById('studentClass').value=saved.className;
   }catch(e){}
 
+  migrateLegacyNotesFromMarkup();
   bindContextActions('questions');
   renderStudentNotes();
 })();
