@@ -1,0 +1,6143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<title>Dynamic Datasets 02 — Music Sales by Method</title>
+
+<style>
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --warn:#b36a14;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:linear-gradient(100deg,#1c0e49,#281260,#37217e);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(1450px,calc(100% - 18px));
+  min-height:62px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.25);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+  font-weight:800;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.timer{
+  font-size:19px;
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
+  background:rgba(255,255,255,.13);
+  padding:8px 11px;
+  border-radius:9px;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+  width:min(1450px,calc(100% - 18px));
+  margin:auto;
+  padding:18px 0 48px;
+}
+
+.hero{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+  color:#21164b;
+  font-size:27px;
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+
+/* =========================
+   WORKSPACE
+========================= */
+
+.workspace{
+  display:grid;
+  grid-template-columns:.92fr 1.08fr;
+  min-height:calc(100vh - 165px);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(35,25,75,.05);
+}
+
+.pane{
+  min-width:0;
+  max-height:calc(100vh - 180px);
+  overflow:auto;
+}
+
+.task-pane{
+  border-right:1px solid var(--line);
+  background:#fff;
+}
+
+.write-pane{
+  background:#fafbfe;
+}
+
+.content{
+  padding:22px 24px;
+}
+
+
+/* =========================
+   TASK
+========================= */
+
+.task-label{
+  margin-bottom:8px;
+  color:#6a4db4;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.task-title{
+  margin:0 0 12px;
+  color:#21164b;
+  font-size:20px;
+}
+
+.task-box{
+  padding:14px;
+  border:1px solid #ded9f2;
+  border-radius:11px;
+  background:#faf9ff;
+  font-size:12.5px;
+  line-height:1.72;
+}
+
+.task-box p{
+  margin:0;
+}
+
+.chart-wrap{
+  margin-top:16px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+
+.chart-wrap img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  border-radius:7px;
+}
+
+.tip{
+  margin-top:12px;
+  padding:10px 11px;
+  border-radius:9px;
+  background:#f5f7fb;
+  color:#6f7890;
+  font-size:10.5px;
+  line-height:1.55;
+}
+
+
+/* =========================
+   WRITING EDITOR
+========================= */
+
+.editor-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.editor-head h2{
+  margin:0;
+  color:#21164b;
+  font-size:18px;
+}
+
+.stats{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.stat{
+  padding:6px 9px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  color:#596174;
+  font-size:10px;
+  font-weight:850;
+}
+
+.stat.good{
+  border-color:#b8e2cd;
+  color:#16845b;
+  background:#f3fcf7;
+}
+
+.stat.warn{
+  border-color:#f1d6ac;
+  color:#9b5a0a;
+  background:#fff9ee;
+}
+
+.editor{
+  width:100%;
+  min-height:560px;
+  resize:vertical;
+  padding:18px;
+  border:1px solid #d7dbe4;
+  border-radius:12px;
+  outline:none;
+  background:#fff;
+  color:#202636;
+  font-size:14px;
+  line-height:1.8;
+}
+
+.editor:focus{
+  border-color:#7863c7;
+  box-shadow:0 0 0 3px rgba(81,53,166,.08);
+}
+
+.editor:disabled{
+  background:#f8f9fc;
+  color:#3b4150;
+}
+
+.save-status{
+  margin-top:7px;
+  color:#7b8292;
+  font-size:9.5px;
+}
+
+.submit-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:12px;
+}
+
+.note{
+  color:#737b8c;
+  font-size:10px;
+}
+
+.submit{
+  border:0;
+  border-radius:9px;
+  padding:11px 17px;
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;
+  font-weight:900;
+}
+
+
+/* =========================
+   HIGHLIGHT + NOTE
+========================= */
+
+mark.user-highlight{
+  background:#fff29a;
+  color:inherit;
+  border-radius:3px;
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+  border-bottom:2px dotted #e28b19;
+  border-radius:2px;
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+  z-index:90;
+  display:none;
+  gap:5px;
+  padding:6px;
+  background:#21164b;
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+  background:#fff;
+  color:#35285e;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:10.5px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+  background:#fff1f3;
+}
+
+
+/* =========================
+   START / RESULT
+========================= */
+
+.start,
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  background:rgba(16,12,40,.64);
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.overlay{
+  z-index:110;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.start-card,
+.result{
+  width:min(500px,100%);
+  max-height:88vh;
+  overflow:auto;
+  padding:22px;
+  background:#fff;
+  border-radius:19px;
+  box-shadow:0 24px 70px rgba(18,10,53,.28);
+}
+
+.start-card h2{
+  margin:5px 0 6px;
+  color:#21164b;
+}
+
+.start-card p{
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size:11.5px;
+}
+
+.field{
+  margin:9px 0;
+}
+
+.field label{
+  display:block;
+  margin-bottom:5px;
+  font-size:10.5px;
+  font-weight:900;
+}
+
+.field input{
+  width:100%;
+  padding:10px;
+  border:1px solid #d5d9e2;
+  border-radius:9px;
+}
+
+.btn{
+  width:100%;
+  margin-top:10px;
+  border:0;
+  border-radius:9px;
+  padding:10px 13px;
+  background:linear-gradient(100deg,var(--purple),var(--purple2));
+  color:#fff;
+  font-weight:900;
+}
+
+.result h2{
+  margin:5px 0 8px;
+  color:#21164b;
+}
+
+.result-number{
+  margin:9px 0;
+  color:#21164b;
+  font-size:32px;
+  font-weight:950;
+}
+
+
+.result-copy{
+  color:#6f7890;
+  font-size:11px;
+  line-height:1.6;
+}
+
+.grading-source{
+  margin-top:7px;
+  padding:8px 10px;
+  border-radius:8px;
+  background:#f5f7fb;
+  color:#697286;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.pending{
+  margin-top:14px;
+  padding:14px;
+  border-radius:10px;
+  background:#eef4ff;
+  color:#3556a8;
+  font-size:11px;
+  font-weight:900;
+  text-align:center;
+}
+
+.grade-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+
+.grade-card{
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fafbfe;
+}
+
+.grade-card span{
+  display:block;
+  color:#737b8c;
+  font-size:9.5px;
+  font-weight:850;
+  line-height:1.35;
+}
+
+.grade-card b{
+  display:block;
+  margin-top:4px;
+  color:#21164b;
+  font-size:20px;
+  font-weight:950;
+}
+
+.feedback-box{
+  margin-top:11px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+}
+
+.feedback-box h4{
+  margin:0 0 7px;
+  color:#21164b;
+  font-size:12px;
+}
+
+.feedback-box ul{
+  margin:0;
+  padding-left:18px;
+  color:#4e5668;
+  font-size:10.5px;
+  line-height:1.6;
+}
+
+.feedback-box p{
+  margin:0;
+  color:#4e5668;
+  font-size:10.5px;
+  line-height:1.6;
+}
+
+.grade-note{
+  margin-top:10px;
+  color:#8a6170;
+  font-size:9.5px;
+  line-height:1.5;
+}
+
+.result{
+  width:min(780px,100%);
+}
+
+.issue-summary{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:9px;
+}
+
+.proofreading-status{
+  margin:-2px 0 10px;
+  font-size:9.5px;
+  line-height:1.5;
+  color:#68757f;
+}
+
+.proofreading-status a{
+  color:#5135a6;
+  font-weight:850;
+}
+
+.issue-pill{
+  padding:5px 8px;
+  border-radius:999px;
+  background:#f4f1ff;
+  color:#59419f;
+  font-size:9.5px;
+  font-weight:900;
+}
+
+.issue-list{
+  display:grid;
+  gap:9px;
+}
+
+.issue-card{
+  border:1px solid var(--line);
+  border-left:4px solid #7b63c9;
+  border-radius:9px;
+  padding:10px 11px;
+  background:#fbfbfe;
+}
+
+.issue-card.spelling{border-left-color:#d48a27}
+.issue-card.grammar{border-left-color:#c34e5c}
+.issue-card.word-choice{border-left-color:#4176c4}
+.issue-card.mechanics{border-left-color:#718096}
+
+.issue-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:7px;
+}
+
+.issue-type{
+  font-size:9px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:#5e4b99;
+}
+
+.issue-index{
+  font-size:9px;
+  color:#8a91a0;
+  font-weight:850;
+}
+
+.issue-row{
+  display:grid;
+  grid-template-columns:78px 1fr;
+  gap:6px 9px;
+  margin-top:5px;
+  font-size:10.5px;
+  line-height:1.55;
+}
+
+.issue-label{
+  color:#7a8292;
+  font-weight:900;
+}
+
+.issue-original{
+  color:#a22f40;
+  font-weight:850;
+}
+
+.issue-correction{
+  color:#14724c;
+  font-weight:900;
+}
+
+.issue-explanation{
+  color:#4e5668;
+}
+
+.corrected-wrap{
+  margin-top:11px;
+  border:1px solid #cfe2d8;
+  border-radius:10px;
+  background:#f7fcf9;
+  overflow:hidden;
+}
+
+.corrected-wrap summary{
+  cursor:pointer;
+  padding:10px 12px;
+  color:#176746;
+  font-size:10.5px;
+  font-weight:950;
+}
+
+.corrected-text{
+  margin:0;
+  padding:0 12px 12px;
+  white-space:pre-wrap;
+  color:#33463c;
+  font-family:inherit;
+  font-size:10.5px;
+  line-height:1.65;
+}
+
+.no-issues{
+  padding:10px;
+  border-radius:8px;
+  background:#f3fbf6;
+  color:#237a52;
+  font-size:10.5px;
+  line-height:1.55;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .task-pane{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .pane{
+    max-height:none;
+  }
+
+  .editor{
+    min-height:430px;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     START
+========================= -->
+
+<div id="start" class="start">
+
+  <div class="start-card">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      color:#6a4db4;
+      letter-spacing:.1em
+    ">
+      WRITING TASK 1 PRACTICE
+    </div>
+
+    <h2>
+      Dynamic Datasets 02
+    </h2>
+
+    <p>
+      Music sales by method, 2011–2018
+    </p>
+
+
+    <div class="field">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+
+    </div>
+
+
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
+      Bắt đầu viết
+    </button>
+
+
+    <div
+      id="startError"
+      style="
+        margin-top:7px;
+        color:#b83345;
+        font-size:10px
+      "
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="top">
+
+  <div class="topin">
+
+    <div class="left">
+
+      <a
+        class="back"
+        href="../"
+      >
+        ← Dynamic Datasets
+      </a>
+
+      <div class="brand">
+        ✍️ Dynamic Datasets 02
+      </div>
+
+    </div>
+
+
+    <div
+      class="student"
+      id="studentInfo"
+    ></div>
+
+
+    <div
+      class="timer"
+      id="timer"
+    >
+      00:00
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="page">
+
+  <section class="hero">
+
+    <div>
+
+      <h1>
+        Dynamic Datasets 02
+      </h1>
+
+      <p>
+        IELTS Writing Task 1 · Line graph
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <section class="workspace">
+
+
+    <!-- =========================
+         TASK
+    ========================= -->
+
+    <div class="pane task-pane">
+
+      <div
+        class="content"
+        id="taskRoot"
+      >
+
+        <div class="task-label">
+          Writing Task 1
+        </div>
+
+
+        <h2 class="task-title">
+          Music sales by method
+        </h2>
+
+
+        <div class="task-box">
+
+          <p>
+            The line graph shows the percentage of total music sales accounted for by
+            three different methods — streaming, downloads and CDs — between 2011 and 2018.
+            Summarise the information by selecting and reporting the main features,
+            and make comparisons where relevant.
+          </p>
+
+        </div>
+
+
+        <div class="chart-wrap">
+
+          <img
+            src="./chart.png"
+            alt="Line graph showing the percentage of total music sales by streaming, downloads and CDs from 2011 to 2018"
+          >
+
+        </div>
+
+
+        <div class="tip">
+
+          Write at least <b>150 words</b>.
+
+          <br><br>
+
+          You should summarise the information by selecting
+          and reporting the main features,
+          and make comparisons where relevant.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         EDITOR
+    ========================= -->
+
+    <div class="pane write-pane">
+
+      <div class="content">
+
+        <div class="editor-head">
+
+          <h2>
+            Bài viết của em
+          </h2>
+
+
+          <div class="stats">
+
+            <div
+              class="stat warn"
+              id="wordStat"
+            >
+              0 từ
+            </div>
+
+
+            <div
+              class="stat"
+              id="paragraphStat"
+            >
+              0 đoạn
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <textarea
+          id="essay"
+          class="editor"
+          lang="en"
+          spellcheck="true"
+          placeholder="Write your response here..."
+          oninput="handleEssayInput()"
+        ></textarea>
+
+
+        <div
+          class="save-status"
+          id="saveStatus"
+        >
+          Bài viết được tự động lưu trên trình duyệt.
+        </div>
+
+
+        <div class="submit-row">
+
+          <div class="note">
+            Có thể chỉnh sửa bài bất cứ lúc nào trước khi nộp.
+          </div>
+
+
+          <button
+            class="submit"
+            onclick="submitPractice()"
+          >
+            Nộp bài
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =========================
+     HIGHLIGHT MENU
+========================= -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
+<!-- =========================
+     RESULT
+========================= -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div style="
+      font-size:10px;
+      font-weight:950;
+      color:#6a4db4;
+      letter-spacing:.1em
+    ">
+      KẾT QUẢ CHẤM BÀI
+    </div>
+
+
+    <h2>
+      Dynamic Datasets 02
+    </h2>
+
+
+    <div
+      class="result-number"
+      id="resultBand"
+    >
+      Đang chấm...
+    </div>
+
+
+    <div
+      class="result-copy"
+      id="resultModeText"
+    >
+      Hệ thống đang thử AI grader.
+    </div>
+
+
+    <div
+      class="result-copy"
+      id="resultInfo"
+      style="margin-top:7px"
+    ></div>
+
+
+    <div
+      class="grading-source hidden"
+      id="gradingSource"
+    ></div>
+
+
+    <div
+      class="pending"
+      id="gradingPending"
+    >
+      Đang chấm bài và phân tích ngữ pháp, từ vựng, cấu trúc...
+    </div>
+
+
+    <div
+      id="gradeResult"
+      class="hidden"
+    >
+
+      <div class="grade-grid">
+
+        <div class="grade-card">
+          <span>Task Achievement</span>
+          <b id="gradeTA">–</b>
+        </div>
+
+        <div class="grade-card">
+          <span>Coherence &amp; Cohesion</span>
+          <b id="gradeCC">–</b>
+        </div>
+
+        <div class="grade-card">
+          <span>Lexical Resource</span>
+          <b id="gradeLR">–</b>
+        </div>
+
+        <div class="grade-card">
+          <span>Grammar</span>
+          <b id="gradeGR">–</b>
+        </div>
+
+      </div>
+
+
+      <div class="feedback-box">
+        <h4>Nhận xét tổng quan</h4>
+        <p id="overallComment"></p>
+      </div>
+
+
+      <div class="feedback-box">
+        <h4>Điểm tốt</h4>
+        <ul id="strengthsList"></ul>
+      </div>
+
+
+      <div class="feedback-box">
+        <h4>Cần cải thiện</h4>
+        <ul id="improvementsList"></ul>
+      </div>
+
+
+      <div class="feedback-box">
+        <h4>Lỗi cụ thể &amp; gợi ý sửa</h4>
+        <div id="issueSummary" class="issue-summary"></div>
+        <div id="proofreadingStatus" class="proofreading-status"></div>
+        <div id="detailedIssues" class="issue-list"></div>
+      </div>
+
+
+      <div
+        class="grade-note"
+        id="gradeNote"
+      ></div>
+
+    </div>
+
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài viết
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const RESULT_ENDPOINT=
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const LANGUAGE_TOOL_ENDPOINT=
+'https://api.languagetool.org/v2/check';
+
+
+const ATTEMPT_KEY=
+'PRACTICE_WRITING_TASK1_DYNAMIC_DATASETS_02_V3_CONTEXTUAL';
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let startedAt=0;
+
+let submitted=false;
+
+let saveTimer=null;
+
+let savedSelection=null;
+
+let menuTarget=null;
+
+let menuMode='selection';
+
+
+let languageToolIssuesCache=null;
+let languageToolReviewPromise=null;
+let languageToolReviewStatus='idle';
+let languageToolReviewError='';
+let languageToolReviewText='';
+let lastRenderedGrade=null;
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+      ||
+      'null'
+    );
+
+  }
+
+  catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const student=
+  readStudent();
+
+
+  if(student){
+
+    studentName.value=
+    student.name || '';
+
+    studentClass.value=
+    student.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name=
+  studentName.value.trim();
+
+
+  const className=
+  studentClass.value.trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    startError.textContent=
+    'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+
+      name:name,
+
+      className:className
+
+    })
+
+  );
+
+
+  studentInfo.textContent=
+  `${name} · ${className}`;
+
+
+  start.classList.add(
+    'hidden'
+  );
+
+
+  startedAt=
+  Date.now();
+
+
+  restoreTaskMarkup();
+
+  restoreEssay();
+
+  updateStats();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function fmt(sec){
+
+  sec=
+  Math.max(
+    0,
+    Math.floor(sec)
+  );
+
+
+  const hours=
+  Math.floor(
+    sec/3600
+  );
+
+
+  const minutes=
+  Math.floor(
+    (sec%3600)/60
+  );
+
+
+  const seconds=
+  sec%60;
+
+
+  return hours
+
+  ?
+
+  `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`
+
+  :
+
+  `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+
+}
+
+
+setInterval(
+
+  ()=>{
+
+    if(
+      startedAt
+      &&
+      !submitted
+    ){
+
+      timer.textContent=
+      fmt(
+        (
+          Date.now()
+          -
+          startedAt
+        )
+        /
+        1000
+      );
+
+    }
+
+  },
+
+  500
+
+);
+
+
+/* =========================================================
+   ESSAY
+========================================================= */
+
+function essayKey(){
+
+  return ATTEMPT_KEY
+  +
+  '_essay';
+
+}
+
+
+function countWords(text){
+
+  const clean=
+  String(
+    text || ''
+  )
+  .trim();
+
+
+  if(!clean){
+
+    return 0;
+
+  }
+
+
+  return clean
+  .split(/\s+/)
+  .filter(Boolean)
+  .length;
+
+}
+
+
+function countParagraphs(text){
+
+  const value=
+  String(
+    text || ''
+  )
+  .trim();
+
+
+  if(!value){
+
+    return 0;
+
+  }
+
+
+  return value
+  .split(/\n\s*\n/)
+  .map(
+    paragraph=>
+    paragraph.trim()
+  )
+  .filter(Boolean)
+  .length;
+
+}
+
+
+function handleEssayInput(){
+
+  if(submitted){
+
+    return;
+
+  }
+
+
+  updateStats();
+
+
+  saveStatus.textContent=
+  'Đang lưu...';
+
+
+  clearTimeout(
+    saveTimer
+  );
+
+
+  saveTimer=
+  setTimeout(
+    saveEssay,
+    350
+  );
+
+}
+
+
+function saveEssay(){
+
+  localStorage.setItem(
+    essayKey(),
+    essay.value
+  );
+
+
+  saveStatus.textContent=
+  'Đã tự động lưu.';
+
+}
+
+
+function restoreEssay(){
+
+  essay.value=
+  localStorage.getItem(
+    essayKey()
+  )
+  ||
+  '';
+
+}
+
+
+function updateStats(){
+
+  const words=
+  countWords(
+    essay.value
+  );
+
+
+  const paragraphs=
+  countParagraphs(
+    essay.value
+  );
+
+
+  wordStat.textContent=
+  `${words} từ`;
+
+
+  paragraphStat.textContent=
+  `${paragraphs} đoạn`;
+
+
+  wordStat.classList.remove(
+    'good',
+    'warn'
+  );
+
+
+  wordStat.classList.add(
+    words>=150
+    ?
+    'good'
+    :
+    'warn'
+  );
+
+}
+
+
+/* =========================================================
+   GRADING HELPERS
+========================================================= */
+
+function makeAttemptId(){
+
+  return 'WP1'
+  +
+  Date.now().toString(36)
+  +
+  Math.random().toString(36).slice(2,8);
+
+}
+
+
+function delay(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+
+}
+
+
+function postForm(payload){
+
+  return fetch(
+
+    RESULT_ENDPOINT,
+
+    {
+
+      method:
+      'POST',
+
+      mode:
+      'no-cors',
+
+      headers:{
+
+        'Content-Type':
+        'application/x-www-form-urlencoded;charset=UTF-8'
+
+      },
+
+      body:
+      new URLSearchParams(payload).toString()
+
+    }
+
+  );
+
+}
+
+
+function jsonpGradeResult(attemptId){
+
+  return new Promise(
+
+    (resolve,reject)=>{
+
+      const callback=
+      '__writingPracticeGrade'
+      +
+      Date.now()
+      +
+      Math.random().toString(36).slice(2,6);
+
+
+      const script=
+      document.createElement(
+        'script'
+      );
+
+
+      const timeout=
+      setTimeout(
+
+        ()=>{
+
+          cleanup();
+
+          reject(
+            new Error(
+              'timeout'
+            )
+          );
+
+        },
+
+        2800
+
+      );
+
+
+      function cleanup(){
+
+        clearTimeout(
+          timeout
+        );
+
+        try{
+          delete window[callback];
+        }catch(e){}
+
+        script.remove();
+
+      }
+
+
+      window[callback]=
+      data=>{
+
+        cleanup();
+
+        resolve(
+          data
+        );
+
+      };
+
+
+      script.onerror=
+      ()=>{
+
+        cleanup();
+
+        reject(
+          new Error(
+            'network'
+          )
+        );
+
+      };
+
+
+      script.src=
+      RESULT_ENDPOINT
+      +
+      '?mode=writingResult'
+      +
+      '&attemptId='
+      +
+      encodeURIComponent(
+        attemptId
+      )
+      +
+      '&callback='
+      +
+      encodeURIComponent(
+        callback
+      )
+      +
+      '&_='
+      +
+      Date.now();
+
+
+      document.body.appendChild(
+        script
+      );
+
+    }
+
+  );
+
+}
+
+
+function pickTask1Grade(grade){
+
+  if(
+    !grade
+    ||
+    typeof grade!=='object'
+  ){
+
+    return null;
+
+  }
+
+
+  const task=
+  grade.task1
+  &&
+  typeof grade.task1==='object'
+
+  ?
+
+  grade.task1
+
+  :
+
+  grade;
+
+
+  const band=
+  Number(
+    task.band
+    ??
+    grade.overall
+  );
+
+
+  const taskAchievement=
+  Number(
+    task.taskAchievement
+    ??
+    task.taskResponse
+    ??
+    task.achievement
+  );
+
+
+  const coherenceCohesion=
+  Number(
+    task.coherenceCohesion
+    ??
+    task.coherence
+  );
+
+
+  const lexicalResource=
+  Number(
+    task.lexicalResource
+    ??
+    task.lexical
+  );
+
+
+  const grammar=
+  Number(
+    task.grammar
+    ??
+    task.grammaticalRangeAccuracy
+  );
+
+
+  if(
+    !Number.isFinite(band)
+    ||
+    !Number.isFinite(taskAchievement)
+    ||
+    !Number.isFinite(coherenceCohesion)
+    ||
+    !Number.isFinite(lexicalResource)
+    ||
+    !Number.isFinite(grammar)
+  ){
+
+    return null;
+
+  }
+
+
+  return{
+
+    band:
+    band,
+
+    taskAchievement:
+    taskAchievement,
+
+    coherenceCohesion:
+    coherenceCohesion,
+
+    lexicalResource:
+    lexicalResource,
+
+    grammar:
+    grammar,
+
+    strengths:
+    Array.isArray(task.strengths)
+    ?
+    task.strengths
+    :
+    [],
+
+    improvements:
+    Array.isArray(task.improvements)
+    ?
+    task.improvements
+    :
+    [],
+
+    overallComment:
+    grade.overallComment
+    ||
+    task.overallComment
+    ||
+    task.comment
+    ||
+    '',
+
+    detailedIssues:
+    extractAIDetailedIssues(
+      task,
+      grade
+    )
+
+  };
+
+}
+
+
+function bandRound(value){
+
+  const number=
+  Math.max(
+    3,
+    Math.min(
+      8,
+      Number(value) || 3
+    )
+  );
+
+
+  return Math.round(
+    number*2
+  )
+  /
+  2;
+
+}
+
+
+function getWords(text){
+
+  return String(
+    text || ''
+  )
+  .match(
+    /[A-Za-z]+(?:['’-][A-Za-z]+)*/g
+  )
+  ||
+  [];
+
+}
+
+
+function getSentences(text){
+
+  return String(
+    text || ''
+  )
+  .replace(
+    /\n+/g,
+    ' '
+  )
+  .match(
+    /[^.!?]+[.!?]+|[^.!?]+$/g
+  )
+  ?.map(
+    sentence=>sentence.trim()
+  )
+  .filter(Boolean)
+  ||
+  [];
+
+}
+
+
+function getParagraphs(text){
+
+  return String(
+    text || ''
+  )
+  .trim()
+  .split(
+    /\n\s*\n+/
+  )
+  .map(
+    paragraph=>paragraph.trim()
+  )
+  .filter(Boolean);
+
+}
+
+
+function uniquePush(
+  array,
+  message
+){
+
+  if(
+    message
+    &&
+    !array.includes(
+      message
+    )
+  ){
+
+    array.push(
+      message
+    );
+
+  }
+
+}
+
+
+function titleCaseFirst(value){
+
+  const text=String(value || '');
+
+  return text.replace(
+    /[A-Za-z]/,
+    char=>char.toUpperCase()
+  );
+
+}
+
+
+function findSentenceContext(
+  text,
+  start,
+  end
+){
+
+  const raw=String(text || '');
+
+  let left=Math.max(
+    raw.lastIndexOf('.',start-1),
+    raw.lastIndexOf('!',start-1),
+    raw.lastIndexOf('?',start-1),
+    raw.lastIndexOf('\n',start-1)
+  );
+
+  left=left<0 ? 0 : left+1;
+
+  const candidates=[
+    raw.indexOf('.',end),
+    raw.indexOf('!',end),
+    raw.indexOf('?',end),
+    raw.indexOf('\n',end)
+  ].filter(value=>value>=0);
+
+  const right=candidates.length
+  ? Math.min(...candidates)+1
+  : raw.length;
+
+  return raw.slice(left,right).trim();
+
+}
+
+
+function addDetailedIssue(
+  issues,
+  issue
+){
+
+  if(!issue || !issue.original){
+    return;
+  }
+
+  const key=[
+    issue.category || '',
+    issue.start ?? '',
+    String(issue.original).toLowerCase(),
+    String(issue.correction || '').toLowerCase()
+  ].join('|');
+
+  if(
+    issues.some(item=>item._key===key)
+  ){
+    return;
+  }
+
+  issues.push({
+    category:issue.category || 'Grammar',
+    original:String(issue.original || ''),
+    correction:String(issue.correction || ''),
+    explanation:String(issue.explanation || ''),
+    sentence:String(issue.sentence || ''),
+    start:Number.isInteger(issue.start) ? issue.start : null,
+    end:Number.isInteger(issue.end) ? issue.end : null,
+    autoFix:issue.autoFix===true,
+    source:issue.source || 'local',
+    confidence:Number.isFinite(Number(issue.confidence)) ? Number(issue.confidence) : null,
+    _key:key
+  });
+
+}
+
+
+function buildDetailedIssues(text){
+
+  const raw=String(text || '');
+  const issues=[];
+
+  const exactRules=[
+    {regex:/\bi am agree\b/gi,category:'Grammar',replace:'I agree',explanation:'“Agree” is a verb. Use “I agree”, not “I am agree”.'},
+    {regex:/\bpeople is\b/gi,category:'Grammar',replace:'people are',explanation:'“People” is plural, so it takes the plural verb “are”.'},
+    {regex:/\bpeople has\b/gi,category:'Grammar',replace:'people have',explanation:'“People” is plural, so use “have”.'},
+    {regex:/\bmore better\b/gi,category:'Grammar',replace:'better',explanation:'Do not use two comparative markers together. “Better” is already comparative.'},
+    {regex:/\bmore easier\b/gi,category:'Grammar',replace:'easier',explanation:'“Easier” is already comparative; remove “more”.'},
+    {regex:/\bmore cheaper\b/gi,category:'Grammar',replace:'cheaper',explanation:'“Cheaper” is already comparative; remove “more”.'},
+    {regex:/\bmore faster\b/gi,category:'Grammar',replace:'faster',explanation:'“Faster” is already comparative; remove “more”.'},
+    {regex:/\bmore higher\b/gi,category:'Grammar',replace:'higher',explanation:'“Higher” is already comparative; remove “more”.'},
+    {regex:/\bmore lower\b/gi,category:'Grammar',replace:'lower',explanation:'“Lower” is already comparative; remove “more”.'},
+    {regex:/\bdiscuss about\b/gi,category:'Word choice',replace:'discuss',explanation:'“Discuss” is transitive in this use, so “about” is unnecessary.'},
+    {regex:/\bdespite of\b/gi,category:'Grammar',replace:'despite',explanation:'Use “despite + noun/gerund” or “in spite of”, not “despite of”.'},
+    {regex:/\bchilds\b/gi,category:'Grammar',replace:'children',explanation:'The irregular plural of “child” is “children”.'},
+    {regex:/\bpeoples\b/gi,category:'Grammar',replace:'people',explanation:'Use “people” for the normal plural meaning.'},
+    {regex:/\binformations\b/gi,category:'Grammar',replace:'information',explanation:'“Information” is normally uncountable.'},
+    {regex:/\badvices\b/gi,category:'Grammar',replace:'advice',explanation:'“Advice” is normally uncountable.'},
+    {regex:/\bequipments\b/gi,category:'Grammar',replace:'equipment',explanation:'“Equipment” is normally uncountable.'},
+    {regex:/\bfurnitures\b/gi,category:'Grammar',replace:'furniture',explanation:'“Furniture” is normally uncountable.'},
+    {regex:/\bmake research\b/gi,category:'Word choice',replace:'conduct research',explanation:'The usual academic collocation is “conduct/do research”.'},
+    {regex:/\bdo a decision\b/gi,category:'Word choice',replace:'make a decision',explanation:'The standard collocation is “make a decision”.'},
+    {regex:/\bstrong rain\b/gi,category:'Word choice',replace:'heavy rain',explanation:'The natural collocation is “heavy rain”.'},
+    {regex:/\bbig amount\b/gi,category:'Word choice',replace:'large amount',explanation:'“Large amount” is more natural and formal in academic writing.'},
+    {regex:/\bbig number\b/gi,category:'Word choice',replace:'large number',explanation:'“Large number” is the standard academic collocation.'},
+    {regex:/\baccording to me\b/gi,category:'Word choice',replace:'in my view',explanation:'For your own opinion, use “in my view/opinion”; “according to” normally introduces another source.'},
+    {regex:/\bin the other hand\b/gi,category:'Word choice',replace:'on the other hand',explanation:'The fixed expression is “on the other hand”.'},
+    {regex:/\bon contrast\b/gi,category:'Word choice',replace:'in contrast',explanation:'The fixed expression is “in contrast”.'},
+    {regex:/\bgrew up\b/gi,category:'Word choice',replace:'grew',explanation:'For figures/data, use “grew/increased”. “Grow up” usually means becoming an adult.'},
+    {regex:/\bwas fluctuated\b/gi,category:'Grammar',replace:'fluctuated',explanation:'“Fluctuate” is normally intransitive when describing data: “the figure fluctuated”.'},
+    {regex:/\bwere fluctuated\b/gi,category:'Grammar',replace:'fluctuated',explanation:'“Fluctuate” is normally intransitive when describing data.'},
+    {regex:/\bmost highest\b/gi,category:'Grammar',replace:'highest',explanation:'Do not combine “most” with the superlative “highest”. Use “highest” only.'},
+    {regex:/\bmost lowest\b/gi,category:'Grammar',replace:'lowest',explanation:'Do not combine “most” with the superlative “lowest”. Use “lowest” only.'},
+    {regex:/\bhaved\b/gi,category:'Grammar',replace:'had',explanation:'The past form of “have” is “had”, not “haved”.'},
+    {regex:/\bgoed\b/gi,category:'Grammar',replace:'went',explanation:'The past form of “go” is “went”.'},
+    {regex:/\bgrowed\b/gi,category:'Grammar',replace:'grew',explanation:'The past form of “grow” is “grew”, not “growed”.'}
+  ];
+
+  exactRules.forEach(rule=>{
+    const regex=new RegExp(rule.regex.source,rule.regex.flags);
+    let match;
+    while((match=regex.exec(raw))){
+      let replacement=rule.replace;
+      if(/^[A-Z]/.test(match[0])){
+        replacement=titleCaseFirst(replacement);
+      }
+      addDetailedIssue(issues,{
+        category:rule.category,
+        original:match[0],
+        correction:replacement,
+        explanation:rule.explanation,
+        sentence:findSentenceContext(raw,match.index,match.index+match[0].length),
+        start:match.index,
+        end:match.index+match[0].length,
+        autoFix:true
+      });
+      if(match[0].length===0) regex.lastIndex++;
+    }
+  });
+
+
+  // Common Task 1 subject–verb agreement: singular visual nouns need a singular verb.
+  const visualAgreement=/\b(the\s+(?:(?:line|bar|pie)\s+(?:graph|chart)|table|diagram|map))\s+(illustrate|show|compare|present|depict)\b/gi;
+  const singularVerb={illustrate:'illustrates',show:'shows',compare:'compares',present:'presents',depict:'depicts'};
+  let va;
+  while((va=visualAgreement.exec(raw))){
+    const verb=va[2].toLowerCase();
+    const fixedVerb=singularVerb[verb] || verb+'s';
+    const verbStart=va.index+va[0].toLowerCase().lastIndexOf(va[2].toLowerCase());
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:va[2],
+      correction:/^[A-Z]/.test(va[2]) ? titleCaseFirst(fixedVerb) : fixedVerb,
+      explanation:'The subject is singular (for example, “the line graph”), so the verb needs the third-person singular form.',
+      sentence:findSentenceContext(raw,va.index,va.index+va[0].length),
+      start:verbStart,
+      end:verbStart+va[2].length,
+      autoFix:true
+    });
+  }
+
+
+  // Infinitive after “to”: catch frequent irregular/past-form mistakes.
+  const badInfinitives={
+    became:'become',rose:'rise',fell:'fall',grew:'grow',dropped:'drop',
+    increased:'increase',decreased:'decrease',declined:'decline',recovered:'recover',
+    fluctuated:'fluctuate',reached:'reach',remained:'remain'
+  };
+  const badInfinitive=/\bto\s+(became|rose|fell|grew|dropped|increased|decreased|declined|recovered|fluctuated|reached|remained)\b/gi;
+  let bi;
+  while((bi=badInfinitive.exec(raw))){
+    const wrong=bi[1];
+    const correction=badInfinitives[wrong.toLowerCase()] || wrong;
+    const wordStart=bi.index+bi[0].toLowerCase().lastIndexOf(wrong.toLowerCase());
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:wrong,
+      correction:correction,
+      explanation:'After infinitive “to”, use the base form of the verb.',
+      sentence:findSentenceContext(raw,bi.index,bi.index+bi[0].length),
+      start:wordStart,
+      end:wordStart+wrong.length,
+      autoFix:true
+    });
+  }
+
+
+  // “before/after + verb” without a new subject normally takes the -ing form.
+  const sequenceVerb=/\b(before|after)\s+(rise|fall|drop|increase|decrease|decline|grow|recover|fluctuate)\s+(again|further|slightly|sharply|gradually|significantly|dramatically)?\b/gi;
+  const gerunds={rise:'rising',fall:'falling',drop:'dropping',increase:'increasing',decrease:'decreasing',decline:'declining',grow:'growing',recover:'recovering',fluctuate:'fluctuating'};
+  let sv;
+  while((sv=sequenceVerb.exec(raw))){
+    const verb=sv[2];
+    const correction=gerunds[verb.toLowerCase()] || verb+'ing';
+    const verbStart=sv.index+sv[0].toLowerCase().indexOf(verb.toLowerCase());
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:verb,
+      correction:correction,
+      explanation:'When “before/after” is followed directly by a verb and there is no new subject, use the -ing form.',
+      sentence:findSentenceContext(raw,sv.index,sv.index+sv[0].length),
+      start:verbStart,
+      end:verbStart+verb.length,
+      autoFix:true
+    });
+  }
+
+
+  // Common Task 1 wording: data/figures change; cities themselves do not literally “drop”.
+  const cityTrend=/\b(City\s+[A-Z])\s+(slightly|sharply|gradually|significantly|dramatically)\s+(rose|fell|dropped|increased|decreased|declined)\b/g;
+  let cityMatch;
+  while((cityMatch=cityTrend.exec(raw))){
+    const city=cityMatch[1];
+    const adv=cityMatch[2];
+    const verb=cityMatch[3];
+    addDetailedIssue(issues,{
+      category:'Word choice',
+      original:cityMatch[0],
+      correction:`the figure for ${city} ${verb} ${adv}`,
+      explanation:'In Task 1, make the figure/number the thing that rises or falls. This is clearer and more natural than saying the city itself “dropped”.',
+      sentence:findSentenceContext(raw,cityMatch.index,cityMatch.index+cityMatch[0].length),
+      start:cityMatch.index,
+      end:cityMatch.index+cityMatch[0].length,
+      autoFix:false
+    });
+  }
+
+
+
+  // High-confidence IELTS Task 1 phrasing. These are not all grammatical errors,
+  // but they are common non-academic expressions that should be flagged clearly.
+  const task1PhraseRules=[
+    {
+      regex:/\b(City\s+[A-Z](?:\s+and\s+City\s+[A-Z])?)\s+went\s+down\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure${subject.includes(' and ') ? 's' : ''} for ${subject} decreased`,
+      explanation:'In IELTS Task 1, describe the figure/number rather than saying a city “went down”. “Decreased” is more precise and academic.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z](?:\s+and\s+City\s+[A-Z])?)\s+went\s+up\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure${subject.includes(' and ') ? 's' : ''} for ${subject} increased`,
+      explanation:'For data, “the figure increased/rose” is more precise than “the city went up”.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+dropped\s+quickly\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure for ${subject} fell sharply`,
+      explanation:'“Fell sharply” is a more natural academic expression for a rapid decrease in a chart.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+went\s+down\s+a\s+little\s+bit\b/g,
+      category:'Word choice',
+      replacement:(m,subject)=>`the figure for ${subject} decreased slightly`,
+      explanation:'“A little bit” is informal. In IELTS Task 1, use “slightly”.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+started\s+from\s+(\d+(?:\.\d+)?)\b/g,
+      category:'Word choice',
+      replacement:(m,subject,value)=>`the figure for ${subject} started at ${value}`,
+      explanation:'For a numerical starting point, “started at” or “stood at” is more natural than “started from”.',
+      autoFix:false
+    },
+    {
+      regex:/\bwent\s+up\s+continually\b/gi,
+      category:'Word choice',
+      replacement:()=>`rose steadily`,
+      explanation:'“Rose steadily” is the usual Task 1 expression for a sustained upward trend. “Continually” is less natural here.',
+      autoFix:false
+    },
+    {
+      regex:/\b(increased|decreased|rose|fell|grew|dropped)\s+a\s+lot\b/gi,
+      category:'Word choice',
+      replacement:(m,verb)=>`${verb} considerably`,
+      explanation:'“A lot” is informal in academic writing. Use an adverb such as “considerably” or “significantly”.',
+      autoFix:false
+    },
+    {
+      regex:/\ba\s+little\s+bit\b/gi,
+      category:'Word choice',
+      replacement:()=>`slightly`,
+      explanation:'“A little bit” is informal. “Slightly” is more appropriate in IELTS Academic Writing Task 1.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+(increased|decreased|rose|fell|dropped|grew)\b/g,
+      category:'Word choice',
+      replacement:(m,subject,verb)=>`the figure for ${subject} ${verb}`,
+      explanation:'In Task 1, it is usually more precise to make the figure/number the grammatical subject rather than the city itself.',
+      autoFix:false
+    },
+    {
+      regex:/\b(City\s+[A-Z])\s+and\s+(City\s+[A-Z])\s+both\s+dropped\b/g,
+      category:'Word choice',
+      replacement:(m,a,b)=>`the figures for ${a} and ${b} both fell`,
+      explanation:'Describe the figures rather than the cities themselves, and use “fell” for a decrease in chart data.',
+      autoFix:false
+    },
+    {
+      regex:/\bgrew\s+back\s+to\b/gi,
+      category:'Word choice',
+      replacement:()=>`recovered to`,
+      explanation:'For data returning to an earlier level, “recovered to” or “rose back to” is more natural than “grew back to”.',
+      autoFix:false
+    },
+    {
+      regex:/\bwent\s+up\s+to\b/gi,
+      category:'Word choice',
+      replacement:()=>`rose to`,
+      explanation:'“Rose to” is more concise and academic than “went up to” in Task 1.',
+      autoFix:false
+    },
+    {
+      regex:/\bthen\s+down\s+to\b/gi,
+      category:'Word choice',
+      replacement:()=>`then fell to`,
+      explanation:'Use an explicit trend verb such as “fell” rather than the elliptical phrase “then down to”.',
+      autoFix:false
+    },
+    {
+      regex:/\ba\s+lot\b/gi,
+      category:'Word choice',
+      replacement:()=>`considerably / significantly`,
+      explanation:'“A lot” is informal in academic Task 1 writing. Use “considerably”, “significantly”, or a more precise description.',
+      autoFix:false
+    },
+    {
+      regex:/\bat\s+the\s+end\b/gi,
+      category:'Word choice',
+      replacement:()=>`by the end of the period`,
+      explanation:'“At the end” can be vague in Task 1. Use a precise time reference such as “by 2010” or “by the end of the period”.',
+      autoFix:false
+    }
+  ];
+
+  task1PhraseRules.forEach(rule=>{
+    const regex=new RegExp(rule.regex.source,rule.regex.flags);
+    let match;
+    while((match=regex.exec(raw))){
+      const replacement=typeof rule.replacement==='function'
+        ? rule.replacement(...match)
+        : rule.replacement;
+      addDetailedIssue(issues,{
+        category:rule.category,
+        original:match[0],
+        correction:replacement,
+        explanation:rule.explanation,
+        sentence:findSentenceContext(raw,match.index,match.index+match[0].length),
+        start:match.index,
+        end:match.index+match[0].length,
+        autoFix:rule.autoFix===true
+      });
+      if(match[0].length===0) regex.lastIndex++;
+    }
+  });
+
+  const mostSales=/\b(accounted\s+for|made\s+up)\s+the\s+most\s+(?:music\s+)?sales\s+at\s+(\d+(?:\.\d+)?)%?\b/gi;
+  let ms;
+  while((ms=mostSales.exec(raw))){
+    addDetailedIssue(issues,{
+      category:'Word choice',
+      original:ms[0],
+      correction:`accounted for the highest proportion of music sales, at ${ms[2]}%`,
+      explanation:'For percentage data, “the highest proportion/share of sales” is more precise than “the most sales”.',
+      sentence:findSentenceContext(raw,ms.index,ms.index+ms[0].length),
+      start:ms.index,
+      end:ms.index+ms[0].length,
+      autoFix:false
+    });
+  }
+
+
+  const adverbToAdjective={
+    dramatically:'dramatic',
+    significantly:'significant',
+    considerably:'considerable',
+    slightly:'slight',
+    gradually:'gradual',
+    sharply:'sharp',
+    steadily:'steady',
+    rapidly:'rapid'
+  };
+
+  const wordForm=/\b(a|an)\s+(dramatically|significantly|considerably|slightly|gradually|sharply|steadily|rapidly)\s+(increase|decrease|rise|fall|decline|growth)\b/gi;
+  let wf;
+  while((wf=wordForm.exec(raw))){
+    const adjective=adverbToAdjective[wf[2].toLowerCase()] || wf[2];
+    const replacement=`a ${adjective} ${wf[3].toLowerCase()}`;
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:wf[0],
+      correction:/^[A-Z]/.test(wf[0]) ? titleCaseFirst(replacement) : replacement,
+      explanation:'After “a/an” before a noun such as “increase” or “decline”, use an adjective, not an adverb.',
+      sentence:findSentenceContext(raw,wf.index,wf.index+wf[0].length),
+      start:wf.index,
+      end:wf.index+wf[0].length,
+      autoFix:true
+    });
+  }
+
+  const numberAgreement=/\bthe\s+number\s+of\s+([A-Za-z-]+(?:\s+[A-Za-z-]+){0,4})\s+(have|were)\b/gi;
+  let na;
+  while((na=numberAgreement.exec(raw))){
+    const replacement=na[0].replace(/\b(have|were)\b/i,verb=>verb.toLowerCase()==='have'?'has':'was');
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:na[0],
+      correction:replacement,
+      explanation:'The head noun is “the number”, which is singular; use a singular verb.',
+      sentence:findSentenceContext(raw,na.index,na.index+na[0].length),
+      start:na.index,
+      end:na.index+na[0].length,
+      autoFix:true
+    });
+  }
+
+  const althoughBut=/\balthough\b([^.!?]{0,140})\bbut\b/gi;
+  let ab;
+  while((ab=althoughBut.exec(raw))){
+    const butOffset=ab[0].toLowerCase().lastIndexOf('but');
+    const start=ab.index+butOffset;
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:raw.slice(start,start+3),
+      correction:'',
+      explanation:'Do not normally use “although” and “but” together in the same sentence. Keep “although” and remove “but”, or use “but” without “although”.',
+      sentence:findSentenceContext(raw,ab.index,ab.index+ab[0].length),
+      start:start,
+      end:start+3,
+      autoFix:true
+    });
+  }
+
+  const becauseSo=/\bbecause\b([^.!?]{0,140})\bso\b/gi;
+  let bs;
+  while((bs=becauseSo.exec(raw))){
+    const soOffset=bs[0].toLowerCase().lastIndexOf('so');
+    const start=bs.index+soOffset;
+    addDetailedIssue(issues,{
+      category:'Grammar',
+      original:raw.slice(start,start+2),
+      correction:'',
+      explanation:'Avoid “because … so …” in the same clause structure. Usually keep one connector.',
+      sentence:findSentenceContext(raw,bs.index,bs.index+bs[0].length),
+      start:start,
+      end:start+2,
+      autoFix:true
+    });
+  }
+
+  const repeatedWord=/\b([A-Za-z]+)(\s+)\1\b/gi;
+  let rw;
+  while((rw=repeatedWord.exec(raw))){
+    addDetailedIssue(issues,{
+      category:'Mechanics',
+      original:rw[0],
+      correction:rw[1],
+      explanation:'The same word is repeated accidentally.',
+      sentence:findSentenceContext(raw,rw.index,rw.index+rw[0].length),
+      start:rw.index,
+      end:rw.index+rw[0].length,
+      autoFix:true
+    });
+  }
+
+  const spacePunct=/\s+[,.!?;:]/g;
+  let sp;
+  while((sp=spacePunct.exec(raw))){
+    addDetailedIssue(issues,{
+      category:'Mechanics',
+      original:sp[0],
+      correction:sp[0].trim(),
+      explanation:'Do not put a space before punctuation.',
+      sentence:findSentenceContext(raw,sp.index,sp.index+sp[0].length),
+      start:sp.index,
+      end:sp.index+sp[0].length,
+      autoFix:true
+    });
+  }
+
+  const doubleSpace=/ {2,}/g;
+  let ds;
+  while((ds=doubleSpace.exec(raw))){
+    addDetailedIssue(issues,{
+      category:'Mechanics',
+      original:ds[0],
+      correction:' ',
+      explanation:'Use a single space between words.',
+      sentence:findSentenceContext(raw,ds.index,ds.index+ds[0].length),
+      start:ds.index,
+      end:ds.index+ds[0].length,
+      autoFix:true
+    });
+  }
+
+  const contractionMap={
+    "don't":'do not',"doesn't":'does not',"didn't":'did not',"can't":'cannot',"won't":'will not',
+    "isn't":'is not',"aren't":'are not',"wasn't":'was not',"weren't":'were not',"it's":'it is',
+    "they're":'they are',"we're":'we are',"i'm":'I am',"i've":'I have',"we've":'we have',
+    "they've":'they have',"shouldn't":'should not',"wouldn't":'would not',"couldn't":'could not'
+  };
+  const contractionRegex=/\b(?:don't|doesn't|didn't|can't|won't|isn't|aren't|wasn't|weren't|it's|they're|we're|i'm|i've|we've|they've|shouldn't|wouldn't|couldn't)\b/gi;
+  let ct;
+  while((ct=contractionRegex.exec(raw))){
+    const lower=ct[0].toLowerCase();
+    let replacement=contractionMap[lower] || ct[0];
+    if(/^[A-Z]/.test(ct[0])) replacement=titleCaseFirst(replacement);
+    addDetailedIssue(issues,{
+      category:'Word choice',
+      original:ct[0],
+      correction:replacement,
+      explanation:'Formal IELTS writing normally avoids contractions.',
+      sentence:findSentenceContext(raw,ct.index,ct.index+ct[0].length),
+      start:ct.index,
+      end:ct.index+ct[0].length,
+      autoFix:true
+    });
+  }
+
+  const informalMap={
+    kids:'children',stuff:'items / material',things:'factors / items',
+    'a lot of':'many / much / a large number of','lots of':'many / much / a large number of'
+  };
+  const informalRegex=/\b(?:kids|stuff|things|a lot of|lots of)\b/gi;
+  let inf;
+  while((inf=informalRegex.exec(raw))){
+    addDetailedIssue(issues,{
+      category:'Word choice',
+      original:inf[0],
+      correction:informalMap[inf[0].toLowerCase()] || 'use a more precise academic term',
+      explanation:'Choose a more formal and precise expression in academic writing.',
+      sentence:findSentenceContext(raw,inf.index,inf.index+inf[0].length),
+      start:inf.index,
+      end:inf.index+inf[0].length,
+      autoFix:false
+    });
+  }
+
+  const spellingMap={
+    incresed:'increased',increasd:'increased',increse:'increase',increaed:'increased',
+    groed:'grew',growed:'grew',haved:'had',
+    decreaed:'decreased',decreasd:'decreased',decrese:'decrease',
+    flactuated:'fluctuated',flucuated:'fluctuated',fluctation:'fluctuation',
+    comparision:'comparison',comparsion:'comparison',seperate:'separate',occured:'occurred',
+    diferent:'different',signifcantly:'significantly',signficantly:'significantly',
+    signifcant:'significant',aproximately:'approximately',approximatly:'approximately',
+    persentage:'percentage',precentage:'percentage',becuase:'because',wich:'which',
+    recieve:'receive',untill:'until',alot:'a lot',begining:'beginning',
+    goverment:'government',enviroment:'environment',developement:'development',
+    tendancy:'tendency',statictics:'statistics',statisticly:'statistically',
+    ilustrate:'illustrate',illustate:'illustrate',illustrte:'illustrate',
+    comparred:'compared',comparied:'compared',fluctueted:'fluctuated',
+    streamming:'streaming',dowloads:'downloads',downlaods:'downloads',purchesed:'purchased',
+    gradualy:'gradually',sligtly:'slightly',sharpley:'sharply',
+    overal:'overall',conversly:'conversely',similary:'similarly',
+    experieced:'experienced',experenced:'experienced',
+    highestt:'highest',numberr:'number',periodd:'period',
+    altho:'although',altough:'although',althogh:'although',althoough:'although',whill:'while',wile:'while',
+    hiest:'highest',higest:'highest',hightest:'highest',
+    decarte:'decade',decad:'decade',decdae:'decade',
+    strongely:'strongly',strongley:'strongly',heavili:'heavily',heavly:'heavily',
+    populer:'popular',populer:'popular',finaly:'finally',continualy:'continually',continuly:'continually',
+    unchange:'unchanged',unchaged:'unchanged',remeined:'remained',remaned:'remained',
+    remaind:'remained',reched:'reached',reachd:'reached',beganinng:'beginning',
+    sharpely:'sharply',considerbly:'considerably',considerabely:'considerably'
+  };
+
+  Object.entries(spellingMap).forEach(([wrong,right])=>{
+    const regex=new RegExp(`\\b${wrong}\\b`,'gi');
+    let match;
+    while((match=regex.exec(raw))){
+      let replacement=right;
+      if(/^[A-Z]/.test(match[0])) replacement=titleCaseFirst(replacement);
+      addDetailedIssue(issues,{
+        category:'Spelling',
+        original:match[0],
+        correction:replacement,
+        explanation:'Common spelling error.',
+        sentence:findSentenceContext(raw,match.index,match.index+match[0].length),
+        start:match.index,
+        end:match.index+match[0].length,
+        autoFix:true
+      });
+    }
+  });
+
+  /* =========================================================
+     HIGH-CONFIDENCE TASK 1 CONTEXT RULES
+
+     These rules target errors that ordinary spell-checkers often miss
+     because each individual word may exist, but the sentence is still
+     grammatically wrong or inappropriate for this fixed past-time graph.
+  ========================================================= */
+
+  const addRegexIssue=(regex,build)=>{
+    const re=new RegExp(regex.source,regex.flags);
+    let match;
+    while((match=re.exec(raw))){
+      const issue=build(match);
+      if(issue){
+        addDetailedIssue(issues,{
+          ...issue,
+          sentence:issue.sentence || findSentenceContext(raw,match.index,match.index+match[0].length),
+          start:Number.isInteger(issue.start) ? issue.start : match.index,
+          end:Number.isInteger(issue.end) ? issue.end : match.index+match[0].length,
+          source:issue.source || 'local',
+          confidence:issue.confidence ?? 0.99
+        });
+      }
+      if(match[0].length===0) re.lastIndex++;
+    }
+  };
+
+  // The graph covers 1965–2010, so descriptions of the data use past tense.
+  addRegexIssue(/\b(City\s+[A-Z])\s+have\b/g,match=>{
+    const wordStart=match.index+match[0].lastIndexOf('have');
+    return{
+      category:'Grammar',
+      original:'have',
+      correction:'had',
+      explanation:'The subject “'+match[1]+'” is singular, and this graph reports past data (1965–2010), so use “had”.',
+      start:wordStart,
+      end:wordStart+4,
+      autoFix:true
+    };
+  });
+
+  addRegexIssue(/\b(the\s+figure\s+for\s+City\s+[A-Z])\s+have\b/gi,match=>{
+    const wordStart=match.index+match[0].toLowerCase().lastIndexOf('have');
+    return{
+      category:'Grammar',
+      original:match[0].slice(match[0].toLowerCase().lastIndexOf('have')),
+      correction:'had',
+      explanation:'“The figure” is singular and the data are in the past, so use “had”.',
+      start:wordStart,
+      end:wordStart+4,
+      autoFix:true
+    };
+  });
+
+  // Incorrect auxiliary + base verb, e.g. “was stay almost unchanged”.
+  addRegexIssue(/\b((?:City\s+[A-Z])|(?:the\s+figure\s+for\s+City\s+[A-Z]))\s+was\s+stay\s+(almost\s+)?unchanged\b/gi,match=>({
+    category:'Grammar',
+    original:match[0],
+    correction:`${match[1]} remained ${match[2] || ''}unchanged`.replace(/\s+/g,' ').trim(),
+    explanation:'Do not use “was stay”. Use the past simple “stayed”, or more naturally for Task 1, “remained unchanged”.',
+    autoFix:true
+  }));
+
+  const pastSimpleMap={
+    stay:'stayed',remain:'remained',rise:'rose',fall:'fell',grow:'grew',
+    increase:'increased',decrease:'decreased',drop:'dropped',decline:'declined',
+    fluctuate:'fluctuated',reach:'reached'
+  };
+  addRegexIssue(/\b(was|were)\s+(stay|remain|rise|fall|grow|increase|decrease|drop|decline|fluctuate|reach)\b/gi,match=>{
+    const verb=match[2].toLowerCase();
+    return{
+      category:'Grammar',
+      original:match[0],
+      correction:pastSimpleMap[verb] || verb,
+      explanation:'For an active change/state in past chart data, use the past simple rather than “was/were + base verb”.',
+      autoFix:true
+    };
+  });
+
+  // Parallel verb structure after a past-tense sequence.
+  addRegexIssue(/\band\s+going\s+up\s+to\s+(\d+(?:\.\d+)?)/gi,match=>({
+    category:'Grammar',
+    original:match[0],
+    correction:`and then rose to ${match[1]}`,
+    explanation:'Keep the verb forms parallel in a past-time sequence: “reached/fell … and then rose …”, not “and going up …”.',
+    autoFix:true
+  }));
+
+  addRegexIssue(/\band\s+going\s+down\s+to\s+(\d+(?:\.\d+)?)/gi,match=>({
+    category:'Grammar',
+    original:match[0],
+    correction:`and then fell to ${match[1]}`,
+    explanation:'Use a finite past-tense verb to keep the sequence parallel: “and then fell to …”.',
+    autoFix:true
+  }));
+
+  // High-confidence collocations for chart language.
+  addRegexIssue(/\bgrew\s+(?:strongely|strongley|strongly)\b/gi,match=>({
+    category:'Word choice',
+    original:match[0],
+    correction:'increased considerably',
+    explanation:'“Grew strongly” is understandable but unnatural for IELTS Task 1 data. “Increased considerably/significantly” is more precise.',
+    autoFix:false
+  }));
+
+  addRegexIssue(/\bfell\s+(?:heavili|heavly|heavily)\b/gi,match=>({
+    category:'Word choice',
+    original:match[0],
+    correction:'fell sharply',
+    explanation:'For a large rapid decrease in chart data, “fell sharply” is the natural collocation; “fell heavily” is not.',
+    autoFix:false
+  }));
+
+  // This chart reports PERCENTAGE SHARE of total music sales.
+  addRegexIssue(/\b(streams?|streaming|downloads?|CDs?)\s+(?:was|were)\s+the\s+most\s+(?:popular|highest)\s+at\s+(\d+(?:\.\d+)?)%?\b/gi,match=>({
+    category:'Task 1 wording',
+    original:match[0],
+    correction:`${match[1]} accounted for the highest proportion of total music sales, at ${match[2]}%`,
+    explanation:'The graph measures percentage share of total music sales. Describe the proportion/share directly rather than calling a method “the most popular”.',
+    autoFix:false
+  }));
+
+  addRegexIssue(/\b(streams?|streaming|downloads?|CDs?)\s+(?:had|have)\s+the\s+highest\s+(?:number|amount)\s+at\s+(\d+(?:\.\d+)?)%?\b/gi,match=>({
+    category:'Task 1 wording',
+    original:match[0],
+    correction:`${match[1]} accounted for the highest proportion of music sales, at ${match[2]}%`,
+    explanation:'Because the y-axis is a percentage, use “proportion”, “percentage”, or “share” rather than “number” or “amount”.',
+    autoFix:false
+  }));
+
+  // Accidental repeated phrase, not just a repeated single word.
+  addRegexIssue(/\b(of\s+the\s+period)\s+\1\b/gi,match=>({
+    category:'Mechanics',
+    original:match[0],
+    correction:match[1],
+    explanation:'The phrase is repeated accidentally.',
+    autoFix:true
+  }));
+
+  addRegexIssue(/\b(by\s+the\s+end\s+of\s+the\s+period)\s+of\s+the\s+period\b/gi,match=>({
+    category:'Mechanics',
+    original:match[0],
+    correction:match[1],
+    explanation:'“Of the period” is repeated. Use the phrase once only.',
+    autoFix:true
+  }));
+
+  // Common adverb spelling/word-form problems that can survive a dictionary-only checker.
+  addRegexIssue(/\b(strong|heavy|sharp|considerable|significant|gradual|slight)\s+(increase|decrease|rise|fall|growth|decline)\b/gi,match=>{
+    // This structure is actually valid adjective+noun, so do not flag it.
+    return null;
+  });
+
+  const paragraphs=getParagraphs(raw);
+  let offset=0;
+  paragraphs.forEach(paragraph=>{
+    const localIndex=raw.indexOf(paragraph,offset);
+    if(localIndex>=0){
+      const letterMatch=paragraph.match(/[A-Za-z]/);
+      if(letterMatch){
+        const pos=localIndex+paragraph.indexOf(letterMatch[0]);
+        if(letterMatch[0]===letterMatch[0].toLowerCase()){
+          addDetailedIssue(issues,{
+            category:'Mechanics',
+            original:letterMatch[0],
+            correction:letterMatch[0].toUpperCase(),
+            explanation:'Start a paragraph/sentence with a capital letter.',
+            sentence:findSentenceContext(raw,pos,pos+1),
+            start:pos,
+            end:pos+1,
+            autoFix:true
+          });
+        }
+      }
+      offset=localIndex+paragraph.length;
+    }
+  });
+
+  if(raw.trim() && !/[.!?]["')\]]?$/.test(raw.trim())){
+    const end=raw.length;
+    addDetailedIssue(issues,{
+      category:'Mechanics',
+      original:'End of response',
+      correction:'Add final punctuation (usually a full stop).',
+      explanation:'The response should end with terminal punctuation.',
+      sentence:findSentenceContext(raw,Math.max(0,end-1),end),
+      start:null,
+      end:null,
+      autoFix:false
+    });
+  }
+
+  return issues.sort((a,b)=>{
+    const ai=a.start===null ? Number.MAX_SAFE_INTEGER : a.start;
+    const bi=b.start===null ? Number.MAX_SAFE_INTEGER : b.start;
+    return ai-bi;
+  });
+
+}
+
+
+function extractAIDetailedIssues(task,grade){
+
+  const candidates=[
+    task?.detailedIssues,
+    task?.languageIssues,
+    task?.errors,
+    task?.corrections,
+    grade?.detailedIssues,
+    grade?.languageIssues,
+    grade?.errors,
+    grade?.corrections
+  ];
+
+  const output=[];
+
+  candidates.forEach(list=>{
+    if(!Array.isArray(list)) return;
+
+    list.forEach(item=>{
+      if(typeof item==='string'){
+        addDetailedIssue(output,{
+          category:'AI feedback',
+          original:item,
+          correction:'',
+          explanation:item,
+          source:'ai'
+        });
+        return;
+      }
+
+      if(!item || typeof item!=='object') return;
+
+      addDetailedIssue(output,{
+        category:item.category || item.type || item.label || 'AI feedback',
+        original:item.original || item.text || item.error || item.phrase || 'Issue detected',
+        correction:item.correction || item.corrected || item.suggestion || item.rewrite || '',
+        explanation:item.explanation || item.reason || item.comment || item.feedback || '',
+        sentence:item.sentence || item.context || '',
+        source:'ai',
+        autoFix:false
+      });
+    });
+  });
+
+  return output;
+
+}
+
+
+function languageToolCategory(match){
+
+  const issueType=String(match?.rule?.issueType || '').toLowerCase();
+  const categoryId=String(match?.rule?.category?.id || '').toLowerCase();
+  const categoryName=String(match?.rule?.category?.name || '').toLowerCase();
+  const ruleId=String(match?.rule?.id || '').toLowerCase();
+
+  if(
+    issueType.includes('misspell')
+    || categoryId.includes('typo')
+    || categoryName.includes('typo')
+    || ruleId.includes('morfologik')
+  ){
+    return 'Spelling';
+  }
+
+  if(
+    issueType.includes('style')
+    || issueType.includes('uncategorized')
+    || categoryId.includes('style')
+    || categoryName.includes('style')
+  ){
+    return 'Word choice';
+  }
+
+  if(
+    issueType.includes('typographical')
+    || categoryId.includes('punct')
+    || categoryName.includes('punct')
+  ){
+    return 'Mechanics';
+  }
+
+  return 'Grammar';
+
+}
+
+
+/* =========================================================
+   CONTEXT-AWARE SPELLING VALIDATOR
+
+   LanguageTool is used as a detector, not as the final judge.
+   For spelling, we rank candidates against the sentence context
+   and suppress low-confidence suggestions instead of showing
+   misleading nearest-word guesses.
+========================================================= */
+
+const CONTEXTUAL_SPELLING_OVERRIDES={
+  altho:'although',
+  altough:'although',
+  althogh:'although',
+  althought:'although',
+  whill:'while',
+  wile:'while',
+  strongely:'strongly',
+  strongley:'strongly',
+  populer:'popular',
+  heavili:'heavily',
+  heavly:'heavily',
+  hiest:'highest',
+  higest:'highest',
+  hightest:'highest',
+  decarte:'decade',
+  decdae:'decade',
+  decad:'decade',
+  ilustrate:'illustrate',
+  illustate:'illustrate',
+  illustrte:'illustrate',
+  increse:'increase',
+  incresed:'increased',
+  increasd:'increased',
+  groed:'grew',
+  growed:'grew',
+  haved:'had',
+  decrese:'decrease',
+  decreasd:'decreased',
+  signifcant:'significant',
+  signifcantly:'significantly',
+  signficantly:'significantly',
+  sligtly:'slightly',
+  sharpley:'sharply',
+  gradualy:'gradually',
+  experieced:'experienced',
+  experenced:'experienced',
+  flactuated:'fluctuated',
+  flucuated:'fluctuated',
+  comparision:'comparison',
+  seperate:'separate',
+  occured:'occurred',
+  becuase:'because',
+  wich:'which',
+  enviroment:'environment',
+  goverment:'government'
+};
+
+
+const CONTEXTUAL_LEXICON=[
+  'although','though','whereas','while','however','therefore','moreover','overall',
+  'highest','lowest','higher','lower','largest','smallest','greatest','least',
+  'decade','year','years','period','century','month','months',
+  'increase','increased','increasing','decrease','decreased','decreasing',
+  'rise','rose','rising','fall','fell','fallen','decline','declined','drop','dropped',
+  'fluctuate','fluctuated','fluctuation','stable','steadily','gradually','slightly',
+  'sharply','dramatically','significantly','approximately','respectively',
+  'illustrate','illustrates','illustrated','show','shows','shown','indicate','indicates',
+  'stream','streams','streaming','download','downloads','cd','cds','music','sales','method','methods','figure','figures','percentage','percentages',
+  'proportion','proportions','amount','amounts','total','average','trend','trends',
+  'experienced','experience','compared','comparison','contrast','similar','similarly',
+  'purchase','purchased','share','shares','accounted','between','during','before','after',
+  'reaching','reached','remaining','remained','recovering','recovered','become','became',
+  'present','period','data','graph','line','chart','information','approximately',
+  'considerably','considerable','dramatic','significant','steady','gradual','slight',
+  'from','to','at','by','with','the','a','an','and','but','despite','because'
+];
+
+
+function levenshteinDistance(a,b){
+
+  const left=String(a || '').toLowerCase();
+  const right=String(b || '').toLowerCase();
+
+  if(left===right) return 0;
+  if(!left) return right.length;
+  if(!right) return left.length;
+
+  let previous=Array.from(
+    {length:right.length+1},
+    (_,index)=>index
+  );
+
+  for(let i=1;i<=left.length;i++){
+
+    const current=[i];
+
+    for(let j=1;j<=right.length;j++){
+
+      const cost=left[i-1]===right[j-1] ? 0 : 1;
+
+      current[j]=Math.min(
+        previous[j]+1,
+        current[j-1]+1,
+        previous[j-1]+cost
+      );
+
+    }
+
+    previous=current;
+
+  }
+
+  return previous[right.length];
+
+}
+
+
+function similarityScore(a,b){
+
+  const left=String(a || '').toLowerCase();
+  const right=String(b || '').toLowerCase();
+  const maxLength=Math.max(left.length,right.length,1);
+
+  return 1-
+  levenshteinDistance(left,right)/maxLength;
+
+}
+
+
+function uniqueStrings(values){
+
+  const seen=new Set();
+
+  return (values || [])
+  .map(value=>String(value || '').trim())
+  .filter(Boolean)
+  .filter(value=>{
+    const key=value.toLowerCase();
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+}
+
+
+function contextualBoost(candidate,original,sentence,startInSentence){
+
+  const word=String(candidate || '').toLowerCase();
+  const wrong=String(original || '').toLowerCase();
+  const context=String(sentence || '').toLowerCase();
+  let score=0;
+
+  // Exact contextual aliases get very high trust.
+  if(CONTEXTUAL_SPELLING_OVERRIDES[wrong]===word){
+    score+=0.55;
+  }
+
+  // IELTS Task 1 phrases: "the highest number/figure/percentage".
+  if(
+    /\bthe\s+[a-z'-]+\s+(number|figure|figures|percentage|proportion|amount|level|rate)\b/i.test(context)
+    && ['highest','lowest','largest','smallest','greatest'].includes(word)
+  ){
+    score+=0.38;
+  }
+
+  // Time expressions: "over/during the next decade".
+  if(
+    /\b(over|during|within|throughout)\s+(the\s+)?(next|following|previous|last|past)?\s*[a-z'-]+\b/i.test(context)
+    && ['decade','year','years','period','century'].includes(word)
+  ){
+    score+=0.34;
+  }
+
+  if(
+    /\b(next|following|previous|last|past)\s+[a-z'-]+\b/i.test(context)
+    && ['decade','year','years','period','century'].includes(word)
+  ){
+    score+=0.25;
+  }
+
+  // Concession connector at the start of a clause.
+  if(
+    ['although','though','whereas','while'].includes(word)
+    && (
+      /^\s*[a-z'-]+\b/i.test(context)
+      || /,\s*[a-z'-]+\b/i.test(context)
+    )
+  ){
+    score+=0.25;
+  }
+
+  // Common graph-reporting vocabulary.
+  if(
+    ['illustrate','illustrates','increase','increased','decrease','decreased','fluctuated','experienced'].includes(word)
+    && /(graph|chart|figure|percentage|sales|stream|download|cd|trend|data)/i.test(context)
+  ){
+    score+=0.12;
+  }
+
+  // A candidate that is implausibly different should not win just on context.
+  if(similarityScore(wrong,word)<0.45){
+    score-=0.25;
+  }
+
+  return score;
+
+}
+
+
+function chooseContextualSpellingCandidate({
+  raw,
+  start,
+  end,
+  original,
+  replacements
+}){
+
+  const wrong=String(original || '').trim();
+  const lowerWrong=wrong.toLowerCase();
+  const sentence=findSentenceContext(raw,start,end);
+
+  const explicit=CONTEXTUAL_SPELLING_OVERRIDES[lowerWrong];
+
+  if(explicit){
+
+    const correction=/^[A-Z]/.test(wrong)
+      ? titleCaseFirst(explicit)
+      : explicit;
+
+    return{
+      correction:correction,
+      confidence:0.99,
+      autoFix:true,
+      explanation:`Context-aware spelling check: “${wrong}” is corrected to “${correction}” in this sentence.`
+    };
+
+  }
+
+  const ltCandidates=uniqueStrings(replacements).slice(0,8);
+
+  // Add nearby IELTS/common candidates. Only consider words with a reasonably
+  // close spelling so the lexicon cannot force an unrelated correction.
+  const lexicalCandidates=CONTEXTUAL_LEXICON.filter(candidate=>{
+    const lengthGap=Math.abs(candidate.length-lowerWrong.length);
+    if(lengthGap>3) return false;
+    return similarityScore(lowerWrong,candidate)>=0.48;
+  });
+
+  const candidates=uniqueStrings([
+    ...ltCandidates,
+    ...lexicalCandidates
+  ]);
+
+  let best=null;
+
+  candidates.forEach(candidate=>{
+
+    const lowerCandidate=candidate.toLowerCase();
+    const similarity=similarityScore(lowerWrong,lowerCandidate);
+
+    let score=similarity*0.70;
+
+    if(
+      ltCandidates.some(item=>item.toLowerCase()===lowerCandidate)
+    ){
+      score+=0.08;
+    }
+
+    score+=contextualBoost(
+      lowerCandidate,
+      lowerWrong,
+      sentence,
+      start
+    );
+
+    // Prefer normal lowercase lexical words to unusual proper-name guesses.
+    if(/^[A-Z][a-z]+$/.test(candidate) && !/^[A-Z]/.test(wrong)){
+      score-=0.20;
+    }
+
+    // Tiny/very short candidates are frequently bad typo suggestions.
+    if(candidate.length<=3 && wrong.length>=5){
+      score-=0.18;
+    }
+
+    if(!best || score>best.score){
+      best={candidate,score,similarity};
+    }
+
+  });
+
+  if(!best){
+    return null;
+  }
+
+  // High precision over high recall: do not show a correction unless context
+  // plus spelling similarity make it reasonably trustworthy.
+  if(best.score<0.78){
+    return null;
+  }
+
+  const correction=/^[A-Z]/.test(wrong)
+    ? titleCaseFirst(best.candidate)
+    : best.candidate.toLowerCase();
+
+  return{
+    correction:correction,
+    confidence:Math.min(0.98,best.score),
+    autoFix:best.score>=0.90,
+    explanation:`Context-aware spelling check selected “${correction}” as the most plausible correction for this sentence.`
+  };
+
+}
+
+
+function chooseNonSpellingSuggestion(replacements){
+
+  const candidates=uniqueStrings(replacements);
+
+  if(candidates.length===1){
+    return{
+      correction:candidates[0],
+      confidence:0.86,
+      autoFix:false
+    };
+  }
+
+  // For grammar/style warnings with several alternatives, avoid pretending
+  // that the first suggestion is definitely correct.
+  return{
+    correction:'',
+    confidence:0.55,
+    autoFix:false
+  };
+
+}
+
+
+async function fetchLanguageToolIssues(text){
+
+  const raw=String(text || '').trim();
+
+  if(!raw){
+    return [];
+  }
+
+  const body=new URLSearchParams({
+    text:raw,
+    language:'en-GB'
+  });
+
+  const response=await fetch(
+    LANGUAGE_TOOL_ENDPOINT,
+    {
+      method:'POST',
+      mode:'cors',
+      headers:{
+        'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body:body.toString()
+    }
+  );
+
+  if(!response.ok){
+    throw new Error('LanguageTool HTTP '+response.status);
+  }
+
+  const data=await response.json();
+  const output=[];
+
+  (Array.isArray(data?.matches) ? data.matches : [])
+  .forEach(match=>{
+
+    const start=Number(match.offset);
+    const length=Number(match.length);
+
+    if(
+      !Number.isInteger(start)
+      || !Number.isInteger(length)
+      || length<=0
+    ){
+      return;
+    }
+
+    const end=start+length;
+    const original=raw.slice(start,end);
+
+    if(!original){
+      return;
+    }
+
+    const replacements=(Array.isArray(match.replacements) ? match.replacements : [])
+      .map(item=>String(item?.value || '').trim())
+      .filter(Boolean)
+      .slice(0,8);
+
+    const category=languageToolCategory(match);
+    const sentence=findSentenceContext(raw,start,end);
+
+    if(category==='Spelling'){
+
+      const validated=chooseContextualSpellingCandidate({
+        raw:raw,
+        start:start,
+        end:end,
+        original:original,
+        replacements:replacements
+      });
+
+      // LanguageTool only flags a suspicious token. If our contextual
+      // validator is not confident, hide it rather than teach a bad correction.
+      if(!validated){
+        return;
+      }
+
+      addDetailedIssue(output,{
+        category:'Spelling',
+        original:original,
+        correction:validated.correction,
+        explanation:validated.explanation,
+        sentence:sentence,
+        start:start,
+        end:end,
+        source:'contextual',
+        confidence:validated.confidence,
+        autoFix:validated.autoFix
+      });
+
+      return;
+    }
+
+    const suggestion=chooseNonSpellingSuggestion(replacements);
+
+    addDetailedIssue(output,{
+      category:category,
+      original:original,
+      correction:suggestion.correction,
+      explanation:String(
+        match.message
+        || match.shortMessage
+        || 'Language issue detected.'
+      ),
+      sentence:sentence,
+      start:start,
+      end:end,
+      source:'contextual',
+      confidence:suggestion.confidence,
+      autoFix:false
+    });
+
+  });
+
+  return output;
+
+}
+
+
+function startLanguageToolReview(text){
+
+  const raw=String(text || '');
+
+  languageToolReviewText=raw;
+  languageToolIssuesCache=null;
+  languageToolReviewError='';
+  languageToolReviewStatus='checking';
+
+  languageToolReviewPromise=fetchLanguageToolIssues(raw)
+  .then(issues=>{
+
+    if(languageToolReviewText!==raw){
+      return issues;
+    }
+
+    languageToolIssuesCache=issues;
+    languageToolReviewStatus='done';
+
+    if(lastRenderedGrade){
+      renderDetailedReview(lastRenderedGrade);
+    }
+
+    return issues;
+
+  })
+  .catch(error=>{
+
+    if(languageToolReviewText!==raw){
+      return [];
+    }
+
+    languageToolIssuesCache=[];
+    languageToolReviewStatus='error';
+    languageToolReviewError=error?.message || 'LanguageTool unavailable';
+
+    if(lastRenderedGrade){
+      renderDetailedReview(lastRenderedGrade);
+    }
+
+    return [];
+
+  });
+
+  return languageToolReviewPromise;
+
+}
+
+
+function mergeDetailedIssues(aiIssues,localIssues){
+
+  const all=[
+    ...(Array.isArray(aiIssues)?aiIssues:[]),
+    ...(Array.isArray(localIssues)?localIssues:[])
+  ];
+
+  const sourcePriority={
+    ai:4,
+    local:3,
+    contextual:2,
+    languagetool:1
+  };
+
+  const chosen=new Map();
+  const withoutLocation=[];
+
+  all.forEach(issue=>{
+
+    if(!issue || !issue.original) return;
+
+    if(Number.isInteger(issue.start)){
+
+      const locationKey=[
+        issue.start,
+        issue.end,
+        String(issue.original).toLowerCase()
+      ].join('|');
+
+      const existing=chosen.get(locationKey);
+
+      const currentPriority=sourcePriority[issue.source] || 0;
+      const existingPriority=sourcePriority[existing?.source] || 0;
+      const currentConfidence=Number(issue.confidence || 0);
+      const existingConfidence=Number(existing?.confidence || 0);
+
+      if(
+        !existing
+        || currentPriority>existingPriority
+        || (
+          currentPriority===existingPriority
+          && currentConfidence>existingConfidence
+        )
+      ){
+        chosen.set(locationKey,issue);
+      }
+
+      return;
+    }
+
+    addDetailedIssue(withoutLocation,issue);
+
+  });
+
+  const merged=[
+    ...chosen.values(),
+    ...withoutLocation
+  ];
+
+  merged.sort((a,b)=>{
+    const ai=Number.isInteger(a.start) ? a.start : Number.MAX_SAFE_INTEGER;
+    const bi=Number.isInteger(b.start) ? b.start : Number.MAX_SAFE_INTEGER;
+    return ai-bi;
+  });
+
+  return merged.slice(0,100);
+
+}
+
+
+function buildCorrectedVersion(text,issues){
+
+  let output=String(text || '');
+
+  const fixes=(issues || [])
+  .filter(issue=>
+    issue.autoFix===true
+    && Number.isInteger(issue.start)
+    && Number.isInteger(issue.end)
+    && issue.end>=issue.start
+  )
+  .sort((a,b)=>b.start-a.start);
+
+  let lastStart=Infinity;
+
+  fixes.forEach(issue=>{
+    if(issue.end>lastStart) return;
+
+    output=
+      output.slice(0,issue.start)
+      + issue.correction
+      + output.slice(issue.end);
+
+    lastStart=issue.start;
+  });
+
+  // Clean up spaces created when a connector is removed.
+  output=output.replace(/ {2,}/g,' ');
+
+  // Capitalise the first alphabetic character of each paragraph.
+  output=output.replace(
+    /(^|\n\s*\n)(\s*)([a-z])/g,
+    (match,boundary,spaces,letter)=>
+      boundary+spaces+letter.toUpperCase()
+  );
+
+  return output;
+
+}
+
+
+
+function issueClass(category){
+
+  const value=String(category || '').toLowerCase();
+  if(value.includes('spell')) return 'spelling';
+  if(value.includes('word') || value.includes('lex')) return 'word-choice';
+  if(value.includes('mechan') || value.includes('punct')) return 'mechanics';
+  return 'grammar';
+
+}
+
+
+function renderDetailedReview(grade){
+
+  const localIssues=buildDetailedIssues(essay.value);
+  const aiIssues=Array.isArray(grade?.detailedIssues) ? grade.detailedIssues : [];
+  const languageIssues=Array.isArray(languageToolIssuesCache) ? languageToolIssuesCache : [];
+
+  const externalIssues=[
+    ...aiIssues,
+    ...languageIssues
+  ];
+
+  const issues=mergeDetailedIssues(
+    externalIssues,
+    localIssues
+  );
+
+  const counts={Grammar:0,Spelling:0,'Word choice':0,Mechanics:0,Other:0};
+
+  issues.forEach(issue=>{
+    const cls=issueClass(issue.category);
+    if(cls==='spelling') counts.Spelling++;
+    else if(cls==='word-choice') counts['Word choice']++;
+    else if(cls==='mechanics') counts.Mechanics++;
+    else if(String(issue.category || '').toLowerCase().includes('grammar')) counts.Grammar++;
+    else counts.Other++;
+  });
+
+  issueSummary.innerHTML=Object.entries(counts)
+  .filter(([,count])=>count>0)
+  .map(([label,count])=>`<span class="issue-pill">${escapeHTML(label)}: ${count}</span>`)
+  .join('');
+
+  if(languageToolReviewStatus==='checking'){
+    proofreadingStatus.innerHTML='Đang quét grammar & spelling và kiểm tra lại gợi ý theo ngữ cảnh…';
+  }
+  else if(languageToolReviewStatus==='done'){
+    proofreadingStatus.innerHTML=`Đã chạy nhiều lớp kiểm tra: contextual/local rules + bộ dò ngoài + AI nếu backend có phản hồi. Hệ thống ưu tiên phát hiện lỗi cụ thể; không tự dựng một “bài viết học thuật” mới để tránh tạo thêm lỗi. Bộ dò ngoài đóng vai trò tín hiệu và chỉ các gợi ý đủ tin cậy mới được giữ lại.`;
+  }
+  else if(languageToolReviewStatus==='error'){
+    proofreadingStatus.innerHTML=`Không gọi được bộ dò ngoài (${escapeHTML(languageToolReviewError)}). Đang dùng AI + contextual/local rules; bài vẫn được chấm bình thường.`;
+  }
+  else{
+    proofreadingStatus.textContent='';
+  }
+
+  if(!issues.length){
+    detailedIssues.innerHTML=`<div class="no-issues">Chưa phát hiện lỗi cụ thể. Điều này không đồng nghĩa bài hoàn toàn không có lỗi; các lỗi phụ thuộc ngữ cảnh vẫn cần AI/giáo viên kiểm tra.</div>`;
+    return;
+  }
+
+  detailedIssues.innerHTML=issues.map((issue,index)=>{
+    const correction=issue.correction
+      ? `<div class="issue-row"><div class="issue-label">Gợi ý sửa</div><div class="issue-correction">${escapeHTML(issue.correction)}</div></div>`
+      : '';
+    const sentence=issue.sentence
+      ? `<div class="issue-row"><div class="issue-label">Trong câu</div><div>${escapeHTML(issue.sentence)}</div></div>`
+      : '';
+
+    const sourceLabel=
+      issue.source==='ai'
+      ? ' · AI'
+      : issue.source==='contextual'
+      ? ' · Context'
+      : '';
+
+    return `
+      <div class="issue-card ${issueClass(issue.category)}">
+        <div class="issue-top">
+          <div class="issue-type">${escapeHTML(issue.category)}</div>
+          <div class="issue-index">Lỗi ${index+1}${sourceLabel}</div>
+        </div>
+        ${sentence}
+        <div class="issue-row"><div class="issue-label">Cụm gốc</div><div class="issue-original">${escapeHTML(issue.original)}</div></div>
+        ${correction}
+        <div class="issue-row"><div class="issue-label">Giải thích</div><div class="issue-explanation">${escapeHTML(issue.explanation || 'Cần kiểm tra và sửa cách diễn đạt này.')}</div></div>
+      </div>
+    `;
+  }).join('');
+
+}
+
+
+function localLanguageReview(text){
+
+  const raw=
+  String(
+    text || ''
+  );
+
+
+  const words=
+  getWords(
+    raw
+  );
+
+
+  const lowerWords=
+  words.map(
+    word=>word.toLowerCase()
+  );
+
+
+  const wordTotal=
+  words.length;
+
+
+  const sentences=
+  getSentences(
+    raw
+  );
+
+
+  const paragraphs=
+  getParagraphs(
+    raw
+  );
+
+
+  const grammarIssues=[];
+
+  const lexicalIssues=[];
+
+  const mechanicsIssues=[];
+
+
+  const grammarRules=[
+
+    [
+      /\bi am agree\b/gi,
+      'Use “I agree”, not “I am agree”.'
+    ],
+
+    [
+      /\bpeople is\b/gi,
+      '“People” is plural: use “people are”.'
+    ],
+
+    [
+      /\bpeople has\b/gi,
+      '“People” is plural: use “people have”.'
+    ],
+
+    [
+      /\bthere have\b/gi,
+      'Check “there is/are/has been/have been”.'
+    ],
+
+    [
+      /\bmore better\b/gi,
+      'Avoid “more better”; use “better”.'
+    ],
+
+    [
+      /\bmore easier\b/gi,
+      'Avoid “more easier”; use “easier”.'
+    ],
+
+    [
+      /\bmore cheaper\b/gi,
+      'Avoid “more cheaper”; use “cheaper”.'
+    ],
+
+    [
+      /\bmore faster\b/gi,
+      'Avoid “more faster”; use “faster”.'
+    ],
+
+    [
+      /\bdiscuss about\b/gi,
+      'Use “discuss the issue”, not “discuss about the issue”.'
+    ],
+
+    [
+      /\bdespite of\b/gi,
+      'Use “despite” or “in spite of”, not “despite of”.'
+    ],
+
+    [
+      /\bchilds\b/gi,
+      'The plural of “child” is “children”.'
+    ],
+
+    [
+      /\bpeoples\b/gi,
+      'Use “people” for the usual plural meaning.'
+    ],
+
+    [
+      /\binformations\b/gi,
+      '“Information” is normally uncountable.'
+    ],
+
+    [
+      /\badvices\b/gi,
+      '“Advice” is normally uncountable.'
+    ],
+
+    [
+      /\bequipments\b/gi,
+      '“Equipment” is normally uncountable.'
+    ],
+
+    [
+      /\bfurnitures\b/gi,
+      '“Furniture” is normally uncountable.'
+    ],
+
+    [
+      /\bmake research\b/gi,
+      'Prefer “do/conduct research”.'
+    ],
+
+    [
+      /\bdo a decision\b/gi,
+      'Use “make a decision”.'
+    ],
+
+    [
+      /\bstrong rain\b/gi,
+      'The usual collocation is “heavy rain”.'
+    ],
+
+    [
+      /\bbig amount\b/gi,
+      'Prefer “large amount”.'
+    ],
+
+    [
+      /\bbig number\b/gi,
+      'Prefer “large number”.'
+    ],
+
+    [
+      /\baccording to me\b/gi,
+      'In formal writing, prefer “in my view/opinion”.'
+    ]
+
+  ];
+
+
+  grammarRules.forEach(
+
+    ([regex,message])=>{
+
+      const matches=
+      raw.match(
+        regex
+      );
+
+
+      if(
+        matches
+        &&
+        matches.length
+      ){
+
+        uniquePush(
+
+          grammarIssues,
+
+          message
+          +
+          ' ('
+          +
+          matches.length
+          +
+          ' occurrence'
+          +
+          (
+            matches.length>1
+            ?
+            's'
+            :
+            ''
+          )
+          +
+          ')'
+
+        );
+
+      }
+
+    }
+
+  );
+
+
+  const repeated=
+  raw.match(
+    /\b([A-Za-z]+)\s+\1\b/gi
+  )
+  ||
+  [];
+
+
+  if(
+    repeated.length
+  ){
+
+    uniquePush(
+
+      grammarIssues,
+
+      'Repeated word detected: '
+      +
+      repeated
+      .slice(
+        0,
+        3
+      )
+      .join(
+        ', '
+      )
+      +
+      '.'
+
+    );
+
+  }
+
+
+  if(
+    (
+      raw.match(
+        /\balthough\b[^.!?]{0,140}\bbut\b/gi
+      )
+      ||
+      []
+    )
+    .length
+  ){
+
+    uniquePush(
+
+      grammarIssues,
+
+      'Avoid pairing “although” with “but” in the same clause structure.'
+
+    );
+
+  }
+
+
+  if(
+    (
+      raw.match(
+        /\bbecause\b[^.!?]{0,140}\bso\b/gi
+      )
+      ||
+      []
+    )
+    .length
+  ){
+
+    uniquePush(
+
+      grammarIssues,
+
+      'Check “because … so …”; normally choose one connector.'
+
+    );
+
+  }
+
+
+  const badSpace=
+  (
+    raw.match(
+      /\s+[,.!?;:]/g
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  if(
+    badSpace
+  ){
+
+    uniquePush(
+
+      mechanicsIssues,
+
+      'Remove spaces before punctuation marks ('
+      +
+      badSpace
+      +
+      ' detected).'
+
+    );
+
+  }
+
+
+  const doubleSpace=
+  (
+    raw.match(
+      / {2,}/g
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  if(
+    doubleSpace
+  ){
+
+    uniquePush(
+
+      mechanicsIssues,
+
+      'Remove repeated spaces ('
+      +
+      doubleSpace
+      +
+      ' detected).'
+
+    );
+
+  }
+
+
+  sentences.forEach(
+
+    (
+      sentence,
+      index
+    )=>{
+
+      const first=
+      (
+        sentence.match(
+          /[A-Za-z]/
+        )
+        ||
+        []
+      )[0];
+
+
+      if(
+        first
+        &&
+        first===first.toLowerCase()
+        &&
+        index<5
+      ){
+
+        uniquePush(
+
+          mechanicsIssues,
+
+          'Some sentences appear to begin with a lowercase letter.'
+
+        );
+
+      }
+
+    }
+
+  );
+
+
+  if(
+    raw.trim()
+    &&
+    !/[.!?]["')\]]?$/.test(
+      raw.trim()
+    )
+  ){
+
+    uniquePush(
+
+      mechanicsIssues,
+
+      'The response does not end with terminal punctuation.'
+
+    );
+
+  }
+
+
+  const contractions=
+  (
+    raw.match(
+      /\b(?:don't|doesn't|didn't|can't|won't|isn't|aren't|wasn't|weren't|it's|they're|we're|i'm|i've|we've|they've|shouldn't|wouldn't|couldn't)\b/gi
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  if(
+    contractions
+  ){
+
+    uniquePush(
+
+      lexicalIssues,
+
+      'Formal IELTS writing usually avoids contractions ('
+      +
+      contractions
+      +
+      ' detected).'
+
+    );
+
+  }
+
+
+  const informal=
+  raw.match(
+    /\b(?:kids|stuff|a lot of|lots of|things)\b/gi
+  )
+  ||
+  [];
+
+
+  if(
+    informal.length
+  ){
+
+    uniquePush(
+
+      lexicalIssues,
+
+      'Consider more formal/precise alternatives for: '
+      +
+      [
+        ...
+        new Set(
+          informal.map(
+            value=>value.toLowerCase()
+          )
+        )
+      ]
+      .slice(
+        0,
+        5
+      )
+      .join(
+        ', '
+      )
+      +
+      '.'
+
+    );
+
+  }
+
+
+  const stop=
+  new Set([
+
+    'the','a','an','and','or','but','if','to','of','in','on','at','for','from','with','by',
+
+    'is','are','was','were','be','been','being','it','this','that','these','those','as',
+
+    'i','we','you','they','he','she','them','their','our','my','your','his','her',
+
+    'do','does','did','have','has','had','can','could','will','would','should','may','might',
+
+    'more','most','some','many','much','very','also','than','so','because'
+
+  ]);
+
+
+  const content=
+  lowerWords.filter(
+
+    word=>
+    word.length>2
+    &&
+    !stop.has(
+      word
+    )
+
+  );
+
+
+  const frequency=
+  {};
+
+
+  content.forEach(
+
+    word=>
+    frequency[word]=
+    (
+      frequency[word]
+      ||
+      0
+    )
+    +
+    1
+
+  );
+
+
+  const repeatedContent=
+  Object.entries(
+    frequency
+  )
+  .filter(
+
+    (
+      [
+        word,
+        count
+      ]
+    )=>
+    count
+    >=
+    Math.max(
+      4,
+      Math.ceil(
+        wordTotal*0.025
+      )
+    )
+
+  )
+  .sort(
+    (
+      a,
+      b
+    )=>
+    b[1]-a[1]
+  )
+  .slice(
+    0,
+    5
+  );
+
+
+  if(
+    repeatedContent.length
+  ){
+
+    uniquePush(
+
+      lexicalIssues,
+
+      'Frequent repetition: '
+      +
+      repeatedContent
+      .map(
+        (
+          [
+            word,
+            count
+          ]
+        )=>
+        word
+        +
+        ' ×'
+        +
+        count
+      )
+      .join(
+        ', '
+      )
+      +
+      '. Consider paraphrasing where natural.'
+
+    );
+
+  }
+
+
+  const uniqueContent=
+  new Set(
+    content
+  )
+  .size;
+
+
+  const diversity=
+  content.length
+  ?
+  uniqueContent/content.length
+  :
+  0;
+
+
+  const connectors=
+  (
+    raw.match(
+      /\b(?:however|therefore|moreover|furthermore|consequently|nevertheless|whereas|while|although|because|thus|hence|overall|in contrast|in comparison|on the other hand|for example|for instance|in addition|as a result)\b/gi
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  const complex=
+  (
+    raw.match(
+      /\b(?:although|whereas|while|because|which|who|that|if|unless|despite|since|when|where)\b/gi
+    )
+    ||
+    []
+  )
+  .length;
+
+
+  return{
+
+    raw:
+    raw,
+
+    wordTotal:
+    wordTotal,
+
+    sentences:
+    sentences,
+
+    paragraphs:
+    paragraphs,
+
+    grammarIssues:
+    grammarIssues,
+
+    lexicalIssues:
+    lexicalIssues,
+
+    mechanicsIssues:
+    mechanicsIssues,
+
+    diversity:
+    diversity,
+
+    connectors:
+    connectors,
+
+    complex:
+    complex,
+
+    detailedIssues:
+    buildDetailedIssues(
+      raw
+    )
+
+  };
+
+}
+
+
+function scoreGrammar(analysis){
+
+  if(
+    analysis.wordTotal<40
+  ){
+
+    return 3.5;
+
+  }
+
+
+  const concreteLanguageIssues=
+  (analysis.detailedIssues || [])
+  .filter(issue=>{
+    const type=issueClass(issue.category);
+    return type==='grammar' || type==='spelling' || type==='mechanics';
+  })
+  .length;
+
+  const issueCount=
+  Math.max(
+    analysis.grammarIssues.length
+    +
+    analysis.mechanicsIssues.length,
+    concreteLanguageIssues
+  );
+
+
+  const density=
+  issueCount
+  /
+  Math.max(
+    1,
+    analysis.wordTotal
+  )
+  *
+  100;
+
+
+  let score=
+  6.5;
+
+
+  if(
+    density>5
+  ){
+
+    score=
+    4.5;
+
+  }
+
+  else if(
+    density>3
+  ){
+
+    score=
+    5.0;
+
+  }
+
+  else if(
+    density>2
+  ){
+
+    score=
+    5.5;
+
+  }
+
+  else if(
+    density>1
+  ){
+
+    score=
+    6.0;
+
+  }
+
+
+  if(
+    analysis.complex>=4
+    &&
+    density<=1.5
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    score
+  );
+
+}
+
+
+function scoreLexical(analysis){
+
+  if(
+    analysis.wordTotal<40
+  ){
+
+    return 3.5;
+
+  }
+
+
+  let score=
+  5.0;
+
+
+  if(
+    analysis.diversity>=0.72
+  ){
+
+    score=
+    7.0;
+
+  }
+
+  else if(
+    analysis.diversity>=0.62
+  ){
+
+    score=
+    6.5;
+
+  }
+
+  else if(
+    analysis.diversity>=0.52
+  ){
+
+    score=
+    6.0;
+
+  }
+
+  else if(
+    analysis.diversity>=0.42
+  ){
+
+    score=
+    5.5;
+
+  }
+
+
+  const wordChoiceIssueCount=
+  (analysis.detailedIssues || [])
+  .filter(issue=>issueClass(issue.category)==='word-choice')
+  .length;
+
+  if(
+    analysis.lexicalIssues.length>=2
+    ||
+    wordChoiceIssueCount>=2
+  ){
+
+    score-=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    score
+  );
+
+}
+
+
+function scoreCoherence(
+  analysis
+){
+
+  if(
+    analysis.wordTotal<40
+  ){
+
+    return 3.5;
+
+  }
+
+
+  let score=
+  5.0;
+
+
+  if(
+    analysis.paragraphs.length>=3
+    &&
+    analysis.paragraphs.length<=5
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    analysis.connectors>=3
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    analysis.connectors>=6
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    analysis.sentences.length>=7
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    Math.min(
+      score,
+      7
+    )
+  );
+
+}
+
+
+function scoreTaskAchievement(
+  analysis
+){
+
+  let score=
+  analysis.wordTotal>=150
+  ?
+  5.5
+  :
+  (
+    analysis.wordTotal>=120
+    ?
+    5.0
+    :
+    4.0
+  );
+
+
+  if(
+    /\b(?:overall|in general|generally|it is clear|it can be seen)\b/i.test(
+      analysis.raw
+    )
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  if(
+    /\b(?:whereas|while|compared with|compared to|in contrast|respectively|more than|less than|higher|lower|increased|decreased|remained|rose|fell|declined|grew|peaked|fluctuated)\b/i.test(
+      analysis.raw
+    )
+  ){
+
+    score+=
+    0.5;
+
+  }
+
+
+  return bandRound(
+    Math.min(
+      score,
+      7
+    )
+  );
+
+}
+
+
+function buildLocalTask1Grade(text){
+
+  const analysis=
+  localLanguageReview(
+    text
+  );
+
+
+  const grammar=
+  scoreGrammar(
+    analysis
+  );
+
+
+  const lexicalResource=
+  scoreLexical(
+    analysis
+  );
+
+
+  const coherenceCohesion=
+  scoreCoherence(
+    analysis
+  );
+
+
+  const taskAchievement=
+  scoreTaskAchievement(
+    analysis
+  );
+
+
+  const band=
+  bandRound(
+    (
+      grammar
+      +
+      lexicalResource
+      +
+      coherenceCohesion
+      +
+      taskAchievement
+    )
+    /
+    4
+  );
+
+
+  const strengths=[];
+
+  const improvements=[];
+
+
+  if(
+    analysis.wordTotal>=150
+  ){
+
+    strengths.push(
+      `Bài đạt yêu cầu tối thiểu 150 từ (${analysis.wordTotal} từ).`
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      `Bài hiện có ${analysis.wordTotal} từ; nên đạt ít nhất 150 từ.`
+    );
+
+  }
+
+
+  if(
+    analysis.paragraphs.length>=3
+  ){
+
+    strengths.push(
+      'Bài đã được chia thành nhiều đoạn.'
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      'Nên chia bài rõ hơn thành mở bài, overview và các body paragraph.'
+    );
+
+  }
+
+
+  if(
+    /\b(?:overall|in general|generally|it is clear|it can be seen)\b/i.test(
+      analysis.raw
+    )
+  ){
+
+    strengths.push(
+      'Có dấu hiệu của phần overview.'
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      'Task 1 cần một overview rõ ràng nêu các xu hướng/đặc điểm chính.'
+    );
+
+  }
+
+
+  if(
+    analysis.connectors>=3
+  ){
+
+    strengths.push(
+      `Có sử dụng từ/cụm liên kết (${analysis.connectors} lượt được phát hiện).`
+    );
+
+  }
+
+  else{
+
+    improvements.push(
+      'Nên dùng từ nối có chọn lọc để liên kết các so sánh và xu hướng.'
+    );
+
+  }
+
+
+  if(
+    analysis.diversity>=0.52
+  ){
+
+    strengths.push(
+      'Từ vựng có mức độ đa dạng tương đối tốt trong phép kiểm tra tự động.'
+    );
+
+  }
+
+
+  analysis.grammarIssues.forEach(
+
+    issue=>
+    improvements.push(
+      'Ngữ pháp: '
+      +
+      issue
+    )
+
+  );
+
+
+  analysis.mechanicsIssues.forEach(
+
+    issue=>
+    improvements.push(
+      'Dấu câu/trình bày: '
+      +
+      issue
+    )
+
+  );
+
+
+  analysis.lexicalIssues.forEach(
+
+    issue=>
+    improvements.push(
+      'Từ vựng/cách dùng từ: '
+      +
+      issue
+    )
+
+  );
+
+
+  if(
+    !analysis.grammarIssues.length
+    &&
+    !analysis.mechanicsIssues.length
+  ){
+
+    strengths.push(
+      'Không phát hiện lỗi phổ biến nào trong bộ quy tắc ngữ pháp/dấu câu cục bộ.'
+    );
+
+  }
+
+
+  return{
+
+    band:
+    band,
+
+    taskAchievement:
+    taskAchievement,
+
+    coherenceCohesion:
+    coherenceCohesion,
+
+    lexicalResource:
+    lexicalResource,
+
+    grammar:
+    grammar,
+
+    strengths:
+    strengths.slice(
+      0,
+      6
+    ),
+
+    improvements:
+    improvements.slice(
+      0,
+      9
+    ),
+
+    overallComment:
+    'Đây là chấm dự phòng ngay trên trình duyệt. Hệ thống kiểm tra độ dài, cấu trúc đoạn/câu, từ nối, mức độ lặp từ, một số lỗi ngữ pháp/collocation phổ biến và dấu câu. Nó không thể đánh giá đầy đủ độ chính xác của số liệu trong biểu đồ, ý nghĩa, mọi lỗi ngữ pháp hay toàn bộ IELTS Band Descriptors như giáo viên/AI grader.',
+
+    detailedIssues:
+    analysis.detailedIssues
+
+  };
+
+}
+
+
+function renderList(
+  id,
+  items
+){
+
+  document
+  .getElementById(
+    id
+  )
+  .innerHTML=
+  (
+    items
+    &&
+    items.length
+    ?
+    items
+    :
+    [
+      'Chưa có nhận xét cụ thể.'
+    ]
+  )
+  .map(
+
+    item=>
+    '<li>'
+    +
+    escapeHTML(
+      item
+    )
+    +
+    '</li>'
+
+  )
+  .join(
+    ''
+  );
+
+}
+
+
+function renderGrade(
+  grade,
+  source,
+  reason
+){
+
+  gradingPending.classList.add(
+    'hidden'
+  );
+
+
+  gradeResult.classList.remove(
+    'hidden'
+  );
+
+
+  gradingSource.classList.remove(
+    'hidden'
+  );
+
+
+  resultBand.textContent=
+  'Band '
+  +
+  Number(
+    grade.band
+  )
+  .toFixed(
+    1
+  );
+
+
+  gradeTA.textContent=
+  grade.taskAchievement;
+
+
+  gradeCC.textContent=
+  grade.coherenceCohesion;
+
+
+  gradeLR.textContent=
+  grade.lexicalResource;
+
+
+  gradeGR.textContent=
+  grade.grammar;
+
+
+  overallComment.textContent=
+  grade.overallComment
+  ||
+  '';
+
+
+  renderList(
+    'strengthsList',
+    grade.strengths
+  );
+
+
+  renderList(
+    'improvementsList',
+    grade.improvements
+  );
+
+
+  lastRenderedGrade=grade;
+
+
+  renderDetailedReview(
+    grade
+  );
+
+
+  if(
+    source==='local'
+  ){
+
+    resultModeText.textContent=
+    'Local diagnostic score — không phải IELTS band chính thức.';
+
+
+    gradingSource.textContent=
+    'AI grader không khả dụng nên hệ thống đã chuyển sang chấm dự phòng trên trình duyệt.'
+    +
+    (
+      reason
+      ?
+      ' Lý do: '
+      +
+      reason
+      :
+      ''
+    );
+
+
+    gradeNote.textContent=
+    'Điểm local chỉ nên dùng để luyện tập. Phần lỗi ngôn ngữ dùng bộ dò ngoài làm tín hiệu, sau đó xác thực lại theo ngữ cảnh trước khi hiển thị gợi ý sửa.';
+
+  }
+
+  else{
+
+    resultModeText.textContent=
+    'Điểm ước lượng từ AI grader cho bài luyện tập.';
+
+
+    gradingSource.textContent=
+    'Nguồn chấm: AI grader qua Apps Script.';
+
+
+    gradeNote.textContent=
+    'Điểm AI vẫn là điểm ước lượng phục vụ luyện tập, không phải điểm IELTS chính thức.';
+
+  }
+
+}
+
+
+function renderLocalGrade(
+  text,
+  reason
+){
+
+  renderGrade(
+
+    buildLocalTask1Grade(
+      text
+    ),
+
+    'local',
+
+    reason
+    ||
+    ''
+
+  );
+
+}
+
+
+async function pollGrade(
+  attemptId,
+  text
+){
+
+  let lastReason=
+  'AI grader chưa trả kết quả hoàn tất.';
+
+
+  for(
+    let attempt=0;
+    attempt<3;
+    attempt++
+  ){
+
+    await delay(
+      1000
+    );
+
+
+    try{
+
+      const response=
+      await jsonpGradeResult(
+        attemptId
+      );
+
+
+      if(
+        response
+        &&
+        response.status==='DONE'
+      ){
+
+        const taskGrade=
+        pickTask1Grade(
+          response.grade
+        );
+
+
+        if(
+          taskGrade
+        ){
+
+          renderGrade(
+            taskGrade,
+            'ai',
+            ''
+          );
+
+          return;
+
+        }
+
+
+        renderLocalGrade(
+          text,
+          'AI trả dữ liệu chấm không đúng định dạng.'
+        );
+
+        return;
+
+      }
+
+
+      if(
+        response
+        &&
+        response.status==='ERROR'
+      ){
+
+        renderLocalGrade(
+
+          text,
+
+          response.error
+          ||
+          'Apps Script báo lỗi khi chấm.'
+
+        );
+
+        return;
+
+      }
+
+
+      if(
+        response
+        &&
+        response.status
+      ){
+
+        lastReason=
+        'Backend status: '
+        +
+        response.status;
+
+      }
+
+    }
+
+    catch(error){
+
+      lastReason=
+      error
+      &&
+      error.message
+      ?
+      error.message
+      :
+      'network/timeout';
+
+    }
+
+  }
+
+
+  renderLocalGrade(
+    text,
+    lastReason
+  );
+
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+async function submitPractice(){
+
+  if(
+    submitted
+  ){
+
+    return;
+
+  }
+
+
+  const text=
+  essay.value.trim();
+
+
+  if(
+    !text
+  ){
+
+    alert(
+      'Em chưa viết nội dung bài.'
+    );
+
+    return;
+
+  }
+
+
+  const words=
+  countWords(
+    text
+  );
+
+
+  if(
+    words<150
+    &&
+    !confirm(
+      `Bài hiện có ${words} từ, chưa đạt 150 từ. Em vẫn muốn nộp?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  submitted=
+  true;
+
+
+  // Normalise leading/trailing whitespace so proofreading offsets stay aligned.
+  essay.value=
+  text;
+
+
+  saveEssay();
+
+
+  essay.disabled=
+  true;
+
+
+  const durationSeconds=
+  Math.floor(
+    (
+      Date.now()
+      -
+      startedAt
+    )
+    /
+    1000
+  );
+
+
+  const student=
+  readStudent();
+
+
+  const paragraphs=
+  countParagraphs(
+    text
+  );
+
+
+  resultBand.textContent=
+  'Đang chấm...';
+
+
+  resultModeText.textContent=
+  'Hệ thống đang thử AI grader.';
+
+
+  resultInfo.innerHTML=
+  `
+    ${escapeHTML(student?.name || '')}
+    ·
+    ${escapeHTML(student?.className || '')}
+
+    <br>
+
+    ${words} từ
+    ·
+    ${paragraphs} đoạn
+    ·
+    Thời gian ${fmt(durationSeconds)}
+  `;
+
+
+  gradingPending.classList.remove(
+    'hidden'
+  );
+
+
+  gradeResult.classList.add(
+    'hidden'
+  );
+
+
+  gradingSource.classList.add(
+    'hidden'
+  );
+
+
+  resultOverlay.classList.remove(
+    'hidden'
+  );
+
+
+  // Run a dedicated proofreading engine in parallel.
+  // This does not replace the AI grader; it supplements grammar/spelling coverage.
+  startLanguageToolReview(
+    text
+  );
+
+
+  const attemptId=
+  makeAttemptId();
+
+
+  const submittedAt=
+  new Date()
+  .toISOString();
+
+
+  const taskPrompt=
+  'The line graph shows the percentage of total music sales accounted for by three different methods — streaming, downloads and CDs — between 2011 and 2018. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.';
+
+
+  const details=
+  JSON.stringify({
+
+    title:
+    'Music sales by method, 2011–2018 - Dynamic Datasets 02',
+
+    taskType:
+    'IELTS Writing Task 1',
+
+    category:
+    'Dynamic Datasets',
+
+    chartType:
+    'Line graph',
+
+    task:
+    taskPrompt,
+
+    essay:
+    text,
+
+    wordCount:
+    words,
+
+    paragraphCount:
+    paragraphs,
+
+    chart:
+    'chart.png',
+
+    attemptId:
+    attemptId
+
+  });
+
+
+  localStorage.setItem(
+
+    ATTEMPT_KEY
+    +
+    '_last_submission',
+
+    JSON.stringify({
+
+      attemptId:
+      attemptId,
+
+      name:
+      student?.name || '',
+
+      className:
+      student?.className || '',
+
+      essay:
+      text,
+
+      wordCount:
+      words,
+
+      paragraphCount:
+      paragraphs,
+
+      durationSeconds:
+      durationSeconds,
+
+      submittedAt:
+      submittedAt
+
+    })
+
+  );
+
+
+  /*
+    1) Giữ nguyên luồng lưu kết quả Practice cũ.
+    Việc này không phụ thuộc AI grader.
+  */
+
+  try{
+
+    await postForm({
+
+      mode:
+      'PRACTICE',
+
+      name:
+      student?.name || '',
+
+      className:
+      student?.className || '',
+
+      skill:
+      'Writing Task 1',
+
+      practiceType:
+      'Dynamic Datasets',
+
+      practiceId:
+      '02',
+
+      score:
+      '',
+
+      total:
+      '',
+
+      durationSeconds:
+      String(
+        durationSeconds
+      ),
+
+      details:
+      details,
+
+      submittedAt:
+      submittedAt
+
+    });
+
+  }
+
+  catch(error){
+
+    console.warn(
+      'Không gửi được Writing Practice:',
+      error
+    );
+
+  }
+
+
+  /*
+    2) Thử AI grader.
+    Nếu API/quota/token/backend lỗi, pollGrade sẽ tự
+    chuyển sang local diagnostic.
+  */
+
+  try{
+
+    await postForm({
+
+      mode:
+      'writingGrade',
+
+      examType:
+      'PRACTICE',
+
+      gradingScope:
+      'TASK1',
+
+      feedbackMode:
+      'DETAILED_LANGUAGE_REVIEW',
+
+      gradingInstructions:
+      'Proofread every sentence in context. Identify as many definite/high-confidence errors as possible in spelling, grammar, verb tense, subject-verb agreement, verb form, word form, punctuation, collocation and IELTS Task 1 wording. Check the full essay sentence by sentence; do not stop after the first few errors. For each issue return category, exact original phrase, exactly one best correction, sentence/context and a short explanation. Prefer context over nearest-spelling guesses. If a phrase is grammatical but inaccurate for this chart (for example using “number” when the graph measures percentage share of total music sales, or describing a method as “popular” when the chart only shows sales share), label it Task 1 wording. Do NOT rewrite the whole essay; return the issue list only. If uncertain, omit that issue rather than inventing a correction.',
+
+      skill:
+      'Writing Task 1',
+
+      practiceType:
+      'Dynamic Datasets',
+
+      practiceId:
+      '02',
+
+      attemptId:
+      attemptId,
+
+      name:
+      student?.name || '',
+
+      className:
+      student?.className || '',
+
+      task1Prompt:
+      taskPrompt,
+
+      task1:
+      text,
+
+      task2:
+      '',
+
+      task1Words:
+      String(
+        words
+      ),
+
+      durationSeconds:
+      String(
+        durationSeconds
+      ),
+
+      submittedAt:
+      submittedAt
+
+    });
+
+
+    pollGrade(
+      attemptId,
+      text
+    );
+
+  }
+
+  catch(error){
+
+    renderLocalGrade(
+
+      text,
+
+      'Không kết nối được Apps Script: '
+      +
+      (
+        error
+        &&
+        error.message
+        ?
+        error.message
+        :
+        'network error'
+      )
+
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function closeResult(){
+
+  resultOverlay.classList.add(
+    'hidden'
+  );
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + TAKE NOTE
+========================================================= */
+
+const selectionMenu=
+document.getElementById(
+  'selectionMenu'
+);
+
+
+const menuHighlight=
+document.getElementById(
+  'menuHighlight'
+);
+
+
+const menuNote=
+document.getElementById(
+  'menuNote'
+);
+
+
+function markupKey(){
+
+  return ATTEMPT_KEY
+  +
+  '_task_markup';
+
+}
+
+
+function saveTaskMarkup(){
+
+  localStorage.setItem(
+
+    markupKey(),
+
+    taskRoot.innerHTML
+
+  );
+
+}
+
+
+function restoreTaskMarkup(){
+
+  const markup=
+  localStorage.getItem(
+    markupKey()
+  );
+
+
+  if(markup){
+
+    taskRoot.innerHTML=
+    markup;
+
+  }
+
+
+  bindContext();
+
+}
+
+
+function resetMenu(){
+
+  menuMode=
+  'selection';
+
+
+  menuTarget=
+  null;
+
+
+  menuHighlight.style.display=
+  '';
+
+
+  menuNote.style.display=
+  '';
+
+
+  menuHighlight.textContent=
+  '🖍 Highlight';
+
+
+  menuNote.textContent=
+  '📝 Take note';
+
+
+  menuHighlight.classList.remove(
+    'danger'
+  );
+
+
+  menuNote.classList.remove(
+    'danger'
+  );
+
+}
+
+
+function hideMenu(){
+
+  selectionMenu.classList.remove(
+    'show'
+  );
+
+
+  resetMenu();
+
+}
+
+
+function showMenu(rect){
+
+  selectionMenu.classList.add(
+    'show'
+  );
+
+
+  requestAnimationFrame(
+
+    ()=>{
+
+      const width=
+      selectionMenu.offsetWidth
+      ||
+      180;
+
+
+      const left=
+      Math.min(
+
+        window.innerWidth-width-10,
+
+        Math.max(
+
+          10,
+
+          rect.left
+          +
+          rect.width/2
+          -
+          width/2
+
+        )
+
+      );
+
+
+      selectionMenu.style.left=
+      left+'px';
+
+
+      selectionMenu.style.top=
+      Math.max(
+        10,
+        rect.top-47
+      )
+      +'px';
+
+    }
+
+  );
+
+}
+
+
+function captureSelection(){
+
+  const selection=
+  window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    !selection.rangeCount
+    ||
+    selection.isCollapsed
+  ){
+
+    return;
+
+  }
+
+
+  const range=
+  selection.getRangeAt(0);
+
+
+  if(
+    !taskRoot.contains(
+      range.commonAncestorContainer
+    )
+  ){
+
+    return;
+
+  }
+
+
+  savedSelection=
+  range.cloneRange();
+
+
+  resetMenu();
+
+
+  showMenu(
+    range.getBoundingClientRect()
+  );
+
+}
+
+
+function clearSelection(){
+
+  const selection=
+  window.getSelection();
+
+
+  if(selection){
+
+    selection.removeAllRanges();
+
+  }
+
+
+  savedSelection=
+  null;
+
+}
+
+
+function addHighlight(){
+
+  if(
+    menuMode===
+    'delete-highlight'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(!savedSelection){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range=
+    savedSelection.cloneRange();
+
+
+    const mark=
+    document.createElement(
+      'mark'
+    );
+
+
+    mark.className=
+    'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveTaskMarkup();
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(error){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function addNote(){
+
+  if(
+    menuMode===
+    'delete-note'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(!savedSelection){
+
+    return;
+
+  }
+
+
+  const note=
+  prompt(
+    'Nhập ghi chú:'
+  );
+
+
+  if(
+    note===null
+    ||
+    !note.trim()
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range=
+    savedSelection.cloneRange();
+
+
+    const span=
+    document.createElement(
+      'span'
+    );
+
+
+    span.className=
+    'note-anchor';
+
+
+    span.dataset.note=
+    note.trim();
+
+
+    span.title=
+    note.trim();
+
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    saveTaskMarkup();
+
+
+    clearSelection();
+
+
+    hideMenu();
+
+  }
+
+  catch(error){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function showDeleteMenu(
+  target,
+  type
+){
+
+  menuTarget=
+  target;
+
+
+  clearSelection();
+
+
+  if(
+    type==='highlight'
+  ){
+
+    menuMode=
+    'delete-highlight';
+
+
+    menuHighlight.textContent=
+    '✕ Xóa highlight';
+
+
+    menuHighlight.classList.add(
+      'danger'
+    );
+
+
+    menuNote.style.display=
+    'none';
+
+  }
+
+  else{
+
+    menuMode=
+    'delete-note';
+
+
+    menuNote.textContent=
+    '✕ Xóa note';
+
+
+    menuNote.classList.add(
+      'danger'
+    );
+
+
+    menuHighlight.style.display=
+    'none';
+
+  }
+
+
+  showMenu(
+    target.getBoundingClientRect()
+  );
+
+}
+
+
+function removeMark(){
+
+  if(!menuTarget){
+
+    return;
+
+  }
+
+
+  const parent=
+  menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+      menuTarget.firstChild,
+      menuTarget
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveTaskMarkup();
+
+
+  hideMenu();
+
+}
+
+
+function bindContext(){
+
+  if(
+    taskRoot.dataset.bound==='1'
+  ){
+
+    return;
+
+  }
+
+
+  taskRoot.dataset.bound=
+  '1';
+
+
+  taskRoot.addEventListener(
+
+    'mouseup',
+
+    ()=>setTimeout(
+      captureSelection,
+      0
+    )
+
+  );
+
+
+  taskRoot.addEventListener(
+
+    'touchend',
+
+    ()=>setTimeout(
+      captureSelection,
+      120
+    )
+
+  );
+
+
+  taskRoot.addEventListener(
+
+    'click',
+
+    event=>{
+
+      const highlight=
+      event.target.closest(
+        'mark.user-highlight'
+      );
+
+
+      const note=
+      event.target.closest(
+        '.note-anchor'
+      );
+
+
+      if(highlight){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          highlight,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          'note'
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+menuHighlight.addEventListener(
+  'click',
+  addHighlight
+);
+
+
+menuNote.addEventListener(
+  'click',
+  addNote
+);
+
+
+document.addEventListener(
+
+  'mousedown',
+
+  event=>{
+
+    if(
+      !selectionMenu.contains(
+        event.target
+      )
+
+      &&
+
+      !event.target.closest(
+        '.user-highlight'
+      )
+
+      &&
+
+      !event.target.closest(
+        '.note-anchor'
+      )
+    ){
+
+      hideMenu();
+
+    }
+
+  }
+
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+  .replace(
+
+    /[&<>"']/g,
+
+    char=>({
+
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+
+    })[char]
+
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+prefill();
+
+bindContext();
+
+</script>
+
+</body>
+</html>
