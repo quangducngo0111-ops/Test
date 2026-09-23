@@ -1,4129 +1,3236 @@
 /* =========================================================
-   VOCABULARY RACER 3D
-   LIGHTWEIGHT RACING VERSION
-   VERSION 7
+   STREET WORD RACER 3D
+   THREE.JS / WEBGL
+
+   GAMEPLAY:
+   - Camera thứ 3 phía sau xe.
+   - 3 làn:
+       trái  = -3
+       giữa  = 0
+       phải  = 3
+   - Mỗi vòng xuất hiện 3 cổng đáp án.
+   - 1 đúng + 2 sai.
+   - Đúng  → tăng tốc + điểm + combo.
+   - Sai   → mất mạng + giảm tốc.
+   - Có 2 xe đối thủ.
 ========================================================= */
 
+(() => {
 
-/* =========================================================
-   1. VOCABULARY
-========================================================= */
+  "use strict";
 
-const VOCABULARY = [
 
-  {
-    word:"critically endangered",
-    meaning:"cực kỳ nguy cấp, có nguy cơ tuyệt chủng rất cao"
-  },
+  /* =========================================================
+     VOCAB DATA DEMO
+  ========================================================= */
 
-  {
-    word:"nocturnal",
-    meaning:"hoạt động về đêm"
-  },
+  const VOCAB = [
 
-  {
-    word:"solitary",
-    meaning:"sống đơn độc"
-  },
+    {
+      word:
+        "public transport",
 
-  {
-    word:"home range",
-    meaning:"phạm vi sinh sống của một cá thể động vật"
-  },
+      correct:
+        "hệ thống giao thông công cộng",
 
-  {
-    word:"forage",
-    meaning:"tìm kiếm thức ăn"
-  },
+      wrong:[
+        "khu dân cư",
+        "ô nhiễm không khí"
+      ]
+    },
 
-  {
-    word:"forest clearance",
-    meaning:"việc phát quang, phá rừng"
-  },
 
-  {
-    word:"predator-free",
-    meaning:"không có động vật săn mồi"
-  },
+    {
+      word:
+        "economic growth",
 
-  {
-    word:"genetic diversity",
-    meaning:"đa dạng di truyền"
-  },
+      correct:
+        "tăng trưởng kinh tế",
 
-  {
-    word:"renewable energy",
-    meaning:"năng lượng tái tạo"
-  },
+      wrong:[
+        "thất nghiệp",
+        "chi tiêu hộ gia đình"
+      ]
+    },
 
-  {
-    word:"artificial lighting",
-    meaning:"hệ thống chiếu sáng nhân tạo"
-  },
 
-  {
-    word:"year-round production",
-    meaning:"sản xuất quanh năm"
-  },
+    {
+      word:
+        "renewable energy",
 
-  {
-    word:"cutting-edge technology",
-    meaning:"công nghệ tiên tiến nhất"
-  }
+      correct:
+        "năng lượng tái tạo",
 
-];
+      wrong:[
+        "nhiên liệu hóa thạch",
+        "khí thải carbon"
+      ]
+    },
 
 
-/* =========================================================
-   2. GAME SETTINGS
-========================================================= */
+    {
+      word:
+        "job security",
 
-/*
-  5 LANES
+      correct:
+        "sự ổn định việc làm",
 
-  Opponent | Answer | Answer | Answer | Opponent
-*/
+      wrong:[
+        "lương tối thiểu",
+        "thị trường lao động"
+      ]
+    },
 
-const PLAYER_LANES = [
 
-  -3.6,
-  0,
-  3.6
+    {
+      word:
+        "higher education",
 
-];
+      correct:
+        "giáo dục đại học",
 
+      wrong:[
+        "giáo dục bắt buộc",
+        "học nghề"
+      ]
+    },
 
-const OPPONENT_LANES = [
 
-  -7.2,
-  7.2
+    {
+      word:
+        "income inequality",
 
-];
+      correct:
+        "bất bình đẳng thu nhập",
 
+      wrong:[
+        "phúc lợi xã hội",
+        "tăng lương"
+      ]
+    },
 
-const BASE_SPEED =
-5;
 
+    {
+      word:
+        "urbanisation",
 
-const MAX_SPEED =
-7.4;
-
-
-/*
-  Khoảng 9-10 giây đọc câu đầu.
-*/
-
-const FIRST_GATE_DISTANCE =
-49;
-
-
-const NEXT_GATE_DISTANCE =
-54;
-
-
-const BOOST_MULTIPLIER =
-1.43;
-
-
-const BOOST_DURATION =
-1.65;
-
-
-const WRONG_SPEED_MULTIPLIER =
-0.76;
-
-
-const WRONG_SLOW_DURATION =
-1.25;
-
-
-const TOTAL_QUESTIONS =
-12;
-
-
-const COLLISION_DISTANCE =
-1.7;
-
-
-/* =========================================================
-   3. DOM
-========================================================= */
-
-const container =
-document.getElementById(
-  "game-container"
-);
-
-
-const targetWordEl =
-document.getElementById(
-  "target-word"
-);
-
-
-const scoreEl =
-document.getElementById(
-  "score"
-);
-
-
-const speedEl =
-document.getElementById(
-  "speed"
-);
-
-
-const positionEl =
-document.getElementById(
-  "position"
-);
-
-
-const comboEl =
-document.getElementById(
-  "combo"
-);
-
-
-const progressEl =
-document.getElementById(
-  "progress"
-);
-
-
-const feedbackEl =
-document.getElementById(
-  "feedback"
-);
-
-
-const speedEffect =
-document.getElementById(
-  "speed-effect"
-);
-
-
-const startScreen =
-document.getElementById(
-  "start-screen"
-);
-
-
-const gameOverScreen =
-document.getElementById(
-  "game-over-screen"
-);
-
-
-const gameOverTitle =
-document.getElementById(
-  "game-over-title"
-);
-
-
-const finalSummary =
-document.getElementById(
-  "final-summary"
-);
-
-
-const resultIcon =
-document.getElementById(
-  "result-icon"
-);
-
-
-const startBtn =
-document.getElementById(
-  "start-btn"
-);
-
-
-const restartBtn =
-document.getElementById(
-  "restart-btn"
-);
-
-
-const leftBtn =
-document.getElementById(
-  "left-btn"
-);
-
-
-const rightBtn =
-document.getElementById(
-  "right-btn"
-);
-
-
-/* =========================================================
-   4. THREE.JS
-========================================================= */
-
-const scene =
-new THREE.Scene();
-
-
-scene.background =
-new THREE.Color(
-  0x92d7ff
-);
-
-
-scene.fog =
-new THREE.Fog(
-
-  0x92d7ff,
-
-  70,
-
-  190
-
-);
-
-
-/* =========================================================
-   CAMERA
-========================================================= */
-
-const camera =
-new THREE.PerspectiveCamera(
-
-  60,
-
-  window.innerWidth /
-  window.innerHeight,
-
-  0.1,
-
-  400
-
-);
-
-
-scene.add(
-  camera
-);
-
-
-/* =========================================================
-   RENDERER
-========================================================= */
-
-const renderer =
-new THREE.WebGLRenderer({
-
-  antialias:true,
-
-  powerPreference:
-  "high-performance"
-
-});
-
-
-/*
-  Bản trước dùng tới DPR 2.
-
-  Đây là một trong các nguyên nhân
-  khiến laptop yếu bị giật.
-
-  Bản này giới hạn 1.25.
-*/
-
-renderer.setPixelRatio(
-
-  Math.min(
-
-    window.devicePixelRatio,
-
-    1.25
-
-  )
-
-);
-
-
-renderer.setSize(
-
-  window.innerWidth,
-
-  window.innerHeight
-
-);
-
-
-/*
-  Tắt shadows hoàn toàn.
-
-  Giảm tải GPU rất nhiều.
-*/
-
-renderer.shadowMap.enabled =
-false;
-
-
-renderer.outputColorSpace =
-THREE.SRGBColorSpace;
-
-
-container.appendChild(
-  renderer.domElement
-);
-
-
-/* =========================================================
-   5. LIGHT
-========================================================= */
-
-const skyLight =
-new THREE.HemisphereLight(
-
-  0xffffff,
-
-  0x52734c,
-
-  2.1
-
-);
-
-
-scene.add(
-  skyLight
-);
-
-
-const sun =
-new THREE.DirectionalLight(
-
-  0xffffff,
-
-  1.6
-
-);
-
-
-sun.position.set(
-
-  -15,
-
-  20,
-
-  10
-
-);
-
-
-scene.add(
-  sun
-);
-
-
-/* =========================================================
-   6. ROAD TEXTURE
-========================================================= */
-
-function createRoadTexture(){
-
-  const canvas =
-  document.createElement(
-    "canvas"
-  );
-
-
-  canvas.width =
-  900;
-
-
-  canvas.height =
-  1800;
-
-
-  const ctx =
-  canvas.getContext(
-    "2d"
-  );
-
-
-  /*
-    Asphalt.
-  */
-
-  ctx.fillStyle =
-  "#343942";
-
-
-  ctx.fillRect(
-
-    0,
-
-    0,
-
-    canvas.width,
-
-    canvas.height
-
-  );
-
-
-  /*
-    Subtle asphalt bands.
-  */
-
-  for(
-    let i = 0;
-    i < 100;
-    i++
-  ){
-
-    const alpha =
-    Math.random() *
-    0.025;
-
-
-    ctx.fillStyle =
-    `rgba(255,255,255,${alpha})`;
-
-
-    ctx.fillRect(
-
-      0,
-
-      Math.random() *
-      canvas.height,
-
-      canvas.width,
-
-      Math.random() *
-      3 +
-      1
-
-    );
-
-  }
-
-
-  /*
-    Road edges.
-  */
-
-  ctx.fillStyle =
-  "#ffffff";
-
-
-  ctx.fillRect(
-
-    12,
-
-    0,
-
-    12,
-
-    canvas.height
-
-  );
-
-
-  ctx.fillRect(
-
-    canvas.width - 24,
-
-    0,
-
-    12,
-
-    canvas.height
-
-  );
-
-
-  /*
-    5 lanes = 4 dashed lines.
-  */
-
-  const divisions = [
-
-    .2,
-    .4,
-    .6,
-    .8
+      correct:
+        "đô thị hóa",
+
+      wrong:[
+        "di cư quốc tế",
+        "quy hoạch nông thôn"
+      ]
+    },
+
+
+    {
+      word:
+        "consumer demand",
+
+      correct:
+        "nhu cầu tiêu dùng",
+
+      wrong:[
+        "chi phí sản xuất",
+        "thị phần"
+      ]
+    }
 
   ];
 
 
-  ctx.strokeStyle =
-  "rgba(255,255,255,.72)";
+
+  /* =========================================================
+     CONSTANTS
+  ========================================================= */
+
+  const LANE_X = [
+    -3,
+    0,
+    3
+  ];
 
 
-  ctx.lineWidth =
-  7;
+  const PLAYER_Z =
+    4;
 
 
-  ctx.setLineDash(
-    [
-      75,
-      65
-    ]
-  );
+  const GATE_START_Z =
+    -52;
 
 
-  divisions.forEach(
-    ratio => {
-
-      ctx.beginPath();
+  const COLLISION_Z =
+    2.5;
 
 
-      ctx.moveTo(
 
-        canvas.width *
-        ratio,
+  /* =========================================================
+     THREE VARIABLES
+  ========================================================= */
 
-        0
+  let scene;
 
-      );
+  let camera;
 
+  let renderer;
 
-      ctx.lineTo(
-
-        canvas.width *
-        ratio,
-
-        canvas.height
-
-      );
+  let clock;
 
 
-      ctx.stroke();
+  let playerCar;
 
+  let rivalLeft;
+
+  let rivalRight;
+
+
+
+  /* =========================================================
+     GAME STATE
+  ========================================================= */
+
+  let targetLane =
+    1;
+
+
+  let score =
+    0;
+
+
+  let lives =
+    5;
+
+
+  let combo =
+    0;
+
+
+  let gameEnded =
+    false;
+
+
+  let baseSpeed =
+    15;
+
+
+  let boost =
+    0;
+
+
+  let wrongSlow =
+    0;
+
+
+  let round =
+    null;
+
+
+  let roundTimer =
+    null;
+
+
+  let roadLines =
+    [];
+
+
+  let particles =
+    [];
+
+
+  let rivalState = [
+
+    {
+      mesh:null,
+
+      lane:0,
+
+      z:0,
+
+      targetZ:0,
+
+      overtaking:false
+    },
+
+
+    {
+      mesh:null,
+
+      lane:2,
+
+      z:-2,
+
+      targetZ:-2,
+
+      overtaking:false
     }
-  );
 
+  ];
 
-  const texture =
-  new THREE.CanvasTexture(
-    canvas
-  );
 
 
-  texture.colorSpace =
-  THREE.SRGBColorSpace;
+  /* =========================================================
+     HTML ELEMENTS
+  ========================================================= */
 
+  const targetWordEl =
+    document.getElementById(
+      "targetWord"
+    );
 
-  texture.wrapS =
-  THREE.RepeatWrapping;
 
+  const scoreEl =
+    document.getElementById(
+      "score"
+    );
 
-  texture.wrapT =
-  THREE.RepeatWrapping;
 
+  const livesEl =
+    document.getElementById(
+      "lives"
+    );
 
-  texture.repeat.set(
 
-    1,
+  const comboEl =
+    document.getElementById(
+      "combo"
+    );
 
-    14
 
-  );
+  const speedEl =
+    document.getElementById(
+      "speed"
+    );
 
 
-  return texture;
+  const messageEl =
+    document.getElementById(
+      "message"
+    );
 
-}
 
+  const bootErrorEl =
+    document.getElementById(
+      "bootError"
+    );
 
-/* =========================================================
-   7. WORLD
-========================================================= */
 
-let road;
+  const gameOverEl =
+    document.getElementById(
+      "gameOver"
+    );
 
-let grass;
 
+  const gameOverTextEl =
+    document.getElementById(
+      "gameOverText"
+    );
 
-const roadsideObjects =
-[];
 
 
-function createWorld(){
+  /* =========================================================
+     START
+  ========================================================= */
 
-  /*
-    Grass.
-  */
-
-  grass =
-  new THREE.Mesh(
-
-    new THREE.PlaneGeometry(
-
-      100,
-
-      3200
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color:0x4f984f
-
-    })
-
-  );
-
-
-  grass.rotation.x =
-  -Math.PI / 2;
-
-
-  grass.position.set(
-
-    0,
-
-    -0.05,
-
-    -1500
-
-  );
-
-
-  scene.add(
-    grass
-  );
-
-
-  /*
-    Road.
-  */
-
-  road =
-  new THREE.Mesh(
-
-    new THREE.PlaneGeometry(
-
-      18,
-
-      3200
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      map:
-      createRoadTexture()
-
-    })
-
-  );
-
-
-  road.rotation.x =
-  -Math.PI / 2;
-
-
-  road.position.set(
-
-    0,
-
-    0,
-
-    -1500
-
-  );
-
-
-  scene.add(
-    road
-  );
-
-
-  createScenery();
-
-}
-
-
-/* =========================================================
-   8. LIGHTWEIGHT TREE
-========================================================= */
-
-function createTree(){
-
-  const group =
-  new THREE.Group();
-
-
-  const trunk =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      .22,
-
-      1.45,
-
-      .22
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color:0x76513a
-
-    })
-
-  );
-
-
-  trunk.position.y =
-  .72;
-
-
-  group.add(
-    trunk
-  );
-
-
-  const crown =
-  new THREE.Mesh(
-
-    new THREE.ConeGeometry(
-
-      .85,
-
-      2.4,
-
-      6
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color:0x246f3c
-
-    })
-
-  );
-
-
-  crown.position.y =
-  2.35;
-
-
-  group.add(
-    crown
-  );
-
-
-  return group;
-
-}
-
-
-/* =========================================================
-   ROADSIDE POST
-========================================================= */
-
-function createPost(){
-
-  const group =
-  new THREE.Group();
-
-
-  const pole =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      .11,
-
-      .75,
-
-      .11
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color:0xf2f2f2
-
-    })
-
-  );
-
-
-  pole.position.y =
-  .375;
-
-
-  group.add(
-    pole
-  );
-
-
-  const reflector =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      .16,
-
-      .18,
-
-      .08
-
-    ),
-
-    new THREE.MeshBasicMaterial({
-
-      color:0xffc94e
-
-    })
-
-  );
-
-
-  reflector.position.y =
-  .67;
-
-
-  group.add(
-    reflector
-  );
-
-
-  return group;
-
-}
-
-
-/* =========================================================
-   9. SCENERY
-========================================================= */
-
-function createScenery(){
-
-  /*
-    Chỉ 24 vị trí.
-
-    Rất nhẹ.
-  */
-
-  for(
-    let i = 0;
-    i < 24;
-    i++
+  if(
+    !window.THREE
   ){
 
-    const z =
-    -15 -
-    i * 14;
+    showBootError(
+      "Không tải được Three.js.\n" +
+      "Kiểm tra kết nối Internet hoặc CDN."
+    );
+
+    return;
+
+  }
 
 
-    const left =
-    i % 3 === 0
-    ?
-    createTree()
-    :
-    createPost();
+  try{
 
+    init();
 
-    left.position.set(
+    animate();
 
-      i % 3 === 0
-      ?
-      -11
-      :
-      -9.7,
+  }
 
-      0,
+  catch(error){
 
-      z
-
+    console.error(
+      error
     );
 
 
-    scene.add(
-      left
-    );
-
-
-    roadsideObjects.push(
-      left
-    );
-
-
-    const right =
-    i % 3 === 0
-    ?
-    createTree()
-    :
-    createPost();
-
-
-    right.position.set(
-
-      i % 3 === 0
-      ?
-      11
-      :
-      9.7,
-
-      0,
-
-      z - 7
-
-    );
-
-
-    scene.add(
-      right
-    );
-
-
-    roadsideObjects.push(
-      right
+    showBootError(
+      error?.stack
+      ||
+      error?.message
+      ||
+      String(error)
     );
 
   }
 
 
-  /*
-    Mountains.
 
-    Low-poly, không shadow.
-  */
+  /* =========================================================
+     INIT
+  ========================================================= */
 
-  for(
-    let i = 0;
-    i < 6;
-    i++
-  ){
+  function init(){
 
-    const mountain =
+    scene =
+    new THREE.Scene();
+
+
+    scene.background =
+    new THREE.Color(
+      0x7cb5df
+    );
+
+
+    scene.fog =
+    new THREE.Fog(
+      0x7cb5df,
+      35,
+      120
+    );
+
+
+    camera =
+    new THREE.PerspectiveCamera(
+
+      58,
+
+      window.innerWidth
+      /
+      window.innerHeight,
+
+      .1,
+
+      180
+
+    );
+
+
+    renderer =
+    new THREE.WebGLRenderer({
+
+      antialias:true,
+
+      powerPreference:
+        "high-performance"
+
+    });
+
+
+    renderer.setPixelRatio(
+
+      Math.min(
+
+        window.devicePixelRatio
+        ||
+        1,
+
+        1.7
+
+      )
+
+    );
+
+
+    renderer.setSize(
+
+      window.innerWidth,
+
+      window.innerHeight
+
+    );
+
+
+    renderer.shadowMap.enabled =
+    true;
+
+
+    renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+
+    document
+    .getElementById(
+      "game"
+    )
+    .prepend(
+      renderer.domElement
+    );
+
+
+    clock =
+    new THREE.Clock();
+
+
+    createLights();
+
+
+    createWorld();
+
+
+    createCars();
+
+
+    setupControls();
+
+
+    startRound();
+
+
+    updateHUD();
+
+
+    window.addEventListener(
+
+      "resize",
+
+      onResize
+
+    );
+
+  }
+
+
+
+  /* =========================================================
+     LIGHT
+  ========================================================= */
+
+  function createLights(){
+
+    const ambient =
+    new THREE.AmbientLight(
+
+      0xffffff,
+
+      1.25
+
+    );
+
+
+    scene.add(
+      ambient
+    );
+
+
+    const sun =
+    new THREE.DirectionalLight(
+
+      0xffffff,
+
+      2.1
+
+    );
+
+
+    sun.position.set(
+
+      10,
+
+      15,
+
+      8
+
+    );
+
+
+    sun.castShadow =
+    true;
+
+
+    sun.shadow.mapSize.set(
+
+      1024,
+
+      1024
+
+    );
+
+
+    sun.shadow.camera.left =
+    -18;
+
+
+    sun.shadow.camera.right =
+    18;
+
+
+    sun.shadow.camera.top =
+    24;
+
+
+    sun.shadow.camera.bottom =
+    -14;
+
+
+    scene.add(
+      sun
+    );
+
+  }
+
+
+
+  /* =========================================================
+     WORLD
+  ========================================================= */
+
+  function createWorld(){
+
+    /* Ground */
+
+    const ground =
     new THREE.Mesh(
 
-      new THREE.ConeGeometry(
+      new THREE.PlaneGeometry(
 
-        12 +
-        Math.random() * 7,
+        80,
 
-        20 +
-        Math.random() * 9,
-
-        5
+        220
 
       ),
 
-      new THREE.MeshLambertMaterial({
+      new THREE.MeshStandardMaterial({
 
         color:
-        i % 2 === 0
-        ?
-        0x7796a5
-        :
-        0x6d8795
+          0x31583c,
+
+        roughness:
+          .95
 
       })
 
     );
 
 
-    mountain.position.set(
+    ground.rotation.x =
+    -Math.PI / 2;
 
+
+    ground.position.z =
+    -55;
+
+
+    ground.receiveShadow =
+    true;
+
+
+    scene.add(
+      ground
+    );
+
+
+
+    /* Road */
+
+    const road =
+    new THREE.Mesh(
+
+      new THREE.PlaneGeometry(
+
+        12,
+
+        220
+
+      ),
+
+      new THREE.MeshStandardMaterial({
+
+        color:
+          0x353c47,
+
+        roughness:
+          .9
+
+      })
+
+    );
+
+
+    road.rotation.x =
+    -Math.PI / 2;
+
+
+    road.position.set(
+
+      0,
+
+      .02,
+
+      -55
+
+    );
+
+
+    road.receiveShadow =
+    true;
+
+
+    scene.add(
+      road
+    );
+
+
+
+    /* Road edge */
+
+    [
+      -6.25,
+      6.25
+    ]
+    .forEach(
+      x => {
+
+        const edge =
+        new THREE.Mesh(
+
+          new THREE.BoxGeometry(
+
+            .45,
+
+            .25,
+
+            220
+
+          ),
+
+          new THREE.MeshStandardMaterial({
+
+            color:
+              0xe8e8e8
+
+          })
+
+        );
+
+
+        edge.position.set(
+
+          x,
+
+          .12,
+
+          -55
+
+        );
+
+
+        edge.receiveShadow =
+        true;
+
+
+        scene.add(
+          edge
+        );
+
+      }
+    );
+
+
+
+    /* Lane stripes */
+
+    for(
+
+      let z = -105;
+
+      z < 10;
+
+      z += 7
+
+    ){
+
+      [
+        -1.5,
+        1.5
+      ]
+      .forEach(
+        x => {
+
+          const stripe =
+          new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+              .12,
+
+              .035,
+
+              3
+
+            ),
+
+            new THREE.MeshStandardMaterial({
+
+              color:
+                0xffffff
+
+            })
+
+          );
+
+
+          stripe.position.set(
+
+            x,
+
+            .055,
+
+            z
+
+          );
+
+
+          stripe.receiveShadow =
+          true;
+
+
+          roadLines.push(
+            stripe
+          );
+
+
+          scene.add(
+            stripe
+          );
+
+        }
+      );
+
+    }
+
+
+    createBuildings();
+
+  }
+
+
+
+  /* =========================================================
+     CITY
+  ========================================================= */
+
+  function createBuildings(){
+
+    const materials = [
+
+      0x496580,
+      0x405873,
+      0x526c87,
+      0x3c536e
+
+    ]
+    .map(
+      color =>
+      new THREE.MeshStandardMaterial({
+
+        color,
+
+        roughness:.85
+
+      })
+    );
+
+
+    for(
+
+      let i = 0;
+
+      i < 42;
+
+      i++
+
+    ){
+
+      const side =
       i % 2 === 0
       ?
-      -35 -
-      i * 4
+      -1
       :
-      35 +
-      i * 4,
+      1;
 
-      7,
 
-      -120 -
-      i * 28
+      const width =
+      2.5
+      +
+      Math.random() * 3.5;
 
+
+      const height =
+      3
+      +
+      Math.random() * 9;
+
+
+      const depth =
+      3
+      +
+      Math.random() * 5;
+
+
+      const building =
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          width,
+
+          height,
+
+          depth
+
+        ),
+
+        materials[
+          i
+          %
+          materials.length
+        ]
+
+      );
+
+
+      building.position.set(
+
+        side
+        *
+        (
+          9
+          +
+          Math.random()
+          *
+          9
+        ),
+
+        height / 2,
+
+        -4
+        -
+        Math.random()
+        *
+        108
+
+      );
+
+
+      building.castShadow =
+      true;
+
+
+      building.receiveShadow =
+      true;
+
+
+      scene.add(
+        building
+      );
+
+    }
+
+  }
+
+
+
+  /* =========================================================
+     CAR
+  ========================================================= */
+
+  function createCar(
+    color
+  ){
+
+    const group =
+    new THREE.Group();
+
+
+    const bodyMaterial =
+    new THREE.MeshStandardMaterial({
+
+      color,
+
+      roughness:.35,
+
+      metalness:.28
+
+    });
+
+
+    const darkMaterial =
+    new THREE.MeshStandardMaterial({
+
+      color:
+        0x11151c,
+
+      roughness:.85
+
+    });
+
+
+    const glassMaterial =
+    new THREE.MeshStandardMaterial({
+
+      color:
+        0x65c4ee,
+
+      roughness:.18,
+
+      metalness:.15
+
+    });
+
+
+
+    /* Main body */
+
+    const body =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+
+        1.75,
+
+        .55,
+
+        3.1
+
+      ),
+
+      bodyMaterial
+
+    );
+
+
+    body.position.y =
+    .45;
+
+
+    body.castShadow =
+    true;
+
+
+    group.add(
+      body
+    );
+
+
+
+    /* Cabin */
+
+    const cabin =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+
+        1.35,
+
+        .6,
+
+        1.5
+
+      ),
+
+      glassMaterial
+
+    );
+
+
+    cabin.position.set(
+
+      0,
+
+      .93,
+
+      -.1
+
+    );
+
+
+    cabin.castShadow =
+    true;
+
+
+    group.add(
+      cabin
+    );
+
+
+
+    /* Spoiler */
+
+    const spoiler =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+
+        1.5,
+
+        .12,
+
+        .24
+
+      ),
+
+      darkMaterial
+
+    );
+
+
+    spoiler.position.set(
+
+      0,
+
+      .8,
+
+      1.52
+
+    );
+
+
+    group.add(
+      spoiler
+    );
+
+
+
+    /* Wheels */
+
+    const wheelGeometry =
+    new THREE.CylinderGeometry(
+
+      .34,
+
+      .34,
+
+      .28,
+
+      18
+
+    );
+
+
+    const wheelPositions = [
+
+      [
+        -.92,
+        .25,
+        -.95
+      ],
+
+      [
+        .92,
+        .25,
+        -.95
+      ],
+
+      [
+        -.92,
+        .25,
+        .95
+      ],
+
+      [
+        .92,
+        .25,
+        .95
+      ]
+
+    ];
+
+
+    wheelPositions
+    .forEach(
+      position => {
+
+        const wheel =
+        new THREE.Mesh(
+
+          wheelGeometry,
+
+          darkMaterial
+
+        );
+
+
+        wheel.rotation.z =
+        Math.PI / 2;
+
+
+        wheel.position.set(
+
+          ...position
+
+        );
+
+
+        wheel.castShadow =
+        true;
+
+
+        group.add(
+          wheel
+        );
+
+      }
+    );
+
+
+    return group;
+
+  }
+
+
+
+  /* =========================================================
+     CARS
+  ========================================================= */
+
+  function createCars(){
+
+    playerCar =
+    createCar(
+      0xff3b30
+    );
+
+
+    playerCar.position.set(
+
+      0,
+
+      .48,
+
+      PLAYER_Z
+
+    );
+
+
+    playerCar.rotation.y =
+    Math.PI;
+
+
+    scene.add(
+      playerCar
+    );
+
+
+
+    rivalLeft =
+    createCar(
+      0x30d47c
+    );
+
+
+    rivalLeft.scale.setScalar(
+      .88
     );
 
 
     scene.add(
-      mountain
+      rivalLeft
     );
 
 
-    roadsideObjects.push(
-      mountain
+
+    rivalRight =
+    createCar(
+      0x4187ff
+    );
+
+
+    rivalRight.scale.setScalar(
+      .88
+    );
+
+
+    scene.add(
+      rivalRight
+    );
+
+
+    rivalState[0].mesh =
+    rivalLeft;
+
+
+    rivalState[1].mesh =
+    rivalRight;
+
+
+    /* Camera behind player */
+
+    camera.position.set(
+
+      0,
+
+      5.1,
+
+      11.5
+
+    );
+
+
+    camera.lookAt(
+
+      0,
+
+      1,
+
+      -14
+
     );
 
   }
 
-}
 
 
-/* =========================================================
-   10. PLAYER PROXY
-========================================================= */
+  /* =========================================================
+     TEXT TEXTURE
+  ========================================================= */
 
-const player =
-new THREE.Group();
+  function createTextTexture(
+    text
+  ){
 
+    const canvas =
+    document.createElement(
+      "canvas"
+    );
 
-player.position.set(
 
-  0,
+    canvas.width =
+    768;
 
-  0,
 
-  5
+    canvas.height =
+    256;
 
-);
 
+    const ctx =
+    canvas.getContext(
+      "2d"
+    );
 
-scene.add(
-  player
-);
 
+    ctx.fillStyle =
+    "#102849";
 
-/* =========================================================
-   11. COCKPIT
-========================================================= */
 
-let steeringWheel;
+    ctx.fillRect(
 
-let dashboardSpeedNeedle;
+      0,
 
+      0,
 
-function createCockpit(){
+      canvas.width,
 
-  const cockpit =
-  new THREE.Group();
+      canvas.height
 
+    );
 
-  /*
-    Hood.
-  */
 
-  const hood =
-  new THREE.Mesh(
+    ctx.strokeStyle =
+    "#67dbff";
 
-    new THREE.BoxGeometry(
 
-      4.4,
+    ctx.lineWidth =
+    13;
 
-      .15,
 
-      2.7
+    ctx.strokeRect(
 
-    ),
+      7,
 
-    new THREE.MeshLambertMaterial({
+      7,
 
-      color:0xe03b42
+      canvas.width - 14,
 
-    })
+      canvas.height - 14
 
-  );
+    );
 
 
-  hood.position.set(
+    ctx.fillStyle =
+    "#ffffff";
 
-    0,
 
-    -.92,
+    ctx.font =
+    "700 53px Arial";
 
-    -3.55
 
-  );
+    ctx.textAlign =
+    "center";
 
 
-  cockpit.add(
-    hood
-  );
+    ctx.textBaseline =
+    "middle";
 
 
-  /*
-    Dashboard.
-  */
+    drawWrappedText(
 
-  const dashboard =
-  new THREE.Mesh(
+      ctx,
 
-    new THREE.BoxGeometry(
+      String(text),
 
-      6.2,
+      canvas.width / 2,
 
-      .48,
+      canvas.height / 2,
 
-      1.05
+      650,
 
-    ),
+      62
 
-    new THREE.MeshLambertMaterial({
+    );
 
-      color:0x111720
 
-    })
+    const texture =
+    new THREE.CanvasTexture(
+      canvas
+    );
 
-  );
 
+    texture.colorSpace =
+    THREE.SRGBColorSpace;
 
-  dashboard.position.set(
 
-    0,
+    texture.needsUpdate =
+    true;
 
-    -1.21,
 
-    -2
+    return texture;
 
-  );
+  }
 
 
-  cockpit.add(
-    dashboard
-  );
 
+  function drawWrappedText(
+    ctx,
+    text,
+    centerX,
+    centerY,
+    maxWidth,
+    lineHeight
+  ){
 
-  /*
-    Instrument panel.
-  */
+    const words =
+    text.split(
+      " "
+    );
 
-  const instrumentPanel =
-  new THREE.Mesh(
 
-    new THREE.BoxGeometry(
+    const lines =
+    [];
 
-      1.65,
 
-      .48,
+    let line =
+    "";
 
-      .08
 
-    ),
+    words
+    .forEach(
+      word => {
 
-    new THREE.MeshBasicMaterial({
-
-      color:0x253246
-
-    })
-
-  );
-
-
-  instrumentPanel.position.set(
-
-    .25,
-
-    -.98,
-
-    -1.45
-
-  );
-
-
-  cockpit.add(
-    instrumentPanel
-  );
-
-
-  /*
-    Speed needle.
-  */
-
-  dashboardSpeedNeedle =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      .04,
-
-      .33,
-
-      .035
-
-    ),
-
-    new THREE.MeshBasicMaterial({
-
-      color:0xff5454
-
-    })
-
-  );
-
-
-  dashboardSpeedNeedle.position.set(
-
-    .25,
-
-    -.98,
-
-    -1.39
-
-  );
-
-
-  cockpit.add(
-    dashboardSpeedNeedle
-  );
-
-
-  /*
-    Steering wheel.
-  */
-
-  steeringWheel =
-  new THREE.Mesh(
-
-    new THREE.TorusGeometry(
-
-      .38,
-
-      .065,
-
-      10,
-
-      28
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color:0x101319
-
-    })
-
-  );
-
-
-  steeringWheel.position.set(
-
-    -.78,
-
-    -.64,
-
-    -1.55
-
-  );
-
-
-  steeringWheel.rotation.x =
-  Math.PI / 2;
-
-
-  cockpit.add(
-    steeringWheel
-  );
-
-
-  /*
-    Windshield pillars.
-  */
-
-  const pillarMaterial =
-  new THREE.MeshLambertMaterial({
-
-    color:0x171a20
-
-  });
-
-
-  const leftPillar =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      .13,
-
-      3,
-
-      .17
-
-    ),
-
-    pillarMaterial
-
-  );
-
-
-  leftPillar.position.set(
-
-    -2.75,
-
-    .15,
-
-    -2.4
-
-  );
-
-
-  leftPillar.rotation.z =
-  -.18;
-
-
-  cockpit.add(
-    leftPillar
-  );
-
-
-  const rightPillar =
-  leftPillar.clone();
-
-
-  rightPillar.position.x =
-  2.75;
-
-
-  rightPillar.rotation.z =
-  .18;
-
-
-  cockpit.add(
-    rightPillar
-  );
-
-
-  camera.add(
-    cockpit
-  );
-
-}
-
-
-/* =========================================================
-   12. OPPONENT CAR
-========================================================= */
-
-function createOpponentCar(
-  color
-){
-
-  const car =
-  new THREE.Group();
-
-
-  /*
-    Lower body.
-  */
-
-  const body =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      1.75,
-
-      .48,
-
-      3
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color
-
-    })
-
-  );
-
-
-  body.position.y =
-  .55;
-
-
-  car.add(
-    body
-  );
-
-
-  /*
-    Bonnet.
-  */
-
-  const bonnet =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      1.55,
-
-      .22,
-
-      .9
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color
-
-    })
-
-  );
-
-
-  bonnet.position.set(
-
-    0,
-
-    .82,
-
-    -1
-
-  );
-
-
-  car.add(
-    bonnet
-  );
-
-
-  /*
-    Cabin.
-  */
-
-  const cabin =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      1.35,
-
-      .58,
-
-      1.25
-
-    ),
-
-    new THREE.MeshLambertMaterial({
-
-      color:0x22334b
-
-    })
-
-  );
-
-
-  cabin.position.set(
-
-    0,
-
-    1.05,
-
-    .15
-
-  );
-
-
-  car.add(
-    cabin
-  );
-
-
-  /*
-    Rear lights.
-  */
-
-  const lightMaterial =
-  new THREE.MeshBasicMaterial({
-
-    color:0xff3030
-
-  });
-
-
-  [
-    -.55,
-    .55
-  ]
-  .forEach(
-    x => {
-
-      const light =
-      new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-
-          .3,
-
-          .14,
-
-          .05
-
-        ),
-
-        lightMaterial
-
-      );
-
-
-      light.position.set(
-
-        x,
-
-        .62,
-
-        1.52
-
-      );
-
-
-      car.add(
-        light
-      );
-
-    }
-  );
-
-
-  /*
-    Wheels.
-
-    Dùng box thay cylinder để nhẹ hơn.
-  */
-
-  const wheelMaterial =
-  new THREE.MeshLambertMaterial({
-
-    color:0x101215
-
-  });
-
-
-  [
-    [-.96,.35,-.9],
-    [.96,.35,-.9],
-    [-.96,.35,.9],
-    [.96,.35,.9]
-  ]
-  .forEach(
-    p => {
-
-      const wheel =
-      new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-
-          .24,
-
-          .48,
-
-          .52
-
-        ),
-
-        wheelMaterial
-
-      );
-
-
-      wheel.position.set(
-
-        p[0],
-        p[1],
-        p[2]
-
-      );
-
-
-      car.add(
-        wheel
-      );
-
-    }
-  );
-
-
-  scene.add(
-    car
-  );
-
-
-  return car;
-
-}
-
-
-/* =========================================================
-   13. OPPONENT STATE
-========================================================= */
-
-const opponentLeft = {
-
-  mesh:
-  createOpponentCar(
-    0x367cff
-  ),
-
-  lane:
-  OPPONENT_LANES[0],
-
-  relativeZ:
-  -2.5,
-
-  targetRelativeZ:
-  -2.5,
-
-  boost:
-  0
-
-};
-
-
-const opponentRight = {
-
-  mesh:
-  createOpponentCar(
-    0xf0444b
-  ),
-
-  lane:
-  OPPONENT_LANES[1],
-
-  relativeZ:
-  2,
-
-  targetRelativeZ:
-  2,
-
-  boost:
-  0
-
-};
-
-
-const opponents = [
-
-  opponentLeft,
-
-  opponentRight
-
-];
-
-
-/* =========================================================
-   14. TEXT WRAPPING
-========================================================= */
-
-function wrapText(
-  ctx,
-  text,
-  maxWidth
-){
-
-  const words =
-  String(text)
-  .split(" ");
-
-
-  const lines =
-  [];
-
-
-  let line =
-  "";
-
-
-  words.forEach(
-    word => {
-
-      const candidate =
-      line
-      ?
-      `${line} ${word}`
-      :
-      word;
-
-
-      if(
-
-        ctx.measureText(
-          candidate
-        ).width >
-        maxWidth
-
-        &&
-
+        const test =
         line
-
-      ){
-
-        lines.push(
-          line
-        );
-
-
-        line =
+        ?
+        line
+        +
+        " "
+        +
+        word
+        :
         word;
 
+
+        if(
+          ctx.measureText(
+            test
+          )
+          .width
+          >
+          maxWidth
+          &&
+          line
+        ){
+
+          lines.push(
+            line
+          );
+
+
+          line =
+          word;
+
+        }
+
+        else{
+
+          line =
+          test;
+
+        }
+
       }
-
-      else{
-
-        line =
-        candidate;
-
-      }
-
-    }
-  );
-
-
-  if(
-    line
-  ){
-
-    lines.push(
-      line
     );
 
-  }
 
+    if(line){
 
-  return lines.slice(
-    0,
-    4
-  );
-
-}
-
-
-/* =========================================================
-   15. ANSWER TEXTURE
-========================================================= */
-
-function createAnswerTexture(
-  text,
-  lane
-){
-
-  /*
-    Bản cũ dùng texture 2048.
-
-    Bản này chỉ 1024:
-    nhẹ hơn nhiều nhưng vẫn đủ rõ.
-  */
-
-  const canvas =
-  document.createElement(
-    "canvas"
-  );
-
-
-  canvas.width =
-  1024;
-
-
-  canvas.height =
-  430;
-
-
-  const ctx =
-  canvas.getContext(
-    "2d"
-  );
-
-
-  /*
-    Background.
-  */
-
-  ctx.fillStyle =
-  "#ffffff";
-
-
-  ctx.fillRect(
-
-    0,
-
-    0,
-
-    canvas.width,
-
-    canvas.height
-
-  );
-
-
-  /*
-    Header.
-  */
-
-  const colors = [
-
-    "#3d79dc",
-
-    "#7354df",
-
-    "#329878"
-
-  ];
-
-
-  ctx.fillStyle =
-  colors[
-    lane
-  ];
-
-
-  ctx.fillRect(
-
-    0,
-
-    0,
-
-    canvas.width,
-
-    54
-
-  );
-
-
-  /*
-    Lane label.
-  */
-
-  ctx.fillStyle =
-  "#ffffff";
-
-
-  ctx.font =
-  "900 27px Arial";
-
-
-  ctx.textAlign =
-  "center";
-
-
-  ctx.textBaseline =
-  "middle";
-
-
-  ctx.fillText(
-
-    lane === 0
-    ?
-    "LEFT"
-    :
-    lane === 1
-    ?
-    "CENTER"
-    :
-    "RIGHT",
-
-    canvas.width / 2,
-
-    27
-
-  );
-
-
-  /*
-    Border.
-  */
-
-  ctx.strokeStyle =
-  "#192843";
-
-
-  ctx.lineWidth =
-  12;
-
-
-  ctx.strokeRect(
-
-    6,
-
-    6,
-
-    canvas.width - 12,
-
-    canvas.height - 12
-
-  );
-
-
-  /*
-    Adaptive font.
-  */
-
-  let size =
-  66;
-
-
-  if(
-    text.length >
-    38
-  ){
-
-    size =
-    56;
-
-  }
-
-
-  if(
-    text.length >
-    60
-  ){
-
-    size =
-    47;
-
-  }
-
-
-  if(
-    text.length >
-    82
-  ){
-
-    size =
-    40;
-
-  }
-
-
-  ctx.font =
-  `900 ${size}px Arial`;
-
-
-  ctx.fillStyle =
-  "#111c31";
-
-
-  const lines =
-  wrapText(
-
-    ctx,
-
-    text,
-
-    890
-
-  );
-
-
-  const lineHeight =
-  size * 1.13;
-
-
-  const totalHeight =
-  lines.length *
-  lineHeight;
-
-
-  const startY =
-
-  255
-
-  -
-
-  totalHeight / 2
-
-  +
-
-  lineHeight / 2;
-
-
-  lines.forEach(
-    (
-      line,
-      index
-    ) => {
-
-      ctx.fillText(
-
-        line,
-
-        canvas.width / 2,
-
-        startY +
-        index *
-        lineHeight
-
+      lines.push(
+        line
       );
 
     }
-  );
 
 
-  const texture =
-  new THREE.CanvasTexture(
-    canvas
-  );
+    const visibleLines =
+    lines.slice(
+      0,
+      3
+    );
 
 
-  texture.colorSpace =
-  THREE.SRGBColorSpace;
+    const startY =
 
+      centerY
 
-  texture.anisotropy =
-  Math.min(
+      -
 
-    renderer.capabilities
-    .getMaxAnisotropy(),
-
-    4
-
-  );
-
-
-  return texture;
-
-}
-
-
-/* =========================================================
-   16. ANSWER GATE
-========================================================= */
-
-function createAnswerGate(
-  text,
-  lane
-){
-
-  const group =
-  new THREE.Group();
-
-
-  const frameMaterial =
-  new THREE.MeshLambertMaterial({
-
-    color:0x263d62
-
-  });
-
-
-  /*
-    Two supports.
-  */
-
-  [
-    -1.45,
-    1.45
-  ]
-  .forEach(
-    x => {
-
-      const pole =
-      new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-
-          .14,
-
-          3.3,
-
-          .18
-
-        ),
-
-        frameMaterial
-
-      );
-
-
-      pole.position.set(
-
-        x,
-
-        1.65,
-
-        0
-
-      );
-
-
-      group.add(
-        pole
-      );
-
-    }
-  );
-
-
-  /*
-    Sign.
-  */
-
-  const texture =
-  createAnswerTexture(
-
-    text,
-
-    lane
-
-  );
-
-
-  const board =
-  new THREE.Mesh(
-
-    new THREE.PlaneGeometry(
-
-      3,
-
-      1.55
-
-    ),
-
-    new THREE.MeshBasicMaterial({
-
-      map:texture,
-
-      side:
-      THREE.DoubleSide
-
-    })
-
-  );
-
-
-  board.position.set(
-
-    0,
-
-    2.15,
-
-    .1
-
-  );
-
-
-  group.add(
-    board
-  );
-
-
-  /*
-    Yellow road marker.
-  */
-
-  const marker =
-  new THREE.Mesh(
-
-    new THREE.BoxGeometry(
-
-      2.6,
-
-      .15,
-
-      .6
-
-    ),
-
-    new THREE.MeshBasicMaterial({
-
-      color:0xffcf42
-
-    })
-
-  );
-
-
-  marker.position.set(
-
-    0,
-
-    .08,
-
-    0
-
-  );
-
-
-  group.add(
-    marker
-  );
-
-
-  group.position.x =
-  PLAYER_LANES[
-    lane
-  ];
-
-
-  return group;
-
-}
-
-
-/* =========================================================
-   17. GAME STATE
-========================================================= */
-
-let selectedLane =
-1;
-
-
-let score =
-0;
-
-
-let combo =
-0;
-
-
-let bestCombo =
-0;
-
-
-let questionCount =
-0;
-
-
-let correctCount =
-0;
-
-
-let elapsed =
-0;
-
-
-let currentSpeed =
-BASE_SPEED;
-
-
-let boostTimer =
-0;
-
-
-let slowTimer =
-0;
-
-
-let shakeTimer =
-0;
-
-
-let gameRunning =
-false;
-
-
-let currentWord =
-null;
-
-
-let currentAnswers =
-[];
-
-
-let gateGroup =
-null;
-
-
-let roundResolved =
-false;
-
-
-let vocabularyDeck =
-[];
-
-
-let feedbackTimer =
-null;
-
-
-/* =========================================================
-   18. UTILITIES
-========================================================= */
-
-function shuffle(
-  input
-){
-
-  const array =
-  [...input];
-
-
-  for(
-    let i =
-    array.length - 1;
-    i > 0;
-    i--
-  ){
-
-    const j =
-    Math.floor(
-
-      Math.random() *
       (
-        i + 1
+        visibleLines.length
+        -
+        1
       )
 
-    );
+      *
+
+      lineHeight
+      /
+      2;
 
 
-    [
-      array[i],
-      array[j]
-    ] =
-    [
-      array[j],
-      array[i]
-    ];
+    visibleLines
+    .forEach(
+      (
+        currentLine,
+        index
+      ) => {
 
-  }
+        ctx.fillText(
 
+          currentLine,
 
-  return array;
+          centerX,
 
-}
+          startY
+          +
+          index
+          *
+          lineHeight
 
-
-/* =========================================================
-   19. VOCAB DECK
-========================================================= */
-
-function resetDeck(){
-
-  vocabularyDeck =
-  shuffle(
-    VOCABULARY
-  );
-
-}
-
-
-function nextVocabularyWord(){
-
-  if(
-    vocabularyDeck.length ===
-    0
-  ){
-
-    resetDeck();
-
-  }
-
-
-  return vocabularyDeck.shift();
-
-}
-
-
-/* =========================================================
-   20. ANSWERS
-========================================================= */
-
-function buildAnswers(
-  target
-){
-
-  const wrong =
-  shuffle(
-
-    VOCABULARY
-    .filter(
-      item =>
-      item.word !==
-      target.word
-    )
-
-  )
-  .slice(
-    0,
-    2
-  );
-
-
-  return shuffle(
-
-    [
-      target,
-      ...wrong
-    ]
-
-  );
-
-}
-
-
-/* =========================================================
-   21. REMOVE GATE
-========================================================= */
-
-function removeGate(){
-
-  if(
-    !gateGroup
-  ){
-
-    return;
-
-  }
-
-
-  gateGroup.traverse(
-    object => {
-
-      if(
-        object.geometry
-      ){
-
-        object.geometry.dispose();
-
-      }
-
-
-      if(
-        object.material
-      ){
-
-        const list =
-        Array.isArray(
-          object.material
-        )
-        ?
-        object.material
-        :
-        [object.material];
-
-
-        list.forEach(
-          material => {
-
-            if(
-              material.map
-            ){
-
-              material.map.dispose();
-
-            }
-
-
-            material.dispose();
-
-          }
         );
 
       }
+    );
 
-    }
-  );
-
-
-  scene.remove(
-    gateGroup
-  );
+  }
 
 
-  gateGroup =
-  null;
 
-}
+  /* =========================================================
+     GATE
+  ========================================================= */
 
-
-/* =========================================================
-   22. CREATE QUESTION
-========================================================= */
-
-function createQuestion(
-  first = false
-){
-
-  removeGate();
-
-
-  roundResolved =
-  false;
-
-
-  currentWord =
-  nextVocabularyWord();
-
-
-  targetWordEl.textContent =
-  currentWord.word;
-
-
-  currentAnswers =
-  buildAnswers(
-    currentWord
-  );
-
-
-  gateGroup =
-  new THREE.Group();
-
-
-  currentAnswers.forEach(
-    (
-      answer,
-      lane
-    ) => {
-
-      const gate =
-      createAnswerGate(
-
-        answer.meaning,
-
-        lane
-
-      );
-
-
-      gate.userData.answer =
-      answer;
-
-
-      gate.userData.lane =
-      lane;
-
-
-      gateGroup.add(
-        gate
-      );
-
-    }
-  );
-
-
-  /*
-    Gate đứng yên trong world space.
-
-    Xe chạy tới gate.
-  */
-
-  gateGroup.position.z =
-
-  player.position.z
-
-  -
-
-  (
-    first
-    ?
-    FIRST_GATE_DISTANCE
-    :
-    NEXT_GATE_DISTANCE
-  );
-
-
-  scene.add(
-    gateGroup
-  );
-
-}
-
-
-/* =========================================================
-   23. CONTROLS
-========================================================= */
-
-function moveLeft(){
-
-  if(
-    !gameRunning
+  function createGate(
+    answer,
+    lane,
+    correct
   ){
 
-    return;
+    const group =
+    new THREE.Group();
 
-  }
 
+    const frameMaterial =
+    new THREE.MeshStandardMaterial({
 
-  selectedLane =
-  Math.max(
+      color:
+        0x245789,
 
-    0,
+      roughness:.42,
 
-    selectedLane - 1
+      metalness:.28
 
-  );
+    });
 
-}
 
 
-function moveRight(){
+    const postGeometry =
+    new THREE.BoxGeometry(
 
-  if(
-    !gameRunning
-  ){
+      .18,
 
-    return;
+      2.8,
 
-  }
+      .18
 
+    );
 
-  selectedLane =
-  Math.min(
 
-    2,
+    [
+      -1.35,
+      1.35
+    ]
+    .forEach(
+      x => {
 
-    selectedLane + 1
+        const post =
+        new THREE.Mesh(
 
-  );
+          postGeometry,
 
-}
+          frameMaterial
 
+        );
 
-document.addEventListener(
-  "keydown",
-  event => {
 
-    if(
-      event.key ===
-      "ArrowLeft"
-      ||
-      event.key ===
-      "a"
-      ||
-      event.key ===
-      "A"
-    ){
+        post.position.set(
 
-      event.preventDefault();
+          x,
 
-      moveLeft();
+          1.4,
 
-    }
+          0
 
+        );
 
-    if(
-      event.key ===
-      "ArrowRight"
-      ||
-      event.key ===
-      "d"
-      ||
-      event.key ===
-      "D"
-    ){
 
-      event.preventDefault();
+        post.castShadow =
+        true;
 
-      moveRight();
 
-    }
-
-  }
-);
-
-
-leftBtn.addEventListener(
-  "pointerdown",
-  moveLeft
-);
-
-
-rightBtn.addEventListener(
-  "pointerdown",
-  moveRight
-);
-
-
-/* =========================================================
-   24. FEEDBACK
-========================================================= */
-
-function showFeedback(
-  text,
-  type
-){
-
-  feedbackEl.textContent =
-  text;
-
-
-  feedbackEl.className =
-  `feedback ${type} show`;
-
-
-  clearTimeout(
-    feedbackTimer
-  );
-
-
-  feedbackTimer =
-  setTimeout(
-    () => {
-
-      feedbackEl.className =
-      "feedback";
-
-    },
-
-    1450
-
-  );
-
-}
-
-
-/* =========================================================
-   25. GET CURRENT LANE
-========================================================= */
-
-function currentLane(){
-
-  let result =
-  0;
-
-
-  let nearest =
-  Infinity;
-
-
-  PLAYER_LANES.forEach(
-    (
-      x,
-      index
-    ) => {
-
-      const distance =
-      Math.abs(
-
-        player.position.x -
-        x
-
-      );
-
-
-      if(
-        distance <
-        nearest
-      ){
-
-        nearest =
-        distance;
-
-
-        result =
-        index;
+        group.add(
+          post
+        );
 
       }
+    );
 
-    }
-  );
 
 
-  return result;
+    const top =
+    new THREE.Mesh(
 
-}
+      new THREE.BoxGeometry(
 
+        2.9,
 
-/* =========================================================
-   26. RANK
-========================================================= */
+        .18,
 
-function getRacePosition(){
+        .18
 
-  /*
-    Negative relativeZ = opponent ahead.
+      ),
 
-    Positive = opponent behind.
-  */
+      frameMaterial
 
-  const opponentsAhead =
-  opponents.filter(
-    opponent =>
-    opponent.relativeZ <
-    -1
-  )
-  .length;
+    );
 
 
-  return 1 +
-  opponentsAhead;
+    top.position.set(
 
-}
+      0,
 
+      2.75,
 
-/* =========================================================
-   27. CORRECT ANSWER
-========================================================= */
+      0
 
-function correctAnswer(){
+    );
 
-  correctCount++;
 
+    top.castShadow =
+    true;
 
-  combo++;
 
+    group.add(
+      top
+    );
 
-  bestCombo =
-  Math.max(
 
-    bestCombo,
 
-    combo
+    const sign =
+    new THREE.Mesh(
 
-  );
+      new THREE.PlaneGeometry(
 
+        2.55,
 
-  const bonus =
-  Math.min(
+        1.05
 
-    combo * 10,
+      ),
 
-    80
+      new THREE.MeshBasicMaterial({
 
-  );
+        map:
+          createTextTexture(
+            answer
+          ),
 
+        side:
+          THREE.DoubleSide
 
-  score +=
-  100 +
-  bonus;
+      })
 
+    );
 
-  /*
-    Player boost.
-  */
 
-  boostTimer =
-  BOOST_DURATION;
+    sign.position.set(
 
+      0,
 
-  slowTimer =
-  0;
+      1.9,
 
-
-  /*
-    Player tăng tốc =>
-    hai đối thủ tụt lại.
-  */
-
-  opponents.forEach(
-    opponent => {
-
-      opponent.targetRelativeZ =
-      Math.min(
-
-        6,
-
-        opponent.targetRelativeZ +
-        5.5
-
-      );
-
-    }
-  );
-
-
-  showFeedback(
-
-    `⚡ CHÍNH XÁC! +${100 + bonus} · TĂNG TỐC!`,
-
-    "good"
-
-  );
-
-
-  updateHUD();
-
-}
-
-
-/* =========================================================
-   28. WRONG ANSWER
-========================================================= */
-
-function wrongAnswer(){
-
-  combo =
-  0;
-
-
-  boostTimer =
-  0;
-
-
-  slowTimer =
-  WRONG_SLOW_DURATION;
-
-
-  shakeTimer =
-  .55;
-
-
-  /*
-    Ưu tiên đối thủ đang ở phía sau
-    để tạo cảm giác nó lao lên vượt.
-  */
-
-  const behind =
-  opponents.filter(
-    opponent =>
-    opponent.relativeZ >
-    -5
-  );
-
-
-  const candidates =
-  behind.length
-  ?
-  behind
-  :
-  opponents;
-
-
-  const opponent =
-  candidates[
-    Math.floor(
-      Math.random() *
-      candidates.length
-    )
-  ];
-
-
-  /*
-    Cho xe đối thủ vượt mạnh.
-  */
-
-  opponent.targetRelativeZ =
-  Math.max(
-
-    -18,
-
-    opponent.targetRelativeZ -
-    11
-
-  );
-
-
-  opponent.boost =
-  1.4;
-
-
-  showFeedback(
-
-    `🏎️ Sai! ${currentWord.meaning} · Đối thủ vượt lên!`,
-
-    "bad"
-
-  );
-
-
-  updateHUD();
-
-}
-
-
-/* =========================================================
-   29. RESOLVE GATE
-========================================================= */
-
-function resolveGate(){
-
-  if(
-    roundResolved
-    ||
-    !gameRunning
-  ){
-
-    return;
-
-  }
-
-
-  roundResolved =
-  true;
-
-
-  const lane =
-  currentLane();
-
-
-  const answer =
-  currentAnswers[
-    lane
-  ];
-
-
-  questionCount++;
-
-
-  if(
-    answer.word ===
-    currentWord.word
-  ){
-
-    correctAnswer();
-
-  }
-
-  else{
-
-    wrongAnswer();
-
-  }
-
-
-  updateHUD();
-
-}
-
-
-/* =========================================================
-   30. HUD
-========================================================= */
-
-function updateHUD(){
-
-  scoreEl.textContent =
-  score;
-
-
-  speedEl.textContent =
-  `${Math.round(
-    currentSpeed *
-    11
-  )} km/h`;
-
-
-  positionEl.textContent =
-  `${getRacePosition()}/3`;
-
-
-  comboEl.textContent =
-  `x${combo}`;
-
-
-  progressEl.textContent =
-  `${questionCount}/${TOTAL_QUESTIONS}`;
-
-}
-
-
-/* =========================================================
-   31. RESET OPPONENTS
-========================================================= */
-
-function resetOpponents(){
-
-  opponentLeft.relativeZ =
-  -2.5;
-
-
-  opponentLeft.targetRelativeZ =
-  -2.5;
-
-
-  opponentLeft.boost =
-  0;
-
-
-  opponentRight.relativeZ =
-  2;
-
-
-  opponentRight.targetRelativeZ =
-  2;
-
-
-  opponentRight.boost =
-  0;
-
-}
-
-
-/* =========================================================
-   32. RESET GAME
-========================================================= */
-
-function resetGame(){
-
-  selectedLane =
-  1;
-
-
-  score =
-  0;
-
-
-  combo =
-  0;
-
-
-  bestCombo =
-  0;
-
-
-  questionCount =
-  0;
-
-
-  correctCount =
-  0;
-
-
-  elapsed =
-  0;
-
-
-  currentSpeed =
-  BASE_SPEED;
-
-
-  boostTimer =
-  0;
-
-
-  slowTimer =
-  0;
-
-
-  shakeTimer =
-  0;
-
-
-  resetDeck();
-
-
-  resetOpponents();
-
-
-  player.position.set(
-
-    0,
-
-    0,
-
-    5
-
-  );
-
-
-  camera.position.set(
-
-    0,
-
-    1.65,
-
-    5.05
-
-  );
-
-
-  createQuestion(
-    true
-  );
-
-
-  updateHUD();
-
-}
-
-
-/* =========================================================
-   33. START GAME
-========================================================= */
-
-function startGame(){
-
-  resetGame();
-
-
-  gameRunning =
-  true;
-
-
-  startScreen
-  .classList
-  .add(
-    "hidden"
-  );
-
-
-  gameOverScreen
-  .classList
-  .add(
-    "hidden"
-  );
-
-}
-
-
-/* =========================================================
-   34. END GAME
-========================================================= */
-
-function endGame(){
-
-  gameRunning =
-  false;
-
-
-  speedEffect
-  .classList
-  .remove(
-    "active"
-  );
-
-
-  const position =
-  getRacePosition();
-
-
-  if(
-    position ===
-    1
-  ){
-
-    resultIcon.textContent =
-    "🏆";
-
-
-    gameOverTitle.textContent =
-    "Bạn về nhất!";
-
-  }
-
-  else if(
-    position ===
-    2
-  ){
-
-    resultIcon.textContent =
-    "🥈";
-
-
-    gameOverTitle.textContent =
-    "Bạn về nhì!";
-
-  }
-
-  else{
-
-    resultIcon.textContent =
-    "🏁";
-
-
-    gameOverTitle.textContent =
-    "Hoàn thành cuộc đua!";
-
-  }
-
-
-  const accuracy =
-  questionCount
-  ?
-  Math.round(
-    correctCount /
-    questionCount *
-    100
-  )
-  :
-  0;
-
-
-  finalSummary.textContent =
-
-  `Điểm ${score} · Đúng ${correctCount}/${questionCount} · Chính xác ${accuracy}% · Combo cao nhất x${bestCombo}.`;
-
-
-  gameOverScreen
-  .classList
-  .remove(
-    "hidden"
-  );
-
-}
-
-
-startBtn.addEventListener(
-  "click",
-  startGame
-);
-
-
-restartBtn.addEventListener(
-  "click",
-  startGame
-);
-
-
-/* =========================================================
-   35. PLAYER MOVEMENT
-========================================================= */
-
-function updatePlayer(
-  delta
-){
-
-  /*
-    Smooth lane change.
-  */
-
-  const wantedX =
-  PLAYER_LANES[
-    selectedLane
-  ];
-
-
-  player.position.x =
-  THREE.MathUtils.lerp(
-
-    player.position.x,
-
-    wantedX,
-
-    Math.min(
-      1,
-
-      delta * 6.5
-    )
-
-  );
-
-
-  /*
-    TRUE FORWARD MOVEMENT.
-  */
-
-  player.position.z -=
-
-  currentSpeed *
-  delta;
-
-}
-
-
-/* =========================================================
-   36. OPPONENT MOVEMENT
-========================================================= */
-
-function updateOpponents(
-  delta
-){
-
-  opponents.forEach(
-    (
-      opponent,
-      index
-    ) => {
-
-      /*
-        Overtake animation.
-      */
-
-      opponent.relativeZ =
-      THREE.MathUtils.lerp(
-
-        opponent.relativeZ,
-
-        opponent.targetRelativeZ,
-
-        Math.min(
-          1,
-
-          delta *
-          (
-            opponent.boost > 0
-            ?
-            3.8
-            :
-            1.8
-          )
-        )
-
-      );
-
-
-      if(
-        opponent.boost >
-        0
-      ){
-
-        opponent.boost -=
-        delta;
-
-      }
-
-
-      opponent.mesh.position.x =
-      opponent.lane;
-
-
-      opponent.mesh.position.z =
-
-      player.position.z
-
-      +
-
-      opponent.relativeZ;
-
-
-      /*
-        Small suspension movement.
-      */
-
-      opponent.mesh.position.y =
-
-      .02
-
-      +
-
-      Math.sin(
-
-        performance.now() *
-        .004
-
-        +
-
-        index
-
-      )
-
-      *
-      .018;
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   37. CAMERA
-========================================================= */
-
-function updateCamera(
-  delta
-){
-
-  const wantedX =
-  player.position.x;
-
-
-  camera.position.x =
-  THREE.MathUtils.lerp(
-
-    camera.position.x,
-
-    wantedX,
-
-    Math.min(
-      1,
-
-      delta * 8
-    )
-
-  );
-
-
-  camera.position.z =
-  player.position.z +
-  .05;
-
-
-  /*
-    Gentle road vibration.
-  */
-
-  const vibration =
-  Math.sin(
-
-    performance.now() *
-    .009
-
-  )
-  *
-  .009;
-
-
-  let crashY =
-  0;
-
-
-  let crashRoll =
-  0;
-
-
-  if(
-    shakeTimer >
-    0
-  ){
-
-    shakeTimer -=
-    delta;
-
-
-    crashY =
-    Math.sin(
-
-      performance.now() *
       .08
 
-    )
-    *
-    .045;
-
-
-    crashRoll =
-    Math.sin(
-
-      performance.now() *
-      .055
-
-    )
-    *
-    .035;
-
-  }
-
-
-  camera.position.y =
-
-  1.65
-
-  +
-
-  vibration
-
-  +
-
-  crashY;
-
-
-  /*
-    Camera lean when changing lane.
-  */
-
-  const laneDifference =
-
-  PLAYER_LANES[
-    selectedLane
-  ]
-
-  -
-
-  player.position.x;
-
-
-  const wantedRoll =
-
-  -laneDifference *
-  .013
-
-  +
-
-  crashRoll;
-
-
-  camera.rotation.z =
-  THREE.MathUtils.lerp(
-
-    camera.rotation.z,
-
-    wantedRoll,
-
-    Math.min(
-      1,
-
-      delta * 6
-    )
-
-  );
-
-
-  camera.lookAt(
-
-    camera.position.x,
-
-    1.35,
-
-    player.position.z -
-    38
-
-  );
-
-
-  /*
-    Steering wheel turns.
-  */
-
-  if(
-    steeringWheel
-  ){
-
-    steeringWheel.rotation.z =
-    THREE.MathUtils.lerp(
-
-      steeringWheel.rotation.z,
-
-      laneDifference *
-      -.12,
-
-      Math.min(
-        1,
-
-        delta * 7
-      )
-
     );
 
-  }
 
-
-  /*
-    Dashboard speed needle.
-  */
-
-  if(
-    dashboardSpeedNeedle
-  ){
-
-    dashboardSpeedNeedle.rotation.z =
-    THREE.MathUtils.lerp(
-
-      dashboardSpeedNeedle.rotation.z,
-
-      -1.1
-
-      +
-
-      (
-        currentSpeed /
-        (
-          MAX_SPEED *
-          BOOST_MULTIPLIER
-        )
-      )
-
-      *
-      2.2,
-
-      Math.min(
-        1,
-
-        delta * 4
-      )
-
+    group.add(
+      sign
     );
 
-  }
 
+    group.position.set(
 
-  /*
-    FOV effect.
-  */
+      LANE_X[
+        lane
+      ],
 
-  const desiredFov =
+      0,
 
-  boostTimer > 0
-  ?
-  67
-  :
-  60;
-
-
-  const oldFov =
-  camera.fov;
-
-
-  camera.fov =
-  THREE.MathUtils.lerp(
-
-    camera.fov,
-
-    desiredFov,
-
-    Math.min(
-      1,
-
-      delta * 4
-    )
-
-  );
-
-
-  /*
-    Chỉ update projection nếu FOV thực sự thay đổi.
-  */
-
-  if(
-    Math.abs(
-      oldFov -
-      camera.fov
-    )
-    >
-    .01
-  ){
-
-    camera.updateProjectionMatrix();
-
-  }
-
-}
-
-
-/* =========================================================
-   38. SPEED
-========================================================= */
-
-function updateSpeed(
-  delta
-){
-
-  elapsed +=
-  delta;
-
-
-  /*
-    Game tăng tốc rất từ từ.
-  */
-
-  const normalSpeed =
-  Math.min(
-
-    MAX_SPEED,
-
-    BASE_SPEED
-
-    +
-
-    elapsed *
-    .018
-
-  );
-
-
-  if(
-    boostTimer >
-    0
-  ){
-
-    boostTimer -=
-    delta;
-
-
-    currentSpeed =
-    THREE.MathUtils.lerp(
-
-      currentSpeed,
-
-      normalSpeed *
-      BOOST_MULTIPLIER,
-
-      Math.min(
-        1,
-
-        delta * 4
-      )
+      GATE_START_Z
 
     );
 
 
-    speedEffect
-    .classList
-    .add(
-      "active"
-    );
+    group.userData = {
 
-  }
+      answer,
 
-  else if(
-    slowTimer >
-    0
-  ){
+      lane,
 
-    slowTimer -=
-    delta;
+      correct
+
+    };
 
 
-    currentSpeed =
-    THREE.MathUtils.lerp(
-
-      currentSpeed,
-
-      normalSpeed *
-      WRONG_SPEED_MULTIPLIER,
-
-      Math.min(
-        1,
-
-        delta * 4
-      )
-
+    scene.add(
+      group
     );
 
 
-    speedEffect
-    .classList
-    .remove(
-      "active"
-    );
-
-  }
-
-  else{
-
-    currentSpeed =
-    THREE.MathUtils.lerp(
-
-      currentSpeed,
-
-      normalSpeed,
-
-      Math.min(
-        1,
-
-        delta * 2
-      )
-
-    );
-
-
-    speedEffect
-    .classList
-    .remove(
-      "active"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   39. SCENERY RECYCLING
-========================================================= */
-
-function updateScenery(){
-
-  roadsideObjects.forEach(
-    object => {
-
-      /*
-        Object đã đi qua xe.
-      */
-
-      if(
-        object.position.z >
-        player.position.z +
-        30
-      ){
-
-        object.position.z -=
-        360;
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   40. GATE
-========================================================= */
-
-function updateGate(){
-
-  if(
-    !gateGroup
-  ){
-
-    return;
+    return group;
 
   }
 
 
-  /*
-    Cổng không di chuyển.
 
-    Distance giảm vì PLAYER chạy tới.
-  */
+  /* =========================================================
+     ROUND
+  ========================================================= */
 
-  const distance =
-
-  player.position.z
-
-  -
-
-  gateGroup.position.z;
-
-
-  if(
-
-    !roundResolved
-
-    &&
-
-    distance <=
-    COLLISION_DISTANCE
-
-  ){
-
-    resolveGate();
-
-  }
-
-
-  /*
-    Xe đã qua biển.
-  */
-
-  if(
-
-    roundResolved
-
-    &&
-
-    player.position.z <
-    gateGroup.position.z -
-    7
-
-  ){
-
-    /*
-      Đủ 12 câu thì kết thúc.
-    */
+  function startRound(){
 
     if(
-      questionCount >=
-      TOTAL_QUESTIONS
+      gameEnded
     ){
-
-      endGame();
 
       return;
 
     }
 
 
-    createQuestion(
-      false
+    disposeRound();
+
+
+    const item =
+
+      VOCAB[
+        Math.floor(
+          Math.random()
+          *
+          VOCAB.length
+        )
+      ];
+
+
+    const answers =
+    shuffle([
+
+      item.correct,
+
+      ...item.wrong
+
+    ]);
+
+
+    const gates =
+    answers
+    .slice(
+      0,
+      3
+    )
+    .map(
+      (
+        answer,
+        lane
+      ) =>
+
+      createGate(
+
+        answer,
+
+        lane,
+
+        answer
+        ===
+        item.correct
+
+      )
+
+    );
+
+
+    round = {
+
+      item,
+
+      gates,
+
+      checked:false
+
+    };
+
+
+    targetWordEl.textContent =
+    item.word;
+
+  }
+
+
+
+  /* =========================================================
+     MAIN LOOP
+  ========================================================= */
+
+  function animate(){
+
+    requestAnimationFrame(
+      animate
+    );
+
+
+    if(
+      !clock
+    ){
+
+      return;
+
+    }
+
+
+    const dt =
+    Math.min(
+
+      clock.getDelta(),
+
+      .034
+
+    );
+
+
+    if(
+      !gameEnded
+    ){
+
+      updatePlayer(
+        dt
+      );
+
+
+      updateRoad(
+        dt
+      );
+
+
+      updateRivals(
+        dt
+      );
+
+
+      updateRound(
+        dt
+      );
+
+
+      updateParticles(
+        dt
+      );
+
+    }
+
+
+    renderer.render(
+
+      scene,
+
+      camera
+
     );
 
   }
 
-}
 
 
-/* =========================================================
-   41. UPDATE HUD POSITION
-========================================================= */
+  /* =========================================================
+     PLAYER
+  ========================================================= */
 
-let hudTimer =
-0;
-
-
-function updateRealtimeHUD(
-  delta
-){
-
-  /*
-    Không cần sửa DOM 60 lần/giây.
-
-    Chỉ 10 lần/giây để nhẹ hơn.
-  */
-
-  hudTimer +=
-  delta;
-
-
-  if(
-    hudTimer <
-    .1
+  function updatePlayer(
+    dt
   ){
 
-    return;
+    const targetX =
+    LANE_X[
+      targetLane
+    ];
+
+
+    const previousX =
+    playerCar.position.x;
+
+
+    playerCar.position.x =
+    THREE.MathUtils.lerp(
+
+      playerCar.position.x,
+
+      targetX,
+
+      1
+      -
+      Math.pow(
+        .0025,
+        dt
+      )
+
+    );
+
+
+    const movement =
+    playerCar.position.x
+    -
+    previousX;
+
+
+    playerCar.rotation.z =
+    THREE.MathUtils.lerp(
+
+      playerCar.rotation.z,
+
+      -movement
+      *
+      2.8,
+
+      .16
+
+    );
+
+
+    /* Camera follow */
+
+    camera.position.x =
+    THREE.MathUtils.lerp(
+
+      camera.position.x,
+
+      playerCar.position.x
+      *
+      .35,
+
+      .08
+
+    );
+
+
+    camera.lookAt(
+
+      playerCar.position.x
+      *
+      .12,
+
+      1,
+
+      -15
+
+    );
+
+
+    /* Boost giảm dần */
+
+    boost =
+    Math.max(
+
+      0,
+
+      boost
+      -
+      dt
+      *
+      7
+
+    );
+
+
+    /* Penalty giảm dần */
+
+    wrongSlow =
+    Math.max(
+
+      0,
+
+      wrongSlow
+      -
+      dt
+      *
+      4
+
+    );
+
+
+    updateHUD();
 
   }
 
 
-  hudTimer =
-  0;
+
+  /* =========================================================
+     WORLD SPEED
+  ========================================================= */
+
+  function getWorldSpeed(){
+
+    return (
+
+      baseSpeed
+
+      +
+
+      boost
+
+      -
+
+      wrongSlow
+
+    );
+
+  }
 
 
-  updateHUD();
 
-}
+  /* =========================================================
+     ROAD
+  ========================================================= */
 
-
-/* =========================================================
-   42. GAME LOOP
-========================================================= */
-
-const clock =
-new THREE.Clock();
-
-
-function animate(){
-
-  requestAnimationFrame(
-    animate
-  );
-
-
-  const delta =
-  Math.min(
-
-    clock.getDelta(),
-
-    .04
-
-  );
-
-
-  if(
-    gameRunning
+  function updateRoad(
+    dt
   ){
 
-    updateSpeed(
-      delta
-    );
+    const speed =
+    getWorldSpeed();
 
 
-    updatePlayer(
-      delta
-    );
+    roadLines
+    .forEach(
+      stripe => {
+
+        stripe.position.z +=
+
+          speed
+          *
+          dt;
 
 
-    updateOpponents(
-      delta
-    );
+        if(
+          stripe.position.z
+          >
+          8
+        ){
 
+          stripe.position.z -=
+          119;
 
-    updateCamera(
-      delta
-    );
+        }
 
-
-    updateScenery();
-
-
-    updateGate();
-
-
-    updateRealtimeHUD(
-      delta
+      }
     );
 
   }
 
 
-  renderer.render(
 
-    scene,
+  /* =========================================================
+     RIVALS
+  ========================================================= */
 
-    camera
+  function updateRivals(
+    dt
+  ){
 
-  );
+    rivalState
+    .forEach(
+      (
+        rival,
+        index
+      ) => {
 
-}
+        rival.z =
+        THREE.MathUtils.lerp(
+
+          rival.z,
+
+          rival.targetZ,
+
+          Math.min(
+            1,
+            dt
+            *
+            2.5
+          )
+
+        );
 
 
-/* =========================================================
-   43. RESIZE
-========================================================= */
+        const baseLane =
+        index === 0
+        ?
+        0
+        :
+        2;
 
-window.addEventListener(
-  "resize",
-  () => {
+
+        rival.mesh.position.set(
+
+          LANE_X[
+            baseLane
+          ],
+
+          .44,
+
+          rival.z
+
+        );
+
+
+        rival.mesh.rotation.y =
+        Math.PI;
+
+      }
+    );
+
+  }
+
+
+
+  function rivalsFallBehind(){
+
+    rivalState
+    .forEach(
+      rival => {
+
+        rival.targetZ =
+        Math.max(
+
+          -9,
+
+          rival.targetZ
+          -
+          (
+            1.8
+            +
+            Math.random()
+            *
+            1.5
+          )
+
+        );
+
+      }
+    );
+
+  }
+
+
+
+  function rivalsOvertake(){
+
+    const both =
+    Math.random()
+    <
+    .42;
+
+
+    const selected =
+    both
+    ?
+    rivalState
+    :
+    [
+      rivalState[
+        Math.random()
+        <
+        .5
+        ?
+        0
+        :
+        1
+      ]
+    ];
+
+
+    selected
+    .forEach(
+      rival => {
+
+        rival.targetZ =
+        Math.min(
+
+          8,
+
+          rival.targetZ
+          +
+          5
+          +
+          Math.random()
+          *
+          3
+
+        );
+
+      }
+    );
+
+
+    flashMessage(
+
+      both
+      ?
+      "💥 Sai! Cả 2 đối thủ vượt lên!"
+      :
+      "💥 Sai! Đối thủ vượt lên!",
+
+      "bad"
+
+    );
+
+  }
+
+
+
+  /* =========================================================
+     GATE MOVEMENT
+  ========================================================= */
+
+  function updateRound(
+    dt
+  ){
+
+    if(
+      !round
+    ){
+
+      return;
+
+    }
+
+
+    const speed =
+    getWorldSpeed();
+
+
+    round.gates
+    .forEach(
+      gate => {
+
+        gate.position.z +=
+
+          speed
+          *
+          dt;
+
+      }
+    );
+
+
+    const gateZ =
+    round
+    .gates[0]
+    .position.z;
+
+
+    /* Collision / choice */
+
+    if(
+
+      !round.checked
+
+      &&
+
+      gateZ
+      >=
+      COLLISION_Z
+
+    ){
+
+      round.checked =
+      true;
+
+
+      const selected =
+      round.gates.find(
+
+        gate =>
+        gate.userData.lane
+        ===
+        targetLane
+
+      );
+
+
+      if(
+
+        selected
+
+        &&
+
+        selected
+        .userData
+        .correct
+
+      ){
+
+        correctAnswer();
+
+      }
+
+      else{
+
+        wrongAnswer();
+
+      }
+
+    }
+
+
+
+    /* Cổng đi qua camera */
+
+    if(
+
+      gateZ
+      >
+      13
+
+      &&
+
+      !roundTimer
+
+    ){
+
+      roundTimer =
+      window.setTimeout(
+
+        () => {
+
+          roundTimer =
+          null;
+
+          startRound();
+
+        },
+
+        260
+
+      );
+
+    }
+
+  }
+
+
+
+  /* =========================================================
+     CORRECT
+  ========================================================= */
+
+  function correctAnswer(){
+
+    score +=
+
+      100
+
+      +
+
+      combo
+      *
+      15;
+
+
+    combo++;
+
+
+    boost =
+    Math.min(
+
+      23,
+
+      boost
+      +
+      11
+
+    );
+
+
+    wrongSlow =
+    0;
+
+
+    rivalsFallBehind();
+
+
+    createBoostParticles();
+
+
+    flashMessage(
+
+      "✓ Đúng! Xe tăng tốc!",
+
+      "good"
+
+    );
+
+
+    updateHUD();
+
+  }
+
+
+
+  /* =========================================================
+     WRONG
+  ========================================================= */
+
+  function wrongAnswer(){
+
+    lives--;
+
+
+    combo =
+    0;
+
+
+    boost =
+    0;
+
+
+    wrongSlow =
+    Math.min(
+
+      8,
+
+      wrongSlow
+      +
+      5
+
+    );
+
+
+    shakePlayer();
+
+
+    rivalsOvertake();
+
+
+    updateHUD();
+
+
+    if(
+      lives
+      <=
+      0
+    ){
+
+      endGame();
+
+    }
+
+  }
+
+
+
+  /* =========================================================
+     BOOST PARTICLES
+  ========================================================= */
+
+  function createBoostParticles(){
+
+    for(
+
+      let i = 0;
+
+      i < 20;
+
+      i++
+
+    ){
+
+      const material =
+      new THREE.MeshBasicMaterial({
+
+        color:
+          i % 2
+          ?
+          0x77e6ff
+          :
+          0xffd45f,
+
+        transparent:true,
+
+        opacity:.9
+
+      });
+
+
+      const particle =
+      new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+
+          .045
+          +
+          Math.random()
+          *
+          .04,
+
+          6,
+
+          6
+
+        ),
+
+        material
+
+      );
+
+
+      particle.position.set(
+
+        playerCar.position.x
+
+        +
+
+        (
+          Math.random()
+          -
+          .5
+        )
+        *
+        1.5,
+
+        .2
+        +
+        Math.random()
+        *
+        .45,
+
+        PLAYER_Z
+        +
+        1.5
+        +
+        Math.random()
+        *
+        1.2
+
+      );
+
+
+      particle.userData.life =
+      .45
+      +
+      Math.random()
+      *
+      .35;
+
+
+      particle.userData.velocity =
+      8
+      +
+      Math.random()
+      *
+      8;
+
+
+      particles.push(
+        particle
+      );
+
+
+      scene.add(
+        particle
+      );
+
+    }
+
+  }
+
+
+
+  function updateParticles(
+    dt
+  ){
+
+    particles =
+    particles.filter(
+      particle => {
+
+        particle.userData.life -=
+        dt;
+
+
+        particle.position.z +=
+
+          particle
+          .userData
+          .velocity
+
+          *
+          dt;
+
+
+        particle.material.opacity =
+        Math.max(
+
+          0,
+
+          particle
+          .userData
+          .life
+          *
+          1.6
+
+        );
+
+
+        if(
+
+          particle
+          .userData
+          .life
+          <=
+          0
+
+        ){
+
+          scene.remove(
+            particle
+          );
+
+
+          particle.geometry.dispose();
+
+
+          particle.material.dispose();
+
+
+          return false;
+
+        }
+
+
+        return true;
+
+      }
+    );
+
+  }
+
+
+
+  /* =========================================================
+     SHAKE
+  ========================================================= */
+
+  function shakePlayer(){
+
+    const start =
+    performance.now();
+
+
+    const originalY =
+    .48;
+
+
+    function frame(
+      now
+    ){
+
+      const elapsed =
+      now
+      -
+      start;
+
+
+      if(
+
+        elapsed
+        >
+        420
+
+        ||
+
+        gameEnded
+
+      ){
+
+        playerCar.position.y =
+        originalY;
+
+
+        playerCar.rotation.y =
+        Math.PI;
+
+
+        return;
+
+      }
+
+
+      playerCar.position.y =
+
+        originalY
+
+        +
+
+        (
+          Math.random()
+          -
+          .5
+        )
+        *
+        .12;
+
+
+      playerCar.rotation.y =
+
+        Math.PI
+
+        +
+
+        (
+          Math.random()
+          -
+          .5
+        )
+        *
+        .06;
+
+
+      requestAnimationFrame(
+        frame
+      );
+
+    }
+
+
+    requestAnimationFrame(
+      frame
+    );
+
+  }
+
+
+
+  /* =========================================================
+     INPUT
+  ========================================================= */
+
+  function setupControls(){
+
+    window.addEventListener(
+
+      "keydown",
+
+      event => {
+
+        if(
+          gameEnded
+        ){
+
+          return;
+
+        }
+
+
+        if(
+          event.key
+          ===
+          "ArrowLeft"
+        ){
+
+          event.preventDefault();
+
+          changeLane(
+            -1
+          );
+
+        }
+
+
+        if(
+          event.key
+          ===
+          "ArrowRight"
+        ){
+
+          event.preventDefault();
+
+          changeLane(
+            1
+          );
+
+        }
+
+      }
+
+    );
+
+
+    document
+    .getElementById(
+      "leftBtn"
+    )
+    .addEventListener(
+
+      "click",
+
+      () =>
+      changeLane(
+        -1
+      )
+
+    );
+
+
+    document
+    .getElementById(
+      "rightBtn"
+    )
+    .addEventListener(
+
+      "click",
+
+      () =>
+      changeLane(
+        1
+      )
+
+    );
+
+
+    document
+    .getElementById(
+      "restartBtn"
+    )
+    .addEventListener(
+
+      "click",
+
+      restart
+
+    );
+
+  }
+
+
+
+  function changeLane(
+    direction
+  ){
+
+    targetLane =
+    THREE.MathUtils.clamp(
+
+      targetLane
+      +
+      direction,
+
+      0,
+
+      2
+
+    );
+
+  }
+
+
+
+  /* =========================================================
+     HUD
+  ========================================================= */
+
+  function updateHUD(){
+
+    scoreEl.textContent =
+    String(
+      score
+    );
+
+
+    livesEl.textContent =
+    String(
+      lives
+    );
+
+
+    comboEl.textContent =
+    "x"
+    +
+    combo;
+
+
+    const visualSpeed =
+
+      100
+
+      +
+
+      boost
+      *
+      5
+
+      -
+
+      wrongSlow
+      *
+      5;
+
+
+    speedEl.textContent =
+    String(
+
+      Math.max(
+
+        50,
+
+        Math.round(
+          visualSpeed
+        )
+
+      )
+
+    );
+
+  }
+
+
+
+  /* =========================================================
+     MESSAGE
+  ========================================================= */
+
+  function flashMessage(
+    text,
+    type
+  ){
+
+    messageEl.textContent =
+    text;
+
+
+    messageEl.className =
+    "show "
+    +
+    type;
+
+
+    window.clearTimeout(
+      flashMessage.timer
+    );
+
+
+    flashMessage.timer =
+    window.setTimeout(
+
+      () => {
+
+        messageEl.className =
+        "";
+
+      },
+
+      950
+
+    );
+
+  }
+
+
+
+  /* =========================================================
+     CLEAN ROUND
+  ========================================================= */
+
+  function disposeRound(){
+
+    if(
+      !round
+    ){
+
+      return;
+
+    }
+
+
+    round.gates
+    .forEach(
+      gate => {
+
+        gate.traverse(
+          object => {
+
+            if(
+              object.geometry
+            ){
+
+              object
+              .geometry
+              .dispose?.();
+
+            }
+
+
+            if(
+              object.material
+            ){
+
+              const materials =
+
+                Array.isArray(
+                  object.material
+                )
+
+                ?
+
+                object.material
+
+                :
+
+                [
+                  object.material
+                ];
+
+
+              materials
+              .forEach(
+                material => {
+
+                  material
+                    .map
+                    ?.dispose?.();
+
+
+                  material
+                    .dispose?.();
+
+                }
+              );
+
+            }
+
+          }
+        );
+
+
+        scene.remove(
+          gate
+        );
+
+      }
+    );
+
+
+    round =
+    null;
+
+  }
+
+
+
+  /* =========================================================
+     GAME OVER
+  ========================================================= */
+
+  function endGame(){
+
+    gameEnded =
+    true;
+
+
+    disposeRound();
+
+
+    gameOverTextEl.textContent =
+
+      "Điểm của bạn: "
+
+      +
+
+      score
+
+      +
+
+      ".";
+
+
+    gameOverEl
+    .classList
+    .remove(
+      "hidden"
+    );
+
+  }
+
+
+
+  /* =========================================================
+     RESTART
+  ========================================================= */
+
+  function restart(){
+
+    if(
+      roundTimer
+    ){
+
+      window.clearTimeout(
+        roundTimer
+      );
+
+
+      roundTimer =
+      null;
+
+    }
+
+
+    disposeRound();
+
+
+    score =
+    0;
+
+
+    lives =
+    5;
+
+
+    combo =
+    0;
+
+
+    baseSpeed =
+    15;
+
+
+    boost =
+    0;
+
+
+    wrongSlow =
+    0;
+
+
+    gameEnded =
+    false;
+
+
+    targetLane =
+    1;
+
+
+    playerCar.position.set(
+
+      0,
+
+      .48,
+
+      PLAYER_Z
+
+    );
+
+
+    rivalState[0].z =
+    0;
+
+
+    rivalState[0].targetZ =
+    0;
+
+
+    rivalState[1].z =
+    -2;
+
+
+    rivalState[1].targetZ =
+    -2;
+
+
+    gameOverEl
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+    updateHUD();
+
+
+    startRound();
+
+  }
+
+
+
+  /* =========================================================
+     RESIZE
+  ========================================================= */
+
+  function onResize(){
 
     camera.aspect =
 
-    window.innerWidth
+      window.innerWidth
 
-    /
+      /
 
-    window.innerHeight;
+      window.innerHeight;
 
 
-    camera.updateProjectionMatrix();
+    camera
+    .updateProjectionMatrix();
 
 
     renderer.setSize(
@@ -4139,32 +3246,119 @@ window.addEventListener(
 
       Math.min(
 
-        window.devicePixelRatio,
+        window.devicePixelRatio
+        ||
+        1,
 
-        1.25
+        1.7
 
       )
 
     );
 
   }
-);
 
 
-/* =========================================================
-   44. INIT
-========================================================= */
 
-createWorld();
+  /* =========================================================
+     BOOT ERROR
+  ========================================================= */
 
+  function showBootError(
+    message
+  ){
 
-createCockpit();
-
-
-resetOpponents();
-
-
-updateHUD();
+    console.error(
+      message
+    );
 
 
-animate();
+    if(
+      !bootErrorEl
+    ){
+
+      return;
+
+    }
+
+
+    bootErrorEl.textContent =
+    String(
+      message
+    );
+
+
+    bootErrorEl
+    .classList
+    .remove(
+      "hidden"
+    );
+
+  }
+
+
+
+  /* =========================================================
+     SHUFFLE
+  ========================================================= */
+
+  function shuffle(
+    source
+  ){
+
+    const array =
+    [
+      ...source
+    ];
+
+
+    for(
+
+      let i =
+        array.length
+        -
+        1;
+
+      i > 0;
+
+      i--
+
+    ){
+
+      const j =
+
+        Math.floor(
+
+          Math.random()
+
+          *
+
+          (
+            i
+            +
+            1
+          )
+
+        );
+
+
+      [
+        array[i],
+        array[j]
+      ]
+
+      =
+
+      [
+        array[j],
+        array[i]
+      ];
+
+    }
+
+
+    return array;
+
+  }
+
+})();
