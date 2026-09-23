@@ -1187,23 +1187,24 @@ button:disabled{
 
 
 /* =========================================================
-   STREET RACER · 2D LITE
-   Lightweight CSS/DOM version — no WebGL / Three.js
+   STREET RACER 3D · LIGHTWEIGHT PERSPECTIVE
+   3D visual depth without loading a WebGL engine
 ========================================================= */
 
 .racer-road{
   position:relative;
-  height:540px;
+  height:560px;
   overflow:hidden;
   isolation:isolate;
   border:4px solid #111827;
-  border-radius:22px;
+  border-radius:24px;
+  perspective:900px;
   background:
-    radial-gradient(circle at 50% 6%,rgba(83,147,255,.28),transparent 22%),
-    linear-gradient(180deg,#081226 0 21%,#101b31 21% 100%);
+    radial-gradient(circle at 50% 17%,rgba(100,174,255,.30),transparent 20%),
+    linear-gradient(180deg,#061025 0 24%,#10192d 24% 100%);
   box-shadow:
-    inset 0 0 50px rgba(0,0,0,.32),
-    0 14px 34px rgba(18,28,55,.13);
+    inset 0 0 60px rgba(0,0,0,.36),
+    0 16px 36px rgba(17,28,59,.16);
 }
 
 .racer-road::before{
@@ -1213,61 +1214,74 @@ button:disabled{
   left:0;
   right:0;
   top:0;
-  height:24%;
+  height:28%;
   background:
-    linear-gradient(90deg,
-      transparent 0 5%,
-      rgba(78,99,145,.68) 5% 10%,
-      transparent 10% 13%,
-      rgba(62,80,126,.8) 13% 20%,
-      transparent 20% 25%,
-      rgba(89,111,162,.7) 25% 31%,
-      transparent 31% 69%,
-      rgba(89,111,162,.7) 69% 75%,
-      transparent 75% 80%,
-      rgba(62,80,126,.8) 80% 87%,
-      transparent 87% 90%,
-      rgba(78,99,145,.68) 90% 95%,
-      transparent 95% 100%
+    linear-gradient(
+      90deg,
+      transparent 0 3%,
+      #172846 3% 8%,
+      transparent 8% 11%,
+      #20365d 11% 17%,
+      transparent 17% 22%,
+      #162c52 22% 29%,
+      transparent 29% 71%,
+      #162c52 71% 78%,
+      transparent 78% 83%,
+      #20365d 83% 89%,
+      transparent 89% 92%,
+      #172846 92% 97%,
+      transparent 97% 100%
     ),
-    linear-gradient(180deg,transparent,#172238);
-  opacity:.88;
+    linear-gradient(180deg,#07142c,#16223a);
+  opacity:.98;
 }
 
 .racer-road::after{
   content:"";
   position:absolute;
   z-index:1;
-  left:12%;
-  right:12%;
-  top:22%;
-  bottom:0;
-  border-left:4px solid rgba(99,214,255,.55);
-  border-right:4px solid rgba(255,95,190,.42);
-  box-shadow:
-    -8px 0 20px rgba(72,204,255,.08),
-    8px 0 20px rgba(255,73,182,.06);
+  left:50%;
+  top:21%;
+  width:82%;
+  height:79%;
+  transform:translateX(-50%);
+  clip-path:polygon(37% 0,63% 0,100% 100%,0 100%);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(79,218,255,.30),
+      transparent 3% 97%,
+      rgba(255,88,183,.25)
+    );
   pointer-events:none;
+  filter:drop-shadow(0 0 18px rgba(54,148,255,.08));
 }
 
 .city-left,
 .city-right{
   position:absolute;
   z-index:1;
-  top:22%;
+  top:20%;
   bottom:0;
-  width:12%;
+  width:17%;
   overflow:hidden;
   background:
     repeating-linear-gradient(
       180deg,
-      rgba(36,55,89,.95) 0 24px,
-      rgba(19,33,58,.98) 24px 50px
+      #14213a 0 26px,
+      #0d172a 26px 52px
     );
 }
 
-.city-left{left:0;}
-.city-right{right:0;}
+.city-left{
+  left:0;
+  clip-path:polygon(0 0,70% 5%,100% 100%,0 100%);
+}
+
+.city-right{
+  right:0;
+  clip-path:polygon(30% 5%,100% 0,100% 100%,0 100%);
+}
 
 .city-left::before,
 .city-right::before{
@@ -1275,12 +1289,13 @@ button:disabled{
   position:absolute;
   inset:0;
   background:
-    radial-gradient(circle at 30% 15%,#7fe6ff 0 2px,transparent 3px),
-    radial-gradient(circle at 70% 28%,#ffe16a 0 2px,transparent 3px),
-    radial-gradient(circle at 35% 46%,#ff86c8 0 2px,transparent 3px),
-    radial-gradient(circle at 65% 66%,#7fe6ff 0 2px,transparent 3px),
-    radial-gradient(circle at 30% 84%,#ffe16a 0 2px,transparent 3px);
-  opacity:.75;
+    radial-gradient(circle at 28% 12%,#76e2ff 0 2px,transparent 3px),
+    radial-gradient(circle at 66% 24%,#ffe16d 0 2px,transparent 3px),
+    radial-gradient(circle at 38% 40%,#ff7fc5 0 2px,transparent 3px),
+    radial-gradient(circle at 70% 57%,#76e2ff 0 2px,transparent 3px),
+    radial-gradient(circle at 32% 75%,#ffe16d 0 2px,transparent 3px),
+    radial-gradient(circle at 68% 91%,#76e2ff 0 2px,transparent 3px);
+  opacity:.78;
 }
 
 .city-left::after,
@@ -1291,78 +1306,115 @@ button:disabled{
 .road-inner{
   position:absolute;
   z-index:2;
-  left:12%;
-  right:12%;
-  top:22%;
-  bottom:0;
+  left:9%;
+  right:9%;
+  top:20%;
+  bottom:-4%;
   overflow:hidden;
+  clip-path:polygon(39% 0,61% 0,100% 100%,0 100%);
   background:
     linear-gradient(
       90deg,
-      #252c3a 0,
-      #363f50 6%,
-      #444e60 50%,
-      #363f50 94%,
-      #252c3a 100%
+      #1a202c 0,
+      #343d4d 9%,
+      #4a5362 50%,
+      #343d4d 91%,
+      #1a202c 100%
     );
+  box-shadow:
+    inset 0 18px 24px rgba(255,255,255,.04),
+    inset 0 -25px 60px rgba(0,0,0,.24);
 }
 
 .road-inner::before{
   content:"";
   position:absolute;
-  inset:0;
-  opacity:.2;
+  inset:-100% -15%;
   background:
     repeating-linear-gradient(
       180deg,
       rgba(255,255,255,.06) 0 2px,
-      transparent 2px 9px
+      transparent 2px 14px
     );
-  animation:racerTextureMove .55s linear infinite;
+  opacity:.30;
+  animation:racerTextureMove .46s linear infinite;
+}
+
+.road-inner::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:0;
+  bottom:0;
+  width:66%;
+  transform:translateX(-50%);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 24.6%,
+      rgba(255,255,255,.18) 24.6% 25.2%,
+      transparent 25.2% 49.6%,
+      rgba(255,255,255,.18) 49.6% 50.2%,
+      transparent 50.2% 74.6%,
+      rgba(255,255,255,.18) 74.6% 75.2%,
+      transparent 75.2% 100%
+    );
+  opacity:.55;
 }
 
 .road-line{
   position:absolute;
-  z-index:3;
-  top:-120%;
-  bottom:-120%;
+  z-index:4;
+  top:20%;
+  bottom:0;
   width:3px;
-  transform:translateX(-50%);
+  transform-origin:50% 0;
+  opacity:.50;
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,.88) 0 24px,
-      transparent 24px 58px
+      #fff 0 24px,
+      transparent 24px 60px
     );
-  opacity:.42;
-  animation:roadMove .72s linear infinite;
+  animation:roadMove .64s linear infinite;
+  pointer-events:none;
 }
 
-.road-line.one{left:25%;}
-.road-line.two{left:50%;}
-.road-line.three{left:75%;}
+.road-line.one{
+  left:41.2%;
+  transform:rotate(-5deg);
+}
+
+.road-line.two{
+  left:50%;
+}
+
+.road-line.three{
+  left:58.8%;
+  transform:rotate(5deg);
+}
 
 .racer-road.boosting .road-line{
-  animation-duration:.30s;
+  animation-duration:.24s;
 }
 
 .racer-road.boosting .road-inner::before{
-  animation-duration:.22s;
+  animation-duration:.18s;
 }
 
 @keyframes roadMove{
-  from{transform:translate(-50%,-58px);}
-  to{transform:translate(-50%,0);}
+  from{background-position-y:-60px;}
+  to{background-position-y:0;}
 }
 
 @keyframes racerTextureMove{
-  from{transform:translateY(-18px);}
+  from{transform:translateY(-28px);}
   to{transform:translateY(0);}
 }
 
 .race-panel{
   position:absolute;
-  z-index:25;
+  z-index:30;
   top:11px;
   left:50%;
   width:min(72%,650px);
@@ -1404,7 +1456,7 @@ button:disabled{
 
 .racer-mode-badge{
   position:absolute;
-  z-index:26;
+  z-index:31;
   top:69px;
   right:16px;
   padding:7px 10px;
@@ -1419,27 +1471,29 @@ button:disabled{
 
 .racer-answer{
   position:absolute;
-  z-index:12;
+  z-index:14;
   width:17%;
-  min-height:70px;
+  min-height:68px;
   padding:9px 7px;
   display:flex;
   align-items:center;
   justify-content:center;
   transform:translate(-50%,-50%);
-  border:2px solid rgba(104,224,255,.78);
+  transform-origin:center center;
+  border:2px solid rgba(104,224,255,.80);
   border-radius:13px;
   background:
     linear-gradient(180deg,rgba(19,36,65,.98),rgba(8,18,36,.98));
   color:#f4fbff;
   text-align:center;
-  font-size:8.3px;
+  font-size:8.2px;
   font-weight:950;
-  line-height:1.25;
+  line-height:1.24;
   overflow-wrap:anywhere;
   box-shadow:
     0 10px 22px rgba(0,0,0,.24),
     inset 0 0 18px rgba(85,220,255,.05);
+  will-change:left,top,transform;
 }
 
 .racer-answer::before{
@@ -1472,8 +1526,8 @@ button:disabled{
 
 .racer-car{
   position:absolute;
-  z-index:18;
-  bottom:20px;
+  z-index:20;
+  bottom:18px;
   width:18%;
   transform:translateX(-50%);
   display:flex;
@@ -1483,7 +1537,7 @@ button:disabled{
 }
 
 .racer-road.boosting .racer-car{
-  transform:translateX(-50%) scale(1.07);
+  transform:translateX(-50%) scale(1.08);
 }
 
 .racer-road.immune .racer-car .car{
@@ -1508,22 +1562,25 @@ button:disabled{
 }
 
 .car{
-  font-size:64px;
-  filter:drop-shadow(0 9px 5px rgba(0,0,0,.3));
+  font-size:67px;
+  transform:perspective(260px) rotateX(10deg);
+  filter:drop-shadow(0 11px 6px rgba(0,0,0,.34));
 }
 
 .npc-car{
   position:absolute;
-  z-index:8;
+  z-index:9;
   transform:translate(-50%,-50%);
-  font-size:39px;
+  transform-origin:center center;
+  font-size:42px;
   filter:drop-shadow(0 6px 4px rgba(0,0,0,.28));
-  opacity:.85;
+  opacity:.88;
+  will-change:left,top,transform;
 }
 
 .speed-badge{
   position:absolute;
-  z-index:20;
+  z-index:22;
   right:15px;
   bottom:14px;
   padding:8px 11px;
@@ -1545,7 +1602,7 @@ button:disabled{
   position:absolute;
   bottom:2px;
   left:50%;
-  width:24px;
+  width:25px;
   height:11px;
   transform:translateX(-50%);
   border-radius:50%;
@@ -3999,11 +4056,11 @@ button:disabled{
       </div>
 
       <h3>
-        Street Word Racer · 2D Lite
+        Street Word Racer 3D
       </h3>
 
       <p>
-        Bản đua xe 2D nhẹ: đổi làn, chọn đúng đáp án và kích hoạt Nitro.
+        Đua xe theo phối cảnh 3D: đổi làn, chọn đúng đáp án và kích hoạt Nitro.
       </p>
 
       <button
@@ -4348,7 +4405,7 @@ button:disabled{
 
     <div>
       <h2>🏎️ Street Racer · 2D Lite</h2>
-      <p>Bản 2D tối ưu tốc độ tải: đổi làn, vượt cổng đáp án và kích hoạt Nitro.</p>
+      <p>Đua theo phối cảnh 3D, đổi làn để vượt đúng cổng đáp án và kích hoạt Nitro.</p>
     </div>
 
     <button
@@ -5414,7 +5471,7 @@ const GAME_NAMES = {
 
   catcher:"Word Catcher",
 
-  racer:"Street Word Racer · 2D Lite",
+  racer:"Street Word Racer 3D",
 
   match:"Alien Maze Escape",
 
@@ -5463,10 +5520,10 @@ const GAME_INTROS = {
 
     icon:"🏎️",
 
-    title:"Street Word Racer · 2D Lite",
+    title:"Street Word Racer 3D",
 
     description:
-      "Bản đua xe 2D nhẹ, không dùng WebGL. Chuyển đúng 1 trong 4 làn để vượt cổng đáp án và bứt tốc.",
+      "Đua xe theo phối cảnh 3D. Chuyển đúng 1 trong 4 làn để vượt cổng đáp án và bứt tốc.",
 
     rules:
       "• Dùng ← →, chạm hoặc vuốt trái/phải để đổi làn.<br>• Mỗi giao lộ có 4 đáp án trên 4 làn.<br>• Trả lời đúng thật nhanh sẽ tự kích hoạt Nitro và nhận thưởng x2.<br>• Sai hoặc phản xạ không kịp: xe va chướng ngại vật, giảm tốc và bị phạt thời gian.<br>• Time Trial: đúng +4 giây, sai -6 giây.<br>• Endless Run: game kết thúc sau 3 lỗi.<br>• Combo 5 câu đúng mở BẤT TỬ 5 giây."
@@ -10760,6 +10817,89 @@ function updateNitroBadge(){
   }
 }
 
+
+function racerPerspectiveProjection(
+  lane,
+  y,
+  height
+){
+
+  const safeHeight =
+  Math.max(
+    1,
+    height
+  );
+
+  const t =
+  Math.max(
+    0,
+    Math.min(
+      1,
+      (
+        y + 80
+      )
+      /
+      (
+        safeHeight + 80
+      )
+    )
+  );
+
+  /*
+    Road lanes converge towards the horizon.
+    At the bottom they return to their normal lane positions.
+  */
+  const depth =
+  .23
+  +
+  .77
+  *
+  Math.pow(
+    t,
+    1.16
+  );
+
+  const baseX =
+  RACER_LANES[lane];
+
+  const x =
+  50
+  +
+  (
+    baseX - 50
+  )
+  *
+  depth;
+
+  const scale =
+  .44
+  +
+  .74
+  *
+  Math.pow(
+    t,
+    .95
+  );
+
+  const opacity =
+  .52
+  +
+  .48
+  *
+  Math.min(
+    1,
+    t * 1.7
+  );
+
+  return{
+    x,
+    scale,
+    opacity
+  };
+
+}
+
+
 function racerLoop(now){
   if(gameEnded) return;
   const dt = Math.min(.035,(now-lastFrame)/1000);
@@ -10778,17 +10918,58 @@ function racerLoop(now){
   $("racerRoad").classList.toggle("immune",racerImmuneTimer > 0);
   racerObjects.forEach(object=>{
     object.y += worldSpeed*dt;
-    object.element.style.left = RACER_LANES[object.lane] + "%";
-    object.element.style.top = object.y + "px";
+
+    const projection =
+    racerPerspectiveProjection(
+      object.lane,
+      object.y,
+      height
+    );
+
+    object.element.style.left =
+    projection.x + "%";
+
+    object.element.style.top =
+    object.y + "px";
+
+    object.element.style.transform =
+    `translate(-50%,-50%) scale(${projection.scale})`;
+
+    object.element.style.opacity =
+    String(projection.opacity);
   });
+
   racerNpc.forEach(npc=>{
     npc.y += (npc.speed + racerBoost*55 + racerProgress*.32) * dt;
+
     if(npc.y > height+60){
       npc.y = randomBetween(-200,-70);
       npc.lane = Math.floor(Math.random()*RACER_LANES.length);
     }
-    npc.element.style.left = RACER_LANES[npc.lane] + "%";
-    npc.element.style.top = npc.y + "px";
+
+    const projection =
+    racerPerspectiveProjection(
+      npc.lane,
+      npc.y,
+      height
+    );
+
+    npc.element.style.left =
+    projection.x + "%";
+
+    npc.element.style.top =
+    npc.y + "px";
+
+    npc.element.style.transform =
+    `translate(-50%,-50%) scale(${projection.scale * .92})`;
+
+    npc.element.style.opacity =
+    String(
+      Math.min(
+        .9,
+        projection.opacity
+      )
+    );
   });
   if(!racerResolving && racerObjects.length && racerObjects[0].y > height-135){
     racerResolving = true;
@@ -10927,7 +11108,30 @@ function moveCar(dir){
 }
 
 function renderCar(){
-  $("racerCar").style.left = RACER_LANES[carLane] + "%";
+
+  const road =
+  $("racerRoad");
+
+  const height =
+  road
+  ?
+  road.clientHeight
+  :
+  560;
+
+  const projection =
+  racerPerspectiveProjection(
+    carLane,
+    height - 35,
+    height
+  );
+
+  $("racerCar")
+  .style.left =
+  projection.x
+  +
+  "%";
+
 }
 
 function updateRacer(seconds){
@@ -11011,7 +11215,7 @@ const ALIEN_SPAWN_CELLS = [
   {row:11,col:7}
 ];
 
-const ALIEN_PLAYER_SPEED_PX = 188;
+const ALIEN_PLAYER_SPEED_PX = 205;
 const ALIEN_BASE_SPEED_PX = 54;
 const ALIEN_HIT_RADIUS_PX = 29;
 
@@ -11258,6 +11462,19 @@ function renderAlienMaze(){
 }
 
 
+function releaseAllAlienControls(){
+
+  Object.keys(
+    alienControlState
+  )
+  .forEach(
+    key =>
+    alienControlState[key] = false
+  );
+
+}
+
+
 function setupAlienControls(){
 
   document
@@ -11270,27 +11487,104 @@ function setupAlienControls(){
       const dir =
       button.dataset.alienControl;
 
-      const press =
+      button.oncontextmenu =
+      event =>
+      event.preventDefault();
+
+
+      button.onpointerdown =
       event => {
+
         event.preventDefault();
+
+        /*
+          Giữ pointer ở đúng button kể cả khi ngón tay / chuột
+          lệch ra ngoài biên. Đây là nguyên nhân cũ khiến astronaut
+          đang chạy thì thỉnh thoảng tự dừng.
+        */
+        try{
+
+          button.setPointerCapture(
+            event.pointerId
+          );
+
+        }
+        catch(error){}
+
         alienControlState[dir] = true;
+
       };
+
 
       const release =
       event => {
+
         event.preventDefault();
+
+        alienControlState[dir] = false;
+
+        try{
+
+          if(
+            button.hasPointerCapture(
+              event.pointerId
+            )
+          ){
+
+            button.releasePointerCapture(
+              event.pointerId
+            );
+
+          }
+
+        }
+        catch(error){}
+
+      };
+
+
+      button.onpointerup =
+      release;
+
+      button.onpointercancel =
+      release;
+
+      button.onlostpointercapture =
+      ()=>{
         alienControlState[dir] = false;
       };
 
-      button.onpointerdown = press;
-      button.onpointerup = release;
-      button.onpointercancel = release;
-      button.onpointerleave = release;
+      /*
+        KHÔNG dùng pointerleave để release nữa.
+        Khi đang giữ nút, pointer capture cho phép người chơi
+        tiếp tục chạy dù ngón tay hơi trượt khỏi nút.
+      */
 
     }
   );
 
 }
+
+
+/*
+  Nếu tab/app mất focus thật sự thì mới giải phóng tất cả phím,
+  tránh tình trạng nút bị kẹt.
+*/
+window.addEventListener(
+  "blur",
+  releaseAllAlienControls
+);
+
+document.addEventListener(
+  "visibilitychange",
+  ()=>{
+
+    if(document.hidden){
+      releaseAllAlienControls();
+    }
+
+  }
+);
 
 
 function alienIsOpenCell(
@@ -11350,11 +11644,15 @@ function alienCanOccupy(
   y
 ){
 
+  /*
+    Hitbox nhỏ hơn sprite một chút để đi qua góc hành lang mượt hơn.
+    Sprite vẫn nhìn 38px nhưng collision không bị "cạ tường" quá sớm.
+  */
   const rx =
-  .018;
+  .0145;
 
   const ry =
-  .024;
+  .0195;
 
   const samples = [
     [0,0],
