@@ -1187,29 +1187,83 @@ button:disabled{
 
 
 /* =========================================================
-   STREET RACER
+   STREET RACER · 2D LITE
+   Lightweight CSS/DOM version — no WebGL / Three.js
 ========================================================= */
 
 .racer-road{
   position:relative;
   height:540px;
   overflow:hidden;
-  border:5px solid #1f2430;
-  border-radius:20px;
+  isolation:isolate;
+  border:4px solid #111827;
+  border-radius:22px;
   background:
-    linear-gradient(180deg,#8fd6ff 0 23%,#6fb6ff 23% 31%,#66707f 31% 100%);
+    radial-gradient(circle at 50% 6%,rgba(83,147,255,.28),transparent 22%),
+    linear-gradient(180deg,#081226 0 21%,#101b31 21% 100%);
+  box-shadow:
+    inset 0 0 50px rgba(0,0,0,.32),
+    0 14px 34px rgba(18,28,55,.13);
+}
+
+.racer-road::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:0;
+  right:0;
+  top:0;
+  height:24%;
+  background:
+    linear-gradient(90deg,
+      transparent 0 5%,
+      rgba(78,99,145,.68) 5% 10%,
+      transparent 10% 13%,
+      rgba(62,80,126,.8) 13% 20%,
+      transparent 20% 25%,
+      rgba(89,111,162,.7) 25% 31%,
+      transparent 31% 69%,
+      rgba(89,111,162,.7) 69% 75%,
+      transparent 75% 80%,
+      rgba(62,80,126,.8) 80% 87%,
+      transparent 87% 90%,
+      rgba(78,99,145,.68) 90% 95%,
+      transparent 95% 100%
+    ),
+    linear-gradient(180deg,transparent,#172238);
+  opacity:.88;
+}
+
+.racer-road::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:12%;
+  right:12%;
+  top:22%;
+  bottom:0;
+  border-left:4px solid rgba(99,214,255,.55);
+  border-right:4px solid rgba(255,95,190,.42);
+  box-shadow:
+    -8px 0 20px rgba(72,204,255,.08),
+    8px 0 20px rgba(255,73,182,.06);
+  pointer-events:none;
 }
 
 .city-left,
 .city-right{
   position:absolute;
   z-index:1;
-  top:0;
+  top:22%;
   bottom:0;
-  width:16%;
+  width:12%;
   overflow:hidden;
   background:
-    linear-gradient(180deg,#96a2b7 0 31%,#3f8f46 31% 100%);
+    repeating-linear-gradient(
+      180deg,
+      rgba(36,55,89,.95) 0 24px,
+      rgba(19,33,58,.98) 24px 50px
+    );
 }
 
 .city-left{left:0;}
@@ -1219,100 +1273,124 @@ button:disabled{
 .city-right::before{
   content:"";
   position:absolute;
-  inset:10% 10% 34% 10%;
+  inset:0;
   background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(58,66,84,.95) 0 18px,
-      rgba(87,96,116,.95) 18px 34px,
-      rgba(58,66,84,.95) 34px 48px
-    );
-  border-radius:18px 18px 0 0;
+    radial-gradient(circle at 30% 15%,#7fe6ff 0 2px,transparent 3px),
+    radial-gradient(circle at 70% 28%,#ffe16a 0 2px,transparent 3px),
+    radial-gradient(circle at 35% 46%,#ff86c8 0 2px,transparent 3px),
+    radial-gradient(circle at 65% 66%,#7fe6ff 0 2px,transparent 3px),
+    radial-gradient(circle at 30% 84%,#ffe16a 0 2px,transparent 3px);
+  opacity:.75;
 }
 
 .city-left::after,
 .city-right::after{
-  content:"🏁";
-  position:absolute;
-  bottom:70px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:44px;
-  filter:drop-shadow(0 5px 5px rgba(0,0,0,.2));
+  content:"";
 }
 
 .road-inner{
   position:absolute;
   z-index:2;
-  top:27%;
+  left:12%;
+  right:12%;
+  top:22%;
   bottom:0;
-  left:16%;
-  right:16%;
+  overflow:hidden;
   background:
-    linear-gradient(90deg,#2e333c 0,#464c57 8%,#5a6070 50%,#464c57 92%,#2e333c 100%);
-  box-shadow:inset 0 18px 0 rgba(255,255,255,.14);
+    linear-gradient(
+      90deg,
+      #252c3a 0,
+      #363f50 6%,
+      #444e60 50%,
+      #363f50 94%,
+      #252c3a 100%
+    );
 }
 
 .road-inner::before{
   content:"";
   position:absolute;
-  left:0;
-  right:0;
-  top:-12px;
-  height:18px;
-  background:repeating-linear-gradient(90deg,#fff 0 44px,#111 44px 88px);
+  inset:0;
+  opacity:.2;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255,255,255,.06) 0 2px,
+      transparent 2px 9px
+    );
+  animation:racerTextureMove .55s linear infinite;
 }
 
 .road-line{
   position:absolute;
   z-index:3;
-  top:-110%;
-  bottom:-110%;
-  width:4px;
-  background:repeating-linear-gradient(to bottom,#fff 0 30px,transparent 30px 64px);
+  top:-120%;
+  bottom:-120%;
+  width:3px;
+  transform:translateX(-50%);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.88) 0 24px,
+      transparent 24px 58px
+    );
   opacity:.42;
-  animation:roadMove 1s linear infinite;
+  animation:roadMove .72s linear infinite;
 }
 
 .road-line.one{left:25%;}
 .road-line.two{left:50%;}
 .road-line.three{left:75%;}
 
-.racer-road.boosting .road-line{animation-duration:.43s;}
+.racer-road.boosting .road-line{
+  animation-duration:.30s;
+}
+
+.racer-road.boosting .road-inner::before{
+  animation-duration:.22s;
+}
 
 @keyframes roadMove{
-  from{transform:translateY(-64px);}
+  from{transform:translate(-50%,-58px);}
+  to{transform:translate(-50%,0);}
+}
+
+@keyframes racerTextureMove{
+  from{transform:translateY(-18px);}
   to{transform:translateY(0);}
 }
 
 .race-panel{
   position:absolute;
-  z-index:20;
-  top:12px;
+  z-index:25;
+  top:11px;
   left:50%;
-  width:70%;
+  width:min(72%,650px);
   transform:translateX(-50%);
-  padding:10px 12px;
-  border-radius:14px;
-  background:rgba(18,24,37,.82);
+  padding:9px 12px;
+  border:1px solid rgba(131,163,255,.24);
+  border-radius:13px;
+  background:rgba(5,12,27,.84);
   color:#fff;
-  box-shadow:0 10px 24px rgba(0,0,0,.18);
+  box-shadow:0 10px 26px rgba(0,0,0,.24);
+  backdrop-filter:blur(7px);
 }
 
 .race-panel-top{
   display:flex;
   justify-content:space-between;
   margin-bottom:7px;
-  font-size:8px;
+  color:#c9d7ff;
+  font-size:7.5px;
   font-weight:950;
-  letter-spacing:.05em;
+  letter-spacing:.07em;
 }
 
 .race-track{
-  height:8px;
+  height:7px;
   overflow:hidden;
   border-radius:999px;
-  background:rgba(255,255,255,.15);
+  background:rgba(255,255,255,.14);
 }
 
 .race-track i{
@@ -1320,131 +1398,143 @@ button:disabled{
   height:100%;
   width:0;
   border-radius:inherit;
-  background:linear-gradient(90deg,#62f4be,#ffe165);
+  background:linear-gradient(90deg,#55e9ff,#7effbc,#ffe567);
+  box-shadow:0 0 12px rgba(85,233,255,.42);
 }
 
 .racer-mode-badge{
   position:absolute;
-  z-index:22;
-  top:74px;
-  right:18px;
-  padding:8px 12px;
+  z-index:26;
+  top:69px;
+  right:16px;
+  padding:7px 10px;
+  border:1px solid rgba(117,218,255,.22);
   border-radius:999px;
-  background:rgba(255,255,255,.9);
-  color:#22314d;
-  font-size:8px;
+  background:rgba(8,20,42,.86);
+  color:#bdefff;
+  font-size:7.5px;
   font-weight:950;
-  box-shadow:0 8px 16px rgba(0,0,0,.12);
+  letter-spacing:.07em;
 }
 
 .racer-answer{
   position:absolute;
   z-index:12;
-  width:18%;
-  min-height:76px;
-  padding:8px 8px 10px;
+  width:17%;
+  min-height:70px;
+  padding:9px 7px;
   display:flex;
   align-items:center;
   justify-content:center;
   transform:translate(-50%,-50%);
-  border:3px solid #ffffff;
-  border-radius:16px;
-  background:linear-gradient(180deg,#fff 0,#eef3ff 100%);
-  color:#2b2f57;
+  border:2px solid rgba(104,224,255,.78);
+  border-radius:13px;
+  background:
+    linear-gradient(180deg,rgba(19,36,65,.98),rgba(8,18,36,.98));
+  color:#f4fbff;
   text-align:center;
   font-size:8.3px;
   font-weight:950;
   line-height:1.25;
   overflow-wrap:anywhere;
-  box-shadow:0 12px 20px rgba(21,34,63,.18);
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.24),
+    inset 0 0 18px rgba(85,220,255,.05);
 }
 
 .racer-answer::before{
-  content:"GIAO LỘ";
+  content:"ANSWER GATE";
   position:absolute;
   top:-10px;
   left:50%;
   transform:translateX(-50%);
-  padding:2px 8px;
+  padding:2px 7px;
   border-radius:999px;
-  background:#ffec96;
-  color:#5b4304;
-  font-size:6px;
-  letter-spacing:.08em;
+  background:#dff8ff;
+  color:#1b5063;
+  font-size:5.5px;
+  letter-spacing:.07em;
+  white-space:nowrap;
 }
 
 .racer-answer.good{
-  background:linear-gradient(180deg,#dff9ea 0,#c7f2df 100%);
-  color:#15683f;
+  border-color:#67f2a9;
+  background:linear-gradient(180deg,#174f3d,#0e352b);
+  color:#dffff0;
+  box-shadow:0 0 24px rgba(103,242,169,.24);
 }
 
 .racer-answer.crash{
-  background:linear-gradient(180deg,#ffe6eb 0,#ffd2dc 100%);
-  color:#9d2e46;
+  border-color:#ff7d91;
+  background:linear-gradient(180deg,#682337,#38101e);
+  color:#ffe8ec;
 }
 
 .racer-car{
   position:absolute;
-  z-index:16;
-  bottom:22px;
-  width:19%;
+  z-index:18;
+  bottom:20px;
+  width:18%;
   transform:translateX(-50%);
   display:flex;
   flex-direction:column;
   align-items:center;
-  transition:left .14s ease,transform .18s ease;
+  transition:left .12s ease,transform .16s ease;
 }
 
 .racer-road.boosting .racer-car{
-  transform:translateX(-50%) scale(1.08);
+  transform:translateX(-50%) scale(1.07);
 }
 
 .racer-road.immune .racer-car .car{
-  filter:drop-shadow(0 0 18px rgba(255,220,90,.88));
+  filter:
+    drop-shadow(0 0 13px rgba(255,231,99,.92))
+    drop-shadow(0 8px 5px rgba(0,0,0,.28));
 }
 
 .car-prompt{
-  max-width:108%;
+  max-width:120%;
   padding:7px 9px;
   margin-bottom:4px;
-  border-radius:10px;
-  background:#fff;
-  color:#2a2755;
+  border:1px solid #dbe7ff;
+  border-radius:9px;
+  background:rgba(255,255,255,.97);
+  color:#2b2855;
   text-align:center;
   font-size:8px;
   font-weight:950;
-  box-shadow:0 10px 20px rgba(16,18,27,.15);
+  box-shadow:0 8px 18px rgba(0,0,0,.16);
   overflow-wrap:anywhere;
 }
 
 .car{
-  font-size:68px;
-  filter:drop-shadow(0 10px 6px rgba(0,0,0,.25));
+  font-size:64px;
+  filter:drop-shadow(0 9px 5px rgba(0,0,0,.3));
 }
 
 .npc-car{
   position:absolute;
   z-index:8;
   transform:translate(-50%,-50%);
-  font-size:42px;
-  filter:drop-shadow(0 6px 4px rgba(0,0,0,.25));
-  opacity:.82;
+  font-size:39px;
+  filter:drop-shadow(0 6px 4px rgba(0,0,0,.28));
+  opacity:.85;
 }
 
 .speed-badge{
   position:absolute;
-  z-index:18;
-  right:18px;
-  bottom:16px;
-  padding:9px 12px;
-  border-radius:12px;
-  background:rgba(19,23,31,.84);
-  color:#fff;
-  font-size:8.5px;
+  z-index:20;
+  right:15px;
+  bottom:14px;
+  padding:8px 11px;
+  border:1px solid rgba(122,220,255,.2);
+  border-radius:11px;
+  background:rgba(5,15,34,.86);
+  color:#eaf8ff;
+  font-size:8px;
   font-weight:950;
   letter-spacing:.05em;
 }
-
 
 .racer-car.crashed{
   animation:racerCrash .13s ease-in-out 8 alternate;
@@ -1456,7 +1546,7 @@ button:disabled{
   bottom:2px;
   left:50%;
   width:24px;
-  height:10px;
+  height:11px;
   transform:translateX(-50%);
   border-radius:50%;
   background:rgba(255,255,255,0);
@@ -1464,9 +1554,15 @@ button:disabled{
 }
 
 .racer-road.boosting .racer-car::after{
-  background:linear-gradient(90deg,rgba(255,95,95,.8),rgba(255,214,73,.8),rgba(88,222,255,.8));
+  background:
+    linear-gradient(
+      90deg,
+      rgba(73,218,255,.9),
+      rgba(255,225,87,.95),
+      rgba(255,98,151,.9)
+    );
   filter:blur(4px);
-  animation:nitroSmoke .3s linear infinite;
+  animation:nitroSmoke .28s linear infinite;
 }
 
 @keyframes racerCrash{
@@ -1480,99 +1576,95 @@ button:disabled{
 }
 
 /* =========================================================
-   ALIEN ESCAPE
+   ALIEN MAZE ESCAPE · 2D
+   Pac-Man-style maze with real wall collision/pathfinding
 ========================================================= */
 
 .alien-stage{
   position:relative;
-  height:560px;
+  height:540px;
   overflow:hidden;
-  border:1px solid #1b2b58;
+  border:3px solid #111a38;
   border-radius:20px;
   background:
-    radial-gradient(circle at 50% 45%,rgba(73,108,190,.18),transparent 28%),
-    radial-gradient(circle at 15% 20%,rgba(95,221,255,.12),transparent 20%),
-    radial-gradient(circle at 85% 80%,rgba(155,93,229,.16),transparent 22%),
-    linear-gradient(180deg,#071127,#030815 68%,#050a18);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);
+    radial-gradient(circle at 50% 48%,rgba(67,86,174,.12),transparent 34%),
+    #02050c;
+  box-shadow:
+    inset 0 0 40px rgba(20,53,120,.16),
+    0 12px 30px rgba(14,25,60,.10);
   touch-action:none;
   user-select:none;
-}
-
-.alien-stage::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  opacity:.34;
-  background-image:
-    linear-gradient(rgba(82,117,180,.22) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(82,117,180,.22) 1px,transparent 1px);
-  background-size:42px 42px;
-  pointer-events:none;
-}
-
-.alien-stage::after{
-  content:"";
-  position:absolute;
-  inset:8% 7%;
-  border:2px solid rgba(77,224,255,.14);
-  border-radius:24px;
-  box-shadow:
-    inset 0 0 30px rgba(77,224,255,.035),
-    0 0 30px rgba(77,224,255,.025);
-  pointer-events:none;
+  isolation:isolate;
 }
 
 .alien-stars{
   position:absolute;
+  z-index:0;
   inset:0;
   pointer-events:none;
-  opacity:.72;
+  opacity:.45;
   background-image:
-    radial-gradient(circle at 7% 14%,#fff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 22% 67%,#8fe8ff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 35% 28%,#fff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 48% 83%,#fff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 64% 12%,#a8b8ff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 74% 54%,#fff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 91% 28%,#fff 0 1px,transparent 1.5px),
-    radial-gradient(circle at 88% 88%,#8fe8ff 0 1px,transparent 1.5px);
+    radial-gradient(circle at 6% 8%,#fff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 18% 74%,#77dfff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 35% 18%,#fff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 51% 84%,#fff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 66% 10%,#9ab2ff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 80% 64%,#fff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 93% 26%,#fff 0 1px,transparent 1.4px);
 }
 
-.alien-lane{
+.alien-maze{
   position:absolute;
-  border:2px solid rgba(117,145,211,.12);
-  border-radius:18px;
+  z-index:1;
+  inset:0;
   pointer-events:none;
 }
 
-.alien-lane.l1{left:22%;top:19%;width:56%;height:16%;}
-.alien-lane.l2{left:22%;bottom:19%;width:56%;height:16%;}
-.alien-lane.l3{left:22%;top:35%;width:16%;height:30%;}
-.alien-lane.l4{right:22%;top:35%;width:16%;height:30%;}
+.alien-wall{
+  position:absolute;
+  border:1px solid #164bff;
+  border-radius:4px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(17,44,115,.98),
+      rgba(4,16,57,.98)
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(89,132,255,.28),
+    0 0 8px rgba(29,78,255,.28);
+}
+
+.alien-wall::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border:1px solid rgba(67,133,255,.14);
+  border-radius:2px;
+}
 
 .alien-question{
   position:absolute;
+  z-index:8;
   left:50%;
   top:50%;
-  z-index:7;
-  width:min(46%,430px);
+  width:min(38%,390px);
   transform:translate(-50%,-50%);
-  padding:13px 16px;
-  border:1px solid rgba(140,169,255,.25);
-  border-radius:16px;
-  background:rgba(5,12,31,.86);
-  box-shadow:0 10px 30px rgba(0,0,0,.28);
-  backdrop-filter:blur(8px);
+  padding:10px 13px;
+  border:1px solid rgba(136,166,255,.25);
+  border-radius:13px;
+  background:rgba(3,8,22,.90);
+  box-shadow:0 8px 24px rgba(0,0,0,.34);
+  backdrop-filter:blur(6px);
   text-align:center;
   pointer-events:none;
 }
 
 .alien-question small{
   display:block;
-  margin-bottom:5px;
-  color:#7fdfff;
-  font-size:9px;
+  margin-bottom:4px;
+  color:#75dcff;
+  font-size:8px;
   font-weight:950;
   letter-spacing:.08em;
   text-transform:uppercase;
@@ -1581,56 +1673,58 @@ button:disabled{
 .alien-question strong{
   display:block;
   color:#fff;
-  font-size:clamp(13px,2vw,20px);
-  line-height:1.35;
+  font-size:clamp(12px,1.7vw,18px);
+  line-height:1.3;
   overflow-wrap:anywhere;
 }
 
 .alien-answer{
   position:absolute;
-  z-index:5;
-  width:29%;
-  min-height:78px;
-  padding:10px 12px;
+  z-index:6;
+  width:min(17%,175px);
+  min-height:54px;
+  padding:7px 9px;
   display:flex;
   align-items:center;
   justify-content:center;
-  border:1px solid rgba(116,216,255,.28);
-  border-radius:15px;
-  background:linear-gradient(145deg,rgba(17,36,77,.96),rgba(10,19,48,.96));
-  box-shadow:0 8px 22px rgba(0,0,0,.28),inset 0 0 18px rgba(91,190,255,.045);
-  color:#eef7ff;
+  transform:translate(-50%,-50%);
+  border:2px solid rgba(110,225,255,.55);
+  border-radius:11px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(18,42,84,.98),
+      rgba(6,17,44,.98)
+    );
+  box-shadow:
+    0 6px 18px rgba(0,0,0,.32),
+    inset 0 0 14px rgba(83,192,255,.06);
+  color:#f3fbff;
   text-align:center;
-  font-size:clamp(9px,1.4vw,13px);
-  line-height:1.25;
+  font-size:clamp(7.5px,1vw,10.5px);
+  line-height:1.2;
   font-weight:900;
   overflow-wrap:anywhere;
   pointer-events:none;
-  transition:.18s ease;
 }
 
 .alien-answer::before{
   content:"";
   position:absolute;
-  inset:5px;
-  border:1px dashed rgba(121,229,255,.13);
-  border-radius:10px;
+  inset:4px;
+  border:1px dashed rgba(123,229,255,.12);
+  border-radius:7px;
 }
 
-.alien-answer.a0{left:4%;top:4%;}
-.alien-answer.a1{right:4%;top:4%;}
-.alien-answer.a2{left:4%;bottom:4%;}
-.alien-answer.a3{right:4%;bottom:4%;}
-
 .alien-answer.correct-flash{
-  border-color:#5cf2aa;
-  background:linear-gradient(145deg,rgba(21,105,78,.96),rgba(7,56,44,.96));
-  box-shadow:0 0 24px rgba(92,242,170,.26);
+  border-color:#55f0a7;
+  background:linear-gradient(145deg,#176b50,#083a2c);
+  box-shadow:0 0 22px rgba(85,240,167,.28);
 }
 
 .alien-answer.wrong-flash{
-  border-color:#ff7c91;
-  background:linear-gradient(145deg,rgba(111,30,51,.96),rgba(58,12,27,.96));
+  border-color:#ff748c;
+  background:linear-gradient(145deg,#74263e,#3e1020);
 }
 
 .astronaut-player,
@@ -1638,52 +1732,54 @@ button:disabled{
   position:absolute;
   left:50%;
   top:50%;
-  z-index:10;
-  width:48px;
-  height:48px;
+  z-index:12;
+  width:38px;
+  height:38px;
   display:flex;
   align-items:center;
   justify-content:center;
   transform:translate(-50%,-50%);
-  filter:drop-shadow(0 5px 8px rgba(0,0,0,.5));
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.58));
   will-change:left,top,transform;
   pointer-events:none;
 }
 
 .astronaut-player{
-  font-size:37px;
+  font-size:30px;
 }
 
 .astronaut-player::after{
   content:"";
   position:absolute;
-  width:34px;
-  height:12px;
+  width:26px;
+  height:9px;
   left:50%;
-  top:36px;
+  top:29px;
   transform:translateX(-50%);
   border-radius:50%;
-  background:rgba(76,216,255,.23);
-  filter:blur(5px);
+  background:rgba(63,216,255,.24);
+  filter:blur(4px);
   z-index:-1;
 }
 
 .alien-enemy{
-  font-size:33px;
-  animation:alienBob .55s ease-in-out infinite alternate;
+  font-size:28px;
+  animation:alienBob .48s ease-in-out infinite alternate;
 }
 
 .alien-enemy.fast{
-  filter:drop-shadow(0 0 10px rgba(255,91,188,.38));
+  filter:
+    drop-shadow(0 0 8px rgba(255,91,188,.45))
+    drop-shadow(0 4px 6px rgba(0,0,0,.55));
 }
 
 @keyframes alienBob{
-  from{transform:translate(-50%,-50%) rotate(-4deg) scale(.97);}
-  to{transform:translate(-50%,-50%) rotate(4deg) scale(1.04);}
+  from{transform:translate(-50%,-50%) translateY(-1px) scale(.98);}
+  to{transform:translate(-50%,-50%) translateY(2px) scale(1.03);}
 }
 
 .alien-stage.hit .astronaut-player{
-  animation:astronautHit .16s linear 3;
+  animation:astronautHit .14s linear 4;
 }
 
 @keyframes astronautHit{
@@ -1698,7 +1794,7 @@ button:disabled{
   grid-template-rows:repeat(2,48px);
   gap:7px;
   justify-content:center;
-  margin:12px auto 0;
+  margin:11px auto 0;
 }
 
 .alien-controls button{
@@ -1733,14 +1829,32 @@ button:disabled{
 }
 
 @media (max-width:700px){
-  .alien-stage{height:500px;border-radius:16px;}
-  .alien-answer{width:38%;min-height:76px;padding:8px;font-size:9px;}
-  .alien-question{width:58%;padding:10px 12px;}
-  .astronaut-player,.alien-enemy{width:42px;height:42px;}
-  .astronaut-player{font-size:32px;}
-  .alien-enemy{font-size:29px;}
-}
+  .alien-stage{
+    height:480px;
+    border-radius:16px;
+  }
 
+  .alien-answer{
+    width:min(22%,140px);
+    min-height:48px;
+    padding:6px;
+    font-size:7.5px;
+  }
+
+  .alien-question{
+    width:42%;
+    padding:8px 9px;
+  }
+
+  .astronaut-player,
+  .alien-enemy{
+    width:34px;
+    height:34px;
+  }
+
+  .astronaut-player{font-size:27px;}
+  .alien-enemy{font-size:25px;}
+}
 
 /* =========================================================
    FLAPPY
@@ -3885,11 +3999,11 @@ button:disabled{
       </div>
 
       <h3>
-        Street Word Racer
+        Street Word Racer · 2D Lite
       </h3>
 
       <p>
-        Đua trên phố với các xe khác. Trả lời đúng để tăng tốc.
+        Bản đua xe 2D nhẹ: đổi làn, chọn đúng đáp án và kích hoạt Nitro.
       </p>
 
       <button
@@ -4233,8 +4347,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-      <h2>🏎️ Street Racer</h2>
-      <p>Chuyển làn thật nhanh để lao qua giao lộ đúng nghĩa và kích hoạt Nitro.</p>
+      <h2>🏎️ Street Racer · 2D Lite</h2>
+      <p>Bản 2D tối ưu tốc độ tải: đổi làn, vượt cổng đáp án và kích hoạt Nitro.</p>
     </div>
 
     <button
@@ -4340,8 +4454,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-      <h2>👨‍🚀 Alien Escape</h2>
-      <p>Chạy tới đúng đáp án ở 4 góc trước khi aliens bắt kịp.</p>
+      <h2>👨‍🚀 Alien Maze Escape</h2>
+      <p>Di chuyển qua mê cung tới đúng đáp án trước khi aliens đuổi kịp.</p>
     </div>
 
     <button
@@ -4391,10 +4505,7 @@ button:disabled{
   >
 
     <div class="alien-stars"></div>
-    <div class="alien-lane l1"></div>
-    <div class="alien-lane l2"></div>
-    <div class="alien-lane l3"></div>
-    <div class="alien-lane l4"></div>
+    <div class="alien-maze" id="alienMaze" aria-hidden="true"></div>
 
     <div class="alien-answer a0" id="alienAnswer0">—</div>
     <div class="alien-answer a1" id="alienAnswer1">—</div>
@@ -5303,9 +5414,9 @@ const GAME_NAMES = {
 
   catcher:"Word Catcher",
 
-  racer:"Street Word Racer",
+  racer:"Street Word Racer · 2D Lite",
 
-  match:"Alien Escape",
+  match:"Alien Maze Escape",
 
   flappy:"Flappy Kākāpō",
 
@@ -5352,10 +5463,10 @@ const GAME_INTROS = {
 
     icon:"🏎️",
 
-    title:"Street Word Racer",
+    title:"Street Word Racer · 2D Lite",
 
     description:
-      "Xe tự tăng tốc. Chuyển đúng 1 trong 4 làn tại giao lộ để bứt tốc về đích.",
+      "Bản đua xe 2D nhẹ, không dùng WebGL. Chuyển đúng 1 trong 4 làn để vượt cổng đáp án và bứt tốc.",
 
     rules:
       "• Dùng ← →, chạm hoặc vuốt trái/phải để đổi làn.<br>• Mỗi giao lộ có 4 đáp án trên 4 làn.<br>• Trả lời đúng thật nhanh sẽ tự kích hoạt Nitro và nhận thưởng x2.<br>• Sai hoặc phản xạ không kịp: xe va chướng ngại vật, giảm tốc và bị phạt thời gian.<br>• Time Trial: đúng +4 giây, sai -6 giây.<br>• Endless Run: game kết thúc sau 3 lỗi.<br>• Combo 5 câu đúng mở BẤT TỬ 5 giây."
@@ -5366,7 +5477,7 @@ const GAME_INTROS = {
 
     icon:"👨‍🚀",
 
-    title:"Alien Escape",
+    title:"Alien Maze Escape",
 
     description:
       "Điều khiển astronaut tới đúng đáp án ở 4 góc trong khi aliens liên tục truy đuổi.",
@@ -10831,7 +10942,7 @@ function updateRacer(seconds){
 }
 
 /* =========================================================
-   ALIEN ESCAPE
+   ALIEN MAZE ESCAPE · 2D
 ========================================================= */
 
 let alienEscapeStarted = false;
@@ -10855,17 +10966,66 @@ const alienControlState = {
   right:false
 };
 
-const ALIEN_PLAYER_SPEED = 0.34;
-const ALIEN_BASE_SPEED = 0.072;
-const ALIEN_PLAYER_RADIUS = 0.037;
-const ALIEN_HIT_RADIUS = 0.066;
+/*
+  # = wall
+  . = corridor
 
-const ALIEN_ANSWER_ZONES = [
-  {x:0.18,y:0.13},
-  {x:0.82,y:0.13},
-  {x:0.18,y:0.87},
-  {x:0.82,y:0.87}
+  17 columns × 13 rows.
+  The map is deliberately small so collision/pathfinding stays cheap.
+*/
+const ALIEN_MAZE = [
+  "#################",
+  "#.......#.......#",
+  "#.###.#.#.#.###.#",
+  "#.....#...#.....#",
+  "###.#.#####.#.###",
+  "#...#...#...#...#",
+  "#.#...#...#...#.#",
+  "#...#...#...#...#",
+  "###.#.#####.#.###",
+  "#.....#...#.....#",
+  "#.###.#.#.#.###.#",
+  "#.......#.......#",
+  "#################"
 ];
+
+const ALIEN_ROWS = ALIEN_MAZE.length;
+const ALIEN_COLS = ALIEN_MAZE[0].length;
+
+const ALIEN_PLAYER_START = {
+  row:6,
+  col:8
+};
+
+const ALIEN_ANSWER_CELLS = [
+  {row:1,col:1},
+  {row:1,col:15},
+  {row:11,col:1},
+  {row:11,col:15}
+];
+
+const ALIEN_SPAWN_CELLS = [
+  {row:6,col:1},
+  {row:6,col:15},
+  {row:1,col:7},
+  {row:11,col:7}
+];
+
+const ALIEN_PLAYER_SPEED_PX = 188;
+const ALIEN_BASE_SPEED_PX = 54;
+const ALIEN_HIT_RADIUS_PX = 29;
+
+function alienCellCenter(cell){
+  return{
+    x:(cell.col + .5) / ALIEN_COLS,
+    y:(cell.row + .5) / ALIEN_ROWS
+  };
+}
+
+const ALIEN_ANSWER_ZONES =
+ALIEN_ANSWER_CELLS
+.map(alienCellCenter);
+
 
 function startMatch(){
 
@@ -10886,6 +11046,7 @@ function beginAlienEscape(){
   alienEscapeRoundLocked = false;
   alienEscapeSeconds = 120;
 
+  renderAlienMaze();
   setupAlienControls();
   startAlienEscapeRound();
   updateMatch(alienEscapeSeconds);
@@ -10955,6 +11116,148 @@ function clearAlienEscape(){
 }
 
 
+function renderAlienMaze(){
+
+  const maze =
+  $("alienMaze");
+
+  if(!maze){
+    return;
+  }
+
+  const rects = [];
+
+  ALIEN_MAZE
+  .forEach(
+    (
+      row,
+      rowIndex
+    )=>{
+
+      let start = -1;
+
+      for(
+        let col=0;
+        col<=ALIEN_COLS;
+        col++
+      ){
+
+        const wall =
+        col < ALIEN_COLS
+        &&
+        row[col] === "#";
+
+        if(
+          wall
+          &&
+          start < 0
+        ){
+          start = col;
+        }
+
+        if(
+          !wall
+          &&
+          start >= 0
+        ){
+
+          rects.push({
+            row:rowIndex,
+            start:start,
+            end:col - 1
+          });
+
+          start = -1;
+        }
+
+      }
+
+    }
+  );
+
+  maze.innerHTML =
+  rects
+  .map(
+    rect => {
+
+      const left =
+      rect.start
+      /
+      ALIEN_COLS
+      *
+      100;
+
+      const top =
+      rect.row
+      /
+      ALIEN_ROWS
+      *
+      100;
+
+      const width =
+      (
+        rect.end
+        -
+        rect.start
+        +
+        1
+      )
+      /
+      ALIEN_COLS
+      *
+      100;
+
+      const height =
+      1
+      /
+      ALIEN_ROWS
+      *
+      100;
+
+      return`
+        <div
+          class="alien-wall"
+          style="
+            left:${left}%;
+            top:${top}%;
+            width:${width}%;
+            height:${height}%;
+          "
+        ></div>
+      `;
+
+    }
+  )
+  .join("");
+
+  ALIEN_ANSWER_ZONES
+  .forEach(
+    (
+      zone,
+      index
+    )=>{
+
+      const node =
+      $(
+        `alienAnswer${index}`
+      );
+
+      if(!node){
+        return;
+      }
+
+      node.style.left =
+      `${zone.x * 100}%`;
+
+      node.style.top =
+      `${zone.y * 100}%`;
+
+    }
+  );
+
+}
+
+
 function setupAlienControls(){
 
   document
@@ -10986,6 +11289,234 @@ function setupAlienControls(){
 
     }
   );
+
+}
+
+
+function alienIsOpenCell(
+  row,
+  col
+){
+
+  return(
+    row >= 0
+    &&
+    row < ALIEN_ROWS
+    &&
+    col >= 0
+    &&
+    col < ALIEN_COLS
+    &&
+    ALIEN_MAZE[row][col] !== "#"
+  );
+
+}
+
+
+function alienCellFromPosition(
+  x,
+  y
+){
+
+  return{
+    row:
+      Math.max(
+        0,
+        Math.min(
+          ALIEN_ROWS - 1,
+          Math.floor(
+            y * ALIEN_ROWS
+          )
+        )
+      ),
+
+    col:
+      Math.max(
+        0,
+        Math.min(
+          ALIEN_COLS - 1,
+          Math.floor(
+            x * ALIEN_COLS
+          )
+        )
+      )
+  };
+
+}
+
+
+function alienCanOccupy(
+  x,
+  y
+){
+
+  const rx =
+  .018;
+
+  const ry =
+  .024;
+
+  const samples = [
+    [0,0],
+    [rx,0],
+    [-rx,0],
+    [0,ry],
+    [0,-ry],
+    [rx*.72,ry*.72],
+    [rx*.72,-ry*.72],
+    [-rx*.72,ry*.72],
+    [-rx*.72,-ry*.72]
+  ];
+
+  return samples
+  .every(
+    sample => {
+
+      const cell =
+      alienCellFromPosition(
+        x + sample[0],
+        y + sample[1]
+      );
+
+      return alienIsOpenCell(
+        cell.row,
+        cell.col
+      );
+
+    }
+  );
+
+}
+
+
+function alienFindPath(
+  start,
+  goal
+){
+
+  const startKey =
+  `${start.row},${start.col}`;
+
+  const goalKey =
+  `${goal.row},${goal.col}`;
+
+  if(startKey === goalKey){
+    return[
+      start
+    ];
+  }
+
+  const queue = [
+    start
+  ];
+
+  const parent =
+  new Map();
+
+  parent.set(
+    startKey,
+    null
+  );
+
+  const dirs = [
+    [-1,0],
+    [1,0],
+    [0,-1],
+    [0,1]
+  ];
+
+  let found =
+  false;
+
+  while(
+    queue.length
+    &&
+    !found
+  ){
+
+    const current =
+    queue.shift();
+
+    for(
+      const dir
+      of
+      dirs
+    ){
+
+      const next = {
+        row:
+          current.row
+          +
+          dir[0],
+
+        col:
+          current.col
+          +
+          dir[1]
+      };
+
+      if(
+        !alienIsOpenCell(
+          next.row,
+          next.col
+        )
+      ){
+        continue;
+      }
+
+      const key =
+      `${next.row},${next.col}`;
+
+      if(parent.has(key)){
+        continue;
+      }
+
+      parent.set(
+        key,
+        current
+      );
+
+      queue.push(
+        next
+      );
+
+      if(key === goalKey){
+        found = true;
+        break;
+      }
+
+    }
+
+  }
+
+  if(!parent.has(goalKey)){
+    return[
+      start
+    ];
+  }
+
+  const path = [];
+
+  let cursor =
+  goal;
+
+  while(cursor){
+
+    path.push(
+      cursor
+    );
+
+    const key =
+    `${cursor.row},${cursor.col}`;
+
+    cursor =
+    parent.get(key);
+
+  }
+
+  path.reverse();
+
+  return path;
 
 }
 
@@ -11029,10 +11560,10 @@ function startAlienEscapeRound(
     return;
   }
 
-  alienPlayer = {
-    x:0.5,
-    y:0.5
-  };
+  alienPlayer =
+  alienCellCenter(
+    ALIEN_PLAYER_START
+  );
 
   alienAnswers =
   optionsFor(
@@ -11109,37 +11640,48 @@ function spawnAliens(){
     )
   );
 
-  const spawnPoints =
-  shuffle([
-    {x:0.08,y:0.50},
-    {x:0.92,y:0.50},
-    {x:0.50,y:0.08},
-    {x:0.50,y:0.92}
-  ]);
+  const spawnCells =
+  shuffle(
+    ALIEN_SPAWN_CELLS
+    .slice()
+  );
 
   alienEnemies =
-  spawnPoints
+  spawnCells
   .slice(
     0,
     count
   )
   .map(
     (
-      point,
+      cell,
       index
-    ) => ({
-      x:point.x,
-      y:point.y,
-      speed:
-        ALIEN_BASE_SPEED
-        +
-        Math.min(
-          0.055,
-          combo * 0.003
-        )
-        +
-        index * 0.004
-    })
+    ) => {
+
+      const point =
+      alienCellCenter(
+        cell
+      );
+
+      return{
+        x:point.x,
+        y:point.y,
+
+        speedPx:
+          Math.min(
+            82,
+            ALIEN_BASE_SPEED_PX
+            +
+            combo * 1.35
+            +
+            index * 3
+          ),
+
+        path:[],
+        repath:0
+      };
+
+    }
   );
 
   $("alienEnemies")
@@ -11228,6 +11770,25 @@ function moveAlienPlayer(dt){
     return;
   }
 
+  const board =
+  $("matchBoard");
+
+  if(!board){
+    return;
+  }
+
+  const width =
+  Math.max(
+    1,
+    board.clientWidth
+  );
+
+  const height =
+  Math.max(
+    1,
+    board.clientHeight
+  );
+
   const length =
   Math.hypot(
     dx,
@@ -11236,86 +11797,220 @@ function moveAlienPlayer(dt){
   ||
   1;
 
-  alienPlayer.x +=
+  const deltaX =
   dx
   /
   length
   *
-  ALIEN_PLAYER_SPEED
+  ALIEN_PLAYER_SPEED_PX
   *
-  dt;
+  dt
+  /
+  width;
 
-  alienPlayer.y +=
+  const deltaY =
   dy
   /
   length
   *
-  ALIEN_PLAYER_SPEED
+  ALIEN_PLAYER_SPEED_PX
   *
-  dt;
+  dt
+  /
+  height;
 
-  alienPlayer.x =
-  Math.max(
-    0.055,
-    Math.min(
-      0.945,
-      alienPlayer.x
-    )
-  );
+  const nextX =
+  alienPlayer.x
+  +
+  deltaX;
 
-  alienPlayer.y =
-  Math.max(
-    0.065,
-    Math.min(
-      0.935,
+  if(
+    alienCanOccupy(
+      nextX,
       alienPlayer.y
     )
-  );
+  ){
+    alienPlayer.x =
+    nextX;
+  }
+
+  const nextY =
+  alienPlayer.y
+  +
+  deltaY;
+
+  if(
+    alienCanOccupy(
+      alienPlayer.x,
+      nextY
+    )
+  ){
+    alienPlayer.y =
+    nextY;
+  }
 
 }
 
 
 function moveAlienEnemies(dt){
 
+  const board =
+  $("matchBoard");
+
+  if(!board){
+    return;
+  }
+
+  const width =
+  Math.max(
+    1,
+    board.clientWidth
+  );
+
+  const height =
+  Math.max(
+    1,
+    board.clientHeight
+  );
+
+  const playerCell =
+  alienCellFromPosition(
+    alienPlayer.x,
+    alienPlayer.y
+  );
+
   alienEnemies
   .forEach(
     enemy => {
 
-      const dx =
-      alienPlayer.x
-      -
-      enemy.x;
+      enemy.repath -=
+      dt;
 
-      const dy =
-      alienPlayer.y
-      -
-      enemy.y;
+      const enemyCell =
+      alienCellFromPosition(
+        enemy.x,
+        enemy.y
+      );
 
-      const length =
+      if(
+        enemy.repath <= 0
+        ||
+        !enemy.path.length
+      ){
+
+        enemy.path =
+        alienFindPath(
+          enemyCell,
+          playerCell
+        )
+        .slice(1);
+
+        enemy.repath =
+        .20
+        +
+        Math.random() * .08;
+
+      }
+
+      let target = null;
+
+      if(
+        enemyCell.row === playerCell.row
+        &&
+        enemyCell.col === playerCell.col
+      ){
+
+        target = {
+          x:alienPlayer.x,
+          y:alienPlayer.y
+        };
+
+      }
+
+      else{
+
+        const nextCell =
+        enemy.path[0];
+
+        if(nextCell){
+          target =
+          alienCellCenter(
+            nextCell
+          );
+        }
+
+      }
+
+      if(!target){
+        return;
+      }
+
+      const dxPx =
+      (
+        target.x
+        -
+        enemy.x
+      )
+      *
+      width;
+
+      const dyPx =
+      (
+        target.y
+        -
+        enemy.y
+      )
+      *
+      height;
+
+      const distancePx =
       Math.hypot(
-        dx,
-        dy
+        dxPx,
+        dyPx
       )
       ||
       1;
 
-      enemy.x +=
-      dx
-      /
-      length
-      *
-      enemy.speed
+      const step =
+      enemy.speedPx
       *
       dt;
 
-      enemy.y +=
-      dy
+      if(
+        distancePx <=
+        step + 2
+      ){
+
+        enemy.x =
+        target.x;
+
+        enemy.y =
+        target.y;
+
+        if(enemy.path.length){
+          enemy.path.shift();
+        }
+
+        return;
+      }
+
+      enemy.x +=
+      dxPx
       /
-      length
+      distancePx
       *
-      enemy.speed
+      step
+      /
+      width;
+
+      enemy.y +=
+      dyPx
+      /
+      distancePx
       *
-      dt;
+      step
+      /
+      height;
 
     }
   );
@@ -11329,6 +12024,25 @@ function checkAlienAnswerCollision(){
     return;
   }
 
+  const board =
+  $("matchBoard");
+
+  if(!board){
+    return;
+  }
+
+  const width =
+  Math.max(
+    1,
+    board.clientWidth
+  );
+
+  const height =
+  Math.max(
+    1,
+    board.clientHeight
+  );
+
   for(
     let index=0;
     index<ALIEN_ANSWER_ZONES.length;
@@ -11338,24 +12052,28 @@ function checkAlienAnswerCollision(){
     const zone =
     ALIEN_ANSWER_ZONES[index];
 
-    const inside =
-    Math.abs(
-      alienPlayer.x
-      -
-      zone.x
-    )
-    <
-    0.155
-    &&
-    Math.abs(
-      alienPlayer.y
-      -
-      zone.y
-    )
-    <
-    0.105;
+    const distance =
+    Math.hypot(
+      (
+        alienPlayer.x
+        -
+        zone.x
+      )
+      *
+      width,
+      (
+        alienPlayer.y
+        -
+        zone.y
+      )
+      *
+      height
+    );
 
-    if(!inside){
+    if(
+      distance >
+      43
+    ){
       continue;
     }
 
@@ -11411,7 +12129,7 @@ function resolveAlienAnswer(index){
     );
 
     feedback(
-      "✓ Đúng! Thoát khỏi aliens!",
+      "✓ Đúng! Qua mê cung thành công!",
       "good"
     );
 
@@ -11442,7 +12160,7 @@ function resolveAlienAnswer(index){
     loseLife();
 
     feedback(
-      "✕ Sai góc! Mất 1 mạng.",
+      "✕ Sai cổng đáp án! Mất 1 mạng.",
       "bad"
     );
 
@@ -11468,20 +12186,47 @@ function checkAlienEnemyCollision(){
     return;
   }
 
+  const board =
+  $("matchBoard");
+
+  if(!board){
+    return;
+  }
+
+  const width =
+  Math.max(
+    1,
+    board.clientWidth
+  );
+
+  const height =
+  Math.max(
+    1,
+    board.clientHeight
+  );
+
   const caught =
   alienEnemies
   .some(
     enemy =>
     Math.hypot(
-      alienPlayer.x
-      -
-      enemy.x,
-      alienPlayer.y
-      -
-      enemy.y
+      (
+        alienPlayer.x
+        -
+        enemy.x
+      )
+      *
+      width,
+      (
+        alienPlayer.y
+        -
+        enemy.y
+      )
+      *
+      height
     )
     <
-    ALIEN_HIT_RADIUS
+    ALIEN_HIT_RADIUS_PX
   );
 
   if(!caught){
@@ -14713,27 +15458,42 @@ async function loadExtraVocabularyData(){
   [];
 
 
-  for(
-    const file of files
-  ){
+  /*
+    Các file topic độc lập, chỉ push vào window.VOCABULARY_DATA.
+    Load song song giúp giảm đáng kể thời gian mở trang khi manifest
+    đã có nhiều bộ từ, thay vì chờ từng file một.
+  */
 
-    try{
-
-      await loadVocabularyScript(
+  const results =
+  await Promise.allSettled(
+    files.map(
+      file =>
+      loadVocabularyScript(
         file
-      );
+      )
+    )
+  );
+
+
+  results
+  .forEach(
+    result => {
+
+      if(
+        result.status ===
+        "rejected"
+      ){
+
+        console.warn(
+          result.reason?.message
+          ||
+          result.reason
+        );
+
+      }
 
     }
-
-    catch(error){
-
-      console.warn(
-        error.message
-      );
-
-    }
-
-  }
+  );
 
 
   window.VOCABULARY_DATA =
