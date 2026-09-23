@@ -1703,12 +1703,12 @@ button:disabled{
 
 /* =========================================================
    ALIEN MAZE ESCAPE · 2D
-   Pac-Man-style maze with real wall collision/pathfinding
+   Pac-Man-style maze with wider map, smoother controls and animated astronaut
 ========================================================= */
 
 .alien-stage{
   position:relative;
-  height:540px;
+  height:620px;
   overflow:hidden;
   border:3px solid #111a38;
   border-radius:20px;
@@ -1774,7 +1774,7 @@ button:disabled{
   z-index:8;
   left:50%;
   top:50%;
-  width:min(38%,390px);
+  width:min(44%,460px);
   transform:translate(-50%,-50%);
   padding:10px 13px;
   border:1px solid rgba(136,166,255,.25);
@@ -1807,7 +1807,7 @@ button:disabled{
 .alien-answer{
   position:absolute;
   z-index:6;
-  width:min(17%,175px);
+  width:min(19%,190px);
   min-height:54px;
   padding:7px 9px;
   display:flex;
@@ -1859,104 +1859,217 @@ button:disabled{
   left:50%;
   top:50%;
   z-index:12;
-  width:38px;
-  height:38px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   transform:translate(-50%,-50%);
-  filter:drop-shadow(0 4px 6px rgba(0,0,0,.58));
   will-change:left,top,transform;
   pointer-events:none;
 }
 
 .astronaut-player{
-  font-size:30px;
+  width:52px;
+  height:58px;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.45));
 }
 
-.astronaut-player::after{
-  content:"";
+.astro-shadow{
   position:absolute;
-  width:26px;
-  height:9px;
   left:50%;
-  top:29px;
+  bottom:2px;
+  width:34px;
+  height:10px;
   transform:translateX(-50%);
   border-radius:50%;
   background:rgba(63,216,255,.24);
-  filter:blur(4px);
-  z-index:-1;
+  filter:blur(5px);
 }
+
+.astro-pack{
+  position:absolute;
+  left:50%;
+  top:18px;
+  width:18px;
+  height:22px;
+  transform:translateX(-50%);
+  border-radius:6px;
+  background:linear-gradient(180deg,#dbe8ff,#8cb2e8);
+  box-shadow:0 0 0 2px #27385a inset;
+}
+
+.astro-body{
+  position:absolute;
+  inset:0;
+}
+
+.astro-helmet{
+  position:absolute;
+  left:50%;
+  top:2px;
+  width:28px;
+  height:28px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:linear-gradient(180deg,#ffffff,#cfe0ff);
+  box-shadow:0 0 0 2px #314b7c inset, 0 1px 0 rgba(255,255,255,.8);
+}
+
+.astro-face{
+  position:absolute;
+  left:50%;
+  top:7px;
+  width:18px;
+  height:12px;
+  transform:translateX(-50%);
+  border-radius:10px;
+  background:linear-gradient(180deg,#4fc8ff,#203a73);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);
+}
+
+.astro-torso{
+  position:absolute;
+  left:50%;
+  top:24px;
+  width:24px;
+  height:18px;
+  transform:translateX(-50%);
+  border-radius:8px;
+  background:linear-gradient(180deg,#ffffff,#d1ddf8);
+  box-shadow:0 0 0 2px #314b7c inset;
+}
+
+.astro-arm,
+.astro-leg{
+  position:absolute;
+  width:8px;
+  border-radius:7px;
+  background:linear-gradient(180deg,#ffffff,#cfd8eb);
+  box-shadow:0 0 0 1.5px #314b7c inset;
+  transform-origin:50% 0;
+}
+
+.astro-arm{
+  top:26px;
+  height:16px;
+}
+
+.astro-arm.left{ left:11px; transform:rotate(18deg); }
+.astro-arm.right{ right:11px; transform:rotate(-18deg); }
+
+.astro-leg{
+  top:39px;
+  height:17px;
+}
+
+.astro-leg.left{ left:17px; transform:rotate(8deg); }
+.astro-leg.right{ right:17px; transform:rotate(-8deg); }
+
+.astronaut-player.walking .astro-leg.left{ animation:astroLegLeft .22s linear infinite alternate; }
+.astronaut-player.walking .astro-leg.right{ animation:astroLegRight .22s linear infinite alternate; }
+.astronaut-player.walking .astro-arm.left{ animation:astroArmLeft .22s linear infinite alternate; }
+.astronaut-player.walking .astro-arm.right{ animation:astroArmRight .22s linear infinite alternate; }
+
+@keyframes astroLegLeft{ from{transform:rotate(18deg);} to{transform:rotate(-10deg);} }
+@keyframes astroLegRight{ from{transform:rotate(-18deg);} to{transform:rotate(10deg);} }
+@keyframes astroArmLeft{ from{transform:rotate(-8deg);} to{transform:rotate(22deg);} }
+@keyframes astroArmRight{ from{transform:rotate(8deg);} to{transform:rotate(-22deg);} }
 
 .alien-enemy{
-  font-size:28px;
-  animation:alienBob .48s ease-in-out infinite alternate;
+  width:42px;
+  height:42px;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.5));
 }
 
-.alien-enemy.fast{
-  filter:
-    drop-shadow(0 0 8px rgba(255,91,188,.45))
-    drop-shadow(0 4px 6px rgba(0,0,0,.55));
+.alien-enemy::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:8px;
+  width:30px;
+  height:22px;
+  transform:translateX(-50%);
+  border-radius:55% 55% 48% 48%;
+  background:linear-gradient(180deg,#98ff7b,#25b95b);
+  box-shadow:0 0 0 2px #173f25 inset;
 }
 
-@keyframes alienBob{
-  from{transform:translate(-50%,-50%) translateY(-1px) scale(.98);}
-  to{transform:translate(-50%,-50%) translateY(2px) scale(1.03);}
+.alien-enemy::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:16px;
+  width:16px;
+  height:6px;
+  transform:translateX(-50%);
+  border-radius:999px;
+  background:
+    radial-gradient(circle at 25% 50%,#fff 0 2px,transparent 2.2px),
+    radial-gradient(circle at 75% 50%,#fff 0 2px,transparent 2.2px);
 }
 
-.alien-stage.hit .astronaut-player{
-  animation:astronautHit .14s linear 4;
+.alien-enemy .alien-body{
+  position:absolute;
+  left:50%;
+  top:22px;
+  width:22px;
+  height:12px;
+  transform:translateX(-50%);
+  border-radius:0 0 12px 12px;
+  background:linear-gradient(180deg,#89ff74,#1ea452);
+  box-shadow:0 0 0 2px #173f25 inset;
 }
 
-@keyframes astronautHit{
-  0%{transform:translate(-50%,-50%) translateX(-3px);}
-  50%{transform:translate(-50%,-50%) translateX(3px);}
-  100%{transform:translate(-50%,-50%) translateX(0);}
+.alien-enemy .alien-leg,
+.alien-enemy .alien-arm,
+.alien-enemy .alien-antenna{
+  position:absolute;
+  background:#67ec6a;
+  box-shadow:0 0 0 1.5px #173f25 inset;
 }
 
-.alien-controls{
-  display:grid;
-  grid-template-columns:repeat(3,52px);
-  grid-template-rows:repeat(2,48px);
-  gap:7px;
-  justify-content:center;
-  margin:11px auto 0;
+.alien-enemy .alien-leg{
+  top:30px;
+  width:5px;
+  height:11px;
+  border-radius:999px;
 }
-
-.alien-controls button{
-  min-width:48px;
-  min-height:44px;
-  padding:0;
-  border:1px solid #d9dfeb;
-  border-radius:12px;
-  background:#fff;
-  color:#313b53;
-  font-size:18px;
-  font-weight:950;
-  box-shadow:0 3px 10px rgba(30,44,80,.07);
-  touch-action:none;
+.alien-enemy .alien-leg.left{ left:14px; }
+.alien-enemy .alien-leg.right{ right:14px; }
+.alien-enemy .alien-arm{
+  top:23px;
+  width:12px;
+  height:4px;
+  border-radius:999px;
 }
-
-.alien-controls button:active{
-  transform:translateY(1px) scale(.97);
-  background:#f2f6ff;
+.alien-enemy .alien-arm.left{ left:5px; transform:rotate(25deg); }
+.alien-enemy .alien-arm.right{ right:5px; transform:rotate(-25deg); }
+.alien-enemy .alien-antenna{
+  top:4px;
+  width:3px;
+  height:10px;
+  border-radius:999px;
 }
+.alien-enemy .alien-antenna.left{ left:15px; transform:rotate(-18deg); }
+.alien-enemy .alien-antenna.right{ right:15px; transform:rotate(18deg); }
 
-.alien-controls .up{grid-column:2;grid-row:1;}
-.alien-controls .left{grid-column:1;grid-row:2;}
-.alien-controls .down{grid-column:2;grid-row:2;}
-.alien-controls .right{grid-column:3;grid-row:2;}
+.alien-enemy.fast{ filter:drop-shadow(0 0 8px rgba(255,91,188,.38)) drop-shadow(0 4px 6px rgba(0,0,0,.55)); }
+.alien-enemy.fast::before,
+.alien-enemy.fast .alien-body,
+.alien-enemy.fast .alien-leg,
+.alien-enemy.fast .alien-arm,
+.alien-enemy.fast .alien-antenna{ background:linear-gradient(180deg,#ff89e3,#e93aa9); }
 
-.alien-help{
-  margin-top:8px;
-  color:#7c8599;
-  font-size:10px;
-  text-align:center;
-}
+.alien-enemy.fast::before,
+.alien-enemy.fast .alien-body{ box-shadow:0 0 0 2px #592243 inset; }
+.alien-enemy.fast .alien-leg,
+.alien-enemy.fast .alien-arm,
+.alien-enemy.fast .alien-antenna{ box-shadow:0 0 0 1.5px #592243 inset; }
 
+.alien-enemy{ animation:alienBob .42s ease-in-out infinite alternate; }
+@keyframes alienBob{ from{transform:translate(-50%,-50%) translateY(-1px) scale(.98);} to{transform:translate(-50%,-50%) translateY(2px) scale(1.03);} }
+
+.alien-stage.hit .astronaut-player{ animation:astronautHit .14s linear 4; }
+@keyframes astronautHit{ 0%{transform:translate(-50%,-50%) translateX(-3px);} 50%{transform:translate(-50%,-50%) translateX(3px);} 100%{transform:translate(-50%,-50%) translateX(0);} }
 @media (max-width:700px){
   .alien-stage{
-    height:480px;
+    height:560px;
     border-radius:16px;
   }
 
@@ -4669,7 +4782,18 @@ button:disabled{
       <strong id="alienQuestion">—</strong>
     </div>
 
-    <div class="astronaut-player" id="alienAstronaut">👨‍🚀</div>
+    <div class="astronaut-player" id="alienAstronaut" aria-label="Astronaut">
+      <div class="astro-shadow"></div>
+      <div class="astro-pack"></div>
+      <div class="astro-body">
+        <div class="astro-helmet"><span class="astro-face"></span></div>
+        <div class="astro-torso"></div>
+        <div class="astro-arm left"></div>
+        <div class="astro-arm right"></div>
+        <div class="astro-leg left"></div>
+        <div class="astro-leg right"></div>
+      </div>
+    </div>
     <div id="alienEnemies"></div>
 
   </section>
@@ -4683,7 +4807,7 @@ button:disabled{
   </div>
 
   <div class="alien-help">
-    Dùng phím mũi tên / WASD hoặc giữ các nút điều hướng · Chạm đúng góc để trả lời
+    Dùng phím mũi tên / WASD hoặc giữ các nút điều hướng · Map rộng hơn, có nhiều alien hơn và astronaut sẽ tự bước chân khi di chuyển
   </div>
 
 </main>
@@ -5618,7 +5742,7 @@ const GAME_INTROS = {
     title:"Street Word Racer 3D · Cockpit",
 
     description:
-      "Góc nhìn từ ghế lái. Đi đúng vào từ vựng để tăng tốc; đi sai bị chậm lại và 1 hoặc 2 xe đối thủ sẽ vượt lên.",
+      "Góc nhìn từ ghế lái/cockpit. Đâm đúng vào từ vựng để tăng tốc; đi sai sẽ bị giảm tốc và đối thủ vượt lên.",
 
     rules:
       "• Dùng ← →, chạm hoặc vuốt trái/phải để đổi làn.<br>• Mỗi giao lộ có 4 đáp án trên 4 làn.<br>• Trả lời đúng thật nhanh sẽ tự kích hoạt Nitro và nhận thưởng x2.<br>• Sai hoặc phản xạ không kịp: xe va chướng ngại vật, giảm tốc và bị phạt thời gian.<br>• Time Trial: đúng +4 giây, sai -6 giây.<br>• Endless Run: game kết thúc sau 3 lỗi.<br>• Combo 5 câu đúng mở BẤT TỬ 5 giây."
@@ -12067,50 +12191,54 @@ const alienControlState = {
   # = wall
   . = corridor
 
-  17 columns × 13 rows.
-  The map is deliberately small so collision/pathfinding stays cheap.
+  Larger map: 23 columns × 15 rows.
+  Wider feel, more room to dodge and route around enemies.
 */
 const ALIEN_MAZE = [
-  "#################",
-  "#.......#.......#",
-  "#.###.#.#.#.###.#",
-  "#.....#...#.....#",
-  "###.#.#####.#.###",
-  "#...#...#...#...#",
-  "#.#...#...#...#.#",
-  "#...#...#...#...#",
-  "###.#.#####.#.###",
-  "#.....#...#.....#",
-  "#.###.#.#.#.###.#",
-  "#.......#.......#",
-  "#################"
+  "#######################",
+  "#.........#.........#.#",
+  "#.###.###.#.###.###.#.#",
+  "#.#.....#...#.....#...#",
+  "#.#.###.#####.###.###.#",
+  "#...#...#...#...#.....#",
+  "###.#.###.#.###.#.###.#",
+  "#...#.....#.....#...#.#",
+  "#.#####.#####.#####.#.#",
+  "#.....#...#...#.....#.#",
+  "#.###.###.#.###.###.#.#",
+  "#...#.....#.....#...#.#",
+  "###.#.###.#####.#.###.#",
+  "#.....#.........#.....#",
+  "#######################"
 ];
 
 const ALIEN_ROWS = ALIEN_MAZE.length;
 const ALIEN_COLS = ALIEN_MAZE[0].length;
 
 const ALIEN_PLAYER_START = {
-  row:6,
-  col:8
+  row:7,
+  col:11
 };
 
 const ALIEN_ANSWER_CELLS = [
-  {row:1,col:1},
-  {row:1,col:15},
-  {row:11,col:1},
-  {row:11,col:15}
+  {row:1,col:2},
+  {row:1,col:20},
+  {row:13,col:2},
+  {row:13,col:20}
 ];
 
 const ALIEN_SPAWN_CELLS = [
-  {row:6,col:1},
-  {row:6,col:15},
-  {row:1,col:7},
-  {row:11,col:7}
+  {row:1,col:11},
+  {row:13,col:11},
+  {row:7,col:1},
+  {row:7,col:21},
+  {row:4,col:5},
+  {row:10,col:17}
 ];
 
-const ALIEN_PLAYER_SPEED_PX = 205;
-const ALIEN_BASE_SPEED_PX = 54;
-const ALIEN_HIT_RADIUS_PX = 29;
+const ALIEN_PLAYER_SPEED_PX = 210;
+const ALIEN_BASE_SPEED_PX = 48;
+const ALIEN_HIT_RADIUS_PX = 26;
 
 function alienCellCenter(cell){
   return{
@@ -12542,10 +12670,10 @@ function alienCanOccupy(
     Sprite vẫn nhìn 38px nhưng collision không bị "cạ tường" quá sớm.
   */
   const rx =
-  .0145;
+  .0105;
 
   const ry =
-  .0195;
+  .0145;
 
   const samples = [
     [0,0],
@@ -12823,11 +12951,11 @@ function spawnAliens(){
 
   const count =
   Math.min(
-    4,
-    2
+    6,
+    3
     +
     Math.floor(
-      combo / 4
+      combo / 3
     )
   );
 
@@ -12857,17 +12985,15 @@ function spawnAliens(){
       return{
         x:point.x,
         y:point.y,
-
         speedPx:
           Math.min(
-            82,
+            76,
             ALIEN_BASE_SPEED_PX
             +
-            combo * 1.35
+            combo * 1.15
             +
-            index * 3
+            index * 2.5
           ),
-
         path:[],
         repath:0
       };
@@ -12884,10 +13010,16 @@ function spawnAliens(){
       index
     ) => `
       <div
-        class="alien-enemy ${index > 1 ? "fast" : ""}"
+        class="alien-enemy ${index > 2 ? "fast" : ""}"
         id="alienEnemy${index}"
       >
-        👽
+        <div class="alien-antenna left"></div>
+        <div class="alien-antenna right"></div>
+        <div class="alien-body"></div>
+        <div class="alien-arm left"></div>
+        <div class="alien-arm right"></div>
+        <div class="alien-leg left"></div>
+        <div class="alien-leg right"></div>
       </div>
     `
   )
@@ -12953,13 +13085,18 @@ function moveAlienPlayer(dt){
   if(alienControlState.up) dy--;
   if(alienControlState.down) dy++;
 
+  const astronaut = $("alienAstronaut");
+
   if(
     dx === 0
     &&
     dy === 0
   ){
+    astronaut?.classList.remove("walking");
     return;
   }
+
+  astronaut?.classList.add("walking");
 
   const board =
   $("matchBoard");
@@ -12968,76 +13105,50 @@ function moveAlienPlayer(dt){
     return;
   }
 
-  const width =
-  Math.max(
-    1,
-    board.clientWidth
-  );
+  const width = Math.max(1, board.clientWidth);
+  const height = Math.max(1, board.clientHeight);
+  const length = Math.hypot(dx,dy) || 1;
 
-  const height =
-  Math.max(
-    1,
-    board.clientHeight
-  );
+  const stepX = dx / length * ALIEN_PLAYER_SPEED_PX * dt / width;
+  const stepY = dy / length * ALIEN_PLAYER_SPEED_PX * dt / height;
 
-  const length =
-  Math.hypot(
-    dx,
-    dy
-  )
-  ||
-  1;
+  const currentCell = alienCellFromPosition(alienPlayer.x, alienPlayer.y);
+  const centerX = (currentCell.col + .5) / ALIEN_COLS;
+  const centerY = (currentCell.row + .5) / ALIEN_ROWS;
 
-  const deltaX =
-  dx
-  /
-  length
-  *
-  ALIEN_PLAYER_SPEED_PX
-  *
-  dt
-  /
-  width;
-
-  const deltaY =
-  dy
-  /
-  length
-  *
-  ALIEN_PLAYER_SPEED_PX
-  *
-  dt
-  /
-  height;
-
-  const nextX =
-  alienPlayer.x
-  +
-  deltaX;
-
-  if(
-    alienCanOccupy(
-      nextX,
-      alienPlayer.y
-    )
-  ){
-    alienPlayer.x =
-    nextX;
+  // snap nhẹ về tâm hành lang để bớt cạ góc khi giữ nút
+  if(dx !== 0 && dy === 0){
+    alienPlayer.y += (centerY - alienPlayer.y) * Math.min(1, dt * 12);
+  }
+  if(dy !== 0 && dx === 0){
+    alienPlayer.x += (centerX - alienPlayer.x) * Math.min(1, dt * 12);
   }
 
-  const nextY =
-  alienPlayer.y
-  +
-  deltaY;
+  const tryMove = (nx, ny) => {
+    if(alienCanOccupy(nx, ny)){
+      alienPlayer.x = nx;
+      alienPlayer.y = ny;
+      return true;
+    }
+    return false;
+  };
 
-  if(
-    alienCanOccupy(
-      alienPlayer.x,
-      nextY
-    )
-  ){
-    alienPlayer.y =
-    nextY;
+  // ưu tiên theo hướng mạnh hơn để cảm giác mượt hơn ở góc cua
+  const absX = Math.abs(stepX);
+  const absY = Math.abs(stepY);
+
+  if(absX >= absY){
+    if(!tryMove(alienPlayer.x + stepX, alienPlayer.y)){
+      tryMove(alienPlayer.x, alienPlayer.y + stepY);
+    } else {
+      tryMove(alienPlayer.x, alienPlayer.y + stepY * .45);
+    }
+  } else {
+    if(!tryMove(alienPlayer.x, alienPlayer.y + stepY)){
+      tryMove(alienPlayer.x + stepX, alienPlayer.y);
+    } else {
+      tryMove(alienPlayer.x + stepX * .45, alienPlayer.y);
+    }
   }
 
 }
