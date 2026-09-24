@@ -2,154 +2,48 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
-  <title>Astronaut Pac-Maze 3D</title>
-
-  <link
-    rel="stylesheet"
-    href="./style.css"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astronaut Escape 3D</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
-
 <body>
-
   <main id="game">
-
-    <!-- =========================
-         HUD
-    ========================== -->
     <section id="hud">
-
       <div class="question-card">
-
-        <span class="hud-label">
-          TÌM ĐÁP ÁN ĐÚNG
-        </span>
-
-        <strong id="question">
-          —
-        </strong>
-
+        <span class="eyebrow">ASTRONAUT ESCAPE</span>
+        <small>CHẠY TỚI TELEPORT PAD ĐÚNG</small>
+        <strong id="question">—</strong>
       </div>
 
-
-      <div class="hud-stats">
-
-        <div class="stat">
-          <span>Điểm</span>
-          <b id="score">0</b>
-        </div>
-
-        <div class="stat">
-          <span>Mạng</span>
-          <b id="lives">5</b>
-        </div>
-
-        <div class="stat">
-          <span>Alien</span>
-          <b id="alienCount">3</b>
-        </div>
-
+      <div class="stats">
+        <div class="stat"><span>Điểm</span><b id="score">0</b></div>
+        <div class="stat"><span>Mạng</span><b id="lives">5</b></div>
+        <div class="stat"><span>Alien</span><b id="alienCount">4</b></div>
       </div>
-
     </section>
 
+    <div id="message" aria-live="polite"></div>
 
-    <!-- Message đúng / sai -->
-    <div
-      id="message"
-      aria-live="polite"
-    ></div>
-
-
-    <!-- Error -->
-    <div
-      id="bootError"
-      class="boot-error hidden"
-    ></div>
-
-
-    <!-- =========================
-         MOBILE CONTROLS
-    ========================== -->
-    <section
-      id="mobileControls"
-      aria-label="Điều khiển astronaut"
-    >
-
-      <button
-        class="up"
-        data-dir="up"
-        type="button"
-      >
-        ↑
-      </button>
-
-      <button
-        class="left"
-        data-dir="left"
-        type="button"
-      >
-        ←
-      </button>
-
-      <button
-        class="down"
-        data-dir="down"
-        type="button"
-      >
-        ↓
-      </button>
-
-      <button
-        class="right"
-        data-dir="right"
-        type="button"
-      >
-        →
-      </button>
-
+    <section id="mobileControls" aria-label="Điều khiển astronaut">
+      <button class="up" data-dir="up" type="button">↑</button>
+      <button class="left" data-dir="left" type="button">←</button>
+      <button class="down" data-dir="down" type="button">↓</button>
+      <button class="right" data-dir="right" type="button">→</button>
     </section>
 
+    <div id="bootError" class="boot-error hidden" role="alert"></div>
 
-    <!-- Game over -->
-    <section
-      id="gameOver"
-      class="modal hidden"
-    >
-
+    <section id="gameOver" class="modal hidden">
       <div class="modal-card">
-
-        <h2>
-          Kết thúc
-        </h2>
-
+        <span class="eyebrow">MISSION FAILED</span>
+        <h2>Hết mạng</h2>
         <p id="gameOverText"></p>
-
-        <button
-          id="restartBtn"
-          type="button"
-        >
-          Chơi lại
-        </button>
-
+        <button id="restartBtn" type="button">Chơi lại</button>
       </div>
-
     </section>
-
   </main>
 
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"
-  ></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
   <script src="./game.js"></script>
-
 </body>
 </html>
