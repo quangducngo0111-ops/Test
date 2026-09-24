@@ -2,7 +2,6 @@
 <html lang="vi">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -15,30 +14,24 @@
     content="#08101f"
   >
 
-  <title>
-    Vocab Racer 3D
-  </title>
+  <title>Vocab Racer 3D</title>
 
   <link
     rel="stylesheet"
-    href="./style.css?v=20260924-bigmap-v3-nav-fix2"
+    href="./style.css?v=20260924-bigmap-fix5"
   >
-
 </head>
 
 
 <body>
 
-
 <main id="game">
-
 
   <!-- =====================================================
        THREE.JS RENDER AREA
   ====================================================== -->
 
   <div id="renderHost"></div>
-
 
 
   <!-- =====================================================
@@ -51,7 +44,6 @@
     aria-label="Điều hướng"
   >
 
-
     <button
       id="backToGameListBtn"
       class="nav-btn"
@@ -59,7 +51,6 @@
     >
       ← Chọn game
     </button>
-
 
     <button
       id="backToPracticeBtn"
@@ -69,9 +60,7 @@
       ← Luyện tập
     </button>
 
-
   </nav>
-
 
 
   <!-- =====================================================
@@ -79,7 +68,6 @@
   ====================================================== -->
 
   <header id="hud">
-
 
     <div class="brand">
 
@@ -94,9 +82,7 @@
     </div>
 
 
-
     <div class="hud-stats">
-
 
       <div class="hud-pill">
 
@@ -115,7 +101,6 @@
       </div>
 
 
-
       <div class="hud-pill">
 
         <span>
@@ -127,7 +112,6 @@
         </strong>
 
       </div>
-
 
 
       <div class="hud-pill">
@@ -142,12 +126,9 @@
 
       </div>
 
-
     </div>
 
-
   </header>
-
 
 
   <!-- =====================================================
@@ -158,7 +139,6 @@
     id="questionPanel"
     class="question-panel hidden"
   >
-
 
     <div
       id="questionSource"
@@ -194,9 +174,7 @@
       class="lane-hints"
     ></div>
 
-
   </section>
-
 
 
   <!-- =====================================================
@@ -204,7 +182,6 @@
   ====================================================== -->
 
   <section class="nitro-wrap">
-
 
     <div class="nitro-label">
 
@@ -225,13 +202,11 @@
 
     </div>
 
-
   </section>
 
 
-
   <!-- =====================================================
-       GAME NOTIFICATIONS
+       NOTIFICATIONS
   ====================================================== -->
 
   <div
@@ -242,16 +217,13 @@
   </div>
 
 
-
   <div id="message"></div>
-
 
 
   <div
     id="overtake"
     class="overtake hidden"
   ></div>
-
 
 
   <!-- =====================================================
@@ -270,13 +242,11 @@
   ></div>
 
 
-
   <!-- =====================================================
        CONTROLS
   ====================================================== -->
 
   <div id="touchControls">
-
 
     <button
       id="leftBtn"
@@ -300,9 +270,7 @@
       →
     </button>
 
-
   </div>
-
 
 
   <!-- =====================================================
@@ -314,14 +282,11 @@
     class="screen"
   >
 
-
     <div class="screen-card start-card">
-
 
       <div class="screen-kicker">
         VOCAB RACER 3D · BIG MAP
       </div>
-
 
 
       <h1>
@@ -329,15 +294,12 @@
       </h1>
 
 
-
       <p id="sourceDescription">
         Đang tải dữ liệu từ Vocabulary Practice...
       </p>
 
 
-
       <div class="start-grid">
-
 
         <label>
 
@@ -367,7 +329,6 @@
         </label>
 
 
-
         <div class="info-card">
 
           <span>
@@ -384,9 +345,7 @@
 
         </div>
 
-
       </div>
-
 
 
       <button
@@ -398,7 +357,6 @@
       </button>
 
 
-
       <button
         id="backBtn"
         class="back-btn"
@@ -407,12 +365,9 @@
         ← Chọn game
       </button>
 
-
     </div>
 
-
   </section>
-
 
 
   <!-- =====================================================
@@ -424,14 +379,11 @@
     class="screen hidden"
   >
 
-
     <div class="screen-card result-card">
-
 
       <div class="screen-kicker">
         RACE RESULT
       </div>
-
 
 
       <h2 id="finishTitle">
@@ -439,9 +391,7 @@
       </h2>
 
 
-
       <div class="result-grid">
-
 
         <div>
 
@@ -454,7 +404,6 @@
           </b>
 
         </div>
-
 
 
         <div>
@@ -470,7 +419,6 @@
         </div>
 
 
-
         <div>
 
           <span>
@@ -482,7 +430,6 @@
           </b>
 
         </div>
-
 
 
         <div>
@@ -497,9 +444,7 @@
 
         </div>
 
-
       </div>
-
 
 
       <div class="review-box">
@@ -513,9 +458,7 @@
       </div>
 
 
-
       <div class="result-actions">
-
 
         <button
           id="restartBtn"
@@ -526,7 +469,6 @@
         </button>
 
 
-
         <button
           id="finishBackBtn"
           class="back-btn"
@@ -535,19 +477,15 @@
           ← Chọn game
         </button>
 
-
       </div>
 
-
     </div>
-
 
   </section>
 
 
-
   <!-- =====================================================
-       ERROR MESSAGE
+       ERROR
   ====================================================== -->
 
   <div
@@ -555,9 +493,7 @@
     class="boot-error hidden"
   ></div>
 
-
 </main>
-
 
 
 <!-- =========================================================
@@ -569,36 +505,31 @@
 ></script>
 
 
-
 <!-- =========================================================
-     FALLBACK DATA
-     Chỉ dùng nếu mở racer3d trực tiếp.
+     FALLBACK VOCAB DATA
 ========================================================= -->
 
 <script
-  src="./data/vocab-sets/environment-fallback.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./data/vocab-sets/environment-fallback.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 
 <!-- =========================================================
-     GAME CONFIG
+     CONFIG
 ========================================================= -->
 
 <script
-  src="./src/config.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./src/config.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 
 <!-- =========================================================
-     VOCABULARY ENGINE
+     VOCAB ENGINE
 ========================================================= -->
 
 <script
-  src="./src/vocab-engine.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./src/vocab-engine.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 
 <!-- =========================================================
@@ -606,9 +537,8 @@
 ========================================================= -->
 
 <script
-  src="./src/hud.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./src/hud.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 
 <!-- =========================================================
@@ -616,9 +546,8 @@
 ========================================================= -->
 
 <script
-  src="./src/track.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./src/track.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 
 <!-- =========================================================
@@ -626,9 +555,8 @@
 ========================================================= -->
 
 <script
-  src="./src/player-car.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./src/player-car.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 
 <!-- =========================================================
@@ -636,20 +564,18 @@
 ========================================================= -->
 
 <script
-  src="./src/ai-car.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./src/ai-car.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 
 <!-- =========================================================
      MAIN GAME
-     Luôn load cuối cùng.
+     Luôn để game.js CUỐI CÙNG
 ========================================================= -->
 
 <script
-  src="./src/game.js?v=20260924-bigmap-v3-nav-fix2"
+  src="./src/game.js?v=20260924-bigmap-fix5"
 ></script>
-
 
 </body>
 
