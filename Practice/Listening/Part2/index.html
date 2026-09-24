@@ -236,6 +236,12 @@ const FALLBACK = [
     title:"New staff at theatre",
     desc:"Questions 11–20 · Multiple Selection + Plan Labelling",
     url:"./01/"
+  },
+  {
+    num:2,
+    title:"New city developments",
+    desc:"Questions 11–20 · Multiple Choice + Matching",
+    url:"./02/"
   }
 ];
 
@@ -267,16 +273,25 @@ function buildItems(tree){
     .map(item => {
       const num = practiceNumber(item.path);
 
+      const meta = {
+        1:{
+          title:"New staff at theatre",
+          desc:"Questions 11–20 · Multiple Selection + Plan Labelling"
+        },
+        2:{
+          title:"New city developments",
+          desc:"Questions 11–20 · Multiple Choice + Matching"
+        }
+      };
+
       return {
         num,
         title:
-          num === 1
-          ? "New staff at theatre"
-          : `Listening Part 2 · Practice ${String(num).padStart(2,"0")}`,
+          meta[num]?.title
+          || `Listening Part 2 · Practice ${String(num).padStart(2,"0")}`,
         desc:
-          num === 1
-          ? "Questions 11–20 · Multiple Selection + Plan Labelling"
-          : "IELTS Listening Part 2 practice",
+          meta[num]?.desc
+          || "Questions 11–20 · IELTS Listening Part 2",
         url:`./${String(num).padStart(2,"0")}/`
       };
     })
