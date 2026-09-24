@@ -1,0 +1,3904 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Listening Part 2 02 — New city developments</title>
+<style>
+
+
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+  --soft:#f8f7ff;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+html,
+body{
+  margin:0;
+
+  min-height:100%;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color:var(--ink);
+
+  background:
+    radial-gradient(
+      circle at 6% 0%,
+      rgba(133,94,220,.08),
+      transparent 23%
+    ),
+    radial-gradient(
+      circle at 94% 0%,
+      rgba(68,138,230,.08),
+      transparent 23%
+    ),
+    var(--bg);
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none !important;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.top{
+  position:sticky;
+
+  top:0;
+
+  z-index:30;
+
+  background:
+    linear-gradient(
+      100deg,
+      #1c0e49,
+      #281260,
+      #37217e
+    );
+
+  color:#fff;
+
+  box-shadow:
+    0 8px 22px
+    rgba(40,18,96,.14);
+}
+
+.topin{
+  width:
+    min(
+      1180px,
+      calc(100% - 18px)
+    );
+
+  min-height:62px;
+
+  margin:auto;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:10px;
+}
+
+.left{
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
+
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+
+  text-decoration:none;
+
+  border:
+    1px solid
+    rgba(255,255,255,.25);
+
+  padding:
+    7px 10px;
+
+  border-radius:9px;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+
+  font-weight:800;
+
+  background:
+    rgba(255,255,255,.1);
+
+  border:
+    1px solid
+    rgba(255,255,255,.18);
+
+  padding:
+    7px 10px;
+
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:
+    tabular-nums;
+
+  font-size:19px;
+
+  font-weight:950;
+
+  background:
+    rgba(255,255,255,.13);
+
+  padding:
+    8px 11px;
+
+  border-radius:9px;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+  width:
+    min(
+      1180px,
+      calc(100% - 18px)
+    );
+
+  margin:auto;
+
+  padding:
+    18px 0 70px;
+}
+
+.hero{
+  display:flex;
+
+  align-items:end;
+
+  justify-content:
+    space-between;
+
+  gap:18px;
+
+  margin-bottom:13px;
+
+  padding:
+    18px 20px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:15px;
+
+  background:#fff;
+
+  box-shadow:
+    0 6px 18px
+    rgba(35,25,75,.035);
+}
+
+.hero h1{
+  margin:0;
+
+  color:#21164b;
+
+  font-size:27px;
+
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:
+    4px 0 0;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-wrap{
+  min-width:260px;
+}
+
+.progress-row{
+  display:flex;
+
+  justify-content:
+    space-between;
+
+  gap:10px;
+
+  margin-bottom:5px;
+
+  color:var(--muted);
+
+  font-size:10.5px;
+
+  font-weight:850;
+}
+
+.progress{
+  height:7px;
+
+  background:#e5e8ef;
+
+  border-radius:999px;
+
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+
+  width:0;
+
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--purple2),
+      var(--blue)
+    );
+
+  transition:
+    width .2s ease;
+}
+
+
+/* =========================================================
+   AUDIO
+========================================================= */
+
+.audio-panel{
+  margin-bottom:12px;
+
+  padding:
+    14px 15px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:15px;
+
+  background:#fff;
+
+  box-shadow:
+    0 6px 18px
+    rgba(35,25,75,.04);
+}
+
+.audio-head{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:12px;
+}
+
+.audio-title{
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+}
+
+.audio-icon{
+  width:38px;
+
+  height:38px;
+
+  border-radius:11px;
+
+  background:#eee9ff;
+
+  color:#5135a6;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:18px;
+}
+
+.audio-title b{
+  display:block;
+
+  color:#21164b;
+
+  font-size:12px;
+}
+
+.audio-title span{
+  display:block;
+
+  margin-top:2px;
+
+  color:var(--muted);
+
+  font-size:10px;
+}
+
+.audio-time{
+  font-size:11px;
+
+  font-weight:950;
+
+  color:#281260;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+.audio-controls{
+  display:grid;
+
+  grid-template-columns:
+    auto
+    auto
+    minmax(120px,1fr)
+    auto
+    auto
+    auto;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:12px;
+}
+
+.audio-btn{
+  min-height:36px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    #dddfe8;
+
+  border-radius:9px;
+
+  background:#fff;
+
+  color:#32255c;
+
+  font-size:11px;
+
+  font-weight:900;
+}
+
+.audio-btn:hover{
+  background:#f7f5ff;
+}
+
+.audio-btn.primary{
+  width:42px;
+
+  padding:0;
+
+  background:#281260;
+
+  color:#fff;
+
+  border-color:#281260;
+
+  font-size:14px;
+}
+
+.seek{
+  width:100%;
+
+  min-width:0;
+
+  accent-color:#5135a6;
+}
+
+.speed-wrap,
+.volume-wrap{
+  display:flex;
+
+  align-items:center;
+
+  gap:5px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
+
+  font-weight:850;
+
+  white-space:nowrap;
+}
+
+.speed-wrap select{
+  padding:
+    7px 6px;
+
+  border:
+    1px solid
+    #d9dde7;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#33265d;
+
+  font-weight:900;
+}
+
+.volume{
+  width:80px;
+
+  accent-color:#5135a6;
+}
+
+.practice-note{
+  margin-top:8px;
+
+  padding:
+    7px 9px;
+
+  background:#f8f7ff;
+
+  border-radius:8px;
+
+  color:#6f7890;
+
+  font-size:9.7px;
+
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   PAPER
+========================================================= */
+
+.paper{
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:16px;
+
+  background:#fff;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 8px 24px
+    rgba(35,25,75,.045);
+}
+
+.paper-inner{
+  padding:
+    22px 28px 28px;
+}
+
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+.question-block{
+  width:
+    min(
+      880px,
+      100%
+    );
+
+  margin:
+    0 auto 14px;
+
+  padding:
+    19px 21px;
+
+  border:
+    1px solid
+    #dfe3eb;
+
+  border-radius:12px;
+
+  background:#fff;
+
+  transition:
+    border-color .15s ease,
+    background .15s ease;
+}
+
+.question-title{
+  margin:
+    0 0 5px;
+
+  color:#21164b;
+
+  font-size:14px;
+
+  font-weight:950;
+}
+
+.question-instruction{
+  margin:
+    0 0 16px;
+
+  color:#626a7a;
+
+  font-size:11px;
+
+  line-height:1.55;
+}
+
+.section-heading{
+  margin:
+    0 0 12px;
+
+  color:#21164b;
+
+  font-size:14px;
+
+  font-weight:950;
+}
+
+.main-question{
+  margin-bottom:14px;
+
+  color:#2d3445;
+
+  font-size:12.5px;
+
+  font-weight:900;
+
+  line-height:1.6;
+}
+
+.qno{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  min-width:31px;
+
+  height:24px;
+
+  margin-right:5px;
+
+  padding:
+    0 6px;
+
+  border-radius:6px;
+
+  background:#eee9ff;
+
+  color:#4b318e;
+
+  font-size:10px;
+
+  font-weight:950;
+}
+
+
+/* =========================================================
+   OPTIONS — FIXED
+========================================================= */
+
+.options{
+  display:grid;
+
+  gap:7px;
+}
+
+.option{
+  display:grid;
+
+  grid-template-columns:
+    20px 24px minmax(0,1fr);
+
+  align-items:start;
+
+  gap:7px;
+
+  width:100%;
+
+  padding:
+    10px 12px;
+
+  border:
+    1px solid
+    #e3e6ed;
+
+  border-radius:9px;
+
+  background:#fff;
+
+  cursor:pointer;
+
+  transition:
+    border-color .12s ease,
+    background .12s ease,
+    transform .12s ease;
+}
+
+.option:hover{
+  border-color:#c8bbee;
+
+  background:#fcfbff;
+}
+
+.option.selected{
+  border-color:#765bc9;
+
+  background:#f2efff;
+}
+
+.option input{
+  width:15px;
+
+  height:15px;
+
+  margin:
+    2px 0 0;
+
+  accent-color:#5135a6;
+}
+
+.option input:disabled{
+  cursor:not-allowed;
+}
+
+.letter{
+  color:#4c367f;
+
+  font-size:11.5px;
+
+  font-weight:950;
+
+  line-height:1.5;
+}
+
+.option-text{
+  min-width:0;
+
+  color:#343b4b;
+
+  font-size:11.5px;
+
+  line-height:1.5;
+
+  overflow-wrap:anywhere;
+}
+
+.question-block.submitted-correct{
+  border-color:#9ed7bb;
+
+  background:#fbfffd;
+}
+
+.question-block.submitted-wrong{
+  border-color:#e9b8bf;
+
+  background:#fffdfd;
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+.review-list{
+  width:
+    min(
+      880px,
+      100%
+    );
+
+  margin:
+    16px auto 0;
+}
+
+.inline-review{
+  margin-top:10px;
+
+  padding:13px;
+
+  border:
+    1px solid
+    #f0d0d5;
+
+  border-left:
+    4px solid
+    var(--bad);
+
+  border-radius:9px;
+
+  background:#fffafb;
+
+  font-size:11px;
+
+  line-height:1.6;
+}
+
+.review-title{
+  margin-bottom:7px;
+
+  color:#21164b;
+
+  font-weight:950;
+}
+
+.review-row{
+  display:grid;
+
+  grid-template-columns:
+    120px 1fr;
+
+  gap:
+    5px 8px;
+
+  margin:
+    4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+
+  font-weight:900;
+}
+
+.explain-box{
+  margin-top:11px;
+
+  padding:11px;
+
+  border:
+    1px solid
+    #ddd6fb;
+
+  border-radius:9px;
+
+  background:#f8f7ff;
+}
+
+.explain-label{
+  margin-bottom:4px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+}
+
+.explain-text{
+  padding:
+    8px 9px;
+
+  border:
+    1px solid
+    #e5e7ee;
+
+  border-radius:7px;
+
+  background:#fff;
+
+  line-height:1.65;
+}
+
+.transcript-evidence{
+  position:relative;
+
+  margin-top:5px;
+
+  padding:
+    10px 36px 10px 10px;
+
+  border:
+    1px solid
+    #d6dffb;
+
+  border-left:
+    3px solid
+    #5773d9;
+
+  border-radius:7px;
+
+  background:#eef3ff;
+
+  color:#293a70;
+
+  line-height:1.65;
+
+  cursor:pointer;
+
+  transition:.15s ease;
+}
+
+.transcript-evidence:hover{
+  background:#e5ecff;
+
+  transform:
+    translateY(-1px);
+}
+
+.transcript-evidence::after{
+  content:"▶";
+
+  position:absolute;
+
+  right:12px;
+
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  color:#5135a6;
+
+  font-size:13px;
+
+  font-weight:950;
+}
+
+.evidence-help{
+  margin-top:5px;
+
+  color:#7b8292;
+
+  font-size:9.5px;
+}
+
+.review-actions{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-top:8px;
+}
+
+.review-btn{
+  padding:
+    7px 9px;
+
+  border:
+    1px solid
+    #d9d3f1;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  color:#4b318e;
+
+  font-size:10px;
+
+  font-weight:900;
+}
+
+.review-btn:hover{
+  background:#f4f1ff;
+}
+
+.conclusion{
+  margin-top:8px;
+
+  padding:
+    8px 9px;
+
+  border:
+    1px solid
+    #bde5ce;
+
+  border-radius:7px;
+
+  background:#f2fff8;
+
+  color:#126b48;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   TRANSCRIPT
+========================================================= */
+
+.transcript-panel{
+  width:
+    min(
+      880px,
+      100%
+    );
+
+  margin:
+    18px auto 0;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:12px;
+
+  background:#fff;
+
+  overflow:hidden;
+}
+
+.transcript-head{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:10px;
+
+  padding:
+    12px 14px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+
+  background:#faf9ff;
+}
+
+.transcript-head b{
+  color:#281260;
+
+  font-size:12px;
+}
+
+.transcript-head span{
+  color:#7b8292;
+
+  font-size:9.5px;
+}
+
+.transcript-body{
+  max-height:560px;
+
+  overflow:auto;
+
+  padding:
+    12px 14px;
+
+  scroll-behavior:smooth;
+}
+
+.tline{
+  padding:
+    8px 9px;
+
+  border-radius:8px;
+
+  color:#434b5b;
+
+  font-size:11px;
+
+  line-height:1.7;
+
+  transition:.25s ease;
+}
+
+.tline + .tline{
+  margin-top:2px;
+}
+
+.speaker{
+  margin-right:6px;
+
+  color:#281260;
+
+  font-weight:950;
+}
+
+.answer-word{
+  padding:
+    1px 3px;
+
+  border-radius:3px;
+
+  background:#fff0a3;
+
+  color:#332750;
+
+  font-weight:950;
+}
+
+.tline.cue{
+  cursor:pointer;
+}
+
+.tline.cue:hover{
+  background:#f7f5ff;
+}
+
+.tline.transcript-focus{
+  background:#fff1a8;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(245,190,35,.22),
+    0 0 18px
+    rgba(245,190,35,.30);
+
+  animation:
+    transcriptPulse .85s ease 2;
+}
+
+@keyframes transcriptPulse{
+
+  50%{
+    box-shadow:
+      0 0 0 6px
+      rgba(245,190,35,.30),
+      0 0 24px
+      rgba(245,190,35,.55);
+  }
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + NOTE
+========================================================= */
+
+mark.user-highlight{
+  padding:0;
+
+  border-radius:3px;
+
+  background:#fff29a;
+
+  color:inherit;
+
+  cursor:pointer;
+}
+
+.note-anchor{
+  border-bottom:
+    2px dotted
+    #e28b19;
+
+  border-radius:2px;
+
+  background:#ffe6a6;
+
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+
+  z-index:90;
+
+  display:none;
+
+  gap:5px;
+
+  padding:6px;
+
+  border-radius:10px;
+
+  background:#21164b;
+
+  box-shadow:
+    0 12px 30px
+    rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  padding:
+    7px 9px;
+
+  border:0;
+
+  border-radius:7px;
+
+  background:#fff;
+
+  color:#35285e;
+
+  font-size:10.5px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  background:#fff1f3;
+
+  color:#a31e31;
+}
+
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottom{
+  position:sticky;
+
+  bottom:0;
+
+  z-index:20;
+
+  width:
+    min(
+      1180px,
+      calc(100% - 18px)
+    );
+
+  margin:auto;
+
+  padding:
+    9px 0 7px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  background:
+    linear-gradient(
+      to top,
+      var(--bg) 76%,
+      rgba(245,247,251,.86)
+    );
+}
+
+.nav{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:5px;
+
+  flex:1;
+}
+
+.nav button{
+  width:34px;
+
+  height:31px;
+
+  padding:0;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:7px;
+
+  background:#fff;
+
+  font-size:10px;
+
+  font-weight:900;
+}
+
+.nav button.answered{
+  border-color:#c4d5ff;
+
+  background:#e7efff;
+}
+
+.nav button.correct{
+  border-color:#8ed6b4 !important;
+
+  background:#dff0e7 !important;
+
+  color:#126b48;
+}
+
+.nav button.wrong{
+  border-color:#f0b5bd !important;
+
+  background:#f4ddd8 !important;
+
+  color:#9b2838;
+}
+
+.submit,
+.btn{
+  padding:
+    10px 15px;
+
+  border:0;
+
+  border-radius:9px;
+
+  background:
+    linear-gradient(
+      100deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  color:#fff;
+
+  font-weight:900;
+}
+
+.submit:disabled{
+  opacity:.55;
+
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
+   START + RESULT
+========================================================= */
+
+.start,
+.overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:120;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:18px;
+
+  background:
+    rgba(16,12,40,.64);
+}
+
+.overlay{
+  z-index:110;
+}
+
+.start-card,
+.result{
+  width:
+    min(
+      500px,
+      100%
+    );
+
+  max-height:88vh;
+
+  overflow:auto;
+
+  padding:22px;
+
+  border-radius:19px;
+
+  background:#fff;
+
+  box-shadow:
+    0 24px 70px
+    rgba(18,10,53,.28);
+}
+
+.start-card h2{
+  margin:
+    5px 0 6px;
+
+  color:#21164b;
+}
+
+.start-card p{
+  margin:
+    0 0 14px;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+}
+
+.field{
+  margin:
+    9px 0;
+}
+
+.field label{
+  display:block;
+
+  margin-bottom:5px;
+
+  font-size:10.5px;
+
+  font-weight:900;
+}
+
+.field input{
+  width:100%;
+
+  padding:10px;
+
+  border:
+    1px solid
+    #d5d9e2;
+
+  border-radius:9px;
+
+  outline:none;
+}
+
+.field input:focus{
+  border-color:#765bc9;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.08);
+}
+
+.start-card .btn{
+  width:100%;
+
+  margin-top:10px;
+}
+
+.score{
+  margin:
+    7px 0;
+
+  color:#21164b;
+
+  font-size:38px;
+
+  font-weight:950;
+}
+
+.result h2{
+  margin:
+    0 0 5px;
+
+  color:#21164b;
+}
+
+.result p{
+  margin:
+    4px 0;
+
+  color:#6f7890;
+
+  font-size:11px;
+
+  line-height:1.55;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:800px){
+
+  .audio-controls{
+    grid-template-columns:
+      auto
+      auto
+      1fr
+      auto;
+  }
+
+  .speed-wrap{
+    grid-column:
+      1 / 3;
+  }
+
+  .volume-wrap{
+    grid-column:
+      3 / 5;
+
+    justify-content:flex-end;
+  }
+
+}
+
+
+@media(max-width:700px){
+
+  .hero{
+    flex-direction:column;
+
+    align-items:stretch;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+  .paper-inner{
+    padding:
+      15px 9px 22px;
+  }
+
+  .student{
+    display:none;
+  }
+
+  .brand{
+    font-size:11px;
+  }
+
+  .timer{
+    font-size:15px;
+  }
+
+  .question-block{
+    padding:
+      15px 12px;
+  }
+
+  .option{
+    grid-template-columns:
+      18px 20px minmax(0,1fr);
+
+    padding:
+      9px 9px;
+  }
+
+  .option-text{
+    font-size:11px;
+  }
+
+  .review-row{
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+
+/* =========================================================
+   PART 2 — PLAN LABELLING
+========================================================= */
+.plan-card{
+  width:min(860px,100%);
+  margin:14px auto 18px;
+  padding:12px;
+  border:1px solid #dfe3eb;
+  border-radius:12px;
+  background:#fbfbfe;
+}
+.plan-card img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:9px;
+  background:#fff;
+}
+.map-answer-list{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+}
+.map-row{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) 86px;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid #e3e6ed;
+  border-radius:9px;
+  background:#fff;
+}
+.map-row.correct-row{
+  border-color:#9ed7bb;
+  background:#fbfffd;
+}
+.map-row.wrong-row{
+  border-color:#e9b8bf;
+  background:#fffdfd;
+}
+.map-label{
+  color:#343b4b;
+  font-size:11.5px;
+  font-weight:800;
+}
+.map-select{
+  width:100%;
+  padding:8px 7px;
+  border:1px solid #d9dde7;
+  border-radius:8px;
+  background:#fff;
+  color:#33265d;
+  font-weight:900;
+  text-align:center;
+}
+.pair-help{
+  margin-top:8px;
+  color:#7b8292;
+  font-size:9.5px;
+}
+.review-summary{
+  margin-top:10px;
+  padding:10px;
+  border-radius:9px;
+  background:#f8f7ff;
+  border:1px solid #ddd6fb;
+  color:#4b3b72;
+  font-size:10.5px;
+  line-height:1.6;
+}
+.audio-missing{
+  display:none;
+  margin-top:8px;
+  color:#b83345;
+  font-size:10px;
+  font-weight:800;
+}
+@media(max-width:700px){
+  .map-row{
+    grid-template-columns:38px minmax(0,1fr) 72px;
+    gap:7px;
+    padding:9px;
+  }
+  .map-label{font-size:10.8px}
+}
+
+
+/* =========================================================
+   PART 2 — PLAN LABELLING · OPTIMISED LAYOUT
+========================================================= */
+.plan-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(285px,.75fr);
+  gap:18px;
+  align-items:start;
+  margin-top:12px;
+}
+
+.plan-column{
+  min-width:0;
+}
+
+.plan-card{
+  width:100%;
+  max-width:540px;
+  margin:0 auto;
+  padding:10px;
+  position:relative;
+}
+
+.plan-card img{
+  width:100%;
+  max-height:405px;
+  object-fit:contain;
+  cursor:zoom-in;
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+
+.plan-card img:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(35,25,75,.10);
+}
+
+.plan-zoom-hint{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin-top:7px;
+  color:#7b8292;
+  font-size:9.5px;
+  font-weight:850;
+  text-align:center;
+}
+
+.map-answer-panel{
+  min-width:0;
+  padding:13px;
+  border:1px solid #dfe3eb;
+  border-radius:12px;
+  background:#faf9ff;
+}
+
+.map-answer-title{
+  margin:0 0 4px;
+  color:#21164b;
+  font-size:12.5px;
+  font-weight:950;
+}
+
+.map-answer-subtitle{
+  margin:0 0 11px;
+  color:#7b8292;
+  font-size:9.7px;
+  line-height:1.5;
+}
+
+.map-answer-list{
+  margin-top:0;
+  gap:8px;
+}
+
+.map-row{
+  grid-template-columns:38px minmax(0,1fr) 74px;
+  gap:8px;
+  padding:9px 9px;
+}
+
+.map-label{
+  font-size:11px;
+  line-height:1.35;
+}
+
+.map-select{
+  min-width:0;
+}
+
+/* Image lightbox */
+.map-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:180;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(12,9,28,.82);
+  backdrop-filter:blur(5px);
+}
+
+.map-lightbox.open{
+  display:flex;
+}
+
+.map-lightbox-card{
+  position:relative;
+  width:min(1120px,96vw);
+  max-height:92vh;
+  padding:14px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 30px 90px rgba(0,0,0,.35);
+}
+
+.map-lightbox img{
+  display:block;
+  width:100%;
+  max-height:calc(92vh - 28px);
+  object-fit:contain;
+  border-radius:10px;
+  background:#fff;
+}
+
+.map-lightbox-close{
+  position:absolute;
+  top:-12px;
+  right:-12px;
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#281260;
+  color:#fff;
+  font-size:20px;
+  font-weight:950;
+  box-shadow:0 8px 22px rgba(0,0,0,.25);
+}
+
+@media(max-width:760px){
+  .plan-layout{
+    grid-template-columns:1fr;
+  }
+
+  .plan-card{
+    max-width:620px;
+  }
+
+  .map-answer-panel{
+    padding:11px;
+  }
+
+  .map-row{
+    grid-template-columns:38px minmax(0,1fr) 72px;
+  }
+}
+
+
+/* =========================================================
+   STUDENT NOTES PANEL
+========================================================= */
+.notes-panel{
+  margin-bottom:12px;
+  padding:12px 14px;
+  border:1px solid #e2def3;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(35,25,75,.04);
+}
+
+.notes-panel.empty{
+  display:none;
+}
+
+.notes-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.notes-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#21164b;
+  font-size:12px;
+  font-weight:950;
+}
+
+.notes-title-icon{
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  background:#fff3d6;
+  color:#9a5a00;
+  font-size:15px;
+}
+
+.notes-count{
+  min-width:27px;
+  height:24px;
+  padding:0 7px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#eee9ff;
+  color:#5135a6;
+  font-size:10px;
+  font-weight:950;
+}
+
+.notes-list{
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+}
+
+.note-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:start;
+  padding:10px 11px;
+  border:1px solid #eee7cf;
+  border-left:4px solid #e5a42a;
+  border-radius:10px;
+  background:#fffdf7;
+}
+
+.note-card-main{
+  min-width:0;
+}
+
+.note-source{
+  margin-bottom:3px;
+  color:#7d6b3a;
+  font-size:9.5px;
+  font-weight:900;
+  line-height:1.45;
+}
+
+.note-text{
+  color:#343b4b;
+  font-size:11px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+
+.note-actions{
+  display:flex;
+  gap:5px;
+}
+
+.note-action{
+  min-width:30px;
+  height:30px;
+  padding:0 8px;
+  border:1px solid #ded7bf;
+  border-radius:8px;
+  background:#fff;
+  color:#6b5a2c;
+  font-size:10px;
+  font-weight:900;
+}
+
+.note-action:hover{
+  background:#fff8e8;
+}
+
+.note-action.danger{
+  color:#a31e31;
+  border-color:#efc9cf;
+}
+
+.note-anchor{
+  position:relative;
+  border-bottom:2px dotted #e28b19;
+  border-radius:2px;
+  background:#ffe6a6;
+  cursor:pointer;
+}
+
+.note-anchor.note-focus{
+  animation:notePulse .9s ease 2;
+  box-shadow:0 0 0 4px rgba(226,139,25,.18);
+}
+
+@keyframes notePulse{
+  50%{
+    background:#ffd66f;
+    box-shadow:0 0 0 7px rgba(226,139,25,.25);
+  }
+}
+
+@media(max-width:700px){
+  .note-card{
+    grid-template-columns:1fr;
+  }
+
+  .note-actions{
+    justify-content:flex-end;
+  }
+}
+
+
+.note-anchor.note-pin{
+  display:inline-grid;
+  place-items:center;
+  min-width:21px;
+  height:21px;
+  margin:0 3px;
+  padding:0 4px;
+  border:1px solid #e8be67;
+  border-radius:999px;
+  background:#fff3cb;
+  color:#8d5a00;
+  font-size:11px;
+  line-height:1;
+  vertical-align:middle;
+  cursor:pointer;
+}
+
+
+.question-block.note-question-focus{
+  animation:noteQuestionPulse .9s ease 2;
+}
+
+@keyframes noteQuestionPulse{
+  50%{
+    border-color:#e5a42a;
+    background:#fffaf0;
+    box-shadow:0 0 0 5px rgba(229,164,42,.15);
+  }
+}
+
+
+/* =========================================================
+   INLINE NOTE NAVIGATION
+========================================================= */
+.note-jump-marker{
+  width:22px;
+  height:22px;
+  margin:0 3px;
+  padding:0;
+  border:1px solid #cbbcf1;
+  border-radius:999px;
+  display:inline-grid;
+  place-items:center;
+  vertical-align:middle;
+  background:#f5f1ff;
+  color:#5135a6;
+  cursor:pointer;
+  box-shadow:0 2px 7px rgba(81,53,166,.12);
+  transform:translateY(-1px);
+}
+
+.note-jump-marker::before{
+  content:"📝";
+  font-size:11px;
+  line-height:1;
+}
+
+.note-jump-marker:hover{
+  background:#eae2ff;
+  border-color:#8f77d1;
+  transform:translateY(-2px);
+}
+
+.note-jump-marker:focus-visible{
+  outline:3px solid rgba(81,53,166,.18);
+  outline-offset:2px;
+}
+
+.note-card.note-card-focus{
+  animation:noteCardPulse .9s ease 2;
+}
+
+@keyframes noteCardPulse{
+  50%{
+    border-color:#8f77d1;
+    background:#f8f5ff;
+    box-shadow:0 0 0 5px rgba(81,53,166,.14);
+  }
+}
+
+
+
+/* =========================================================
+   PRACTICE 02 — MCQ + MATCHING FEATURES
+========================================================= */
+.mcq-stack{
+  display:grid;
+  gap:8px;
+}
+
+.feature-box{
+  margin:0 0 16px;
+  padding:14px 15px;
+  border:1px solid #ddd6fb;
+  border-radius:11px;
+  background:#f8f7ff;
+}
+
+.feature-box-title{
+  margin:0 0 9px;
+  color:#21164b;
+  font-size:12px;
+  font-weight:950;
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px 14px;
+}
+
+.feature-item{
+  display:grid;
+  grid-template-columns:24px minmax(0,1fr);
+  gap:7px;
+  align-items:start;
+  color:#343b4b;
+  font-size:11.3px;
+  line-height:1.45;
+}
+
+.feature-letter{
+  display:grid;
+  place-items:center;
+  width:23px;
+  height:23px;
+  border-radius:6px;
+  background:#eee9ff;
+  color:#4b318e;
+  font-size:10px;
+  font-weight:950;
+}
+
+.matching-list{
+  display:grid;
+  gap:8px;
+}
+
+.matching-list .map-row{
+  grid-template-columns:44px minmax(0,1fr) 86px;
+}
+
+.transcript-evidence.static-evidence{
+  cursor:default;
+}
+
+.transcript-evidence.static-evidence:hover{
+  transform:none;
+  background:#eef3ff;
+}
+
+.transcript-evidence.static-evidence::after{
+  display:none;
+}
+
+@media(max-width:700px){
+  .feature-grid{
+    grid-template-columns:1fr;
+  }
+
+  .matching-list .map-row{
+    grid-template-columns:40px minmax(0,1fr) 72px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<audio id="practiceAudio" preload="metadata" src="./Cam10-Test2-Section2.mp3"></audio>
+
+<div id="start" class="start">
+  <div class="start-card">
+    <div style="font-size:10px;font-weight:950;letter-spacing:.1em;color:#6a4db4;">LISTENING PRACTICE</div>
+    <h2>Part 2 · Practice 02</h2>
+    <p>New city developments · Questions 11–20</p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input id="studentName" placeholder="Nguyễn Văn A">
+    </div>
+
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass" placeholder="11A1">
+    </div>
+
+    <button class="btn" onclick="startPractice()">Bắt đầu luyện</button>
+    <div id="startError" style="margin-top:7px;color:#b83345;font-size:10.5px;"></div>
+  </div>
+</div>
+
+<div id="resultOverlay" class="overlay hidden">
+  <div class="result">
+    <div style="font-size:10px;font-weight:950;letter-spacing:.1em;color:#6a4db4;">PRACTICE RESULT</div>
+    <h2>Listening Part 2</h2>
+    <p id="resultStudent"></p>
+    <div class="score" id="resultScore">0 / 10</div>
+    <p id="resultPercent"></p>
+    <p>Sau khi đóng cửa sổ này, hệ thống sẽ đánh dấu phần em làm chưa đúng.</p>
+    <button class="btn" onclick="closeResult()" style="width:100%;margin-top:10px;">Xem chữa bài</button>
+  </div>
+</div>
+
+<header class="top">
+  <div class="topin">
+    <div class="left">
+      <a class="back" href="../">← Part 2</a>
+      <div class="brand">🎧 Listening Part 2 · 02</div>
+    </div>
+    <div class="student" id="studentInfo"></div>
+    <div class="timer" id="timer">00:00</div>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <h1>Listening Part 2 · Practice 02</h1>
+      <p>New city developments · Questions 11–20</p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span>Tiến độ</span>
+        <span id="progressText">0/10 câu đã trả lời</span>
+      </div>
+      <div class="progress"><i id="progressBar"></i></div>
+    </div>
+  </section>
+
+  <section class="audio-panel">
+    <div class="audio-head">
+      <div class="audio-title">
+        <div class="audio-icon">🎧</div>
+        <div>
+          <b id="audioStatusTitle">Audio luyện tập</b>
+          <span id="audioStatusText">Có thể nghe lại, tua và đổi tốc độ tùy ý</span>
+        </div>
+      </div>
+      <div class="audio-time" id="audioTime">00:00 / 00:00</div>
+    </div>
+
+    <div class="audio-controls">
+      <button class="audio-btn primary" id="playPauseBtn" onclick="togglePlay()">▶</button>
+      <button class="audio-btn" onclick="skipAudio(-10)">−10s</button>
+      <input class="seek" id="seekBar" type="range" min="0" max="100" value="0" step="0.1"
+             oninput="seekPreview(this.value)" onchange="seekCommit(this.value)">
+      <button class="audio-btn" onclick="skipAudio(10)">+10s</button>
+
+      <div class="speed-wrap">
+        <span>Tốc độ</span>
+        <select id="speedSelect" onchange="setSpeed(this.value)">
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+        </select>
+      </div>
+
+      <div class="volume-wrap">
+        <span>Âm lượng</span>
+        <input class="volume" id="volumeSlider" type="range" min="0" max="1" step="0.05" value="1"
+               oninput="setVolume(this.value)">
+      </div>
+    </div>
+
+    <div class="practice-note">
+      Đây là chế độ luyện tập: em có thể dừng, nghe lại, tua ±10 giây,
+      kéo thanh audio và đổi tốc độ.
+    </div>
+    <div class="audio-missing" id="audioMissing">
+      Không tải được audio. Kiểm tra file <b>Cam10-Test2-Section2.mp3</b> trong cùng thư mục.
+    </div>
+  </section>
+
+  
+<!-- =========================================================
+     STUDENT NOTES
+========================================================= -->
+<section
+  id="studentNotesPanel"
+  class="notes-panel empty"
+>
+  <div class="notes-head">
+    <div class="notes-title">
+      <span class="notes-title-icon">📝</span>
+      <span>Ghi chú của em</span>
+    </div>
+
+    <span
+      id="studentNotesCount"
+      class="notes-count"
+    >0</span>
+  </div>
+
+  <div style="
+    margin-top:5px;
+    color:#7b8292;
+    font-size:9.5px;
+    line-height:1.45;
+  ">
+    Ghi chú được lưu tự động. Nút 📝 cạnh từ đã note đưa tới đúng ghi chú; nút ↗ trong ghi chú đưa quay lại câu hỏi.
+  </div>
+
+  <div
+    id="studentNotesList"
+    class="notes-list"
+  ></div>
+</section>
+
+<section class="paper">
+    <div class="paper-inner" id="questionsRoot">
+
+      <section class="question-block" id="questionGroup11">
+        <div class="question-title">Question 11</div>
+        <p class="question-instruction"><b>Choose the correct letter, A, B or C.</b></p>
+        <div class="section-heading">New city developments</div>
+        <div class="main-question">
+          <span class="qno">11</span>
+          The idea for the two new developments in the city came from
+        </div>
+        <div class="options mcq-stack">
+          <label class="option"><input type="radio" name="q11" value="A" onchange="singleChanged(11)"><span class="letter">A</span><span class="option-text">local people.</span></label>
+          <label class="option"><input type="radio" name="q11" value="B" onchange="singleChanged(11)"><span class="letter">B</span><span class="option-text">the City Council.</span></label>
+          <label class="option"><input type="radio" name="q11" value="C" onchange="singleChanged(11)"><span class="letter">C</span><span class="option-text">the SWRDC.</span></label>
+        </div>
+      </section>
+
+      <section class="question-block" id="questionGroup12">
+        <div class="question-title">Question 12</div>
+        <p class="question-instruction"><b>Choose the correct letter, A, B or C.</b></p>
+        <div class="main-question">
+          <span class="qno">12</span>
+          What is unusual about Brackenside pool?
+        </div>
+        <div class="options mcq-stack">
+          <label class="option"><input type="radio" name="q12" value="A" onchange="singleChanged(12)"><span class="letter">A</span><span class="option-text">its architectural style</span></label>
+          <label class="option"><input type="radio" name="q12" value="B" onchange="singleChanged(12)"><span class="letter">B</span><span class="option-text">its heating system</span></label>
+          <label class="option"><input type="radio" name="q12" value="C" onchange="singleChanged(12)"><span class="letter">C</span><span class="option-text">its method of water treatment</span></label>
+        </div>
+      </section>
+
+      <section class="question-block" id="questionGroup13">
+        <div class="question-title">Question 13</div>
+        <p class="question-instruction"><b>Choose the correct letter, A, B or C.</b></p>
+        <div class="main-question">
+          <span class="qno">13</span>
+          Local newspapers have raised worries about
+        </div>
+        <div class="options mcq-stack">
+          <label class="option"><input type="radio" name="q13" value="A" onchange="singleChanged(13)"><span class="letter">A</span><span class="option-text">the late opening date.</span></label>
+          <label class="option"><input type="radio" name="q13" value="B" onchange="singleChanged(13)"><span class="letter">B</span><span class="option-text">the cost of the project.</span></label>
+          <label class="option"><input type="radio" name="q13" value="C" onchange="singleChanged(13)"><span class="letter">C</span><span class="option-text">the size of the facilities.</span></label>
+        </div>
+      </section>
+
+      <section class="question-block" id="questionGroup14">
+        <div class="question-title">Question 14</div>
+        <p class="question-instruction"><b>Choose the correct letter, A, B or C.</b></p>
+        <div class="main-question">
+          <span class="qno">14</span>
+          What decision has not yet been made about the pool?
+        </div>
+        <div class="options mcq-stack">
+          <label class="option"><input type="radio" name="q14" value="A" onchange="singleChanged(14)"><span class="letter">A</span><span class="option-text">whose statue will be at the door</span></label>
+          <label class="option"><input type="radio" name="q14" value="B" onchange="singleChanged(14)"><span class="letter">B</span><span class="option-text">the exact opening times</span></label>
+          <label class="option"><input type="radio" name="q14" value="C" onchange="singleChanged(14)"><span class="letter">C</span><span class="option-text">who will open it</span></label>
+        </div>
+      </section>
+
+      <section class="question-block" id="questionGroup15">
+        <div class="question-title">Questions 15–20</div>
+        <p class="question-instruction">
+          <b>Which feature is related to each of the following areas of the world represented in the playground?</b><br>
+          Choose <b>SIX</b> answers from the box and write the correct letter, <b>A–I</b>, next to Questions 15–20.
+        </p>
+
+        <div class="feature-box">
+          <div class="feature-box-title">Features</div>
+          <div class="feature-grid">
+            <div class="feature-item"><span class="feature-letter">A</span><span>ancient forts</span></div>
+            <div class="feature-item"><span class="feature-letter">B</span><span>waterways</span></div>
+            <div class="feature-item"><span class="feature-letter">C</span><span>ice and snow</span></div>
+            <div class="feature-item"><span class="feature-letter">D</span><span>jewels</span></div>
+            <div class="feature-item"><span class="feature-letter">E</span><span>local animals</span></div>
+            <div class="feature-item"><span class="feature-letter">F</span><span>mountains</span></div>
+            <div class="feature-item"><span class="feature-letter">G</span><span>music and film</span></div>
+            <div class="feature-item"><span class="feature-letter">H</span><span>space travel</span></div>
+            <div class="feature-item"><span class="feature-letter">I</span><span>volcanoes</span></div>
+          </div>
+        </div>
+
+        <div class="section-heading">Areas of the world</div>
+        <div class="matching-list">
+          <div class="map-row" id="mapRow15"><span class="qno">15</span><span class="map-label">Asia</span><select class="map-select" id="q15" onchange="singleChanged(15)"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select></div>
+          <div class="map-row" id="mapRow16"><span class="qno">16</span><span class="map-label">Antarctica</span><select class="map-select" id="q16" onchange="singleChanged(16)"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select></div>
+          <div class="map-row" id="mapRow17"><span class="qno">17</span><span class="map-label">South America</span><select class="map-select" id="q17" onchange="singleChanged(17)"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select></div>
+          <div class="map-row" id="mapRow18"><span class="qno">18</span><span class="map-label">North America</span><select class="map-select" id="q18" onchange="singleChanged(18)"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select></div>
+          <div class="map-row" id="mapRow19"><span class="qno">19</span><span class="map-label">Europe</span><select class="map-select" id="q19" onchange="singleChanged(19)"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select></div>
+          <div class="map-row" id="mapRow20"><span class="qno">20</span><span class="map-label">Africa</span><select class="map-select" id="q20" onchange="singleChanged(20)"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select></div>
+        </div>
+      </section>
+
+      <div id="reviewList" class="review-list"></div>
+
+    </div>
+  </section>
+
+</main>
+
+
+<div class="bottom">
+  <div class="nav">
+    <button id="nav11" onclick="goQ(11)">11</button><button id="nav12" onclick="goQ(12)">12</button><button id="nav13" onclick="goQ(13)">13</button><button id="nav14" onclick="goQ(14)">14</button><button id="nav15" onclick="goQ(15)">15</button><button id="nav16" onclick="goQ(16)">16</button><button id="nav17" onclick="goQ(17)">17</button><button id="nav18" onclick="goQ(18)">18</button><button id="nav19" onclick="goQ(19)">19</button><button id="nav20" onclick="goQ(20)">20</button>
+  </div>
+  <button class="submit" id="submitButton" onclick="submitPractice()">Nộp bài</button>
+</div>
+
+
+<!-- =========================================================
+     HIGHLIGHT + TAKE NOTE MENU
+========================================================= -->
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+</div>
+
+<script>
+const RESULT_ENDPOINT =
+'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+const ATTEMPT_KEY = 'PRACTICE_LISTENING_PART2_02_V1';
+const COMPLETED_KEY = `${ATTEMPT_KEY}_completed`;
+const NUMBERS = [11,12,13,14,15,16,17,18,19,20];
+
+const ANSWER_KEYS = {
+  11:'A',
+  12:'C',
+  13:'C',
+  14:'A',
+  15:'E',
+  16:'F',
+  17:'D',
+  18:'H',
+  19:'A',
+  20:'B'
+};
+
+const DISPLAY_KEY = {...ANSWER_KEYS};
+
+const EXPLANATION = {
+  11:'Đáp án <b>A</b>. Ý tưởng xuất phát từ người dân thông qua đợt tham vấn rộng rãi do City Council tổ chức; SWRDC là đơn vị cấp nguồn tài chính, không phải nơi đưa ra ý tưởng.',
+  12:'Đáp án <b>C</b>. Điểm đặc biệt là hệ thống tái chế duy nhất thuộc loại này, cho phép sử dụng nước biển trong hồ — tức phương pháp xử lý/tái sử dụng nước.',
+  13:'Đáp án <b>C</b>. Báo chí địa phương lo liệu hồ có đủ chỗ cho số lượng khách dự kiến hay không, tức lo về quy mô/công suất của cơ sở.',
+  14:'Đáp án <b>A</b>. Người mở cửa hồ đã được chọn, ngày khai trương cũng đã có; điều còn chưa quyết định là nhân vật lịch sử nào sẽ được làm tượng ở lối vào.',
+  15:'Đáp án <b>E</b>. Khu Asia sử dụng rắn, đười ươi, hổ và các loài động vật bản địa của rừng trong khu vực.',
+  16:'Đáp án <b>F</b>. Khu Antarctica dùng các khối leo trèo có hình dạng núi.',
+  17:'Đáp án <b>D</b>. South America lấy chủ đề El Dorado và cuộc tìm kiếm các mỏ đầy đá quý.',
+  18:'Đáp án <b>H</b>. North America được thể hiện bằng tên lửa và International Space Station.',
+  19:'Đáp án <b>A</b>. Europe dùng lâu đài thời Trung Cổ và các công trình phòng thủ.',
+  20:'Đáp án <b>B</b>. Africa có các mosaic và đường mòn tượng trưng cho những con sông lớn của châu lục.'
+};
+
+const EVIDENCE = {
+  11:'“the idea for these initiatives came from you, the public, in the extensive consultation exercise ...”',
+  12:'“a recycling system ... which enables seawater to be used in the pool”',
+  13:'“discussion in the local press about whether there would be enough room for the number of visitors ...”',
+  14:'“a competition for the public to decide on the sculpture ... which famous historical figure ... we should have”',
+  15:'“snakes, orangutans, tigers ... fauna native to the forests of the region”',
+  16:'“climbing blocks in the shape of mountains”',
+  17:'“the theme is El Dorado ... mines full of precious stones”',
+  18:'“the designers finally opted for rockets, and the International Space Station”',
+  19:'“Medieval castles and other fortifications”',
+  20:'“mosaics and trails, to represent the great rivers of this ... continent”'
+};
+
+let submitted = false;
+let startTime = null;
+let timerHandle = null;
+let student = null;
+
+/* Highlight / Take note state */
+let savedSelection = null;
+let savedSelectionText = '';
+let savedNoteTargetId = '';
+let savedNoteCharEnd = null;
+let savedZone = null;
+let menuTarget = null;
+let menuZone = null;
+let menuMode = 'selection';
+
+const practiceAudio = document.getElementById('practiceAudio');
+const selectionMenu = document.getElementById('selectionMenu');
+const menuHighlight = document.getElementById('menuHighlight');
+const menuNote = document.getElementById('menuNote');
+const questionsRoot = document.getElementById('questionsRoot');
+const studentNotesPanel = document.getElementById('studentNotesPanel');
+const studentNotesList = document.getElementById('studentNotesList');
+const studentNotesCount = document.getElementById('studentNotesCount');
+const seekBar = document.getElementById('seekBar');
+const playPauseBtn = document.getElementById('playPauseBtn');
+
+function fmt(seconds){
+  seconds = Math.max(0, Math.floor(Number(seconds)||0));
+  const m = String(Math.floor(seconds/60)).padStart(2,'0');
+  const sec = String(seconds%60).padStart(2,'0');
+  return `${m}:${sec}`;
+}
+
+function startPractice(){
+  const name = document.getElementById('studentName').value.trim();
+  const className = document.getElementById('studentClass').value.trim();
+
+  if(!name || !className){
+    document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';
+    return;
+  }
+
+  student={name,className};
+  localStorage.setItem('IELTS_PRACTICE_STUDENT',JSON.stringify(student));
+  document.getElementById('studentInfo').textContent=`${name} · ${className}`;
+  document.getElementById('start').classList.add('hidden');
+
+  startTime=Date.now();
+  timerHandle=setInterval(updateTimer,1000);
+
+  restoreMarkup();
+  restoreAnswers();
+  updateProgress();
+  updateNav();
+}
+
+function updateTimer(){
+  if(!startTime) return;
+  document.getElementById('timer').textContent=fmt((Date.now()-startTime)/1000);
+}
+
+function togglePlay(){
+  if(practiceAudio.paused){
+    practiceAudio.play().catch(()=>{});
+  }else{
+    practiceAudio.pause();
+  }
+}
+
+function skipAudio(delta){
+  if(!Number.isFinite(practiceAudio.duration)) return;
+  practiceAudio.currentTime=Math.max(0,Math.min(practiceAudio.duration,practiceAudio.currentTime+delta));
+}
+
+function seekPreview(value){
+  if(!Number.isFinite(practiceAudio.duration)) return;
+  document.getElementById('audioTime').textContent=
+    `${fmt(practiceAudio.duration*Number(value)/100)} / ${fmt(practiceAudio.duration)}`;
+}
+
+function seekCommit(value){
+  if(!Number.isFinite(practiceAudio.duration)) return;
+  practiceAudio.currentTime=practiceAudio.duration*Number(value)/100;
+}
+
+function setSpeed(value){
+  practiceAudio.playbackRate=Number(value)||1;
+}
+
+function setVolume(value){
+  practiceAudio.volume=Number(value);
+}
+
+practiceAudio.addEventListener('play',()=>{playPauseBtn.textContent='❚❚';});
+practiceAudio.addEventListener('pause',()=>{playPauseBtn.textContent='▶';});
+practiceAudio.addEventListener('loadedmetadata',updateAudioUI);
+practiceAudio.addEventListener('timeupdate',updateAudioUI);
+practiceAudio.addEventListener('error',()=>{
+  document.getElementById('audioMissing').style.display='block';
+});
+
+function updateAudioUI(){
+  const duration=Number.isFinite(practiceAudio.duration)?practiceAudio.duration:0;
+  const current=practiceAudio.currentTime||0;
+  document.getElementById('audioTime').textContent=`${fmt(current)} / ${fmt(duration)}`;
+  seekBar.value=duration?current/duration*100:0;
+}
+
+function singleStorageKey(number){
+  return `${ATTEMPT_KEY}_q${number}`;
+}
+
+function getSingle(number){
+  return localStorage.getItem(singleStorageKey(number))||'';
+}
+
+function singleChanged(number){
+  if(submitted) return;
+
+  let value='';
+  if(number<=14){
+    value=document.querySelector(`input[name="q${number}"]:checked`)?.value||'';
+  }else{
+    value=document.getElementById(`q${number}`)?.value||'';
+  }
+
+  localStorage.setItem(singleStorageKey(number),value);
+  updateOptionUI();
+  updateProgress();
+  updateNav();
+}
+
+function restoreAnswers(){
+  [11,12,13,14].forEach(number=>{
+    const value=getSingle(number);
+    document.querySelectorAll(`input[name="q${number}"]`).forEach(input=>{
+      input.checked=input.value===value;
+    });
+  });
+
+  [15,16,17,18,19,20].forEach(number=>{
+    const select=document.getElementById(`q${number}`);
+    if(select) select.value=getSingle(number);
+  });
+
+  updateOptionUI();
+}
+
+function updateOptionUI(){
+  document.querySelectorAll('.option').forEach(label=>{
+    const input=label.querySelector('input');
+    label.classList.toggle('selected',!!input?.checked);
+  });
+}
+
+function answeredCount(){
+  return NUMBERS.filter(number=>!!getSingle(number)).length;
+}
+
+function updateProgress(){
+  const answered=answeredCount();
+  document.getElementById('progressText').textContent=`${answered}/10 câu đã trả lời`;
+  document.getElementById('progressBar').style.width=`${answered/10*100}%`;
+}
+
+function targetForNumber(number){
+  if(number<=14) return `questionGroup${number}`;
+  return `mapRow${number}`;
+}
+
+function updateNav(){
+  NUMBERS.forEach(number=>{
+    document.getElementById(`nav${number}`)?.classList.toggle('answered',!!getSingle(number));
+  });
+}
+
+function goQ(number){
+  document.getElementById(targetForNumber(number))?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function addReview(number,userAnswer,correctAnswer,explanation,evidence){
+  const item=document.createElement('div');
+  item.className='inline-review';
+  item.innerHTML=`
+    <div class="review-title">Question ${number}</div>
+    <div class="review-row"><span class="review-label">Em chọn</span><span class="review-user">${userAnswer||'—'}</span></div>
+    <div class="review-row"><span class="review-label">Đáp án đúng</span><span class="review-correct">${correctAnswer}</span></div>
+    <div class="explain-box">
+      <div class="explain-label">Giải thích</div>
+      <div class="explain-text">${explanation}</div>
+      <div class="explain-label" style="margin-top:9px;">Transcript evidence</div>
+      <div class="transcript-evidence static-evidence">${evidence}</div>
+    </div>`;
+  document.getElementById('reviewList').appendChild(item);
+}
+
+async function submitPractice(){
+  if(submitted) return;
+
+  const answered=answeredCount();
+  if(answered<10 && !confirm(`Bạn mới trả lời ${answered}/10 câu. Vẫn nộp bài?`)) return;
+
+  submitted=true;
+  practiceAudio.pause();
+  document.getElementById('submitButton').disabled=true;
+  localStorage.setItem(COMPLETED_KEY,'1');
+
+  let score=0;
+  const answers={};
+  document.getElementById('reviewList').innerHTML='';
+
+  NUMBERS.forEach(number=>{
+    const value=getSingle(number);
+    answers[number]=value;
+    const correct=value===ANSWER_KEYS[number];
+    if(correct) score++;
+
+    if(number<=14){
+      document.getElementById(`questionGroup${number}`)?.classList.add(correct?'submitted-correct':'submitted-wrong');
+    }else{
+      document.getElementById(`mapRow${number}`)?.classList.add(correct?'correct-row':'wrong-row');
+    }
+
+    if(!correct){
+      addReview(number,value||'—',DISPLAY_KEY[number],EXPLANATION[number],EVIDENCE[number]);
+    }
+  });
+
+  document.querySelectorAll('input,select').forEach(el=>el.disabled=true);
+  updateNavAfterSubmit();
+
+  const durationSeconds=Math.round((Date.now()-(startTime||Date.now()))/1000);
+  clearInterval(timerHandle);
+
+  document.getElementById('resultStudent').textContent=`${student?.name||''} · ${student?.className||''}`;
+  document.getElementById('resultScore').textContent=`${score} / 10`;
+  document.getElementById('resultPercent').textContent=`${Math.round(score/10*100)}% đúng · Thời gian ${fmt(durationSeconds)}`;
+  document.getElementById('resultOverlay').classList.remove('hidden');
+
+  const body=new URLSearchParams({
+    mode:'PRACTICE',
+    name:student?.name||'',
+    className:student?.className||'',
+    skill:'Listening',
+    practiceType:'Part 2',
+    practiceId:'02',
+    score:String(score),
+    total:'10',
+    durationSeconds:String(durationSeconds),
+    details:JSON.stringify({
+      title:'New city developments - Listening Part 2 Practice 02',
+      source:'Cambridge IELTS 10 Test 2 Section 2',
+      audio:'Cam10-Test2-Section2.mp3',
+      answers,
+      correctAnswers:ANSWER_KEYS
+    }),
+    submittedAt:new Date().toISOString()
+  });
+
+  try{
+    await fetch(RESULT_ENDPOINT,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+      body:body.toString()
+    });
+  }catch(error){
+    console.warn('Không gửi được kết quả Practice:',error);
+  }
+}
+
+function updateNavAfterSubmit(){
+  NUMBERS.forEach(number=>{
+    const correct=getSingle(number)===ANSWER_KEYS[number];
+    document.getElementById(`nav${number}`)?.classList.add(correct?'correct':'wrong');
+  });
+}
+
+function closeResult(){
+  document.getElementById('resultOverlay').classList.add('hidden');
+  const firstReview=document.getElementById('reviewList').querySelector('.inline-review');
+  if(firstReview) firstReview.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+
+
+/* =========================================================
+   HIGHLIGHT + TAKE NOTE
+========================================================= */
+
+function zoneRoot(zone){
+  return zone === 'questions'
+    ? document.getElementById('questionsRoot')
+    : null;
+}
+
+function markupKey(zone){
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+}
+
+function saveMarkup(zone){
+  if(submitted) return;
+
+  const root = zoneRoot(zone);
+  if(!root) return;
+
+  localStorage.setItem(
+    markupKey(zone),
+    root.innerHTML
+  );
+}
+
+function restoreMarkup(){
+  const root = zoneRoot('questions');
+  if(!root) return;
+
+  const markup = localStorage.getItem(
+    markupKey('questions')
+  );
+
+  if(markup){
+    root.innerHTML = markup;
+  }
+
+  migrateLegacyNotesFromMarkup();
+  bindContextActions('questions');
+  renderStudentNotes();
+}
+
+function resetMenu(){
+  if(!selectionMenu || !menuHighlight || !menuNote) return;
+
+  menuMode = 'selection';
+  menuTarget = null;
+  menuZone = null;
+
+  menuHighlight.style.display = '';
+  menuNote.style.display = '';
+
+  menuHighlight.textContent = '🖍 Highlight';
+  menuNote.textContent = '📝 Take note';
+
+  menuHighlight.classList.remove('danger');
+  menuNote.classList.remove('danger');
+}
+
+function hideMenu(){
+  if(!selectionMenu) return;
+
+  selectionMenu.classList.remove('show');
+  resetMenu();
+}
+
+function showMenu(rect){
+  if(!selectionMenu || !rect) return;
+
+  selectionMenu.classList.add('show');
+
+  requestAnimationFrame(()=>{
+    const width =
+      selectionMenu.offsetWidth || 180;
+
+    const height =
+      selectionMenu.offsetHeight || 40;
+
+    const left =
+      Math.min(
+        window.innerWidth - width - 10,
+        Math.max(
+          10,
+          rect.left + rect.width / 2 - width / 2
+        )
+      );
+
+    let top =
+      rect.top - height - 8;
+
+    if(top < 8){
+      top = rect.bottom + 8;
+    }
+
+    selectionMenu.style.left = `${left}px`;
+    selectionMenu.style.top = `${top}px`;
+  });
+}
+
+function captureSelection(zone){
+  const selection = window.getSelection();
+
+  if(
+    !selection ||
+    !selection.rangeCount ||
+    selection.isCollapsed
+  ){
+    return;
+  }
+
+  const range =
+    selection.getRangeAt(0);
+
+  const root =
+    zoneRoot(zone);
+
+  if(
+    !root ||
+    !root.contains(range.commonAncestorContainer)
+  ){
+    return;
+  }
+
+  const common =
+    range.commonAncestorContainer.nodeType === 1
+      ? range.commonAncestorContainer
+      : range.commonAncestorContainer.parentElement;
+
+  /*
+   * Không cho highlight/note trên các control tương tác.
+   * Đồng thời tránh bọc lại text đã có mark/note.
+   */
+  if(
+    common?.closest(
+      'button,input,select,option'
+    )
+  ){
+    return;
+  }
+
+  const text =
+    selection.toString().trim();
+
+  if(!text){
+    return;
+  }
+
+  savedSelection =
+    range.cloneRange();
+
+  savedSelectionText =
+    text;
+
+  const startElement =
+    range.startContainer.nodeType === Node.ELEMENT_NODE
+      ? range.startContainer
+      : range.startContainer.parentElement;
+
+  const questionBlock =
+    startElement?.closest('.question-block');
+
+  savedNoteTargetId =
+    questionBlock?.id || '';
+
+  savedNoteCharEnd =
+    null;
+
+  if(questionBlock){
+    try{
+      const locatorRange =
+        document.createRange();
+
+      locatorRange.selectNodeContents(
+        questionBlock
+      );
+
+      locatorRange.setEnd(
+        range.endContainer,
+        range.endOffset
+      );
+
+      savedNoteCharEnd =
+        locatorRange.toString().length;
+    }
+    catch(error){
+      savedNoteCharEnd = null;
+    }
+  }
+
+  savedZone =
+    zone;
+
+  resetMenu();
+
+  showMenu(
+    range.getBoundingClientRect()
+  );
+}
+
+function clearSelection(){
+  const selection =
+    window.getSelection();
+
+  if(selection){
+    selection.removeAllRanges();
+  }
+
+  savedSelection = null;
+  savedSelectionText = '';
+  savedNoteTargetId = '';
+  savedNoteCharEnd = null;
+  savedZone = null;
+}
+
+function addHighlight(){
+  if(
+    menuMode === 'delete-highlight'
+  ){
+    removeMark();
+    return;
+  }
+
+  if(
+    !savedSelection ||
+    !savedZone
+  ){
+    return;
+  }
+
+  try{
+    const range =
+      savedSelection.cloneRange();
+
+    const mark =
+      document.createElement('mark');
+
+    mark.className =
+      'user-highlight';
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+    range.insertNode(mark);
+
+    saveMarkup(savedZone);
+    clearSelection();
+    hideMenu();
+  }
+  catch(error){
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+  }
+}
+
+
+
+const NOTES_KEY =
+  `${ATTEMPT_KEY}_student_notes_v2`;
+
+function readStudentNotes(){
+  try{
+    const data =
+      JSON.parse(
+        localStorage.getItem(NOTES_KEY)
+        ||
+        '[]'
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
+  }
+  catch(error){
+    return [];
+  }
+}
+
+function writeStudentNotes(notes){
+  localStorage.setItem(
+    NOTES_KEY,
+    JSON.stringify(notes)
+  );
+}
+
+function migrateLegacyNotesFromMarkup(){
+  const root =
+    zoneRoot('questions');
+
+  if(!root){
+    return;
+  }
+
+  const legacy =
+    [...root.querySelectorAll('.note-anchor')];
+
+  if(!legacy.length){
+    return;
+  }
+
+  const notes =
+    readStudentNotes();
+
+  const knownIds =
+    new Set(
+      notes.map(item=>item.id)
+    );
+
+  let changed = false;
+
+  legacy.forEach((node,index)=>{
+    const id =
+      node.dataset.noteId
+      ||
+      `legacy_${Date.now()}_${index}`;
+
+    const selectedText =
+      (
+        node.dataset.selectedText
+        ||
+        node.textContent
+        ||
+        ''
+      )
+      .replace('📝','')
+      .trim();
+
+    const noteText =
+      (
+        node.dataset.note
+        ||
+        node.title
+        ||
+        ''
+      )
+      .trim();
+
+    const targetId =
+      node.closest('.question-block')?.id
+      ||
+      '';
+
+    if(
+      noteText
+      &&
+      !knownIds.has(id)
+    ){
+      notes.push({
+        id,
+        selectedText:
+          selectedText || 'Đoạn đã ghi chú',
+        note:
+          noteText,
+        targetId,
+        charEnd:null,
+        createdAt:
+          Date.now() + index
+      });
+
+      knownIds.add(id);
+    }
+
+    const parent =
+      node.parentNode;
+
+    if(node.classList.contains('note-pin')){
+      node.remove();
+    }
+    else{
+      while(node.firstChild){
+        parent.insertBefore(
+          node.firstChild,
+          node
+        );
+      }
+
+      node.remove();
+    }
+
+    parent?.normalize?.();
+    changed = true;
+  });
+
+  if(changed){
+    writeStudentNotes(notes);
+
+    /*
+     * Xóa note-anchor cũ khỏi markup đã lưu để lần sau
+     * không restore lại DOM phức tạp.
+     */
+    localStorage.setItem(
+      markupKey('questions'),
+      root.innerHTML
+    );
+  }
+}
+
+function renderStudentNotes(){
+  if(
+    !studentNotesPanel
+    ||
+    !studentNotesList
+    ||
+    !studentNotesCount
+  ){
+    return;
+  }
+
+  const notes =
+    readStudentNotes();
+
+  studentNotesCount.textContent =
+    String(notes.length);
+
+  if(!notes.length){
+    studentNotesPanel.classList.add('empty');
+    studentNotesList.innerHTML = '';
+
+    zoneRoot('questions')
+      ?.querySelectorAll('.note-jump-marker')
+      .forEach(marker=>marker.remove());
+
+    return;
+  }
+
+  studentNotesPanel.classList.remove('empty');
+
+  studentNotesList.innerHTML =
+    notes.map((item,index)=>{
+      const id =
+        escapeHTML(item.id);
+
+      const selectedText =
+        escapeHTML(
+          item.selectedText
+          ||
+          'Đoạn đã ghi chú'
+        );
+
+      const noteText =
+        escapeHTML(
+          item.note
+          ||
+          ''
+        );
+
+      const questionLabel =
+        item.targetId
+        ? escapeHTML(
+            item.targetId
+              .replace('questionGroup','Questions ')
+          )
+        : 'Trong bài';
+
+      return `
+        <article
+          class="note-card"
+          id="studentNoteCard-${id}"
+        >
+          <div class="note-card-main">
+            <div class="note-source">
+              #${index + 1} · ${questionLabel} · “${selectedText}”
+            </div>
+
+            <div class="note-text">
+              ${noteText}
+            </div>
+          </div>
+
+          <div class="note-actions">
+            <button
+              type="button"
+              class="note-action"
+              title="Đi tới câu đã ghi chú"
+              onclick="focusNote('${id}')"
+            >↗</button>
+
+            <button
+              type="button"
+              class="note-action"
+              title="Sửa ghi chú"
+              onclick="editNote('${id}')"
+            >✎</button>
+
+            <button
+              type="button"
+              class="note-action danger"
+              title="Xóa ghi chú"
+              onclick="deleteNoteById('${id}')"
+            >×</button>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+  renderNoteJumpMarkers();
+}
+
+function scrollToNoteCard(noteId){
+  const card =
+    document.getElementById(
+      `studentNoteCard-${noteId}`
+    );
+
+  if(!card){
+    return;
+  }
+
+  card.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+  card.classList.remove(
+    'note-card-focus'
+  );
+
+  void card.offsetWidth;
+
+  card.classList.add(
+    'note-card-focus'
+  );
+
+  setTimeout(
+    ()=>card.classList.remove(
+      'note-card-focus'
+    ),
+    1800
+  );
+}
+
+function createNoteJumpMarker(noteId){
+  const button =
+    document.createElement('button');
+
+  button.type =
+    'button';
+
+  button.className =
+    'note-jump-marker';
+
+  button.dataset.noteId =
+    noteId;
+
+  button.setAttribute(
+    'aria-label',
+    'Đi tới ghi chú'
+  );
+
+  button.title =
+    'Đi tới ghi chú';
+
+  button.addEventListener(
+    'click',
+    event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      scrollToNoteCard(noteId);
+    }
+  );
+
+  return button;
+}
+
+function insertMarkerAtCharacterOffset(
+  block,
+  charEnd,
+  noteId
+){
+  if(
+    !block
+    ||
+    !Number.isFinite(charEnd)
+  ){
+    return false;
+  }
+
+  const walker =
+    document.createTreeWalker(
+      block,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node){
+          const parent =
+            node.parentElement;
+
+          if(
+            !parent
+            ||
+            parent.closest(
+              'button,input,select,option,.note-jump-marker'
+            )
+          ){
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+  let total = 0;
+  let node = null;
+
+  while(
+    (node = walker.nextNode())
+  ){
+    const length =
+      node.nodeValue?.length || 0;
+
+    if(
+      total + length >= charEnd
+    ){
+      const offset =
+        Math.max(
+          0,
+          Math.min(
+            length,
+            charEnd - total
+          )
+        );
+
+      const marker =
+        createNoteJumpMarker(noteId);
+
+      const range =
+        document.createRange();
+
+      range.setStart(
+        node,
+        offset
+      );
+
+      range.collapse(true);
+
+      const highlight =
+        node.parentElement?.closest(
+          'mark.user-highlight'
+        );
+
+      if(
+        highlight
+        &&
+        block.contains(highlight)
+      ){
+        highlight.insertAdjacentElement(
+          'afterend',
+          marker
+        );
+      }
+      else{
+        range.insertNode(marker);
+      }
+
+      return true;
+    }
+
+    total += length;
+  }
+
+  return false;
+}
+
+function insertMarkerBySelectedText(
+  block,
+  selectedText,
+  noteId
+){
+  if(
+    !block
+    ||
+    !selectedText
+  ){
+    return false;
+  }
+
+  const walker =
+    document.createTreeWalker(
+      block,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node){
+          const parent =
+            node.parentElement;
+
+          if(
+            !parent
+            ||
+            parent.closest(
+              'button,input,select,option,.note-jump-marker'
+            )
+          ){
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+  let node = null;
+
+  while(
+    (node = walker.nextNode())
+  ){
+    const text =
+      node.nodeValue || '';
+
+    const index =
+      text.indexOf(selectedText);
+
+    if(index !== -1){
+      const marker =
+        createNoteJumpMarker(noteId);
+
+      const range =
+        document.createRange();
+
+      range.setStart(
+        node,
+        index + selectedText.length
+      );
+
+      range.collapse(true);
+
+      const highlight =
+        node.parentElement?.closest(
+          'mark.user-highlight'
+        );
+
+      if(
+        highlight
+        &&
+        block.contains(highlight)
+      ){
+        highlight.insertAdjacentElement(
+          'afterend',
+          marker
+        );
+      }
+      else{
+        range.insertNode(marker);
+      }
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function renderNoteJumpMarkers(){
+  const root =
+    zoneRoot('questions');
+
+  if(!root){
+    return;
+  }
+
+  root
+    .querySelectorAll(
+      '.note-jump-marker'
+    )
+    .forEach(
+      marker=>marker.remove()
+    );
+
+  const notes =
+    readStudentNotes();
+
+  notes.forEach(item=>{
+    const block =
+      item.targetId
+        ? document.getElementById(
+            item.targetId
+          )
+        : null;
+
+    if(!block){
+      return;
+    }
+
+    let inserted =
+      insertMarkerAtCharacterOffset(
+        block,
+        Number(item.charEnd),
+        item.id
+      );
+
+    if(!inserted){
+      inserted =
+        insertMarkerBySelectedText(
+          block,
+          item.selectedText || '',
+          item.id
+        );
+    }
+
+    if(!inserted){
+      const target =
+        block.querySelector(
+          '.main-question'
+        )
+        ||
+        block.querySelector(
+          '.question-title'
+        )
+        ||
+        block;
+
+      target.appendChild(
+        createNoteJumpMarker(
+          item.id
+        )
+      );
+    }
+  });
+}
+
+function findStoredNote(noteId){
+  return readStudentNotes()
+    .find(item=>item.id === noteId)
+    || null;
+}
+
+function focusNote(noteId){
+  const item =
+    findStoredNote(noteId);
+
+  if(!item){
+    return;
+  }
+
+  const target =
+    item.targetId
+      ? document.getElementById(item.targetId)
+      : document.getElementById('questionsRoot');
+
+  if(!target){
+    return;
+  }
+
+  target.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+  target.classList.remove('note-question-focus');
+
+  void target.offsetWidth;
+
+  target.classList.add('note-question-focus');
+
+  setTimeout(
+    ()=>target.classList.remove('note-question-focus'),
+    1800
+  );
+}
+
+function editNote(noteId){
+  const notes =
+    readStudentNotes();
+
+  const index =
+    notes.findIndex(
+      item=>item.id === noteId
+    );
+
+  if(index < 0){
+    return;
+  }
+
+  const updated =
+    prompt(
+      'Sửa ghi chú:',
+      notes[index].note || ''
+    );
+
+  if(
+    updated === null
+    ||
+    !updated.trim()
+  ){
+    return;
+  }
+
+  notes[index].note =
+    updated.trim();
+
+  writeStudentNotes(notes);
+  renderStudentNotes();
+}
+
+function deleteNoteById(noteId){
+  const notes =
+    readStudentNotes()
+      .filter(
+        item=>item.id !== noteId
+      );
+
+  writeStudentNotes(notes);
+  renderStudentNotes();
+}
+
+function addNote(){
+  /*
+   * Note mới KHÔNG sửa DOM của đề nữa.
+   * Chỉ lưu text đã chọn + vị trí câu hỏi vào localStorage.
+   * Vì vậy selection dài/ngắn, có highlight hay spans đều không lỗi.
+   */
+  if(
+    !savedSelectionText
+    ||
+    !savedZone
+  ){
+    return;
+  }
+
+  const note =
+    prompt('Nhập ghi chú:');
+
+  if(
+    note === null
+    ||
+    !note.trim()
+  ){
+    return;
+  }
+
+  const notes =
+    readStudentNotes();
+
+  notes.push({
+    id:
+      `note_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,
+    selectedText:
+      savedSelectionText,
+    note:
+      note.trim(),
+    targetId:
+      savedNoteTargetId,
+    charEnd:
+      Number.isFinite(savedNoteCharEnd)
+        ? savedNoteCharEnd
+        : null,
+    createdAt:
+      Date.now()
+  });
+
+  writeStudentNotes(notes);
+
+  clearSelection();
+  hideMenu();
+  renderStudentNotes();
+}
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+  menuTarget = target;
+  menuZone = zone;
+
+  clearSelection();
+
+  if(type === 'highlight'){
+    menuMode = 'delete-highlight';
+
+    menuHighlight.textContent =
+      '✕ Xóa highlight';
+
+    menuHighlight
+      .classList
+      .add('danger');
+
+    menuNote.style.display = 'none';
+  }
+  else{
+    menuMode = 'delete-note';
+
+    menuNote.textContent =
+      '✕ Xóa note';
+
+    menuNote
+      .classList
+      .add('danger');
+
+    menuHighlight.style.display = 'none';
+  }
+
+  showMenu(
+    target.getBoundingClientRect()
+  );
+}
+
+function removeMark(){
+  if(!menuTarget) return;
+
+  const parent =
+    menuTarget.parentNode;
+
+  if(menuTarget.classList.contains('note-pin')){
+    menuTarget.remove();
+  }
+  else{
+    while(menuTarget.firstChild){
+      parent.insertBefore(
+        menuTarget.firstChild,
+        menuTarget
+      );
+    }
+
+    menuTarget.remove();
+  }
+
+  parent.normalize();
+
+  saveMarkup(menuZone);
+  hideMenu();
+  renderStudentNotes();
+}
+
+function bindContextActions(zone){
+  const root =
+    zoneRoot(zone);
+
+  if(
+    !root ||
+    root.dataset.contextBound === '1'
+  ){
+    return;
+  }
+
+  root.dataset.contextBound = '1';
+
+  root.addEventListener(
+    'mouseup',
+    ()=>{
+      setTimeout(
+        ()=>captureSelection(zone),
+        0
+      );
+    }
+  );
+
+  root.addEventListener(
+    'touchend',
+    ()=>{
+      setTimeout(
+        ()=>captureSelection(zone),
+        120
+      );
+    }
+  );
+
+  root.addEventListener(
+    'click',
+    event=>{
+      const highlight =
+        event.target.closest(
+          'mark.user-highlight'
+        );
+
+      const note =
+        event.target.closest(
+          '.note-anchor'
+        );
+
+      if(highlight){
+        event.stopPropagation();
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+        return;
+      }
+
+      if(note){
+        event.stopPropagation();
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+      }
+    }
+  );
+}
+
+menuHighlight?.addEventListener(
+  'click',
+  addHighlight
+);
+
+menuNote?.addEventListener(
+  'click',
+  addNote
+);
+
+document.addEventListener(
+  'mousedown',
+  event=>{
+    if(
+      selectionMenu &&
+      !selectionMenu.contains(event.target)
+      &&
+      !event.target.closest('.user-highlight')
+      &&
+      !event.target.closest('.note-anchor')
+    ){
+      hideMenu();
+    }
+  }
+);
+
+
+function openMapLightbox(){
+  const lightbox=document.getElementById('mapLightbox');
+  if(!lightbox) return;
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+
+function closeMapLightbox(event,force=false){
+  const lightbox=document.getElementById('mapLightbox');
+  if(!lightbox) return;
+
+  const clickedBackdrop =
+    event
+    && event.target === lightbox;
+
+  if(!force && event && !clickedBackdrop) return;
+
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){
+    const lightbox=document.getElementById('mapLightbox');
+    if(lightbox?.classList.contains('open')){
+      closeMapLightbox(null,true);
+    }
+  }
+});
+
+
+(function init(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
+    if(saved?.name) document.getElementById('studentName').value=saved.name;
+    if(saved?.className) document.getElementById('studentClass').value=saved.className;
+  }catch(e){}
+
+  migrateLegacyNotesFromMarkup();
+  bindContextActions('questions');
+  renderStudentNotes();
+})();
+</script>
+</body>
+</html>
