@@ -4125,11 +4125,11 @@ button:disabled{
       </div>
 
       <h3>
-        Street Word Racer 3D · Cockpit
+        Vocab Racer 3D
       </h3>
 
       <p>
-        Góc nhìn từ ghế lái: lao vào đúng từ để tăng tốc và bỏ lại 2 xe đối thủ.
+        Đua xe 3D góc nhìn sau xe: chọn đúng cổng từ vựng để kích hoạt Nitro và vượt các xe đối thủ.
       </p>
 
       <button
@@ -5566,7 +5566,7 @@ const GAME_NAMES = {
 
   catcher:"Word Catcher",
 
-  racer:"Street Word Racer 3D · Cockpit",
+  racer:"Vocab Racer 3D",
 
   match:"Alien Maze Escape",
 
@@ -5615,13 +5615,13 @@ const GAME_INTROS = {
 
     icon:"🏎️",
 
-    title:"Street Word Racer 3D · Cockpit",
+    title:"Vocab Racer 3D",
 
     description:
-      "Góc nhìn từ ghế lái. Đi đúng vào từ vựng để tăng tốc; đi sai bị chậm lại và 1 hoặc 2 xe đối thủ sẽ vượt lên.",
+      "Đua xe 3D góc nhìn sau xe. Chọn đúng cổng từ vựng để kích hoạt Nitro, vượt đối thủ và về đích.",
 
     rules:
-      "• Dùng ← →, chạm hoặc vuốt trái/phải để đổi làn.<br>• Mỗi giao lộ có 4 đáp án trên 4 làn.<br>• Trả lời đúng thật nhanh sẽ tự kích hoạt Nitro và nhận thưởng x2.<br>• Sai hoặc phản xạ không kịp: xe va chướng ngại vật, giảm tốc và bị phạt thời gian.<br>• Time Trial: đúng +4 giây, sai -6 giây.<br>• Endless Run: game kết thúc sau 3 lỗi.<br>• Combo 5 câu đúng mở BẤT TỬ 5 giây."
+      "• Dùng ← → hoặc A/D để đổi làn; tablet có thể vuốt trái/phải.<br>• Mỗi cổng có 3 đáp án tương ứng 3 làn đường.<br>• Chọn đúng: kích hoạt Nitro, tăng tốc và có thể vượt xe AI.<br>• Chọn sai hoặc hết giờ: xe giảm tốc tạm thời, không mất mạng.<br>• Kết thúc màn sẽ có xếp hạng và danh sách từ cần ôn lại."
 
   },
 
@@ -10819,8 +10819,8 @@ let cockpitOpponents = [
 
 function startRacer(){
 
-  // Mở bản Vocab Racer 3D mới trong thư mục riêng.
-  // Không gọi racerScreen / beginRacer của game cũ nữa.
+  // Mở Vocab Racer 3D mới.
+  // Không chạy racerScreen / beginRacer cũ trong file Vocabulary này nữa.
   try{
     localStorage.setItem(
       "VOCAB_RACER_RETURN_URL",
@@ -10828,8 +10828,9 @@ function startRacer(){
     );
   }catch(error){}
 
-  window.location.href =
-  "./racer3d/";
+  window.location.assign(
+    "./racer3d/index.html?v=20260924-racer3d-new"
+  );
 
 }
 
