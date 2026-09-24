@@ -2,144 +2,62 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
-  <title>Street Word Racer 3D</title>
-
-  <link
-    rel="stylesheet"
-    href="./style.css"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Racer 3D — First Person</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
-
 <body>
-
   <main id="game">
-
-    <!-- =========================
-         HUD
-    ========================== -->
     <section id="hud">
-
-      <div class="target-box">
-        <span class="hud-label">
-          TỪ MỤC TIÊU
-        </span>
-
-        <strong id="targetWord">
-          —
-        </strong>
+      <div class="target-card">
+        <span class="eyebrow">WORD RACER 3D</span>
+        <small>TỪ / CỤM TỪ MỤC TIÊU</small>
+        <strong id="targetWord">—</strong>
       </div>
 
-
-      <div class="hud-stats">
-
-        <div class="stat">
-          <span>Điểm</span>
-          <b id="score">0</b>
-        </div>
-
-        <div class="stat">
-          <span>Mạng</span>
-          <b id="lives">5</b>
-        </div>
-
-        <div class="stat">
-          <span>Combo</span>
-          <b id="combo">x0</b>
-        </div>
-
-        <div class="stat">
-          <span>Tốc độ</span>
-          <b id="speed">100</b>
-        </div>
-
+      <div class="stats">
+        <div class="stat"><span>Điểm</span><b id="score">0</b></div>
+        <div class="stat"><span>Mạng</span><b id="lives">5</b></div>
+        <div class="stat"><span>Combo</span><b id="combo">x0</b></div>
+        <div class="stat"><span>Tốc độ</span><b id="speed">120</b></div>
       </div>
-
     </section>
 
+    <div id="message" aria-live="polite"></div>
 
-    <!-- Thông báo đúng / sai -->
-    <div
-      id="message"
-      aria-live="polite"
-    ></div>
+    <div id="boostFx" aria-hidden="true">
+      <div class="speed-line l1"></div>
+      <div class="speed-line l2"></div>
+      <div class="speed-line l3"></div>
+      <div class="speed-line l4"></div>
+      <div class="speed-line l5"></div>
+      <div class="speed-line l6"></div>
+    </div>
 
+    <div id="damageFx" aria-hidden="true"></div>
 
-    <!-- Báo lỗi nếu Three.js / WebGL lỗi -->
-    <div
-      id="bootError"
-      class="boot-error hidden"
-    ></div>
-
-
-    <!-- Điều khiển mobile -->
-    <section id="controls">
-
-      <button
-        id="leftBtn"
-        type="button"
-        aria-label="Sang trái"
-      >
-        ←
-      </button>
-
-      <div class="control-hint">
-        ← / → đổi làn
+    <section id="controls" aria-label="Điều khiển xe">
+      <button id="leftBtn" type="button" aria-label="Sang làn trái">←</button>
+      <div class="control-copy">
+        <b>A / D</b>
+        <span>hoặc ← / → để đổi làn</span>
       </div>
-
-      <button
-        id="rightBtn"
-        type="button"
-        aria-label="Sang phải"
-      >
-        →
-      </button>
-
+      <button id="rightBtn" type="button" aria-label="Sang làn phải">→</button>
     </section>
 
+    <div id="bootError" class="boot-error hidden" role="alert"></div>
 
-    <!-- Game over -->
-    <section
-      id="gameOver"
-      class="modal hidden"
-    >
-
+    <section id="gameOver" class="modal hidden">
       <div class="modal-card">
-
-        <h2>
-          Kết thúc lượt đua
-        </h2>
-
+        <span class="eyebrow">RACE OVER</span>
+        <h2>Kết thúc lượt đua</h2>
         <p id="gameOverText"></p>
-
-        <button
-          id="restartBtn"
-          type="button"
-        >
-          Chơi lại
-        </button>
-
+        <button id="restartBtn" type="button">Chơi lại</button>
       </div>
-
     </section>
-
   </main>
 
-
-  <!--
-    Three.js dạng global THREE.
-    Dùng r159 để tránh vấn đề compatibility của một số build mới hơn.
-  -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"
-  ></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
   <script src="./game.js"></script>
-
 </body>
 </html>
