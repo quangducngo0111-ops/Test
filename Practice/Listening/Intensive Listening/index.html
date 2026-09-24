@@ -291,7 +291,7 @@ a{text-decoration:none}
 
   <div class="section-head">
     <h2>Bài luyện tập</h2>
-    <p id="lessonSummary">1 bài · bắt đầu từ Bài 01</p>
+    <p id="lessonSummary">2 bài · bắt đầu từ Bài 01</p>
   </div>
 
   <section class="lesson-grid">
@@ -324,10 +324,33 @@ a{text-decoration:none}
       </div>
     </a>
 
-    <div class="empty">
-      Bài 02<br>
-      Sẽ được bổ sung sau
-    </div>
+    <a class="lesson-card" href="./02/">
+      <div class="lesson-top">
+        <div class="lesson-number">02</div>
+        <div class="status" id="lesson02Status">Chưa làm</div>
+      </div>
+
+      <h3>New city developments</h3>
+
+      <div class="source">
+        Cambridge 10 · Test 2 · Section 2
+      </div>
+
+      <p>
+        Luyện nghe bài nói theo 2 bước: hoàn thành audioscript có từ bị khuyết,
+        sau đó nghe chép chính tả các đoạn trọng tâm về Brackenside Pool và Central Park Playground.
+      </p>
+
+      <div class="tags">
+        <span class="tag">Gap-fill</span>
+        <span class="tag">Dictation</span>
+        <span class="tag">Section 2</span>
+      </div>
+
+      <div class="start" id="lesson02Action">
+        Bắt đầu luyện →
+      </div>
+    </a>
 
     <div class="empty">
       Bài 03<br>
@@ -339,8 +362,10 @@ a{text-decoration:none}
 </main>
 
 <script>
-const LESSON_01_ID =
-"INTENSIVE_LISTENING_01_SELFDRIVE_V1";
+const LESSON_IDS = {
+  1:"INTENSIVE_LISTENING_01_SELFDRIVE_V1",
+  2:"INTENSIVE_LISTENING_02_CITY_DEVELOPMENTS_V1"
+};
 
 function studentScope(){
   try{
@@ -375,8 +400,8 @@ function studentScope(){
   return "guest";
 }
 
-function lessonStateKey(){
-  return LESSON_01_ID
+function lessonStateKey(lessonId){
+  return lessonId
   +
   "_"
   +
@@ -414,14 +439,23 @@ function renderStudent(){
   catch(error){}
 }
 
-function renderLessonStatus(){
+function renderOneLessonStatus(number){
+  const lessonId =
+  LESSON_IDS[number];
+
+  if(!lessonId){
+    return;
+  }
+
   let state = {};
 
   try{
     state =
     JSON.parse(
       localStorage.getItem(
-        lessonStateKey()
+        lessonStateKey(
+          lessonId
+        )
       )
       ||
       "{}"
@@ -429,15 +463,30 @@ function renderLessonStatus(){
   }
   catch(error){}
 
+  const padded =
+  String(number)
+  .padStart(
+    2,
+    "0"
+  );
+
   const badge =
   document.getElementById(
-    "lesson01Status"
+    `lesson${padded}Status`
   );
 
   const action =
   document.getElementById(
-    "lesson01Action"
+    `lesson${padded}Action`
   );
+
+  if(
+    !badge
+    ||
+    !action
+  ){
+    return;
+  }
 
   if(state.part2Submitted){
     badge.textContent =
@@ -475,8 +524,21 @@ function renderLessonStatus(){
   "Bắt đầu luyện →";
 }
 
+function renderLessonStatuses(){
+  Object
+  .keys(
+    LESSON_IDS
+  )
+  .forEach(
+    number =>
+    renderOneLessonStatus(
+      Number(number)
+    )
+  );
+}
+
 renderStudent();
-renderLessonStatus();
+renderLessonStatuses();
 </script>
 
 </body>
