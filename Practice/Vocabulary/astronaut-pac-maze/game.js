@@ -1,4809 +1,1071 @@
 /* =========================================================
-   ASTRONAUT PAC-MAZE 3D
-   THREE.JS / WEBGL
-
-   - Map dựng bằng Matrix Grid.
-   - 1 = Wall
-   - 0 = Corridor
-   - 2 = Answer Station
-   - Astronaut có body + animation tay/chân.
-   - Alien dùng BFS tìm đường.
-   - WASD / Arrow Keys.
+   ASTRONAUT ESCAPE 3D
+   Stylized Low-Poly Space Station
+   Three.js / WebGL
 ========================================================= */
-
 (() => {
-
   "use strict";
 
+  const CELL=2.45;
+  const GRID=[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 1], [1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1], [1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1], [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1], [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1], [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1], [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1], [1, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]];
+  const ROWS=GRID.length;
+  const COLS=GRID[0].length;
 
-  /* =========================================================
-     CONFIG
-  ========================================================= */
+  const START={"row": 8, "col": 11};
+  const STATIONS=[{"row": 1, "col": 1}, {"row": 1, "col": 21}, {"row": 15, "col": 1}, {"row": 15, "col": 21}];
 
-  const CELL =
-    2.25;
-
-
-
-  /* =========================================================
-     MAZE MATRIX
-  ========================================================= */
-
-  const GRID = [
-
-    [
-      1,1,1,1,1,1,1,1,1,1,
-      1,1,1,1,1,1,1,1,1,1,1
-    ],
-
-    [
-      1,2,0,0,0,0,0,0,0,1,
-      0,0,0,0,0,0,0,0,0,2,1
-    ],
-
-    [
-      1,0,1,1,1,0,1,1,0,1,
-      0,1,1,0,1,1,1,0,1,0,1
-    ],
-
-    [
-      1,0,1,0,0,0,1,0,0,0,
-      0,0,1,0,0,0,1,0,1,0,1
-    ],
-
-    [
-      1,0,1,0,1,1,1,0,1,1,
-      1,0,1,1,1,0,1,0,1,0,1
-    ],
-
-    [
-      1,0,0,0,1,0,0,0,0,0,
-      1,0,0,0,1,0,0,0,0,0,1
-    ],
-
-    [
-      1,1,1,0,1,0,1,1,1,0,
-      1,0,1,1,1,0,1,0,1,1,1
-    ],
-
-    [
-      1,0,0,0,1,0,0,0,1,0,
-      0,0,1,0,0,0,1,0,0,0,1
-    ],
-
-    [
-      1,0,1,1,1,0,1,0,1,1,
-      0,1,1,0,1,0,1,1,1,0,1
-    ],
-
-    [
-      1,0,0,0,0,0,1,0,0,0,
-      0,0,1,0,0,0,0,0,0,0,1
-    ],
-
-    [
-      1,0,1,1,1,0,1,1,1,0,
-      1,0,1,1,1,0,1,1,1,0,1
-    ],
-
-    [
-      1,0,1,0,0,0,0,0,1,0,
-      1,0,0,0,1,0,0,0,1,0,1
-    ],
-
-    [
-      1,0,1,0,1,1,1,0,1,0,
-      1,1,1,0,1,1,1,0,1,0,1
-    ],
-
-    [
-      1,2,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,2,1
-    ],
-
-    [
-      1,1,1,1,1,1,1,1,1,1,
-      1,1,1,1,1,1,1,1,1,1,1
-    ]
-
+  const ALIEN_SPAWNS=[
+    {row:1,col:11},
+    {row:15,col:11},
+    {row:8,col:2},
+    {row:8,col:20}
   ];
 
-
-  const ROWS =
-    GRID.length;
-
-
-  const COLS =
-    GRID[0].length;
-
-
-
-  /* =========================================================
-     START / STATIONS
-  ========================================================= */
-
-  const START = {
-
-    row:7,
-
-    col:10
-
-  };
-
-
-  const STATIONS = [
-
-    {
-      row:1,
-      col:1
-    },
-
-    {
-      row:1,
-      col:19
-    },
-
-    {
-      row:13,
-      col:1
-    },
-
-    {
-      row:13,
-      col:19
-    }
-
+  const VOCAB=[
+    {word:"public transport",correct:"hệ thống giao thông công cộng",wrong:["khu dân cư","tắc nghẽn giao thông","cơ sở y tế"]},
+    {word:"income inequality",correct:"bất bình đẳng thu nhập",wrong:["thuế thu nhập","thu nhập khả dụng","tăng lương"]},
+    {word:"renewable energy",correct:"năng lượng tái tạo",wrong:["nhiên liệu hóa thạch","hiệu suất năng lượng","khí thải"]},
+    {word:"higher education",correct:"giáo dục đại học",wrong:["giáo dục mầm non","đào tạo nghề","giáo dục bắt buộc"]},
+    {word:"labour market",correct:"thị trường lao động",wrong:["năng suất lao động","lương tối thiểu","việc làm tạm thời"]}
   ];
 
-
-
-  /* =========================================================
-     ALIEN SPAWNS
-  ========================================================= */
-
-  const ALIEN_SPAWNS = [
-
-    {
-      row:1,
-      col:10
-    },
-
-    {
-      row:13,
-      col:10
-    },
-
-    {
-      row:7,
-      col:1
-    },
-
-    {
-      row:7,
-      col:19
-    }
-
-  ];
-
-
-
-  /* =========================================================
-     DEMO VOCAB
-  ========================================================= */
-
-  const VOCAB = [
-
-    {
-      word:
-        "public transport",
-
-      correct:
-        "hệ thống giao thông công cộng",
-
-      wrong:[
-        "khu dân cư",
-        "tắc nghẽn giao thông",
-        "cơ sở y tế"
-      ]
-    },
-
-
-    {
-      word:
-        "income inequality",
-
-      correct:
-        "bất bình đẳng thu nhập",
-
-      wrong:[
-        "thuế thu nhập",
-        "thu nhập khả dụng",
-        "tăng lương"
-      ]
-    },
-
-
-    {
-      word:
-        "renewable energy",
-
-      correct:
-        "năng lượng tái tạo",
-
-      wrong:[
-        "nhiên liệu hóa thạch",
-        "hiệu suất năng lượng",
-        "khí thải"
-      ]
-    },
-
-
-    {
-      word:
-        "higher education",
-
-      correct:
-        "giáo dục đại học",
-
-      wrong:[
-        "giáo dục mầm non",
-        "đào tạo nghề",
-        "giáo dục bắt buộc"
-      ]
-    },
-
-
-    {
-      word:
-        "labour market",
-
-      correct:
-        "thị trường lao động",
-
-      wrong:[
-        "năng suất lao động",
-        "lương tối thiểu",
-        "việc làm tạm thời"
-      ]
-    }
-
-  ];
-
-
-
-  /* =========================================================
-     THREE STATE
-  ========================================================= */
-
-  let scene;
-
-  let camera;
-
-  let renderer;
-
-  let clock;
-
-
-  let astronaut;
-
-  let astronautParts =
-    null;
-
-
-  let stationMeshes =
-    [];
-
-
-  let aliens =
-    [];
-
-
-
-  /* =========================================================
-     GAME STATE
-  ========================================================= */
-
-  let score =
-    0;
-
-
-  let lives =
-    5;
-
-
-  let gameEnded =
-    false;
-
-
-  let answerLock =
-    false;
-
-
-  let currentItem =
-    null;
-
-
-  let stationAnswers =
-    [];
-
-
-  let lastStationKey =
-    "";
-
-
-  let walkTime =
-    0;
-
-
-  let moveDirection = {
-
-    x:0,
-
-    z:0
-
-  };
-
-
-  const pressed = {
-
-    up:false,
-
-    down:false,
-
-    left:false,
-
-    right:false
-
-  };
-
-
-
-  /* =========================================================
-     DOM
-  ========================================================= */
-
-  const questionEl =
-    document.getElementById(
-      "question"
-    );
-
-
-  const scoreEl =
-    document.getElementById(
-      "score"
-    );
-
-
-  const livesEl =
-    document.getElementById(
-      "lives"
-    );
-
-
-  const alienCountEl =
-    document.getElementById(
-      "alienCount"
-    );
-
-
-  const messageEl =
-    document.getElementById(
-      "message"
-    );
-
-
-  const bootErrorEl =
-    document.getElementById(
-      "bootError"
-    );
-
-
-  const gameOverEl =
-    document.getElementById(
-      "gameOver"
-    );
-
-
-  const gameOverTextEl =
-    document.getElementById(
-      "gameOverText"
-    );
-
-
-
-  /* =========================================================
-     BOOT
-  ========================================================= */
-
-  if(
-    !window.THREE
-  ){
-
-    showBootError(
-
-      "Không tải được Three.js.\n" +
-
-      "Kiểm tra Internet hoặc CDN."
-
-    );
-
-
+  let scene,camera,renderer,clock;
+  let astronaut,astroParts;
+  let aliens=[],stationsMeshes=[],teleportBeams=[];
+  let score=0,lives=5,gameEnded=false,answerLock=false;
+  let currentItem=null,stationAnswers=[];
+  let walkTime=0,lastStationKey="",lastMove={x:0,z:1};
+
+  const pressed={up:false,down:false,left:false,right:false};
+
+  const questionEl=document.getElementById("question");
+  const scoreEl=document.getElementById("score");
+  const livesEl=document.getElementById("lives");
+  const alienCountEl=document.getElementById("alienCount");
+  const messageEl=document.getElementById("message");
+  const bootErrorEl=document.getElementById("bootError");
+  const gameOverEl=document.getElementById("gameOver");
+  const gameOverTextEl=document.getElementById("gameOverText");
+
+  if(!window.THREE){
+    showBootError("Không tải được Three.js từ CDN.");
     return;
-
   }
-
 
   try{
-
     init();
-
     animate();
-
+  }catch(error){
+    showBootError(error?.stack||error?.message||String(error));
   }
-
-  catch(error){
-
-    showBootError(
-
-      error?.stack
-
-      ||
-
-      error?.message
-
-      ||
-
-      String(error)
-
-    );
-
-  }
-
-
-
-  /* =========================================================
-     INIT
-  ========================================================= */
 
   function init(){
+    scene=new THREE.Scene();
+    scene.background=new THREE.Color(0x030713);
+    scene.fog=new THREE.Fog(0x030713,36,84);
 
-    scene =
-    new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(52,window.innerWidth/window.innerHeight,.1,140);
 
+    renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.65));
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace=THREE.SRGBColorSpace;
+    document.getElementById("game").prepend(renderer.domElement);
 
-    scene.background =
-    new THREE.Color(
-      0x040914
-    );
+    clock=new THREE.Clock();
 
+    createLighting();
+    createStationFloor();
+    createMazeWalls();
+    createNeonGrid();
 
-    scene.fog =
-    new THREE.Fog(
-
-      0x040914,
-
-      42,
-
-      82
-
-    );
-
-
-    camera =
-    new THREE.PerspectiveCamera(
-
-      52,
-
-      window.innerWidth
-      /
-      window.innerHeight,
-
-      .1,
-
-      160
-
-    );
-
-
-    renderer =
-    new THREE.WebGLRenderer({
-
-      antialias:true,
-
-      powerPreference:
-        "high-performance"
-
-    });
-
-
-    renderer.setPixelRatio(
-
-      Math.min(
-
-        window.devicePixelRatio
-        ||
-        1,
-
-        1.7
-
-      )
-
-    );
-
-
-    renderer.setSize(
-
-      window.innerWidth,
-
-      window.innerHeight
-
-    );
-
-
-    renderer.shadowMap.enabled =
-    true;
-
-
-    renderer.shadowMap.type =
-    THREE.PCFSoftShadowMap;
-
-
-    document
-    .getElementById(
-      "game"
-    )
-    .prepend(
-      renderer.domElement
-    );
-
-
-    clock =
-    new THREE.Clock();
-
-
-    createLights();
-
-
-    createMaze();
-
-
-    astronaut =
-    createAstronaut();
-
-
+    astronaut=createAstronaut();
+    scene.add(astronaut);
     resetPlayer();
 
-
-    scene.add(
-      astronaut
-    );
-
-
-    spawnAliens(
-      3
-    );
-
-
+    spawnAliens(4);
     newQuestion();
-
-
     setupInput();
 
+    setInitialCamera();
+    updateHud();
 
-    positionCamera();
-
-
-    updateHUD();
-
-
-    window.addEventListener(
-
-      "resize",
-
-      onResize
-
-    );
-
+    window.addEventListener("resize",onResize);
   }
 
+  function createLighting(){
+    scene.add(new THREE.AmbientLight(0x7a96d8,1.55));
 
+    const key=new THREE.DirectionalLight(0xd9ecff,2.0);
+    key.position.set(14,24,12);
+    key.castShadow=true;
+    key.shadow.mapSize.set(1024,1024);
+    key.shadow.camera.left=-32;
+    key.shadow.camera.right=32;
+    key.shadow.camera.top=28;
+    key.shadow.camera.bottom=-28;
+    scene.add(key);
 
-  /* =========================================================
-     LIGHT
-  ========================================================= */
-
-  function createLights(){
-
-    const ambient =
-    new THREE.AmbientLight(
-
-      0x9ebcff,
-
-      1.45
-
-    );
-
-
-    scene.add(
-      ambient
-    );
-
-
-    const directional =
-    new THREE.DirectionalLight(
-
-      0xffffff,
-
-      2.2
-
-    );
-
-
-    directional.position.set(
-
-      15,
-
-      30,
-
-      18
-
-    );
-
-
-    directional.castShadow =
-    true;
-
-
-    directional.shadow
-    .mapSize
-    .set(
-
-      1024,
-
-      1024
-
-    );
-
-
-    directional.shadow.camera.left =
-    -30;
-
-
-    directional.shadow.camera.right =
-    30;
-
-
-    directional.shadow.camera.top =
-    28;
-
-
-    directional.shadow.camera.bottom =
-    -28;
-
-
-    scene.add(
-      directional
-    );
-
-
-    const blue =
-    new THREE.PointLight(
-
-      0x356cff,
-
-      14,
-
-      28,
-
-      2
-
-    );
-
-
-    blue.position.set(
-
-      0,
-
-      7,
-
-      0
-
-    );
-
-
-    scene.add(
-      blue
-    );
-
+    const cyan=new THREE.PointLight(0x1d9bff,9,28,2);
+    cyan.position.set(0,5,0);
+    scene.add(cyan);
   }
 
-
-
-  /* =========================================================
-     MAZE
-  ========================================================= */
-
-  function createMaze(){
-
-    const floor =
-    new THREE.Mesh(
-
-      new THREE.PlaneGeometry(
-
-        COLS
-        *
-        CELL,
-
-        ROWS
-        *
-        CELL
-
-      ),
-
-      new THREE.MeshStandardMaterial({
-
-        color:
-          0x071322,
-
-        roughness:
-          .95
-
-      })
-
+  function createStationFloor(){
+    const floor=new THREE.Mesh(
+      new THREE.PlaneGeometry(COLS*CELL,ROWS*CELL),
+      new THREE.MeshStandardMaterial({color:0x0a1220,roughness:.85,metalness:.2})
     );
+    floor.rotation.x=-Math.PI/2;
+    floor.position.y=-.04;
+    floor.receiveShadow=true;
+    scene.add(floor);
+  }
 
+  function createNeonGrid(){
+    const mat=new THREE.LineBasicMaterial({color:0x143d78,transparent:true,opacity:.48});
+    const points=[];
+    const halfW=COLS*CELL/2;
+    const halfH=ROWS*CELL/2;
 
-    floor.rotation.x =
-    -Math.PI / 2;
-
-
-    floor.position.y =
-    -.05;
-
-
-    floor.receiveShadow =
-    true;
-
-
-    scene.add(
-      floor
-    );
-
-
-    const wallGeometry =
-    new THREE.BoxGeometry(
-
-      CELL * .96,
-
-      1.5,
-
-      CELL * .96
-
-    );
-
-
-    const wallMaterial =
-    new THREE.MeshStandardMaterial({
-
-      color:
-        0x173c91,
-
-      roughness:
-        .48,
-
-      metalness:
-        .18,
-
-      emissive:
-        0x071638,
-
-      emissiveIntensity:
-        .42
-
-    });
-
-
-    for(
-
-      let row = 0;
-
-      row < ROWS;
-
-      row++
-
-    ){
-
-      for(
-
-        let col = 0;
-
-        col < COLS;
-
-        col++
-
-      ){
-
-        if(
-          GRID[row][col]
-          !==
-          1
-        ){
-
-          continue;
-
-        }
-
-
-        const position =
-        gridToWorld(
-
-          row,
-
-          col
-
-        );
-
-
-        const wall =
-        new THREE.Mesh(
-
-          wallGeometry,
-
-          wallMaterial
-
-        );
-
-
-        wall.position.set(
-
-          position.x,
-
-          .75,
-
-          position.z
-
-        );
-
-
-        wall.castShadow =
-        true;
-
-
-        wall.receiveShadow =
-        true;
-
-
-        scene.add(
-          wall
-        );
-
-      }
-
+    for(let c=0;c<=COLS;c++){
+      const x=-halfW+c*CELL;
+      points.push(new THREE.Vector3(x,.015,-halfH));
+      points.push(new THREE.Vector3(x,.015,halfH));
     }
 
-
-    createPathDots();
-
-  }
-
-
-
-  /* =========================================================
-     PATH DOTS
-  ========================================================= */
-
-  function createPathDots(){
-
-    const geometry =
-    new THREE.SphereGeometry(
-
-      .055,
-
-      7,
-
-      7
-
-    );
-
-
-    const material =
-    new THREE.MeshBasicMaterial({
-
-      color:
-        0xdff7ff
-
-    });
-
-
-    for(
-
-      let row = 1;
-
-      row < ROWS - 1;
-
-      row++
-
-    ){
-
-      for(
-
-        let col = 1;
-
-        col < COLS - 1;
-
-        col++
-
-      ){
-
-        if(
-
-          GRID[row][col]
-          !==
-          0
-
-        ){
-
-          continue;
-
-        }
-
-
-        if(
-
-          (
-            row
-            +
-            col
-          )
-          %
-          2
-          !==
-          0
-
-        ){
-
-          continue;
-
-        }
-
-
-        const position =
-        gridToWorld(
-
-          row,
-
-          col
-
-        );
-
-
-        const dot =
-        new THREE.Mesh(
-
-          geometry,
-
-          material
-
-        );
-
-
-        dot.position.set(
-
-          position.x,
-
-          .06,
-
-          position.z
-
-        );
-
-
-        scene.add(
-          dot
-        );
-
-      }
-
+    for(let r=0;r<=ROWS;r++){
+      const z=-halfH+r*CELL;
+      points.push(new THREE.Vector3(-halfW,.015,z));
+      points.push(new THREE.Vector3(halfW,.015,z));
     }
 
+    scene.add(
+      new THREE.LineSegments(
+        new THREE.BufferGeometry().setFromPoints(points),
+        mat
+      )
+    );
   }
 
+  function createMazeWalls(){
+    const bodyMat=new THREE.MeshStandardMaterial({
+      color:0x18264a,
+      roughness:.45,
+      metalness:.38,
+      emissive:0x07132c,
+      emissiveIntensity:.35
+    });
 
+    const ledMat=new THREE.MeshStandardMaterial({
+      color:0x42d6ff,
+      emissive:0x1ea7ff,
+      emissiveIntensity:2.2,
+      roughness:.25,
+      metalness:.15
+    });
 
-  /* =========================================================
-     ASTRONAUT
-  ========================================================= */
+    const wallGeo=new THREE.BoxGeometry(CELL*.94,1.65,CELL*.94);
+    const ledXGeo=new THREE.BoxGeometry(CELL*.78,.06,.06);
+    const ledZGeo=new THREE.BoxGeometry(.06,.06,CELL*.78);
+
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        if(GRID[r][c]!==1) continue;
+
+        const p=gridToWorld(r,c);
+
+        const wall=new THREE.Mesh(wallGeo,bodyMat);
+        wall.position.set(p.x,.82,p.z);
+        wall.castShadow=true;
+        wall.receiveShadow=true;
+        scene.add(wall);
+
+        const led1=new THREE.Mesh(ledXGeo,ledMat);
+        led1.position.set(p.x,1.68,p.z-CELL*.34);
+        scene.add(led1);
+
+        const led2=new THREE.Mesh(ledZGeo,ledMat);
+        led2.position.set(p.x+CELL*.34,1.68,p.z);
+        scene.add(led2);
+      }
+    }
+  }
 
   function createAstronaut(){
+    const g=new THREE.Group();
 
-    const group =
-    new THREE.Group();
-
-
-    const white =
-    new THREE.MeshStandardMaterial({
-
-      color:
-        0xf3f7ff,
-
-      roughness:
-        .62
-
+    const white=new THREE.MeshStandardMaterial({color:0xf5f8ff,roughness:.52});
+    const blue=new THREE.MeshStandardMaterial({color:0x4fa8ff,roughness:.32,metalness:.15});
+    const dark=new THREE.MeshStandardMaterial({color:0x20365f,roughness:.5,metalness:.1});
+    const visorMat=new THREE.MeshStandardMaterial({
+      color:0x6bd6ff,
+      roughness:.08,
+      metalness:.35,
+      emissive:0x154d7d,
+      emissiveIntensity:.35
     });
 
-
-    const blue =
-    new THREE.MeshStandardMaterial({
-
-      color:
-        0x55b9ff,
-
-      roughness:
-        .2,
-
-      metalness:
-        .16
-
-    });
-
-
-    const dark =
-    new THREE.MeshStandardMaterial({
-
-      color:
-        0x263e70,
-
-      roughness:
-        .5
-
-    });
-
-
-
-    /* Helmet */
-
-    const helmet =
-    new THREE.Mesh(
-
-      new THREE.SphereGeometry(
-
-        .38,
-
-        18,
-
-        14
-
-      ),
-
-      white
-
-    );
-
-
-    helmet.position.y =
-    1.45;
-
-
-    helmet.castShadow =
-    true;
-
-
-    group.add(
-      helmet
-    );
-
-
-
-    /* Visor */
-
-    const visor =
-    new THREE.Mesh(
-
-      new THREE.SphereGeometry(
-
-        .29,
-
-        18,
-
-        12
-
-      ),
-
-      blue
-
-    );
-
-
-    visor.scale.set(
-
-      1,
-
-      .72,
-
-      .45
-
-    );
-
-
-    visor.position.set(
-
-      0,
-
-      1.47,
-
-      -.23
-
-    );
-
-
-    group.add(
-      visor
-    );
-
-
-
-    /* Body */
-
-    const torso =
-    new THREE.Mesh(
-
-      new THREE.BoxGeometry(
-
-        .62,
-
-        .78,
-
-        .4
-
-      ),
-
-      white
-
-    );
-
-
-    torso.position.y =
-    .86;
-
-
-    torso.castShadow =
-    true;
-
-
-    group.add(
-      torso
-    );
-
-
-
-    /* Backpack */
-
-    const backpack =
-    new THREE.Mesh(
-
-      new THREE.BoxGeometry(
-
-        .52,
-
-        .56,
-
-        .24
-
-      ),
-
-      dark
-
-    );
-
-
-    backpack.position.set(
-
-      0,
-
-      .93,
-
-      .29
-
-    );
-
-
-    group.add(
-      backpack
-    );
-
-
-
-    /* Cylinder limbs */
-
-    const limbGeometry =
-    new THREE.CylinderGeometry(
-
-      .11,
-
-      .11,
-
-      .58,
-
-      10
-
-    );
-
-
-    const leftArm =
-    new THREE.Mesh(
-
-      limbGeometry,
-
-      white
-
-    );
-
-
-    const rightArm =
-    new THREE.Mesh(
-
-      limbGeometry,
-
-      white
-
-    );
-
-
-    leftArm.position.set(
-
-      -.43,
-
-      .94,
-
-      0
-
-    );
-
-
-    rightArm.position.set(
-
-      .43,
-
-      .94,
-
-      0
-
-    );
-
-
-    leftArm.rotation.z =
-    -.16;
-
-
-    rightArm.rotation.z =
-    .16;
-
-
-    group.add(
-
-      leftArm,
-
-      rightArm
-
-    );
-
-
-
-    const leftLeg =
-    new THREE.Mesh(
-
-      limbGeometry,
-
-      white
-
-    );
-
-
-    const rightLeg =
-    new THREE.Mesh(
-
-      limbGeometry,
-
-      white
-
-    );
-
-
-    leftLeg.position.set(
-
-      -.18,
-
-      .28,
-
-      0
-
-    );
-
-
-    rightLeg.position.set(
-
-      .18,
-
-      .28,
-
-      0
-
-    );
-
-
-    group.add(
-
-      leftLeg,
-
-      rightLeg
-
-    );
-
-
-    astronautParts = {
-
-      leftArm,
-
-      rightArm,
-
-      leftLeg,
-
-      rightLeg
-
-    };
-
-
-    group.scale.setScalar(
-      .82
-    );
-
-
-    return group;
-
+    const helmet=new THREE.Mesh(new THREE.SphereGeometry(.42,18,14),white);
+    helmet.position.y=1.55;
+    helmet.castShadow=true;
+    g.add(helmet);
+
+    const visor=new THREE.Mesh(new THREE.SphereGeometry(.32,18,12),visorMat);
+    visor.scale.set(1,.72,.44);
+    visor.position.set(0,1.57,-.28);
+    g.add(visor);
+
+    const torso=new THREE.Mesh(new THREE.BoxGeometry(.72,.82,.42),white);
+    torso.position.y=.92;
+    torso.castShadow=true;
+    g.add(torso);
+
+    const chest=new THREE.Mesh(new THREE.BoxGeometry(.42,.26,.06),blue);
+    chest.position.set(0,1.0,-.24);
+    g.add(chest);
+
+    const tank=new THREE.Mesh(new THREE.BoxGeometry(.54,.7,.27),dark);
+    tank.position.set(0,.98,.33);
+    tank.castShadow=true;
+    g.add(tank);
+
+    const limbGeo=new THREE.CylinderGeometry(.115,.115,.62,10);
+
+    const leftArm=new THREE.Mesh(limbGeo,white);
+    const rightArm=new THREE.Mesh(limbGeo,white);
+    leftArm.position.set(-.48,.98,0);
+    rightArm.position.set(.48,.98,0);
+    leftArm.rotation.z=-.16;
+    rightArm.rotation.z=.16;
+    g.add(leftArm,rightArm);
+
+    const leftLeg=new THREE.Mesh(limbGeo,white);
+    const rightLeg=new THREE.Mesh(limbGeo,white);
+    leftLeg.position.set(-.2,.29,0);
+    rightLeg.position.set(.2,.29,0);
+    g.add(leftLeg,rightLeg);
+
+    const bootGeo=new THREE.BoxGeometry(.24,.16,.4);
+    const leftBoot=new THREE.Mesh(bootGeo,dark);
+    const rightBoot=new THREE.Mesh(bootGeo,dark);
+    leftBoot.position.set(-.2,-.05,-.06);
+    rightBoot.position.set(.2,-.05,-.06);
+    g.add(leftBoot,rightBoot);
+
+    astroParts={leftArm,rightArm,leftLeg,rightLeg};
+    g.scale.setScalar(.84);
+
+    return g;
   }
 
+  function createAlien(color){
+    const g=new THREE.Group();
 
-
-  /* =========================================================
-     ALIEN
-  ========================================================= */
-
-  function createAlien(
-    color
-  ){
-
-    const group =
-    new THREE.Group();
-
-
-    const material =
-    new THREE.MeshStandardMaterial({
-
+    const bodyMat=new THREE.MeshStandardMaterial({
       color,
-
-      roughness:.46,
-
-      emissive:
-
-        new THREE.Color(
-          color
-        )
-        .multiplyScalar(
-          .12
-        )
-
+      roughness:.32,
+      metalness:.12,
+      emissive:new THREE.Color(color).multiplyScalar(.35),
+      emissiveIntensity:1.2
     });
 
+    const eyeWhite=new THREE.MeshBasicMaterial({color:0xffffff});
+    const pupilMat=new THREE.MeshBasicMaterial({color:0x12030d});
 
-    const white =
-    new THREE.MeshBasicMaterial({
+    const head=new THREE.Mesh(new THREE.SphereGeometry(.46,14,10),bodyMat);
+    head.position.y=.95;
+    head.scale.set(1,.82,.9);
+    g.add(head);
 
-      color:
-        0xffffff
+    const body=new THREE.Mesh(new THREE.DodecahedronGeometry(.45,0),bodyMat);
+    body.position.y=.47;
+    body.scale.y=.8;
+    g.add(body);
 
+    [-.17,.17].forEach(x=>{
+      const eye=new THREE.Mesh(new THREE.SphereGeometry(.10,8,6),eyeWhite);
+      eye.position.set(x,1.0,-.38);
+
+      const pupil=new THREE.Mesh(new THREE.SphereGeometry(.04,6,5),pupilMat);
+      pupil.position.set(0,0,-.085);
+
+      eye.add(pupil);
+      g.add(eye);
     });
 
+    const legGeo=new THREE.CylinderGeometry(.07,.09,.42,7);
+    const legs=[];
 
-    const black =
-    new THREE.MeshBasicMaterial({
-
-      color:
-        0x111111
-
+    [-.25,0,.25].forEach(x=>{
+      const leg=new THREE.Mesh(legGeo,bodyMat);
+      leg.position.set(x,.08,0);
+      leg.rotation.z=(x||.01)*.5;
+      g.add(leg);
+      legs.push(leg);
     });
 
-
-
-    /* Head */
-
-    const head =
-    new THREE.Mesh(
-
-      new THREE.SphereGeometry(
-
-        .42,
-
-        16,
-
-        12
-
-      ),
-
-      material
-
-    );
-
-
-    head.position.y =
-    .82;
-
-
-    head.scale.y =
-    .82;
-
-
-    head.castShadow =
-    true;
-
-
-    group.add(
-      head
-    );
-
-
-
-    /* Body */
-
-    const body =
-    new THREE.Mesh(
-
-      new THREE.BoxGeometry(
-
-        .68,
-
-        .55,
-
-        .5
-
-      ),
-
-      material
-
-    );
-
-
-    body.position.y =
-    .38;
-
-
-    body.castShadow =
-    true;
-
-
-    group.add(
-      body
-    );
-
-
-
-    /* Eyes */
-
-    [
-      -.16,
-      .16
-    ]
-    .forEach(
-      x => {
-
-        const eye =
-        new THREE.Mesh(
-
-          new THREE.SphereGeometry(
-
-            .09,
-
-            9,
-
-            7
-
-          ),
-
-          white
-
-        );
-
-
-        eye.position.set(
-
-          x,
-
-          .88,
-
-          -.35
-
-        );
-
-
-        const pupil =
-        new THREE.Mesh(
-
-          new THREE.SphereGeometry(
-
-            .035,
-
-            7,
-
-            6
-
-          ),
-
-          black
-
-        );
-
-
-        pupil.position.set(
-
-          0,
-
-          0,
-
-          -.08
-
-        );
-
-
-        eye.add(
-          pupil
-        );
-
-
-        group.add(
-          eye
-        );
-
-      }
-    );
-
-
-
-    /* Legs */
-
-    [
-      -.2,
-      .2
-    ]
-    .forEach(
-      x => {
-
-        const leg =
-        new THREE.Mesh(
-
-          new THREE.CylinderGeometry(
-
-            .075,
-
-            .075,
-
-            .34,
-
-            8
-
-          ),
-
-          material
-
-        );
-
-
-        leg.position.set(
-
-          x,
-
-          .02,
-
-          0
-
-        );
-
-
-        group.add(
-          leg
-        );
-
-      }
-    );
-
-
-    group.scale.setScalar(
-      .85
-    );
-
-
-    return group;
-
+    const hornGeo=new THREE.ConeGeometry(.08,.38,7);
+
+    [-.2,.2].forEach(x=>{
+      const horn=new THREE.Mesh(hornGeo,bodyMat);
+      horn.position.set(x,1.42,0);
+      horn.rotation.z=x<0?.18:-.18;
+      g.add(horn);
+    });
+
+    g.userData.legs=legs;
+    return g;
   }
 
+  function spawnAliens(count){
+    aliens.forEach(a=>disposeObject(a.group));
+    aliens=[];
 
+    const colors=[0xff335f,0xa743ff,0xff5a9f,0x7e3cff];
 
-  /* =========================================================
-     SPAWN ALIENS
-  ========================================================= */
+    for(let i=0;i<count;i++){
+      const spawn=ALIEN_SPAWNS[i%ALIEN_SPAWNS.length];
+      const p=gridToWorld(spawn.row,spawn.col);
+      const group=createAlien(colors[i%colors.length]);
 
-  function spawnAliens(
-    count
-  ){
-
-    aliens
-    .forEach(
-      alien => {
-
-        scene.remove(
-          alien.group
-        );
-
-      }
-    );
-
-
-    aliens =
-    [];
-
-
-    const colors = [
-
-      0xff6488,
-
-      0x5fe2b8,
-
-      0xffcc56,
-
-      0xad8bff
-
-    ];
-
-
-    for(
-
-      let i = 0;
-
-      i < count;
-
-      i++
-
-    ){
-
-      const spawn =
-      ALIEN_SPAWNS[
-
-        i
-        %
-        ALIEN_SPAWNS.length
-
-      ];
-
-
-      const position =
-      gridToWorld(
-
-        spawn.row,
-
-        spawn.col
-
-      );
-
-
-      const group =
-      createAlien(
-
-        colors[
-
-          i
-          %
-          colors.length
-
-        ]
-
-      );
-
-
-      group.position.set(
-
-        position.x,
-
-        .04,
-
-        position.z
-
-      );
-
-
-      scene.add(
-        group
-      );
-
+      group.position.set(p.x,.04,p.z);
+      scene.add(group);
 
       aliens.push({
-
         group,
-
         path:[],
-
         repath:0,
-
-        speed:
-          1.95
-          +
-          i
-          *
-          .12
-
+        speed:2.0+i*.13,
+        phase:Math.random()*Math.PI*2
       });
-
     }
 
-
-    alienCountEl.textContent =
-    String(
-      aliens.length
-    );
-
+    alienCountEl.textContent=String(aliens.length);
   }
 
+  function createHologramTexture(text){
+    const canvas=document.createElement("canvas");
+    canvas.width=768;
+    canvas.height=300;
+    const ctx=canvas.getContext("2d");
 
+    ctx.fillStyle="rgba(6,18,42,.92)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  /* =========================================================
-     STATION TEXT
-  ========================================================= */
+    ctx.strokeStyle="#70ecff";
+    ctx.lineWidth=15;
+    ctx.shadowColor="#48d9ff";
+    ctx.shadowBlur=26;
+    ctx.strokeRect(10,10,748,280);
+    ctx.shadowBlur=0;
 
-  function createStationTexture(
-    text
-  ){
+    ctx.fillStyle="#fff";
+    ctx.font="800 50px Arial";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
 
-    const canvas =
-    document.createElement(
-      "canvas"
-    );
+    drawWrappedText(ctx,text,384,150,650,58);
 
-
-    canvas.width =
-    640;
-
-
-    canvas.height =
-    320;
-
-
-    const ctx =
-    canvas.getContext(
-      "2d"
-    );
-
-
-    ctx.fillStyle =
-    "#09182e";
-
-
-    ctx.fillRect(
-
-      0,
-
-      0,
-
-      canvas.width,
-
-      canvas.height
-
-    );
-
-
-    ctx.strokeStyle =
-    "#6bdcff";
-
-
-    ctx.lineWidth =
-    14;
-
-
-    ctx.strokeRect(
-
-      8,
-
-      8,
-
-      canvas.width - 16,
-
-      canvas.height - 16
-
-    );
-
-
-    ctx.fillStyle =
-    "#ffffff";
-
-
-    ctx.font =
-    "700 46px Arial";
-
-
-    ctx.textAlign =
-    "center";
-
-
-    ctx.textBaseline =
-    "middle";
-
-
-    drawWrappedText(
-
-      ctx,
-
-      text,
-
-      canvas.width / 2,
-
-      canvas.height / 2,
-
-      550,
-
-      54
-
-    );
-
-
-    const texture =
-    new THREE.CanvasTexture(
-      canvas
-    );
-
-
-    texture.colorSpace =
-    THREE.SRGBColorSpace;
-
-
+    const texture=new THREE.CanvasTexture(canvas);
+    texture.colorSpace=THREE.SRGBColorSpace;
     return texture;
-
   }
 
+  function drawWrappedText(ctx,text,cx,cy,maxWidth,lineHeight){
+    const words=String(text).split(" ");
+    const lines=[];
+    let line="";
 
-
-  function drawWrappedText(
-    ctx,
-    text,
-    centerX,
-    centerY,
-    maxWidth,
-    lineHeight
-  ){
-
-    const words =
-    String(text)
-    .split(
-      " "
-    );
-
-
-    const lines =
-    [];
-
-
-    let line =
-    "";
-
-
-    words
-    .forEach(
-      word => {
-
-        const test =
-        line
-        ?
-        line
-        +
-        " "
-        +
-        word
-        :
-        word;
-
-
-        if(
-
-          ctx.measureText(
-            test
-          )
-          .width
-          >
-          maxWidth
-
-          &&
-
-          line
-
-        ){
-
-          lines.push(
-            line
-          );
-
-
-          line =
-          word;
-
-        }
-
-        else{
-
-          line =
-          test;
-
-        }
-
+    words.forEach(word=>{
+      const test=line?line+" "+word:word;
+      if(ctx.measureText(test).width>maxWidth && line){
+        lines.push(line);
+        line=word;
+      }else{
+        line=test;
       }
-    );
+    });
 
+    if(line) lines.push(line);
 
-    if(line){
-
-      lines.push(
-        line
-      );
-
-    }
-
-
-    const finalLines =
-    lines.slice(
-      0,
-      4
-    );
-
-
-    const startY =
-
-      centerY
-
-      -
-
-      (
-        finalLines.length
-        -
-        1
-      )
-
-      *
-
-      lineHeight
-      /
-      2;
-
-
-    finalLines
-    .forEach(
-      (
-        currentLine,
-        index
-      ) => {
-
-        ctx.fillText(
-
-          currentLine,
-
-          centerX,
-
-          startY
-
-          +
-
-          index
-          *
-          lineHeight
-
-        );
-
-      }
-    );
-
+    const visible=lines.slice(0,4);
+    const y0=cy-(visible.length-1)*lineHeight/2;
+    visible.forEach((v,i)=>ctx.fillText(v,cx,y0+i*lineHeight));
   }
-
-
-
-  /* =========================================================
-     BUILD STATIONS
-  ========================================================= */
 
   function buildStations(){
-
     disposeStations();
 
+    const ringGeo=new THREE.TorusGeometry(.92,.12,10,28);
+    const diskGeo=new THREE.CylinderGeometry(.92,.92,.12,28);
 
-    STATIONS
-    .forEach(
-      (
-        station,
-        index
-      ) => {
+    STATIONS.forEach((station,index)=>{
+      const p=gridToWorld(station.row,station.col);
 
-        const answer =
-        stationAnswers[
-          index
-        ];
+      const diskMat=new THREE.MeshStandardMaterial({
+        color:0x153a6d,
+        emissive:0x0f5ea9,
+        emissiveIntensity:1.0,
+        roughness:.32,
+        metalness:.32
+      });
 
+      const ringMat=new THREE.MeshStandardMaterial({
+        color:0x6deaff,
+        emissive:0x30ccff,
+        emissiveIntensity:2.4,
+        roughness:.2,
+        metalness:.1
+      });
 
-        const position =
-        gridToWorld(
+      const disk=new THREE.Mesh(diskGeo,diskMat);
+      disk.position.set(p.x,.06,p.z);
 
-          station.row,
+      const ring=new THREE.Mesh(ringGeo,ringMat);
+      ring.rotation.x=Math.PI/2;
+      ring.position.set(p.x,.14,p.z);
 
-          station.col
+      const sign=new THREE.Mesh(
+        new THREE.PlaneGeometry(2.8,1.08),
+        new THREE.MeshBasicMaterial({
+          map:createHologramTexture(stationAnswers[index]),
+          transparent:true,
+          side:THREE.DoubleSide
+        })
+      );
+      sign.position.set(p.x,2.15,p.z);
+      sign.rotation.x=-.08;
 
-        );
+      scene.add(disk,ring,sign);
+      stationsMeshes.push({disk,ring,sign,index});
 
-
-
-        /* Platform */
-
-        const base =
-        new THREE.Mesh(
-
-          new THREE.CylinderGeometry(
-
-            .92,
-
-            .92,
-
-            .18,
-
-            20
-
-          ),
-
-          new THREE.MeshStandardMaterial({
-
-            color:
-              0x1d4386,
-
-            emissive:
-              0x071735,
-
-            emissiveIntensity:
-              .55
-
-          })
-
-        );
-
-
-        base.position.set(
-
-          position.x,
-
-          .1,
-
-          position.z
-
-        );
-
-
-        base.receiveShadow =
-        true;
-
-
-        scene.add(
-          base
-        );
-
-
-
-        /* Text */
-
-        const sign =
-        new THREE.Mesh(
-
-          new THREE.PlaneGeometry(
-
-            2.4,
-
-            1.2
-
-          ),
-
-          new THREE.MeshBasicMaterial({
-
-            map:
-              createStationTexture(
-                answer
-              ),
-
-            side:
-              THREE.DoubleSide
-
-          })
-
-        );
-
-
-        sign.position.set(
-
-          position.x,
-
-          1.25,
-
-          position.z
-
-        );
-
-
-        sign.rotation.x =
-        -.16;
-
-
-        scene.add(
-          sign
-        );
-
-
-        stationMeshes.push(
-
-          base,
-
-          sign
-
-        );
-
-      }
-    );
-
+      const beam=new THREE.Mesh(
+        new THREE.CylinderGeometry(.84,.84,4.8,24,1,true),
+        new THREE.MeshBasicMaterial({
+          color:0x6deaff,
+          transparent:true,
+          opacity:0,
+          side:THREE.DoubleSide,
+          depthWrite:false
+        })
+      );
+      beam.position.set(p.x,2.4,p.z);
+      scene.add(beam);
+      teleportBeams.push(beam);
+    });
   }
-
-
-
-  /* =========================================================
-     NEW QUESTION
-  ========================================================= */
 
   function newQuestion(){
+    currentItem=VOCAB[Math.floor(Math.random()*VOCAB.length)];
+    stationAnswers=shuffle([currentItem.correct,...currentItem.wrong]).slice(0,4);
 
-    currentItem =
-
-      VOCAB[
-
-        Math.floor(
-
-          Math.random()
-
-          *
-
-          VOCAB.length
-
-        )
-
-      ];
-
-
-    stationAnswers =
-    shuffle([
-
-      currentItem.correct,
-
-      ...currentItem.wrong
-
-    ])
-    .slice(
-      0,
-      4
-    );
-
-
-    questionEl.textContent =
-    currentItem.word;
-
-
-    answerLock =
-    false;
-
-
-    lastStationKey =
-    "";
-
+    questionEl.textContent=currentItem.word;
+    answerLock=false;
+    lastStationKey="";
 
     buildStations();
-
-
     resetAliens();
-
   }
-
-
-
-  /* =========================================================
-     GAME LOOP
-  ========================================================= */
 
   function animate(){
+    requestAnimationFrame(animate);
+    if(!clock||!renderer) return;
 
-    requestAnimationFrame(
-      animate
-    );
+    const dt=Math.min(clock.getDelta(),.034);
 
-
-    if(
-      !clock
-    ){
-
-      return;
-
-    }
-
-
-    const dt =
-    Math.min(
-
-      clock.getDelta(),
-
-      .034
-
-    );
-
-
-    if(
-      !gameEnded
-    ){
-
-      updatePlayer(
-        dt
-      );
-
-
-      updateAliens(
-        dt
-      );
-
-
+    if(!gameEnded){
+      updatePlayer(dt);
+      updateAliens(dt);
+      animateStations();
       checkStations();
-
-
       checkAlienCollision();
-
-
-      updateCamera(
-        dt
-      );
-
+      updateCamera(dt);
     }
 
-
-    renderer.render(
-
-      scene,
-
-      camera
-
-    );
-
+    renderer.render(scene,camera);
   }
 
+  function updatePlayer(dt){
+    let dx=(pressed.right?1:0)-(pressed.left?1:0);
+    let dz=(pressed.down?1:0)-(pressed.up?1:0);
 
+    const len=Math.hypot(dx,dz);
 
-  /* =========================================================
-     PLAYER MOVEMENT
-  ========================================================= */
-
-  function updatePlayer(
-    dt
-  ){
-
-    let dx =
-      0;
-
-
-    let dz =
-      0;
-
-
-    if(
-      pressed.left
-    ){
-
-      dx--;
-
-    }
-
-
-    if(
-      pressed.right
-    ){
-
-      dx++;
-
-    }
-
-
-    if(
-      pressed.up
-    ){
-
-      dz--;
-
-    }
-
-
-    if(
-      pressed.down
-    ){
-
-      dz++;
-
-    }
-
-
-    const length =
-    Math.hypot(
-
-      dx,
-
-      dz
-
-    );
-
-
-    if(
-      length === 0
-    ){
-
-      animateAstronaut(
-
-        false,
-
-        dt
-
-      );
-
-
+    if(!len){
+      animateAstronaut(false,dt);
       return;
-
     }
 
+    dx/=len;
+    dz/=len;
+    lastMove={x:dx,z:dz};
 
-    dx /=
-    length;
+    const speed=4.65;
+    const moveX=dx*speed*dt;
+    const moveZ=dz*speed*dt;
 
-
-    dz /=
-    length;
-
-
-    moveDirection.x =
-    dx;
-
-
-    moveDirection.z =
-    dz;
-
-
-    const speed =
-    4.4;
-
-
-    const deltaX =
-    dx
-    *
-    speed
-    *
-    dt;
-
-
-    const deltaZ =
-    dz
-    *
-    speed
-    *
-    dt;
-
-
-
-    /*
-      Tách collision X / Z:
-      Nếu bị chặn ở một trục,
-      vẫn có thể trượt theo trục còn lại.
-    */
-
-    const nextX =
-    astronaut.position.x
-    +
-    deltaX;
-
-
-    if(
-
-      canStandAt(
-
-        nextX,
-
-        astronaut.position.z
-
-      )
-
-    ){
-
-      astronaut.position.x =
-      nextX;
-
+    const nextX=astronaut.position.x+moveX;
+    if(canStandAt(nextX,astronaut.position.z)){
+      astronaut.position.x=nextX;
     }
 
-
-
-    const nextZ =
-    astronaut.position.z
-    +
-    deltaZ;
-
-
-    if(
-
-      canStandAt(
-
-        astronaut.position.x,
-
-        nextZ
-
-      )
-
-    ){
-
-      astronaut.position.z =
-      nextZ;
-
+    const nextZ=astronaut.position.z+moveZ;
+    if(canStandAt(astronaut.position.x,nextZ)){
+      astronaut.position.z=nextZ;
     }
 
-
-
-    /* Rotate */
-
-    const angle =
-    Math.atan2(
-
-      dx,
-
-      dz
-
-    );
-
-
-    astronaut.rotation.y =
-    lerpAngle(
-
+    astronaut.rotation.y=lerpAngle(
       astronaut.rotation.y,
-
-      angle,
-
-      .20
-
+      Math.atan2(dx,dz),
+      .22
     );
 
-
-    animateAstronaut(
-
-      true,
-
-      dt
-
-    );
-
+    animateAstronaut(true,dt);
   }
 
+  function canStandAt(x,z){
+    const radius=.29;
 
-
-  /* =========================================================
-     PLAYER COLLISION
-  ========================================================= */
-
-  function canStandAt(
-    x,
-    z
-  ){
-
-    /*
-      Hitbox nhỏ hơn model.
-      Giúp đi qua hành lang và góc cua dễ hơn.
-    */
-
-    const half =
-    .24;
-
-
-    const points = [
-
-      [
-        x - half,
-        z - half
-      ],
-
-      [
-        x + half,
-        z - half
-      ],
-
-      [
-        x - half,
-        z + half
-      ],
-
-      [
-        x + half,
-        z + half
-      ]
-
+    const samples=[
+      [x-radius,z],
+      [x+radius,z],
+      [x,z-radius],
+      [x,z+radius],
+      [x-radius*.72,z-radius*.72],
+      [x+radius*.72,z-radius*.72],
+      [x-radius*.72,z+radius*.72],
+      [x+radius*.72,z+radius*.72]
     ];
 
-
-    return points
-    .every(
-      point => {
-
-        const cell =
-        worldToGrid(
-
-          point[0],
-
-          point[1]
-
-        );
-
-
-        return isWalkable(
-
-          cell.row,
-
-          cell.col
-
-        );
-
-      }
-    );
-
+    return samples.every(([sx,sz])=>{
+      const cell=worldToGrid(sx,sz);
+      return isWalkable(cell.row,cell.col);
+    });
   }
 
+  function animateAstronaut(walking,dt){
+    if(!astroParts) return;
 
+    if(walking){
+      walkTime+=dt*9.5;
+      const swing=Math.sin(walkTime)*.58;
 
-  /* =========================================================
-     WALK ANIMATION
-  ========================================================= */
+      astroParts.leftLeg.rotation.x=swing;
+      astroParts.rightLeg.rotation.x=-swing;
+      astroParts.leftArm.rotation.x=-swing*.72;
+      astroParts.rightArm.rotation.x=swing*.72;
 
-  function animateAstronaut(
-    walking,
-    dt
-  ){
+      astronaut.position.y=.05+Math.abs(Math.sin(walkTime*2))*.035;
+    }else{
+      [astroParts.leftLeg,astroParts.rightLeg,astroParts.leftArm,astroParts.rightArm]
+        .forEach(l=>l.rotation.x*=.78);
 
-    if(
-      !astronautParts
-    ){
-
-      return;
-
+      astronaut.position.y=THREE.MathUtils.lerp(astronaut.position.y,.05,.2);
     }
-
-
-    if(
-      walking
-    ){
-
-      walkTime +=
-
-        dt
-
-        *
-        9;
-
-
-      const swing =
-
-        Math.sin(
-          walkTime
-        )
-
-        *
-        .58;
-
-
-      astronautParts
-      .leftLeg
-      .rotation
-      .x =
-      swing;
-
-
-      astronautParts
-      .rightLeg
-      .rotation
-      .x =
-      -swing;
-
-
-      astronautParts
-      .leftArm
-      .rotation
-      .x =
-      -swing
-      *
-      .72;
-
-
-      astronautParts
-      .rightArm
-      .rotation
-      .x =
-      swing
-      *
-      .72;
-
-    }
-
-    else{
-
-      [
-
-        astronautParts.leftLeg,
-
-        astronautParts.rightLeg,
-
-        astronautParts.leftArm,
-
-        astronautParts.rightArm
-
-      ]
-      .forEach(
-        limb => {
-
-          limb.rotation.x *=
-          .80;
-
-        }
-      );
-
-    }
-
   }
 
-
-
-  /* =========================================================
-     ALIEN MOVEMENT
-  ========================================================= */
-
-  function updateAliens(
-    dt
-  ){
-
-    const playerCell =
-    worldToGrid(
-
-      astronaut.position.x,
-
-      astronaut.position.z
-
-    );
-
-
-    aliens
-    .forEach(
-      (
-        alien,
-        index
-      ) => {
-
-        alien.repath -=
-        dt;
-
-
-        const alienCell =
-        worldToGrid(
-
-          alien
-          .group
-          .position
-          .x,
-
-          alien
-          .group
-          .position
-          .z
-
-        );
-
-
-        if(
-
-          alien.repath
-          <=
-          0
-
-          ||
-
-          alien.path.length
-          ===
-          0
-
-        ){
-
-          alien.path =
-
-            findPath(
-
-              alienCell,
-
-              playerCell
-
-            )
-
-            .slice(
-              1
-            );
-
-
-          alien.repath =
-
-            .30
-
-            +
-
-            Math.random()
-
-            *
-            .16;
-
-        }
-
-
-        const next =
-        alien.path[0];
-
-
-        if(
-          !next
-        ){
-
-          return;
-
-        }
-
-
-        const target =
-        gridToWorld(
-
-          next.row,
-
-          next.col
-
-        );
-
-
-        const dx =
-        target.x
-        -
-        alien
-        .group
-        .position
-        .x;
-
-
-        const dz =
-        target.z
-        -
-        alien
-        .group
-        .position
-        .z;
-
-
-        const distance =
-        Math.hypot(
-
-          dx,
-
-          dz
-
-        );
-
-
-        if(
-          distance
-          <
-          .07
-        ){
-
-          alien
-          .group
-          .position
-          .x =
-          target.x;
-
-
-          alien
-          .group
-          .position
-          .z =
-          target.z;
-
-
-          alien.path.shift();
-
-
-          return;
-
-        }
-
-
-        const step =
-
-          Math.min(
-
-            distance,
-
-            alien.speed
-            *
-            dt
-
-          );
-
-
-        alien
-        .group
-        .position
-        .x +=
-
-          dx
-          /
-          distance
-          *
-          step;
-
-
-        alien
-        .group
-        .position
-        .z +=
-
-          dz
-          /
-          distance
-          *
-          step;
-
-
-        const angle =
-        Math.atan2(
-
-          dx,
-
-          dz
-
-        );
-
-
-        alien
-        .group
-        .rotation
-        .y =
-        lerpAngle(
-
-          alien
-          .group
-          .rotation
-          .y,
-
-          angle,
-
-          .18
-
-        );
-
-
-        /*
-          Nhún nhẹ khi chạy.
-        */
-
-        alien
-        .group
-        .position
-        .y =
-
-          .04
-
-          +
-
-          Math.sin(
-
-            performance.now()
-            *
-            .006
-
-            +
-
-            index
-
-          )
-
-          *
-          .045;
-
+  function updateAliens(dt){
+    const playerCell=worldToGrid(astronaut.position.x,astronaut.position.z);
+
+    aliens.forEach((alien,index)=>{
+      alien.repath-=dt;
+      const alienCell=worldToGrid(alien.group.position.x,alien.group.position.z);
+
+      if(alien.repath<=0||alien.path.length===0){
+        alien.path=findPath(alienCell,playerCell).slice(1);
+        alien.repath=.28+Math.random()*.16;
       }
-    );
 
+      const next=alien.path[0];
+      if(!next) return;
+
+      const target=gridToWorld(next.row,next.col);
+      const dx=target.x-alien.group.position.x;
+      const dz=target.z-alien.group.position.z;
+      const dist=Math.hypot(dx,dz);
+
+      if(dist<.06){
+        alien.group.position.x=target.x;
+        alien.group.position.z=target.z;
+        alien.path.shift();
+      }else{
+        const step=Math.min(dist,alien.speed*dt);
+
+        alien.group.position.x+=dx/dist*step;
+        alien.group.position.z+=dz/dist*step;
+
+        alien.group.rotation.y=lerpAngle(
+          alien.group.rotation.y,
+          Math.atan2(dx,dz),
+          .2
+        );
+      }
+
+      const t=performance.now()*.008+alien.phase;
+      alien.group.position.y=.04+Math.sin(t)*.06;
+
+      alien.group.userData.legs?.forEach((leg,i)=>{
+        leg.rotation.x=Math.sin(t*1.7+i*Math.PI)*.45;
+      });
+    });
   }
 
-
-
-  /* =========================================================
-     BFS PATHFINDING
-  ========================================================= */
-
-  function findPath(
-    start,
-    goal
-  ){
-
-    const queue = [
-
-      start
-
-    ];
-
-
-    const parent =
-    new Map();
-
-
-    const startKey =
-    keyOf(
-
-      start.row,
-
-      start.col
-
-    );
-
-
-    const goalKey =
-    keyOf(
-
-      goal.row,
-
-      goal.col
-
-    );
-
-
-    parent.set(
-
-      startKey,
-
-      null
-
-    );
-
-
-    const directions = [
-
-      [
-        -1,
-        0
-      ],
-
-      [
-        1,
-        0
-      ],
-
-      [
-        0,
-        -1
-      ],
-
-      [
-        0,
-        1
-      ]
-
-    ];
-
-
-    while(
-      queue.length
-    ){
-
-      const current =
-      queue.shift();
-
-
-      if(
-
-        keyOf(
-
-          current.row,
-
-          current.col
-
-        )
-
-        ===
-
-        goalKey
-
-      ){
-
-        break;
-
-      }
-
-
-      for(
-        const direction
-        of
-        directions
-      ){
-
-        const row =
-
-          current.row
-
-          +
-
-          direction[0];
-
-
-        const col =
-
-          current.col
-
-          +
-
-          direction[1];
-
-
-        const key =
-        keyOf(
-
-          row,
-
-          col
-
-        );
-
-
-        if(
-
-          !isWalkable(
-
-            row,
-
-            col
-
-          )
-
-          ||
-
-          parent.has(
-            key
-          )
-
-        ){
-
-          continue;
-
-        }
-
-
-        parent.set(
-
-          key,
-
-          current
-
-        );
-
-
-        queue.push({
-
-          row,
-
-          col
-
-        });
-
-      }
-
-    }
-
-
-    if(
-      !parent.has(
-        goalKey
-      )
-    ){
-
-      return [
-
-        start
-
-      ];
-
-    }
-
-
-    const path =
-    [];
-
-
-    let cursor =
-    goal;
-
-
-    while(
-      cursor
-    ){
-
-      path.push(
-        cursor
-      );
-
-
-      cursor =
-
-        parent.get(
-
-          keyOf(
-
-            cursor.row,
-
-            cursor.col
-
-          )
-
-        );
-
-    }
-
-
-    return path.reverse();
-
+  function animateStations(){
+    stationsMeshes.forEach((station,i)=>{
+      station.ring.rotation.z+=.012+i*.0007;
+      station.disk.material.emissiveIntensity=
+        1+Math.sin(performance.now()*.004+i)*.25;
+    });
   }
-
-
-
-  /* =========================================================
-     ANSWER STATION
-  ========================================================= */
 
   function checkStations(){
+    if(answerLock) return;
 
-    if(
-      answerLock
-    ){
+    const cell=worldToGrid(astronaut.position.x,astronaut.position.z);
+    const key=`${cell.row},${cell.col}`;
 
-      return;
+    if(key===lastStationKey) return;
+    lastStationKey=key;
 
-    }
-
-
-    const cell =
-    worldToGrid(
-
-      astronaut.position.x,
-
-      astronaut.position.z
-
+    const index=STATIONS.findIndex(
+      s=>s.row===cell.row&&s.col===cell.col
     );
 
+    if(index<0) return;
 
-    const key =
-    keyOf(
+    answerLock=true;
 
-      cell.row,
-
-      cell.col
-
-    );
-
-
-    /*
-      Không trigger liên tục
-      khi vẫn đứng trong cùng 1 station.
-    */
-
-    if(
-      key
-      ===
-      lastStationKey
-    ){
-
-      return;
-
+    if(stationAnswers[index]===currentItem.correct){
+      handleCorrectStation(index);
+    }else{
+      handleWrongStation(index);
     }
-
-
-    lastStationKey =
-    key;
-
-
-    const stationIndex =
-    STATIONS.findIndex(
-
-      station =>
-
-      station.row
-      ===
-      cell.row
-
-      &&
-
-      station.col
-      ===
-      cell.col
-
-    );
-
-
-    if(
-      stationIndex
-      <
-      0
-    ){
-
-      return;
-
-    }
-
-
-    answerLock =
-    true;
-
-
-    const selected =
-    stationAnswers[
-      stationIndex
-    ];
-
-
-    if(
-
-      selected
-
-      ===
-
-      currentItem.correct
-
-    ){
-
-      handleCorrectStation();
-
-    }
-
-    else{
-
-      handleWrongStation();
-
-    }
-
   }
 
+  function handleCorrectStation(index){
+    score+=120;
 
+    flashMessage("✓ Đúng! TELEPORT — tiêu diệt toàn bộ Alien!","good");
+    updateHud();
 
-  function handleCorrectStation(){
+    triggerTeleport(index,true);
+    vanishAliens();
 
-    score +=
-    100;
-
-
-    flashMessage(
-
-      "✓ Đúng! Sang câu tiếp theo.",
-
-      "good"
-
-    );
-
-
-    updateHUD();
-
-
-    window.setTimeout(
-
-      () => {
-
-        newQuestion();
-
-      },
-
-      500
-
-    );
-
+    setTimeout(()=>{
+      newQuestion();
+    },900);
   }
 
-
-
-  function handleWrongStation(){
-
-    flashMessage(
-
-      "✕ Sai! Quay lại và tìm trạm khác.",
-
-      "bad"
-
-    );
-
-
+  function handleWrongStation(index){
+    flashMessage("✕ Sai! Teleport Pad từ chối.","bad");
+    triggerTeleport(index,false);
     pushPlayerBack();
 
-
-    window.setTimeout(
-
-      () => {
-
-        answerLock =
-        false;
-
-      },
-
-      420
-
-    );
-
+    setTimeout(()=>{
+      answerLock=false;
+    },560);
   }
 
+  function triggerTeleport(index,good){
+    const item=stationsMeshes[index];
+    const beam=teleportBeams[index];
 
+    if(!item||!beam) return;
 
-  /* =========================================================
-     PUSH BACK
-  ========================================================= */
+    const color=good?0x71ecff:0xff334f;
+
+    item.ring.material.color.setHex(color);
+    item.ring.material.emissive.setHex(color);
+    item.disk.material.emissive.setHex(color);
+
+    beam.material.color.setHex(color);
+    beam.material.opacity=.44;
+
+    const start=performance.now();
+
+    const tick=now=>{
+      const p=Math.min(1,(now-start)/650);
+
+      beam.material.opacity=(1-p)*.44;
+      beam.scale.set(1+p*.65,1,1+p*.65);
+
+      if(p<1){
+        requestAnimationFrame(tick);
+      }else{
+        beam.material.opacity=0;
+        beam.scale.set(1,1,1);
+      }
+    };
+
+    requestAnimationFrame(tick);
+  }
+
+  function vanishAliens(){
+    aliens.forEach((alien,i)=>{
+      const start=performance.now();
+
+      const tick=now=>{
+        const p=Math.min(1,(now-start)/520);
+        const s=1-p;
+
+        alien.group.scale.setScalar(Math.max(.02,s));
+        alien.group.rotation.y+=.18;
+        alien.group.position.y=.04+p*2.8;
+
+        if(p<1) requestAnimationFrame(tick);
+      };
+
+      setTimeout(()=>requestAnimationFrame(tick),i*45);
+    });
+  }
 
   function pushPlayerBack(){
+    const amount=1.25;
+    const nx=astronaut.position.x-lastMove.x*amount;
+    const nz=astronaut.position.z-lastMove.z*amount;
 
-    const amount =
-    1;
-
-
-    const nextX =
-
-      astronaut.position.x
-
-      -
-
-      moveDirection.x
-      *
-      amount;
-
-
-    const nextZ =
-
-      astronaut.position.z
-
-      -
-
-      moveDirection.z
-      *
-      amount;
-
-
-    if(
-
-      canStandAt(
-
-        nextX,
-
-        nextZ
-
-      )
-
-    ){
-
-      astronaut.position.x =
-      nextX;
-
-
-      astronaut.position.z =
-      nextZ;
-
-    }
-
-    else{
-
+    if(canStandAt(nx,nz)){
+      astronaut.position.x=nx;
+      astronaut.position.z=nz;
+    }else{
       resetPlayer();
-
     }
-
   }
-
-
-
-  /* =========================================================
-     ALIEN COLLISION
-  ========================================================= */
 
   function checkAlienCollision(){
+    if(answerLock) return;
 
-    if(
-      answerLock
-    ){
+    for(const alien of aliens){
+      const dx=astronaut.position.x-alien.group.position.x;
+      const dz=astronaut.position.z-alien.group.position.z;
 
-      return;
+      if(Math.hypot(dx,dz)<.72){
+        answerLock=true;
+        lives--;
 
-    }
+        flashMessage("👽 Alien bắt được bạn! Mất 1 mạng.","bad");
 
+        resetPlayer();
+        resetAliens();
+        updateHud();
 
-    for(
-      const alien
-      of
-      aliens
-    ){
+        if(lives<=0){
+          endGame();
+          return;
+        }
 
-      const dx =
-
-        astronaut.position.x
-
-        -
-
-        alien
-        .group
-        .position
-        .x;
-
-
-      const dz =
-
-        astronaut.position.z
-
-        -
-
-        alien
-        .group
-        .position
-        .z;
-
-
-      const distance =
-
-        Math.hypot(
-
-          dx,
-
-          dz
-
-        );
-
-
-      if(
-        distance
-        >
-        .72
-      ){
-
-        continue;
-
+        setTimeout(()=>answerLock=false,700);
+        break;
       }
-
-
-      answerLock =
-      true;
-
-
-      lives--;
-
-
-      flashMessage(
-
-        "👽 Alien bắt được bạn! Mất 1 mạng.",
-
-        "bad"
-
-      );
-
-
-      resetPlayer();
-
-
-      resetAliens();
-
-
-      updateHUD();
-
-
-      if(
-        lives
-        <=
-        0
-      ){
-
-        endGame();
-
-        return;
-
-      }
-
-
-      window.setTimeout(
-
-        () => {
-
-          answerLock =
-          false;
-
-        },
-
-        650
-
-      );
-
-
-      break;
-
     }
-
   }
-
-
-
-  /* =========================================================
-     RESET PLAYER
-  ========================================================= */
 
   function resetPlayer(){
-
-    if(
-      !astronaut
-    ){
-
-      return;
-
-    }
-
-
-    const position =
-    gridToWorld(
-
-      START.row,
-
-      START.col
-
-    );
-
-
-    astronaut.position.set(
-
-      position.x,
-
-      .05,
-
-      position.z
-
-    );
-
-
-    lastStationKey =
-    "";
-
+    const p=gridToWorld(START.row,START.col);
+    astronaut.position.set(p.x,.05,p.z);
+    lastStationKey="";
   }
-
-
-
-  /* =========================================================
-     RESET ALIENS
-  ========================================================= */
 
   function resetAliens(){
+    aliens.forEach((alien,i)=>{
+      const spawn=ALIEN_SPAWNS[i%ALIEN_SPAWNS.length];
+      const p=gridToWorld(spawn.row,spawn.col);
 
-    aliens
-    .forEach(
-      (
-        alien,
-        index
-      ) => {
-
-        const spawn =
-        ALIEN_SPAWNS[
-
-          index
-          %
-          ALIEN_SPAWNS.length
-
-        ];
-
-
-        const position =
-        gridToWorld(
-
-          spawn.row,
-
-          spawn.col
-
-        );
-
-
-        alien
-        .group
-        .position
-        .set(
-
-          position.x,
-
-          .04,
-
-          position.z
-
-        );
-
-
-        alien.path =
-        [];
-
-
-        alien.repath =
-        0;
-
-      }
-    );
-
+      alien.group.position.set(p.x,.04,p.z);
+      alien.group.scale.setScalar(1);
+      alien.path=[];
+      alien.repath=0;
+    });
   }
-
-
-
-  /* =========================================================
-     INPUT
-  ========================================================= */
 
   function setupInput(){
+    window.addEventListener("keydown",e=>{
+      const key=e.key.toLowerCase();
 
-    window.addEventListener(
-
-      "keydown",
-
-      event => {
-
-        const key =
-        event.key.toLowerCase();
-
-
-        if(
-
-          key
-          ===
-          "arrowup"
-
-          ||
-
-          key
-          ===
-          "w"
-
-        ){
-
-          pressed.up =
-          true;
-
-        }
-
-
-        if(
-
-          key
-          ===
-          "arrowdown"
-
-          ||
-
-          key
-          ===
-          "s"
-
-        ){
-
-          pressed.down =
-          true;
-
-        }
-
-
-        if(
-
-          key
-          ===
-          "arrowleft"
-
-          ||
-
-          key
-          ===
-          "a"
-
-        ){
-
-          pressed.left =
-          true;
-
-        }
-
-
-        if(
-
-          key
-          ===
-          "arrowright"
-
-          ||
-
-          key
-          ===
-          "d"
-
-        ){
-
-          pressed.right =
-          true;
-
-        }
-
-
-        if(
-
-          [
-            "arrowup",
-            "arrowdown",
-            "arrowleft",
-            "arrowright",
-            "w",
-            "a",
-            "s",
-            "d"
-          ]
-          .includes(
-            key
-          )
-
-        ){
-
-          event.preventDefault();
-
-        }
-
+      if(["arrowup","arrowdown","arrowleft","arrowright","w","a","s","d"].includes(key)){
+        e.preventDefault();
       }
 
-    );
+      if(key==="arrowup"||key==="w") pressed.up=true;
+      if(key==="arrowdown"||key==="s") pressed.down=true;
+      if(key==="arrowleft"||key==="a") pressed.left=true;
+      if(key==="arrowright"||key==="d") pressed.right=true;
+    });
 
+    window.addEventListener("keyup",e=>{
+      const key=e.key.toLowerCase();
 
-    window.addEventListener(
+      if(key==="arrowup"||key==="w") pressed.up=false;
+      if(key==="arrowdown"||key==="s") pressed.down=false;
+      if(key==="arrowleft"||key==="a") pressed.left=false;
+      if(key==="arrowright"||key==="d") pressed.right=false;
+    });
 
-      "keyup",
+    document.querySelectorAll("[data-dir]").forEach(button=>{
+      const dir=button.dataset.dir;
 
-      event => {
+      button.addEventListener("pointerdown",e=>{
+        e.preventDefault();
+        try{button.setPointerCapture(e.pointerId)}catch(error){}
+        pressed[dir]=true;
+      });
 
-        const key =
-        event.key.toLowerCase();
+      const release=e=>{
+        e.preventDefault();
+        pressed[dir]=false;
 
-
-        if(
-
-          key
-          ===
-          "arrowup"
-
-          ||
-
-          key
-          ===
-          "w"
-
-        ){
-
-          pressed.up =
-          false;
-
-        }
-
-
-        if(
-
-          key
-          ===
-          "arrowdown"
-
-          ||
-
-          key
-          ===
-          "s"
-
-        ){
-
-          pressed.down =
-          false;
-
-        }
-
-
-        if(
-
-          key
-          ===
-          "arrowleft"
-
-          ||
-
-          key
-          ===
-          "a"
-
-        ){
-
-          pressed.left =
-          false;
-
-        }
-
-
-        if(
-
-          key
-          ===
-          "arrowright"
-
-          ||
-
-          key
-          ===
-          "d"
-
-        ){
-
-          pressed.right =
-          false;
-
-        }
-
-      }
-
-    );
-
-
-
-    /* Mobile */
-
-    document
-    .querySelectorAll(
-      "[data-dir]"
-    )
-    .forEach(
-      button => {
-
-        const direction =
-        button.dataset.dir;
-
-
-        button.addEventListener(
-
-          "pointerdown",
-
-          event => {
-
-            event.preventDefault();
-
-
-            try{
-
-              button
-              .setPointerCapture(
-                event.pointerId
-              );
-
-            }
-
-            catch(error){}
-
-
-            pressed[
-              direction
-            ] =
-            true;
-
+        try{
+          if(button.hasPointerCapture(e.pointerId)){
+            button.releasePointerCapture(e.pointerId);
           }
+        }catch(error){}
+      };
 
-        );
+      button.addEventListener("pointerup",release);
+      button.addEventListener("pointercancel",release);
+      button.addEventListener("lostpointercapture",()=>pressed[dir]=false);
+    });
 
+    window.addEventListener("blur",clearPressed);
 
-        const release =
+    document.addEventListener("visibilitychange",()=>{
+      if(document.hidden) clearPressed();
+    });
 
-        event => {
-
-          event.preventDefault();
-
-
-          pressed[
-            direction
-          ] =
-          false;
-
-
-          try{
-
-            if(
-
-              button
-              .hasPointerCapture(
-                event.pointerId
-              )
-
-            ){
-
-              button
-              .releasePointerCapture(
-                event.pointerId
-              );
-
-            }
-
-          }
-
-          catch(error){}
-
-        };
-
-
-        button.addEventListener(
-
-          "pointerup",
-
-          release
-
-        );
-
-
-        button.addEventListener(
-
-          "pointercancel",
-
-          release
-
-        );
-
-
-        button.addEventListener(
-
-          "lostpointercapture",
-
-          () => {
-
-            pressed[
-              direction
-            ] =
-            false;
-
-          }
-
-        );
-
-      }
-    );
-
-
-    window.addEventListener(
-
-      "blur",
-
-      clearPressed
-
-    );
-
-
-    document.addEventListener(
-
-      "visibilitychange",
-
-      () => {
-
-        if(
-          document.hidden
-        ){
-
-          clearPressed();
-
-        }
-
-      }
-
-    );
-
-
-    document
-    .getElementById(
-      "restartBtn"
-    )
-    .addEventListener(
-
-      "click",
-
-      restart
-
-    );
-
+    document.getElementById("restartBtn").addEventListener("click",restart);
   }
-
-
-
-  /* =========================================================
-     CLEAR INPUT
-  ========================================================= */
 
   function clearPressed(){
+    Object.keys(pressed).forEach(key=>pressed[key]=false);
+  }
 
-    Object
-    .keys(
-      pressed
-    )
-    .forEach(
-      key => {
+  function findPath(start,goal){
+    const queue=[start];
+    const parent=new Map();
 
-        pressed[
-          key
-        ] =
-        false;
+    const startKey=keyOf(start.row,start.col);
+    const goalKey=keyOf(goal.row,goal.col);
 
+    parent.set(startKey,null);
+
+    const dirs=[[-1,0],[1,0],[0,-1],[0,1]];
+
+    while(queue.length){
+      const current=queue.shift();
+
+      if(keyOf(current.row,current.col)===goalKey){
+        break;
       }
-    );
 
+      for(const [dr,dc] of dirs){
+        const row=current.row+dr;
+        const col=current.col+dc;
+        const key=keyOf(row,col);
+
+        if(!isWalkable(row,col)||parent.has(key)){
+          continue;
+        }
+
+        parent.set(key,current);
+        queue.push({row,col});
+      }
+    }
+
+    if(!parent.has(goalKey)){
+      return [start];
+    }
+
+    const path=[];
+    let cursor=goal;
+
+    while(cursor){
+      path.push(cursor);
+      cursor=parent.get(keyOf(cursor.row,cursor.col));
+    }
+
+    return path.reverse();
   }
 
-
-
-  /* =========================================================
-     GRID HELPERS
-  ========================================================= */
-
-  function isWalkable(
-    row,
-    col
-  ){
-
+  function isWalkable(row,col){
     return (
-
-      row >= 0
-
-      &&
-
-      row < ROWS
-
-      &&
-
-      col >= 0
-
-      &&
-
-      col < COLS
-
-      &&
-
-      GRID[row][col]
-      !==
-      1
-
+      row>=0&&
+      row<ROWS&&
+      col>=0&&
+      col<COLS&&
+      GRID[row][col]!==1
     );
-
   }
 
-
-
-  function gridToWorld(
-    row,
-    col
-  ){
+  function gridToWorld(row,col){
+    const halfW=COLS*CELL/2;
+    const halfH=ROWS*CELL/2;
 
     return {
-
-      x:
-
-        (
-          col
-          -
-          (
-            COLS
-            -
-            1
-          )
-          /
-          2
-        )
-
-        *
-
-        CELL,
-
-
-      z:
-
-        (
-          row
-          -
-          (
-            ROWS
-            -
-            1
-          )
-          /
-          2
-        )
-
-        *
-
-        CELL
-
+      x:-halfW+CELL/2+col*CELL,
+      z:-halfH+CELL/2+row*CELL
     };
-
   }
 
-
-
-  function worldToGrid(
-    x,
-    z
-  ){
+  function worldToGrid(x,z){
+    const halfW=COLS*CELL/2;
+    const halfH=ROWS*CELL/2;
 
     return {
-
-      col:
-
-        Math.round(
-
-          x
-          /
-          CELL
-
-          +
-
-          (
-            COLS
-            -
-            1
-          )
-          /
-          2
-
-        ),
-
-
-      row:
-
-        Math.round(
-
-          z
-          /
-          CELL
-
-          +
-
-          (
-            ROWS
-            -
-            1
-          )
-          /
-          2
-
-        )
-
+      col:Math.floor((x+halfW)/CELL),
+      row:Math.floor((z+halfH)/CELL)
     };
-
   }
 
-
-
-  function keyOf(
-    row,
-    col
-  ){
-
-    return (
-      row
-      +
-      ","
-      +
-      col
-    );
-
+  function keyOf(row,col){
+    return `${row},${col}`;
   }
 
-
-
-  /* =========================================================
-     CAMERA
-  ========================================================= */
-
-  function positionCamera(){
-
-    const width =
-    COLS
-    *
-    CELL;
-
-
-    const height =
-    ROWS
-    *
-    CELL;
-
-
-    camera.position.set(
-
-      width
-      *
-      .44,
-
-      Math.max(
-        width,
-        height
-      )
-      *
-      .76,
-
-      height
-      *
-      .56
-
-    );
-
-
-    camera.lookAt(
-
-      0,
-
-      0,
-
-      0
-
-    );
-
+  function setInitialCamera(){
+    camera.position.set(14,22,16);
+    camera.lookAt(astronaut.position.x,0,astronaut.position.z);
   }
 
+  function updateCamera(dt){
+    const desiredX=astronaut.position.x+13.5;
+    const desiredY=21.5;
+    const desiredZ=astronaut.position.z+15.5;
 
-
-  function updateCamera(
-    dt
-  ){
-
-    const width =
-    COLS
-    *
-    CELL;
-
-
-    const height =
-    ROWS
-    *
-    CELL;
-
-
-    const baseX =
-    width
-    *
-    .44;
-
-
-    const baseY =
-    Math.max(
-      width,
-      height
-    )
-    *
-    .76;
-
-
-    const baseZ =
-    height
-    *
-    .56;
-
-
-    camera.position.x =
-    THREE.MathUtils.lerp(
-
+    camera.position.x=THREE.MathUtils.lerp(
       camera.position.x,
-
-      baseX
-
-      +
-
-      astronaut.position.x
-      *
-      .07,
-
-      1
-      -
-      Math.pow(
-        .02,
-        dt
-      )
-
+      desiredX,
+      1-Math.pow(.018,dt)
     );
 
+    camera.position.y=THREE.MathUtils.lerp(
+      camera.position.y,
+      desiredY,
+      1-Math.pow(.018,dt)
+    );
 
-    camera.position.z =
-    THREE.MathUtils.lerp(
-
+    camera.position.z=THREE.MathUtils.lerp(
       camera.position.z,
-
-      baseZ
-
-      +
-
-      astronaut.position.z
-      *
-      .05,
-
-      1
-      -
-      Math.pow(
-        .02,
-        dt
-      )
-
+      desiredZ,
+      1-Math.pow(.018,dt)
     );
-
-
-    camera.position.y =
-    baseY;
-
 
     camera.lookAt(
-
-      astronaut.position.x
-      *
-      .09,
-
+      astronaut.position.x,
       0,
-
       astronaut.position.z
-      *
-      .07
-
     );
-
   }
 
-
-
-  /* =========================================================
-     HUD
-  ========================================================= */
-
-  function updateHUD(){
-
-    scoreEl.textContent =
-    String(
-      score
-    );
-
-
-    livesEl.textContent =
-    String(
-      lives
-    );
-
-
-    alienCountEl.textContent =
-    String(
-      aliens.length
-    );
-
+  function updateHud(){
+    scoreEl.textContent=String(score);
+    livesEl.textContent=String(lives);
+    alienCountEl.textContent=String(aliens.length);
   }
 
+  function flashMessage(text,type){
+    messageEl.textContent=text;
+    messageEl.className="show "+type;
 
+    clearTimeout(flashMessage.timer);
 
-  /* =========================================================
-     MESSAGE
-  ========================================================= */
-
-  function flashMessage(
-    text,
-    type
-  ){
-
-    messageEl.textContent =
-    text;
-
-
-    messageEl.className =
-    "show "
-    +
-    type;
-
-
-    window.clearTimeout(
-      flashMessage.timer
+    flashMessage.timer=setTimeout(
+      ()=>messageEl.className="",
+      1050
     );
-
-
-    flashMessage.timer =
-    window.setTimeout(
-
-      () => {
-
-        messageEl.className =
-        "";
-
-      },
-
-      1000
-
-    );
-
   }
-
-
-
-  /* =========================================================
-     DISPOSE STATIONS
-  ========================================================= */
 
   function disposeStations(){
+    stationsMeshes.forEach(item=>{
+      [item.disk,item.ring,item.sign].forEach(disposeObject);
+    });
 
-    stationMeshes
-    .forEach(
-      mesh => {
+    stationsMeshes=[];
 
-        if(
-          mesh.geometry
-        ){
-
-          mesh.geometry.dispose();
-
-        }
-
-
-        if(
-          mesh.material
-        ){
-
-          const materials =
-
-            Array.isArray(
-              mesh.material
-            )
-
-            ?
-
-            mesh.material
-
-            :
-
-            [
-              mesh.material
-            ];
-
-
-          materials
-          .forEach(
-            material => {
-
-              material
-                .map
-                ?.dispose?.();
-
-
-              material
-                .dispose?.();
-
-            }
-          );
-
-        }
-
-
-        scene.remove(
-          mesh
-        );
-
-      }
-    );
-
-
-    stationMeshes =
-    [];
-
+    teleportBeams.forEach(disposeObject);
+    teleportBeams=[];
   }
 
+  function disposeObject(obj){
+    if(!obj) return;
 
+    obj.traverse?.(child=>{
+      child.geometry?.dispose?.();
 
-  /* =========================================================
-     GAME OVER
-  ========================================================= */
+      if(child.material){
+        const materials=Array.isArray(child.material)
+          ?child.material
+          :[child.material];
+
+        materials.forEach(material=>{
+          material.map?.dispose?.();
+          material.dispose?.();
+        });
+      }
+    });
+
+    scene.remove(obj);
+  }
 
   function endGame(){
-
-    gameEnded =
-    true;
-
-
+    gameEnded=true;
     clearPressed();
 
-
-    gameOverTextEl.textContent =
-
-      "Điểm của bạn: "
-
-      +
-
-      score
-
-      +
-
-      ".";
-
-
-    gameOverEl
-    .classList
-    .remove(
-      "hidden"
-    );
-
+    gameOverTextEl.textContent=`Điểm của bạn: ${score}.`;
+    gameOverEl.classList.remove("hidden");
   }
-
-
-
-  /* =========================================================
-     RESTART
-  ========================================================= */
 
   function restart(){
-
-    score =
-    0;
-
-
-    lives =
-    5;
-
-
-    gameEnded =
-    false;
-
-
-    answerLock =
-    false;
-
-
-    lastStationKey =
-    "";
-
+    score=0;
+    lives=5;
+    gameEnded=false;
+    answerLock=false;
+    lastStationKey="";
 
     clearPressed();
-
-
     resetPlayer();
-
-
-    spawnAliens(
-      3
-    );
-
-
+    spawnAliens(4);
     newQuestion();
+    updateHud();
 
-
-    updateHUD();
-
-
-    gameOverEl
-    .classList
-    .add(
-      "hidden"
-    );
-
+    gameOverEl.classList.add("hidden");
   }
 
+  function lerpAngle(current,target,amount){
+    let delta=target-current;
 
+    while(delta>Math.PI) delta-=Math.PI*2;
+    while(delta<-Math.PI) delta+=Math.PI*2;
 
-  /* =========================================================
-     LERP ANGLE
-  ========================================================= */
-
-  function lerpAngle(
-    current,
-    target,
-    amount
-  ){
-
-    let delta =
-
-      target
-
-      -
-
-      current;
-
-
-    while(
-      delta
-      >
-      Math.PI
-    ){
-
-      delta -=
-      Math.PI * 2;
-
-    }
-
-
-    while(
-      delta
-      <
-      -Math.PI
-    ){
-
-      delta +=
-      Math.PI * 2;
-
-    }
-
-
-    return (
-
-      current
-
-      +
-
-      delta
-      *
-      amount
-
-    );
-
+    return current+delta*amount;
   }
-
-
-
-  /* =========================================================
-     RESIZE
-  ========================================================= */
 
   function onResize(){
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
 
-    camera.aspect =
-
-      window.innerWidth
-
-      /
-
-      window.innerHeight;
-
-
-    camera
-    .updateProjectionMatrix();
-
-
-    renderer.setSize(
-
-      window.innerWidth,
-
-      window.innerHeight
-
-    );
-
-
-    renderer.setPixelRatio(
-
-      Math.min(
-
-        window.devicePixelRatio
-        ||
-        1,
-
-        1.7
-
-      )
-
-    );
-
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.65));
   }
 
+  function shuffle(arr){
+    const a=[...arr];
 
-
-  /* =========================================================
-     ERROR
-  ========================================================= */
-
-  function showBootError(
-    message
-  ){
-
-    console.error(
-      message
-    );
-
-
-    if(
-      !bootErrorEl
-    ){
-
-      return;
-
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
     }
 
-
-    bootErrorEl.textContent =
-    String(
-      message
-    );
-
-
-    bootErrorEl
-    .classList
-    .remove(
-      "hidden"
-    );
-
+    return a;
   }
 
+  function showBootError(message){
+    console.error(message);
 
+    if(!bootErrorEl) return;
 
-  /* =========================================================
-     SHUFFLE
-  ========================================================= */
-
-  function shuffle(
-    source
-  ){
-
-    const array =
-    [
-      ...source
-    ];
-
-
-    for(
-
-      let i =
-        array.length
-        -
-        1;
-
-      i > 0;
-
-      i--
-
-    ){
-
-      const j =
-
-        Math.floor(
-
-          Math.random()
-
-          *
-
-          (
-            i
-            +
-            1
-          )
-
-        );
-
-
-      [
-        array[i],
-        array[j]
-      ]
-
-      =
-
-      [
-        array[j],
-        array[i]
-      ];
-
-    }
-
-
-    return array;
-
+    bootErrorEl.textContent=String(message);
+    bootErrorEl.classList.remove("hidden");
   }
-
 })();
