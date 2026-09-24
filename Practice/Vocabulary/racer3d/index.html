@@ -2,94 +2,539 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#080b16" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <meta name="theme-color" content="#08101f" />
   <title>Vocab Racer 3D</title>
-  <link rel="stylesheet" href="./style.css?v=20260924-ui-fix-2" />
+
+  <link
+    rel="stylesheet"
+    href="./style.css?v=20260924-bigmap-v3-nav"
+  />
 </head>
+
 <body>
+
   <main id="game">
+
     <div id="renderHost"></div>
 
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <nav
+      id="racerNav"
+      class="racer-nav"
+      aria-label="Điều hướng"
+    >
+
+      <button
+        id="backToGameListBtn"
+        class="nav-btn"
+        type="button"
+      >
+        ← Chọn game
+      </button>
+
+      <button
+        id="backToPracticeBtn"
+        class="nav-btn nav-btn-secondary"
+        type="button"
+      >
+        ← Luyện tập
+      </button>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HUD
+    ====================================================== -->
+
     <header id="hud">
+
       <div class="brand">
-        <span class="brand-kicker">VOCAB RACER</span>
-        <b>3D · IELTS Arcade</b>
+
+        <span>
+          VOCAB RACER 3D
+        </span>
+
+        <b id="activeSetName">
+          Đang tải bộ từ...
+        </b>
+
       </div>
+
+
       <div class="hud-stats">
-        <div class="hud-pill"><span>Tốc độ / SPEED</span><strong id="speedValue">0</strong><small>km/h</small></div>
-        <div class="hud-pill"><span>Vị trí / POS</span><strong id="positionValue">1/5</strong></div>
-        <div class="hud-pill"><span>Tiến độ / RACE</span><strong id="raceProgress">0%</strong></div>
+
+        <div class="hud-pill">
+
+          <span>
+            SPEED
+          </span>
+
+          <strong id="speedValue">
+            0
+          </strong>
+
+          <small>
+            km/h
+          </small>
+
+        </div>
+
+
+        <div class="hud-pill">
+
+          <span>
+            POS
+          </span>
+
+          <strong id="positionValue">
+            1/8
+          </strong>
+
+        </div>
+
+
+        <div class="hud-pill">
+
+          <span>
+            RACE
+          </span>
+
+          <strong id="raceProgress">
+            0%
+          </strong>
+
+        </div>
+
       </div>
+
     </header>
 
-    <section id="questionPanel" class="question-panel hidden" aria-live="polite">
-      <div class="question-type" id="questionType">VOCAB GATE</div>
-      <div class="question-text" id="questionText">—</div>
-      <div class="question-meta"><span>Chọn làn đúng trước khi hết giờ</span><b id="gateTimer">4.0s</b></div>
-      <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
-      <div class="lane-hints" id="laneHints"></div>
+
+    <!-- =====================================================
+         VOCABULARY QUESTION
+    ====================================================== -->
+
+    <section
+      id="questionPanel"
+      class="question-panel hidden"
+    >
+
+      <div
+        class="question-source"
+        id="questionSource"
+      >
+        Vocabulary
+      </div>
+
+
+      <div
+        class="question-text"
+        id="questionText"
+      >
+        —
+      </div>
+
+
+      <div class="question-meta">
+
+        <span>
+          Chọn đúng làn trước khi đi qua cổng.
+        </span>
+
+        <b id="gateDistance">
+          —
+        </b>
+
+      </div>
+
+
+      <div
+        class="lane-hints"
+        id="laneHints"
+      ></div>
+
     </section>
+
+
+    <!-- =====================================================
+         NITRO
+    ====================================================== -->
 
     <section class="nitro-wrap">
-      <div class="nitro-label"><span>NITRO</span><b id="nitroText">READY</b></div>
-      <div class="nitro-track"><div id="nitroFill"></div></div>
+
+      <div class="nitro-label">
+
+        <span>
+          NITRO
+        </span>
+
+        <b id="nitroText">
+          READY
+        </b>
+
+      </div>
+
+
+      <div class="nitro-track">
+
+        <div id="nitroFill"></div>
+
+      </div>
+
     </section>
 
-    <div id="message" aria-live="polite"></div>
-    <div id="overtake" class="overtake hidden"></div>
-    <div id="speedFx" aria-hidden="true"></div>
-    <div id="damageFx" aria-hidden="true"></div>
 
-    <div id="touchControls">
-      <button id="leftBtn" type="button" aria-label="Chuyển làn trái">←</button>
-      <div class="touch-help">A / D · ← / → · SWIPE</div>
-      <button id="rightBtn" type="button" aria-label="Chuyển làn phải">→</button>
+    <!-- =====================================================
+         NOTIFICATIONS
+    ====================================================== -->
+
+    <div
+      id="junctionNotice"
+      class="junction-notice hidden"
+    >
+      NGÃ RẼ PHÍA TRƯỚC
     </div>
 
-    <section id="startScreen" class="screen">
-      <div class="screen-card start-card">
-        <div class="screen-kicker">VOCAB RACER 3D</div>
-        <h1>Học từ vựng bằng một cuộc đua tốc độ cao.</h1>
-        <p>Chọn đúng cổng từ vựng để kích hoạt Nitro. Trả lời sai sẽ làm xe giảm tốc và tạo cơ hội cho đối thủ vượt lên.</p>
+
+    <div id="message"></div>
+
+
+    <div
+      id="overtake"
+      class="overtake hidden"
+    ></div>
+
+
+    <div
+      id="speedFx"
+      aria-hidden="true"
+    ></div>
+
+
+    <div
+      id="damageFx"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- =====================================================
+         CONTROLS
+    ====================================================== -->
+
+    <div id="touchControls">
+
+      <button
+        id="leftBtn"
+        type="button"
+      >
+        ←
+      </button>
+
+
+      <div class="touch-help">
+
+        A / D · ← / → · SWIPE
+
+      </div>
+
+
+      <button
+        id="rightBtn"
+        type="button"
+      >
+        →
+      </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         START SCREEN
+    ====================================================== -->
+
+    <section
+      id="startScreen"
+      class="screen"
+    >
+
+      <div class="screen-card">
+
+        <div class="screen-kicker">
+          VOCAB RACER 3D · BIG MAP
+        </div>
+
+
+        <h1>
+          Đua xe qua bản đồ lớn và học đúng bộ từ em vừa chọn.
+        </h1>
+
+
+        <p id="sourceDescription">
+          Đang tải dữ liệu từ Vocabulary Practice...
+        </p>
+
+
         <div class="start-grid">
-          <label><span>Độ khó / Difficulty</span><select id="difficultySelect"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option></select></label>
-          <label><span>Bộ từ / Vocab set</span><select id="vocabSetSelect"><option value="environment">IELTS Environment</option></select></label>
+
+          <label>
+
+            <span>
+              Độ khó / Difficulty
+            </span>
+
+            <select id="difficultySelect">
+
+              <option value="easy">
+                Easy
+              </option>
+
+              <option
+                value="normal"
+                selected
+              >
+                Normal
+              </option>
+
+              <option value="hard">
+                Hard
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <div class="info-card">
+
+            <span>
+              LUẬT MỚI
+            </span>
+
+            <b>
+              Không còn “hết giờ”
+            </b>
+
+            <small>
+              Game chỉ chấm khi xe thật sự đi qua cổng từ vựng.
+            </small>
+
+          </div>
+
         </div>
-        <button id="startBtn" class="primary-btn" type="button">BẮT ĐẦU ĐUA / START RACE</button>
-        <div class="control-note">Desktop: ← → hoặc A/D · Tablet: vuốt trái/phải</div>
+
+
+        <button
+          id="startBtn"
+          class="primary-btn"
+          type="button"
+        >
+          BẮT ĐẦU ĐUA / START RACE
+        </button>
+
+
+        <button
+          id="backBtn"
+          class="back-btn"
+          type="button"
+        >
+          ← Quay lại Vocabulary
+        </button>
+
       </div>
+
     </section>
 
-    <section id="finishScreen" class="screen hidden">
-      <div class="screen-card result-card">
-        <div class="screen-kicker">RACE RESULT</div>
-        <h2 id="finishTitle">Hoàn thành!</h2>
+
+    <!-- =====================================================
+         FINISH SCREEN
+    ====================================================== -->
+
+    <section
+      id="finishScreen"
+      class="screen hidden"
+    >
+
+      <div class="screen-card">
+
+        <div class="screen-kicker">
+          RACE RESULT
+        </div>
+
+
+        <h2>
+          Hoàn thành chặng đua!
+        </h2>
+
+
         <div class="result-grid">
-          <div><span>Vị trí</span><b id="finalRank">—</b></div>
-          <div><span>Thời gian</span><b id="finalTime">—</b></div>
-          <div><span>Điểm</span><b id="finalScore">—</b></div>
-          <div><span>Đúng / Sai</span><b id="finalAccuracy">—</b></div>
+
+          <div>
+
+            <span>
+              Vị trí
+            </span>
+
+            <b id="finalRank">
+              —
+            </b>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Thời gian
+            </span>
+
+            <b id="finalTime">
+              —
+            </b>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Điểm
+            </span>
+
+            <b id="finalScore">
+              —
+            </b>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              Đúng / Sai
+            </span>
+
+            <b id="finalAccuracy">
+              —
+            </b>
+
+          </div>
+
         </div>
-        <div class="review-box"><h3>Từ cần ôn lại / Review words</h3><div id="reviewWords"></div></div>
+
+
+        <div class="review-box">
+
+          <h3>
+            Từ cần ôn lại
+          </h3>
+
+          <div id="reviewWords"></div>
+
+        </div>
+
+
         <div class="result-actions">
-          <button id="restartBtn" class="primary-btn" type="button">CHƠI LẠI</button>
-          <button id="changeSetBtn" class="secondary-btn" type="button">CHỌN BỘ TỪ KHÁC</button>
+
+          <button
+            id="restartBtn"
+            class="primary-btn"
+            type="button"
+          >
+            CHƠI LẠI
+          </button>
+
+
+          <button
+            id="finishBackBtn"
+            class="back-btn"
+            type="button"
+          >
+            ← Vocabulary
+          </button>
+
         </div>
+
       </div>
+
     </section>
 
-    <div id="bootError" class="boot-error hidden"></div>
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    <div
+      id="bootError"
+      class="boot-error hidden"
+    ></div>
+
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
-  <script src="./data/vocab-sets/environment-fallback.js?v=20260924-ui-fix-2"></script>
-  <script src="./src/config.js?v=20260924-ui-fix-2"></script>
-  <script src="./src/vocab-engine.js?v=20260924-ui-fix-2"></script>
-  <script src="./src/hud.js?v=20260924-ui-fix-2"></script>
-  <script src="./src/track.js?v=20260924-ui-fix-2"></script>
-  <script src="./src/player-car.js?v=20260924-ui-fix-2"></script>
-  <script src="./src/ai-car.js?v=20260924-ui-fix-2"></script>
-  <script src="./src/game.js?v=20260924-ui-fix-2"></script>
+
+  <!-- =======================================================
+       THREE.JS
+  ======================================================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"
+  ></script>
+
+
+  <!-- =======================================================
+       FALLBACK VOCAB DATA
+  ======================================================== -->
+
+  <script
+    src="./data/vocab-sets/environment-fallback.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
+
+  <!-- =======================================================
+       GAME MODULES
+  ======================================================== -->
+
+  <script
+    src="./src/config.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
+
+  <script
+    src="./src/vocab-engine.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
+
+  <script
+    src="./src/hud.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
+
+  <script
+    src="./src/track.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
+
+  <script
+    src="./src/player-car.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
+
+  <script
+    src="./src/ai-car.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
+
+  <script
+    src="./src/game.js?v=20260924-bigmap-v3-nav"
+  ></script>
+
 </body>
 </html>
