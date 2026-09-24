@@ -691,6 +691,24 @@ button:disabled{cursor:not-allowed;opacity:.55}
   line-height:1.4;
 }
 
+
+.cloze-answer{
+  display:inline-block;
+  margin-left:6px;
+  padding:3px 7px;
+  border-radius:7px;
+  background:#fff2f4;
+  color:#bd2842;
+  font-size:8.5px;
+  font-weight:900;
+  line-height:1.25;
+  vertical-align:middle;
+}
+.cloze[disabled]{
+  opacity:1;
+  cursor:default;
+}
+
 </style>
 </head>
 
@@ -817,11 +835,24 @@ button:disabled{cursor:not-allowed;opacity:.55}
 
       <div class="script" id="scriptContainer"></div>
 
-      <div class="action-bar">
+      <div class="action-bar" id="part1Actions">
         <div class="action-info" id="part1Progress">0/0 ô đã điền</div>
         <button class="primary" id="submitPart1Btn" type="button">
-          Nộp Phần 1 & sang Dictation →
+          Nộp Phần 1 & xem kết quả
         </button>
+      </div>
+
+      <div class="result-card hidden" id="part1Review">
+        <div class="result-score" id="part1ScoreCircle">0%</div>
+        <div>
+          <h3>Đã chấm Audioscript Gap-fill</h3>
+          <p id="part1ResultText">
+            Xem lại các ô màu xanh/đỏ và đáp án đúng trước khi chuyển sang Dictation.
+          </p>
+          <button class="primary" id="continuePart2Btn" type="button" style="margin-top:12px">
+            Chuyển sang Phần 2 · Dictation →
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -1547,32 +1578,147 @@ function updatePart1Progress(){
   $("part1Progress").textContent=`${filled}/${inputs.length} ô đã điền`;
 }
 
-function submitPart1(){
-  const inputs=[...document.querySelectorAll(".cloze")];
+function markPart1Answers(inputs){
   let correct=0;
 
   inputs.forEach(input=>{
-    const good=normalize(input.value)===normalize(input.dataset.answer);
+    input.classList.remove("correct","wrong");
+
+    const oldHint=
+    input.parentElement?.querySelector(
+      `.cloze-answer[data-for="${input.dataset.clozeIndex}"]`
+    );
+
+    if(oldHint){
+      oldHint.remove();
+    }
+
+    const good=
+    normalize(input.value)
+    ===
+    normalize(input.dataset.answer);
+
     if(good){
       correct++;
       input.classList.add("correct");
     }else{
       input.classList.add("wrong");
+
+      const hint=
+      document.createElement("span");
+
+      hint.className=
+      "cloze-answer";
+
+      hint.dataset.for=
+      input.dataset.clozeIndex;
+
+      hint.textContent=
+      `Đáp án: ${input.dataset.answer}`;
+
+      input.insertAdjacentElement(
+        "afterend",
+        hint
+      );
     }
+
+    input.disabled=true;
   });
+
+  return correct;
+}
+
+function showPart1Review(score,total){
+  const percent=
+  total
+  ?
+  Math.round(
+    score/total*100
+  )
+  :
+  0;
+
+  $("part1ScoreCircle").textContent=
+  `${percent}%`;
+
+  $("part1ResultText").textContent=
+  `Bạn đúng ${score}/${total} ô. Hãy xem lại các ô màu đỏ và đáp án đúng được hiển thị ngay bên cạnh. Khi đã xem xong, tự bấm “Chuyển sang Phần 2”.`;
+
+  $("part1Review").classList.remove("hidden");
+  $("part1Actions").classList.add("hidden");
+}
+
+function restorePart1Review(state){
+  const inputs=[
+    ...document.querySelectorAll(".cloze")
+  ];
+
+  const savedAnswers=
+  Array.isArray(state.part1Answers)
+  ?
+  state.part1Answers
+  :
+  [];
+
+  inputs.forEach((input,index)=>{
+    input.value=
+    savedAnswers[index]
+    ??
+    "";
+  });
+
+  const correct=
+  markPart1Answers(inputs);
+
+  showPart1Review(
+    state.part1Score
+    ??
+    correct,
+    state.part1Total
+    ??
+    inputs.length
+  );
+}
+
+function submitPart1(){
+  const inputs=[
+    ...document.querySelectorAll(".cloze")
+  ];
+
+  const answers=
+  inputs.map(
+    input=>input.value
+  );
+
+  const correct=
+  markPart1Answers(inputs);
 
   saveState({
     part1Locked:true,
+    part2Started:false,
     part1Score:correct,
     part1Total:inputs.length,
+    part1Answers:answers,
     part1SubmittedAt:new Date().toISOString()
   });
 
-  toast(`Phần 1: ${correct}/${inputs.length} · Audioscript đã khóa`);
+  showPart1Review(
+    correct,
+    inputs.length
+  );
 
-  setTimeout(()=>{
-    showPart2();
-  },650);
+  toast(
+    `Phần 1: ${correct}/${inputs.length} · Hãy xem lại đáp án trước khi chuyển phần`
+  );
+}
+
+function continueToPart2(){
+  saveState({
+    part2Started:true,
+    part2StartedAt:new Date().toISOString()
+  });
+
+  showPart2();
 }
 
 
@@ -2183,6 +2329,8 @@ function saveProgressRecord(dictationAverage){
 ========================================================= */
 
 function showPart1(){
+  const state=loadState();
+
   $("part1Panel").classList.remove("hidden");
   $("part2Panel").classList.add("hidden");
 
@@ -2190,7 +2338,14 @@ function showPart1(){
   $("step1").classList.remove("done");
   $("step2").classList.remove("active");
 
+  $("part1Review").classList.add("hidden");
+  $("part1Actions").classList.remove("hidden");
+
   renderPart1();
+
+  if(state.part1Locked){
+    restorePart1Review(state);
+  }
 }
 
 function showPart2(){
@@ -2256,6 +2411,7 @@ function init(){
   }catch(error){}
 
   $("submitPart1Btn").addEventListener("click",submitPart1);
+  $("continuePart2Btn").addEventListener("click",continueToPart2);
   $("submitPart2Btn").addEventListener("click",submitPart2);
   $("resetBtn").addEventListener("click",resetLesson);
 
@@ -2263,7 +2419,11 @@ function init(){
 
   const state=loadState();
 
-  if(state.part1Locked){
+  if(
+    state.part2Started
+    ||
+    state.part2Submitted
+  ){
     showPart2();
   }else{
     showPart1();
