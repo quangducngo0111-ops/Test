@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+  Gifted children and learning · Reading Passage 2
+</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --purple:#6557e8;
+  --purple-dark:#281260;
+  --purple-soft:#f1efff;
+
+  --bg:#f5f7fb;
+  --panel:#ffffff;
+
+  --text:#111827;
+  --muted:#69758a;
+
+  --line:#dde3ec;
+
+  --good:#178a58;
+  --good-bg:#eaf9f1;
+
+  --bad:#c43b4d;
+  --bad-bg:#fff0f2;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  height:100%;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color:var(--text);
+  background:var(--bg);
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar{
+  height:66px;
+
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+
+  padding:0 22px;
+
+  border-bottom:1px solid var(--line);
+
+  background:#fff;
+
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.top-left{
+  justify-self:start;
+}
+
+.top-center{
+  justify-self:center;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  font-size:18px;
+  font-weight:900;
+
+  color:var(--purple-dark);
+}
+
+.top-right{
+  justify-self:end;
+
+  color:#707b90;
+  font-size:12px;
+  font-weight:800;
+}
+
+.back-btn{
+  display:inline-flex;
+  align-items:center;
+
+  min-height:40px;
+
+  padding:0 14px;
+
+  border:1px solid var(--line);
+  border-radius:12px;
+
+  background:#fff;
+
+  color:var(--purple-dark);
+
+  font-weight:800;
+
+  text-decoration:none;
+}
+
+.logo{
+  width:38px;
+  height:38px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #5d55df,
+      #825cf0
+    );
+
+  color:#fff;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.workspace{
+  height:calc(100vh - 66px);
+
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(420px,.82fr);
+
+  overflow:hidden;
+}
+
+
+/* =========================================================
+   PASSAGE
+========================================================= */
+
+.passage-panel{
+  overflow-y:auto;
+
+  padding:34px 42px 80px;
+
+  border-right:1px solid var(--line);
+
+  background:#fff;
+}
+
+.eyebrow{
+  color:var(--purple);
+
+  font-size:12px;
+  font-weight:950;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+}
+
+.passage-panel h1{
+  margin:8px 0 12px;
+
+  font-size:36px;
+  line-height:1.12;
+
+  color:#111827;
+}
+
+.instructions{
+  margin:0 0 28px;
+
+  color:var(--muted);
+
+  font-size:14px;
+  line-height:1.6;
+}
+
+.paragraph{
+  margin:0 0 28px;
+}
+
+.paragraph-label{
+  display:flex;
+
+  width:32px;
+  height:32px;
+
+  align-items:center;
+  justify-content:center;
+
+  margin-bottom:8px;
+
+  border-radius:10px;
+
+  background:var(--purple-soft);
+
+  color:var(--purple-dark);
+
+  font-weight:950;
+}
+
+.paragraph p{
+  margin:0;
+
+  font-family:Georgia,"Times New Roman",serif;
+
+  font-size:17px;
+  line-height:1.83;
+
+  color:#202837;
+}
+
+
+/* =========================================================
+   QUESTION PANEL
+========================================================= */
+
+.questions-panel{
+  overflow-y:auto;
+
+  padding:28px 30px 110px;
+
+  background:#f6f7fb;
+}
+
+.question-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+
+  margin-bottom:18px;
+}
+
+.question-head h2{
+  margin:0;
+
+  font-size:25px;
+
+  color:#151c2b;
+}
+
+.question-head p{
+  margin:4px 0 0;
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+.progress-chip{
+  flex:none;
+
+  padding:8px 11px;
+
+  border-radius:999px;
+
+  background:var(--purple-soft);
+
+  color:var(--purple-dark);
+
+  font-size:11px;
+  font-weight:900;
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.question-section{
+  margin-bottom:22px;
+
+  padding:20px;
+
+  border:1px solid var(--line);
+  border-radius:18px;
+
+  background:#fff;
+}
+
+.question-section h3{
+  margin:0 0 4px;
+
+  font-size:17px;
+}
+
+.section-instruction{
+  margin:0 0 17px;
+
+  color:var(--muted);
+
+  font-size:12px;
+  line-height:1.55;
+}
+
+.nb{
+  margin:10px 0 17px;
+
+  padding:9px 11px;
+
+  border-radius:10px;
+
+  background:#f7f4ff;
+
+  color:#5137ab;
+
+  font-size:11px;
+  font-weight:800;
+}
+
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+.question-item{
+  margin-top:12px;
+
+  padding:14px;
+
+  border:1px solid #e8ebf1;
+  border-radius:14px;
+
+  background:#fff;
+
+  transition:.15s ease;
+}
+
+.question-number{
+  display:inline-flex;
+
+  width:28px;
+  height:28px;
+
+  align-items:center;
+  justify-content:center;
+
+  margin-right:7px;
+
+  border-radius:9px;
+
+  background:#eeeafe;
+
+  color:#4a34ad;
+
+  font-size:12px;
+  font-weight:950;
+
+  vertical-align:top;
+}
+
+.question-copy{
+  display:inline;
+
+  font-size:13px;
+  line-height:1.55;
+  font-weight:650;
+}
+
+.answer-row{
+  margin-top:12px;
+
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.answer-row select,
+.answer-row input{
+  min-height:40px;
+
+  border:1px solid #ccd4df;
+  border-radius:10px;
+
+  background:#fff;
+
+  color:#111827;
+
+  outline:none;
+}
+
+.answer-row select{
+  width:92px;
+  padding:0 10px;
+}
+
+.answer-row input{
+  width:100%;
+  padding:0 12px;
+}
+
+.answer-row select:focus,
+.answer-row input:focus{
+  border-color:#7b6cf2;
+
+  box-shadow:
+    0 0 0 3px rgba(101,87,232,.10);
+}
+
+
+/* =========================================================
+   PEOPLE BOX
+========================================================= */
+
+.people-box{
+  margin:15px 0;
+
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+
+  gap:7px;
+
+  padding:12px;
+
+  border-radius:13px;
+
+  background:#f7f8fc;
+}
+
+.person{
+  padding:8px 9px;
+
+  border:1px solid #e3e6ee;
+  border-radius:9px;
+
+  background:#fff;
+
+  font-size:12px;
+}
+
+.person b{
+  color:var(--purple-dark);
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+.question-item.correct{
+  border-color:#78cba3;
+  background:var(--good-bg);
+}
+
+.question-item.wrong{
+  border-color:#efa0ac;
+  background:var(--bad-bg);
+}
+
+.feedback{
+  display:none;
+
+  margin-top:9px;
+
+  font-size:11px;
+  font-weight:850;
+}
+
+.correct .feedback,
+.wrong .feedback{
+  display:block;
+}
+
+.correct .feedback{
+  color:var(--good);
+}
+
+.wrong .feedback{
+  color:var(--bad);
+}
+
+
+/* =========================================================
+   BOTTOM ACTION
+========================================================= */
+
+.action-bar{
+  position:fixed;
+
+  right:0;
+  bottom:0;
+
+  width:min(
+    calc(45.1vw),
+    720px
+  );
+
+  display:flex;
+  gap:8px;
+
+  padding:12px 22px;
+
+  border-top:1px solid var(--line);
+
+  background:rgba(255,255,255,.95);
+
+  backdrop-filter:blur(12px);
+
+  z-index:40;
+}
+
+.action-bar button{
+  min-height:45px;
+
+  border-radius:12px;
+
+  font-weight:900;
+}
+
+.check-btn{
+  flex:1;
+
+  border:0;
+
+  background:
+    linear-gradient(
+      90deg,
+      #5959e7,
+      #7865ef
+    );
+
+  color:#fff;
+}
+
+.reset-btn{
+  width:110px;
+
+  border:1px solid var(--line);
+
+  background:#fff;
+
+  color:#445066;
+}
+
+.score-box{
+  display:none;
+
+  margin-bottom:15px;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  background:var(--purple-soft);
+
+  color:var(--purple-dark);
+
+  font-weight:900;
+}
+
+.score-box.show{
+  display:block;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:900px){
+
+  html,
+  body{
+    height:auto;
+    overflow:auto;
+  }
+
+  .workspace{
+    height:auto;
+
+    display:block;
+
+    overflow:visible;
+  }
+
+  .passage-panel,
+  .questions-panel{
+    overflow:visible;
+  }
+
+  .passage-panel{
+    padding:25px 20px 35px;
+
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .questions-panel{
+    padding:25px 16px 100px;
+  }
+
+  .passage-panel h1{
+    font-size:29px;
+  }
+
+  .action-bar{
+    left:0;
+    right:0;
+
+    width:100%;
+  }
+
+}
+
+
+@media(max-width:600px){
+
+  .topbar{
+    padding:0 10px;
+
+    grid-template-columns:auto 1fr;
+  }
+
+  .top-center{
+    justify-self:end;
+
+    font-size:14px;
+  }
+
+  .top-right{
+    display:none;
+  }
+
+  .people-box{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<header class="topbar">
+
+  <div class="top-left">
+
+    <a
+      href="../"
+      class="back-btn"
+    >
+      ← Passage 2
+    </a>
+
+  </div>
+
+
+  <div class="top-center">
+
+    <div class="logo">
+      R
+    </div>
+
+    <span>
+      Reading Practice
+    </span>
+
+  </div>
+
+
+  <div class="top-right">
+    Practice 02 · Passage 2
+  </div>
+
+</header>
+
+
+
+<main class="workspace">
+
+
+  <!-- =====================================================
+       PASSAGE
+  ====================================================== -->
+
+  <article class="passage-panel">
+
+    <div class="eyebrow">
+      Reading Passage 2
+    </div>
+
+    <h1>
+      Gifted children and learning
+    </h1>
+
+    <p class="instructions">
+      You should spend about 20 minutes on Questions 14–26,
+      which are based on Reading Passage 2 below.
+    </p>
+
+
+
+    <section class="paragraph">
+
+      <div class="paragraph-label">
+        A
+      </div>
+
+      <p>
+        Internationally, ‘giftedness’ is most frequently determined
+        by a score on a general intelligence test, known as an IQ test,
+        which is above a chosen cutoff point, usually at around the top
+        2–5%. Children’s educational environment contributes to the IQ
+        score and the way intelligence is used. For example, a very
+        close positive relationship was found when children’s IQ scores
+        were compared with their home educational provision
+        (Freeman, 2010). The higher the children’s IQ scores, especially
+        over IQ 130, the better the quality of their educational backup,
+        measured in terms of reported verbal interactions with parents,
+        number of books and activities in their home etc. Because IQ
+        tests are decidedly influenced by what the child has learned,
+        they are to some extent measures of current achievement based
+        on age-norms; that is, how well the children have learned to
+        manipulate their knowledge and know-how within the terms of the
+        test. The vocabulary aspect, for example, is dependent on having
+        heard those words. But IQ tests can neither identify the processes
+        of learning and thinking nor predict creativity.
+      </p>
+
+    </section>
+
+
+
+    <section class="paragraph">
+
+      <div class="paragraph-label">
+        B
+      </div>
+
+      <p>
+        Excellence does not emerge without appropriate help. To reach an
+        exceptionally high standard in any area very able children need
+        the means to learn, which includes material to work with and
+        focused challenging tuition – and the encouragement to follow
+        their dream. There appears to be a qualitative difference in the
+        way the intellectually highly able think, compared with more
+        average-ability or older pupils, for whom external regulation by
+        the teacher often compensates for lack of internal regulation.
+        To be at their most effective in their self-regulation, all
+        children can be helped to identify their own ways of learning –
+        metacognition – which will include strategies of planning,
+        monitoring, evaluation, and choice of what to learn. Emotional
+        awareness is also part of metacognition, so children should be
+        helped to be aware of their feelings around the area to be
+        learned, feelings of curiosity or confidence, for example.
+      </p>
+
+    </section>
+
+
+
+    <section class="paragraph">
+
+      <div class="paragraph-label">
+        C
+      </div>
+
+      <p>
+        High achievers have been found to use self-regulatory learning
+        strategies more often and more effectively than lower achievers,
+        and are better able to transfer these strategies to deal with
+        unfamiliar tasks. This happens to such a high degree in some
+        children that they appear to be demonstrating talent in
+        particular areas. Overviewing research on the thinking process of
+        highly able children, Shore and Kanevsky (1993) put the
+        instructor’s problem succinctly: ‘If they [the gifted] merely
+        think more quickly, then we need only teach more quickly. If they
+        merely make fewer errors, then we can shorten the practice’.
+        But of course, this is not entirely the case; adjustments have to
+        be made in methods of learning and teaching, to take account of
+        the many ways individuals think.
+      </p>
+
+    </section>
+
+
+
+    <section class="paragraph">
+
+      <div class="paragraph-label">
+        D
+      </div>
+
+      <p>
+        Yet in order to learn by themselves, the gifted do need some
+        support from their teachers. Conversely, teachers who have a
+        tendency to ‘overdirect’ can diminish their gifted pupils’
+        learning autonomy. Although ‘spoon-feeding’ can produce
+        extremely high examination results, these are not always
+        followed by equally impressive life successes. Too much
+        dependence on the teachers risks loss of autonomy and motivation
+        to discover. However, when teachers encourage pupils to reflect
+        on their own learning and thinking activities, they increase
+        their pupils’ self-regulation. For a young child, it may be just
+        the simple question ‘What have you learned today?’ which helps
+        them to recognise what they are doing. Given that a fundamental
+        goal of education is to transfer the control of learning from
+        teachers to pupils, improving pupils’ learning to learn
+        techniques should be a major outcome of the school experience,
+        especially for the highly competent. There are quite a number of
+        new methods which can help, such as child-initiated learning,
+        ability-peer tutoring, etc. Such practices have been found to be
+        particularly useful for bright children from deprived areas.
+      </p>
+
+    </section>
+
+
+
+    <section class="paragraph">
+
+      <div class="paragraph-label">
+        E
+      </div>
+
+      <p>
+        But scientific progress is not all theoretical; knowledge is also
+        vital to outstanding performance: individuals who know a great
+        deal about a specific domain will achieve at a higher level than
+        those who do not (Elshout, 1995). Research with creative
+        scientists by Simonton (1988) brought him to the conclusion that
+        above a certain high level, characteristics such as independence
+        seemed to contribute more to reaching the highest levels of
+        expertise than intellectual skills, due to the great demands of
+        effort and time needed for learning and practice. Creativity in
+        all forms can be seen as expertise mixed with a high level of
+        motivation (Weisberg, 1993).
+      </p>
+
+    </section>
+
+
+
+    <section class="paragraph">
+
+      <div class="paragraph-label">
+        F
+      </div>
+
+      <p>
+        To sum up, learning is affected by emotions of both the individual
+        and significant others. Positive emotions facilitate the creative
+        aspects of learning and negative emotions inhibit it. Fear, for
+        example, can limit the development of curiosity, which is a strong
+        force in scientific advance, because it motivates problem-solving
+        behaviour. In Boekaerts’ (1991) review of emotion in the learning
+        of very high IQ and highly achieving children, she found emotional
+        forces in harness. They were not only curious, but often had a
+        strong desire to control their environment, improve their learning
+        efficiency and increase their own learning resources.
+      </p>
+
+    </section>
+
+  </article>
+
+
+
+  <!-- =====================================================
+       QUESTIONS
+  ====================================================== -->
+
+  <aside class="questions-panel">
+
+    <div class="question-head">
+
+      <div>
+
+        <h2>
+          Questions 14–26
+        </h2>
+
+        <p>
+          Answer all 13 questions.
+        </p>
+
+      </div>
+
+      <div
+        id="answerCounter"
+        class="progress-chip"
+      >
+        0 / 13
+      </div>
+
+    </div>
+
+
+
+    <div
+      id="scoreBox"
+      class="score-box"
+    ></div>
+
+
+
+    <!-- QUESTIONS 14-17 -->
+
+    <section class="question-section">
+
+      <h3>
+        Questions 14–17
+      </h3>
+
+      <p class="section-instruction">
+        Reading Passage 2 has six paragraphs, A–F.
+        Which paragraph contains the following information?
+      </p>
+
+      <div class="nb">
+        NB: You may use any letter more than once.
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="14"
+      >
+
+        <span class="question-number">
+          14
+        </span>
+
+        <span class="question-copy">
+          a reference to the influence of the domestic background
+          on the gifted child.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="14">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="15"
+      >
+
+        <span class="question-number">
+          15
+        </span>
+
+        <span class="question-copy">
+          reference to what can be lost if learners are given
+          too much guidance.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="15">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="16"
+      >
+
+        <span class="question-number">
+          16
+        </span>
+
+        <span class="question-copy">
+          a reference to the damaging effects of anxiety.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="16">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="17"
+      >
+
+        <span class="question-number">
+          17
+        </span>
+
+        <span class="question-copy">
+          examples of classroom techniques which favour
+          socially-disadvantaged children.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="17">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- QUESTIONS 18-22 -->
+
+    <section class="question-section">
+
+      <h3>
+        Questions 18–22
+      </h3>
+
+      <p class="section-instruction">
+        Match each statement with the correct person or people, A–E.
+      </p>
+
+
+      <div class="people-box">
+
+        <div class="person">
+          <b>A</b> Freeman
+        </div>
+
+        <div class="person">
+          <b>B</b> Shore and Kanevsky
+        </div>
+
+        <div class="person">
+          <b>C</b> Elshout
+        </div>
+
+        <div class="person">
+          <b>D</b> Simonton
+        </div>
+
+        <div class="person">
+          <b>E</b> Boekaerts
+        </div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="18"
+      >
+
+        <span class="question-number">
+          18
+        </span>
+
+        <span class="question-copy">
+          Less time can be spent on exercises with gifted pupils
+          who produce accurate work.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="18">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="19"
+      >
+
+        <span class="question-number">
+          19
+        </span>
+
+        <span class="question-copy">
+          Self-reliance is a valuable tool that helps gifted
+          students reach their goals.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="19">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="20"
+      >
+
+        <span class="question-number">
+          20
+        </span>
+
+        <span class="question-copy">
+          Gifted children know how to channel their feelings
+          to assist their learning.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="20">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="21"
+      >
+
+        <span class="question-number">
+          21
+        </span>
+
+        <span class="question-copy">
+          The very gifted child benefits from appropriate support
+          from close relatives.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="21">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="22"
+      >
+
+        <span class="question-number">
+          22
+        </span>
+
+        <span class="question-copy">
+          Really successful students have learnt a considerable
+          amount about their subject.
+        </span>
+
+        <div class="answer-row">
+
+          <select data-answer="22">
+
+            <option value="">
+              Select
+            </option>
+
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+
+          </select>
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- QUESTIONS 23-26 -->
+
+    <section class="question-section">
+
+      <h3>
+        Questions 23–26
+      </h3>
+
+      <p class="section-instruction">
+        Complete the sentences below.
+        Choose NO MORE THAN THREE WORDS from the passage
+        for each answer.
+      </p>
+
+
+
+      <div
+        class="question-item"
+        data-question="23"
+      >
+
+        <span class="question-number">
+          23
+        </span>
+
+        <span class="question-copy">
+          One study found a strong connection between children’s IQ
+          and the availability of ______ at home.
+        </span>
+
+        <div class="answer-row">
+
+          <input
+            data-answer="23"
+            type="text"
+            autocomplete="off"
+            placeholder="Type your answer"
+          >
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="24"
+      >
+
+        <span class="question-number">
+          24
+        </span>
+
+        <span class="question-copy">
+          Children of average ability seem to need more direction
+          from teachers because they do not have ______.
+        </span>
+
+        <div class="answer-row">
+
+          <input
+            data-answer="24"
+            type="text"
+            autocomplete="off"
+            placeholder="Type your answer"
+          >
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="25"
+      >
+
+        <span class="question-number">
+          25
+        </span>
+
+        <span class="question-copy">
+          Meta-cognition involves children understanding their own
+          learning strategies, as well as developing ______.
+        </span>
+
+        <div class="answer-row">
+
+          <input
+            data-answer="25"
+            type="text"
+            autocomplete="off"
+            placeholder="Type your answer"
+          >
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+
+
+      <div
+        class="question-item"
+        data-question="26"
+      >
+
+        <span class="question-number">
+          26
+        </span>
+
+        <span class="question-copy">
+          Teachers who rely on what is known as ______ often
+          produce sets of impressive grades in class tests.
+        </span>
+
+        <div class="answer-row">
+
+          <input
+            data-answer="26"
+            type="text"
+            autocomplete="off"
+            placeholder="Type your answer"
+          >
+
+        </div>
+
+        <div class="feedback"></div>
+
+      </div>
+
+    </section>
+
+  </aside>
+
+</main>
+
+
+
+<div class="action-bar">
+
+  <button
+    id="resetBtn"
+    class="reset-btn"
+    type="button"
+  >
+    Làm lại
+  </button>
+
+  <button
+    id="checkBtn"
+    class="check-btn"
+    type="button"
+  >
+    Kiểm tra đáp án
+  </button>
+
+</div>
+
+
+
+<script>
+
+const STORAGE_KEY =
+  "reading_passage2_practice02_answers";
+
+
+const KEYS = {
+
+  14:[
+    "A"
+  ],
+
+  15:[
+    "D"
+  ],
+
+  16:[
+    "F"
+  ],
+
+  17:[
+    "D"
+  ],
+
+  18:[
+    "B"
+  ],
+
+  19:[
+    "D"
+  ],
+
+  20:[
+    "E"
+  ],
+
+  21:[
+    "A"
+  ],
+
+  22:[
+    "C"
+  ],
+
+  23:[
+    "books and activities"
+  ],
+
+  24:[
+    "internal regulation",
+    "self-regulation",
+    "self regulation"
+  ],
+
+  25:[
+    "emotional awareness"
+  ],
+
+  26:[
+    "spoon-feeding",
+    "spoon feeding"
+  ]
+
+};
+
+
+
+function normalise(value){
+
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[.,!?;:]+$/g,"")
+    .replace(/[’']/g,"'")
+    .replace(/\s+/g," ");
+
+}
+
+
+
+function getInputs(){
+
+  return [
+    ...document.querySelectorAll(
+      "[data-answer]"
+    )
+  ];
+
+}
+
+
+
+function saveAnswers(){
+
+  const data={};
+
+
+  getInputs()
+    .forEach(
+      input=>{
+
+        data[
+          input.dataset.answer
+        ]=
+        input.value;
+
+      }
+    );
+
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+
+  updateCounter();
+
+}
+
+
+
+function loadAnswers(){
+
+  try{
+
+    const data=
+      JSON.parse(
+        localStorage.getItem(
+          STORAGE_KEY
+        ) || "{}"
+      );
+
+
+    getInputs()
+      .forEach(
+        input=>{
+
+          const question=
+            input.dataset.answer;
+
+
+          if(
+            data[question] !== undefined
+          ){
+
+            input.value=
+              data[question];
+
+          }
+
+        }
+      );
+
+  }
+  catch(error){
+
+    console.warn(error);
+
+  }
+
+
+  updateCounter();
+
+}
+
+
+
+function updateCounter(){
+
+  const completed=
+    getInputs()
+      .filter(
+        input=>
+          input.value.trim() !== ""
+      )
+      .length;
+
+
+  document.getElementById(
+    "answerCounter"
+  )
+  .textContent=
+    `${completed} / 13`;
+
+}
+
+
+
+function checkAnswers(){
+
+  let correct=0;
+
+
+  getInputs()
+    .forEach(
+      input=>{
+
+        const number=
+          input.dataset.answer;
+
+
+        const item=
+          document.querySelector(
+            `[data-question="${number}"]`
+          );
+
+
+        const feedback=
+          item.querySelector(
+            ".feedback"
+          );
+
+
+        const user=
+          normalise(
+            input.value
+          );
+
+
+        const validAnswers=
+          KEYS[number]
+            .map(
+              normalise
+            );
+
+
+        const isCorrect=
+          validAnswers.includes(
+            user
+          );
+
+
+        item.classList.remove(
+          "correct",
+          "wrong"
+        );
+
+
+        if(isCorrect){
+
+          correct++;
+
+
+          item.classList.add(
+            "correct"
+          );
+
+
+          feedback.textContent=
+            "✓ Correct";
+
+        }
+        else{
+
+          item.classList.add(
+            "wrong"
+          );
+
+
+          feedback.textContent=
+            input.value.trim()
+
+            ?
+
+            `✕ Correct answer: ${KEYS[number][0]}`
+
+            :
+
+            `Chưa trả lời · Correct answer: ${KEYS[number][0]}`;
+
+        }
+
+      }
+    );
+
+
+  const scoreBox=
+    document.getElementById(
+      "scoreBox"
+    );
+
+
+  scoreBox.textContent=
+    `Kết quả: ${correct}/13 câu đúng · ${Math.round(correct/13*100)}%`;
+
+
+  scoreBox.classList.add(
+    "show"
+  );
+
+
+  saveAnswers();
+
+
+  document
+    .querySelector(
+      ".questions-panel"
+    )
+    .scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+}
+
+
+
+function resetAnswers(){
+
+  const ok=
+    confirm(
+      "Xóa toàn bộ đáp án của bài này?"
+    );
+
+
+  if(!ok){
+    return;
+  }
+
+
+  getInputs()
+    .forEach(
+      input=>{
+
+        input.value="";
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".question-item"
+    )
+    .forEach(
+      item=>{
+
+        item.classList.remove(
+          "correct",
+          "wrong"
+        );
+
+
+        const feedback=
+          item.querySelector(
+            ".feedback"
+          );
+
+
+        feedback.textContent="";
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "scoreBox"
+    )
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  localStorage.removeItem(
+    STORAGE_KEY
+  );
+
+
+  updateCounter();
+
+}
+
+
+
+getInputs()
+  .forEach(
+    input=>{
+
+      input.addEventListener(
+        "input",
+        saveAnswers
+      );
+
+
+      input.addEventListener(
+        "change",
+        saveAnswers
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "checkBtn"
+  )
+  .addEventListener(
+    "click",
+    checkAnswers
+  );
+
+
+document
+  .getElementById(
+    "resetBtn"
+  )
+  .addEventListener(
+    "click",
+    resetAnswers
+  );
+
+
+loadAnswers();
+
+</script>
+
+</body>
+</html>
