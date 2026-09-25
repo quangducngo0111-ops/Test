@@ -1111,7 +1111,7 @@ button:disabled{
   --rise:.28s;
   --mole-scale:1;
   position:relative;
-  z-index:2;
+  z-index:4;
   width:min(94%,170px);
   min-height:140px;
   padding:0 8px 10px;
@@ -1252,7 +1252,7 @@ button:disabled{
   line-height:1.22;
   font-weight:950;
   overflow-wrap:anywhere;
-  transform:translateY(10px);
+  transform:translateY(2px);
 }
 
 .whack-score-pop{
@@ -1737,10 +1737,10 @@ button:disabled{
   transform-origin:50% 50%;
 }
 
-.astronaut-player[data-dir="up"] .astronaut-direction{transform:rotate(0deg);}
-.astronaut-player[data-dir="right"] .astronaut-direction{transform:rotate(90deg);}
-.astronaut-player[data-dir="down"] .astronaut-direction{transform:rotate(180deg);}
-.astronaut-player[data-dir="left"] .astronaut-direction{transform:rotate(-90deg);}
+.astronaut-player[data-dir="up"] .astronaut-direction{transform:none;}
+.astronaut-player[data-dir="right"] .astronaut-direction{transform:none;}
+.astronaut-player[data-dir="down"] .astronaut-direction{transform:none;}
+.astronaut-player[data-dir="left"] .astronaut-direction{transform:scaleX(-1);}
 
 .astronaut-player:not(.moving) .astronaut-model{animation:astronautFloat 1.7s ease-in-out infinite alternate;}
 
@@ -4393,29 +4393,26 @@ button:disabled{
       <div class="astronaut-direction">
         <div class="astronaut-model">
           <svg class="astronaut-svg" viewBox="0 0 72 86" aria-hidden="true">
-            <defs>
-              <linearGradient id="astroGlass2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#d9f1ff"/><stop offset=".75" stop-color="#a7d4ff"/><stop offset="1" stop-color="#6f8fff"/></linearGradient>
-              <linearGradient id="astroSuit2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d8e4ff"/></linearGradient>
-            </defs>
-            <ellipse cx="36" cy="77" rx="17" ry="4" fill="rgba(63,28,142,.18)"/>
-            <path d="M18 18c0-7 6-13 13-13h10c7 0 13 6 13 13v12c0 5-4 9-9 9H27c-5 0-9-4-9-9z" fill="#ffffff" stroke="#28324f" stroke-width="2.8"/>
-            <rect x="22" y="12" width="28" height="20" rx="10" fill="url(#astroGlass2)" stroke="#28324f" stroke-width="2.2"/>
-            <circle cx="31" cy="22" r="6.2" fill="#ffd45b"/>
-            <path d="M26.5 19.5c1.8-4.6 7.2-5.9 10.6-2.3" fill="#d6853a"/>
-            <circle cx="28.8" cy="22.8" r="1.3" fill="#2c2f40"/><circle cx="33.4" cy="22.8" r="1.3" fill="#2c2f40"/>
-            <path d="M28.8 26.1c1.6 1.5 3.2 1.5 4.8 0" fill="none" stroke="#b05c3b" stroke-width="1.4" stroke-linecap="round"/>
-            <path d="M20 41c0-6.1 4.9-11 11-11h10c6.1 0 11 4.9 11 11v11c0 7.2-5.8 13-13 13h-6c-7.2 0-13-5.8-13-13z" fill="url(#astroSuit2)" stroke="#28324f" stroke-width="2.8"/>
-            <rect x="28" y="40" width="16" height="9" rx="4.5" fill="#ff5f75" stroke="#28324f" stroke-width="1.6"/>
-            <path d="M18 43c-5 2-8 5-8 9v4c0 2 1.6 3.6 3.6 3.6H20l3-9-3-7z" fill="#ffffff" stroke="#28324f" stroke-width="2.5"/>
-            <path d="M54 43c5 2 8 5 8 9v4c0 2-1.6 3.6-3.6 3.6H52l-3-9 3-7z" fill="#ffffff" stroke="#28324f" stroke-width="2.5"/>
-            <path d="M26 62v8c0 3.3 2.7 6 6 6h1.5v-14z" fill="#ffffff" stroke="#28324f" stroke-width="2.5"/>
-            <path d="M46 62v8c0 3.3-2.7 6-6 6h-1.5v-14z" fill="#ffffff" stroke="#28324f" stroke-width="2.5"/>
-            <rect x="22" y="73" width="13" height="6.5" rx="3.2" fill="#6d65ff" stroke="#28324f" stroke-width="2"/>
-            <rect x="37" y="73" width="13" height="6.5" rx="3.2" fill="#6d65ff" stroke="#28324f" stroke-width="2"/>
+            <ellipse cx="36" cy="80" rx="17" ry="4" fill="rgba(63,28,142,.16)"/>
+            <path d="M24 17c2-7 7.8-11 12-11s10 2.1 13 9c6 .8 10 6 10 12.5 0 7.6-5.4 13.5-12.4 13.5H26c-7 0-12.4-5.9-12.4-13.5C13.6 22.5 18 18 24 17z" fill="#ffffff" stroke="#29263f" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="36" cy="25" r="9.6" fill="#ffcf5a"/>
+            <circle cx="32.5" cy="24" r="1.55" fill="#2a2940"/>
+            <circle cx="39.5" cy="24" r="1.55" fill="#2a2940"/>
+            <path d="M33.3 28.6c1.8 1.5 3.6 1.5 5.4 0" fill="none" stroke="#b46146" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M27 21c2-2 5.6-3.4 9-3.4 5.3 0 9.7 2.2 12.2 6" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M24 44c0-6.2 5-11.2 11.2-11.2h1.6C43 32.8 48 37.8 48 44v13.6c0 7.5-6.1 13.6-13.6 13.6h-.8C26.1 71.2 20 65.1 20 57.6V44z" fill="#ffffff" stroke="#29263f" stroke-width="3" stroke-linejoin="round"/>
+            <rect x="28.5" y="45" width="15" height="7.8" rx="3.9" fill="#ff5f77" stroke="#29263f" stroke-width="1.9"/>
+            <path d="M21 45l-7 4.4v7.4c0 2.1 1.7 3.8 3.8 3.8h5.4l2.8-9.1L23.8 45z" fill="#ffffff" stroke="#29263f" stroke-width="2.6" stroke-linejoin="round"/>
+            <path d="M51 45l7 4.4v7.4c0 2.1-1.7 3.8-3.8 3.8h-5.4L46 51.5l2.2-6.5z" fill="#ffffff" stroke="#29263f" stroke-width="2.6" stroke-linejoin="round"/>
+            <path d="M29.2 70v6.2c0 2.1 1.7 3.8 3.8 3.8h2.2v-13.6h-6z" fill="#ffffff" stroke="#29263f" stroke-width="2.6" stroke-linejoin="round"/>
+            <path d="M42.8 70v6.2c0 2.1-1.7 3.8-3.8 3.8h-2.2v-13.6h6z" fill="#ffffff" stroke="#29263f" stroke-width="2.6" stroke-linejoin="round"/>
+            <rect x="26.4" y="77" width="11.4" height="4.8" rx="2.4" fill="#6e65ff" stroke="#29263f" stroke-width="1.8"/>
+            <rect x="34.2" y="77" width="11.4" height="4.8" rx="2.4" fill="#6e65ff" stroke="#29263f" stroke-width="1.8"/>
           </svg>
         </div>
       </div>
     </div>
+
     <div id="alienEnemies"></div>
   </section>
 
