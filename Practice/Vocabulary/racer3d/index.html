@@ -1,71 +1,750 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#08101f">
+<title>Vocab Racer 3D</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
+<style>
+*{box-sizing:border-box}
 
-  <meta
-    name="theme-color"
-    content="#08101f"
-  >
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#08101f;
+  color:#fff;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
 
-  <title>Vocab Racer 3D</title>
+button,select{font:inherit}
+button{cursor:pointer}
 
-  <link
-    rel="stylesheet"
-    href="./style.css?v=20260924-bigmap-fix5"
-  >
+.hidden{
+  display:none!important
+}
+
+#game,
+#renderHost,
+canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%
+}
+
+#game{
+  min-height:580px;
+  overflow:hidden;
+  background:#0a1220
+}
+
+canvas{
+  display:block
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav{
+  position:absolute;
+  z-index:100;
+  top:12px;
+  left:14px;
+  display:flex;
+  gap:8px
+}
+
+.nav button{
+  height:40px;
+  padding:0 14px;
+  border:1px solid #334158;
+  border-radius:12px;
+  background:rgba(6,12,27,.88);
+  color:#fff;
+  font-size:11px;
+  font-weight:900
+}
+
+
+/* =========================================================
+   HUD
+========================================================= */
+
+#hud{
+  position:absolute;
+  z-index:20;
+  top:62px;
+  left:14px;
+  right:14px;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  pointer-events:none
+}
+
+.brand,
+.pill,
+.nitro,
+.question,
+.screen-card{
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(5,10,22,.82);
+  backdrop-filter:blur(10px)
+}
+
+.brand{
+  max-width:430px;
+  padding:10px 13px;
+  border-radius:14px
+}
+
+.brand span{
+  display:block;
+  color:#5ee7ff;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.12em
+}
+
+.brand b{
+  display:block;
+  margin-top:4px;
+  font-size:13px
+}
+
+.stats{
+  display:flex;
+  gap:7px
+}
+
+.pill{
+  min-width:90px;
+  padding:8px;
+  border-radius:13px;
+  text-align:center
+}
+
+.pill span{
+  display:block;
+  color:#9fb0c5;
+  font-size:8px;
+  font-weight:900
+}
+
+.pill b{
+  display:block;
+  font-size:18px
+}
+
+.pill small{
+  font-size:7px;
+  color:#778aa3
+}
+
+
+/* =========================================================
+   QUESTION
+========================================================= */
+
+.question{
+  position:absolute;
+  z-index:25;
+  top:126px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(790px,76vw);
+  padding:12px 14px;
+  border-radius:16px
+}
+
+.qsource{
+  color:#5ee7ff;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.1em
+}
+
+.qtext{
+  margin-top:4px;
+  font-size:clamp(16px,1.8vw,24px);
+  font-weight:950;
+  line-height:1.2
+}
+
+.qmeta{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:7px;
+  color:#aab9cc;
+  font-size:9px
+}
+
+.lanes{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:8px
+}
+
+.lane{
+  min-height:48px;
+  padding:6px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;
+  background:rgba(255,255,255,.045);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center
+}
+
+.lane span{
+  font-size:7px;
+  color:#8298b1;
+  font-weight:900
+}
+
+.lane b{
+  margin-top:2px;
+  font-size:9px;
+  line-height:1.2
+}
+
+.lane.active{
+  border-color:#5ee7ff;
+  background:rgba(94,231,255,.13)
+}
+
+
+/* =========================================================
+   NITRO
+========================================================= */
+
+.nitro{
+  position:absolute;
+  z-index:22;
+  right:15px;
+  bottom:17px;
+  width:210px;
+  padding:9px 11px;
+  border-radius:13px
+}
+
+.nitro-head{
+  display:flex;
+  justify-content:space-between;
+  color:#a8b7ca;
+  font-size:8px;
+  font-weight:950
+}
+
+.nitro-head b{
+  color:#5ee7ff
+}
+
+.nitro-track{
+  height:7px;
+  margin-top:6px;
+  border-radius:99px;
+  background:rgba(255,255,255,.1);
+  overflow:hidden
+}
+
+#nitroFill{
+  height:100%;
+  width:0;
+  background:linear-gradient(
+    90deg,
+    #44d9ff,
+    #7167ff,
+    #d8c6ff
+  )
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+#controls{
+  position:absolute;
+  z-index:23;
+  left:50%;
+  bottom:13px;
+  transform:translateX(-50%);
+  display:grid;
+  grid-template-columns:58px 180px 58px;
+  gap:8px;
+  align-items:center
+}
+
+#controls button{
+  width:58px;
+  height:50px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:14px;
+  background:rgba(6,12,27,.78);
+  color:#fff;
+  font-size:22px;
+  font-weight:950
+}
+
+.control-help{
+  padding:9px;
+  border-radius:12px;
+  background:rgba(6,12,27,.68);
+  text-align:center;
+  color:#a9bad0;
+  font-size:8px;
+  font-weight:900
+}
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+#message{
+  position:absolute;
+  z-index:30;
+  top:270px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:9px 15px;
+  border-radius:999px;
+  background:rgba(6,12,27,.92);
+  font-size:11px;
+  font-weight:950;
+  opacity:0;
+  pointer-events:none;
+  transition:.15s
+}
+
+#message.show{
+  opacity:1
+}
+
+#message.good{
+  background:rgba(14,112,76,.96)
+}
+
+#message.bad{
+  background:rgba(146,31,53,.96)
+}
+
+#overtake,
+#junction{
+  position:absolute;
+  z-index:28;
+  left:50%;
+  transform:translateX(-50%);
+  padding:8px 14px;
+  border-radius:999px;
+  font-weight:950;
+  pointer-events:none
+}
+
+#overtake{
+  top:47%;
+  background:rgba(8,15,31,.86);
+  font-size:16px
+}
+
+#junction{
+  top:230px;
+  background:rgba(78,55,15,.87);
+  color:#ffe18e;
+  font-size:9px
+}
+
+
+/* =========================================================
+   FX
+========================================================= */
+
+#speedFx,
+#damageFx{
+  position:absolute;
+  z-index:9;
+  inset:0;
+  pointer-events:none;
+  opacity:0
+}
+
+#speedFx{
+  background:
+    repeating-linear-gradient(
+      110deg,
+      transparent 0 11%,
+      rgba(255,255,255,.1) 11.4%,
+      transparent 12.1% 21%
+    );
+
+  mix-blend-mode:screen
+}
+
+#speedFx.active{
+  opacity:.5;
+  animation:speed .18s linear infinite
+}
+
+@keyframes speed{
+  from{
+    transform:translateY(-2%)
+  }
+
+  to{
+    transform:translateY(2%)
+  }
+}
+
+#damageFx{
+  background:
+    radial-gradient(
+      circle at 50% 58%,
+      transparent 38%,
+      rgba(255,52,81,.28) 100%
+    )
+}
+
+#damageFx.active{
+  opacity:1
+}
+
+
+/* =========================================================
+   SCREEN
+========================================================= */
+
+.screen{
+  position:absolute;
+  z-index:80;
+  inset:0;
+  display:grid;
+  place-items:center;
+  padding:22px;
+
+  background:
+    radial-gradient(
+      circle at 50% 24%,
+      rgba(78,101,255,.16),
+      transparent 42%
+    ),
+    rgba(4,8,17,.76);
+
+  backdrop-filter:blur(7px)
+}
+
+.screen-card{
+  width:min(720px,95vw);
+  max-height:92vh;
+  overflow:auto;
+  padding:26px;
+  border-radius:23px;
+  box-shadow:0 30px 90px rgba(0,0,0,.45)
+}
+
+.kicker{
+  color:#5ee7ff;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.15em
+}
+
+.screen-card h1{
+  margin:7px 0 10px;
+  font-size:clamp(28px,4vw,46px);
+  line-height:1.06
+}
+
+.screen-card h2{
+  margin:6px 0 15px
+}
+
+.screen-card p{
+  color:#b5c4d7;
+  line-height:1.55;
+  font-size:12px
+}
+
+.start-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:18px 0
+}
+
+.box{
+  padding:10px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:13px;
+  background:rgba(255,255,255,.035)
+}
+
+.box span{
+  display:block;
+  margin-bottom:6px;
+  color:#9cafc7;
+  font-size:8px;
+  font-weight:900
+}
+
+.box b{
+  font-size:12px
+}
+
+.box small{
+  display:block;
+  margin-top:4px;
+  color:#9cafc7;
+  font-size:9px;
+  line-height:1.4
+}
+
+select{
+  width:100%;
+  height:40px;
+  padding:0 10px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:9px;
+  background:#111a31;
+  color:#fff
+}
+
+.primary,
+.secondary{
+  width:100%;
+  min-height:47px;
+  border-radius:12px;
+  font-weight:950
+}
+
+.primary{
+  border:0;
+  background:
+    linear-gradient(
+      90deg,
+      #5667f0,
+      #7b61ef
+    );
+
+  color:#fff
+}
+
+.secondary{
+  margin-top:8px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:#fff
+}
+
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px
+}
+
+.result-grid div{
+  padding:11px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  text-align:center
+}
+
+.result-grid span{
+  display:block;
+  color:#93a5bd;
+  font-size:8px
+}
+
+.result-grid b{
+  display:block;
+  margin-top:3px;
+  font-size:19px
+}
+
+.review{
+  margin-top:13px;
+  padding:13px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;
+  background:rgba(255,255,255,.035)
+}
+
+.review h3{
+  margin:0 0 7px
+}
+
+.review-item{
+  padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  font-size:10px;
+  line-height:1.4
+}
+
+.review-item span{
+  color:#9cafc7
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:13px
+}
+
+.actions .secondary{
+  margin-top:0
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+#error{
+  position:absolute;
+  z-index:200;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(720px,92vw);
+  padding:16px;
+  border:1px solid #ef9aa8;
+  border-radius:14px;
+  background:#2b1018;
+  color:#ffe9ed;
+  white-space:pre-wrap;
+  line-height:1.45
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:760px){
+
+  .nav{
+    top:7px;
+    left:7px
+  }
+
+  .nav button{
+    height:34px;
+    padding:0 9px;
+    font-size:8px
+  }
+
+  #hud{
+    top:48px;
+    left:7px;
+    right:7px
+  }
+
+  .brand{
+    display:none
+  }
+
+  .stats{
+    width:100%
+  }
+
+  .pill{
+    flex:1;
+    min-width:0;
+    padding:7px 5px
+  }
+
+  .pill b{
+    font-size:16px
+  }
+
+  .question{
+    top:100px;
+    width:calc(100vw - 14px);
+    padding:10px
+  }
+
+  .qtext{
+    font-size:14px
+  }
+
+  .lane{
+    min-height:43px
+  }
+
+  .lane b{
+    font-size:8px
+  }
+
+  #message{
+    top:240px
+  }
+
+  #junction{
+    top:205px
+  }
+
+  .nitro{
+    right:7px;
+    bottom:69px;
+    width:145px
+  }
+
+  #controls{
+    bottom:7px;
+    grid-template-columns:54px 150px 54px
+  }
+
+  #controls button{
+    width:54px;
+    height:47px
+  }
+
+  .start-grid{
+    grid-template-columns:1fr
+  }
+
+  .result-grid{
+    grid-template-columns:1fr 1fr
+  }
+
+}
+</style>
 </head>
-
 
 <body>
 
 <main id="game">
 
-  <!-- =====================================================
-       THREE.JS RENDER AREA
-  ====================================================== -->
-
   <div id="renderHost"></div>
 
 
-  <!-- =====================================================
-       TOP NAVIGATION
-  ====================================================== -->
+  <!-- NAV -->
 
-  <nav
-    id="racerNav"
-    class="racer-nav"
-    aria-label="Điều hướng"
-  >
+  <nav class="nav">
 
-    <button
-      id="backToGameListBtn"
-      class="nav-btn"
-      type="button"
-    >
+    <button id="backGames">
       ← Chọn game
     </button>
 
-    <button
-      id="backToPracticeBtn"
-      class="nav-btn nav-btn-secondary"
-      type="button"
-    >
+    <button id="backPractice">
       ← Luyện tập
     </button>
 
   </nav>
 
 
-  <!-- =====================================================
-       HUD
-  ====================================================== -->
+  <!-- HUD -->
 
   <header id="hud">
 
@@ -75,24 +754,24 @@
         VOCAB RACER 3D
       </span>
 
-      <b id="activeSetName">
+      <b id="setName">
         Đang tải bộ từ...
       </b>
 
     </div>
 
 
-    <div class="hud-stats">
+    <div class="stats">
 
-      <div class="hud-pill">
+      <div class="pill">
 
         <span>
           SPEED
         </span>
 
-        <strong id="speedValue">
+        <b id="speed">
           0
-        </strong>
+        </b>
 
         <small>
           km/h
@@ -101,28 +780,28 @@
       </div>
 
 
-      <div class="hud-pill">
+      <div class="pill">
 
         <span>
           POS
         </span>
 
-        <strong id="positionValue">
+        <b id="rank">
           1/8
-        </strong>
+        </b>
 
       </div>
 
 
-      <div class="hud-pill">
+      <div class="pill">
 
         <span>
           RACE
         </span>
 
-        <strong id="raceProgress">
+        <b id="progress">
           0%
-        </strong>
+        </b>
 
       </div>
 
@@ -131,59 +810,52 @@
   </header>
 
 
-  <!-- =====================================================
-       VOCABULARY QUESTION
-  ====================================================== -->
+  <!-- QUESTION -->
 
   <section
-    id="questionPanel"
-    class="question-panel hidden"
+    id="question"
+    class="question hidden"
   >
 
     <div
-      id="questionSource"
-      class="question-source"
+      class="qsource"
+      id="qsource"
     >
       Vocabulary
     </div>
 
-
     <div
-      id="questionText"
-      class="question-text"
+      class="qtext"
+      id="qtext"
     >
       —
     </div>
 
-
-    <div class="question-meta">
+    <div class="qmeta">
 
       <span>
         Chọn đúng làn trước khi đi qua cổng.
       </span>
 
-      <b id="gateDistance">
+      <b id="distance">
         —
       </b>
 
     </div>
 
-
     <div
-      id="laneHints"
-      class="lane-hints"
+      class="lanes"
+      id="lanes"
     ></div>
 
   </section>
 
 
-  <!-- =====================================================
-       NITRO
-  ====================================================== -->
+  <!-- NITRO -->
 
-  <section class="nitro-wrap">
+  <section class="nitro">
 
-    <div class="nitro-label">
+    <div class="nitro-head">
 
       <span>
         NITRO
@@ -195,7 +867,6 @@
 
     </div>
 
-
     <div class="nitro-track">
 
       <div id="nitroFill"></div>
@@ -205,109 +876,77 @@
   </section>
 
 
-  <!-- =====================================================
-       NOTIFICATIONS
-  ====================================================== -->
+  <!-- NOTIFICATIONS -->
 
   <div
-    id="junctionNotice"
-    class="junction-notice hidden"
+    id="junction"
+    class="hidden"
   >
     NGÃ RẼ PHÍA TRƯỚC
   </div>
 
-
   <div id="message"></div>
-
 
   <div
     id="overtake"
-    class="overtake hidden"
+    class="hidden"
   ></div>
 
+  <div id="speedFx"></div>
 
-  <!-- =====================================================
-       VISUAL EFFECTS
-  ====================================================== -->
-
-  <div
-    id="speedFx"
-    aria-hidden="true"
-  ></div>
+  <div id="damageFx"></div>
 
 
-  <div
-    id="damageFx"
-    aria-hidden="true"
-  ></div>
+  <!-- CONTROLS -->
 
+  <div id="controls">
 
-  <!-- =====================================================
-       CONTROLS
-  ====================================================== -->
-
-  <div id="touchControls">
-
-    <button
-      id="leftBtn"
-      type="button"
-      aria-label="Chuyển làn trái"
-    >
+    <button id="left">
       ←
     </button>
 
-
-    <div class="touch-help">
+    <div class="control-help">
       A / D · ← / → · SWIPE
     </div>
 
-
-    <button
-      id="rightBtn"
-      type="button"
-      aria-label="Chuyển làn phải"
-    >
+    <button id="right">
       →
     </button>
 
   </div>
 
 
-  <!-- =====================================================
-       START SCREEN
-  ====================================================== -->
+  <!-- START -->
 
   <section
     id="startScreen"
     class="screen"
   >
 
-    <div class="screen-card start-card">
+    <div class="screen-card">
 
-      <div class="screen-kicker">
-        VOCAB RACER 3D · BIG MAP
+      <div class="kicker">
+        VOCAB RACER 3D · SINGLE FILE
       </div>
-
 
       <h1>
         Đua xe qua bản đồ lớn và học đúng bộ từ em vừa chọn.
       </h1>
 
-
-      <p id="sourceDescription">
-        Đang tải dữ liệu từ Vocabulary Practice...
+      <p id="sourceInfo">
+        Đang nhận dữ liệu từ Vocabulary Practice...
       </p>
 
 
       <div class="start-grid">
 
-        <label>
+        <label class="box">
 
           <span>
             Độ khó / Difficulty
           </span>
 
-          <select id="difficultySelect">
+          <select id="difficulty">
 
             <option value="easy">
               Easy
@@ -329,18 +968,19 @@
         </label>
 
 
-        <div class="info-card">
+        <div class="box">
 
           <span>
             LUẬT CHƠI
           </span>
 
           <b>
-            Không còn giới hạn thời gian cho câu hỏi
+            Không có timeout câu hỏi
           </b>
 
           <small>
-            Game chỉ chấm đáp án khi xe thực sự đi qua cổng từ vựng.
+            Game chỉ chấm khi xe thật sự đi qua cổng.
+            Đúng → Nitro; sai → giảm tốc.
           </small>
 
         </div>
@@ -349,18 +989,15 @@
 
 
       <button
-        id="startBtn"
-        class="primary-btn"
-        type="button"
+        id="start"
+        class="primary"
       >
         BẮT ĐẦU ĐUA / START RACE
       </button>
 
-
       <button
-        id="backBtn"
-        class="back-btn"
-        type="button"
+        id="backStart"
+        class="secondary"
       >
         ← Chọn game
       </button>
@@ -370,23 +1007,20 @@
   </section>
 
 
-  <!-- =====================================================
-       FINISH SCREEN
-  ====================================================== -->
+  <!-- FINISH -->
 
   <section
     id="finishScreen"
     class="screen hidden"
   >
 
-    <div class="screen-card result-card">
+    <div class="screen-card">
 
-      <div class="screen-kicker">
+      <div class="kicker">
         RACE RESULT
       </div>
 
-
-      <h2 id="finishTitle">
+      <h2>
         Hoàn thành chặng đua!
       </h2>
 
@@ -435,7 +1069,7 @@
         <div>
 
           <span>
-            Đúng / Sai
+            Đúng
           </span>
 
           <b id="finalAccuracy">
@@ -447,32 +1081,29 @@
       </div>
 
 
-      <div class="review-box">
+      <div class="review">
 
         <h3>
           Từ cần ôn lại
         </h3>
 
-        <div id="reviewWords"></div>
+        <div id="review"></div>
 
       </div>
 
 
-      <div class="result-actions">
+      <div class="actions">
 
         <button
-          id="restartBtn"
-          class="primary-btn"
-          type="button"
+          id="restart"
+          class="primary"
         >
           CHƠI LẠI
         </button>
 
-
         <button
-          id="finishBackBtn"
-          class="back-btn"
-          type="button"
+          id="backFinish"
+          class="secondary"
         >
           ← Chọn game
         </button>
@@ -484,99 +1115,5479 @@
   </section>
 
 
-  <!-- =====================================================
-       ERROR
-  ====================================================== -->
-
   <div
-    id="bootError"
-    class="boot-error hidden"
+    id="error"
+    class="hidden"
   ></div>
 
 </main>
 
 
-<!-- =========================================================
-     THREE.JS
-========================================================= -->
-
-<script
-  src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"
-></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
 
 
-<!-- =========================================================
-     FALLBACK VOCAB DATA
-========================================================= -->
+<script>
+(() => {
 
-<script
-  src="./data/vocab-sets/environment-fallback.js?v=20260924-bigmap-fix6"
-></script>
+"use strict";
 
 
-<!-- =========================================================
-     CONFIG
-========================================================= -->
+/* =========================================================
+   HELPERS
+========================================================= */
 
-<script
-  src="./src/config.js?v=20260924-bigmap-fix6"
-></script>
-
-
-<!-- =========================================================
-     VOCAB ENGINE
-========================================================= -->
-
-<script
-  src="./src/vocab-engine.js?v=20260924-bigmap-fix5"
-></script>
+const $ =
+  id =>
+    document.getElementById(id);
 
 
-<!-- =========================================================
-     HUD
-========================================================= -->
+const CFG = {
 
-<script
-  src="./src/hud.js?v=20260924-bigmap-fix5"
-></script>
+  laneWidth:
+    3.35,
 
+  roadWidth:
+    11.6,
 
-<!-- =========================================================
-     TRACK / BIG MAP
-========================================================= -->
+  questionsPerRace:
+    16,
 
-<script
-  src="./src/track.js?v=20260925-bigmap-fix7"
-></script>
+  firstGate:
+    165,
 
+  gateGap:
+    165,
 
-<!-- =========================================================
-     PLAYER CAR
-========================================================= -->
-
-<script
-  src="./src/player-car.js?v=20260924-bigmap-fix5"
-></script>
+  resolveDistance:
+    3.2,
 
 
-<!-- =========================================================
-     AI CARS
-========================================================= -->
+  player: {
 
-<script
-  src="./src/ai-car.js?v=20260924-bigmap-fix5"
-></script>
+    base:
+      29,
+
+    nitro:
+      13.5,
+
+    nitroTime:
+      2.7,
+
+    slow:
+      8,
+
+    slowTime:
+      2.3,
+
+    laneSharpness:
+      7.6
+
+  },
 
 
-<!-- =========================================================
-     MAIN GAME
-     Luôn để game.js CUỐI CÙNG
-========================================================= -->
+  camera: {
 
-<script
-  src="./src/game.js?v=20260924-bigmap-fix5"
-></script>
+    fov:
+      62,
+
+    nitroFov:
+      72,
+
+    height:
+      5.2,
+
+    back:
+      12.2,
+
+    look:
+      20
+
+  },
+
+
+  ai: {
+
+    count:
+      7,
+
+    names: [
+      "NOVA",
+      "BOLT",
+      "RAVEN",
+      "ECHO",
+      "VIPER",
+      "COMET",
+      "PULSE"
+    ],
+
+    easy: {
+      speed:26.3,
+      var:.9
+    },
+
+    normal: {
+      speed:28,
+      var:1.15
+    },
+
+    hard: {
+      speed:29.2,
+      var:1.35
+    }
+
+  },
+
+
+  maxPixelRatio:
+    1.35,
+
+  fogNear:
+    75,
+
+  fogFar:
+    290
+
+};
+
+
+let scene;
+let camera;
+let renderer;
+let clock;
+
+let track;
+let player;
+
+let ai = [];
+
+let words = [];
+let queue = [];
+let results = [];
+
+let running = false;
+let finished = false;
+
+let raceTime = 0;
+let score = 0;
+let combo = 0;
+
+let difficulty =
+  "normal";
+
+let gate =
+  null;
+
+let lastGateDistance =
+  0;
+
+let lastJunction =
+  -1;
+
+let touchX =
+  null;
+
+let payload =
+  null;
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function fail(err){
+
+  console.error(err);
+
+  const el =
+    $("error");
+
+  if(el){
+
+    el.textContent =
+      err?.stack
+      ||
+      err?.message
+      ||
+      String(err);
+
+    el
+      .classList
+      .remove(
+        "hidden"
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   TEXT HELPERS
+========================================================= */
+
+function esc(v){
+
+  return String(
+    v ?? ""
+  )
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+  .replaceAll(
+    '"',
+    "&quot;"
+  );
+
+}
+
+
+function norm(v){
+
+  return String(
+    v ?? ""
+  )
+  .trim()
+  .toLowerCase()
+  .normalize(
+    "NFKC"
+  )
+  .replace(
+    /\s+/g,
+    " "
+  );
+
+}
+
+
+function shuffle(a){
+
+  a =
+    [...a];
+
+  for(
+    let i =
+      a.length - 1;
+
+    i > 0;
+
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random()
+        *
+        (
+          i + 1
+        )
+      );
+
+    [
+      a[i],
+      a[j]
+    ]
+    =
+    [
+      a[j],
+      a[i]
+    ];
+
+  }
+
+  return a;
+
+}
+
+
+/* =========================================================
+   VOCABULARY DATA
+========================================================= */
+
+function loadVocab(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        "VOCAB_RACER_ACTIVE_SET_V3"
+      );
+
+
+    if(raw){
+
+      const p =
+        JSON.parse(
+          raw
+        );
+
+
+      if(
+        Array.isArray(
+          p.words
+        )
+        &&
+        p.words.length >= 3
+      ){
+
+        payload =
+          p;
+
+
+        words =
+          p.words.filter(
+            x =>
+              x
+              &&
+              x.word
+              &&
+              x.meaning
+          );
+
+      }
+
+    }
+
+  }
+  catch(e){
+
+    console.warn(e);
+
+  }
+
+
+  /*
+    Fallback chỉ chạy khi người dùng
+    mở thẳng racer3d/index.html.
+  */
+
+  if(
+    words.length < 3
+  ){
+
+    payload = {
+
+      title:
+        "IELTS Environment Demo",
+
+      skill:
+        "topic-environment",
+
+      set:
+        "demo",
+
+      direction:
+        "vi-en",
+
+      source:
+        "fallback"
+
+    };
+
+
+    words = [
+
+      {
+        word:"sustainable",
+        meaning:"bền vững",
+        collocation:"sustainable development"
+      },
+
+      {
+        word:"biodiversity",
+        meaning:"đa dạng sinh học",
+        collocation:"protect biodiversity"
+      },
+
+      {
+        word:"mitigate",
+        meaning:"giảm nhẹ",
+        collocation:"mitigate environmental damage"
+      },
+
+      {
+        word:"renewable",
+        meaning:"có thể tái tạo",
+        collocation:"renewable energy"
+      },
+
+      {
+        word:"emission",
+        meaning:"khí thải",
+        collocation:"carbon emissions"
+      },
+
+      {
+        word:"conservation",
+        meaning:"sự bảo tồn",
+        collocation:"wildlife conservation"
+      },
+
+      {
+        word:"depletion",
+        meaning:"sự cạn kiệt",
+        collocation:"resource depletion"
+      },
+
+      {
+        word:"ecosystem",
+        meaning:"hệ sinh thái",
+        collocation:"marine ecosystem"
+      },
+
+      {
+        word:"pollutant",
+        meaning:"chất gây ô nhiễm",
+        collocation:"air pollutants"
+      },
+
+      {
+        word:"recycle",
+        meaning:"tái chế",
+        collocation:"recycle household waste"
+      },
+
+      {
+        word:"habitat",
+        meaning:"môi trường sống",
+        collocation:"natural habitat"
+      },
+
+      {
+        word:"deforestation",
+        meaning:"nạn phá rừng",
+        collocation:"reduce deforestation"
+      }
+
+    ];
+
+  }
+
+
+  $("setName").textContent =
+    payload.title
+    ||
+    `${
+      payload.skill
+      ||
+      "Vocabulary"
+    } · Bộ ${
+      payload.set
+      ||
+      ""
+    }`;
+
+
+  $("qsource").textContent =
+    payload.title
+    ||
+    "Vocabulary";
+
+
+  $("sourceInfo").textContent =
+
+    payload.source ===
+    "fallback"
+
+    ?
+
+    "Đang dùng bộ demo vì Racer được mở trực tiếp."
+
+    :
+
+    `Nguồn từ vựng: ${
+      payload.title
+      ||
+      payload.skill
+      ||
+      "Vocabulary"
+    } · ${
+      words.length
+    } từ.`;
+
+}
+
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+function prepareQuestions(){
+
+  const unique =
+    [];
+
+  const seen =
+    new Set();
+
+
+  for(
+    const w
+    of
+    shuffle(words)
+  ){
+
+    const k =
+      norm(
+        w.word
+      );
+
+
+    if(
+      !k
+      ||
+      seen.has(k)
+    ){
+
+      continue;
+
+    }
+
+
+    seen.add(k);
+
+    unique.push(w);
+
+  }
+
+
+  queue =
+    unique.slice(
+      0,
+      Math.min(
+        CFG.questionsPerRace,
+        unique.length
+      )
+    );
+
+
+  results =
+    [];
+
+}
+
+
+function nextQuestion(){
+
+  if(
+    !queue.length
+  ){
+
+    return null;
+
+  }
+
+
+  const target =
+    queue.shift();
+
+
+  const dir =
+
+    payload?.direction ===
+    "en-vi"
+
+    ?
+
+    "en-vi"
+
+    :
+
+    "vi-en";
+
+
+  const prompt =
+
+    dir ===
+    "vi-en"
+
+    ?
+
+    target.meaning
+
+    :
+
+    target.word;
+
+
+  const correct =
+
+    dir ===
+    "vi-en"
+
+    ?
+
+    target.word
+
+    :
+
+    target.meaning;
+
+
+  const field =
+
+    dir ===
+    "vi-en"
+
+    ?
+
+    "word"
+
+    :
+
+    "meaning";
+
+
+  const ds =
+
+    shuffle(
+
+      words
+      .filter(
+        x =>
+          norm(x.word)
+          !==
+          norm(target.word)
+      )
+      .map(
+        x =>
+          x[field]
+      )
+      .filter(Boolean)
+
+    );
+
+
+  const wrong =
+    [];
+
+
+  const seen =
+    new Set([
+      norm(correct)
+    ]);
+
+
+  for(
+    const x
+    of
+    ds
+  ){
+
+    const k =
+      norm(x);
+
+
+    if(
+      !k
+      ||
+      seen.has(k)
+    ){
+
+      continue;
+
+    }
+
+
+    seen.add(k);
+
+    wrong.push(x);
+
+
+    if(
+      wrong.length ===
+      2
+    ){
+
+      break;
+
+    }
+
+  }
+
+
+  while(
+    wrong.length < 2
+  ){
+
+    wrong.push(
+      "—"
+    );
+
+  }
+
+
+  const correctLane =
+    Math.floor(
+      Math.random()
+      *
+      3
+    );
+
+
+  const options = [
+    null,
+    null,
+    null
+  ];
+
+
+  options[
+    correctLane
+  ] =
+  correct;
+
+
+  let j =
+    0;
+
+
+  for(
+    let i = 0;
+    i < 3;
+    i++
+  ){
+
+    if(
+      i !==
+      correctLane
+    ){
+
+      options[i] =
+        wrong[j++];
+
+    }
+
+  }
+
+
+  return {
+
+    target,
+
+    prompt,
+
+    correct,
+
+    correctLane,
+
+    options
+
+  };
+
+}
+
+
+/* =========================================================
+   SAVE LEARNING RESULT
+========================================================= */
+
+function recordAnswer(
+  q,
+  lane,
+  good
+){
+
+  results.push({
+
+    word:
+      q.target.word,
+
+    meaning:
+      q.target.meaning,
+
+    correct:
+      q.correct,
+
+    isCorrect:
+      good,
+
+    note:
+      q.target.collocation
+      ||
+      q.target.example
+      ||
+      ""
+
+  });
+
+
+  if(
+    !payload
+  ){
+
+    return;
+
+  }
+
+
+  const id =
+
+    `${
+      payload.skill
+      ||
+      ""
+    }::${
+      payload.set
+      ||
+      ""
+    }::${
+      norm(
+        q.target.word
+      )
+    }`;
+
+
+  try{
+
+    if(
+      payload.statsStorageKey
+    ){
+
+      const stats =
+
+        JSON.parse(
+
+          localStorage.getItem(
+            payload.statsStorageKey
+          )
+
+          ||
+
+          "{}"
+
+        );
+
+
+      const d =
+
+        stats[id]
+
+        ||
+
+        {
+          seen:0,
+          correct:0,
+          wrong:0
+        };
+
+
+      d.seen++;
+
+
+      if(good){
+
+        d.correct++;
+
+      }
+      else{
+
+        d.wrong++;
+
+      }
+
+
+      stats[id] =
+        d;
+
+
+      localStorage.setItem(
+
+        payload.statsStorageKey,
+
+        JSON.stringify(
+          stats
+        )
+
+      );
+
+    }
+
+
+    if(
+      good
+      &&
+      payload.learnedStorageKey
+    ){
+
+      const learned =
+
+        JSON.parse(
+
+          localStorage.getItem(
+            payload.learnedStorageKey
+          )
+
+          ||
+
+          "{}"
+
+        );
+
+
+      learned[id] =
+        true;
+
+
+      localStorage.setItem(
+
+        payload.learnedStorageKey,
+
+        JSON.stringify(
+          learned
+        )
+
+      );
+
+    }
+
+  }
+  catch(e){
+
+    console.warn(e);
+
+  }
+
+}
+
+
+/* =========================================================
+   TRACK CLASS
+========================================================= */
+
+class Track{
+
+  constructor(){
+
+    this.junctions =
+      [];
+
+
+    const pts = [
+
+      [0,0,0],
+
+      [0,0,230],
+
+      [55,0,470],
+
+      [145,0,690],
+
+      [90,0,920],
+
+      [-45,0,1140],
+
+      [-155,0,1370],
+
+      [-125,0,1610],
+
+      [10,0,1840],
+
+      [165,0,2070],
+
+      [185,0,2300],
+
+      [70,0,2530],
+
+      [-105,0,2760],
+
+      [-145,0,3010],
+
+      [5,0,3240],
+
+      [165,0,3460],
+
+      [95,0,3690]
+
+    ]
+    .map(
+      p =>
+        new THREE.Vector3(
+          ...p
+        )
+    );
+
+
+    this.curve =
+
+      new THREE.CatmullRomCurve3(
+
+        pts,
+
+        false,
+
+        "centripetal",
+
+        .25
+
+      );
+
+
+    this.length =
+      this.curve.getLength();
+
+
+    this.finishDistance =
+      this.length - 45;
+
+
+    this.makeGround();
+
+    this.makeRoad(
+      this.curve,
+      CFG.roadWidth,
+      0x30343c,
+      .01
+    );
+
+    this.makeMarkers();
+
+    this.makeBranches();
+
+    this.makeScenery();
+
+    this.makeFinish();
+
+  }
+
+
+  frame(d){
+
+    d =
+      THREE.MathUtils.clamp(
+        d,
+        0,
+        this.length
+      );
+
+
+    const u =
+
+      this.length
+
+      ?
+
+      d /
+      this.length
+
+      :
+
+      0;
+
+
+    const point =
+      this.curve
+      .getPointAt(u);
+
+
+    const tangent =
+      this.curve
+      .getTangentAt(u)
+      .normalize();
+
+
+    const normal =
+
+      new THREE.Vector3(
+
+        tangent.z,
+
+        0,
+
+        -tangent.x
+
+      )
+      .normalize();
+
+
+    return {
+
+      point,
+
+      tangent,
+
+      normal,
+
+      heading:
+        Math.atan2(
+          tangent.x,
+          tangent.z
+        )
+
+    };
+
+  }
+
+
+  laneOffset(l){
+
+    return (
+      l - 1
+    )
+    *
+    CFG.laneWidth;
+
+  }
+
+
+  lanePos(
+    d,
+    l,
+    override = null
+  ){
+
+    const f =
+      this.frame(d);
+
+
+    const off =
+
+      override ===
+      null
+
+      ?
+
+      this.laneOffset(l)
+
+      :
+
+      override;
+
+
+    return {
+
+      ...f,
+
+      position:
+
+        f.point
+        .clone()
+        .add(
+
+          f.normal
+          .clone()
+          .multiplyScalar(off)
+
+        )
+
+    };
+
+  }
+
+
+  ribbon(
+    curve,
+    width,
+    color,
+    y
+  ){
+
+    const len =
+      curve.getLength();
+
+
+    const seg =
+
+      Math.max(
+
+        80,
+
+        Math.ceil(
+          len / 7
+        )
+
+      );
+
+
+    const pos =
+      [];
+
+    const idx =
+      [];
+
+
+    for(
+      let i = 0;
+      i <= seg;
+      i++
+    ){
+
+      const u =
+        i / seg;
+
+
+      const p =
+        curve.getPointAt(u);
+
+
+      const t =
+        curve
+        .getTangentAt(u)
+        .normalize();
+
+
+      const n =
+
+        new THREE.Vector3(
+
+          t.z,
+
+          0,
+
+          -t.x
+
+        )
+        .normalize();
+
+
+      const a =
+
+        p.clone()
+        .add(
+
+          n.clone()
+          .multiplyScalar(
+            width / 2
+          )
+
+        );
+
+
+      const b =
+
+        p.clone()
+        .add(
+
+          n.clone()
+          .multiplyScalar(
+            -width / 2
+          )
+
+        );
+
+
+      pos.push(
+
+        a.x,
+        y,
+        a.z,
+
+        b.x,
+        y,
+        b.z
+
+      );
+
+
+      if(
+        i < seg
+      ){
+
+        const k =
+          i * 2;
+
+
+        idx.push(
+
+          k,
+          k + 1,
+          k + 2,
+
+          k + 1,
+          k + 3,
+          k + 2
+
+        );
+
+      }
+
+    }
+
+
+    const g =
+      new THREE.BufferGeometry();
+
+
+    g.setAttribute(
+
+      "position",
+
+      new THREE.Float32BufferAttribute(
+        pos,
+        3
+      )
+
+    );
+
+
+    g.setIndex(
+      idx
+    );
+
+
+    g.computeVertexNormals();
+
+
+    return new THREE.Mesh(
+
+      g,
+
+      new THREE.MeshStandardMaterial({
+
+        color,
+
+        roughness:.96
+
+      })
+
+    );
+
+  }
+
+
+  makeGround(){
+
+    const m =
+
+      new THREE.Mesh(
+
+        new THREE.PlaneGeometry(
+
+          5600,
+
+          5600
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+          color:
+            0x263421,
+
+          roughness:
+            1
+
+        })
+
+      );
+
+
+    m.rotation.x =
+      -Math.PI / 2;
+
+
+    m.position.set(
+
+      0,
+
+      -.18,
+
+      1850
+
+    );
+
+
+    scene.add(m);
+
+  }
+
+
+  makeRoad(
+    curve,
+    width,
+    color,
+    y
+  ){
+
+    scene.add(
+
+      this.ribbon(
+
+        curve,
+
+        width,
+
+        color,
+
+        y
+
+      )
+
+    );
+
+  }
+
+
+  makeMarkers(){
+
+    const mat =
+
+      new THREE.MeshStandardMaterial({
+
+        color:
+          0xf6e8bd,
+
+        roughness:
+          .7
+
+      });
+
+
+    const edgeMat =
+
+      new THREE.MeshStandardMaterial({
+
+        color:
+          0xe7e1db,
+
+        roughness:
+          .7
+
+      });
+
+
+    const marker =
+
+      new THREE.InstancedMesh(
+
+        new THREE.BoxGeometry(
+
+          .1,
+
+          .025,
+
+          5.2
+
+        ),
+
+        mat,
+
+        Math.floor(
+          this.length / 15
+        )
+        *
+        2
+        +
+        10
+
+      );
+
+
+    const edge =
+
+      new THREE.InstancedMesh(
+
+        new THREE.BoxGeometry(
+
+          .17,
+
+          .035,
+
+          6.6
+
+        ),
+
+        edgeMat,
+
+        Math.floor(
+          this.length / 11
+        )
+        *
+        2
+        +
+        10
+
+      );
+
+
+    const dmy =
+      new THREE.Object3D();
+
+
+    let k =
+      0;
+
+
+    for(
+      let d = 12;
+      d < this.length;
+      d += 15
+    ){
+
+      const f =
+        this.frame(d);
+
+
+      for(
+        const off
+        of
+        [
+          -CFG.laneWidth / 2,
+          CFG.laneWidth / 2
+        ]
+      ){
+
+        dmy.position.copy(
+
+          f.point
+          .clone()
+          .add(
+
+            f.normal
+            .clone()
+            .multiplyScalar(off)
+
+          )
+
+        );
+
+
+        dmy.position.y =
+          .055;
+
+
+        dmy.rotation.set(
+
+          0,
+
+          f.heading,
+
+          0
+
+        );
+
+
+        dmy.updateMatrix();
+
+
+        marker.setMatrixAt(
+
+          k++,
+
+          dmy.matrix
+
+        );
+
+      }
+
+    }
+
+
+    marker.count =
+      k;
+
+
+    marker
+      .instanceMatrix
+      .needsUpdate =
+      true;
+
+
+    scene.add(marker);
+
+
+    k =
+      0;
+
+
+    for(
+      let d = 6;
+      d < this.length;
+      d += 11
+    ){
+
+      const f =
+        this.frame(d);
+
+
+      for(
+        const off
+        of
+        [
+          CFG.roadWidth / 2 - .15,
+          -CFG.roadWidth / 2 + .15
+        ]
+      ){
+
+        dmy.position.copy(
+
+          f.point
+          .clone()
+          .add(
+
+            f.normal
+            .clone()
+            .multiplyScalar(off)
+
+          )
+
+        );
+
+
+        dmy.position.y =
+          .06;
+
+
+        dmy.rotation.set(
+
+          0,
+
+          f.heading,
+
+          0
+
+        );
+
+
+        dmy.updateMatrix();
+
+
+        edge.setMatrixAt(
+
+          k++,
+
+          dmy.matrix
+
+        );
+
+      }
+
+    }
+
+
+    edge.count =
+      k;
+
+
+    edge
+      .instanceMatrix
+      .needsUpdate =
+      true;
+
+
+    scene.add(edge);
+
+  }
+
+
+  makeBranches(){
+
+    const branches = [
+
+      {
+        d:690,
+        side:1
+      },
+
+      {
+        d:1640,
+        side:-1
+      },
+
+      {
+        d:2560,
+        side:1
+      }
+
+    ];
+
+
+    for(
+      const s
+      of
+      branches
+    ){
+
+      const a =
+        this.frame(
+          s.d
+        );
+
+
+      const returnDistance =
+
+        Math.min(
+
+          this.length - 100,
+
+          s.d + 330
+
+        );
+
+
+      const b =
+        this.frame(
+          returnDistance
+        );
+
+
+      const p0 =
+        a.point.clone();
+
+
+      const p4 =
+        b.point.clone();
+
+
+      const p1 =
+
+        p0
+        .clone()
+        .add(
+
+          a.tangent
+          .clone()
+          .multiplyScalar(70)
+
+        )
+        .add(
+
+          a.normal
+          .clone()
+          .multiplyScalar(
+            s.side * 28
+          )
+
+        );
+
+
+      const p2 =
+
+        p0
+        .clone()
+        .add(
+
+          a.tangent
+          .clone()
+          .multiplyScalar(155)
+
+        )
+        .add(
+
+          a.normal
+          .clone()
+          .multiplyScalar(
+            s.side * 105
+          )
+
+        );
+
+
+      const p3 =
+
+        p4
+        .clone()
+        .add(
+
+          b.tangent
+          .clone()
+          .multiplyScalar(-85)
+
+        )
+        .add(
+
+          b.normal
+          .clone()
+          .multiplyScalar(
+            s.side * 72
+          )
+
+        );
+
+
+      const c =
+
+        new THREE.CatmullRomCurve3(
+
+          [
+            p0,
+            p1,
+            p2,
+            p3,
+            p4
+          ],
+
+          false,
+
+          "centripetal",
+
+          .25
+
+        );
+
+
+      scene.add(
+
+        this.ribbon(
+
+          c,
+
+          8.8,
+
+          0x363b45,
+
+          -.005
+
+        )
+
+      );
+
+
+      this.junctions.push(
+
+        s.d,
+
+        returnDistance
+
+      );
+
+    }
+
+  }
+
+
+  makeScenery(){
+
+    let seed =
+      20260925;
+
+
+    const rnd =
+      () =>
+        (
+          (
+            seed =
+            (
+              seed
+              *
+              1664525
+              +
+              1013904223
+            )
+            >>>
+            0
+          )
+          /
+          4294967296
+        );
+
+
+    const dummy =
+      new THREE.Object3D();
+
+
+    /* TREES */
+
+    const trunks =
+
+      new THREE.InstancedMesh(
+
+        new THREE.CylinderGeometry(
+
+          .15,
+
+          .22,
+
+          1.6,
+
+          6
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+          color:
+            0x67452f
+
+        }),
+
+        140
+
+      );
+
+
+    const crowns =
+
+      new THREE.InstancedMesh(
+
+        new THREE.ConeGeometry(
+
+          1.15,
+
+          2.8,
+
+          7
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+          color:
+            0x3c693f
+
+        }),
+
+        140
+
+      );
+
+
+    for(
+      let i = 0;
+      i < 140;
+      i++
+    ){
+
+      const d =
+
+        50
+
+        +
+
+        rnd()
+
+        *
+
+        (
+          this.length
+          -
+          100
+        );
+
+
+      const f =
+        this.frame(d);
+
+
+      const side =
+
+        rnd() < .5
+
+        ?
+
+        -1
+
+        :
+
+        1;
+
+
+      const off =
+
+        CFG.roadWidth / 2
+
+        +
+
+        7
+
+        +
+
+        rnd() * 42;
+
+
+      const b =
+
+        f.point
+        .clone()
+        .add(
+
+          f.normal
+          .clone()
+          .multiplyScalar(
+            side * off
+          )
+
+        )
+        .add(
+
+          f.tangent
+          .clone()
+          .multiplyScalar(
+
+            (
+              rnd()
+              -
+              .5
+            )
+            *
+            16
+
+          )
+
+        );
+
+
+      const s =
+        .75
+        +
+        rnd()
+        *
+        1.35;
+
+
+      dummy.position.set(
+
+        b.x,
+
+        .8 * s,
+
+        b.z
+
+      );
+
+
+      dummy.scale.set(
+
+        s,
+
+        s,
+
+        s
+
+      );
+
+
+      dummy.rotation.set(
+
+        0,
+
+        rnd()
+        *
+        Math.PI
+        *
+        2,
+
+        0
+
+      );
+
+
+      dummy.updateMatrix();
+
+
+      trunks.setMatrixAt(
+
+        i,
+
+        dummy.matrix
+
+      );
+
+
+      dummy.position.set(
+
+        b.x,
+
+        2.55 * s,
+
+        b.z
+
+      );
+
+
+      dummy.updateMatrix();
+
+
+      crowns.setMatrixAt(
+
+        i,
+
+        dummy.matrix
+
+      );
+
+    }
+
+
+    trunks
+      .instanceMatrix
+      .needsUpdate =
+      true;
+
+
+    crowns
+      .instanceMatrix
+      .needsUpdate =
+      true;
+
+
+    scene.add(
+
+      trunks,
+
+      crowns
+
+    );
+
+
+    /* BUILDINGS */
+
+    const buildings =
+
+      new THREE.InstancedMesh(
+
+        new THREE.BoxGeometry(
+          1,
+          1,
+          1
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+          color:
+            0x718092,
+
+          roughness:
+            .86
+
+        }),
+
+        55
+
+      );
+
+
+    for(
+      let i = 0;
+      i < 55;
+      i++
+    ){
+
+      const d =
+
+        this.length
+        *
+        .27
+
+        +
+
+        rnd()
+        *
+        this.length
+        *
+        .5;
+
+
+      const f =
+        this.frame(d);
+
+
+      const side =
+
+        rnd() < .5
+
+        ?
+
+        -1
+
+        :
+
+        1;
+
+
+      const off =
+
+        CFG.roadWidth / 2
+
+        +
+
+        16
+
+        +
+
+        rnd() * 55;
+
+
+      const b =
+
+        f.point
+        .clone()
+        .add(
+
+          f.normal
+          .clone()
+          .multiplyScalar(
+            side * off
+          )
+
+        );
+
+
+      const sx =
+        5
+        +
+        rnd() * 10;
+
+
+      const sy =
+        8
+        +
+        rnd() * 24;
+
+
+      const sz =
+        5
+        +
+        rnd() * 10;
+
+
+      dummy.position.set(
+
+        b.x,
+
+        sy / 2,
+
+        b.z
+
+      );
+
+
+      dummy.scale.set(
+
+        sx,
+
+        sy,
+
+        sz
+
+      );
+
+
+      dummy.rotation.set(
+
+        0,
+
+        f.heading
+
+        +
+
+        (
+          rnd()
+          -
+          .5
+        )
+        *
+        .8,
+
+        0
+
+      );
+
+
+      dummy.updateMatrix();
+
+
+      buildings.setMatrixAt(
+
+        i,
+
+        dummy.matrix
+
+      );
+
+    }
+
+
+    buildings
+      .instanceMatrix
+      .needsUpdate =
+      true;
+
+
+    scene.add(
+      buildings
+    );
+
+  }
+
+
+  makeFinish(){
+
+    const f =
+      this.frame(
+        this.finishDistance
+      );
+
+
+    const g =
+      new THREE.Group();
+
+
+    const mat =
+
+      new THREE.MeshStandardMaterial({
+
+        color:
+          0x121722
+
+      });
+
+
+    for(
+      const x
+      of
+      [
+        -5,
+        5
+      ]
+    ){
+
+      const p =
+
+        new THREE.Mesh(
+
+          new THREE.BoxGeometry(
+
+            .34,
+
+            6.2,
+
+            .34
+
+          ),
+
+          mat
+
+        );
+
+
+      p.position.set(
+
+        x,
+
+        3.1,
+
+        0
+
+      );
+
+
+      g.add(p);
+
+    }
+
+
+    const beam =
+
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          10.3,
+
+          .52,
+
+          .48
+
+        ),
+
+        mat
+
+      );
+
+
+    beam.position.set(
+
+      0,
+
+      6,
+
+      0
+
+    );
+
+
+    g.add(beam);
+
+
+    g.position.copy(
+      f.point
+    );
+
+
+    g.rotation.y =
+      f.heading;
+
+
+    scene.add(g);
+
+  }
+
+
+  nearestJunction(d){
+
+    let n =
+      Infinity;
+
+
+    for(
+      const j
+      of
+      this.junctions
+    ){
+
+      const x =
+        j - d;
+
+
+      if(
+        x >= 0
+        &&
+        x < n
+      ){
+
+        n =
+          x;
+
+      }
+
+    }
+
+
+    return n;
+
+  }
+
+}
+
+
+/* =========================================================
+   CAR
+========================================================= */
+
+class Car{
+
+  constructor(
+    color,
+    scale = .98
+  ){
+
+    this.distance =
+      0;
+
+    this.lane =
+      1;
+
+    this.targetLane =
+      1;
+
+    this.lateral =
+      0;
+
+    this.speed =
+      0;
+
+    this.nitro =
+      0;
+
+    this.slow =
+      0;
+
+
+    this.group =
+      this.model(
+        color,
+        scale
+      );
+
+
+    scene.add(
+      this.group
+    );
+
+  }
+
+
+  model(
+    color,
+    scale
+  ){
+
+    const g =
+      new THREE.Group();
+
+
+    const bodyMat =
+
+      new THREE.MeshStandardMaterial({
+
+        color,
+
+        roughness:
+          .35,
+
+        metalness:
+          .2
+
+      });
+
+
+    const glass =
+
+      new THREE.MeshStandardMaterial({
+
+        color:
+          0x6bc1d9,
+
+        roughness:
+          .12
+
+      });
+
+
+    const dark =
+
+      new THREE.MeshStandardMaterial({
+
+        color:
+          0x11141a
+
+      });
+
+
+    const body =
+
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          1.8,
+
+          .55,
+
+          3.2
+
+        ),
+
+        bodyMat
+
+      );
+
+
+    body.position.y =
+      .5;
+
+
+    g.add(body);
+
+
+    const cab =
+
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          1.25,
+
+          .62,
+
+          1.4
+
+        ),
+
+        glass
+
+      );
+
+
+    cab.position.set(
+
+      0,
+
+      .98,
+
+      -.08
+
+    );
+
+
+    g.add(cab);
+
+
+    const wg =
+
+      new THREE.CylinderGeometry(
+
+        .31,
+
+        .31,
+
+        .24,
+
+        10
+
+      );
+
+
+    for(
+      const p
+      of
+      [
+        [-.92,.26,.95],
+        [.92,.26,.95],
+        [-.92,.26,-.95],
+        [.92,.26,-.95]
+      ]
+    ){
+
+      const w =
+
+        new THREE.Mesh(
+
+          wg,
+
+          dark
+
+        );
+
+
+      w.rotation.z =
+        Math.PI / 2;
+
+
+      w.position.set(
+        ...p
+      );
+
+
+      g.add(w);
+
+    }
+
+
+    g.scale.setScalar(
+      scale
+    );
+
+
+    return g;
+
+  }
+
+
+  moveLane(dir){
+
+    this.targetLane =
+
+      THREE.MathUtils.clamp(
+
+        this.targetLane
+        +
+        dir,
+
+        0,
+
+        2
+
+      );
+
+  }
+
+
+  update(dt){
+
+    this.nitro =
+
+      Math.max(
+
+        0,
+
+        this.nitro
+        -
+        dt
+
+      );
+
+
+    this.slow =
+
+      Math.max(
+
+        0,
+
+        this.slow
+        -
+        dt
+
+      );
+
+
+    let target =
+
+      CFG.player.base
+
+      +
+
+      (
+        this.nitro > 0
+
+        ?
+
+        CFG.player.nitro
+
+        :
+
+        0
+      )
+
+      -
+
+      (
+        this.slow > 0
+
+        ?
+
+        CFG.player.slow
+
+        :
+
+        0
+      );
+
+
+    this.speed =
+
+      THREE.MathUtils.lerp(
+
+        this.speed,
+
+        target,
+
+        1
+
+        -
+
+        Math.exp(
+          -3.5 * dt
+        )
+
+      );
+
+
+    this.distance +=
+
+      this.speed
+      *
+      dt;
+
+
+    const targetLat =
+
+      track.laneOffset(
+        this.targetLane
+      );
+
+
+    this.lateral =
+
+      THREE.MathUtils.lerp(
+
+        this.lateral,
+
+        targetLat,
+
+        1
+
+        -
+
+        Math.exp(
+
+          -CFG.player.laneSharpness
+
+          *
+
+          dt
+
+        )
+
+      );
+
+
+    const f =
+
+      track.lanePos(
+
+        this.distance,
+
+        this.targetLane,
+
+        this.lateral
+
+      );
+
+
+    this.group.position.copy(
+      f.position
+    );
+
+
+    this.group.position.y =
+      .02;
+
+
+    this.group.rotation.y =
+      f.heading;
+
+  }
+
+}
+
+
+/* =========================================================
+   AI
+========================================================= */
+
+class AI{
+
+  constructor(
+    i,
+    level
+  ){
+
+    this.name =
+
+      CFG.ai.names[i]
+
+      ||
+
+      `AI-${i + 1}`;
+
+
+    this.distance =
+
+      Math.max(
+
+        0,
+
+        [
+          26,
+          10,
+          -16,
+          -34,
+          46,
+          -54,
+          65
+        ][i]
+
+        ||
+
+        0
+
+      );
+
+
+    this.lane =
+      i % 3;
+
+
+    this.lateral =
+
+      track.laneOffset(
+        this.lane
+      );
+
+
+    this.base =
+
+      CFG.ai[level].speed
+
+      +
+
+      (
+        i - 3
+      )
+      *
+      .1;
+
+
+    this.var =
+      CFG.ai[level].var;
+
+
+    this.timer =
+
+      1.5
+
+      +
+
+      Math.random()
+      *
+      3;
+
+
+    this.speed =
+      this.base;
+
+
+    this.car =
+
+      new Car(
+
+        [
+          0x3bd082,
+          0x3e7cff,
+          0xffb43c,
+          0xa968ff,
+          0x24c2cf,
+          0xf66b58,
+          0xe4df4b
+        ][
+          i % 7
+        ],
+
+        .92
+
+      );
+
+
+    this.car.distance =
+      this.distance;
+
+
+    this.car.targetLane =
+      this.lane;
+
+
+    this.car.lane =
+      this.lane;
+
+  }
+
+
+  update(dt){
+
+    this.timer -=
+      dt;
+
+
+    if(
+      this.timer <= 0
+    ){
+
+      this.timer =
+
+        2
+
+        +
+
+        Math.random()
+        *
+        4;
+
+
+      if(
+        Math.random()
+        <
+        .6
+      ){
+
+        this.lane =
+
+          THREE.MathUtils.clamp(
+
+            this.lane
+
+            +
+
+            (
+              Math.random() < .5
+
+              ?
+
+              -1
+
+              :
+
+              1
+            ),
+
+            0,
+
+            2
+
+          );
+
+      }
+
+    }
+
+
+    this.speed =
+
+      THREE.MathUtils.lerp(
+
+        this.speed,
+
+        this.base
+
+        +
+
+        Math.sin(
+
+          performance.now()
+          *
+          .0014
+
+          +
+
+          this.base
+
+        )
+
+        *
+
+        this.var,
+
+        Math.min(
+
+          1,
+
+          dt * 1.7
+
+        )
+
+      );
+
+
+    this.distance +=
+
+      this.speed
+      *
+      dt;
+
+
+    this.lateral =
+
+      THREE.MathUtils.lerp(
+
+        this.lateral,
+
+        track.laneOffset(
+          this.lane
+        ),
+
+        1
+
+        -
+
+        Math.exp(
+          -4.2 * dt
+        )
+
+      );
+
+
+    const f =
+
+      track.lanePos(
+
+        this.distance,
+
+        this.lane,
+
+        this.lateral
+
+      );
+
+
+    this.car.group.position.copy(
+      f.position
+    );
+
+
+    this.car.group.position.y =
+      .02;
+
+
+    this.car.group.rotation.y =
+      f.heading;
+
+
+    const rel =
+
+      this.distance
+      -
+      player.distance;
+
+
+    this.car.group.visible =
+
+      rel > -95
+
+      &&
+
+      rel < 150;
+
+  }
+
+}
+
+
+/* =========================================================
+   THREE INIT
+========================================================= */
+
+function init3D(){
+
+  scene =
+    new THREE.Scene();
+
+
+  scene.background =
+    new THREE.Color(
+      0x9bc5e0
+    );
+
+
+  scene.fog =
+
+    new THREE.Fog(
+
+      0x9bc5e0,
+
+      CFG.fogNear,
+
+      CFG.fogFar
+
+    );
+
+
+  camera =
+
+    new THREE.PerspectiveCamera(
+
+      CFG.camera.fov,
+
+      innerWidth
+      /
+      innerHeight,
+
+      .1,
+
+      650
+
+    );
+
+
+  renderer =
+
+    new THREE.WebGLRenderer({
+
+      antialias:
+        true,
+
+      powerPreference:
+        "high-performance"
+
+    });
+
+
+  renderer.setPixelRatio(
+
+    Math.min(
+
+      devicePixelRatio
+      ||
+      1,
+
+      CFG.maxPixelRatio
+
+    )
+
+  );
+
+
+  renderer.setSize(
+
+    innerWidth,
+
+    innerHeight
+
+  );
+
+
+  renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+  $("renderHost")
+    .appendChild(
+      renderer.domElement
+    );
+
+
+  scene.add(
+
+    new THREE.AmbientLight(
+
+      0xffffff,
+
+      1.45
+
+    )
+
+  );
+
+
+  const sun =
+
+    new THREE.DirectionalLight(
+
+      0xffd3a1,
+
+      1.75
+
+    );
+
+
+  sun.position.set(
+
+    -80,
+
+    150,
+
+    -40
+
+  );
+
+
+  scene.add(
+
+    sun,
+
+    new THREE.HemisphereLight(
+
+      0xc9ebff,
+
+      0x415036,
+
+      .9
+
+    )
+
+  );
+
+
+  track =
+    new Track();
+
+
+  player =
+
+    new Car(
+
+      0xe61f44,
+
+      1
+
+    );
+
+
+  clock =
+    new THREE.Clock();
+
+
+  resetCamera();
+
+}
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+function resetCamera(){
+
+  const f =
+    track.frame(
+      player.distance
+    );
+
+
+  const p =
+    f.point.clone();
+
+
+  camera.position.copy(
+
+    p
+    .clone()
+    .add(
+
+      f.tangent
+      .clone()
+      .multiplyScalar(
+
+        -CFG.camera.back
+
+      )
+
+    )
+    .add(
+
+      new THREE.Vector3(
+
+        0,
+
+        CFG.camera.height,
+
+        0
+
+      )
+
+    )
+
+  );
+
+
+  camera.fov =
+    CFG.camera.fov;
+
+
+  camera.updateProjectionMatrix();
+
+
+  camera.lookAt(
+
+    p
+    .clone()
+    .add(
+
+      f.tangent
+      .clone()
+      .multiplyScalar(
+
+        CFG.camera.look
+
+      )
+
+    )
+    .add(
+
+      new THREE.Vector3(
+
+        0,
+
+        1,
+
+        0
+
+      )
+
+    )
+
+  );
+
+}
+
+
+function updateCamera(dt){
+
+  const f =
+    track.frame(
+      player.distance
+    );
+
+
+  const nitro =
+    player.nitro > 0;
+
+
+  const p =
+    player.group
+    .position
+    .clone();
+
+
+  const desired =
+
+    p
+    .add(
+
+      f.tangent
+      .clone()
+      .multiplyScalar(
+
+        -CFG.camera.back
+
+        +
+
+        (
+          nitro
+          ?
+          1.2
+          :
+          0
+        )
+
+      )
+
+    )
+    .add(
+
+      new THREE.Vector3(
+
+        0,
+
+        CFG.camera.height
+
+        +
+
+        (
+          nitro
+          ?
+          .25
+          :
+          0
+        ),
+
+        0
+
+      )
+
+    );
+
+
+  camera.position.lerp(
+
+    desired,
+
+    1
+
+    -
+
+    Math.exp(
+      -5 * dt
+    )
+
+  );
+
+
+  camera.fov =
+
+    THREE.MathUtils.lerp(
+
+      camera.fov,
+
+      nitro
+
+      ?
+
+      CFG.camera.nitroFov
+
+      :
+
+      CFG.camera.fov,
+
+      1
+
+      -
+
+      Math.exp(
+        -5 * dt
+      )
+
+    );
+
+
+  camera.updateProjectionMatrix();
+
+
+  const look =
+
+    track.frame(
+
+      Math.min(
+
+        track.finishDistance,
+
+        player.distance
+
+        +
+
+        CFG.camera.look
+
+      )
+
+    )
+    .point
+    .clone()
+    .add(
+
+      new THREE.Vector3(
+
+        0,
+
+        1,
+
+        0
+
+      )
+
+    );
+
+
+  camera.lookAt(
+    look
+  );
+
+}
+
+
+/* =========================================================
+   TEXTURE
+========================================================= */
+
+function createTextTexture(
+  text
+){
+
+  const c =
+    document.createElement(
+      "canvas"
+    );
+
+
+  c.width =
+    1024;
+
+
+  c.height =
+    420;
+
+
+  const x =
+    c.getContext(
+      "2d"
+    );
+
+
+  const g =
+    x.createLinearGradient(
+
+      0,
+
+      0,
+
+      1024,
+
+      420
+
+    );
+
+
+  g.addColorStop(
+
+    0,
+
+    "#07152a"
+
+  );
+
+
+  g.addColorStop(
+
+    1,
+
+    "#12385a"
+
+  );
+
+
+  x.fillStyle =
+    g;
+
+
+  x.fillRect(
+
+    0,
+
+    0,
+
+    1024,
+
+    420
+
+  );
+
+
+  x.strokeStyle =
+    "#5de4ff";
+
+
+  x.lineWidth =
+    14;
+
+
+  x.strokeRect(
+
+    10,
+
+    10,
+
+    1004,
+
+    400
+
+  );
+
+
+  x.fillStyle =
+    "#fff";
+
+
+  x.textAlign =
+    "center";
+
+
+  x.textBaseline =
+    "middle";
+
+
+  x.font =
+    "800 62px Arial";
+
+
+  const ws =
+    String(text)
+    .split(/\s+/);
+
+
+  const ls =
+    [];
+
+
+  let line =
+    "";
+
+
+  for(
+    const w
+    of
+    ws
+  ){
+
+    const t =
+
+      line
+
+      ?
+
+      `${line} ${w}`
+
+      :
+
+      w;
+
+
+    if(
+      x.measureText(t).width
+      >
+      880
+      &&
+      line
+    ){
+
+      ls.push(line);
+
+      line =
+        w;
+
+    }
+    else{
+
+      line =
+        t;
+
+    }
+
+  }
+
+
+  if(line){
+
+    ls.push(line);
+
+  }
+
+
+  const vis =
+    ls.slice(
+      0,
+      3
+    );
+
+
+  const y =
+
+    210
+
+    -
+
+    (
+      vis.length - 1
+    )
+    *
+    38;
+
+
+  vis.forEach(
+
+    (
+      v,
+      i
+    ) =>
+
+      x.fillText(
+
+        v,
+
+        512,
+
+        y
+        +
+        i
+        *
+        76
+
+      )
+
+  );
+
+
+  const tex =
+    new THREE.CanvasTexture(c);
+
+
+  tex.colorSpace =
+    THREE.SRGBColorSpace;
+
+
+  return tex;
+
+}
+
+
+/* =========================================================
+   VOCAB PORTALS
+========================================================= */
+
+function makePortal(answer){
+
+  const g =
+    new THREE.Group();
+
+
+  const fm =
+
+    new THREE.MeshStandardMaterial({
+
+      color:
+        0x172235,
+
+      roughness:
+        .4,
+
+      metalness:
+        .28
+
+    });
+
+
+  const gm =
+
+    new THREE.MeshStandardMaterial({
+
+      color:
+        0x56e2ff,
+
+      emissive:
+        0x1688b8,
+
+      emissiveIntensity:
+        1.5
+
+    });
+
+
+  for(
+    const x
+    of
+    [
+      -1.25,
+      1.25
+    ]
+  ){
+
+    const p =
+
+      new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+          .15,
+
+          3.8,
+
+          .16
+
+        ),
+
+        fm
+
+      );
+
+
+    p.position.set(
+
+      x,
+
+      1.9,
+
+      0
+
+    );
+
+
+    g.add(p);
+
+  }
+
+
+  const top =
+
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+
+        2.65,
+
+        .15,
+
+        .18
+
+      ),
+
+      gm
+
+    );
+
+
+  top.position.set(
+
+    0,
+
+    3.75,
+
+    0
+
+  );
+
+
+  g.add(top);
+
+
+  const sign =
+
+    new THREE.Mesh(
+
+      new THREE.PlaneGeometry(
+
+        2.5,
+
+        1
+
+      ),
+
+      new THREE.MeshBasicMaterial({
+
+        map:
+          createTextTexture(
+            answer
+          ),
+
+        side:
+          THREE.DoubleSide,
+
+        transparent:
+          true
+
+      })
+
+    );
+
+
+  sign.position.set(
+
+    0,
+
+    2.45,
+
+    -.12
+
+  );
+
+
+  sign.rotation.y =
+    Math.PI;
+
+
+  g.add(sign);
+
+
+  return g;
+
+}
+
+
+function spawnGate(distance){
+
+  const q =
+    nextQuestion();
+
+
+  if(!q){
+
+    gate =
+      null;
+
+
+    $("question")
+      .classList
+      .add(
+        "hidden"
+      );
+
+
+    return;
+
+  }
+
+
+  distance =
+
+    Math.max(
+
+      distance,
+
+      player.distance
+      +
+      125
+
+    );
+
+
+  distance =
+
+    Math.min(
+
+      distance,
+
+      track.finishDistance
+      -
+      90
+
+    );
+
+
+  if(
+    distance <=
+    player.distance
+    +
+    45
+  ){
+
+    return;
+
+  }
+
+
+  const group =
+    new THREE.Group();
+
+
+  for(
+    let lane = 0;
+    lane < 3;
+    lane++
+  ){
+
+    const p =
+      makePortal(
+        q.options[lane]
+      );
+
+
+    const f =
+
+      track.lanePos(
+
+        distance,
+
+        lane
+
+      );
+
+
+    p.position.copy(
+      f.position
+    );
+
+
+    p.rotation.y =
+      f.heading;
+
+
+    group.add(p);
+
+  }
+
+
+  scene.add(group);
+
+
+  gate = {
+
+    q,
+
+    distance,
+
+    group,
+
+    resolved:
+      false
+
+  };
+
+
+  lastGateDistance =
+    distance;
+
+
+  showQuestion(q);
+
+}
+
+
+function showQuestion(q){
+
+  $("question")
+    .classList
+    .remove(
+      "hidden"
+    );
+
+
+  $("qtext").textContent =
+    q.prompt;
+
+
+  $("lanes").innerHTML =
+
+    q.options
+    .map(
+
+      (
+        v,
+        i
+      ) =>
+
+      `
+      <div
+        class="lane ${
+          i === player.targetLane
+          ?
+          "active"
+          :
+          ""
+        }"
+        data-lane="${i}"
+      >
+
+        <span>
+          ${
+            [
+              "TRÁI",
+              "GIỮA",
+              "PHẢI"
+            ][i]
+          }
+        </span>
+
+        <b>
+          ${esc(v)}
+        </b>
+
+      </div>
+      `
+
+    )
+    .join("");
+
+}
+
+
+function updateLaneUI(){
+
+  document
+    .querySelectorAll(
+      ".lane"
+    )
+    .forEach(
+
+      el =>
+
+        el.classList.toggle(
+
+          "active",
+
+          Number(
+            el.dataset.lane
+          )
+          ===
+          player.targetLane
+
+        )
+
+    );
+
+}
+
+
+function flash(
+  text,
+  type = "good",
+  ms = 1100
+){
+
+  const m =
+    $("message");
+
+
+  m.textContent =
+    text;
+
+
+  m.className =
+    `show ${type}`;
+
+
+  clearTimeout(
+    flash.t
+  );
+
+
+  flash.t =
+
+    setTimeout(
+
+      () =>
+        m.className =
+        "",
+
+      ms
+
+    );
+
+}
+
+
+function dispose(obj){
+
+  if(!obj){
+
+    return;
+
+  }
+
+
+  obj.traverse(
+
+    c => {
+
+      c.geometry
+      ?.dispose
+      ?.();
+
+
+      if(
+        c.material
+      ){
+
+        for(
+          const m
+          of
+          (
+            Array.isArray(
+              c.material
+            )
+
+            ?
+
+            c.material
+
+            :
+
+            [
+              c.material
+            ]
+          )
+        ){
+
+          m.map
+          ?.dispose
+          ?.();
+
+
+          m.dispose
+          ?.();
+
+        }
+
+      }
+
+    }
+
+  );
+
+
+  scene.remove(obj);
+
+}
+
+
+function resolveGate(){
+
+  if(
+    !gate
+    ||
+    gate.resolved
+  ){
+
+    return;
+
+  }
+
+
+  gate.resolved =
+    true;
+
+
+  const q =
+    gate.q;
+
+
+  const lane =
+    player.targetLane;
+
+
+  const good =
+
+    lane ===
+    q.correctLane;
+
+
+  recordAnswer(
+
+    q,
+
+    lane,
+
+    good
+
+  );
+
+
+  if(good){
+
+    combo++;
+
+
+    score +=
+
+      120
+
+      +
+
+      Math.min(
+
+        140,
+
+        combo * 16
+
+      );
+
+
+    player.nitro =
+      CFG.player.nitroTime;
+
+
+    player.slow =
+      0;
+
+
+    flash(
+
+      "✓ CHÍNH XÁC · NITRO!",
+
+      "good"
+
+    );
+
+
+    $("speedFx")
+      .classList
+      .add(
+        "active"
+      );
+
+  }
+  else{
+
+    combo =
+      0;
+
+
+    score =
+
+      Math.max(
+
+        0,
+
+        score - 15
+
+      );
+
+
+    player.nitro =
+      0;
+
+
+    player.slow =
+      CFG.player.slowTime;
+
+
+    flash(
+
+      `✕ Đáp án đúng: ${q.correct}`,
+
+      "bad",
+
+      1500
+
+    );
+
+
+    $("damageFx")
+      .classList
+      .add(
+        "active"
+      );
+
+
+    setTimeout(
+
+      () =>
+
+        $("damageFx")
+        .classList
+        .remove(
+          "active"
+        ),
+
+      420
+
+    );
+
+  }
+
+}
+
+
+function updateGate(){
+
+  if(!gate){
+
+    return;
+
+  }
+
+
+  const rem =
+
+    gate.distance
+
+    -
+
+    player.distance;
+
+
+  $("distance").textContent =
+
+    rem > 0
+
+    ?
+
+    `Cổng còn ${
+      Math.ceil(rem)
+    } m`
+
+    :
+
+    "CHỌN LÀN";
+
+
+  if(
+    !gate.resolved
+    &&
+    rem <=
+    CFG.resolveDistance
+  ){
+
+    resolveGate();
+
+  }
+
+
+  if(
+    rem < -26
+  ){
+
+    dispose(
+      gate.group
+    );
+
+
+    gate =
+      null;
+
+
+    spawnGate(
+
+      lastGateDistance
+
+      +
+
+      CFG.gateGap
+
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   START / FINISH
+========================================================= */
+
+function startRace(){
+
+  if(running){
+
+    return;
+
+  }
+
+
+  difficulty =
+    $("difficulty").value;
+
+
+  prepareQuestions();
+
+
+  if(
+    !queue.length
+  ){
+
+    flash(
+
+      "Bộ từ này không còn câu để luyện.",
+
+      "bad",
+
+      1800
+
+    );
+
+
+    return;
+
+  }
+
+
+  finished =
+    false;
+
+
+  raceTime =
+    0;
+
+
+  score =
+    0;
+
+
+  combo =
+    0;
+
+
+  lastJunction =
+    -1;
+
+
+  player.distance =
+    0;
+
+
+  player.targetLane =
+    1;
+
+
+  player.lateral =
+    0;
+
+
+  player.speed =
+    0;
+
+
+  player.nitro =
+    0;
+
+
+  player.slow =
+    0;
+
+
+  player.update(
+    .001
+  );
+
+
+  for(
+    const a
+    of
+    ai
+  ){
+
+    scene.remove(
+      a.car.group
+    );
+
+  }
+
+
+  ai =
+    [];
+
+
+  for(
+    let i = 0;
+    i < CFG.ai.count;
+    i++
+  ){
+
+    ai.push(
+
+      new AI(
+
+        i,
+
+        difficulty
+
+      )
+
+    );
+
+  }
+
+
+  $("startScreen")
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  $("finishScreen")
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  $("question")
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  running =
+    true;
+
+
+  spawnGate(
+    CFG.firstGate
+  );
+
+
+  flash(
+
+    "3 · 2 · 1 · GO!",
+
+    "good",
+
+    900
+
+  );
+
+}
+
+
+function getRank(){
+
+  return (
+
+    1
+
+    +
+
+    ai.filter(
+
+      a =>
+        a.distance
+        >
+        player.distance
+
+    )
+    .length
+
+  );
+
+}
+
+
+function finishRace(){
+
+  if(finished){
+
+    return;
+
+  }
+
+
+  finished =
+    true;
+
+
+  running =
+    false;
+
+
+  $("question")
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  $("speedFx")
+    .classList
+    .remove(
+      "active"
+    );
+
+
+  if(gate){
+
+    dispose(
+      gate.group
+    );
+
+
+    gate =
+      null;
+
+  }
+
+
+  const correct =
+
+    results.filter(
+      x =>
+        x.isCorrect
+    )
+    .length;
+
+
+  const review =
+
+    results.filter(
+      x =>
+        !x.isCorrect
+    );
+
+
+  const rank =
+    getRank();
+
+
+  score +=
+
+    (
+      ai.length
+      +
+      1
+      -
+      rank
+    )
+    *
+    70
+
+    +
+
+    correct
+    *
+    35;
+
+
+  $("finalRank").textContent =
+    `${rank}/${ai.length + 1}`;
+
+
+  $("finalTime").textContent =
+    `${raceTime.toFixed(1)}s`;
+
+
+  $("finalScore").textContent =
+    score;
+
+
+  $("finalAccuracy").textContent =
+
+    `${correct}/${results.length} · ${
+      results.length
+      ?
+      Math.round(
+        correct
+        /
+        results.length
+        *
+        100
+      )
+      :
+      0
+    }%`;
+
+
+  $("review").innerHTML =
+
+    review.length
+
+    ?
+
+    review.map(
+
+      x =>
+
+      `
+      <div class="review-item">
+
+        <b>
+          ${esc(x.word)}
+        </b>
+
+        <span>
+          · ${esc(x.meaning)}
+        </span>
+
+        <br>
+
+        <span>
+          Đáp án đúng:
+          ${esc(x.correct)}
+        </span>
+
+        ${
+          x.note
+
+          ?
+
+          `<br><span>${esc(x.note)}</span>`
+
+          :
+
+          ""
+        }
+
+      </div>
+      `
+
+    )
+    .join("")
+
+    :
+
+    `
+    <div
+      style="
+        color:#2bd591;
+        font-weight:900
+      "
+    >
+      Không có từ nào cần ôn lại.
+    </div>
+    `;
+
+
+  $("finishScreen")
+    .classList
+    .remove(
+      "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   GAME LOOP
+========================================================= */
+
+function update(dt){
+
+  raceTime +=
+    dt;
+
+
+  const old =
+    player.distance;
+
+
+  player.update(dt);
+
+
+  for(
+    const a
+    of
+    ai
+  ){
+
+    const ahead =
+      a.distance > old;
+
+
+    a.update(dt);
+
+
+    if(
+      player.nitro > 0
+      &&
+      ahead
+      &&
+      a.distance <
+      player.distance
+    ){
+
+      $("overtake").textContent =
+        `VƯỢT XE · ${a.name}`;
+
+
+      $("overtake")
+        .classList
+        .remove(
+          "hidden"
+        );
+
+
+      setTimeout(
+
+        () =>
+
+          $("overtake")
+          .classList
+          .add(
+            "hidden"
+          ),
+
+        800
+
+      );
+
+    }
+
+  }
+
+
+  updateGate();
+
+
+  updateCamera(dt);
+
+
+  const nd =
+    track.nearestJunction(
+      player.distance
+    );
+
+
+  if(
+    nd < 85
+    &&
+    nd > 5
+  ){
+
+    const id =
+
+      Math.round(
+
+        (
+          player.distance
+          +
+          nd
+        )
+
+        /
+
+        10
+
+      );
+
+
+    if(
+      id !==
+      lastJunction
+    ){
+
+      lastJunction =
+        id;
+
+
+      $("junction")
+        .classList
+        .remove(
+          "hidden"
+        );
+
+
+      setTimeout(
+
+        () =>
+
+          $("junction")
+          .classList
+          .add(
+            "hidden"
+          ),
+
+        1200
+
+      );
+
+    }
+
+  }
+
+
+  const rank =
+    getRank();
+
+
+  $("speed").textContent =
+
+    Math.round(
+      player.speed * 6.05
+    );
+
+
+  $("rank").textContent =
+
+    `${rank}/${ai.length + 1}`;
+
+
+  $("progress").textContent =
+
+    `${
+
+      Math.min(
+
+        100,
+
+        Math.round(
+
+          player.distance
+
+          /
+
+          track.finishDistance
+
+          *
+
+          100
+
+        )
+
+      )
+
+    }%`;
+
+
+  $("nitroFill").style.width =
+
+    `${
+
+      Math.max(
+
+        0,
+
+        Math.min(
+
+          100,
+
+          player.nitro
+
+          /
+
+          CFG.player.nitroTime
+
+          *
+
+          100
+
+        )
+
+      )
+
+    }%`;
+
+
+  $("nitroText").textContent =
+
+    player.nitro > 0
+
+    ?
+
+    "BOOST"
+
+    :
+
+    "READY";
+
+
+  $("speedFx")
+    .classList
+    .toggle(
+
+      "active",
+
+      player.nitro > 0
+
+    );
+
+
+  if(
+    player.distance >=
+    track.finishDistance
+  ){
+
+    finishRace();
+
+  }
+
+}
+
+
+function animate(){
+
+  requestAnimationFrame(
+    animate
+  );
+
+
+  const dt =
+
+    Math.min(
+
+      clock.getDelta(),
+
+      .033
+
+    );
+
+
+  if(
+    running
+    &&
+    !finished
+  ){
+
+    update(dt);
+
+  }
+  else{
+
+    updateCamera(dt);
+
+  }
+
+
+  renderer.render(
+
+    scene,
+
+    camera
+
+  );
+
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+function moveLane(dir){
+
+  if(
+    !running
+    ||
+    finished
+  ){
+
+    return;
+
+  }
+
+
+  player.moveLane(dir);
+
+  updateLaneUI();
+
+}
+
+
+function backGames(){
+
+  try{
+
+    const u =
+
+      localStorage.getItem(
+
+        "VOCAB_RACER_RETURN_URL"
+
+      );
+
+
+    if(u){
+
+      location.href =
+        u;
+
+      return;
+
+    }
+
+  }
+  catch(e){}
+
+
+  location.href =
+    "../";
+
+}
+
+
+function backPractice(){
+
+  location.href =
+    "../../";
+
+}
+
+
+function bind(){
+
+  $("start")
+    .addEventListener(
+      "click",
+      startRace
+    );
+
+
+  $("restart")
+    .addEventListener(
+      "click",
+      startRace
+    );
+
+
+  $("left")
+    .addEventListener(
+      "click",
+      () =>
+        moveLane(-1)
+    );
+
+
+  $("right")
+    .addEventListener(
+      "click",
+      () =>
+        moveLane(1)
+    );
+
+
+  $("backGames")
+    .addEventListener(
+      "click",
+      backGames
+    );
+
+
+  $("backStart")
+    .addEventListener(
+      "click",
+      backGames
+    );
+
+
+  $("backFinish")
+    .addEventListener(
+      "click",
+      backGames
+    );
+
+
+  $("backPractice")
+    .addEventListener(
+      "click",
+      backPractice
+    );
+
+
+  addEventListener(
+
+    "keydown",
+
+    e => {
+
+      if(
+        e.key ===
+        "ArrowLeft"
+
+        ||
+
+        e.key
+        .toLowerCase()
+        ===
+        "a"
+      ){
+
+        e.preventDefault();
+
+        moveLane(-1);
+
+      }
+
+
+      if(
+        e.key ===
+        "ArrowRight"
+
+        ||
+
+        e.key
+        .toLowerCase()
+        ===
+        "d"
+      ){
+
+        e.preventDefault();
+
+        moveLane(1);
+
+      }
+
+    }
+
+  );
+
+
+  renderer.domElement
+    .addEventListener(
+
+      "pointerdown",
+
+      e =>
+        touchX =
+        e.clientX,
+
+      {
+        passive:true
+      }
+
+    );
+
+
+  renderer.domElement
+    .addEventListener(
+
+      "pointerup",
+
+      e => {
+
+        if(
+          touchX ===
+          null
+        ){
+
+          return;
+
+        }
+
+
+        const dx =
+
+          e.clientX
+          -
+          touchX;
+
+
+        if(
+          Math.abs(dx)
+          >
+          34
+        ){
+
+          moveLane(
+
+            dx < 0
+
+            ?
+
+            -1
+
+            :
+
+            1
+
+          );
+
+        }
+
+
+        touchX =
+          null;
+
+      },
+
+      {
+        passive:true
+      }
+
+    );
+
+
+  addEventListener(
+
+    "resize",
+
+    () => {
+
+      camera.aspect =
+
+        innerWidth
+
+        /
+
+        innerHeight;
+
+
+      camera.updateProjectionMatrix();
+
+
+      renderer.setSize(
+
+        innerWidth,
+
+        innerHeight
+
+      );
+
+
+      renderer.setPixelRatio(
+
+        Math.min(
+
+          devicePixelRatio
+          ||
+          1,
+
+          CFG.maxPixelRatio
+
+        )
+
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   BOOT
+========================================================= */
+
+function boot(){
+
+  if(
+    !window.THREE
+  ){
+
+    throw new Error(
+      "Không tải được Three.js."
+    );
+
+  }
+
+
+  loadVocab();
+
+  init3D();
+
+  bind();
+
+  animate();
+
+}
+
+
+try{
+
+  boot();
+
+}
+catch(e){
+
+  fail(e);
+
+}
+
+})();
+</script>
 
 </body>
-
 </html>
