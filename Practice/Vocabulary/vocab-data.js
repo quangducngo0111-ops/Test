@@ -591,6 +591,446 @@ window.VOCABULARY_DATA = [
     topics:["food-security","cities","agriculture"],
     example:"Urban rooftops can be used to produce food.",
     collocation:"use urban rooftops"
+  },
+  /* =======================================================
+     READING · SET 02
+
+     PASSAGE 1:
+     Australia's cane toad problem
+
+     PASSAGE 2:
+     Saving the saiga
+  ======================================================= */
+
+
+  /* =======================================================
+     AUSTRALIA'S CANE TOAD PROBLEM
+  ======================================================= */
+
+  {
+    word:"pest",
+    meaning:"sinh vật gây hại, đặc biệt là loài phá hoại cây trồng",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","animals","agriculture"],
+    example:"The beetle became a serious pest in sugar cane fields.",
+    collocation:"serious pest"
+  },
+
+  {
+    word:"beetle",
+    meaning:"bọ cánh cứng",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","agriculture"],
+    example:"A species of beetle damaged the sugar cane plantations.",
+    collocation:"species of beetle"
+  },
+
+  {
+    word:"larvae",
+    meaning:"ấu trùng; dạng non của côn trùng",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","agriculture"],
+    example:"The larvae lived underground in the soil.",
+    collocation:"beetle larvae"
+  },
+
+  {
+    word:"roots",
+    meaning:"rễ cây",
+    skills:["reading"],
+    set:"02",
+    topics:["plants","agriculture"],
+    example:"The larvae ate the roots of the sugar cane plants.",
+    collocation:"plant roots"
+  },
+
+  {
+    word:"pesticide",
+    meaning:"thuốc trừ sâu, hóa chất dùng để tiêu diệt sinh vật gây hại",
+    skills:["reading"],
+    set:"02",
+    topics:["agriculture","environment"],
+    example:"Modern pesticides were not developed until the 1940s.",
+    collocation:"chemical pesticide"
+  },
+
+  {
+    word:"poisonous",
+    meaning:"có độc, gây ngộ độc",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","science"],
+    example:"Some early pesticides were poisonous to people and animals.",
+    collocation:"poisonous to animals"
+  },
+
+  {
+    word:"expensive",
+    meaning:"đắt tiền, tốn kém",
+    skills:["reading"],
+    set:"02",
+    topics:["agriculture","economy"],
+    example:"Arsenic and copper were expensive methods of pest control.",
+    collocation:"expensive method"
+  },
+
+  {
+    word:"biological control",
+    meaning:"kiểm soát sinh vật gây hại bằng sinh vật khác thay vì hóa chất",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","agriculture","science"],
+    example:"Farmers considered biological control a safer alternative.",
+    collocation:"biological pest control"
+  },
+
+  {
+    word:"predatory",
+    meaning:"có tính săn mồi",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","environment"],
+    example:"Predatory insects were used to control agricultural pests.",
+    collocation:"predatory insects"
+  },
+
+  {
+    word:"introduced agents",
+    meaning:"các sinh vật được đưa từ nơi khác vào để thực hiện một mục đích kiểm soát",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","wildlife-conservation"],
+    example:"Introduced agents were released into new environments.",
+    collocation:"release introduced agents"
+  },
+
+  {
+    word:"gardeners",
+    meaning:"những người làm vườn",
+    skills:["reading"],
+    set:"02",
+    topics:["agriculture"],
+    example:"French gardeners used toads to eat insect pests.",
+    collocation:"French gardeners"
+  },
+
+  {
+    word:"prickly-pear cactus",
+    meaning:"cây xương rồng lê gai",
+    skills:["reading"],
+    set:"02",
+    topics:["plants","environment"],
+    example:"Biological control limited the spread of prickly-pear cactus.",
+    collocation:"prickly-pear cactus"
+  },
+
+  {
+    word:"moth",
+    meaning:"bướm đêm",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","environment"],
+    example:"A moth from Argentina helped control the cactus.",
+    collocation:"introduce a moth"
+  },
+
+  {
+    word:"release",
+    meaning:"thả, phóng thích một sinh vật vào môi trường",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","animals"],
+    example:"Cane toads were released in sugar cane plantations.",
+    collocation:"release into the environment"
+  },
+
+  {
+    word:"failure",
+    meaning:"sự thất bại; điều không đạt được mục đích",
+    skills:["reading"],
+    set:"02",
+    topics:["science","environment"],
+    example:"The cane toads proved to be a failure as pest control.",
+    collocation:"prove to be a failure"
+  },
+
+  {
+    word:"fatal flaw",
+    meaning:"sai sót nghiêm trọng khiến một kế hoạch thất bại",
+    skills:["reading"],
+    set:"02",
+    topics:["science","environment"],
+    example:"There was a fatal flaw in the biological-control plan.",
+    collocation:"fatal flaw in the plan"
+  },
+
+  {
+    word:"forecast",
+    meaning:"dự đoán trước một sự việc trong tương lai",
+    skills:["reading"],
+    set:"02",
+    topics:["science","environment"],
+    example:"Walter Froggatt forecast that cane toads could become a pest.",
+    collocation:"forecast that"
+  },
+
+  {
+    word:"rebuke",
+    meaning:"chỉ trích hoặc khiển trách mạnh mẽ",
+    skills:["reading"],
+    set:"02",
+    topics:["society","science"],
+    example:"Froggatt was rebuked by other scientists.",
+    collocation:"rebuke someone for"
+  },
+
+  {
+    word:"toxic infestation",
+    meaning:"sự xâm lấn với số lượng lớn của sinh vật có độc",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","wildlife-conservation"],
+    example:"Millions of cane toads now form a toxic infestation.",
+    collocation:"toxic infestation"
+  },
+
+  {
+    word:"native fauna",
+    meaning:"hệ động vật bản địa",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","animals","wildlife-conservation"],
+    example:"Cane toads compete with native Australian fauna for food.",
+    collocation:"native fauna"
+  },
+
+
+  /* =======================================================
+     SAVING THE SAIGA
+  ======================================================= */
+
+  {
+    word:"antelope",
+    meaning:"linh dương",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","wildlife-conservation"],
+    example:"The saiga is a species of antelope from Central Asia.",
+    collocation:"species of antelope"
+  },
+
+  {
+    word:"native to",
+    meaning:"có nguồn gốc tự nhiên ở, bản địa tại",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","environment"],
+    example:"The saiga is native to Central Asia.",
+    collocation:"be native to"
+  },
+
+  {
+    word:"adapted to",
+    meaning:"thích nghi với",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","environment"],
+    example:"The saiga is well adapted to harsh steppe conditions.",
+    collocation:"well adapted to"
+  },
+
+  {
+    word:"bulbous nose",
+    meaning:"chiếc mũi phình to, có dạng củ",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","science"],
+    example:"The saiga has a distinctive bulbous nose.",
+    collocation:"bulbous nose"
+  },
+
+  {
+    word:"nostrils",
+    meaning:"lỗ mũi",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","science"],
+    example:"Its swollen nostrils help filter the air.",
+    collocation:"swollen nostrils"
+  },
+
+  {
+    word:"filter out",
+    meaning:"lọc bỏ, ngăn một chất hoặc vật đi qua",
+    skills:["reading"],
+    set:"02",
+    topics:["science","animals"],
+    example:"The saiga's nose can filter out dust.",
+    collocation:"filter out dust"
+  },
+
+  {
+    word:"dust",
+    meaning:"bụi",
+    skills:["reading"],
+    set:"02",
+    topics:["environment"],
+    example:"Its nose filters out dust during dry summers.",
+    collocation:"filter out dust"
+  },
+
+  {
+    word:"blood",
+    meaning:"máu",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","science"],
+    example:"The nose helps cool the animal's blood in summer.",
+    collocation:"cool the blood"
+  },
+
+  {
+    word:"coat",
+    meaning:"lớp lông bao phủ cơ thể động vật",
+    skills:["reading"],
+    set:"02",
+    topics:["animals"],
+    example:"The saiga develops a heavy winter coat.",
+    collocation:"heavy winter coat"
+  },
+
+  {
+    word:"extinction",
+    meaning:"sự tuyệt chủng",
+    skills:["reading"],
+    set:"02",
+    topics:["wildlife-conservation","environment"],
+    example:"The species was almost driven to extinction.",
+    collocation:"drive to extinction"
+  },
+
+  {
+    word:"poaching",
+    meaning:"việc săn bắt động vật trái phép",
+    skills:["reading"],
+    set:"02",
+    topics:["wildlife-conservation","animals"],
+    example:"Illegal poaching caused a dramatic population decline.",
+    collocation:"illegal poaching"
+  },
+
+  {
+    word:"horns",
+    meaning:"sừng của động vật",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","wildlife-conservation"],
+    example:"Male saiga were hunted for their horns.",
+    collocation:"saiga horns"
+  },
+
+  {
+    word:"population crash",
+    meaning:"sự sụt giảm cực mạnh về số lượng quần thể",
+    skills:["reading"],
+    set:"02",
+    topics:["wildlife-conservation","environment"],
+    example:"Heavy poaching led to a population crash.",
+    collocation:"cause a population crash"
+  },
+
+  {
+    word:"habitat",
+    meaning:"môi trường sống tự nhiên của một loài",
+    skills:["reading"],
+    set:"02",
+    topics:["wildlife-conservation","environment"],
+    example:"Agricultural expansion causes loss of habitat.",
+    collocation:"loss of habitat"
+  },
+
+  {
+    word:"migration route",
+    meaning:"tuyến đường di cư của động vật",
+    skills:["reading"],
+    set:"02",
+    topics:["animals","wildlife-conservation"],
+    example:"Fences can block the saiga's migration routes.",
+    collocation:"seasonal migration route"
+  },
+
+  {
+    word:"mass mortality event",
+    meaning:"sự kiện khiến một số lượng rất lớn cá thể chết trong thời gian ngắn",
+    skills:["reading"],
+    set:"02",
+    topics:["wildlife-conservation","science"],
+    example:"Disease caused a major mass mortality event.",
+    collocation:"mass mortality event"
+  },
+
+  {
+    word:"outbreak",
+    meaning:"sự bùng phát, đặc biệt của bệnh dịch",
+    skills:["reading"],
+    set:"02",
+    topics:["health","animals","science"],
+    example:"A disease outbreak killed a large proportion of the population.",
+    collocation:"disease outbreak"
+  },
+
+  {
+    word:"climate fluctuations",
+    meaning:"những biến động, thay đổi thất thường của khí hậu",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","climate"],
+    example:"The species struggles with unpredictable climate fluctuations.",
+    collocation:"unpredictable climate fluctuations"
+  },
+
+  {
+    word:"streams",
+    meaning:"các dòng suối nhỏ",
+    skills:["reading"],
+    set:"02",
+    topics:["environment","animals"],
+    example:"Many streams used by the saiga have dried up.",
+    collocation:"small streams"
+  },
+
+  {
+    word:"critically endangered",
+    meaning:"cực kỳ nguy cấp, đối mặt nguy cơ tuyệt chủng rất cao",
+    skills:["reading"],
+    set:"02",
+    topics:["wildlife-conservation","environment"],
+    example:"The saiga remains critically endangered.",
+    collocation:"critically endangered species"
+  }
+];
+/* =========================================================
+   VOCABULARY SET INFORMATION
+========================================================= */
+
+window.VOCABULARY_SET_INFO =
+  window.VOCABULARY_SET_INFO || {};
+
+
+window.VOCABULARY_SET_INFO.reading = {
+
+  ...(window.VOCABULARY_SET_INFO.reading || {}),
+
+  "02":{
+    label:"Bộ 02",
+
+    titles:[
+      "Australia's cane toad problem",
+      "Saving the saiga"
+    ]
   }
 
-];
+};
