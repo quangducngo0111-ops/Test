@@ -21,14 +21,9 @@ html,body{
 
 button,select{font:inherit}
 button{cursor:pointer}
+.hidden{display:none!important}
 
-.hidden{
-  display:none!important
-}
-
-#game,
-#renderHost,
-canvas{
+#game,#renderHost,canvas{
   position:absolute;
   inset:0;
   width:100%;
@@ -41,14 +36,7 @@ canvas{
   background:#0a1220
 }
 
-canvas{
-  display:block
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
+canvas{display:block}
 
 .nav{
   position:absolute;
@@ -70,11 +58,6 @@ canvas{
   font-weight:900
 }
 
-
-/* =========================================================
-   HUD
-========================================================= */
-
 #hud{
   position:absolute;
   z-index:20;
@@ -87,11 +70,7 @@ canvas{
   pointer-events:none
 }
 
-.brand,
-.pill,
-.nitro,
-.question,
-.screen-card{
+.brand,.pill,.nitro,.question,.screen-card{
   border:1px solid rgba(255,255,255,.13);
   background:rgba(5,10,22,.82);
   backdrop-filter:blur(10px)
@@ -145,11 +124,6 @@ canvas{
   font-size:7px;
   color:#778aa3
 }
-
-
-/* =========================================================
-   QUESTION
-========================================================= */
 
 .question{
   position:absolute;
@@ -222,11 +196,6 @@ canvas{
   background:rgba(94,231,255,.13)
 }
 
-
-/* =========================================================
-   NITRO
-========================================================= */
-
 .nitro{
   position:absolute;
   z-index:22;
@@ -260,18 +229,8 @@ canvas{
 #nitroFill{
   height:100%;
   width:0;
-  background:linear-gradient(
-    90deg,
-    #44d9ff,
-    #7167ff,
-    #d8c6ff
-  )
+  background:linear-gradient(90deg,#44d9ff,#7167ff,#d8c6ff)
 }
-
-
-/* =========================================================
-   CONTROLS
-========================================================= */
 
 #controls{
   position:absolute;
@@ -306,11 +265,6 @@ canvas{
   font-weight:900
 }
 
-
-/* =========================================================
-   MESSAGES
-========================================================= */
-
 #message{
   position:absolute;
   z-index:30;
@@ -327,20 +281,11 @@ canvas{
   transition:.15s
 }
 
-#message.show{
-  opacity:1
-}
+#message.show{opacity:1}
+#message.good{background:rgba(14,112,76,.96)}
+#message.bad{background:rgba(146,31,53,.96)}
 
-#message.good{
-  background:rgba(14,112,76,.96)
-}
-
-#message.bad{
-  background:rgba(146,31,53,.96)
-}
-
-#overtake,
-#junction{
+#overtake,#junction{
   position:absolute;
   z-index:28;
   left:50%;
@@ -364,13 +309,7 @@ canvas{
   font-size:9px
 }
 
-
-/* =========================================================
-   FX
-========================================================= */
-
-#speedFx,
-#damageFx{
+#speedFx,#damageFx{
   position:absolute;
   z-index:9;
   inset:0;
@@ -379,14 +318,12 @@ canvas{
 }
 
 #speedFx{
-  background:
-    repeating-linear-gradient(
-      110deg,
-      transparent 0 11%,
-      rgba(255,255,255,.1) 11.4%,
-      transparent 12.1% 21%
-    );
-
+  background:repeating-linear-gradient(
+    110deg,
+    transparent 0 11%,
+    rgba(255,255,255,.1) 11.4%,
+    transparent 12.1% 21%
+  );
   mix-blend-mode:screen
 }
 
@@ -396,32 +333,19 @@ canvas{
 }
 
 @keyframes speed{
-  from{
-    transform:translateY(-2%)
-  }
-
-  to{
-    transform:translateY(2%)
-  }
+  from{transform:translateY(-2%)}
+  to{transform:translateY(2%)}
 }
 
 #damageFx{
-  background:
-    radial-gradient(
-      circle at 50% 58%,
-      transparent 38%,
-      rgba(255,52,81,.28) 100%
-    )
+  background:radial-gradient(
+    circle at 50% 58%,
+    transparent 38%,
+    rgba(255,52,81,.28) 100%
+  )
 }
 
-#damageFx.active{
-  opacity:1
-}
-
-
-/* =========================================================
-   SCREEN
-========================================================= */
+#damageFx.active{opacity:1}
 
 .screen{
   position:absolute;
@@ -430,7 +354,6 @@ canvas{
   display:grid;
   place-items:center;
   padding:22px;
-
   background:
     radial-gradient(
       circle at 50% 24%,
@@ -438,7 +361,6 @@ canvas{
       transparent 42%
     ),
     rgba(4,8,17,.76);
-
   backdrop-filter:blur(7px)
 }
 
@@ -518,8 +440,7 @@ select{
   color:#fff
 }
 
-.primary,
-.secondary{
+.primary,.secondary{
   width:100%;
   min-height:47px;
   border-radius:12px;
@@ -528,13 +449,7 @@ select{
 
 .primary{
   border:0;
-  background:
-    linear-gradient(
-      90deg,
-      #5667f0,
-      #7b61ef
-    );
-
+  background:linear-gradient(90deg,#5667f0,#7b61ef);
   color:#fff
 }
 
@@ -605,11 +520,6 @@ select{
   margin-top:0
 }
 
-
-/* =========================================================
-   ERROR
-========================================================= */
-
 #error{
   position:absolute;
   z-index:200;
@@ -626,13 +536,7 @@ select{
   line-height:1.45
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
 @media(max-width:760px){
-
   .nav{
     top:7px;
     left:7px
@@ -650,13 +554,9 @@ select{
     right:7px
   }
 
-  .brand{
-    display:none
-  }
+  .brand{display:none}
 
-  .stats{
-    width:100%
-  }
+  .stats{width:100%}
 
   .pill{
     flex:1;
@@ -717,7 +617,6 @@ select{
   .result-grid{
     grid-template-columns:1fr 1fr
   }
-
 }
 </style>
 </head>
@@ -728,200 +627,97 @@ select{
 
   <div id="renderHost"></div>
 
-
-  <!-- NAV -->
-
   <nav class="nav">
-
-    <button id="backGames">
-      ← Chọn game
-    </button>
-
-    <button id="backPractice">
-      ← Luyện tập
-    </button>
-
+    <button id="backGames">← Chọn game</button>
+    <button id="backPractice">← Luyện tập</button>
   </nav>
-
-
-  <!-- HUD -->
 
   <header id="hud">
 
     <div class="brand">
-
-      <span>
-        VOCAB RACER 3D
-      </span>
-
-      <b id="setName">
-        Đang tải bộ từ...
-      </b>
-
+      <span>VOCAB RACER 3D</span>
+      <b id="setName">Đang tải bộ từ...</b>
     </div>
-
 
     <div class="stats">
 
       <div class="pill">
-
-        <span>
-          SPEED
-        </span>
-
-        <b id="speed">
-          0
-        </b>
-
-        <small>
-          km/h
-        </small>
-
+        <span>SPEED</span>
+        <b id="speed">0</b>
+        <small>km/h</small>
       </div>
 
-
       <div class="pill">
-
-        <span>
-          POS
-        </span>
-
-        <b id="rank">
-          1/8
-        </b>
-
+        <span>POS</span>
+        <b id="rank">1/8</b>
       </div>
 
-
       <div class="pill">
-
-        <span>
-          RACE
-        </span>
-
-        <b id="progress">
-          0%
-        </b>
-
+        <span>RACE</span>
+        <b id="progress">0%</b>
       </div>
 
     </div>
 
   </header>
 
+  <section id="question" class="question hidden">
 
-  <!-- QUESTION -->
-
-  <section
-    id="question"
-    class="question hidden"
-  >
-
-    <div
-      class="qsource"
-      id="qsource"
-    >
+    <div class="qsource" id="qsource">
       Vocabulary
     </div>
 
-    <div
-      class="qtext"
-      id="qtext"
-    >
+    <div class="qtext" id="qtext">
       —
     </div>
 
     <div class="qmeta">
-
-      <span>
-        Chọn đúng làn trước khi đi qua cổng.
-      </span>
-
-      <b id="distance">
-        —
-      </b>
-
+      <span>Chọn đúng làn trước khi đi qua cổng.</span>
+      <b id="distance">—</b>
     </div>
 
-    <div
-      class="lanes"
-      id="lanes"
-    ></div>
+    <div class="lanes" id="lanes"></div>
 
   </section>
-
-
-  <!-- NITRO -->
 
   <section class="nitro">
 
     <div class="nitro-head">
-
-      <span>
-        NITRO
-      </span>
-
-      <b id="nitroText">
-        READY
-      </b>
-
+      <span>NITRO</span>
+      <b id="nitroText">READY</b>
     </div>
 
     <div class="nitro-track">
-
       <div id="nitroFill"></div>
-
     </div>
 
   </section>
 
-
-  <!-- NOTIFICATIONS -->
-
-  <div
-    id="junction"
-    class="hidden"
-  >
+  <div id="junction" class="hidden">
     NGÃ RẼ PHÍA TRƯỚC
   </div>
 
   <div id="message"></div>
 
-  <div
-    id="overtake"
-    class="hidden"
-  ></div>
+  <div id="overtake" class="hidden"></div>
 
   <div id="speedFx"></div>
 
   <div id="damageFx"></div>
 
-
-  <!-- CONTROLS -->
-
   <div id="controls">
 
-    <button id="left">
-      ←
-    </button>
+    <button id="left">←</button>
 
     <div class="control-help">
       A / D · ← / → · SWIPE
     </div>
 
-    <button id="right">
-      →
-    </button>
+    <button id="right">→</button>
 
   </div>
 
-
-  <!-- START -->
-
-  <section
-    id="startScreen"
-    class="screen"
-  >
+  <section id="startScreen" class="screen">
 
     <div class="screen-card">
 
@@ -937,7 +733,6 @@ select{
         Đang nhận dữ liệu từ Vocabulary Practice...
       </p>
 
-
       <div class="start-grid">
 
         <label class="box">
@@ -947,26 +742,12 @@ select{
           </span>
 
           <select id="difficulty">
-
-            <option value="easy">
-              Easy
-            </option>
-
-            <option
-              value="normal"
-              selected
-            >
-              Normal
-            </option>
-
-            <option value="hard">
-              Hard
-            </option>
-
+            <option value="easy">Easy</option>
+            <option value="normal" selected>Normal</option>
+            <option value="hard">Hard</option>
           </select>
 
         </label>
-
 
         <div class="box">
 
@@ -987,18 +768,11 @@ select{
 
       </div>
 
-
-      <button
-        id="start"
-        class="primary"
-      >
+      <button id="start" class="primary">
         BẮT ĐẦU ĐUA / START RACE
       </button>
 
-      <button
-        id="backStart"
-        class="secondary"
-      >
+      <button id="backStart" class="secondary">
         ← Chọn game
       </button>
 
@@ -1006,13 +780,7 @@ select{
 
   </section>
 
-
-  <!-- FINISH -->
-
-  <section
-    id="finishScreen"
-    class="screen hidden"
-  >
+  <section id="finishScreen" class="screen hidden">
 
     <div class="screen-card">
 
@@ -1024,62 +792,29 @@ select{
         Hoàn thành chặng đua!
       </h2>
 
-
       <div class="result-grid">
 
         <div>
-
-          <span>
-            Vị trí
-          </span>
-
-          <b id="finalRank">
-            —
-          </b>
-
+          <span>Vị trí</span>
+          <b id="finalRank">—</b>
         </div>
 
-
         <div>
-
-          <span>
-            Thời gian
-          </span>
-
-          <b id="finalTime">
-            —
-          </b>
-
+          <span>Thời gian</span>
+          <b id="finalTime">—</b>
         </div>
 
-
         <div>
-
-          <span>
-            Điểm
-          </span>
-
-          <b id="finalScore">
-            —
-          </b>
-
+          <span>Điểm</span>
+          <b id="finalScore">—</b>
         </div>
 
-
         <div>
-
-          <span>
-            Đúng
-          </span>
-
-          <b id="finalAccuracy">
-            —
-          </b>
-
+          <span>Đúng</span>
+          <b id="finalAccuracy">—</b>
         </div>
 
       </div>
-
 
       <div class="review">
 
@@ -1091,20 +826,13 @@ select{
 
       </div>
 
-
       <div class="actions">
 
-        <button
-          id="restart"
-          class="primary"
-        >
+        <button id="restart" class="primary">
           CHƠI LẠI
         </button>
 
-        <button
-          id="backFinish"
-          class="secondary"
-        >
+        <button id="backFinish" class="secondary">
           ← Chọn game
         </button>
 
@@ -1114,103 +842,48 @@ select{
 
   </section>
 
-
-  <div
-    id="error"
-    class="hidden"
-  ></div>
+  <div id="error" class="hidden"></div>
 
 </main>
 
-
 <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
-
 
 <script>
 (() => {
 
 "use strict";
 
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-const $ =
-  id =>
-    document.getElementById(id);
-
+const $ = id => document.getElementById(id);
 
 const CFG = {
+  laneWidth:3.35,
+  roadWidth:11.6,
+  questionsPerRace:16,
+  firstGate:165,
+  gateGap:165,
+  resolveDistance:3.2,
 
-  laneWidth:
-    3.35,
-
-  roadWidth:
-    11.6,
-
-  questionsPerRace:
-    16,
-
-  firstGate:
-    165,
-
-  gateGap:
-    165,
-
-  resolveDistance:
-    3.2,
-
-
-  player: {
-
-    base:
-      29,
-
-    nitro:
-      13.5,
-
-    nitroTime:
-      2.7,
-
-    slow:
-      8,
-
-    slowTime:
-      2.3,
-
-    laneSharpness:
-      7.6
-
+  player:{
+    base:29,
+    nitro:13.5,
+    nitroTime:2.7,
+    slow:8,
+    slowTime:2.3,
+    laneSharpness:7.6
   },
 
-
-  camera: {
-
-    fov:
-      62,
-
-    nitroFov:
-      72,
-
-    height:
-      5.2,
-
-    back:
-      12.2,
-
-    look:
-      20
-
+  camera:{
+    fov:62,
+    nitroFov:72,
+    height:5.2,
+    back:12.2,
+    look:20
   },
 
+  ai:{
+    count:7,
 
-  ai: {
-
-    count:
-      7,
-
-    names: [
+    names:[
       "NOVA",
       "BOLT",
       "RAVEN",
@@ -1220,74 +893,54 @@ const CFG = {
       "PULSE"
     ],
 
-    easy: {
+    easy:{
       speed:26.3,
       var:.9
     },
 
-    normal: {
+    normal:{
       speed:28,
       var:1.15
     },
 
-    hard: {
+    hard:{
       speed:29.2,
       var:1.35
     }
-
   },
 
-
-  maxPixelRatio:
-    1.35,
-
-  fogNear:
-    75,
-
-  fogFar:
-    290
-
+  maxPixelRatio:1.35,
+  fogNear:75,
+  fogFar:290
 };
-
 
 let scene;
 let camera;
 let renderer;
 let clock;
-
 let track;
 let player;
 
-let ai = [];
+let ai=[];
 
-let words = [];
-let queue = [];
-let results = [];
+let words=[];
+let queue=[];
+let results=[];
 
-let running = false;
-let finished = false;
+let running=false;
+let finished=false;
 
-let raceTime = 0;
-let score = 0;
-let combo = 0;
+let raceTime=0;
+let score=0;
+let combo=0;
+let difficulty="normal";
 
-let difficulty =
-  "normal";
+let gate=null;
+let lastGateDistance=0;
+let lastJunction=-1;
+let touchX=null;
 
-let gate =
-  null;
-
-let lastGateDistance =
-  0;
-
-let lastJunction =
-  -1;
-
-let touchX =
-  null;
-
-let payload =
-  null;
+let payload=null;
 
 
 /* =========================================================
@@ -1298,23 +951,18 @@ function fail(err){
 
   console.error(err);
 
-  const el =
-    $("error");
+  const el=$("error");
 
   if(el){
 
-    el.textContent =
-      err?.stack
-      ||
-      err?.message
-      ||
+    el.textContent=
+      err?.stack ||
+      err?.message ||
       String(err);
 
-    el
-      .classList
-      .remove(
-        "hidden"
-      );
+    el.classList.remove(
+      "hidden"
+    );
 
   }
 
@@ -1322,81 +970,50 @@ function fail(err){
 
 
 /* =========================================================
-   TEXT HELPERS
+   HELPERS
 ========================================================= */
 
 function esc(v){
 
-  return String(
-    v ?? ""
-  )
-  .replaceAll(
-    "&",
-    "&amp;"
-  )
-  .replaceAll(
-    "<",
-    "&lt;"
-  )
-  .replaceAll(
-    ">",
-    "&gt;"
-  )
-  .replaceAll(
-    '"',
-    "&quot;"
-  );
+  return String(v??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
 
 }
 
 
 function norm(v){
 
-  return String(
-    v ?? ""
-  )
-  .trim()
-  .toLowerCase()
-  .normalize(
-    "NFKC"
-  )
-  .replace(
-    /\s+/g,
-    " "
-  );
+  return String(v??"")
+    .trim()
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/\s+/g," ");
 
 }
 
 
 function shuffle(a){
 
-  a =
-    [...a];
+  a=[...a];
 
   for(
-    let i =
-      a.length - 1;
-
-    i > 0;
-
+    let i=a.length-1;
+    i>0;
     i--
   ){
 
-    const j =
+    const j=
       Math.floor(
-        Math.random()
-        *
-        (
-          i + 1
-        )
+        Math.random()*(i+1)
       );
 
     [
       a[i],
       a[j]
-    ]
-    =
-    [
+    ]=[
       a[j],
       a[i]
     ];
@@ -1409,46 +1026,35 @@ function shuffle(a){
 
 
 /* =========================================================
-   VOCABULARY DATA
+   VOCABULARY
 ========================================================= */
 
 function loadVocab(){
 
   try{
 
-    const raw =
+    const raw=
       localStorage.getItem(
         "VOCAB_RACER_ACTIVE_SET_V3"
       );
 
-
     if(raw){
 
-      const p =
-        JSON.parse(
-          raw
-        );
-
+      const p=
+        JSON.parse(raw);
 
       if(
-        Array.isArray(
-          p.words
-        )
-        &&
-        p.words.length >= 3
+        Array.isArray(p.words) &&
+        p.words.length>=3
       ){
 
-        payload =
-          p;
+        payload=p;
 
-
-        words =
+        words=
           p.words.filter(
             x =>
-              x
-              &&
-              x.word
-              &&
+              x &&
+              x.word &&
               x.meaning
           );
 
@@ -1464,154 +1070,102 @@ function loadVocab(){
   }
 
 
-  /*
-    Fallback chỉ chạy khi người dùng
-    mở thẳng racer3d/index.html.
-  */
+  if(words.length<3){
 
-  if(
-    words.length < 3
-  ){
-
-    payload = {
-
-      title:
-        "IELTS Environment Demo",
-
-      skill:
-        "topic-environment",
-
-      set:
-        "demo",
-
-      direction:
-        "vi-en",
-
-      source:
-        "fallback"
-
+    payload={
+      title:"IELTS Environment Demo",
+      skill:"topic-environment",
+      set:"demo",
+      direction:"vi-en",
+      source:"fallback"
     };
 
-
-    words = [
-
+    words=[
       {
         word:"sustainable",
         meaning:"bền vững",
         collocation:"sustainable development"
       },
-
       {
         word:"biodiversity",
         meaning:"đa dạng sinh học",
         collocation:"protect biodiversity"
       },
-
       {
         word:"mitigate",
         meaning:"giảm nhẹ",
         collocation:"mitigate environmental damage"
       },
-
       {
         word:"renewable",
         meaning:"có thể tái tạo",
         collocation:"renewable energy"
       },
-
       {
         word:"emission",
         meaning:"khí thải",
         collocation:"carbon emissions"
       },
-
       {
         word:"conservation",
         meaning:"sự bảo tồn",
         collocation:"wildlife conservation"
       },
-
       {
         word:"depletion",
         meaning:"sự cạn kiệt",
         collocation:"resource depletion"
       },
-
       {
         word:"ecosystem",
         meaning:"hệ sinh thái",
         collocation:"marine ecosystem"
       },
-
       {
         word:"pollutant",
         meaning:"chất gây ô nhiễm",
         collocation:"air pollutants"
       },
-
       {
         word:"recycle",
         meaning:"tái chế",
         collocation:"recycle household waste"
       },
-
       {
         word:"habitat",
         meaning:"môi trường sống",
         collocation:"natural habitat"
       },
-
       {
         word:"deforestation",
         meaning:"nạn phá rừng",
         collocation:"reduce deforestation"
       }
-
     ];
 
   }
 
 
-  $("setName").textContent =
-    payload.title
-    ||
-    `${
-      payload.skill
-      ||
-      "Vocabulary"
-    } · Bộ ${
-      payload.set
-      ||
-      ""
-    }`;
+  $("setName").textContent=
+    payload.title ||
+    `${payload.skill||"Vocabulary"} · Bộ ${payload.set||""}`;
 
 
-  $("qsource").textContent =
-    payload.title
-    ||
+  $("qsource").textContent=
+    payload.title ||
     "Vocabulary";
 
 
-  $("sourceInfo").textContent =
-
-    payload.source ===
-    "fallback"
-
+  $("sourceInfo").textContent=
+    payload.source==="fallback"
     ?
-
     "Đang dùng bộ demo vì Racer được mở trực tiếp."
-
     :
-
     `Nguồn từ vựng: ${
-      payload.title
-      ||
-      payload.skill
-      ||
+      payload.title ||
+      payload.skill ||
       "Vocabulary"
-    } · ${
-      words.length
-    } từ.`;
+    } · ${words.length} từ.`;
 
 }
 
@@ -1622,35 +1176,23 @@ function loadVocab(){
 
 function prepareQuestions(){
 
-  const unique =
-    [];
-
-  const seen =
-    new Set();
-
+  const unique=[];
+  const seen=new Set();
 
   for(
     const w
-    of
-    shuffle(words)
+    of shuffle(words)
   ){
 
-    const k =
-      norm(
-        w.word
-      );
-
+    const k=
+      norm(w.word);
 
     if(
-      !k
-      ||
+      !k ||
       seen.has(k)
     ){
-
       continue;
-
     }
-
 
     seen.add(k);
 
@@ -1659,7 +1201,7 @@ function prepareQuestions(){
   }
 
 
-  queue =
+  queue=
     unique.slice(
       0,
       Math.min(
@@ -1669,108 +1211,72 @@ function prepareQuestions(){
     );
 
 
-  results =
-    [];
+  results=[];
 
 }
 
 
 function nextQuestion(){
 
-  if(
-    !queue.length
-  ){
-
+  if(!queue.length){
     return null;
-
   }
 
 
-  const target =
+  const target=
     queue.shift();
 
 
-  const dir =
-
-    payload?.direction ===
-    "en-vi"
-
+  const dir=
+    payload?.direction==="en-vi"
     ?
-
     "en-vi"
-
     :
-
     "vi-en";
 
 
-  const prompt =
-
-    dir ===
-    "vi-en"
-
+  const prompt=
+    dir==="vi-en"
     ?
-
     target.meaning
-
     :
-
     target.word;
 
 
-  const correct =
-
-    dir ===
-    "vi-en"
-
+  const correct=
+    dir==="vi-en"
     ?
-
     target.word
-
     :
-
     target.meaning;
 
 
-  const field =
-
-    dir ===
-    "vi-en"
-
+  const field=
+    dir==="vi-en"
     ?
-
     "word"
-
     :
-
     "meaning";
 
 
-  const ds =
-
+  const ds=
     shuffle(
-
       words
-      .filter(
-        x =>
-          norm(x.word)
-          !==
-          norm(target.word)
-      )
-      .map(
-        x =>
-          x[field]
-      )
-      .filter(Boolean)
-
+        .filter(
+          x =>
+            norm(x.word)!==
+            norm(target.word)
+        )
+        .map(
+          x => x[field]
+        )
+        .filter(Boolean)
     );
 
 
-  const wrong =
-    [];
+  const wrong=[];
 
-
-  const seen =
+  const seen=
     new Set([
       norm(correct)
     ]);
@@ -1778,62 +1284,44 @@ function nextQuestion(){
 
   for(
     const x
-    of
-    ds
+    of ds
   ){
 
-    const k =
+    const k=
       norm(x);
 
-
     if(
-      !k
-      ||
+      !k ||
       seen.has(k)
     ){
-
       continue;
-
     }
-
 
     seen.add(k);
 
     wrong.push(x);
 
-
-    if(
-      wrong.length ===
-      2
-    ){
-
+    if(wrong.length===2){
       break;
-
     }
 
   }
 
 
   while(
-    wrong.length < 2
+    wrong.length<2
   ){
-
-    wrong.push(
-      "—"
-    );
-
+    wrong.push("—");
   }
 
 
-  const correctLane =
+  const correctLane=
     Math.floor(
-      Math.random()
-      *
-      3
+      Math.random()*3
     );
 
 
-  const options = [
+  const options=[
     null,
     null,
     null
@@ -1842,26 +1330,24 @@ function nextQuestion(){
 
   options[
     correctLane
-  ] =
+  ]=
   correct;
 
 
-  let j =
-    0;
+  let j=0;
 
 
   for(
-    let i = 0;
-    i < 3;
+    let i=0;
+    i<3;
     i++
   ){
 
     if(
-      i !==
-      correctLane
+      i!==correctLane
     ){
 
-      options[i] =
+      options[i]=
         wrong[j++];
 
     }
@@ -1869,25 +1355,19 @@ function nextQuestion(){
   }
 
 
-  return {
-
+  return{
     target,
-
     prompt,
-
     correct,
-
     correctLane,
-
     options
-
   };
 
 }
 
 
 /* =========================================================
-   SAVE LEARNING RESULT
+   SAVE RESULTS
 ========================================================= */
 
 function recordAnswer(
@@ -1897,53 +1377,24 @@ function recordAnswer(
 ){
 
   results.push({
-
-    word:
-      q.target.word,
-
-    meaning:
-      q.target.meaning,
-
-    correct:
-      q.correct,
-
-    isCorrect:
-      good,
-
+    word:q.target.word,
+    meaning:q.target.meaning,
+    correct:q.correct,
+    isCorrect:good,
     note:
-      q.target.collocation
-      ||
-      q.target.example
-      ||
+      q.target.collocation ||
+      q.target.example ||
       ""
-
   });
 
 
-  if(
-    !payload
-  ){
-
+  if(!payload){
     return;
-
   }
 
 
-  const id =
-
-    `${
-      payload.skill
-      ||
-      ""
-    }::${
-      payload.set
-      ||
-      ""
-    }::${
-      norm(
-        q.target.word
-      )
-    }`;
+  const id=
+    `${payload.skill||""}::${payload.set||""}::${norm(q.target.word)}`;
 
 
   try{
@@ -1952,28 +1403,16 @@ function recordAnswer(
       payload.statsStorageKey
     ){
 
-      const stats =
-
+      const stats=
         JSON.parse(
-
           localStorage.getItem(
             payload.statsStorageKey
-          )
-
-          ||
-
-          "{}"
-
+          ) || "{}"
         );
 
 
-      const d =
-
-        stats[id]
-
-        ||
-
-        {
+      const d=
+        stats[id] || {
           seen:0,
           correct:0,
           wrong:0
@@ -1984,67 +1423,43 @@ function recordAnswer(
 
 
       if(good){
-
         d.correct++;
-
       }
       else{
-
         d.wrong++;
-
       }
 
 
-      stats[id] =
-        d;
+      stats[id]=d;
 
 
       localStorage.setItem(
-
         payload.statsStorageKey,
-
-        JSON.stringify(
-          stats
-        )
-
+        JSON.stringify(stats)
       );
 
     }
 
 
     if(
-      good
-      &&
+      good &&
       payload.learnedStorageKey
     ){
 
-      const learned =
-
+      const learned=
         JSON.parse(
-
           localStorage.getItem(
             payload.learnedStorageKey
-          )
-
-          ||
-
-          "{}"
-
+          ) || "{}"
         );
 
 
-      learned[id] =
-        true;
+      learned[id]=true;
 
 
       localStorage.setItem(
-
         payload.learnedStorageKey,
-
-        JSON.stringify(
-          learned
-        )
-
+        JSON.stringify(learned)
       );
 
     }
@@ -2060,53 +1475,34 @@ function recordAnswer(
 
 
 /* =========================================================
-   TRACK CLASS
+   TRACK
 ========================================================= */
 
 class Track{
 
   constructor(){
 
-    this.junctions =
-      [];
+    this.junctions=[];
 
 
-    const pts = [
-
+    const pts=[
       [0,0,0],
-
       [0,0,230],
-
       [55,0,470],
-
       [145,0,690],
-
       [90,0,920],
-
       [-45,0,1140],
-
       [-155,0,1370],
-
       [-125,0,1610],
-
       [10,0,1840],
-
       [165,0,2070],
-
       [185,0,2300],
-
       [70,0,2530],
-
       [-105,0,2760],
-
       [-145,0,3010],
-
       [5,0,3240],
-
       [165,0,3460],
-
       [95,0,3690]
-
     ]
     .map(
       p =>
@@ -2116,27 +1512,21 @@ class Track{
     );
 
 
-    this.curve =
-
+    this.curve=
       new THREE.CatmullRomCurve3(
-
         pts,
-
         false,
-
         "centripetal",
-
         .25
-
       );
 
 
-    this.length =
+    this.length=
       this.curve.getLength();
 
 
-    this.finishDistance =
-      this.length - 45;
+    this.finishDistance=
+      this.length-45;
 
 
     this.makeGround();
@@ -2161,7 +1551,7 @@ class Track{
 
   frame(d){
 
-    d =
+    d=
       THREE.MathUtils.clamp(
         d,
         0,
@@ -2169,59 +1559,42 @@ class Track{
       );
 
 
-    const u =
-
+    const u=
       this.length
-
       ?
-
-      d /
-      this.length
-
+      d/this.length
       :
-
       0;
 
 
-    const point =
+    const point=
+      this.curve.getPointAt(u);
+
+
+    const tangent=
       this.curve
-      .getPointAt(u);
+        .getTangentAt(u)
+        .normalize();
 
 
-    const tangent =
-      this.curve
-      .getTangentAt(u)
-      .normalize();
-
-
-    const normal =
-
+    const normal=
       new THREE.Vector3(
-
         tangent.z,
-
         0,
-
         -tangent.x
-
       )
       .normalize();
 
 
-    return {
-
+    return{
       point,
-
       tangent,
-
       normal,
-
       heading:
         Math.atan2(
           tangent.x,
           tangent.z
         )
-
     };
 
   }
@@ -2229,11 +1602,9 @@ class Track{
 
   laneOffset(l){
 
-    return (
-      l - 1
-    )
-    *
-    CFG.laneWidth;
+    return(
+      l-1
+    )*CFG.laneWidth;
 
   }
 
@@ -2241,43 +1612,32 @@ class Track{
   lanePos(
     d,
     l,
-    override = null
+    override=null
   ){
 
-    const f =
+    const f=
       this.frame(d);
 
 
-    const off =
-
-      override ===
-      null
-
+    const off=
+      override===null
       ?
-
       this.laneOffset(l)
-
       :
-
       override;
 
 
-    return {
-
+    return{
       ...f,
 
       position:
-
         f.point
-        .clone()
-        .add(
-
-          f.normal
           .clone()
-          .multiplyScalar(off)
-
-        )
-
+          .add(
+            f.normal
+              .clone()
+              .multiplyScalar(off)
+          )
     };
 
   }
@@ -2290,121 +1650,79 @@ class Track{
     y
   ){
 
-    const len =
+    const len=
       curve.getLength();
 
 
-    const seg =
-
+    const seg=
       Math.max(
-
         80,
-
-        Math.ceil(
-          len / 7
-        )
-
+        Math.ceil(len/7)
       );
 
 
-    const pos =
-      [];
-
-    const idx =
-      [];
+    const pos=[];
+    const idx=[];
 
 
     for(
-      let i = 0;
-      i <= seg;
+      let i=0;
+      i<=seg;
       i++
     ){
 
-      const u =
-        i / seg;
+      const u=i/seg;
 
-
-      const p =
+      const p=
         curve.getPointAt(u);
 
-
-      const t =
+      const t=
         curve
-        .getTangentAt(u)
-        .normalize();
+          .getTangentAt(u)
+          .normalize();
 
-
-      const n =
-
+      const n=
         new THREE.Vector3(
-
           t.z,
-
           0,
-
           -t.x
-
         )
         .normalize();
 
 
-      const a =
-
+      const a=
         p.clone()
-        .add(
-
-          n.clone()
-          .multiplyScalar(
-            width / 2
-          )
-
-        );
+          .add(
+            n.clone()
+              .multiplyScalar(
+                width/2
+              )
+          );
 
 
-      const b =
-
+      const b=
         p.clone()
-        .add(
-
-          n.clone()
-          .multiplyScalar(
-            -width / 2
-          )
-
-        );
+          .add(
+            n.clone()
+              .multiplyScalar(
+                -width/2
+              )
+          );
 
 
       pos.push(
-
-        a.x,
-        y,
-        a.z,
-
-        b.x,
-        y,
-        b.z
-
+        a.x,y,a.z,
+        b.x,y,b.z
       );
 
 
-      if(
-        i < seg
-      ){
+      if(i<seg){
 
-        const k =
-          i * 2;
-
+        const k=i*2;
 
         idx.push(
-
-          k,
-          k + 1,
-          k + 2,
-
-          k + 1,
-          k + 3,
-          k + 2
-
+          k,k+1,k+2,
+          k+1,k+3,k+2
         );
 
       }
@@ -2412,42 +1730,30 @@ class Track{
     }
 
 
-    const g =
+    const g=
       new THREE.BufferGeometry();
 
 
     g.setAttribute(
-
       "position",
-
       new THREE.Float32BufferAttribute(
         pos,
         3
       )
-
     );
 
 
-    g.setIndex(
-      idx
-    );
-
+    g.setIndex(idx);
 
     g.computeVertexNormals();
 
 
     return new THREE.Mesh(
-
       g,
-
       new THREE.MeshStandardMaterial({
-
         color,
-
         roughness:.96
-
       })
-
     );
 
   }
@@ -2455,43 +1761,27 @@ class Track{
 
   makeGround(){
 
-    const m =
-
+    const m=
       new THREE.Mesh(
-
         new THREE.PlaneGeometry(
-
           5600,
-
           5600
-
         ),
-
         new THREE.MeshStandardMaterial({
-
-          color:
-            0x263421,
-
-          roughness:
-            1
-
+          color:0x263421,
+          roughness:1
         })
-
       );
 
 
-    m.rotation.x =
-      -Math.PI / 2;
+    m.rotation.x=
+      -Math.PI/2;
 
 
     m.position.set(
-
       0,
-
       -.18,
-
       1850
-
     );
 
 
@@ -2508,19 +1798,12 @@ class Track{
   ){
 
     scene.add(
-
       this.ribbon(
-
         curve,
-
         width,
-
         color,
-
         y
-
       )
-
     );
 
   }
@@ -2528,140 +1811,91 @@ class Track{
 
   makeMarkers(){
 
-    const mat =
-
+    const mat=
       new THREE.MeshStandardMaterial({
-
-        color:
-          0xf6e8bd,
-
-        roughness:
-          .7
-
+        color:0xf6e8bd,
+        roughness:.7
       });
 
 
-    const edgeMat =
-
+    const edgeMat=
       new THREE.MeshStandardMaterial({
-
-        color:
-          0xe7e1db,
-
-        roughness:
-          .7
-
+        color:0xe7e1db,
+        roughness:.7
       });
 
 
-    const marker =
-
+    const marker=
       new THREE.InstancedMesh(
-
         new THREE.BoxGeometry(
-
           .1,
-
           .025,
-
           5.2
-
         ),
-
         mat,
-
         Math.floor(
-          this.length / 15
-        )
-        *
-        2
-        +
-        10
-
+          this.length/15
+        )*2+10
       );
 
 
-    const edge =
-
+    const edge=
       new THREE.InstancedMesh(
-
         new THREE.BoxGeometry(
-
           .17,
-
           .035,
-
           6.6
-
         ),
-
         edgeMat,
-
         Math.floor(
-          this.length / 11
-        )
-        *
-        2
-        +
-        10
-
+          this.length/11
+        )*2+10
       );
 
 
-    const dmy =
+    const dmy=
       new THREE.Object3D();
 
 
-    let k =
-      0;
+    let k=0;
 
 
     for(
-      let d = 12;
-      d < this.length;
-      d += 15
+      let d=12;
+      d<this.length;
+      d+=15
     ){
 
-      const f =
+      const f=
         this.frame(d);
 
 
       for(
         const off
-        of
-        [
-          -CFG.laneWidth / 2,
-          CFG.laneWidth / 2
+        of[
+          -CFG.laneWidth/2,
+          CFG.laneWidth/2
         ]
       ){
 
         dmy.position.copy(
-
           f.point
-          .clone()
-          .add(
-
-            f.normal
             .clone()
-            .multiplyScalar(off)
-
-          )
-
+            .add(
+              f.normal
+                .clone()
+                .multiplyScalar(off)
+            )
         );
 
 
-        dmy.position.y =
-          .055;
+        dmy.position.y=.055;
 
 
         dmy.rotation.set(
-
           0,
-
           f.heading,
-
           0
-
         );
 
 
@@ -2669,11 +1903,8 @@ class Track{
 
 
         marker.setMatrixAt(
-
           k++,
-
           dmy.matrix
-
         );
 
       }
@@ -2681,69 +1912,52 @@ class Track{
     }
 
 
-    marker.count =
-      k;
+    marker.count=k;
 
-
-    marker
-      .instanceMatrix
-      .needsUpdate =
-      true;
-
+    marker.instanceMatrix.needsUpdate=true;
 
     scene.add(marker);
 
 
-    k =
-      0;
+    k=0;
 
 
     for(
-      let d = 6;
-      d < this.length;
-      d += 11
+      let d=6;
+      d<this.length;
+      d+=11
     ){
 
-      const f =
+      const f=
         this.frame(d);
 
 
       for(
         const off
-        of
-        [
-          CFG.roadWidth / 2 - .15,
-          -CFG.roadWidth / 2 + .15
+        of[
+          CFG.roadWidth/2-.15,
+          -CFG.roadWidth/2+.15
         ]
       ){
 
         dmy.position.copy(
-
           f.point
-          .clone()
-          .add(
-
-            f.normal
             .clone()
-            .multiplyScalar(off)
-
-          )
-
+            .add(
+              f.normal
+                .clone()
+                .multiplyScalar(off)
+            )
         );
 
 
-        dmy.position.y =
-          .06;
+        dmy.position.y=.06;
 
 
         dmy.rotation.set(
-
           0,
-
           f.heading,
-
           0
-
         );
 
 
@@ -2751,11 +1965,8 @@ class Track{
 
 
         edge.setMatrixAt(
-
           k++,
-
           dmy.matrix
-
         );
 
       }
@@ -2763,15 +1974,9 @@ class Track{
     }
 
 
-    edge.count =
-      k;
+    edge.count=k;
 
-
-    edge
-      .instanceMatrix
-      .needsUpdate =
-      true;
-
+    edge.instanceMatrix.needsUpdate=true;
 
     scene.add(edge);
 
@@ -2780,133 +1985,86 @@ class Track{
 
   makeBranches(){
 
-    const branches = [
-
-      {
-        d:690,
-        side:1
-      },
-
-      {
-        d:1640,
-        side:-1
-      },
-
-      {
-        d:2560,
-        side:1
-      }
-
-    ];
-
-
     for(
       const s
-      of
-      branches
+      of[
+        {d:690,side:1},
+        {d:1640,side:-1},
+        {d:2560,side:1}
+      ]
     ){
 
-      const a =
+      const a=
+        this.frame(s.d);
+
+
+      const b=
         this.frame(
-          s.d
+          Math.min(
+            this.length-100,
+            s.d+330
+          )
         );
 
 
-      const returnDistance =
-
-        Math.min(
-
-          this.length - 100,
-
-          s.d + 330
-
-        );
-
-
-      const b =
-        this.frame(
-          returnDistance
-        );
-
-
-      const p0 =
+      const p0=
         a.point.clone();
 
 
-      const p4 =
+      const p4=
         b.point.clone();
 
 
-      const p1 =
-
-        p0
-        .clone()
-        .add(
-
-          a.tangent
-          .clone()
-          .multiplyScalar(70)
-
-        )
-        .add(
-
-          a.normal
-          .clone()
-          .multiplyScalar(
-            s.side * 28
+      const p1=
+        p0.clone()
+          .add(
+            a.tangent
+              .clone()
+              .multiplyScalar(70)
           )
+          .add(
+            a.normal
+              .clone()
+              .multiplyScalar(
+                s.side*28
+              )
+          );
 
-        );
 
-
-      const p2 =
-
-        p0
-        .clone()
-        .add(
-
-          a.tangent
-          .clone()
-          .multiplyScalar(155)
-
-        )
-        .add(
-
-          a.normal
-          .clone()
-          .multiplyScalar(
-            s.side * 105
+      const p2=
+        p0.clone()
+          .add(
+            a.tangent
+              .clone()
+              .multiplyScalar(155)
           )
+          .add(
+            a.normal
+              .clone()
+              .multiplyScalar(
+                s.side*105
+              )
+          );
 
-        );
 
-
-      const p3 =
-
-        p4
-        .clone()
-        .add(
-
-          b.tangent
-          .clone()
-          .multiplyScalar(-85)
-
-        )
-        .add(
-
-          b.normal
-          .clone()
-          .multiplyScalar(
-            s.side * 72
+      const p3=
+        p4.clone()
+          .add(
+            b.tangent
+              .clone()
+              .multiplyScalar(-85)
           )
+          .add(
+            b.normal
+              .clone()
+              .multiplyScalar(
+                s.side*72
+              )
+          );
 
-        );
 
-
-      const c =
-
+      const c=
         new THREE.CatmullRomCurve3(
-
           [
             p0,
             p1,
@@ -2914,39 +2072,28 @@ class Track{
             p3,
             p4
           ],
-
           false,
-
           "centripetal",
-
           .25
-
         );
 
 
       scene.add(
-
         this.ribbon(
-
           c,
-
           8.8,
-
           0x363b45,
-
           -.005
-
         )
-
       );
 
 
       this.junctions.push(
-
         s.d,
-
-        returnDistance
-
+        Math.min(
+          this.length-100,
+          s.d+330
+        )
       );
 
     }
@@ -2956,217 +2103,130 @@ class Track{
 
   makeScenery(){
 
-    let seed =
-      20260925;
+    let seed=20260925;
 
 
-    const rnd =
+    const rnd=
       () =>
         (
           (
-            seed =
-            (
-              seed
-              *
-              1664525
-              +
-              1013904223
-            )
-            >>>
-            0
-          )
-          /
+            seed=
+              (
+                seed*1664525+
+                1013904223
+              )>>>0
+          )/
           4294967296
         );
 
 
-    const dummy =
+    const dummy=
       new THREE.Object3D();
 
 
-    /* TREES */
-
-    const trunks =
-
+    const trunks=
       new THREE.InstancedMesh(
-
         new THREE.CylinderGeometry(
-
           .15,
-
           .22,
-
           1.6,
-
           6
-
         ),
-
         new THREE.MeshStandardMaterial({
-
-          color:
-            0x67452f
-
+          color:0x67452f
         }),
-
         140
-
       );
 
 
-    const crowns =
-
+    const crowns=
       new THREE.InstancedMesh(
-
         new THREE.ConeGeometry(
-
           1.15,
-
           2.8,
-
           7
-
         ),
-
         new THREE.MeshStandardMaterial({
-
-          color:
-            0x3c693f
-
+          color:0x3c693f
         }),
-
         140
-
       );
 
 
     for(
-      let i = 0;
-      i < 140;
+      let i=0;
+      i<140;
       i++
     ){
 
-      const d =
-
-        50
-
-        +
-
-        rnd()
-
-        *
-
+      const d=
+        50+
+        rnd()*
         (
-          this.length
-          -
-          100
+          this.length-100
         );
 
 
-      const f =
+      const f=
         this.frame(d);
 
 
-      const side =
-
-        rnd() < .5
-
+      const side=
+        rnd()<.5
         ?
-
         -1
-
         :
-
         1;
 
 
-      const off =
-
-        CFG.roadWidth / 2
-
-        +
-
-        7
-
-        +
-
-        rnd() * 42;
+      const off=
+        CFG.roadWidth/2+
+        7+
+        rnd()*42;
 
 
-      const b =
-
+      const b=
         f.point
-        .clone()
-        .add(
-
-          f.normal
           .clone()
-          .multiplyScalar(
-            side * off
+          .add(
+            f.normal
+              .clone()
+              .multiplyScalar(
+                side*off
+              )
           )
-
-        )
-        .add(
-
-          f.tangent
-          .clone()
-          .multiplyScalar(
-
-            (
-              rnd()
-              -
-              .5
-            )
-            *
-            16
-
-          )
-
-        );
+          .add(
+            f.tangent
+              .clone()
+              .multiplyScalar(
+                (rnd()-.5)*16
+              )
+          );
 
 
-      const s =
-        .75
-        +
-        rnd()
-        *
-        1.35;
+      const s=
+        .75+
+        rnd()*1.35;
 
 
       dummy.position.set(
-
         b.x,
-
-        .8 * s,
-
+        .8*s,
         b.z
-
       );
 
 
       dummy.scale.set(
-
         s,
-
         s,
-
         s
-
       );
 
 
       dummy.rotation.set(
-
         0,
-
-        rnd()
-        *
-        Math.PI
-        *
-        2,
-
+        rnd()*Math.PI*2,
         0
-
       );
 
 
@@ -3174,22 +2234,15 @@ class Track{
 
 
       trunks.setMatrixAt(
-
         i,
-
         dummy.matrix
-
       );
 
 
       dummy.position.set(
-
         b.x,
-
-        2.55 * s,
-
+        2.55*s,
         b.z
-
       );
 
 
@@ -3197,188 +2250,110 @@ class Track{
 
 
       crowns.setMatrixAt(
-
         i,
-
         dummy.matrix
-
       );
 
     }
 
 
-    trunks
-      .instanceMatrix
-      .needsUpdate =
-      true;
+    trunks.instanceMatrix.needsUpdate=true;
 
-
-    crowns
-      .instanceMatrix
-      .needsUpdate =
-      true;
-
+    crowns.instanceMatrix.needsUpdate=true;
 
     scene.add(
-
       trunks,
-
       crowns
-
     );
 
 
-    /* BUILDINGS */
-
-    const buildings =
-
+    const buildings=
       new THREE.InstancedMesh(
-
         new THREE.BoxGeometry(
           1,
           1,
           1
         ),
-
         new THREE.MeshStandardMaterial({
-
-          color:
-            0x718092,
-
-          roughness:
-            .86
-
+          color:0x718092,
+          roughness:.86
         }),
-
         55
-
       );
 
 
     for(
-      let i = 0;
-      i < 55;
+      let i=0;
+      i<55;
       i++
     ){
 
-      const d =
-
-        this.length
-        *
-        .27
-
-        +
-
-        rnd()
-        *
-        this.length
-        *
-        .5;
+      const d=
+        this.length*.27+
+        rnd()*this.length*.5;
 
 
-      const f =
+      const f=
         this.frame(d);
 
 
-      const side =
-
-        rnd() < .5
-
+      const side=
+        rnd()<.5
         ?
-
         -1
-
         :
-
         1;
 
 
-      const off =
-
-        CFG.roadWidth / 2
-
-        +
-
-        16
-
-        +
-
-        rnd() * 55;
+      const off=
+        CFG.roadWidth/2+
+        16+
+        rnd()*55;
 
 
-      const b =
-
+      const b=
         f.point
-        .clone()
-        .add(
-
-          f.normal
           .clone()
-          .multiplyScalar(
-            side * off
-          )
-
-        );
-
-
-      const sx =
-        5
-        +
-        rnd() * 10;
+          .add(
+            f.normal
+              .clone()
+              .multiplyScalar(
+                side*off
+              )
+          );
 
 
-      const sy =
-        8
-        +
-        rnd() * 24;
+      const sx=
+        5+rnd()*10;
 
 
-      const sz =
-        5
-        +
-        rnd() * 10;
+      const sy=
+        8+rnd()*24;
+
+
+      const sz=
+        5+rnd()*10;
 
 
       dummy.position.set(
-
         b.x,
-
-        sy / 2,
-
+        sy/2,
         b.z
-
       );
 
 
       dummy.scale.set(
-
         sx,
-
         sy,
-
         sz
-
       );
 
 
       dummy.rotation.set(
-
         0,
-
-        f.heading
-
-        +
-
-        (
-          rnd()
-          -
-          .5
-        )
-        *
-        .8,
-
+        f.heading+
+        (rnd()-.5)*.8,
         0
-
       );
 
 
@@ -3386,87 +2361,58 @@ class Track{
 
 
       buildings.setMatrixAt(
-
         i,
-
         dummy.matrix
-
       );
 
     }
 
 
-    buildings
-      .instanceMatrix
-      .needsUpdate =
-      true;
+    buildings.instanceMatrix.needsUpdate=true;
 
-
-    scene.add(
-      buildings
-    );
+    scene.add(buildings);
 
   }
 
 
   makeFinish(){
 
-    const f =
+    const f=
       this.frame(
         this.finishDistance
       );
 
 
-    const g =
+    const g=
       new THREE.Group();
 
 
-    const mat =
-
+    const mat=
       new THREE.MeshStandardMaterial({
-
-        color:
-          0x121722
-
+        color:0x121722
       });
 
 
     for(
       const x
-      of
-      [
-        -5,
-        5
-      ]
+      of[-5,5]
     ){
 
-      const p =
-
+      const p=
         new THREE.Mesh(
-
           new THREE.BoxGeometry(
-
             .34,
-
             6.2,
-
             .34
-
           ),
-
           mat
-
         );
 
 
       p.position.set(
-
         x,
-
         3.1,
-
         0
-
       );
 
 
@@ -3475,33 +2421,21 @@ class Track{
     }
 
 
-    const beam =
-
+    const beam=
       new THREE.Mesh(
-
         new THREE.BoxGeometry(
-
           10.3,
-
           .52,
-
           .48
-
         ),
-
         mat
-
       );
 
 
     beam.position.set(
-
       0,
-
       6,
-
       0
-
     );
 
 
@@ -3513,7 +2447,7 @@ class Track{
     );
 
 
-    g.rotation.y =
+    g.rotation.y=
       f.heading;
 
 
@@ -3524,28 +2458,24 @@ class Track{
 
   nearestJunction(d){
 
-    let n =
-      Infinity;
+    let n=Infinity;
 
 
     for(
       const j
-      of
-      this.junctions
+      of this.junctions
     ){
 
-      const x =
-        j - d;
+      const x=
+        j-d;
 
 
       if(
-        x >= 0
-        &&
-        x < n
+        x>=0 &&
+        x<n
       ){
 
-        n =
-          x;
+        n=x;
 
       }
 
@@ -3567,32 +2497,19 @@ class Car{
 
   constructor(
     color,
-    scale = .98
+    scale=.98
   ){
 
-    this.distance =
-      0;
-
-    this.lane =
-      1;
-
-    this.targetLane =
-      1;
-
-    this.lateral =
-      0;
-
-    this.speed =
-      0;
-
-    this.nitro =
-      0;
-
-    this.slow =
-      0;
+    this.distance=0;
+    this.lane=1;
+    this.targetLane=1;
+    this.lateral=0;
+    this.speed=0;
+    this.nitro=0;
+    this.slow=0;
 
 
-    this.group =
+    this.group=
       this.model(
         color,
         scale
@@ -3611,126 +2528,81 @@ class Car{
     scale
   ){
 
-    const g =
+    const g=
       new THREE.Group();
 
 
-    const bodyMat =
-
+    const bodyMat=
       new THREE.MeshStandardMaterial({
-
         color,
-
-        roughness:
-          .35,
-
-        metalness:
-          .2
-
+        roughness:.35,
+        metalness:.2
       });
 
 
-    const glass =
-
+    const glass=
       new THREE.MeshStandardMaterial({
-
-        color:
-          0x6bc1d9,
-
-        roughness:
-          .12
-
+        color:0x6bc1d9,
+        roughness:.12
       });
 
 
-    const dark =
-
+    const dark=
       new THREE.MeshStandardMaterial({
-
-        color:
-          0x11141a
-
+        color:0x11141a
       });
 
 
-    const body =
-
+    const body=
       new THREE.Mesh(
-
         new THREE.BoxGeometry(
-
           1.8,
-
           .55,
-
           3.2
-
         ),
-
         bodyMat
-
       );
 
 
-    body.position.y =
-      .5;
+    body.position.y=.5;
 
 
     g.add(body);
 
 
-    const cab =
-
+    const cab=
       new THREE.Mesh(
-
         new THREE.BoxGeometry(
-
           1.25,
-
           .62,
-
           1.4
-
         ),
-
         glass
-
       );
 
 
     cab.position.set(
-
       0,
-
       .98,
-
       -.08
-
     );
 
 
     g.add(cab);
 
 
-    const wg =
-
+    const wg=
       new THREE.CylinderGeometry(
-
         .31,
-
         .31,
-
         .24,
-
         10
-
       );
 
 
     for(
       const p
-      of
-      [
+      of[
         [-.92,.26,.95],
         [.92,.26,.95],
         [-.92,.26,-.95],
@@ -3738,19 +2610,15 @@ class Car{
       ]
     ){
 
-      const w =
-
+      const w=
         new THREE.Mesh(
-
           wg,
-
           dark
-
         );
 
 
-      w.rotation.z =
-        Math.PI / 2;
+      w.rotation.z=
+        Math.PI/2;
 
 
       w.position.set(
@@ -3775,18 +2643,11 @@ class Car{
 
   moveLane(dir){
 
-    this.targetLane =
-
+    this.targetLane=
       THREE.MathUtils.clamp(
-
-        this.targetLane
-        +
-        dir,
-
+        this.targetLane+dir,
         0,
-
         2
-
       );
 
   }
@@ -3794,133 +2655,73 @@ class Car{
 
   update(dt){
 
-    this.nitro =
-
+    this.nitro=
       Math.max(
-
         0,
-
-        this.nitro
-        -
-        dt
-
+        this.nitro-dt
       );
 
 
-    this.slow =
-
+    this.slow=
       Math.max(
-
         0,
-
-        this.slow
-        -
-        dt
-
+        this.slow-dt
       );
 
 
-    let target =
-
-      CFG.player.base
-
-      +
-
+    const target=
+      CFG.player.base+
       (
-        this.nitro > 0
-
+        this.nitro>0
         ?
-
         CFG.player.nitro
-
         :
-
         0
-      )
-
-      -
-
+      )-
       (
-        this.slow > 0
-
+        this.slow>0
         ?
-
         CFG.player.slow
-
         :
-
         0
       );
 
 
-    this.speed =
-
+    this.speed=
       THREE.MathUtils.lerp(
-
         this.speed,
-
         target,
-
-        1
-
-        -
-
-        Math.exp(
-          -3.5 * dt
+        1-Math.exp(
+          -3.5*dt
         )
-
       );
 
 
-    this.distance +=
-
-      this.speed
-      *
-      dt;
+    this.distance+=
+      this.speed*dt;
 
 
-    const targetLat =
-
+    const targetLat=
       track.laneOffset(
         this.targetLane
       );
 
 
-    this.lateral =
-
+    this.lateral=
       THREE.MathUtils.lerp(
-
         this.lateral,
-
         targetLat,
-
-        1
-
-        -
-
-        Math.exp(
-
-          -CFG.player.laneSharpness
-
-          *
-
-          dt
-
+        1-Math.exp(
+          -CFG.player.laneSharpness*dt
         )
-
       );
 
 
-    const f =
-
+    const f=
       track.lanePos(
-
         this.distance,
-
         this.targetLane,
-
         this.lateral
-
       );
 
 
@@ -3929,11 +2730,10 @@ class Car{
     );
 
 
-    this.group.position.y =
-      .02;
+    this.group.position.y=.02;
 
 
-    this.group.rotation.y =
+    this.group.rotation.y=
       f.heading;
 
   }
@@ -3952,21 +2752,14 @@ class AI{
     level
   ){
 
-    this.name =
-
-      CFG.ai.names[i]
-
-      ||
-
-      `AI-${i + 1}`;
+    this.name=
+      CFG.ai.names[i] ||
+      `AI-${i+1}`;
 
 
-    this.distance =
-
+    this.distance=
       Math.max(
-
         0,
-
         [
           26,
           10,
@@ -3975,62 +2768,39 @@ class AI{
           46,
           -54,
           65
-        ][i]
-
-        ||
-
-        0
-
+        ][i] || 0
       );
 
 
-    this.lane =
-      i % 3;
+    this.lane=i%3;
 
 
-    this.lateral =
-
+    this.lateral=
       track.laneOffset(
         this.lane
       );
 
 
-    this.base =
-
-      CFG.ai[level].speed
-
-      +
-
-      (
-        i - 3
-      )
-      *
-      .1;
+    this.base=
+      CFG.ai[level].speed+
+      (i-3)*.1;
 
 
-    this.var =
+    this.var=
       CFG.ai[level].var;
 
 
-    this.timer =
-
-      1.5
-
-      +
-
-      Math.random()
-      *
-      3;
+    this.timer=
+      1.5+
+      Math.random()*3;
 
 
-    this.speed =
+    this.speed=
       this.base;
 
 
-    this.car =
-
+    this.car=
       new Car(
-
         [
           0x3bd082,
           0x3e7cff,
@@ -4039,24 +2809,20 @@ class AI{
           0x24c2cf,
           0xf66b58,
           0xe4df4b
-        ][
-          i % 7
-        ],
-
+        ][i%7],
         .92
-
       );
 
 
-    this.car.distance =
+    this.car.distance=
       this.distance;
 
 
-    this.car.targetLane =
+    this.car.targetLane=
       this.lane;
 
 
-    this.car.lane =
+    this.car.lane=
       this.lane;
 
   }
@@ -4064,55 +2830,32 @@ class AI{
 
   update(dt){
 
-    this.timer -=
-      dt;
+    this.timer-=dt;
 
 
-    if(
-      this.timer <= 0
-    ){
+    if(this.timer<=0){
 
-      this.timer =
-
-        2
-
-        +
-
-        Math.random()
-        *
-        4;
+      this.timer=
+        2+
+        Math.random()*4;
 
 
       if(
-        Math.random()
-        <
-        .6
+        Math.random()<.6
       ){
 
-        this.lane =
-
+        this.lane=
           THREE.MathUtils.clamp(
-
-            this.lane
-
-            +
-
+            this.lane+
             (
-              Math.random() < .5
-
+              Math.random()<.5
               ?
-
               -1
-
               :
-
               1
             ),
-
             0,
-
             2
-
           );
 
       }
@@ -4120,81 +2863,43 @@ class AI{
     }
 
 
-    this.speed =
-
+    this.speed=
       THREE.MathUtils.lerp(
-
         this.speed,
-
-        this.base
-
-        +
-
+        this.base+
         Math.sin(
-
-          performance.now()
-          *
-          .0014
-
-          +
-
+          performance.now()*.0014+
           this.base
-
-        )
-
-        *
-
+        )*
         this.var,
-
         Math.min(
-
           1,
-
-          dt * 1.7
-
+          dt*1.7
         )
-
       );
 
 
-    this.distance +=
-
-      this.speed
-      *
-      dt;
+    this.distance+=
+      this.speed*dt;
 
 
-    this.lateral =
-
+    this.lateral=
       THREE.MathUtils.lerp(
-
         this.lateral,
-
         track.laneOffset(
           this.lane
         ),
-
-        1
-
-        -
-
-        Math.exp(
-          -4.2 * dt
+        1-Math.exp(
+          -4.2*dt
         )
-
       );
 
 
-    const f =
-
+    const f=
       track.lanePos(
-
         this.distance,
-
         this.lane,
-
         this.lateral
-
       );
 
 
@@ -4203,28 +2908,21 @@ class AI{
     );
 
 
-    this.car.group.position.y =
-      .02;
+    this.car.group.position.y=.02;
 
 
-    this.car.group.rotation.y =
+    this.car.group.rotation.y=
       f.heading;
 
 
-    const rel =
-
-      this.distance
-      -
+    const rel=
+      this.distance-
       player.distance;
 
 
-    this.car.group.visible =
-
-      rel > -95
-
-      &&
-
-      rel < 150;
+    this.car.group.visible=
+      rel>-95 &&
+      rel<150;
 
   }
 
@@ -4232,89 +2930,60 @@ class AI{
 
 
 /* =========================================================
-   THREE INIT
+   THREE.JS
 ========================================================= */
 
 function init3D(){
 
-  scene =
+  scene=
     new THREE.Scene();
 
 
-  scene.background =
+  scene.background=
     new THREE.Color(
       0x9bc5e0
     );
 
 
-  scene.fog =
-
+  scene.fog=
     new THREE.Fog(
-
       0x9bc5e0,
-
       CFG.fogNear,
-
       CFG.fogFar
-
     );
 
 
-  camera =
-
+  camera=
     new THREE.PerspectiveCamera(
-
       CFG.camera.fov,
-
-      innerWidth
-      /
-      innerHeight,
-
+      innerWidth/innerHeight,
       .1,
-
       650
-
     );
 
 
-  renderer =
-
+  renderer=
     new THREE.WebGLRenderer({
-
-      antialias:
-        true,
-
-      powerPreference:
-        "high-performance"
-
+      antialias:true,
+      powerPreference:"high-performance"
     });
 
 
   renderer.setPixelRatio(
-
     Math.min(
-
-      devicePixelRatio
-      ||
-      1,
-
+      devicePixelRatio || 1,
       CFG.maxPixelRatio
-
     )
-
   );
 
 
   renderer.setSize(
-
     innerWidth,
-
     innerHeight
-
   );
 
 
-  renderer.outputColorSpace =
+  renderer.outputColorSpace=
     THREE.SRGBColorSpace;
 
 
@@ -4325,73 +2994,49 @@ function init3D(){
 
 
   scene.add(
-
     new THREE.AmbientLight(
-
       0xffffff,
-
       1.45
-
     )
-
   );
 
 
-  const sun =
-
+  const sun=
     new THREE.DirectionalLight(
-
       0xffd3a1,
-
       1.75
-
     );
 
 
   sun.position.set(
-
     -80,
-
     150,
-
     -40
-
   );
 
 
   scene.add(
-
     sun,
-
     new THREE.HemisphereLight(
-
       0xc9ebff,
-
       0x415036,
-
       .9
-
     )
-
   );
 
 
-  track =
+  track=
     new Track();
 
 
-  player =
-
+  player=
     new Car(
-
       0xe61f44,
-
       1
-
     );
 
 
-  clock =
+  clock=
     new THREE.Clock();
 
 
@@ -4406,49 +3051,36 @@ function init3D(){
 
 function resetCamera(){
 
-  const f =
+  const f=
     track.frame(
       player.distance
     );
 
 
-  const p =
+  const p=
     f.point.clone();
 
 
   camera.position.copy(
-
-    p
-    .clone()
-    .add(
-
-      f.tangent
-      .clone()
-      .multiplyScalar(
-
-        -CFG.camera.back
-
+    p.clone()
+      .add(
+        f.tangent
+          .clone()
+          .multiplyScalar(
+            -CFG.camera.back
+          )
       )
-
-    )
-    .add(
-
-      new THREE.Vector3(
-
-        0,
-
-        CFG.camera.height,
-
-        0
-
+      .add(
+        new THREE.Vector3(
+          0,
+          CFG.camera.height,
+          0
+        )
       )
-
-    )
-
   );
 
 
-  camera.fov =
+  camera.fov=
     CFG.camera.fov;
 
 
@@ -4456,34 +3088,21 @@ function resetCamera(){
 
 
   camera.lookAt(
-
-    p
-    .clone()
-    .add(
-
-      f.tangent
-      .clone()
-      .multiplyScalar(
-
-        CFG.camera.look
-
+    p.clone()
+      .add(
+        f.tangent
+          .clone()
+          .multiplyScalar(
+            CFG.camera.look
+          )
       )
-
-    )
-    .add(
-
-      new THREE.Vector3(
-
-        0,
-
-        1,
-
-        0
-
+      .add(
+        new THREE.Vector3(
+          0,
+          1,
+          0
+        )
       )
-
-    )
-
   );
 
 }
@@ -4491,147 +3110,95 @@ function resetCamera(){
 
 function updateCamera(dt){
 
-  const f =
+  const f=
     track.frame(
       player.distance
     );
 
 
-  const nitro =
-    player.nitro > 0;
+  const nitro=
+    player.nitro>0;
 
 
-  const p =
+  const p=
     player.group
-    .position
-    .clone();
+      .position
+      .clone();
 
 
-  const desired =
-
+  const desired=
     p
-    .add(
-
-      f.tangent
-      .clone()
-      .multiplyScalar(
-
-        -CFG.camera.back
-
-        +
-
-        (
-          nitro
-          ?
-          1.2
-          :
+      .add(
+        f.tangent
+          .clone()
+          .multiplyScalar(
+            -CFG.camera.back+
+            (
+              nitro
+              ?
+              1.2
+              :
+              0
+            )
+          )
+      )
+      .add(
+        new THREE.Vector3(
+          0,
+          CFG.camera.height+
+          (
+            nitro
+            ?
+            .25
+            :
+            0
+          ),
           0
         )
-
-      )
-
-    )
-    .add(
-
-      new THREE.Vector3(
-
-        0,
-
-        CFG.camera.height
-
-        +
-
-        (
-          nitro
-          ?
-          .25
-          :
-          0
-        ),
-
-        0
-
-      )
-
-    );
+      );
 
 
   camera.position.lerp(
-
     desired,
-
-    1
-
-    -
-
-    Math.exp(
-      -5 * dt
+    1-Math.exp(
+      -5*dt
     )
-
   );
 
 
-  camera.fov =
-
+  camera.fov=
     THREE.MathUtils.lerp(
-
       camera.fov,
-
       nitro
-
       ?
-
       CFG.camera.nitroFov
-
       :
-
       CFG.camera.fov,
-
-      1
-
-      -
-
-      Math.exp(
-        -5 * dt
+      1-Math.exp(
+        -5*dt
       )
-
     );
 
 
   camera.updateProjectionMatrix();
 
 
-  const look =
-
+  const look=
     track.frame(
-
       Math.min(
-
         track.finishDistance,
-
-        player.distance
-
-        +
-
+        player.distance+
         CFG.camera.look
-
       )
-
     )
     .point
     .clone()
     .add(
-
       new THREE.Vector3(
-
         0,
-
         1,
-
         0
-
       )
-
     );
 
 
@@ -4643,169 +3210,120 @@ function updateCamera(dt){
 
 
 /* =========================================================
-   TEXTURE
+   TEXT TEXTURE
 ========================================================= */
 
-function createTextTexture(
-  text
-){
+function createTextTexture(text){
 
-  const c =
+  const c=
     document.createElement(
       "canvas"
     );
 
 
-  c.width =
-    1024;
+  c.width=1024;
+  c.height=420;
 
 
-  c.height =
-    420;
-
-
-  const x =
+  const x=
     c.getContext(
       "2d"
     );
 
 
-  const g =
+  const g=
     x.createLinearGradient(
-
       0,
-
       0,
-
       1024,
-
       420
-
     );
 
 
   g.addColorStop(
-
     0,
-
     "#07152a"
-
   );
 
 
   g.addColorStop(
-
     1,
-
     "#12385a"
-
   );
 
 
-  x.fillStyle =
-    g;
+  x.fillStyle=g;
 
 
   x.fillRect(
-
     0,
-
     0,
-
     1024,
-
     420
-
   );
 
 
-  x.strokeStyle =
+  x.strokeStyle=
     "#5de4ff";
 
 
-  x.lineWidth =
-    14;
+  x.lineWidth=14;
 
 
   x.strokeRect(
-
     10,
-
     10,
-
     1004,
-
     400
-
   );
 
 
-  x.fillStyle =
-    "#fff";
+  x.fillStyle="#fff";
 
+  x.textAlign="center";
 
-  x.textAlign =
-    "center";
+  x.textBaseline="middle";
 
-
-  x.textBaseline =
-    "middle";
-
-
-  x.font =
+  x.font=
     "800 62px Arial";
 
 
-  const ws =
+  const ws=
     String(text)
-    .split(/\s+/);
+      .split(/\s+/);
 
 
-  const ls =
-    [];
+  const ls=[];
 
-
-  let line =
-    "";
+  let line="";
 
 
   for(
     const w
-    of
-    ws
+    of ws
   ){
 
-    const t =
-
+    const t=
       line
-
       ?
-
       `${line} ${w}`
-
       :
-
       w;
 
 
     if(
-      x.measureText(t).width
-      >
-      880
-      &&
+      x.measureText(t).width>880 &&
       line
     ){
 
       ls.push(line);
 
-      line =
-        w;
+      line=w;
 
     }
     else{
 
-      line =
-        t;
+      line=t;
 
     }
 
@@ -4813,61 +3331,37 @@ function createTextTexture(
 
 
   if(line){
-
     ls.push(line);
-
   }
 
 
-  const vis =
+  const vis=
     ls.slice(
       0,
       3
     );
 
 
-  const y =
-
-    210
-
-    -
-
-    (
-      vis.length - 1
-    )
-    *
-    38;
+  const y=
+    210-
+    (vis.length-1)*38;
 
 
   vis.forEach(
-
-    (
-      v,
-      i
-    ) =>
-
+    (v,i)=>
       x.fillText(
-
         v,
-
         512,
-
-        y
-        +
-        i
-        *
-        76
-
+        y+i*76
       )
-
   );
 
 
-  const tex =
+  const tex=
     new THREE.CanvasTexture(c);
 
 
-  tex.colorSpace =
+  tex.colorSpace=
     THREE.SRGBColorSpace;
 
 
@@ -4877,83 +3371,51 @@ function createTextTexture(
 
 
 /* =========================================================
-   VOCAB PORTALS
+   GATES
 ========================================================= */
 
 function makePortal(answer){
 
-  const g =
+  const g=
     new THREE.Group();
 
 
-  const fm =
-
+  const fm=
     new THREE.MeshStandardMaterial({
-
-      color:
-        0x172235,
-
-      roughness:
-        .4,
-
-      metalness:
-        .28
-
+      color:0x172235,
+      roughness:.4,
+      metalness:.28
     });
 
 
-  const gm =
-
+  const gm=
     new THREE.MeshStandardMaterial({
-
-      color:
-        0x56e2ff,
-
-      emissive:
-        0x1688b8,
-
-      emissiveIntensity:
-        1.5
-
+      color:0x56e2ff,
+      emissive:0x1688b8,
+      emissiveIntensity:1.5
     });
 
 
   for(
     const x
-    of
-    [
-      -1.25,
-      1.25
-    ]
+    of[-1.25,1.25]
   ){
 
-    const p =
-
+    const p=
       new THREE.Mesh(
-
         new THREE.BoxGeometry(
-
           .15,
-
           3.8,
-
           .16
-
         ),
-
         fm
-
       );
 
 
     p.position.set(
-
       x,
-
       1.9,
-
       0
-
     );
 
 
@@ -4962,81 +3424,53 @@ function makePortal(answer){
   }
 
 
-  const top =
-
+  const top=
     new THREE.Mesh(
-
       new THREE.BoxGeometry(
-
         2.65,
-
         .15,
-
         .18
-
       ),
-
       gm
-
     );
 
 
   top.position.set(
-
     0,
-
     3.75,
-
     0
-
   );
 
 
   g.add(top);
 
 
-  const sign =
-
+  const sign=
     new THREE.Mesh(
-
       new THREE.PlaneGeometry(
-
         2.5,
-
         1
-
       ),
-
       new THREE.MeshBasicMaterial({
-
         map:
           createTextTexture(
             answer
           ),
-
         side:
           THREE.DoubleSide,
-
-        transparent:
-          true
-
+        transparent:true
       })
-
     );
 
 
   sign.position.set(
-
     0,
-
     2.45,
-
     -.12
-
   );
 
 
-  sign.rotation.y =
+  sign.rotation.y=
     Math.PI;
 
 
@@ -5050,15 +3484,13 @@ function makePortal(answer){
 
 function spawnGate(distance){
 
-  const q =
+  const q=
     nextQuestion();
 
 
   if(!q){
 
-    gate =
-      null;
-
+    gate=null;
 
     $("question")
       .classList
@@ -5066,74 +3498,53 @@ function spawnGate(distance){
         "hidden"
       );
 
-
     return;
 
   }
 
 
-  distance =
-
+  distance=
     Math.max(
-
       distance,
-
-      player.distance
-      +
-      125
-
+      player.distance+125
     );
 
 
-  distance =
-
+  distance=
     Math.min(
-
       distance,
-
-      track.finishDistance
-      -
-      90
-
+      track.finishDistance-90
     );
 
 
   if(
-    distance <=
-    player.distance
-    +
-    45
+    distance<=
+    player.distance+45
   ){
-
     return;
-
   }
 
 
-  const group =
+  const group=
     new THREE.Group();
 
 
   for(
-    let lane = 0;
-    lane < 3;
+    let lane=0;
+    lane<3;
     lane++
   ){
 
-    const p =
+    const p=
       makePortal(
         q.options[lane]
       );
 
 
-    const f =
-
+    const f=
       track.lanePos(
-
         distance,
-
         lane
-
       );
 
 
@@ -5142,7 +3553,7 @@ function spawnGate(distance){
     );
 
 
-    p.rotation.y =
+    p.rotation.y=
       f.heading;
 
 
@@ -5154,21 +3565,15 @@ function spawnGate(distance){
   scene.add(group);
 
 
-  gate = {
-
+  gate={
     q,
-
     distance,
-
     group,
-
-    resolved:
-      false
-
+    resolved:false
   };
 
 
-  lastGateDistance =
+  lastGateDistance=
     distance;
 
 
@@ -5186,51 +3591,41 @@ function showQuestion(q){
     );
 
 
-  $("qtext").textContent =
+  $("qtext").textContent=
     q.prompt;
 
 
-  $("lanes").innerHTML =
-
+  $("lanes").innerHTML=
     q.options
-    .map(
-
-      (
-        v,
-        i
-      ) =>
-
-      `
-      <div
-        class="lane ${
-          i === player.targetLane
-          ?
-          "active"
-          :
-          ""
-        }"
-        data-lane="${i}"
-      >
-
-        <span>
-          ${
-            [
-              "TRÁI",
-              "GIỮA",
-              "PHẢI"
-            ][i]
-          }
-        </span>
-
-        <b>
-          ${esc(v)}
-        </b>
-
-      </div>
-      `
-
-    )
-    .join("");
+      .map(
+        (v,i)=>
+          `
+          <div
+            class="lane ${
+              i===player.targetLane
+              ?
+              "active"
+              :
+              ""
+            }"
+            data-lane="${i}"
+          >
+            <span>
+              ${
+                [
+                  "TRÁI",
+                  "GIỮA",
+                  "PHẢI"
+                ][i]
+              }
+            </span>
+            <b>
+              ${esc(v)}
+            </b>
+          </div>
+          `
+      )
+      .join("");
 
 }
 
@@ -5242,21 +3637,14 @@ function updateLaneUI(){
       ".lane"
     )
     .forEach(
-
-      el =>
-
+      el=>
         el.classList.toggle(
-
           "active",
-
           Number(
             el.dataset.lane
-          )
-          ===
+          )===
           player.targetLane
-
         )
-
     );
 
 }
@@ -5264,19 +3652,19 @@ function updateLaneUI(){
 
 function flash(
   text,
-  type = "good",
-  ms = 1100
+  type="good",
+  ms=1100
 ){
 
-  const m =
+  const m=
     $("message");
 
 
-  m.textContent =
+  m.textContent=
     text;
 
 
-  m.className =
+  m.className=
     `show ${type}`;
 
 
@@ -5285,16 +3673,11 @@ function flash(
   );
 
 
-  flash.t =
-
+  flash.t=
     setTimeout(
-
-      () =>
-        m.className =
-        "",
-
+      ()=>
+        m.className="",
       ms
-
     );
 
 }
@@ -5303,59 +3686,45 @@ function flash(
 function dispose(obj){
 
   if(!obj){
-
     return;
-
   }
 
 
   obj.traverse(
-
-    c => {
+    c=>{
 
       c.geometry
-      ?.dispose
-      ?.();
+        ?.dispose
+        ?.();
 
 
-      if(
-        c.material
-      ){
+      if(c.material){
 
         for(
           const m
-          of
-          (
+          of(
             Array.isArray(
               c.material
             )
-
             ?
-
             c.material
-
             :
-
-            [
-              c.material
-            ]
+            [c.material]
           )
         ){
 
           m.map
-          ?.dispose
-          ?.();
-
+            ?.dispose
+            ?.();
 
           m.dispose
-          ?.();
+            ?.();
 
         }
 
       }
 
     }
-
   );
 
 
@@ -5367,42 +3736,33 @@ function dispose(obj){
 function resolveGate(){
 
   if(
-    !gate
-    ||
+    !gate ||
     gate.resolved
   ){
-
     return;
-
   }
 
 
-  gate.resolved =
-    true;
+  gate.resolved=true;
 
 
-  const q =
+  const q=
     gate.q;
 
 
-  const lane =
+  const lane=
     player.targetLane;
 
 
-  const good =
-
-    lane ===
+  const good=
+    lane===
     q.correctLane;
 
 
   recordAnswer(
-
     q,
-
     lane,
-
     good
-
   );
 
 
@@ -5411,35 +3771,24 @@ function resolveGate(){
     combo++;
 
 
-    score +=
-
-      120
-
-      +
-
+    score+=
+      120+
       Math.min(
-
         140,
-
-        combo * 16
-
+        combo*16
       );
 
 
-    player.nitro =
+    player.nitro=
       CFG.player.nitroTime;
 
 
-    player.slow =
-      0;
+    player.slow=0;
 
 
     flash(
-
       "✓ CHÍNH XÁC · NITRO!",
-
       "good"
-
     );
 
 
@@ -5452,37 +3801,27 @@ function resolveGate(){
   }
   else{
 
-    combo =
-      0;
+    combo=0;
 
 
-    score =
-
+    score=
       Math.max(
-
         0,
-
-        score - 15
-
+        score-15
       );
 
 
-    player.nitro =
-      0;
+    player.nitro=0;
 
 
-    player.slow =
+    player.slow=
       CFG.player.slowTime;
 
 
     flash(
-
       `✕ Đáp án đúng: ${q.correct}`,
-
       "bad",
-
       1500
-
     );
 
 
@@ -5494,17 +3833,13 @@ function resolveGate(){
 
 
     setTimeout(
-
-      () =>
-
+      ()=>
         $("damageFx")
-        .classList
-        .remove(
-          "active"
-        ),
-
+          .classList
+          .remove(
+            "active"
+          ),
       420
-
     );
 
   }
@@ -5515,41 +3850,26 @@ function resolveGate(){
 function updateGate(){
 
   if(!gate){
-
     return;
-
   }
 
 
-  const rem =
-
-    gate.distance
-
-    -
-
+  const rem=
+    gate.distance-
     player.distance;
 
 
-  $("distance").textContent =
-
-    rem > 0
-
+  $("distance").textContent=
+    rem>0
     ?
-
-    `Cổng còn ${
-      Math.ceil(rem)
-    } m`
-
+    `Cổng còn ${Math.ceil(rem)} m`
     :
-
     "CHỌN LÀN";
 
 
   if(
-    !gate.resolved
-    &&
-    rem <=
-    CFG.resolveDistance
+    !gate.resolved &&
+    rem<=CFG.resolveDistance
   ){
 
     resolveGate();
@@ -5557,27 +3877,19 @@ function updateGate(){
   }
 
 
-  if(
-    rem < -26
-  ){
+  if(rem<-26){
 
     dispose(
       gate.group
     );
 
 
-    gate =
-      null;
+    gate=null;
 
 
     spawnGate(
-
-      lastGateDistance
-
-      +
-
+      lastGateDistance+
       CFG.gateGap
-
     );
 
   }
@@ -5586,98 +3898,66 @@ function updateGate(){
 
 
 /* =========================================================
-   START / FINISH
+   START RACE
 ========================================================= */
 
 function startRace(){
 
   if(running){
-
     return;
-
   }
 
 
-  difficulty =
+  difficulty=
     $("difficulty").value;
 
 
   prepareQuestions();
 
 
-  if(
-    !queue.length
-  ){
+  if(!queue.length){
 
     flash(
-
       "Bộ từ này không còn câu để luyện.",
-
       "bad",
-
       1800
-
     );
-
 
     return;
 
   }
 
 
-  finished =
-    false;
+  finished=false;
+
+  raceTime=0;
+
+  score=0;
+
+  combo=0;
+
+  lastJunction=-1;
 
 
-  raceTime =
-    0;
+  player.distance=0;
+
+  player.targetLane=1;
+
+  player.lateral=0;
+
+  player.speed=0;
+
+  player.nitro=0;
+
+  player.slow=0;
 
 
-  score =
-    0;
-
-
-  combo =
-    0;
-
-
-  lastJunction =
-    -1;
-
-
-  player.distance =
-    0;
-
-
-  player.targetLane =
-    1;
-
-
-  player.lateral =
-    0;
-
-
-  player.speed =
-    0;
-
-
-  player.nitro =
-    0;
-
-
-  player.slow =
-    0;
-
-
-  player.update(
-    .001
-  );
+  player.update(.001);
 
 
   for(
     const a
-    of
-    ai
+    of ai
   ){
 
     scene.remove(
@@ -5687,26 +3967,20 @@ function startRace(){
   }
 
 
-  ai =
-    [];
+  ai=[];
 
 
   for(
-    let i = 0;
-    i < CFG.ai.count;
+    let i=0;
+    i<CFG.ai.count;
     i++
   ){
 
     ai.push(
-
       new AI(
-
         i,
-
         difficulty
-
       )
-
     );
 
   }
@@ -5733,8 +4007,7 @@ function startRace(){
     );
 
 
-  running =
-    true;
+  running=true;
 
 
   spawnGate(
@@ -5743,13 +4016,9 @@ function startRace(){
 
 
   flash(
-
     "3 · 2 · 1 · GO!",
-
     "good",
-
     900
-
   );
 
 }
@@ -5757,42 +4026,32 @@ function startRace(){
 
 function getRank(){
 
-  return (
-
-    1
-
-    +
-
+  return(
+    1+
     ai.filter(
-
-      a =>
-        a.distance
-        >
+      a=>
+        a.distance>
         player.distance
-
-    )
-    .length
-
+    ).length
   );
 
 }
 
 
+/* =========================================================
+   FINISH
+========================================================= */
+
 function finishRace(){
 
   if(finished){
-
     return;
-
   }
 
 
-  finished =
-    true;
+  finished=true;
 
-
-  running =
-    false;
+  running=false;
 
 
   $("question")
@@ -5815,75 +4074,57 @@ function finishRace(){
       gate.group
     );
 
-
-    gate =
-      null;
+    gate=null;
 
   }
 
 
-  const correct =
-
+  const correct=
     results.filter(
-      x =>
+      x=>
         x.isCorrect
-    )
-    .length;
+    ).length;
 
 
-  const review =
-
+  const review=
     results.filter(
-      x =>
+      x=>
         !x.isCorrect
     );
 
 
-  const rank =
+  const rank=
     getRank();
 
 
-  score +=
-
+  score+=
     (
-      ai.length
-      +
-      1
-      -
+      ai.length+
+      1-
       rank
-    )
-    *
-    70
-
-    +
-
-    correct
-    *
-    35;
+    )*70+
+    correct*35;
 
 
-  $("finalRank").textContent =
-    `${rank}/${ai.length + 1}`;
+  $("finalRank").textContent=
+    `${rank}/${ai.length+1}`;
 
 
-  $("finalTime").textContent =
+  $("finalTime").textContent=
     `${raceTime.toFixed(1)}s`;
 
 
-  $("finalScore").textContent =
+  $("finalScore").textContent=
     score;
 
 
-  $("finalAccuracy").textContent =
-
+  $("finalAccuracy").textContent=
     `${correct}/${results.length} · ${
       results.length
       ?
       Math.round(
-        correct
-        /
-        results.length
-        *
+        correct/
+        results.length*
         100
       )
       :
@@ -5891,54 +4132,43 @@ function finishRace(){
     }%`;
 
 
-  $("review").innerHTML =
-
+  $("review").innerHTML=
     review.length
-
     ?
+    review
+      .map(
+        x=>
+          `
+          <div class="review-item">
 
-    review.map(
+            <b>
+              ${esc(x.word)}
+            </b>
 
-      x =>
+            <span>
+              · ${esc(x.meaning)}
+            </span>
 
-      `
-      <div class="review-item">
+            <br>
 
-        <b>
-          ${esc(x.word)}
-        </b>
+            <span>
+              Đáp án đúng:
+              ${esc(x.correct)}
+            </span>
 
-        <span>
-          · ${esc(x.meaning)}
-        </span>
+            ${
+              x.note
+              ?
+              `<br><span>${esc(x.note)}</span>`
+              :
+              ""
+            }
 
-        <br>
-
-        <span>
-          Đáp án đúng:
-          ${esc(x.correct)}
-        </span>
-
-        ${
-          x.note
-
-          ?
-
-          `<br><span>${esc(x.note)}</span>`
-
-          :
-
-          ""
-        }
-
-      </div>
-      `
-
-    )
-    .join("")
-
+          </div>
+          `
+      )
+      .join("")
     :
-
     `
     <div
       style="
@@ -5961,16 +4191,15 @@ function finishRace(){
 
 
 /* =========================================================
-   GAME LOOP
+   UPDATE
 ========================================================= */
 
 function update(dt){
 
-  raceTime +=
-    dt;
+  raceTime+=dt;
 
 
-  const old =
+  const old=
     player.distance;
 
 
@@ -5979,27 +4208,24 @@ function update(dt){
 
   for(
     const a
-    of
-    ai
+    of ai
   ){
 
-    const ahead =
-      a.distance > old;
+    const ahead=
+      a.distance>old;
 
 
     a.update(dt);
 
 
     if(
-      player.nitro > 0
-      &&
-      ahead
-      &&
-      a.distance <
+      player.nitro>0 &&
+      ahead &&
+      a.distance<
       player.distance
     ){
 
-      $("overtake").textContent =
+      $("overtake").textContent=
         `VƯỢT XE · ${a.name}`;
 
 
@@ -6011,17 +4237,13 @@ function update(dt){
 
 
       setTimeout(
-
-        () =>
-
+        ()=>
           $("overtake")
-          .classList
-          .add(
-            "hidden"
-          ),
-
+            .classList
+            .add(
+              "hidden"
+            ),
         800
-
       );
 
     }
@@ -6031,46 +4253,34 @@ function update(dt){
 
   updateGate();
 
-
   updateCamera(dt);
 
 
-  const nd =
+  const nd=
     track.nearestJunction(
       player.distance
     );
 
 
   if(
-    nd < 85
-    &&
-    nd > 5
+    nd<85 &&
+    nd>5
   ){
 
-    const id =
-
+    const id=
       Math.round(
-
         (
-          player.distance
-          +
+          player.distance+
           nd
-        )
-
-        /
-
-        10
-
+        )/10
       );
 
 
     if(
-      id !==
-      lastJunction
+      id!==lastJunction
     ){
 
-      lastJunction =
-        id;
+      lastJunction=id;
 
 
       $("junction")
@@ -6081,17 +4291,13 @@ function update(dt){
 
 
       setTimeout(
-
-        () =>
-
+        ()=>
           $("junction")
-          .classList
-          .add(
-            "hidden"
-          ),
-
+            .classList
+            .add(
+              "hidden"
+            ),
         1200
-
       );
 
     }
@@ -6099,104 +4305,61 @@ function update(dt){
   }
 
 
-  const rank =
+  const rank=
     getRank();
 
 
-  $("speed").textContent =
-
+  $("speed").textContent=
     Math.round(
-      player.speed * 6.05
+      player.speed*6.05
     );
 
 
-  $("rank").textContent =
+  $("rank").textContent=
+    `${rank}/${ai.length+1}`;
 
-    `${rank}/${ai.length + 1}`;
+
+  $("progress").textContent=
+    `${Math.min(
+      100,
+      Math.round(
+        player.distance/
+        track.finishDistance*
+        100
+      )
+    )}%`;
 
 
-  $("progress").textContent =
-
-    `${
-
+  $("nitroFill").style.width=
+    `${Math.max(
+      0,
       Math.min(
-
         100,
-
-        Math.round(
-
-          player.distance
-
-          /
-
-          track.finishDistance
-
-          *
-
-          100
-
-        )
-
+        player.nitro/
+        CFG.player.nitroTime*
+        100
       )
-
-    }%`;
-
-
-  $("nitroFill").style.width =
-
-    `${
-
-      Math.max(
-
-        0,
-
-        Math.min(
-
-          100,
-
-          player.nitro
-
-          /
-
-          CFG.player.nitroTime
-
-          *
-
-          100
-
-        )
-
-      )
-
-    }%`;
+    )}%`;
 
 
-  $("nitroText").textContent =
-
-    player.nitro > 0
-
+  $("nitroText").textContent=
+    player.nitro>0
     ?
-
     "BOOST"
-
     :
-
     "READY";
 
 
   $("speedFx")
     .classList
     .toggle(
-
       "active",
-
-      player.nitro > 0
-
+      player.nitro>0
     );
 
 
   if(
-    player.distance >=
+    player.distance>=
     track.finishDistance
   ){
 
@@ -6207,6 +4370,10 @@ function update(dt){
 }
 
 
+/* =========================================================
+   LOOP
+========================================================= */
+
 function animate(){
 
   requestAnimationFrame(
@@ -6214,20 +4381,15 @@ function animate(){
   );
 
 
-  const dt =
-
+  const dt=
     Math.min(
-
       clock.getDelta(),
-
       .033
-
     );
 
 
   if(
-    running
-    &&
+    running &&
     !finished
   ){
 
@@ -6242,30 +4404,24 @@ function animate(){
 
 
   renderer.render(
-
     scene,
-
     camera
-
   );
 
 }
 
 
 /* =========================================================
-   INPUT
+   CONTROLS
 ========================================================= */
 
 function moveLane(dir){
 
   if(
-    !running
-    ||
+    !running ||
     finished
   ){
-
     return;
-
   }
 
 
@@ -6280,19 +4436,15 @@ function backGames(){
 
   try{
 
-    const u =
-
+    const u=
       localStorage.getItem(
-
         "VOCAB_RACER_RETURN_URL"
-
       );
 
 
     if(u){
 
-      location.href =
-        u;
+      location.href=u;
 
       return;
 
@@ -6302,19 +4454,21 @@ function backGames(){
   catch(e){}
 
 
-  location.href =
-    "../";
+  location.href="../";
 
 }
 
 
 function backPractice(){
 
-  location.href =
-    "../../";
+  location.href="../../";
 
 }
 
+
+/* =========================================================
+   INPUT - ĐÃ SỬA ĐÚNG HƯỚNG TRÁI / PHẢI
+========================================================= */
 
 function bind(){
 
@@ -6332,19 +4486,28 @@ function bind(){
     );
 
 
+  /*
+    QUAN TRỌNG:
+    Do normal vector của track đang quy ước lane index ngược
+    với hướng nhìn camera:
+
+    TRÁI  => moveLane(+1)
+    PHẢI  => moveLane(-1)
+  */
+
   $("left")
     .addEventListener(
       "click",
-      () =>
-        moveLane(-1)
+      ()=>
+        moveLane(1)
     );
 
 
   $("right")
     .addEventListener(
       "click",
-      () =>
-        moveLane(1)
+      ()=>
+        moveLane(-1)
     );
 
 
@@ -6377,40 +4540,18 @@ function bind(){
 
 
   addEventListener(
-
     "keydown",
+    e=>{
 
-    e => {
-
-      if(
-        e.key ===
-        "ArrowLeft"
-
-        ||
-
-        e.key
-        .toLowerCase()
-        ===
-        "a"
-      ){
-
-        e.preventDefault();
-
-        moveLane(-1);
-
-      }
+      const key=
+        String(
+          e.key||""
+        ).toLowerCase();
 
 
       if(
-        e.key ===
-        "ArrowRight"
-
-        ||
-
-        e.key
-        .toLowerCase()
-        ===
-        "d"
+        key==="arrowleft" ||
+        key==="a"
       ){
 
         e.preventDefault();
@@ -6419,98 +4560,86 @@ function bind(){
 
       }
 
-    }
 
+      if(
+        key==="arrowright" ||
+        key==="d"
+      ){
+
+        e.preventDefault();
+
+        moveLane(-1);
+
+      }
+
+    }
   );
 
 
   renderer.domElement
     .addEventListener(
-
       "pointerdown",
-
-      e =>
-        touchX =
+      e=>
+        touchX=
         e.clientX,
-
       {
         passive:true
       }
-
     );
 
 
   renderer.domElement
     .addEventListener(
-
       "pointerup",
-
-      e => {
+      e=>{
 
         if(
-          touchX ===
-          null
+          touchX===null
         ){
-
           return;
-
         }
 
 
-        const dx =
-
-          e.clientX
-          -
+        const dx=
+          e.clientX-
           touchX;
 
 
         if(
-          Math.abs(dx)
-          >
-          34
+          Math.abs(dx)>34
         ){
 
+          /*
+            Vuốt sang trái  => +1
+            Vuốt sang phải => -1
+          */
+
           moveLane(
-
-            dx < 0
-
+            dx<0
             ?
-
-            -1
-
-            :
-
             1
-
+            :
+            -1
           );
 
         }
 
 
-        touchX =
-          null;
+        touchX=null;
 
       },
-
       {
         passive:true
       }
-
     );
 
 
   addEventListener(
-
     "resize",
+    ()=>{
 
-    () => {
-
-      camera.aspect =
-
-        innerWidth
-
-        /
-
+      camera.aspect=
+        innerWidth/
         innerHeight;
 
 
@@ -6518,30 +4647,19 @@ function bind(){
 
 
       renderer.setSize(
-
         innerWidth,
-
         innerHeight
-
       );
 
 
       renderer.setPixelRatio(
-
         Math.min(
-
-          devicePixelRatio
-          ||
-          1,
-
+          devicePixelRatio||1,
           CFG.maxPixelRatio
-
         )
-
       );
 
     }
-
   );
 
 }
@@ -6553,9 +4671,7 @@ function bind(){
 
 function boot(){
 
-  if(
-    !window.THREE
-  ){
+  if(!window.THREE){
 
     throw new Error(
       "Không tải được Three.js."
