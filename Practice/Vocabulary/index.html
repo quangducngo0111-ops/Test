@@ -1012,103 +1012,346 @@ button:disabled{
 
 
 /* =========================================================
-   WHACK
+   WHACK · LIVING SHREW FAMILY
 ========================================================= */
 
 .whack-board{
-  min-height:460px;
-
-  padding:15px;
-
+  position:relative;
+  min-height:500px;
+  padding:24px 18px 18px;
   display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:10px;
-
-  border-radius:17px;
-
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  overflow:hidden;
+  border:1px solid #a9d68f;
+  border-radius:22px;
   background:
-    linear-gradient(
-      #e1f7d6,
-      #bce4a7
-    );
+    radial-gradient(circle at 11% 14%,rgba(255,255,255,.55) 0 2px,transparent 3px),
+    radial-gradient(circle at 84% 28%,rgba(255,255,255,.4) 0 1.5px,transparent 2.5px),
+    radial-gradient(circle at 26% 78%,rgba(255,240,132,.55) 0 2px,transparent 3px),
+    linear-gradient(180deg,#e9fbdc 0%,#caedb4 48%,#a8d58d 100%);
+  box-shadow:inset 0 -28px 50px rgba(73,116,51,.08),0 12px 28px rgba(40,73,32,.08);
+  isolation:isolate;
+}
+
+.whack-board::before,
+.whack-board::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:0;
+}
+
+.whack-board::before{
+  inset:auto 0 0;
+  height:34%;
+  opacity:.34;
+  background:
+    repeating-linear-gradient(78deg,transparent 0 17px,rgba(48,122,50,.18) 18px 20px,transparent 21px 34px);
+}
+
+.whack-board::after{
+  width:88px;
+  height:88px;
+  right:22px;
+  top:18px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff7bd 0 4px,#ffd75f 5px 8px,transparent 9px);
+  opacity:.45;
+  filter:drop-shadow(-48px 54px 0 #fff) drop-shadow(-280px 30px 0 #fff0a7);
 }
 
 .hole{
   position:relative;
-
-  min-height:130px;
-
-  overflow:hidden;
-
+  z-index:1;
+  min-height:140px;
+  overflow:visible;
   display:flex;
   align-items:flex-end;
   justify-content:center;
+  border-radius:18px;
+}
+
+.hole::before{
+  content:"";
+  position:absolute;
+  left:9%;
+  right:9%;
+  bottom:13px;
+  height:34px;
+  border-radius:50%;
+  background:radial-gradient(ellipse at center,#3b2517 0 46%,#65402a 48% 64%,#8a5c38 66% 78%,transparent 80%);
+  box-shadow:0 8px 12px rgba(60,41,24,.24),inset 0 7px 9px rgba(0,0,0,.34);
+}
+
+.hole::after{
+  content:"✿";
+  position:absolute;
+  right:9%;
+  bottom:5px;
+  color:#ff88af;
+  font-size:14px;
+  text-shadow:-24px -3px 0 #ffe270,18px -8px 0 #fff;
+  opacity:.75;
 }
 
 .ground-hole{
   position:absolute;
-
-  bottom:3px;
-
-  width:90%;
-  height:31px;
-
+  z-index:3;
+  bottom:0;
+  width:92%;
+  height:28px;
   border-radius:50%;
-
-  background:#79583d;
+  background:linear-gradient(180deg,#6d4c31,#4b2e1c);
+  box-shadow:0 -4px 0 #94633f,inset 0 7px 8px rgba(0,0,0,.35);
+  pointer-events:none;
 }
 
 .mole{
+  --rise:.28s;
+  --mole-scale:1;
   position:relative;
-
   z-index:2;
-
-  width:90%;
-  min-height:100px;
-
-  padding:8px;
-
+  width:min(94%,170px);
+  min-height:122px;
+  padding:0 8px 10px;
   border:0;
-
-  border-radius:
-    50% 50% 28% 28%;
-
-  background:
-    linear-gradient(
-      #ad774b,
-      #80502f
-    );
-
+  background:transparent;
   color:#fff;
-
-  transform:translateY(150%);
-
-  transition:.2s;
+  transform:translateY(138%) scale(var(--mole-scale));
+  transform-origin:50% 100%;
+  opacity:0;
+  transition:transform var(--rise) cubic-bezier(.18,1.45,.38,1),opacity .16s ease;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
 
 .mole.show{
-  transform:translateY(0);
+  transform:translateY(0) scale(var(--mole-scale));
+  opacity:1;
 }
 
-.mole-face{
-  font-size:32px;
+.mole.show .mole-character{
+  animation:whackPeek .55s ease .18s 1;
 }
+
+.mole.hit{
+  animation:whackSquash .42s cubic-bezier(.2,.9,.3,1) both;
+}
+
+.mole.good-hit .mole-character{
+  filter:drop-shadow(0 0 12px rgba(75,232,147,.8));
+}
+
+.mole.bad-hit .mole-character{
+  animation:whackWrongShake .42s ease both;
+}
+
+.mole.rare .mole-character{
+  filter:drop-shadow(0 0 10px rgba(255,208,66,.75));
+}
+
+.mole-character{
+  position:relative;
+  width:100%;
+  height:86px;
+  display:grid;
+  place-items:end center;
+  transform-origin:50% 78%;
+  will-change:transform,filter;
+}
+
+.mole-svg{
+  width:92px;
+  max-width:88%;
+  overflow:visible;
+  display:block;
+}
+
+.mole[data-mole-size="baby"] .mole-svg{width:76px;}
+.mole[data-mole-size="elder"] .mole-svg{width:103px;}
+.mole[data-mole-size="rare"] .mole-svg{width:96px;}
+
+.mole-tail{
+  transform-origin:82% 74%;
+  animation:whackTail 1.4s ease-in-out infinite alternate;
+}
+
+.mole-whisker{
+  stroke:#4d3429;
+  stroke-width:1.2;
+  stroke-linecap:round;
+  opacity:.8;
+}
+
+.mole-eye-x{opacity:0;}
+.mole.hit .mole-eye-normal{opacity:0;}
+.mole.hit .mole-eye-x{opacity:1;}
+
+.mole-bump{
+  position:absolute;
+  z-index:5;
+  left:58%;
+  top:4px;
+  width:16px;
+  height:12px;
+  border-radius:55% 45% 50% 50%;
+  border:2px solid rgba(116,22,75,.45);
+  background:linear-gradient(180deg,#ff7b82,#b53f80);
+  box-shadow:0 2px 8px rgba(145,44,79,.35);
+  transform:scale(0);
+  opacity:0;
+}
+
+.mole.hit .mole-bump{
+  animation:whackBump .52s ease both;
+}
+
+.dizzy-stars{
+  position:absolute;
+  z-index:6;
+  left:50%;
+  top:14px;
+  width:86px;
+  height:42px;
+  transform:translateX(-50%);
+  opacity:0;
+  pointer-events:none;
+}
+
+.mole.hit .dizzy-stars{opacity:1;}
+
+.dizzy-star{
+  position:absolute;
+  left:50%;
+  top:50%;
+  color:#ffe269;
+  font-size:15px;
+  text-shadow:0 1px 3px rgba(83,51,0,.28);
+  animation:whackStarOrbit .48s ease-out both;
+}
+
+.dizzy-star:nth-child(2){animation-delay:.03s;--sx:31px;--sy:-17px;}
+.dizzy-star:nth-child(3){animation-delay:.06s;--sx:-30px;--sy:-12px;}
+.dizzy-star:nth-child(4){animation-delay:.09s;--sx:8px;--sy:-30px;}
+.dizzy-star:nth-child(1){--sx:-7px;--sy:-28px;}
 
 .mole-word{
-  padding:5px 7px;
-
-  border-radius:7px;
-
-  background:#fff;
+  position:relative;
+  z-index:8;
+  width:100%;
+  margin-top:-2px;
+  padding:7px 8px;
+  border:1px solid rgba(75,54,38,.12);
+  border-radius:9px;
+  background:rgba(255,255,255,.96);
   color:#33261e;
-
+  box-shadow:0 4px 10px rgba(75,54,38,.13);
   font-size:9px;
+  line-height:1.2;
   font-weight:950;
-
   overflow-wrap:anywhere;
+}
+
+.whack-score-pop{
+  position:absolute;
+  z-index:20;
+  left:50%;
+  top:24%;
+  transform:translate(-50%,0) scale(.85);
+  padding:5px 9px;
+  border-radius:999px;
+  background:#173b2f;
+  color:#dcffe9;
+  font-size:11px;
+  font-weight:1000;
+  white-space:nowrap;
+  pointer-events:none;
+  animation:whackScoreRise .7s ease-out forwards;
+}
+
+.whack-score-pop.bad{
+  background:#6c2634;
+  color:#ffe8ed;
+}
+
+.hole.impact{animation:whackHoleShake .24s linear 2;}
+.hole.correct-hole{filter:drop-shadow(0 0 14px rgba(75,232,147,.65));}
+.hole.wrong-hole{filter:drop-shadow(0 0 11px rgba(255,92,119,.48));}
+
+.whack-hammer-icon{
+  display:inline-block;
+  transform-origin:80% 80%;
+  animation:whackHammerIdle 1.8s ease-in-out infinite;
+}
+
+@keyframes whackPeek{
+  0%,100%{transform:rotate(0deg)}
+  30%{transform:rotate(-5deg) translateX(-2px)}
+  65%{transform:rotate(5deg) translateX(2px)}
+}
+
+@keyframes whackTail{
+  from{transform:rotate(-7deg)}
+  to{transform:rotate(9deg)}
+}
+
+@keyframes whackSquash{
+  0%{transform:translateY(0) scale(var(--mole-scale)) scaleX(1) scaleY(1)}
+  25%{transform:translateY(9px) scale(var(--mole-scale)) scaleX(1.22) scaleY(.68)}
+  52%{transform:translateY(-2px) scale(var(--mole-scale)) scaleX(.95) scaleY(1.06)}
+  100%{transform:translateY(6px) scale(var(--mole-scale)) scaleX(1) scaleY(.96)}
+}
+
+@keyframes whackWrongShake{
+  0%,100%{transform:translateX(0) rotate(0)}
+  25%{transform:translateX(-5px) rotate(-5deg)}
+  50%{transform:translateX(5px) rotate(5deg)}
+  75%{transform:translateX(-3px) rotate(-3deg)}
+}
+
+@keyframes whackBump{
+  0%{transform:scale(0);opacity:0}
+  35%{transform:scale(1.2);opacity:1}
+  100%{transform:scale(.85);opacity:0}
+}
+
+@keyframes whackStarOrbit{
+  from{transform:translate(-50%,-50%) scale(.4) rotate(0);opacity:0}
+  25%{opacity:1}
+  to{transform:translate(calc(-50% + var(--sx)),calc(-50% + var(--sy))) scale(1.05) rotate(160deg);opacity:0}
+}
+
+@keyframes whackHoleShake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-3px)}
+  75%{transform:translateX(3px)}
+}
+
+@keyframes whackScoreRise{
+  0%{opacity:0;transform:translate(-50%,8px) scale(.8)}
+  20%{opacity:1;transform:translate(-50%,0) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-42px) scale(1.06)}
+}
+
+@keyframes whackHammerIdle{
+  0%,80%,100%{transform:rotate(0)}
+  88%{transform:rotate(-18deg)}
+  94%{transform:rotate(8deg)}
+}
+
+@media(max-width:700px){
+  .whack-board{min-height:520px;padding:16px 9px;gap:8px;}
+  .hole{min-height:145px;}
+  .mole{width:100%;}
+  .mole-word{font-size:8px;padding:6px 5px;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .mole.show .mole-character,
+  .mole-tail,
+  .whack-hammer-icon{animation:none!important;}
 }
 
 
@@ -1192,22 +1435,34 @@ button:disabled{
 ========================================================= */
 
 /* =========================================================
-   ALIEN MAZE ESCAPE · 2D
-   Pac-Man-style maze with real wall collision/pathfinding
+   ALIEN ESCAPE · NEON PAC-MAZE
 ========================================================= */
+
+.alien-hud{
+  grid-template-columns:repeat(6,1fr);
+}
+
+.alien-hud .hud-box{
+  border-color:#26375c;
+  background:linear-gradient(180deg,#0f1830,#0a1022);
+  box-shadow:inset 0 0 18px rgba(65,112,255,.06),0 5px 15px rgba(11,22,50,.08);
+}
+
+.alien-hud .hud-box small{color:#8ea9d8;}
+.alien-hud .hud-box b{color:#eff7ff;}
 
 .alien-stage{
   position:relative;
-  height:540px;
+  height:620px;
   overflow:hidden;
-  border:3px solid #111a38;
-  border-radius:20px;
+  border:3px solid #15234d;
+  border-radius:24px;
   background:
-    radial-gradient(circle at 50% 48%,rgba(67,86,174,.12),transparent 34%),
-    #02050c;
+    radial-gradient(circle at 50% 45%,rgba(64,72,182,.17),transparent 36%),
+    linear-gradient(180deg,#030715,#01030a 72%,#040717);
   box-shadow:
-    inset 0 0 40px rgba(20,53,120,.16),
-    0 12px 30px rgba(14,25,60,.10);
+    inset 0 0 65px rgba(27,70,184,.18),
+    0 16px 35px rgba(14,25,60,.12);
   touch-action:none;
   user-select:none;
   isolation:isolate;
@@ -1218,45 +1473,96 @@ button:disabled{
   z-index:0;
   inset:0;
   pointer-events:none;
-  opacity:.45;
+  opacity:.6;
   background-image:
-    radial-gradient(circle at 6% 8%,#fff 0 1px,transparent 1.4px),
-    radial-gradient(circle at 18% 74%,#77dfff 0 1px,transparent 1.4px),
-    radial-gradient(circle at 35% 18%,#fff 0 1px,transparent 1.4px),
-    radial-gradient(circle at 51% 84%,#fff 0 1px,transparent 1.4px),
-    radial-gradient(circle at 66% 10%,#9ab2ff 0 1px,transparent 1.4px),
-    radial-gradient(circle at 80% 64%,#fff 0 1px,transparent 1.4px),
-    radial-gradient(circle at 93% 26%,#fff 0 1px,transparent 1.4px);
+    radial-gradient(circle at 6% 8%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 18% 74%,#77dfff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 35% 18%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 51% 84%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 66% 10%,#9ab2ff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 80% 64%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 93% 26%,#fff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 45% 40%,#816dff 0 1px,transparent 1.5px);
+  animation:alienStarDrift 8s ease-in-out infinite alternate;
 }
 
-.alien-maze{
+.alien-grid-floor{
   position:absolute;
-  z-index:1;
+  z-index:0;
+  inset:0;
+  pointer-events:none;
+  opacity:.22;
+  background-image:
+    linear-gradient(rgba(63,151,255,.18) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(63,151,255,.18) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(180deg,transparent 0,#000 15%,#000 88%,transparent 100%);
+}
+
+.alien-maze,
+.alien-dots{
+  position:absolute;
   inset:0;
   pointer-events:none;
 }
+.alien-maze{z-index:1;}
+.alien-dots{z-index:2;}
 
 .alien-wall{
   position:absolute;
-  border:1px solid #164bff;
-  border-radius:4px;
+  border:1px solid rgba(57,130,255,.94);
+  border-radius:6px;
   background:
-    linear-gradient(
-      180deg,
-      rgba(17,44,115,.98),
-      rgba(4,16,57,.98)
-    );
+    linear-gradient(180deg,rgba(21,54,132,.98),rgba(5,18,63,.98));
   box-shadow:
-    inset 0 0 0 1px rgba(89,132,255,.28),
-    0 0 8px rgba(29,78,255,.28);
+    inset 0 0 0 1px rgba(117,165,255,.24),
+    inset 0 -5px 10px rgba(0,0,0,.28),
+    0 0 8px rgba(29,78,255,.30);
+  animation:alienWallBreath 2.8s ease-in-out infinite alternate;
+}
+
+.alien-wall::before{
+  content:"";
+  position:absolute;
+  left:4px;
+  right:4px;
+  top:2px;
+  height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg,transparent,#5de8ff,#745cff,transparent);
+  box-shadow:0 0 7px #4bc7ff;
+  opacity:.75;
 }
 
 .alien-wall::after{
   content:"";
   position:absolute;
-  inset:2px;
-  border:1px solid rgba(67,133,255,.14);
-  border-radius:2px;
+  inset:3px;
+  border:1px solid rgba(98,160,255,.13);
+  border-radius:3px;
+}
+
+.alien-dot{
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:#8beeff;
+  box-shadow:0 0 7px rgba(104,233,255,.9);
+  animation:alienDotTwinkle 1.4s ease-in-out infinite alternate;
+  will-change:opacity,transform;
+}
+
+.alien-particle{
+  position:absolute;
+  z-index:18;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#9df5ff;
+  pointer-events:none;
+  animation:alienParticleBurst .45s ease-out forwards;
 }
 
 .alien-question{
@@ -1264,83 +1570,143 @@ button:disabled{
   z-index:8;
   left:50%;
   top:50%;
-  width:min(38%,390px);
+  width:clamp(245px,34%,430px);
+  min-height:76px;
+  max-width:calc(100% - 360px);
   transform:translate(-50%,-50%);
-  padding:10px 13px;
-  border:1px solid rgba(136,166,255,.25);
-  border-radius:13px;
-  background:rgba(3,8,22,.90);
-  box-shadow:0 8px 24px rgba(0,0,0,.34);
-  backdrop-filter:blur(6px);
+  padding:12px 16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  border:1px solid rgba(116,194,255,.34);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(5,14,35,.95),rgba(4,9,24,.92));
+  box-shadow:0 10px 28px rgba(0,0,0,.4),inset 0 0 24px rgba(78,121,255,.07),0 0 18px rgba(53,128,255,.12);
+  backdrop-filter:blur(8px);
   text-align:center;
   pointer-events:none;
 }
 
+.alien-question::before,
+.alien-question::after{
+  content:"";
+  position:absolute;
+  width:32px;
+  height:2px;
+  top:50%;
+  background:#62deff;
+  box-shadow:0 0 10px #62deff;
+  opacity:.55;
+}
+.alien-question::before{right:100%;}
+.alien-question::after{left:100%;}
+
 .alien-question small{
   display:block;
-  margin-bottom:4px;
+  margin-bottom:5px;
   color:#75dcff;
   font-size:8px;
   font-weight:950;
-  letter-spacing:.08em;
+  letter-spacing:.09em;
   text-transform:uppercase;
 }
 
 .alien-question strong{
   display:block;
+  width:100%;
   color:#fff;
-  font-size:clamp(12px,1.7vw,18px);
-  line-height:1.3;
+  font-size:clamp(13px,1.55vw,19px);
+  line-height:1.28;
   overflow-wrap:anywhere;
+  word-break:normal;
+  hyphens:auto;
+  text-wrap:balance;
 }
+
+.alien-question.long strong{font-size:clamp(11px,1.3vw,16px);}
+.alien-question.xlong{padding:11px 14px;min-height:92px;}
+.alien-question.xlong strong{font-size:clamp(10px,1.08vw,14px);line-height:1.22;}
 
 .alien-answer{
   position:absolute;
   z-index:6;
-  width:min(17%,175px);
-  min-height:54px;
-  padding:7px 9px;
+  width:clamp(112px,14vw,164px);
+  height:68px;
   display:flex;
   align-items:center;
   justify-content:center;
   transform:translate(-50%,-50%);
-  border:2px solid rgba(110,225,255,.55);
-  border-radius:11px;
+  border:2px solid rgba(90,225,255,.64);
+  border-radius:50%;
   background:
-    linear-gradient(
-      145deg,
-      rgba(18,42,84,.98),
-      rgba(6,17,44,.98)
-    );
-  box-shadow:
-    0 6px 18px rgba(0,0,0,.32),
-    inset 0 0 14px rgba(83,192,255,.06);
+    radial-gradient(ellipse at center,rgba(34,117,167,.58) 0 33%,rgba(8,29,67,.97) 36% 62%,rgba(2,9,24,.98) 66%);
+  box-shadow:0 0 16px rgba(62,214,255,.18),inset 0 0 18px rgba(83,192,255,.08);
   color:#f3fbff;
-  text-align:center;
-  font-size:clamp(7.5px,1vw,10.5px);
-  line-height:1.2;
-  font-weight:900;
-  overflow-wrap:anywhere;
   pointer-events:none;
+  transition:filter .18s ease,box-shadow .18s ease,border-color .18s ease,transform .18s ease;
 }
 
 .alien-answer::before{
   content:"";
   position:absolute;
-  inset:4px;
-  border:1px dashed rgba(123,229,255,.12);
-  border-radius:7px;
+  inset:7px;
+  border:1px dashed rgba(123,229,255,.35);
+  border-radius:50%;
+  animation:alienPadSpin 7s linear infinite;
+}
+
+.alien-answer::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:46px;
+  width:64%;
+  height:55px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg,rgba(91,224,255,.22),transparent);
+  clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);
+  opacity:.28;
+  filter:blur(1px);
+  animation:alienBeamPulse 1.6s ease-in-out infinite alternate;
+}
+
+.alien-answer-label{
+  position:absolute;
+  z-index:3;
+  left:50%;
+  bottom:72px;
+  width:clamp(120px,16vw,190px);
+  transform:translateX(-50%);
+  padding:7px 8px;
+  border:1px solid rgba(94,227,255,.45);
+  border-radius:10px;
+  background:rgba(3,14,34,.9);
+  box-shadow:0 5px 16px rgba(0,0,0,.3),0 0 12px rgba(83,209,255,.12);
+  color:#f3fbff;
+  text-align:center;
+  font-size:clamp(7.5px,.92vw,10px);
+  line-height:1.2;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.alien-answer.near{
+  border-color:#fff07b;
+  box-shadow:0 0 24px rgba(255,232,82,.48),inset 0 0 18px rgba(255,232,82,.09);
+  filter:brightness(1.18);
+  transform:translate(-50%,-50%) scale(1.04);
 }
 
 .alien-answer.correct-flash{
   border-color:#55f0a7;
-  background:linear-gradient(145deg,#176b50,#083a2c);
-  box-shadow:0 0 22px rgba(85,240,167,.28);
+  box-shadow:0 0 30px rgba(85,240,167,.62);
+  filter:brightness(1.25);
 }
 
 .alien-answer.wrong-flash{
   border-color:#ff748c;
-  background:linear-gradient(145deg,#74263e,#3e1020);
+  box-shadow:0 0 27px rgba(255,80,112,.55);
+  animation:alienWrongPad .22s linear 3;
 }
 
 .astronaut-player,
@@ -1349,89 +1715,126 @@ button:disabled{
   left:50%;
   top:50%;
   z-index:12;
-  width:38px;
-  height:38px;
   display:flex;
   align-items:center;
   justify-content:center;
   transform:translate(-50%,-50%);
-  filter:drop-shadow(0 4px 6px rgba(0,0,0,.58));
-  will-change:left,top,transform;
+  will-change:left,top;
   pointer-events:none;
 }
 
 .astronaut-player{
-  font-size:30px;
+  width:52px;
+  height:62px;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.68)) drop-shadow(0 0 9px rgba(76,204,255,.22));
 }
+
+.astronaut-direction,
+.astronaut-model{
+  width:100%;
+  height:100%;
+  transform-origin:50% 50%;
+}
+
+.astronaut-player[data-dir="up"] .astronaut-direction{transform:rotate(0deg);}
+.astronaut-player[data-dir="right"] .astronaut-direction{transform:rotate(90deg);}
+.astronaut-player[data-dir="down"] .astronaut-direction{transform:rotate(180deg);}
+.astronaut-player[data-dir="left"] .astronaut-direction{transform:rotate(-90deg);}
+
+.astronaut-player:not(.moving) .astronaut-model{animation:astronautFloat 1.7s ease-in-out infinite alternate;}
+
+.astronaut-player.moving .astro-leg-left{animation:astroLegLeft .38s ease-in-out infinite alternate;}
+.astronaut-player.moving .astro-leg-right{animation:astroLegRight .38s ease-in-out infinite alternate;}
+.astronaut-player.moving .astro-arm-left{animation:astroArmLeft .38s ease-in-out infinite alternate;}
+.astronaut-player.moving .astro-arm-right{animation:astroArmRight .38s ease-in-out infinite alternate;}
 
 .astronaut-player::after{
   content:"";
   position:absolute;
-  width:26px;
-  height:9px;
-  left:50%;
-  top:29px;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:rgba(63,216,255,.24);
-  filter:blur(4px);
   z-index:-1;
+  left:50%;
+  top:78%;
+  width:36px;
+  height:12px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:rgba(63,216,255,.2);
+  filter:blur(5px);
 }
+
+.alien-stage.hit .astronaut-direction{animation:astronautHit .15s linear 4;}
+.alien-stage.hit .astro-visor{filter:drop-shadow(0 0 7px #ff4d67);}
 
 .alien-enemy{
-  font-size:28px;
-  animation:alienBob .48s ease-in-out infinite alternate;
+  width:48px;
+  height:56px;
+  filter:drop-shadow(0 4px 7px rgba(0,0,0,.58));
 }
 
-.alien-enemy.fast{
-  filter:
-    drop-shadow(0 0 8px rgba(255,91,188,.45))
-    drop-shadow(0 4px 6px rgba(0,0,0,.55));
+.alien-body-wrap{
+  width:100%;
+  height:100%;
+  animation:alienFloat 1.25s ease-in-out infinite alternate;
 }
 
-@keyframes alienBob{
-  from{transform:translate(-50%,-50%) translateY(-1px) scale(.98);}
-  to{transform:translate(-50%,-50%) translateY(2px) scale(1.03);}
-}
+.alien-enemy .alien-tentacle.t1{animation:alienTentacleA .7s ease-in-out infinite alternate;transform-origin:22px 39px;}
+.alien-enemy .alien-tentacle.t2{animation:alienTentacleB .82s ease-in-out -.18s infinite alternate;transform-origin:32px 39px;}
+.alien-enemy .alien-tentacle.t3{animation:alienTentacleA .76s ease-in-out -.31s infinite alternate;transform-origin:42px 39px;}
+.alien-enemy .alien-antenna{animation:alienAntenna 1.45s ease-in-out infinite alternate;transform-origin:32px 16px;}
+.alien-enemy.blink .alien-eye{transform:scaleY(.08);transform-origin:center;}
 
-.alien-stage.hit .astronaut-player{
-  animation:astronautHit .14s linear 4;
-}
+.alien-enemy.fast{filter:drop-shadow(0 0 8px rgba(207,93,255,.45)) drop-shadow(0 4px 6px rgba(0,0,0,.55));}
 
-@keyframes astronautHit{
-  0%{transform:translate(-50%,-50%) translateX(-3px);}
-  50%{transform:translate(-50%,-50%) translateX(3px);}
-  100%{transform:translate(-50%,-50%) translateX(0);}
+.alien-enemy.danger{
+  filter:drop-shadow(0 0 12px rgba(255,102,71,.88)) drop-shadow(0 4px 7px rgba(0,0,0,.6));
+}
+.alien-enemy.danger .alien-body-wrap{animation-duration:.48s;}
+.alien-enemy.danger .alien-antenna-tip{fill:#ff7b45;filter:drop-shadow(0 0 5px #ff5e3c);}
+
+.alien-enemy.vanish{animation:alienVanish .36s ease forwards;}
+
+.alien-stage.teleport-win::after{
+  content:"";
+  position:absolute;
+  z-index:10;
+  left:50%;
+  top:0;
+  width:15%;
+  height:100%;
+  transform:translateX(-50%);
+  background:linear-gradient(90deg,transparent,rgba(104,255,207,.28),rgba(255,255,255,.5),rgba(104,255,207,.28),transparent);
+  filter:blur(4px);
+  animation:alienTeleportFlash .4s ease-out forwards;
+  pointer-events:none;
 }
 
 .alien-controls{
   display:grid;
-  grid-template-columns:repeat(3,52px);
-  grid-template-rows:repeat(2,48px);
+  grid-template-columns:repeat(3,56px);
+  grid-template-rows:repeat(2,50px);
   gap:7px;
   justify-content:center;
   margin:11px auto 0;
 }
 
 .alien-controls button{
-  min-width:48px;
-  min-height:44px;
+  min-width:52px;
+  min-height:46px;
   padding:0;
-  border:1px solid #d9dfeb;
-  border-radius:12px;
-  background:#fff;
-  color:#313b53;
-  font-size:18px;
+  border:1px solid #cfd8e8;
+  border-radius:13px;
+  background:linear-gradient(180deg,#fff,#f5f8ff);
+  color:#26324b;
+  font-size:19px;
   font-weight:950;
-  box-shadow:0 3px 10px rgba(30,44,80,.07);
+  box-shadow:0 4px 12px rgba(30,44,80,.08);
   touch-action:none;
 }
 
 .alien-controls button:active{
   transform:translateY(1px) scale(.97);
-  background:#f2f6ff;
+  background:#eef4ff;
 }
-
 .alien-controls .up{grid-column:2;grid-row:1;}
 .alien-controls .left{grid-column:1;grid-row:2;}
 .alien-controls .down{grid-column:2;grid-row:2;}
@@ -1444,33 +1847,52 @@ button:disabled{
   text-align:center;
 }
 
-@media (max-width:700px){
-  .alien-stage{
-    height:480px;
-    border-radius:16px;
-  }
+@keyframes alienStarDrift{from{transform:translateY(-3px)}to{transform:translateY(3px)}}
+@keyframes alienWallBreath{from{box-shadow:inset 0 0 0 1px rgba(117,165,255,.18),0 0 6px rgba(29,78,255,.22)}to{box-shadow:inset 0 0 0 1px rgba(117,165,255,.3),0 0 13px rgba(39,105,255,.5)}}
+@keyframes alienDotTwinkle{from{opacity:.38;transform:translate(-50%,-50%) scale(.7)}to{opacity:1;transform:translate(-50%,-50%) scale(1.22)}}
+@keyframes alienPadSpin{to{transform:rotate(360deg)}}
+@keyframes alienBeamPulse{from{opacity:.13}to{opacity:.4}}
+@keyframes alienWrongPad{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(calc(-50% + 4px),-50%)}}
+@keyframes astronautFloat{from{transform:translateY(-1px)}to{transform:translateY(3px)}}
+@keyframes astroLegLeft{from{transform:rotate(14deg)}to{transform:rotate(-16deg)}}
+@keyframes astroLegRight{from{transform:rotate(-16deg)}to{transform:rotate(14deg)}}
+@keyframes astroArmLeft{from{transform:rotate(-12deg)}to{transform:rotate(15deg)}}
+@keyframes astroArmRight{from{transform:rotate(15deg)}to{transform:rotate(-12deg)}}
+@keyframes astronautHit{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes alienFloat{from{transform:translateY(-2px) rotate(-1deg)}to{transform:translateY(3px) rotate(1deg)}}
+@keyframes alienTentacleA{from{transform:rotate(-9deg)}to{transform:rotate(10deg)}}
+@keyframes alienTentacleB{from{transform:rotate(10deg)}to{transform:rotate(-8deg)}}
+@keyframes alienAntenna{from{transform:rotate(-7deg)}to{transform:rotate(8deg)}}
+@keyframes alienVanish{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}60%{filter:brightness(2);opacity:.75}100%{opacity:0;transform:translate(-50%,-50%) scale(.2)}}
+@keyframes alienTeleportFlash{from{opacity:0;transform:translateX(-50%) scaleX(.3)}35%{opacity:1}to{opacity:0;transform:translateX(-50%) scaleX(1.4)}}
+@keyframes alienParticleBurst{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(calc(-50% + var(--px)),calc(-50% + var(--py))) scale(.2)}}
 
-  .alien-answer{
-    width:min(22%,140px);
-    min-height:48px;
-    padding:6px;
-    font-size:7.5px;
-  }
-
-  .alien-question{
-    width:42%;
-    padding:8px 9px;
-  }
-
-  .astronaut-player,
-  .alien-enemy{
-    width:34px;
-    height:34px;
-  }
-
-  .astronaut-player{font-size:27px;}
-  .alien-enemy{font-size:25px;}
+@media(max-width:850px){
+  .alien-hud{grid-template-columns:repeat(3,1fr);}
+  .alien-stage{height:590px;border-radius:18px;}
+  .alien-question{width:clamp(220px,48%,340px);max-width:calc(100% - 240px);padding:10px 12px;}
+  .alien-answer{width:clamp(100px,18vw,138px);height:60px;}
+  .alien-answer-label{bottom:64px;width:clamp(105px,20vw,150px);font-size:7.5px;}
+  .astronaut-player{width:46px;height:56px;}
+  .alien-enemy{width:43px;height:50px;}
 }
+
+@media(max-width:620px){
+  .alien-stage{height:610px;}
+  .alien-question{top:50%;width:56%;max-width:56%;min-width:0;}
+  .alien-question strong{font-size:clamp(10px,3vw,14px);}
+  .alien-answer{width:27%;height:56px;}
+  .alien-answer-label{width:130%;bottom:58px;font-size:7px;}
+  .astronaut-player{width:42px;height:52px;}
+  .alien-enemy{width:39px;height:46px;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .alien-stars,.alien-wall,.alien-dot,.alien-answer::before,.alien-answer::after,
+  .astronaut-model,.astro-leg-left,.astro-leg-right,.astro-arm-left,.astro-arm-right,
+  .alien-body-wrap,.alien-tentacle,.alien-antenna{animation:none!important;}
+}
+
 
 /* =========================================================
    FLAPPY
@@ -3791,8 +4213,8 @@ button:disabled{
   <div class="game-header">
 
     <div>
-      <h2>🐹 Whack a Word</h2>
-      <p>Đập đúng đáp án trước khi chuột biến mất.</p>
+      <h2><span class="whack-hammer-icon">🔨</span> Whack a Word</h2>
+      <p>Đọc gợi ý, đập đúng chuột trù mang đáp án. Chuột hiếm cho điểm thưởng x2.</p>
     </div>
 
     <button
@@ -3804,51 +4226,23 @@ button:disabled{
 
   </div>
 
-
   <div class="hud">
-
-    <div class="hud-box">
-      <small>Score</small>
-      <b id="whackScore">0</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Time</small>
-      <b id="whackTime">70</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Lives</small>
-      <b id="whackLives">5</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Combo</small>
-      <b id="whackCombo">x0</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Accuracy</small>
-      <b id="whackAccuracy">0%</b>
-    </div>
-
+    <div class="hud-box"><small>⭐ Score</small><b id="whackScore">0</b></div>
+    <div class="hud-box"><small>⏱ Time</small><b id="whackTime">70</b></div>
+    <div class="hud-box"><small>❤️ Lives</small><b id="whackLives">5</b></div>
+    <div class="hud-box"><small>⚡ Combo</small><b id="whackCombo">x0</b></div>
+    <div class="hud-box"><small>🎯 Accuracy</small><b id="whackAccuracy">0%</b></div>
   </div>
 
-
   <section class="target">
-
     <small>Đập từ tương ứng</small>
-
-    <b id="whackTarget">
-      —
-    </b>
-
+    <b id="whackTarget">—</b>
   </section>
-
 
   <section
     class="whack-board"
     id="whackBoard"
+    aria-label="Whack a Word meadow"
   ></section>
 
 </main>
@@ -3966,76 +4360,63 @@ button:disabled{
 >
 
   <div class="game-header">
-
     <div>
-      <h2>👨‍🚀 Alien Maze Escape</h2>
-      <p>Di chuyển qua mê cung tới đúng đáp án trước khi aliens đuổi kịp.</p>
+      <h2>🪐 Astronaut Escape</h2>
+      <p>Đi qua mê cung neon, né alien và chạm đúng Teleport Pad chứa đáp án.</p>
     </div>
-
-    <button
-      class="game-back"
-      onclick="backToGameList()"
-    >
-      ← Chọn game
-    </button>
-
+    <button class="game-back" onclick="backToGameList()">← Chọn game</button>
   </div>
 
-
-  <div class="hud">
-
-    <div class="hud-box">
-      <small>Score</small>
-      <b id="matchScore">0</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Time</small>
-      <b id="matchTime">120</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Lives</small>
-      <b id="matchLives">5</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Combo</small>
-      <b id="matchCombo">x0</b>
-    </div>
-
-    <div class="hud-box">
-      <small>Accuracy</small>
-      <b id="matchAccuracy">0%</b>
-    </div>
-
+  <div class="hud alien-hud">
+    <div class="hud-box"><small>⭐ Score</small><b id="matchScore">0</b></div>
+    <div class="hud-box"><small>⏱ Time</small><b id="matchTime">120</b></div>
+    <div class="hud-box"><small>❤️ Lives</small><b id="matchLives">5</b></div>
+    <div class="hud-box"><small>⚡ Combo</small><b id="matchCombo">x0</b></div>
+    <div class="hud-box"><small>🎯 Accuracy</small><b id="matchAccuracy">0%</b></div>
+    <div class="hud-box"><small>🚀 Complete</small><b id="matchProgress">0%</b></div>
   </div>
 
-
-  <section
-    class="alien-stage"
-    id="matchBoard"
-    aria-label="Alien Escape game map"
-  >
-
+  <section class="alien-stage" id="matchBoard" aria-label="Astronaut Escape game map">
     <div class="alien-stars"></div>
+    <div class="alien-grid-floor"></div>
     <div class="alien-maze" id="alienMaze" aria-hidden="true"></div>
+    <div class="alien-dots" id="alienDots" aria-hidden="true"></div>
 
-    <div class="alien-answer a0" id="alienAnswer0">—</div>
-    <div class="alien-answer a1" id="alienAnswer1">—</div>
-    <div class="alien-answer a2" id="alienAnswer2">—</div>
-    <div class="alien-answer a3" id="alienAnswer3">—</div>
+    <div class="alien-answer a0" id="alienAnswer0"><span class="alien-answer-label">—</span></div>
+    <div class="alien-answer a1" id="alienAnswer1"><span class="alien-answer-label">—</span></div>
+    <div class="alien-answer a2" id="alienAnswer2"><span class="alien-answer-label">—</span></div>
+    <div class="alien-answer a3" id="alienAnswer3"><span class="alien-answer-label">—</span></div>
 
-    <div class="alien-question">
+    <div class="alien-question" id="alienQuestionBox">
       <small id="alienQuestionLabel">Tìm đáp án đúng</small>
       <strong id="alienQuestion">—</strong>
     </div>
 
-    <div class="astronaut-player" id="alienAstronaut">👨‍🚀</div>
+    <div class="astronaut-player" id="alienAstronaut" data-dir="up">
+      <div class="astronaut-direction">
+      <div class="astronaut-model">
+        <svg class="astronaut-svg" viewBox="0 0 64 78" aria-hidden="true">
+          <defs>
+            <linearGradient id="astroSuit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9cae4"/></linearGradient>
+            <linearGradient id="astroVisor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9df3ff"/><stop offset=".45" stop-color="#587ee8"/><stop offset="1" stop-color="#472d88"/></linearGradient>
+          </defs>
+          <rect x="17" y="27" width="30" height="32" rx="11" fill="url(#astroSuit)" stroke="#7184a5" stroke-width="2"/>
+          <rect x="11" y="31" width="10" height="24" rx="5" fill="#8398b7" class="astro-pack"/>
+          <g class="astro-arm astro-arm-left" style="transform-origin:19px 37px"><rect x="10" y="33" width="10" height="24" rx="5" fill="#eaf0f8" stroke="#7184a5" stroke-width="2"/><circle cx="13" cy="56" r="4" fill="#5578e9"/></g>
+          <g class="astro-arm astro-arm-right" style="transform-origin:45px 37px"><rect x="44" y="33" width="10" height="24" rx="5" fill="#eaf0f8" stroke="#7184a5" stroke-width="2"/><circle cx="51" cy="56" r="4" fill="#5578e9"/></g>
+          <g class="astro-leg astro-leg-left" style="transform-origin:26px 56px"><rect x="20" y="53" width="11" height="20" rx="5" fill="#dce6f4" stroke="#7184a5" stroke-width="2"/><rect x="18" y="68" width="14" height="7" rx="3" fill="#4567c8"/></g>
+          <g class="astro-leg astro-leg-right" style="transform-origin:38px 56px"><rect x="33" y="53" width="11" height="20" rx="5" fill="#dce6f4" stroke="#7184a5" stroke-width="2"/><rect x="32" y="68" width="14" height="7" rx="3" fill="#4567c8"/></g>
+          <circle cx="32" cy="21" r="18" fill="#eef5ff" stroke="#7184a5" stroke-width="2"/>
+          <ellipse class="astro-visor" cx="32" cy="21" rx="13" ry="10" fill="url(#astroVisor)" stroke="#38509c" stroke-width="1.5"/>
+          <path d="M24 16c5-6 12-5 16-2" fill="none" stroke="rgba(255,255,255,.78)" stroke-width="2.2" stroke-linecap="round"/>
+          <rect x="24" y="36" width="16" height="9" rx="3" fill="#426cdf"/>
+          <circle cx="28" cy="40" r="1.5" fill="#7dffdb"/><circle cx="33" cy="40" r="1.5" fill="#ffd36c"/>
+        </svg>
+      </div>
+    </div>
+    </div>
     <div id="alienEnemies"></div>
-
   </section>
-
 
   <div class="alien-controls" aria-label="Điều khiển astronaut">
     <button class="up" data-alien-control="up" type="button" aria-label="Đi lên">↑</button>
@@ -4044,9 +4425,7 @@ button:disabled{
     <button class="right" data-alien-control="right" type="button" aria-label="Sang phải">→</button>
   </div>
 
-  <div class="alien-help">
-    Dùng phím mũi tên / WASD hoặc giữ các nút điều hướng · Chạm đúng góc để trả lời
-  </div>
+  <div class="alien-help">WASD / phím mũi tên / giữ nút điều hướng · Trạm sai đẩy lùi, Alien bắt mới mất mạng</div>
 
 </main>
 
@@ -4947,7 +5326,7 @@ const GAME_INTROS = {
 
   whack:{
 
-    icon:"🐹",
+    icon:"🐭",
 
     title:"Whack a Word",
 
@@ -9246,396 +9625,195 @@ function backToGameList(){
 
 
 /* =========================================================
-   WHACK
+   WHACK · LIVING SHREW FAMILY
 ========================================================= */
 
-function startWhack(){
+const WHACK_MOLE_TYPES = [
+  {id:"baby",label:"Chuột con",size:"baby",rise:240,weight:27,fur:"#a8866f",belly:"#e9d7c9",accent:"#ff89b1",accessory:"bow"},
+  {id:"mom",label:"Chuột mẹ",size:"parent",rise:280,weight:22,fur:"#8b735f",belly:"#dfcbbb",accent:"#ef6d9e",accessory:"scarf"},
+  {id:"dad",label:"Chuột bố",size:"parent",rise:275,weight:22,fur:"#75685f",belly:"#daccc2",accent:"#5e80e8",accessory:"cap"},
+  {id:"elder",label:"Chuột ông",size:"elder",rise:410,weight:21,fur:"#807b77",belly:"#dedbd7",accent:"#a9b8d7",accessory:"glasses"},
+  {id:"rare",label:"Chuột tinh nghịch hiếm",size:"rare",rise:230,weight:8,fur:"#e4ad35",belly:"#fff0b9",accent:"#ff63ba",accessory:"star",rare:true}
+];
 
-  launchGame(
-    "whack",
-    "whackScreen",
-    beginWhack
-  );
-
+function weightedWhackType(){
+  const total = WHACK_MOLE_TYPES.reduce((sum,item)=>sum+item.weight,0);
+  let pick = Math.random()*total;
+  for(const item of WHACK_MOLE_TYPES){
+    pick -= item.weight;
+    if(pick <= 0) return item;
+  }
+  return WHACK_MOLE_TYPES[0];
 }
 
+function whackMoleSVG(type){
+  const bow = type.accessory === "bow" ? `<g><path d="M19 13c-8-5-9 6-2 8l7-5z" fill="${type.accent}"/><path d="M31 13c8-5 9 6 2 8l-7-5z" fill="${type.accent}"/><circle cx="25" cy="16" r="4" fill="#ffd1e1"/></g>` : "";
+  const scarf = type.accessory === "scarf" ? `<path d="M16 54c12 6 28 6 39-1l2 7c-14 7-31 7-44 0z" fill="${type.accent}" opacity=".9"/>` : "";
+  const cap = type.accessory === "cap" ? `<path d="M16 13c7-9 23-10 31-2l-3 7H17z" fill="${type.accent}"/><path d="M42 16h13c-2 4-7 5-13 4z" fill="#3859a8"/>` : "";
+  const glasses = type.accessory === "glasses" ? `<g fill="none" stroke="#4f4d57" stroke-width="2"><circle cx="25" cy="34" r="7"/><circle cx="43" cy="34" r="7"/><path d="M32 34h4"/></g><path d="M21 45c7 4 18 4 25 0" fill="none" stroke="#f4f4f4" stroke-width="2.6" stroke-linecap="round"/>` : "";
+  const star = type.accessory === "star" ? `<path d="M34 7l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="#fff06d" stroke="#d78e22" stroke-width="1"/>` : "";
+  return `
+  <svg class="mole-svg" viewBox="0 0 88 82" aria-hidden="true">
+    <g class="mole-tail"><path d="M66 59c19 4 18 17 5 18-7 1-9-4-5-7" fill="none" stroke="${type.fur}" stroke-width="4" stroke-linecap="round"/></g>
+    <ellipse cx="43" cy="59" rx="27" ry="20" fill="${type.fur}"/>
+    <circle cx="26" cy="26" r="10" fill="${type.fur}" stroke="#694f45" stroke-width="2"/><circle cx="57" cy="26" r="10" fill="${type.fur}" stroke="#694f45" stroke-width="2"/>
+    <circle cx="26" cy="26" r="5" fill="#dca49b"/><circle cx="57" cy="26" r="5" fill="#dca49b"/>
+    <path d="M14 42c1-18 12-30 29-30 17 0 29 12 29 31 0 14-12 24-29 24-17 0-30-10-29-25z" fill="${type.fur}"/>
+    <ellipse cx="44" cy="51" rx="17" ry="13" fill="${type.belly}"/>
+    <g class="mole-eye-normal"><circle cx="30" cy="36" r="4.7" fill="#19171a"/><circle cx="55" cy="36" r="4.7" fill="#19171a"/><circle cx="31.5" cy="34.5" r="1.4" fill="#fff"/><circle cx="56.5" cy="34.5" r="1.4" fill="#fff"/></g>
+    <g class="mole-eye-x" stroke="#2d2730" stroke-width="2.4" stroke-linecap="round"><path d="M26 32l8 8m0-8l-8 8"/><path d="M51 32l8 8m0-8l-8 8"/></g>
+    <path d="M37 44c4-6 9-6 13 0-2 4-5 6-7 6s-5-2-6-6z" fill="#cf6d74" stroke="#704347" stroke-width="1.2"/>
+    <rect x="39" y="50" width="6" height="7" rx="1" fill="#fff7e9" stroke="#a58a7e" stroke-width="1"/><rect x="45" y="50" width="6" height="7" rx="1" fill="#fff7e9" stroke="#a58a7e" stroke-width="1"/>
+    <path class="mole-whisker" d="M35 48L12 45M35 51L10 53M52 48l23-5M52 51l24 3"/>
+    ${bow}${scarf}${cap}${glasses}${star}
+  </svg>`;
+}
+
+let whackAudioContext = null;
+function whackTone(kind="hit"){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return;
+    if(!whackAudioContext) whackAudioContext = new Ctx();
+    const ctx = whackAudioContext;
+    if(ctx.state === "suspended") ctx.resume();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    const settings = {
+      hit:[150,90,.055,"triangle"],
+      chip:[580,720,.04,"sine"],
+      good:[760,1050,.12,"sine"],
+      bad:[170,120,.11,"triangle"]
+    }[kind] || [220,150,.06,"triangle"];
+    osc.type=settings[3];
+    osc.frequency.setValueAtTime(settings[0],now);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(40,settings[1]),now+settings[2]);
+    gain.gain.setValueAtTime(.0001,now);
+    gain.gain.exponentialRampToValueAtTime(kind==="hit"?.12:.07,now+.008);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+settings[2]+.04);
+    osc.start(now); osc.stop(now+settings[2]+.05);
+  }catch(error){}
+}
+
+function whackHitFX(mole,hole,good,points,type){
+  mole.classList.add("hit",good?"good-hit":"bad-hit");
+  hole.classList.add("impact",good?"correct-hole":"wrong-hole");
+  whackTone("hit");
+  setTimeout(()=>whackTone("chip"),45);
+  setTimeout(()=>whackTone(good?"good":"bad"),110);
+  const pop=document.createElement("div");
+  pop.className=`whack-score-pop ${good?"":"bad"}`;
+  pop.textContent=good ? `+${points}${type.rare?" · x2 RARE!":""}` : "Chưa đúng";
+  hole.appendChild(pop);
+  setTimeout(()=>pop.remove(),760);
+}
+
+function startWhack(){
+  launchGame("whack","whackScreen",beginWhack);
+}
 
 function beginWhack(){
+  $("whackBoard").innerHTML = Array.from({length:9},(_,i)=>`
+    <div class="hole" id="whackHole${i}">
+      <button class="mole" id="mole${i}" type="button" aria-label="Chuột mang đáp án">
+        <div class="mole-character"></div>
+        <span class="mole-bump"></span>
+        <span class="dizzy-stars"><i class="dizzy-star">★</i><i class="dizzy-star">✦</i><i class="dizzy-star">★</i><i class="dizzy-star">✧</i></span>
+        <div class="mole-word"></div>
+      </button>
+      <div class="ground-hole"></div>
+    </div>`).join("");
 
-  $("whackBoard")
-  .innerHTML =
-  Array.from(
-    {
-      length:9
-    },
-    (
-      _,
-      i
-    ) => `
-      <div class="hole">
-
-        <div class="ground-hole"></div>
-
-        <button
-          class="mole"
-          id="mole${i}"
-        >
-
-          <div class="mole-face">
-            🐹
-          </div>
-
-          <div class="mole-word"></div>
-
-        </button>
-
-      </div>
-    `
-  )
-  .join("");
-
-
-  let seconds =
-  70;
-
-
-  updateWhack(
-    seconds
-  );
-
-
+  let seconds=70;
+  updateWhack(seconds);
   nextWhack();
-
-
-  gameTimer =
-  setInterval(
-    ()=>{
-
-      seconds--;
-
-
-      updateWhack(
-        seconds
-      );
-
-
-      if(
-        seconds <=
-        0
-      ){
-
-        endGame(
-          isSetComplete()
-        );
-
-      }
-
-    },
-    1000
-  );
-
+  gameTimer=setInterval(()=>{
+    seconds--;
+    updateWhack(seconds);
+    if(seconds<=0) endGame(isSetComplete());
+  },1000);
 }
-
 
 function nextWhack(){
-
-  whackRoundLocked =
-  false;
-
-
-  if(
-    gameEnded
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    isSetComplete()
-  ){
-
-    endGame(
-      true
-    );
-
-    return;
-
-  }
-
-
-  clearTimeout(
-    roundTimer
-  );
-
-
-  currentTarget =
-  weightedWord();
-
-
-  $("whackTarget")
-  .textContent =
-  promptFor(
-    currentTarget
-  );
-
-
-  const options =
-  optionsFor(
-    currentTarget,
-    4
-  );
-
-
-  const positions =
-  shuffle(
-    [
-      0,1,2,3,4,5,6,7,8
-    ]
-  )
-  .slice(
-    0,
-    4
-  );
-
-
-  document
-  .querySelectorAll(
-    ".mole"
-  )
-  .forEach(
-    mole => {
-
-      mole.className =
-      "mole";
-
-
-      mole.onclick =
-      null;
-
-    }
-  );
-
-
-  options.forEach(
-    (
-      word,
-      index
-    ) => {
-
-      const mole =
-      $(
-        `mole${positions[index]}`
-      );
-
-
-      mole
-      .querySelector(
-        ".mole-word"
-      )
-      .textContent =
-      answerFor(
-        word
-      );
-
-
-      mole.onclick =
-      ()=>{
-
-        if(
-          whackRoundLocked
-          ||
-          gameEnded
-        ){
-
-          return;
-
-        }
-
-
-        whackRoundLocked =
-        true;
-
-
-        clearTimeout(
-          roundTimer
-        );
-
-
-        const good =
-        wordId(word)
-        ===
-        wordId(
-          currentTarget
-        );
-
-
-        if(good){
-
-          const complete =
-          correctAnswer(
-            currentTarget
-          );
-
-
-          feedback(
-            "✓ Chính xác!",
-            "good"
-          );
-
-
-          updateWhack();
-
-
-          if(complete){
-
-            setTimeout(
-              ()=>endGame(true),
-              500
-            );
-
-          }
-
-          else{
-
-            setTimeout(
-              nextWhack,
-              650
-            );
-
-          }
-
-        }
-
-        else{
-
-          wrongAnswer(
-            currentTarget
-          );
-
-
-          loseLife();
-
-
-          feedback(
-            `✕ ${answerFor(currentTarget)}`,
-            "bad"
-          );
-
-
-          updateWhack();
-
-
-          if(!gameEnded){
-
-            setTimeout(
-              nextWhack,
-              650
-            );
-
-          }
-
-        }
-
-      };
-
-
-      requestAnimationFrame(
-        ()=>{
-
-          mole
-          .classList
-          .add(
-            "show"
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-  roundTimer =
-  setTimeout(
-    ()=>{
-
-      if(
-        gameEnded
-      ){
-
-        return;
-
+  whackRoundLocked=false;
+  if(gameEnded) return;
+  if(isSetComplete()){endGame(true);return;}
+  clearTimeout(roundTimer);
+  currentTarget=weightedWord();
+  $("whackTarget").textContent=promptFor(currentTarget);
+
+  const options=optionsFor(currentTarget,4);
+  const positions=shuffle([0,1,2,3,4,5,6,7,8]).slice(0,4);
+
+  document.querySelectorAll(".hole").forEach(h=>h.classList.remove("impact","correct-hole","wrong-hole"));
+  document.querySelectorAll(".mole").forEach(mole=>{
+    mole.className="mole";
+    mole.style.removeProperty("--rise");
+    mole.dataset.moleSize="parent";
+    mole.onclick=null;
+    mole.querySelector(".mole-character").innerHTML="";
+    mole.querySelector(".mole-word").textContent="";
+  });
+
+  options.forEach((word,index)=>{
+    const pos=positions[index];
+    const mole=$(`mole${pos}`);
+    const hole=$(`whackHole${pos}`);
+    const type=weightedWhackType();
+    mole.dataset.moleSize=type.size;
+    mole.dataset.moleType=type.id;
+    mole.style.setProperty("--rise",`${type.rise}ms`);
+    if(type.rare) mole.classList.add("rare");
+    mole.querySelector(".mole-character").innerHTML=whackMoleSVG(type);
+    mole.querySelector(".mole-word").textContent=answerFor(word);
+
+    mole.onclick=()=>{
+      if(whackRoundLocked||gameEnded) return;
+      whackRoundLocked=true;
+      clearTimeout(roundTimer);
+      const good=wordId(word)===wordId(currentTarget);
+      if(good){
+        const before=score;
+        const complete=correctAnswer(currentTarget);
+        let earned=score-before;
+        if(type.rare){score+=earned;earned*=2;}
+        whackHitFX(mole,hole,true,earned,type);
+        feedback(type.rare?"✨ Chính xác! Chuột hiếm x2!":"✓ Chính xác!","good");
+        updateWhack();
+        if(complete) setTimeout(()=>endGame(true),680);
+        else setTimeout(nextWhack,720);
+      }else{
+        wrongAnswer(currentTarget);
+        const dead=loseLife();
+        whackHitFX(mole,hole,false,0,type);
+        feedback(`✕ Đáp án: ${answerFor(currentTarget)}`,"bad");
+        updateWhack();
+        if(!dead&&!gameEnded) setTimeout(nextWhack,720);
       }
+    };
 
+    requestAnimationFrame(()=>requestAnimationFrame(()=>mole.classList.add("show")));
+  });
 
-      wrongAnswer(
-        currentTarget
-      );
-
-
-      loseLife();
-
-
-      feedback(
-        `⏱ ${answerFor(currentTarget)}`,
-        "bad"
-      );
-
-
-      updateWhack();
-
-
-      if(!gameEnded){
-
-        nextWhack();
-
-      }
-
-    },
-    4500
-  );
-
+  roundTimer=setTimeout(()=>{
+    if(gameEnded||whackRoundLocked) return;
+    whackRoundLocked=true;
+    wrongAnswer(currentTarget);
+    const dead=loseLife();
+    feedback(`⏱ Đáp án: ${answerFor(currentTarget)}`,"bad");
+    updateWhack();
+    if(!dead&&!gameEnded) setTimeout(nextWhack,250);
+  },4500);
 }
 
-
 function updateWhack(seconds){
-
-  $("whackScore")
-  .textContent =
-  score;
-
-
-  if(
-    typeof seconds ===
-    "number"
-  ){
-
-    $("whackTime")
-    .textContent =
-    Math.max(
-      0,
-      seconds
-    );
-
-  }
-
-
-  $("whackLives")
-  .textContent =
-  lives;
-
-
-  $("whackCombo")
-  .textContent =
-  `x${combo}`;
-
-
-  $("whackAccuracy")
-  .textContent =
-  `${accuracy()}%`;
-
+  $("whackScore").textContent=score;
+  if(typeof seconds==="number") $("whackTime").textContent=Math.max(0,seconds);
+  $("whackLives").textContent=lives;
+  $("whackCombo").textContent=`x${combo}`;
+  $("whackAccuracy").textContent=`${accuracy()}%`;
 }
 
 
@@ -10214,1616 +10392,436 @@ function toggleRacerMode(){
 
 
 /* =========================================================
-   ALIEN MAZE ESCAPE · 2D
+   ALIEN ESCAPE · NEON PAC-MAZE
 ========================================================= */
 
-let alienEscapeStarted = false;
-let alienEscapeFrameId = null;
-let alienEscapeLastFrame = 0;
-let alienEscapeRoundLocked = false;
-let alienEscapeSeconds = 120;
+let alienEscapeStarted=false;
+let alienEscapeFrameId=null;
+let alienEscapeLastFrame=0;
+let alienEscapeRoundLocked=false;
+let alienEscapeSeconds=120;
+let alienPlayer={x:.5,y:.78};
+let alienEnemies=[];
+let alienAnswers=[];
+let alienDots=[];
+let alienBlinkTimers=[];
+let alienPlayerDir="up";
+let alienPlayerMoving=false;
 
-let alienPlayer = {
-  x:0.5,
-  y:0.5
-};
+const alienControlState={up:false,down:false,left:false,right:false};
 
-let alienEnemies = [];
-let alienAnswers = [];
-
-const alienControlState = {
-  up:false,
-  down:false,
-  left:false,
-  right:false
-};
-
-/*
-  # = wall
-  . = corridor
-
-  17 columns × 13 rows.
-  The map is deliberately small so collision/pathfinding stays cheap.
-*/
-const ALIEN_MAZE = [
-  "#################",
-  "#.......#.......#",
-  "#.###.#.#.#.###.#",
-  "#.....#...#.....#",
-  "###.#.#####.#.###",
-  "#...#...#...#...#",
-  "#.#...#...#...#.#",
-  "#...#...#...#...#",
-  "###.#.#####.#.###",
-  "#.....#...#.....#",
-  "#.###.#.#.#.###.#",
-  "#.......#.......#",
-  "#################"
+/* 23 columns × 15 rows. Rộng, nhiều ngã tư và toàn bộ lối đi liên thông. */
+const ALIEN_MAZE=[
+  "#######################",
+  "#.........#...........#",
+  "#..###....#....###....#",
+  "#.....................#",
+  "#....##.......##......#",
+  "#....##..###..##......#",
+  "#.........#...........#",
+  "#..###....#....###....#",
+  "#.....................#",
+  "#....##..###..##......#",
+  "#....##.......##......#",
+  "#.....................#",
+  "#..###....#....###....#",
+  "#.........#...........#",
+  "#######################"
 ];
 
-const ALIEN_ROWS = ALIEN_MAZE.length;
-const ALIEN_COLS = ALIEN_MAZE[0].length;
+const ALIEN_ROWS=ALIEN_MAZE.length;
+const ALIEN_COLS=ALIEN_MAZE[0].length;
+const ALIEN_PLAYER_START={row:11,col:11};
+const ALIEN_ANSWER_CELLS=[{row:1,col:1},{row:1,col:21},{row:13,col:1},{row:13,col:21}];
+const ALIEN_SPAWN_CELLS=[{row:3,col:5},{row:3,col:17},{row:11,col:5},{row:11,col:17}];
+const ALIEN_PLAYER_SPEED_PX=238;
+const ALIEN_BASE_SPEED_PX=43;
+const ALIEN_HIT_RADIUS_PX=27;
 
-const ALIEN_PLAYER_START = {
-  row:6,
-  col:8
-};
+function alienCellCenter(cell){return{x:(cell.col+.5)/ALIEN_COLS,y:(cell.row+.5)/ALIEN_ROWS};}
+const ALIEN_ANSWER_ZONES=ALIEN_ANSWER_CELLS.map(alienCellCenter);
 
-const ALIEN_ANSWER_CELLS = [
-  {row:1,col:1},
-  {row:1,col:15},
-  {row:11,col:1},
-  {row:11,col:15}
-];
-
-const ALIEN_SPAWN_CELLS = [
-  {row:6,col:1},
-  {row:6,col:15},
-  {row:1,col:7},
-  {row:11,col:7}
-];
-
-const ALIEN_PLAYER_SPEED_PX = 205;
-const ALIEN_BASE_SPEED_PX = 54;
-const ALIEN_HIT_RADIUS_PX = 29;
-
-function alienCellCenter(cell){
-  return{
-    x:(cell.col + .5) / ALIEN_COLS,
-    y:(cell.row + .5) / ALIEN_ROWS
-  };
-}
-
-const ALIEN_ANSWER_ZONES =
-ALIEN_ANSWER_CELLS
-.map(alienCellCenter);
-
-
-function startMatch(){
-
-  launchGame(
-    "match",
-    "matchScreen",
-    beginAlienEscape
-  );
-
-}
-
+function startMatch(){launchGame("match","matchScreen",beginAlienEscape);}
 
 function beginAlienEscape(){
-
   clearAlienEscape();
-
-  alienEscapeStarted = true;
-  alienEscapeRoundLocked = false;
-  alienEscapeSeconds = 120;
-
+  alienEscapeStarted=true;
+  alienEscapeRoundLocked=false;
+  alienEscapeSeconds=120;
   renderAlienMaze();
   setupAlienControls();
   startAlienEscapeRound();
   updateMatch(alienEscapeSeconds);
-
-  gameTimer =
-  setInterval(
-    ()=>{
-
-      alienEscapeSeconds--;
-      updateMatch(alienEscapeSeconds);
-
-      if(
-        alienEscapeSeconds <= 0
-      ){
-        endGame(
-          isSetComplete(),
-          isSetComplete()
-          ? "Hoàn thành bộ từ!"
-          : "Hết giờ!"
-        );
-      }
-
-    },
-    1000
-  );
-
-  alienEscapeLastFrame =
-  performance.now();
-
-  alienEscapeFrameId =
-  requestAnimationFrame(
-    alienEscapeLoop
-  );
-
+  gameTimer=setInterval(()=>{
+    alienEscapeSeconds--;
+    updateMatch(alienEscapeSeconds);
+    if(alienEscapeSeconds<=0){
+      endGame(isSetComplete(),isSetComplete()?"Hoàn thành bộ từ!":"Hết giờ!");
+    }
+  },1000);
+  alienEscapeLastFrame=performance.now();
+  alienEscapeFrameId=requestAnimationFrame(alienEscapeLoop);
 }
-
 
 function clearAlienEscape(){
-
-  alienEscapeStarted = false;
-  alienEscapeRoundLocked = false;
-
-  if(alienEscapeFrameId){
-    cancelAnimationFrame(
-      alienEscapeFrameId
-    );
-  }
-
-  alienEscapeFrameId = null;
-  alienEscapeLastFrame = 0;
-
-  Object.keys(
-    alienControlState
-  )
-  .forEach(
-    key =>
-    alienControlState[key] = false
-  );
-
-  const enemies =
-  $("alienEnemies");
-
-  if(enemies){
-    enemies.innerHTML = "";
-  }
-
+  alienEscapeStarted=false;
+  alienEscapeRoundLocked=false;
+  if(alienEscapeFrameId) cancelAnimationFrame(alienEscapeFrameId);
+  alienEscapeFrameId=null;
+  alienEscapeLastFrame=0;
+  releaseAllAlienControls();
+  alienBlinkTimers.forEach(clearTimeout);
+  alienBlinkTimers=[];
+  const enemies=$("alienEnemies"); if(enemies) enemies.innerHTML="";
+  const board=$("matchBoard"); if(board) board.classList.remove("hit","teleport-win");
 }
-
 
 function renderAlienMaze(){
+  const maze=$("alienMaze");
+  const dots=$("alienDots");
+  if(!maze) return;
+  const rects=[];
+  ALIEN_MAZE.forEach((row,rowIndex)=>{
+    let start=-1;
+    for(let col=0;col<=ALIEN_COLS;col++){
+      const wall=col<ALIEN_COLS&&row[col]==="#";
+      if(wall&&start<0) start=col;
+      if(!wall&&start>=0){rects.push({row:rowIndex,start,end:col-1});start=-1;}
+    }
+  });
+  maze.innerHTML=rects.map(rect=>{
+    const left=rect.start/ALIEN_COLS*100;
+    const top=rect.row/ALIEN_ROWS*100;
+    const width=(rect.end-rect.start+1)/ALIEN_COLS*100;
+    const height=1/ALIEN_ROWS*100;
+    return `<div class="alien-wall" style="left:${left}%;top:${top}%;width:${width}%;height:${height}%"></div>`;
+  }).join("");
 
-  const maze =
-  $("alienMaze");
+  ALIEN_ANSWER_ZONES.forEach((zone,index)=>{
+    const node=$(`alienAnswer${index}`);
+    if(node){node.style.left=`${zone.x*100}%`;node.style.top=`${zone.y*100}%`;}
+  });
 
-  if(!maze){
-    return;
+  alienDots=[];
+  if(dots){
+    let id=0;
+    for(let row=1;row<ALIEN_ROWS-1;row++){
+      for(let col=1;col<ALIEN_COLS-1;col++){
+        if(ALIEN_MAZE[row][col]==="#") continue;
+        if((row+col)%2!==0) continue;
+        if(ALIEN_ANSWER_CELLS.some(c=>c.row===row&&c.col===col)) continue;
+        if(Math.abs(row-7)<2&&Math.abs(col-11)<4) continue;
+        const p=alienCellCenter({row,col});
+        alienDots.push({id,row,col,x:p.x,y:p.y,collected:false});
+        id++;
+      }
+    }
+    dots.innerHTML=alienDots.map((dot,index)=>`<i class="alien-dot" id="alienDot${dot.id}" style="left:${dot.x*100}%;top:${dot.y*100}%;animation-delay:-${(index%11)*.11}s"></i>`).join("");
   }
-
-  const rects = [];
-
-  ALIEN_MAZE
-  .forEach(
-    (
-      row,
-      rowIndex
-    )=>{
-
-      let start = -1;
-
-      for(
-        let col=0;
-        col<=ALIEN_COLS;
-        col++
-      ){
-
-        const wall =
-        col < ALIEN_COLS
-        &&
-        row[col] === "#";
-
-        if(
-          wall
-          &&
-          start < 0
-        ){
-          start = col;
-        }
-
-        if(
-          !wall
-          &&
-          start >= 0
-        ){
-
-          rects.push({
-            row:rowIndex,
-            start:start,
-            end:col - 1
-          });
-
-          start = -1;
-        }
-
-      }
-
-    }
-  );
-
-  maze.innerHTML =
-  rects
-  .map(
-    rect => {
-
-      const left =
-      rect.start
-      /
-      ALIEN_COLS
-      *
-      100;
-
-      const top =
-      rect.row
-      /
-      ALIEN_ROWS
-      *
-      100;
-
-      const width =
-      (
-        rect.end
-        -
-        rect.start
-        +
-        1
-      )
-      /
-      ALIEN_COLS
-      *
-      100;
-
-      const height =
-      1
-      /
-      ALIEN_ROWS
-      *
-      100;
-
-      return`
-        <div
-          class="alien-wall"
-          style="
-            left:${left}%;
-            top:${top}%;
-            width:${width}%;
-            height:${height}%;
-          "
-        ></div>
-      `;
-
-    }
-  )
-  .join("");
-
-  ALIEN_ANSWER_ZONES
-  .forEach(
-    (
-      zone,
-      index
-    )=>{
-
-      const node =
-      $(
-        `alienAnswer${index}`
-      );
-
-      if(!node){
-        return;
-      }
-
-      node.style.left =
-      `${zone.x * 100}%`;
-
-      node.style.top =
-      `${zone.y * 100}%`;
-
-    }
-  );
-
 }
 
-
-function releaseAllAlienControls(){
-
-  Object.keys(
-    alienControlState
-  )
-  .forEach(
-    key =>
-    alienControlState[key] = false
-  );
-
-}
-
+function releaseAllAlienControls(){Object.keys(alienControlState).forEach(key=>alienControlState[key]=false);alienPlayerMoving=false;}
 
 function setupAlienControls(){
-
-  document
-  .querySelectorAll(
-    "[data-alien-control]"
-  )
-  .forEach(
-    button => {
-
-      const dir =
-      button.dataset.alienControl;
-
-      button.oncontextmenu =
-      event =>
-      event.preventDefault();
-
-
-      button.onpointerdown =
-      event => {
-
-        event.preventDefault();
-
-        /*
-          Giữ pointer ở đúng button kể cả khi ngón tay / chuột
-          lệch ra ngoài biên. Đây là nguyên nhân cũ khiến astronaut
-          đang chạy thì thỉnh thoảng tự dừng.
-        */
-        try{
-
-          button.setPointerCapture(
-            event.pointerId
-          );
-
-        }
-        catch(error){}
-
-        alienControlState[dir] = true;
-
-      };
-
-
-      const release =
-      event => {
-
-        event.preventDefault();
-
-        alienControlState[dir] = false;
-
-        try{
-
-          if(
-            button.hasPointerCapture(
-              event.pointerId
-            )
-          ){
-
-            button.releasePointerCapture(
-              event.pointerId
-            );
-
-          }
-
-        }
-        catch(error){}
-
-      };
-
-
-      button.onpointerup =
-      release;
-
-      button.onpointercancel =
-      release;
-
-      button.onlostpointercapture =
-      ()=>{
-        alienControlState[dir] = false;
-      };
-
-      /*
-        KHÔNG dùng pointerleave để release nữa.
-        Khi đang giữ nút, pointer capture cho phép người chơi
-        tiếp tục chạy dù ngón tay hơi trượt khỏi nút.
-      */
-
-    }
-  );
-
+  document.querySelectorAll("[data-alien-control]").forEach(button=>{
+    const dir=button.dataset.alienControl;
+    button.oncontextmenu=e=>e.preventDefault();
+    button.onpointerdown=e=>{
+      e.preventDefault();
+      try{button.setPointerCapture(e.pointerId);}catch(error){}
+      alienControlState[dir]=true;
+    };
+    const release=e=>{
+      e.preventDefault();alienControlState[dir]=false;
+      try{if(button.hasPointerCapture(e.pointerId))button.releasePointerCapture(e.pointerId);}catch(error){}
+    };
+    button.onpointerup=release;
+    button.onpointercancel=release;
+    button.onlostpointercapture=()=>alienControlState[dir]=false;
+  });
 }
 
+window.addEventListener("blur",releaseAllAlienControls);
+document.addEventListener("visibilitychange",()=>{if(document.hidden)releaseAllAlienControls();});
 
-/*
-  Nếu tab/app mất focus thật sự thì mới giải phóng tất cả phím,
-  tránh tình trạng nút bị kẹt.
-*/
-window.addEventListener(
-  "blur",
-  releaseAllAlienControls
-);
+function alienIsOpenCell(row,col){return row>=0&&row<ALIEN_ROWS&&col>=0&&col<ALIEN_COLS&&ALIEN_MAZE[row][col]!=="#";}
+function alienCellFromPosition(x,y){return{row:Math.max(0,Math.min(ALIEN_ROWS-1,Math.floor(y*ALIEN_ROWS))),col:Math.max(0,Math.min(ALIEN_COLS-1,Math.floor(x*ALIEN_COLS)))}};
 
-document.addEventListener(
-  "visibilitychange",
-  ()=>{
-
-    if(document.hidden){
-      releaseAllAlienControls();
-    }
-
-  }
-);
-
-
-function alienIsOpenCell(
-  row,
-  col
-){
-
-  return(
-    row >= 0
-    &&
-    row < ALIEN_ROWS
-    &&
-    col >= 0
-    &&
-    col < ALIEN_COLS
-    &&
-    ALIEN_MAZE[row][col] !== "#"
-  );
-
+function alienCanOccupy(x,y){
+  const rx=.24/ALIEN_COLS,ry=.24/ALIEN_ROWS;
+  const samples=[[0,0],[rx,0],[-rx,0],[0,ry],[0,-ry],[rx*.72,ry*.72],[rx*.72,-ry*.72],[-rx*.72,ry*.72],[-rx*.72,-ry*.72]];
+  return samples.every(([sx,sy])=>{const cell=alienCellFromPosition(x+sx,y+sy);return alienIsOpenCell(cell.row,cell.col);});
 }
 
-
-function alienCellFromPosition(
-  x,
-  y
-){
-
-  return{
-    row:
-      Math.max(
-        0,
-        Math.min(
-          ALIEN_ROWS - 1,
-          Math.floor(
-            y * ALIEN_ROWS
-          )
-        )
-      ),
-
-    col:
-      Math.max(
-        0,
-        Math.min(
-          ALIEN_COLS - 1,
-          Math.floor(
-            x * ALIEN_COLS
-          )
-        )
-      )
-  };
-
+function alienFindPath(start,goal){
+  const startKey=`${start.row},${start.col}`,goalKey=`${goal.row},${goal.col}`;
+  if(startKey===goalKey)return[start];
+  const queue=[start],parent=new Map([[startKey,null]]),dirs=[[-1,0],[1,0],[0,-1],[0,1]];
+  let found=false;
+  while(queue.length&&!found){
+    const current=queue.shift();
+    for(const [dr,dc] of dirs){
+      const next={row:current.row+dr,col:current.col+dc};
+      if(!alienIsOpenCell(next.row,next.col))continue;
+      const key=`${next.row},${next.col}`;
+      if(parent.has(key))continue;
+      parent.set(key,current);queue.push(next);
+      if(key===goalKey){found=true;break;}
+    }
+  }
+  if(!parent.has(goalKey))return[start];
+  const path=[];let cursor=goal;
+  while(cursor){path.push(cursor);cursor=parent.get(`${cursor.row},${cursor.col}`);}
+  return path.reverse();
 }
 
-
-function alienCanOccupy(
-  x,
-  y
-){
-
-  /*
-    Hitbox nhỏ hơn sprite một chút để đi qua góc hành lang mượt hơn.
-    Sprite vẫn nhìn 38px nhưng collision không bị "cạ tường" quá sớm.
-  */
-  const rx =
-  .0145;
-
-  const ry =
-  .0195;
-
-  const samples = [
-    [0,0],
-    [rx,0],
-    [-rx,0],
-    [0,ry],
-    [0,-ry],
-    [rx*.72,ry*.72],
-    [rx*.72,-ry*.72],
-    [-rx*.72,ry*.72],
-    [-rx*.72,-ry*.72]
-  ];
-
-  return samples
-  .every(
-    sample => {
-
-      const cell =
-      alienCellFromPosition(
-        x + sample[0],
-        y + sample[1]
-      );
-
-      return alienIsOpenCell(
-        cell.row,
-        cell.col
-      );
-
-    }
-  );
-
+function setAlienQuestionText(text){
+  const box=$("alienQuestionBox"),node=$("alienQuestion");
+  if(!box||!node)return;
+  const value=String(text||"—");
+  node.textContent=value;
+  box.classList.toggle("long",value.length>58);
+  box.classList.toggle("xlong",value.length>105);
+  node.title=value;
 }
 
-
-function alienFindPath(
-  start,
-  goal
-){
-
-  const startKey =
-  `${start.row},${start.col}`;
-
-  const goalKey =
-  `${goal.row},${goal.col}`;
-
-  if(startKey === goalKey){
-    return[
-      start
-    ];
-  }
-
-  const queue = [
-    start
-  ];
-
-  const parent =
-  new Map();
-
-  parent.set(
-    startKey,
-    null
-  );
-
-  const dirs = [
-    [-1,0],
-    [1,0],
-    [0,-1],
-    [0,1]
-  ];
-
-  let found =
-  false;
-
-  while(
-    queue.length
-    &&
-    !found
-  ){
-
-    const current =
-    queue.shift();
-
-    for(
-      const dir
-      of
-      dirs
-    ){
-
-      const next = {
-        row:
-          current.row
-          +
-          dir[0],
-
-        col:
-          current.col
-          +
-          dir[1]
-      };
-
-      if(
-        !alienIsOpenCell(
-          next.row,
-          next.col
-        )
-      ){
-        continue;
-      }
-
-      const key =
-      `${next.row},${next.col}`;
-
-      if(parent.has(key)){
-        continue;
-      }
-
-      parent.set(
-        key,
-        current
-      );
-
-      queue.push(
-        next
-      );
-
-      if(key === goalKey){
-        found = true;
-        break;
-      }
-
-    }
-
-  }
-
-  if(!parent.has(goalKey)){
-    return[
-      start
-    ];
-  }
-
-  const path = [];
-
-  let cursor =
-  goal;
-
-  while(cursor){
-
-    path.push(
-      cursor
-    );
-
-    const key =
-    `${cursor.row},${cursor.col}`;
-
-    cursor =
-    parent.get(key);
-
-  }
-
-  path.reverse();
-
-  return path;
-
-}
-
-
-function startAlienEscapeRound(
-  keepTarget=false
-){
-
-  if(
-    gameEnded
-    ||
-    !alienEscapeStarted
-  ){
-    return;
-  }
-
-  if(
-    isSetComplete()
-  ){
-    endGame(true);
-    return;
-  }
-
-  alienEscapeRoundLocked = false;
-
-  if(
-    !keepTarget
-    ||
-    !currentTarget
-    ||
-    isLearned(currentTarget)
-  ){
-    currentTarget =
-    randomItem(
-      remainingWords()
-    );
-  }
-
-  if(!currentTarget){
-    endGame(true);
-    return;
-  }
-
-  alienPlayer =
-  alienCellCenter(
-    ALIEN_PLAYER_START
-  );
-
-  alienAnswers =
-  optionsFor(
-    currentTarget,
-    4
-  );
-
-  while(
-    alienAnswers.length < 4
-  ){
-    alienAnswers.push(
-      currentTarget
-    );
-  }
-
-  const answerNodes =
-  [0,1,2,3]
-  .map(
-    index =>
-    $(
-      `alienAnswer${index}`
-    )
-  );
-
-  answerNodes
-  .forEach(
-    (
-      node,
-      index
-    ) => {
-
-      node.classList.remove(
-        "correct-flash",
-        "wrong-flash"
-      );
-
-      node.textContent =
-      answerFor(
-        alienAnswers[index]
-      );
-
-    }
-  );
-
-  $("alienQuestionLabel")
-  .textContent =
-  direction === "vi-en"
-  ?
-  "Tìm cụm tiếng Anh"
-  :
-  "Tìm nghĩa tiếng Việt";
-
-  $("alienQuestion")
-  .textContent =
-  promptFor(
-    currentTarget
-  );
-
+function startAlienEscapeRound(keepTarget=false){
+  if(gameEnded||!alienEscapeStarted)return;
+  if(isSetComplete()){endGame(true);return;}
+  alienEscapeRoundLocked=false;
+  if(!keepTarget||!currentTarget||isLearned(currentTarget))currentTarget=randomItem(remainingWords());
+  if(!currentTarget){endGame(true);return;}
+  alienPlayer=alienCellCenter(ALIEN_PLAYER_START);
+  alienPlayerDir="up";
+  alienAnswers=optionsFor(currentTarget,4);
+  while(alienAnswers.length<4) alienAnswers.push(currentTarget);
+  [0,1,2,3].forEach(index=>{
+    const node=$(`alienAnswer${index}`);
+    node.classList.remove("correct-flash","wrong-flash","near");
+    const label=node.querySelector(".alien-answer-label");
+    if(label)label.textContent=answerFor(alienAnswers[index]);
+  });
+  $("alienQuestionLabel").textContent=direction==="vi-en"?"Tìm cụm tiếng Anh":"Tìm nghĩa tiếng Việt";
+  setAlienQuestionText(promptFor(currentTarget));
   spawnAliens();
   renderAlienEscape();
-
 }
 
+function alienSVG(index){
+  const hue=["#80ef75","#b47cff","#73e7d0","#ff82c9"][index%4];
+  return `<div class="alien-body-wrap"><svg viewBox="0 0 64 70" aria-hidden="true">
+    <g class="alien-antenna"><path d="M32 18C30 9 38 6 39 2" fill="none" stroke="${hue}" stroke-width="3" stroke-linecap="round"/><circle class="alien-antenna-tip" cx="40" cy="4" r="4" fill="#aaff8c"/></g>
+    <ellipse cx="32" cy="31" rx="23" ry="21" fill="${hue}" stroke="#244d49" stroke-width="2"/>
+    <ellipse class="alien-eye" cx="23" cy="28" rx="6" ry="9" fill="#11131b"/><ellipse class="alien-eye" cx="41" cy="28" rx="6" ry="9" fill="#11131b"/>
+    <circle cx="21" cy="25" r="1.6" fill="#fff"/><circle cx="39" cy="25" r="1.6" fill="#fff"/>
+    <path d="M26 42c4 3 8 3 12 0" fill="none" stroke="#28534d" stroke-width="2" stroke-linecap="round"/>
+    <path class="alien-tentacle t1" d="M22 47c-5 8-4 14 1 18" fill="none" stroke="${hue}" stroke-width="6" stroke-linecap="round"/>
+    <path class="alien-tentacle t2" d="M32 49c-2 8 0 14 0 17" fill="none" stroke="${hue}" stroke-width="6" stroke-linecap="round"/>
+    <path class="alien-tentacle t3" d="M42 47c5 8 4 14-1 18" fill="none" stroke="${hue}" stroke-width="6" stroke-linecap="round"/>
+  </svg></div>`;
+}
+
+function scheduleAlienBlink(index){
+  const delay=1800+Math.random()*4200;
+  const timer=setTimeout(()=>{
+    const node=$(`alienEnemy${index}`);
+    if(node&&alienEscapeStarted){
+      node.classList.add("blink");
+      setTimeout(()=>node.classList.remove("blink"),130);
+      scheduleAlienBlink(index);
+    }
+  },delay);
+  alienBlinkTimers.push(timer);
+}
 
 function spawnAliens(){
-
-  const count =
-  Math.min(
-    4,
-    2
-    +
-    Math.floor(
-      combo / 4
-    )
-  );
-
-  const spawnCells =
-  shuffle(
-    ALIEN_SPAWN_CELLS
-    .slice()
-  );
-
-  alienEnemies =
-  spawnCells
-  .slice(
-    0,
-    count
-  )
-  .map(
-    (
-      cell,
-      index
-    ) => {
-
-      const point =
-      alienCellCenter(
-        cell
-      );
-
-      return{
-        x:point.x,
-        y:point.y,
-
-        speedPx:
-          Math.min(
-            82,
-            ALIEN_BASE_SPEED_PX
-            +
-            combo * 1.35
-            +
-            index * 3
-          ),
-
-        path:[],
-        repath:0
-      };
-
-    }
-  );
-
-  $("alienEnemies")
-  .innerHTML =
-  alienEnemies
-  .map(
-    (
-      enemy,
-      index
-    ) => `
-      <div
-        class="alien-enemy ${index > 1 ? "fast" : ""}"
-        id="alienEnemy${index}"
-      >
-        👽
-      </div>
-    `
-  )
-  .join("");
-
+  alienBlinkTimers.forEach(clearTimeout);alienBlinkTimers=[];
+  const count=Math.min(4,3+Math.floor(combo/5));
+  const spawnCells=shuffle(ALIEN_SPAWN_CELLS.slice());
+  alienEnemies=spawnCells.slice(0,count).map((cell,index)=>{
+    const p=alienCellCenter(cell);
+    return{x:p.x,y:p.y,speedPx:Math.min(66,ALIEN_BASE_SPEED_PX+combo*.85+index*2.2),path:[],repath:0};
+  });
+  $("alienEnemies").innerHTML=alienEnemies.map((enemy,index)=>`<div class="alien-enemy ${index>1?"fast":""}" id="alienEnemy${index}">${alienSVG(index)}</div>`).join("");
+  alienEnemies.forEach((_,index)=>scheduleAlienBlink(index));
 }
-
 
 function alienEscapeLoop(timestamp){
-
-  if(
-    !alienEscapeStarted
-    ||
-    gameEnded
-    ||
-    currentGame !== "match"
-  ){
-    alienEscapeFrameId = null;
-    return;
-  }
-
-  const dt =
-  Math.min(
-    0.035,
-    Math.max(
-      0,
-      (
-        timestamp
-        -
-        alienEscapeLastFrame
-      )
-      /
-      1000
-    )
-  );
-
-  alienEscapeLastFrame =
-  timestamp;
-
+  if(!alienEscapeStarted||gameEnded||currentGame!=="match"){alienEscapeFrameId=null;return;}
+  const dt=Math.min(.035,Math.max(0,(timestamp-alienEscapeLastFrame)/1000));
+  alienEscapeLastFrame=timestamp;
   if(!alienEscapeRoundLocked){
-    moveAlienPlayer(dt);
-    moveAlienEnemies(dt);
-    checkAlienAnswerCollision();
-    checkAlienEnemyCollision();
-    renderAlienEscape();
+    moveAlienPlayer(dt);moveAlienEnemies(dt);collectAlienDots();checkAlienAnswerCollision();checkAlienEnemyCollision();renderAlienEscape();
   }
-
-  alienEscapeFrameId =
-  requestAnimationFrame(
-    alienEscapeLoop
-  );
-
+  alienEscapeFrameId=requestAnimationFrame(alienEscapeLoop);
 }
-
 
 function moveAlienPlayer(dt){
-
-  let dx = 0;
-  let dy = 0;
-
-  if(alienControlState.left) dx--;
-  if(alienControlState.right) dx++;
-  if(alienControlState.up) dy--;
-  if(alienControlState.down) dy++;
-
-  if(
-    dx === 0
-    &&
-    dy === 0
-  ){
-    return;
-  }
-
-  const board =
-  $("matchBoard");
-
-  if(!board){
-    return;
-  }
-
-  const width =
-  Math.max(
-    1,
-    board.clientWidth
-  );
-
-  const height =
-  Math.max(
-    1,
-    board.clientHeight
-  );
-
-  const length =
-  Math.hypot(
-    dx,
-    dy
-  )
-  ||
-  1;
-
-  const deltaX =
-  dx
-  /
-  length
-  *
-  ALIEN_PLAYER_SPEED_PX
-  *
-  dt
-  /
-  width;
-
-  const deltaY =
-  dy
-  /
-  length
-  *
-  ALIEN_PLAYER_SPEED_PX
-  *
-  dt
-  /
-  height;
-
-  const nextX =
-  alienPlayer.x
-  +
-  deltaX;
-
-  if(
-    alienCanOccupy(
-      nextX,
-      alienPlayer.y
-    )
-  ){
-    alienPlayer.x =
-    nextX;
-  }
-
-  const nextY =
-  alienPlayer.y
-  +
-  deltaY;
-
-  if(
-    alienCanOccupy(
-      alienPlayer.x,
-      nextY
-    )
-  ){
-    alienPlayer.y =
-    nextY;
-  }
-
+  let dx=0,dy=0;
+  if(alienControlState.left)dx--;
+  if(alienControlState.right)dx++;
+  if(alienControlState.up)dy--;
+  if(alienControlState.down)dy++;
+  alienPlayerMoving=dx!==0||dy!==0;
+  if(!alienPlayerMoving)return;
+  if(Math.abs(dx)>Math.abs(dy))alienPlayerDir=dx<0?"left":"right";
+  else if(dy!==0)alienPlayerDir=dy<0?"up":"down";
+  const board=$("matchBoard");if(!board)return;
+  const width=Math.max(1,board.clientWidth),height=Math.max(1,board.clientHeight),length=Math.hypot(dx,dy)||1;
+  const deltaX=dx/length*ALIEN_PLAYER_SPEED_PX*dt/width;
+  const deltaY=dy/length*ALIEN_PLAYER_SPEED_PX*dt/height;
+  const nextX=alienPlayer.x+deltaX;
+  if(alienCanOccupy(nextX,alienPlayer.y))alienPlayer.x=nextX;
+  const nextY=alienPlayer.y+deltaY;
+  if(alienCanOccupy(alienPlayer.x,nextY))alienPlayer.y=nextY;
 }
-
 
 function moveAlienEnemies(dt){
-
-  const board =
-  $("matchBoard");
-
-  if(!board){
-    return;
-  }
-
-  const width =
-  Math.max(
-    1,
-    board.clientWidth
-  );
-
-  const height =
-  Math.max(
-    1,
-    board.clientHeight
-  );
-
-  const playerCell =
-  alienCellFromPosition(
-    alienPlayer.x,
-    alienPlayer.y
-  );
-
-  alienEnemies
-  .forEach(
-    enemy => {
-
-      enemy.repath -=
-      dt;
-
-      const enemyCell =
-      alienCellFromPosition(
-        enemy.x,
-        enemy.y
-      );
-
-      if(
-        enemy.repath <= 0
-        ||
-        !enemy.path.length
-      ){
-
-        enemy.path =
-        alienFindPath(
-          enemyCell,
-          playerCell
-        )
-        .slice(1);
-
-        enemy.repath =
-        .20
-        +
-        Math.random() * .08;
-
-      }
-
-      let target = null;
-
-      if(
-        enemyCell.row === playerCell.row
-        &&
-        enemyCell.col === playerCell.col
-      ){
-
-        target = {
-          x:alienPlayer.x,
-          y:alienPlayer.y
-        };
-
-      }
-
-      else{
-
-        const nextCell =
-        enemy.path[0];
-
-        if(nextCell){
-          target =
-          alienCellCenter(
-            nextCell
-          );
-        }
-
-      }
-
-      if(!target){
-        return;
-      }
-
-      const dxPx =
-      (
-        target.x
-        -
-        enemy.x
-      )
-      *
-      width;
-
-      const dyPx =
-      (
-        target.y
-        -
-        enemy.y
-      )
-      *
-      height;
-
-      const distancePx =
-      Math.hypot(
-        dxPx,
-        dyPx
-      )
-      ||
-      1;
-
-      const step =
-      enemy.speedPx
-      *
-      dt;
-
-      if(
-        distancePx <=
-        step + 2
-      ){
-
-        enemy.x =
-        target.x;
-
-        enemy.y =
-        target.y;
-
-        if(enemy.path.length){
-          enemy.path.shift();
-        }
-
-        return;
-      }
-
-      enemy.x +=
-      dxPx
-      /
-      distancePx
-      *
-      step
-      /
-      width;
-
-      enemy.y +=
-      dyPx
-      /
-      distancePx
-      *
-      step
-      /
-      height;
-
-    }
-  );
-
+  const board=$("matchBoard");if(!board)return;
+  const width=Math.max(1,board.clientWidth),height=Math.max(1,board.clientHeight);
+  const playerCell=alienCellFromPosition(alienPlayer.x,alienPlayer.y);
+  alienEnemies.forEach(enemy=>{
+    enemy.repath-=dt;
+    const enemyCell=alienCellFromPosition(enemy.x,enemy.y);
+    if(enemy.repath<=0||!enemy.path.length){enemy.path=alienFindPath(enemyCell,playerCell).slice(1);enemy.repath=.25+Math.random()*.12;}
+    let target=null;
+    if(enemyCell.row===playerCell.row&&enemyCell.col===playerCell.col)target={x:alienPlayer.x,y:alienPlayer.y};
+    else{const nextCell=enemy.path[0];if(nextCell)target=alienCellCenter(nextCell);}
+    if(!target)return;
+    const dxPx=(target.x-enemy.x)*width,dyPx=(target.y-enemy.y)*height,distancePx=Math.hypot(dxPx,dyPx)||1,step=enemy.speedPx*dt;
+    if(distancePx<=step+2){enemy.x=target.x;enemy.y=target.y;if(enemy.path.length)enemy.path.shift();return;}
+    enemy.x+=dxPx/distancePx*step/width;enemy.y+=dyPx/distancePx*step/height;
+  });
 }
 
+function collectAlienDots(){
+  const board=$("matchBoard");if(!board)return;
+  const w=board.clientWidth||1,h=board.clientHeight||1;
+  alienDots.forEach(dot=>{
+    if(dot.collected)return;
+    const d=Math.hypot((alienPlayer.x-dot.x)*w,(alienPlayer.y-dot.y)*h);
+    if(d>18)return;
+    dot.collected=true;
+    const node=$(`alienDot${dot.id}`);
+    if(node){
+      const left=node.style.left,top=node.style.top;node.remove();
+      for(let i=0;i<5;i++){
+        const p=document.createElement("i");p.className="alien-particle";p.style.left=left;p.style.top=top;p.style.setProperty("--px",`${(Math.random()-.5)*36}px`);p.style.setProperty("--py",`${(Math.random()-.5)*36}px`);board.appendChild(p);setTimeout(()=>p.remove(),480);
+      }
+    }
+  });
+}
 
 function checkAlienAnswerCollision(){
-
-  if(alienEscapeRoundLocked){
-    return;
+  if(alienEscapeRoundLocked)return;
+  const board=$("matchBoard");if(!board)return;
+  const w=board.clientWidth||1,h=board.clientHeight||1;
+  for(let index=0;index<ALIEN_ANSWER_ZONES.length;index++){
+    const zone=ALIEN_ANSWER_ZONES[index];
+    const distance=Math.hypot((alienPlayer.x-zone.x)*w,(alienPlayer.y-zone.y)*h);
+    if(distance<=52){resolveAlienAnswer(index);return;}
   }
-
-  const board =
-  $("matchBoard");
-
-  if(!board){
-    return;
-  }
-
-  const width =
-  Math.max(
-    1,
-    board.clientWidth
-  );
-
-  const height =
-  Math.max(
-    1,
-    board.clientHeight
-  );
-
-  for(
-    let index=0;
-    index<ALIEN_ANSWER_ZONES.length;
-    index++
-  ){
-
-    const zone =
-    ALIEN_ANSWER_ZONES[index];
-
-    const distance =
-    Math.hypot(
-      (
-        alienPlayer.x
-        -
-        zone.x
-      )
-      *
-      width,
-      (
-        alienPlayer.y
-        -
-        zone.y
-      )
-      *
-      height
-    );
-
-    if(
-      distance >
-      43
-    ){
-      continue;
-    }
-
-    resolveAlienAnswer(
-      index
-    );
-
-    return;
-
-  }
-
 }
 
+function pushAlienPlayerFromZone(index){
+  const zone=ALIEN_ANSWER_ZONES[index];
+  let dx=.5-zone.x,dy=.5-zone.y;
+  const len=Math.hypot(dx,dy)||1;dx/=len;dy/=len;
+  for(let step=.085;step>=.025;step-=.01){
+    const nx=alienPlayer.x+dx*step,ny=alienPlayer.y+dy*step;
+    if(alienCanOccupy(nx,ny)){alienPlayer.x=nx;alienPlayer.y=ny;return;}
+  }
+  alienPlayer=alienCellCenter(ALIEN_PLAYER_START);
+}
 
 function resolveAlienAnswer(index){
-
-  if(
-    alienEscapeRoundLocked
-    ||
-    !currentTarget
-  ){
-    return;
-  }
-
-  alienEscapeRoundLocked = true;
-
-  const picked =
-  alienAnswers[index];
-
-  const good =
-  wordId(picked)
-  ===
-  wordId(currentTarget);
-
-  const node =
-  $(
-    `alienAnswer${index}`
-  );
-
-  node.classList.add(
-    good
-    ?
-    "correct-flash"
-    :
-    "wrong-flash"
-  );
-
+  if(alienEscapeRoundLocked||!currentTarget)return;
+  alienEscapeRoundLocked=true;
+  const picked=alienAnswers[index],good=wordId(picked)===wordId(currentTarget),node=$(`alienAnswer${index}`),board=$("matchBoard");
+  node.classList.add(good?"correct-flash":"wrong-flash");
   if(good){
-
-    const complete =
-    correctAnswer(
-      currentTarget
-    );
-
-    feedback(
-      "✓ Đúng! Qua mê cung thành công!",
-      "good"
-    );
-
+    const complete=correctAnswer(currentTarget);
+    board?.classList.add("teleport-win");
+    document.querySelectorAll(".alien-enemy").forEach(enemy=>enemy.classList.add("vanish"));
+    feedback("✓ Đúng! Teleport kích hoạt!","good");
     updateMatch();
-
-    if(complete){
-      setTimeout(
-        ()=>endGame(true),
-        450
-      );
-      return;
-    }
-
-    setTimeout(
-      ()=>startAlienEscapeRound(false),
-      430
-    );
-
-  }
-
-  else{
-
-    wrongAnswer(
-      currentTarget
-    );
-
-    const dead =
-    loseLife();
-
-    feedback(
-      "✕ Sai cổng đáp án! Mất 1 mạng.",
-      "bad"
-    );
-
+    if(complete){setTimeout(()=>endGame(true),520);return;}
+    setTimeout(()=>{board?.classList.remove("teleport-win");startAlienEscapeRound(false);},500);
+  }else{
+    wrongAnswer(currentTarget);
+    pushAlienPlayerFromZone(index);
+    feedback("✕ Sai trạm — bị đẩy lùi, thử lại!","bad");
     updateMatch();
-
-    if(dead){
-      return;
-    }
-
-    setTimeout(
-      ()=>startAlienEscapeRound(true),
-      560
-    );
-
+    setTimeout(()=>{node.classList.remove("wrong-flash");alienEscapeRoundLocked=false;},430);
   }
-
 }
-
 
 function checkAlienEnemyCollision(){
-
-  if(alienEscapeRoundLocked){
-    return;
-  }
-
-  const board =
-  $("matchBoard");
-
-  if(!board){
-    return;
-  }
-
-  const width =
-  Math.max(
-    1,
-    board.clientWidth
-  );
-
-  const height =
-  Math.max(
-    1,
-    board.clientHeight
-  );
-
-  const caught =
-  alienEnemies
-  .some(
-    enemy =>
-    Math.hypot(
-      (
-        alienPlayer.x
-        -
-        enemy.x
-      )
-      *
-      width,
-      (
-        alienPlayer.y
-        -
-        enemy.y
-      )
-      *
-      height
-    )
-    <
-    ALIEN_HIT_RADIUS_PX
-  );
-
-  if(!caught){
-    return;
-  }
-
-  alienEscapeRoundLocked = true;
-
-  $("matchBoard")
-  .classList
-  .add(
-    "hit"
-  );
-
-  wrongAnswer(
-    currentTarget
-  );
-
-  const dead =
-  loseLife();
-
-  feedback(
-    "👽 Alien bắt được bạn! Mất 1 mạng.",
-    "bad"
-  );
-
+  if(alienEscapeRoundLocked)return;
+  const board=$("matchBoard");if(!board)return;
+  const w=board.clientWidth||1,h=board.clientHeight||1;
+  const caught=alienEnemies.some(enemy=>Math.hypot((alienPlayer.x-enemy.x)*w,(alienPlayer.y-enemy.y)*h)<ALIEN_HIT_RADIUS_PX);
+  if(!caught)return;
+  alienEscapeRoundLocked=true;
+  board.classList.add("hit");
+  wrongAnswer(currentTarget);
+  const dead=loseLife();
+  feedback("👽 Alien bắt được bạn! Mất 1 mạng.","bad");
   updateMatch();
-
-  setTimeout(
-    ()=>{
-      const board =
-      $("matchBoard");
-      if(board){
-        board.classList.remove("hit");
-      }
-    },
-    520
-  );
-
-  if(dead){
-    return;
-  }
-
-  setTimeout(
-    ()=>startAlienEscapeRound(true),
-    650
-  );
-
+  setTimeout(()=>board.classList.remove("hit"),520);
+  if(dead)return;
+  setTimeout(()=>startAlienEscapeRound(true),620);
 }
-
 
 function renderAlienEscape(){
-
-  const astronaut =
-  $("alienAstronaut");
-
+  const astronaut=$("alienAstronaut"),board=$("matchBoard");
   if(astronaut){
-    astronaut.style.left =
-    `${alienPlayer.x * 100}%`;
-
-    astronaut.style.top =
-    `${alienPlayer.y * 100}%`;
+    astronaut.style.left=`${alienPlayer.x*100}%`;astronaut.style.top=`${alienPlayer.y*100}%`;
+    astronaut.dataset.dir=alienPlayerDir;astronaut.classList.toggle("moving",alienPlayerMoving);
   }
-
-  alienEnemies
-  .forEach(
-    (
-      enemy,
-      index
-    ) => {
-
-      const node =
-      $(
-        `alienEnemy${index}`
-      );
-
-      if(node){
-        node.style.left =
-        `${enemy.x * 100}%`;
-
-        node.style.top =
-        `${enemy.y * 100}%`;
-      }
-
-    }
-  );
-
+  if(!board)return;
+  const w=board.clientWidth||1,h=board.clientHeight||1;
+  alienEnemies.forEach((enemy,index)=>{
+    const node=$(`alienEnemy${index}`);if(!node)return;
+    node.style.left=`${enemy.x*100}%`;node.style.top=`${enemy.y*100}%`;
+    const distance=Math.hypot((alienPlayer.x-enemy.x)*w,(alienPlayer.y-enemy.y)*h);
+    node.classList.toggle("danger",distance<120);
+  });
+  ALIEN_ANSWER_ZONES.forEach((zone,index)=>{
+    const node=$(`alienAnswer${index}`);if(!node)return;
+    const distance=Math.hypot((alienPlayer.x-zone.x)*w,(alienPlayer.y-zone.y)*h);
+    node.classList.toggle("near",distance<115&&!node.classList.contains("correct-flash")&&!node.classList.contains("wrong-flash"));
+  });
 }
-
 
 function updateMatch(seconds){
-
-  $("matchScore")
-  .textContent =
-  score;
-
-  if(
-    typeof seconds ===
-    "number"
-  ){
-    $("matchTime")
-    .textContent =
-    Math.max(
-      0,
-      seconds
-    );
-  }
-
-  $("matchLives")
-  .textContent =
-  lives;
-
-  $("matchCombo")
-  .textContent =
-  `x${combo}`;
-
-  $("matchAccuracy")
-  .textContent =
-  `${accuracy()}%`;
-
+  $("matchScore").textContent=score;
+  if(typeof seconds==="number")$("matchTime").textContent=Math.max(0,seconds);
+  $("matchLives").textContent=lives;
+  $("matchCombo").textContent=`x${combo}`;
+  $("matchAccuracy").textContent=`${accuracy()}%`;
+  const total=Math.max(1,currentCollection.length||1);
+  const progress=$("matchProgress");if(progress)progress.textContent=`${Math.round(learnedCount()/total*100)}%`;
 }
 
-
-function setAlienKeyboardControl(
-  key,
-  value
-){
-
-  if(
-    key === "arrowup"
-    ||
-    key === "w"
-  ){
-    alienControlState.up = value;
-    return true;
-  }
-
-  if(
-    key === "arrowdown"
-    ||
-    key === "s"
-  ){
-    alienControlState.down = value;
-    return true;
-  }
-
-  if(
-    key === "arrowleft"
-    ||
-    key === "a"
-  ){
-    alienControlState.left = value;
-    return true;
-  }
-
-  if(
-    key === "arrowright"
-    ||
-    key === "d"
-  ){
-    alienControlState.right = value;
-    return true;
-  }
-
+function setAlienKeyboardControl(key,value){
+  if(key==="arrowup"||key==="w"){alienControlState.up=value;return true;}
+  if(key==="arrowdown"||key==="s"){alienControlState.down=value;return true;}
+  if(key==="arrowleft"||key==="a"){alienControlState.left=value;return true;}
+  if(key==="arrowright"||key==="d"){alienControlState.right=value;return true;}
   return false;
-
 }
 
-
-window.addEventListener(
-  "keydown",
-  event => {
-
-    if(
-      currentGame !== "match"
-      ||
-      !alienEscapeStarted
-      ||
-      gameEnded
-    ){
-      return;
-    }
-
-    const target =
-    event.target;
-
-    if(
-      target
-      &&
-      ["INPUT","TEXTAREA","SELECT"]
-      .includes(target.tagName)
-    ){
-      return;
-    }
-
-    if(
-      setAlienKeyboardControl(
-        String(event.key).toLowerCase(),
-        true
-      )
-    ){
-      event.preventDefault();
-    }
-
-  }
-);
-
-
-window.addEventListener(
-  "keyup",
-  event => {
-
-    if(
-      currentGame !== "match"
-      ||
-      !alienEscapeStarted
-    ){
-      return;
-    }
-
-    if(
-      setAlienKeyboardControl(
-        String(event.key).toLowerCase(),
-        false
-      )
-    ){
-      event.preventDefault();
-    }
-
-  }
-);
+window.addEventListener("keydown",event=>{
+  if(currentGame!=="match"||!alienEscapeStarted||gameEnded)return;
+  const target=event.target;
+  if(target&&["INPUT","TEXTAREA","SELECT"].includes(target.tagName))return;
+  if(setAlienKeyboardControl(String(event.key).toLowerCase(),true))event.preventDefault();
+});
+window.addEventListener("keyup",event=>{
+  if(currentGame!=="match"||!alienEscapeStarted)return;
+  if(setAlienKeyboardControl(String(event.key).toLowerCase(),false))event.preventDefault();
+});
 
 
 /* =========================================================
