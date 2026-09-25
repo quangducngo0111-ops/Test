@@ -1,63 +1,69 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+
 <meta charset="UTF-8">
-<meta name="practice-title" content="Gifted children and learning">
+
+<meta
+  name="practice-title"
+  content="Gifted children and learning"
+>
+
 <meta
   name="practice-description"
   content="Matching Information + Matching People + Sentence Completion"
 >
-<meta name="practice-questions" content="13">
+
 <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
+  name="practice-questions"
+  content="13"
 >
 
-<title>
-  Gifted children and learning · Reading Passage 2
-</title>
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0"
+>
+
+<meta
+  http-equiv="Cache-Control"
+  content="no-cache, no-store, must-revalidate"
+>
+
+<title>Reading Passage 2 — 02 | Gifted children and learning</title>
+
 
 <style>
+
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
 
 *{
   box-sizing:border-box;
 }
 
-:root{
-  --purple:#6557e8;
-  --purple-dark:#281260;
-  --purple-soft:#f1efff;
-
-  --bg:#f5f7fb;
-  --panel:#ffffff;
-
-  --text:#111827;
-  --muted:#69758a;
-
-  --line:#dde3ec;
-
-  --good:#178a58;
-  --good-bg:#eaf9f1;
-
-  --bad:#c43b4d;
-  --bad-bg:#fff0f2;
-}
-
 html,
 body{
   margin:0;
-  width:100%;
-  height:100%;
+  min-height:100%;
 
   font-family:
     Inter,
     system-ui,
     -apple-system,
-    BlinkMacSystemFont,
     "Segoe UI",
+    Arial,
     sans-serif;
 
-  color:var(--text);
+  color:var(--ink);
   background:var(--bg);
 }
 
@@ -67,105 +73,274 @@ select{
   font:inherit;
 }
 
+button{
+  cursor:pointer;
+}
+
 
 /* =========================================================
-   TOP BAR
+   HEADER
 ========================================================= */
 
-.topbar{
-  height:66px;
-
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
-
-  padding:0 22px;
-
-  border-bottom:1px solid var(--line);
-
-  background:#fff;
-
+.top{
   position:sticky;
   top:0;
-  z-index:50;
-}
-
-.top-left{
-  justify-self:start;
-}
-
-.top-center{
-  justify-self:center;
-
-  display:flex;
-  align-items:center;
-  gap:10px;
-
-  font-size:18px;
-  font-weight:900;
-
-  color:var(--purple-dark);
-}
-
-.top-right{
-  justify-self:end;
-
-  color:#707b90;
-  font-size:12px;
-  font-weight:800;
-}
-
-.back-btn{
-  display:inline-flex;
-  align-items:center;
-
-  min-height:40px;
-
-  padding:0 14px;
-
-  border:1px solid var(--line);
-  border-radius:12px;
-
-  background:#fff;
-
-  color:var(--purple-dark);
-
-  font-weight:800;
-
-  text-decoration:none;
-}
-
-.logo{
-  width:38px;
-  height:38px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:12px;
+  z-index:30;
 
   background:
     linear-gradient(
-      135deg,
-      #5d55df,
-      #825cf0
+      100deg,
+      #1c0e49,
+      #281260,
+      #37217e
     );
 
   color:#fff;
+
+  box-shadow:
+    0 8px 22px
+    rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(
+    1400px,
+    calc(100% - 18px)
+  );
+
+  min-height:62px;
+
+  margin:auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+
+  gap:9px;
+
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+
+  text-decoration:none;
+
+  border:
+    1px solid rgba(255,255,255,.25);
+
+  padding:
+    7px 10px;
+
+  border-radius:9px;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+
+  font-weight:800;
+
+  background:
+    rgba(255,255,255,.1);
+
+  border:
+    1px solid rgba(255,255,255,.18);
+
+  padding:
+    7px 10px;
+
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:
+    tabular-nums;
+
+  font-size:19px;
+
+  font-weight:950;
+
+  background:
+    rgba(255,255,255,.13);
+
+  padding:
+    8px 11px;
+
+  border-radius:9px;
 }
 
 
 /* =========================================================
-   MAIN LAYOUT
+   PAGE
+========================================================= */
+
+.page{
+  width:min(
+    1400px,
+    calc(100% - 18px)
+  );
+
+  margin:auto;
+
+  padding:
+    18px 0 46px;
+}
+
+.hero{
+  display:flex;
+
+  align-items:end;
+
+  justify-content:space-between;
+
+  gap:18px;
+
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+
+  color:#21164b;
+
+  font-size:27px;
+
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:
+    4px 0 0;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+}
+
+.progress-wrap{
+  min-width:245px;
+}
+
+.progress-row{
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  color:var(--muted);
+
+  font-size:10.5px;
+
+  font-weight:850;
+
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+
+  background:#e5e8ef;
+
+  border-radius:999px;
+
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+
+  width:0;
+
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--purple2),
+      var(--blue)
+    );
+
+  transition:
+    width .2s ease;
+}
+
+
+/* =========================================================
+   WORKSPACE
 ========================================================= */
 
 .workspace{
-  height:calc(100vh - 66px);
-
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(420px,.82fr);
+
+  grid-template-columns:
+    1fr 1fr;
+
+  min-height:
+    calc(100vh - 190px);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:18px;
 
   overflow:hidden;
+
+  background:#fff;
+
+  box-shadow:
+    0 8px 24px
+    rgba(35,25,75,.05);
+}
+
+.pane{
+  min-width:0;
+
+  overflow:auto;
+
+  max-height:
+    calc(100vh - 205px);
+
+  scroll-behavior:smooth;
+}
+
+.passage{
+  border-right:
+    1px solid var(--line);
+
+  background:#fff;
+}
+
+.questions{
+  background:#fafbfe;
+}
+
+.content{
+  padding:
+    20px 23px;
 }
 
 
@@ -173,177 +348,154 @@ select{
    PASSAGE
 ========================================================= */
 
-.passage-panel{
-  overflow-y:auto;
-
-  padding:34px 42px 80px;
-
-  border-right:1px solid var(--line);
-
-  background:#fff;
-}
-
-.eyebrow{
-  color:var(--purple);
-
-  font-size:12px;
-  font-weight:950;
-
-  letter-spacing:.12em;
-
-  text-transform:uppercase;
-}
-
-.passage-panel h1{
-  margin:8px 0 12px;
-
-  font-size:36px;
-  line-height:1.12;
-
-  color:#111827;
-}
-
-.instructions{
-  margin:0 0 28px;
-
-  color:var(--muted);
-
-  font-size:14px;
-  line-height:1.6;
-}
-
-.paragraph{
-  margin:0 0 28px;
-}
-
-.paragraph-label{
-  display:flex;
-
-  width:32px;
-  height:32px;
-
-  align-items:center;
-  justify-content:center;
-
-  margin-bottom:8px;
-
-  border-radius:10px;
-
-  background:var(--purple-soft);
-
-  color:var(--purple-dark);
-
-  font-weight:950;
-}
-
-.paragraph p{
-  margin:0;
-
-  font-family:Georgia,"Times New Roman",serif;
-
-  font-size:17px;
-  line-height:1.83;
-
-  color:#202837;
-}
-
-
-/* =========================================================
-   QUESTION PANEL
-========================================================= */
-
-.questions-panel{
-  overflow-y:auto;
-
-  padding:28px 30px 110px;
-
-  background:#f6f7fb;
-}
-
-.question-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:15px;
+.passage-title{
+  text-align:center;
 
   margin-bottom:18px;
 }
 
-.question-head h2{
-  margin:0;
+.passage-title .label{
+  font-size:10px;
 
-  font-size:25px;
+  font-weight:950;
 
-  color:#151c2b;
+  letter-spacing:.09em;
+
+  color:#6a4db4;
+
+  text-transform:uppercase;
 }
 
-.question-head p{
-  margin:4px 0 0;
+.passage-title h2{
+  margin:
+    5px 0;
+
+  color:#21164b;
+
+  font-size:21px;
+}
+
+.passage-title p{
+  margin:0;
 
   color:var(--muted);
 
-  font-size:13px;
+  font-size:11px;
+
+  text-align:center;
+
+  line-height:1.5;
 }
 
-.progress-chip{
-  flex:none;
+.passage-paragraph{
+  position:relative;
 
-  padding:8px 11px;
+  padding:
+    0 0 0 34px;
 
-  border-radius:999px;
+  margin:
+    0 0 17px;
 
-  background:var(--purple-soft);
+  font-size:13.4px;
 
-  color:var(--purple-dark);
+  line-height:1.78;
 
-  font-size:11px;
-  font-weight:900;
+  text-align:justify;
+
+  border-radius:8px;
+}
+
+.paragraph-letter{
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:24px;
+  height:24px;
+
+  border-radius:7px;
+
+  display:grid;
+
+  place-items:center;
+
+  background:#eee9ff;
+
+  color:#4b318e;
+
+  font-size:10.5px;
+
+  font-weight:950;
 }
 
 
 /* =========================================================
-   SECTIONS
+   EVIDENCE
 ========================================================= */
 
-.question-section{
-  margin-bottom:22px;
+.evidence-source{
+  border-radius:4px;
 
-  padding:20px;
-
-  border:1px solid var(--line);
-  border-radius:18px;
-
-  background:#fff;
+  transition:
+    background .3s ease,
+    box-shadow .3s ease,
+    font-weight .3s ease;
 }
 
-.question-section h3{
-  margin:0 0 4px;
+.evidence-source.evidence-focus{
+  background:#fff1a8;
 
-  font-size:17px;
-}
+  box-shadow:
+    0 0 0 3px rgba(245,190,35,.25),
+    0 0 18px rgba(245,190,35,.35);
 
-.section-instruction{
-  margin:0 0 17px;
-
-  color:var(--muted);
-
-  font-size:12px;
-  line-height:1.55;
-}
-
-.nb{
-  margin:10px 0 17px;
-
-  padding:9px 11px;
-
-  border-radius:10px;
-
-  background:#f7f4ff;
-
-  color:#5137ab;
-
-  font-size:11px;
   font-weight:800;
+
+  padding:
+    2px 3px;
+
+  margin:
+    -2px -3px;
+
+  animation:
+    evidencePulse .85s ease 2;
+}
+
+.passage-paragraph.evidence-source.evidence-focus{
+  padding:
+    7px 8px 7px 42px;
+
+  margin:
+    -7px -8px 10px;
+}
+
+.passage-paragraph.evidence-source.evidence-focus
+.paragraph-letter{
+  left:8px;
+  top:7px;
+}
+
+@keyframes evidencePulse{
+
+  0%{
+    box-shadow:
+      0 0 0 2px rgba(245,190,35,.15),
+      0 0 4px rgba(245,190,35,.1);
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 6px rgba(245,190,35,.30),
+      0 0 24px rgba(245,190,35,.55);
+  }
+
+  100%{
+    box-shadow:
+      0 0 0 3px rgba(245,190,35,.25),
+      0 0 18px rgba(245,190,35,.35);
+  }
+
 }
 
 
@@ -351,1514 +503,2312 @@ select{
    QUESTIONS
 ========================================================= */
 
-.question-item{
-  margin-top:12px;
-
-  padding:14px;
-
-  border:1px solid #e8ebf1;
-  border-radius:14px;
-
-  background:#fff;
-
-  transition:.15s ease;
+.instructions{
+  margin-bottom:13px;
 }
 
-.question-number{
-  display:inline-flex;
+.instructions h3{
+  margin:
+    0 0 6px;
 
-  width:28px;
-  height:28px;
+  color:#21164b;
 
-  align-items:center;
-  justify-content:center;
-
-  margin-right:7px;
-
-  border-radius:9px;
-
-  background:#eeeafe;
-
-  color:#4a34ad;
-
-  font-size:12px;
-  font-weight:950;
-
-  vertical-align:top;
+  font-size:17px;
 }
 
-.question-copy{
-  display:inline;
+.instructions p{
+  margin:
+    3px 0;
 
-  font-size:13px;
+  color:var(--muted);
+
+  font-size:11.5px;
+
   line-height:1.55;
-  font-weight:650;
 }
 
-.answer-row{
-  margin-top:12px;
+.rule{
+  display:inline-block;
 
-  display:flex;
-  align-items:center;
-  gap:9px;
-}
+  padding:
+    7px 10px;
 
-.answer-row select,
-.answer-row input{
-  min-height:40px;
+  margin:
+    7px 0 10px;
 
-  border:1px solid #ccd4df;
-  border-radius:10px;
+  border-radius:8px;
 
-  background:#fff;
+  background:#f0ecff;
 
-  color:#111827;
+  color:#5c43b2;
 
-  outline:none;
-}
-
-.answer-row select{
-  width:92px;
-  padding:0 10px;
-}
-
-.answer-row input{
-  width:100%;
-  padding:0 12px;
-}
-
-.answer-row select:focus,
-.answer-row input:focus{
-  border-color:#7b6cf2;
-
-  box-shadow:
-    0 0 0 3px rgba(101,87,232,.10);
-}
-
-
-/* =========================================================
-   PEOPLE BOX
-========================================================= */
-
-.people-box{
-  margin:15px 0;
-
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-
-  gap:7px;
-
-  padding:12px;
-
-  border-radius:13px;
-
-  background:#f7f8fc;
-}
-
-.person{
-  padding:8px 9px;
-
-  border:1px solid #e3e6ee;
-  border-radius:9px;
-
-  background:#fff;
-
-  font-size:12px;
-}
-
-.person b{
-  color:var(--purple-dark);
-}
-
-
-/* =========================================================
-   FEEDBACK
-========================================================= */
-
-.question-item.correct{
-  border-color:#78cba3;
-  background:var(--good-bg);
-}
-
-.question-item.wrong{
-  border-color:#efa0ac;
-  background:var(--bad-bg);
-}
-
-.feedback{
-  display:none;
-
-  margin-top:9px;
-
-  font-size:11px;
-  font-weight:850;
-}
-
-.correct .feedback,
-.wrong .feedback{
-  display:block;
-}
-
-.correct .feedback{
-  color:var(--good);
-}
-
-.wrong .feedback{
-  color:var(--bad);
-}
-
-
-/* =========================================================
-   BOTTOM ACTION
-========================================================= */
-
-.action-bar{
-  position:fixed;
-
-  right:0;
-  bottom:0;
-
-  width:min(
-    calc(45.1vw),
-    720px
-  );
-
-  display:flex;
-  gap:8px;
-
-  padding:12px 22px;
-
-  border-top:1px solid var(--line);
-
-  background:rgba(255,255,255,.95);
-
-  backdrop-filter:blur(12px);
-
-  z-index:40;
-}
-
-.action-bar button{
-  min-height:45px;
-
-  border-radius:12px;
+  font-size:10.5px;
 
   font-weight:900;
 }
 
-.check-btn{
+.question-section
++
+.question-section{
+  margin-top:24px;
+
+  padding-top:22px;
+
+  border-top:
+    1px solid var(--line);
+}
+
+.heading-list{
+  margin:
+    11px 0 14px;
+
+  padding:
+    12px 14px;
+
+  border:
+    1px solid #ddd8f2;
+
+  border-radius:12px;
+
+  background:#fff;
+}
+
+.heading-list-title{
+  font-size:12px;
+
+  font-weight:950;
+
+  color:#21164b;
+
+  margin-bottom:9px;
+}
+
+.heading-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    6px 14px;
+}
+
+.heading-item{
+  font-size:10.8px;
+
+  line-height:1.45;
+
+  color:#4d5363;
+}
+
+.heading-item b{
+  display:inline-block;
+
+  width:28px;
+
+  color:#5c43b2;
+}
+
+.example{
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:14px;
+
+  align-items:center;
+
+  padding:
+    9px 11px;
+
+  margin:
+    10px 0 8px;
+
+  border-radius:9px;
+
+  background:#f4f5f8;
+
+  color:#62697a;
+
+  font-size:11px;
+
+  font-weight:800;
+}
+
+.question-card{
+  margin:
+    8px 0;
+
+  padding:12px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:11px;
+
+  background:#fff;
+
+  transition:
+    .15s ease;
+}
+
+.question-card:focus-within{
+  border-color:#c5b8f2;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.05);
+}
+
+.question-card.correct-card{
+  border-color:#9ddbbc;
+
+  background:#f8fffb;
+}
+
+.question-card.wrong-card{
+  border-color:#efbdc4;
+
+  background:#fffafb;
+}
+
+.question-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
+}
+
+.qno{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  flex:
+    0 0 30px;
+
+  height:30px;
+
+  border-radius:8px;
+
+  background:#eee9ff;
+
+  color:#4b318e;
+
+  font-size:10.5px;
+
+  font-weight:950;
+}
+
+.qcopy{
   flex:1;
 
+  min-width:0;
+
+  font-size:11.7px;
+
+  line-height:1.55;
+
+  color:#303747;
+}
+
+.qcopy b{
+  color:#21164b;
+}
+
+.answer-select{
+  width:210px;
+
+  max-width:44%;
+
+  padding:
+    8px 9px;
+
+  border:
+    1px solid #cdd3df;
+
+  border-radius:8px;
+
+  outline:none;
+
+  background:#fff;
+
+  color:#2d3342;
+
+  font-size:10.8px;
+
+  font-weight:800;
+}
+
+.answer-select:focus{
+  border-color:#6a55bf;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.08);
+}
+
+.answer-select.correct{
+  border-color:#8ed6b4;
+
+  background:#f4fcf7;
+
+  color:#126b48;
+}
+
+.answer-select.wrong{
+  border-color:#efb7bf;
+
+  background:#fff7f8;
+
+  color:#9b2838;
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+.review-list{
+  margin-top:14px;
+}
+
+.inline-review{
+  margin-top:10px;
+
+  padding:12px;
+
+  border:
+    1px solid #f0d0d5;
+
+  border-left:
+    4px solid var(--bad);
+
+  border-radius:9px;
+
+  background:#fffafb;
+
+  font-size:11px;
+
+  line-height:1.55;
+}
+
+.review-title{
+  font-weight:950;
+
+  color:#21164b;
+
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+
+  grid-template-columns:
+    105px 1fr;
+
+  gap:
+    5px 8px;
+
+  margin:
+    4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+
+  font-weight:900;
+}
+
+.compare-box{
+  margin-top:12px;
+
+  padding:13px;
+
+  background:#f8f7ff;
+
+  border:
+    1px solid #ddd6fb;
+
+  border-radius:10px;
+}
+
+.compare-heading{
+  color:#281260;
+
+  font-weight:950;
+
+  margin-bottom:10px;
+}
+
+.compare-item{
+  margin-top:10px;
+}
+
+.compare-label{
+  margin-bottom:4px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+
+  letter-spacing:.04em;
+}
+
+.compare-text,
+.compare-analysis{
+  padding:
+    9px 10px;
+
+  background:#fff;
+
+  border:
+    1px solid #e5e7ee;
+
+  border-radius:7px;
+
+  line-height:1.6;
+}
+
+.passage-evidence{
+  position:relative;
+
+  padding:
+    10px 35px 10px 10px;
+
+  background:#eef3ff;
+
+  border:
+    1px solid #d6dffb;
+
+  border-left:
+    3px solid #5773d9;
+
+  border-radius:7px;
+
+  color:#293a70;
+
+  font-style:italic;
+
+  line-height:1.6;
+
+  cursor:pointer;
+
+  transition:
+    .15s ease;
+}
+
+.passage-evidence:hover{
+  background:#e5ecff;
+
+  transform:
+    translateY(-1px);
+}
+
+.passage-evidence::after{
+  content:"↗";
+
+  position:absolute;
+
+  right:12px;
+
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  font-size:16px;
+
+  font-style:normal;
+
+  font-weight:950;
+
+  color:#5b43b5;
+}
+
+.evidence-help{
+  margin-top:5px;
+
+  color:#7b8292;
+
+  font-size:9.5px;
+
+  font-style:normal;
+}
+
+.conclusion{
+  margin-top:10px;
+
+  padding:
+    9px 10px;
+
+  border:
+    1px solid #bde5ce;
+
+  background:#f2fff8;
+
+  border-radius:7px;
+
+  color:#126b48;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   HIGHLIGHT / NOTE
+========================================================= */
+
+mark.user-highlight{
+  background:#fff29a;
+
+  color:inherit;
+
+  border-radius:3px;
+
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+
+  border-bottom:
+    2px dotted #e28b19;
+
+  border-radius:2px;
+
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+
+  z-index:90;
+
+  display:none;
+
+  gap:5px;
+
+  padding:6px;
+
+  background:#21164b;
+
+  border-radius:10px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+
+  background:#fff;
+
+  color:#35285e;
+
+  border-radius:7px;
+
+  padding:
+    7px 9px;
+
+  font-size:10.5px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+
+  background:#fff1f3;
+}
+
+
+/* =========================================================
+   BOTTOM
+========================================================= */
+
+.bottom{
+  position:sticky;
+
+  bottom:0;
+
+  z-index:20;
+
+  width:min(
+    1400px,
+    calc(100% - 18px)
+  );
+
+  margin:auto;
+
+  padding:
+    9px 0 6px;
+
+  background:
+    linear-gradient(
+      to top,
+      var(--bg) 75%,
+      rgba(245,247,251,.88)
+    );
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+
+  gap:5px;
+
+  flex:1;
+
+  overflow-x:auto;
+
+  padding-bottom:2px;
+}
+
+.nav button{
+  flex:
+    0 0 31px;
+
+  width:31px;
+
+  height:31px;
+
+  border:
+    1px solid var(--line);
+
+  background:#fff;
+
+  border-radius:7px;
+
+  font-size:9.5px;
+
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+
+  border-color:#f0b5bd;
+}
+
+.submit,
+.btn{
   border:0;
 
   background:
     linear-gradient(
-      90deg,
-      #5959e7,
-      #7865ef
+      100deg,
+      var(--purple),
+      var(--purple2)
     );
 
   color:#fff;
-}
 
-.reset-btn{
-  width:110px;
+  border-radius:9px;
 
-  border:1px solid var(--line);
-
-  background:#fff;
-
-  color:#445066;
-}
-
-.score-box{
-  display:none;
-
-  margin-bottom:15px;
-
-  padding:14px;
-
-  border-radius:14px;
-
-  background:var(--purple-soft);
-
-  color:var(--purple-dark);
+  padding:
+    10px 15px;
 
   font-weight:900;
 }
 
-.score-box.show{
+
+/* =========================================================
+   OVERLAYS
+========================================================= */
+
+.overlay,
+.start{
+  position:fixed;
+
+  inset:0;
+
+  z-index:100;
+
+  background:
+    rgba(15,11,35,.62);
+
+  display:grid;
+
+  place-items:center;
+
+  padding:18px;
+}
+
+.start{
+  z-index:120;
+}
+
+.hidden{
+  display:none;
+}
+
+.result,
+.start-card{
+  width:min(
+    590px,
+    100%
+  );
+
+  max-height:88vh;
+
+  overflow:auto;
+
+  background:#fff;
+
+  border-radius:18px;
+
+  padding:22px;
+
+  box-shadow:
+    0 24px 70px
+    rgba(18,10,53,.28);
+}
+
+.start-card{
+  width:min(
+    460px,
+    100%
+  );
+}
+
+.score{
+  font-size:38px;
+
+  font-weight:950;
+
+  color:#21164b;
+
+  margin:
+    7px 0;
+}
+
+.field{
+  margin:
+    9px 0;
+}
+
+.field label{
   display:block;
+
+  margin-bottom:5px;
+
+  font-size:10.5px;
+
+  font-weight:900;
+}
+
+.field input{
+  width:100%;
+
+  padding:10px;
+
+  border:
+    1px solid #d5d9e2;
+
+  border-radius:9px;
+}
+
+.start-card .btn{
+  width:100%;
+
+  margin-top:10px;
 }
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
 @media(max-width:900px){
 
-  html,
-  body{
-    height:auto;
-    overflow:auto;
-  }
-
   .workspace{
-    height:auto;
-
-    display:block;
-
-    overflow:visible;
+    grid-template-columns:
+      1fr;
   }
 
-  .passage-panel,
-  .questions-panel{
-    overflow:visible;
-  }
-
-  .passage-panel{
-    padding:25px 20px 35px;
-
+  .passage{
     border-right:0;
-    border-bottom:1px solid var(--line);
+
+    border-bottom:
+      1px solid var(--line);
   }
 
-  .questions-panel{
-    padding:25px 16px 100px;
+  .pane{
+    max-height:none;
   }
 
-  .passage-panel h1{
-    font-size:29px;
+  .hero{
+    flex-direction:column;
+
+    align-items:stretch;
   }
 
-  .action-bar{
-    left:0;
-    right:0;
+  .progress-wrap{
+    min-width:0;
+  }
 
+  .heading-grid{
+    grid-template-columns:
+      1fr;
+  }
+
+  .question-row{
+    align-items:flex-start;
+
+    flex-wrap:wrap;
+  }
+
+  .answer-select{
     width:100%;
+
+    max-width:none;
+
+    margin-left:39px;
   }
 
 }
 
 
-@media(max-width:600px){
+@media(max-width:620px){
 
-  .topbar{
-    padding:0 10px;
-
-    grid-template-columns:auto 1fr;
-  }
-
-  .top-center{
-    justify-self:end;
-
-    font-size:14px;
-  }
-
-  .top-right{
+  .student{
     display:none;
   }
 
-  .people-box{
-    grid-template-columns:1fr;
+  .brand{
+    font-size:12px;
+  }
+
+  .content{
+    padding:16px;
+  }
+
+  .passage-paragraph{
+    font-size:12.8px;
+  }
+
+  .bottom{
+    align-items:flex-end;
   }
 
 }
+
 </style>
+
 </head>
+
 
 <body>
 
 
-<header class="topbar">
+<!-- =========================================================
+     START SCREEN
+========================================================= -->
 
-  <div class="top-left">
+<div
+  id="start"
+  class="start"
+>
 
-    <a
-      href="../"
-      class="back-btn"
+  <div class="start-card">
+
+    <div
+      style="
+        font-size:10px;
+        font-weight:950;
+        color:#6a4db4;
+        letter-spacing:.08em
+      "
     >
-      ← Passage 2
-    </a>
-
-  </div>
-
-
-  <div class="top-center">
-
-    <div class="logo">
-      R
+      READING PRACTICE
     </div>
 
-    <span>
-      Reading Practice
-    </span>
+
+    <h2>
+      Reading Passage 2 — Bài 02
+    </h2>
+
+
+    <p
+      style="
+        font-size:11.5px;
+        color:#6f7890
+      "
+    >
+      Gifted children and learning · Questions 14–26
+    </p>
+
+
+    <div class="field">
+
+      <label>
+        Họ và tên
+      </label>
+
+      <input
+        id="studentName"
+        placeholder="Nguyễn Văn A"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Lớp
+      </label>
+
+      <input
+        id="studentClass"
+        placeholder="11A1"
+      >
+
+    </div>
+
+
+    <button
+      class="btn"
+      onclick="startPractice()"
+    >
+      Bắt đầu luyện
+    </button>
+
+
+    <div
+      id="startError"
+      style="
+        font-size:10px;
+        color:#b83345;
+        margin-top:7px
+      "
+    ></div>
 
   </div>
 
+</div>
 
-  <div class="top-right">
-    Practice 02 · Passage 2
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="top">
+
+  <div class="topin">
+
+    <div class="left">
+
+      <a
+        class="back"
+        href="../"
+      >
+        ← Reading Passage 2
+      </a>
+
+
+      <div class="brand">
+        📖 Reading Passage 2 — 02
+      </div>
+
+    </div>
+
+
+    <div
+      id="studentInfo"
+      class="student"
+    ></div>
+
+
+    <div
+      id="timer"
+      class="timer"
+    >
+      00:00
+    </div>
+
   </div>
 
 </header>
 
 
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-<main class="workspace">
-
-
-  <!-- =====================================================
-       PASSAGE
-  ====================================================== -->
-
-  <article class="passage-panel">
-
-    <div class="eyebrow">
-      Reading Passage 2
-    </div>
-
-    <h1>
-      Gifted children and learning
-    </h1>
-
-    <p class="instructions">
-      You should spend about 20 minutes on Questions 14–26,
-      which are based on Reading Passage 2 below.
-    </p>
+<main class="page">
 
 
+  <!-- HERO -->
 
-    <section class="paragraph">
+  <section class="hero">
 
-      <div class="paragraph-label">
-        A
-      </div>
+    <div>
+
+      <h1>
+        Reading Passage 2 — Bài 02
+      </h1>
 
       <p>
-        Internationally, ‘giftedness’ is most frequently determined
-        by a score on a general intelligence test, known as an IQ test,
-        which is above a chosen cutoff point, usually at around the top
-        2–5%. Children’s educational environment contributes to the IQ
-        score and the way intelligence is used. For example, a very
-        close positive relationship was found when children’s IQ scores
-        were compared with their home educational provision
-        (Freeman, 2010). The higher the children’s IQ scores, especially
-        over IQ 130, the better the quality of their educational backup,
-        measured in terms of reported verbal interactions with parents,
-        number of books and activities in their home etc. Because IQ
-        tests are decidedly influenced by what the child has learned,
-        they are to some extent measures of current achievement based
-        on age-norms; that is, how well the children have learned to
-        manipulate their knowledge and know-how within the terms of the
-        test. The vocabulary aspect, for example, is dependent on having
-        heard those words. But IQ tests can neither identify the processes
-        of learning and thinking nor predict creativity.
+        Gifted children and learning · Questions 14–26
       </p>
-
-    </section>
-
-
-
-    <section class="paragraph">
-
-      <div class="paragraph-label">
-        B
-      </div>
-
-      <p>
-        Excellence does not emerge without appropriate help. To reach an
-        exceptionally high standard in any area very able children need
-        the means to learn, which includes material to work with and
-        focused challenging tuition – and the encouragement to follow
-        their dream. There appears to be a qualitative difference in the
-        way the intellectually highly able think, compared with more
-        average-ability or older pupils, for whom external regulation by
-        the teacher often compensates for lack of internal regulation.
-        To be at their most effective in their self-regulation, all
-        children can be helped to identify their own ways of learning –
-        metacognition – which will include strategies of planning,
-        monitoring, evaluation, and choice of what to learn. Emotional
-        awareness is also part of metacognition, so children should be
-        helped to be aware of their feelings around the area to be
-        learned, feelings of curiosity or confidence, for example.
-      </p>
-
-    </section>
-
-
-
-    <section class="paragraph">
-
-      <div class="paragraph-label">
-        C
-      </div>
-
-      <p>
-        High achievers have been found to use self-regulatory learning
-        strategies more often and more effectively than lower achievers,
-        and are better able to transfer these strategies to deal with
-        unfamiliar tasks. This happens to such a high degree in some
-        children that they appear to be demonstrating talent in
-        particular areas. Overviewing research on the thinking process of
-        highly able children, Shore and Kanevsky (1993) put the
-        instructor’s problem succinctly: ‘If they [the gifted] merely
-        think more quickly, then we need only teach more quickly. If they
-        merely make fewer errors, then we can shorten the practice’.
-        But of course, this is not entirely the case; adjustments have to
-        be made in methods of learning and teaching, to take account of
-        the many ways individuals think.
-      </p>
-
-    </section>
-
-
-
-    <section class="paragraph">
-
-      <div class="paragraph-label">
-        D
-      </div>
-
-      <p>
-        Yet in order to learn by themselves, the gifted do need some
-        support from their teachers. Conversely, teachers who have a
-        tendency to ‘overdirect’ can diminish their gifted pupils’
-        learning autonomy. Although ‘spoon-feeding’ can produce
-        extremely high examination results, these are not always
-        followed by equally impressive life successes. Too much
-        dependence on the teachers risks loss of autonomy and motivation
-        to discover. However, when teachers encourage pupils to reflect
-        on their own learning and thinking activities, they increase
-        their pupils’ self-regulation. For a young child, it may be just
-        the simple question ‘What have you learned today?’ which helps
-        them to recognise what they are doing. Given that a fundamental
-        goal of education is to transfer the control of learning from
-        teachers to pupils, improving pupils’ learning to learn
-        techniques should be a major outcome of the school experience,
-        especially for the highly competent. There are quite a number of
-        new methods which can help, such as child-initiated learning,
-        ability-peer tutoring, etc. Such practices have been found to be
-        particularly useful for bright children from deprived areas.
-      </p>
-
-    </section>
-
-
-
-    <section class="paragraph">
-
-      <div class="paragraph-label">
-        E
-      </div>
-
-      <p>
-        But scientific progress is not all theoretical; knowledge is also
-        vital to outstanding performance: individuals who know a great
-        deal about a specific domain will achieve at a higher level than
-        those who do not (Elshout, 1995). Research with creative
-        scientists by Simonton (1988) brought him to the conclusion that
-        above a certain high level, characteristics such as independence
-        seemed to contribute more to reaching the highest levels of
-        expertise than intellectual skills, due to the great demands of
-        effort and time needed for learning and practice. Creativity in
-        all forms can be seen as expertise mixed with a high level of
-        motivation (Weisberg, 1993).
-      </p>
-
-    </section>
-
-
-
-    <section class="paragraph">
-
-      <div class="paragraph-label">
-        F
-      </div>
-
-      <p>
-        To sum up, learning is affected by emotions of both the individual
-        and significant others. Positive emotions facilitate the creative
-        aspects of learning and negative emotions inhibit it. Fear, for
-        example, can limit the development of curiosity, which is a strong
-        force in scientific advance, because it motivates problem-solving
-        behaviour. In Boekaerts’ (1991) review of emotion in the learning
-        of very high IQ and highly achieving children, she found emotional
-        forces in harness. They were not only curious, but often had a
-        strong desire to control their environment, improve their learning
-        efficiency and increase their own learning resources.
-      </p>
-
-    </section>
-
-  </article>
-
-
-
-  <!-- =====================================================
-       QUESTIONS
-  ====================================================== -->
-
-  <aside class="questions-panel">
-
-    <div class="question-head">
-
-      <div>
-
-        <h2>
-          Questions 14–26
-        </h2>
-
-        <p>
-          Answer all 13 questions.
-        </p>
-
-      </div>
-
-      <div
-        id="answerCounter"
-        class="progress-chip"
-      >
-        0 / 13
-      </div>
 
     </div>
 
 
+    <div class="progress-wrap">
 
-    <div
-      id="scoreBox"
-      class="score-box"
-    ></div>
+      <div class="progress-row">
 
+        <span>
+          Tiến độ
+        </span>
 
+        <span id="progressText">
+          0/13 câu đã trả lời
+        </span>
 
-    <!-- QUESTIONS 14-17 -->
-
-    <section class="question-section">
-
-      <h3>
-        Questions 14–17
-      </h3>
-
-      <p class="section-instruction">
-        Reading Passage 2 has six paragraphs, A–F.
-        Which paragraph contains the following information?
-      </p>
-
-      <div class="nb">
-        NB: You may use any letter more than once.
       </div>
 
 
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       WORKSPACE
+  ====================================================== -->
+
+  <section class="workspace">
+
+
+    <!-- ===================================================
+         PASSAGE
+    ==================================================== -->
+
+    <div class="pane passage">
 
       <div
-        class="question-item"
-        data-question="14"
+        id="passageRoot"
+        class="content"
       >
 
-        <span class="question-number">
-          14
-        </span>
+        <div class="passage-title">
 
-        <span class="question-copy">
-          a reference to the influence of the domestic background
-          on the gifted child.
-        </span>
+          <div class="label">
+            Reading Passage 2
+          </div>
 
-        <div class="answer-row">
+          <h2>
+            GIFTED CHILDREN AND LEARNING
+          </h2>
 
-          <select data-answer="14">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-
-          </select>
+          <p>
+            You should spend about 20 minutes on Questions 14–26.
+          </p>
 
         </div>
 
-        <div class="feedback"></div>
+
+        <!-- A -->
+
+        <div
+          class="passage-paragraph evidence-source"
+          data-evidence="14 21 23"
+        >
+
+          <span class="paragraph-letter">
+            A
+          </span>
+
+          Internationally, ‘giftedness’ is most frequently determined
+          by a score on a general intelligence test, known as an IQ test,
+          which is above a chosen cutoff point, usually at around the top
+          2-5%. Children’s educational environment contributes to the IQ
+          score and the way intelligence is used. For example, a very close
+          positive relationship was found when children’s IQ scores were
+          compared with their home educational provision (Freeman, 2010).
+          The higher the children’s IQ scores, especially over IQ 130, the
+          better the quality of their educational backup, measured in terms
+          of reported verbal interactions with parents, number of books and
+          activities in their home etc. Because IQ tests are decidedly
+          influenced by what the child has learned, they are to some extent
+          measures of current achievement based on age-norms; that is, how
+          well the children have learned to manipulate their knowledge and
+          know-how within the terms of the test. The vocabulary aspect, for
+          example, is dependent on having heard those words. But IQ tests
+          can neither identify the processes of learning and thinking nor
+          predict creativity.
+
+        </div>
+
+
+        <!-- B -->
+
+        <div
+          class="passage-paragraph evidence-source"
+          data-evidence="24 25"
+        >
+
+          <span class="paragraph-letter">
+            B
+          </span>
+
+          Excellence does not emerge without appropriate help. To reach an
+          exceptionally high standard in any area very able children need
+          the means to learn, which includes material to work with and
+          focused challenging tuition -and the encouragement to follow
+          their dream. There appears to be a qualitative difference in the
+          way the intellectually highly able think, compared with more
+          average-ability or older pupils, for whom external regulation by
+          the teacher often compensates for lack of internal regulation.
+          To be at their most effective in their self-regulation, all
+          children can be helped to identify their own ways of learning –
+          metacognition – which will include strategies of planning,
+          monitoring, evaluation, and choice of what to learn. Emotional
+          awareness is also part of metacognition, so children should be
+          helped to be aware of their feelings around the area to be
+          learned, feelings of curiosity or confidence, for example.
+
+        </div>
+
+
+        <!-- C -->
+
+        <div
+          class="passage-paragraph evidence-source"
+          data-evidence="18"
+        >
+
+          <span class="paragraph-letter">
+            C
+          </span>
+
+          High achievers have been found to use self-regulatory learning
+          strategies more often and more effectively than lower achievers,
+          and are better able to transfer these strategies to deal with
+          unfamiliar tasks. This happens to such a high degree in some
+          children that they appear to be demonstrating talent in
+          particular areas. Overviewing research on the thinking process of
+          highly able children, (Shore and Kanevsky, 1993) put the
+          instructor’s problem succinctly: ‘If they [the gifted] merely
+          think more quickly, then .we need only teach more quickly. If they
+          merely make fewer errors, then we can shorten the practice’.
+          But of course, this is not entirely the case; adjustments have to
+          be made in methods of learning and teaching, to take account of
+          the many ways individuals think.
+
+        </div>
+
+
+        <!-- D -->
+
+        <div
+          class="passage-paragraph evidence-source"
+          data-evidence="15 17 26"
+        >
+
+          <span class="paragraph-letter">
+            D
+          </span>
+
+          Yet in order to learn by themselves, the gifted do need some
+          support from their teachers. Conversely, teachers who have a
+          tendency to ‘overdirect’ can diminish their gifted pupils’
+          learning autonomy. Although ‘spoon-feeding’ can produce extremely
+          high examination results, these are not always followed by
+          equally impressive life successes. Too much dependence on the
+          teachers risks loss of autonomy and motivation to discover.
+          However, when teachers o pupils to reflect on their own learning
+          and thinking activities, they increase their pupils’
+          self-regulation. For a young child, it may be just the simple
+          question ‘What have you learned today?’ which helps them to
+          recognise what they are doing. Given that a fundamental goal of
+          education is to transfer the control of learning from teachers to
+          pupils, improving pupils’ learning to learn techniques should be
+          a major outcome of the school experience, especially for the
+          highly competent. There are quite a number of new methods which
+          can help, such as child- initiated learning, ability-peer
+          tutoring, etc. Such practices have been found to be particularly
+          useful for bright children from deprived areas.
+
+        </div>
+
+
+        <!-- E -->
+
+        <div
+          class="passage-paragraph evidence-source"
+          data-evidence="19 22"
+        >
+
+          <span class="paragraph-letter">
+            E
+          </span>
+
+          But scientific progress is not all theoretical, knowledge is a so
+          vital to outstanding performance: individuals who know a great
+          deal about a specific domain will achieve at a higher level than
+          those who do not (Elshout, 1995). Research with creative
+          scientists by Simonton (1988) brought him to the conclusion that
+          above a certain high level, characteristics such as independence
+          seemed to contribute more to reaching the highest levels of
+          expertise than intellectual skills, due to the great demands of
+          effort and time needed for learning and practice. Creativity in
+          all forms can be seen as expertise se mixed with a high level of
+          motivation (Weisberg, 1993).
+
+        </div>
+
+
+        <!-- F -->
+
+        <div
+          class="passage-paragraph evidence-source"
+          data-evidence="16 20"
+        >
+
+          <span class="paragraph-letter">
+            F
+          </span>
+
+          To sum up, learning is affected by emotions of both the individual
+          and significant others. Positive emotions facilitate the creative
+          aspects of earning and negative emotions inhibit it. Fear, for
+          example, can limit the development of curiosity, which is a strong
+          force in scientific advance, because it motivates problem-solving
+          behaviour. In Boekaerts’ (1991) review of emotion the learning of
+          very high IQ and highly achieving children, she found emotional
+          forces in harness. They were not only curious, but often had a
+          strong desire to control their environment, improve their learning
+          efficiency and increase their own learning resources.
+
+        </div>
 
       </div>
 
+    </div>
 
+
+    <!-- ===================================================
+         QUESTIONS
+    ==================================================== -->
+
+    <div class="pane questions">
 
       <div
-        class="question-item"
-        data-question="15"
+        id="questionsRoot"
+        class="content"
       >
 
-        <span class="question-number">
-          15
-        </span>
 
-        <span class="question-copy">
-          reference to what can be lost if learners are given
-          too much guidance.
-        </span>
+        <!-- ===============================================
+             QUESTIONS 14–17
+        ================================================ -->
 
-        <div class="answer-row">
+        <section class="question-section">
 
-          <select data-answer="15">
+          <div class="instructions">
 
-            <option value="">
-              Select
-            </option>
+            <h3>
+              Questions 14–17
+            </h3>
 
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
+            <p>
+              Reading Passage 2 has six paragraphs, A–F.
+            </p>
 
-          </select>
+            <p>
+              Which paragraph contains the following information?
+            </p>
 
-        </div>
+            <p>
+              Write the correct letter, <b>A–F</b>.
+            </p>
 
-        <div class="feedback"></div>
+            <div class="rule">
+              NB: You may use any letter more than once.
+            </div>
 
-      </div>
+          </div>
 
 
-
-      <div
-        class="question-item"
-        data-question="16"
-      >
-
-        <span class="question-number">
-          16
-        </span>
-
-        <span class="question-copy">
-          a reference to the damaging effects of anxiety.
-        </span>
-
-        <div class="answer-row">
-
-          <select data-answer="16">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-
-          </select>
-
-        </div>
-
-        <div class="feedback"></div>
-
-      </div>
-
-
-
-      <div
-        class="question-item"
-        data-question="17"
-      >
-
-        <span class="question-number">
-          17
-        </span>
-
-        <span class="question-copy">
-          examples of classroom techniques which favour
-          socially-disadvantaged children.
-        </span>
-
-        <div class="answer-row">
-
-          <select data-answer="17">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-
-          </select>
-
-        </div>
-
-        <div class="feedback"></div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- QUESTIONS 18-22 -->
-
-    <section class="question-section">
-
-      <h3>
-        Questions 18–22
-      </h3>
-
-      <p class="section-instruction">
-        Match each statement with the correct person or people, A–E.
-      </p>
-
-
-      <div class="people-box">
-
-        <div class="person">
-          <b>A</b> Freeman
-        </div>
-
-        <div class="person">
-          <b>B</b> Shore and Kanevsky
-        </div>
-
-        <div class="person">
-          <b>C</b> Elshout
-        </div>
-
-        <div class="person">
-          <b>D</b> Simonton
-        </div>
-
-        <div class="person">
-          <b>E</b> Boekaerts
-        </div>
-
-      </div>
-
-
-
-      <div
-        class="question-item"
-        data-question="18"
-      >
-
-        <span class="question-number">
-          18
-        </span>
-
-        <span class="question-copy">
-          Less time can be spent on exercises with gifted pupils
-          who produce accurate work.
-        </span>
-
-        <div class="answer-row">
-
-          <select data-answer="18">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-
-          </select>
-
-        </div>
-
-        <div class="feedback"></div>
-
-      </div>
-
-
-
-      <div
-        class="question-item"
-        data-question="19"
-      >
-
-        <span class="question-number">
-          19
-        </span>
-
-        <span class="question-copy">
-          Self-reliance is a valuable tool that helps gifted
-          students reach their goals.
-        </span>
-
-        <div class="answer-row">
-
-          <select data-answer="19">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-
-          </select>
-
-        </div>
-
-        <div class="feedback"></div>
-
-      </div>
-
-
-
-      <div
-        class="question-item"
-        data-question="20"
-      >
-
-        <span class="question-number">
-          20
-        </span>
-
-        <span class="question-copy">
-          Gifted children know how to channel their feelings
-          to assist their learning.
-        </span>
-
-        <div class="answer-row">
-
-          <select data-answer="20">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-
-          </select>
-
-        </div>
-
-        <div class="feedback"></div>
-
-      </div>
-
-
-
-      <div
-        class="question-item"
-        data-question="21"
-      >
-
-        <span class="question-number">
-          21
-        </span>
-
-        <span class="question-copy">
-          The very gifted child benefits from appropriate support
-          from close relatives.
-        </span>
-
-        <div class="answer-row">
-
-          <select data-answer="21">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-
-          </select>
-
-        </div>
-
-        <div class="feedback"></div>
-
-      </div>
-
-
-
-      <div
-        class="question-item"
-        data-question="22"
-      >
-
-        <span class="question-number">
-          22
-        </span>
-
-        <span class="question-copy">
-          Really successful students have learnt a considerable
-          amount about their subject.
-        </span>
-
-        <div class="answer-row">
-
-          <select data-answer="22">
-
-            <option value="">
-              Select
-            </option>
-
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-
-          </select>
-
-        </div>
-
-        <div class="feedback"></div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- QUESTIONS 23-26 -->
-
-    <section class="question-section">
-
-      <h3>
-        Questions 23–26
-      </h3>
-
-      <p class="section-instruction">
-        Complete the sentences below.
-        Choose NO MORE THAN THREE WORDS from the passage
-        for each answer.
-      </p>
-
-
-
-      <div
-        class="question-item"
-        data-question="23"
-      >
-
-        <span class="question-number">
-          23
-        </span>
-
-        <span class="question-copy">
-          One study found a strong connection between children’s IQ
-          and the availability of ______ at home.
-        </span>
-
-        <div class="answer-row">
-
-          <input
-            data-answer="23"
-            type="text"
-            autocomplete="off"
-            placeholder="Type your answer"
+          <div
+            class="question-card"
+            id="q14"
           >
 
-        </div>
+            <div class="question-row">
 
-        <div class="feedback"></div>
+              <span class="qno">
+                14
+              </span>
 
-      </div>
+              <div class="qcopy">
+                a reference to the influence of the domestic
+                background on the gifted child.
+              </div>
+
+              <select
+                id="a14"
+                class="answer-select"
+                onchange="saveAnswer(14,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
 
 
-
-      <div
-        class="question-item"
-        data-question="24"
-      >
-
-        <span class="question-number">
-          24
-        </span>
-
-        <span class="question-copy">
-          Children of average ability seem to need more direction
-          from teachers because they do not have ______.
-        </span>
-
-        <div class="answer-row">
-
-          <input
-            data-answer="24"
-            type="text"
-            autocomplete="off"
-            placeholder="Type your answer"
+          <div
+            class="question-card"
+            id="q15"
           >
 
-        </div>
+            <div class="question-row">
 
-        <div class="feedback"></div>
+              <span class="qno">
+                15
+              </span>
 
-      </div>
+              <div class="qcopy">
+                reference to what can be lost if learners are
+                given too much guidance.
+              </div>
+
+              <select
+                id="a15"
+                class="answer-select"
+                onchange="saveAnswer(15,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
 
 
-
-      <div
-        class="question-item"
-        data-question="25"
-      >
-
-        <span class="question-number">
-          25
-        </span>
-
-        <span class="question-copy">
-          Meta-cognition involves children understanding their own
-          learning strategies, as well as developing ______.
-        </span>
-
-        <div class="answer-row">
-
-          <input
-            data-answer="25"
-            type="text"
-            autocomplete="off"
-            placeholder="Type your answer"
+          <div
+            class="question-card"
+            id="q16"
           >
 
-        </div>
+            <div class="question-row">
 
-        <div class="feedback"></div>
+              <span class="qno">
+                16
+              </span>
 
-      </div>
+              <div class="qcopy">
+                a reference to the damaging effects of anxiety.
+              </div>
+
+              <select
+                id="a16"
+                class="answer-select"
+                onchange="saveAnswer(16,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
 
 
-
-      <div
-        class="question-item"
-        data-question="26"
-      >
-
-        <span class="question-number">
-          26
-        </span>
-
-        <span class="question-copy">
-          Teachers who rely on what is known as ______ often
-          produce sets of impressive grades in class tests.
-        </span>
-
-        <div class="answer-row">
-
-          <input
-            data-answer="26"
-            type="text"
-            autocomplete="off"
-            placeholder="Type your answer"
+          <div
+            class="question-card"
+            id="q17"
           >
 
-        </div>
+            <div class="question-row">
 
-        <div class="feedback"></div>
+              <span class="qno">
+                17
+              </span>
+
+              <div class="qcopy">
+                examples of classroom techniques which favour
+                socially-disadvantaged children.
+              </div>
+
+              <select
+                id="a17"
+                class="answer-select"
+                onchange="saveAnswer(17,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ===============================================
+             QUESTIONS 18–22
+        ================================================ -->
+
+        <section class="question-section">
+
+          <div class="instructions">
+
+            <h3>
+              Questions 18–22
+            </h3>
+
+            <p>
+              Match each statement with the correct person or
+              people, A–E.
+            </p>
+
+            <div class="rule">
+              MATCHING PEOPLE
+            </div>
+
+          </div>
+
+
+          <div class="heading-list">
+
+            <div class="heading-list-title">
+              List of People
+            </div>
+
+
+            <div class="heading-grid">
+
+              <div class="heading-item">
+                <b>A</b>
+                Freeman
+              </div>
+
+              <div class="heading-item">
+                <b>B</b>
+                Shore and Kanevsky
+              </div>
+
+              <div class="heading-item">
+                <b>C</b>
+                Elshout
+              </div>
+
+              <div class="heading-item">
+                <b>D</b>
+                Simonton
+              </div>
+
+              <div class="heading-item">
+                <b>E</b>
+                Boekaerts
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q18"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                18
+              </span>
+
+              <div class="qcopy">
+                Less time can be spent on exercises with gifted
+                pupils who produce accurate work.
+              </div>
+
+              <select
+                id="a18"
+                class="answer-select"
+                onchange="saveAnswer(18,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q19"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                19
+              </span>
+
+              <div class="qcopy">
+                Self-reliance is a valuable tool that helps
+                gifted students reach their goals.
+              </div>
+
+              <select
+                id="a19"
+                class="answer-select"
+                onchange="saveAnswer(19,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q20"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                20
+              </span>
+
+              <div class="qcopy">
+                Gifted children know how to channel their
+                feelings to assist their learning.
+              </div>
+
+              <select
+                id="a20"
+                class="answer-select"
+                onchange="saveAnswer(20,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q21"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                21
+              </span>
+
+              <div class="qcopy">
+                The very gifted child benefits from appropriate
+                support from close relatives.
+              </div>
+
+              <select
+                id="a21"
+                class="answer-select"
+                onchange="saveAnswer(21,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q22"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                22
+              </span>
+
+              <div class="qcopy">
+                Really successful students have learnt a
+                considerable amount about their subject.
+              </div>
+
+              <select
+                id="a22"
+                class="answer-select"
+                onchange="saveAnswer(22,this.value)"
+              ></select>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ===============================================
+             QUESTIONS 23–26
+        ================================================ -->
+
+        <section class="question-section">
+
+          <div class="instructions">
+
+            <h3>
+              Questions 23–26
+            </h3>
+
+            <p>
+              Complete the sentences below.
+            </p>
+
+            <p>
+              Choose <b>NO MORE THAN THREE WORDS</b> from the
+              passage for each answer.
+            </p>
+
+            <div class="rule">
+              SENTENCE COMPLETION
+            </div>
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q23"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                23
+              </span>
+
+              <div class="qcopy">
+                One study found a strong connection between
+                children’s IQ and the availability of
+                <b>__________</b> at home.
+              </div>
+
+            </div>
+
+            <input
+              id="a23"
+              class="answer-select"
+              style="
+                margin-top:10px;
+                width:100%;
+                max-width:none
+              "
+              placeholder="Nhập đáp án"
+              oninput="saveAnswer(23,this.value)"
+            >
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q24"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                24
+              </span>
+
+              <div class="qcopy">
+                Children of average ability seem to need more
+                direction from teachers because they do not
+                have <b>__________</b>.
+              </div>
+
+            </div>
+
+            <input
+              id="a24"
+              class="answer-select"
+              style="
+                margin-top:10px;
+                width:100%;
+                max-width:none
+              "
+              placeholder="Nhập đáp án"
+              oninput="saveAnswer(24,this.value)"
+            >
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q25"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                25
+              </span>
+
+              <div class="qcopy">
+                Meta-cognition involves children understanding
+                their own learning strategies, as well as
+                developing <b>__________</b>.
+              </div>
+
+            </div>
+
+            <input
+              id="a25"
+              class="answer-select"
+              style="
+                margin-top:10px;
+                width:100%;
+                max-width:none
+              "
+              placeholder="Nhập đáp án"
+              oninput="saveAnswer(25,this.value)"
+            >
+
+          </div>
+
+
+          <div
+            class="question-card"
+            id="q26"
+          >
+
+            <div class="question-row">
+
+              <span class="qno">
+                26
+              </span>
+
+              <div class="qcopy">
+                Teachers who rely on what is known as
+                <b>__________</b> often produce sets of
+                impressive grades in class tests.
+              </div>
+
+            </div>
+
+            <input
+              id="a26"
+              class="answer-select"
+              style="
+                margin-top:10px;
+                width:100%;
+                max-width:none
+              "
+              placeholder="Nhập đáp án"
+              oninput="saveAnswer(26,this.value)"
+            >
+
+          </div>
+
+        </section>
+
+
+        <div
+          id="reviewList"
+          class="review-list"
+        ></div>
 
       </div>
 
-    </section>
+    </div>
 
-  </aside>
+  </section>
 
 </main>
 
 
+<!-- =========================================================
+     BOTTOM NAV
+========================================================= -->
 
-<div class="action-bar">
+<div class="bottom">
+
+  <div
+    id="nav"
+    class="nav"
+  ></div>
+
 
   <button
-    id="resetBtn"
-    class="reset-btn"
-    type="button"
+    class="submit"
+    onclick="submitPractice()"
   >
-    Làm lại
-  </button>
-
-  <button
-    id="checkBtn"
-    class="check-btn"
-    type="button"
-  >
-    Kiểm tra đáp án
+    Nộp bài
   </button>
 
 </div>
 
 
+<!-- =========================================================
+     HIGHLIGHT MENU
+========================================================= -->
+
+<div
+  id="selectionMenu"
+  class="selection-menu"
+>
+
+  <button
+    id="menuHighlight"
+    type="button"
+  >
+    🖍 Highlight
+  </button>
+
+
+  <button
+    id="menuNote"
+    type="button"
+  >
+    📝 Take note
+  </button>
+
+</div>
+
+
+<!-- =========================================================
+     RESULT
+========================================================= -->
+
+<div
+  id="resultOverlay"
+  class="overlay hidden"
+>
+
+  <div class="result">
+
+    <div
+      style="
+        font-size:10px;
+        font-weight:950;
+        color:#6a4db4;
+        letter-spacing:.08em
+      "
+    >
+      KẾT QUẢ LUYỆN TẬP
+    </div>
+
+
+    <div
+      id="resultStudent"
+      style="
+        margin-top:5px;
+        font-size:12px;
+        color:#6f7890
+      "
+    ></div>
+
+
+    <div
+      id="resultScore"
+      class="score"
+    >
+      0 / 13
+    </div>
+
+
+    <div id="resultPercent"></div>
+
+
+    <p
+      style="
+        font-size:11px;
+        color:#6f7890
+      "
+    >
+      Các câu sai được giải thích bên dưới phần câu hỏi.
+    </p>
+
+
+    <button
+      class="btn"
+      onclick="closeResult()"
+    >
+      Xem lại bài
+    </button>
+
+  </div>
+
+</div>
+
 
 <script>
 
-const STORAGE_KEY =
-  "reading_passage2_practice02_answers";
+/* =========================================================
+   CONFIG
+========================================================= */
 
+const RESULT_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const ATTEMPT_KEY =
+  'PRACTICE_READINGPASSAGE2_02_GIFTED_CHILDREN_V1';
+
+
+const QUESTION_NUMBERS = [
+  14,15,16,17,
+  18,19,20,21,22,
+  23,24,25,26
+];
+
+
+const PARA_NUMBERS = [
+  14,15,16,17
+];
+
+
+const PEOPLE_NUMBERS = [
+  18,19,20,21,22
+];
+
+
+const TEXT_NUMBERS = [
+  23,24,25,26
+];
+
+
+const PARA_OPTIONS = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F'
+];
+
+
+const PEOPLE_OPTIONS = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E'
+];
+
+
+/* =========================================================
+   ANSWER KEY
+========================================================= */
 
 const KEYS = {
 
   14:[
-    "A"
+    'A'
   ],
 
   15:[
-    "D"
+    'D'
   ],
 
   16:[
-    "F"
+    'F'
   ],
 
   17:[
-    "D"
+    'D'
   ],
 
   18:[
-    "B"
+    'B'
   ],
 
   19:[
-    "D"
+    'D'
   ],
 
   20:[
-    "E"
+    'E'
   ],
 
   21:[
-    "A"
+    'A'
   ],
 
   22:[
-    "C"
+    'C'
   ],
 
   23:[
-    "books and activities"
+    'books and activities'
   ],
 
   24:[
-    "internal regulation",
-    "self-regulation",
-    "self regulation"
+    'internal regulation',
+    'self-regulation',
+    'self regulation'
   ],
 
   25:[
-    "emotional awareness"
+    'emotional awareness'
   ],
 
   26:[
-    "spoon-feeding",
-    "spoon feeding"
+    'spoon-feeding',
+    'spoon feeding'
   ]
 
 };
 
 
+const DISPLAY_KEY = {
 
-function normalise(value){
+  14:
+    'A',
 
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .replace(/[.,!?;:]+$/g,"")
-    .replace(/[’']/g,"'")
-    .replace(/\s+/g," ");
+  15:
+    'D',
 
-}
+  16:
+    'F',
 
+  17:
+    'D',
 
+  18:
+    'B — Shore and Kanevsky',
 
-function getInputs(){
+  19:
+    'D — Simonton',
 
-  return [
-    ...document.querySelectorAll(
-      "[data-answer]"
-    )
-  ];
+  20:
+    'E — Boekaerts',
 
-}
+  21:
+    'A — Freeman',
 
+  22:
+    'C — Elshout',
 
+  23:
+    'books and activities',
 
-function saveAnswers(){
+  24:
+    'internal regulation / self-regulation',
 
-  const data={};
+  25:
+    'emotional awareness',
 
+  26:
+    'spoon-feeding'
 
-  getInputs()
-    .forEach(
-      input=>{
-
-        data[
-          input.dataset.answer
-        ]=
-        input.value;
-
-      }
-    );
-
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(data)
-  );
+};
 
 
-  updateCounter();
+const QUESTION_TEXT = {
 
-}
+  14:
+    'a reference to the influence of the domestic background on the gifted child.',
 
+  15:
+    'reference to what can be lost if learners are given too much guidance.',
 
+  16:
+    'a reference to the damaging effects of anxiety.',
 
-function loadAnswers(){
+  17:
+    'examples of classroom techniques which favour socially-disadvantaged children.',
 
-  try{
+  18:
+    'Less time can be spent on exercises with gifted pupils who produce accurate work.',
 
-    const data=
-      JSON.parse(
-        localStorage.getItem(
-          STORAGE_KEY
-        ) || "{}"
-      );
+  19:
+    'Self-reliance is a valuable tool that helps gifted students reach their goals.',
 
+  20:
+    'Gifted children know how to channel their feelings to assist their learning.',
 
-    getInputs()
-      .forEach(
-        input=>{
+  21:
+    'The very gifted child benefits from appropriate support from close relatives.',
 
-          const question=
-            input.dataset.answer;
+  22:
+    'Really successful students have learnt a considerable amount about their subject.',
 
+  23:
+    'One study found a strong connection between children’s IQ and the availability of ... at home.',
 
-          if(
-            data[question] !== undefined
-          ){
+  24:
+    'Children of average ability seem to need more direction from teachers because they do not have ...',
 
-            input.value=
-              data[question];
+  25:
+    'Meta-cognition involves children understanding their own learning strategies, as well as developing ...',
 
-          }
+  26:
+    'Teachers who rely on what is known as ... often produce sets of impressive grades in class tests.'
 
-        }
-      );
-
-  }
-  catch(error){
-
-    console.warn(error);
-
-  }
+};
 
 
-  updateCounter();
+const EVIDENCE = {
 
-}
+  14:
+    'Children’s educational environment contributes to the IQ score ... children’s IQ scores were compared with their home educational provision.',
+
+  15:
+    'Too much dependence on the teachers risks loss of autonomy and motivation to discover.',
+
+  16:
+    'Fear, for example, can limit the development of curiosity.',
+
+  17:
+    'There are quite a number of new methods which can help, such as child-initiated learning, ability-peer tutoring ... useful for bright children from deprived areas.',
+
+  18:
+    'If they merely make fewer errors, then we can shorten the practice.',
+
+  19:
+    'Characteristics such as independence seemed to contribute more to reaching the highest levels of expertise than intellectual skills.',
+
+  20:
+    'Boekaerts ... found emotional forces in harness.',
+
+  21:
+    'The higher the children’s IQ scores ... the better the quality of their educational backup ... verbal interactions with parents, number of books and activities in their home.',
+
+  22:
+    'Individuals who know a great deal about a specific domain will achieve at a higher level than those who do not.',
+
+  23:
+    '... number of books and activities in their home etc.',
+
+  24:
+    '... external regulation by the teacher often compensates for lack of internal regulation.',
+
+  25:
+    'Emotional awareness is also part of metacognition.',
+
+  26:
+    'Although ‘spoon-feeding’ can produce extremely high examination results ...'
+
+};
 
 
+const ANALYSIS = {
 
-function updateCounter(){
+  14:
+    'Đoạn A nói trực tiếp về <b>home educational provision</b> và ảnh hưởng của môi trường giáo dục tại nhà đối với IQ. → <b>A</b>.',
 
-  const completed=
-    getInputs()
-      .filter(
-        input=>
-          input.value.trim() !== ""
-      )
-      .length;
+  15:
+    'Đoạn D nói việc phụ thuộc quá nhiều vào giáo viên có thể làm mất <b>autonomy</b> và động lực khám phá. → <b>D</b>.',
+
+  16:
+    'Đoạn F nêu rõ <b>fear</b> có thể hạn chế sự phát triển của curiosity. → <b>F</b>.',
+
+  17:
+    'Đoạn D đưa ra các kỹ thuật như <b>child-initiated learning</b> và <b>ability-peer tutoring</b>, đặc biệt hữu ích với trẻ sáng dạ ở khu vực thiếu thốn. → <b>D</b>.',
+
+  18:
+    'Shore and Kanevsky nêu rằng nếu học sinh giỏi ít mắc lỗi thì có thể <b>shorten the practice</b>. → <b>B</b>.',
+
+  19:
+    'Simonton kết luận rằng <b>independence</b> góp phần lớn vào việc đạt trình độ chuyên môn cao nhất. → <b>D</b>.',
+
+  20:
+    'Boekaerts nhận thấy trẻ có IQ cao có thể huy động các lực cảm xúc phục vụ việc học. → <b>E</b>.',
+
+  21:
+    'Freeman được trích dẫn trong nghiên cứu cho thấy trẻ rất giỏi được hưởng lợi từ hỗ trợ giáo dục tại nhà. → <b>A</b>.',
+
+  22:
+    'Elshout cho rằng người biết nhiều về một lĩnh vực cụ thể sẽ đạt thành tích cao hơn. → <b>C</b>.',
+
+  23:
+    'Đoạn A nêu cụm chính xác <b>books and activities</b>.',
+
+  24:
+    'Đoạn B cho biết external regulation từ giáo viên bù đắp cho việc thiếu <b>internal regulation</b>; đáp án <b>self-regulation</b> cũng được chấp nhận theo key bạn cung cấp.',
+
+  25:
+    'Đoạn B nói trực tiếp <b>Emotional awareness is also part of metacognition</b>.',
+
+  26:
+    'Đoạn D dùng đúng thuật ngữ <b>spoon-feeding</b> cho cách dạy có thể tạo kết quả thi rất cao.'
+
+};
 
 
-  document.getElementById(
-    "answerCounter"
+/* =========================================================
+   STATE
+========================================================= */
+
+let startedAt = 0;
+
+let submitted = false;
+
+let savedSelection = null;
+
+let savedZone = null;
+
+let menuMode =
+  'selection';
+
+let menuTarget = null;
+
+let menuZone = null;
+
+
+/* =========================================================
+   ANSWER HELPERS
+========================================================= */
+
+function normalize(value){
+
+  return String(
+    value || ''
   )
-  .textContent=
-    `${completed} / 13`;
-
-}
-
-
-
-function checkAnswers(){
-
-  let correct=0;
-
-
-  getInputs()
-    .forEach(
-      input=>{
-
-        const number=
-          input.dataset.answer;
-
-
-        const item=
-          document.querySelector(
-            `[data-question="${number}"]`
-          );
-
-
-        const feedback=
-          item.querySelector(
-            ".feedback"
-          );
-
-
-        const user=
-          normalise(
-            input.value
-          );
-
-
-        const validAnswers=
-          KEYS[number]
-            .map(
-              normalise
-            );
-
-
-        const isCorrect=
-          validAnswers.includes(
-            user
-          );
-
-
-        item.classList.remove(
-          "correct",
-          "wrong"
-        );
-
-
-        if(isCorrect){
-
-          correct++;
-
-
-          item.classList.add(
-            "correct"
-          );
-
-
-          feedback.textContent=
-            "✓ Correct";
-
-        }
-        else{
-
-          item.classList.add(
-            "wrong"
-          );
-
-
-          feedback.textContent=
-            input.value.trim()
-
-            ?
-
-            `✕ Correct answer: ${KEYS[number][0]}`
-
-            :
-
-            `Chưa trả lời · Correct answer: ${KEYS[number][0]}`;
-
-        }
-
-      }
-    );
-
-
-  const scoreBox=
-    document.getElementById(
-      "scoreBox"
-    );
-
-
-  scoreBox.textContent=
-    `Kết quả: ${correct}/13 câu đúng · ${Math.round(correct/13*100)}%`;
-
-
-  scoreBox.classList.add(
-    "show"
+  .trim()
+  .toLowerCase()
+  .replace(
+    /[’']/g,
+    "'"
+  )
+  .replace(
+    /\s+/g,
+    ' '
   );
 
+}
 
-  saveAnswers();
+
+function isCorrect(
+  number,
+  value
+){
+
+  const answer =
+    normalize(value);
 
 
-  document
-    .querySelector(
-      ".questions-panel"
-    )
-    .scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
+  return KEYS[number]
+    .some(
+      key =>
+        normalize(key)
+        ===
+        answer
+    );
 
 }
 
 
+/* =========================================================
+   BUILD CONTROLS
+========================================================= */
 
-function resetAnswers(){
+function buildControls(){
 
-  const ok=
-    confirm(
-      "Xóa toàn bộ đáp án của bài này?"
-    );
-
-
-  if(!ok){
-    return;
-  }
-
-
-  getInputs()
+  PARA_NUMBERS
     .forEach(
-      input=>{
+      number => {
 
-        input.value="";
+        const select =
+          document.getElementById(
+            'a' + number
+          );
+
+
+        if(!select){
+          return;
+        }
+
+
+        select.innerHTML =
+
+          '<option value="">— Chọn đoạn —</option>'
+
+          +
+
+          PARA_OPTIONS
+            .map(
+              value =>
+                `<option value="${value}">${value}</option>`
+            )
+            .join('');
 
       }
     );
 
 
-  document
-    .querySelectorAll(
-      ".question-item"
-    )
+  PEOPLE_NUMBERS
     .forEach(
-      item=>{
+      number => {
 
-        item.classList.remove(
-          "correct",
-          "wrong"
-        );
-
-
-        const feedback=
-          item.querySelector(
-            ".feedback"
+        const select =
+          document.getElementById(
+            'a' + number
           );
 
 
-        feedback.textContent="";
+        if(!select){
+          return;
+        }
+
+
+        select.innerHTML =
+
+          '<option value="">— Chọn người —</option>'
+
+          +
+
+          PEOPLE_OPTIONS
+            .map(
+              value =>
+                `<option value="${value}">${value}</option>`
+            )
+            .join('');
 
       }
     );
@@ -1866,65 +2816,1753 @@ function resetAnswers(){
 
   document
     .getElementById(
-      "scoreBox"
+      'nav'
     )
-    .classList
-    .remove(
-      "show"
-    );
+    .innerHTML =
 
-
-  localStorage.removeItem(
-    STORAGE_KEY
-  );
-
-
-  updateCounter();
+    QUESTION_NUMBERS
+      .map(
+        number =>
+          `
+          <button
+            id="nav${number}"
+            onclick="goQ(${number})"
+          >
+            ${number}
+          </button>
+          `
+      )
+      .join('');
 
 }
 
 
+/* =========================================================
+   STUDENT
+========================================================= */
 
-getInputs()
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+      ||
+      'null'
+    );
+
+  }
+  catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const student =
+    readStudent();
+
+
+  if(student){
+
+    document
+      .getElementById(
+        'studentName'
+      )
+      .value =
+      student.name || '';
+
+
+    document
+      .getElementById(
+        'studentClass'
+      )
+      .value =
+      student.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name =
+    document
+      .getElementById(
+        'studentName'
+      )
+      .value
+      .trim();
+
+
+  const className =
+    document
+      .getElementById(
+        'studentClass'
+      )
+      .value
+      .trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    document
+      .getElementById(
+        'startError'
+      )
+      .textContent =
+      'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+      name,
+      className
+    })
+
+  );
+
+
+  document
+    .getElementById(
+      'studentInfo'
+    )
+    .textContent =
+    `${name} · ${className}`;
+
+
+  document
+    .getElementById(
+      'start'
+    )
+    .classList
+    .add(
+      'hidden'
+    );
+
+
+  startedAt =
+    Date.now();
+
+
+  restoreMarkup();
+
+  buildControls();
+
+  restoreAnswers();
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function fmt(sec){
+
+  sec =
+    Math.max(
+      0,
+      Math.floor(sec)
+    );
+
+
+  const hours =
+    Math.floor(
+      sec / 3600
+    );
+
+
+  const minutes =
+    Math.floor(
+      (
+        sec % 3600
+      )
+      /
+      60
+    );
+
+
+  const seconds =
+    sec % 60;
+
+
+  return hours
+
+    ?
+
+    `${
+      String(hours)
+      .padStart(
+        2,
+        '0'
+      )
+    }:${
+      String(minutes)
+      .padStart(
+        2,
+        '0'
+      )
+    }:${
+      String(seconds)
+      .padStart(
+        2,
+        '0'
+      )
+    }`
+
+    :
+
+    `${
+      String(minutes)
+      .padStart(
+        2,
+        '0'
+      )
+    }:${
+      String(seconds)
+      .padStart(
+        2,
+        '0'
+      )
+    }`;
+
+}
+
+
+setInterval(
+  () => {
+
+    if(startedAt){
+
+      document
+        .getElementById(
+          'timer'
+        )
+        .textContent =
+
+        fmt(
+          (
+            Date.now()
+            -
+            startedAt
+          )
+          /
+          1000
+        );
+
+    }
+
+  },
+
+  500
+);
+
+
+/* =========================================================
+   ANSWERS
+========================================================= */
+
+function saveAnswer(
+  number,
+  value
+){
+
+  if(submitted){
+    return;
+  }
+
+
+  localStorage.setItem(
+
+    `${ATTEMPT_KEY}_q${number}`,
+
+    value
+
+  );
+
+
+  navState(number);
+
+  updateProgress();
+
+}
+
+
+function getAnswer(number){
+
+  return localStorage.getItem(
+    `${ATTEMPT_KEY}_q${number}`
+  )
+  ||
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  QUESTION_NUMBERS
+    .forEach(
+      number => {
+
+        const value =
+          getAnswer(number);
+
+
+        const input =
+          document.getElementById(
+            'a' + number
+          );
+
+
+        if(input){
+
+          input.value =
+            value;
+
+        }
+
+
+        navState(number);
+
+      }
+    );
+
+}
+
+
+function navState(number){
+
+  const button =
+    document.getElementById(
+      'nav' + number
+    );
+
+
+  if(button){
+
+    button
+      .classList
+      .toggle(
+        'answered',
+        !!normalize(
+          getAnswer(number)
+        )
+      );
+
+  }
+
+}
+
+
+function updateProgress(){
+
+  const answered =
+
+    QUESTION_NUMBERS
+      .filter(
+        number =>
+          normalize(
+            getAnswer(number)
+          )
+      )
+      .length;
+
+
+  document
+    .getElementById(
+      'progressText'
+    )
+    .textContent =
+    `${answered}/13 câu đã trả lời`;
+
+
+  document
+    .getElementById(
+      'progressBar'
+    )
+    .style
+    .width =
+    (
+      answered
+      /
+      13
+      *
+      100
+    )
+    +
+    '%';
+
+}
+
+
+function goQ(number){
+
+  const target =
+    document.getElementById(
+      'q' + number
+    );
+
+
+  if(!target){
+    return;
+  }
+
+
+  target.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+
+  setTimeout(
+    () => {
+
+      document
+        .getElementById(
+          'a' + number
+        )
+        ?.focus();
+
+    },
+
+    300
+  );
+
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+async function submitPractice(){
+
+  if(submitted){
+    return;
+  }
+
+
+  submitted =
+    true;
+
+
+  let score =
+    0;
+
+
+  const answers =
+    {};
+
+
+  document
+    .getElementById(
+      'reviewList'
+    )
+    .innerHTML =
+    '';
+
+
+  QUESTION_NUMBERS
+    .forEach(
+      number => {
+
+        const user =
+          getAnswer(number);
+
+
+        const ok =
+          isCorrect(
+            number,
+            user
+          );
+
+
+        answers[number] =
+          user || '';
+
+
+        if(ok){
+
+          score++;
+
+        }
+
+
+        const card =
+          document.getElementById(
+            'q' + number
+          );
+
+
+        card
+          ?.classList
+          .add(
+            ok
+            ?
+            'correct-card'
+            :
+            'wrong-card'
+          );
+
+
+        const input =
+          document.getElementById(
+            'a' + number
+          );
+
+
+        if(input){
+
+          input.disabled =
+            true;
+
+
+          input
+            .classList
+            .add(
+              ok
+              ?
+              'correct'
+              :
+              'wrong'
+            );
+
+        }
+
+
+        const navButton =
+          document.getElementById(
+            'nav' + number
+          );
+
+
+        navButton
+          ?.classList
+          .add(
+            ok
+            ?
+            'correct'
+            :
+            'wrong'
+          );
+
+
+        if(!ok){
+
+          renderReview(
+            number,
+            user
+          );
+
+        }
+
+      }
+    );
+
+
+  const durationSeconds =
+
+    Math.floor(
+      (
+        Date.now()
+        -
+        startedAt
+      )
+      /
+      1000
+    );
+
+
+  const student =
+    readStudent();
+
+
+  document
+    .getElementById(
+      'resultStudent'
+    )
+    .textContent =
+
+    student
+
+    ?
+
+    `${student.name} · ${student.className}`
+
+    :
+
+    '';
+
+
+  document
+    .getElementById(
+      'resultScore'
+    )
+    .textContent =
+    `${score} / 13`;
+
+
+  document
+    .getElementById(
+      'resultPercent'
+    )
+    .textContent =
+
+    `${
+      Math.round(
+        score
+        /
+        13
+        *
+        100
+      )
+    }% đúng · Thời gian ${
+      fmt(durationSeconds)
+    }`;
+
+
+  document
+    .getElementById(
+      'resultOverlay'
+    )
+    .classList
+    .remove(
+      'hidden'
+    );
+
+
+  const details =
+    JSON.stringify({
+
+      title:
+        'Gifted children and learning - Reading Passage 2 - 02',
+
+      answers,
+
+      correctAnswers:
+        DISPLAY_KEY
+
+    });
+
+
+  const body =
+    new URLSearchParams({
+
+      mode:
+        'PRACTICE',
+
+      name:
+        student?.name || '',
+
+      className:
+        student?.className || '',
+
+      skill:
+        'Reading',
+
+      practiceType:
+        'Reading Passage 2',
+
+      practiceId:
+        '02',
+
+      score:
+        String(score),
+
+      total:
+        '13',
+
+      durationSeconds:
+        String(
+          durationSeconds
+        ),
+
+      details,
+
+      submittedAt:
+        new Date()
+        .toISOString()
+
+    });
+
+
+  try{
+
+    await fetch(
+
+      RESULT_ENDPOINT,
+
+      {
+
+        method:
+          'POST',
+
+        mode:
+          'no-cors',
+
+        headers:{
+          'Content-Type':
+            'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+
+        body:
+          body.toString()
+
+      }
+
+    );
+
+  }
+  catch(err){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      err
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+function renderReview(
+  number,
+  user
+){
+
+  document
+    .getElementById(
+      'reviewList'
+    )
+    .insertAdjacentHTML(
+
+      'beforeend',
+
+      `
+      <div class="inline-review">
+
+        <div class="review-title">
+          Câu ${number}
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Câu hỏi
+          </div>
+
+          <div>
+            ${escapeHTML(
+              QUESTION_TEXT[number]
+            )}
+          </div>
+
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án em chọn
+          </div>
+
+          <div class="review-user">
+            ${escapeHTML(
+              user
+              ||
+              'Chưa trả lời'
+            )}
+          </div>
+
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án đúng
+          </div>
+
+          <div class="review-correct">
+            ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-box">
+
+          <div class="compare-heading">
+            🔎 Đối chiếu với bài đọc
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Passage
+            </div>
+
+            <div
+              class="passage-evidence"
+              role="button"
+              tabindex="0"
+              onclick="focusEvidence(${number})"
+              onkeydown="
+                if(
+                  event.key==='Enter'
+                  ||
+                  event.key===' '
+                ){
+                  event.preventDefault();
+                  focusEvidence(${number});
+                }
+              "
+            >
+
+              “${EVIDENCE[number]}”
+
+              <div class="evidence-help">
+                Nhấn để xem vị trí trong bài đọc
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Phân tích
+            </div>
+
+            <div class="compare-analysis">
+              ${ANALYSIS[number]}
+            </div>
+
+          </div>
+
+
+          <div class="conclusion">
+            Đáp án: ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+      </div>
+      `
+
+    );
+
+}
+
+
+/* =========================================================
+   EVIDENCE FOCUS
+========================================================= */
+
+function focusEvidence(number){
+
+  document
+    .querySelectorAll(
+      '.evidence-source.evidence-focus'
+    )
+    .forEach(
+      element =>
+
+        element
+          .classList
+          .remove(
+            'evidence-focus'
+          )
+
+    );
+
+
+  const targets = [
+
+    ...document
+      .querySelectorAll(
+        `[data-evidence~="${number}"]`
+      )
+
+  ];
+
+
+  if(
+    !targets.length
+  ){
+
+    return;
+
+  }
+
+
+  targets
+    .forEach(
+      target =>
+
+        target
+          .classList
+          .add(
+            'evidence-focus'
+          )
+
+    );
+
+
+  targets[0]
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'center'
+
+    });
+
+
+  targets
+    .forEach(
+      target => {
+
+        target.style.animation =
+          'none';
+
+
+        void target.offsetWidth;
+
+
+        target.style.animation =
+          '';
+
+      }
+    );
+
+}
+
+
+function closeResult(){
+
+  document
+    .getElementById(
+      'resultOverlay'
+    )
+    .classList
+    .add(
+      'hidden'
+    );
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + NOTES
+========================================================= */
+
+const selectionMenu =
+  document.getElementById(
+    'selectionMenu'
+  );
+
+
+const menuHighlight =
+  document.getElementById(
+    'menuHighlight'
+  );
+
+
+const menuNote =
+  document.getElementById(
+    'menuNote'
+  );
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+
+    zone ===
+    'passage'
+
+    ?
+
+    'passageRoot'
+
+    :
+
+    'questionsRoot'
+
+  );
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function saveMarkup(zone){
+
+  document
+    .querySelectorAll(
+      '.evidence-source.evidence-focus'
+    )
+    .forEach(
+      element =>
+
+        element
+          .classList
+          .remove(
+            'evidence-focus'
+          )
+
+    );
+
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    zoneRoot(zone)
+      .innerHTML
+
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  [
+    'passage',
+    'questions'
+  ]
   .forEach(
-    input=>{
+    zone => {
 
-      input.addEventListener(
-        "input",
-        saveAnswers
+      const html =
+        localStorage.getItem(
+          markupKey(zone)
+        );
+
+
+      if(html){
+
+        zoneRoot(zone)
+          .innerHTML =
+          html;
+
+      }
+
+
+      bindContext(zone);
+
+    }
+  );
+
+}
+
+
+function resetMenu(){
+
+  menuMode =
+    'selection';
+
+
+  menuTarget =
+    null;
+
+
+  menuZone =
+    null;
+
+
+  menuHighlight
+    .style
+    .display =
+    '';
+
+
+  menuNote
+    .style
+    .display =
+    '';
+
+
+  menuHighlight
+    .textContent =
+    '🖍 Highlight';
+
+
+  menuNote
+    .textContent =
+    '📝 Take note';
+
+
+  menuHighlight
+    .classList
+    .remove(
+      'danger'
+    );
+
+
+  menuNote
+    .classList
+    .remove(
+      'danger'
+    );
+
+}
+
+
+function hideMenu(){
+
+  selectionMenu
+    .classList
+    .remove(
+      'show'
+    );
+
+
+  resetMenu();
+
+}
+
+
+function showMenu(rect){
+
+  selectionMenu
+    .classList
+    .add(
+      'show'
+    );
+
+
+  requestAnimationFrame(
+    () => {
+
+      const width =
+        selectionMenu.offsetWidth
+        ||
+        180;
+
+
+      const left =
+        Math.min(
+
+          window.innerWidth
+          -
+          width
+          -
+          10,
+
+          Math.max(
+
+            10,
+
+            rect.left
+            +
+            rect.width / 2
+            -
+            width / 2
+
+          )
+
+        );
+
+
+      selectionMenu
+        .style
+        .left =
+        left + 'px';
+
+
+      selectionMenu
+        .style
+        .top =
+        Math.max(
+          10,
+          rect.top - 47
+        )
+        +
+        'px';
+
+    }
+  );
+
+}
+
+
+function captureSelection(zone){
+
+  const selection =
+    window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    selection.rangeCount === 0
+    ||
+    selection.isCollapsed
+  ){
+
+    return;
+
+  }
+
+
+  const range =
+    selection.getRangeAt(0);
+
+
+  if(
+    !zoneRoot(zone)
+      .contains(
+        range.commonAncestorContainer
+      )
+  ){
+
+    return;
+
+  }
+
+
+  savedSelection =
+    range.cloneRange();
+
+
+  savedZone =
+    zone;
+
+
+  resetMenu();
+
+
+  showMenu(
+    range.getBoundingClientRect()
+  );
+
+}
+
+
+function clearSelection(){
+
+  const selection =
+    window.getSelection();
+
+
+  if(selection){
+
+    selection
+      .removeAllRanges();
+
+  }
+
+
+  savedSelection =
+    null;
+
+
+  savedZone =
+    null;
+
+}
+
+
+function addHighlight(){
+
+  if(
+    menuMode ===
+    'delete-highlight'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+      savedSelection
+      .cloneRange();
+
+
+    const mark =
+      document.createElement(
+        'mark'
       );
 
 
-      input.addEventListener(
-        "change",
-        saveAnswers
+    mark.className =
+      'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+    hideMenu();
+
+  }
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function addNote(){
+
+  if(
+    menuMode ===
+    'delete-note'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const text =
+    prompt(
+      'Nhập ghi chú:'
+    );
+
+
+  if(
+    text === null
+    ||
+    !text.trim()
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+      savedSelection
+      .cloneRange();
+
+
+    const span =
+      document.createElement(
+        'span'
       );
+
+
+    span.className =
+      'note-anchor';
+
+
+    span.dataset.note =
+      text.trim();
+
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+    hideMenu();
+
+  }
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget =
+    target;
+
+
+  menuZone =
+    zone;
+
+
+  clearSelection();
+
+
+  if(
+    type ===
+    'highlight'
+  ){
+
+    menuMode =
+      'delete-highlight';
+
+
+    menuHighlight
+      .textContent =
+      '✕ Xóa highlight';
+
+
+    menuHighlight
+      .classList
+      .add(
+        'danger'
+      );
+
+
+    menuNote
+      .style
+      .display =
+      'none';
+
+  }
+  else{
+
+    menuMode =
+      'delete-note';
+
+
+    menuNote
+      .textContent =
+      '✕ Xóa note';
+
+
+    menuNote
+      .classList
+      .add(
+        'danger'
+      );
+
+
+    menuHighlight
+      .style
+      .display =
+      'none';
+
+  }
+
+
+  showMenu(
+    target.getBoundingClientRect()
+  );
+
+}
+
+
+function removeMark(){
+
+  if(
+    !menuTarget
+  ){
+
+    return;
+
+  }
+
+
+  const parent =
+    menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    menuZone
+  );
+
+
+  hideMenu();
+
+}
+
+
+function bindContext(zone){
+
+  const root =
+    zoneRoot(zone);
+
+
+  if(!root){
+
+    return;
+
+  }
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    () =>
+      setTimeout(
+        () =>
+          captureSelection(zone),
+        0
+      )
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    () =>
+      setTimeout(
+        () =>
+          captureSelection(zone),
+        120
+      )
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event => {
+
+      const highlight =
+        event.target
+          .closest(
+            'mark.user-highlight'
+          );
+
+
+      const note =
+        event.target
+          .closest(
+            '.note-anchor'
+          );
+
+
+      if(highlight){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+menuHighlight
+  .addEventListener(
+    'click',
+    addHighlight
+  );
+
+
+menuNote
+  .addEventListener(
+    'click',
+    addNote
+  );
+
+
+document
+  .addEventListener(
+    'mousedown',
+    event => {
+
+      if(
+        !selectionMenu
+          .contains(
+            event.target
+          )
+
+        &&
+
+        !event.target
+          .closest(
+            '.user-highlight'
+          )
+
+        &&
+
+        !event.target
+          .closest(
+            '.note-anchor'
+          )
+      ){
+
+        hideMenu();
+
+      }
 
     }
   );
 
 
-document
-  .getElementById(
-    "checkBtn"
-  )
-  .addEventListener(
-    "click",
-    checkAnswers
-  );
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(
+      /[&<>"']/g,
+      char => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      })[char]
+    );
+
+}
 
 
-document
-  .getElementById(
-    "resetBtn"
-  )
-  .addEventListener(
-    "click",
-    resetAnswers
-  );
+/* =========================================================
+   INIT
+========================================================= */
 
+buildControls();
 
-loadAnswers();
+prefill();
 
 </script>
 
