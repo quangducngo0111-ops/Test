@@ -4283,7 +4283,25 @@ button:disabled{
   margin-top:auto;
   padding-top:20px;
   display:flex;
-  justify-content:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.vocab-test-actions .vocab-test-prev{
+  border:1px solid #d8d0f4;
+  background:#fff;
+  color:#402b89;
+}
+.vocab-test-actions button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.vocab-test-result-actions{
+  flex-wrap:wrap;
+}
+@media(max-width:600px){
+  .vocab-test-actions button{flex:1;min-width:120px;}
+  .vocab-test-result-actions button{flex:1 1 180px;}
 }
 
 .vocab-test-actions button{
@@ -4731,6 +4749,15 @@ button:disabled{
         onclick="reviewWrongTestWords()"
       >
         Ôn từ sai
+      </button>
+
+      <button
+        class="secondary hidden"
+        id="completionWrongRetryBtn"
+        type="button"
+        onclick="retryWrongOnlyVocabularyTest()"
+      >
+        Làm lại câu sai →
       </button>
 
       <button
@@ -5720,6 +5747,15 @@ button:disabled{
       </div>
 
       <div class="vocab-test-actions">
+        <button
+          class="secondary vocab-test-prev"
+          id="vocabTestPrevBtn"
+          type="button"
+          onclick="previousVocabularyTestQuestion()"
+          disabled
+        >
+          ← Câu trước
+        </button>
 
         <button
           class="primary"
@@ -5816,6 +5852,15 @@ button:disabled{
         onclick="closeVocabularyTestResult()"
       >
         ← Về bộ từ
+      </button>
+
+      <button
+        class="primary hidden"
+        id="vocabTestRetryWrongBtn"
+        type="button"
+        onclick="retryWrongOnlyVocabularyTest()"
+      >
+        Làm lại câu sai →
       </button>
 
       <button
@@ -7066,6 +7111,48 @@ function saveCurrentVocabularyTestResult(
 }
 
 
+/* Save only what is needed to retry previously missed questions.
+   The key uses the current student AND collection, not global storage. */
+function vocabWrongRetryStorageKey(){
+  return "VOCAB_RETRY_V4_"+studentScope()+"_"+currentVocabularyTestKey();
+}
+function saveVocabWrongRetrySession(session){
+  try{
+    localStorage.setItem(vocabWrongRetryStorageKey(),JSON.stringify(session));
+  }catch(error){
+    console.warn("Không thể lưu phiên làm lại câu sai:",error);
+  }
+}
+function loadVocabWrongRetrySession(){
+  try{
+    const value=JSON.parse(localStorage.getItem(vocabWrongRetryStorageKey())||"null");
+    return value&&value.version===4&&Array.isArray(value.outstanding)?value:null;
+  }catch(error){return null;}
+}
+function clearVocabWrongRetrySession(){
+  try{localStorage.removeItem(vocabWrongRetryStorageKey());}catch(error){}
+}
+function availableWrongRetrySession(){
+  const saved=loadVocabWrongRetrySession();
+  if(saved&&saved.outstanding.length) return saved;
+  // Legacy record: no original question objects were saved in older builds.
+  // Reconstruct *only* its missed vocabulary, preserving previous score.
+  const record=getCurrentVocabularyTestRecord();
+  if(!record||!Array.isArray(record.wrongIds)||!record.wrongIds.length) return null;
+  const missed=new Set(record.wrongIds);
+  const words=currentCollection.filter(word=>missed.has(wordId(word)));
+  if(!words.length) return null;
+  const types=["typing","reverse","meaning","context","collocation"];
+  return {
+    version:4,originalTotal:Number(record.total)||VOCAB_TEST_MAX_QUESTIONS,
+    correctCount:Math.max(0,Number(record.score)||0),
+    outstanding:words.map((word,i)=>({
+      question:makeVocabularyTestQuestion(word,types[i%types.length]),
+      answer:"",correct:false
+    }))
+  };
+}
+
 function hasPassedCurrentVocabularyTest(){
 
   return Boolean(
@@ -7137,6 +7224,7 @@ function resetCurrentLearning(){
 
 
   clearCurrentVocabularyTestRecord();
+  clearVocabWrongRetrySession();
 
 
   showGameList();
@@ -7416,6 +7504,13 @@ null;
 
 let vocabTestFinished =
 false;
+
+// Input draft persists while navigating Back/Forward.
+let vocabTestDrafts = [];
+// Cumulative 30-question score; only missed questions are retried.
+let vocabTestRetryBase = null;
+let vocabTestWrongOnly = false;
+let vocabTestAcceptedVariantNotes = [];
 
 
 /* =========================================================
@@ -8380,6 +8475,14 @@ function renderCollection(){
   }
 
 
+  const wrongRetryBtn=$("completionWrongRetryBtn");
+  if(wrongRetryBtn){
+    const session=complete?availableWrongRetrySession():null;
+    wrongRetryBtn.classList.toggle("hidden",!session||!session.outstanding.length);
+    if(session)wrongRetryBtn.textContent=`Làm lại ${session.outstanding.length} câu sai →`;
+  }
+
+
   document
   .querySelectorAll(
     "[data-game-button]"
@@ -8436,6 +8539,60 @@ function normalizeVocabularyTestAnswer(value){
 
 }
 
+
+/* Maps: accept equivalent location phrases in vocabulary recall.
+   A strict photo-based MCQ still tests the actual position and grammar.
+   Do NOT merge inside-the-map (in ...) with outside-relative (to ...). */
+const MAPS_EQUIVALENT_GROUPS = [
+  ["in the north of","in the northern part of","on the northern side of"],
+  ["in the south of","in the southern part of","on the southern side of"],
+  ["in the east of","in the eastern part of","on the eastern side of"],
+  ["in the west of","in the western part of","on the western side of"],
+  ["in the centre of","in the middle of","at the centre of"],
+  ["beside","next to","adjacent to"],
+  ["with ... added nearby","with ... be added nearby"],
+  ["in the north-western corner of","in the northwest corner of","in the north western corner of"],
+  ["in the north-eastern corner of","in the northeast corner of","in the north eastern corner of"],
+  ["in the south-western corner of","in the southwest corner of","in the south western corner of"],
+  ["in the south-eastern corner of","in the southeast corner of","in the south eastern corner of"]
+];
+
+function mapsCanonicalAnswer(value){
+  const normalized=normalizeVocabularyTestAnswer(value)
+    .replace(/\.{2,}/g," ")
+    .replace(/\s+/g," ").trim();
+  // The ellipsis stands for a noun phrase. Accept the learner's optional
+  // 'be' in isolated recall, but teach the correct 'with + N + added' syntax.
+  const canonical=normalized.replace(/^with\s+(?:be\s+)?added nearby$/,"with added nearby");
+  for(const group of MAPS_EQUIVALENT_GROUPS){
+    if(group.some(item=>normalizeVocabularyTestAnswer(item).replace(/\s+/g," ").trim()===normalized)) {
+      return normalizeVocabularyTestAnswer(group[0]).replace(/\s+/g," ").trim();
+    }
+  }
+  if(canonical==="with added nearby") return "with added nearby";
+  return normalized;
+}
+
+function mapsEquivalent(a,b){
+  return mapsCanonicalAnswer(a)===mapsCanonicalAnswer(b);
+}
+
+function correctVocabularyTestResponse(question,answer){
+  const same=normalizeVocabularyTestAnswer(answer)===normalizeVocabularyTestAnswer(question.correct);
+  if(same) return true;
+  if(selectedSkill==="writing-task-1"&&String(selectedSet)==="maps") {
+    // For illustrated questions the curated options are mutually exclusive;
+    // only canonical equivalents of that spatial relation may count.
+    return mapsEquivalent(answer,question.correct);
+  }
+  return false;
+}
+
+function mapsVariantNote(question,answer){
+  if(question.mode!=="typing" || !/^with\s+be\s+added nearby$/i.test(
+    normalizeVocabularyTestAnswer(answer))) return "";
+  return "Đã chấp nhận cách trả lời gần nghĩa. Khi viết câu, dùng 'with + danh từ + added nearby' (không dùng 'be' sau with).";
+}
 
 function replaceTargetWithBlank(
   source,
@@ -8522,6 +8679,9 @@ function vocabularyTestDistractors(
       wordId(word)
       !==
       targetId
+      &&
+      !(selectedSkill==="writing-task-1"&&String(selectedSet)==="maps"
+        && mapsEquivalent(word.word,targetWord.word))
       &&
       String(
         word[field]
@@ -8711,7 +8871,7 @@ const MAPS_CONTEXT_SCENES = [
   {word:"on the eastern side of",image:"image5.png",title:"Arts Centre",context:"Find the two galleries. They are _____ the arts centre.",options:["on the eastern side of","on the western side of","on the southern side of","on the northern side of"]},
   {word:"in the centre of",image:"image6.png",title:"Library Floor Plan",context:"Find the information desk. It is _____ the library.",options:["in the centre of","in the north of","in the south of","in the west of"]},
   {word:"midway between",image:"image7.png",title:"Station District",context:"The station is approximately _____ the university and the city centre.",options:["midway between","to the west of","to the east of","opposite"]},
-  {word:"opposite",image:"image8.png",title:"Botanical Gardens",context:"The rose garden stands _____ the glasshouse, across the central path.",options:["opposite","adjacent to","next to","alongside"]},
+  {word:"opposite",image:"image8.png",title:"Botanical Gardens",context:"The rose garden stands _____ the glasshouse, across the central path.",options:["opposite","adjacent to","surrounded by","to the north of"]},
   {word:"adjacent to",image:"image9.png",title:"Museum Gardens",context:"Look at the gallery and café. The café is directly _____ the gallery.",options:["adjacent to","opposite","surrounded by","at the centre of"]},
   {word:"surrounded by",image:"image10.png",title:"Theatre Seating Plan",context:"The stage is _____ the seating areas on several sides.",options:["surrounded by","opposite","next to","alongside"]},
   {word:"along",image:"image11.png",title:"Main Road Shops",context:"The row of shops is arranged _____ the main road.",options:["along","between","opposite","surrounded by"]},
@@ -8950,6 +9110,10 @@ function buildVocabularyTest(){
 
   vocabTestResponses =
   [];
+  vocabTestDrafts=[];
+  vocabTestWrongOnly=false;
+  vocabTestRetryBase=null;
+  vocabTestAcceptedVariantNotes=[];
 
 
   vocabTestSelection =
@@ -9207,8 +9371,10 @@ function renderVocabularyTestQuestion(){
   }
 
 
-  vocabTestSelection =
-  null;
+  const previousResponse=vocabTestResponses[vocabTestIndex];
+  const previousDraft=vocabTestDrafts[vocabTestIndex];
+  vocabTestSelection=previousDraft!==undefined ? previousDraft
+      : (previousResponse ? previousResponse.answer : null);
 
 
   const current =
@@ -9224,6 +9390,8 @@ function renderVocabularyTestQuestion(){
   $("vocabTestProgressText")
   .textContent =
   `${current}/${total}`;
+  const prevButton=$("vocabTestPrevBtn");
+  if(prevButton)prevButton.disabled=vocabTestIndex===0;
 
 
   $("vocabTestProgressFill")
@@ -9351,12 +9519,14 @@ function renderVocabularyTestQuestion(){
 
 
     input.value =
-    "";
+      typeof vocabTestSelection==="string" ? vocabTestSelection : "";
 
 
     $("vocabTestHint")
     .textContent =
-    "Nhập đáp án rồi nhấn Enter hoặc Câu tiếp theo.";
+    selectedSkill==="writing-task-1"&&String(selectedSet)==="maps"
+      ? "Có thể dùng cụm từ đồng nghĩa phù hợp; nhấn Enter hoặc Câu tiếp theo."
+      : "Nhập đáp án rồi nhấn Enter hoặc Câu tiếp theo.";
 
 
     setTimeout(
@@ -9390,7 +9560,7 @@ function renderVocabularyTestQuestion(){
         index
       ) => `
         <button
-          class="vocab-test-option"
+          class="vocab-test-option${vocabTestSelection===option ? ' selected' : ''}"
           type="button"
           data-test-option="${index}"
           onclick="selectVocabularyTestOption(${index})"
@@ -9449,6 +9619,7 @@ function selectVocabularyTestOption(index){
   question.options[
     index
   ];
+  vocabTestDrafts[vocabTestIndex]=vocabTestSelection;
 
 
   document
@@ -9475,340 +9646,153 @@ function selectVocabularyTestOption(index){
 }
 
 
-function submitVocabularyTestAnswer(){
+function saveCurrentVocabularyTestDraft(){
+  const question=vocabTestQuestions[vocabTestIndex];
+  if(!question)return;
+  vocabTestDrafts[vocabTestIndex]=question.mode==="typing"
+    ? $("vocabTestInput").value
+    : vocabTestSelection;
+}
 
-  const question =
-  vocabTestQuestions[
-    vocabTestIndex
-  ];
-
-
-  if(!question){
-
-    return;
-
-  }
-
-
-  let answer =
-  "";
-
-
-  if(
-    question.mode ===
-    "typing"
-  ){
-
-    answer =
-    $("vocabTestInput")
-    .value
-    .trim();
-
-
-    if(!answer){
-
-      alert(
-        "Em hãy nhập đáp án trước khi tiếp tục."
-      );
-
-      $("vocabTestInput")
-      .focus();
-
-      return;
-
-    }
-
-  }
-
-  else{
-
-    answer =
-    vocabTestSelection;
-
-
-    if(
-      answer ===
-      null
-      ||
-      answer ===
-      undefined
-    ){
-
-      alert(
-        "Em hãy chọn một đáp án trước khi tiếp tục."
-      );
-
-      return;
-
-    }
-
-  }
-
-
-  const correct =
-  normalizeVocabularyTestAnswer(
-    answer
-  )
-  ===
-  normalizeVocabularyTestAnswer(
-    question.correct
-  );
-
-
-  vocabTestResponses.push({
-
-    question,
-
-    answer,
-
-    correct
-
-  });
-
-
-  vocabTestIndex++;
-
-
-  if(
-    vocabTestIndex >=
-    vocabTestQuestions.length
-  ){
-
-    finishVocabularyTest();
-    return;
-
-  }
-
-
+function previousVocabularyTestQuestion(){
+  if(vocabTestIndex<=0||vocabTestFinished)return;
+  saveCurrentVocabularyTestDraft();
+  vocabTestIndex--;
   renderVocabularyTestQuestion();
+}
 
+function submitVocabularyTestAnswer(){
+  const question=vocabTestQuestions[vocabTestIndex];
+  if(!question)return;
+  const answer=question.mode==="typing"
+    ? $("vocabTestInput").value.trim()
+    : vocabTestSelection;
+  if(answer===null||answer===undefined||!String(answer).trim()){
+    alert(question.mode==="typing"
+      ? "Em hãy nhập đáp án trước khi tiếp tục."
+      : "Em hãy chọn một đáp án trước khi tiếp tục.");
+    if(question.mode==="typing") $("vocabTestInput").focus();
+    return;
+  }
+  const correct=correctVocabularyTestResponse(question,answer);
+  const note=correct ? mapsVariantNote(question,answer) : "";
+  if(note&&!vocabTestAcceptedVariantNotes.includes(note))vocabTestAcceptedVariantNotes.push(note);
+  vocabTestResponses[vocabTestIndex]={question,answer,correct,note};
+  vocabTestDrafts[vocabTestIndex]=answer;
+  vocabTestIndex++;
+  if(vocabTestIndex>=vocabTestQuestions.length){
+    // Every question must have a response, including earlier edited ones.
+    if(vocabTestQuestions.some((_,i)=>!vocabTestResponses[i])){
+      vocabTestIndex=vocabTestQuestions.findIndex((_,i)=>!vocabTestResponses[i]);
+      renderVocabularyTestQuestion();return;
+    }
+    finishVocabularyTest();return;
+  }
+  renderVocabularyTestQuestion();
 }
 
 
 function finishVocabularyTest(){
-
-  if(vocabTestFinished){
-
+  if(vocabTestFinished)return;
+  const roundResponses=vocabTestQuestions.map((q,i)=>vocabTestResponses[i]);
+  if(roundResponses.some(r=>!r)){
+    vocabTestIndex=roundResponses.findIndex(r=>!r);
+    renderVocabularyTestQuestion();
+    alert("Em còn câu chưa trả lời, hãy hoàn thành trước khi nộp.");
     return;
-
   }
-
-
-  vocabTestFinished =
-  true;
-
-
+  vocabTestFinished=true;
   stopVocabularyTestTimer();
-
-
-  $("vocabTestProgressFill")
-  .style
-  .width =
-  "100%";
-
-
-  const total =
-  vocabTestResponses.length;
-
-
-  const correct =
-  vocabTestResponses
-  .filter(
-    response =>
-    response.correct
-  )
-  .length;
-
-
-  const wrongResponses =
-  vocabTestResponses
-  .filter(
-    response =>
-    !response.correct
-  );
-
-
-  const wrongMap =
-  new Map();
-
-
-  wrongResponses
-  .forEach(
-    response => {
-
-      const id =
-      wordId(
-        response.question.word
-      );
-
-
-      if(
-        !wrongMap.has(id)
-      ){
-
-        wrongMap.set(
-          id,
-          response.question.word
-        );
-
-      }
-
-    }
-  );
-
-
-  const wrongWords =
-  Array.from(
-    wrongMap.values()
-  );
-
-
-  const record =
-  saveCurrentVocabularyTestResult(
-    correct,
-    total,
-    wrongWords
-  );
-
-
-  const percent =
-  total
-  ?
-  Math.round(
-    correct
-    /
-    total
-    *
-    100
-  )
-  :
-  0;
-
-
-  const passed =
-  percent >=
-  VOCAB_TEST_PASS_PERCENT;
-
-
-  $("vocabTestResultIcon")
-  .textContent =
-  passed
-  ?
-  "🎓"
-  :
-  "🎯";
-
-
-  $("vocabTestResultTitle")
-  .textContent =
-  passed
-  ?
-  "Đã vượt qua bài kiểm tra!"
-  :
-  "Chưa đạt — hãy ôn lại từ sai";
-
-
-  $("vocabTestResultScore")
-  .textContent =
-  `${percent}%`;
-
-
-  $("vocabTestResultSummary")
-  .textContent =
-  passed
-  ?
-  `Em đã hoàn thành Bộ ${selectedSet}. Điểm tốt nhất hiện tại: ${record.bestPercent || percent}%.`
-  :
-  `Cần đạt ${VOCAB_TEST_PASS_PERCENT}%. Em còn ${wrongWords.length} từ/cụm từ cần ôn lại.`;
-
-
-  $("vocabTestCorrect")
-  .textContent =
-  correct;
-
-
-  $("vocabTestTotal")
-  .textContent =
-  total;
-
-
-  $("vocabTestStatus")
-  .textContent =
-  passed
-  ?
-  "ĐẠT ✓"
-  :
-  "CHƯA ĐẠT";
-
-
-  const wrap =
-  $("vocabTestWrongWrap");
-
-
-  const list =
-  $("vocabTestWrongList");
-
-
-  wrap
-  .classList
-  .toggle(
-    "hidden",
-    !wrongResponses.length
-  );
-
-
-  list.innerHTML =
-  wrongResponses
-  .map(
-    response => `
-      <div class="vocab-test-wrong-item">
-
-        <b>
-          ${escapeHTML(response.question.word.word)}
-        </b>
-
-        <span>
-          ${escapeHTML(response.question.word.meaning)}
-        </span>
-
-        <small>
-          Em trả lời:
-          ${escapeHTML(response.answer || "—")}
-          ·
-          Đáp án:
-          ${escapeHTML(response.question.correctDisplay || response.question.correct)}
-        </small>
-
-      </div>
-    `
-  )
-  .join("");
-
-
-  $("vocabTestReviewBtn")
-  .classList
-  .toggle(
-    "hidden",
-    !wrongWords.length
-  );
-
-
-  $("vocabTestResultOverlay")
-  .classList
-  .remove(
-    "hidden"
-  );
-
-
-  if(passed){
-
-    burstConfetti(
-      $("vocabTestResultOverlay").querySelector(".result"),
-      36
-    );
-
+  $("vocabTestProgressFill").style.width="100%";
+  const roundCorrect=roundResponses.filter(r=>r.correct).length;
+  const wrongResponses=roundResponses.filter(r=>!r.correct);
+  let total,correct;
+  if(vocabTestWrongOnly&&vocabTestRetryBase){
+    // Combine retained correct answers with corrected mistakes; threshold
+    // remains the original 30-question test, not the short retry subset.
+    total=vocabTestRetryBase.originalTotal;
+    correct=Math.min(total,vocabTestRetryBase.correctCount+roundCorrect);
+  }else{
+    total=roundResponses.length;
+    correct=roundCorrect;
   }
+  const session={
+    version:4,originalTotal:total,correctCount:correct,
+    outstanding:wrongResponses
+  };
+  saveVocabWrongRetrySession(session);
+  vocabTestRetryBase=session;
+  const wrongMap=new Map();
+  wrongResponses.forEach(r=>{
+    const id=wordId(r.question.word);
+    if(!wrongMap.has(id))wrongMap.set(id,r.question.word);
+  });
+  const wrongWords=Array.from(wrongMap.values());
+  const record=saveCurrentVocabularyTestResult(correct,total,wrongWords);
+  const percent=total?Math.round(correct/total*100):0;
+  const passed=percent>=VOCAB_TEST_PASS_PERCENT;
+  $("vocabTestResultIcon").textContent=passed?"🎓":"🎯";
+  $("vocabTestResultTitle").textContent=passed
+    ? "Đã vượt qua bài kiểm tra!" : "Còn một số câu cần ôn lại";
+  $("vocabTestResultScore").textContent=`${percent}%`;
+  $("vocabTestResultSummary").textContent=vocabTestWrongOnly
+    ? `Đã sửa đúng ${roundCorrect}/${roundResponses.length} câu trong lượt ôn này. Kết quả cộng dồn: ${correct}/${total}. ${passed?"Đã đạt yêu cầu.":"Làm lại các câu còn sai để cải thiện điểm."}`
+    : (passed
+      ? `Em đã hoàn thành Bộ ${selectedSet}. Điểm tốt nhất: ${record.bestPercent||percent}%.`
+      : `Em đúng ${correct}/${total} câu. Còn ${wrongResponses.length} câu sai; em chỉ cần làm lại các câu này.`);
+  if(vocabTestAcceptedVariantNotes.length){
+    $("vocabTestResultSummary").textContent+=" " + vocabTestAcceptedVariantNotes.join(" ");
+  }
+  $("vocabTestCorrect").textContent=correct;
+  $("vocabTestTotal").textContent=total;
+  $("vocabTestStatus").textContent=passed?"ĐẠT ✓":"CHƯA ĐẠT";
+  const wrap=$("vocabTestWrongWrap");
+  const list=$("vocabTestWrongList");
+  wrap.classList.toggle("hidden",!wrongResponses.length);
+  list.innerHTML=wrongResponses.map(r=>`
+    <div class="vocab-test-wrong-item">
+      <b>${escapeHTML(r.question.word.word)}</b>
+      <span>${escapeHTML(r.question.word.meaning)}</span>
+      <small>Em trả lời: ${escapeHTML(r.answer||"—")} ·
+        Đáp án mẫu: ${escapeHTML(r.question.correctDisplay||r.question.correct)}</small>
+    </div>`).join("");
+  const retry=$("vocabTestRetryWrongBtn");
+  if(retry){
+    retry.classList.toggle("hidden",!wrongResponses.length);
+    retry.textContent=`Làm lại ${wrongResponses.length} câu sai →`;
+  }
+  $("vocabTestReviewBtn").classList.toggle("hidden",!wrongWords.length);
+  $("vocabTestResultOverlay").classList.remove("hidden");
+  if(passed)burstConfetti($("vocabTestResultOverlay").querySelector(".result"),36);
+}
 
+/* Revisit exactly the missed questions. Keep already-correct score. */
+function retryWrongOnlyVocabularyTest(){
+  const session=availableWrongRetrySession();
+  if(!session||!session.outstanding.length){
+    alert("Không còn câu sai cần làm lại.");return;
+  }
+  stopGame();
+  stopVocabularyTestTimer();
+  vocabTestRetryBase=session;
+  vocabTestWrongOnly=true;
+  vocabTestQuestions=session.outstanding.map(r=>r.question);
+  vocabTestIndex=0;
+  vocabTestResponses=[];
+  vocabTestDrafts=[];
+  vocabTestSelection=null;
+  vocabTestAcceptedVariantNotes=[];
+  vocabTestStartedAt=Date.now();
+  vocabTestFinished=false;
+  hideScreens();
+  $("vocabTestResultOverlay").classList.add("hidden");
+  $("vocabTestScreen").classList.remove("hidden");
+  const meta=getSkillMeta(selectedSkill);
+  $("vocabTestTitle").textContent=`${meta.icon} ${meta.title} · Ôn câu sai`;
+  $("vocabTestSubtitle").textContent=`Chỉ ${vocabTestQuestions.length} câu sai · Giữ ${session.correctCount}/${session.originalTotal} câu đã đúng · Cần đạt ${VOCAB_TEST_PASS_PERCENT}%`;
+  startVocabularyTestTimer();
+  renderVocabularyTestQuestion();
+  try{window.scrollTo({top:0,behavior:"smooth"});}catch(error){window.scrollTo(0,0);}
 }
 
 
