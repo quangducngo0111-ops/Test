@@ -8705,18 +8705,40 @@ function makeTypingQuestion(word){
    never a random unrelated map next to a generic sentence. */
 const MAPS_CONTEXT_SCENES = [
   {word:"in the southern part of",image:"image1.png",title:"City & Harbour",context:"Look at the harbour. The port is located _____ the city.",options:["in the southern part of","in the northern part of","in the western part of","in the eastern part of"]},
-  {word:"in the north-eastern corner of",image:"image2.png",title:"University City",context:"Look at the university. It is situated _____ the city.",options:["in the north-eastern corner of","in the north-western corner of","in the south-eastern corner of","in the south-western corner of"]},
-  {word:"in the eastern part of",image:"image3.png",title:"Forest District",context:"Look at the forest. It occupies _____ the town.",options:["in the eastern part of","in the western part of","in the southern part of","in the centre of"]},
+  {word:"to the north-east of",image:"image2.png",title:"University City",context:"Look at the university and the city centre. The university lies _____ the city centre.",options:["to the north-east of","to the north-west of","to the south-east of","to the south-west of"]},
+  {word:"in the north-eastern corner of",image:"image3.png",title:"Forest District",context:"Look at the forest. It is located _____ the town.",options:["in the north-eastern corner of","in the north-western corner of","in the south-eastern corner of","in the south-western corner of"]},
   {word:"to the west of",image:"image4.png",title:"Market & Roundabout",context:"Find the market and the roundabout. The market is _____ the roundabout.",options:["to the west of","to the east of","to the north of","to the south of"]},
   {word:"on the eastern side of",image:"image5.png",title:"Arts Centre",context:"Find the two galleries. They are _____ the arts centre.",options:["on the eastern side of","on the western side of","on the southern side of","on the northern side of"]},
   {word:"in the centre of",image:"image6.png",title:"Library Floor Plan",context:"Find the information desk. It is _____ the library.",options:["in the centre of","in the north of","in the south of","in the west of"]},
   {word:"midway between",image:"image7.png",title:"Station District",context:"The station is approximately _____ the university and the city centre.",options:["midway between","to the west of","to the east of","opposite"]},
-  {word:"opposite",image:"image8.png",title:"Botanical Gardens",context:"The rose garden stands _____ the glasshouse, across the main path.",options:["opposite","adjacent to","next to","alongside"]},
+  {word:"opposite",image:"image8.png",title:"Botanical Gardens",context:"The rose garden stands _____ the glasshouse, across the central path.",options:["opposite","adjacent to","next to","alongside"]},
   {word:"adjacent to",image:"image9.png",title:"Museum Gardens",context:"Look at the gallery and café. The café is directly _____ the gallery.",options:["adjacent to","opposite","surrounded by","at the centre of"]},
   {word:"surrounded by",image:"image10.png",title:"Theatre Seating Plan",context:"The stage is _____ the seating areas on several sides.",options:["surrounded by","opposite","next to","alongside"]},
   {word:"along",image:"image11.png",title:"Main Road Shops",context:"The row of shops is arranged _____ the main road.",options:["along","between","opposite","surrounded by"]},
   {word:"on the northern side of",image:"image12.png",title:"Public Campus",context:"The library, main building and café are _____ the campus.",options:["on the northern side of","on the southern side of","on the eastern side of","on the western side of"]},
   {word:"in the south-eastern corner of",image:"image13.png",title:"River Village",context:"Find the post office. It stands _____ the village.",options:["in the south-eastern corner of","in the north-eastern corner of","in the north-western corner of","in the south-western corner of"]}
+];
+
+/* All Maps collocation questions are curated and image-backed.  Distractors
+   describe mutually exclusive positions on the exact referenced diagram.
+   Never mix synonyms such as "in the middle of" and "in the centre of". */
+const MAPS_COLLOCATION_SCENES = [
+  {word:"in the middle of",image:"image8.png",title:"Botanical Gardens",context:"Look at the fountain. The fountain is _____ the garden.",options:["in the middle of","on the northern side of","on the southern side of","on the eastern side of"]},
+  {word:"at the centre of",image:"image9.png",title:"Museum Gardens",context:"Look at the fountain. It stands _____ the park.",options:["at the centre of","at the northern end of","at the southern end of","at the western end of"]},
+  {word:"in the north-western corner of",image:"image3.png",title:"Forest District",context:"Find the residential area. It is located _____ the town.",options:["in the north-western corner of","in the north-eastern corner of","in the south-western corner of","in the south-eastern corner of"]},
+  {word:"on the southern side of",image:"image1.png",title:"City & Harbour",context:"The port is situated _____ the city.",options:["on the southern side of","on the northern side of","on the eastern side of","on the western side of"]},
+  {word:"on the western side of",image:"image5.png",title:"Arts Centre",context:"The museum lies _____ the arts centre.",options:["on the western side of","on the eastern side of","on the northern side of","on the southern side of"]},
+  {word:"to the south of",image:"image7.png",title:"Station District",context:"The school is situated _____ the station.",options:["to the south of","to the north of","to the east of","to the west of"]},
+  {word:"to the north of",image:"image7.png",title:"Station District",context:"The station is situated _____ the school.",options:["to the north of","to the south of","to the east of","to the west of"]},
+  {word:"in the northern part of",image:"image1.png",title:"City & Harbour",context:"The school is located _____ the city.",options:["in the northern part of","in the southern part of","in the western part of","in the eastern part of"]},
+  {word:"to the east of",image:"image3.png",title:"Forest District",context:"The library lies _____ the shopping centre.",options:["to the east of","to the west of","to the north of","to the south of"]},
+  {word:"in the south of",image:"image12.png",title:"Public Campus",context:"The car park is _____ the campus.",options:["in the south of","in the north of","in the east of","in the west of"]},
+  {word:"between",image:"image6.png",title:"Library Floor Plan",context:"The information desk is _____ the study rooms and the meeting room.",options:["between","to the north of","to the south of","opposite"]},
+  {word:"alongside",image:"image11.png",title:"Main Road Shops",context:"The row of shops is arranged _____ the main road.",options:["alongside","to the north of","to the east of","to the west of"]},
+  {word:"bordered by",image:"image3.png",title:"Forest District",context:"The town is _____ a river on its southern edge.",options:["bordered by","divided by","enclosed by","surrounded by"]},
+  {word:"next to",image:"image9.png",title:"Museum Gardens",context:"The gallery is _____ the café.",options:["next to","to the north of","to the south of","opposite"]},
+  {word:"at the northern end of",image:"image10.png",title:"Theatre Seating Plan",context:"The lobby is _____ the theatre.",options:["at the northern end of","at the southern end of","at the eastern end of","at the western end of"]},
+  {word:"in the centre of",image:"image6.png",title:"Library Floor Plan",context:"The information desk is _____ the library.",options:["in the centre of","in the north of","in the south of","in the west of"]}
 ];
 
 /* Most Maps `collocation` fields equal `word` by design, and hence
@@ -8770,14 +8792,25 @@ function mapsSafeCloze(source,word){
 
 function makeCollocationQuestion(word){
   const isMaps=selectedSkill==="writing-task-1" && String(selectedSet)==="maps";
-  const sample=isMaps && MAPS_COLLOCATION_TEMPLATES[word.word]
-    ? MAPS_COLLOCATION_TEMPLATES[word.word]
-    : word.example;
+  if(isMaps){
+    const scene=MAPS_COLLOCATION_SCENES.find(item=>item.word===word.word);
+    /* An uncurated sentence may accept two synonyms: don't guess. */
+    if(!scene) return makeReverseMeaningQuestion(word);
+    return {
+      type:"collocation",label:"Map Collocation",word,mode:"mcq",
+      prompt:"Quan sát bản đồ và hoàn thành cụm từ trong câu",
+      context:scene.context,
+      image:"./maps/images/"+scene.image,
+      imageCaption:scene.title+" · Nhấp vào ảnh để phóng to.",
+      options:shuffle(scene.options),correct:scene.word,correctDisplay:scene.word
+    };
+  }
+  const sample=word.example||word.collocation;
   let cloze=mapsSafeCloze(sample,word.word);
-  if(!cloze && word.collocation && word.collocation!==word.word){
+  if(!cloze&&word.collocation&&word.collocation!==word.word){
     cloze=mapsSafeCloze(word.collocation,word.word);
   }
-  if(!cloze){return makeReverseMeaningQuestion(word);}
+  if(!cloze) return makeReverseMeaningQuestion(word);
   return {
     type:"collocation",label:"Collocation",word,mode:"mcq",
     prompt:"Hoàn thành cụm từ trong câu",context:cloze,
@@ -8786,23 +8819,24 @@ function makeCollocationQuestion(word){
   };
 }
 
+
 function makeContextQuestion(word){
   const isMaps=selectedSkill==="writing-task-1" && String(selectedSet)==="maps";
   if(isMaps){
     const scene=MAPS_CONTEXT_SCENES.find(item=>item.word===word.word);
-    if(scene){
-      return {
-        type:"context",label:"Map Context",word,mode:"mcq",
-        prompt:"Quan sát bản đồ và hoàn thành câu mô tả",
-        context:scene.context,
-        image:"./maps/images/"+scene.image,
-        imageCaption:scene.title+" · Nhấp vào ảnh để phóng to.",
-        options:shuffle(scene.options),correct:scene.word,correctDisplay:scene.word
-      };
-    }
+    /* All Maps context questions must show the actual relevant diagram. */
+    if(!scene) return makeMeaningQuestion(word);
+    return {
+      type:"context",label:"Map Context",word,mode:"mcq",
+      prompt:"Quan sát bản đồ và hoàn thành câu mô tả",
+      context:scene.context,
+      image:"./maps/images/"+scene.image,
+      imageCaption:scene.title+" · Nhấp vào ảnh để phóng to.",
+      options:shuffle(scene.options),correct:scene.word,correctDisplay:scene.word
+    };
   }
   const cloze=mapsSafeCloze(word.example,word.word);
-  if(!cloze){return makeMeaningQuestion(word);}
+  if(!cloze) return makeMeaningQuestion(word);
   return {
     type:"context",label:"Context",word,mode:"mcq",
     prompt:"Chọn từ/cụm từ phù hợp với ngữ cảnh",context:cloze,
@@ -8879,18 +8913,32 @@ function buildVocabularyTest(){
   const plannedTypes=Array.from({length:total},(_,index)=>types[(start+index)%types.length]);
   let words;
   if(selectedSkill==="writing-task-1"&&String(selectedSet)==="maps"){
-    /* Reserve real illustrated cases for ALL context questions. Avoid
-       repeating their vocabulary in the other 24 questions. */
+    /* Reserve six real-image questions for each illustrated category. */
     const sceneWords=shuffle(MAPS_CONTEXT_SCENES)
       .map(scene=>currentCollection.find(word=>word.word===scene.word))
       .filter(Boolean);
-    const count=plannedTypes.filter(type=>type==="context").length;
-    const selectedScenes=sceneWords.slice(0,count);
+    const contextCount=plannedTypes.filter(type=>type==="context").length;
+    const selectedScenes=sceneWords.slice(0,contextCount);
     const reserved=new Set(selectedScenes.map(word=>wordId(word)));
+
+    const collocationWords=shuffle(MAPS_COLLOCATION_SCENES)
+      .map(scene=>currentCollection.find(word=>word.word===scene.word))
+      .filter(word=>word&&!reserved.has(wordId(word)));
+    const collocationCount=plannedTypes.filter(type=>type==="collocation").length;
+    const selectedCollocations=collocationWords.slice(0,collocationCount);
+    selectedCollocations.forEach(word=>reserved.add(wordId(word)));
+
     const rest=shuffle(currentCollection.filter(word=>!reserved.has(wordId(word))));
-    let contextIndex=0,otherIndex=0;
-    words=plannedTypes.map(type=>type==="context"&&contextIndex<selectedScenes.length
-      ?selectedScenes[contextIndex++]:rest[otherIndex++]);
+    let contextIndex=0,collocationIndex=0,otherIndex=0;
+    words=plannedTypes.map(type=>{
+      if(type==="context"&&contextIndex<selectedScenes.length){
+        return selectedScenes[contextIndex++];
+      }
+      if(type==="collocation"&&collocationIndex<selectedCollocations.length){
+        return selectedCollocations[collocationIndex++];
+      }
+      return rest[otherIndex++];
+    });
   }else{
     words=shuffle([...currentCollection]).slice(0,total);
   }
