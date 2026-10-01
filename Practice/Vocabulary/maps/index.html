@@ -756,6 +756,31 @@ textarea:focus-visible{
   font-weight:950;
 }
 
+.constraintGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+
+.constraintItem{
+  min-width:0;
+}
+
+.constraintLabel{
+  display:block;
+  margin-bottom:8px;
+  color:#55408d;
+  font-size:12px;
+  font-weight:900;
+}
+
+
+@media(max-width:660px){
+  .constraintGrid{
+    grid-template-columns:1fr;
+  }
+}
+
 .sentenceFeedback{
   margin-top:14px;
   border-radius:14px;
@@ -1681,14 +1706,14 @@ footer{
 
         <div class="phraseBox">
 
-          <h4>
-            Cụm từ cần dùng
-          </h4>
+          <div class="constraintGrid">
 
-          <div
-            class="phrases"
-            id="phraseList"
-          ></div>
+            <div class="constraintItem">
+              <span class="constraintLabel" id="constraintLabel">Cụm từ cần dùng</span>
+              <div class="phrases" id="phraseList"></div>
+            </div>
+
+          </div>
 
         </div>
 
@@ -2562,77 +2587,344 @@ footer{
   }
 
 
-  function requiredPhraseForFact(fact){
+  /* =======================================================
+     CỤM TỪ VỊ TRÍ ĐÃ KIỂM TRA THỦ CÔNG
+     - Không suy đoán từ keyword nữa.
+     - Thứ tự các phần tử khớp 1:1 với task.facts trong tasks.js.
+     - Mục tiêu: mỗi câu chỉ có một cụm từ rõ ràng để học sinh luyện
+       và hệ thống có thể kiểm tra chính xác hơn.
+  ======================================================= */
 
-    const source =
-      [
-        String(fact?.label || ""),
-        ...factKeywords(fact)
-      ]
-      .join(" ")
-      .toLowerCase()
-      .replace(/[–—]/g,"-")
-      .replace(/\s+/g," ")
-      .trim();
+  const REQUIRED_PHRASES_BY_TASK = {
 
-    const rules = [
-      [/north[- ]?east(?:ern)?\s+corner|north-eastern corner/, "in the north-eastern corner of"],
-      [/north[- ]?west(?:ern)?\s+corner|north-western corner/, "in the north-western corner of"],
-      [/south[- ]?east(?:ern)?\s+corner|south-eastern corner/, "in the south-eastern corner of"],
-      [/south[- ]?west(?:ern)?\s+corner|south-western corner/, "in the south-western corner of"],
+    "city-harbour": [
+      "in the southern part of",
+      "along the eastern side of",
+      "in the north-western part of",
+      "in the northern part of",
+      "to the west of",
+      "to the east of"
+    ],
 
-      [/at the northern end|northern end/, "at the northern end of"],
-      [/at the southern end|southern end/, "at the southern end of"],
-      [/at the eastern end|eastern end/, "at the eastern end of"],
-      [/at the western end|western end/, "at the western end of"],
+    "forest-district": [
+      "in the north-eastern corner of",
+      "in the north-west of",
+      "between",
+      "to the east of",
+      "along the southern edge of",
+      "in the south-eastern part of"
+    ],
 
-      [/to the north[- ]?east of/, "to the north-east of"],
-      [/to the north[- ]?west of/, "to the north-west of"],
-      [/to the south[- ]?east of/, "to the south-east of"],
-      [/to the south[- ]?west of/, "to the south-west of"],
-      [/to the north of/, "to the north of"],
-      [/to the south of/, "to the south of"],
-      [/to the east of/, "to the east of"],
-      [/to the west of/, "to the west of"],
+    "arts-centre": [
+      "in the centre of",
+      "on the eastern side of",
+      "to the north-west of",
+      "on the western side of",
+      "in the northern part of",
+      "to the south of"
+    ],
 
-      [/in the north[- ]?east|north[- ]?east|north-eastern/, "in the north-east of"],
-      [/in the north[- ]?west|north[- ]?west|north-western/, "in the north-west of"],
-      [/in the south[- ]?east|south[- ]?east|south-eastern/, "in the south-east of"],
-      [/in the south[- ]?west|south[- ]?west|south-western/, "in the south-west of"],
+    "library-plan": [
+      "in the centre of",
+      "to the north-west of",
+      "in the north-eastern part of",
+      "on the western side of",
+      "on the eastern side of",
+      "to the south of"
+    ],
 
-      [/on the northern side|northern side/, "on the northern side of"],
-      [/on the southern side|southern side/, "on the southern side of"],
-      [/on the eastern side|eastern side/, "on the eastern side of"],
-      [/on the western side|western side/, "on the western side of"],
+    "botanical-gardens": [
+      "opposite",
+      "in the centre of",
+      "in the north-eastern part of",
+      "in the north-western part of",
+      "in the south-eastern part of",
+      "at the southern end of"
+    ],
 
-      [/in the north|northern part|\bnorth\b|\bnorthern\b/, "in the north of"],
-      [/in the south|southern part|\bsouth\b|\bsouthern\b/, "in the south of"],
-      [/in the east|eastern part|\beast\b|\beastern\b/, "in the east of"],
-      [/in the west|western part|\bwest\b|\bwestern\b/, "in the west of"],
+    "theatre": [
+      "in the centre of",
+      "surrounded by",
+      "in the northern part of",
+      "in the north-eastern part of",
+      "in the north-western part of",
+      "at the southern end of"
+    ],
 
-      [/midway between/, "midway between"],
-      [/\bbetween\b/, "between"],
-      [/across from/, "across from"],
-      [/\bopposite\b/, "opposite"],
-      [/adjacent to|\badjacent\b/, "adjacent to"],
-      [/next to/, "next to"],
-      [/\bbeside\b/, "beside"],
-      [/\balongside\b/, "alongside"],
-      [/\balong\b/, "along"],
-      [/surrounded by|\bsurrounded\b/, "surrounded by"],
-      [/enclosed by|\benclosed\b/, "enclosed by"],
-      [/bordered by|\bbordered\b/, "bordered by"],
-      [/in the centre|in the center|at the centre|at the center|\bcentre\b|\bcenter\b|\bmiddle\b/, "in the centre of"]
-    ];
+    "main-road": [
+      "along",
+      "to the north-west of",
+      "on the northern side of",
+      "in the north-eastern part of",
+      "on the southern side of",
+      "to the south of"
+    ],
 
-    for(const [pattern, phrase] of rules){
-      if(pattern.test(source)){
-        return phrase;
-      }
+    "public-campus": [
+      "on the northern side of",
+      "in the centre of",
+      "in the western part of",
+      "on the eastern side of",
+      "at the southern end of"
+    ],
+
+    "river-village": [
+      "through",
+      "across",
+      "along",
+      "in the north-western part of",
+      "in the north-eastern part of",
+      "to the south of",
+      "in the south-eastern part of"
+    ],
+
+    "university-city": [
+      "in the north-eastern corner of",
+      "in the north-western part of",
+      "to the south-east of",
+      "in the southern part of",
+      "on the eastern side of"
+    ],
+
+    "market-roundabout": [
+      "in the centre of",
+      "to the west of",
+      "to the north of",
+      "to the east of",
+      "in the south-eastern part of",
+      "along the eastern edge of"
+    ],
+
+    "station-district": [
+      "between",
+      "to the west of",
+      "to the east of",
+      "in the western part of",
+      "in the centre of",
+      "along the southern edge of"
+    ],
+
+    "museum-gardens": [
+      "at the centre of",
+      "in the north-western part of",
+      "in the north-eastern part of",
+      "on the eastern side of",
+      "in the south-western corner of",
+      "in the south-eastern corner of"
+    ]
+
+  };
+
+
+  /* =======================================================
+     ĐỐI TƯỢNG THAM CHIẾU ĐÃ KIỂM TRA THỦ CÔNG
+     - Mỗi phần tử khớp 1:1 với task.facts.
+     - kind:"map" = tên địa điểm của map hiện tại.
+     - groups có nhiều nhóm = phải có đủ các đối tượng (vd. between A and B).
+     - aliases là các cách gọi hợp lệ của cùng một đối tượng.
+  ======================================================= */
+
+  const REQUIRED_REFERENCES_BY_TASK = {
+
+    "city-harbour": [
+      {kind:"map", aliases:["city","town"]},
+      {kind:"map", aliases:["city","town"]},
+      {kind:"map", aliases:["city","town"]},
+      {kind:"map", aliases:["city","town"]},
+      {display:"Shopping centre", groups:[["shopping centre","shopping center"]]},
+      {display:"School", groups:[["school"]]}
+    ],
+
+    "forest-district": [
+      {kind:"map", aliases:["district","city","town"]},
+      {kind:"map", aliases:["district","city","town"]},
+      {display:"Residential area và Forest", groups:[["residential area","residential"],["forest"]]},
+      {display:"Hospital", groups:[["hospital"]]},
+      {kind:"map", aliases:["district","city","town"]},
+      {kind:"map", aliases:["district","city","town"]}
+    ],
+
+    "arts-centre": [
+      {kind:"map", aliases:["city","town","plan"]},
+      {display:"Arts centre", groups:[["arts centre","arts center"]]},
+      {display:"Arts centre", groups:[["arts centre","arts center"]]},
+      {display:"Arts centre", groups:[["arts centre","arts center"]]},
+      {kind:"map", aliases:["city","town","complex"]},
+      {display:"Arts centre", groups:[["arts centre","arts center"]]}
+    ],
+
+    "library-plan": [
+      {display:"Library", groups:[["library"]]},
+      {display:"Information desk", groups:[["information desk","desk"]]},
+      {display:"Information desk", groups:[["information desk","desk"]]},
+      {display:"Information desk", groups:[["information desk","desk"]]},
+      {display:"Information desk", groups:[["information desk","desk"]]},
+      {display:"Information desk", groups:[["information desk","desk"]]}
+    ],
+
+    "botanical-gardens": [
+      {display:"Glasshouse", groups:[["glasshouse","glass house"]]},
+      {display:"Garden", groups:[["garden","botanical garden","botanical gardens"]]},
+      {display:"Garden", groups:[["garden","botanical garden","botanical gardens"]]},
+      {display:"Garden", groups:[["garden","botanical garden","botanical gardens"]]},
+      {display:"Garden", groups:[["garden","botanical garden","botanical gardens"]]},
+      {display:"Garden", groups:[["garden","botanical garden","botanical gardens"]]}
+    ],
+
+    "theatre": [
+      {display:"Theatre", groups:[["theatre","theater"]]},
+      {display:"Seating areas", groups:[["seating areas","seating area","seats"]]},
+      {display:"Theatre", groups:[["theatre","theater"]]},
+      {display:"Theatre", groups:[["theatre","theater"]]},
+      {display:"Theatre", groups:[["theatre","theater"]]},
+      {display:"Theatre", groups:[["theatre","theater"]]}
+    ],
+
+    "main-road": [
+      {display:"Main road", groups:[["main road","road"]]},
+      {display:"Shops", groups:[["shops","shop"]]},
+      {display:"Main road", groups:[["main road","road"]]},
+      {kind:"map", aliases:["town","city"]},
+      {display:"Main road", groups:[["main road","road"]]},
+      {display:"Main road", groups:[["main road","road"]]}
+    ],
+
+    "public-campus": [
+      {display:"Campus", groups:[["campus","site"]]},
+      {display:"Campus", groups:[["campus","site"]]},
+      {display:"Campus", groups:[["campus","site"]]},
+      {display:"Campus", groups:[["campus","site"]]},
+      {display:"Campus", groups:[["campus","site"]]}
+    ],
+
+    "river-village": [
+      {kind:"map", aliases:["village","town"]},
+      {kind:"map", aliases:["village","town"]},
+      {display:"Main road", groups:[["main road","road"]]},
+      {kind:"map", aliases:["village","town"]},
+      {kind:"map", aliases:["village","town"]},
+      {display:"Main road", groups:[["main road","road"]]},
+      {kind:"map", aliases:["village","town"]}
+    ],
+
+    "university-city": [
+      {kind:"map", aliases:["city","town","village"]},
+      {kind:"map", aliases:["city","town","village"]},
+      {display:"City centre", groups:[["city centre","city center","centre","center"]]},
+      {kind:"map", aliases:["city","town","village"]},
+      {kind:"map", aliases:["city","town","village"]}
+    ],
+
+    "market-roundabout": [
+      {kind:"map", aliases:["city","town"]},
+      {display:"City centre", groups:[["city centre","city center","roundabout"]]},
+      {display:"City centre / roundabout", groups:[["city centre","city center","roundabout"]]},
+      {display:"City centre / roundabout", groups:[["city centre","city center","roundabout"]]},
+      {kind:"map", aliases:["city","town"]},
+      {kind:"map", aliases:["city","town"]}
+    ],
+
+    "station-district": [
+      {display:"University và City centre", groups:[["university"],["city centre","city center"]]},
+      {display:"Station", groups:[["station"]]},
+      {display:"Station", groups:[["station"]]},
+      {display:"Middle row", groups:[["middle row"]]},
+      {display:"Middle row", groups:[["middle row"]]},
+      {kind:"map", aliases:["district","town","city"]}
+    ],
+
+    "museum-gardens": [
+      {display:"Park", groups:[["park"]]},
+      {display:"Park", groups:[["park"]]},
+      {display:"Park", groups:[["park"]]},
+      {display:"Park", groups:[["park"]]},
+      {display:"Park", groups:[["park"]]},
+      {display:"Park", groups:[["park"]]}
+    ]
+
+  };
+
+
+  function referenceSpecForFact(fact, task = current, factIndex = currentFactIndex){
+
+    const taskId =
+      String(task?.id || "");
+
+    const list =
+      REQUIRED_REFERENCES_BY_TASK[taskId];
+
+    const raw =
+      Array.isArray(list)
+      ? list[factIndex]
+      : null;
+
+    if(!raw){
+      return {
+        display:"",
+        groups:[]
+      };
     }
 
-    /* Fallback có chủ đích: vẫn tạo một bài luyện có thể chấm định lượng. */
-    return "in the north of";
+    if(raw.kind === "map"){
+
+      const context =
+        practiceMapContext(task);
+
+      const mapName =
+        String(context?.name || "").trim();
+
+      const aliases = [
+        mapName,
+        ...(Array.isArray(raw.aliases) ? raw.aliases : [])
+      ]
+      .filter(Boolean);
+
+      return {
+        display:mapName,
+        groups:[aliases]
+      };
+
+    }
+
+    return {
+      display:String(raw.display || "").trim(),
+      groups:Array.isArray(raw.groups) ? raw.groups : []
+    };
+
+  }
+
+
+  function hintModeForFact(task = current, factIndex = currentFactIndex){
+
+    /* Xen kẽ cố định để học sinh không thể đoán cả hai thành phần:
+       câu lẻ theo index 0,2,4...: cho cụm từ, tự tìm đối tượng tham chiếu
+       câu lẻ theo index 1,3,5...: cho đối tượng tham chiếu, tự tìm cụm từ */
+    return (Number(factIndex) % 2 === 0)
+      ? "phrase"
+      : "reference";
+
+  }
+
+
+  function requiredPhraseForFact(fact, task = current, factIndex = currentFactIndex){
+
+    const taskId =
+      String(task?.id || "");
+
+    const curated =
+      REQUIRED_PHRASES_BY_TASK[taskId];
+
+    if(
+      Array.isArray(curated)
+      &&
+      curated[factIndex]
+    ){
+      return curated[factIndex];
+    }
+
+    /* Fallback chỉ dùng khi tasks.js có câu mới chưa được curate.
+       Không tự suy đoán hướng để tránh đưa cụm từ sai cho học sinh. */
+    return "";
 
   }
 
@@ -2659,6 +2951,81 @@ footer{
       .includes(
         normalizeForCheck(phrase)
       );
+
+  }
+
+
+  function referenceGroupsMatchTail(tail, referenceSpec){
+
+    const cleanTail =
+      normalizeForCheck(tail);
+
+    const groups =
+      Array.isArray(referenceSpec?.groups)
+      ? referenceSpec.groups
+      : [];
+
+    if(!groups.length){
+      return true;
+    }
+
+    return groups.every(
+      group =>
+        Array.isArray(group)
+        &&
+        group.some(
+          alias => {
+            const wanted = normalizeForCheck(alias);
+            return wanted && cleanTail.includes(wanted);
+          }
+        )
+    );
+
+  }
+
+
+  function hasConstrainedRelation(sentence, target, phrase, referenceSpec){
+
+    const answer =
+      normalizeForCheck(sentence);
+
+    const wantedTarget =
+      normalizeForCheck(target)
+      .replace(/^the\s+/,"");
+
+    const wantedPhrase =
+      normalizeForCheck(phrase);
+
+    if(!wantedTarget || !wantedPhrase){
+      return false;
+    }
+
+    const targetIndex =
+      answer.indexOf(wantedTarget);
+
+    if(targetIndex < 0){
+      return false;
+    }
+
+    const phraseIndex =
+      answer.indexOf(
+        wantedPhrase,
+        targetIndex + wantedTarget.length
+      );
+
+    if(phraseIndex < 0){
+      return false;
+    }
+
+    const afterPhrase =
+      answer.slice(
+        phraseIndex + wantedPhrase.length
+      );
+
+    return referenceGroupsMatchTail(
+      afterPhrase,
+      referenceSpec
+    );
 
   }
 
@@ -2701,14 +3068,25 @@ footer{
       targetForFact(fact);
 
     const phrase =
-      requiredPhraseForFact(fact);
+      requiredPhraseForFact(fact, current, currentFactIndex);
+
+    const reference =
+      referenceSpecForFact(fact, current, currentFactIndex);
+
+    const hintMode =
+      hintModeForFact(current, currentFactIndex);
 
     const checks = {
       target:
         hasTarget(sentence,target),
 
       phrase:
-        hasRequiredPhrase(sentence,phrase),
+        phrase ? hasRequiredPhrase(sentence,phrase) : true,
+
+      reference:
+        reference?.groups?.length
+        ? hasConstrainedRelation(sentence,target,phrase,reference)
+        : true,
 
       past:
         usesPastDescription(sentence)
@@ -2718,6 +3096,8 @@ footer{
       checks.target
       &&
       checks.phrase
+      &&
+      checks.reference
       &&
       checks.past;
 
@@ -2729,9 +3109,27 @@ footer{
       );
     }
 
-    if(!checks.phrase){
+    if(phrase && !checks.phrase){
       issues.push(
-        "Dùng cụm từ được yêu cầu: “" + phrase + "”."
+        hintMode === "phrase"
+        ? "Hãy dùng đúng cụm từ vị trí đã cho."
+        : "Cụm từ chỉ vị trí chưa chính xác. Hãy quan sát lại bản đồ."
+      );
+    }
+
+    if(
+      checks.target
+      &&
+      checks.phrase
+      &&
+      !checks.reference
+      &&
+      reference.display
+    ){
+      issues.push(
+        hintMode === "reference"
+        ? "Hãy dùng đúng đối tượng tham chiếu đã cho."
+        : "Đối tượng dùng để so sánh vị trí chưa chính xác. Hãy quan sát lại bản đồ."
       );
     }
 
@@ -2745,13 +3143,14 @@ footer{
       correct,
       target,
       phrase,
+      reference,
+      hintMode,
       checks,
       issues,
       context
     };
 
   }
-
 
   function renderSentenceFeedback(result){
 
@@ -2764,7 +3163,7 @@ footer{
       $("feedback").innerHTML = `
         <div class="sentenceFeedback good">
           <strong>✓ Chính xác</strong>
-          <p>Em đã dùng đúng đối tượng, đúng cụm từ vị trí được yêu cầu và đúng thì quá khứ.</p>
+          <p>Câu của em đáp ứng đúng yêu cầu của bài.</p>
         </div>
       `;
       return;
@@ -3204,12 +3603,41 @@ footer{
 
 
     const requiredPhrase =
-      requiredPhraseForFact(fact);
+      requiredPhraseForFact(fact, current, currentFactIndex);
+
+    const reference =
+      referenceSpecForFact(fact, current, currentFactIndex);
+
+    const hintMode =
+      hintModeForFact(current, currentFactIndex);
 
 
-    $("phraseList")
-      .innerHTML =
-      `<span class="requiredPhrase">${escapeHTML(requiredPhrase)}</span>`;
+    if(hintMode === "reference"){
+
+      $("constraintLabel")
+        .textContent =
+        "Đối tượng tham chiếu";
+
+      $("phraseList")
+        .innerHTML =
+        reference?.display
+        ? `<span class="requiredPhrase">${escapeHTML(reference.display)}</span>`
+        : `<span class="requiredPhrase">Đang cập nhật</span>`;
+
+    }
+    else{
+
+      $("constraintLabel")
+        .textContent =
+        "Cụm từ cần dùng";
+
+      $("phraseList")
+        .innerHTML =
+        requiredPhrase
+        ? `<span class="requiredPhrase">${escapeHTML(requiredPhrase)}</span>`
+        : `<span class="requiredPhrase">Đang cập nhật</span>`;
+
+    }
 
 
     $("taskInstruction")
@@ -3314,8 +3742,15 @@ footer{
       "";
 
 
-    if(last?.feedback){
-      renderSentenceFeedback(last.feedback);
+    if(last?.sentence){
+      const refreshedFeedback =
+        gradeConstrainedSentence(
+          fact,
+          context,
+          last.sentence
+        );
+
+      renderSentenceFeedback(refreshedFeedback);
     }
 
   }
