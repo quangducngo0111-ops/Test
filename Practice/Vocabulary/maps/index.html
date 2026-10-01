@@ -608,6 +608,18 @@ textarea:focus-visible{
   font-size:17px;
 }
 
+.mapTitleRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.mapTitleRow h3{
+  margin:0;
+}
+
 /* =========================================================
    MAP
 ========================================================= */
@@ -1626,9 +1638,10 @@ footer{
 
       <section class="panel">
 
-        <h3>
-          Đề bài / Map
-        </h3>
+        <div class="mapTitleRow">
+          <h3 id="mapHeading">Đề bài / Map</h3>
+          <span class="pill" id="mapYear"></span>
+        </div>
 
 
         <div class="mapframe">
@@ -2926,6 +2939,55 @@ footer{
   }
 
 
+  function taskIndex(task){
+
+    return tasks.findIndex(
+      item => item.id === task?.id
+    );
+
+  }
+
+
+  function openTaskAtSentence(taskIndexValue, sentenceIndex){
+
+    if(
+      taskIndexValue < 0
+      ||
+      taskIndexValue >= tasks.length
+    ){
+      return;
+    }
+
+    const task = tasks[taskIndexValue];
+
+    if(!task){
+      return;
+    }
+
+    openTask(task.id);
+
+    const facts = taskFacts(task);
+
+    currentFactIndex = Math.min(
+      Math.max(sentenceIndex, 0),
+      Math.max(facts.length - 1, 0)
+    );
+
+    const old = getRecord(task.id) || {};
+
+    setRecord(
+      task.id,
+      {
+        ...old,
+        lastFactIndex: currentFactIndex
+      }
+    );
+
+    renderSentenceDrill();
+
+  }
+
+
   /* =======================================================
      OPEN TASK
   ======================================================= */
@@ -3011,10 +3073,22 @@ footer{
 
     $("taskTitle")
       .textContent =
-      context.name
+      "Map "
+      +
+      String(task.number).padStart(2,"0")
       +
       " · "
       +
+      context.name;
+
+
+    $("mapHeading")
+      .textContent =
+      context.name;
+
+
+    $("mapYear")
+      .textContent =
       context.year;
 
 
@@ -3148,14 +3222,66 @@ footer{
       "";
 
 
+    const currentTaskIndex =
+      taskIndex(current);
+
+
+    const hasPreviousMap =
+      currentTaskIndex > 0;
+
+
+    const hasNextMap =
+      currentTaskIndex >= 0
+      &&
+      currentTaskIndex < tasks.length - 1;
+
+
+    const atFirstSentence =
+      currentFactIndex <= 0;
+
+
+    const atLastSentence =
+      currentFactIndex >= facts.length - 1;
+
+
     $("prevSentence")
       .disabled =
-      currentFactIndex <= 0;
+      atFirstSentence
+      &&
+      !hasPreviousMap;
+
+
+    $("prevSentence")
+      .textContent =
+      atFirstSentence
+      &&
+      hasPreviousMap
+      ?
+      "← Map trước"
+      :
+      "← Câu trước";
 
 
     $("nextSentence")
       .disabled =
-      currentFactIndex >= facts.length - 1;
+      atLastSentence
+      &&
+      !hasNextMap;
+
+
+    $("nextSentence")
+      .textContent =
+      atLastSentence
+      &&
+      hasNextMap
+      ?
+      "Map tiếp →"
+      :
+      atLastSentence
+      ?
+      "Đã hết →"
+      :
+      "Câu tiếp →";
 
 
     $("essay").value =
@@ -3453,20 +3579,59 @@ footer{
   $("prevSentence")
     .addEventListener(
       "click",
-      () =>
-        switchSentence(
-          currentFactIndex - 1
-        )
+      () => {
+
+        if(!current){
+          return;
+        }
+
+        if(currentFactIndex > 0){
+          switchSentence(currentFactIndex - 1);
+          return;
+        }
+
+        const index = taskIndex(current);
+
+        if(index > 0){
+          const previousTask = tasks[index - 1];
+          const previousFacts = taskFacts(previousTask);
+          openTaskAtSentence(
+            index - 1,
+            Math.max(previousFacts.length - 1, 0)
+          );
+        }
+
+      }
     );
 
 
   $("nextSentence")
     .addEventListener(
       "click",
-      () =>
-        switchSentence(
-          currentFactIndex + 1
-        )
+      () => {
+
+        if(!current){
+          return;
+        }
+
+        const facts = taskFacts(current);
+
+        if(currentFactIndex < facts.length - 1){
+          switchSentence(currentFactIndex + 1);
+          return;
+        }
+
+        const index = taskIndex(current);
+
+        if(
+          index >= 0
+          &&
+          index < tasks.length - 1
+        ){
+          openTaskAtSentence(index + 1, 0);
+        }
+
+      }
     );
 
 
