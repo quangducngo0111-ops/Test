@@ -675,7 +675,7 @@ textarea:focus-visible{
 }
 
 .simpleTaskPrompt{
-  margin:16px 0 8px;
+  margin:14px 0 8px;
   padding:13px 15px;
   border-radius:11px;
   background:#f4f1ff;
@@ -730,6 +730,52 @@ textarea:focus-visible{
   flex-wrap:wrap;
 }
 
+
+.requiredPhrase{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:8px 12px;
+  border-radius:10px;
+  background:#ede8ff;
+  border:1px solid #d8ceff;
+  color:#43279f;
+  font-size:12px;
+  font-weight:950;
+}
+
+.sentenceFeedback{
+  margin-top:14px;
+  border-radius:14px;
+  padding:14px 15px;
+  border:1px solid #dce2ec;
+  background:#fff;
+}
+
+.sentenceFeedback.good{
+  border-color:#b8dfce;
+  background:#f5fff9;
+}
+
+.sentenceFeedback.fix{
+  border-color:#ead7a8;
+  background:#fffaf0;
+}
+
+.sentenceFeedback strong{
+  display:block;
+  color:#281260;
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.sentenceFeedback p{
+  margin:0;
+  color:#566078;
+  font-size:12px;
+  line-height:1.55;
+}
+
 .phrase{
   background:#f2f0ff;
 
@@ -748,48 +794,25 @@ textarea:focus-visible{
 }
 
 /* =========================================================
-   SENTENCE NAVIGATION
+   MAP CONTEXT + SENTENCE ACTIONS
 ========================================================= */
 
-.sentenceNav{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  margin:12px 0 2px;
+.sentenceActions{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(170px,2.2fr) minmax(0,1fr);
+  gap:9px;
+  margin-top:12px;
 }
 
-.sentenceNav button{
-  border:1px solid var(--line);
-  background:#fff;
-  color:#4b3786;
-  border-radius:9px;
-  padding:8px 10px;
-  font-size:11px;
-  font-weight:900;
+.sentenceActions .btn{
+  width:100%;
+  min-width:0;
+  white-space:nowrap;
 }
 
-.sentenceNav button:disabled{
+.sentenceActions .btn:disabled{
   opacity:.45;
   cursor:not-allowed;
-}
-
-.sentenceProgress{
-  font-size:11px;
-  font-weight:950;
-  color:#5e48ac;
-  text-align:center;
-}
-
-.sentenceTarget{
-  margin-top:10px;
-  padding:10px 12px;
-  border:1px dashed #cfc5f8;
-  background:#fbfaff;
-  border-radius:10px;
-  color:#4d4074;
-  font-size:11px;
-  line-height:1.55;
 }
 
 /* =========================================================
@@ -868,14 +891,6 @@ textarea:focus{
 
   margin:
     10px 0;
-}
-
-.actions{
-  display:flex;
-
-  gap:9px;
-
-  flex-wrap:wrap;
 }
 
 .btn{
@@ -1373,6 +1388,17 @@ footer{
     font-size:17px;
   }
 
+  .sentenceActions{
+    grid-template-columns:1fr 1.5fr 1fr;
+    gap:6px;
+  }
+
+  .sentenceActions .btn{
+    padding:10px 7px;
+    font-size:10px;
+  }
+
+
 }
 
 </style>
@@ -1639,36 +1665,11 @@ footer{
 
         <div class="sentenceTarget hidden" id="sentenceTarget"></div>
 
-        <div class="sentenceNav">
-
-          <button
-            id="prevSentence"
-            type="button"
-          >
-            ← Câu trước
-          </button>
-
-          <span
-            class="sentenceProgress"
-            id="sentenceProgress"
-          >
-            Câu 1/1
-          </span>
-
-          <button
-            id="nextSentence"
-            type="button"
-          >
-            Câu tiếp →
-          </button>
-
-        </div>
-
 
         <div class="phraseBox">
 
           <h4>
-            Gợi ý từ vựng từ bộ Maps
+            Cụm từ cần dùng
           </h4>
 
           <div
@@ -1701,7 +1702,7 @@ footer{
 
         <textarea
           id="essay"
-          placeholder="Viết 1 câu tiếng Anh mô tả thông tin được yêu cầu..."
+          placeholder="Viết 1 câu tiếng Anh. Hãy chú ý dùng thì quá khứ phù hợp..."
           aria-label="Câu luyện viết Maps"
         ></textarea>
 
@@ -1709,19 +1710,17 @@ footer{
         <div
           class="status"
           id="saveStatus"
-        >
-          Câu nháp được tự động lưu trên trình duyệt.
-        </div>
+        ></div>
 
 
-        <div class="actions">
+        <div class="sentenceActions">
 
           <button
-            id="saveBtn"
+            id="prevSentence"
             class="btn"
             type="button"
           >
-            Lưu câu nháp
+            ← Câu trước
           </button>
 
 
@@ -1730,7 +1729,16 @@ footer{
             class="btn primary"
             type="button"
           >
-            Hoàn thành câu ✓
+            Kiểm tra câu ✓
+          </button>
+
+
+          <button
+            id="nextSentence"
+            class="btn"
+            type="button"
+          >
+            Câu tiếp →
           </button>
 
         </div>
@@ -1772,9 +1780,7 @@ footer{
 
 
 <footer>
-  Writing Task 1 · Maps · Sentence Practice ·
-  Phản hồi tự động phục vụ luyện tập câu;
-  không phải điểm IELTS chính thức.
+  Writing Task 1 · Maps · Luyện viết câu theo bản đồ
 </footer>
 
 
@@ -1793,6 +1799,45 @@ footer{
     window.MAPS_WRITING_TASKS
     :
     [];
+
+
+  /*
+    Tên địa điểm + mốc thời gian cố định cho từng Map.
+    Dùng năm trong quá khứ để học sinh hình thành thói quen
+    miêu tả Maps bằng past simple (was / were / stood / lay...).
+  */
+  const PRACTICE_MAP_CONTEXTS = [
+    { name:"Oldi City", year:1995 },
+    { name:"Foreston District", year:1998 },
+    { name:"Rivermere City", year:1992 },
+    { name:"Westbridge Town", year:2001 },
+    { name:"Greenford Village", year:1989 },
+    { name:"Lakeview City", year:1997 },
+    { name:"Northfield Town", year:1994 },
+    { name:"Hillcrest City", year:2003 },
+    { name:"Brookdale Town", year:1990 },
+    { name:"Eastwood Village", year:1996 },
+    { name:"Meadowfield City", year:1999 },
+    { name:"Kingsford Town", year:1993 },
+    { name:"Harborview City", year:2002 }
+  ];
+
+
+  function practiceMapContext(task){
+
+    const number =
+      Number(task?.number) || 1;
+
+    return (
+      PRACTICE_MAP_CONTEXTS[number - 1]
+      ||
+      {
+        name:"Oldi City",
+        year:1995
+      }
+    );
+
+  }
 
 
   const $ =
@@ -1851,10 +1896,6 @@ footer{
 
 
   let currentFactIndex =
-    0;
-
-
-  let saveTimeout =
     0;
 
 
@@ -2278,10 +2319,17 @@ footer{
 
     return Object.keys(submissions)
       .filter(
-        key =>
-          Array.isArray(submissions[key])
-          &&
-          submissions[key].length
+        key => {
+          const attempts = submissions[key];
+          const last =
+            Array.isArray(attempts)
+            ?
+            attempts.at(-1)
+            :
+            null;
+
+          return last?.correct === true;
+        }
       )
       .map(Number);
 
@@ -2419,101 +2467,322 @@ footer{
   }
 
 
-  function simpleSentencePrompt(fact){
+  function relationWordSet(){
 
-    const relationOnly =
-      /^(?:in|on|at|to|near|next|beside|adjacent|opposite|across|between|midway|along|alongside|around|surrounded|enclosed|bordered|north|south|east|west|northern|southern|eastern|western|north[- ]?east|north[- ]?west|south[- ]?east|south[- ]?west|located|situated|positioned|lie|lies|stand|stands|occupy|occupies|run|runs|pass|passes|through|across)$/i;
+    return /^(?:in|on|at|to|near|next|beside|adjacent|opposite|across|between|midway|along|alongside|around|surrounded|enclosed|bordered|north|south|east|west|northern|southern|eastern|western|north[- ]?east|north[- ]?west|south[- ]?east|south[- ]?west|located|situated|positioned|lie|lies|lay|stand|stands|stood|occupy|occupies|occupied|run|runs|ran|pass|passes|passed|through|corner|centre|center|middle|part|side|end|of|the)$/i;
 
-
-    const looksLikeRelation =
-      value => {
-
-        const text =
-          String(value || "")
-          .trim();
-
-        if(!text){
-          return true;
-        }
-
-        const words =
-          text
-          .toLowerCase()
-          .replace(/[^a-z-]+/g," ")
-          .trim()
-          .split(/\s+/)
-          .filter(Boolean);
-
-        return (
-          words.length > 0
-          &&
-          words.every(
-            word => relationOnly.test(word)
-          )
-        );
-
-      };
+  }
 
 
-    const candidates =
-      [
-        ...factKeywords(fact),
-        ...factPlaces(fact)
-      ];
+  function looksLikeRelation(value){
 
+    const text =
+      String(value || "")
+      .trim();
 
-    let target =
-      candidates.find(
-        item =>
-          !looksLikeRelation(item)
-      )
-      ||
-      "";
-
-
-    if(target){
-
-      target =
-        target
-        .replace(/[.?!]+$/g,"")
-        .trim();
-
-      target =
-        target.charAt(0).toUpperCase()
-        +
-        target.slice(1);
-
-      return (
-        "Hãy miêu tả vị trí của "
-        +
-        target
-        +
-        "."
-      );
-
+    if(!text){
+      return true;
     }
 
+    const words =
+      text
+      .toLowerCase()
+      .replace(/[^a-z-]+/g," ")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+
+    return (
+      words.length > 0
+      &&
+      words.every(
+        word => relationWordSet().test(word)
+      )
+    );
+
+  }
+
+
+  function targetForFact(fact){
 
     const label =
       String(fact?.label || "")
       .replace(/[.?!]+$/g,"")
       .trim();
 
-
-    if(label){
-
-      return (
-        "Hãy viết 1 câu mô tả: "
-        +
-        label
-        +
-        "."
+    /* Nếu label là một câu mô tả hoàn chỉnh, lấy subject đứng trước động từ. */
+    const subjectMatch =
+      label.match(
+        /^(?:the\s+)?(.+?)\s+(?:is|are|was|were|lies|lie|lay|stands|stand|stood|occupies|occupy|occupied|runs|run|ran|passes|pass|passed)\b/i
       );
 
+    if(subjectMatch?.[1]){
+      const subject = subjectMatch[1].trim();
+      if(subject && !looksLikeRelation(subject)){
+        return subject.charAt(0).toUpperCase() + subject.slice(1);
+      }
     }
 
+    const candidates = [
+      ...factPlaces(fact),
+      ...factKeywords(fact)
+    ];
 
-    return "Hãy miêu tả vị trí của đối tượng được yêu cầu trên bản đồ.";
+    const found =
+      candidates.find(
+        item => !looksLikeRelation(item)
+      )
+      ||
+      "";
+
+    if(!found){
+      return "đối tượng được yêu cầu";
+    }
+
+    const clean =
+      String(found)
+      .replace(/[.?!]+$/g,"")
+      .trim();
+
+    return clean.charAt(0).toUpperCase() + clean.slice(1);
+
+  }
+
+
+  function requiredPhraseForFact(fact){
+
+    const source =
+      [
+        String(fact?.label || ""),
+        ...factKeywords(fact)
+      ]
+      .join(" ")
+      .toLowerCase()
+      .replace(/[–—]/g,"-")
+      .replace(/\s+/g," ")
+      .trim();
+
+    const rules = [
+      [/north[- ]?east(?:ern)?\s+corner|north-eastern corner/, "in the north-eastern corner of"],
+      [/north[- ]?west(?:ern)?\s+corner|north-western corner/, "in the north-western corner of"],
+      [/south[- ]?east(?:ern)?\s+corner|south-eastern corner/, "in the south-eastern corner of"],
+      [/south[- ]?west(?:ern)?\s+corner|south-western corner/, "in the south-western corner of"],
+
+      [/at the northern end|northern end/, "at the northern end of"],
+      [/at the southern end|southern end/, "at the southern end of"],
+      [/at the eastern end|eastern end/, "at the eastern end of"],
+      [/at the western end|western end/, "at the western end of"],
+
+      [/to the north[- ]?east of/, "to the north-east of"],
+      [/to the north[- ]?west of/, "to the north-west of"],
+      [/to the south[- ]?east of/, "to the south-east of"],
+      [/to the south[- ]?west of/, "to the south-west of"],
+      [/to the north of/, "to the north of"],
+      [/to the south of/, "to the south of"],
+      [/to the east of/, "to the east of"],
+      [/to the west of/, "to the west of"],
+
+      [/in the north[- ]?east|north[- ]?east|north-eastern/, "in the north-east of"],
+      [/in the north[- ]?west|north[- ]?west|north-western/, "in the north-west of"],
+      [/in the south[- ]?east|south[- ]?east|south-eastern/, "in the south-east of"],
+      [/in the south[- ]?west|south[- ]?west|south-western/, "in the south-west of"],
+
+      [/on the northern side|northern side/, "on the northern side of"],
+      [/on the southern side|southern side/, "on the southern side of"],
+      [/on the eastern side|eastern side/, "on the eastern side of"],
+      [/on the western side|western side/, "on the western side of"],
+
+      [/in the north|northern part|\bnorth\b|\bnorthern\b/, "in the north of"],
+      [/in the south|southern part|\bsouth\b|\bsouthern\b/, "in the south of"],
+      [/in the east|eastern part|\beast\b|\beastern\b/, "in the east of"],
+      [/in the west|western part|\bwest\b|\bwestern\b/, "in the west of"],
+
+      [/midway between/, "midway between"],
+      [/\bbetween\b/, "between"],
+      [/across from/, "across from"],
+      [/\bopposite\b/, "opposite"],
+      [/adjacent to|\badjacent\b/, "adjacent to"],
+      [/next to/, "next to"],
+      [/\bbeside\b/, "beside"],
+      [/\balongside\b/, "alongside"],
+      [/\balong\b/, "along"],
+      [/surrounded by|\bsurrounded\b/, "surrounded by"],
+      [/enclosed by|\benclosed\b/, "enclosed by"],
+      [/bordered by|\bbordered\b/, "bordered by"],
+      [/in the centre|in the center|at the centre|at the center|\bcentre\b|\bcenter\b|\bmiddle\b/, "in the centre of"]
+    ];
+
+    for(const [pattern, phrase] of rules){
+      if(pattern.test(source)){
+        return phrase;
+      }
+    }
+
+    /* Fallback có chủ đích: vẫn tạo một bài luyện có thể chấm định lượng. */
+    return "in the north of";
+
+  }
+
+
+  function normalizeForCheck(value){
+
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[’']/g,"")
+      .replace(/north\s*east/g,"north-east")
+      .replace(/north\s*west/g,"north-west")
+      .replace(/south\s*east/g,"south-east")
+      .replace(/south\s*west/g,"south-west")
+      .replace(/[^a-z0-9-]+/g," ")
+      .replace(/\s+/g," ")
+      .trim();
+
+  }
+
+
+  function hasRequiredPhrase(sentence, phrase){
+
+    return normalizeForCheck(sentence)
+      .includes(
+        normalizeForCheck(phrase)
+      );
+
+  }
+
+
+  function hasTarget(sentence, target){
+
+    const wanted =
+      normalizeForCheck(target)
+      .replace(/^the\s+/,"");
+
+    const answer =
+      normalizeForCheck(sentence);
+
+    return (
+      wanted
+      &&
+      answer.includes(wanted)
+    );
+
+  }
+
+
+  function usesPastDescription(sentence){
+
+    const text =
+      " "
+      +
+      normalizeForCheck(sentence)
+      +
+      " ";
+
+    return /\b(?:was|were|stood|lay|occupied|ran|passed|had|could|used to)\b/.test(text);
+
+  }
+
+
+  function gradeConstrainedSentence(fact, context, sentence){
+
+    const target =
+      targetForFact(fact);
+
+    const phrase =
+      requiredPhraseForFact(fact);
+
+    const checks = {
+      target:
+        hasTarget(sentence,target),
+
+      phrase:
+        hasRequiredPhrase(sentence,phrase),
+
+      past:
+        usesPastDescription(sentence)
+    };
+
+    const correct =
+      checks.target
+      &&
+      checks.phrase
+      &&
+      checks.past;
+
+    const issues = [];
+
+    if(!checks.target){
+      issues.push(
+        "Nhắc đúng đối tượng: " + target + "."
+      );
+    }
+
+    if(!checks.phrase){
+      issues.push(
+        "Dùng cụm từ được yêu cầu: “" + phrase + "”."
+      );
+    }
+
+    if(!checks.past){
+      issues.push(
+        "Dùng thì quá khứ, ví dụ: was / were / stood / lay / occupied."
+      );
+    }
+
+    return {
+      correct,
+      target,
+      phrase,
+      checks,
+      issues,
+      context
+    };
+
+  }
+
+
+  function renderSentenceFeedback(result){
+
+    if(!result){
+      $("feedback").innerHTML = "";
+      return;
+    }
+
+    if(result.correct){
+      $("feedback").innerHTML = `
+        <div class="sentenceFeedback good">
+          <strong>✓ Chính xác</strong>
+          <p>Em đã dùng đúng đối tượng, đúng cụm từ vị trí được yêu cầu và đúng thì quá khứ.</p>
+        </div>
+      `;
+      return;
+    }
+
+    $("feedback").innerHTML = `
+      <div class="sentenceFeedback fix">
+        <strong>Cần sửa một chút</strong>
+        <p>${escapeHTML(result.issues.join(" "))}</p>
+      </div>
+    `;
+
+  }
+
+
+  function simpleSentencePrompt(fact, context){
+
+    const target =
+      targetForFact(fact);
+
+    return (
+      "Hãy miêu tả vị trí của "
+      +
+      target
+      +
+      " vào năm "
+      +
+      context.year
+      +
+      "."
+    );
 
   }
 
@@ -2570,16 +2839,8 @@ footer{
           const record =
             getRecord(task.id);
 
-          const hasDraft =
-            Boolean(
-              record?.drafts
-              &&
-              Object.values(record.drafts)
-                .some(
-                  value =>
-                    String(value || "").trim()
-                )
-            );
+          const context =
+            practiceMapContext(task);
 
           const complete =
             done >= total;
@@ -2606,7 +2867,7 @@ footer{
                 </span>
 
                 <strong>
-                  ${escapeHTML(task.title)}
+                  ${escapeHTML(context.name)} · ${escapeHTML(context.year)}
                 </strong>
 
                 <small>
@@ -2618,10 +2879,6 @@ footer{
                     done
                     ?
                     `Đã hoàn thành ${done}/${total} câu`
-                    :
-                    hasDraft
-                    ?
-                    "Có câu nháp chưa nộp"
                     :
                     `${total} câu luyện ngắn theo bản đồ`
                   }
@@ -2748,9 +3005,17 @@ footer{
       );
 
 
+    const context =
+      practiceMapContext(task);
+
+
     $("taskTitle")
       .textContent =
-      task.title;
+      context.name
+      +
+      " · "
+      +
+      context.year;
 
 
     $("taskImage").src =
@@ -2764,26 +3029,7 @@ footer{
 
 
     $("phraseList")
-      .innerHTML =
-      (
-        Array.isArray(task.suggestions)
-        ?
-        task.suggestions
-        :
-        []
-      )
-      .map(
-        item =>
-          `
-            <button
-              type="button"
-              class="phrase"
-            >
-              ${escapeHTML(item)} +
-            </button>
-          `
-      )
-      .join("");
+      .innerHTML = "";
 
 
     renderSentenceDrill();
@@ -2848,10 +3094,8 @@ footer{
       submissions.at(-1);
 
 
-    const draft =
-      record?.drafts?.[
-        currentFactIndex
-      ];
+    const context =
+      practiceMapContext(current);
 
 
     $("taskNumber")
@@ -2879,7 +3123,19 @@ footer{
 
     $("taskPrompt")
       .textContent =
-      simpleSentencePrompt(fact);
+      simpleSentencePrompt(
+        fact,
+        context
+      );
+
+
+    const requiredPhrase =
+      requiredPhraseForFact(fact);
+
+
+    $("phraseList")
+      .innerHTML =
+      `<span class="requiredPhrase">${escapeHTML(requiredPhrase)}</span>`;
 
 
     $("taskInstruction")
@@ -2890,19 +3146,6 @@ footer{
     $("sentenceTarget")
       .textContent =
       "";
-
-
-    $("sentenceProgress")
-      .textContent =
-      "Câu "
-      +
-      (
-        currentFactIndex + 1
-      )
-      +
-      "/"
-      +
-      facts.length;
 
 
     $("prevSentence")
@@ -2916,8 +3159,6 @@ footer{
 
 
     $("essay").value =
-      draft
-      ??
       last?.sentence
       ??
       "";
@@ -2939,23 +3180,17 @@ footer{
 
     $("saveStatus")
       .textContent =
-      draft
-      ?
-      "Đã khôi phục câu nháp trước đó."
-      :
-      last
-      ?
-      "Đã khôi phục câu đã lưu trước đó."
-      :
-      "Câu nháp được tự động lưu trên trình duyệt.";
+      "";
 
 
     $("feedback")
       .innerHTML =
       "";
 
-    /* Phase 3 chỉ lưu câu luyện tập, không chấm đúng/sai tự động. */
-    $("feedback").innerHTML = "";
+
+    if(last?.feedback){
+      renderSentenceFeedback(last.feedback);
+    }
 
   }
 
@@ -2969,11 +3204,6 @@ footer{
       return;
 
     }
-
-
-    saveDraft(
-      false
-    );
 
 
     const total =
@@ -3023,11 +3253,6 @@ footer{
 
   function backToCatalog(){
 
-    saveDraft(
-      false
-    );
-
-
     $("workspaceArea")
       .classList
       .add(
@@ -3062,80 +3287,9 @@ footer{
 
 
   /* =======================================================
-     SAVE
-  ======================================================= */
-
-  function saveDraft(
-    show = true
-  ){
-
-    if(
-      !current
-    ){
-
-      return;
-
-    }
-
-
-    const old =
-      getRecord(
-        current.id
-      )
-      ||
-      {};
-
-
-    const drafts = {
-      ...(
-        old.drafts
-        ||
-        {}
-      ),
-
-      [currentFactIndex]:
-        $("essay").value
-    };
-
-
-    setRecord(
-      current.id,
-      {
-        ...old,
-        drafts,
-        lastFactIndex:
-          currentFactIndex,
-        savedAt:
-          new Date()
-          .toISOString()
-      }
-    );
-
-
-    if(
-      show
-    ){
-
-      $("saveStatus")
-        .classList
-        .remove(
-          "error"
-        );
-
-
-      $("saveStatus")
-        .textContent =
-        "Đã lưu câu nháp trên trình duyệt ✓";
-
-    }
-
-  }
-
-
-  /* =======================================================
-     NO AUTOMATIC GRADING
-     Phase 3 chỉ lưu câu học sinh viết. Hệ thống không tự kết luận
-     đúng/sai về vị trí trên bản đồ để tránh phản hồi sai.
+     CONSTRAINED GRADING
+     Hệ thống chỉ chấm những tiêu chí có thể xác định chắc chắn:
+     đúng đối tượng, dùng đúng cụm từ vị trí đã cho và dùng thì quá khứ.
   ======================================================= */
 
   /* =======================================================
@@ -3163,8 +3317,6 @@ footer{
     const sentenceCount =
       countSentences(sentence);
 
-    /* Chỉ kiểm tra điều kiện kỹ thuật tối thiểu để tránh lưu nhầm ô trống.
-       Không đánh giá vị trí trên bản đồ, không cho điểm, không kết luận đúng/sai. */
     if(words < 3){
       $("saveStatus").textContent =
         "Hãy viết một câu trước khi hoàn thành.";
@@ -3185,7 +3337,20 @@ footer{
 
     submitting = true;
     $("submitBtn").disabled = true;
-    $("submitBtn").textContent = "Đang lưu...";
+    $("submitBtn").textContent = "Đang kiểm tra...";
+
+    const fact =
+      currentFact();
+
+    const context =
+      practiceMapContext(current);
+
+    const feedback =
+      gradeConstrainedSentence(
+        fact,
+        context,
+        sentence
+      );
 
     const now =
       new Date()
@@ -3208,37 +3373,35 @@ footer{
         {
           sentence,
           submittedAt: now,
-          feedback: null,
-          mode: "saved"
+          feedback,
+          correct: feedback.correct,
+          mode: "constrained"
         }
       ]
-    };
-
-    const drafts = {
-      ...(old.drafts || {}),
-      [currentFactIndex]: sentence
     };
 
     setRecord(
       current.id,
       {
         ...old,
-        drafts,
         sentenceSubmissions,
         lastFactIndex: currentFactIndex,
         savedAt: now
       }
     );
 
-    /* Xóa mọi feedback chấm cũ để học sinh không thấy kết luận sai từ phiên bản trước. */
-    $("feedback").innerHTML = "";
+    renderSentenceFeedback(feedback);
 
     $("saveStatus").textContent =
-      "Đã hoàn thành và lưu câu ✓";
+      feedback.correct
+      ?
+      "Đã hoàn thành câu ✓"
+      :
+      "Hãy sửa câu theo gợi ý bên dưới.";
 
     submitting = false;
     $("submitBtn").disabled = false;
-    $("submitBtn").textContent = "Hoàn thành câu ✓";
+    $("submitBtn").textContent = "Kiểm tra câu ✓";
 
     renderCatalog();
   }
@@ -3277,14 +3440,6 @@ footer{
     .addEventListener(
       "click",
       backToCatalog
-    );
-
-
-  $("saveBtn")
-    .addEventListener(
-      "click",
-      () =>
-        saveDraft()
     );
 
 
@@ -3336,118 +3491,11 @@ footer{
 
         $("saveStatus")
           .textContent =
-          "Đang viết câu...";
-
-
-        clearTimeout(
-          saveTimeout
-        );
-
-
-        saveTimeout =
-          setTimeout(
-            () =>
-              saveDraft(
-                true
-              ),
-
-            700
-          );
+          "";
 
       }
     );
 
-
-  $("phraseList")
-    .addEventListener(
-      "click",
-      event => {
-
-        const button =
-          event.target.closest(
-            "button"
-          );
-
-
-        if(
-          !button
-        ){
-
-          return;
-
-        }
-
-
-        const area =
-          $("essay");
-
-
-        const phrase =
-          button.textContent
-          .replace(
-            /\s*\+\s*$/,
-            ""
-          );
-
-
-        const begin =
-          area.selectionStart;
-
-
-        const end =
-          area.selectionEnd;
-
-
-        const value =
-          area.value;
-
-
-        area.value =
-          value.slice(
-            0,
-            begin
-          )
-
-          +
-
-          (
-            begin
-            &&
-            value[
-              begin - 1
-            ]
-            !==
-            " "
-            ?
-            " "
-            :
-            ""
-          )
-
-          +
-
-          phrase
-          +
-          " "
-
-          +
-
-          value.slice(
-            end
-          );
-
-
-        area.focus();
-
-
-        area.dispatchEvent(
-          new Event(
-            "input"
-          )
-        );
-
-      }
-    );
 
 
   $("zoomBtn")
@@ -3459,9 +3507,17 @@ footer{
           current.image;
 
 
+        const context =
+          practiceMapContext(current);
+
+
         $("mapModalTitle")
           .textContent =
-          current.title;
+          context.name
+          +
+          " · "
+          +
+          context.year;
 
 
         $("mapModal")
@@ -3493,25 +3549,6 @@ footer{
 
           $("mapModal")
             .close();
-
-        }
-
-      }
-    );
-
-
-  window
-    .addEventListener(
-      "beforeunload",
-      () => {
-
-        if(
-          current
-        ){
-
-          saveDraft(
-            false
-          );
 
         }
 
