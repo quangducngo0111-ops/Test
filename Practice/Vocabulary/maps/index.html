@@ -1730,7 +1730,7 @@ footer{
             class="btn primary"
             type="button"
           >
-            Nộp câu & nhận xét →
+            Hoàn thành câu ✓
           </button>
 
         </div>
@@ -2945,7 +2945,7 @@ footer{
       :
       last
       ?
-      "Đã khôi phục câu ở lần nộp gần nhất."
+      "Đã khôi phục câu đã lưu trước đó."
       :
       "Câu nháp được tự động lưu trên trình duyệt.";
 
@@ -2954,36 +2954,8 @@ footer{
       .innerHTML =
       "";
 
-
-    if(
-      last
-    ){
-
-      const feedbackToShow =
-        last?.feedback?.gradeVersion === "sentence-v3"
-        ?
-        last.feedback
-        :
-        localGrade(
-          current,
-          fact,
-          last.sentence || ""
-        );
-
-
-      renderFeedback(
-        feedbackToShow,
-        last?.feedback?.gradeVersion === "sentence-v3"
-        ?
-        last.mode
-        :
-        "local",
-        last.sentence,
-        last.submittedAt,
-        true
-      );
-
-    }
+    /* Phase 3 chỉ lưu câu luyện tập, không chấm đúng/sai tự động. */
+    $("feedback").innerHTML = "";
 
   }
 
@@ -3161,771 +3133,10 @@ footer{
 
 
   /* =======================================================
-     LOCAL GRADING · SAFE MODE
-
-     Nguyên tắc:
-     - Không coi fact.label / keywords là "đáp án duy nhất".
-     - Chỉ kết luận sai khi có lỗi chắc chắn.
-     - Nếu học sinh dùng một quan hệ Maps hợp lệ khác đáp án mẫu,
-       hệ thống không trừ điểm oan.
-     - Nếu tasks.js có validFacts, hệ thống sẽ kiểm tra chính xác
-       nhiều đáp án đúng.
+     NO AUTOMATIC GRADING
+     Phase 3 chỉ lưu câu học sinh viết. Hệ thống không tự kết luận
+     đúng/sai về vị trí trên bản đồ để tránh phản hồi sai.
   ======================================================= */
-
-  function normalizeMapText(value){
-
-    return String(value || "")
-      .toLowerCase()
-      .replace(/[’']/g,"'")
-      .replace(/[^a-z0-9\s-]/g," ")
-      .replace(/\s+/g," ")
-      .trim();
-
-  }
-
-
-  function targetNameFromFact(fact){
-
-    const relationWords = new Set([
-      "in","on","at","to","near","next","beside","adjacent",
-      "opposite","across","between","midway","along","alongside",
-      "around","surrounded","enclosed","bordered","north","south",
-      "east","west","northern","southern","eastern","western",
-      "northeast","north-east","northwest","north-west",
-      "southeast","south-east","southwest","south-west",
-      "located","situated","positioned","lie","lies","stand","stands",
-      "occupy","occupies","run","runs","pass","passes","through"
-    ]);
-
-    const candidates = [
-      ...factKeywords(fact),
-      ...factPlaces(fact)
-    ];
-
-    const target = candidates.find(item => {
-      const words = normalizeMapText(item).split(/\s+/).filter(Boolean);
-      return words.length && !words.every(word => relationWords.has(word));
-    });
-
-    if(target){
-      return String(target).replace(/[.?!]+$/g,"").trim();
-    }
-
-    const label = String(fact?.label || "").trim();
-
-    /* Cố gắng lấy chủ thể ở đầu câu mẫu, ví dụ:
-       "The school is ..." -> "school" */
-    const m = label.match(/^\s*(?:the|a|an)?\s*([a-z][a-z0-9 -]{1,45}?)\s+(?:is|was|lies?|lay|stands?|stood|occupies?|occupied|has|had)\b/i);
-
-    return m
-      ? m[1].trim()
-      : "";
-
-  }
-
-
-  function normalizeRelationName(value){
-
-    const text = normalizeMapText(value)
-      .replace(/\bnorth eastern\b/g,"north-eastern")
-      .replace(/\bnorth western\b/g,"north-western")
-      .replace(/\bsouth eastern\b/g,"south-eastern")
-      .replace(/\bsouth western\b/g,"south-western")
-      .replace(/\bnortheastern\b/g,"north-eastern")
-      .replace(/\bnorthwestern\b/g,"north-western")
-      .replace(/\bsoutheastern\b/g,"south-eastern")
-      .replace(/\bsouthwestern\b/g,"south-western");
-
-    /*
-      Các mẫu cụ thể phải đứng trước mẫu chung.
-      Đặc biệt chấp nhận cả:
-      - in the north-eastern corner of ...
-      - occupies the north-eastern corner of ...
-      - lies in the north-east corner of ...
-    */
-    const rules = [
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+north(?:-| )?(?:east|eastern)\s+(?:part|corner|side)\s+of\b/,"north_east_in"],
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+north(?:-| )?(?:west|western)\s+(?:part|corner|side)\s+of\b/,"north_west_in"],
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+south(?:-| )?(?:east|eastern)\s+(?:part|corner|side)\s+of\b/,"south_east_in"],
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+south(?:-| )?(?:west|western)\s+(?:part|corner|side)\s+of\b/,"south_west_in"],
-
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:north|northern)\s+(?:part|corner|side|end)\s+of\b/,"north_in"],
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:south|southern)\s+(?:part|corner|side|end)\s+of\b/,"south_in"],
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:east|eastern)\s+(?:part|corner|side|end)\s+of\b/,"east_in"],
-      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:west|western)\s+(?:part|corner|side|end)\s+of\b/,"west_in"],
-
-      [/\b(?:to\s+the\s+)?north(?:-| )?west\s+of\b/,"north_west_of"],
-      [/\b(?:to\s+the\s+)?north(?:-| )?east\s+of\b/,"north_east_of"],
-      [/\b(?:to\s+the\s+)?south(?:-| )?west\s+of\b/,"south_west_of"],
-      [/\b(?:to\s+the\s+)?south(?:-| )?east\s+of\b/,"south_east_of"],
-      [/\b(?:to\s+the\s+)?north\s+of\b/,"north_of"],
-      [/\b(?:to\s+the\s+)?south\s+of\b/,"south_of"],
-      [/\b(?:to\s+the\s+)?east\s+of\b/,"east_of"],
-      [/\b(?:to\s+the\s+)?west\s+of\b/,"west_of"],
-
-      [/\bacross\s+from\b/,"opposite"],
-      [/\bopposite(?:\s+to)?\b/,"opposite"],
-      [/\badjacent\s+to\b/,"next_to"],
-      [/\bnext\s+to\b/,"next_to"],
-      [/\bbeside\b/,"next_to"],
-      [/\balongside\b/,"alongside"],
-      [/\bmidway\s+between\b/,"between"],
-      [/\bbetween\b/,"between"],
-      [/\bsurrounded\s+by\b/,"surrounded_by"],
-      [/\benclosed\s+by\b/,"surrounded_by"],
-      [/\bbordered\s+by\b/,"bordered_by"],
-      [/\b(?:in\s+|at\s+)?the\s+(?:centre|center|middle)\s+of\b/,"centre_in"],
-      [/\bnear\b|\bclose\s+to\b/,"near"],
-      [/\balong\b/,"along"],
-      [/\bruns?\s+(?:through|across)\b/,"through"],
-      [/\bpasses?\s+through\b/,"through"]
-    ];
-
-    for(const [regex,name] of rules){
-      if(regex.test(text)){
-        return name;
-      }
-    }
-
-    return "";
-
-  }
-
-  function oppositeRelation(relation){
-
-    return ({
-      north_of:"south_of",
-      south_of:"north_of",
-      east_of:"west_of",
-      west_of:"east_of",
-      north_east_of:"south_west_of",
-      south_west_of:"north_east_of",
-      north_west_of:"south_east_of",
-      south_east_of:"north_west_of"
-    })[relation] || "";
-
-  }
-
-
-  function knownTaskObjects(task){
-
-    return taskFacts(task)
-      .map(targetNameFromFact)
-      .map(item => String(item || "").trim())
-      .filter(Boolean);
-
-  }
-
-
-  function mentionedReference(task,target,sentence){
-
-    const lower = normalizeMapText(sentence);
-    const targetLower = normalizeMapText(target);
-
-    const objects = knownTaskObjects(task)
-      .filter(item => normalizeMapText(item) !== targetLower)
-      .sort((a,b) => b.length - a.length);
-
-    return objects.find(item =>
-      lower.includes(normalizeMapText(item))
-    ) || "";
-
-  }
-
-
-  function collectValidFacts(task,fact,target){
-
-    const output = [];
-
-    const pushFact = item => {
-      if(!item || typeof item !== "object") return;
-
-      const subject = normalizeMapText(
-        item.subject || item.target || item.object || target
-      );
-
-      const wanted = normalizeMapText(target);
-
-      if(subject && wanted && subject !== wanted) return;
-
-      const relation = normalizeRelationName(
-        item.relation || item.position || item.type || ""
-      ) || String(item.relation || "").trim();
-
-      const reference = String(
-        item.reference || item.relativeTo || item.place || ""
-      ).trim();
-
-      if(relation){
-        output.push({ relation, reference });
-      }
-    };
-
-    if(Array.isArray(fact?.validFacts)){
-      fact.validFacts.forEach(pushFact);
-    }
-
-    if(Array.isArray(task?.validFacts)){
-      task.validFacts.forEach(pushFact);
-    }
-
-    if(task?.validFacts && !Array.isArray(task.validFacts) && typeof task.validFacts === "object"){
-      const byTarget =
-        task.validFacts[target]
-        || task.validFacts[normalizeMapText(target)];
-
-      if(Array.isArray(byTarget)){
-        byTarget.forEach(pushFact);
-      }
-    }
-
-    return output;
-
-  }
-
-
-  function expectedRelationFromFact(fact){
-
-    const source = [
-      String(fact?.label || ""),
-      ...factKeywords(fact),
-      ...factPlaces(fact)
-    ].join(" ");
-
-    return normalizeRelationName(source);
-
-  }
-
-
-  function verifyRelation(task,fact,target,sentence){
-
-    const submittedRelation = normalizeRelationName(sentence);
-    const reference = mentionedReference(task,target,sentence);
-    const validFacts = collectValidFacts(task,fact,target);
-
-    if(!submittedRelation){
-      return {
-        verdict:"missing",
-        relation:"",
-        reference,
-        reason:"Câu chưa có cấu trúc vị trí Maps mà hệ thống nhận diện được."
-      };
-    }
-
-    /* Nếu có validFacts: đây là nguồn kiểm tra đáng tin cậy nhất. */
-    if(validFacts.length){
-
-      const exact = validFacts.some(item => {
-        const sameRelation = item.relation === submittedRelation;
-        const sameReference = !item.reference ||
-          normalizeMapText(item.reference) === normalizeMapText(reference);
-        return sameRelation && sameReference;
-      });
-
-      if(exact){
-        return {
-          verdict:"correct",
-          relation:submittedRelation,
-          reference,
-          reason:"Quan hệ này nằm trong danh sách các cách mô tả đúng của bản đồ."
-        };
-      }
-
-      /* Chỉ báo sai khi cùng mốc tham chiếu nhưng dùng quan hệ đối nghịch
-         với một validFact đã khai báo. */
-      const contradiction = validFacts.some(item => {
-        if(!item.reference || !reference) return false;
-        const sameReference = normalizeMapText(item.reference) === normalizeMapText(reference);
-        return sameReference && oppositeRelation(item.relation) === submittedRelation;
-      });
-
-      if(contradiction){
-        return {
-          verdict:"incorrect",
-          relation:submittedRelation,
-          reference,
-          reason:"Quan hệ này đối nghịch với dữ liệu vị trí đã được khai báo cho cùng mốc tham chiếu."
-        };
-      }
-
-      return {
-        verdict:"plausible",
-        relation:submittedRelation,
-        reference,
-        reason:"Đây là một cách mô tả khác đáp án mẫu; dữ liệu hiện tại không cho phép kết luận là sai."
-      };
-    }
-
-    /* Không có validFacts: tuyệt đối không dùng keywords/label như đáp án duy nhất. */
-    const expected = expectedRelationFromFact(fact);
-
-    if(expected && expected === submittedRelation){
-      return {
-        verdict:"correct",
-        relation:submittedRelation,
-        reference,
-        reason:"Câu khớp với thông tin vị trí đã lưu cho bài luyện."
-      };
-    }
-
-    /* Một quan hệ tương đối với một đối tượng khác trên cùng map có thể hoàn toàn đúng
-       (vd: School west of Park) dù fact mẫu chỉ lưu School ở phía bắc.
-       Vì vậy: không trừ điểm và không gắn nhãn sai. */
-    if(reference){
-      return {
-        verdict:"plausible",
-        relation:submittedRelation,
-        reference,
-        reason:"Câu dùng một mốc tham chiếu khác trên bản đồ. Hệ thống không coi đây là lỗi chỉ vì khác đáp án mẫu."
-      };
-    }
-
-    return {
-      verdict:"uncertain",
-      relation:submittedRelation,
-      reference,
-      reason:"Hệ thống nhận diện được cấu trúc Maps nhưng chưa đủ dữ liệu để xác minh chính xác vị trí này."
-    };
-
-  }
-
-
-  function localGrade(
-    task,
-    fact,
-    sentence
-  ){
-
-    const clean = sentence.trim();
-    const lower = normalizeMapText(clean);
-    const words = countWords(clean);
-    const target = targetNameFromFact(fact);
-    const targetPresent = target
-      ? lower.includes(normalizeMapText(target))
-      : true;
-
-    const startsCapital = /^[A-Z]/.test(clean);
-    const endsPunctuation = /[.!?]$/.test(clean);
-    const oneSentence = countSentences(clean) === 1;
-    const usefulLength = words >= 4 && words <= 35;
-
-    const verification = verifyRelation(
-      task,
-      fact,
-      target,
-      clean
-    );
-
-    let status = "plausible";
-
-    if(!targetPresent || !oneSentence || words < 4){
-      status = "needs_fix";
-    }
-    else if(verification.verdict === "incorrect" || verification.verdict === "missing"){
-      status = "needs_fix";
-    }
-    else if(verification.verdict === "correct" && startsCapital && endsPunctuation && usefulLength){
-      status = "correct";
-    }
-    else if(verification.verdict === "correct"){
-      /* Nội dung đúng nhưng còn lỗi hình thức nhỏ. */
-      status = "plausible";
-    }
-    else if(verification.verdict === "uncertain"){
-      status = "uncertain";
-    }
-
-    const strengths = [];
-    const improvements = [];
-
-    if(verification.verdict === "correct"){
-      strengths.push("Vị trí được miêu tả chính xác.");
-    }
-    else if(verification.verdict === "plausible"){
-      strengths.push("Câu dùng cấu trúc miêu tả vị trí hợp lệ.");
-    }
-
-    if(!targetPresent){
-      improvements.push(
-        target
-        ? `Hãy miêu tả đúng đối tượng “${target}”.`
-        : "Hãy nêu rõ đối tượng cần miêu tả."
-      );
-    }
-
-    if(verification.verdict === "missing"){
-      improvements.push("Hãy dùng một cụm từ chỉ vị trí rõ ràng.");
-    }
-
-    if(verification.verdict === "incorrect"){
-      improvements.push("Vị trí trong câu chưa khớp với bản đồ. Hãy quan sát lại hướng hoặc mốc tham chiếu.");
-    }
-
-    if(!startsCapital){
-      improvements.push("Viết hoa chữ cái đầu câu.");
-    }
-
-    if(!endsPunctuation){
-      improvements.push("Thêm dấu chấm ở cuối câu.");
-    }
-
-    if(!oneSentence){
-      improvements.push("Bài này chỉ cần viết 1 câu.");
-    }
-
-    if(words > 35){
-      improvements.push("Câu hơi dài; hãy viết gọn hơn.");
-    }
-
-    return {
-      type:"local",
-      gradeVersion:"sentence-v3",
-      status,
-      verdict:verification.verdict,
-      statusLabel:
-        status === "correct"
-        ? "Chính xác"
-        : status === "needs_fix"
-        ? "Cần sửa"
-        : status === "uncertain"
-        ? "Kiểm tra lại vị trí"
-        : "Câu hợp lệ",
-      strengths,
-      improvements,
-      correctedSentence:"",
-      wordCount:words
-    };
-
-  }
-
-  /* =======================================================
-     AI GRADING
-     Dùng endpoint riêng cho sentence practice nếu được cấu hình:
-     window.MAPS_SENTENCE_GRADER_ENDPOINT
-  ======================================================= */
-
-  async function aiGrade(
-    task,
-    fact,
-    sentence
-  ){
-
-    if(
-      !endpoint
-    ){
-
-      return null;
-
-    }
-
-
-    const controller =
-      new AbortController();
-
-
-    const timer =
-      setTimeout(
-        () =>
-          controller.abort(),
-        25000
-      );
-
-
-    try{
-
-      const response =
-        await fetch(
-          endpoint,
-          {
-            method:"POST",
-
-            headers:{
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify({
-                mode:
-                  "sentence",
-                taskId:
-                  task.id,
-                factIndex:
-                  currentFactIndex,
-                target:{
-                  label:
-                    fact?.label
-                    ||
-                    "",
-                  keywords:
-                    factKeywords(fact),
-                  places:
-                    factPlaces(fact),
-                  targetName:
-                    targetNameFromFact(fact),
-                  validFacts:
-                    collectValidFacts(
-                      task,
-                      fact,
-                      targetNameFromFact(fact)
-                    )
-                },
-                gradingPolicy:{
-                  multipleCorrectAnswers:true,
-                  doNotTreatModelSentenceAsOnlyAnswer:true,
-                  onlyMarkPositionWrongWhenContradictionIsCertain:true,
-                  allowUncertainVerdict:true
-                },
-                sentence,
-                essay:
-                  sentence
-              }),
-
-            signal:
-              controller.signal
-          }
-        );
-
-
-      if(
-        !response.ok
-      ){
-
-        throw Error(
-          "Máy chủ chấm câu trả về "
-          +
-          response.status
-        );
-
-      }
-
-
-      const data =
-        await response.json();
-
-
-      if(
-        !data
-        ||
-        typeof data !== "object"
-      ){
-
-        throw Error(
-          "Định dạng phản hồi AI cho câu chưa hợp lệ"
-        );
-
-      }
-
-
-      const aiStatusRaw =
-        String(
-          data.status
-          ||
-          data.verdict
-          ||
-          ""
-        )
-        .toLowerCase()
-        .trim();
-
-
-      const aiStatus =
-        ["correct","needs_fix","plausible","uncertain"]
-        .includes(aiStatusRaw)
-        ?
-        aiStatusRaw
-        :
-        "uncertain";
-
-
-      return {
-        type:"ai",
-        gradeVersion:"sentence-v3",
-        status:aiStatus,
-        statusLabel:
-          data.statusLabel
-          ||
-          (
-            aiStatus === "correct"
-            ?
-            "Chính xác"
-            :
-            aiStatus === "needs_fix"
-            ?
-            "Cần sửa"
-            :
-            aiStatus === "plausible"
-            ?
-            "Câu hợp lệ"
-            :
-            "Kiểm tra lại vị trí"
-          ),
-        statusDetail:
-          data.statusDetail
-          ||
-          data.reason
-          ||
-          "",
-        checks:
-          Array.isArray(data.checks)
-          ?
-          data.checks
-          :
-          [],
-        metrics:
-          Array.isArray(data.metrics)
-          ?
-          data.metrics
-          :
-          [],
-        strengths:
-          Array.isArray(data.strengths)
-          ?
-          data.strengths
-          :
-          [],
-        improvements:
-          Array.isArray(data.improvements)
-          ?
-          data.improvements
-          :
-          [],
-        matched:
-          Array.isArray(data.matched)
-          ?
-          data.matched
-          :
-          [],
-        correctedSentence:
-          data.correctedSentence
-          ||
-          data.modelSentence
-          ||
-          (
-            Array.isArray(data.exampleSentences)
-            ?
-            data.exampleSentences[0]
-            :
-            ""
-          )
-          ||
-          "",
-        note:
-          ""
-      };
-
-    }
-    finally{
-
-      clearTimeout(
-        timer
-      );
-
-    }
-
-  }
-
-
-  /* =======================================================
-     FEEDBACK
-  ======================================================= */
-
-  function renderFeedback(
-    result,
-    mode,
-    sentence,
-    date,
-    isOld = false
-  ){
-
-    if(!result){
-      $("feedback").innerHTML = "";
-      return;
-    }
-
-    const corrected = String(result.correctedSentence || "").trim();
-
-    let status = String(result.status || "").trim();
-
-    if(!status){
-      status = "uncertain";
-    }
-
-    const defaultLabel =
-      status === "correct"
-      ? "Chính xác"
-      : status === "needs_fix"
-      ? "Cần sửa"
-      : status === "plausible"
-      ? "Câu hợp lệ"
-      : "Kiểm tra lại vị trí";
-
-    const icon =
-      status === "correct" || status === "plausible"
-      ? "✓"
-      : status === "needs_fix"
-      ? "!"
-      : "?";
-
-    const strengths = Array.isArray(result.strengths) ? result.strengths : [];
-    const improvements = Array.isArray(result.improvements) ? result.improvements : [];
-
-    const mainMessage =
-      status === "correct"
-      ? (strengths[0] || "Câu miêu tả vị trí đúng.")
-      : status === "plausible"
-      ? (strengths[0] || "Câu dùng cấu trúc miêu tả vị trí hợp lệ.")
-      : status === "needs_fix"
-      ? (improvements[0] || "Hãy kiểm tra lại câu.")
-      : "Hãy quan sát lại bản đồ và kiểm tra vị trí một lần nữa.";
-
-    const extraImprovements =
-      status === "needs_fix"
-      ? improvements.slice(1)
-      : improvements;
-
-    const html = `
-      <div class="result ${mode === "ai" ? "ai" : ""}">
-
-        <div class="resultStatus ${escapeHTML(status)}">
-          <span>${icon}</span>
-          <span>${escapeHTML(result.statusLabel || defaultLabel)}</span>
-        </div>
-
-        <p class="statusDetail">
-          ${escapeHTML(mainMessage)}
-        </p>
-
-        ${
-          extraImprovements.length
-          ? `
-            <ul class="feedbacklist">
-              ${
-                extraImprovements
-                .map(item => `<li>${escapeHTML(item)}</li>`)
-                .join("")
-              }
-            </ul>
-          `
-          : ""
-        }
-
-        ${
-          corrected
-          ? `
-            <div class="instruction">
-              <b>Gợi ý:</b> ${escapeHTML(corrected)}
-            </div>
-          `
-          : ""
-        }
-
-      </div>
-    `;
-
-    $("feedback").innerHTML = html;
-
-  }
 
   /* =======================================================
      SUBMIT
@@ -3938,225 +3149,75 @@ footer{
       ||
       submitting
     ){
-
       return;
-
     }
-
 
     const sentence =
       $("essay")
       .value
       .trim();
 
-
     const words =
-      countWords(
-        sentence
-      );
-
+      countWords(sentence);
 
     const sentenceCount =
-      countSentences(
-        sentence
-      );
+      countSentences(sentence);
 
-
-    if(
-      words < 4
-    ){
-
-      $("saveStatus")
-        .textContent =
-        "Hãy viết một câu hoàn chỉnh trước khi nộp (ít nhất khoảng 4 từ).";
-
-
-      $("saveStatus")
-        .classList
-        .add(
-          "error"
-        );
-
-
-      $("essay")
-        .focus();
-
-
+    /* Chỉ kiểm tra điều kiện kỹ thuật tối thiểu để tránh lưu nhầm ô trống.
+       Không đánh giá vị trí trên bản đồ, không cho điểm, không kết luận đúng/sai. */
+    if(words < 3){
+      $("saveStatus").textContent =
+        "Hãy viết một câu trước khi hoàn thành.";
+      $("saveStatus").classList.add("error");
+      $("essay").focus();
       return;
-
     }
 
-
-    if(
-      sentenceCount !== 1
-    ){
-
-      $("saveStatus")
-        .textContent =
-        "Phase 3 này luyện từng câu: hãy chỉ nộp 1 câu cho yêu cầu hiện tại.";
-
-
-      $("saveStatus")
-        .classList
-        .add(
-          "error"
-        );
-
-
-      $("essay")
-        .focus();
-
-
+    if(sentenceCount !== 1){
+      $("saveStatus").textContent =
+        "Bài này chỉ cần viết 1 câu cho yêu cầu hiện tại.";
+      $("saveStatus").classList.add("error");
+      $("essay").focus();
       return;
-
     }
 
+    $("saveStatus").classList.remove("error");
 
-    $("saveStatus")
-      .classList
-      .remove(
-        "error"
-      );
-
-
-    submitting =
-      true;
-
-
-    $("submitBtn")
-      .disabled =
-      true;
-
-
-    $("submitBtn")
-      .textContent =
-      endpoint
-      ?
-      "Đang gửi chấm câu..."
-      :
-      "Đang nhận xét câu...";
-
-
-    const fact =
-      currentFact();
-
-
-    let result =
-      null;
-
-
-    let mode =
-      "local";
-
-
-    let warning =
-      "";
-
-
-    if(
-      endpoint
-    ){
-
-      try{
-
-        result =
-          await aiGrade(
-            current,
-            fact,
-            sentence
-          );
-
-
-        mode =
-          "ai";
-
-      }
-      catch(error){
-
-        warning =
-          "Máy chủ AI chấm câu chưa kết nối được. Đã chuyển sang nhận xét cơ bản trên trình duyệt.";
-
-
-        console.warn(
-          error
-        );
-
-      }
-
-    }
-
-
-    if(
-      !result
-    ){
-
-      result =
-        localGrade(
-          current,
-          fact,
-          sentence
-        );
-
-
-      mode =
-        "local";
-
-    }
-
+    submitting = true;
+    $("submitBtn").disabled = true;
+    $("submitBtn").textContent = "Đang lưu...";
 
     const now =
       new Date()
       .toISOString();
 
-
     const old =
-      getRecord(
-        current.id
-      )
+      getRecord(current.id)
       ||
       {};
 
-
     const previousForSentence =
-      old?.sentenceSubmissions?.[
-        currentFactIndex
-      ]
+      old?.sentenceSubmissions?.[currentFactIndex]
       ||
       [];
 
-
     const sentenceSubmissions = {
-      ...(
-        old.sentenceSubmissions
-        ||
-        {}
-      ),
-
-      [currentFactIndex]:[
+      ...(old.sentenceSubmissions || {}),
+      [currentFactIndex]: [
         ...previousForSentence,
         {
           sentence,
-          submittedAt:
-            now,
-          feedback:
-            result,
-          mode
+          submittedAt: now,
+          feedback: null,
+          mode: "saved"
         }
       ]
     };
 
-
     const drafts = {
-      ...(
-        old.drafts
-        ||
-        {}
-      ),
-
-      [currentFactIndex]:
-        sentence
+      ...(old.drafts || {}),
+      [currentFactIndex]: sentence
     };
-
 
     setRecord(
       current.id,
@@ -4164,52 +3225,22 @@ footer{
         ...old,
         drafts,
         sentenceSubmissions,
-        lastFactIndex:
-          currentFactIndex,
-        savedAt:
-          now
+        lastFactIndex: currentFactIndex,
+        savedAt: now
       }
     );
 
+    /* Xóa mọi feedback chấm cũ để học sinh không thấy kết luận sai từ phiên bản trước. */
+    $("feedback").innerHTML = "";
 
-    renderFeedback(
-      result,
-      mode,
-      sentence,
-      now
-    );
+    $("saveStatus").textContent =
+      "Đã hoàn thành và lưu câu ✓";
 
-
-    $("saveStatus")
-      .textContent =
-      warning
-      ||
-      "Đã nộp câu và lưu kết quả ✓";
-
-
-    submitting =
-      false;
-
-
-    $("submitBtn")
-      .disabled =
-      false;
-
-
-    $("submitBtn")
-      .textContent =
-      "Nộp lại câu & nhận xét →";
-
+    submitting = false;
+    $("submitBtn").disabled = false;
+    $("submitBtn").textContent = "Hoàn thành câu ✓";
 
     renderCatalog();
-
-
-    $("feedback")
-      .scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
-
   }
 
 
