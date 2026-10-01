@@ -674,6 +674,17 @@ textarea:focus-visible{
     14px 0 5px;
 }
 
+.simpleTaskPrompt{
+  margin:16px 0 8px;
+  padding:13px 15px;
+  border-radius:11px;
+  background:#f4f1ff;
+  color:#321b7a;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.5;
+}
+
 .instruction{
   background:#f4f1ff;
 
@@ -1553,17 +1564,17 @@ footer{
 
 
         <p
-          class="prompt"
+          class="simpleTaskPrompt"
           id="taskPrompt"
         ></p>
 
 
         <div
-          class="instruction"
+          class="instruction hidden"
           id="taskInstruction"
         ></div>
 
-        <div class="sentenceTarget" id="sentenceTarget"></div>
+        <div class="sentenceTarget hidden" id="sentenceTarget"></div>
 
         <div class="sentenceNav">
 
@@ -2345,6 +2356,105 @@ footer{
   }
 
 
+  function simpleSentencePrompt(fact){
+
+    const relationOnly =
+      /^(?:in|on|at|to|near|next|beside|adjacent|opposite|across|between|midway|along|alongside|around|surrounded|enclosed|bordered|north|south|east|west|northern|southern|eastern|western|north[- ]?east|north[- ]?west|south[- ]?east|south[- ]?west|located|situated|positioned|lie|lies|stand|stands|occupy|occupies|run|runs|pass|passes|through|across)$/i;
+
+
+    const looksLikeRelation =
+      value => {
+
+        const text =
+          String(value || "")
+          .trim();
+
+        if(!text){
+          return true;
+        }
+
+        const words =
+          text
+          .toLowerCase()
+          .replace(/[^a-z-]+/g," ")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+
+        return (
+          words.length > 0
+          &&
+          words.every(
+            word => relationOnly.test(word)
+          )
+        );
+
+      };
+
+
+    const candidates =
+      [
+        ...factKeywords(fact),
+        ...factPlaces(fact)
+      ];
+
+
+    let target =
+      candidates.find(
+        item =>
+          !looksLikeRelation(item)
+      )
+      ||
+      "";
+
+
+    if(target){
+
+      target =
+        target
+        .replace(/[.?!]+$/g,"")
+        .trim();
+
+      target =
+        target.charAt(0).toUpperCase()
+        +
+        target.slice(1);
+
+      return (
+        "Hãy miêu tả vị trí của "
+        +
+        target
+        +
+        "."
+      );
+
+    }
+
+
+    const label =
+      String(fact?.label || "")
+      .replace(/[.?!]+$/g,"")
+      .trim();
+
+
+    if(label){
+
+      return (
+        "Hãy viết 1 câu mô tả: "
+        +
+        label
+        +
+        "."
+      );
+
+    }
+
+
+    return "Hãy miêu tả vị trí của đối tượng được yêu cầu trên bản đồ.";
+
+  }
+
+
   /* =======================================================
      CATALOG
   ======================================================= */
@@ -2706,25 +2816,17 @@ footer{
 
     $("taskPrompt")
       .textContent =
-      "Quan sát kỹ sơ đồ và viết đúng 1 câu tiếng Anh cho yêu cầu bên dưới.";
+      simpleSentencePrompt(fact);
 
 
     $("taskInstruction")
       .textContent =
-      places.length
-      ?
-      "Mô tả chính xác thông tin liên quan đến: "
-      +
-      places.join(" · ")
-      +
-      "."
-      :
-      "Mô tả một thông tin cụ thể trên bản đồ theo gợi ý của câu luyện này.";
+      "";
 
 
     $("sentenceTarget")
       .textContent =
-      "Mục tiêu: 1 câu hoàn chỉnh, đúng thông tin trên bản đồ và có ít nhất một cấu trúc miêu tả vị trí/thay đổi phù hợp. Không cần Introduction, Overview hay đoạn văn.";
+      "";
 
 
     $("sentenceProgress")
