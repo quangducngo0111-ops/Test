@@ -14,11 +14,11 @@
 <script src="./tasks.js"></script>
 </head>
 <body>
-<header class="top"><div class="wrap topin"><a class="back" href="/Test/Practice/Vocabulary/index.html?skill=writing-task-1&amp;set=maps">← Bộ Maps</a><div class="brand"><span class="brandIcon">M</span><span>Writing Task 1 · Maps</span></div><span class="student" id="studentInfo"></span></div></header>
+<header class="top"><div class="wrap topin"><button class="back" id="backToMaps" type="button">← Bộ Maps</button><div class="brand"><span class="brandIcon">M</span><span>Writing Task 1 · Maps</span></div><span class="student" id="studentInfo"></span></div></header>
 <main class="wrap">
-  <section class="hero"><div class="eyebrow">Writing Task 1 · Giai đoạn 3</div><h1>Luyện viết Maps theo bản đồ</h1><p>Quan sát các sơ đồ trong tài liệu, viết một bài miêu tả vị trí và bố cục. Hệ thống tự lưu bài làm và nhận xét ngay sau khi nộp.</p></section>
-  <section class="stagebar"><div class="stage"><span>✓</span><div><b>01 · Học bằng game</b><small>Hoàn thành bộ từ Maps</small></div></div><div class="stage"><span>✓</span><div><b>02 · Kiểm tra</b><small>Đã đạt bài kiểm tra từ vựng</small></div></div><div class="stage active"><span>03</span><div><b>Luyện viết</b><small>13 sơ đồ gốc từ tài liệu</small></div></div></section>
-  <section id="gate" class="gate hidden"><h2>Giai đoạn 3 chưa mở khóa</h2><p>Em hãy trở lại Vocabulary → Writing Task 1 → Maps, hoàn thành bộ từ bằng các trò chơi và đạt ít nhất 80% ở bài kiểm tra để mở phần luyện viết.</p><a href="/Test/Practice/Vocabulary/index.html?skill=writing-task-1&amp;set=maps">← Quay về Bộ Maps</a></section>
+  <section class="hero"><div class="eyebrow">Writing Task 1 · Giai đoạn 3</div><h1>Luyện viết Maps theo bản đồ</h1><p>Quan sát các sơ đồ trong tài liệu, viết một bài miêu tả vị trí và bố cục. Hệ thống tự lưu bài làm và phản hồi luyện tập ngay trong Giai đoạn 3.</p></section>
+  <section class="stagebar"><div class="stage"><span>✓</span><div><b>01 · Học bằng game</b><small>Hoàn thành bộ từ Maps</small></div></div><div class="stage"><span>✓</span><div><b>02 · Kiểm tra</b><small>Đã đạt bài kiểm tra từ vựng</small></div></div><div class="stage active"><span>03</span><div><b>Luyện viết</b><small>13 sơ đồ từ tài liệu</small></div></div></section>
+  <section id="gate" class="gate hidden"><h2>Giai đoạn 3 chưa mở khóa</h2><p>Em hãy trở lại Vocabulary → Writing Task 1 → Maps, hoàn thành bộ từ bằng các trò chơi và đạt ít nhất 80% ở bài kiểm tra để mở phần luyện viết.</p><button class="btn" type="button" onclick="history.back()">← Quay lại Giai đoạn 2</button></section>
   <section id="catalog"><div class="titleRow"><div><h2>Chọn bài luyện viết</h2><p>Mỗi sơ đồ là một bài riêng. Có thể nộp bài, nhận xét và làm lại.</p></div><div class="count" id="progressCount">0/13 bài đã nộp</div></div><div class="taskgrid" id="taskGrid"></div></section>
   <section id="workspaceArea" class="hidden"><div class="worktop"><button id="backCatalog" type="button">← Danh sách bản đồ</button><h2 id="taskTitle"></h2><span class="pill" id="taskNumber"></span></div><div class="workspace"><section class="panel"><h3>Đề bài / Map</h3><div class="mapframe"><img id="taskImage" alt="Sơ đồ minh họa từ tài liệu" src="" draggable="false"><button id="zoomBtn" class="zoom" type="button">Phóng to sơ đồ ⤢</button></div><p class="prompt" id="taskPrompt"></p><div class="instruction" id="taskInstruction"></div><div class="phraseBox"><h4>Gợi ý từ vựng từ bộ Maps</h4><div class="phrases" id="phraseList"></div></div></section><section class="panel"><div class="writingtop"><h3>Bài viết của em</h3><span class="counter" id="wordCount">0 từ</span></div><textarea id="essay" placeholder="The map illustrates..." aria-label="Bài luyện viết Maps"></textarea><div class="status" id="saveStatus">Bản nháp được tự động lưu trên trình duyệt.</div><div class="actions"><button id="saveBtn" class="btn" type="button">Lưu bản nháp</button><button id="submitBtn" class="btn primary" type="button">Nộp bài &amp; nhận xét →</button></div><div id="feedback"></div></section></div></section>
 </main><dialog id="mapModal"><div class="modalTop"><span id="mapModalTitle"></span><button type="button" id="closeZoom">Đóng ✕</button></div><img id="modalImage" alt="Sơ đồ phóng to"></dialog><footer>Writing Task 1 · Maps · Phản hồi tự động phục vụ luyện tập; không thay thế giám khảo IELTS.</footer>
@@ -26,7 +26,7 @@
 (()=>{'use strict';
   const tasks=Array.isArray(window.MAPS_WRITING_TASKS)?window.MAPS_WRITING_TASKS:[];
   const $=id=>document.getElementById(id);
-  const sourceUrl='/Test/Practice/Vocabulary/index.html?skill=writing-task-1&set=maps';
+  const sourceUrl='../index.html?skill=writing-task-1&set=maps';
   let current=null;
   let saveTimeout=0;
   let submitting=false;
@@ -36,10 +36,28 @@
   const saveKey=id=>'MAPS_WRITING_V1_'+scope+'::'+id;
   function getRecord(id){try{return JSON.parse(localStorage.getItem(saveKey(id))||'null')}catch(e){return null}}
   function setRecord(id,data){localStorage.setItem(saveKey(id),JSON.stringify(data));}
-  function hasPassed(){try{const store=JSON.parse(localStorage.getItem('VOCABULARY_TESTED_V1_'+scope)||'{}');return Boolean(store['writing-task-1::maps']?.passed)}catch(e){return false}}
+  const phase3AccessKey='MAPS_PHASE3_ACCESS_'+scope;
+  function hasPassed(){
+    try{
+      const store=JSON.parse(localStorage.getItem('VOCABULARY_TESTED_V1_'+scope)||'{}');
+      if(Boolean(store['writing-task-1::maps']?.passed)) return true;
+      return sessionStorage.getItem(phase3AccessKey)==='1';
+    }catch(e){
+      return sessionStorage.getItem(phase3AccessKey)==='1';
+    }
+  }
   function countWords(s){return (String(s||'').trim().match(/\S+/g)||[]).length}
   const endpoint=String(window.MAPS_GRADER_ENDPOINT||'').trim();
   function fillStudent(){try{const st=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');if(st?.name)$('studentInfo').textContent=st.name+(st.className?' · '+st.className:'');}catch(e){}}
+  function goBackToMaps(){
+    try{
+      if(document.referrer && document.referrer.includes('/Test/Practice/Vocabulary/')){
+        history.back();
+        return;
+      }
+    }catch(e){}
+    location.href='/Test/Practice/Vocabulary/index.html';
+  }
   function renderCatalog(){
     const submitted=tasks.filter(t=>getRecord(t.id)?.submissions?.length).length;
     $('progressCount').textContent=submitted+'/'+tasks.length+' bài đã nộp';
@@ -131,6 +149,7 @@
     submitting=false;$('submitBtn').disabled=false;$('submitBtn').textContent='Nộp lại bài & nhận xét →';
     $('feedback').scrollIntoView({behavior:'smooth',block:'start'});
   }
+  $('backToMaps').addEventListener('click',goBackToMaps);
   $('taskGrid').addEventListener('click',e=>{const card=e.target.closest('[data-task]');if(card)openTask(card.dataset.task)});
   $('backCatalog').addEventListener('click',backToCatalog);
   $('saveBtn').addEventListener('click',()=>saveDraft());
