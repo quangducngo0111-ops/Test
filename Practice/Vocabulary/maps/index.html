@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#281260">
 
-<title>Writing Task 1 · Maps · Phase 3</title>
+<title>Writing Task 1 · Maps · Phase 3 · Sentence Practice</title>
 
 <style>
 :root{
@@ -737,6 +737,51 @@ textarea:focus-visible{
 }
 
 /* =========================================================
+   SENTENCE NAVIGATION
+========================================================= */
+
+.sentenceNav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin:12px 0 2px;
+}
+
+.sentenceNav button{
+  border:1px solid var(--line);
+  background:#fff;
+  color:#4b3786;
+  border-radius:9px;
+  padding:8px 10px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.sentenceNav button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.sentenceProgress{
+  font-size:11px;
+  font-weight:950;
+  color:#5e48ac;
+  text-align:center;
+}
+
+.sentenceTarget{
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px dashed #cfc5f8;
+  background:#fbfaff;
+  border-radius:10px;
+  color:#4d4074;
+  font-size:11px;
+  line-height:1.55;
+}
+
+/* =========================================================
    WRITING
 ========================================================= */
 
@@ -768,7 +813,7 @@ textarea{
 
   width:100%;
 
-  min-height:360px;
+  min-height:180px;
 
   resize:vertical;
 
@@ -1310,14 +1355,13 @@ footer{
     </div>
 
     <h1>
-      Luyện viết Maps theo bản đồ
+      Luyện viết từng câu theo bản đồ
     </h1>
 
     <p>
-      Quan sát các sơ đồ trong tài liệu,
-      viết một bài miêu tả vị trí và bố cục.
-      Hệ thống tự lưu bài làm và nhận xét
-      ngay sau khi nộp.
+      Quan sát sơ đồ và luyện diễn đạt từng thông tin bằng một câu tiếng Anh.
+      Mỗi lần chỉ cần viết 1 câu; không cần viết mở bài, overview hay một bài hoàn chỉnh.
+      Hệ thống tự lưu câu nháp và nhận xét ngay sau khi nộp.
     </p>
 
   </section>
@@ -1376,11 +1420,11 @@ footer{
       <div>
 
         <b>
-          Luyện viết
+          Luyện viết câu
         </b>
 
         <small>
-          13 sơ đồ gốc từ tài liệu
+          Viết từng câu ngắn theo thông tin trên bản đồ
         </small>
 
       </div>
@@ -1423,12 +1467,12 @@ footer{
       <div>
 
         <h2>
-          Chọn bài luyện viết
+          Chọn bản đồ để luyện câu
         </h2>
 
         <p>
-          Mỗi sơ đồ là một bài riêng.
-          Có thể nộp bài, nhận xét và làm lại.
+          Mỗi bản đồ gồm nhiều câu luyện nhỏ.
+          Hoàn thành từng câu, nhận phản hồi rồi chuyển sang câu tiếp theo.
         </p>
 
       </div>
@@ -1438,7 +1482,7 @@ footer{
         class="count"
         id="progressCount"
       >
-        0/13 bài đã nộp
+        0 câu đã hoàn thành
       </div>
 
     </div>
@@ -1519,6 +1563,33 @@ footer{
           id="taskInstruction"
         ></div>
 
+        <div class="sentenceTarget" id="sentenceTarget"></div>
+
+        <div class="sentenceNav">
+
+          <button
+            id="prevSentence"
+            type="button"
+          >
+            ← Câu trước
+          </button>
+
+          <span
+            class="sentenceProgress"
+            id="sentenceProgress"
+          >
+            Câu 1/1
+          </span>
+
+          <button
+            id="nextSentence"
+            type="button"
+          >
+            Câu tiếp →
+          </button>
+
+        </div>
+
 
         <div class="phraseBox">
 
@@ -1541,14 +1612,14 @@ footer{
         <div class="writingtop">
 
           <h3>
-            Bài viết của em
+            Câu của em
           </h3>
 
           <span
             class="counter"
             id="wordCount"
           >
-            0 từ
+            0 từ · 0 câu
           </span>
 
         </div>
@@ -1556,8 +1627,8 @@ footer{
 
         <textarea
           id="essay"
-          placeholder="The map illustrates..."
-          aria-label="Bài luyện viết Maps"
+          placeholder="Viết 1 câu tiếng Anh mô tả thông tin được yêu cầu..."
+          aria-label="Câu luyện viết Maps"
         ></textarea>
 
 
@@ -1565,7 +1636,7 @@ footer{
           class="status"
           id="saveStatus"
         >
-          Bản nháp được tự động lưu trên trình duyệt.
+          Câu nháp được tự động lưu trên trình duyệt.
         </div>
 
 
@@ -1576,7 +1647,7 @@ footer{
             class="btn"
             type="button"
           >
-            Lưu bản nháp
+            Lưu câu nháp
           </button>
 
 
@@ -1585,7 +1656,7 @@ footer{
             class="btn primary"
             type="button"
           >
-            Nộp bài & nhận xét →
+            Nộp câu & nhận xét →
           </button>
 
         </div>
@@ -1627,9 +1698,9 @@ footer{
 
 
 <footer>
-  Writing Task 1 · Maps ·
-  Phản hồi tự động phục vụ luyện tập;
-  không thay thế giám khảo IELTS.
+  Writing Task 1 · Maps · Sentence Practice ·
+  Phản hồi tự động phục vụ luyện tập câu;
+  không phải điểm IELTS chính thức.
 </footer>
 
 
@@ -1703,6 +1774,10 @@ footer{
 
   let current =
     null;
+
+
+  let currentFactIndex =
+    0;
 
 
   let saveTimeout =
@@ -1791,7 +1866,7 @@ footer{
 
   const saveKey =
     id =>
-      "MAPS_WRITING_V1_"
+      "MAPS_SENTENCE_PRACTICE_V1_"
       +
       scope
       +
@@ -2050,7 +2125,7 @@ footer{
 
   const endpoint =
     String(
-      window.MAPS_GRADER_ENDPOINT
+      window.MAPS_SENTENCE_GRADER_ENDPOINT
       ||
       ""
     )
@@ -2097,34 +2172,214 @@ footer{
   }
 
 
+  function taskFacts(task){
+
+    if(
+      Array.isArray(task?.facts)
+      &&
+      task.facts.length
+    ){
+
+      return task.facts;
+
+    }
+
+    return [
+      {
+        label:"Mô tả một thông tin nổi bật trên sơ đồ.",
+        keywords:[],
+        places:[]
+      }
+    ];
+
+  }
+
+
+  function submittedIndexes(record){
+
+    const submissions =
+      record?.sentenceSubmissions
+      ||
+      {};
+
+    return Object.keys(submissions)
+      .filter(
+        key =>
+          Array.isArray(submissions[key])
+          &&
+          submissions[key].length
+      )
+      .map(Number);
+
+  }
+
+
+  function completedSentenceCount(task){
+
+    const record =
+      getRecord(task.id);
+
+    return submittedIndexes(record)
+      .filter(
+        index =>
+          index >= 0
+          &&
+          index < taskFacts(task).length
+      )
+      .length;
+
+  }
+
+
+  function countSentences(value){
+
+    const clean =
+      String(value || "")
+      .trim();
+
+    if(
+      !clean
+    ){
+
+      return 0;
+
+    }
+
+    const chunks =
+      clean
+      .split(
+        /(?:[.!?]+(?=\s|$)|\n+)/
+      )
+      .map(
+        item =>
+          item.trim()
+      )
+      .filter(Boolean);
+
+    return Math.max(
+      chunks.length,
+      1
+    );
+
+  }
+
+
+  function sentenceCounterText(value){
+
+    const words =
+      countWords(value);
+
+    const sentences =
+      countSentences(value);
+
+    return (
+      words
+      +
+      " từ · "
+      +
+      sentences
+      +
+      (
+        sentences === 1
+        ?
+        " câu"
+        :
+        " câu"
+      )
+    );
+
+  }
+
+
+  function currentFact(){
+
+    const facts =
+      taskFacts(current);
+
+    return facts[
+      Math.min(
+        Math.max(
+          currentFactIndex,
+          0
+        ),
+        facts.length - 1
+      )
+    ];
+
+  }
+
+
+  function factPlaces(fact){
+
+    return (
+      Array.isArray(fact?.places)
+      ?
+      fact.places
+      :
+      []
+    )
+    .map(
+      item =>
+        String(item || "").trim()
+    )
+    .filter(Boolean);
+
+  }
+
+
+  function factKeywords(fact){
+
+    return (
+      Array.isArray(fact?.keywords)
+      ?
+      fact.keywords
+      :
+      []
+    )
+    .map(
+      item =>
+        String(item || "").trim()
+    )
+    .filter(Boolean);
+
+  }
+
+
   /* =======================================================
      CATALOG
   ======================================================= */
 
   function renderCatalog(){
 
-    const submitted =
-      tasks
-      .filter(
-        task =>
-          getRecord(
-            task.id
-          )
-          ?.submissions
-          ?.length
-      )
-      .length;
+    const totalSentences =
+      tasks.reduce(
+        (sum,task) =>
+          sum
+          +
+          taskFacts(task).length,
+        0
+      );
+
+
+    const completedSentences =
+      tasks.reduce(
+        (sum,task) =>
+          sum
+          +
+          completedSentenceCount(task),
+        0
+      );
 
 
     $("progressCount")
       .textContent =
-      submitted
+      completedSentences
       +
       "/"
       +
-      tasks.length
+      totalSentences
       +
-      " bài đã nộp";
+      " câu đã hoàn thành";
 
 
     $("taskGrid")
@@ -2133,29 +2388,28 @@ footer{
       .map(
         task => {
 
+          const total =
+            taskFacts(task).length;
+
+          const done =
+            completedSentenceCount(task);
+
           const record =
-            getRecord(
-              task.id
-            );
+            getRecord(task.id);
 
-
-          const last =
-            record
-            ?.submissions
-            ?.at(-1);
-
-
-          const saved =
+          const hasDraft =
             Boolean(
-              last
+              record?.drafts
+              &&
+              Object.values(record.drafts)
+                .some(
+                  value =>
+                    String(value || "").trim()
+                )
             );
 
-
-          const draft =
-            Boolean(
-              record?.draft
-            );
-
+          const complete =
+            done >= total;
 
           return `
             <button
@@ -2175,7 +2429,7 @@ footer{
                 <span class="tasknum">
                   MAP ${String(task.number).padStart(2,"0")}
                   ·
-                  ${escapeHTML(task.type)}
+                  ${escapeHTML(task.type || "Maps")}
                 </span>
 
                 <strong>
@@ -2184,15 +2438,19 @@ footer{
 
                 <small>
                   ${
-                    saved
+                    complete
                     ?
-                    "Đã nộp · có thể xem lại và sửa bài"
+                    "Đã hoàn thành tất cả câu luyện"
                     :
-                    draft
+                    done
                     ?
-                    "Có bản nháp chưa nộp"
+                    `Đã hoàn thành ${done}/${total} câu`
                     :
-                    "Bài viết theo sơ đồ thực tế"
+                    hasDraft
+                    ?
+                    "Có câu nháp chưa nộp"
+                    :
+                    `${total} câu luyện ngắn theo bản đồ`
                   }
                 </small>
 
@@ -2200,7 +2458,7 @@ footer{
 
                   <span
                     class="pill ${
-                      saved
+                      complete
                       ?
                       "done"
                       :
@@ -2208,20 +2466,20 @@ footer{
                     }"
                   >
                     ${
-                      saved
+                      complete
                       ?
-                      "✓ Đã nộp"
+                      "✓ Hoàn thành"
                       :
-                      draft
+                      done
                       ?
-                      "◐ Bản nháp"
+                      `${done}/${total} câu`
                       :
                       "Chưa làm"
                     }
                   </span>
 
                   <span>
-                    Mở bài →
+                    Luyện câu →
                   </span>
 
                 </span>
@@ -2264,6 +2522,45 @@ footer{
       task;
 
 
+    const record =
+      getRecord(id)
+      ||
+      {};
+
+
+    const facts =
+      taskFacts(task);
+
+
+    const completed =
+      new Set(
+        submittedIndexes(record)
+      );
+
+
+    const firstIncomplete =
+      facts.findIndex(
+        (_,index) =>
+          !completed.has(index)
+      );
+
+
+    currentFactIndex =
+      Number.isInteger(record.lastFactIndex)
+      &&
+      record.lastFactIndex >= 0
+      &&
+      record.lastFactIndex < facts.length
+      ?
+      record.lastFactIndex
+      :
+      firstIncomplete >= 0
+      ?
+      firstIncomplete
+      :
+      0;
+
+
     $("catalog")
       .classList
       .add(
@@ -2283,19 +2580,6 @@ footer{
       task.title;
 
 
-    $("taskNumber")
-      .textContent =
-      "Bài "
-      +
-      String(
-        task.number
-      )
-      .padStart(
-        2,
-        "0"
-      );
-
-
     $("taskImage").src =
       task.image;
 
@@ -2306,19 +2590,15 @@ footer{
       task.title;
 
 
-    $("taskPrompt")
-      .textContent =
-      task.prompt;
-
-
-    $("taskInstruction")
-      .textContent =
-      task.instruction;
-
-
     $("phraseList")
       .innerHTML =
-      task.suggestions
+      (
+        Array.isArray(task.suggestions)
+        ?
+        task.suggestions
+        :
+        []
+      )
       .map(
         item =>
           `
@@ -2333,39 +2613,176 @@ footer{
       .join("");
 
 
-    const saved =
-      getRecord(
-        id
+    renderSentenceDrill();
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+
+
+  function renderSentenceDrill(){
+
+    if(
+      !current
+    ){
+
+      return;
+
+    }
+
+
+    const facts =
+      taskFacts(current);
+
+
+    currentFactIndex =
+      Math.min(
+        Math.max(
+          currentFactIndex,
+          0
+        ),
+        facts.length - 1
       );
 
 
+    const fact =
+      currentFact();
+
+
+    const places =
+      factPlaces(fact);
+
+
+    const record =
+      getRecord(current.id)
+      ||
+      {};
+
+
+    const submissions =
+      record?.sentenceSubmissions?.[
+        currentFactIndex
+      ]
+      ||
+      [];
+
+
+    const last =
+      submissions.at(-1);
+
+
+    const draft =
+      record?.drafts?.[
+        currentFactIndex
+      ];
+
+
+    $("taskNumber")
+      .textContent =
+      "Map "
+      +
+      String(
+        current.number
+      )
+      .padStart(
+        2,
+        "0"
+      )
+      +
+      " · Câu "
+      +
+      (
+        currentFactIndex + 1
+      )
+      +
+      "/"
+      +
+      facts.length;
+
+
+    $("taskPrompt")
+      .textContent =
+      "Quan sát kỹ sơ đồ và viết đúng 1 câu tiếng Anh cho yêu cầu bên dưới.";
+
+
+    $("taskInstruction")
+      .textContent =
+      places.length
+      ?
+      "Mô tả chính xác thông tin liên quan đến: "
+      +
+      places.join(" · ")
+      +
+      "."
+      :
+      "Mô tả một thông tin cụ thể trên bản đồ theo gợi ý của câu luyện này.";
+
+
+    $("sentenceTarget")
+      .textContent =
+      "Mục tiêu: 1 câu hoàn chỉnh, đúng thông tin trên bản đồ và có ít nhất một cấu trúc miêu tả vị trí/thay đổi phù hợp. Không cần Introduction, Overview hay đoạn văn.";
+
+
+    $("sentenceProgress")
+      .textContent =
+      "Câu "
+      +
+      (
+        currentFactIndex + 1
+      )
+      +
+      "/"
+      +
+      facts.length;
+
+
+    $("prevSentence")
+      .disabled =
+      currentFactIndex <= 0;
+
+
+    $("nextSentence")
+      .disabled =
+      currentFactIndex >= facts.length - 1;
+
+
     $("essay").value =
-      saved?.draft
+      draft
       ??
-      saved
-        ?.submissions
-        ?.at(-1)
-        ?.essay
+      last?.sentence
       ??
       "";
 
 
     $("wordCount")
       .textContent =
-      countWords(
+      sentenceCounterText(
         $("essay").value
-      )
-      +
-      " từ";
+      );
+
+
+    $("saveStatus")
+      .classList
+      .remove(
+        "error"
+      );
 
 
     $("saveStatus")
       .textContent =
-      saved?.draft
+      draft
       ?
-      "Đã khôi phục bản nháp trước đó."
+      "Đã khôi phục câu nháp trước đó."
       :
-      "Bản nháp được tự động lưu trên trình duyệt.";
+      last
+      ?
+      "Đã khôi phục câu ở lần nộp gần nhất."
+      :
+      "Câu nháp được tự động lưu trên trình duyệt.";
 
 
     $("feedback")
@@ -2374,28 +2791,77 @@ footer{
 
 
     if(
-      saved
-      ?.submissions
-      ?.length
+      last
     ){
-
-      const last =
-        saved.submissions.at(-1);
-
 
       renderFeedback(
         last.feedback,
         last.mode,
-        last.essay,
+        last.sentence,
         last.submittedAt,
         true
       );
 
     }
 
+  }
+
+
+  function switchSentence(nextIndex){
+
+    if(
+      !current
+    ){
+
+      return;
+
+    }
+
+
+    saveDraft(
+      false
+    );
+
+
+    const total =
+      taskFacts(current).length;
+
+
+    currentFactIndex =
+      Math.min(
+        Math.max(
+          nextIndex,
+          0
+        ),
+        total - 1
+      );
+
+
+    const old =
+      getRecord(current.id)
+      ||
+      {};
+
+
+    setRecord(
+      current.id,
+      {
+        ...old,
+        lastFactIndex:
+          currentFactIndex
+      }
+    );
+
+
+    renderSentenceDrill();
+
 
     window.scrollTo({
-      top:0,
+      top:
+        $("workspaceArea")
+        .offsetTop
+        -
+        75,
       behavior:"smooth"
     });
 
@@ -2425,6 +2891,10 @@ footer{
 
     current =
       null;
+
+
+    currentFactIndex =
+      0;
 
 
     renderCatalog();
@@ -2463,14 +2933,25 @@ footer{
       {};
 
 
+    const drafts = {
+      ...(
+        old.drafts
+        ||
+        {}
+      ),
+
+      [currentFactIndex]:
+        $("essay").value
+    };
+
+
     setRecord(
       current.id,
       {
         ...old,
-
-        draft:
-          $("essay").value,
-
+        drafts,
+        lastFactIndex:
+          currentFactIndex,
         savedAt:
           new Date()
           .toISOString()
@@ -2483,8 +2964,15 @@ footer{
     ){
 
       $("saveStatus")
+        .classList
+        .remove(
+          "error"
+        );
+
+
+      $("saveStatus")
         .textContent =
-        "Đã lưu bản nháp trên trình duyệt ✓";
+        "Đã lưu câu nháp trên trình duyệt ✓";
 
     }
 
@@ -2493,88 +2981,82 @@ footer{
 
   /* =======================================================
      LOCAL GRADING
+     Chỉ chấm dấu hiệu phù hợp để luyện 1 câu.
+     Không suy ra band IELTS từ một câu đơn lẻ.
   ======================================================= */
 
   function localGrade(
     task,
-    essay
+    fact,
+    sentence
   ){
 
-    const sentences =
-      essay
-      .split(
-        /[.!?\n]+/
-      )
-      .map(
-        sentence =>
-          sentence
-          .toLowerCase()
-          .trim()
-      )
-      .filter(
-        Boolean
+    const lower =
+      sentence
+      .toLowerCase();
+
+
+    const words =
+      countWords(
+        sentence
       );
 
 
-    const matched =
-      task.facts
-      .map(
-        fact => {
-
-          const hit =
-            sentences
-            .some(
-              sentence =>
-                fact.keywords
-                .some(
-                  keyword =>
-                    sentence
-                    .includes(
-                      keyword.toLowerCase()
-                    )
-                )
-                &&
-                fact.places
-                .some(
-                  place =>
-                    sentence
-                    .includes(
-                      place.toLowerCase()
-                    )
-                )
-            );
-
-
-          return {
-            label:
-              fact.label,
-
-            matched:
-              hit
-          };
-
-        }
+    const places =
+      factPlaces(
+        fact
       );
 
 
-    const coverage =
-      matched
+    const keywords =
+      factKeywords(
+        fact
+      );
+
+
+    const matchedPlaces =
+      places
       .filter(
-        item =>
-          item.matched
-      )
-      .length;
+        place =>
+          lower.includes(
+            place.toLowerCase()
+          )
+      );
 
 
-    const positions = [
+    const matchedKeywords =
+      keywords
+      .filter(
+        keyword =>
+          lower.includes(
+            keyword.toLowerCase()
+          )
+      );
+
+
+    const placeRatio =
+      places.length
+      ?
+      matchedPlaces.length
+      /
+      places.length
+      :
+      1;
+
+
+    const relationHit =
+      keywords.length
+      ?
+      matchedKeywords.length > 0
+      :
+      true;
+
+
+    const commonMapLanguage = [
       "north",
       "south",
       "east",
       "west",
-      "north-east",
-      "north-west",
-      "south-east",
-      "south-west",
       "between",
       "opposite",
       "across from",
@@ -2589,157 +3071,116 @@ footer{
       "middle",
       "corner",
       "end",
-      "runs through",
-      "runs across",
       "located",
-      "situated"
+      "situated",
+      "lies",
+      "lay",
+      "stands",
+      "stood",
+      "occupies",
+      "occupied",
+      "built",
+      "constructed",
+      "replaced",
+      "converted",
+      "removed",
+      "expanded",
+      "extended"
     ];
 
 
-    const used =
-      positions
+    const usedMapLanguage =
+      commonMapLanguage
       .filter(
         phrase =>
-          essay
-          .toLowerCase()
-          .includes(
+          lower.includes(
             phrase
           )
       );
 
 
-    const paragraphs =
-      essay
-      .trim()
-      .split(
-        /\n\s*\n/
+    const startsCapital =
+      /^[A-Z]/.test(
+        sentence.trim()
+      );
+
+
+    const endsPunctuation =
+      /[.!?]$/.test(
+        sentence.trim()
+      );
+
+
+    const oneSentence =
+      countSentences(
+        sentence
       )
-      .filter(
-        Boolean
-      )
-      .length;
+      ===
+      1;
 
 
-    const words =
-      countWords(
-        essay
-      );
+    const usefulLength =
+      words >= 4
+      &&
+      words <= 35;
 
 
-    const overview =
-      /(overall|in general|generally|it is clear|most noticeable|on the whole)/i
-      .test(
-        essay
-      );
-
-
-    const links =
-      /(while|whereas|meanwhile|in contrast|by comparison|furthermore|in addition)/i
-      .test(
-        essay
-      );
-
-
-    const content =
+    const objectScore =
       Math.round(
-        40
+        35
         *
-        coverage
+        placeRatio
+      );
+
+
+    const relationScore =
+      relationHit
+      ?
+      35
+      :
+      0;
+
+
+    const structureChecks = [
+      startsCapital,
+      endsPunctuation,
+      oneSentence,
+      usefulLength
+    ];
+
+
+    const structureScore =
+      Math.round(
+        20
+        *
+        structureChecks
+        .filter(Boolean)
+        .length
         /
-        Math.max(
-          task.facts.length,
-          1
-        )
+        structureChecks.length
       );
 
 
-    const lexical =
+    const languageScore =
       Math.min(
-        25,
-        Math.round(
-          25
-          *
-          Math.min(
-            used.length,
-            6
-          )
-          /
-          6
-        )
+        10,
+        usedMapLanguage.length
+        *
+        5
       );
 
 
-    const cohesion =
+    const score =
       Math.min(
-        20,
-        Math.round(
-          Math.min(
-            sentences.length,
-            5
-          )
-          /
-          5
-          *
-          9
-
-          +
-
-          Math.min(
-            paragraphs,
-            2
-          )
-          /
-          2
-          *
-          5
-
-          +
-
-          (
-            overview
-            ?
-            4
-            :
-            0
-          )
-
-          +
-
-          (
-            links
-            ?
-            2
-            :
-            0
-          )
-        )
+        100,
+        objectScore
+        +
+        relationScore
+        +
+        structureScore
+        +
+        languageScore
       );
-
-
-    const length =
-      Math.min(
-        15,
-        Math.round(
-          15
-          *
-          Math.min(
-            words,
-            150
-          )
-          /
-          150
-        )
-      );
-
-
-    const total =
-      content
-      +
-      lexical
-      +
-      cohesion
-      +
-      length;
 
 
     const strengths =
@@ -2747,33 +3188,57 @@ footer{
 
 
     if(
-      coverage >= 3
+      placeRatio >= 1
     ){
 
       strengths.push(
-        "Đã đề cập được một số vị trí có trong sơ đồ."
+        "Câu đã nhắc đúng các đối tượng/địa điểm chính mà bài luyện yêu cầu."
       );
 
     }
 
 
     if(
-      used.length >= 4
+      relationHit
     ){
 
       strengths.push(
-        "Có sử dụng đa dạng ngôn ngữ miêu tả vị trí."
+        "Câu có dấu hiệu diễn đạt đúng quan hệ hoặc thay đổi chính cần mô tả."
       );
 
     }
 
 
     if(
-      overview
+      startsCapital
+      &&
+      endsPunctuation
+      &&
+      oneSentence
     ){
 
       strengths.push(
-        "Đã có dấu hiệu của câu tổng quan (overview)."
+        "Câu được trình bày gọn thành một câu hoàn chỉnh."
+      );
+
+    }
+
+
+    if(
+      usedMapLanguage.length
+    ){
+
+      strengths.push(
+        "Đã sử dụng ngôn ngữ phù hợp với dạng Maps: "
+        +
+        usedMapLanguage
+        .slice(
+          0,
+          3
+        )
+        .join(", ")
+        +
+        "."
       );
 
     }
@@ -2784,57 +3249,88 @@ footer{
 
 
     if(
-      words < 120
+      placeRatio < 1
     ){
 
       improvements.push(
-        "Viết thêm thông tin quan trọng; mục tiêu tham khảo là khoảng 150 từ."
+        "Kiểm tra lại tên đối tượng/địa điểm cần mô tả và đưa chúng vào câu rõ ràng hơn."
       );
 
     }
 
 
     if(
-      coverage
-      <
-      task.facts.length - 1
+      !relationHit
     ){
 
       improvements.push(
-        "Đối chiếu lại hình và bổ sung các công trình/vị trí chưa được hệ thống nhận diện."
+        "Quan sát lại hướng, vị trí tương đối hoặc thay đổi trên sơ đồ; câu hiện chưa thể hiện rõ quan hệ chính."
       );
 
     }
 
 
     if(
-      used.length < 4
+      words < 4
     ){
 
       improvements.push(
-        "Thử dùng thêm từ chỉ hướng, vị trí tương đối và động từ như be situated, occupy."
+        "Câu còn quá ngắn. Hãy viết đủ chủ ngữ + động từ + thông tin vị trí/thay đổi."
       );
 
     }
 
 
     if(
-      !overview
+      words > 35
     ){
 
       improvements.push(
-        "Bổ sung overview tóm tắt bố cục chính, tránh chỉ liệt kê từng vị trí."
+        "Câu đang khá dài. Hãy giữ một ý chính và diễn đạt gọn trong một câu."
       );
 
     }
 
 
     if(
-      paragraphs < 2
+      !startsCapital
     ){
 
       improvements.push(
-        "Tách thành ít nhất hai đoạn: giới thiệu + tổng quan và phần miêu tả chi tiết."
+        "Viết hoa chữ cái đầu câu."
+      );
+
+    }
+
+
+    if(
+      !endsPunctuation
+    ){
+
+      improvements.push(
+        "Thêm dấu chấm ở cuối câu."
+      );
+
+    }
+
+
+    if(
+      !oneSentence
+    ){
+
+      improvements.push(
+        "Bài luyện này chỉ yêu cầu 1 câu. Hãy tách ý và chỉ giữ lại một câu cho yêu cầu hiện tại."
+      );
+
+    }
+
+
+    if(
+      !usedMapLanguage.length
+    ){
+
+      improvements.push(
+        "Thử dùng một cấu trúc Maps phù hợp như be located, lie, stand, to the north/south/east/west of, next to, between..."
       );
 
     }
@@ -2845,7 +3341,7 @@ footer{
     ){
 
       strengths.push(
-        "Em đã hoàn thành một bản nháp để tiếp tục hoàn thiện."
+        "Em đã bắt đầu diễn đạt thông tin của bản đồ bằng tiếng Anh."
       );
 
     }
@@ -2856,7 +3352,7 @@ footer{
     ){
 
       improvements.push(
-        "Đọc lại bài và kiểm tra từng hướng/vị trí theo ảnh trước khi chốt."
+        "Có thể thử viết lại câu bằng một cấu trúc Maps khác để tăng độ linh hoạt."
       );
 
     }
@@ -2866,47 +3362,36 @@ footer{
 
       type:"local",
 
-      score:total,
+      score,
 
       metrics:[
         {
           label:
-            "Dấu hiệu nội dung bản đồ",
-
+            "Đúng đối tượng",
           value:
-            content,
-
-          max:40
+            objectScore,
+          max:35
         },
-
         {
           label:
-            "Từ ngữ chỉ vị trí",
-
+            "Đúng quan hệ / vị trí",
           value:
-            lexical,
-
-          max:25
+            relationScore,
+          max:35
         },
-
         {
           label:
-            "Tổ chức bài (dấu hiệu)",
-
+            "Hình thức câu",
           value:
-            cohesion,
-
+            structureScore,
           max:20
         },
-
         {
           label:
-            "Độ dài",
-
+            "Ngôn ngữ Maps",
           value:
-            length,
-
-          max:15
+            languageScore,
+          max:10
         }
       ],
 
@@ -2914,13 +3399,41 @@ footer{
 
       improvements,
 
-      matched,
+      matched:[
+        {
+          label:
+            places.length
+            ?
+            "Đối tượng cần có: "
+            +
+            places.join(" · ")
+            :
+            "Đối tượng chính của câu",
+          matched:
+            placeRatio >= 1
+        },
+        {
+          label:
+            fact?.label
+            ?
+            "Thông tin mục tiêu: "
+            +
+            fact.label
+            :
+            "Quan hệ / thay đổi chính của câu",
+          matched:
+            relationHit
+        }
+      ],
+
+      correctedSentence:
+        "",
 
       wordCount:
         words,
 
       note:
-        "Phản hồi dựa trên từ khóa và cấu trúc, không kiểm chứng đầy đủ tính chính xác, ngữ pháp hay band IELTS."
+        "Điểm này chỉ là điểm luyện câu dựa trên dấu hiệu nội dung và hình thức; không phải band IELTS và không thay thế nhận xét ngữ pháp của giáo viên/AI."
 
     };
 
@@ -2929,11 +3442,14 @@ footer{
 
   /* =======================================================
      AI GRADING
+     Dùng endpoint riêng cho sentence practice nếu được cấu hình:
+     window.MAPS_SENTENCE_GRADER_ENDPOINT
   ======================================================= */
 
   async function aiGrade(
     task,
-    essay
+    fact,
+    sentence
   ){
 
     if(
@@ -2953,7 +3469,6 @@ footer{
       setTimeout(
         () =>
           controller.abort(),
-
         25000
       );
 
@@ -2973,10 +3488,25 @@ footer{
 
             body:
               JSON.stringify({
+                mode:
+                  "sentence",
                 taskId:
                   task.id,
-
-                essay
+                factIndex:
+                  currentFactIndex,
+                target:{
+                  label:
+                    fact?.label
+                    ||
+                    "",
+                  keywords:
+                    factKeywords(fact),
+                  places:
+                    factPlaces(fact)
+                },
+                sentence,
+                essay:
+                  sentence
               }),
 
             signal:
@@ -2990,7 +3520,7 @@ footer{
       ){
 
         throw Error(
-          "Máy chủ chấm bài trả về "
+          "Máy chủ chấm câu trả về "
           +
           response.status
         );
@@ -3005,21 +3535,87 @@ footer{
       if(
         !data
         ||
-        data.mode !== "ai"
-        ||
-        typeof data.overall !== "number"
-        ||
-        !data.criteria
+        (
+          typeof data.score !== "number"
+          &&
+          typeof data.overall !== "number"
+        )
       ){
 
         throw Error(
-          "Định dạng phản hồi AI không hợp lệ"
+          "Định dạng phản hồi AI cho câu chưa hợp lệ"
         );
 
       }
 
 
-      return data;
+      const rawScore =
+        typeof data.score === "number"
+        ?
+        data.score
+        :
+        Math.round(
+          Number(data.overall)
+          /
+          9
+          *
+          100
+        );
+
+
+      return {
+        type:"ai",
+        score:
+          Math.max(
+            0,
+            Math.min(
+              100,
+              Math.round(rawScore)
+            )
+          ),
+        metrics:
+          Array.isArray(data.metrics)
+          ?
+          data.metrics
+          :
+          [],
+        strengths:
+          Array.isArray(data.strengths)
+          ?
+          data.strengths
+          :
+          [],
+        improvements:
+          Array.isArray(data.improvements)
+          ?
+          data.improvements
+          :
+          [],
+        matched:
+          Array.isArray(data.matched)
+          ?
+          data.matched
+          :
+          [],
+        correctedSentence:
+          data.correctedSentence
+          ||
+          data.modelSentence
+          ||
+          (
+            Array.isArray(data.exampleSentences)
+            ?
+            data.exampleSentences[0]
+            :
+            ""
+          )
+          ||
+          "",
+        note:
+          data.note
+          ||
+          "AI nhận xét câu dựa trên yêu cầu luyện tập hiện tại; không phải band IELTS."
+      };
 
     }
     finally{
@@ -3040,7 +3636,7 @@ footer{
   function renderFeedback(
     result,
     mode,
-    essay,
+    sentence,
     date,
     isOld = false
   ){
@@ -3058,341 +3654,232 @@ footer{
     }
 
 
-    let html =
-      "";
+    const metrics =
+      Array.isArray(result.metrics)
+      ?
+      result.metrics
+      :
+      [];
 
 
-    if(
-      mode === "ai"
-    ){
+    const matched =
+      Array.isArray(result.matched)
+      ?
+      result.matched
+      :
+      [];
 
-      const criteria =
-        result.criteria
+
+    const corrected =
+      String(
+        result.correctedSentence
         ||
-        {};
+        ""
+      )
+      .trim();
 
 
-      const categories = [
+    const html = `
+      <div class="result ${
+        mode === "ai"
+        ?
+        "ai"
+        :
+        ""
+      }">
 
-        [
-          "Task Achievement",
-          criteria.taskAchievement
-        ],
+        <span class="resultBadge">
+          ${
+            mode === "ai"
+            ?
+            "AI nhận xét câu"
+            :
+            "Nhận xét câu · trên thiết bị"
+          }
+        </span>
 
-        [
-          "Coherence & Cohesion",
-          criteria.coherenceCohesion
-        ],
+        <h3>
+          ${
+            isOld
+            ?
+            "Kết quả lần nộp gần nhất"
+            :
+            "Đã nhận câu của em"
+          }
+        </h3>
 
-        [
-          "Lexical Resource",
-          criteria.lexicalResource
-        ],
+        <div class="scorebig">
 
-        [
-          "Grammar Range & Accuracy",
-          criteria.grammaticalRangeAccuracy
-        ]
+          ${Number(result.score) || 0}
 
-      ];
-
-
-      html = `
-        <div class="result ai">
-
-          <span class="resultBadge">
-            AI nhận xét bài viết
-          </span>
-
-          <h3>
-            ${
-              isOld
-              ?
-              "Kết quả lần nộp trước"
-              :
-              "Đã chấm xong bài viết"
-            }
-          </h3>
-
-          <div class="scorebig">
-
-            ${Number(result.overall).toFixed(1)}
-
-            <small style="font-size:13px">
-              / 9 · band tham khảo
-            </small>
-
-          </div>
-
-          <div class="rubric">
-
-            ${
-              categories
-              .map(
-                ([label,value]) =>
-                  `
-                    <div class="metric">
-
-                      <span>
-                        ${label}
-                      </span>
-
-                      <b>
-                        ${Number(value ?? 0).toFixed(1)}
-                      </b>
-
-                    </div>
-                  `
-              )
-              .join("")
-            }
-
-          </div>
-
-          <h4>
-            Điểm mạnh
-          </h4>
-
-          <ul class="feedbacklist">
-
-            ${
-              (
-                result.strengths
-                ||
-                []
-              )
-              .map(
-                item =>
-                  `<li>${escapeHTML(item)}</li>`
-              )
-              .join("")
-            }
-
-          </ul>
-
-          <h4>
-            Điểm cần cải thiện
-          </h4>
-
-          <ul class="feedbacklist">
-
-            ${
-              (
-                result.improvements
-                ||
-                []
-              )
-              .map(
-                item =>
-                  `<li>${escapeHTML(item)}</li>`
-              )
-              .join("")
-            }
-
-          </ul>
-
-          <h4>
-            Ví dụ diễn đạt tốt hơn
-          </h4>
-
-          <ul class="feedbacklist">
-
-            ${
-              (
-                result.exampleSentences
-                ||
-                []
-              )
-              .map(
-                item =>
-                  `<li>${escapeHTML(item)}</li>`
-              )
-              .join("")
-            }
-
-          </ul>
-
-          <p class="scorehint">
-            Đánh giá AI mang tính tham khảo
-            và dựa trên mô tả sự kiện của bản đồ,
-            không phải điểm IELTS chính thức.
-          </p>
+          <small style="font-size:13px">
+            / 100 · điểm luyện câu
+          </small>
 
         </div>
-      `;
 
-    }
-    else{
+        <p class="scorehint">
+          ${
+            escapeHTML(
+              result.note
+              ||
+              "Không phải band IELTS."
+            )
+          }
+        </p>
 
-      html = `
-        <div class="result">
+        ${
+          metrics.length
+          ?
+          `
+            <div class="rubric">
 
-          <span class="resultBadge">
-            Nhận xét tự động · trên thiết bị
-          </span>
+              ${
+                metrics
+                .map(
+                  item =>
+                    `
+                      <div class="metric">
 
-          <h3>
-            ${
-              isOld
-              ?
-              "Kết quả lần nộp trước"
-              :
-              "Hệ thống đã nhận bài"
-            }
-          </h3>
+                        <span>
+                          ${escapeHTML(item.label)}
+                        </span>
 
-          <div class="scorebig">
+                        <b>
+                          ${Number(item.value) || 0}/${Number(item.max) || 0}
+                        </b>
 
-            ${Number(result.score) || 0}
+                      </div>
+                    `
+                )
+                .join("")
+              }
 
-            <small style="font-size:13px">
-              / 100 · điểm luyện tập
-            </small>
+            </div>
+          `
+          :
+          ""
+        }
 
-          </div>
+        <h4>
+          Câu em đã viết
+        </h4>
 
-          <p class="scorehint">
-            ${
-              escapeHTML(
-                result.note
-                ||
-                "Không phải band IELTS."
-              )
-            }
-          </p>
+        <div class="instruction">
+          ${escapeHTML(sentence)}
+        </div>
 
-          <div class="rubric">
+        <h4>
+          Điểm tốt
+        </h4>
 
-            ${
-              (
-                result.metrics
-                ||
-                []
-              )
-              .map(
-                item =>
-                  `
-                    <div class="metric">
+        <ul class="feedbacklist">
 
-                      <span>
-                        ${escapeHTML(item.label)}
-                      </span>
+          ${
+            (
+              result.strengths
+              ||
+              []
+            )
+            .map(
+              item =>
+                `<li>${escapeHTML(item)}</li>`
+            )
+            .join("")
+          }
 
-                      <b>
-                        ${item.value}/${item.max}
-                      </b>
+        </ul>
 
-                    </div>
-                  `
-              )
-              .join("")
-            }
+        <h4>
+          Cần chỉnh
+        </h4>
 
-          </div>
+        <ul class="feedbacklist">
 
-          <h4>
-            Điểm tốt
-          </h4>
+          ${
+            (
+              result.improvements
+              ||
+              []
+            )
+            .map(
+              item =>
+                `<li>${escapeHTML(item)}</li>`
+            )
+            .join("")
+          }
 
-          <ul class="feedbacklist">
+        </ul>
 
-            ${
-              (
-                result.strengths
-                ||
-                []
-              )
-              .map(
-                item =>
-                  `<li>${escapeHTML(item)}</li>`
-              )
-              .join("")
-            }
-
-          </ul>
-
-          <h4>
-            Hãy cải thiện
-          </h4>
-
-          <ul class="feedbacklist">
-
-            ${
-              (
-                result.improvements
-                ||
-                []
-              )
-              .map(
-                item =>
-                  `<li>${escapeHTML(item)}</li>`
-              )
-              .join("")
-            }
-
-          </ul>
-
-          <div class="coverage">
-
+        ${
+          corrected
+          ?
+          `
             <h4>
-              Những nội dung hệ thống tìm thấy trong bài
+              Gợi ý sửa câu
             </h4>
 
-            ${
-              (
-                result.matched
-                ||
-                []
-              )
-              .map(
-                item =>
-                  `
-                    <div
-                      class="fact ${
-                        item.matched
-                        ?
-                        ""
-                        :
-                        "missing"
-                      }"
-                    >
+            <div class="instruction">
+              ${escapeHTML(corrected)}
+            </div>
+          `
+          :
+          ""
+        }
 
-                      <i>
-                        ${
-                          item.matched
-                          ?
-                          "✓"
-                          :
-                          "○"
-                        }
-                      </i>
+        ${
+          matched.length
+          ?
+          `
+            <div class="coverage">
 
-                      <span>
+              <h4>
+                Đối chiếu yêu cầu câu
+              </h4>
 
-                        ${escapeHTML(item.label)}
-
-                        ${
+              ${
+                matched
+                .map(
+                  item =>
+                    `
+                      <div
+                        class="fact ${
                           item.matched
                           ?
                           ""
                           :
-                          "— có thể cần bổ sung hoặc diễn đạt rõ hơn"
-                        }
+                          "missing"
+                        }"
+                      >
 
-                      </span>
+                        <i>
+                          ${
+                            item.matched
+                            ?
+                            "✓"
+                            :
+                            "○"
+                          }
+                        </i>
 
-                    </div>
-                  `
-              )
-              .join("")
-            }
+                        <span>
+                          ${escapeHTML(item.label)}
+                        </span>
 
-          </div>
+                      </div>
+                    `
+                )
+                .join("")
+              }
 
-        </div>
-      `;
+            </div>
+          `
+          :
+          ""
+        }
 
-    }
+      </div>
+    `;
 
 
     $("feedback")
@@ -3406,7 +3893,7 @@ footer{
      SUBMIT
   ======================================================= */
 
-  async function submitEssay(){
+  async function submitSentence(){
 
     if(
       !current
@@ -3419,7 +3906,7 @@ footer{
     }
 
 
-    const essay =
+    const sentence =
       $("essay")
       .value
       .trim();
@@ -3427,17 +3914,48 @@ footer{
 
     const words =
       countWords(
-        essay
+        sentence
+      );
+
+
+    const sentenceCount =
+      countSentences(
+        sentence
       );
 
 
     if(
-      words < 60
+      words < 4
     ){
 
       $("saveStatus")
         .textContent =
-        "Hãy viết ít nhất 60 từ trước khi nộp (gợi ý: khoảng 150 từ).";
+        "Hãy viết một câu hoàn chỉnh trước khi nộp (ít nhất khoảng 4 từ).";
+
+
+      $("saveStatus")
+        .classList
+        .add(
+          "error"
+        );
+
+
+      $("essay")
+        .focus();
+
+
+      return;
+
+    }
+
+
+    if(
+      sentenceCount !== 1
+    ){
+
+      $("saveStatus")
+        .textContent =
+        "Phase 3 này luyện từng câu: hãy chỉ nộp 1 câu cho yêu cầu hiện tại.";
 
 
       $("saveStatus")
@@ -3476,9 +3994,13 @@ footer{
       .textContent =
       endpoint
       ?
-      "Đang gửi chấm AI..."
+      "Đang gửi chấm câu..."
       :
-      "Đang nhận xét...";
+      "Đang nhận xét câu...";
+
+
+    const fact =
+      currentFact();
 
 
     let result =
@@ -3502,7 +4024,8 @@ footer{
         result =
           await aiGrade(
             current,
-            essay
+            fact,
+            sentence
           );
 
 
@@ -3513,7 +4036,7 @@ footer{
       catch(error){
 
         warning =
-          "Máy chủ AI chưa kết nối được. Đã chuyển sang nhận xét cơ bản trên trình duyệt.";
+          "Máy chủ AI chấm câu chưa kết nối được. Đã chuyển sang nhận xét cơ bản trên trình duyệt.";
 
 
         console.warn(
@@ -3532,7 +4055,8 @@ footer{
       result =
         localGrade(
           current,
-          essay
+          fact,
+          sentence
         );
 
 
@@ -3555,36 +4079,57 @@ footer{
       {};
 
 
+    const previousForSentence =
+      old?.sentenceSubmissions?.[
+        currentFactIndex
+      ]
+      ||
+      [];
+
+
+    const sentenceSubmissions = {
+      ...(
+        old.sentenceSubmissions
+        ||
+        {}
+      ),
+
+      [currentFactIndex]:[
+        ...previousForSentence,
+        {
+          sentence,
+          submittedAt:
+            now,
+          feedback:
+            result,
+          mode
+        }
+      ]
+    };
+
+
+    const drafts = {
+      ...(
+        old.drafts
+        ||
+        {}
+      ),
+
+      [currentFactIndex]:
+        sentence
+    };
+
+
     setRecord(
       current.id,
       {
         ...old,
-
-        draft:
-          essay,
-
+        drafts,
+        sentenceSubmissions,
+        lastFactIndex:
+          currentFactIndex,
         savedAt:
-          now,
-
-        submissions:[
-          ...(
-            old.submissions
-            ||
-            []
-          ),
-
-          {
-            essay,
-
-            submittedAt:
-              now,
-
-            feedback:
-              result,
-
-            mode
-          }
-        ]
+          now
       }
     );
 
@@ -3592,7 +4137,7 @@ footer{
     renderFeedback(
       result,
       mode,
-      essay,
+      sentence,
       now
     );
 
@@ -3601,7 +4146,7 @@ footer{
       .textContent =
       warning
       ||
-      "Đã nộp và lưu kết quả vào trình duyệt ✓";
+      "Đã nộp câu và lưu kết quả ✓";
 
 
     submitting =
@@ -3615,7 +4160,10 @@ footer{
 
     $("submitBtn")
       .textContent =
-      "Nộp lại bài & nhận xét →";
+      "Nộp lại câu & nhận xét →";
+
+
+    renderCatalog();
 
 
     $("feedback")
@@ -3674,7 +4222,27 @@ footer{
   $("submitBtn")
     .addEventListener(
       "click",
-      submitEssay
+      submitSentence
+    );
+
+
+  $("prevSentence")
+    .addEventListener(
+      "click",
+      () =>
+        switchSentence(
+          currentFactIndex - 1
+        )
+    );
+
+
+  $("nextSentence")
+    .addEventListener(
+      "click",
+      () =>
+        switchSentence(
+          currentFactIndex + 1
+        )
     );
 
 
@@ -3685,11 +4253,9 @@ footer{
 
         $("wordCount")
           .textContent =
-          countWords(
+          sentenceCounterText(
             $("essay").value
-          )
-          +
-          " từ";
+          );
 
 
         $("saveStatus")
@@ -3701,7 +4267,7 @@ footer{
 
         $("saveStatus")
           .textContent =
-          "Đang viết...";
+          "Đang viết câu...";
 
 
         clearTimeout(
@@ -3896,11 +4462,11 @@ footer{
     Vocabulary page bên ngoài vẫn quản lý điều kiện
     Phase 1 → Phase 2 → Phase 3.
 
-    Trang luyện viết này KHÔNG tự đẩy học sinh
+    Trang luyện câu này KHÔNG tự đẩy học sinh
     quay ra ngoài nữa nếu localStorage cũ bị lệch scope.
 
-    Nhờ vậy học sinh đã bấm "Luyện viết theo bản đồ"
-    sẽ luôn vào đúng danh sách bài viết.
+    Nhờ vậy học sinh đã mở Phase 3
+    sẽ luôn vào đúng danh sách luyện câu.
   */
 
   try{
