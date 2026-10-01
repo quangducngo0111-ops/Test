@@ -2960,7 +2960,7 @@ footer{
     ){
 
       const feedbackToShow =
-        last?.feedback?.gradeVersion === "safe-v2"
+        last?.feedback?.gradeVersion === "sentence-v3"
         ?
         last.feedback
         :
@@ -2973,7 +2973,7 @@ footer{
 
       renderFeedback(
         feedbackToShow,
-        last?.feedback?.gradeVersion === "safe-v2"
+        last?.feedback?.gradeVersion === "sentence-v3"
         ?
         last.mode
         :
@@ -3227,43 +3227,58 @@ footer{
   function normalizeRelationName(value){
 
     const text = normalizeMapText(value)
-      .replace(/\bnorth eastern\b/g,"north-east")
-      .replace(/\bnorth western\b/g,"north-west")
-      .replace(/\bsouth eastern\b/g,"south-east")
-      .replace(/\bsouth western\b/g,"south-west");
+      .replace(/\bnorth eastern\b/g,"north-eastern")
+      .replace(/\bnorth western\b/g,"north-western")
+      .replace(/\bsouth eastern\b/g,"south-eastern")
+      .replace(/\bsouth western\b/g,"south-western")
+      .replace(/\bnortheastern\b/g,"north-eastern")
+      .replace(/\bnorthwestern\b/g,"north-western")
+      .replace(/\bsoutheastern\b/g,"south-eastern")
+      .replace(/\bsouthwestern\b/g,"south-western");
 
+    /*
+      Các mẫu cụ thể phải đứng trước mẫu chung.
+      Đặc biệt chấp nhận cả:
+      - in the north-eastern corner of ...
+      - occupies the north-eastern corner of ...
+      - lies in the north-east corner of ...
+    */
     const rules = [
-      [/(?:to\s+the\s+)?north[- ]?west\s+of/,"north_west_of"],
-      [/(?:to\s+the\s+)?north[- ]?east\s+of/,"north_east_of"],
-      [/(?:to\s+the\s+)?south[- ]?west\s+of/,"south_west_of"],
-      [/(?:to\s+the\s+)?south[- ]?east\s+of/,"south_east_of"],
-      [/(?:to\s+the\s+)?north\s+of/,"north_of"],
-      [/(?:to\s+the\s+)?south\s+of/,"south_of"],
-      [/(?:to\s+the\s+)?east\s+of/,"east_of"],
-      [/(?:to\s+the\s+)?west\s+of/,"west_of"],
-      [/across\s+from/,"opposite"],
-      [/opposite(?:\s+to)?/,"opposite"],
-      [/adjacent\s+to/,"next_to"],
-      [/next\s+to/,"next_to"],
-      [/beside/,"next_to"],
-      [/alongside/,"alongside"],
-      [/between/,"between"],
-      [/surrounded\s+by/,"surrounded_by"],
-      [/enclosed\s+by/,"surrounded_by"],
-      [/bordered\s+by/,"bordered_by"],
-      [/in\s+the\s+north[- ]?western\s+(?:part|corner)\s+of/,"north_west_in"],
-      [/in\s+the\s+north[- ]?eastern\s+(?:part|corner)\s+of/,"north_east_in"],
-      [/in\s+the\s+south[- ]?western\s+(?:part|corner)\s+of/,"south_west_in"],
-      [/in\s+the\s+south[- ]?eastern\s+(?:part|corner)\s+of/,"south_east_in"],
-      [/in\s+the\s+northern\s+(?:part|side)\s+of/,"north_in"],
-      [/in\s+the\s+southern\s+(?:part|side)\s+of/,"south_in"],
-      [/in\s+the\s+eastern\s+(?:part|side)\s+of/,"east_in"],
-      [/in\s+the\s+western\s+(?:part|side)\s+of/,"west_in"],
-      [/in\s+the\s+(?:centre|center|middle)\s+of/,"centre_in"],
-      [/at\s+the\s+(?:centre|center)\s+of/,"centre_in"],
-      [/along\b/,"along"],
-      [/runs?\s+through/,"through"],
-      [/passes?\s+through/,"through"]
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+north(?:-| )?(?:east|eastern)\s+(?:part|corner|side)\s+of\b/,"north_east_in"],
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+north(?:-| )?(?:west|western)\s+(?:part|corner|side)\s+of\b/,"north_west_in"],
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+south(?:-| )?(?:east|eastern)\s+(?:part|corner|side)\s+of\b/,"south_east_in"],
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+south(?:-| )?(?:west|western)\s+(?:part|corner|side)\s+of\b/,"south_west_in"],
+
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:north|northern)\s+(?:part|corner|side|end)\s+of\b/,"north_in"],
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:south|southern)\s+(?:part|corner|side|end)\s+of\b/,"south_in"],
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:east|eastern)\s+(?:part|corner|side|end)\s+of\b/,"east_in"],
+      [/\b(?:in\s+|at\s+|on\s+)?the\s+(?:west|western)\s+(?:part|corner|side|end)\s+of\b/,"west_in"],
+
+      [/\b(?:to\s+the\s+)?north(?:-| )?west\s+of\b/,"north_west_of"],
+      [/\b(?:to\s+the\s+)?north(?:-| )?east\s+of\b/,"north_east_of"],
+      [/\b(?:to\s+the\s+)?south(?:-| )?west\s+of\b/,"south_west_of"],
+      [/\b(?:to\s+the\s+)?south(?:-| )?east\s+of\b/,"south_east_of"],
+      [/\b(?:to\s+the\s+)?north\s+of\b/,"north_of"],
+      [/\b(?:to\s+the\s+)?south\s+of\b/,"south_of"],
+      [/\b(?:to\s+the\s+)?east\s+of\b/,"east_of"],
+      [/\b(?:to\s+the\s+)?west\s+of\b/,"west_of"],
+
+      [/\bacross\s+from\b/,"opposite"],
+      [/\bopposite(?:\s+to)?\b/,"opposite"],
+      [/\badjacent\s+to\b/,"next_to"],
+      [/\bnext\s+to\b/,"next_to"],
+      [/\bbeside\b/,"next_to"],
+      [/\balongside\b/,"alongside"],
+      [/\bmidway\s+between\b/,"between"],
+      [/\bbetween\b/,"between"],
+      [/\bsurrounded\s+by\b/,"surrounded_by"],
+      [/\benclosed\s+by\b/,"surrounded_by"],
+      [/\bbordered\s+by\b/,"bordered_by"],
+      [/\b(?:in\s+|at\s+)?the\s+(?:centre|center|middle)\s+of\b/,"centre_in"],
+      [/\bnear\b|\bclose\s+to\b/,"near"],
+      [/\balong\b/,"along"],
+      [/\bruns?\s+(?:through|across)\b/,"through"],
+      [/\bpasses?\s+through\b/,"through"]
     ];
 
     for(const [regex,name] of rules){
@@ -3275,7 +3290,6 @@ footer{
     return "";
 
   }
-
 
   function oppositeRelation(relation){
 
@@ -3502,18 +3516,20 @@ footer{
       clean
     );
 
-    const formGood = startsCapital && endsPunctuation && oneSentence && usefulLength;
-
     let status = "plausible";
 
-    if(!targetPresent || !oneSentence || words < 4 || verification.verdict === "missing"){
+    if(!targetPresent || !oneSentence || words < 4){
       status = "needs_fix";
     }
-    else if(verification.verdict === "incorrect"){
+    else if(verification.verdict === "incorrect" || verification.verdict === "missing"){
       status = "needs_fix";
     }
-    else if(verification.verdict === "correct" && formGood){
+    else if(verification.verdict === "correct" && startsCapital && endsPunctuation && usefulLength){
       status = "correct";
+    }
+    else if(verification.verdict === "correct"){
+      /* Nội dung đúng nhưng còn lỗi hình thức nhỏ. */
+      status = "plausible";
     }
     else if(verification.verdict === "uncertain"){
       status = "uncertain";
@@ -3522,35 +3538,27 @@ footer{
     const strengths = [];
     const improvements = [];
 
-    if(targetPresent && target){
-      strengths.push(`Đã mô tả đúng đối tượng được yêu cầu: ${target}.`);
-    }
-
     if(verification.verdict === "correct"){
-      strengths.push("Quan hệ/vị trí trong câu khớp với dữ liệu bản đồ đã được xác minh.");
+      strengths.push("Vị trí được miêu tả chính xác.");
     }
     else if(verification.verdict === "plausible"){
-      strengths.push("Câu sử dụng một quan hệ Maps hợp lệ và hệ thống không phát hiện mâu thuẫn chắc chắn.");
-    }
-
-    if(oneSentence && usefulLength){
-      strengths.push("Câu gọn và đúng yêu cầu luyện một câu.");
+      strengths.push("Câu dùng cấu trúc miêu tả vị trí hợp lệ.");
     }
 
     if(!targetPresent){
       improvements.push(
         target
-        ? `Hãy đưa đúng đối tượng “${target}” vào câu.`
-        : "Hãy nêu rõ đối tượng cần mô tả trong câu."
+        ? `Hãy miêu tả đúng đối tượng “${target}”.`
+        : "Hãy nêu rõ đối tượng cần miêu tả."
       );
     }
 
     if(verification.verdict === "missing"){
-      improvements.push("Hãy thêm quan hệ vị trí rõ ràng, ví dụ: to the west of, next to, opposite, in the northern part of...");
+      improvements.push("Hãy dùng một cụm từ chỉ vị trí rõ ràng.");
     }
 
     if(verification.verdict === "incorrect"){
-      improvements.push("Quan hệ vị trí này mâu thuẫn với dữ liệu bản đồ đã khai báo. Hãy quan sát lại hướng/vị trí so với mốc tham chiếu.");
+      improvements.push("Vị trí trong câu chưa khớp với bản đồ. Hãy quan sát lại hướng hoặc mốc tham chiếu.");
     }
 
     if(!startsCapital){
@@ -3562,55 +3570,16 @@ footer{
     }
 
     if(!oneSentence){
-      improvements.push("Bài luyện này chỉ yêu cầu 1 câu.");
+      improvements.push("Bài này chỉ cần viết 1 câu.");
     }
 
     if(words > 35){
-      improvements.push("Câu hơi dài; nên giữ một quan hệ vị trí chính trong câu này.");
+      improvements.push("Câu hơi dài; hãy viết gọn hơn.");
     }
-
-    if(!improvements.length && verification.verdict === "plausible"){
-      improvements.push("Không cần sửa chỉ vì câu khác đáp án mẫu. Nếu muốn xác minh tuyệt đối, cần khai báo thêm validFacts cho bản đồ này.");
-    }
-
-    if(!improvements.length && verification.verdict === "correct"){
-      improvements.push("Câu hiện ổn. Em có thể thử diễn đạt lại bằng một cấu trúc Maps khác.");
-    }
-
-    const checks = [
-      {
-        label: target
-          ? `Đúng đối tượng: ${target}`
-          : "Đúng đối tượng",
-        state: targetPresent ? "ok" : "bad"
-      },
-      {
-        label:
-          verification.verdict === "correct"
-          ? "Vị trí: đã xác minh đúng"
-          : verification.verdict === "plausible"
-          ? "Vị trí: cách diễn đạt khác, không phát hiện mâu thuẫn"
-          : verification.verdict === "incorrect"
-          ? "Vị trí: có mâu thuẫn với dữ liệu đã khai báo"
-          : verification.verdict === "missing"
-          ? "Vị trí: chưa diễn đạt rõ"
-          : "Vị trí: chưa đủ dữ liệu để xác minh",
-        state:
-          verification.verdict === "correct"
-          ? "ok"
-          : verification.verdict === "incorrect" || verification.verdict === "missing"
-          ? "bad"
-          : "neutral"
-      },
-      {
-        label:"Một câu hoàn chỉnh",
-        state: formGood ? "ok" : "neutral"
-      }
-    ];
 
     return {
       type:"local",
-      gradeVersion:"safe-v2",
+      gradeVersion:"sentence-v3",
       status,
       verdict:verification.verdict,
       statusLabel:
@@ -3619,25 +3588,15 @@ footer{
         : status === "needs_fix"
         ? "Cần sửa"
         : status === "uncertain"
-        ? "Chưa thể xác định chắc chắn"
+        ? "Kiểm tra lại vị trí"
         : "Câu hợp lệ",
-      statusDetail:verification.reason,
       strengths,
       improvements,
-      checks,
-      matched:[],
       correctedSentence:"",
-      wordCount:words,
-      note:
-        verification.verdict === "plausible"
-        ? "Hệ thống không dùng một câu mẫu làm đáp án duy nhất. Câu khác mẫu sẽ không bị trừ điểm nếu chưa có bằng chứng chắc chắn rằng vị trí sai."
-        : verification.verdict === "uncertain"
-        ? "Hệ thống trên thiết bị chưa đủ dữ liệu để kết luận đúng/sai về vị trí này, nên không tự động trừ điểm."
-        : "Nhận xét này phục vụ luyện câu Maps; không phải band IELTS."
+      wordCount:words
     };
 
   }
-
 
   /* =======================================================
      AI GRADING
@@ -3781,7 +3740,7 @@ footer{
 
       return {
         type:"ai",
-        gradeVersion:"safe-v2",
+        gradeVersion:"sentence-v3",
         status:aiStatus,
         statusLabel:
           data.statusLabel
@@ -3799,7 +3758,7 @@ footer{
             ?
             "Câu hợp lệ"
             :
-            "Chưa thể xác định chắc chắn"
+            "Kiểm tra lại vị trí"
           ),
         statusDetail:
           data.statusDetail
@@ -3852,9 +3811,7 @@ footer{
           ||
           "",
         note:
-          data.note
-          ||
-          "AI nhận xét câu dựa trên yêu cầu luyện tập hiện tại; không phải band IELTS."
+          ""
       };
 
     }
@@ -3881,48 +3838,18 @@ footer{
     isOld = false
   ){
 
-    if(
-      !result
-    ){
-
-      $("feedback")
-        .innerHTML =
-        "";
-
+    if(!result){
+      $("feedback").innerHTML = "";
       return;
-
     }
 
+    const corrected = String(result.correctedSentence || "").trim();
 
-    const corrected =
-      String(
-        result.correctedSentence
-        ||
-        ""
-      )
-      .trim();
-
-
-    /* Hỗ trợ cả kết quả cũ đã lưu trong localStorage. */
-    let status =
-      String(result.status || "")
-      .trim();
-
+    let status = String(result.status || "").trim();
 
     if(!status){
-      if(typeof result.score === "number"){
-        status =
-          result.score >= 85
-          ? "correct"
-          : result.score >= 60
-          ? "plausible"
-          : "uncertain";
-      }
-      else{
-        status = "uncertain";
-      }
+      status = "uncertain";
     }
-
 
     const defaultLabel =
       status === "correct"
@@ -3931,206 +3858,74 @@ footer{
       ? "Cần sửa"
       : status === "plausible"
       ? "Câu hợp lệ"
-      : "Chưa thể xác định chắc chắn";
-
+      : "Kiểm tra lại vị trí";
 
     const icon =
-      status === "correct"
+      status === "correct" || status === "plausible"
       ? "✓"
       : status === "needs_fix"
       ? "!"
-      : status === "plausible"
-      ? "✓"
       : "?";
 
+    const strengths = Array.isArray(result.strengths) ? result.strengths : [];
+    const improvements = Array.isArray(result.improvements) ? result.improvements : [];
 
-    const checks =
-      Array.isArray(result.checks)
-      ?
-      result.checks
-      :
-      [];
+    const mainMessage =
+      status === "correct"
+      ? (strengths[0] || "Câu miêu tả vị trí đúng.")
+      : status === "plausible"
+      ? (strengths[0] || "Câu dùng cấu trúc miêu tả vị trí hợp lệ.")
+      : status === "needs_fix"
+      ? (improvements[0] || "Hãy kiểm tra lại câu.")
+      : "Hãy quan sát lại bản đồ và kiểm tra vị trí một lần nữa.";
 
+    const extraImprovements =
+      status === "needs_fix"
+      ? improvements.slice(1)
+      : improvements;
 
     const html = `
-      <div class="result ${
-        mode === "ai"
-        ?
-        "ai"
-        :
-        ""
-      }">
-
-        <span class="resultBadge">
-          ${
-            mode === "ai"
-            ?
-            "AI nhận xét câu"
-            :
-            "Nhận xét câu · chế độ an toàn"
-          }
-        </span>
-
-        <h3>
-          ${
-            isOld
-            ?
-            "Kết quả lần nộp gần nhất"
-            :
-            "Đã nhận câu của em"
-          }
-        </h3>
+      <div class="result ${mode === "ai" ? "ai" : ""}">
 
         <div class="resultStatus ${escapeHTML(status)}">
           <span>${icon}</span>
-          <span>
-            ${escapeHTML(result.statusLabel || defaultLabel)}
-          </span>
+          <span>${escapeHTML(result.statusLabel || defaultLabel)}</span>
         </div>
 
-        ${
-          result.statusDetail
-          ?
-          `
-            <p class="statusDetail">
-              ${escapeHTML(result.statusDetail)}
-            </p>
-          `
-          :
-          ""
-        }
-
-        <p class="scorehint">
-          ${
-            escapeHTML(
-              result.note
-              ||
-              "Nhận xét phục vụ luyện câu Maps; không phải band IELTS."
-            )
-          }
+        <p class="statusDetail">
+          ${escapeHTML(mainMessage)}
         </p>
 
         ${
-          checks.length
-          ?
-          `
-            <div class="checkList">
-              ${
-                checks
-                .map(item => {
-                  const state =
-                    item.state === "ok"
-                    ? "ok"
-                    : item.state === "bad"
-                    ? "bad"
-                    : "neutral";
-
-                  const mark =
-                    state === "ok"
-                    ? "✓"
-                    : state === "bad"
-                    ? "!"
-                    : "○";
-
-                  return `
-                    <div class="checkRow ${state}">
-                      <i>${mark}</i>
-                      <span>${escapeHTML(item.label || "")}</span>
-                    </div>
-                  `;
-                })
-                .join("")
-              }
-            </div>
-          `
-          :
-          ""
-        }
-
-        <h4>
-          Câu em đã viết
-        </h4>
-
-        <div class="instruction">
-          ${escapeHTML(sentence)}
-        </div>
-
-        ${
-          (result.strengths || []).length
-          ?
-          `
-            <h4>
-              Điểm tốt
-            </h4>
-
+          extraImprovements.length
+          ? `
             <ul class="feedbacklist">
               ${
-                (result.strengths || [])
-                .map(
-                  item =>
-                    `<li>${escapeHTML(item)}</li>`
-                )
+                extraImprovements
+                .map(item => `<li>${escapeHTML(item)}</li>`)
                 .join("")
               }
             </ul>
           `
-          :
-          ""
-        }
-
-        ${
-          (result.improvements || []).length
-          ?
-          `
-            <h4>
-              ${
-                status === "correct"
-                ? "Gợi ý thêm"
-                : "Cần lưu ý"
-              }
-            </h4>
-
-            <ul class="feedbacklist">
-              ${
-                (result.improvements || [])
-                .map(
-                  item =>
-                    `<li>${escapeHTML(item)}</li>`
-                )
-                .join("")
-              }
-            </ul>
-          `
-          :
-          ""
+          : ""
         }
 
         ${
           corrected
-          ?
-          `
-            <h4>
-              Gợi ý sửa câu
-            </h4>
-
+          ? `
             <div class="instruction">
-              ${escapeHTML(corrected)}
+              <b>Gợi ý:</b> ${escapeHTML(corrected)}
             </div>
           `
-          :
-          ""
+          : ""
         }
 
       </div>
     `;
 
-
-    $("feedback")
-      .innerHTML =
-      html;
+    $("feedback").innerHTML = html;
 
   }
-
 
   /* =======================================================
      SUBMIT
