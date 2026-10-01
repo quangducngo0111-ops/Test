@@ -14457,12 +14457,18 @@ init();
         alert('Em cần đạt ít nhất 80% ở Giai đoạn 2 trước khi mở phần luyện viết.');
         return;
       }
+
       const scope=(typeof studentScope==='function')?studentScope():'guest';
       sessionStorage.setItem('MAPS_PHASE3_ACCESS_'+scope,'1');
+      localStorage.setItem('MAPS_PHASE3_UNLOCKED_'+scope,'1');
+
+      const target=new URL('./maps/index.html',window.location.href);
+      target.searchParams.set('access','1');
+      window.location.assign(target.href);
     }catch(e){
-      console.warn('[Maps] Không thể lưu trạng thái mở khóa Giai đoạn 3:',e);
+      console.warn('[Maps] Không thể mở Giai đoạn 3:',e);
+      window.location.assign('./maps/index.html?access=1');
     }
-    window.location.href='/Test/Practice/Vocabulary/maps/index.html';
   };
 
   const oldRender=window.renderCollection;
