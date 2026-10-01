@@ -14448,6 +14448,23 @@ init();
     console.warn('[Maps] Chưa tìm thấy renderCollection trong Vocabulary/index.html.');
     return;
   }
+
+  // Phase 3 is the final phase for now. Save a short-lived access marker
+  // before navigating so the writing page can reliably recognise the pass state.
+  window.openMapsPhase3=function(){
+    try{
+      if(typeof hasPassedCurrentVocabularyTest==='function' && !hasPassedCurrentVocabularyTest()){
+        alert('Em cần đạt ít nhất 80% ở Giai đoạn 2 trước khi mở phần luyện viết.');
+        return;
+      }
+      const scope=(typeof studentScope==='function')?studentScope():'guest';
+      sessionStorage.setItem('MAPS_PHASE3_ACCESS_'+scope,'1');
+    }catch(e){
+      console.warn('[Maps] Không thể lưu trạng thái mở khóa Giai đoạn 3:',e);
+    }
+    window.location.href='/Test/Practice/Vocabulary/maps/index.html';
+  };
+
   const oldRender=window.renderCollection;
   window.renderCollection=function(){
     const result=oldRender.apply(this,arguments);
@@ -14477,9 +14494,9 @@ init();
       <div class="maps-phases-row">
         <div class="maps-phase ${finished?'done':'active'}"><span>01</span><strong>Học bằng game</strong><small>${finished?'Đã hoàn thành':'Chơi các game ở dưới để hoàn thành bộ từ'}</small></div>
         <div class="maps-phase ${passed?'done':finished?'active':''}"><span>02</span><strong>Kiểm tra</strong><small>${passed?'Đạt bài kiểm tra':finished?'Chọn Bắt đầu kiểm tra bên dưới':'Mở khi hoàn thành game'}</small></div>
-        <div class="maps-phase ${passed?'active':'locked'}"><span>03</span><strong>Luyện viết Maps</strong><small>${passed?'Đã mở khóa · 9 bản đồ từ tài liệu':'Mở sau khi đạt bài kiểm tra'}</small></div>
+        <div class="maps-phase ${passed?'active':'locked'}"><span>03</span><strong>Luyện viết Maps</strong><small>${passed?'Đã mở khóa · 13 bản đồ từ tài liệu':'Mở sau khi đạt bài kiểm tra'}</small></div>
       </div>
-      ${passed?'<a class="maps-phase-go" href="/Test/Practice/Vocabulary/maps/index.html">Bắt đầu Giai đoạn 3: Luyện viết theo bản đồ →</a>':'<div class="maps-phase-lock">Hoàn thành giai đoạn trước để mở phần tiếp theo.</div>'}
+      ${passed?'<button class="maps-phase-go" type="button" onclick="openMapsPhase3()">Bắt đầu Giai đoạn 3: Luyện viết theo bản đồ →</button>':'<div class="maps-phase-lock">Hoàn thành giai đoạn trước để mở phần tiếp theo.</div>'}
     `;
     return result;
   };
@@ -14493,7 +14510,7 @@ init();
     .maps-phase span{background:#eeeafa;border-radius:9px;padding:6px 8px;width:max-content;font-weight:900;color:#5238a9}
     .maps-phase strong{color:#281260;font-size:13px}.maps-phase small{color:#69738a;font-size:11px;line-height:1.4}
     .maps-phase.done{border-color:#91dcb7;background:#f7fff9}.maps-phase.active{opacity:1;border-color:#7155df;box-shadow:0 5px 14px #4c32a619}.maps-phase.locked{opacity:.55}
-    .maps-phase-go{display:block;margin-top:13px;padding:13px 15px;text-align:center;border-radius:13px;background:linear-gradient(90deg,#5135b7,#765ce8);font-weight:900;color:white;text-decoration:none}
+    .maps-phase-go{display:block;width:100%;margin-top:13px;padding:13px 15px;text-align:center;border-radius:13px;background:linear-gradient(90deg,#5135b7,#765ce8);font-weight:900;color:white;text-decoration:none}
     .maps-phase-lock{text-align:center;margin-top:11px;color:#7c8391;font-size:11px}
     @media(max-width:700px){.maps-phases-row{grid-template-columns:1fr}.maps-phases-head{align-items:flex-start;flex-direction:column}}
   `;
