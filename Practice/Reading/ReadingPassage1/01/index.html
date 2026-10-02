@@ -1,0 +1,3497 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="practice-title" content="The History of Glass">
+<meta name="practice-description" content="Note Completion + TRUE/FALSE/NOT GIVEN">
+<meta name="practice-questions" content="13">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Reading Passage 1 — 01 | The History of Glass</title>
+
+<style>
+
+:root{
+  --purple:#281260;
+  --purple2:#5135a6;
+  --blue:#2f6fdf;
+  --ink:#202636;
+  --muted:#6f7890;
+  --line:#e4e7ef;
+  --bg:#f5f7fb;
+  --good:#16845b;
+  --bad:#b83345;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color:var(--ink);
+  background:var(--bg);
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:30;
+
+  background:
+    linear-gradient(
+      100deg,
+      #1c0e49,
+      #281260,
+      #37217e
+    );
+
+  color:#fff;
+
+  box-shadow:
+    0 8px 22px
+    rgba(40,18,96,.14);
+}
+
+.topin{
+  width:min(
+    1400px,
+    calc(100% - 18px)
+  );
+
+  min-height:62px;
+
+  margin:auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+
+  gap:9px;
+
+  min-width:0;
+}
+
+.back{
+  color:#fff;
+
+  text-decoration:none;
+
+  border:
+    1px solid rgba(255,255,255,.25);
+
+  padding:
+    7px 10px;
+
+  border-radius:9px;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.brand{
+  font-weight:950;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.student{
+  font-size:11px;
+
+  font-weight:800;
+
+  background:
+    rgba(255,255,255,.1);
+
+  border:
+    1px solid rgba(255,255,255,.18);
+
+  padding:
+    7px 10px;
+
+  border-radius:999px;
+}
+
+.timer{
+  font-variant-numeric:
+    tabular-nums;
+
+  font-size:19px;
+
+  font-weight:950;
+
+  background:
+    rgba(255,255,255,.13);
+
+  padding:
+    8px 11px;
+
+  border-radius:9px;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+  width:min(
+    1400px,
+    calc(100% - 18px)
+  );
+
+  margin:auto;
+
+  padding:
+    18px 0 46px;
+}
+
+.hero{
+  display:flex;
+
+  align-items:end;
+
+  justify-content:space-between;
+
+  gap:18px;
+
+  margin-bottom:13px;
+}
+
+.hero h1{
+  margin:0;
+
+  color:#21164b;
+
+  font-size:27px;
+
+  letter-spacing:-.03em;
+}
+
+.hero p{
+  margin:
+    4px 0 0;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+}
+
+.progress-wrap{
+  min-width:245px;
+}
+
+.progress-row{
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  color:var(--muted);
+
+  font-size:10.5px;
+
+  font-weight:850;
+
+  margin-bottom:5px;
+}
+
+.progress{
+  height:7px;
+
+  background:#e5e8ef;
+
+  border-radius:999px;
+
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+
+  width:0;
+
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--purple2),
+      var(--blue)
+    );
+
+  transition:
+    width .2s ease;
+}
+
+
+/* =========================================================
+   WORKSPACE
+========================================================= */
+
+.workspace{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  min-height:
+    calc(100vh - 190px);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  background:#fff;
+
+  box-shadow:
+    0 8px 24px
+    rgba(35,25,75,.05);
+}
+
+.pane{
+  min-width:0;
+
+  overflow:auto;
+
+  max-height:
+    calc(100vh - 205px);
+
+  scroll-behavior:smooth;
+}
+
+.passage{
+  border-right:
+    1px solid var(--line);
+
+  background:#fff;
+}
+
+.questions{
+  background:#fafbfe;
+}
+
+.content{
+  padding:
+    20px 23px;
+}
+
+
+/* =========================================================
+   PASSAGE
+========================================================= */
+
+.passage-title{
+  text-align:center;
+
+  margin-bottom:18px;
+}
+
+.passage-title .label{
+  font-size:10px;
+
+  font-weight:950;
+
+  letter-spacing:.09em;
+
+  color:#6a4db4;
+
+  text-transform:uppercase;
+}
+
+.passage-title h2{
+  margin:
+    5px 0;
+
+  color:#21164b;
+
+  font-size:21px;
+}
+
+.passage-title p{
+  margin:0;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  text-align:center;
+
+  line-height:1.5;
+}
+
+.passage-paragraph{
+  position:relative;
+
+  padding:
+    0 0 0 34px;
+
+  margin:
+    0 0 17px;
+
+  font-size:13.4px;
+
+  line-height:1.78;
+
+  text-align:justify;
+
+  border-radius:8px;
+}
+
+.paragraph-letter{
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:24px;
+  height:24px;
+
+  border-radius:7px;
+
+  display:grid;
+
+  place-items:center;
+
+  background:#eee9ff;
+
+  color:#4b318e;
+
+  font-size:10.5px;
+
+  font-weight:950;
+}
+
+
+/* =========================================================
+   EVIDENCE - CHỈ SÁNG ĐÚNG CÂU
+========================================================= */
+
+.evidence-source{
+  border-radius:4px;
+
+  transition:
+    background .28s ease,
+    box-shadow .28s ease,
+    color .28s ease;
+}
+
+.evidence-source.evidence-focus{
+  background:#fff1a8;
+
+  box-shadow:
+    0 0 0 2px rgba(245,190,35,.24),
+    0 2px 9px rgba(245,190,35,.24);
+
+  color:#202636;
+
+  padding:2px 3px;
+
+  margin:-2px -3px;
+
+  animation:
+    evidencePulse .75s ease 2;
+}
+
+@keyframes evidencePulse{
+
+  0%{
+    background:#fff7c9;
+
+    box-shadow:
+      0 0 0 1px rgba(245,190,35,.14);
+  }
+
+  50%{
+    background:#ffe977;
+
+    box-shadow:
+      0 0 0 4px rgba(245,190,35,.23),
+      0 3px 13px rgba(245,190,35,.3);
+  }
+
+  100%{
+    background:#fff1a8;
+
+    box-shadow:
+      0 0 0 2px rgba(245,190,35,.24),
+      0 2px 9px rgba(245,190,35,.24);
+  }
+
+}
+
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+.instructions{
+  margin-bottom:13px;
+}
+
+.instructions h3{
+  margin:
+    0 0 6px;
+
+  color:#21164b;
+
+  font-size:17px;
+}
+
+.instructions p{
+  margin:
+    3px 0;
+
+  color:var(--muted);
+
+  font-size:11.5px;
+
+  line-height:1.55;
+}
+
+.rule{
+  display:inline-block;
+
+  padding:
+    7px 10px;
+
+  margin:
+    7px 0 10px;
+
+  border-radius:8px;
+
+  background:#f0ecff;
+
+  color:#5c43b2;
+
+  font-size:10.5px;
+
+  font-weight:900;
+}
+
+.question-section
++
+.question-section{
+  margin-top:24px;
+
+  padding-top:22px;
+
+  border-top:
+    1px solid var(--line);
+}
+
+.heading-list{
+  margin:
+    11px 0 14px;
+
+  padding:
+    12px 14px;
+
+  border:
+    1px solid #ddd8f2;
+
+  border-radius:12px;
+
+  background:#fff;
+}
+
+.heading-list-title{
+  font-size:12px;
+
+  font-weight:950;
+
+  color:#21164b;
+
+  margin-bottom:9px;
+}
+
+.heading-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    6px 14px;
+}
+
+.heading-item{
+  font-size:10.8px;
+
+  line-height:1.45;
+
+  color:#4d5363;
+}
+
+.heading-item b{
+  display:inline-block;
+
+  width:28px;
+
+  color:#5c43b2;
+}
+
+.question-card{
+  margin:
+    8px 0;
+
+  padding:12px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:11px;
+
+  background:#fff;
+
+  transition:
+    .15s ease;
+}
+
+.question-card:focus-within{
+  border-color:#c5b8f2;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.05);
+}
+
+.question-card.correct-card{
+  border-color:#9ddbbc;
+
+  background:#f8fffb;
+}
+
+.question-card.wrong-card{
+  border-color:#efbdc4;
+
+  background:#fffafb;
+}
+
+.question-row{
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
+}
+
+.qno{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  flex:
+    0 0 30px;
+
+  height:30px;
+
+  border-radius:8px;
+
+  background:#eee9ff;
+
+  color:#4b318e;
+
+  font-size:10.5px;
+
+  font-weight:950;
+}
+
+.qcopy{
+  flex:1;
+
+  min-width:0;
+
+  font-size:11.7px;
+
+  line-height:1.55;
+
+  color:#303747;
+}
+
+.qcopy b{
+  color:#21164b;
+}
+
+.answer-select{
+  width:210px;
+
+  max-width:44%;
+
+  padding:
+    8px 9px;
+
+  border:
+    1px solid #cdd3df;
+
+  border-radius:8px;
+
+  outline:none;
+
+  background:#fff;
+
+  color:#2d3342;
+
+  font-size:10.8px;
+
+  font-weight:800;
+}
+
+.answer-select:focus{
+  border-color:#6a55bf;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(81,53,166,.08);
+}
+
+.answer-select.correct{
+  border-color:#8ed6b4;
+
+  background:#f4fcf7;
+
+  color:#126b48;
+}
+
+.answer-select.wrong{
+  border-color:#efb7bf;
+
+  background:#fff7f8;
+
+  color:#9b2838;
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+.review-list{
+  margin-top:14px;
+}
+
+.inline-review{
+  margin-top:10px;
+
+  padding:12px;
+
+  border:
+    1px solid #f0d0d5;
+
+  border-left:
+    4px solid var(--bad);
+
+  border-radius:9px;
+
+  background:#fffafb;
+
+  font-size:11px;
+
+  line-height:1.55;
+}
+
+.review-title{
+  font-weight:950;
+
+  color:#21164b;
+
+  margin-bottom:7px;
+}
+
+.review-row{
+  display:grid;
+
+  grid-template-columns:
+    105px 1fr;
+
+  gap:
+    5px 8px;
+
+  margin:
+    4px 0;
+}
+
+.review-label{
+  color:var(--muted);
+
+  font-weight:800;
+}
+
+.review-user{
+  color:var(--bad);
+
+  font-weight:900;
+}
+
+.review-correct{
+  color:var(--good);
+
+  font-weight:900;
+}
+
+.compare-box{
+  margin-top:12px;
+
+  padding:13px;
+
+  background:#f8f7ff;
+
+  border:
+    1px solid #ddd6fb;
+
+  border-radius:10px;
+}
+
+.compare-heading{
+  color:#281260;
+
+  font-weight:950;
+
+  margin-bottom:10px;
+}
+
+.compare-item{
+  margin-top:10px;
+}
+
+.compare-label{
+  margin-bottom:4px;
+
+  color:#6f7890;
+
+  font-size:9.5px;
+
+  font-weight:950;
+
+  text-transform:uppercase;
+
+  letter-spacing:.04em;
+}
+
+.compare-text,
+.compare-analysis{
+  padding:
+    9px 10px;
+
+  background:#fff;
+
+  border:
+    1px solid #e5e7ee;
+
+  border-radius:7px;
+
+  line-height:1.6;
+}
+
+.passage-evidence{
+  position:relative;
+
+  padding:
+    10px 35px 10px 10px;
+
+  background:#eef3ff;
+
+  border:
+    1px solid #d6dffb;
+
+  border-left:
+    3px solid #5773d9;
+
+  border-radius:7px;
+
+  color:#293a70;
+
+  font-style:italic;
+
+  line-height:1.6;
+
+  cursor:pointer;
+
+  transition:
+    .15s ease;
+}
+
+.passage-evidence:hover{
+  background:#e5ecff;
+
+  transform:
+    translateY(-1px);
+}
+
+.passage-evidence::after{
+  content:"↗";
+
+  position:absolute;
+
+  right:12px;
+
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  font-size:16px;
+
+  font-style:normal;
+
+  font-weight:950;
+
+  color:#5b43b5;
+}
+
+.evidence-help{
+  margin-top:5px;
+
+  color:#7b8292;
+
+  font-size:9.5px;
+
+  font-style:normal;
+}
+
+.conclusion{
+  margin-top:10px;
+
+  padding:
+    9px 10px;
+
+  border:
+    1px solid #bde5ce;
+
+  background:#f2fff8;
+
+  border-radius:7px;
+
+  color:#126b48;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   HIGHLIGHT / NOTE
+========================================================= */
+
+mark.user-highlight{
+  background:#fff29a;
+
+  color:inherit;
+
+  border-radius:3px;
+
+  cursor:pointer;
+}
+
+.note-anchor{
+  background:#ffe6a6;
+
+  border-bottom:
+    2px dotted #e28b19;
+
+  border-radius:2px;
+
+  cursor:pointer;
+}
+
+.selection-menu{
+  position:fixed;
+
+  z-index:90;
+
+  display:none;
+
+  gap:5px;
+
+  padding:6px;
+
+  background:#21164b;
+
+  border-radius:10px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(25,18,65,.22);
+}
+
+.selection-menu.show{
+  display:flex;
+}
+
+.selection-menu button{
+  border:0;
+
+  background:#fff;
+
+  color:#35285e;
+
+  border-radius:7px;
+
+  padding:
+    7px 9px;
+
+  font-size:10.5px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.selection-menu button.danger{
+  color:#a31e31;
+
+  background:#fff1f3;
+}
+
+
+/* =========================================================
+   BOTTOM
+========================================================= */
+
+.bottom{
+  position:sticky;
+
+  bottom:0;
+
+  z-index:20;
+
+  width:min(
+    1400px,
+    calc(100% - 18px)
+  );
+
+  margin:auto;
+
+  padding:
+    9px 0 6px;
+
+  background:
+    linear-gradient(
+      to top,
+      var(--bg) 75%,
+      rgba(245,247,251,.88)
+    );
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+}
+
+.nav{
+  display:flex;
+
+  gap:5px;
+
+  flex:1;
+
+  overflow-x:auto;
+
+  padding-bottom:2px;
+}
+
+.nav button{
+  flex:
+    0 0 31px;
+
+  width:31px;
+
+  height:31px;
+
+  border:
+    1px solid var(--line);
+
+  background:#fff;
+
+  border-radius:7px;
+
+  font-size:9.5px;
+
+  font-weight:900;
+}
+
+.nav button.answered{
+  background:#e7efff;
+
+  border-color:#c4d5ff;
+}
+
+.nav button.correct{
+  background:#dff0e7;
+
+  border-color:#8ed6b4;
+}
+
+.nav button.wrong{
+  background:#f4ddd8;
+
+  border-color:#f0b5bd;
+}
+
+.submit,
+.btn{
+  border:0;
+
+  background:
+    linear-gradient(
+      100deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  color:#fff;
+
+  border-radius:9px;
+
+  padding:
+    10px 15px;
+
+  font-weight:900;
+}
+
+
+/* =========================================================
+   OVERLAYS
+========================================================= */
+
+.overlay,
+.start{
+  position:fixed;
+
+  inset:0;
+
+  z-index:100;
+
+  background:
+    rgba(15,11,35,.62);
+
+  display:grid;
+
+  place-items:center;
+
+  padding:18px;
+}
+
+.start{
+  z-index:120;
+}
+
+.hidden{
+  display:none;
+}
+
+.result,
+.start-card{
+  width:min(
+    590px,
+    100%
+  );
+
+  max-height:88vh;
+
+  overflow:auto;
+
+  background:#fff;
+
+  border-radius:18px;
+
+  padding:22px;
+
+  box-shadow:
+    0 24px 70px
+    rgba(18,10,53,.28);
+}
+
+.start-card{
+  width:min(
+    460px,
+    100%
+  );
+}
+
+.score{
+  font-size:38px;
+
+  font-weight:950;
+
+  color:#21164b;
+
+  margin:
+    7px 0;
+}
+
+.field{
+  margin:
+    9px 0;
+}
+
+.field label{
+  display:block;
+
+  margin-bottom:5px;
+
+  font-size:10.5px;
+
+  font-weight:900;
+}
+
+.field input{
+  width:100%;
+
+  padding:10px;
+
+  border:
+    1px solid #d5d9e2;
+
+  border-radius:9px;
+}
+
+.start-card .btn{
+  width:100%;
+
+  margin-top:10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+  .workspace{
+    grid-template-columns:
+      1fr;
+  }
+
+  .passage{
+    border-right:0;
+
+    border-bottom:
+      1px solid var(--line);
+  }
+
+  .pane{
+    max-height:none;
+  }
+
+  .hero{
+    flex-direction:column;
+
+    align-items:stretch;
+  }
+
+  .progress-wrap{
+    min-width:0;
+  }
+
+  .heading-grid{
+    grid-template-columns:
+      1fr;
+  }
+
+  .question-row{
+    align-items:flex-start;
+
+    flex-wrap:wrap;
+  }
+
+  .answer-select{
+    width:100%;
+
+    max-width:none;
+
+    margin-left:39px;
+  }
+
+}
+
+
+@media(max-width:620px){
+
+  .student{
+    display:none;
+  }
+
+  .brand{
+    font-size:12px;
+  }
+
+  .content{
+    padding:16px;
+  }
+
+  .passage-paragraph{
+    font-size:12.8px;
+  }
+
+  .bottom{
+    align-items:flex-end;
+  }
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     START SCREEN
+========================================================= -->
+<div id="start" class="start">
+  <div class="start-card">
+    <div style="font-size:10px;font-weight:950;color:#6a4db4;letter-spacing:.08em">
+      READING PRACTICE
+    </div>
+
+    <h2>Reading Passage 1 — Bài 01</h2>
+
+    <p style="font-size:11.5px;color:#6f7890">
+      The History of Glass · Questions 1–13
+    </p>
+
+    <div class="field">
+      <label>Họ và tên</label>
+      <input id="studentName" placeholder="Nguyễn Văn A">
+    </div>
+
+    <div class="field">
+      <label>Lớp</label>
+      <input id="studentClass" placeholder="11A1">
+    </div>
+
+    <button class="btn" onclick="startPractice()">Bắt đầu luyện</button>
+
+    <div id="startError" style="font-size:10px;color:#b83345;margin-top:7px"></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+<header class="top">
+  <div class="topin">
+    <div class="left">
+      <a class="back" href="../">← Reading Passage 1</a>
+      <div class="brand">📖 Reading Passage 1 — 01</div>
+    </div>
+
+    <div id="studentInfo" class="student"></div>
+    <div id="timer" class="timer">00:00</div>
+  </div>
+</header>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <h1>Reading Passage 1 — Bài 01</h1>
+      <p>The History of Glass · Questions 1–13</p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span>Tiến độ</span>
+        <span id="progressText">0/13 câu đã trả lời</span>
+      </div>
+      <div class="progress"><i id="progressBar"></i></div>
+    </div>
+  </section>
+
+  <section class="workspace">
+
+    <!-- PASSAGE -->
+    <div class="pane passage">
+      <div id="passageRoot" class="content">
+
+        <div class="passage-title">
+          <div class="label">Reading Passage 1</div>
+          <h2>THE HISTORY OF GLASS</h2>
+          <p>You should spend about 20 minutes on Questions 1–13.</p>
+        </div>
+
+        <div class="passage-paragraph" style="padding-left:0">
+          From our earliest origins, man has been making use of glass. Historians have discovered that
+          <span class="evidence-source" data-evidence="1 2">a type of natural glass – obsidian – formed in places such as the mouth of a volcano as a result of the intense heat of an eruption melting sand – was first used as tips for spears.</span>
+          Archaeologists have even found evidence of
+          <span class="evidence-source" data-evidence="3">man-made glass which dates back to 4000 BC; this took the form of glazes used for coating stone beads.</span>
+          It was not until 1500 BC, however, that the first hollow glass container was made by covering a sand core with a layer of molten glass.
+        </div>
+
+        <div class="passage-paragraph" style="padding-left:0">
+          Glass blowing became the most common way to make glass containers from the first century BC.
+          <span class="evidence-source" data-evidence="4">The glass made during this time was highly coloured due to the impurities of the raw material.</span>
+          In the first century AD, methods of creating colourless glass were developed, which was then tinted by the addition of colouring materials.
+          <span class="evidence-source" data-evidence="5">The secret of glass making was taken across Europe by the Romans during this century. However, they guarded the skills and technology required to make glass very closely, and it was not until their empire collapsed in 476 AD that glass-making knowledge became widespread throughout Europe and the Middle East.</span>
+          From the 10th century onwards, the Venetians gained a reputation for technical skill and artistic ability in the making of glass bottles, and many of the city’s craftsmen left Italy to set up glassworks throughout Europe.
+        </div>
+
+        <div class="passage-paragraph" style="padding-left:0">
+          A major milestone in the history of glass occurred with the invention of lead crystal glass by the English glass manufacturer George Ravenscroft (1632-1683).
+          <span class="evidence-source" data-evidence="6 7">He attempted to counter the effect of clouding that sometimes occurred in blown glass by introducing lead to the raw materials used in the process.</span>
+          The new glass he created was softer and easier to decorate, and had a higher refractive index, adding to its brilliance and beauty, and it proved invaluable to the optical industry. It is thanks to Ravenscroft’s invention that optical lenses, astronomical telescopes, microscopes and the like became possible.
+        </div>
+
+        <div class="passage-paragraph" style="padding-left:0">
+          In Britain, the modern glass industry only really started to develop after the repeal of the Excise Act in 1845.
+          <span class="evidence-source" data-evidence="8">Before that time, heavy taxes had been placed on the amount of glass melted in a glasshouse, and were levied continuously from 1745 to 1845.</span>
+          Joseph Paxton’s Crystal Palace at London’s Great Exhibition of 1851 marked the beginning of glass as a material used in the building industry. This revolutionary new building encouraged the use of glass in public, domestic and horticultural architecture. Glass manufacturing techniques also improved with the advancement of science and the development of better technology.
+        </div>
+
+        <div class="passage-paragraph" style="padding-left:0">
+          From 1887 onwards, glass making developed from traditional mouth-blowing to a semi-automatic process, after
+          <span class="evidence-source" data-evidence="9">factory-owner HM Ashley introduced a machine capable of producing 200 bottles per hour in Castleford, Yorkshire, England – more than three times quicker than any previous production method.</span>
+          Then in 1907,
+          <span class="evidence-source" data-evidence="10">the first fully automated machine was developed in the USA by Michael Owens – founder of the Owens Bottle Machine Company (later the major manufacturers Owens-Illinois) – and installed in its factory.</span>
+          Owens’ invention could produce an impressive 2,500 bottles per hour. Other developments followed rapidly, but it was not until the First World War, when Britain became out off from essential glass suppliers, that glass became part of the scientific sector. Previous to this, glass had been as a craft rather than a precise science.
+        </div>
+
+        <div class="passage-paragraph" style="padding-left:0">
+          <span class="evidence-source" data-evidence="11">Today, glass making is big business. It has become a modern, hi-tech industry operating in a fiercely competitive global market where quality, design and service levels are critical to maintaining market share.</span>
+          Modern glass plants are capable of making millions of glass containers a day in many different colours, with green, brown and clear remaining the most popular. Few of us can imagine modern life without glass. It features in almost every aspect of our lives – in our homes, our cars and whenever we sit down to eat or drink. Glass packaging is used for many products, many beverages are sold in glass, as are numerous foodstuffs, as well as medicines and cosmetics.
+        </div>
+
+        <div class="passage-paragraph" style="padding-left:0">
+          Glass is an ideal material for recycling, and
+          <span class="evidence-source" data-evidence="12">with growing consumer concern for green issues, glass bottles and jars are becoming ever more popular.</span>
+          Glass recycling is good news for the environment. It saves used glass containers being sent to landfill.
+          <span class="evidence-source" data-evidence="13">As less energy is needed to melt recycled glass than to melt down raw materials, this also saves fuel and production costs.</span>
+          Recycling also reduces the need for raw materials to be quarried, thus saving precious resources.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- QUESTIONS -->
+    <div class="pane questions">
+      <div id="questionsRoot" class="content">
+
+        <section class="question-section">
+          <div class="instructions">
+            <h3>Questions 1–8</h3>
+            <p>Complete the notes below.</p>
+            <p>Choose <b>ONE WORD ONLY</b> from the passage for each answer.</p>
+            <div class="rule">NOTE COMPLETION</div>
+          </div>
+
+          <div class="heading-list">
+            <div class="heading-list-title">The History of Glass</div>
+          </div>
+
+          <div class="question-card" id="q1">
+            <div class="question-row"><span class="qno">1</span><div class="qcopy">Early humans used a material called <b>__________</b>.</div></div>
+            <input id="a1" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(1,this.value)">
+          </div>
+
+          <div class="question-card" id="q2">
+            <div class="question-row"><span class="qno">2</span><div class="qcopy">They used this material to make the sharp points of their <b>__________</b>.</div></div>
+            <input id="a2" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(2,this.value)">
+          </div>
+
+          <div class="question-card" id="q3">
+            <div class="question-row"><span class="qno">3</span><div class="qcopy">4000 BC: <b>__________</b> made of stone were covered in a coating of man-made glass.</div></div>
+            <input id="a3" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(3,this.value)">
+          </div>
+
+          <div class="question-card" id="q4">
+            <div class="question-row"><span class="qno">4</span><div class="qcopy">First century BC: glass was coloured because of the <b>__________</b> in the material.</div></div>
+            <input id="a4" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(4,this.value)">
+          </div>
+
+          <div class="question-card" id="q5">
+            <div class="question-row"><span class="qno">5</span><div class="qcopy">Until 476 AD: Only the <b>__________</b> knew how to make glass.</div></div>
+            <input id="a5" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(5,this.value)">
+          </div>
+
+          <div class="question-card" id="q6">
+            <div class="question-row"><span class="qno">6</span><div class="qcopy">17th century: George Ravenscroft developed a process using <b>__________</b>.</div></div>
+            <input id="a6" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(6,this.value)">
+          </div>
+
+          <div class="question-card" id="q7">
+            <div class="question-row"><span class="qno">7</span><div class="qcopy">The process was intended to avoid the occurrence of <b>__________</b> in blown glass.</div></div>
+            <input id="a7" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(7,this.value)">
+          </div>
+
+          <div class="question-card" id="q8">
+            <div class="question-row"><span class="qno">8</span><div class="qcopy">Mid-19th century: British glass production developed after changes to laws concerning <b>__________</b>.</div></div>
+            <input id="a8" class="answer-select" style="margin-top:10px;width:100%;max-width:none" placeholder="Nhập đáp án" oninput="saveAnswer(8,this.value)">
+          </div>
+        </section>
+
+        <section class="question-section">
+          <div class="instructions">
+            <h3>Questions 9–13</h3>
+            <p>Do the following statements agree with the information given in Reading Passage 1?</p>
+            <p>Choose <b>TRUE</b>, <b>FALSE</b> or <b>NOT GIVEN</b>.</p>
+            <div class="rule">TRUE / FALSE / NOT GIVEN</div>
+          </div>
+
+          <div class="question-card" id="q9"><div class="question-row"><span class="qno">9</span><div class="qcopy">In 1887, HM Ashley had the fastest bottle-producing machine that existed at the time.</div><select id="a9" class="answer-select" onchange="saveAnswer(9,this.value)"></select></div></div>
+          <div class="question-card" id="q10"><div class="question-row"><span class="qno">10</span><div class="qcopy">Michael Owens was hired by a large US company to design a fully-automated bottle manufacturing machine for them.</div><select id="a10" class="answer-select" onchange="saveAnswer(10,this.value)"></select></div></div>
+          <div class="question-card" id="q11"><div class="question-row"><span class="qno">11</span><div class="qcopy">Nowadays, most glass is produced by large international manufacturers.</div><select id="a11" class="answer-select" onchange="saveAnswer(11,this.value)"></select></div></div>
+          <div class="question-card" id="q12"><div class="question-row"><span class="qno">12</span><div class="qcopy">Concern for the environment is leading to an increased demand for glass containers.</div><select id="a12" class="answer-select" onchange="saveAnswer(12,this.value)"></select></div></div>
+          <div class="question-card" id="q13"><div class="question-row"><span class="qno">13</span><div class="qcopy">It is more expensive to produce recycled glass than to manufacture new glass.</div><select id="a13" class="answer-select" onchange="saveAnswer(13,this.value)"></select></div></div>
+        </section>
+
+        <div id="reviewList" class="review-list"></div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- BOTTOM NAV -->
+<div class="bottom">
+  <div id="nav" class="nav"></div>
+  <button class="submit" onclick="submitPractice()">Nộp bài</button>
+</div>
+
+<!-- HIGHLIGHT MENU -->
+<div id="selectionMenu" class="selection-menu">
+  <button id="menuHighlight" type="button">🖍 Highlight</button>
+  <button id="menuNote" type="button">📝 Take note</button>
+</div>
+
+<!-- RESULT -->
+<div id="resultOverlay" class="overlay hidden">
+  <div class="result">
+    <div style="font-size:10px;font-weight:950;color:#6a4db4;letter-spacing:.08em">KẾT QUẢ LUYỆN TẬP</div>
+    <div id="resultStudent" style="margin-top:5px;font-size:12px;color:#6f7890"></div>
+    <div id="resultScore" class="score">0 / 13</div>
+    <div id="resultPercent"></div>
+    <p style="font-size:11px;color:#6f7890">Các câu sai được giải thích bên dưới phần câu hỏi.</p>
+    <button class="btn" onclick="closeResult()">Xem lại bài</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const RESULT_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+
+
+const ATTEMPT_KEY =
+  'PRACTICE_READINGPASSAGE1_01_HISTORY_OF_GLASS_V1';
+
+
+const QUESTION_NUMBERS = [
+  1,2,3,4,5,6,7,8,
+  9,10,11,12,13
+];
+
+
+const TFNG_NUMBERS = [
+  9,10,11,12,13
+];
+
+
+const TFNG_OPTIONS = [
+  'TRUE',
+  'FALSE',
+  'NOT GIVEN'
+];
+
+
+/* =========================================================
+   ANSWER KEY
+========================================================= */
+
+const KEYS = {
+  1:['obsidian'],
+  2:['spears'],
+  3:['beads'],
+  4:['impurities'],
+  5:['romans'],
+  6:['lead'],
+  7:['clouding'],
+  8:['taxes'],
+  9:['true'],
+  10:['false'],
+  11:['not given'],
+  12:['true'],
+  13:['false']
+};
+
+
+const DISPLAY_KEY = {
+  1:'obsidian',
+  2:'spears',
+  3:'beads',
+  4:'impurities',
+  5:'Romans',
+  6:'lead',
+  7:'clouding',
+  8:'taxes',
+  9:'TRUE',
+  10:'FALSE',
+  11:'NOT GIVEN',
+  12:'TRUE',
+  13:'FALSE'
+};
+
+
+const QUESTION_TEXT = {
+  1:'Early humans used a material called ...',
+  2:'Early humans used this material to make the sharp points of their ...',
+  3:'4000 BC: ... made of stone were covered in a coating of man-made glass.',
+  4:'First century BC: glass was coloured because of the ... in the material.',
+  5:'Until 476 AD: Only the ... knew how to make glass.',
+  6:'17th century: George Ravenscroft developed a process using ...',
+  7:'The process was intended to avoid the occurrence of ... in blown glass.',
+  8:'Mid-19th century: British glass production developed after changes to laws concerning ...',
+  9:'In 1887, HM Ashley had the fastest bottle-producing machine that existed at the time.',
+  10:'Michael Owens was hired by a large US company to design a fully-automated bottle manufacturing machine for them.',
+  11:'Nowadays, most glass is produced by large international manufacturers.',
+  12:'Concern for the environment is leading to an increased demand for glass containers.',
+  13:'It is more expensive to produce recycled glass than to manufacture new glass.'
+};
+
+
+const EVIDENCE = {
+  1:'a type of natural glass – obsidian – ... was first used as tips for spears.',
+  2:'obsidian ... was first used as tips for spears.',
+  3:'man-made glass ... took the form of glazes used for coating stone beads.',
+  4:'The glass made during this time was highly coloured due to the impurities of the raw material.',
+  5:'The secret of glass making was taken across Europe by the Romans ... and it was not until their empire collapsed in 476 AD that glass-making knowledge became widespread.',
+  6:'He attempted to counter the effect of clouding ... by introducing lead to the raw materials used in the process.',
+  7:'He attempted to counter the effect of clouding that sometimes occurred in blown glass by introducing lead ...',
+  8:'Before that time, heavy taxes had been placed on the amount of glass melted in a glasshouse, and were levied continuously from 1745 to 1845.',
+  9:'HM Ashley introduced a machine capable of producing 200 bottles per hour ... more than three times quicker than any previous production method.',
+  10:'the first fully automated machine was developed in the USA by Michael Owens – founder of the Owens Bottle Machine Company – and installed in its factory.',
+  11:'Today, glass making is big business. It has become a modern, hi-tech industry operating in a fiercely competitive global market ...',
+  12:'with growing consumer concern for green issues, glass bottles and jars are becoming ever more popular.',
+  13:'less energy is needed to melt recycled glass than to melt down raw materials, this also saves fuel and production costs.'
+};
+
+
+const ANALYSIS = {
+  1:'Đoạn đầu gọi loại thủy tinh tự nhiên được con người thời kỳ đầu sử dụng là <b>obsidian</b>.',
+  2:'Obsidian được dùng làm phần đầu nhọn của <b>spears</b>.',
+  3:'Khoảng năm 4000 BC, lớp men thủy tinh nhân tạo được dùng để phủ các <b>stone beads</b>, nên đáp án là <b>beads</b>.',
+  4:'Đoạn 2 nói thủy tinh thời kỳ này có màu do <b>impurities</b> trong nguyên liệu.',
+  5:'Người <b>Romans</b> mang bí quyết làm thủy tinh đi khắp châu Âu nhưng giữ kỹ kỹ năng và công nghệ cho tới khi đế chế sụp đổ năm 476 AD.',
+  6:'Ravenscroft cho <b>lead</b> vào nguyên liệu để xử lý vấn đề của thủy tinh thổi.',
+  7:'Vấn đề Ravenscroft muốn khắc phục là hiện tượng <b>clouding</b>.',
+  8:'Trước năm 1845, ngành thủy tinh Anh chịu <b>heavy taxes</b>; việc bãi bỏ luật thuế giúp ngành phát triển. → <b>taxes</b>.',
+  9:'Máy của HM Ashley nhanh hơn <b>more than three times</b> so với mọi phương pháp sản xuất trước đó, nên phát biểu là <b>TRUE</b>.',
+  10:'Bài đọc nói Michael Owens là <b>founder of the Owens Bottle Machine Company</b>, không phải được một công ty lớn thuê để thiết kế máy. → <b>FALSE</b>.',
+  11:'Bài chỉ nói sản xuất thủy tinh hiện nay là ngành công nghệ cao trong thị trường toàn cầu cạnh tranh; không nói <b>most glass</b> do các nhà sản xuất quốc tế lớn làm ra. → <b>NOT GIVEN</b>.',
+  12:'Đoạn cuối nói do mối quan tâm ngày càng tăng về môi trường, chai và lọ thủy tinh đang <b>becoming ever more popular</b>. → <b>TRUE</b>.',
+  13:'Bài nói thủy tinh tái chế cần <b>less energy</b> và giúp tiết kiệm fuel và production costs, trái với phát biểu rằng nó đắt hơn. → <b>FALSE</b>.'
+};
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let startedAt = 0;
+
+let submitted = false;
+
+let savedSelection = null;
+
+let savedZone = null;
+
+let menuMode =
+  'selection';
+
+let menuTarget = null;
+
+let menuZone = null;
+
+
+/* =========================================================
+   ANSWER HELPERS
+========================================================= */
+
+function normalize(value){
+
+  return String(
+    value || ''
+  )
+  .trim()
+  .toLowerCase()
+  .replace(
+    /[’']/g,
+    "'"
+  )
+  .replace(
+    /\s+/g,
+    ' '
+  );
+
+}
+
+
+function isCorrect(
+  number,
+  value
+){
+
+  const answer =
+    normalize(value);
+
+
+  return KEYS[number]
+    .some(
+      key =>
+        normalize(key)
+        ===
+        answer
+    );
+
+}
+
+
+/* =========================================================
+   BUILD CONTROLS
+========================================================= */
+
+function buildControls(){
+
+  TFNG_NUMBERS
+    .forEach(
+      number => {
+
+        const select =
+          document.getElementById(
+            'a' + number
+          );
+
+
+        if(!select){
+          return;
+        }
+
+
+        select.innerHTML =
+
+          '<option value="">— Chọn đáp án —</option>'
+
+          +
+
+          TFNG_OPTIONS
+            .map(
+              value =>
+                `<option value="${value}">${value}</option>`
+            )
+            .join('');
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      'nav'
+    )
+    .innerHTML =
+
+    QUESTION_NUMBERS
+      .map(
+        number =>
+          `
+          <button
+            id="nav${number}"
+            onclick="goQ(${number})"
+          >
+            ${number}
+          </button>
+          `
+      )
+      .join('');
+
+}
+
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+function readStudent(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        'IELTS_PRACTICE_STUDENT'
+      )
+      ||
+      'null'
+    );
+
+  }
+  catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function prefill(){
+
+  const student =
+    readStudent();
+
+
+  if(student){
+
+    document
+      .getElementById(
+        'studentName'
+      )
+      .value =
+      student.name || '';
+
+
+    document
+      .getElementById(
+        'studentClass'
+      )
+      .value =
+      student.className || '';
+
+  }
+
+}
+
+
+function startPractice(){
+
+  const name =
+    document
+      .getElementById(
+        'studentName'
+      )
+      .value
+      .trim();
+
+
+  const className =
+    document
+      .getElementById(
+        'studentClass'
+      )
+      .value
+      .trim();
+
+
+  if(
+    !name
+    ||
+    !className
+  ){
+
+    document
+      .getElementById(
+        'startError'
+      )
+      .textContent =
+      'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+
+    'IELTS_PRACTICE_STUDENT',
+
+    JSON.stringify({
+      name,
+      className
+    })
+
+  );
+
+
+  document
+    .getElementById(
+      'studentInfo'
+    )
+    .textContent =
+    `${name} · ${className}`;
+
+
+  document
+    .getElementById(
+      'start'
+    )
+    .classList
+    .add(
+      'hidden'
+    );
+
+
+  startedAt =
+    Date.now();
+
+
+  restoreMarkup();
+
+  buildControls();
+
+  restoreAnswers();
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function fmt(sec){
+
+  sec =
+    Math.max(
+      0,
+      Math.floor(sec)
+    );
+
+
+  const hours =
+    Math.floor(
+      sec / 3600
+    );
+
+
+  const minutes =
+    Math.floor(
+      (
+        sec % 3600
+      )
+      /
+      60
+    );
+
+
+  const seconds =
+    sec % 60;
+
+
+  return hours
+
+    ?
+
+    `${
+      String(hours)
+      .padStart(
+        2,
+        '0'
+      )
+    }:${
+      String(minutes)
+      .padStart(
+        2,
+        '0'
+      )
+    }:${
+      String(seconds)
+      .padStart(
+        2,
+        '0'
+      )
+    }`
+
+    :
+
+    `${
+      String(minutes)
+      .padStart(
+        2,
+        '0'
+      )
+    }:${
+      String(seconds)
+      .padStart(
+        2,
+        '0'
+      )
+    }`;
+
+}
+
+
+setInterval(
+  () => {
+
+    if(startedAt){
+
+      document
+        .getElementById(
+          'timer'
+        )
+        .textContent =
+
+        fmt(
+          (
+            Date.now()
+            -
+            startedAt
+          )
+          /
+          1000
+        );
+
+    }
+
+  },
+
+  500
+);
+
+
+/* =========================================================
+   ANSWERS
+========================================================= */
+
+function saveAnswer(
+  number,
+  value
+){
+
+  if(submitted){
+    return;
+  }
+
+
+  localStorage.setItem(
+
+    `${ATTEMPT_KEY}_q${number}`,
+
+    value
+
+  );
+
+
+  navState(number);
+
+  updateProgress();
+
+}
+
+
+function getAnswer(number){
+
+  return localStorage.getItem(
+    `${ATTEMPT_KEY}_q${number}`
+  )
+  ||
+  '';
+
+}
+
+
+function restoreAnswers(){
+
+  QUESTION_NUMBERS
+    .forEach(
+      number => {
+
+        const value =
+          getAnswer(number);
+
+
+        const input =
+          document.getElementById(
+            'a' + number
+          );
+
+
+        if(input){
+
+          input.value =
+            value;
+
+        }
+
+
+        navState(number);
+
+      }
+    );
+
+}
+
+
+function navState(number){
+
+  const button =
+    document.getElementById(
+      'nav' + number
+    );
+
+
+  if(button){
+
+    button
+      .classList
+      .toggle(
+        'answered',
+        !!normalize(
+          getAnswer(number)
+        )
+      );
+
+  }
+
+}
+
+
+function updateProgress(){
+
+  const answered =
+
+    QUESTION_NUMBERS
+      .filter(
+        number =>
+          normalize(
+            getAnswer(number)
+          )
+      )
+      .length;
+
+
+  document
+    .getElementById(
+      'progressText'
+    )
+    .textContent =
+    `${answered}/13 câu đã trả lời`;
+
+
+  document
+    .getElementById(
+      'progressBar'
+    )
+    .style
+    .width =
+    (
+      answered
+      /
+      13
+      *
+      100
+    )
+    +
+    '%';
+
+}
+
+
+function goQ(number){
+
+  const target =
+    document.getElementById(
+      'q' + number
+    );
+
+
+  if(!target){
+    return;
+  }
+
+
+  target.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+
+  setTimeout(
+    () => {
+
+      document
+        .getElementById(
+          'a' + number
+        )
+        ?.focus();
+
+    },
+
+    300
+  );
+
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+async function submitPractice(){
+
+  if(submitted){
+    return;
+  }
+
+
+  submitted =
+    true;
+
+
+  let score =
+    0;
+
+
+  const answers =
+    {};
+
+
+  document
+    .getElementById(
+      'reviewList'
+    )
+    .innerHTML =
+    '';
+
+
+  QUESTION_NUMBERS
+    .forEach(
+      number => {
+
+        const user =
+          getAnswer(number);
+
+
+        const ok =
+          isCorrect(
+            number,
+            user
+          );
+
+
+        answers[number] =
+          user || '';
+
+
+        if(ok){
+
+          score++;
+
+        }
+
+
+        const card =
+          document.getElementById(
+            'q' + number
+          );
+
+
+        card
+          ?.classList
+          .add(
+            ok
+            ?
+            'correct-card'
+            :
+            'wrong-card'
+          );
+
+
+        const input =
+          document.getElementById(
+            'a' + number
+          );
+
+
+        if(input){
+
+          input.disabled =
+            true;
+
+
+          input
+            .classList
+            .add(
+              ok
+              ?
+              'correct'
+              :
+              'wrong'
+            );
+
+        }
+
+
+        const navButton =
+          document.getElementById(
+            'nav' + number
+          );
+
+
+        navButton
+          ?.classList
+          .add(
+            ok
+            ?
+            'correct'
+            :
+            'wrong'
+          );
+
+
+        if(!ok){
+
+          renderReview(
+            number,
+            user
+          );
+
+        }
+
+      }
+    );
+
+
+  const durationSeconds =
+
+    Math.floor(
+      (
+        Date.now()
+        -
+        startedAt
+      )
+      /
+      1000
+    );
+
+
+  const student =
+    readStudent();
+
+
+  document
+    .getElementById(
+      'resultStudent'
+    )
+    .textContent =
+
+    student
+
+    ?
+
+    `${student.name} · ${student.className}`
+
+    :
+
+    '';
+
+
+  document
+    .getElementById(
+      'resultScore'
+    )
+    .textContent =
+    `${score} / 13`;
+
+
+  document
+    .getElementById(
+      'resultPercent'
+    )
+    .textContent =
+
+    `${
+      Math.round(
+        score
+        /
+        13
+        *
+        100
+      )
+    }% đúng · Thời gian ${
+      fmt(durationSeconds)
+    }`;
+
+
+  document
+    .getElementById(
+      'resultOverlay'
+    )
+    .classList
+    .remove(
+      'hidden'
+    );
+
+
+  const details =
+    JSON.stringify({
+
+      title:
+        'The History of Glass - Reading Passage 1 - 01',
+
+      answers,
+
+      correctAnswers:
+        DISPLAY_KEY
+
+    });
+
+
+  const body =
+    new URLSearchParams({
+
+      mode:
+        'PRACTICE',
+
+      name:
+        student?.name || '',
+
+      className:
+        student?.className || '',
+
+      skill:
+        'Reading',
+
+      practiceType:
+        'Reading Passage 1',
+
+      practiceId:
+        '01',
+
+      score:
+        String(score),
+
+      total:
+        '13',
+
+      durationSeconds:
+        String(
+          durationSeconds
+        ),
+
+      details,
+
+      submittedAt:
+        new Date()
+        .toISOString()
+
+    });
+
+
+  try{
+
+    await fetch(
+
+      RESULT_ENDPOINT,
+
+      {
+
+        method:
+          'POST',
+
+        mode:
+          'no-cors',
+
+        headers:{
+          'Content-Type':
+            'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+
+        body:
+          body.toString()
+
+      }
+
+    );
+
+  }
+  catch(err){
+
+    console.warn(
+      'Không gửi được kết quả Practice:',
+      err
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+function renderReview(
+  number,
+  user
+){
+
+  document
+    .getElementById(
+      'reviewList'
+    )
+    .insertAdjacentHTML(
+
+      'beforeend',
+
+      `
+      <div class="inline-review">
+
+        <div class="review-title">
+          Câu ${number}
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Câu hỏi
+          </div>
+
+          <div>
+            ${escapeHTML(
+              QUESTION_TEXT[number]
+            )}
+          </div>
+
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án em chọn
+          </div>
+
+          <div class="review-user">
+            ${escapeHTML(
+              user
+              ||
+              'Chưa trả lời'
+            )}
+          </div>
+
+        </div>
+
+        <div class="review-row">
+
+          <div class="review-label">
+            Đáp án đúng
+          </div>
+
+          <div class="review-correct">
+            ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+
+        <div class="compare-box">
+
+          <div class="compare-heading">
+            🔎 Đối chiếu với bài đọc
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Passage
+            </div>
+
+            <div
+              class="passage-evidence"
+              role="button"
+              tabindex="0"
+              onclick="focusEvidence(${number})"
+              onkeydown="
+                if(
+                  event.key==='Enter'
+                  ||
+                  event.key===' '
+                ){
+                  event.preventDefault();
+                  focusEvidence(${number});
+                }
+              "
+            >
+
+              “${EVIDENCE[number]}”
+
+              <div class="evidence-help">
+                Nhấn để xem vị trí trong bài đọc
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="compare-item">
+
+            <div class="compare-label">
+              Phân tích
+            </div>
+
+            <div class="compare-analysis">
+              ${ANALYSIS[number]}
+            </div>
+
+          </div>
+
+
+          <div class="conclusion">
+            Đáp án: ${DISPLAY_KEY[number]}
+          </div>
+
+        </div>
+
+      </div>
+      `
+
+    );
+
+}
+
+
+/* =========================================================
+   EVIDENCE FOCUS
+========================================================= */
+
+function focusEvidence(number){
+
+  document
+    .querySelectorAll(
+      '.evidence-source.evidence-focus'
+    )
+    .forEach(
+      element => {
+
+        element
+          .classList
+          .remove(
+            'evidence-focus'
+          );
+
+      }
+    );
+
+
+  const targets = [
+
+    ...document
+      .querySelectorAll(
+        `[data-evidence~="${number}"]`
+      )
+
+  ];
+
+
+  if(
+    !targets.length
+  ){
+
+    return;
+
+  }
+
+
+  targets
+    .forEach(
+      target => {
+
+        target
+          .classList
+          .add(
+            'evidence-focus'
+          );
+
+      }
+    );
+
+
+  targets[0]
+    .scrollIntoView({
+
+      behavior:'smooth',
+
+      block:'center'
+
+    });
+
+
+  targets
+    .forEach(
+      target => {
+
+        target.style.animation =
+          'none';
+
+
+        void target.offsetWidth;
+
+
+        target.style.animation =
+          '';
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function closeResult(){
+
+  document
+    .getElementById(
+      'resultOverlay'
+    )
+    .classList
+    .add(
+      'hidden'
+    );
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT + NOTES
+========================================================= */
+
+const selectionMenu =
+  document.getElementById(
+    'selectionMenu'
+  );
+
+
+const menuHighlight =
+  document.getElementById(
+    'menuHighlight'
+  );
+
+
+const menuNote =
+  document.getElementById(
+    'menuNote'
+  );
+
+
+function zoneRoot(zone){
+
+  return document.getElementById(
+
+    zone ===
+    'passage'
+
+    ?
+
+    'passageRoot'
+
+    :
+
+    'questionsRoot'
+
+  );
+
+}
+
+
+function markupKey(zone){
+
+  return `${ATTEMPT_KEY}_markup_${zone}`;
+
+}
+
+
+function saveMarkup(zone){
+
+  document
+    .querySelectorAll(
+      '.evidence-source.evidence-focus'
+    )
+    .forEach(
+      element =>
+
+        element
+          .classList
+          .remove(
+            'evidence-focus'
+          )
+
+    );
+
+
+  localStorage.setItem(
+
+    markupKey(zone),
+
+    zoneRoot(zone)
+      .innerHTML
+
+  );
+
+}
+
+
+function restoreMarkup(){
+
+  [
+    'passage',
+    'questions'
+  ]
+  .forEach(
+    zone => {
+
+      const html =
+        localStorage.getItem(
+          markupKey(zone)
+        );
+
+
+      if(html){
+
+        zoneRoot(zone)
+          .innerHTML =
+          html;
+
+      }
+
+
+      bindContext(zone);
+
+    }
+  );
+
+}
+
+
+function resetMenu(){
+
+  menuMode =
+    'selection';
+
+
+  menuTarget =
+    null;
+
+
+  menuZone =
+    null;
+
+
+  menuHighlight
+    .style
+    .display =
+    '';
+
+
+  menuNote
+    .style
+    .display =
+    '';
+
+
+  menuHighlight
+    .textContent =
+    '🖍 Highlight';
+
+
+  menuNote
+    .textContent =
+    '📝 Take note';
+
+
+  menuHighlight
+    .classList
+    .remove(
+      'danger'
+    );
+
+
+  menuNote
+    .classList
+    .remove(
+      'danger'
+    );
+
+}
+
+
+function hideMenu(){
+
+  selectionMenu
+    .classList
+    .remove(
+      'show'
+    );
+
+
+  resetMenu();
+
+}
+
+
+function showMenu(rect){
+
+  selectionMenu
+    .classList
+    .add(
+      'show'
+    );
+
+
+  requestAnimationFrame(
+    () => {
+
+      const width =
+        selectionMenu.offsetWidth
+        ||
+        180;
+
+
+      const left =
+        Math.min(
+
+          window.innerWidth
+          -
+          width
+          -
+          10,
+
+          Math.max(
+
+            10,
+
+            rect.left
+            +
+            rect.width / 2
+            -
+            width / 2
+
+          )
+
+        );
+
+
+      selectionMenu
+        .style
+        .left =
+        left + 'px';
+
+
+      selectionMenu
+        .style
+        .top =
+        Math.max(
+          10,
+          rect.top - 47
+        )
+        +
+        'px';
+
+    }
+  );
+
+}
+
+
+function captureSelection(zone){
+
+  const selection =
+    window.getSelection();
+
+
+  if(
+    !selection
+    ||
+    selection.rangeCount === 0
+    ||
+    selection.isCollapsed
+  ){
+
+    return;
+
+  }
+
+
+  const range =
+    selection.getRangeAt(0);
+
+
+  if(
+    !zoneRoot(zone)
+      .contains(
+        range.commonAncestorContainer
+      )
+  ){
+
+    return;
+
+  }
+
+
+  savedSelection =
+    range.cloneRange();
+
+
+  savedZone =
+    zone;
+
+
+  resetMenu();
+
+
+  showMenu(
+    range.getBoundingClientRect()
+  );
+
+}
+
+
+function clearSelection(){
+
+  const selection =
+    window.getSelection();
+
+
+  if(selection){
+
+    selection
+      .removeAllRanges();
+
+  }
+
+
+  savedSelection =
+    null;
+
+
+  savedZone =
+    null;
+
+}
+
+
+function addHighlight(){
+
+  if(
+    menuMode ===
+    'delete-highlight'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+      savedSelection
+      .cloneRange();
+
+
+    const mark =
+      document.createElement(
+        'mark'
+      );
+
+
+    mark.className =
+      'user-highlight';
+
+
+    mark.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      mark
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+    hideMenu();
+
+  }
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function addNote(){
+
+  if(
+    menuMode ===
+    'delete-note'
+  ){
+
+    removeMark();
+
+    return;
+
+  }
+
+
+  if(
+    !savedSelection
+    ||
+    !savedZone
+  ){
+
+    return;
+
+  }
+
+
+  const text =
+    prompt(
+      'Nhập ghi chú:'
+    );
+
+
+  if(
+    text === null
+    ||
+    !text.trim()
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const range =
+      savedSelection
+      .cloneRange();
+
+
+    const span =
+      document.createElement(
+        'span'
+      );
+
+
+    span.className =
+      'note-anchor';
+
+
+    span.dataset.note =
+      text.trim();
+
+
+    span.appendChild(
+      range.extractContents()
+    );
+
+
+    range.insertNode(
+      span
+    );
+
+
+    saveMarkup(
+      savedZone
+    );
+
+
+    clearSelection();
+
+    hideMenu();
+
+  }
+  catch(e){
+
+    alert(
+      'Hãy chọn một đoạn chữ ngắn hơn.'
+    );
+
+  }
+
+}
+
+
+function showDeleteMenu(
+  target,
+  zone,
+  type
+){
+
+  menuTarget =
+    target;
+
+
+  menuZone =
+    zone;
+
+
+  clearSelection();
+
+
+  if(
+    type ===
+    'highlight'
+  ){
+
+    menuMode =
+      'delete-highlight';
+
+
+    menuHighlight
+      .textContent =
+      '✕ Xóa highlight';
+
+
+    menuHighlight
+      .classList
+      .add(
+        'danger'
+      );
+
+
+    menuNote
+      .style
+      .display =
+      'none';
+
+  }
+  else{
+
+    menuMode =
+      'delete-note';
+
+
+    menuNote
+      .textContent =
+      '✕ Xóa note';
+
+
+    menuNote
+      .classList
+      .add(
+        'danger'
+      );
+
+
+    menuHighlight
+      .style
+      .display =
+      'none';
+
+  }
+
+
+  showMenu(
+    target.getBoundingClientRect()
+  );
+
+}
+
+
+function removeMark(){
+
+  if(
+    !menuTarget
+  ){
+
+    return;
+
+  }
+
+
+  const parent =
+    menuTarget.parentNode;
+
+
+  while(
+    menuTarget.firstChild
+  ){
+
+    parent.insertBefore(
+
+      menuTarget.firstChild,
+
+      menuTarget
+
+    );
+
+  }
+
+
+  menuTarget.remove();
+
+
+  parent.normalize();
+
+
+  saveMarkup(
+    menuZone
+  );
+
+
+  hideMenu();
+
+}
+
+
+function bindContext(zone){
+
+  const root =
+    zoneRoot(zone);
+
+
+  if(!root){
+
+    return;
+
+  }
+
+
+  root.addEventListener(
+
+    'mouseup',
+
+    () =>
+      setTimeout(
+        () =>
+          captureSelection(zone),
+        0
+      )
+
+  );
+
+
+  root.addEventListener(
+
+    'touchend',
+
+    () =>
+      setTimeout(
+        () =>
+          captureSelection(zone),
+        120
+      )
+
+  );
+
+
+  root.addEventListener(
+
+    'click',
+
+    event => {
+
+      const highlight =
+        event.target
+          .closest(
+            'mark.user-highlight'
+          );
+
+
+      const note =
+        event.target
+          .closest(
+            '.note-anchor'
+          );
+
+
+      if(highlight){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          highlight,
+          zone,
+          'highlight'
+        );
+
+
+        return;
+
+      }
+
+
+      if(note){
+
+        event.stopPropagation();
+
+
+        showDeleteMenu(
+          note,
+          zone,
+          'note'
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+menuHighlight
+  .addEventListener(
+    'click',
+    addHighlight
+  );
+
+
+menuNote
+  .addEventListener(
+    'click',
+    addNote
+  );
+
+
+document
+  .addEventListener(
+    'mousedown',
+    event => {
+
+      if(
+        !selectionMenu
+          .contains(
+            event.target
+          )
+
+        &&
+
+        !event.target
+          .closest(
+            '.user-highlight'
+          )
+
+        &&
+
+        !event.target
+          .closest(
+            '.note-anchor'
+          )
+      ){
+
+        hideMenu();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(
+      /[&<>"']/g,
+      char => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      })[char]
+    );
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+buildControls();
+
+prefill();
+
+
+</script>
+
+</body>
+</html>
