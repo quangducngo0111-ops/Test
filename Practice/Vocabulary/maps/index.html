@@ -1704,7 +1704,7 @@ footer{
         <div class="sentenceTarget hidden" id="sentenceTarget"></div>
 
 
-        <div class="phraseBox">
+        <div class="phraseBox hidden" id="constraintBox">
 
           <div class="constraintGrid">
 
@@ -3179,10 +3179,64 @@ footer{
   }
 
 
-  function simpleSentencePrompt(fact, context){
+  function simpleSentencePrompt(
+    fact,
+    context,
+    hintMode,
+    requiredPhrase,
+    reference
+  ){
 
     const target =
       targetForFact(fact);
+
+    if(
+      hintMode === "reference"
+      &&
+      reference?.display
+    ){
+
+      return (
+        "Hãy miêu tả vị trí của "
+        +
+        target
+        +
+        " so với "
+        +
+        reference.display
+        +
+        " vào năm "
+        +
+        context.year
+        +
+        "."
+      );
+
+    }
+
+    if(
+      hintMode === "phrase"
+      &&
+      requiredPhrase
+    ){
+
+      return (
+        "Hãy miêu tả vị trí của "
+        +
+        target
+        +
+        " vào năm "
+        +
+        context.year
+        +
+        ", sử dụng cụm từ “"
+        +
+        requiredPhrase
+        +
+        "”."
+      );
+
+    }
 
     return (
       "Hãy miêu tả vị trí của "
@@ -3594,14 +3648,6 @@ footer{
       facts.length;
 
 
-    $("taskPrompt")
-      .textContent =
-      simpleSentencePrompt(
-        fact,
-        context
-      );
-
-
     const requiredPhrase =
       requiredPhraseForFact(fact, current, currentFactIndex);
 
@@ -3612,32 +3658,29 @@ footer{
       hintModeForFact(current, currentFactIndex);
 
 
-    if(hintMode === "reference"){
+    $("taskPrompt")
+      .textContent =
+      simpleSentencePrompt(
+        fact,
+        context,
+        hintMode,
+        requiredPhrase,
+        reference
+      );
 
-      $("constraintLabel")
-        .textContent =
-        "Đối tượng tham chiếu";
 
-      $("phraseList")
-        .innerHTML =
-        reference?.display
-        ? `<span class="requiredPhrase">${escapeHTML(reference.display)}</span>`
-        : `<span class="requiredPhrase">Đang cập nhật</span>`;
+    /* Gợi ý được viết trực tiếp trong câu lệnh để học sinh dễ hiểu.
+       Không hiển thị các nhãn kỹ thuật riêng như “đối tượng tham chiếu”. */
+    const constraintBox =
+      $("constraintBox");
 
+    if(constraintBox){
+      constraintBox.classList.add("hidden");
     }
-    else{
 
-      $("constraintLabel")
-        .textContent =
-        "Cụm từ cần dùng";
-
-      $("phraseList")
-        .innerHTML =
-        requiredPhrase
-        ? `<span class="requiredPhrase">${escapeHTML(requiredPhrase)}</span>`
-        : `<span class="requiredPhrase">Đang cập nhật</span>`;
-
-    }
+    $("phraseList")
+      .innerHTML =
+      "";
 
 
     $("taskInstruction")
