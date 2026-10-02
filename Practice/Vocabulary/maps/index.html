@@ -1325,6 +1325,14 @@ dialog img{
     5px 10px;
 }
 
+
+.secondHint{
+  margin-top:10px !important;
+  padding-top:10px;
+  border-top:1px dashed #dfc98c;
+  color:#5f4a1b !important;
+}
+
 footer{
   text-align:center;
 
@@ -1857,7 +1865,7 @@ footer{
     { name:"Eastwood Village", year:1996 },
     { name:"Meadowfield City", year:1999 },
     { name:"Kingsford Town", year:1993 },
-    { name:"Harborview City", year:2002 }
+    { name:"Harborview Park", year:2002 }
   ];
 
 
@@ -2834,12 +2842,12 @@ footer{
     ],
 
     "museum-gardens": [
-      {display:"Park", groups:[["park"]]},
-      {display:"Park", groups:[["park"]]},
-      {display:"Park", groups:[["park"]]},
-      {display:"Park", groups:[["park"]]},
-      {display:"Park", groups:[["park"]]},
-      {display:"Park", groups:[["park"]]}
+      {kind:"map", aliases:["park","garden","gardens","museum gardens","site"]},
+      {kind:"map", aliases:["park","garden","gardens","museum gardens","site"]},
+      {kind:"map", aliases:["park","garden","gardens","museum gardens","site"]},
+      {kind:"map", aliases:["park","garden","gardens","museum gardens","site"]},
+      {kind:"map", aliases:["park","garden","gardens","museum gardens","site"]},
+      {kind:"map", aliases:["park","garden","gardens","museum gardens","site"]}
     ]
 
   };
@@ -3152,7 +3160,47 @@ footer{
 
   }
 
-  function renderSentenceFeedback(result){
+  function secondAttemptHint(result){
+
+    if(!result){
+      return "";
+    }
+
+    /* Sau lần sai thứ hai, hé lộ đúng phần đang bị ẩn trong đề:
+       - đề cho cụm từ -> gợi ý đối tượng so sánh
+       - đề cho đối tượng -> gợi ý cụm từ vị trí
+       Không đưa cả câu mẫu hoàn chỉnh để học sinh vẫn phải tự viết. */
+    if(
+      result.hintMode === "phrase"
+      &&
+      result.reference?.display
+    ){
+      return (
+        "Gợi ý: Hãy xác định vị trí của "
+        + result.target
+        + " so với "
+        + result.reference.display
+        + "."
+      );
+    }
+
+    if(
+      result.hintMode === "reference"
+      &&
+      result.phrase
+    ){
+      return (
+        "Gợi ý: Cụm từ vị trí phù hợp là “"
+        + result.phrase
+        + "”."
+      );
+    }
+
+    return "Gợi ý: Quan sát lại vị trí của đối tượng trên bản đồ và giữ câu ở thì quá khứ.";
+  }
+
+
+  function renderSentenceFeedback(result, attemptCount = 1){
 
     if(!result){
       $("feedback").innerHTML = "";
@@ -3169,10 +3217,20 @@ footer{
       return;
     }
 
+    const extraHint =
+      Number(attemptCount) >= 2
+      ? secondAttemptHint(result)
+      : "";
+
     $("feedback").innerHTML = `
       <div class="sentenceFeedback fix">
         <strong>Cần sửa một chút</strong>
         <p>${escapeHTML(result.issues.join(" "))}</p>
+        ${
+          extraHint
+          ? `<p class="secondHint"><b>Gợi ý:</b> ${escapeHTML(extraHint.replace(/^Gợi ý:\s*/i,""))}</p>`
+          : ""
+        }
       </div>
     `;
 
@@ -3793,7 +3851,10 @@ footer{
           last.sentence
         );
 
-      renderSentenceFeedback(refreshedFeedback);
+      renderSentenceFeedback(
+        refreshedFeedback,
+        submissions.length
+      );
     }
 
   }
@@ -3994,7 +4055,10 @@ footer{
       }
     );
 
-    renderSentenceFeedback(feedback);
+    renderSentenceFeedback(
+      feedback,
+      previousForSentence.length + 1
+    );
 
     $("saveStatus").textContent =
       feedback.correct
