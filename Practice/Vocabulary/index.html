@@ -10271,7 +10271,134 @@ function mapsSafeCloze(source,word){
   return cloze!==sentence && cloze.replace(/_____/g,"").trim().split(/\s+/).length>=3 ? cloze : "";
 }
 
+
+/* Writing Task 2 · Learning a Foreign Language · Bộ 01
+   Context/collocation questions are fully curated. The generic test generator
+   previously created bare cloze sentences where several career/culture phrases
+   could be logically correct at the same time. Each item below now uses a
+   sentence and distractors chosen so there is only one defensible answer. */
+const WT2_LANGUAGE_TEST_SCENES = [
+  {
+    word:"translation software",
+    context:"Many travellers use _____ to convert written text from one language into another.",
+    options:["translation software","widely available","broaden knowledge","work in multinational companies"]
+  },
+  {
+    word:"widely available",
+    context:"Because smartphone apps can be downloaded in most countries, translation technology is now _____.",
+    options:["widely available","secure better-paid jobs","digital tools","explore traditions and customs"]
+  },
+  {
+    word:"remain beneficial",
+    context:"Even when translation apps improve, learning a foreign language can _____ for long-term communication and cultural understanding.",
+    options:["remain beneficial","widely available","digital tools","qualify for international positions"]
+  },
+  {
+    word:"digital tools",
+    context:"Online dictionaries, AI translators and language-learning apps are examples of _____.",
+    options:["digital tools","convenient","broaden horizons","gain access to employment opportunities"]
+  },
+  {
+    word:"convenient",
+    context:"For a tourist who needs an immediate translation on the street, a phone app is especially _____.",
+    options:["convenient","translation software","improve career prospects","develop cultural awareness"]
+  },
+  {
+    word:"advantageous",
+    context:"For applicants seeking international careers, being bilingual can be particularly _____.",
+    options:["advantageous","digital tools","communicate with native speakers","widely available"]
+  },
+  {
+    word:"learn a foreign language",
+    context:"Instead of relying entirely on translation apps, some people choose to _____ so they can communicate independently.",
+    options:["learn a foreign language","digital tools","advantageous","cultural awareness"]
+  },
+  {
+    word:"gain access to authentic materials",
+    context:"By understanding the original language, learners can _____ such as novels, interviews and news reports without translation.",
+    options:["gain access to authentic materials","secure better-paid jobs","digital tools","advantageous"]
+  },
+  {
+    word:"communicate with native speakers",
+    context:"Speaking the language directly allows learners to _____ without depending on translation software.",
+    options:["communicate with native speakers","digital tools","widely available","advantageous"]
+  },
+  {
+    word:"have a deeper understanding of different cultures",
+    context:"Learning a language can help people _____ by noticing meanings and values that may be lost in translation.",
+    options:["have a deeper understanding of different cultures","work in multinational companies","digital tools","widely available"]
+  },
+  {
+    word:"explore traditions and customs",
+    context:"When learners read local stories and speak with residents, they can _____ more directly.",
+    options:["explore traditions and customs","qualify for international positions","translation software","convenient"]
+  },
+  {
+    word:"develop cultural awareness",
+    context:"Exposure to different ways of speaking and behaving can help students _____.",
+    options:["develop cultural awareness","digital tools","secure better-paid jobs","widely available"]
+  },
+  {
+    word:"broaden knowledge",
+    context:"Reading academic sources in another language can _____ by exposing students to ideas unavailable in translation.",
+    options:["broaden knowledge","work in multinational companies","convenient","translation software"]
+  },
+  {
+    word:"broaden horizons",
+    context:"Studying another language can _____ by introducing learners to new perspectives and ways of life.",
+    options:["broaden horizons","digital tools","widely available","secure better-paid jobs"]
+  },
+  {
+    word:"qualify for international positions",
+    context:"Candidates who meet the language requirement may _____ that specifically require bilingual staff.",
+    options:["qualify for international positions","translation software","broaden horizons","convenient"]
+  },
+  {
+    word:"gain access to employment opportunities",
+    context:"A second language may help graduates _____ that would otherwise be unavailable to them.",
+    options:["gain access to employment opportunities","explore traditions and customs","digital tools","widely available"]
+  },
+  {
+    word:"secure better-paid jobs",
+    context:"Employees with strong bilingual skills may _____ with higher salaries than similar monolingual roles.",
+    options:["secure better-paid jobs","communicate with native speakers","translation software","advantageous"]
+  },
+  {
+    word:"work in multinational companies",
+    context:"Graduates who can use English professionally may be better prepared to _____ where colleagues and clients come from different countries.",
+    options:["work in multinational companies","widely available","develop cultural awareness","translation software"]
+  },
+  {
+    word:"communicate with international clients",
+    context:"Sales staff need strong language skills to _____ during meetings and negotiations.",
+    options:["communicate with international clients","digital tools","broaden horizons","advantageous"]
+  },
+  {
+    word:"enhance employability",
+    context:"Adding a foreign language to a candidate's skill set can _____ in a competitive labour market.",
+    options:["enhance employability","widely available","translation software","explore traditions and customs"]
+  },
+  {
+    word:"improve career prospects",
+    context:"Over time, stronger language skills can _____ by opening the door to promotion and international roles.",
+    options:["improve career prospects","convenient","digital tools","communicate with native speakers"]
+  }
+];
+
+function wt2LanguageScene(word){
+  if(selectedSkill!=="writing-task-2" || String(selectedSet)!=="learning-a-language") return null;
+  return WT2_LANGUAGE_TEST_SCENES.find(item=>item.word===word.word) || null;
+}
+
 function makeCollocationQuestion(word){
+  const wt2Scene=wt2LanguageScene(word);
+  if(wt2Scene){
+    return {
+      type:"collocation",label:"Collocation",word,mode:"mcq",
+      prompt:"Hoàn thành cụm từ trong câu",context:wt2Scene.context,
+      options:shuffle([...wt2Scene.options]),correct:wt2Scene.word,correctDisplay:wt2Scene.word
+    };
+  }
   const isMaps=selectedSkill==="writing-task-1" && String(selectedSet)==="maps";
   if(isMaps){
     const scene=MAPS_COLLOCATION_SCENES.find(item=>item.word===word.word);
@@ -10302,6 +10429,14 @@ function makeCollocationQuestion(word){
 
 
 function makeContextQuestion(word){
+  const wt2Scene=wt2LanguageScene(word);
+  if(wt2Scene){
+    return {
+      type:"context",label:"Context",word,mode:"mcq",
+      prompt:"Chọn cụm từ phù hợp nhất với ngữ cảnh",context:wt2Scene.context,
+      options:shuffle([...wt2Scene.options]),correct:wt2Scene.word,correctDisplay:wt2Scene.word
+    };
+  }
   const isMaps=selectedSkill==="writing-task-1" && String(selectedSet)==="maps";
   if(isMaps){
     const scene=MAPS_CONTEXT_SCENES.find(item=>item.word===word.word);
