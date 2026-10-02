@@ -38,7 +38,7 @@ const TASKS = [
  {id:'fluct1',title:'Fluctuation',subtitle:'fluctuate · high · low',period:'2011–2017',type:'line',labels:['2011','2012','2013','2014','2015','2016','2017'],series:[{name:'Petrol price',values:[110,118,108,116,105,112,109]}],facts:[{prompt:'Mô tả xu hướng chung của giá trong cả giai đoạn.',required:['fluctuated'],checks:{min:105,max:118}},{prompt:'Mô tả điểm cao nhất.',required:['reached a high of'],checks:{peak:118,peakYear:'2012'}},{prompt:'Mô tả điểm thấp nhất.',required:['reached a low of'],checks:{low:105,lowYear:'2015'}}]},
  {id:'peak1',title:'Peak then fall',subtitle:'reach its peak · fall',period:'2010–2016',type:'line',labels:['2010','2011','2012','2013','2014','2015','2016'],series:[{name:'Visitors',values:[40,55,75,100,92,76,60]}],facts:[{prompt:'Mô tả đỉnh của lượng khách.',required:['reached its peak at'],checks:{peak:100,peakYear:'2013'}},{prompt:'Mô tả sự giảm từ đỉnh đến năm 2016.',required:['fell from','to'],checks:{from:100,to:60,yearFrom:'2013',yearTo:'2016'}}]},
  {id:'compare1',title:'Two-line comparison',subtitle:'surpass · exceed',period:'2010–2015',type:'line',labels:['2010','2011','2012','2013','2014','2015'],series:[{name:'A',values:[40,48,57,66,78,88]},{name:'B',values:[65,63,62,64,70,80]}],facts:[{prompt:'Mô tả thời điểm A lần đầu vượt B.',required:['surpassed'],checks:{year:'2013',a:66,b:64},hints:['Tìm năm đầu tiên mà đường A nằm cao hơn đường B.','A lần đầu cao hơn B vào năm 2013. Khi đó A = 66 và B = 64.','Khung câu: In ______, A surpassed B, reaching ______ compared with ______ for B.'],model:'In 2013, A surpassed B, reaching 66 compared with 64 for B.'},{prompt:'So sánh A và B vào năm 2015.',required:['exceeded'],checks:{year:'2015',a:88,b:80},hints:['Nhìn vào điểm cuối cùng của hai đường ở năm 2015.','Năm 2015, A = 88 còn B = 80. Dùng “exceeded” để nói A cao hơn B.','Khung câu: In 2015, A exceeded B, at ______ compared with ______.'],model:'In 2015, A exceeded B, at 88 compared with 80.'}]},
- {id:'sameRate',title:'Similar rates',subtitle:'roughly the same rate',period:'2012–2016',type:'line',labels:['2012','2013','2014','2015','2016'],series:[{name:'City A',values:[30,40,50,60,70]},{name:'City B',values:[20,30,40,50,60]}],facts:[{prompt:'Mô tả hai đường tăng với tốc độ gần tương đương.',required:['increased at roughly the same rate'],checks:{a0:30,a1:70,b0:20,b1:60}}]},
+ {id:'sameRate',title:'Similar rates',subtitle:'roughly the same rate',period:'2012–2016',type:'line',labels:['2012','2013','2014','2015','2016'],series:[{name:'City A',values:[30,40,50,60,70]},{name:'City B',values:[20,30,40,50,60]}],facts:[{prompt:'Mô tả hai đường tăng với tốc độ gần tương đương.',required:['increased at roughly the same rate'],checks:{a0:30,a1:70,b0:20,b1:60},quality:'same-rate',hints:['Em đã xác định đúng xu hướng. Bây giờ hãy nói rõ mỗi thành phố tăng từ mức nào lên mức nào.','City A tăng từ 30 lên 70; City B tăng từ 20 lên 60. Với mỗi thành phố, dùng đầy đủ cấu trúc “from ... to ...”.','Khung câu: City A and City B increased at roughly the same rate, with City A rising from ___ to ___ and City B increasing from ___ to ___.'],model:'City A and City B increased at roughly the same rate, with City A rising from 30 to 70 and City B increasing from 20 to 60.'}]},
  {id:'degree1',title:'Degree of change',subtitle:'slightly · significantly',period:'2010–2014',type:'line',labels:['2010','2011','2012','2013','2014'],series:[{name:'A',values:[50,52,53,54,55]},{name:'B',values:[45,55,70,88,110]}],facts:[{prompt:'Mô tả A tăng nhẹ.',required:['increased slightly'],checks:{from:50,to:55}},{prompt:'Mô tả B tăng đáng kể.',required:['increased significantly'],checks:{from:45,to:110}}]},
  {id:'period1',title:'Beginning & end',subtitle:'time phrases',period:'2000–2005',type:'line',labels:['2000','2001','2002','2003','2004','2005'],series:[{name:'Cost',values:[115,114,116,113,111,112]}],facts:[{prompt:'Mô tả số liệu ở đầu giai đoạn.',required:['at the beginning of the period'],checks:{value:115,year:'2000'}},{prompt:'Mô tả số liệu ở cuối giai đoạn.',required:['at the end of the period'],checks:{value:112,year:'2005'}}]},
  {id:'bars1',title:'Bar chart comparison',subtitle:'higher/lower · cheapest',period:'2020',type:'bar',labels:['UK','USA','Canada','Australia'],series:[{name:'Petrol price',values:[1.15,1.35,1.05,1.25]}],facts:[{prompt:'So sánh UK với USA.',required:['cheaper than'],checks:{a:'UK',b:'USA',av:1.15,bv:1.35}},{prompt:'Nêu quốc gia có mức thấp nhất.',required:['the cheapest'],checks:{a:'Canada',av:1.05}}]},
@@ -58,7 +58,35 @@ function openTask(id,idx=0){current=TASKS.find(t=>t.id===id);factIndex=idx;$('ca
 function renderWorkspace(){const f=currentFact(), rec=getRecord(current.id)||{}, last=(rec.submissions?.[factIndex]||[]).at(-1);$('taskHeading').textContent=`Chart ${TASKS.indexOf(current)+1} · ${current.title}`;$('chartHeading').textContent=current.title;$('chartPeriod').textContent=current.period;$('taskImage').src=svgData(current);$('factPrompt').textContent=f.prompt;$('instruction').textContent=`Câu ${factIndex+1}/${current.facts.length}. Viết đúng 1 câu và dùng cấu trúc bắt buộc. Số liệu phải khớp biểu đồ.`;$('requiredPhrases').innerHTML=f.required.map(x=>`<span class="requiredPhrase">${esc(x)}</span>`).join('');$('essay').value=last?.sentence||'';count();const attempts=rec.submissions?.[factIndex]||[];const wrongCount=attempts.filter(x=>!x.correct).length;$('feedback').innerHTML=last?feedbackHtml(last.feedback,wrongCount):'';$('prevSentence').disabled=TASKS.indexOf(current)===0&&factIndex===0;$('nextSentence').disabled=TASKS.indexOf(current)===TASKS.length-1&&factIndex===current.facts.length-1;$('prevSentence').textContent=factIndex===0?'← Chart trước':'← Câu trước';$('nextSentence').textContent=factIndex===current.facts.length-1?'Chart tiếp →':'Câu tiếp →'}
 function normalize(s){return String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9.%$\s-]/g,' ').replace(/\s+/g,' ').trim()}
 function containsPhrase(n,p){const clean=p.replace(/\.\.\./g,'').trim();return n.includes(clean)}
-function grade(sentence){const f=currentFact(), n=normalize(sentence);const phraseChecks=f.required.map(p=>({label:`Dùng “${p}”`,ok:containsPhrase(n,p)}));const nums=[...sentence.matchAll(/\d+(?:\.\d+)?/g)].map(m=>Number(m[0]));const expected=[];Object.entries(f.checks||{}).forEach(([k,v])=>{if(typeof v==='number')expected.push(v)});const unique=[...new Set(expected)];const numberChecks=unique.map(v=>({label:`Có số liệu ${v}`,ok:nums.some(n=>Math.abs(n-v)<.001)}));const oneSentence=(sentence.match(/[.!?]+/g)||[]).length<=1;const checks=[...phraseChecks,...numberChecks,{label:'Chỉ viết 1 câu',ok:oneSentence}];const correct=checks.every(c=>c.ok);return{correct,checks}}
+function grade(sentence){
+  const f=currentFact(), n=normalize(sentence);
+  const phraseChecks=f.required.map(p=>({label:`Dùng “${p}”`,ok:containsPhrase(n,p)}));
+  const nums=[...sentence.matchAll(/\d+(?:\.\d+)?/g)].map(m=>Number(m[0]));
+  const expected=[];
+  Object.entries(f.checks||{}).forEach(([k,v])=>{if(typeof v==='number')expected.push(v)});
+  const unique=[...new Set(expected)];
+  const numberChecks=unique.map(v=>({label:`Có số liệu ${v}`,ok:nums.some(x=>Math.abs(x-v)<.001)}));
+  const oneSentence=(sentence.match(/[.!?]+/g)||[]).length<=1;
+  const qualityChecks=[];
+
+  if(f.quality==='same-rate'){
+    const cityA=/city\s*a/.test(n), cityB=/city\s*b/.test(n);
+    const aRange=/(?:city\s*a[^.!?]{0,80})?(?:ris(?:e|ing)|increas(?:e|ed|ing)|climb(?:ed|ing)?)[^.!?]{0,35}from\s+30\s+to\s+70/.test(n)
+      || /city\s*a[^.!?]{0,70}from\s+30\s+to\s+70/.test(n);
+    const bRange=/(?:city\s*b[^.!?]{0,80})?(?:ris(?:e|ing)|increas(?:e|ed|ing)|climb(?:ed|ing)?)[^.!?]{0,35}from\s+20\s+to\s+60/.test(n)
+      || /city\s*b[^.!?]{0,70}from\s+20\s+to\s+60/.test(n);
+    const badCompressed=/compared\s+(?:to|with)\s+20\s+to\s+60(?:\s+of\s+city\s*b)?/.test(n)
+      || /20\s+to\s+60\s+of\s+city\s*b/.test(n);
+    qualityChecks.push({label:'Nêu rõ City A và City B',ok:cityA&&cityB});
+    qualityChecks.push({label:'City A: dùng đầy đủ “from 30 to 70”',ok:aRange});
+    qualityChecks.push({label:'City B: dùng đầy đủ “from 20 to 60”',ok:bRange});
+    qualityChecks.push({label:'Diễn đạt so sánh đầy đủ, không viết “20 to 60 of City B”',ok:!badCompressed});
+  }
+
+  const checks=[...phraseChecks,...numberChecks,...qualityChecks,{label:'Chỉ viết 1 câu',ok:oneSentence}];
+  const correct=checks.every(c=>c.ok);
+  return{correct,checks,qualityFailed:qualityChecks.some(c=>!c.ok)};
+}
 function hintInfo(f,wrongCount){
   const level=Math.min(Math.max(wrongCount,1),4);
   const hints=Array.isArray(f.hints)?f.hints:[];
@@ -78,7 +106,12 @@ function hintInfo(f,wrongCount){
 function feedbackHtml(f,wrongCount=0){
   const fact=currentFact();
   const hint=!f.correct?hintInfo(fact,wrongCount):null;
-  return `<div class="sentenceFeedback ${f.correct?'good':'fix'}"><strong>${f.correct?'✓ Câu đạt yêu cầu':'Cần sửa lại'}</strong><p>${f.correct?'Cấu trúc và số liệu chính đã khớp yêu cầu.':'Kiểm tra lại các mục bên dưới rồi sửa câu và bấm “Kiểm tra câu” lần nữa.'}</p>${f.checks.map(c=>`<div class="checkRow ${c.ok?'ok':'bad'}">${c.ok?'✓':'✕'} ${esc(c.label)}</div>`).join('')}${hint?`<div class="progressHint"><b>${esc(hint.title)}</b><span>${esc(hint.text)}</span>${wrongCount<4?'<small>Nếu vẫn chưa viết được, hãy sửa câu và kiểm tra lại để nhận gợi ý tiếp theo.</small>':''}</div>`:''}</div>`
+  const partial=!f.correct && f.checks.some(c=>c.ok);
+  const title=f.correct?'✓ Câu đạt yêu cầu':(partial?'⚠ Gần đúng · cần chỉnh':'Cần sửa lại');
+  const message=f.correct
+    ?'Cấu trúc, số liệu và cách diễn đạt chính đã khớp yêu cầu.'
+    :(f.qualityFailed?'Em đã có đúng một phần nội dung, nhưng cách ghép số liệu/chủ thể chưa đủ rõ hoặc chưa tự nhiên. Hãy sửa theo mục ✕ bên dưới.':'Kiểm tra lại các mục bên dưới rồi sửa câu và bấm “Kiểm tra câu” lần nữa.');
+  return `<div class="sentenceFeedback ${f.correct?'good':'fix'}"><strong>${title}</strong><p>${message}</p>${f.checks.map(c=>`<div class="checkRow ${c.ok?'ok':'bad'}">${c.ok?'✓':'✕'} ${esc(c.label)}</div>`).join('')}${hint?`<div class="progressHint"><b>${esc(hint.title)}</b><span>${esc(hint.text)}</span>${wrongCount<4?'<small>Nếu vẫn chưa viết được, hãy sửa câu rồi kiểm tra lại để mở gợi ý tiếp theo.</small>':''}</div>`:''}</div>`
 }
 function submit(){
   const sentence=$('essay').value.trim();
