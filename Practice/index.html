@@ -110,8 +110,8 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_V5';
-const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V4'];
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_V6';
+const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
 const CACHE_TTL=6*60*60*1000;
 
 const CATS={
@@ -136,7 +136,9 @@ const FALLBACK={
   writing1:[
     {title:'Dynamic Datasets',desc:'Writing Task 1 practice',url:'./WritingTask1/DynamicDatasets/'}
   ],
-  writing2:[],
+  writing2:[
+    {title:'Translation Practice',desc:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',url:'./WritingTask2/TranslationPractice/'}
+  ],
   vocabulary:[
     {title:'Vocabulary Practice',desc:'Từ vựng & trò chơi',url:'./Vocabulary/'}
   ]
@@ -218,7 +220,7 @@ function item(path,root){
     MatchingSentenceEndings:'Matching Sentence Endings',SentenceCompletion:'Sentence Completion',SummaryCompletion:'Summary Completion',
     TableCompletion:'Table Completion',NoteCompletion:'Note Completion',FlowChartCompletion:'Flow-chart Completion',
     ShortAnswerQuestions:'Short Answer Questions',MultipleChoice:'Multiple Choice',DiagramLabelling:'Diagram Labelling',
-    DynamicDatasets:'Dynamic Datasets'
+    DynamicDatasets:'Dynamic Datasets',TranslationPractice:'Translation Practice'
   };
   return{
     title:labels[raw]||pretty(raw),
