@@ -12,8 +12,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The school is in the northern part of town.',keywords:['school'],places:['north','northern']},
       {label:'The hospital lies west of the shopping centre.',keywords:['hospital','shopping'],places:['west','western']},
       {label:'The park is near the river, east of the school.',keywords:['park','river'],places:['east','eastern','near','beside']}
-    ], suggestions:['in the north of','in the south of','to the east of','be located','along']
+    ],
+    suggestions:['in the north of','in the south of','to the east of','be located','along']
   },
+
   {
     id:'forest-district', number:2, image:'./images/image3.png', title:'Forest District', type:'Vị trí theo góc',
     prompt:'The map illustrates the location of a forest and several public facilities in a city. Summarise the main spatial features and relationships.',
@@ -25,8 +27,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The park is located east of the hospital.',keywords:['park'],places:['east','eastern']},
       {label:'The river runs along the southern edge.',keywords:['river'],places:['south','southern']},
       {label:'The library occupies the south-eastern district.',keywords:['library'],places:['south-east','southeast','south']}
-    ], suggestions:['in the north-eastern corner of','occupy','to the east of','in the southern part of']
+    ],
+    suggestions:['in the north-eastern corner of','occupy','to the east of','in the southern part of']
   },
+
   {
     id:'arts-centre', number:3, image:'./images/image5.png', title:'Arts Centre', type:'Quan hệ vị trí',
     prompt:'The plan shows an arts centre and its surrounding facilities. Describe the layout and how the facilities are positioned relative to each other.',
@@ -38,8 +42,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The museum is west or south-west of the arts centre.',keywords:['museum'],places:['west','western']},
       {label:'The café is in the northern part of the complex.',keywords:['cafe','café'],places:['north','northern']},
       {label:'The car park is to the south of the arts centre.',keywords:['car park','parking'],places:['south','southern']}
-    ], suggestions:['on the eastern side of','adjacent to','to the north-west of','in the centre of']
+    ],
+    suggestions:['on the eastern side of','adjacent to','to the north-west of','in the centre of']
   },
+
   {
     id:'library-plan', number:4, image:'./images/image6.png', title:'Library Floor Plan', type:'Sơ đồ bên trong',
     prompt:'The floor plan presents the arrangement of different areas inside a library. Summarise the main layout, including the location of the central desk and rooms.',
@@ -51,8 +57,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The study rooms are on the western side.',keywords:['study room'],places:['west','western','left']},
       {label:'The meeting room is on the eastern side.',keywords:['meeting room'],places:['east','eastern','right']},
       {label:'The book sections are to the south of the desk.',keywords:['book section','fiction','non-fiction'],places:['south','southern','bottom']}
-    ], suggestions:['in the centre of','to the north-east of','opposite','be positioned']
+    ],
+    suggestions:['in the centre of','to the north-east of','opposite','be positioned']
   },
+
   {
     id:'botanical-gardens', number:5, image:'./images/image8.png', title:'Botanical Gardens', type:'Đối diện & cạnh nhau',
     prompt:'The plan shows a public garden with several recreational facilities. Describe the layout, focusing on the position of the rose garden and glasshouse.',
@@ -64,8 +72,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The playground occupies the north-western area.',keywords:['playground'],places:['north-west','northwest','north']},
       {label:'The café is in the south-eastern area.',keywords:['cafe','café'],places:['south-east','southeast','south']},
       {label:'The main entrance is at the southern end.',keywords:['entrance'],places:['south','southern','bottom']}
-    ], suggestions:['opposite','across from','adjacent to','in the centre of']
+    ],
+    suggestions:['opposite','across from','adjacent to','in the centre of']
   },
+
   {
     id:'theatre', number:6, image:'./images/image10.png', title:'Theatre Seating Plan', type:'Bao quanh',
     prompt:'The plan depicts the seating arrangement and facilities in a theatre. Describe the layout, highlighting the position of the stage and surrounding seating.',
@@ -77,8 +87,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The cloakroom lies to the north-east.',keywords:['cloakroom'],places:['north-east','northeast','north']},
       {label:'The washrooms lie to the north-west.',keywords:['washroom'],places:['north-west','northwest','north']},
       {label:'Exits are located at the southern end.',keywords:['exit'],places:['south','southern','bottom']}
-    ], suggestions:['surrounded by','in the centre of','be located','at the southern end of']
+    ],
+    suggestions:['surrounded by','in the centre of','be located','at the southern end of']
   },
+
   {
     id:'main-road', number:7, image:'./images/image11.png', title:'Main Road Shops', type:'Dọc theo',
     prompt:'The map shows a town with shops along a main road and several public buildings. Summarise the arrangement of the town.',
@@ -90,8 +102,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The hospital lies to the north-east.',keywords:['hospital'],places:['north-east','northeast','north']},
       {label:'The library is on the southern side of the road.',keywords:['library'],places:['south','southern']},
       {label:'A parking lot and post office lie south of the road.',keywords:['parking','post office'],places:['south','southern']}
-    ], suggestions:['along','on the northern side of','on the southern side of','be situated']
+    ],
+    suggestions:['along','on the northern side of','on the southern side of','be situated']
   },
+
   {
     id:'public-campus', number:8, image:'./images/image12.png', title:'Public Campus', type:'Các công trình trong khu',
     prompt:'The plan depicts a campus with public facilities and a garden. Summarise the layout of the site, selecting the most important spatial relationships.',
@@ -102,8 +116,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The sports centre and tennis courts occupy the western section.',keywords:['sports','tennis'],places:['west','western','left']},
       {label:'The exhibition hall and playground are on the eastern side.',keywords:['exhibition','playground'],places:['east','eastern','right']},
       {label:'A car park lies at the southern end.',keywords:['car park','parking'],places:['south','southern','bottom']}
-    ], suggestions:['at the northern end of','in the centre of','on the eastern side of','at the southern end of']
+    ],
+    suggestions:['at the northern end of','in the centre of','on the eastern side of','at the southern end of']
   },
+
   {
     id:'river-village', number:9, image:'./images/image13.png', title:'River Village', type:'Sông chạy qua làng',
     prompt:'The map illustrates a village divided by a river and crossed by a main road. Summarise how the public buildings, shops and open spaces are arranged.',
@@ -116,8 +132,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The hospital is in the north-east.',keywords:['hospital'],places:['north-east','northeast']},
       {label:'The library is south of the main road.',keywords:['library'],places:['south','southern']},
       {label:'The post office is to the south-east.',keywords:['post office'],places:['south-east','southeast','south']}
-    ], suggestions:['run through','run across','divide ... into ...','along','to the south of']
+    ],
+    suggestions:['run through','run across','divide ... into ...','along','to the south of']
   },
+
   {
     id:'university-city', number:10, image:'./images/image2.png', title:'University City', type:'Vị trí công trình',
     prompt:'The map shows a university and several facilities in a riverside city. Summarise the main spatial features.',
@@ -128,8 +146,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The park lies to the south-east of the city centre.',keywords:['park'],places:['south-east','southeast','east']},
       {label:'The port occupies the southernmost area.',keywords:['port'],places:['south','southern']},
       {label:'The river is on the eastern side of the city.',keywords:['river'],places:['east','eastern']}
-    ], suggestions:['in the north-eastern corner of','to the south-east of','on the eastern side of']
+    ],
+    suggestions:['in the north-eastern corner of','to the south-east of','on the eastern side of']
   },
+
   {
     id:'market-roundabout', number:11, image:'./images/image4.png', title:'Market & Roundabout', type:'Vị trí tương đối',
     prompt:'The plan illustrates a city centred on a roundabout, with a market and a number of amenities. Describe the position of the amenities in relation to the city centre.',
@@ -141,8 +161,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The hospital is east of the roundabout.',keywords:['hospital'],places:['east','eastern']},
       {label:'The stadium occupies the south-eastern district.',keywords:['stadium'],places:['south-east','southeast','south']},
       {label:'The river runs along the eastern edge.',keywords:['river'],places:['east','eastern']}
-    ], suggestions:['to the west of','in the centre of','on the eastern side of']
+    ],
+    suggestions:['to the west of','in the centre of','on the eastern side of']
   },
+
   {
     id:'station-district', number:12, image:'./images/image7.png', title:'Station District', type:'Giữa & liền kề',
     prompt:'The map shows a town with a station, university, city centre and several other public facilities. Summarise the town layout.',
@@ -154,8 +176,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The hospital is in the western part of the middle row.',keywords:['hospital'],places:['west','western']},
       {label:'The park is in the centre of the middle row.',keywords:['park'],places:['centre','center','middle']},
       {label:'The river borders the southern edge.',keywords:['river'],places:['south','southern']}
-    ], suggestions:['between','midway between','to the east of','be situated']
+    ],
+    suggestions:['between','midway between','to the east of','be situated']
   },
+
   {
     id:'museum-gardens', number:13, image:'./images/image9.png', title:'Museum Gardens', type:'Đối diện & tiếp giáp',
     prompt:'The map presents the facilities of a cultural and recreational park. Summarise the arrangement around the central fountain.',
@@ -167,306 +191,688 @@ window.MAPS_WRITING_TASKS = [
       {label:'The gallery and café are adjacent on the eastern side.',keywords:['gallery','cafe','café'],places:['adjacent','next to','east','eastern']},
       {label:'The car park is at the south-western corner.',keywords:['car park','parking'],places:['south-west','southwest']},
       {label:'The rest area is in the south-eastern corner.',keywords:['rest area'],places:['south-east','southeast']}
-    ], suggestions:['adjacent to','opposite','in the north-eastern corner of','in the centre of']
+    ],
+    suggestions:['adjacent to','opposite','in the north-eastern corner of','in the centre of']
   },
 
   {
-    id:'change-site-a', number:14, image:'./images/image14.png', title:'Riverside Campus · 2000–2025', type:'Thay đổi theo thời gian',
-    practiceMode:'change', fromYear:2000, toYear:2025,
+    id:'change-site-a',
+    number:14,
+    image:'./images/image14.png',
+    title:'Riverside Campus · 2000–2025',
+    type:'Thay đổi theo thời gian',
+    practiceMode:'change',
+    fromYear:2000,
+    toYear:2025,
+
     prompt:'The maps show a site in 2000 and 2025. Describe the changes using suitable change vocabulary.',
     instruction:'Write one sentence at a time, focusing on how the open space changed and how the cafeteria appeared.',
+
     facts:[
       {
         label:'A cafeteria was constructed on the eastern side of the site.',
-        keywords:['cafeteria'],places:['constructed','east','eastern'],
+        keywords:['cafeteria'],
+        places:['constructed','east','eastern'],
+
         changePractice:{
           prompt:'Hãy miêu tả Cafeteria mới vào năm 2025, sử dụng từ “constructed”.',
-          requiredGroups:[['cafeteria']],
-          acceptedPhrases:['was constructed','was constructed on the eastern side of'],
+
+          requiredGroups:[
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was constructed',
+            'was constructed on the eastern side of'
+          ],
+
           secondHint:'Dùng cấu trúc “was constructed” để diễn tả công trình mới.'
         }
       },
+
       {
         label:'The open space was replaced by a cafeteria.',
-        keywords:['open space','cafeteria'],places:['replaced'],
+        keywords:['open space','cafeteria'],
+        places:['replaced'],
+
         changePractice:{
           prompt:'Hãy miêu tả sự thay đổi từ Open space sang Cafeteria trong giai đoạn 2000–2025.',
-          requiredGroups:[['open space'],['cafeteria']],
-          acceptedPhrases:['was replaced by','gave way to'],
-          secondHint:'Có thể dùng cấu trúc “was replaced by” để diễn tả sự thay thế.'
+
+          requiredGroups:[
+            ['open space'],
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was replaced by',
+            'gave way to',
+            'was converted into',
+            'was transformed into'
+          ],
+
+          secondHint:'Có thể dùng “was replaced by”, “gave way to”, “was converted into” hoặc “was transformed into” nếu câu phù hợp với bản đồ.'
         }
       },
+
       {
         label:'The former open space was replaced by a cafeteria.',
-        keywords:['open space','cafeteria'],places:['former','replaced'],
+        keywords:['open space','cafeteria'],
+        places:['former','replaced'],
+
         changePractice:{
           prompt:'Hãy miêu tả Open space trước đây, sử dụng từ “former”.',
-          requiredGroups:[['former'],['open space'],['cafeteria']],
-          acceptedPhrases:['was replaced by','gave way to'],
-          secondHint:'Sau “the former open space”, hãy diễn tả rằng khu vực này đã được thay thế bởi Cafeteria.'
+
+          requiredGroups:[
+            ['former'],
+            ['open space'],
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was replaced by',
+            'gave way to',
+            'was converted into',
+            'was transformed into'
+          ],
+
+          secondHint:'Sau “the former open space”, hãy diễn tả rằng khu vực này đã trở thành Cafeteria.'
         }
       },
+
       {
         label:'A cafeteria was added to the eastern side of the site.',
-        keywords:['cafeteria'],places:['added','east','eastern'],
+        keywords:['cafeteria'],
+        places:['added','east','eastern'],
+
         changePractice:{
           prompt:'Hãy miêu tả việc Cafeteria được bổ sung vào năm 2025, sử dụng từ “added”.',
-          requiredGroups:[['cafeteria']],
-          acceptedPhrases:['was added','was added to'],
+
+          requiredGroups:[
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was added',
+            'was added to'
+          ],
+
           secondHint:'Dùng cấu trúc “was added” để diễn tả công trình được bổ sung.'
         }
       },
+
       {
         label:'A cafeteria was introduced on the eastern side of the site.',
-        keywords:['cafeteria'],places:['introduced','east','eastern'],
+        keywords:['cafeteria'],
+        places:['introduced','east','eastern'],
+
         changePractice:{
           prompt:'Hãy miêu tả Cafeteria mới, sử dụng từ “introduced”.',
-          requiredGroups:[['cafeteria']],
-          acceptedPhrases:['was introduced'],
+
+          requiredGroups:[
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was introduced'
+          ],
+
           secondHint:'Dùng cấu trúc “was introduced” để diễn tả một feature mới xuất hiện.'
         }
       }
     ],
-    suggestions:['be constructed','be added','be introduced','be replaced by','former']
+
+    suggestions:[
+      'be constructed',
+      'be added',
+      'be introduced',
+      'be replaced by',
+      'former'
+    ]
   },
 
   {
-    id:'change-site-b', number:15, image:'./images/image15.png', title:'Heritage Gardens · 2010–2020', type:'Thay thế công trình',
-    practiceMode:'change', fromYear:2010, toYear:2020,
+    id:'change-site-b',
+    number:15,
+    image:'./images/image15.png',
+    title:'Heritage Gardens · 2010–2020',
+    type:'Thay thế công trình',
+    practiceMode:'change',
+    fromYear:2010,
+    toYear:2020,
+
     prompt:'The maps compare a site in 2010 and 2020. Describe how the southern part changed.',
     instruction:'Focus on the change from the car park to the museum.',
+
     facts:[
       {
         label:'The former car park was replaced by a museum.',
-        keywords:['car park','museum'],places:['former','replaced'],
+        keywords:['car park','museum'],
+        places:['former','replaced'],
+
         changePractice:{
           prompt:'Hãy miêu tả sự thay đổi của Car park, sử dụng từ “former”.',
-          requiredGroups:[['former'],['car park','carpark'],['museum']],
-          acceptedPhrases:['was replaced by','gave way to'],
-          secondHint:'Car park không còn tồn tại vào năm 2020; có thể dùng “was replaced by”.'
+
+          requiredGroups:[
+            ['former'],
+            ['car park','carpark'],
+            ['museum']
+          ],
+
+          acceptedPhrases:[
+            'was replaced by',
+            'gave way to',
+            'was converted into',
+            'was transformed into'
+          ],
+
+          secondHint:'Car park không còn tồn tại vào năm 2020 và Museum xuất hiện tại vị trí đó.'
         }
       },
+
       {
         label:'A museum was built in the southern part of the site.',
-        keywords:['museum'],places:['built','south','southern'],
+        keywords:['museum'],
+        places:['built','south','southern'],
+
         changePractice:{
           prompt:'Hãy miêu tả Museum mới vào năm 2020, sử dụng từ “built”.',
-          requiredGroups:[['museum']],
-          acceptedPhrases:['was built','was built in the southern part of'],
+
+          requiredGroups:[
+            ['museum']
+          ],
+
+          acceptedPhrases:[
+            'was built',
+            'was built in the southern part of'
+          ],
+
           secondHint:'Dùng cấu trúc “was built” để diễn tả Museum mới.'
         }
       },
+
       {
         label:'The previous car-park area was transformed into a museum.',
-        keywords:['car park','museum'],places:['previous','transformed'],
+        keywords:['car park','museum'],
+        places:['previous','transformed'],
+
         changePractice:{
           prompt:'Hãy miêu tả khu vực Car park trước đó, sử dụng từ “previous”.',
-          requiredGroups:[['previous'],['car park','car-park'],['museum']],
-          acceptedPhrases:['was transformed into','was converted into','was replaced by'],
-          secondHint:'Khu vực Car park trước đó trở thành Museum; có thể dùng “was transformed into”.'
+
+          requiredGroups:[
+            ['previous'],
+            ['car park','car-park'],
+            ['museum']
+          ],
+
+          acceptedPhrases:[
+            'was transformed into',
+            'was converted into',
+            'was replaced by',
+            'gave way to'
+          ],
+
+          secondHint:'Khu vực Car park trước đó trở thành Museum; có thể dùng một cấu trúc thay đổi phù hợp.'
         }
       },
+
       {
         label:'The car-park area was converted into a museum.',
-        keywords:['car park','museum'],places:['converted'],
+        keywords:['car park','museum'],
+        places:['converted'],
+
         changePractice:{
           prompt:'Hãy miêu tả sự chuyển đổi từ Car park thành Museum, sử dụng từ “converted”.',
-          requiredGroups:[['car park','car-park'],['museum']],
-          acceptedPhrases:['was converted into'],
+
+          requiredGroups:[
+            ['car park','car-park'],
+            ['museum']
+          ],
+
+          acceptedPhrases:[
+            'was converted into'
+          ],
+
           secondHint:'Dùng cấu trúc “was converted into”.'
         }
       }
     ],
-    suggestions:['former','be built','previous','be transformed into','be converted into']
+
+    suggestions:[
+      'former',
+      'be built',
+      'previous',
+      'be transformed into',
+      'be converted into'
+    ]
   },
 
   {
-    id:'change-site-c', number:16, image:'./images/image16.png', title:'Greenfield Grounds · 2010–2020', type:'Thay thế công trình',
-    practiceMode:'change', fromYear:2010, toYear:2020,
+    id:'change-site-c',
+    number:16,
+    image:'./images/image16.png',
+    title:'Greenfield Grounds · 2010–2020',
+    type:'Thay thế công trình',
+    practiceMode:'change',
+    fromYear:2010,
+    toYear:2020,
+
     prompt:'The maps compare a site in 2010 and 2020. Describe the change on the western side of the garden.',
     instruction:'Focus on the sports court and the library.',
+
     facts:[
       {
         label:'The former sports court was replaced by a library.',
-        keywords:['sports court','library'],places:['former','replaced'],
+        keywords:['sports court','library'],
+        places:['former','replaced'],
+
         changePractice:{
           prompt:'Hãy miêu tả sự thay đổi từ Sports court sang Library, sử dụng từ “former”.',
-          requiredGroups:[['former'],['sports court'],['library']],
-          acceptedPhrases:['was replaced by','gave way to'],
-          secondHint:'Sports court trước đây đã được thay thế bởi Library.'
+
+          requiredGroups:[
+            ['former'],
+            ['sports court'],
+            ['library']
+          ],
+
+          acceptedPhrases:[
+            'was replaced by',
+            'gave way to',
+            'was converted into',
+            'was transformed into'
+          ],
+
+          secondHint:'Sports court trước đây đã trở thành Library; có thể dùng một cấu trúc thay đổi phù hợp.'
         }
       },
+
       {
         label:'A library was constructed on the western side of the garden.',
-        keywords:['library','garden'],places:['constructed','west','western'],
+        keywords:['library','garden'],
+        places:['constructed','west','western'],
+
         changePractice:{
           prompt:'Hãy miêu tả Library mới vào năm 2020, sử dụng từ “constructed”.',
-          requiredGroups:[['library']],
-          acceptedPhrases:['was constructed','was built'],
+
+          requiredGroups:[
+            ['library']
+          ],
+
+          acceptedPhrases:[
+            'was constructed',
+            'was built'
+          ],
+
           secondHint:'Dùng cấu trúc “was constructed” hoặc “was built” để diễn tả Library mới.'
         }
       },
+
       {
         label:'The sports-court area was transformed into a library.',
-        keywords:['sports court','library'],places:['transformed'],
+        keywords:['sports court','library'],
+        places:['transformed'],
+
         changePractice:{
           prompt:'Hãy miêu tả sự chuyển đổi của Sports court, sử dụng từ “transformed”.',
-          requiredGroups:[['sports court','sports-court'],['library']],
-          acceptedPhrases:['was transformed into'],
+
+          requiredGroups:[
+            ['sports court','sports-court'],
+            ['library']
+          ],
+
+          acceptedPhrases:[
+            'was transformed into'
+          ],
+
           secondHint:'Dùng cấu trúc “was transformed into”.'
         }
       },
+
       {
         label:'The original sports court was removed to make way for a library.',
-        keywords:['sports court','library'],places:['original','removed'],
+        keywords:['sports court','library'],
+        places:['original','removed'],
+
         changePractice:{
           prompt:'Hãy miêu tả Sports court ban đầu, sử dụng từ “original”.',
-          requiredGroups:[['original'],['sports court'],['library']],
-          acceptedPhrases:['was removed to make way for','was removed','gave way to'],
+
+          requiredGroups:[
+            ['original'],
+            ['sports court'],
+            ['library']
+          ],
+
+          acceptedPhrases:[
+            'was removed to make way for',
+            'was removed',
+            'gave way to',
+            'was replaced by',
+            'was converted into',
+            'was transformed into'
+          ],
+
           secondHint:'Sports court ban đầu không còn vào năm 2020 và Library xuất hiện tại vị trí đó.'
         }
       }
     ],
-    suggestions:['former','be constructed','be transformed into','original','be removed']
+
+    suggestions:[
+      'former',
+      'be constructed',
+      'be transformed into',
+      'original',
+      'be removed'
+    ]
   },
 
   {
-    id:'change-site-d', number:17, image:'./images/image17.png', title:'Meadowview Park · 2010–2020', type:'Di dời công trình',
-    practiceMode:'change', fromYear:2010, toYear:2020,
+    id:'change-site-d',
+    number:17,
+    image:'./images/image17.png',
+    title:'Meadowview Park · 2010–2020',
+    type:'Di dời công trình',
+    practiceMode:'change',
+    fromYear:2010,
+    toYear:2020,
+
     prompt:'The maps show that the cafeteria changed position between 2010 and 2020.',
     instruction:'Describe the relocation from the western side of the garden to the eastern side.',
+
     facts:[
       {
         label:'The previous cafeteria was relocated to the eastern side of the garden.',
-        keywords:['cafeteria','garden'],places:['previous','relocated','east','eastern'],
+        keywords:['cafeteria','garden'],
+        places:['previous','relocated','east','eastern'],
+
         changePractice:{
           prompt:'Hãy miêu tả việc Cafeteria trước đó được di dời, sử dụng từ “previous” và “relocated”.',
-          requiredGroups:[['previous'],['cafeteria']],
-          acceptedPhrases:['was relocated','was relocated to','was relocated to the eastern side of'],
+
+          requiredGroups:[
+            ['previous'],
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was relocated',
+            'was relocated to',
+            'was relocated to the eastern side of'
+          ],
+
           secondHint:'Dùng “the previous cafeteria” và cấu trúc “was relocated”.'
         }
       },
+
       {
         label:'The cafeteria was moved from the western side to the eastern side of the garden.',
-        keywords:['cafeteria','garden'],places:['moved','west','western','east','eastern'],
+        keywords:['cafeteria','garden'],
+        places:['moved','west','western','east','eastern'],
+
         changePractice:{
           prompt:'Hãy miêu tả việc Cafeteria được di dời, sử dụng từ “moved”.',
-          requiredGroups:[['cafeteria']],
-          acceptedPhrases:['was moved','was moved to','was moved from','was moved from the western side to the eastern side of'],
+
+          requiredGroups:[
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was moved',
+            'was moved to',
+            'was moved from',
+            'was moved from the western side to the eastern side of'
+          ],
+
           secondHint:'Dùng cấu trúc “was moved” để diễn tả việc Cafeteria được di dời.'
         }
       },
+
       {
         label:'The former cafeteria was moved to the eastern side of the garden.',
-        keywords:['cafeteria','garden'],places:['former','moved','east','eastern'],
+        keywords:['cafeteria','garden'],
+        places:['former','moved','east','eastern'],
+
         changePractice:{
           prompt:'Hãy miêu tả Cafeteria trước đây và việc nó được di dời, sử dụng từ “former”.',
-          requiredGroups:[['former'],['cafeteria']],
-          acceptedPhrases:['was moved','was moved to','was relocated','was relocated to'],
+
+          requiredGroups:[
+            ['former'],
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was moved',
+            'was moved to',
+            'was relocated',
+            'was relocated to'
+          ],
+
           secondHint:'Dùng “the former cafeteria” và một cấu trúc diễn tả sự di dời như “was moved” hoặc “was relocated”.'
         }
       },
+
       {
         label:'The cafeteria was relocated from the western side to the eastern side of the garden.',
-        keywords:['cafeteria','garden'],places:['relocated','west','western','east','eastern'],
+        keywords:['cafeteria','garden'],
+        places:['relocated','west','western','east','eastern'],
+
         changePractice:{
           prompt:'Hãy viết một câu về việc Cafeteria được di dời, sử dụng từ “relocated”.',
-          requiredGroups:[['cafeteria']],
-          acceptedPhrases:['was relocated','was relocated to','was relocated from','was relocated from the western side to the eastern side of'],
+
+          requiredGroups:[
+            ['cafeteria']
+          ],
+
+          acceptedPhrases:[
+            'was relocated',
+            'was relocated to',
+            'was relocated from',
+            'was relocated from the western side to the eastern side of'
+          ],
+
           secondHint:'Dùng cấu trúc “was relocated” để diễn tả sự di dời.'
         }
       }
     ],
-    suggestions:['previous','be relocated to','be moved to','former']
+
+    suggestions:[
+      'previous',
+      'be relocated to',
+      'be moved to',
+      'former'
+    ]
   },
 
   {
-    id:'change-site-e', number:18, image:'./images/image18.png', title:'Kingsley Gardens · 2010–2020', type:'Phá bỏ / loại bỏ',
-    practiceMode:'change', fromYear:2010, toYear:2020,
+    id:'change-site-e',
+    number:18,
+    image:'./images/image18.png',
+    title:'Kingsley Gardens · 2010–2020',
+    type:'Phá bỏ / loại bỏ',
+    practiceMode:'change',
+    fromYear:2010,
+    toYear:2020,
+
     prompt:'The maps show that the small museum disappeared between 2010 and 2020.',
     instruction:'Describe the removal of the museum and the resulting open area.',
+
     facts:[
       {
         label:'The former small museum was removed from the site.',
-        keywords:['small museum'],places:['former','removed'],
+        keywords:['small museum'],
+        places:['former','removed'],
+
         changePractice:{
           prompt:'Hãy miêu tả Small Museum trước đây, sử dụng từ “former” và “removed”.',
-          requiredGroups:[['former'],['small museum','museum']],
-          acceptedPhrases:['was removed from','was removed'],
+
+          requiredGroups:[
+            ['former'],
+            ['small museum','museum']
+          ],
+
+          acceptedPhrases:[
+            'was removed from',
+            'was removed'
+          ],
+
           secondHint:'Small Museum trước đây không còn xuất hiện vào năm 2020.'
         }
       },
+
       {
         label:'The small museum was demolished by 2020.',
-        keywords:['small museum'],places:['demolished'],
+        keywords:['small museum'],
+        places:['demolished'],
+
         changePractice:{
           prompt:'Hãy miêu tả việc Small Museum biến mất vào năm 2020, sử dụng từ “demolished”.',
-          requiredGroups:[['small museum','museum']],
-          acceptedPhrases:['was demolished'],
+
+          requiredGroups:[
+            ['small museum','museum']
+          ],
+
+          acceptedPhrases:[
+            'was demolished'
+          ],
+
           secondHint:'Dùng cấu trúc “was demolished”.'
         }
       },
+
       {
         label:'The original museum site was cleared by 2020.',
-        keywords:['museum','site'],places:['original','cleared'],
+        keywords:['museum','site'],
+        places:['original','cleared'],
+
         changePractice:{
           prompt:'Hãy miêu tả khu vực Museum ban đầu, sử dụng từ “original” và “cleared”.',
-          requiredGroups:[['original'],['museum']],
-          acceptedPhrases:['was cleared'],
+
+          requiredGroups:[
+            ['original'],
+            ['museum']
+          ],
+
+          acceptedPhrases:[
+            'was cleared'
+          ],
+
           secondHint:'Dùng “the original museum site” và diễn tả rằng khu vực này đã được dọn bỏ vào năm 2020.'
         }
       },
+
       {
         label:'The former museum was removed, leaving an open area.',
-        keywords:['museum','open area'],places:['former','removed'],
+        keywords:['museum','open area'],
+        places:['former','removed'],
+
         changePractice:{
           prompt:'Hãy miêu tả kết quả sau khi Museum bị loại bỏ, sử dụng từ “removed”.',
-          requiredGroups:[['museum'],['open area','open space','green area']],
-          acceptedPhrases:['was removed','was removed leaving','was removed, leaving'],
+
+          requiredGroups:[
+            ['museum'],
+            ['open area','open space','green area']
+          ],
+
+          acceptedPhrases:[
+            'was removed',
+            'was removed leaving',
+            'was removed, leaving'
+          ],
+
           secondHint:'Sau khi Museum bị loại bỏ, một khoảng không gian mở xuất hiện.'
         }
       }
     ],
-    suggestions:['former','be removed','be demolished','original','be cleared']
+
+    suggestions:[
+      'former',
+      'be removed',
+      'be demolished',
+      'original',
+      'be cleared'
+    ]
   },
 
   {
-    id:'change-site-f', number:19, image:'./images/image19.png', title:'Lakewood Campus · 2010–2020', type:'Mở rộng',
-    practiceMode:'change', fromYear:2010, toYear:2020,
+    id:'change-site-f',
+    number:19,
+    image:'./images/image19.png',
+    title:'Lakewood Campus · 2010–2020',
+    type:'Mở rộng',
+    practiceMode:'change',
+    fromYear:2010,
+    toYear:2020,
+
     prompt:'The maps compare the garden in 2010 and 2020.',
     instruction:'Describe how the garden changed in size while the main building, library and car park remained in place.',
+
     facts:[
       {
         label:'The garden was expanded between 2010 and 2020.',
-        keywords:['garden'],places:['expanded'],
+        keywords:['garden'],
+        places:['expanded'],
+
         changePractice:{
           prompt:'Hãy miêu tả thay đổi về kích thước của Garden, sử dụng từ “expanded”.',
-          requiredGroups:[['garden']],
-          acceptedPhrases:['was expanded','expanded in size'],
+
+          requiredGroups:[
+            ['garden']
+          ],
+
+          acceptedPhrases:[
+            'was expanded',
+            'expanded in size'
+          ],
+
           secondHint:'Garden lớn hơn vào năm 2020; dùng cấu trúc “was expanded”.'
         }
       },
+
       {
         label:'The garden was extended by 2020.',
-        keywords:['garden'],places:['extended'],
+        keywords:['garden'],
+        places:['extended'],
+
         changePractice:{
           prompt:'Hãy miêu tả Garden vào năm 2020, sử dụng từ “extended”.',
-          requiredGroups:[['garden']],
-          acceptedPhrases:['was extended'],
+
+          requiredGroups:[
+            ['garden']
+          ],
+
+          acceptedPhrases:[
+            'was extended'
+          ],
+
           secondHint:'Dùng cấu trúc “was extended”.'
         }
       },
+
       {
         label:'The original garden was expanded in size by 2020.',
-        keywords:['garden'],places:['original','expanded'],
+        keywords:['garden'],
+        places:['original','expanded'],
+
         changePractice:{
           prompt:'Hãy miêu tả Garden ban đầu và sự thay đổi của nó, sử dụng từ “original”.',
-          requiredGroups:[['original'],['garden']],
-          acceptedPhrases:['was expanded','expanded in size','was extended'],
+
+          requiredGroups:[
+            ['original'],
+            ['garden']
+          ],
+
+          acceptedPhrases:[
+            'was expanded',
+            'expanded in size',
+            'was extended'
+          ],
+
           secondHint:'Dùng “the original garden” và diễn tả rằng khu vườn đã được mở rộng.'
         }
       }
     ],
-    suggestions:['be expanded','be extended','original']
+
+    suggestions:[
+      'be expanded',
+      'be extended',
+      'original'
+    ]
   }
 ];
