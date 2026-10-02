@@ -1865,7 +1865,13 @@ footer{
     { name:"Eastwood Village", year:1996 },
     { name:"Meadowfield City", year:1999 },
     { name:"Kingsford Town", year:1993 },
-    { name:"Harborview Park", year:2002 }
+    { name:"Harborview Park", year:2002 },
+    { name:"Site A", year:"2000 → 2025", fromYear:2000, toYear:2025, change:true },
+    { name:"Site B", year:"2010 → 2020", fromYear:2010, toYear:2020, change:true },
+    { name:"Site C", year:"2010 → 2020", fromYear:2010, toYear:2020, change:true },
+    { name:"Site D", year:"2010 → 2020", fromYear:2010, toYear:2020, change:true },
+    { name:"Site E", year:"2010 → 2020", fromYear:2010, toYear:2020, change:true },
+    { name:"Site F", year:"2010 → 2020", fromYear:2010, toYear:2020, change:true }
   ];
 
 
@@ -2559,7 +2565,7 @@ footer{
     /* Nếu label là một câu mô tả hoàn chỉnh, lấy subject đứng trước động từ. */
     const subjectMatch =
       label.match(
-        /^(?:the\s+)?(.+?)\s+(?:is|are|was|were|lies|lie|lay|stands|stand|stood|occupies|occupy|occupied|runs|run|ran|passes|pass|passed)\b/i
+        /^(?:(?:the|a|an)\s+)?(.+?)\s+(?:is|are|was|were|lies|lie|lay|stands|stand|stood|occupies|occupy|occupied|runs|run|ran|passes|pass|passed)\b/i
       );
 
     if(subjectMatch?.[1]){
@@ -3070,7 +3076,148 @@ footer{
   }
 
 
+
+  function changePracticeForFact(fact){
+    return fact?.changePractice || null;
+  }
+
+
+  function anyAliasGroupMatches(sentence, group){
+
+    const text =
+      normalizeForCheck(sentence);
+
+    return (
+      Array.isArray(group)
+      &&
+      group.some(
+        alias => {
+          const wanted =
+            normalizeForCheck(alias);
+
+          return (
+            wanted
+            &&
+            text.includes(wanted)
+          );
+        }
+      )
+    );
+
+  }
+
+
+  function gradeChangeSentence(fact, context, sentence){
+
+    const practice =
+      changePracticeForFact(fact)
+      ||
+      {};
+
+    const groups =
+      Array.isArray(practice.requiredGroups)
+      ?
+      practice.requiredGroups
+      :
+      [];
+
+    const phrases =
+      Array.isArray(practice.acceptedPhrases)
+      ?
+      practice.acceptedPhrases
+      :
+      [];
+
+    const groupsOk =
+      groups.every(
+        group =>
+          anyAliasGroupMatches(
+            sentence,
+            group
+          )
+      );
+
+    const phraseOk =
+      !phrases.length
+      ||
+      phrases.some(
+        phrase =>
+          normalizeForCheck(sentence)
+          .includes(
+            normalizeForCheck(phrase)
+          )
+      );
+
+    const pastOk =
+      usesPastDescription(sentence)
+      ||
+      /\b(?:gave|expanded|extended)\b/i.test(
+        normalizeForCheck(sentence)
+      );
+
+    const correct =
+      groupsOk
+      &&
+      phraseOk
+      &&
+      pastOk;
+
+    const issues = [];
+
+    if(!groupsOk){
+      issues.push(
+        "Một hoặc nhiều thông tin trong câu chưa khớp với hai bản đồ. Hãy quan sát lại đối tượng và vị trí/thay đổi."
+      );
+    }
+
+    if(!phraseOk){
+      issues.push(
+        "Cách diễn đạt sự thay đổi chưa đúng với yêu cầu."
+      );
+    }
+
+    if(!pastOk){
+      issues.push(
+        "Hãy dùng cấu trúc quá khứ phù hợp, ví dụ: was / were + past participle."
+      );
+    }
+
+    return {
+      correct,
+      isChange:true,
+      target:
+        targetForFact(fact),
+      phrase:
+        phrases[0]
+        ||
+        "",
+      reference:{
+        display:"",
+        groups:[]
+      },
+      hintMode:"change",
+      checks:{
+        groups:groupsOk,
+        phrase:phraseOk,
+        past:pastOk
+      },
+      issues,
+      context,
+      changePractice:practice
+    };
+
+  }
+
+
   function gradeConstrainedSentence(fact, context, sentence){
+
+    if(changePracticeForFact(fact)){
+      return gradeChangeSentence(
+        fact,
+        context,
+        sentence
+      );
+    }
 
     const target =
       targetForFact(fact);
@@ -3166,6 +3313,14 @@ footer{
       return "";
     }
 
+    if(
+      result.isChange
+      &&
+      result.changePractice?.secondHint
+    ){
+      return result.changePractice.secondHint;
+    }
+
     /* Sau lần sai thứ hai, hé lộ đúng phần đang bị ẩn trong đề:
        - đề cho cụm từ -> gợi ý đối tượng so sánh
        - đề cho đối tượng -> gợi ý cụm từ vị trí
@@ -3244,6 +3399,12 @@ footer{
     requiredPhrase,
     reference
   ){
+
+    if(
+      fact?.changePractice?.prompt
+    ){
+      return fact.changePractice.prompt;
+    }
 
     const target =
       targetForFact(fact);
