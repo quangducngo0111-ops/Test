@@ -2362,28 +2362,105 @@ footer{
   }
 
 
-  function submittedIndexes(record){
+  function storedAttemptIsCorrect(task, factIndex, attempt){
+
+    if(attempt?.correct === true){
+      return true;
+    }
+
+    const sentence =
+      String(attempt?.sentence || "").trim();
+
+    if(!task || !sentence){
+      return false;
+    }
+
+    const facts = taskFacts(task);
+    const fact = facts[factIndex];
+
+    if(!fact){
+      return false;
+    }
+
+    const previousCurrent = current;
+    const previousFactIndex = currentFactIndex;
+
+    try{
+      current = task;
+      currentFactIndex = factIndex;
+
+      const feedback =
+        gradeConstrainedSentence(
+          fact,
+          practiceMapContext(task),
+          sentence
+        );
+
+      return feedback?.correct === true;
+    }
+    catch(error){
+      return false;
+    }
+    finally{
+      current = previousCurrent;
+      currentFactIndex = previousFactIndex;
+    }
+
+  }
+
+
+  function submittedIndexes(record, task){
+
+    const completed = new Set(
+      Array.isArray(record?.completedSentenceIndexes)
+      ? record.completedSentenceIndexes
+          .map(Number)
+          .filter(Number.isInteger)
+      : []
+    );
 
     const submissions =
       record?.sentenceSubmissions
       ||
       {};
 
-    return Object.keys(submissions)
-      .filter(
+    Object.keys(submissions)
+      .forEach(
         key => {
-          const attempts = submissions[key];
-          const last =
-            Array.isArray(attempts)
-            ?
-            attempts.at(-1)
-            :
-            null;
+          const factIndex = Number(key);
 
-          return last?.correct === true;
+          if(!Number.isInteger(factIndex)){
+            return;
+          }
+
+          const attempts =
+            Array.isArray(submissions[key])
+            ? submissions[key]
+            : [];
+
+          /*
+            Một câu đã từng đúng thì luôn được tính là hoàn thành.
+            Đồng thời chấm lại câu cũ theo logic hiện tại để dữ liệu
+            từ các phiên bản chấm cũ không làm mất tiến độ.
+          */
+          const hasCorrectAttempt =
+            attempts.some(
+              attempt =>
+                storedAttemptIsCorrect(
+                  task,
+                  factIndex,
+                  attempt
+                )
+            );
+
+          if(hasCorrectAttempt){
+            completed.add(factIndex);
+          }
         }
-      )
-      .map(Number);
+      );
+
+    return [...completed]
+      .sort((a,b) => a - b);
 
   }
 
@@ -2393,14 +2470,39 @@ footer{
     const record =
       getRecord(task.id);
 
-    return submittedIndexes(record)
+    const validIndexes =
+      submittedIndexes(record, task)
       .filter(
         index =>
           index >= 0
           &&
           index < taskFacts(task).length
-      )
-      .length;
+      );
+
+    /* Tự migrate dữ liệu tracking cũ sang danh sách hoàn thành bền vững. */
+    if(record){
+      const stored =
+        Array.isArray(record.completedSentenceIndexes)
+        ? record.completedSentenceIndexes
+            .map(Number)
+            .filter(Number.isInteger)
+            .sort((a,b) => a - b)
+        : [];
+
+      const next = [...validIndexes].sort((a,b) => a - b);
+
+      if(JSON.stringify(stored) !== JSON.stringify(next)){
+        setRecord(
+          task.id,
+          {
+            ...record,
+            completedSentenceIndexes: next
+          }
+        );
+      }
+    }
+
+    return validIndexes.length;
 
   }
 
@@ -3698,7 +3800,7 @@ footer{
 
     const completed =
       new Set(
-        submittedIndexes(record)
+        submittedIndexes(record, task)
       );
 
 
@@ -4206,11 +4308,27 @@ footer{
       ]
     };
 
+    const completedSentenceIndexes =
+      new Set(
+        Array.isArray(old.completedSentenceIndexes)
+        ? old.completedSentenceIndexes
+            .map(Number)
+            .filter(Number.isInteger)
+        : []
+      );
+
+    if(feedback.correct){
+      completedSentenceIndexes.add(currentFactIndex);
+    }
+
     setRecord(
       current.id,
       {
         ...old,
         sentenceSubmissions,
+        completedSentenceIndexes:
+          [...completedSentenceIndexes]
+          .sort((a,b) => a - b),
         lastFactIndex: currentFactIndex,
         savedAt: now
       }
