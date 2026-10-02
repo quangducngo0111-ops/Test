@@ -110,7 +110,8 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_V4';
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_V5';
+const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V4'];
 const CACHE_TTL=6*60*60*1000;
 
 const CATS={
@@ -146,6 +147,45 @@ let current='reading';
 
 function cloneCatalog(source){
   return Object.fromEntries(Object.keys(CATS).map(k=>[k,(source[k]||[]).map(x=>({...x}))]));
+}
+
+/*
+  Luôn giữ các mục cốt lõi trong FALLBACK.
+  Cache/GitHub chỉ được bổ sung hoặc cập nhật metadata,
+  không được phép làm mất Reading Passage 1/2 hay các mục cố định khác.
+*/
+function mergeItems(base=[],extra=[]){
+  const merged=new Map();
+
+  [...base,...extra].forEach(item=>{
+    if(!item) return;
+
+    const key=String(item.url||item.title||'').trim().toLowerCase();
+    if(!key) return;
+
+    merged.set(
+      key,
+      {
+        ...(merged.get(key)||{}),
+        ...item
+      }
+    );
+  });
+
+  return [...merged.values()];
+}
+
+function mergeCatalogWithFallback(source){
+  const merged=cloneCatalog(FALLBACK);
+
+  for(const key of Object.keys(CATS)){
+    merged[key]=mergeItems(
+      FALLBACK[key]||[],
+      source?.[key]||[]
+    );
+  }
+
+  return merged;
 }
 function student(){
   try{
@@ -207,13 +247,21 @@ function render(){
 }
 function readCache(){
   try{
+    /* Xóa cache schema cũ từng có thể làm mất card mới. */
+    OLD_CACHE_KEYS.forEach(key=>localStorage.removeItem(key));
+
     const raw=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
+
     if(raw?.catalog && raw?.savedAt){
-      catalog=raw.catalog;
+      catalog=mergeCatalogWithFallback(raw.catalog);
       render();
-      return raw;
+      return {
+        ...raw,
+        catalog
+      };
     }
   }catch(e){}
+
   return null;
 }
 function saveCache(){
@@ -232,12 +280,23 @@ async function loadRemote(){
     if(!Array.isArray(d.tree)) throw new Error('GitHub tree không hợp lệ');
     const paths=d.tree.filter(x=>x.type==='blob'&&/index\.html$/i.test(x.path)).map(x=>x.path);
     const next=cloneCatalog(FALLBACK);
+
     for(const [k,c] of Object.entries(CATS)){
       const found=paths
         .filter(p=>p.startsWith(c.root)&&p!==c.root+'index.html')
-        .map(p=>item(p,c.root)).filter(Boolean)
+        .map(p=>item(p,c.root))
+        .filter(Boolean)
         .sort((a,b)=>(a.sort?.[0]??9999)-(b.sort?.[0]??9999)||String(a.title).localeCompare(String(b.title),undefined,{numeric:true}));
-      if(found.length) next[k]=found;
+
+      /*
+        Không dùng next[k]=found nữa.
+        GitHub tree có thể chậm/stale và thiếu folder mới; nếu thay toàn bộ
+        danh sách bằng found thì Reading Passage 1 sẽ biến mất.
+      */
+      next[k]=mergeItems(
+        FALLBACK[k]||[],
+        found
+      );
     }
     /* Vocabulary có trang chính ở root, giữ card ổn định thay vì liệt kê asset/game con. */
     next.vocabulary=FALLBACK.vocabulary;
