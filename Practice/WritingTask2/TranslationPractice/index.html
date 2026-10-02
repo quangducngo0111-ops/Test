@@ -59,7 +59,7 @@ button{cursor:pointer}
     <div class="progress-wrap"><div class="progress-row"><span>Tiến độ</span><span id="progressText">0/20 câu hoàn thành</span></div><div class="progress"><i id="progressBar"></i></div></div>
   </section>
   <section class="workspace">
-    <aside class="sidebar"><div class="side-head"><b>20 câu luyện hỗn hợp</b><span>Đạt từ 85 điểm, đúng cấu trúc và không còn lỗi ngữ pháp nghiêm trọng/chính tả để hoàn thành câu.</span></div><div id="questionList" class="question-list"></div></aside>
+    <aside class="sidebar"><div class="side-head"><b>20 câu luyện hỗn hợp</b><span>Chấp nhận nhiều cách diễn đạt tương đương. Câu hoàn thành khi đúng cấu trúc, đủ ý và không còn lỗi ngữ pháp/chính tả quan trọng.</span></div><div id="questionList" class="question-list"></div></aside>
     <section class="main">
       <div class="eyebrow"><span id="structureChip" class="chip"></span><span id="counter" class="counter"></span></div>
       <div class="prompt-box"><div class="prompt-label">Dịch sang tiếng Anh</div><div id="viPrompt" class="vi"></div><div class="structure-hint"><b>Cấu trúc mục tiêu:</b> <span id="formula"></span></div></div>
@@ -72,8 +72,8 @@ button{cursor:pointer}
   </section>
 </main>
 <script>
-const STORAGE_KEY='WT2_TRANSLATION_MIXED_STRUCTURES_V2';
-const LEGACY_STORAGE_KEY='WT2_TRANSLATION_MIXED_STRUCTURES_V1';
+const STORAGE_KEY='WT2_TRANSLATION_MIXED_STRUCTURES_V3';
+const LEGACY_STORAGE_KEYS=['WT2_TRANSLATION_MIXED_STRUCTURES_V2','WT2_TRANSLATION_MIXED_STRUCTURES_V1'];
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
 const QUESTIONS=[
@@ -90,7 +90,7 @@ const QUESTIONS=[
     vi:'Việc học tiếng Anh giúp sinh viên giao tiếp với nhiều người hơn. Điều này cho phép họ xây dựng các mối quan hệ quốc tế.',
     reference:'Learning English helps students communicate with more people. This allows them to build international relationships.',
     patterns:[/\bthis\s+allows\s+\w+\s+to\s+\w+/i],
-    concepts:[['learning english','studying english'],['students','learners'],['communicate','communication'],['build international relationships','develop international relationships']],
+    concepts:[['learning english','studying english'],['students','learners','undergraduates','university students'],['communicate','communication','interact'],['build international relationships','develop international relationships']],
     structureTip:'Câu thứ hai cần có “This allows + somebody + to V”.'
   },
   {
@@ -106,7 +106,7 @@ const QUESTIONS=[
     vi:'Tiếng Anh được sử dụng trong nhiều môi trường làm việc quốc tế. Vì vậy, khả năng sử dụng ngôn ngữ này có thể cải thiện triển vọng nghề nghiệp.',
     reference:'English is used in many international workplaces. Therefore, the ability to use this language can improve career prospects.',
     patterns:[/\.\s*therefore,?/i,/^therefore,?/i],
-    concepts:[['english'],['international workplaces','international workplace','international work environments'],['ability','skills'],['career prospects','career opportunities']],
+    concepts:[['english'],['international workplaces','international workplace','international work environments','international environments','international environment','global workplaces','global work environments'],['ability','skills'],['career prospects','career opportunities']],
     structureTip:'Dùng Therefore để nối kết quả ở câu thứ hai.'
   },
   {
@@ -210,7 +210,7 @@ const QUESTIONS=[
     vi:'Sinh viên có được bằng cấp quốc tế. Do đó, họ có thể tiếp cận nhiều cơ hội việc làm hơn.',
     reference:'Students obtain international qualifications. Consequently, they can access more employment opportunities.',
     patterns:[/\bconsequently,?/i],
-    concepts:[['students','graduates'],['international qualifications'],['access'],['employment opportunities','job opportunities']],
+    concepts:[['students','graduates','undergraduates','university students'],['international qualifications'],['access'],['employment opportunities','job opportunities']],
     structureTip:'Consequently dùng để giới thiệu hệ quả trực tiếp.'
   },
   {
@@ -245,9 +245,62 @@ let state={answers:{},attempts:{},completed:[],scores:{}};
 function normalize(s){return String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9'\s.,-]/g,' ').replace(/\s+/g,' ').trim()}
 function tokenize(s){return normalize(s).replace(/[.,]/g,' ').split(/\s+/).filter(Boolean)}
 function editDistance(a,b){a=String(a);b=String(b);const m=a.length,n=b.length,dp=Array.from({length:m+1},()=>Array(n+1).fill(0));for(let i=0;i<=m;i++)dp[i][0]=i;for(let j=0;j<=n;j++)dp[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return dp[m][n]}
-function containsAny(text,variants){const t=normalize(text);return variants.some(v=>t.includes(normalize(v)))}
-function conceptScore(q,text){const hits=q.concepts.map(group=>containsAny(text,group));return {hits,ratio:hits.filter(Boolean).length/q.concepts.length}}
-function structureScore(q,text){return q.patterns.some(re=>re.test(String(text||'')))}
+const SEMANTIC_EQUIVALENTS=[
+  ['students','student','learners','learner','undergraduates','undergraduate','university students','college students'],
+  ['employees','employee','workers','worker','staff','staff members'],
+  ['people','persons','individuals'],
+  ['international workplaces','international workplace','international work environments','international work environment','international environments','international environment','global workplaces','global workplace','global work environments','global work environment','international working environments','international working environment'],
+  ['career prospects','career opportunities','employment prospects','job prospects','career chances'],
+  ['employment opportunities','job opportunities','career opportunities','work opportunities'],
+  ['authentic materials','authentic resources','real-world materials','real world materials','real-life materials','real life materials'],
+  ['language ability','language skills','language proficiency','english proficiency','linguistic ability'],
+  ['build international relationships','develop international relationships','establish international relationships','form international relationships','build global relationships','develop global relationships','build international connections','develop international connections'],
+  ['communicate','communication','interact','interaction'],
+  ['different cultures','various cultures','other cultures','diverse cultures','a range of cultures'],
+  ['cultural awareness','culture awareness','awareness of other cultures','awareness of different cultures'],
+  ['speaking skills','speaking ability','oral communication skills'],
+  ['reading skills','reading ability'],
+  ['knowledge','understanding'],
+  ['broaden','expand','widen'],
+  ['improve','develop','enhance'],
+  ['native speakers','native english speakers'],
+  ['new words','vocabulary','new vocabulary'],
+  ['international qualifications','global qualifications','internationally recognised qualifications','internationally recognized qualifications']
+];
+
+function equivalentVariants(variants){
+  const out=new Set(variants.map(v=>normalize(v)));
+  for(const family of SEMANTIC_EQUIVALENTS){
+    const normFamily=family.map(normalize);
+    if(normFamily.some(x=>out.has(x))){
+      normFamily.forEach(x=>out.add(x));
+    }
+  }
+  return [...out];
+}
+
+function containsAny(text,variants){
+  const t=normalize(text);
+  return equivalentVariants(variants).some(v=>t.includes(v));
+}
+
+function conceptScore(q,text){
+  const hits=q.concepts.map(group=>containsAny(text,group));
+  return {hits,ratio:hits.filter(Boolean).length/q.concepts.length};
+}
+
+function structureScore(q,text){
+  const raw=String(text||'');
+  const basic=q.patterns.some(re=>re.test(raw));
+  if(!basic) return false;
+
+  /* allows/enables cần một tân ngữ hợp lệ, không phải subject pronoun như they/he/we. */
+  if(['This allows + somebody + to V','This enables + somebody + to V'].includes(q.structure)){
+    if(/\b(?:allows|enables)\s+(?:i|he|she|we|they)\b/i.test(raw)) return false;
+  }
+
+  return true;
+}
 
 const COMMON=new Set(`a an the this that these those i you he she it we they them their his her our your can could may might will would should must is are was were be been being have has had do does did to of in on at for from with by as and or but not only also more most many much some any into than then therefore consequently result which while people person students student learners learner employees employee workers worker english language languages skills skill materials material resources resource books book words word world work workplace workplaces environment environments cultures culture cultural career careers opportunities opportunity prospects prospect communication communicate communicating speaking reading learning learn studying study helps help improve improves improving improved develop develops developing developed use uses used using access accesses accessed accessing become becomes became becoming around regularly effectively naturally international authentic different good new wide range native speakers speaker qualification qualifications employment job jobs relationship relationships fluency confidence awareness foreign foreigners ability abilities benefits advantages provides provide providing increases increase increasing broaden broadens broadening expand expands expanding enhance enhances enhancing obtain obtains obtaining understand understands understanding build builds building allow allows allowing enable enables enabling read reads reading talk talks talking practise practises practised practising practice practices practiced practicing exposed exposure used widely clear clearer deepen deeper`.split(/\s+/));
 
@@ -343,8 +396,24 @@ function grammarIssues(q,text){
 
   if(/\bthis\s+allow\b/i.test(s)) pushGrammar(issues,'this-allows','Sau “This” phải dùng “allows”.');
   if(/\bthis\s+enable\b/i.test(s)) pushGrammar(issues,'this-enables','Sau “This” phải dùng “enables”.');
+
+  if(/\b(?:allows|enables)\s+(?:i|he|she|we|they)\b/i.test(s)){
+    pushGrammar(issues,'object-pronoun','Sau “allows/enables” cần tân ngữ: me / him / her / us / them / you, không dùng I / he / she / we / they. Ví dụ: “This allows them to ...”.');
+  }
+  if(/\b(?:allows|enables)\s+(?:my|his|our|their)\s+to\b/i.test(s)){
+    pushGrammar(issues,'object-pronoun-possessive','Sau “allows/enables” cần đại từ tân ngữ, không dùng tính từ sở hữu. Ví dụ: “allows them to ...”.');
+  }
+
   if(/\ballows\s+(?:him|her|them|us|me|you|\w+)\s+(?!to\b)/i.test(s)) pushGrammar(issues,'allows-to','Cấu trúc đúng: allows + somebody + to V.');
   if(/\benables\s+(?:him|her|them|us|me|you|\w+)\s+(?!to\b)/i.test(s)) pushGrammar(issues,'enables-to','Cấu trúc đúng: enables + somebody + to V.');
+
+  /* more/many/several + danh từ đếm được phải ở dạng số nhiều. */
+  if(/\bmore\s+(person|student|learner|employee|worker|culture|custom|material|resource|book|word|skill|opportunity|relationship|qualification|workplace|environment)\b/i.test(n)){
+    pushGrammar(issues,'more-plural','Sau “more” với danh từ đếm được, dùng dạng số nhiều. Ví dụ: “more people”, “more opportunities”.');
+  }
+  if(/\b(?:many|several|various|numerous)\s+(person|student|learner|employee|worker|culture|custom|material|resource|book|word|skill|opportunity|relationship|qualification|workplace|environment)\b/i.test(n)){
+    pushGrammar(issues,'quantifier-plural','Sau “many/several/various/numerous” cần danh từ số nhiều.');
+  }
 
   const modalRe=new RegExp(`\\b(can|could|may|might|must|should|will|would)\\s+(${NONBASE_AFTER_MODAL})\\b`,'i');
   if(modalRe.test(s)) pushGrammar(issues,'modal-base','Sau động từ khuyết thiếu (can/could/should...) phải dùng động từ nguyên mẫu.');
@@ -372,6 +441,16 @@ function grammarIssues(q,text){
   /* Chủ ngữ số nhiều không dùng động từ thêm -s. */
   const pluralSva=/\b(students|learners|employees|workers|people|skills|materials|resources|books|qualifications|opportunities|prospects)\s+(helps|allows|enables|improves|develops|provides|increases|broadens|enhances|communicates|works|uses|reads|learns|understands|builds|accesses|becomes|obtains)\b/i;
   if(pluralSva.test(n)) pushGrammar(issues,'plural-sva','Chủ ngữ số nhiều cần động từ nguyên mẫu, không thêm “-s”.');
+
+  /* Một số chủ ngữ số ít phổ biến cần động từ ngôi thứ ba số ít nếu không có modal. */
+  const singularBase=/\b(english|language|ability|skill|communication|learning english|studying english|learning a foreign language)\s+(help|allow|enable|improve|develop|provide|increase|broaden|enhance|communicate|work|use|read|learn|understand|build|access|become|obtain)\b/i;
+  const singularMatch=n.match(singularBase);
+  if(singularMatch){
+    const prefix=n.slice(Math.max(0,(singularMatch.index||0)-14),singularMatch.index||0);
+    if(!/\b(can|could|may|might|must|should|will|would)\s*$/.test(prefix)){
+      pushGrammar(issues,'singular-sva','Chủ ngữ số ít cần động từ ngôi thứ ba số ít (ví dụ: helps / improves / provides).');
+    }
+  }
 
   if(/\benglish\s+(are|were)\b/i.test(n)) pushGrammar(issues,'english-sva','“English” là chủ ngữ số ít trong câu này: dùng “is/was”, không dùng “are/were”.');
   if(/\b(skills|materials|resources|books|qualifications|opportunities|prospects)\s+(is|was)\b/i.test(n)) pushGrammar(issues,'plural-be','Danh từ số nhiều cần đi với “are/were”.');
@@ -462,13 +541,13 @@ function grade(q,text){
   const completed=
     total>=85 &&
     structureOK &&
-    meaning.ratio>=0.8 &&
+    meaning.ratio>=0.75 &&
     majorGrammar.length===0 &&
     spelling.length===0;
 
   const issues=[];
   if(!structureOK) issues.push(`Cấu trúc chưa đúng mục tiêu. ${q.structureTip}`);
-  if(meaning.ratio<0.8){
+  if(meaning.ratio<0.75){
     const missing=q.concepts.filter((_,i)=>!meaning.hits[i]).map(g=>g[0]);
     issues.push('Ý còn thiếu/chưa rõ: '+missing.join(', ')+'.');
   }
@@ -501,7 +580,7 @@ function regradeSavedAnswers(){
 function load(){
   try{
     let x=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
-    if(!x) x=JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY)||'null');
+    if(!x) x=JSON.parse(LEGACY_STORAGE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean)||'null');
     if(x){
       state={answers:x.answers||{},attempts:x.attempts||{},completed:[],scores:{}};
       regradeSavedAnswers();
@@ -529,7 +608,7 @@ function renderFeedback(result,afterCheck=true){
   const x=q(); const a=attemptsFor(x.id); const cls=result.completed?'good':result.total>=70?'warn':'bad';
   let detail=result.issues.length?`<div class="detail ${result.completed?'good':cls==='bad'?'bad':''}"><b>${result.completed?'Câu đạt yêu cầu.':'Cần chỉnh:'}</b>${result.issues.length?`<ul>${result.issues.map(v=>`<li>${v}</li>`).join('')}</ul>`:''}</div>`:`<div class="detail good"><b>Câu đạt yêu cầu.</b> Cấu trúc, ý chính và hình thức câu đều ổn.</div>`;
   const showRef=!result.completed && a>=2;
-  feedback.innerHTML=`<div class="scorebar"><div><div class="scorebig">${result.total}/100</div><div class="status ${cls}">${result.completed?'✓ Hoàn thành':result.total>=70?'Gần đạt — sửa thêm một chút':'Cần chỉnh lại'}</div></div><div style="font-size:10px;color:#7c8392;text-align:right">Mục tiêu hoàn thành<br><b style="color:#2a3040">≥85 + đúng cấu trúc + không lỗi ngữ pháp nghiêm trọng/chính tả</b></div></div><div class="metric-grid"><div class="metric"><span>Cấu trúc</span><b>${result.structureOK?'Đúng':'Chưa đúng'}</b></div><div class="metric"><span>Ý chính</span><b>${result.meaningPct}%</b></div><div class="metric"><span>Ngữ pháp</span><b>${result.grammarPts}/25</b></div><div class="metric"><span>Chính tả</span><b>${result.spellingPts}/10</b></div></div>${detail}${showRef?`<div class="reference"><b>Gợi ý tham khảo sau 2 lần chưa đạt:</b><br>${x.reference}</div>`:''}`;
+  feedback.innerHTML=`<div class="scorebar"><div><div class="scorebig">${result.total}/100</div><div class="status ${cls}">${result.completed?'✓ Hoàn thành':result.total>=70?'Gần đạt — sửa thêm một chút':'Cần chỉnh lại'}</div></div><div style="font-size:10px;color:#7c8392;text-align:right">Mục tiêu hoàn thành<br><b style="color:#2a3040">≥85 + đúng cấu trúc + ý chính ≥75% + không lỗi ngữ pháp nghiêm trọng/chính tả</b></div></div><div class="metric-grid"><div class="metric"><span>Cấu trúc</span><b>${result.structureOK?'Đúng':'Chưa đúng'}</b></div><div class="metric"><span>Ý chính</span><b>${result.meaningPct}%</b></div><div class="metric"><span>Ngữ pháp</span><b>${result.grammarPts}/25</b></div><div class="metric"><span>Chính tả</span><b>${result.spellingPts}/10</b></div></div>${detail}${showRef?`<div class="reference"><b>Gợi ý tham khảo sau 2 lần chưa đạt:</b><br>${x.reference}</div>`:''}`;
   feedback.className='feedback show';
 }
 
