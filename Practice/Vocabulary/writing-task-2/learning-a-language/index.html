@@ -72,8 +72,8 @@ button{cursor:pointer}
   </section>
 </main>
 <script>
-const STORAGE_KEY='VOCAB_WT2_LANGUAGE_SENTENCES_V1';
-const LEGACY_STORAGE_KEYS=[];
+const STORAGE_KEY='VOCAB_WT2_LANGUAGE_SENTENCES_V2';
+const LEGACY_STORAGE_KEYS=['VOCAB_WT2_LANGUAGE_SENTENCES_V1'];
 
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
@@ -510,8 +510,32 @@ function grammarIssues(q,text){
     pushGrammar(issues,'a-an','Trước âm nguyên âm trong “international”, dùng “an”, không dùng “a”.');
   }
 
+  if(/\b(?:help|helps|helped|helping)\s+(?:i|he|she|we|they)\b/i.test(n)){
+    pushGrammar(issues,'help-object-pronoun','Sau “help” khi chỉ người nhận tác động cần dùng đại từ tân ngữ: me / him / her / us / them / you. Ví dụ: “help them communicate”, không dùng “help they communicate”.');
+  }
+
+  if(/\b(?:help|helps|helped|helping)\s+(?:my|his|our|their)\s+(?:to\s+)?[a-z]+\b/i.test(n)){
+    pushGrammar(issues,'help-possessive-pronoun','Sau “help” cần danh từ hoặc đại từ tân ngữ, không dùng tính từ sở hữu trước động từ. Ví dụ: “help them communicate”.');
+  }
+
   if(/\b(?:help|helps)\s+(?:him|her|them|us|me|you|people|students|learners|employees|workers)\s+(understanding|communicating|improving|developing|learning|building)\b/i.test(n)){
     pushGrammar(issues,'help-base','Sau “help + somebody” nên dùng động từ nguyên mẫu (hoặc “to + V”), không dùng V-ing trong cấu trúc này.');
+  }
+
+  /* Agreement với be/have ở các chủ ngữ thường gặp trong bộ này. */
+  if(/\b(people|students|learners|employees|workers|clients|companies|cultures|tools)\s+(is|was|has)\b/i.test(n)){
+    pushGrammar(issues,'plural-be-have','Chủ ngữ số nhiều cần “are/were/have”, không dùng “is/was/has”.');
+  }
+  if(/\b(translation software|software|english|language ability|employability)\s+(are|were|have)\b/i.test(n)){
+    pushGrammar(issues,'singular-be-have','Chủ ngữ này được dùng như số ít/không đếm được trong ngữ cảnh này: dùng “is/was/has”.');
+  }
+
+  /* Một số lỗi danh từ không đếm được thường gặp. */
+  if(/\b(?:a|an)\s+(?:translation\s+)?software\b/i.test(n)){
+    pushGrammar(issues,'software-uncountable','“Software” thường là danh từ không đếm được; dùng “translation software” hoặc “a piece of software”, không dùng “a software”.');
+  }
+  if(/\bmany\s+(software|knowledge|information)\b/i.test(n)){
+    pushGrammar(issues,'uncountable-quantifier','Với software/knowledge/information, không dùng “many”; dùng “much/a lot of” hoặc cách diễn đạt phù hợp.');
   }
 
   if(/\b(students|learners|employees|people)\b[^.!?]{0,90}\b(his|her)\b/i.test(n)){
@@ -644,7 +668,7 @@ function renderFeedback(result,afterCheck=true){
   const x=q(); const a=attemptsFor(x.id); const cls=result.completed?'good':result.total>=70?'warn':'bad';
   let detail=result.issues.length?`<div class="detail ${result.completed?'good':cls==='bad'?'bad':''}"><b>${result.completed?'Câu đạt yêu cầu.':'Cần chỉnh:'}</b>${result.issues.length?`<ul>${result.issues.map(v=>`<li>${v}</li>`).join('')}</ul>`:''}</div>`:`<div class="detail good"><b>Câu đạt yêu cầu.</b> Cấu trúc, ý chính và hình thức câu đều ổn.</div>`;
   const showRef=!result.completed && a>=2;
-  feedback.innerHTML=`<div class="scorebar"><div><div class="scorebig">${result.total}/100</div><div class="status ${cls}">${result.completed?'✓ Hoàn thành':result.total>=70?'Gần đạt — sửa thêm một chút':'Cần chỉnh lại'}</div></div><div style="font-size:10px;color:#7c8392;text-align:right">Mục tiêu hoàn thành<br><b style="color:#2a3040">≥85 + đúng cấu trúc + ý chính ≥75% + không lỗi ngữ pháp nghiêm trọng/chính tả</b></div></div><div class="metric-grid"><div class="metric"><span>Cấu trúc</span><b>${result.structureOK?'Đúng':'Chưa đúng'}</b></div><div class="metric"><span>Ý chính</span><b>${result.meaningPct}%</b></div><div class="metric"><span>Ngữ pháp</span><b>${result.grammarPts}/25</b></div><div class="metric"><span>Chính tả</span><b>${result.spellingPts}/10</b></div></div>${detail}${showRef?`<div class="reference"><b>Gợi ý tham khảo sau 2 lần chưa đạt:</b><br>${x.reference}</div>`:''}`;
+  feedback.innerHTML=`<div class="scorebar"><div><div class="scorebig">${result.total}/100</div><div class="status ${cls}">${result.completed?'✓ Hoàn thành':result.total>=70?'Gần đạt — sửa thêm một chút':'Cần chỉnh lại'}</div></div><div style="font-size:10px;color:#7c8392;text-align:right">Mục tiêu hoàn thành<br><b style="color:#2a3040">≥85 + đúng cấu trúc + ý chính ≥75% + không còn lỗi ngữ pháp nghiêm trọng/chính tả</b></div></div><div class="metric-grid"><div class="metric"><span>Cấu trúc</span><b>${result.structureOK?'Đúng':'Chưa đúng'}</b></div><div class="metric"><span>Ý chính</span><b>${result.meaningPct}%</b></div><div class="metric"><span>Ngữ pháp</span><b>${result.grammarPts}/25</b></div><div class="metric"><span>Chính tả</span><b>${result.spellingPts}/10</b></div></div>${detail}${showRef?`<div class="reference"><b>Gợi ý tham khảo sau 2 lần chưa đạt:</b><br>${x.reference}</div>`:''}`;
   feedback.className='feedback show';
 }
 
