@@ -117,8 +117,8 @@ window.MAPS_WRITING_TASKS = [
       {label:'The library is south of the main road.',keywords:['library'],places:['south','southern']},
       {label:'The post office is to the south-east.',keywords:['post office'],places:['south-east','southeast','south']}
     ], suggestions:['run through','run across','divide ... into ...','along','to the south of']
-  }
-  ,{
+  },
+  {
     id:'university-city', number:10, image:'./images/image2.png', title:'University City', type:'Vị trí công trình',
     prompt:'The map shows a university and several facilities in a riverside city. Summarise the main spatial features.',
     instruction:'Describe the university, residential area, park, shopping centre, stadium, port and river.',
@@ -168,10 +168,10 @@ window.MAPS_WRITING_TASKS = [
       {label:'The car park is at the south-western corner.',keywords:['car park','parking'],places:['south-west','southwest']},
       {label:'The rest area is in the south-eastern corner.',keywords:['rest area'],places:['south-east','southeast']}
     ], suggestions:['adjacent to','opposite','in the north-eastern corner of','in the centre of']
-  }
+  },
 
-  ,{
-    id:'change-site-a', number:14, image:'./images/image14.png', title:'Site A · 2000–2025', type:'Thay đổi theo thời gian',
+  {
+    id:'change-site-a', number:14, image:'./images/image14.png', title:'Riverside Campus · 2000–2025', type:'Thay đổi theo thời gian',
     practiceMode:'change', fromYear:2000, toYear:2025,
     prompt:'The maps show a site in 2000 and 2025. Describe the changes using suitable change vocabulary.',
     instruction:'Write one sentence at a time, focusing on how the open space changed and how the cafeteria appeared.',
@@ -181,9 +181,9 @@ window.MAPS_WRITING_TASKS = [
         keywords:['cafeteria'],places:['constructed','east','eastern'],
         changePractice:{
           prompt:'Hãy miêu tả Cafeteria mới vào năm 2025, sử dụng từ “constructed”.',
-          requiredGroups:[['cafeteria'],['east','eastern side']],
+          requiredGroups:[['cafeteria']],
           acceptedPhrases:['was constructed','was constructed on the eastern side of'],
-          secondHint:'Dùng cấu trúc “was constructed” và nêu vị trí ở phía đông của site.'
+          secondHint:'Dùng cấu trúc “was constructed” để diễn tả công trình mới.'
         }
       },
       {
@@ -211,9 +211,9 @@ window.MAPS_WRITING_TASKS = [
         keywords:['cafeteria'],places:['added','east','eastern'],
         changePractice:{
           prompt:'Hãy miêu tả việc Cafeteria được bổ sung vào năm 2025, sử dụng từ “added”.',
-          requiredGroups:[['cafeteria'],['east','eastern side']],
+          requiredGroups:[['cafeteria']],
           acceptedPhrases:['was added','was added to'],
-          secondHint:'Dùng “was added” và nêu Cafeteria nằm ở phía đông của site.'
+          secondHint:'Dùng cấu trúc “was added” để diễn tả công trình được bổ sung.'
         }
       },
       {
@@ -221,16 +221,17 @@ window.MAPS_WRITING_TASKS = [
         keywords:['cafeteria'],places:['introduced','east','eastern'],
         changePractice:{
           prompt:'Hãy miêu tả Cafeteria mới, sử dụng từ “introduced”.',
-          requiredGroups:[['cafeteria'],['east','eastern side']],
+          requiredGroups:[['cafeteria']],
           acceptedPhrases:['was introduced'],
-          secondHint:'Dùng cấu trúc “was introduced” và nêu vị trí ở phía đông của site.'
+          secondHint:'Dùng cấu trúc “was introduced” để diễn tả một feature mới xuất hiện.'
         }
       }
     ],
     suggestions:['be constructed','be added','be introduced','be replaced by','former']
   },
+
   {
-    id:'change-site-b', number:15, image:'./images/image15.png', title:'Site B · 2010–2020', type:'Thay thế công trình',
+    id:'change-site-b', number:15, image:'./images/image15.png', title:'Heritage Gardens · 2010–2020', type:'Thay thế công trình',
     practiceMode:'change', fromYear:2010, toYear:2020,
     prompt:'The maps compare a site in 2010 and 2020. Describe how the southern part changed.',
     instruction:'Focus on the change from the car park to the museum.',
@@ -250,9 +251,9 @@ window.MAPS_WRITING_TASKS = [
         keywords:['museum'],places:['built','south','southern'],
         changePractice:{
           prompt:'Hãy miêu tả Museum mới vào năm 2020, sử dụng từ “built”.',
-          requiredGroups:[['museum'],['south','southern']],
+          requiredGroups:[['museum']],
           acceptedPhrases:['was built','was built in the southern part of'],
-          secondHint:'Dùng “was built” và nêu Museum nằm ở phần phía nam của site.'
+          secondHint:'Dùng cấu trúc “was built” để diễn tả Museum mới.'
         }
       },
       {
@@ -278,8 +279,9 @@ window.MAPS_WRITING_TASKS = [
     ],
     suggestions:['former','be built','previous','be transformed into','be converted into']
   },
+
   {
-    id:'change-site-c', number:16, image:'./images/image16.png', title:'Site C · 2010–2020', type:'Thay thế công trình',
+    id:'change-site-c', number:16, image:'./images/image16.png', title:'Greenfield Grounds · 2010–2020', type:'Thay thế công trình',
     practiceMode:'change', fromYear:2010, toYear:2020,
     prompt:'The maps compare a site in 2010 and 2020. Describe the change on the western side of the garden.',
     instruction:'Focus on the sports court and the library.',
@@ -299,9 +301,9 @@ window.MAPS_WRITING_TASKS = [
         keywords:['library','garden'],places:['constructed','west','western'],
         changePractice:{
           prompt:'Hãy miêu tả Library mới vào năm 2020, sử dụng từ “constructed”.',
-          requiredGroups:[['library'],['west','western'],['garden']],
+          requiredGroups:[['library']],
           acceptedPhrases:['was constructed','was built'],
-          secondHint:'Dùng “was constructed” và nêu Library nằm ở phía tây của Garden.'
+          secondHint:'Dùng cấu trúc “was constructed” hoặc “was built” để diễn tả Library mới.'
         }
       },
       {
@@ -327,8 +329,9 @@ window.MAPS_WRITING_TASKS = [
     ],
     suggestions:['former','be constructed','be transformed into','original','be removed']
   },
+
   {
-    id:'change-site-d', number:17, image:'./images/image17.png', title:'Site D · 2010–2020', type:'Di dời công trình',
+    id:'change-site-d', number:17, image:'./images/image17.png', title:'Meadowview Park · 2010–2020', type:'Di dời công trình',
     practiceMode:'change', fromYear:2010, toYear:2020,
     prompt:'The maps show that the cafeteria changed position between 2010 and 2020.',
     instruction:'Describe the relocation from the western side of the garden to the eastern side.',
@@ -337,47 +340,48 @@ window.MAPS_WRITING_TASKS = [
         label:'The previous cafeteria was relocated to the eastern side of the garden.',
         keywords:['cafeteria','garden'],places:['previous','relocated','east','eastern'],
         changePractice:{
-          prompt:'Hãy miêu tả Cafeteria trước đó, sử dụng từ “previous” và “relocated”.',
-          requiredGroups:[['previous'],['cafeteria'],['east','eastern'],['garden']],
-          acceptedPhrases:['was relocated to','was relocated to the eastern side of'],
-          secondHint:'Cafeteria trước đó ở phía tây và sau đó được di dời sang phía đông của Garden.'
+          prompt:'Hãy miêu tả việc Cafeteria trước đó được di dời, sử dụng từ “previous” và “relocated”.',
+          requiredGroups:[['previous'],['cafeteria']],
+          acceptedPhrases:['was relocated','was relocated to','was relocated to the eastern side of'],
+          secondHint:'Dùng “the previous cafeteria” và cấu trúc “was relocated”.'
         }
       },
       {
         label:'The cafeteria was moved from the western side to the eastern side of the garden.',
         keywords:['cafeteria','garden'],places:['moved','west','western','east','eastern'],
         changePractice:{
-          prompt:'Hãy miêu tả việc Cafeteria đổi vị trí từ phía tây sang phía đông của Garden, sử dụng từ “moved”.',
-          requiredGroups:[['cafeteria'],['west','western'],['east','eastern'],['garden']],
-          acceptedPhrases:['was moved from','was moved from the western side to the eastern side of'],
-          secondHint:'Cần thể hiện cả vị trí cũ ở phía tây và vị trí mới ở phía đông của Garden.'
+          prompt:'Hãy miêu tả việc Cafeteria được di dời, sử dụng từ “moved”.',
+          requiredGroups:[['cafeteria']],
+          acceptedPhrases:['was moved','was moved to','was moved from','was moved from the western side to the eastern side of'],
+          secondHint:'Dùng cấu trúc “was moved” để diễn tả việc Cafeteria được di dời.'
         }
       },
       {
         label:'The former cafeteria was moved to the eastern side of the garden.',
         keywords:['cafeteria','garden'],places:['former','moved','east','eastern'],
         changePractice:{
-          prompt:'Hãy miêu tả Cafeteria ở vị trí cũ, sử dụng từ “former”.',
-          requiredGroups:[['former'],['cafeteria'],['east','eastern'],['garden']],
-          acceptedPhrases:['was moved to','was relocated to'],
-          secondHint:'Dùng “former” cho Cafeteria ở vị trí trước đây và nêu vị trí mới ở phía đông của Garden.'
+          prompt:'Hãy miêu tả Cafeteria trước đây và việc nó được di dời, sử dụng từ “former”.',
+          requiredGroups:[['former'],['cafeteria']],
+          acceptedPhrases:['was moved','was moved to','was relocated','was relocated to'],
+          secondHint:'Dùng “the former cafeteria” và một cấu trúc diễn tả sự di dời như “was moved” hoặc “was relocated”.'
         }
       },
       {
         label:'The cafeteria was relocated from the western side to the eastern side of the garden.',
         keywords:['cafeteria','garden'],places:['relocated','west','western','east','eastern'],
         changePractice:{
-          prompt:'Hãy viết một câu đầy đủ về việc di dời Cafeteria, sử dụng từ “relocated”.',
-          requiredGroups:[['cafeteria'],['west','western'],['east','eastern'],['garden']],
-          acceptedPhrases:['was relocated from','was relocated from the western side to the eastern side of'],
-          secondHint:'Câu cần nêu Cafeteria được di dời từ phía tây sang phía đông của Garden.'
+          prompt:'Hãy viết một câu về việc Cafeteria được di dời, sử dụng từ “relocated”.',
+          requiredGroups:[['cafeteria']],
+          acceptedPhrases:['was relocated','was relocated to','was relocated from','was relocated from the western side to the eastern side of'],
+          secondHint:'Dùng cấu trúc “was relocated” để diễn tả sự di dời.'
         }
       }
     ],
     suggestions:['previous','be relocated to','be moved to','former']
   },
+
   {
-    id:'change-site-e', number:18, image:'./images/image18.png', title:'Site E · 2010–2020', type:'Phá bỏ / loại bỏ',
+    id:'change-site-e', number:18, image:'./images/image18.png', title:'Kingsley Gardens · 2010–2020', type:'Phá bỏ / loại bỏ',
     practiceMode:'change', fromYear:2010, toYear:2020,
     prompt:'The maps show that the small museum disappeared between 2010 and 2020.',
     instruction:'Describe the removal of the museum and the resulting open area.',
@@ -419,14 +423,15 @@ window.MAPS_WRITING_TASKS = [
           prompt:'Hãy miêu tả kết quả sau khi Museum bị loại bỏ, sử dụng từ “removed”.',
           requiredGroups:[['museum'],['open area','open space','green area']],
           acceptedPhrases:['was removed','was removed leaving','was removed, leaving'],
-          secondHint:'Sau khi Museum bị loại bỏ, khu vực phía đông trở thành một khoảng không gian mở.'
+          secondHint:'Sau khi Museum bị loại bỏ, một khoảng không gian mở xuất hiện.'
         }
       }
     ],
     suggestions:['former','be removed','be demolished','original','be cleared']
   },
+
   {
-    id:'change-site-f', number:19, image:'./images/image19.png', title:'Site F · 2010–2020', type:'Mở rộng',
+    id:'change-site-f', number:19, image:'./images/image19.png', title:'Lakewood Campus · 2010–2020', type:'Mở rộng',
     practiceMode:'change', fromYear:2010, toYear:2020,
     prompt:'The maps compare the garden in 2010 and 2020.',
     instruction:'Describe how the garden changed in size while the main building, library and car park remained in place.',
@@ -464,5 +469,4 @@ window.MAPS_WRITING_TASKS = [
     ],
     suggestions:['be expanded','be extended','original']
   }
-
 ];
