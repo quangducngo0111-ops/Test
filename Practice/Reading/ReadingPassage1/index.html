@@ -1216,218 +1216,110 @@ function escapeHTML(
 
 async function loadExercises(){
 
-  const grid =
-    document.getElementById(
-      "grid"
-    );
+  const grid = document.getElementById("grid");
+  const count = document.getElementById("count");
 
+  /*
+    Bài 01 đã tồn tại trong hệ thống nên luôn hiển thị ngay.
+    Danh sách từ GitHub chỉ dùng để bổ sung các bài 02, 03... sau này.
+    Nhờ vậy trang không bị trống khi GitHub API / GitHub Pages cập nhật chậm
+    hoặc tạm thời bị rate-limit.
+  */
+  const fallback = [
+    {
+      number:1,
+      folder:"01",
+      url:"./01/",
+      title:"The History of Glass",
+      description:"Note Completion + TRUE / FALSE / NOT GIVEN",
+      questions:13
+    }
+  ];
 
-  const count =
-    document.getElementById(
-      "count"
-    );
+  async function renderItems(items){
+    const unique = new Map();
 
+    for(const item of items){
+      const key = String(item.folder || item.number).padStart(2,"0");
+      if(!unique.has(key)){
+        unique.set(key,item);
+      }
+    }
+
+    const sorted = [...unique.values()]
+      .sort((a,b)=>a.number-b.number);
+
+    count.textContent = `${sorted.length} bài`;
+    grid.innerHTML = sorted.map(renderCard).join("");
+  }
+
+  /* Hiển thị Bài 01 ngay, không chờ network. */
+  await renderItems(fallback);
 
   try{
 
-    /*
-      Bước 1:
-      lấy danh sách toàn bộ file từ GitHub.
-    */
-
-    const response =
-      await fetch(
-        `${TREE}&v=${Date.now()}`,
-        {
-          cache:
-            "no-store"
-        }
-      );
-
-
-    if(
-      !response.ok
-    ){
-
-      throw new Error(
-        `GitHub API ${response.status}`
-      );
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    const escapedRoot =
-
-      ROOT.replace(
-        /[.*+?^${}()|[\]\\]/g,
-        "\\$&"
-      );
-
-
-    /*
-      Chỉ lấy:
-
-      ReadingPassage1/01/index.html
-      ReadingPassage1/02/index.html
-      ReadingPassage1/03/index.html
-      ...
-
-      Không lấy folder con linh tinh.
-    */
-
-    const regex =
-      new RegExp(
-        "^"
-        +
-        escapedRoot
-        +
-        "(\\d+)/index\\.html$",
-        "i"
-      );
-
-
-    const found =
-      [];
-
-
-    for(
-      const file
-      of
-      data.tree
-    ){
-
-      if(
-        file.type !==
-        "blob"
-      ){
-
-        continue;
-
-      }
-
-
-      const match =
-        file.path.match(
-          regex
-        );
-
-
-      if(
-        !match
-      ){
-
-        continue;
-
-      }
-
-
-      const folder =
-        match[1];
-
-
-      found.push({
-
-        number:
-          Number(folder),
-
-        folder,
-
-        url:
-          `./${folder}/`
-
-      });
-
-    }
-
-
-    found.sort(
-      (
-        a,
-        b
-      ) =>
-        a.number
-        -
-        b.number
+    const response = await fetch(
+      `${TREE}&v=${Date.now()}`,
+      {cache:"no-store"}
     );
 
-
-    count.textContent =
-      `${found.length} bài`;
-
-
-    if(
-      !found.length
-    ){
-
-      grid.innerHTML =
-        `
-        <div class="empty">
-          Chưa có bài trong Reading Passage 1.
-        </div>
-        `;
-
-
-      return;
-
+    if(!response.ok){
+      throw new Error(`GitHub API ${response.status}`);
     }
 
+    const data = await response.json();
+
+    const escapedRoot = ROOT.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&"
+    );
+
+    const regex = new RegExp(
+      "^" + escapedRoot + "(\\d+)/index\\.html$",
+      "i"
+    );
+
+    const found = [];
+
+    for(const file of (data.tree || [])){
+      if(file.type !== "blob") continue;
+
+      const match = file.path.match(regex);
+      if(!match) continue;
+
+      const folder = match[1];
+
+      found.push({
+        number:Number(folder),
+        folder,
+        url:`./${folder}/`
+      });
+    }
+
+    const discovered = await Promise.all(
+      found.map(readExerciseMeta)
+    );
 
     /*
-      Bước 2:
-      mở index.html của từng bài để đọc title.
-
-      Promise.all giúp tải song song,
-      nhanh hơn tải lần lượt từng bài.
+      Ưu tiên metadata đọc được từ file bài.
+      Nếu Bài 01 chưa được GitHub Pages cập nhật thì fallback vẫn giữ nguyên.
     */
+    const merged = new Map(
+      fallback.map(item => [item.folder,{...item}])
+    );
 
-    const items =
+    for(const item of discovered){
+      const key = String(item.folder || item.number).padStart(2,"0");
+      merged.set(key,{...(merged.get(key)||{}),...item});
+    }
 
-      await Promise.all(
-
-        found.map(
-          readExerciseMeta
-        )
-
-      );
-
-
-    /*
-      Bước 3:
-      render.
-    */
-
-    grid.innerHTML =
-
-      items
-      .map(
-        renderCard
-      )
-      .join("");
+    await renderItems([...merged.values()]);
 
   }
   catch(error){
-
-    console.error(error);
-
-
-    count.textContent =
-      "—";
-
-
-    grid.innerHTML =
-      `
-      <div class="empty">
-        Không tải được danh sách bài.
-        Hãy tải lại trang sau ít phút.
-      </div>
-      `;
-
+    console.warn("GitHub chưa trả danh sách mới, đang dùng danh sách dự phòng.",error);
+    /* Không xoá Bài 01 đã render ở trên. */
   }
-
 }
 
 
