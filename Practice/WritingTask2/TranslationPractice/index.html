@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="practice-title" content="Translation Practice">
-<meta name="practice-description" content="Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback">
+<meta name="practice-description" content="Mixed Structures · 12+ IELTS Topics · Grammar & Spelling Feedback">
 <meta name="practice-questions" content="20">
 <title>Writing Task 2 · Translation Practice</title>
 <style>
@@ -55,11 +55,11 @@ button{cursor:pointer}
 <header class="top"><div class="topin"><div class="left"><a class="back" href="../../">← Writing Task 2</a><div class="brand">✍️ Translation Practice · Mixed Structures</div></div><div id="studentInfo" class="student"></div></div></header>
 <main class="page">
   <section class="hero">
-    <div><h1>Translation Practice · Mixed Structures</h1><p>Luyện dịch câu theo các mẫu Writing Task 2: By + V-ing, This allows/enables..., result linkers, thereby, which-clause, V-ing clause và not only... but also...</p></div>
+    <div><h1>Translation Practice · Mixed Structures</h1><p>Luyện cùng một nhóm cấu trúc qua nhiều chủ đề IELTS Writing Task 2: môi trường, giáo dục, sức khỏe, công nghệ, việc làm, đô thị, gia đình, văn hóa, tội phạm và hơn thế nữa.</p></div>
     <div class="progress-wrap"><div class="progress-row"><span>Tiến độ</span><span id="progressText">0/20 câu hoàn thành</span></div><div class="progress"><i id="progressBar"></i></div></div>
   </section>
   <section class="workspace">
-    <aside class="sidebar"><div class="side-head"><b>20 câu luyện hỗn hợp</b><span>Chấp nhận nhiều cách diễn đạt tương đương. Câu hoàn thành khi đúng cấu trúc, đủ ý và không còn lỗi ngữ pháp/chính tả quan trọng.</span></div><div id="questionList" class="question-list"></div></aside>
+    <aside class="sidebar"><div class="side-head"><b>20 câu · nhiều chủ đề IELTS</b><span>Chấp nhận nhiều cách diễn đạt tương đương. Câu hoàn thành khi đúng cấu trúc, đủ ý và không còn lỗi ngữ pháp/chính tả quan trọng.</span></div><div id="questionList" class="question-list"></div></aside>
     <section class="main">
       <div class="eyebrow"><span id="structureChip" class="chip"></span><span id="counter" class="counter"></span></div>
       <div class="prompt-box"><div class="prompt-label">Dịch sang tiếng Anh</div><div id="viPrompt" class="vi"></div><div class="structure-hint"><b>Cấu trúc mục tiêu:</b> <span id="formula"></span></div></div>
@@ -72,169 +72,169 @@ button{cursor:pointer}
   </section>
 </main>
 <script>
-const STORAGE_KEY='WT2_TRANSLATION_MIXED_STRUCTURES_V3';
-const LEGACY_STORAGE_KEYS=['WT2_TRANSLATION_MIXED_STRUCTURES_V2','WT2_TRANSLATION_MIXED_STRUCTURES_V1'];
+const STORAGE_KEY='WT2_TRANSLATION_MIXED_STRUCTURES_V4_DIVERSE';
+const LEGACY_STORAGE_KEYS=[];
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
 const QUESTIONS=[
   {
-    id:1, structure:'By + V-ing', formula:'By + V-ing, S + V.',
-    vi:'Bằng cách thường xuyên sử dụng các tài liệu thực tế, học sinh có thể phát triển khả năng ngôn ngữ của mình.',
-    reference:'By regularly using authentic materials, students can develop their language ability.',
+    id:1, topic:'Môi trường', structure:'By + V-ing', formula:'By + V-ing, S + V.',
+    vi:'Bằng cách sử dụng phương tiện giao thông công cộng thường xuyên hơn, người dân có thể giảm lượng khí thải carbon từ việc đi lại hằng ngày.',
+    reference:'By using public transport more regularly, people can reduce carbon emissions from their daily travel.',
     patterns:[/\bby\s+[a-z]+(?:ing)\b/i],
-    concepts:[['authentic materials','authentic resources'],['students','learners'],['develop','improve'],['language ability','language skills']],
+    concepts:[['public transport','public transportation','mass transit'],['people','commuters','residents'],['reduce carbon emissions','cut carbon emissions','lower carbon emissions','reduce greenhouse gas emissions'],['daily travel','daily commuting','commuting']],
     structureTip:'Mở đầu bằng By + V-ing.'
   },
   {
-    id:2, structure:'This allows + somebody + to V', formula:'S + V. This allows + somebody + to + V.',
-    vi:'Việc học tiếng Anh giúp sinh viên giao tiếp với nhiều người hơn. Điều này cho phép họ xây dựng các mối quan hệ quốc tế.',
-    reference:'Learning English helps students communicate with more people. This allows them to build international relationships.',
+    id:2, topic:'Giáo dục', structure:'This allows + somebody + to V', formula:'S + V. This allows + somebody + to + V.',
+    vi:'Các nền tảng học trực tuyến cung cấp bài học theo yêu cầu. Điều này cho phép sinh viên học theo tốc độ của riêng mình.',
+    reference:'Online learning platforms provide lessons on demand. This allows students to study at their own pace.',
     patterns:[/\bthis\s+allows\s+\w+\s+to\s+\w+/i],
-    concepts:[['learning english','studying english'],['students','learners','undergraduates','university students'],['communicate','communication','interact'],['build international relationships','develop international relationships']],
-    structureTip:'Câu thứ hai cần có “This allows + somebody + to V”.'
+    concepts:[['online learning platforms','online education platforms','e-learning platforms'],['lessons on demand','on-demand lessons','flexible lessons'],['students','learners','undergraduates'],['study at their own pace','learn at their own pace','study more flexibly']],
+    structureTip:'Câu thứ hai cần có This allows + somebody + to V.'
   },
   {
-    id:3, structure:'thereby + V-ing', formula:'S + V, thereby + V-ing...',
-    vi:'Người học thường xuyên luyện tập với người bản xứ, qua đó cải thiện cả độ trôi chảy và sự tự tin.',
-    reference:'Learners regularly practise with native speakers, thereby improving both their fluency and confidence.',
+    id:3, topic:'Sức khỏe', structure:'thereby + V-ing', formula:'S + V, thereby + V-ing...',
+    vi:'Tập thể dục thường xuyên giúp tăng cường sức khỏe tim mạch, qua đó làm giảm nguy cơ mắc các bệnh mãn tính.',
+    reference:'Regular exercise strengthens cardiovascular health, thereby reducing the risk of chronic diseases.',
     patterns:[/\bthereby\s+[a-z]+ing\b/i],
-    concepts:[['learners','students'],['practise','practice'],['native speakers'],['fluency'],['confidence']],
+    concepts:[['regular exercise','exercising regularly','physical exercise'],['cardiovascular health','heart health'],['reducing the risk','lowering the risk','decreasing the risk'],['chronic diseases','chronic illness','long-term diseases']],
     structureTip:'Sau thereby dùng V-ing.'
   },
   {
-    id:4, structure:'Therefore,', formula:'S + V. Therefore, S + V.',
-    vi:'Tiếng Anh được sử dụng trong nhiều môi trường làm việc quốc tế. Vì vậy, khả năng sử dụng ngôn ngữ này có thể cải thiện triển vọng nghề nghiệp.',
-    reference:'English is used in many international workplaces. Therefore, the ability to use this language can improve career prospects.',
-    patterns:[/\.\s*therefore,?/i,/^therefore,?/i],
-    concepts:[['english'],['international workplaces','international workplace','international work environments','international environments','international environment','global workplaces','global work environments'],['ability','skills'],['career prospects','career opportunities']],
-    structureTip:'Dùng Therefore để nối kết quả ở câu thứ hai.'
-  },
-  {
-    id:5, structure:'Not only... but also...', formula:'S + not only + V... but also + V...',
-    vi:'Học ngoại ngữ không chỉ giúp mọi người giao tiếp hiệu quả hơn mà còn giúp họ hiểu các nền văn hóa khác nhau.',
-    reference:'Learning a foreign language not only helps people communicate more effectively but also helps them understand different cultures.',
-    patterns:[/\bnot\s+only\b[\s\S]*\bbut\s+also\b/i],
-    concepts:[['learning a foreign language','learning foreign languages'],['communicate','communication'],['effectively','more effectively'],['understand'],['different cultures']],
-    structureTip:'Cần có cả “not only” và “but also”.'
-  },
-  {
-    id:6, structure:'By + V-ing', formula:'By + V-ing, S + V.',
-    vi:'Bằng cách giao tiếp với người bản xứ, người học có thể cải thiện kỹ năng nói.',
-    reference:'By communicating with native speakers, learners can improve their speaking skills.',
-    patterns:[/\bby\s+[a-z]+ing\b/i],
-    concepts:[['communicating','talking'],['native speakers'],['learners','students'],['improve','develop'],['speaking skills']],
-    structureTip:'By phải đi với V-ing.'
-  },
-  {
-    id:7, structure:'This allows + somebody + to V', formula:'S + V. This allows + somebody + to + V.',
-    vi:'Sinh viên có thể tiếp cận các tài liệu bằng tiếng Anh. Điều này cho phép họ học thêm nhiều từ mới.',
-    reference:'Students can access English materials. This allows them to learn more new words.',
-    patterns:[/\bthis\s+allows\s+\w+\s+to\s+\w+/i],
-    concepts:[['students','learners'],['access'],['english materials','materials in english'],['learn','learn more'],['new words','vocabulary']],
-    structureTip:'Sau allows phải có tân ngữ + to V.'
-  },
-  {
-    id:8, structure:'This enables + somebody + to V', formula:'S + V. This enables + somebody + to + V.',
-    vi:'Người học thường xuyên tiếp xúc với tiếng Anh. Điều này giúp họ có khả năng sử dụng ngôn ngữ tự nhiên hơn.',
-    reference:'Learners are regularly exposed to English. This enables them to use the language more naturally.',
-    patterns:[/\bthis\s+enables\s+\w+\s+to\s+\w+/i],
-    concepts:[['learners','students'],['exposed to english','exposure to english'],['use the language','use english'],['naturally','more naturally']],
-    structureTip:'Cấu trúc: This enables + somebody + to V.'
-  },
-  {
-    id:9, structure:'As a result,', formula:'S + V. As a result, S + V.',
-    vi:'Học sinh đọc nhiều tài liệu thực tế. Vì vậy, kiến thức của họ trở nên rộng hơn.',
-    reference:'Students read a wide range of authentic materials. As a result, they broaden their knowledge.',
-    patterns:[/\bas\s+a\s+result,?/i],
-    concepts:[['students','learners'],['authentic materials','authentic resources'],['broaden','expand'],['knowledge','understanding']],
-    structureTip:'Dùng “As a result,” để giới thiệu kết quả.'
-  },
-  {
-    id:10, structure:'Consequently,', formula:'S + V. Consequently, S + V.',
-    vi:'Nhân viên có thể giao tiếp tốt bằng tiếng Anh. Do đó, triển vọng nghề nghiệp của họ được cải thiện.',
-    reference:'Employees can communicate effectively in English. Consequently, their career prospects are improved.',
-    patterns:[/\bconsequently,?/i],
-    concepts:[['employees','workers'],['communicate'],['english'],['career prospects','career opportunities'],['improved','better','enhanced']],
-    structureTip:'Dùng “Consequently,” ở mệnh đề kết quả.'
-  },
-  {
-    id:11, structure:'Therefore,', formula:'S + V. Therefore, S + V.',
-    vi:'Tiếng Anh được sử dụng rộng rãi trên thế giới. Vì vậy, học tiếng Anh mang lại nhiều lợi ích.',
-    reference:'English is widely used around the world. Therefore, learning English provides many benefits.',
+    id:4, topic:'Công nghệ & việc làm', structure:'Therefore,', formula:'S + V. Therefore, S + V.',
+    vi:'Tự động hóa đang thay thế nhiều nhiệm vụ lặp đi lặp lại. Vì vậy, người lao động cần phát triển các kỹ năng số mới.',
+    reference:'Automation is replacing many repetitive tasks. Therefore, workers need to develop new digital skills.',
     patterns:[/\btherefore,?/i],
-    concepts:[['english'],['widely used'],['around the world','worldwide'],['learning english','studying english'],['benefits','advantages']],
-    structureTip:'Therefore đứng ở câu nêu kết quả.'
+    concepts:[['automation'],['repetitive tasks','routine tasks'],['workers','employees'],['develop new digital skills','develop digital skills','acquire new digital skills','learn new digital skills']],
+    structureTip:'Dùng Therefore ở đầu câu nêu hệ quả.'
   },
   {
-    id:12, structure:'thereby + V-ing', formula:'S + V, thereby + V-ing...',
-    vi:'Người học giao tiếp với người bản xứ, qua đó phát triển nhận thức về văn hóa.',
-    reference:'Learners communicate with native speakers, thereby developing cultural awareness.',
-    patterns:[/\bthereby\s+[a-z]+ing\b/i],
-    concepts:[['learners','students'],['communicate','talk'],['native speakers'],['cultural awareness']],
-    structureTip:'Sau thereby dùng V-ing, không dùng động từ nguyên mẫu.'
-  },
-  {
-    id:13, structure:'which-clause', formula:'S + V, which + V...',
-    vi:'Học sinh có thể tiếp cận nhiều tài liệu thực tế, điều này giúp mở rộng kiến thức của họ.',
-    reference:'Students can access a wide range of authentic materials, which helps broaden their knowledge.',
-    patterns:[/,\s*which\s+\w+/i],
-    concepts:[['students','learners'],['access'],['authentic materials','authentic resources'],['broaden','expand'],['knowledge','understanding']],
-    structureTip:'Dùng dấu phẩy + which-clause.'
-  },
-  {
-    id:14, structure:'V-ing Clause', formula:'S + V, V-ing...',
-    vi:'Nhân viên sử dụng tiếng Anh tại nơi làm việc, từ đó phát triển kỹ năng giao tiếp quốc tế.',
-    reference:'Employees use English at work, developing their international communication skills.',
-    patterns:[/,\s*[a-z]+ing\b/i],
-    concepts:[['employees','workers'],['use english'],['at work','workplace'],['developing','improving'],['international communication skills','communication skills']],
-    structureTip:'Sau dấu phẩy dùng V-ing clause.'
-  },
-  {
-    id:15, structure:'Not only... but also...', formula:'S + not only + V... but also + V...',
-    vi:'Đọc sách tiếng Anh không chỉ giúp học sinh học từ mới mà còn phát triển kỹ năng đọc của họ.',
-    reference:'Reading English books not only helps students learn new words but also develops their reading skills.',
+    id:5, topic:'Đô thị & môi trường', structure:'Not only... but also...', formula:'S + not only + V... but also + V...',
+    vi:'Không gian xanh trong thành phố không chỉ giúp giảm ô nhiễm không khí mà còn cải thiện sức khỏe tinh thần của cư dân.',
+    reference:'Urban green spaces not only reduce air pollution but also improve residents\' mental well-being.',
     patterns:[/\bnot\s+only\b[\s\S]*\bbut\s+also\b/i],
-    concepts:[['reading english books','reading books in english'],['students','learners'],['learn new words','learn vocabulary'],['reading skills']],
-    structureTip:'Hai vế sau not only / but also cần song song về ý và dạng động từ.'
+    concepts:[['urban green spaces','green spaces','public parks'],['reduce air pollution','lower air pollution','cut air pollution'],['improve mental well-being','improve mental health','support mental well-being'],['residents','city residents','urban residents']],
+    structureTip:'Hai vế sau not only và but also cần song song về ngữ pháp.'
   },
   {
-    id:16, structure:'By + V-ing', formula:'By + V-ing, S + V.',
-    vi:'Bằng cách đọc sách bằng tiếng Anh thường xuyên, học sinh có thể mở rộng vốn từ và cải thiện kỹ năng đọc.',
-    reference:'By reading books in English regularly, students can expand their vocabulary and improve their reading skills.',
-    patterns:[/\bby\s+[a-z]+ing\b/i],
-    concepts:[['reading','read'],['books in english','english books'],['students','learners'],['vocabulary'],['reading skills']],
+    id:6, topic:'Tội phạm & cộng đồng', structure:'By + V-ing', formula:'By + V-ing, S + V.',
+    vi:'Bằng cách tăng cường hoạt động cảnh sát cộng đồng, chính quyền có thể xây dựng lòng tin và ngăn ngừa tội phạm hiệu quả hơn.',
+    reference:'By strengthening community policing, authorities can build trust and prevent crime more effectively.',
+    patterns:[/\bby\s+[a-z]+(?:ing)\b/i],
+    concepts:[['community policing'],['authorities','local authorities','police'],['build trust','increase trust','strengthen trust'],['prevent crime','reduce crime','crime prevention'],['effectively','more effectively']],
     structureTip:'Mở đầu bằng By + V-ing, sau đó là mệnh đề chính.'
   },
   {
-    id:17, structure:'Consequently,', formula:'S + V. Consequently, S + V.',
-    vi:'Sinh viên có được bằng cấp quốc tế. Do đó, họ có thể tiếp cận nhiều cơ hội việc làm hơn.',
-    reference:'Students obtain international qualifications. Consequently, they can access more employment opportunities.',
+    id:7, topic:'Gia đình', structure:'This allows + somebody + to V', formula:'S + V. This allows + somebody + to + V.',
+    vi:'Chính sách nghỉ phép dành cho cha mẹ cho họ nhiều thời gian hơn ở nhà. Điều này cho phép họ chăm sóc con nhỏ và xây dựng mối quan hệ gia đình bền chặt hơn.',
+    reference:'Parental leave policies give parents more time at home. This allows them to care for young children and build stronger family bonds.',
+    patterns:[/\bthis\s+allows\s+\w+\s+to\s+\w+/i],
+    concepts:[['parental leave policies','parental leave'],['parents'],['more time at home','time at home'],['care for young children','look after young children','care for their children'],['build stronger family bonds','strengthen family bonds','build close family relationships']],
+    structureTip:'Sau allows phải có tân ngữ + to V.'
+  },
+  {
+    id:8, topic:'Du lịch & văn hóa', structure:'This enables + somebody + to V', formula:'S + V. This enables + somebody + to + V.',
+    vi:'Du lịch bền vững tạo ra thu nhập cho cộng đồng địa phương. Điều này giúp họ có khả năng bảo tồn di sản văn hóa tốt hơn.',
+    reference:'Sustainable tourism generates income for local communities. This enables them to preserve cultural heritage more effectively.',
+    patterns:[/\bthis\s+enables\s+\w+\s+to\s+\w+/i],
+    concepts:[['sustainable tourism'],['income','revenue'],['local communities','local people'],['preserve cultural heritage','protect cultural heritage','conserve cultural heritage'],['effectively','more effectively']],
+    structureTip:'Cấu trúc: This enables + somebody + to V.'
+  },
+  {
+    id:9, topic:'Năng lượng', structure:'As a result,', formula:'S + V. As a result, S + V.',
+    vi:'Nhiều quốc gia đang đầu tư vào năng lượng tái tạo. Kết quả là, sự phụ thuộc vào nhiên liệu hóa thạch đang giảm dần.',
+    reference:'Many countries are investing in renewable energy. As a result, their dependence on fossil fuels is gradually decreasing.',
+    patterns:[/\bas\s+a\s+result,?/i],
+    concepts:[['countries','nations'],['investing in renewable energy','investment in renewable energy'],['dependence on fossil fuels','reliance on fossil fuels'],['decreasing','declining','falling','being reduced']],
+    structureTip:'Dùng As a result ở câu nêu kết quả.'
+  },
+  {
+    id:10, topic:'Công việc', structure:'Consequently,', formula:'S + V. Consequently, S + V.',
+    vi:'Làm việc từ xa làm giảm thời gian đi lại hằng ngày. Do đó, nhân viên có thể tiết kiệm cả thời gian và chi phí vận chuyển.',
+    reference:'Remote work reduces daily commuting time. Consequently, employees can save both time and transport costs.',
     patterns:[/\bconsequently,?/i],
-    concepts:[['students','graduates','undergraduates','university students'],['international qualifications'],['access'],['employment opportunities','job opportunities']],
+    concepts:[['remote work','working remotely','working from home'],['daily commuting time','commuting time','travel time to work'],['employees','workers'],['save both time and transport costs','save time and transport costs','save time and commuting costs']],
     structureTip:'Consequently dùng để giới thiệu hệ quả trực tiếp.'
   },
   {
-    id:18, structure:'As a result,', formula:'S + V. As a result, S + V.',
-    vi:'Người học luyện nói thường xuyên. Kết quả là, họ trở nên tự tin hơn khi giao tiếp.',
-    reference:'Learners practise speaking regularly. As a result, they become more confident when communicating.',
+    id:11, topic:'Y tế công', structure:'Therefore,', formula:'S + V. Therefore, S + V.',
+    vi:'Các chương trình y tế dự phòng có thể làm giảm số ca bệnh nghiêm trọng. Vì vậy, áp lực lên bệnh viện có thể được giảm bớt.',
+    reference:'Preventive healthcare programmes can reduce the number of serious illnesses. Therefore, pressure on hospitals can be reduced.',
+    patterns:[/\btherefore,?/i],
+    concepts:[['preventive healthcare programmes','preventive health programmes','preventive healthcare programs'],['reduce the number of serious illnesses','reduce serious illnesses','prevent serious illnesses'],['pressure on hospitals','hospital pressure','burden on hospitals'],['reduced','lowered','eased']],
+    structureTip:'Therefore đứng ở câu nêu hệ quả.'
+  },
+  {
+    id:12, topic:'Nông nghiệp', structure:'thereby + V-ing', formula:'S + V, thereby + V-ing...',
+    vi:'Nông dân áp dụng các phương pháp canh tác bền vững, qua đó duy trì độ phì nhiêu của đất trong dài hạn.',
+    reference:'Farmers adopt sustainable farming methods, thereby maintaining soil fertility in the long term.',
+    patterns:[/\bthereby\s+[a-z]+ing\b/i],
+    concepts:[['farmers'],['sustainable farming methods','sustainable agricultural methods','sustainable farming practices'],['maintaining soil fertility','preserving soil fertility','protecting soil fertility'],['long term','long-term']],
+    structureTip:'Sau thereby dùng V-ing, không dùng động từ nguyên mẫu.'
+  },
+  {
+    id:13, topic:'Trí tuệ nhân tạo', structure:'which-clause', formula:'S + V, which + V...',
+    vi:'Trí tuệ nhân tạo có thể xử lý nhiều nhiệm vụ hành chính lặp đi lặp lại, điều này cho phép nhân viên tập trung vào công việc sáng tạo hơn.',
+    reference:'Artificial intelligence can handle many repetitive administrative tasks, which allows employees to focus on more creative work.',
+    patterns:[/,\s*which\s+\w+/i],
+    concepts:[['artificial intelligence','ai'],['repetitive administrative tasks','routine administrative tasks','administrative tasks'],['employees','workers'],['focus on more creative work','focus on creative work','concentrate on creative tasks']],
+    structureTip:'Dùng dấu phẩy + which-clause để nêu kết quả.'
+  },
+  {
+    id:14, topic:'Giáo dục', structure:'V-ing Clause', formula:'S + V, V-ing...',
+    vi:'Học sinh thường xuyên làm việc theo nhóm, qua đó phát triển kỹ năng làm việc nhóm và giải quyết vấn đề.',
+    reference:'Students regularly work in groups, developing teamwork and problem-solving skills.',
+    patterns:[/,\s*[a-z]+ing\b/i],
+    concepts:[['students','learners'],['work in groups','work in teams','group work'],['developing teamwork','develop teamwork','teamwork skills'],['problem-solving skills','problem solving skills']],
+    structureTip:'Sau dấu phẩy dùng V-ing clause.'
+  },
+  {
+    id:15, topic:'Quảng cáo & trẻ em', structure:'Not only... but also...', formula:'S + not only + V... but also + V...',
+    vi:'Quảng cáo nhắm vào trẻ em không chỉ ảnh hưởng đến thói quen mua sắm mà còn khuyến khích việc tiêu thụ thực phẩm không lành mạnh.',
+    reference:'Advertising aimed at children not only influences purchasing habits but also encourages the consumption of unhealthy food.',
+    patterns:[/\bnot\s+only\b[\s\S]*\bbut\s+also\b/i],
+    concepts:[['advertising aimed at children','advertising targeting children','advertisements aimed at children'],['influences purchasing habits','affects purchasing habits','influences buying habits'],['encourages the consumption of unhealthy food','encourages unhealthy eating','promotes unhealthy food consumption']],
+    structureTip:'Hai vế sau not only / but also cần song song về ngữ pháp.'
+  },
+  {
+    id:16, topic:'Giao thông đô thị', structure:'By + V-ing', formula:'By + V-ing, S + V.',
+    vi:'Bằng cách xây dựng thêm làn đường dành cho xe đạp, thành phố có thể giảm ùn tắc giao thông và cải thiện chất lượng không khí.',
+    reference:'By building more cycle lanes, cities can reduce traffic congestion and improve air quality.',
+    patterns:[/\bby\s+[a-z]+(?:ing)\b/i],
+    concepts:[['cycle lanes','bike lanes','bicycle lanes'],['cities','city authorities','urban areas'],['reduce traffic congestion','ease traffic congestion','cut congestion'],['improve air quality','increase air quality']],
+    structureTip:'By phải đi với V-ing.'
+  },
+  {
+    id:17, topic:'Nhà ở', structure:'Consequently,', formula:'S + V. Consequently, S + V.',
+    vi:'Dân số đô thị tăng nhanh đang làm tăng nhu cầu về nhà ở. Do đó, giá thuê nhà trở nên kém khả năng chi trả hơn đối với nhiều gia đình.',
+    reference:'Rapid urban population growth is increasing demand for housing. Consequently, rents are becoming less affordable for many families.',
+    patterns:[/\bconsequently,?/i],
+    concepts:[['urban population growth','rapid urban population growth','population growth in cities'],['demand for housing','housing demand'],['rents','rental prices','housing rents'],['less affordable','more expensive','increasingly unaffordable'],['families','households']],
+    structureTip:'Consequently dùng để giới thiệu hệ quả trực tiếp.'
+  },
+  {
+    id:18, topic:'Chế độ ăn & sức khỏe', structure:'As a result,', formula:'S + V. As a result, S + V.',
+    vi:'Nhiều người tiêu thụ quá nhiều thực phẩm chế biến sẵn. Kết quả là, nguy cơ béo phì và các vấn đề sức khỏe liên quan tăng lên.',
+    reference:'Many people consume too much processed food. As a result, the risk of obesity and related health problems increases.',
     patterns:[/\bas\s+a\s+result,?/i],
-    concepts:[['learners','students'],['practise speaking','practice speaking','speaking practice'],['regularly'],['confident','confidence'],['communicating','communication']],
+    concepts:[['people','individuals'],['processed food','processed foods','highly processed food'],['risk of obesity','obesity risk'],['related health problems','associated health problems','health problems'],['increases','rises','grows']],
     structureTip:'Câu thứ hai mở đầu bằng As a result.'
   },
   {
-    id:19, structure:'which-clause', formula:'S + V, which + V...',
-    vi:'Học một ngoại ngữ giúp mọi người hiểu các nền văn hóa khác nhau, điều này làm tăng nhận thức về văn hóa của họ.',
-    reference:'Learning a foreign language helps people understand different cultures, which increases their cultural awareness.',
+    id:19, topic:'Di sản văn hóa', structure:'which-clause', formula:'S + V, which + V...',
+    vi:'Việc trùng tu các tòa nhà lịch sử thu hút nhiều du khách hơn, điều này tạo thêm doanh thu cho các doanh nghiệp địa phương.',
+    reference:'Restoring historic buildings attracts more visitors, which generates additional revenue for local businesses.',
     patterns:[/,\s*which\s+\w+/i],
-    concepts:[['learning a foreign language','learning foreign languages'],['understand'],['different cultures'],['cultural awareness']],
+    concepts:[['restoring historic buildings','restoration of historic buildings','restoring historical buildings'],['attracts more visitors','attracts tourists','brings in more visitors'],['generates additional revenue','generates revenue','creates additional income','creates revenue'],['local businesses']],
     structureTip:'which-clause phải nối trực tiếp với ý đứng trước nó.'
   },
   {
-    id:20, structure:'This enables + somebody + to V', formula:'S + V. This enables + somebody + to + V.',
-    vi:'Kỹ năng giao tiếp tốt giúp nhân viên làm việc hiệu quả hơn. Điều này giúp họ có khả năng làm việc trong môi trường quốc tế.',
-    reference:'Good communication skills help employees work more effectively. This enables them to work in an international environment.',
+    id:20, topic:'Khoa học & hợp tác quốc tế', structure:'This enables + somebody + to V', formula:'S + V. This enables + somebody + to + V.',
+    vi:'Các nhà nghiên cứu ở nhiều quốc gia chia sẻ dữ liệu nhanh chóng. Điều này giúp họ phản ứng hiệu quả hơn trước các mối đe dọa sức khỏe toàn cầu.',
+    reference:'Researchers in different countries share data quickly. This enables them to respond more effectively to global health threats.',
     patterns:[/\bthis\s+enables\s+\w+\s+to\s+\w+/i],
-    concepts:[['communication skills'],['employees','workers'],['work','working'],['effectively','more effectively'],['international environment','international workplace']],
+    concepts:[['researchers','scientists'],['different countries','multiple countries','countries around the world'],['share data quickly','share research data quickly','exchange data quickly'],['respond more effectively','respond effectively','react more effectively'],['global health threats','global health risks','international health threats']],
     structureTip:'This enables + somebody + to V.'
   }
 ];
@@ -266,6 +266,52 @@ const SEMANTIC_EQUIVALENTS=[
   ['native speakers','native english speakers'],
   ['new words','vocabulary','new vocabulary'],
   ['international qualifications','global qualifications','internationally recognised qualifications','internationally recognized qualifications']
+  ['public transport','public transportation','mass transit'],
+  ['carbon emissions','greenhouse gas emissions','co2 emissions'],
+  ['online learning platforms','online education platforms','e-learning platforms'],
+  ['study at their own pace','learn at their own pace','study more flexibly'],
+  ['regular exercise','physical exercise','exercising regularly'],
+  ['cardiovascular health','heart health'],
+  ['chronic diseases','chronic illness','long-term diseases'],
+  ['repetitive tasks','routine tasks'],
+  ['digital skills','technology skills','technical skills'],
+  ['urban green spaces','green spaces','public parks'],
+  ['mental well-being','mental wellbeing','mental health'],
+  ['community policing','community-based policing'],
+  ['build trust','increase trust','strengthen trust'],
+  ['prevent crime','reduce crime','crime prevention'],
+  ['parental leave policies','parental leave'],
+  ['family bonds','family relationships','close family relationships'],
+  ['sustainable tourism','responsible tourism'],
+  ['cultural heritage','cultural sites','heritage'],
+  ['renewable energy','clean energy','renewable power'],
+  ['fossil fuels','coal oil and gas','non-renewable fuels'],
+  ['remote work','working remotely','working from home'],
+  ['commuting time','travel time to work','daily commuting time'],
+  ['preventive healthcare programmes','preventive health programmes','preventive healthcare programs'],
+  ['pressure on hospitals','burden on hospitals','hospital pressure'],
+  ['sustainable farming methods','sustainable farming practices','sustainable agricultural methods'],
+  ['soil fertility','soil quality'],
+  ['artificial intelligence','ai'],
+  ['administrative tasks','repetitive administrative tasks','routine administrative tasks'],
+  ['creative work','creative tasks'],
+  ['teamwork skills','collaboration skills'],
+  ['problem-solving skills','problem solving skills'],
+  ['advertising aimed at children','advertising targeting children','advertisements aimed at children'],
+  ['purchasing habits','buying habits','consumer habits'],
+  ['unhealthy food','unhealthy foods','junk food'],
+  ['cycle lanes','bike lanes','bicycle lanes'],
+  ['traffic congestion','traffic jams','congestion'],
+  ['air quality','quality of the air'],
+  ['demand for housing','housing demand'],
+  ['rents','rental prices','housing rents'],
+  ['less affordable','more expensive','increasingly unaffordable'],
+  ['processed food','processed foods','highly processed food'],
+  ['risk of obesity','obesity risk'],
+  ['historic buildings','historical buildings','heritage buildings'],
+  ['local businesses','local firms','local companies'],
+  ['researchers','scientists'],
+  ['global health threats','global health risks','international health threats'],
 ];
 
 function equivalentVariants(variants){
@@ -302,7 +348,7 @@ function structureScore(q,text){
   return true;
 }
 
-const COMMON=new Set(`a an the this that these those i you he she it we they them their his her our your can could may might will would should must is are was were be been being have has had do does did to of in on at for from with by as and or but not only also more most many much some any into than then therefore consequently result which while people person students student learners learner employees employee workers worker english language languages skills skill materials material resources resource books book words word world work workplace workplaces environment environments cultures culture cultural career careers opportunities opportunity prospects prospect communication communicate communicating speaking reading learning learn studying study helps help improve improves improving improved develop develops developing developed use uses used using access accesses accessed accessing become becomes became becoming around regularly effectively naturally international authentic different good new wide range native speakers speaker qualification qualifications employment job jobs relationship relationships fluency confidence awareness foreign foreigners ability abilities benefits advantages provides provide providing increases increase increasing broaden broadens broadening expand expands expanding enhance enhances enhancing obtain obtains obtaining understand understands understanding build builds building allow allows allowing enable enables enabling read reads reading talk talks talking practise practises practised practising practice practices practiced practicing exposed exposure used widely clear clearer deepen deeper`.split(/\s+/));
+const COMMON=new Set(`a an the this that these those i you he she it we they them their his her our your can could may might will would should must is are was were be been being have has had do does did to of in on at for from with by as and or but not only also more most many much some any into than then therefore consequently result which while people person students student learners learner employees employee workers worker english language languages skills skill materials material resources resource books book words word world work workplace workplaces environment environments cultures culture cultural career careers opportunities opportunity prospects prospect communication communicate communicating speaking reading learning learn studying study helps help improve improves improving improved develop develops developing developed use uses used using access accesses accessed accessing become becomes became becoming around regularly effectively naturally international authentic different good new wide range native speakers speaker qualification qualifications employment job jobs relationship relationships fluency confidence awareness foreign foreigners ability abilities benefits advantages provides provide providing increases increase increasing broaden broadens broadening expand expands expanding enhance enhances enhancing obtain obtains obtaining understand understands understanding build builds building allow allows allowing enable enables enabling read reads reading talk talks talking practise practises practised practising practice practices practiced practicing exposed exposure used widely clear clearer deepen deeper public transportation mass transit carbon emissions greenhouse co2 commuters residents online education e-learning platforms on-demand flexible pace regular exercise physical cardiovascular heart chronic illness diseases automation repetitive routine digital urban green spaces pollution mental well-being wellbeing community policing authorities crime parental leave parents newborn children bonds sustainable tourism income revenue local communities preserve protect conserve heritage renewable energy fossil fuels dependence reliance remote commuting transport costs preventive healthcare programmes programs serious illnesses pressure hospitals burden farmers farming agricultural methods practices soil fertility artificial intelligence ai administrative creative teamwork collaboration problem-solving advertising aimed targeting advertisements purchasing buying consumer unhealthy consumption cycle bike bicycle lanes traffic congestion jams air quality housing demand rents rental prices affordable unaffordable families households processed obesity related associated restoring historic historical buildings attracts visitors generates businesses researchers scientists data threats risks government governments city cities country countries nations public health sustainable strengthen strengthening maintaining maintain generates generate reducing reduce lowered lower declining decline falling response respond effectively global`.split(/\s+/));
 
 const SPELLING_OVERRIDES={
   culturals:'cultures',
@@ -327,7 +373,25 @@ const SPELLING_OVERRIDES={
   studens:'students',
   foreing:'foreign',
   materails:'materials',
-  qualifcations:'qualifications'
+  qualifcations:'qualifications',
+  goverment:'government',
+  enviromental:'environmental',
+  tecnology:'technology',
+  techonology:'technology',
+  emmisions:'emissions',
+  emisions:'emissions',
+  polution:'pollution',
+  comunity:'community',
+  sustainble:'sustainable',
+  tourisim:'tourism',
+  renwable:'renewable',
+  hospitial:'hospital',
+  artifical:'artificial',
+  inteligence:'intelligence',
+  advertisment:'advertisement',
+  congeston:'congestion',
+  obessity:'obesity',
+  reserchers:'researchers'
 };
 
 function buildKnownWords(){
@@ -439,11 +503,11 @@ function grammarIssues(q,text){
   }
 
   /* Chủ ngữ số nhiều không dùng động từ thêm -s. */
-  const pluralSva=/\b(students|learners|employees|workers|people|skills|materials|resources|books|qualifications|opportunities|prospects)\s+(helps|allows|enables|improves|develops|provides|increases|broadens|enhances|communicates|works|uses|reads|learns|understands|builds|accesses|becomes|obtains)\b/i;
+  const pluralSva=/\b(students|learners|employees|workers|people|skills|materials|resources|books|qualifications|opportunities|prospects|parents|authorities|countries|nations|farmers|researchers|scientists|cities|families|households|rents|platforms|programmes|programs)\s+(helps|allows|enables|improves|develops|provides|increases|broadens|enhances|communicates|works|uses|reads|learns|understands|builds|accesses|becomes|obtains)\b/i;
   if(pluralSva.test(n)) pushGrammar(issues,'plural-sva','Chủ ngữ số nhiều cần động từ nguyên mẫu, không thêm “-s”.');
 
   /* Một số chủ ngữ số ít phổ biến cần động từ ngôi thứ ba số ít nếu không có modal. */
-  const singularBase=/\b(english|language|ability|skill|communication|learning english|studying english|learning a foreign language)\s+(help|allow|enable|improve|develop|provide|increase|broaden|enhance|communicate|work|use|read|learn|understand|build|access|become|obtain)\b/i;
+  const singularBase=/\b(english|language|ability|skill|communication|learning english|studying english|learning a foreign language|automation|exercise|tourism|remote work|artificial intelligence|advertising|population growth|demand|risk|pressure)\s+(help|allow|enable|improve|develop|provide|increase|broaden|enhance|communicate|work|use|read|learn|understand|build|access|become|obtain)\b/i;
   const singularMatch=n.match(singularBase);
   if(singularMatch){
     const prefix=n.slice(Math.max(0,(singularMatch.index||0)-14),singularMatch.index||0);
@@ -598,7 +662,7 @@ function renderList(){
 }
 function renderProgress(){const done=completedSet().size;progressText.textContent=`${done}/${QUESTIONS.length} câu hoàn thành`;progressBar.style.width=`${done/QUESTIONS.length*100}%`;if(done===QUESTIONS.length) renderSummary();else summary.classList.add('hidden')}
 function renderQuestion(){
-  const x=q(); structureChip.textContent=x.structure; counter.textContent=`Câu ${x.id}/${QUESTIONS.length}`; viPrompt.textContent=x.vi; formula.textContent=x.formula; answer.value=state.answers[x.id]||''; attemptText.textContent=attemptsFor(x.id)?`${attemptsFor(x.id)} lần đã kiểm tra`:'Chưa nộp'; feedback.className='feedback';feedback.innerHTML=''; prevBtn.disabled=currentIndex===0; nextBtn.disabled=currentIndex===QUESTIONS.length-1; renderList();renderProgress();
+  const x=q(); structureChip.textContent=x.structure; counter.textContent=`Câu ${x.id}/${QUESTIONS.length}${x.topic?' · '+x.topic:''}`; viPrompt.textContent=x.vi; formula.textContent=x.formula; answer.value=state.answers[x.id]||''; attemptText.textContent=attemptsFor(x.id)?`${attemptsFor(x.id)} lần đã kiểm tra`:'Chưa nộp'; feedback.className='feedback';feedback.innerHTML=''; prevBtn.disabled=currentIndex===0; nextBtn.disabled=currentIndex===QUESTIONS.length-1; renderList();renderProgress();
   if(state.scores[x.id]) renderFeedback(state.scores[x.id],false);
 }
 function go(i){state.answers[q().id]=answer.value;save();currentIndex=Math.max(0,Math.min(QUESTIONS.length-1,i));renderQuestion();mainScrollTop()}
