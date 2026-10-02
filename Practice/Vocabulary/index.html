@@ -15497,7 +15497,6 @@ init();
     const result=oldRender.apply(this,arguments);
     const root=document.getElementById('collectionScreen');
     let phaseBox=document.getElementById('mapsPhaseProgress');
-    let changePreview=document.getElementById('mapsChangePreview');
     let mapsSelected=false;
     let finished=false;
     let passed=false;
@@ -15508,7 +15507,6 @@ init();
     }catch(e){console.warn('[Maps] Progress:',e);}
     if(!mapsSelected){
       if(phaseBox)phaseBox.remove();
-      if(changePreview)changePreview.remove();
       return result;
     }
     const heading=document.getElementById('collectionTitle');
@@ -15530,40 +15528,6 @@ init();
       </div>
       ${passed?'<button class="maps-phase-go" type="button" onclick="openMapsPhase3()">Bắt đầu Giai đoạn 3: Luyện viết theo bản đồ →</button>':'<div class="maps-phase-lock">Hoàn thành giai đoạn trước để mở phần tiếp theo.</div>'}
     `;
-    if(!changePreview){
-      changePreview=document.createElement('section');
-      changePreview.id='mapsChangePreview';
-      changePreview.className='maps-change-preview';
-      phaseBox.insertAdjacentElement('afterend',changePreview);
-    }
-
-    const changeMaps=[
-      {image:'image14.png',title:'Site A · 2000–2025',words:['constructed','added','former','replaced']},
-      {image:'image15.png',title:'Site B · 2010–2020',words:['built','former','converted','transformed']},
-      {image:'image16.png',title:'Site C · 2010–2020',words:['constructed','former','original','removed']},
-      {image:'image17.png',title:'Site D · 2010–2020',words:['relocated','moved','previous','former']},
-      {image:'image18.png',title:'Site E · 2010–2020',words:['removed','demolished','cleared','original']},
-      {image:'image19.png',title:'Site F · 2010–2020',words:['expanded','extended','original']}
-    ];
-
-    changePreview.innerHTML=`
-      <div class="maps-change-preview-head">
-        <div>
-          <b>Bản đồ thay đổi mới</b>
-          <small>6 sơ đồ before/after từ tài liệu · dùng xuyên suốt 3 giai đoạn</small>
-        </div>
-        <span>CHANGE MAPS</span>
-      </div>
-      <div class="maps-change-preview-grid">
-        ${changeMaps.map(item=>`
-          <a class="maps-change-card" href="./maps/images/${item.image}" target="_blank" rel="noopener">
-            <img src="./maps/images/${item.image}" alt="${item.title}">
-            <strong>${item.title}</strong>
-            <small>${item.words.map(word=>`<em>${word}</em>`).join('')}</small>
-          </a>
-        `).join('')}
-      </div>
-    `;
     return result;
   };
   const css=document.createElement('style');
@@ -15578,18 +15542,8 @@ init();
     .maps-phase.done{border-color:#91dcb7;background:#f7fff9}.maps-phase.active{opacity:1;border-color:#7155df;box-shadow:0 5px 14px #4c32a619}.maps-phase.locked{opacity:.55}
     .maps-phase-go{display:block;width:100%;margin-top:13px;padding:13px 15px;text-align:center;border-radius:13px;background:linear-gradient(90deg,#5135b7,#765ce8);font-weight:900;color:white;text-decoration:none}
     .maps-phase-lock{text-align:center;margin-top:11px;color:#7c8391;font-size:11px}
-    .maps-change-preview{padding:16px;margin:0 0 16px;background:#fff;border:1px solid #e3e5ef;border-radius:18px}
-    .maps-change-preview-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px;color:#281260}
-    .maps-change-preview-head div{display:flex;flex-direction:column;gap:3px}.maps-change-preview-head b{font-size:14px}.maps-change-preview-head small{font-size:10px;color:#6d7488}
-    .maps-change-preview-head>span{font-size:9px;font-weight:950;letter-spacing:.08em;color:#684fc7;background:#f0ebff;padding:6px 8px;border-radius:99px}
-    .maps-change-preview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-    .maps-change-card{display:flex;flex-direction:column;gap:7px;padding:9px;border:1px solid #e4e6ef;border-radius:12px;text-decoration:none;color:#2f245b;background:#fbfcff}
-    .maps-change-card img{width:100%;height:122px;object-fit:contain;background:#fff;border-radius:8px}
-    .maps-change-card strong{font-size:11px}.maps-change-card small{display:flex;flex-wrap:wrap;gap:4px}
-    .maps-change-card em{font-style:normal;font-size:8px;background:#f0ebff;color:#5c42b5;padding:3px 5px;border-radius:99px}
-    @media(max-width:850px){.maps-change-preview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:700px){.maps-phases-row{grid-template-columns:1fr}.maps-phases-head{align-items:flex-start;flex-direction:column}.maps-change-preview-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:480px){.maps-change-preview-grid{grid-template-columns:1fr}}
+    @media(max-width:700px){.maps-phases-row{grid-template-columns:1fr}.maps-phases-head{align-items:flex-start;flex-direction:column}}
+    
   `;
   document.head.appendChild(css);
 })();
