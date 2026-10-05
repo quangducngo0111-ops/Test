@@ -176,8 +176,8 @@
 
   function currentBase(){
     return /\/process\/sentence-practice\//i.test(location.pathname)
-      ? '../images/'
-      : './process/images/';
+      ? '../'
+      : './process/';
   }
 
   function sourceUrl(set){
