@@ -13,7 +13,29 @@ const COMMON=new Set(`the a an is are was were be been being in on at to from wi
 const SPELL={digged:'dug',sended:'sent',leaved:'left',cutted:'cut',mould:'moulded',labeld:'labelled',packeged:'packaged',delivred:'delivered',crused:'crushed',washd:'washed',heatted:'heated',manufacturd:'manufactured',metamorphisis:'metamorphosis',morpholigical:'morphological',moultng:'moulting'};
 function knownWords(){const s=new Set(COMMON);Object.values(DATA).forEach(p=>p.questions.forEach(q=>{tokenize(q.reference).forEach(w=>s.add(w));q.concepts.flat().forEach(v=>tokenize(v).forEach(w=>s.add(w)))}));Object.values(SPELL).forEach(w=>s.add(w));return s}const KNOWN=knownWords();
 function spellingIssues(text){const out=[];for(const w of tokenize(text)){if(w.length<4||KNOWN.has(w))continue;if(SPELL[w]){out.push(`${w} → ${SPELL[w]}`);continue}let best='',dist=99;for(const k of KNOWN){if(Math.abs(k.length-w.length)>2||k.length<3)continue;const d=editDistance(w,k);if(d<dist){dist=d;best=k}}if(best&&dist<=(w.length>=8?2:1))out.push(`${w} → ${best}?`)}return [...new Set(out)].slice(0,6)}
-function passiveOK(text,group){const v=group.map(x=>normalize(x).replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+')).join('|');const re=new RegExp(`\\b(?:is|are|was|were|be|been|being)\\s+(?:then\\s+)?(?:${v})\\b`,'i');return re.test(normalize(text))}
+function passiveOK(text,group){
+  const n=normalize(text);
+  const v=group.map(x=>normalize(x).replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+')).join('|');
+
+  /* 1) Passive form with its own auxiliary: is/are/was/were + V3. */
+  const direct=new RegExp(`\\b(?:is|are|was|were|be|been|being)\\s+(?:then\\s+)?(?:${v})\\b`,'i');
+  if(direct.test(n)) return true;
+
+  /*
+     2) Shared auxiliary in coordinated passive verbs.
+        Valid English examples:
+        - The clay is crushed and then mixed with sand and water.
+        - The cups are labelled and sealed.
+        - The bottles are packaged and delivered.
+
+     The second/third V3 does NOT need another "is/are" because it shares
+     the auxiliary with the first passive verb.
+  */
+  const shared=new RegExp(`\\b(?:is|are|was|were|be|been|being)\\b[^.!?;]{0,90}\\b(?:and|or)(?:\\s+then)?\\s+(?:${v})\\b`,'i');
+  if(shared.test(n)) return true;
+
+  return false;
+}
 function grammarIssues(q,text){const s=String(text||'').trim(),n=normalize(s),issues=[];const add=(m,minor=false)=>issues.push({message:m,minor});if(!/^[A-Z]/.test(s))add('Viết hoa chữ cái đầu câu.',true);if(!/[.!?]$/.test(s))add('Kết thúc câu bằng dấu câu.',true);if(/\s{2,}/.test(s))add('Có khoảng trắng thừa.',true);
  if(/(bricks|tomatoes|bottles|cups|eggs|legs|pellets|noodles|strips|sheets|impurities|vegetables|spices)\s+(is|was)/i.test(n))add('Chủ ngữ số nhiều cần dùng are/were.');
  if(/(clay|mixture|dough|ketchup|plastic|frogspawn|embryo|tadpole|tail|bee|product|material)\s+(are|were)/i.test(n))add('Chủ ngữ số ít/không đếm được cần dùng is/was.');
