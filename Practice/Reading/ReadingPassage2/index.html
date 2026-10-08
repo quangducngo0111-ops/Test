@@ -874,11 +874,32 @@ async function readExerciseMeta(
   item
 ){
 
+  const knownFallbackMeta = {
+
+    4:{
+      title:"Autumn leaves",
+      description:"Matching Information + Note Completion + TRUE / FALSE / NOT GIVEN + Multiple Choice",
+      questions:13
+    }
+
+  };
+
+
+  const known =
+    knownFallbackMeta[
+      Number(item.number)
+    ]
+    ||
+    {};
+
+
   const fallback = {
 
     ...item,
 
     title:
+      known.title
+      ||
       `Reading Passage 2 — Bài ${
         String(
           item.number
@@ -890,9 +911,15 @@ async function readExerciseMeta(
       }`,
 
     description:
+      known.description
+      ||
       "Full passage practice",
 
     questions:
+      Number.isFinite(known.questions)
+      ?
+      known.questions
+      :
       null
 
   };
