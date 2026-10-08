@@ -1039,16 +1039,14 @@
   window.VOCABULARY_SET_INFO.reading["04"] = {
     label:"Bộ 04",
     titles:[
-      "Healthy buildings, productive people",
-      "Indoor environment · cognition · green building"
+      "Healthy buildings, productive people"
     ]
   };
 
   window.VOCABULARY_SET_INFO.reading["05"] = {
     label:"Bộ 05",
     titles:[
-      "Farmers",
-      "Business history · retail · corporate change"
+      "Farmers"
     ]
   };
 })();
@@ -4234,6 +4232,70 @@ button:disabled{
 
   font-size:10px;
   line-height:1.5;
+}
+
+/* Reading cards: gọn hơn, ưu tiên tên bài đọc */
+.reading-set-card{
+  min-height:152px;
+  padding:16px 18px;
+  justify-content:flex-start;
+}
+
+.reading-set-card .reading-card-top{
+  width:100%;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.reading-set-card .set-number{
+  min-width:46px;
+  height:46px;
+  padding:0 11px;
+  border-radius:13px;
+  font-size:17px;
+}
+
+.reading-set-card .reading-word-count{
+  padding-top:4px;
+  color:#8a91a2;
+  font-size:10.5px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.reading-set-card .reading-set-label{
+  margin-top:11px;
+  color:#281b52;
+  font-size:15px;
+  font-weight:950;
+  line-height:1.2;
+}
+
+.reading-set-card .reading-article-title{
+  margin-top:8px;
+  color:#545f76;
+  font-size:17px;
+  line-height:1.32;
+  font-weight:850;
+  letter-spacing:-.01em;
+}
+
+.reading-set-card .reading-card-footer{
+  width:100%;
+  margin-top:auto;
+  padding-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  color:#6548c6;
+  font-size:11px;
+  font-weight:900;
+}
+
+.reading-set-card:hover .reading-card-footer{
+  transform:translateX(2px);
 }
 
 
@@ -10553,6 +10615,51 @@ function renderSets(){
       info.titles
       :
       [];
+
+      if(selectedSkill === "reading") {
+
+        const articleTitle =
+        titles.length
+        ?
+        titles[0]
+        :
+        "";
+
+        return `
+          <button
+            class="set-card reading-set-card"
+            onclick="openSet('${set}')"
+          >
+
+            <div class="reading-card-top">
+              <div class="set-number">
+                ${set}
+              </div>
+
+              <div class="reading-word-count">
+                ${setWords.length} từ
+              </div>
+            </div>
+
+            <div class="reading-set-label">
+              ${escapeHTML(info.label || `Bộ ${set}`)}
+            </div>
+
+            ${articleTitle
+              ?
+              `<div class="reading-article-title">${escapeHTML(articleTitle)}</div>`
+              :
+              ""
+            }
+
+            <div class="reading-card-footer">
+              Vào học →
+            </div>
+
+          </button>
+        `;
+
+      }
 
       const titlesHtml =
       titles.length
