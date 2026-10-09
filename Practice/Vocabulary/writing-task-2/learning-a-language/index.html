@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="practice-title" content="Learning a Foreign Language · Sentence Practice">
-<meta name="practice-description" content="Vocabulary Phase 3 · Luyện viết câu Writing Task 2">
+<meta name="practice-description" content="Vocabulary Phase 3 · Kiểm tra chính tả + Luyện viết câu Writing Task 2">
 <meta name="practice-questions" content="15">
 <title>Vocabulary · Writing Task 2 · Learning a Foreign Language</title>
 <style>
@@ -36,6 +36,56 @@ button{cursor:pointer}
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.metric{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}.metric span{display:block;color:#8a91a1;font-size:8.5px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}.metric b{display:block;margin-top:3px;color:#2a3040;font-size:13px}.detail{margin-top:8px;border-radius:12px;padding:12px 13px;border:1px solid #eadfc3;background:var(--warn-bg);font-size:10.7px;line-height:1.55}.detail.good{border-color:#bde5ce;background:var(--good-bg)}.detail.bad{border-color:#efc8ce;background:var(--bad-bg)}.detail ul{margin:6px 0 0;padding-left:18px}.detail li{margin:4px 0}.reference{margin-top:8px;padding:12px 13px;border-radius:12px;background:#f6f4ff;border:1px solid #ded7fb;font-size:10.8px;line-height:1.6}.reference b{color:#4b318e}.hidden{display:none!important}
 .summary{margin-top:14px;padding:14px;border:1px solid #d9d3f6;border-radius:13px;background:#faf9ff}.summary h3{margin:0 0 9px;color:#21164b;font-size:14px}.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.summary-cell{padding:9px;border-radius:9px;background:#fff;border:1px solid #e7e4f2;text-align:center}.summary-cell span{display:block;font-size:8.5px;text-transform:uppercase;color:#8990a0;font-weight:900}.summary-cell b{font-size:14px;color:#29215a}
 .start-overlay{position:fixed;inset:0;z-index:100;background:rgba(15,11,35,.62);display:grid;place-items:center;padding:18px}.start-card{width:min(470px,100%);background:#fff;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(18,10,53,.28)}.start-card h2{margin:7px 0;color:#21164b}.start-card p{font-size:11.5px;color:#6f7890;line-height:1.55}.field{margin:9px 0}.field label{display:block;margin-bottom:5px;font-size:10.5px;font-weight:900}.field input{width:100%;padding:10px;border:1px solid #d5d9e2;border-radius:9px}.start-card .btn{width:100%;margin-top:10px}
+
+/* =========================================================
+   SPELLING CHECK — PRE-WRITING
+========================================================= */
+.spelling-stage{border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(35,25,75,.05);overflow:hidden;margin-bottom:14px}
+.spelling-head{padding:18px 20px 14px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fbfaff,#f7f9ff)}
+.spelling-head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.spelling-head h2{margin:0;color:#21164b;font-size:20px;letter-spacing:-.02em}
+.spelling-head p{margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.55;max-width:760px}
+.spelling-badge{flex:0 0 auto;padding:7px 10px;border-radius:999px;background:#eee9ff;color:#5d43b0;font-size:10px;font-weight:950}
+.spelling-body{display:grid;grid-template-columns:250px 1fr;min-height:440px}
+.spelling-nav{padding:16px;border-right:1px solid var(--line);background:#fafbfe}
+.spelling-nav-head{margin-bottom:10px}
+.spelling-nav-head b{display:block;color:#21164b;font-size:12px}
+.spelling-nav-head span{display:block;color:var(--muted);font-size:9.8px;margin-top:4px;line-height:1.45}
+.spelling-numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.spelling-numbers button{height:36px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#5f6675;font-size:10px;font-weight:900}
+.spelling-numbers button.active{border-color:#7a61e6;color:#4b318e;background:#f5f2ff;box-shadow:0 0 0 2px rgba(117,89,232,.07)}
+.spelling-numbers button.correct{border-color:#b9e3cb;background:#f1fbf6;color:#16845b}
+.spelling-numbers button.wrong{border-color:#efc8ce;background:#fff6f7;color:#b83345}
+.spelling-main{padding:22px 24px}
+.spelling-topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.spelling-type{display:inline-flex;padding:6px 9px;border-radius:999px;background:#f0ecff;color:#5c43b2;font-size:9.5px;font-weight:950;text-transform:uppercase;letter-spacing:.05em}
+.spelling-counter{color:#8a91a0;font-size:10px;font-weight:850}
+.spelling-card{border:1px solid #ded8f4;border-radius:14px;background:linear-gradient(135deg,#fbfaff,#f7f9ff);padding:18px}
+.spelling-prompt-label{color:#8a7ac8;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.spelling-prompt{color:#21164b;font-size:17px;line-height:1.55;font-weight:820}
+.spelling-note{margin-top:8px;color:#7a8190;font-size:10px;line-height:1.45}
+.spelling-input{width:100%;margin-top:14px;padding:13px 14px;border:1px solid #cfd5e1;border-radius:11px;background:#fff;outline:none;color:#202636;font-size:14px;font-weight:750}
+.spelling-input:focus{border-color:#765ee0;box-shadow:0 0 0 3px rgba(117,89,232,.08)}
+.spelling-actions{display:grid;grid-template-columns:120px 1fr 120px;gap:8px;margin-top:10px}
+.spelling-feedback{margin-top:12px;border-radius:11px;padding:11px 12px;border:1px solid var(--line);background:#fff;color:#5e6677;font-size:10.8px;line-height:1.55}
+.spelling-feedback.good{border-color:#bde5ce;background:var(--good-bg);color:#126d4a}
+.spelling-feedback.bad{border-color:#efc8ce;background:var(--bad-bg);color:#9b3241}
+.spelling-feedback.hint{border-color:#eadfc3;background:var(--warn-bg);color:#7e5a19}
+.spelling-progress{margin-top:14px}
+.spelling-progress-row{display:flex;justify-content:space-between;gap:10px;color:#7b8292;font-size:9.7px;font-weight:850;margin-bottom:5px}
+.spelling-progress-track{height:7px;border-radius:999px;background:#e8eaf0;overflow:hidden}
+.spelling-progress-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5d43b0,#2f6fdf);transition:width .2s ease}
+.spelling-complete{padding:24px;text-align:center}
+.spelling-complete h3{margin:0;color:#21164b;font-size:22px}
+.spelling-complete p{margin:8px auto 15px;max-width:650px;color:#6f7890;font-size:11px;line-height:1.55}
+.spelling-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:620px;margin:0 auto 16px}
+.spelling-stat{padding:11px;border:1px solid var(--line);border-radius:11px;background:#fff}
+.spelling-stat span{display:block;color:#8a91a0;font-size:8.5px;font-weight:900;text-transform:uppercase}
+.spelling-stat b{display:block;margin-top:4px;color:#21164b;font-size:17px}
+.spelling-complete .btn{min-width:240px}
+@media(max-width:900px){.spelling-body{grid-template-columns:1fr}.spelling-nav{border-right:0;border-bottom:1px solid var(--line)}.spelling-numbers{grid-template-columns:repeat(10,1fr)}}
+@media(max-width:620px){.spelling-head-row{flex-direction:column}.spelling-numbers{grid-template-columns:repeat(6,1fr)}.spelling-main{padding:16px}.spelling-actions{grid-template-columns:1fr}.spelling-stats{grid-template-columns:1fr}}
+
 @media(max-width:900px){.workspace{grid-template-columns:1fr}.sidebar{max-height:none;border-right:0;border-bottom:1px solid var(--line)}.question-list{grid-template-columns:repeat(2,1fr)}.main{max-height:none}.hero{flex-direction:column;align-items:stretch}.progress-wrap{min-width:0}}
 @media(max-width:620px){.student{display:none}.question-list{grid-template-columns:1fr}.main{padding:17px}.actions{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}.summary-grid{grid-template-columns:1fr 1fr}.vi{font-size:14px}}
 </style>
@@ -45,7 +95,7 @@ button{cursor:pointer}
   <div class="start-card">
     <div style="font-size:10px;font-weight:950;color:#6a4db4;letter-spacing:.08em">VOCABULARY · WRITING TASK 2 · PHASE 3</div>
     <h2>Learning a Foreign Language · Luyện viết câu</h2>
-    <p>Dùng các cụm từ đã học để dịch câu Việt → Anh theo cấu trúc gợi ý. Hệ thống kiểm tra cấu trúc, ý chính, ngữ pháp, chính tả và chấp nhận nhiều cách diễn đạt tương đương.</p>
+    <p>Trước khi viết câu, học sinh làm 30 câu kiểm tra chính tả từ/cụm từ. Sau khi sửa đúng toàn bộ, hệ thống mới mở 15 câu dịch Việt → Anh và tiếp tục chấm cấu trúc, ý chính, ngữ pháp, chính tả.</p>
     <div class="field"><label>Họ và tên</label><input id="studentName" placeholder="Nguyễn Văn A"></div>
     <div class="field"><label>Lớp</label><input id="studentClass" placeholder="11A1"></div>
     <button class="btn primary" onclick="startPractice()">Bắt đầu luyện</button>
@@ -55,11 +105,59 @@ button{cursor:pointer}
 <header class="top"><div class="topin"><div class="left"><a class="back" href="../../">← Vocabulary</a><div class="brand">✍️ Learning a Foreign Language · Phase 3</div></div><div id="studentInfo" class="student"></div></div></header>
 <main class="page">
   <section class="hero">
-    <div><h1>Learning a Foreign Language · Luyện viết câu</h1><p>Giai đoạn 3: đưa 21 cụm từ chủ đề ngoại ngữ vào câu Writing Task 2 bằng các cấu trúc đã luyện.</p></div>
+    <div><h1>Learning a Foreign Language · Chính tả & Luyện viết câu</h1><p>Giai đoạn 3 gồm 2 bước: kiểm tra chính tả 30 câu trước, sau đó luyện viết 15 câu Writing Task 2.</p></div>
     <div class="progress-wrap"><div class="progress-row"><span>Tiến độ</span><span id="progressText">0/15 câu hoàn thành</span></div><div class="progress"><i id="progressBar"></i></div></div>
   </section>
-  <section class="workspace">
-    <aside class="sidebar"><div class="side-head"><b>15 câu luyện viết theo chủ đề</b><span>Dùng đúng cụm từ mục tiêu hoặc cách diễn đạt tương đương. Câu hoàn thành khi đúng cấu trúc, đủ ý và không còn lỗi ngữ pháp/chính tả quan trọng.</span></div><div id="questionList" class="question-list"></div></aside>
+
+  <section id="spellingStage" class="spelling-stage">
+    <div class="spelling-head">
+      <div class="spelling-head-row">
+        <div>
+          <h2>Bước 1 · Kiểm tra chính tả trước khi viết</h2>
+          <p>30 câu để học sinh nhớ chính xác cách viết từ/cụm từ. Mỗi câu phải được sửa đúng trước khi mở phần luyện viết. Sau 2 lần sai, hệ thống tăng mức gợi ý; sau 3 lần sai sẽ hiện đáp án để học sinh nhìn và gõ lại.</p>
+        </div>
+        <div class="spelling-badge">30 CÂU</div>
+      </div>
+    </div>
+    <div id="spellingPracticeView" class="spelling-body">
+      <aside class="spelling-nav">
+        <div class="spelling-nav-head"><b>Danh sách câu</b><span>Màu xanh = đã gõ đúng. Câu sai vẫn có thể làm lại không giới hạn.</span></div>
+        <div id="spellingNumbers" class="spelling-numbers"></div>
+      </aside>
+      <div class="spelling-main">
+        <div class="spelling-topline"><span id="spellingType" class="spelling-type"></span><span id="spellingCounter" class="spelling-counter"></span></div>
+        <div class="spelling-card">
+          <div class="spelling-prompt-label">Viết chính xác bằng tiếng Anh</div>
+          <div id="spellingPrompt" class="spelling-prompt"></div>
+          <div id="spellingNote" class="spelling-note"></div>
+          <input id="spellingInput" class="spelling-input" lang="en" spellcheck="false" autocomplete="off" autocapitalize="none" placeholder="Gõ đáp án tiếng Anh...">
+        </div>
+        <div class="spelling-actions">
+          <button id="spellingPrev" class="btn">← Câu trước</button>
+          <button id="spellingCheck" class="btn primary">Kiểm tra chính tả ✓</button>
+          <button id="spellingNext" class="btn">Câu tiếp →</button>
+        </div>
+        <div id="spellingFeedback" class="spelling-feedback hidden"></div>
+        <div class="spelling-progress">
+          <div class="spelling-progress-row"><span>Tiến độ chính tả</span><span id="spellingProgressText">0/30 câu đúng</span></div>
+          <div class="spelling-progress-track"><i id="spellingProgressBar"></i></div>
+        </div>
+      </div>
+    </div>
+    <div id="spellingCompleteView" class="spelling-complete hidden">
+      <h3>✓ Đã hoàn thành kiểm tra chính tả</h3>
+      <p>Toàn bộ 30 câu đã được gõ đúng. Học sinh có thể chuyển sang Bước 2 để sử dụng các từ/cụm từ này trong câu Writing Task 2.</p>
+      <div class="spelling-stats">
+        <div class="spelling-stat"><span>Đã sửa đúng</span><b id="spellingCorrectStat">30/30</b></div>
+        <div class="spelling-stat"><span>Đúng ngay lần đầu</span><b id="spellingFirstStat">0/30</b></div>
+        <div class="spelling-stat"><span>Tổng lần kiểm tra</span><b id="spellingAttemptStat">0</b></div>
+      </div>
+      <button id="startWritingBtn" class="btn primary">Bắt đầu luyện viết câu →</button>
+    </div>
+  </section>
+
+  <section id="sentenceWorkspace" class="workspace hidden">
+    <aside class="sidebar"><div class="side-head"><b>Bước 2 · 15 câu luyện viết theo chủ đề</b><span>Dùng đúng cụm từ mục tiêu hoặc cách diễn đạt tương đương. Câu hoàn thành khi đúng cấu trúc, đủ ý và không còn lỗi ngữ pháp/chính tả quan trọng.</span></div><div id="questionList" class="question-list"></div></aside>
     <section class="main">
       <div class="eyebrow"><span id="structureChip" class="chip"></span><span id="counter" class="counter"></span></div>
       <div class="prompt-box"><div class="prompt-label">Dịch sang tiếng Anh</div><div id="viPrompt" class="vi"></div><div class="structure-hint"><b>Cấu trúc mục tiêu:</b> <span id="formula"></span><br><b>Từ/cụm từ trọng tâm:</b> <span id="vocabTarget"></span></div></div>
@@ -72,8 +170,8 @@ button{cursor:pointer}
   </section>
 </main>
 <script>
-const STORAGE_KEY='VOCAB_WT2_LANGUAGE_SENTENCES_V2';
-const LEGACY_STORAGE_KEYS=['VOCAB_WT2_LANGUAGE_SENTENCES_V1'];
+const STORAGE_KEY='VOCAB_WT2_LANGUAGE_SENTENCES_V3';
+const LEGACY_STORAGE_KEYS=['VOCAB_WT2_LANGUAGE_SENTENCES_V2','VOCAB_WT2_LANGUAGE_SENTENCES_V1'];
 
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
@@ -87,6 +185,7 @@ function studentScope(){
   return 'guest';
 }
 const PHASE_SCOPE=studentScope();
+const SPELLING_STORAGE_KEY='VOCAB_WT2_LANGUAGE_SPELLING_V1_'+PHASE_SCOPE;
 const PHASE_ACCESS_KEY='WT2_LANGUAGE_PHASE3_ACCESS_'+PHASE_SCOPE;
 const PHASE_UNLOCKED_KEY='WT2_LANGUAGE_PHASE3_UNLOCKED_'+PHASE_SCOPE;
 
@@ -114,6 +213,169 @@ function hasPhase3Access(){
 if(!hasPhase3Access()){
   alert('Giai đoạn 3 chỉ mở sau khi em đạt ít nhất 80% ở bài kiểm tra từ vựng.');
   window.location.replace('../../index.html?skill=writing-task-2&set=learning-a-language');
+}
+
+
+
+/* =========================================================
+   PRE-WRITING SPELLING CHECK
+   21 cụm từ + 9 từ khó = 30 câu
+========================================================= */
+const SPELLING_ITEMS=[
+  {id:1,type:'Cụm từ',prompt:'phần mềm dịch thuật',answer:'translation software'},
+  {id:2,type:'Cụm từ',prompt:'có sẵn rộng rãi',answer:'widely available'},
+  {id:3,type:'Cụm từ',prompt:'vẫn mang lại lợi ích',answer:'remain beneficial'},
+  {id:4,type:'Cụm từ',prompt:'công cụ kỹ thuật số',answer:'digital tools'},
+  {id:5,type:'Từ',prompt:'tiện lợi',answer:'convenient'},
+  {id:6,type:'Từ',prompt:'có lợi',answer:'advantageous'},
+  {id:7,type:'Cụm từ',prompt:'học một ngoại ngữ',answer:'learn a foreign language'},
+  {id:8,type:'Cụm từ',prompt:'tiếp cận tài liệu gốc',answer:'gain access to authentic materials'},
+  {id:9,type:'Cụm từ',prompt:'giao tiếp với người bản xứ',answer:'communicate with native speakers'},
+  {id:10,type:'Cụm từ',prompt:'hiểu sâu hơn về các nền văn hóa khác nhau',answer:'have a deeper understanding of different cultures'},
+  {id:11,type:'Cụm từ',prompt:'khám phá truyền thống và phong tục',answer:'explore traditions and customs'},
+  {id:12,type:'Cụm từ',prompt:'phát triển nhận thức văn hóa',answer:'develop cultural awareness'},
+  {id:13,type:'Cụm từ',prompt:'mở rộng kiến thức',answer:'broaden knowledge'},
+  {id:14,type:'Cụm từ',prompt:'mở rộng tầm nhìn',answer:'broaden horizons'},
+  {id:15,type:'Cụm từ',prompt:'đủ điều kiện cho các vị trí quốc tế',answer:'qualify for international positions'},
+  {id:16,type:'Cụm từ',prompt:'có thêm cơ hội việc làm',answer:'gain access to employment opportunities'},
+  {id:17,type:'Cụm từ',prompt:'có được công việc lương cao hơn',answer:'secure better-paid jobs'},
+  {id:18,type:'Cụm từ',prompt:'làm việc tại công ty đa quốc gia',answer:'work in multinational companies'},
+  {id:19,type:'Cụm từ',prompt:'giao tiếp với khách hàng quốc tế',answer:'communicate with international clients'},
+  {id:20,type:'Cụm từ',prompt:'nâng cao khả năng được tuyển dụng',answer:'enhance employability'},
+  {id:21,type:'Cụm từ',prompt:'cải thiện triển vọng nghề nghiệp',answer:'improve career prospects'},
+  {id:22,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “dịch thuật”',answer:'translation'},
+  {id:23,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “có lợi”',answer:'beneficial'},
+  {id:24,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “có lợi / thuận lợi”',answer:'advantageous'},
+  {id:25,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “nguyên bản / xác thực”',answer:'authentic'},
+  {id:26,type:'Chính tả từ khó',prompt:'Viết đúng động từ tiếng Anh: “giao tiếp”',answer:'communicate'},
+  {id:27,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “cơ hội” (số nhiều)',answer:'opportunities'},
+  {id:28,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “đa quốc gia”',answer:'multinational'},
+  {id:29,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “khả năng được tuyển dụng”',answer:'employability'},
+  {id:30,type:'Chính tả từ khó',prompt:'Viết đúng từ tiếng Anh: “triển vọng”',answer:'prospects'}
+];
+
+let spellingIndex=0;
+let spellingState={answers:{},attempts:{},correct:[],firstTryCorrect:[]};
+
+function spellingNormalize(value){
+  return String(value||'').toLowerCase().trim().replace(/[’‘]/g,"'").replace(/\s+/g,' ');
+}
+function saveSpelling(){localStorage.setItem(SPELLING_STORAGE_KEY,JSON.stringify(spellingState))}
+function loadSpelling(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(SPELLING_STORAGE_KEY)||'null');
+    if(raw){
+      spellingState={
+        answers:raw.answers||{},
+        attempts:raw.attempts||{},
+        correct:Array.isArray(raw.correct)?raw.correct.map(Number):[],
+        firstTryCorrect:Array.isArray(raw.firstTryCorrect)?raw.firstTryCorrect.map(Number):[]
+      };
+    }
+  }catch(e){}
+}
+function spellingCorrectSet(){return new Set(spellingState.correct.map(Number))}
+function spellingFirstSet(){return new Set(spellingState.firstTryCorrect.map(Number))}
+function currentSpelling(){return SPELLING_ITEMS[spellingIndex]}
+function wordShape(answer){return String(answer).split(/\s+/).map(word=>word.replace(/[^a-zA-Z-]/g,'').length).join(' · ')}
+function firstLetterHint(answer){
+  return String(answer).split(/\s+/).map(word=>{
+    const clean=word.replace(/[^a-zA-Z-]/g,'');
+    if(!clean) return word;
+    return clean[0]+'_'.repeat(Math.max(1,clean.length-1));
+  }).join(' ');
+}
+function spellingFeedbackFor(item){
+  const attempts=Number(spellingState.attempts[item.id]||0);
+  const done=spellingCorrectSet().has(item.id);
+  if(done) return {cls:'good',html:`<b>✓ Chính xác.</b> ${item.answer}`};
+  if(attempts===0) return null;
+  if(attempts===1) return {cls:'hint',html:`<b>Chưa đúng.</b> Gợi ý: ${item.answer.split(/\s+/).length} từ · số ký tự: ${wordShape(item.answer)}.`};
+  if(attempts===2) return {cls:'hint',html:`<b>Chưa đúng.</b> Gợi ý thêm: <b>${firstLetterHint(item.answer)}</b>`};
+  return {cls:'bad',html:`<b>Đáp án để học chính tả:</b> ${item.answer}<br>Hãy nhìn kỹ rồi gõ lại chính xác để hoàn thành câu này.`};
+}
+function renderSpellingNumbers(){
+  const correct=spellingCorrectSet();
+  spellingNumbers.innerHTML=SPELLING_ITEMS.map((item,i)=>{
+    const attempts=Number(spellingState.attempts[item.id]||0);
+    const cls=[i===spellingIndex?'active':'',correct.has(item.id)?'correct':(!correct.has(item.id)&&attempts>0?'wrong':'')].filter(Boolean).join(' ');
+    return `<button class="${cls}" onclick="goSpelling(${i})">${item.id}</button>`;
+  }).join('');
+}
+function renderSpellingProgress(){
+  const done=spellingCorrectSet().size,total=SPELLING_ITEMS.length;
+  spellingProgressText.textContent=`${done}/${total} câu đúng`;
+  spellingProgressBar.style.width=`${done/total*100}%`;
+  if(done===total) showSpellingComplete();
+}
+function renderSpellingQuestion(){
+  const item=currentSpelling();
+  spellingType.textContent=item.type;
+  spellingCounter.textContent=`Câu ${item.id}/${SPELLING_ITEMS.length}`;
+  spellingPrompt.textContent=item.prompt;
+  spellingNote.textContent='Nhập đúng toàn bộ chữ cái và khoảng trắng. Không chấm theo nghĩa gần đúng ở bước này.';
+  spellingInput.value=spellingState.answers[item.id]||'';
+  spellingPrev.disabled=spellingIndex===0;
+  spellingNext.disabled=spellingIndex===SPELLING_ITEMS.length-1;
+  const fb=spellingFeedbackFor(item);
+  if(fb){spellingFeedback.className=`spelling-feedback ${fb.cls}`;spellingFeedback.innerHTML=fb.html}
+  else{spellingFeedback.className='spelling-feedback hidden';spellingFeedback.innerHTML=''}
+  renderSpellingNumbers();renderSpellingProgress();
+}
+function goSpelling(index){
+  const item=currentSpelling();
+  spellingState.answers[item.id]=spellingInput.value;
+  saveSpelling();
+  spellingIndex=Math.max(0,Math.min(SPELLING_ITEMS.length-1,index));
+  renderSpellingQuestion();
+}
+function checkSpellingCurrent(){
+  const item=currentSpelling(),value=spellingInput.value.trim();
+  if(!value){
+    spellingFeedback.className='spelling-feedback bad';
+    spellingFeedback.innerHTML='<b>Chưa có đáp án.</b> Hãy gõ từ/cụm từ tiếng Anh trước khi kiểm tra.';
+    return;
+  }
+  spellingState.answers[item.id]=value;
+  const oldAttempts=Number(spellingState.attempts[item.id]||0);
+  spellingState.attempts[item.id]=oldAttempts+1;
+  const isCorrect=spellingNormalize(value)===spellingNormalize(item.answer);
+  if(isCorrect){
+    if(oldAttempts===0&&!spellingFirstSet().has(item.id)) spellingState.firstTryCorrect=[...spellingState.firstTryCorrect,item.id];
+    if(!spellingCorrectSet().has(item.id)) spellingState.correct=[...spellingState.correct,item.id];
+  }
+  saveSpelling();renderSpellingQuestion();
+  if(isCorrect){
+    const nextUndone=SPELLING_ITEMS.findIndex((x,i)=>i>spellingIndex&&!spellingCorrectSet().has(x.id));
+    if(nextUndone>=0) setTimeout(()=>goSpelling(nextUndone),300);
+  }
+}
+function showSpellingComplete(){
+  if(spellingCorrectSet().size!==SPELLING_ITEMS.length) return;
+  spellingPracticeView.classList.add('hidden');
+  spellingCompleteView.classList.remove('hidden');
+  const first=spellingFirstSet().size;
+  const attempts=Object.values(spellingState.attempts).reduce((sum,n)=>sum+Number(n||0),0);
+  spellingCorrectStat.textContent=`${SPELLING_ITEMS.length}/${SPELLING_ITEMS.length}`;
+  spellingFirstStat.textContent=`${first}/${SPELLING_ITEMS.length}`;
+  spellingAttemptStat.textContent=attempts;
+}
+function openWritingStage(){
+  spellingStage.classList.add('hidden');
+  sentenceWorkspace.classList.remove('hidden');
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showLearningStage(){
+  loadSpelling();
+  sentenceWorkspace.classList.add('hidden');
+  spellingStage.classList.remove('hidden');
+  if(spellingCorrectSet().size===SPELLING_ITEMS.length) showSpellingComplete();
+  else{
+    spellingPracticeView.classList.remove('hidden');
+    spellingCompleteView.classList.add('hidden');
+    renderSpellingQuestion();
+  }
 }
 
 
@@ -682,10 +944,19 @@ function renderSummary(){
   const avg=key=>Math.round(vals.reduce((s,v)=>s+(v[key]||0),0)/vals.length);
   summary.innerHTML=`<h3>Hoàn thành Giai đoạn 3 🎉</h3><div class="summary-grid"><div class="summary-cell"><span>Hoàn thành</span><b>${completedSet().size}/${QUESTIONS.length}</b></div><div class="summary-cell"><span>Điểm TB</span><b>${avg('total')}</b></div><div class="summary-cell"><span>Ý chính</span><b>${avg('meaningPct')}%</b></div><div class="summary-cell"><span>Ngữ pháp</span><b>${avg('grammarPts')}/25</b></div><div class="summary-cell"><span>Chính tả</span><b>${avg('spellingPts')}/10</b></div></div>`;summary.classList.remove('hidden')
 }
-function startPractice(){const name=studentName.value.trim(),cls=studentClass.value.trim();if(!name||!cls){startError.textContent='Vui lòng nhập đầy đủ họ tên và lớp.';return}localStorage.setItem(STUDENT_KEY,JSON.stringify({name,className:cls}));studentInfo.textContent=`${name} · ${cls}`;startOverlay.classList.add('hidden');renderQuestion()}
+function startPractice(){const name=studentName.value.trim(),cls=studentClass.value.trim();if(!name||!cls){startError.textContent='Vui lòng nhập đầy đủ họ tên và lớp.';return}localStorage.setItem(STUDENT_KEY,JSON.stringify({name,className:cls}));studentInfo.textContent=`${name} · ${cls}`;startOverlay.classList.add('hidden');showLearningStage()}
 function restoreStudent(){try{const s=JSON.parse(localStorage.getItem(STUDENT_KEY)||'null');if(s?.name)studentName.value=s.name;if(s?.className)studentClass.value=s.className;if(s?.name&&s?.className)studentInfo.textContent=`${s.name} · ${s.className}`}catch(e){}}
-answer.addEventListener('input',()=>{state.answers[q().id]=answer.value;save();renderList()});checkBtn.addEventListener('click',checkCurrent);prevBtn.addEventListener('click',()=>go(currentIndex-1));nextBtn.addEventListener('click',()=>go(currentIndex+1));
-load();restoreStudent();renderQuestion();
+answer.addEventListener('input',()=>{state.answers[q().id]=answer.value;save();renderList()});
+checkBtn.addEventListener('click',checkCurrent);
+prevBtn.addEventListener('click',()=>go(currentIndex-1));
+nextBtn.addEventListener('click',()=>go(currentIndex+1));
+spellingInput.addEventListener('input',()=>{const item=currentSpelling();spellingState.answers[item.id]=spellingInput.value;saveSpelling()});
+spellingInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();checkSpellingCurrent()}});
+spellingCheck.addEventListener('click',checkSpellingCurrent);
+spellingPrev.addEventListener('click',()=>goSpelling(spellingIndex-1));
+spellingNext.addEventListener('click',()=>goSpelling(spellingIndex+1));
+startWritingBtn.addEventListener('click',openWritingStage);
+load();loadSpelling();restoreStudent();renderQuestion();renderSpellingQuestion();
 </script>
 </body>
 </html>
