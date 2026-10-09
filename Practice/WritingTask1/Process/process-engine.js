@@ -6,19 +6,12 @@ const ID=String(window.PROCESS_TASK_ID||'01').padStart(2,'0');
 const task=TASKS[ID];
 
 if(!task){
-  document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">Không tìm thấy dữ liệu bài Process.</p>';
+  document.body.innerHTML=
+    '<p style="padding:30px;font-family:sans-serif">Không tìm thấy dữ liệu bài Process.</p>';
   return;
 }
 
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
-const STEP_NAMES=[
-  'Phân tích sơ đồ',
-  'Introduction',
-  'Overview',
-  'Body Paragraph 1',
-  'Body Paragraph 2',
-  'Bài hoàn chỉnh'
-];
 
 function studentScope(){
   try{
@@ -41,10 +34,28 @@ function studentScope(){
 }
 
 const STORAGE_KEY=
-  'WT1_PROCESS_GUIDED_V3_'
+  'WT1_PROCESS_GUIDED_V4_'
   +studentScope()
   +'::'
   +ID;
+
+const STEP_NAMES=[
+  'Phân tích sơ đồ',
+  'Introduction',
+  'Overview',
+  'Body Paragraph 1',
+  'Body Paragraph 2',
+  'Bài hoàn chỉnh'
+];
+
+const STEP_SHORT=[
+  'Phân tích',
+  'Intro',
+  'Overview',
+  'Body 1',
+  'Body 2',
+  'Full essay'
+];
 
 let state={
   current:0,
@@ -63,20 +74,20 @@ let state={
 
 function load(){
   try{
-    const saved=JSON.parse(
+    const s=JSON.parse(
       localStorage.getItem(STORAGE_KEY)||'null'
     );
 
-    if(saved){
+    if(s){
       state={
         ...state,
-        ...saved,
+        ...s,
         drafts:{
           ...state.drafts,
-          ...(saved.drafts||{}),
+          ...(s.drafts||{}),
           analysis:{
             ...state.drafts.analysis,
-            ...(saved.drafts?.analysis||{})
+            ...(s.drafts?.analysis||{})
           }
         }
       };
@@ -91,8 +102,8 @@ function save(){
   );
 }
 
-function norm(v){
-  return String(v||'')
+function norm(s){
+  return String(s||'')
     .toLowerCase()
     .replace(/[’‘]/g,"'")
     .replace(/[^a-z0-9°%–—'\s-]/g,' ')
@@ -100,16 +111,16 @@ function norm(v){
     .trim();
 }
 
-function words(v){
-  return String(v||'')
+function words(s){
+  return String(s||'')
     .trim()
     .split(/\s+/)
     .filter(Boolean)
     .length;
 }
 
-function esc(v){
-  return String(v??'')
+function esc(s){
+  return String(s??'')
     .replace(
       /[&<>"']/g,
       c=>({
@@ -122,28 +133,17 @@ function esc(v){
     );
 }
 
-function containsAny(
-  text,
-  variants=[]
-){
+function containsAny(text,vars){
   const t=norm(text);
 
-  return variants.some(
-    v=>t.includes(
-      norm(v)
-    )
+  return vars.some(
+    v=>t.includes(norm(v))
   );
 }
 
-function groupHits(
-  text,
-  groups=[]
-){
+function hits(text,groups){
   return groups.map(
-    g=>containsAny(
-      text,
-      g
-    )
+    g=>containsAny(text,g)
   );
 }
 
@@ -157,15 +157,30 @@ function done(step){
   return state.completed.includes(step);
 }
 
+function unlockIndex(){
+  let u=0;
+
+  for(let i=0;i<6;i++){
+
+    if(done(i)){
+      u=i+1;
+    }else{
+      break;
+    }
+
+  }
+
+  return Math.min(5,u);
+}
+
 function completeStep(step){
+
   if(!done(step)){
     state.completed.push(step);
   }
 
   state.completed=[
-    ...new Set(
-      state.completed
-    )
+    ...new Set(state.completed)
   ].sort(
     (a,b)=>a-b
   );
@@ -173,44 +188,19 @@ function completeStep(step){
   save();
 }
 
-function unlockIndex(){
-  let u=0;
-
-  for(
-    let i=0;
-    i<6;
-    i++
-  ){
-    if(done(i)){
-      u=i+1;
-    }else{
-      break;
-    }
-  }
-
-  return Math.min(
-    5,
-    u
-  );
-}
 
 const style=`
 
 :root{
   --purple:#281260;
-  --purple2:#5d43b0;
   --violet:#7358e7;
-  --blue:#2f6fdf;
   --ink:#202636;
   --muted:#6f7890;
   --line:#e1e5ee;
   --bg:#f5f7fb;
   --good:#16845b;
-  --goodbg:#f1fbf6;
   --warn:#9b6b16;
-  --warnbg:#fff9ed;
   --bad:#b83345;
-  --badbg:#fff6f7;
 }
 
 *{
@@ -272,14 +262,18 @@ button{
     );
 }
 
-.topin{
+.topin,
+.page{
   width:min(
     1440px,
     calc(100% - 18px)
   );
 
-  min-height:62px;
   margin:auto;
+}
+
+.topin{
+  min-height:62px;
 
   display:flex;
   align-items:center;
@@ -292,11 +286,13 @@ button{
   display:flex;
   align-items:center;
   gap:10px;
+
   min-width:0;
 }
 
 .back{
   color:#fff;
+
   text-decoration:none;
 
   border:
@@ -321,6 +317,7 @@ button{
 
 .brand{
   font-weight:950;
+
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -356,13 +353,6 @@ button{
 }
 
 .page{
-  width:min(
-    1440px,
-    calc(100% - 18px)
-  );
-
-  margin:auto;
-
   padding:
     16px
     0
@@ -385,7 +375,6 @@ button{
   color:#21164b;
 
   font-size:28px;
-  letter-spacing:-.03em;
 }
 
 .hero p{
@@ -397,7 +386,6 @@ button{
   color:var(--muted);
 
   font-size:11px;
-  line-height:1.5;
 }
 
 .progresswrap{
@@ -422,7 +410,6 @@ button{
   background:#e5e8ef;
 
   border-radius:999px;
-
   overflow:hidden;
 }
 
@@ -435,11 +422,9 @@ button{
   background:
     linear-gradient(
       90deg,
-      var(--purple2),
-      var(--blue)
+      #5d43b0,
+      #2f6fdf
     );
-
-  transition:.2s;
 }
 
 .layout{
@@ -505,18 +490,19 @@ button{
   font-size:13px;
 }
 
-.pill{
-  font-size:9px;
-  font-weight:900;
-
-  color:#6246bd;
+.pill,
+.chip{
   background:#f0ecff;
+  color:#5c43b2;
+
+  border-radius:999px;
+
+  font-size:9.5px;
+  font-weight:950;
 
   padding:
     6px
-    8px;
-
-  border-radius:999px;
+    9px;
 }
 
 .imgwrap{
@@ -530,8 +516,6 @@ button{
   border-radius:12px;
 
   overflow:hidden;
-
-  background:#fff;
 }
 
 .imgwrap img{
@@ -550,14 +534,7 @@ button{
     solid
     #dddff0;
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .94
-    );
-
+  background:#fff;
   color:#4f3d8b;
 
   border-radius:9px;
@@ -570,24 +547,35 @@ button{
   font-weight:900;
 }
 
-.prompt{
+.prompt,
+.guide{
   margin-top:10px;
 
   padding:11px;
-
-  border-radius:11px;
-
-  background:#f7f5ff;
 
   border:
     1px
     solid
     #e3def9;
 
-  color:#41355f;
+  border-radius:11px;
+
+  background:#f7f5ff;
+  color:#4a4161;
 
   font-size:10.5px;
-  line-height:1.5;
+  line-height:1.55;
+}
+
+.guide{
+  margin:
+    0
+    0
+    12px;
+}
+
+.guide b{
+  color:#4b318e;
 }
 
 .steps{
@@ -631,7 +619,6 @@ button{
   border-radius:8px;
 
   background:#eee9ff;
-
   color:#4b318e;
 
   display:grid;
@@ -643,8 +630,6 @@ button{
 
 .stepbtn strong{
   display:block;
-
-  color:#292f40;
 
   font-size:10.8px;
 }
@@ -661,22 +646,11 @@ button{
 
 .stepbtn.active{
   border-color:#8269e8;
-
-  box-shadow:
-    0
-    0
-    0
-    3px
-    rgba(
-      117,
-      89,
-      232,
-      .07
-    );
 }
 
 .stepbtn.done{
   background:#f6fcf8;
+
   border-color:#b9e3cb;
 }
 
@@ -698,32 +672,22 @@ button{
     22px;
 }
 
-.ey{
+.ey,
+.writehead,
+.scorebar{
   display:flex;
   justify-content:space-between;
   align-items:center;
 
   gap:10px;
+}
 
+.ey{
   margin-bottom:12px;
 }
 
-.chip{
-  padding:
-    7px
-    10px;
-
-  border-radius:999px;
-
-  background:#f0ecff;
-
-  color:#5c43b2;
-
-  font-size:9.5px;
-  font-weight:950;
-}
-
-.counter{
+.counter,
+.wc{
   font-size:10px;
   color:var(--muted);
   font-weight:850;
@@ -752,37 +716,6 @@ button{
   line-height:1.55;
 }
 
-.guide{
-  padding:
-    12px
-    13px;
-
-  border:
-    1px
-    solid
-    #ded8f4;
-
-  border-radius:12px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #fbfaff,
-      #f7f9ff
-    );
-
-  margin-bottom:12px;
-
-  color:#545d6f;
-
-  font-size:10.5px;
-  line-height:1.55;
-}
-
-.guide b{
-  color:#4b318e;
-}
-
 .formgrid{
   display:grid;
 
@@ -802,14 +735,10 @@ button{
   border-radius:11px;
 
   padding:10px;
-
-  background:#fff;
 }
 
 .field label{
   display:block;
-
-  color:#303747;
 
   font-size:10px;
   font-weight:900;
@@ -819,7 +748,8 @@ button{
 
 .field input,
 .field select,
-.field textarea{
+.field textarea,
+.write{
   width:100%;
 
   border:
@@ -827,17 +757,14 @@ button{
     solid
     #cfd4df;
 
-  border-radius:8px;
+  border-radius:9px;
 
-  padding:9px;
+  padding:10px;
 
   outline:none;
 
   background:#fff;
-
   color:#202636;
-
-  font-size:11px;
 }
 
 .field textarea{
@@ -845,9 +772,22 @@ button{
   resize:vertical;
 }
 
+.write{
+  min-height:205px;
+
+  resize:vertical;
+
+  font-size:12.5px;
+  line-height:1.7;
+}
+
+.write.full{
+  min-height:400px;
+}
+
 .field input:focus,
-.field textarea:focus,
 .field select:focus,
+.field textarea:focus,
 .write:focus{
   border-color:#765ee0;
 
@@ -862,55 +802,6 @@ button{
       232,
       .07
     );
-}
-
-.write{
-  width:100%;
-
-  min-height:205px;
-
-  resize:vertical;
-
-  border:
-    1px
-    solid
-    #cbd2df;
-
-  border-radius:12px;
-
-  padding:13px;
-
-  outline:none;
-
-  color:#202636;
-
-  font-size:12.5px;
-  line-height:1.7;
-}
-
-.write.full{
-  min-height:400px;
-}
-
-.writehead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  gap:10px;
-
-  margin:
-    8px
-    0
-    7px;
-
-  font-size:10.5px;
-  font-weight:900;
-}
-
-.wc{
-  color:#8a91a0;
-  font-size:9.5px;
 }
 
 .actions{
@@ -933,7 +824,6 @@ button{
     #dcdfe7;
 
   background:#fff;
-
   color:#40345f;
 
   border-radius:10px;
@@ -953,7 +843,7 @@ button{
     linear-gradient(
       100deg,
       var(--purple),
-      #7358e7
+      var(--violet)
     );
 
   color:#fff;
@@ -974,13 +864,6 @@ button{
 }
 
 .scorebar{
-  display:flex;
-
-  justify-content:space-between;
-  align-items:center;
-
-  gap:12px;
-
   padding:
     12px
     13px;
@@ -996,6 +879,7 @@ button{
 .score{
   font-size:24px;
   font-weight:950;
+
   color:#21164b;
 }
 
@@ -1016,20 +900,13 @@ button{
   color:var(--bad);
 }
 
-.detail{
+.detail,
+.reference{
   margin-top:8px;
 
   padding:
     11px
     12px;
-
-  border:
-    1px
-    solid
-    #eadfc3;
-
-  background:
-    var(--warnbg);
 
   border-radius:11px;
 
@@ -1037,14 +914,23 @@ button{
   line-height:1.55;
 }
 
+.detail{
+  border:
+    1px
+    solid
+    #eadfc3;
+
+  background:#fff9ed;
+}
+
 .detail.goodbox{
   border-color:#bde5ce;
-  background:var(--goodbg);
+  background:#f1fbf6;
 }
 
 .detail.badbox{
   border-color:#efc8ce;
-  background:var(--badbg);
+  background:#fff6f7;
 }
 
 .detail ul{
@@ -1057,23 +943,12 @@ button{
 }
 
 .reference{
-  margin-top:8px;
-
-  padding:
-    11px
-    12px;
-
   border:
     1px
     solid
     #ded7fb;
 
   background:#f6f4ff;
-
-  border-radius:11px;
-
-  font-size:10.5px;
-  line-height:1.6;
 }
 
 .reference b{
@@ -1156,11 +1031,6 @@ button{
   line-height:1.5;
 
   color:#656d7d;
-
-  margin:
-    7px
-    0
-    0;
 
   white-space:pre-wrap;
 }
@@ -1260,7 +1130,9 @@ dialog::backdrop{
 
 .modalimg{
   max-width:100%;
+
   display:block;
+
   margin:auto;
 }
 
@@ -1299,24 +1171,15 @@ dialog::backdrop{
     min-width:0;
   }
 
-  .steps{
-    grid-template-columns:1fr;
-  }
-
-  .formgrid{
-    grid-template-columns:1fr;
-  }
-
-  .actions{
+  .steps,
+  .formgrid,
+  .actions,
+  .reviewparts{
     grid-template-columns:1fr;
   }
 
   .main{
     padding:16px;
-  }
-
-  .reviewparts{
-    grid-template-columns:1fr;
   }
 
 }
@@ -1332,203 +1195,187 @@ function mount(){
 
   document.body.innerHTML=`
 
-    <header class="top">
+<header class="top">
 
-      <div class="topin">
+  <div class="topin">
 
-        <div class="left">
+    <div class="left">
 
-          <a
-            class="back"
-            href="../"
-          >
-            ← Process
-          </a>
+      <a
+        class="back"
+        href="../"
+      >
+        ← Process
+      </a>
 
-          <div class="brand">
-            ${task.icon}
-            ${esc(task.title)}
-          </div>
+      <div class="brand">
+        ${task.icon}
+        ${esc(task.title)}
+      </div>
 
-        </div>
+    </div>
 
-        <div
-          id="studentInfo"
-          class="student"
-        ></div>
+    <div
+      id="studentInfo"
+      class="student"
+    ></div>
+
+  </div>
+
+</header>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <div>
+
+      <h1>
+        ${esc(task.title)}
+      </h1>
+
+      <p>
+        Học theo 6 bước · phải hoàn thành bước trước
+        để mở bước tiếp theo · chữa ngay tại từng bước.
+      </p>
+
+    </div>
+
+    <div class="progresswrap">
+
+      <div class="prow">
+
+        <span>
+          Tiến độ
+        </span>
+
+        <span id="progressText"></span>
 
       </div>
 
-    </header>
+      <div class="progress">
+        <i id="progressBar"></i>
+      </div>
+
+    </div>
+
+  </section>
 
 
-    <main class="page">
+  <div class="layout">
 
-      <section class="hero">
+    <aside class="leftcol">
 
-        <div>
+      <section class="diagram">
 
-          <h1>
-            ${esc(task.title)}
-          </h1>
+        <div class="diagramtop">
 
-          <p>
-            Học theo 6 bước · hoàn thành bước trước
-            để mở bước tiếp theo · chữa ngay tại từng bước.
-          </p>
+          <b>
+            Sơ đồ Process
+          </b>
+
+          <span class="pill">
+            ${esc(task.type)}
+            ·
+            ${task.stages}
+            main stages
+          </span>
 
         </div>
 
+        <div class="imgwrap">
 
-        <div class="progresswrap">
+          <img
+            id="diagramImg"
+            src="../assets/${esc(task.image)}"
+            alt="${esc(task.title)}"
+          >
 
-          <div class="prow">
+          <button
+            id="zoomBtn"
+            class="zoom"
+            type="button"
+          >
+            Phóng to sơ đồ ⤢
+          </button>
 
-            <span>
-              Tiến độ
-            </span>
+        </div>
 
-            <span
-              id="progressText"
-            ></span>
+        <div class="prompt">
 
-          </div>
+          <b>
+            Đề bài:
+          </b>
 
-          <div class="progress">
-
-            <i
-              id="progressBar"
-            ></i>
-
-          </div>
+          ${esc(task.prompt)}
 
         </div>
 
       </section>
 
+      <section
+        id="stepNav"
+        class="steps"
+      ></section>
 
-      <div class="layout">
+    </aside>
 
-        <aside class="leftcol">
+    <section
+      id="main"
+      class="main"
+    ></section>
 
-          <section class="diagram">
+  </div>
 
-            <div class="diagramtop">
-
-              <b>
-                Sơ đồ Process
-              </b>
-
-              <span class="pill">
-                ${esc(task.type)}
-                ·
-                ${task.stages}
-                main stages
-              </span>
-
-            </div>
+</main>
 
 
-            <div class="imgwrap">
+<dialog id="imgDialog">
 
-              <img
-                src="../assets/${esc(task.image)}"
-                alt="${esc(task.title)}"
-              >
+  <div class="modalhead">
 
-              <button
-                id="zoomBtn"
-                class="zoom"
-                type="button"
-              >
-                Phóng to sơ đồ ⤢
-              </button>
+    <b>
+      ${esc(task.title)}
+    </b>
 
-            </div>
+    <button id="closeDialog">
+      Đóng ✕
+    </button>
 
+  </div>
 
-            <div class="prompt">
+  <img
+    class="modalimg"
+    src="../assets/${esc(task.image)}"
+    alt="${esc(task.title)}"
+  >
 
-              <b>
-                Đề bài:
-              </b>
-
-              ${esc(task.prompt)}
-
-            </div>
-
-          </section>
-
-
-          <section
-            id="stepNav"
-            class="steps"
-          ></section>
-
-        </aside>
-
-
-        <section
-          id="main"
-          class="main"
-        ></section>
-
-      </div>
-
-    </main>
-
-
-    <dialog id="imgDialog">
-
-      <div class="modalhead">
-
-        <b>
-          ${esc(task.title)}
-        </b>
-
-        <button id="closeDialog">
-          Đóng ✕
-        </button>
-
-      </div>
-
-      <img
-        class="modalimg"
-        src="../assets/${esc(task.image)}"
-        alt="${esc(task.title)}"
-      >
-
-    </dialog>
+</dialog>
 
   `;
 
 
   try{
 
-    const s=
-    JSON.parse(
-      localStorage.getItem(
-        STUDENT_KEY
-      )
-      ||
-      'null'
+    const s=JSON.parse(
+      localStorage.getItem(STUDENT_KEY)||'null'
     );
-
 
     if(s?.name){
 
       studentInfo.textContent=
-      s.name
-      +
-      (
-        s.className
-        ?
-        ' · '
+        s.name
         +
-        s.className
-        :
-        ''
-      );
+        (
+          s.className
+          ?
+          ' · '
+          +
+          s.className
+          :
+          ''
+        );
 
     }
 
@@ -1536,13 +1383,13 @@ function mount(){
 
 
   zoomBtn.onclick=
-  ()=>
-  imgDialog.showModal();
+    ()=>
+    imgDialog.showModal();
 
 
   closeDialog.onclick=
-  ()=>
-  imgDialog.close();
+    ()=>
+    imgDialog.close();
 
 
   imgDialog.addEventListener(
@@ -1554,7 +1401,9 @@ function mount(){
         ===
         imgDialog
       ){
+
         imgDialog.close();
+
       }
 
     }
@@ -1564,94 +1413,89 @@ function mount(){
 
 function renderNav(){
 
-  const unlocked=
-  unlockIndex();
+  const u=
+    unlockIndex();
 
 
   stepNav.innerHTML=
-  STEP_NAMES
-  .map(
-    (name,i)=>{
+    STEP_NAMES
+    .map(
+      (name,i)=>{
 
-      const cls=[
-        i===state.current
-        ?
-        'active'
-        :
-        '',
+        const cls=[
 
+          i===state.current
+          ?
+          'active'
+          :
+          '',
+
+          done(i)
+          ?
+          'done'
+          :
+          '',
+
+          i>u
+          ?
+          'locked'
+          :
+          ''
+
+        ]
+        .filter(Boolean)
+        .join(' ');
+
+
+        return `
+
+<button
+  class="stepbtn ${cls}"
+  ${
+    i>u
+    ?
+    'disabled'
+    :
+    ''
+  }
+  data-step="${i}"
+>
+
+  <span class="n">
+    ${i+1}
+  </span>
+
+  <span>
+
+    <strong>
+      ${name}
+    </strong>
+
+    <small>
+
+      ${
         done(i)
         ?
-        'done'
+        '✓ Hoàn thành'
         :
-        '',
-
-        i>unlocked
+        i>u
         ?
-        'locked'
+        'Chưa mở'
         :
-        ''
-      ]
-      .filter(Boolean)
-      .join(' ');
+        'Đang học'
+      }
 
+    </small>
 
-      return `
+  </span>
 
-        <button
+</button>
 
-          class="
-            stepbtn
-            ${cls}
-          "
+        `;
 
-          ${
-            i>unlocked
-            ?
-            'disabled'
-            :
-            ''
-          }
-
-          data-step="${i}"
-
-        >
-
-          <span class="n">
-            ${i+1}
-          </span>
-
-          <span>
-
-            <strong>
-              ${name}
-            </strong>
-
-            <small>
-
-              ${
-                done(i)
-                ?
-                '✓ Hoàn thành'
-                :
-                i>unlocked
-                ?
-                'Chưa mở'
-                :
-                'Đang học'
-              }
-
-            </small>
-
-          </span>
-
-        </button>
-
-      `;
-
-    }
-  )
-  .join('');
+      }
+    )
+    .join('');
 
 
   stepNav
@@ -1659,34 +1503,30 @@ function renderNav(){
     '[data-step]'
   )
   .forEach(
-    btn=>{
+    b=>{
 
-      btn.onclick=
-      ()=>{
+      b.onclick=
+        ()=>{
 
-        const i=
-        Number(
-          btn.dataset.step
-        );
+          const i=
+            Number(
+              b.dataset.step
+            );
 
 
-        if(
-          i
-          <=
-          unlockIndex()
-        ){
+          if(
+            i<=unlockIndex()
+          ){
 
-          saveCurrentDraft();
+            state.current=i;
 
-          state.current=i;
+            save();
 
-          save();
+            render();
 
-          render();
+          }
 
-        }
-
-      };
+        };
 
     }
   );
@@ -1695,16 +1535,16 @@ function renderNav(){
 
 function renderProgress(){
 
-  const count=
-  state.completed.length;
+  const c=
+    state.completed.length;
 
 
   progressText.textContent=
-  `${count}/6 bước hoàn thành`;
+    `${c}/6 bước hoàn thành`;
 
 
   progressBar.style.width=
-  `${count/6*100}%`;
+    `${c/6*100}%`;
 
 }
 
@@ -1715,51 +1555,68 @@ function guideFor(step){
     `
       <b>Mục tiêu:</b>
       Nhận diện loại process, số giai đoạn,
-      điểm đầu–cuối và đặc điểm nổi bật.
-      Với Body 1 và Body 2, em
-      <b>tự chọn cách chia hợp lý</b>;
-      không có một mốc chia duy nhất.
+      điểm đầu–cuối, đặc điểm nổi bật và
+      <b>tự chọn cách chia Body 1/Body 2 hợp lý</b>.
+      Không có một cách chia duy nhất; chỉ cần
+      hai body nối tiếp nhau, không lặp ý và
+      cùng nhau bao quát quá trình.
     `,
 
     `
       <b>Mục tiêu:</b>
       Paraphrase đề bài trong 1 câu.
       Introduction chỉ cần cho biết sơ đồ
-      mô tả quá trình gì; chưa mô tả chi tiết các stage.
+      mô tả quá trình gì; chưa đưa chi tiết
+      các stage.
     `,
 
     `
       <b>Mục tiêu:</b>
-      Viết Overview nêu cấu trúc chung của quá trình
-      và điểm đầu–cuối/biến đổi nổi bật.
-      Không sa vào chi tiết từng stage.
+      Viết Overview gồm 2 ý:
+      cấu trúc chung của quá trình và
+      những thay đổi/đặc điểm nổi bật.
+      Không sa vào mô tả chi tiết từng bước.
     `,
 
     `
       <b>Mục tiêu:</b>
       Viết Body 1 theo
       <b>cách chia em đã chọn ở Bước 1</b>.
-      Hệ thống không bắt một nhóm stage cố định;
-      cần mô tả đủ một cụm stage liên tiếp,
-      đúng trình tự và rõ ràng.
+      Không có một mốc chia cố định;
+      ưu tiên trình tự rõ ràng,
+      đủ chi tiết và không nhảy stage.
     `,
 
     `
       <b>Mục tiêu:</b>
       Viết Body 2 tiếp nối Body 1 theo
-      <b>cách chia em đã chọn</b>.
-      Khi ghép hai body, bài cần bao quát phần lớn
-      toàn bộ process và không lặp lại cùng một nhóm stage.
+      <b>cách chia em đã chọn</b>,
+      đi đến kết quả cuối cùng hoặc
+      điểm quay lại của vòng đời.
+      Không lặp lại các stage đã mô tả ở Body 1.
     `,
 
     `
       <b>Mục tiêu:</b>
       Viết lại toàn bài từ đầu,
-      gồm Introduction → Overview → Body 1 → Body 2.
-      Cố gắng viết từ trí nhớ trước khi mở phần xem lại.
+      gồm 4 phần theo thứ tự
+      Introduction → Overview → Body 1 → Body 2.
+      Cố gắng viết từ trí nhớ trước khi
+      mở phần xem lại.
     `
 
   ][step];
+
+}
+
+function fieldVal(id){
+
+  return (
+    document.getElementById(id)
+    ?.value
+    ||
+    ''
+  );
 
 }
 
@@ -1776,23 +1633,10 @@ function draftKey(step){
 
 }
 
-function fieldValue(id){
-
-  return (
-    document.getElementById(
-      id
-    )
-    ?.value
-    ||
-    ''
-  );
-
-}
-
 function saveCurrentDraft(){
 
   const step=
-  state.current;
+    state.current;
 
 
   if(step===0){
@@ -1800,56 +1644,42 @@ function saveCurrentDraft(){
     state.drafts.analysis={
 
       type:
-      fieldValue(
-        'aType'
-      ),
+        fieldVal('aType'),
 
       stages:
-      fieldValue(
-        'aStages'
-      ),
+        fieldVal('aStages'),
 
       first:
-      fieldValue(
-        'aFirst'
-      ),
+        fieldVal('aFirst'),
 
       last:
-      fieldValue(
-        'aLast'
-      ),
+        fieldVal('aLast'),
 
       features:
-      fieldValue(
-        'aFeatures'
-      ),
+        fieldVal('aFeatures'),
 
       body1:
-      fieldValue(
-        'aBody1'
-      ),
+        fieldVal('aBody1'),
 
       body2:
-      fieldValue(
-        'aBody2'
-      )
+        fieldVal('aBody2')
 
     };
 
   }else{
 
-    const box=
-    document.getElementById(
-      'writeBox'
-    );
+    const el=
+      document.getElementById(
+        'writeBox'
+      );
 
 
-    if(box){
+    if(el){
 
       state.drafts[
         draftKey(step)
       ]=
-      box.value;
+        el.value;
 
     }
 
@@ -1860,424 +1690,241 @@ function saveCurrentDraft(){
 
 }
 
-function keywordScore(
-  text,
-  keywords=[]
-){
-
-  const unique=[
-    ...new Set(
-      keywords
-      .map(norm)
-      .filter(Boolean)
-    )
-  ];
-
-
-  if(!unique.length){
-    return 1;
-  }
-
-
-  const t=
-  norm(text);
-
-
-  return (
-    unique
-    .filter(
-      k=>
-      t.includes(k)
-    )
-    .length
-    /
-    unique.length
-  );
-
-}
-
-function globalBodyGroups(){
-
-  const all=[
-    ...(task.body1?.concepts||[]),
-    ...(task.body2?.concepts||[])
-  ];
-
-
-  const seen=
-  new Set();
-
-
-  return all.filter(
-    group=>{
-
-      const key=
-      (group||[])
-      .map(norm)
-      .sort()
-      .join('|');
-
-
-      if(
-        !key
-        ||
-        seen.has(key)
-      ){
-        return false;
-      }
-
-
-      seen.add(key);
-
-      return true;
-
-    }
-  );
-
-}
-
-function bodyPlanInfo(text){
-
-  const groups=
-  globalBodyGroups();
-
-
-  const h=
-  groupHits(
-    text,
-    groups
-  );
-
-
-  return {
-
-    hits:h,
-
-    count:
-    h.filter(Boolean).length,
-
-    groups
-
-  };
-
-}
-
-function bodyPlansAreDistinct(
-  a,
-  b
-){
-
-  const A=
-  new Set(
-    norm(a)
-    .split(/\s+/)
-    .filter(
-      x=>
-      x.length>3
-    )
-  );
-
-
-  const B=
-  new Set(
-    norm(b)
-    .split(/\s+/)
-    .filter(
-      x=>
-      x.length>3
-    )
-  );
-
-
-  if(
-    !A.size
-    ||
-    !B.size
-  ){
-    return false;
-  }
-
-
-  let overlap=0;
-
-
-  A.forEach(
-    x=>{
-
-      if(
-        B.has(x)
-      ){
-        overlap++;
-      }
-
-    }
-  );
-
-
-  return (
-    overlap
-    /
-    Math.max(
-      1,
-      Math.min(
-        A.size,
-        B.size
-      )
-    )
-    <
-    .78
-  );
-
-}
-
 function renderAnalysis(){
 
   const d=
-  state.drafts.analysis
-  ||
-  {};
+    state.drafts.analysis
+    ||
+    {};
 
 
   main.innerHTML=`
 
-    <div class="ey">
+<div class="ey">
 
-      <span class="chip">
-        BƯỚC 1
-      </span>
+  <span class="chip">
+    BƯỚC 1
+  </span>
 
-      <span class="counter">
-        Phân tích trước khi viết
-      </span>
+  <span class="counter">
+    Phân tích trước khi viết
+  </span>
 
-    </div>
+</div>
 
 
-    <h2>
-      Phân tích sơ đồ
-    </h2>
+<h2>
+  Phân tích sơ đồ
+</h2>
 
 
-    <p class="sub">
+<p class="sub">
 
-      Quan sát toàn bộ sơ đồ rồi hoàn thành 7 mục.
-      Riêng Body 1/Body 2, hãy tự chọn điểm chia hợp lý;
-      hệ thống không dùng một đáp án chia body duy nhất.
+  Quan sát toàn bộ sơ đồ rồi hoàn thành 7 mục.
+  Riêng cách chia Body 1 và Body 2
+  <b>không có một đáp án duy nhất</b>;
+  em tự chọn mốc chia hợp lý.
 
-    </p>
+</p>
 
 
-    <div class="guide">
-      ${guideFor(0)}
-    </div>
+<div class="guide">
+  ${guideFor(0)}
+</div>
 
 
-    <div class="formgrid">
+<div class="formgrid">
 
+  <div class="field">
 
-      <div class="field">
+    <label>
+      Process thuộc dạng nào?
+    </label>
 
-        <label>
-          Process thuộc dạng nào?
-        </label>
+    <select id="aType">
 
-        <select id="aType">
+      <option value="">
+        — Chọn —
+      </option>
 
-          <option value="">
-            — Chọn —
-          </option>
+      <option>
+        Linear
+      </option>
 
-          <option>
-            Linear
-          </option>
+      <option>
+        Cyclical
+      </option>
 
-          <option>
-            Cyclical
-          </option>
+      <option>
+        Life Cycle
+      </option>
 
-          <option>
-            Life Cycle
-          </option>
+    </select>
 
-        </select>
+  </div>
 
-      </div>
 
+  <div class="field">
 
-      <div class="field">
+    <label>
+      Có bao nhiêu main stages?
+    </label>
 
-        <label>
-          Có bao nhiêu main stages?
-        </label>
+    <input
+      id="aStages"
+      placeholder="Ví dụ: 7"
+    >
 
-        <input
-          id="aStages"
-          placeholder="Ví dụ: 7"
-        >
+  </div>
 
-      </div>
 
+  <div class="field">
 
-      <div class="field">
+    <label>
+      First stage là gì?
+    </label>
 
-        <label>
-          First stage là gì?
-        </label>
+    <textarea id="aFirst"></textarea>
 
-        <textarea
-          id="aFirst"
-        ></textarea>
+  </div>
 
-      </div>
 
+  <div class="field">
 
-      <div class="field">
+    <label>
+      Last / return stage là gì?
+    </label>
 
-        <label>
-          Last / return stage là gì?
-        </label>
+    <textarea id="aLast"></textarea>
 
-        <textarea
-          id="aLast"
-        ></textarea>
+  </div>
 
-      </div>
 
+  <div
+    class="field"
+    style="grid-column:1/-1"
+  >
 
-      <div
-        class="field"
-        style="
-          grid-column:1/-1
-        "
-      >
+    <label>
+      Important features là gì?
+    </label>
 
-        <label>
-          Important features là gì?
-        </label>
+    <textarea id="aFeatures"></textarea>
 
-        <textarea
-          id="aFeatures"
-        ></textarea>
+  </div>
 
-      </div>
 
+  <div class="field">
 
-      <div class="field">
+    <label>
+      Em dự kiến Body 1 sẽ mô tả phần nào?
+    </label>
 
-        <label>
-          Em chọn Body 1 gồm những stage nào?
-        </label>
+    <textarea
+      id="aBody1"
+      placeholder="Ví dụ: stages 1–4, hoặc từ ... đến ..."
+    ></textarea>
 
-        <textarea
-          id="aBody1"
-          placeholder="Tự chọn một nhóm stage liên tiếp..."
-        ></textarea>
+  </div>
 
-      </div>
 
+  <div class="field">
 
-      <div class="field">
+    <label>
+      Em dự kiến Body 2 sẽ mô tả phần nào?
+    </label>
 
-        <label>
-          Em chọn Body 2 gồm những stage nào?
-        </label>
+    <textarea
+      id="aBody2"
+      placeholder="Ví dụ: các stages còn lại, từ ... đến ..."
+    ></textarea>
 
-        <textarea
-          id="aBody2"
-          placeholder="Tiếp nối Body 1 đến cuối process..."
-        ></textarea>
+  </div>
 
-      </div>
+</div>
 
 
-    </div>
+<div class="actions">
 
+  <button
+    class="btn"
+    disabled
+  >
+    ← Bước trước
+  </button>
 
-    <div class="actions">
+  <button
+    id="checkBtn"
+    class="btn primary"
+  >
+    Kiểm tra Bước 1 ✓
+  </button>
 
-      <button
-        class="btn"
-        disabled
-      >
-        ← Bước trước
-      </button>
+  <button
+    id="nextBtn"
+    class="btn"
+    ${
+      done(0)
+      ?
+      ''
+      :
+      'disabled'
+    }
+  >
+    Bước tiếp →
+  </button>
 
-      <button
-        id="checkBtn"
-        class="btn primary"
-      >
-        Kiểm tra Bước 1 ✓
-      </button>
+</div>
 
-      <button
 
-        id="nextBtn"
-
-        class="btn"
-
-        ${
-          done(0)
-          ?
-          ''
-          :
-          'disabled'
-        }
-
-      >
-        Bước tiếp →
-      </button>
-
-    </div>
-
-
-    <div
-      id="feedback"
-      class="feedback"
-    ></div>
+<div
+  id="feedback"
+  class="feedback"
+></div>
 
   `;
 
 
   aType.value=
-  d.type
-  ||
-  '';
+    d.type
+    ||
+    '';
 
 
   aStages.value=
-  d.stages
-  ||
-  '';
+    d.stages
+    ||
+    '';
 
 
   aFirst.value=
-  d.first
-  ||
-  '';
+    d.first
+    ||
+    '';
 
 
   aLast.value=
-  d.last
-  ||
-  '';
+    d.last
+    ||
+    '';
 
 
   aFeatures.value=
-  d.features
-  ||
-  '';
+    d.features
+    ||
+    '';
 
 
   aBody1.value=
-  d.body1
-  ||
-  '';
+    d.body1
+    ||
+    '';
 
 
   aBody2.value=
-  d.body2
-  ||
-  '';
+    d.body2
+    ||
+    '';
 
 
   main
@@ -2294,21 +1941,41 @@ function renderAnalysis(){
 
 
   checkBtn.onclick=
-  checkAnalysis;
+    checkAnalysis;
 
 
   nextBtn.onclick=
-  ()=>
-  goStep(1);
+    ()=>
+    goStep(1);
 
 
   if(
     state.scores[0]
   ){
+
     showAnalysisFeedback(
-      state.scores[0]
+      state.scores[0],
+      false
     );
+
   }
+
+}
+
+function planIsFilled(text){
+
+  const t=
+    String(text||'')
+    .trim();
+
+
+  return (
+    words(t)>=2
+    ||
+    /\bstage(?:s)?\s*\d+/i.test(t)
+    ||
+    /\b\d+\s*[-–—]\s*\d+\b/.test(t)
+  );
 
 }
 
@@ -2318,31 +1985,36 @@ function checkAnalysis(){
 
 
   state.attempts[0]=
-  attempts(0)
-  +
-  1;
+    attempts(0)
+    +
+    1;
 
 
   const a=
-  state.drafts.analysis;
+    state.drafts.analysis;
 
 
-  const p1=
-  bodyPlanInfo(
-    a.body1
-  );
+  const body1OK=
+    planIsFilled(
+      a.body1
+    );
 
 
-  const p2=
-  bodyPlanInfo(
-    a.body2
-  );
+  const body2OK=
+    planIsFilled(
+      a.body2
+    )
+    &&
+    norm(a.body2)
+    !==
+    norm(a.body1);
 
 
   const checks=[
 
     [
       'Process type',
+
       containsAny(
         a.type,
         task.analysis.type
@@ -2351,6 +2023,7 @@ function checkAnalysis(){
 
     [
       'Main stages',
+
       containsAny(
         a.stages,
         task.analysis.stages
@@ -2359,82 +2032,71 @@ function checkAnalysis(){
 
     [
       'First stage',
-      keywordScore(
-        a.first,
-        task.analysis.first
+
+      task.analysis.first
+      .filter(
+        x=>
+        containsAny(
+          a.first,
+          [x]
+        )
       )
+      .length
       >=
-      .5
+      2
     ],
 
     [
       'Last / return stage',
-      keywordScore(
-        a.last,
-        task.analysis.last
+
+      task.analysis.last
+      .filter(
+        x=>
+        containsAny(
+          a.last,
+          [x]
+        )
       )
+      .length
       >=
-      .35
+      2
     ],
 
     [
       'Important features',
-      keywordScore(
+
+      hits(
         a.features,
-        task.analysis.features
+        chunkGroups(
+          task.analysis.features,
+          3
+        )
       )
+      .filter(Boolean)
+      .length
       >=
-      .3
+      2
     ],
 
     [
-      'Body 1: có một nhóm stage hợp lý',
-
-      words(
-        a.body1
-      )
-      >=
-      3
-
-      &&
-
-      p1.count
-      >=
-      1
+      'Kế hoạch Body 1',
+      body1OK
     ],
 
     [
-      'Body 2: tiếp nối và không lặp Body 1',
-
-      words(
-        a.body2
-      )
-      >=
-      3
-
-      &&
-
-      p2.count
-      >=
-      1
-
-      &&
-
-      bodyPlansAreDistinct(
-        a.body1,
-        a.body2
-      )
+      'Kế hoạch Body 2',
+      body2OK
     ]
 
   ];
 
 
   const correct=
-  checks
-  .filter(
-    x=>x[1]
-  )
-  .length;
+    checks
+    .filter(
+      x=>x[1]
+    )
+    .length;
 
 
   const result={
@@ -2442,30 +2104,37 @@ function checkAnalysis(){
     checks,
 
     total:
-    Math.round(
-      correct
-      /
-      checks.length
-      *
-      100
-    ),
+      Math.round(
+        correct
+        /
+        checks.length
+        *
+        100
+      ),
 
     completed:
-    correct
-    ===
-    checks.length
+      correct
+      ===
+      checks.length
 
   };
 
 
   state.scores[0]=
-  result;
+    result;
 
 
-  if(
-    result.completed
-  ){
+  if(result.completed){
+
     completeStep(0);
+
+  }else{
+
+    state.completed=
+      state.completed.filter(
+        x=>x<0
+      );
+
   }
 
 
@@ -2473,7 +2142,8 @@ function checkAnalysis(){
 
 
   showAnalysisFeedback(
-    result
+    result,
+    true
   );
 
 
@@ -2482,77 +2152,119 @@ function checkAnalysis(){
 
 
   nextBtn.disabled=
-  !done(0);
+    !done(0);
+
+}
+
+function chunkGroups(
+  items,
+  size
+){
+
+  const groups=[];
+
+
+  for(
+    let i=0;
+    i<items.length;
+    i+=size
+  ){
+
+    groups.push(
+      items.slice(
+        i,
+        i+size
+      )
+    );
+
+  }
+
+
+  return groups;
 
 }
 
 function analysisReference(){
 
+  const a=
+    task.analysis;
+
+
   return `
 
-    <b>
-      Một cách chia tham khảo — không phải đáp án duy nhất:
-    </b>
+<b>
+  Gợi ý phần phân tích:
+</b>
 
-    <br>
+<br>
 
-    • Type:
-    ${esc(task.type)}
+• Type:
+${task.type}
 
-    <br>
+<br>
 
-    • Main stages:
-    ${task.stages}
+• Main stages:
+${task.stages}
 
-    <br>
+<br>
 
-    • First stage:
-    ${esc(
-      (task.analysis.first||[])
-      .join(' / ')
-    )}
+• First stage:
+${esc(
+  a.first
+  .slice(0,3)
+  .join(' / ')
+)}
 
-    <br>
+<br>
 
-    • Last/return stage:
-    ${esc(
-      (task.analysis.last||[])
-      .join(' / ')
-    )}
+• Last/return stage:
+${esc(
+  a.last
+  .slice(0,4)
+  .join(' / ')
+)}
 
-    <br>
+<br>
 
-    • Important features:
-    ${esc(
-      (task.analysis.features||[])
-      .join(' · ')
-    )}
+• Important features:
+${esc(
+  a.features
+  .join(' · ')
+)}
 
-    <br>
+<br><br>
 
-    • Một cách chia Body 1:
-    ${esc(
-      (task.analysis.body1||[])
-      .join(' · ')
-    )}
+<b>
+  Cách chia Body 1/Body 2:
+</b>
 
-    <br>
+không có đáp án duy nhất.
+Chỉ cần chọn một mốc chia hợp lý,
+hai đoạn đi theo đúng thứ tự,
+không lặp stage và khi ghép lại
+bao quát toàn bộ quá trình.
 
-    • Một cách chia Body 2:
-    ${esc(
-      (task.analysis.body2||[])
-      .join(' · ')
-    )}
+<br><br>
 
-    <br><br>
+<b>
+  Một cách chia tham khảo:
+</b>
 
-    <b>
-      Lưu ý:
-    </b>
+<br>
 
-    học sinh có thể chia ở mốc khác nếu
-    hai body vẫn theo trình tự,
-    không lặp và bao quát process.
+• Body 1:
+${esc(
+  a.body1
+  .join(' · ')
+)}
+
+<br>
+
+• Body 2:
+${esc(
+  a.body2
+  .join(' · ')
+)}
 
   `;
 
@@ -2561,9 +2273,9 @@ function analysisReference(){
 function showAnalysisFeedback(r){
 
   const f=
-  document.getElementById(
-    'feedback'
-  );
+    document.getElementById(
+      'feedback'
+    );
 
 
   if(!f){
@@ -2572,203 +2284,948 @@ function showAnalysisFeedback(r){
 
 
   f.className=
-  'feedback show';
+    'feedback show';
 
 
   const rows=
-  r.checks
-  .map(
-    ([n,ok])=>`
-
-      <div
-        class="
-          rowcheck
-          ${
-            ok
-            ?
-            'ok'
-            :
-            'no'
-          }
-        "
-      >
-
-        <b>
-          ${n}
-        </b>
-
-        <span>
-
-          ${
-            ok
-            ?
-            '✓ Hợp lý / đủ ý'
-            :
-            'Cần bổ sung hoặc làm rõ'
-          }
-
-        </span>
-
-      </div>
-
-    `
-  )
-  .join('');
-
-
-  const ref=
-
-  !r.completed
-  &&
-  attempts(0)>=2
-
-  ?
-
-  `
-    <div class="reference">
-      ${analysisReference()}
-    </div>
-  `
-
-  :
-
-  '';
-
-
-  f.innerHTML=`
-
-    <div class="scorebar">
-
-      <div>
-
-        <div class="score">
-          ${r.total}/100
-        </div>
-
+    r.checks
+    .map(
+      ([n,ok])=>
+      `
         <div
           class="
-            status
+            rowcheck
             ${
-              r.completed
+              ok
               ?
-              'good'
+              'ok'
               :
-              'warn'
+              'no'
             }
           "
         >
 
-          ${
-            r.completed
-            ?
-            '✓ Hoàn thành Bước 1'
-            :
-            'Cần sửa các mục còn thiếu'
-          }
+          <b>
+            ${n}
+          </b>
+
+          <span>
+
+            ${
+              ok
+              ?
+              '✓ Hợp lý / đủ ý'
+              :
+              'Cần bổ sung hoặc làm rõ'
+            }
+
+          </span>
 
         </div>
+      `
+    )
+    .join('');
 
+
+  const ref=
+
+    !r.completed
+    &&
+    attempts(0)>=2
+
+    ?
+
+    `
+      <div class="reference">
+        ${analysisReference()}
       </div>
+    `
+
+    :
+
+    '';
 
 
-      <div class="counter">
+  f.innerHTML=`
 
-        Body 1/2 được chấm theo tính hợp lý,
-        không theo mốc chia cố định
+<div class="scorebar">
 
-      </div>
+  <div>
+
+    <div class="score">
+      ${r.total}/100
+    </div>
+
+    <div
+      class="
+        status
+        ${
+          r.completed
+          ?
+          'good'
+          :
+          'warn'
+        }
+      "
+    >
+
+      ${
+        r.completed
+        ?
+        '✓ Hoàn thành Bước 1'
+        :
+        'Cần sửa các mục còn thiếu'
+      }
 
     </div>
 
-
-    <div class="analysis-result">
-      ${rows}
-    </div>
+  </div>
 
 
-    ${ref}
+  <div class="counter">
+
+    Body 1/2 được chấm theo tính hợp lý,
+    không theo một mốc chia cố định
+
+  </div>
+
+</div>
+
+
+<div class="analysis-result">
+  ${rows}
+</div>
+
+
+${ref}
 
   `;
 
 }
 
+
 function sectionConfig(step){
+
   return task[
     draftKey(step)
   ];
+
 }
+
+
+/* =========================================================
+   TOPIC CHECK
+========================================================= */
+
+const TOPIC_RULES={
+
+  '01':{
+    required:[
+      'brick',
+      'bricks'
+    ],
+
+    forbidden:[
+      'noodle',
+      'noodles',
+      'ketchup',
+      'frog',
+      'frogs',
+      'bee',
+      'bees',
+      'plastic bottle',
+      'plastic bottles'
+    ],
+
+    label:'bricks'
+  },
+
+
+  '02':{
+    required:[
+      'noodle',
+      'noodles',
+      'instant noodle',
+      'instant noodles'
+    ],
+
+    forbidden:[
+      'brick',
+      'bricks',
+      'ketchup',
+      'frog',
+      'frogs',
+      'bee',
+      'bees',
+      'plastic bottle',
+      'plastic bottles'
+    ],
+
+    label:'instant noodles'
+  },
+
+
+  '03':{
+    required:[
+      'ketchup',
+      'tomato ketchup'
+    ],
+
+    forbidden:[
+      'brick',
+      'bricks',
+      'noodle',
+      'noodles',
+      'frog',
+      'frogs',
+      'bee',
+      'bees',
+      'plastic bottle',
+      'plastic bottles'
+    ],
+
+    label:'tomato ketchup'
+  },
+
+
+  '04':{
+    required:[
+      'frog',
+      'frogs'
+    ],
+
+    forbidden:[
+      'brick',
+      'bricks',
+      'noodle',
+      'noodles',
+      'ketchup',
+      'bee',
+      'bees',
+      'plastic bottle',
+      'plastic bottles'
+    ],
+
+    label:'frog life cycle'
+  },
+
+
+  '05':{
+    required:[
+      'bee',
+      'bees'
+    ],
+
+    forbidden:[
+      'brick',
+      'bricks',
+      'noodle',
+      'noodles',
+      'ketchup',
+      'frog',
+      'frogs',
+      'plastic bottle',
+      'plastic bottles'
+    ],
+
+    label:'bee life cycle'
+  },
+
+
+  '06':{
+    required:[
+      'plastic bottle',
+      'plastic bottles',
+      'plastic',
+      'recycling'
+    ],
+
+    forbidden:[
+      'brick',
+      'bricks',
+      'noodle',
+      'noodles',
+      'ketchup',
+      'frog',
+      'frogs',
+      'bee',
+      'bees'
+    ],
+
+    label:'plastic bottles'
+  }
+
+};
+
+function hasPhrase(
+  text,
+  phrase
+){
+
+  const t=
+    ' '
+    +
+    norm(text)
+    +
+    ' ';
+
+
+  const p=
+    ' '
+    +
+    norm(phrase)
+    +
+    ' ';
+
+
+  return t.includes(p);
+
+}
+
+function topicCheck(text){
+
+  const rule=
+    TOPIC_RULES[ID];
+
+
+  if(!rule){
+
+    return {
+      requiredOK:true,
+      wrong:[],
+      expected:''
+    };
+
+  }
+
+
+  return {
+
+    requiredOK:
+      rule.required.some(
+        x=>
+        hasPhrase(
+          text,
+          x
+        )
+      ),
+
+    wrong:[
+      ...new Set(
+        rule.forbidden.filter(
+          x=>
+          hasPhrase(
+            text,
+            x
+          )
+        )
+      )
+    ],
+
+    expected:
+      rule.label
+
+  };
+
+}
+
+
+/* =========================================================
+   INTRODUCTION
+========================================================= */
+
+function gradeIntroduction(text){
+
+  const wc=
+    words(text);
+
+
+  const grammar=
+    grammarIssues(text);
+
+
+  const topic=
+    topicCheck(text);
+
+
+  const framingOK=
+    containsAny(
+      text,
+      [
+        'diagram',
+        'figure',
+        'illustration'
+      ]
+    );
+
+
+  const describeOK=
+    containsAny(
+      text,
+      [
+        'illustrates',
+        'shows',
+        'depicts',
+        'presents',
+        'demonstrates'
+      ]
+    );
+
+
+  const processOK=
+    containsAny(
+      text,
+      [
+        'process',
+        'stages',
+        'production',
+        'manufacturing',
+        'manufacture',
+        'manufactured',
+        'produced',
+        'made',
+        'recycled',
+        'life cycle'
+      ]
+    );
+
+
+  const issues=[];
+
+
+  if(!topic.requiredOK){
+
+    issues.push(
+      `Sai hoặc thiếu đối tượng chính. Bài này mô tả “${topic.expected}”.`
+    );
+
+  }
+
+
+  if(topic.wrong.length){
+
+    issues.push(
+      `Sai nội dung: em đang nhắc tới “${topic.wrong.join(', ')}”, không thuộc sơ đồ này.`
+    );
+
+  }
+
+
+  if(!framingOK){
+
+    issues.push(
+      'Introduction nên cho biết đây là diagram/figure.'
+    );
+
+  }
+
+
+  if(!describeOK){
+
+    issues.push(
+      'Cần dùng một động từ mô tả phù hợp như illustrates, shows hoặc depicts.'
+    );
+
+  }
+
+
+  if(!processOK){
+
+    issues.push(
+      'Chưa diễn đạt rõ sơ đồ mô tả một process/life cycle.'
+    );
+
+  }
+
+
+  if(wc<8){
+
+    issues.push(
+      `Câu còn quá ngắn (${wc} từ).`
+    );
+
+  }
+
+
+  grammar.forEach(
+    x=>
+    issues.push(
+      'Ngữ pháp/trình bày: '
+      +
+      x
+    )
+  );
+
+
+  let score=
+
+    (
+      topic.requiredOK
+      ?
+      40
+      :
+      0
+    )
+
+    +
+
+    (
+      framingOK
+      ?
+      12
+      :
+      0
+    )
+
+    +
+
+    (
+      describeOK
+      ?
+      15
+      :
+      0
+    )
+
+    +
+
+    (
+      processOK
+      ?
+      15
+      :
+      0
+    )
+
+    +
+
+    (
+      wc>=8
+      ?
+      8
+      :
+      Math.round(
+        wc/8*8
+      )
+    )
+
+    +
+
+    Math.max(
+      0,
+      10
+      -
+      grammar.length*4
+    );
+
+
+  if(topic.wrong.length){
+
+    score=
+      Math.min(
+        score,
+        40
+      );
+
+  }
+
+
+  if(!topic.requiredOK){
+
+    score=
+      Math.min(
+        score,
+        50
+      );
+
+  }
+
+
+  return {
+
+    total:
+      Math.min(
+        100,
+        score
+      ),
+
+    completed:
+
+      topic.requiredOK
+
+      &&
+
+      topic.wrong.length===0
+
+      &&
+
+      framingOK
+
+      &&
+
+      describeOK
+
+      &&
+
+      processOK
+
+      &&
+
+      wc>=8
+
+      &&
+
+      grammar.length<=1,
+
+    wc,
+    grammar,
+    issues
+
+  };
+
+}
+
+
+/* =========================================================
+   OVERVIEW
+========================================================= */
+
+function gradeOverview(text){
+
+  const cfg=
+    task.overview;
+
+
+  const wc=
+    words(text);
+
+
+  const grammar=
+    grammarIssues(text);
+
+
+  const topic=
+    topicCheck(text);
+
+
+  const firstOK=
+    containsAny(
+      text,
+      task.analysis.first||[]
+    );
+
+
+  const lastOK=
+    containsAny(
+      text,
+      task.analysis.last||[]
+    );
+
+
+  const overviewMarker=
+    containsAny(
+      text,
+      [
+        'overall',
+        'in general',
+        'generally',
+        'it is clear that',
+        'it can be seen that'
+      ]
+    );
+
+
+  const h=
+    hits(
+      text,
+      cfg.concepts||[]
+    );
+
+
+  const ratio=
+    h.length
+    ?
+    h.filter(Boolean).length
+    /
+    h.length
+    :
+    1;
+
+
+  const issues=[];
+
+
+  if(topic.wrong.length){
+
+    issues.push(
+      `Có nội dung thuộc bài khác: “${topic.wrong.join(', ')}”.`
+    );
+
+  }
+
+
+  if(!overviewMarker){
+
+    issues.push(
+      'Chưa có dấu hiệu mở Overview rõ ràng, ví dụ Overall / In general.'
+    );
+
+  }
+
+
+  if(!firstOK){
+
+    issues.push(
+      'Overview chưa thể hiện rõ điểm bắt đầu của process.'
+    );
+
+  }
+
+
+  if(!lastOK){
+
+    issues.push(
+      'Overview chưa thể hiện rõ điểm kết thúc / return stage.'
+    );
+
+  }
+
+
+  if(ratio<.45){
+
+    issues.push(
+      'Overview chưa khái quát đủ đặc điểm nổi bật của process.'
+    );
+
+  }
+
+
+  if(wc<25){
+
+    issues.push(
+      `Overview còn ngắn (${wc} từ).`
+    );
+
+  }
+
+
+  grammar.forEach(
+    x=>
+    issues.push(
+      'Ngữ pháp/trình bày: '
+      +
+      x
+    )
+  );
+
+
+  let score=
+
+    (
+      overviewMarker
+      ?
+      15
+      :
+      0
+    )
+
+    +
+
+    (
+      firstOK
+      ?
+      20
+      :
+      0
+    )
+
+    +
+
+    (
+      lastOK
+      ?
+      20
+      :
+      0
+    )
+
+    +
+
+    Math.round(
+      Math.min(
+        1,
+        ratio/.65
+      )
+      *
+      25
+    )
+
+    +
+
+    (
+      wc>=25
+      ?
+      10
+      :
+      Math.round(
+        wc/25*10
+      )
+    )
+
+    +
+
+    Math.max(
+      0,
+      10
+      -
+      grammar.length*4
+    );
+
+
+  if(topic.wrong.length){
+
+    score=
+      Math.min(
+        score,
+        45
+      );
+
+  }
+
+
+  return {
+
+    total:
+      Math.min(
+        100,
+        score
+      ),
+
+    completed:
+
+      topic.wrong.length===0
+
+      &&
+
+      overviewMarker
+
+      &&
+
+      firstOK
+
+      &&
+
+      lastOK
+
+      &&
+
+      ratio>=.45
+
+      &&
+
+      wc>=25
+
+      &&
+
+      grammar.length<=1,
+
+    wc,
+    issues
+
+  };
+
+}
+
+
+/* =========================================================
+   GRAMMAR CHECK
+========================================================= */
 
 function grammarIssues(text){
 
   const s=
-  String(
-    text
-    ||
-    ''
-  )
-  .trim();
+    String(
+      text
+      ||
+      ''
+    )
+    .trim();
 
 
   const n=
-  norm(s);
+    norm(s);
 
 
   const issues=[];
 
 
   if(!s){
+
     return [
       'Chưa có câu trả lời.'
     ];
+
   }
 
 
   if(
     !/^[A-Z]/.test(s)
   ){
+
     issues.push(
       'Viết hoa chữ cái đầu câu/đoạn.'
     );
+
   }
 
 
   if(
     !/[.!?]$/.test(s)
   ){
+
     issues.push(
       'Nên kết thúc bằng dấu câu.'
     );
+
   }
 
 
   if(
     /\s{2,}/.test(s)
   ){
+
     issues.push(
       'Có khoảng trắng thừa.'
     );
+
   }
 
 
   if(
-    /\b(is|are|was|were)\s+\1\b/i.test(n)
+    /\b(is|are|was|were)\s+\1\b/i
+    .test(n)
   ){
+
     issues.push(
       'Có trợ động từ bị lặp.'
     );
+
   }
 
 
   if(
-    /\b(the|a|an)\s+\1\b/i.test(n)
+    /\b(the|a|an)\s+\1\b/i
+    .test(n)
   ){
+
     issues.push(
       'Có mạo từ bị lặp.'
     );
+
   }
 
 
-  const passive=[
+  const parts=[
 
     'crushed',
     'mixed',
@@ -2782,7 +3239,6 @@ function grammarIssues(text){
     'compressed',
     'washed',
     'labelled',
-    'labeled',
     'sealed',
     'boiled',
     'transported'
@@ -2793,14 +3249,17 @@ function grammarIssues(text){
   for(
     const p
     of
-    passive
+    parts
   ){
 
     const re=
-    new RegExp(
-      `\\b(?:clay|bricks|bottles|tomatoes|noodles|mixture|plastic)\\s+${p}\\b`,
-      'i'
-    );
+      new RegExp(
+
+        `\\b(?:clay|bricks|bottles|tomatoes|noodles|mixture|plastic)\\s+${p}\\b`,
+
+        'i'
+
+      );
 
 
     if(
@@ -2824,297 +3283,273 @@ function grammarIssues(text){
 
 }
 
+
+/* =========================================================
+   FLEXIBLE BODY GRADING
+========================================================= */
+
+function globalBodyGroups(){
+
+  const all=[
+
+    ...(task.body1?.concepts||[]),
+
+    ...(task.body2?.concepts||[])
+
+  ];
+
+
+  const seen=
+    new Set();
+
+
+  return all.filter(
+    g=>{
+
+      const key=
+        (g||[])
+        .map(norm)
+        .sort()
+        .join('|');
+
+
+      if(
+        !key
+        ||
+        seen.has(key)
+      ){
+
+        return false;
+
+      }
+
+
+      seen.add(key);
+
+      return true;
+
+    }
+  );
+
+}
+
 function flexibleBodyGrade(
   step,
   text
 ){
 
   const cfg=
-  sectionConfig(step);
+    sectionConfig(step);
 
 
   const groups=
-  globalBodyGroups();
+    globalBodyGroups();
 
 
   const h=
-  groupHits(
-    text,
-    groups
-  );
+    hits(
+      text,
+      groups
+    );
 
 
   const hitCount=
-  h.filter(Boolean).length;
+    h.filter(Boolean).length;
 
 
   const minHits=
-  Math.max(
-    2,
-    Math.min(
-      4,
-      Math.ceil(
-        groups.length
-        *
-        .18
+    Math.max(
+      2,
+      Math.min(
+        4,
+        Math.ceil(
+          groups.length*.18
+        )
       )
-    )
-  );
+    );
 
 
   const wc=
-  words(text);
+    words(text);
 
 
   const grammar=
-  grammarIssues(text);
+    grammarIssues(text);
+
+
+  const topic=
+    topicCheck(text);
 
 
   const seqOK=
 
-  !cfg.sequence?.length
+    !cfg.sequence?.length
 
-  ||
+    ||
 
-  containsAny(
-    text,
-    cfg.sequence
-  );
-
-
-  let overlapPenalty=0;
-
-
-  if(
-    step===4
-    &&
-    state.drafts.body1
-  ){
-
-    const a=
-    norm(
-      state.drafts.body1
-    )
-    .split(/\s+/)
-    .filter(
-      x=>x.length>3
+    containsAny(
+      text,
+      cfg.sequence
     );
-
-
-    const b=
-    norm(text)
-    .split(/\s+/)
-    .filter(
-      x=>x.length>3
-    );
-
-
-    const A=
-    new Set(a);
-
-
-    const B=
-    new Set(b);
-
-
-    let overlap=0;
-
-
-    A.forEach(
-      x=>{
-
-        if(
-          B.has(x)
-        ){
-          overlap++;
-        }
-
-      }
-    );
-
-
-    const ratio=
-    overlap
-    /
-    Math.max(
-      1,
-      Math.min(
-        A.size,
-        B.size
-      )
-    );
-
-
-    if(
-      ratio>.72
-    ){
-      overlapPenalty=12;
-    }
-
-  }
 
 
   const combined=
 
-  step===4
-
-  ?
-
-  String(
-    state.drafts.body1
-    ||
-    ''
-  )
-  +
-  ' '
-  +
-  String(
-    text
-    ||
-    ''
-  )
-
-  :
-
-  String(
-    text
-    ||
-    ''
-  );
-
-
-  const combinedHits=
-  groupHits(
-    combined,
-    groups
-  );
-
-
-  const combinedRatio=
-
-  combinedHits.length
-
-  ?
-
-  combinedHits
-  .filter(Boolean)
-  .length
-  /
-  combinedHits.length
-
-  :
-
-  0;
-
-
-  const coverageOK=
-
-  step===4
-
-  ?
-
-  combinedRatio>=.48
-
-  :
-
-  true;
-
-
-  let score=
-
-  Math.round(
-    Math.min(
-      1,
-      hitCount/minHits
-    )
-    *
-    55
-  )
-
-  +
-
-  (
-    wc>=cfg.minWords
-
-    ?
-
-    15
-
-    :
-
-    Math.round(
-      15
-      *
-      Math.min(
-        1,
-        wc/cfg.minWords
-      )
-    )
-  )
-
-  +
-
-  (
-    seqOK
-    ?
-    10
-    :
-    0
-  )
-
-  +
-
-  Math.max(
-    0,
-    10
-    -
-    grammar.length
-    *
-    4
-  )
-
-  +
-
-  (
     step===4
 
     ?
 
-    (
-      coverageOK
-      ?
-      10
-      :
-      Math.round(
-        combinedRatio
-        /
-        .48
-        *
-        10
-      )
+    String(
+      state.drafts.body1
+      ||
+      ''
+    )
+    +
+    ' '
+    +
+    String(
+      text
+      ||
+      ''
     )
 
     :
 
-    10
-  )
+    String(
+      text
+      ||
+      ''
+    );
 
-  -
 
-  overlapPenalty;
+  const combinedHits=
+    hits(
+      combined,
+      groups
+    );
 
 
-  score=
-  Math.max(
-    0,
+  const combinedRatio=
+
+    combinedHits.length
+
+    ?
+
+    combinedHits
+    .filter(Boolean)
+    .length
+    /
+    combinedHits.length
+
+    :
+
+    0;
+
+
+  const coverageOK=
+
+    step===4
+
+    ?
+
+    combinedRatio>=.48
+
+    :
+
+    true;
+
+
+  let pts=
+
+    Math.round(
+      Math.min(
+        1,
+        hitCount/minHits
+      )
+      *
+      55
+    )
+
+    +
+
+    (
+      wc>=cfg.minWords
+
+      ?
+
+      15
+
+      :
+
+      Math.round(
+        15
+        *
+        Math.min(
+          1,
+          wc/cfg.minWords
+        )
+      )
+    )
+
+    +
+
+    (
+      seqOK
+      ?
+      10
+      :
+      0
+    )
+
+    +
+
+    Math.max(
+      0,
+      10
+      -
+      grammar.length*4
+    )
+
+    +
+
+    (
+      step===4
+
+      ?
+
+      (
+        coverageOK
+        ?
+        10
+        :
+        Math.round(
+          combinedRatio/.48*10
+        )
+      )
+
+      :
+
+      10
+    );
+
+
+  pts=
     Math.min(
       100,
-      score
-    )
-  );
+      pts
+    );
 
 
   const issues=[];
+
+
+  if(topic.wrong.length){
+
+    issues.push(
+      `Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
+    );
+
+  }
 
 
   if(
@@ -3139,9 +3574,7 @@ function flexibleBodyGrade(
   }
 
 
-  if(
-    !seqOK
-  ){
+  if(!seqOK){
 
     issues.push(
       'Nên có từ/cụm nối để thể hiện đúng trình tự các stage.'
@@ -3157,18 +3590,7 @@ function flexibleBodyGrade(
   ){
 
     issues.push(
-      'Khi ghép Body 1 và Body 2, vẫn còn khá nhiều stage của toàn bộ process chưa được thể hiện. Hãy đối chiếu lại sơ đồ để tránh bỏ sót.'
-    );
-
-  }
-
-
-  if(
-    overlapPenalty
-  ){
-
-    issues.push(
-      'Body 2 đang lặp khá nhiều nội dung của Body 1. Hãy tiếp tục từ điểm Body 1 đã dừng.'
+      'Khi ghép Body 1 và Body 2, vẫn còn khá nhiều stage/đặc điểm của toàn bộ process chưa được thể hiện. Hãy đối chiếu lại sơ đồ để tránh bỏ sót.'
     );
 
   }
@@ -3184,44 +3606,63 @@ function flexibleBodyGrade(
   );
 
 
+  if(topic.wrong.length){
+
+    pts=
+      Math.min(
+        pts,
+        45
+      );
+
+  }
+
+
   const completed=
 
-  hitCount>=minHits
+    topic.wrong.length===0
 
-  &&
+    &&
 
-  wc
-  >=
-  Math.round(
-    cfg.minWords
-    *
-    .8
-  )
+    hitCount>=minHits
 
-  &&
+    &&
 
-  seqOK
+    wc>=Math.round(
+      cfg.minWords*.8
+    )
 
-  &&
+    &&
 
-  coverageOK
+    seqOK
 
-  &&
+    &&
 
-  overlapPenalty===0
+    coverageOK
 
-  &&
+    &&
 
-  grammar.length<=1;
+    grammar.length<=1;
 
 
   return {
 
-    total:score,
+    total:pts,
 
     completed,
 
+    ratio:
+      hitCount
+      /
+      Math.max(
+        1,
+        groups.length
+      ),
+
     wc,
+
+    seqOK,
+
+    grammar,
 
     issues,
 
@@ -3233,10 +3674,33 @@ function flexibleBodyGrade(
 
 }
 
+
+/* =========================================================
+   SECTION GRADING
+========================================================= */
+
 function sectionGrade(
   step,
   text
 ){
+
+  if(step===1){
+
+    return gradeIntroduction(
+      text
+    );
+
+  }
+
+
+  if(step===2){
+
+    return gradeOverview(
+      text
+    );
+
+  }
+
 
   if(
     step===3
@@ -3253,138 +3717,147 @@ function sectionGrade(
 
 
   const cfg=
-  sectionConfig(step);
+    sectionConfig(step);
 
 
   const h=
-  groupHits(
-    text,
-    cfg.concepts
-    ||
-    []
-  );
+    hits(
+      text,
+      cfg.concepts||[]
+    );
 
 
   const ratio=
 
-  h.length
+    h.length
 
-  ?
+    ?
 
-  h
-  .filter(Boolean)
-  .length
-  /
-  h.length
+    h.filter(Boolean).length
+    /
+    h.length
 
-  :
+    :
 
-  1;
+    1;
 
 
   const wc=
-  words(text);
+    words(text);
 
 
   const grammar=
-  grammarIssues(text);
+    grammarIssues(text);
 
 
-  const seqOK=
-
-  !cfg.sequence?.length
-
-  ||
-
-  containsAny(
-    text,
-    cfg.sequence
-  );
+  const topic=
+    topicCheck(text);
 
 
-  let score=
+  let seqOK=true;
 
-  Math.round(
-    ratio
-    *
-    70
-  )
 
-  +
+  if(cfg.sequence?.length){
 
-  (
-    wc>=cfg.minWords
+    seqOK=
+      containsAny(
+        text,
+        cfg.sequence
+      );
 
-    ?
+  }
 
-    15
 
-    :
+  let pts=
 
     Math.round(
+      ratio*70
+    )
+
+    +
+
+    (
+      wc>=cfg.minWords
+
+      ?
+
       15
-      *
-      Math.min(
-        1,
-        wc/cfg.minWords
+
+      :
+
+      Math.round(
+        15
+        *
+        Math.min(
+          1,
+          wc/cfg.minWords
+        )
       )
     )
-  )
 
-  +
+    +
 
-  (
-    seqOK
-    ?
-    8
-    :
-    0
-  )
+    (
+      seqOK
+      ?
+      8
+      :
+      0
+    )
 
-  +
+    +
 
-  Math.max(
-    0,
-    7
-    -
-    grammar.length
-    *
-    3
-  );
+    Math.max(
+      0,
+      7
+      -
+      grammar.length*3
+    );
 
 
-  score=
-  Math.min(
-    100,
-    score
-  );
+  pts=
+    Math.min(
+      100,
+      pts
+    );
 
 
   const issues=[];
 
 
-  if(
-    ratio<.75
-  ){
+  if(topic.wrong.length){
 
-    const missing=
-    (
-      cfg.concepts
-      ||
-      []
-    )
-    .filter(
-      (_,i)=>!h[i]
-    )
-    .map(
-      g=>g[0]
+    issues.push(
+      `Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
     );
+
+  }
+
+
+  if(ratio<.75){
+
+    const miss=
+
+      (
+        cfg.concepts
+        ||
+        []
+      )
+
+      .filter(
+        (_,i)=>
+        !h[i]
+      )
+
+      .map(
+        g=>g[0]
+      );
 
 
     issues.push(
-      'Ý/stage còn thiếu hoặc chưa rõ: '
+      'Ý/stage còn thiếu: '
       +
-      missing.join(', ')
+      miss.join(', ')
       +
       '.'
     );
@@ -3403,9 +3876,7 @@ function sectionGrade(
   }
 
 
-  if(
-    !seqOK
-  ){
+  if(!seqOK){
 
     issues.push(
       'Nên có từ/cụm nối để thể hiện đúng trình tự các stage.'
@@ -3424,22 +3895,33 @@ function sectionGrade(
   );
 
 
+  if(topic.wrong.length){
+
+    pts=
+      Math.min(
+        pts,
+        45
+      );
+
+  }
+
+
   return {
 
-    total:score,
+    total:pts,
 
     completed:
+
+      topic.wrong.length===0
+
+      &&
 
       ratio>=.75
 
       &&
 
-      wc
-      >=
-      Math.round(
-        cfg.minWords
-        *
-        .8
+      wc>=Math.round(
+        cfg.minWords*.8
       )
 
       &&
@@ -3458,258 +3940,247 @@ function sectionGrade(
 
 }
 
+
+/* =========================================================
+   WRITING SCREEN
+========================================================= */
+
 function renderWriting(step){
 
   const title=
-  STEP_NAMES[step];
+    STEP_NAMES[step];
 
 
   const d=
-  state.drafts[
-    draftKey(step)
-  ]
-  ||
-  '';
+    state.drafts[
+      draftKey(step)
+    ]
+    ||
+    '';
 
 
   const full=
-  step===5;
+    step===5;
 
 
   const review=
 
-  full
+    full
 
-  ?
+    ?
 
-  `
+    `
 
-    <div class="reviewparts">
+<div class="reviewparts">
 
-      <details>
+  <details>
 
-        <summary>
-          Xem lại Introduction đã đạt
-        </summary>
+    <summary>
+      Xem lại Introduction đã đạt
+    </summary>
 
-        <p>
-          ${esc(state.drafts.intro||'')}
-        </p>
+    <p>
+      ${esc(state.drafts.intro||'')}
+    </p>
 
-      </details>
-
-
-      <details>
-
-        <summary>
-          Xem lại Overview đã đạt
-        </summary>
-
-        <p>
-          ${esc(state.drafts.overview||'')}
-        </p>
-
-      </details>
+  </details>
 
 
-      <details>
+  <details>
 
-        <summary>
-          Xem lại Body 1 đã đạt
-        </summary>
+    <summary>
+      Xem lại Overview đã đạt
+    </summary>
 
-        <p>
-          ${esc(state.drafts.body1||'')}
-        </p>
+    <p>
+      ${esc(state.drafts.overview||'')}
+    </p>
 
-      </details>
+  </details>
 
 
-      <details>
+  <details>
 
-        <summary>
-          Xem lại Body 2 đã đạt
-        </summary>
+    <summary>
+      Xem lại Body 1 đã đạt
+    </summary>
 
-        <p>
-          ${esc(state.drafts.body2||'')}
-        </p>
+    <p>
+      ${esc(state.drafts.body1||'')}
+    </p>
 
-      </details>
+  </details>
 
-    </div>
 
-  `
+  <details>
 
-  :
+    <summary>
+      Xem lại Body 2 đã đạt
+    </summary>
 
-  '';
+    <p>
+      ${esc(state.drafts.body2||'')}
+    </p>
+
+  </details>
+
+</div>
+
+    `
+
+    :
+
+    '';
 
 
   main.innerHTML=`
 
-    <div class="ey">
+<div class="ey">
 
-      <span class="chip">
-        BƯỚC ${step+1}
-      </span>
+  <span class="chip">
+    BƯỚC ${step+1}
+  </span>
 
-      <span class="counter">
-        ${esc(title)}
-      </span>
+  <span class="counter">
+    ${esc(title)}
+  </span>
 
-    </div>
-
-
-    <h2>
-      ${esc(title)}
-    </h2>
+</div>
 
 
-    <p class="sub">
-
-      ${
-        full
-
-        ?
-
-        `
-          Viết lại toàn bộ bài từ trí nhớ.
-          Chỉ mở các phần xem lại khi thật sự cần.
-        `
-
-        :
-
-        `
-          Viết phần này dựa trên sơ đồ và
-          kết quả phân tích ở Bước 1.
-        `
-      }
-
-    </p>
+<h2>
+  ${esc(title)}
+</h2>
 
 
-    <div class="guide">
-      ${guideFor(step)}
-    </div>
+<p class="sub">
+
+  ${
+    step===5
+
+    ?
+
+    `
+      Viết lại toàn bộ bài từ trí nhớ.
+      Chỉ mở các phần xem lại khi thật sự cần.
+    `
+
+    :
+
+    `
+      Viết phần này dựa trên sơ đồ
+      và kết quả phân tích ở Bước 1.
+    `
+  }
+
+</p>
 
 
-    ${review}
+<div class="guide">
+  ${guideFor(step)}
+</div>
 
 
-    <div class="writehead">
-
-      <span>
-        Bài viết của em
-      </span>
-
-      <span
-        id="wordCount"
-        class="wc"
-      >
-        0 từ
-      </span>
-
-    </div>
+${review}
 
 
-    <textarea
+<div class="writehead">
 
-      id="writeBox"
+  <span>
+    Bài viết của em
+  </span>
 
-      class="
-        write
-        ${
-          full
-          ?
-          'full'
-          :
-          ''
-        }
-      "
+  <span
+    id="wordCount"
+    class="wc"
+  >
+    0 từ
+  </span>
 
-      placeholder="${
-        full
-        ?
-        'Viết bài hoàn chỉnh tại đây...'
-        :
-        'Viết '
-        +
-        esc(title)
-        +
-        ' tại đây...'
-      }"
-
-    >${esc(d)}</textarea>
+</div>
 
 
-    <div class="actions">
-
-      <button
-        id="prevBtn"
-        class="btn"
-      >
-        ← Bước trước
-      </button>
-
-
-      <button
-        id="checkBtn"
-        class="btn primary"
-      >
-        Kiểm tra & chữa Bước ${step+1} ✓
-      </button>
-
-
-      <button
-
-        id="nextBtn"
-
-        class="btn"
-
-        ${
-          done(step)
-          &&
-          step<5
-
-          ?
-
-          ''
-
-          :
-
-          'disabled'
-        }
-
-      >
-
-        ${
-          step===5
-          ?
-          'Hoàn tất'
-          :
-          'Bước tiếp →'
-        }
-
-      </button>
-
-    </div>
+<textarea
+  id="writeBox"
+  class="
+    write
+    ${
+      full
+      ?
+      'full'
+      :
+      ''
+    }
+  "
+  placeholder="${
+    full
+    ?
+    'Viết bài hoàn chỉnh tại đây...'
+    :
+    'Viết '
+    +
+    esc(title)
+    +
+    ' tại đây...'
+  }"
+>${esc(d)}</textarea>
 
 
-    <div
-      id="feedback"
-      class="feedback"
-    ></div>
+<div class="actions">
+
+  <button
+    id="prevBtn"
+    class="btn"
+  >
+    ← Bước trước
+  </button>
+
+  <button
+    id="checkBtn"
+    class="btn primary"
+  >
+    Kiểm tra & chữa Bước ${step+1} ✓
+  </button>
+
+  <button
+    id="nextBtn"
+    class="btn"
+    ${
+      done(step)
+      &&
+      step<5
+      ?
+      ''
+      :
+      'disabled'
+    }
+  >
+
+    ${
+      step===5
+      ?
+      'Hoàn tất'
+      :
+      'Bước tiếp →'
+    }
+
+  </button>
+
+</div>
 
 
-    <div
-      id="finalDone"
-    ></div>
+<div
+  id="feedback"
+  class="feedback"
+></div>
+
+
+<div id="finalDone"></div>
 
   `;
 
 
-  updateWordCount();
+  updateWC();
 
 
   writeBox.addEventListener(
@@ -3719,41 +4190,41 @@ function renderWriting(step){
       state.drafts[
         draftKey(step)
       ]=
-      writeBox.value;
+        writeBox.value;
 
 
       save();
 
-      updateWordCount();
+      updateWC();
 
     }
   );
 
 
   prevBtn.onclick=
-  ()=>
-  goStep(
-    step-1
-  );
+    ()=>
+    goStep(
+      step-1
+    );
 
 
   checkBtn.onclick=
-  ()=>
-  checkWriting(step);
+    ()=>
+    checkWriting(step);
 
 
   nextBtn.onclick=
-  ()=>{
+    ()=>{
 
-    if(
-      step<5
-    ){
-      goStep(
-        step+1
-      );
-    }
+      if(step<5){
 
-  };
+        goStep(
+          step+1
+        );
+
+      }
+
+    };
 
 
   if(
@@ -3762,61 +4233,67 @@ function renderWriting(step){
 
     showWritingFeedback(
       step,
-      state.scores[step]
+      state.scores[step],
+      false
     );
 
   }
 
 }
 
-function updateWordCount(){
+function updateWC(){
 
-  const c=
-  document.getElementById(
-    'wordCount'
-  );
+  const e=
+    document.getElementById(
+      'wordCount'
+    );
 
 
-  const b=
-  document.getElementById(
-    'writeBox'
-  );
+  const w=
+    document.getElementById(
+      'writeBox'
+    );
 
 
   if(
-    c
+    e
     &&
-    b
+    w
   ){
 
-    c.textContent=
-    `${words(b.value)} từ`;
+    e.textContent=
+      `${words(w.value)} từ`;
 
   }
 
 }
 
+
+/* =========================================================
+   FULL ESSAY
+========================================================= */
+
 function fullGrade(text){
 
   const wc=
-  words(text);
+    words(text);
 
 
   const paras=
-  String(
-    text
-    ||
-    ''
-  )
-  .trim()
-  .split(
-    /\n\s*\n|\n(?=[A-Z])/
-  )
-  .filter(
-    x=>
-    x.trim().length>20
-  )
-  .length;
+    String(
+      text
+      ||
+      ''
+    )
+    .trim()
+    .split(
+      /\n\s*\n|\n(?=[A-Z])/
+    )
+    .filter(
+      x=>
+      x.trim().length>20
+    )
+    .length;
 
 
   const groups=[
@@ -3833,98 +4310,115 @@ function fullGrade(text){
 
 
   const h=
-  groupHits(
-    text,
-    groups
-  );
+    hits(
+      text,
+      groups
+    );
 
 
   const ratio=
-  h.filter(Boolean).length
-  /
-  h.length;
+    h.filter(Boolean).length
+    /
+    h.length;
 
 
   const grammar=
-  grammarIssues(text);
+    grammarIssues(text);
+
+
+  const topic=
+    topicCheck(text);
 
 
   const hasOverview=
-  /\boverall\b/i.test(text);
+    /\boverall\b/i
+    .test(text);
 
 
-  let score=
-
-  Math.round(
-    ratio
-    *
-    55
-  )
-
-  +
-
-  (
-    wc>=150
-
-    ?
-
-    20
-
-    :
+  let pts=
 
     Math.round(
-      Math.min(
-        20,
-        wc/150*20
+      ratio*55
+    )
+
+    +
+
+    (
+      wc>=150
+
+      ?
+
+      20
+
+      :
+
+      Math.round(
+        Math.min(
+          20,
+          wc/150*20
+        )
       )
     )
-  )
 
-  +
+    +
 
-  (
-    hasOverview
-    ?
-    10
-    :
-    0
-  )
+    (
+      hasOverview
+      ?
+      10
+      :
+      0
+    )
 
-  +
+    +
 
-  (
-    paras>=4
-    ?
-    8
-    :
-    0
-  )
+    (
+      paras>=4
+      ?
+      8
+      :
+      0
+    )
 
-  +
+    +
 
-  Math.max(
-    0,
-    7
-    -
-    grammar.length
-    *
-    3
-  );
+    Math.max(
+      0,
+      7
+      -
+      grammar.length*3
+    );
 
 
-  score=
-  Math.min(
-    100,
-    score
-  );
+  pts=
+    Math.min(
+      100,
+      pts
+    );
 
 
   const issues=[];
 
 
-  if(
-    wc<150
-  ){
+  if(!topic.requiredOK){
+
+    issues.push(
+      `Bài chưa thể hiện rõ đúng đối tượng chính: “${topic.expected}”.`
+    );
+
+  }
+
+
+  if(topic.wrong.length){
+
+    issues.push(
+      `Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
+    );
+
+  }
+
+
+  if(wc<150){
 
     issues.push(
       `Bài hiện có ${wc} từ; Writing Task 1 nên đạt tối thiểu 150 từ.`
@@ -3933,9 +4427,7 @@ function fullGrade(text){
   }
 
 
-  if(
-    !hasOverview
-  ){
+  if(!hasOverview){
 
     issues.push(
       'Chưa thấy Overview rõ ràng (có thể mở đầu bằng “Overall,”).'
@@ -3944,9 +4436,7 @@ function fullGrade(text){
   }
 
 
-  if(
-    paras<4
-  ){
+  if(paras<4){
 
     issues.push(
       `Bài nên tách 4 phần/đoạn rõ ràng; hệ thống đang nhận khoảng ${paras} đoạn.`
@@ -3955,22 +4445,25 @@ function fullGrade(text){
   }
 
 
-  if(
-    ratio<.72
-  ){
+  if(ratio<.72){
 
     const missing=
-    groups
-    .filter(
-      (_,i)=>!h[i]
-    )
-    .map(
-      g=>g[0]
-    )
-    .slice(
-      0,
-      12
-    );
+
+      groups
+
+      .filter(
+        (_,i)=>
+        !h[i]
+      )
+
+      .map(
+        g=>g[0]
+      )
+
+      .slice(
+        0,
+        12
+      );
 
 
     issues.push(
@@ -3994,31 +4487,63 @@ function fullGrade(text){
   );
 
 
+  if(
+    topic.wrong.length
+    ||
+    !topic.requiredOK
+  ){
+
+    pts=
+      Math.min(
+        pts,
+        50
+      );
+
+  }
+
+
+  const completed=
+
+    topic.requiredOK
+
+    &&
+
+    topic.wrong.length===0
+
+    &&
+
+    wc>=150
+
+    &&
+
+    hasOverview
+
+    &&
+
+    paras>=4
+
+    &&
+
+    ratio>=.72
+
+    &&
+
+    grammar.length<=1;
+
+
   return {
 
-    total:score,
+    total:pts,
 
-    completed:
+    completed,
 
-      wc>=150
-
-      &&
-
-      hasOverview
-
-      &&
-
-      paras>=4
-
-      &&
-
-      ratio>=.72
-
-      &&
-
-      grammar.length<=1,
+    ratio,
 
     wc,
+
+    paras,
+
+    grammar,
 
     issues
 
@@ -4026,50 +4551,66 @@ function fullGrade(text){
 
 }
 
+
+/* =========================================================
+   CHECK + FEEDBACK
+========================================================= */
+
 function checkWriting(step){
 
   saveCurrentDraft();
 
 
   state.attempts[step]=
-  attempts(step)
-  +
-  1;
+    attempts(step)
+    +
+    1;
 
 
   const text=
-  state.drafts[
-    draftKey(step)
-  ]
-  ||
-  '';
+    state.drafts[
+      draftKey(step)
+    ]
+    ||
+    '';
 
 
-  const result=
+  const r=
 
-  step===5
+    step===5
 
-  ?
+    ?
 
-  fullGrade(text)
+    fullGrade(text)
 
-  :
+    :
 
-  sectionGrade(
-    step,
-    text
-  );
+    sectionGrade(
+      step,
+      text
+    );
 
 
   state.scores[step]=
-  result;
+    r;
 
 
-  if(
-    result.completed
-  ){
+  if(r.completed){
 
     completeStep(step);
+
+  }else{
+
+    /*
+      Nếu bước đã từng đạt nhưng học sinh
+      sửa thành câu sai thì thu hồi trạng thái đạt,
+      đồng thời khóa các bước phía sau.
+    */
+
+    state.completed=
+      state.completed.filter(
+        x=>x<step
+      );
 
   }
 
@@ -4079,7 +4620,8 @@ function checkWriting(step){
 
   showWritingFeedback(
     step,
-    result
+    r,
+    true
   );
 
 
@@ -4087,20 +4629,20 @@ function checkWriting(step){
   renderProgress();
 
 
-  const next=
-  document.getElementById(
-    'nextBtn'
-  );
+  const nb=
+    document.getElementById(
+      'nextBtn'
+    );
 
 
   if(
-    next
+    nb
     &&
     step<5
   ){
 
-    next.disabled=
-    !done(step);
+    nb.disabled=
+      !done(step);
 
   }
 
@@ -4112,9 +4654,9 @@ function showWritingFeedback(
 ){
 
   const f=
-  document.getElementById(
-    'feedback'
-  );
+    document.getElementById(
+      'feedback'
+    );
 
 
   if(!f){
@@ -4123,91 +4665,98 @@ function showWritingFeedback(
 
 
   f.className=
-  'feedback show';
+    'feedback show';
 
 
   const showRef=
 
-  !r.completed
+    !r.completed
 
-  &&
+    &&
 
-  attempts(step)>=2;
+    attempts(step)>=2;
 
 
-  const reference=
+  const ref=
 
-  step===5
+    step===5
 
-  ?
+    ?
 
-  task.fullReference
+    task.fullReference
 
-  :
+    :
 
-  sectionConfig(step).reference;
+    sectionConfig(step).reference;
 
 
   const refLabel=
 
-  (
-    step===3
-    ||
-    step===4
-  )
+    (
+      step===3
+      ||
+      step===4
+    )
 
-  ?
+    ?
 
-  'Một cách triển khai tham khảo — không phải cách chia duy nhất:'
+    'Một cách triển khai tham khảo (không phải cách chia duy nhất):'
 
-  :
+    :
 
-  'Bài tham khảo:';
+    'Bài tham khảo:';
 
 
-  const detail=
+  const issues=
 
-  r.issues?.length
+    r.issues?.length
 
-  ?
+    ?
 
-  `
+    `
 
-    <div
-      class="
-        detail
-        ${
-          r.completed
-          ?
-          'goodbox'
-          :
-          r.total<60
-          ?
-          'badbox'
-          :
-          ''
-        }
-      "
-    >
+<div
+  class="
+    detail
+    ${
+      r.completed
+      ?
+      'goodbox'
+      :
+      r.total<60
+      ?
+      'badbox'
+      :
+      ''
+    }
+  "
+>
 
-      <b>
+  <b>
 
-        ${
-          r.completed
-          ?
-          'Phần này đạt yêu cầu.'
-          :
-          'Cần sửa:'
-        }
+    ${
+      r.completed
+      ?
+      'Phần này đạt yêu cầu.'
+      :
+      'Cần sửa:'
+    }
 
-      </b>
+  </b>
 
+  ${
+    r.issues.length
+
+    ?
+
+    `
       <ul>
 
         ${
           r.issues
           .map(
-            x=>`
+            x=>
+            `
               <li>
                 ${esc(x)}
               </li>
@@ -4217,116 +4766,122 @@ function showWritingFeedback(
         }
 
       </ul>
+    `
+
+    :
+
+    ''
+  }
+
+</div>
+
+    `
+
+    :
+
+    `
+
+<div class="detail goodbox">
+
+  <b>
+    Đạt yêu cầu.
+  </b>
+
+  Nội dung và trình tự chính đã phù hợp.
+
+</div>
+
+    `;
+
+
+  f.innerHTML=`
+
+<div class="scorebar">
+
+  <div>
+
+    <div class="score">
+      ${r.total}/100
+    </div>
+
+    <div
+      class="
+        status
+        ${
+          r.completed
+          ?
+          'good'
+          :
+          r.total>=70
+          ?
+          'warn'
+          :
+          'bad'
+        }
+      "
+    >
+
+      ${
+        r.completed
+        ?
+        '✓ Hoàn thành bước này'
+        :
+        r.total>=70
+        ?
+        'Gần đạt — sửa thêm'
+        :
+        'Cần chỉnh lại'
+      }
 
     </div>
+
+  </div>
+
+
+  <div class="counter">
+
+    Lần kiểm tra:
+    ${attempts(step)}
+
+  </div>
+
+</div>
+
+
+${issues}
+
+
+${
+  showRef
+
+  ?
+
+  `
+
+<div class="reference">
+
+  <b>
+    ${refLabel}
+  </b>
+
+  <br>
+
+  ${
+    esc(ref)
+    .replace(
+      /\n/g,
+      '<br>'
+    )
+  }
+
+</div>
 
   `
 
   :
 
-  `
-
-    <div class="detail goodbox">
-
-      <b>
-        Đạt yêu cầu.
-      </b>
-
-      Nội dung và trình tự chính đã phù hợp.
-
-    </div>
-
-  `;
-
-
-  f.innerHTML=`
-
-    <div class="scorebar">
-
-      <div>
-
-        <div class="score">
-          ${r.total}/100
-        </div>
-
-        <div
-          class="
-            status
-            ${
-              r.completed
-              ?
-              'good'
-              :
-              r.total>=70
-              ?
-              'warn'
-              :
-              'bad'
-            }
-          "
-        >
-
-          ${
-            r.completed
-            ?
-            '✓ Hoàn thành bước này'
-            :
-            r.total>=70
-            ?
-            'Gần đạt — sửa thêm'
-            :
-            'Cần chỉnh lại'
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="counter">
-
-        Lần kiểm tra:
-        ${attempts(step)}
-
-      </div>
-
-    </div>
-
-
-    ${detail}
-
-
-    ${
-      showRef
-
-      ?
-
-      `
-
-        <div class="reference">
-
-          <b>
-            ${refLabel}
-          </b>
-
-          <br>
-
-          ${
-            esc(reference)
-            .replace(
-              /\n/g,
-              '<br>'
-            )
-          }
-
-        </div>
-
-      `
-
-      :
-
-      ''
-    }
+  ''
+}
 
   `;
 
@@ -4339,37 +4894,43 @@ function showWritingFeedback(
 
     finalDone.innerHTML=`
 
-      <div class="finaldone">
+<div class="finaldone">
 
-        <h3>
-          🎉 Hoàn thành
-          ${esc(task.title)}
-        </h3>
+  <h3>
+    🎉 Hoàn thành
+    ${esc(task.title)}
+  </h3>
 
-        <p>
-          Em đã đi đủ 6 bước từ phân tích
-          đến full essay. Có thể quay lại
-          từng bước để ôn lại cách triển khai.
-        </p>
+  <p>
+    Em đã đi đủ 6 bước từ phân tích
+    đến full essay.
+    Có thể quay lại từng bước
+    để ôn lại cách triển khai.
+  </p>
 
-        <a
-          class="btn primary"
-          href="../"
-          style="
-            display:inline-block;
-            text-decoration:none
-          "
-        >
-          Về danh sách Process
-        </a>
+  <a
+    class="btn primary"
+    href="../"
+    style="
+      display:inline-block;
+      text-decoration:none
+    "
+  >
+    Về danh sách Process
+  </a>
 
-      </div>
+</div>
 
     `;
 
   }
 
 }
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 function goStep(i){
 
@@ -4381,11 +4942,14 @@ function goStep(i){
     ||
     i>unlockIndex()
   ){
+
     return;
+
   }
 
 
   state.current=i;
+
 
   save();
 
@@ -4393,11 +4957,8 @@ function goStep(i){
 
 
   window.scrollTo({
-
     top:0,
-
     behavior:'smooth'
-
   });
 
 }
@@ -4409,33 +4970,40 @@ function render(){
   renderProgress();
 
 
-  state.current===0
+  if(
+    state.current===0
+  ){
 
-  ?
+    renderAnalysis();
 
-  renderAnalysis()
+  }else{
 
-  :
+    renderWriting(
+      state.current
+    );
 
-  renderWriting(
-    state.current
-  );
+  }
 
 }
+
+
+/* =========================================================
+   START
+========================================================= */
 
 load();
 
 mount();
 
 state.current=
-Math.min(
-  Number(
-    state.current
-  )
-  ||
-  0,
-  unlockIndex()
-);
+  Math.min(
+    Number(
+      state.current
+    )
+    ||
+    0,
+    unlockIndex()
+  );
 
 render();
 
