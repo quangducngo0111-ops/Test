@@ -53,27 +53,41 @@ main{padding:24px 0 50px}
   padding:7px;background:#eceff5;border-radius:15px
 }
 .tab{
-  border:0;background:transparent;border-radius:10px;padding:12px 10px;text-align:left;
-  color:#4f576a;font-size:11px;font-weight:900
+  border:0;background:transparent;border-radius:12px;padding:11px 12px;text-align:left;
+  color:#4f576a;font-size:11px;font-weight:900;display:flex;align-items:center;gap:9px
 }
-.tab small{display:block;margin-top:3px;color:#9399a7;font-weight:700}
+.tab-icon{
+  width:30px;height:30px;flex:0 0 30px;border-radius:9px;display:grid;place-items:center;
+  background:rgba(255,255,255,.62);font-size:16px
+}
+.tab-copy{min-width:0}
+.tab small{display:block;margin-top:2px;color:#9399a7;font-weight:700}
 .tab.active{background:#fff;color:#5d43b0;box-shadow:0 5px 15px rgba(41,35,80,.08)}
+.tab.active .tab-icon{background:#eee8ff}
 .head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:12px}
 .head h2{margin:0;font-size:24px;color:#21164b}.head p{margin:4px 0 0;color:var(--muted);font-size:11px}
 .count{font-size:11px;font-weight:900;color:#676e80}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .card{
-  display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:15px;
-  background:#fff;box-shadow:0 5px 13px rgba(50,55,90,.035);text-decoration:none;color:inherit;transition:.16s ease
+  position:relative;display:flex;align-items:center;gap:14px;padding:16px 17px;
+  border:1px solid var(--line);border-radius:17px;background:#fff;
+  box-shadow:0 6px 16px rgba(50,55,90,.04);text-decoration:none;color:inherit;transition:.16s ease;
+  min-height:96px
 }
-.card:hover{transform:translateY(-2px);border-color:#cabdfa;box-shadow:0 10px 22px rgba(61,50,105,.08)}
-.badge{
-  flex:0 0 42px;width:42px;height:42px;border-radius:12px;background:#edf3ff;color:#2f6fdf;
-  display:grid;place-items:center;font-size:10px;font-weight:950
+.card:hover{transform:translateY(-2px);border-color:#cabdfa;box-shadow:0 11px 24px rgba(61,50,105,.09)}
+.item-icon{
+  flex:0 0 54px;width:54px;height:54px;border-radius:15px;
+  background:linear-gradient(135deg,#f0ecff,#edf5ff);
+  display:grid;place-items:center;font-size:25px;border:1px solid #e6e0fb
 }
-.copy{min-width:0;flex:1}.copy b{display:block;font-size:12.5px;color:#1f2637;margin-bottom:3px}
-.copy span{display:block;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.arrow{font-size:16px;color:#9ca2b1}
+.item-no{
+  position:absolute;top:11px;right:42px;font-size:9px;font-weight:950;color:#a1a6b3;
+  letter-spacing:.05em
+}
+.copy{min-width:0;flex:1}
+.copy b{display:block;font-size:14px;color:#1f2637;margin-bottom:5px}
+.copy span{display:block;font-size:10.5px;color:var(--muted);line-height:1.45}
+.arrow{font-size:17px;color:#9ca2b1}
 .empty{grid-column:1/-1;padding:38px;text-align:center;border:1px dashed #d7dce6;border-radius:16px;background:#fff;color:#7d8493}
 .footer{padding:24px 0;text-align:center;color:#9aa0ad;font-size:10.5px}
 @media(max-width:850px){.tabs{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
@@ -110,37 +124,38 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_V6';
-const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_V7';
+const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
 const CACHE_TTL=6*60*60*1000;
 
 const CATS={
-  reading:{label:'Reading',root:'Practice/Reading/',sub:'Passage & dạng bài'},
-  listening:{label:'Listening',root:'Practice/Listening/',sub:'Part & dạng bài'},
-  writing1:{label:'Writing Task 1',root:'Practice/WritingTask1/',sub:'Task 1'},
-  writing2:{label:'Writing Task 2',root:'Practice/WritingTask2/',sub:'Task 2'},
-  vocabulary:{label:'Vocabulary',root:'Practice/Vocabulary/',sub:'Từ vựng & trò chơi'}
+  reading:{label:'Reading',icon:'📖',root:'Practice/Reading/',sub:'Passage & dạng bài'},
+  listening:{label:'Listening',icon:'🎧',root:'Practice/Listening/',sub:'Part & dạng bài'},
+  writing1:{label:'Writing Task 1',icon:'✍️',root:'Practice/WritingTask1/',sub:'Task 1'},
+  writing2:{label:'Writing Task 2',icon:'📝',root:'Practice/WritingTask2/',sub:'Task 2'},
+  vocabulary:{label:'Vocabulary',icon:'🎮',root:'Practice/Vocabulary/',sub:'Từ vựng & trò chơi'}
 };
 
 /* Fallback chỉ dùng khi GitHub API tạm lỗi / rate limit. */
 const FALLBACK={
   reading:[
-    {title:'Reading Passage 1',desc:'Reading practice',url:'./Reading/ReadingPassage1/'},
-    {title:'Reading Passage 2',desc:'Reading practice',url:'./Reading/ReadingPassage2/'}
+    {title:'Reading Passage 1',icon:'📘',desc:'Reading practice',url:'./Reading/ReadingPassage1/'},
+    {title:'Reading Passage 2',icon:'📗',desc:'Reading practice',url:'./Reading/ReadingPassage2/'}
   ],
   listening:[
-    {title:'Listening Part 1',desc:'IELTS Listening Part 1',url:'./Listening/Part1/'},
-    {title:'Listening Part 2',desc:'IELTS Listening Part 2',url:'./Listening/Part2/'},
-    {title:'Intensive Listening',desc:'Gap-fill + Dictation',url:'./Listening/IntensiveListening/'}
+    {title:'Listening Part 1',icon:'🎧',desc:'IELTS Listening Part 1',url:'./Listening/Part1/'},
+    {title:'Listening Part 2',icon:'🎧',desc:'IELTS Listening Part 2',url:'./Listening/Part2/'},
+    {title:'Intensive Listening',icon:'🎙️',desc:'Gap-fill + Dictation',url:'./Listening/IntensiveListening/'}
   ],
   writing1:[
-    {title:'Dynamic Datasets',desc:'Writing Task 1 practice',url:'./WritingTask1/DynamicDatasets/'}
+    {title:'Dynamic Datasets',icon:'📈',desc:'Biểu đồ thể hiện sự thay đổi theo thời gian',url:'./WritingTask1/DynamicDatasets/'},
+    {title:'Process',icon:'✍️',desc:'6 bài luyện Process theo từng bước, có chữa bài',url:'./WritingTask1/Process/'}
   ],
   writing2:[
-    {title:'Translation Practice',desc:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',url:'./WritingTask2/TranslationPractice/'}
+    {title:'Translation Practice',icon:'🔤',desc:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',url:'./WritingTask2/TranslationPractice/'}
   ],
   vocabulary:[
-    {title:'Vocabulary Practice',desc:'Từ vựng & trò chơi',url:'./Vocabulary/'}
+    {title:'Vocabulary Practice',icon:'🎮',desc:'Từ vựng & trò chơi',url:'./Vocabulary/'}
   ]
 };
 
@@ -165,13 +180,13 @@ function mergeItems(base=[],extra=[]){
     const key=String(item.url||item.title||'').trim().toLowerCase();
     if(!key) return;
 
-    merged.set(
-      key,
-      {
-        ...(merged.get(key)||{}),
-        ...item
-      }
-    );
+    const previous=merged.get(key)||{};
+    const next={...previous,...item};
+
+    if(previous.icon && (!item.icon || item.icon==='📚')) next.icon=previous.icon;
+    if(previous.desc && item.desc==='Dạng bài luyện tập') next.desc=previous.desc;
+
+    merged.set(key,next);
   });
 
   return [...merged.values()];
@@ -220,18 +235,40 @@ function item(path,root){
     MatchingSentenceEndings:'Matching Sentence Endings',SentenceCompletion:'Sentence Completion',SummaryCompletion:'Summary Completion',
     TableCompletion:'Table Completion',NoteCompletion:'Note Completion',FlowChartCompletion:'Flow-chart Completion',
     ShortAnswerQuestions:'Short Answer Questions',MultipleChoice:'Multiple Choice',DiagramLabelling:'Diagram Labelling',
-    DynamicDatasets:'Dynamic Datasets',TranslationPractice:'Translation Practice'
+    DynamicDatasets:'Dynamic Datasets',Process:'Process',TranslationPractice:'Translation Practice'
+  };
+
+  const icons={
+    ReadingPassage1:'📘',ReadingPassage2:'📗',
+    Part1:'🎧',Part2:'🎧',IntensiveListening:'🎙️',
+    TrueFalseNotGiven:'✅',YesNoNotGiven:'☑️',
+    MatchingHeadings:'🧩',MatchingInformation:'🔎',MatchingFeatures:'🔗',
+    MatchingSentenceEndings:'🧷',SentenceCompletion:'✏️',SummaryCompletion:'📝',
+    TableCompletion:'📋',NoteCompletion:'🗒️',FlowChartCompletion:'🔀',
+    ShortAnswerQuestions:'💬',MultipleChoice:'🔘',DiagramLabelling:'🏷️',
+    DynamicDatasets:'📈',Process:'✍️',TranslationPractice:'🔤'
+  };
+
+  const descriptions={
+    DynamicDatasets:'Biểu đồ thể hiện sự thay đổi theo thời gian',
+    Process:'6 bài luyện Process theo từng bước, có chữa bài',
+    TranslationPractice:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback'
   };
   return{
     title:labels[raw]||pretty(raw),
-    desc:'Dạng bài luyện tập',
+    icon:icons[raw]||'📚',
+    desc:descriptions[raw]||'Dạng bài luyện tập',
     url:'./'+path.replace(/^Practice\//,'').replace(/index\.html$/i,''),
     depth:1,
     sort:[num(raw),raw]
   };
 }
 function renderTabs(){
-  tabs.innerHTML=Object.entries(CATS).map(([k,v])=>`<button class="tab ${k===current?'active':''}" data-cat="${k}">${v.label}<small>${v.sub}</small></button>`).join('');
+  tabs.innerHTML=Object.entries(CATS).map(([k,v])=>`
+    <button class="tab ${k===current?'active':''}" data-cat="${k}">
+      <span class="tab-icon">${v.icon||'📚'}</span>
+      <span class="tab-copy">${v.label}<small>${v.sub}</small></span>
+    </button>`).join('');
   document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{current=b.dataset.cat;render()});
 }
 function render(){
@@ -242,8 +279,9 @@ function render(){
   count.textContent=`${list.length} mục`;
   grid.innerHTML=list.length?list.map((x,i)=>`
     <a class="card" href="${x.url}?practice=1">
-      <div class="badge">${String(i+1).padStart(2,'0')}</div>
+      <div class="item-icon">${x.icon||'📚'}</div>
       <div class="copy"><b>${x.title}</b><span>${x.desc}</span></div>
+      <span class="item-no">${String(i+1).padStart(2,'0')}</span>
       <div class="arrow">→</div>
     </a>`).join(''):'<div class="empty">Chưa có mục luyện tập trong nhóm này.</div>';
 }
