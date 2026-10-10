@@ -1,10 +1,6 @@
 (()=>{
 'use strict';
 
-/* =========================================================
-   BASIC DATA
-========================================================= */
-
 const TASKS=window.PROCESS_TASKS||{};
 const ID=String(window.PROCESS_TASK_ID||'01').padStart(2,'0');
 const task=TASKS[ID];
@@ -16,6 +12,7 @@ if(!task){
 }
 
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
+const STORAGE_VERSION='V8';
 
 const STEP_NAMES=[
   'Phân tích sơ đồ',
@@ -25,6 +22,11 @@ const STEP_NAMES=[
   'Body Paragraph 2',
   'Bài hoàn chỉnh'
 ];
+
+
+/* =========================================================
+   STUDENT / STORAGE
+========================================================= */
 
 function studentScope(){
   try{
@@ -47,15 +49,13 @@ function studentScope(){
 }
 
 const STORAGE_KEY=
-  'WT1_PROCESS_GUIDED_V6_'
-  +studentScope()
-  +'::'
-  +ID;
+  `WT1_PROCESS_GUIDED_${STORAGE_VERSION}_${studentScope()}::${ID}`;
 
 let state={
   current:0,
   completed:[],
   attempts:{},
+
   drafts:{
     analysis:{},
     intro:'',
@@ -64,13 +64,9 @@ let state={
     body2:'',
     full:''
   },
+
   scores:{}
 };
-
-
-/* =========================================================
-   STORAGE
-========================================================= */
 
 function load(){
   try{
@@ -82,9 +78,11 @@ function load(){
       state={
         ...state,
         ...saved,
+
         drafts:{
           ...state.drafts,
           ...(saved.drafts||{}),
+
           analysis:{
             ...state.drafts.analysis,
             ...(saved.drafts?.analysis||{})
@@ -104,7 +102,7 @@ function save(){
 
 
 /* =========================================================
-   HELPERS
+   BASIC HELPERS
 ========================================================= */
 
 function norm(value){
@@ -117,8 +115,14 @@ function norm(value){
 }
 
 function words(value){
-  return String(value||'')
-    .trim()
+  const text=
+    String(value||'').trim();
+
+  if(!text){
+    return 0;
+  }
+
+  return text
     .split(/\s+/)
     .filter(Boolean)
     .length;
@@ -128,38 +132,48 @@ function esc(value){
   return String(value??'')
     .replace(
       /[&<>"']/g,
-      c=>({
+      char=>({
         '&':'&amp;',
         '<':'&lt;',
         '>':'&gt;',
         '"':'&quot;',
         "'":'&#39;'
-      }[c])
+      }[char])
     );
 }
 
-function containsAny(text,variants=[]){
-  const t=norm(text);
+function containsAny(
+  text,
+  variants=[]
+){
+  const normalized=
+    norm(text);
 
   return variants.some(
-    value=>
-    t.includes(
-      norm(value)
-    )
+    item=>
+      normalized.includes(
+        norm(item)
+      )
   );
 }
 
-function groupHits(text,groups=[]){
+function groupHits(
+  text,
+  groups=[]
+){
   return groups.map(
     group=>
-    containsAny(
-      text,
-      group
-    )
+      containsAny(
+        text,
+        group
+      )
   );
 }
 
-function keywordScore(text,keywords=[]){
+function keywordScore(
+  text,
+  keywords=[]
+){
   const unique=[
     ...new Set(
       keywords
@@ -172,19 +186,58 @@ function keywordScore(text,keywords=[]){
     return 1;
   }
 
-  const t=norm(text);
+  const normalized=
+    norm(text);
 
   return (
     unique
     .filter(
       keyword=>
-      t.includes(keyword)
+        normalized.includes(keyword)
     )
     .length
     /
     unique.length
   );
 }
+
+function unique(items){
+  return [
+    ...new Set(
+      (items||[])
+      .filter(Boolean)
+    )
+  ];
+}
+
+
+/* =========================================================
+   PARAGRAPH DETECTION
+   ENTER 1 LẦN = 1 ĐOẠN MỚI
+========================================================= */
+
+function splitParagraphs(
+  text,
+  minLength=0
+){
+  return String(text||'')
+    .replace(/\r\n?/g,'\n')
+    .trim()
+    .split(/\n+/)
+    .map(
+      item=>
+        item.trim()
+    )
+    .filter(
+      item=>
+        item.length>minLength
+    );
+}
+
+
+/* =========================================================
+   PROGRESS HELPERS
+========================================================= */
 
 function attempts(step){
   return Number(
@@ -197,13 +250,18 @@ function done(step){
 }
 
 function completeStep(step){
-  if(!done(step)){
+  if(
+    !done(step)
+  ){
     state.completed.push(step);
   }
 
   state.completed=[
-    ...new Set(state.completed)
-  ].sort(
+    ...new Set(
+      state.completed
+    )
+  ]
+  .sort(
     (a,b)=>a-b
   );
 
@@ -213,7 +271,8 @@ function completeStep(step){
 function invalidateFrom(step){
   state.completed=
     state.completed.filter(
-      x=>x<step
+      index=>
+        index<step
     );
 
   for(
@@ -241,7 +300,9 @@ function unlockIndex(){
     i<6;
     i++
   ){
-    if(done(i)){
+    if(
+      done(i)
+    ){
       unlocked=i+1;
     }else{
       break;
@@ -275,17 +336,33 @@ function fieldValue(id){
 }
 
 function saveCurrentDraft(){
-  const step=state.current;
+  const step=
+    state.current;
 
-  if(step===0){
+  if(
+    step===0
+  ){
     state.drafts.analysis={
-      type:fieldValue('aType'),
-      stages:fieldValue('aStages'),
-      first:fieldValue('aFirst'),
-      last:fieldValue('aLast'),
-      features:fieldValue('aFeatures'),
-      body1:fieldValue('aBody1'),
-      body2:fieldValue('aBody2')
+      type:
+        fieldValue('aType'),
+
+      stages:
+        fieldValue('aStages'),
+
+      first:
+        fieldValue('aFirst'),
+
+      last:
+        fieldValue('aLast'),
+
+      features:
+        fieldValue('aFeatures'),
+
+      body1:
+        fieldValue('aBody1'),
+
+      body2:
+        fieldValue('aBody2')
     };
   }else{
     const box=
@@ -333,17 +410,17 @@ const NUMBER_WORDS={
 };
 
 function numberValue(token){
-  const t=
+  const value=
     String(token||'')
     .toLowerCase();
 
   if(
-    /^\d+$/.test(t)
+    /^\d+$/.test(value)
   ){
-    return Number(t);
+    return Number(value);
   }
 
-  return NUMBER_WORDS[t] ?? null;
+  return NUMBER_WORDS[value]??null;
 }
 
 function detectStageCountClaim(text){
@@ -351,33 +428,37 @@ function detectStageCountClaim(text){
     String(text||'')
     .toLowerCase();
 
-  const word=
+  const numberPattern=
     'one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\\d+';
 
   const patterns=[
+
     new RegExp(
-      `\\b(${word})\\s*[-–— ]\\s*(?:main\\s+)?stages?\\b`,
+      `\\b(${numberPattern})\\s*[-–— ]\\s*(?:main\\s+)?stages?\\b`,
       'i'
     ),
 
     new RegExp(
-      `\\b(?:consists|comprises|contains|has|involves)\\s+(?:of\\s+)?(${word})\\s+(?:main\\s+)?stages?\\b`,
+      `\\b(?:consists|comprises|contains|has|involves)\\s+(?:of\\s+)?(${numberPattern})\\s+(?:main\\s+)?stages?\\b`,
       'i'
     )
+
   ];
 
   for(
-    const re
+    const regex
     of
     patterns
   ){
     const match=
-      raw.match(re);
+      raw.match(regex);
 
     if(match){
       return {
         mentioned:true,
-        count:numberValue(match[1]),
+        count:numberValue(
+          match[1]
+        ),
         token:match[1],
         match:match[0]
       };
@@ -419,7 +500,9 @@ function analysisStageCount(){
 
   return match
     ?
-    numberValue(match[1])
+    numberValue(
+      match[1]
+    )
     :
     null;
 }
@@ -436,6 +519,7 @@ const TOPIC_RULES={
       'brick',
       'bricks'
     ],
+
     forbidden:[
       'noodle',
       'noodles',
@@ -447,8 +531,10 @@ const TOPIC_RULES={
       'plastic bottle',
       'plastic bottles'
     ],
+
     label:'bricks'
   },
+
 
   '02':{
     required:[
@@ -457,6 +543,7 @@ const TOPIC_RULES={
       'instant noodle',
       'instant noodles'
     ],
+
     forbidden:[
       'brick',
       'bricks',
@@ -468,14 +555,17 @@ const TOPIC_RULES={
       'plastic bottle',
       'plastic bottles'
     ],
+
     label:'instant noodles'
   },
+
 
   '03':{
     required:[
       'ketchup',
       'tomato ketchup'
     ],
+
     forbidden:[
       'brick',
       'bricks',
@@ -488,14 +578,17 @@ const TOPIC_RULES={
       'plastic bottle',
       'plastic bottles'
     ],
+
     label:'tomato ketchup'
   },
+
 
   '04':{
     required:[
       'frog',
       'frogs'
     ],
+
     forbidden:[
       'brick',
       'bricks',
@@ -507,14 +600,17 @@ const TOPIC_RULES={
       'plastic bottle',
       'plastic bottles'
     ],
+
     label:'frog life cycle'
   },
+
 
   '05':{
     required:[
       'bee',
       'bees'
     ],
+
     forbidden:[
       'brick',
       'bricks',
@@ -526,8 +622,10 @@ const TOPIC_RULES={
       'plastic bottle',
       'plastic bottles'
     ],
+
     label:'bee life cycle'
   },
+
 
   '06':{
     required:[
@@ -536,6 +634,7 @@ const TOPIC_RULES={
       'plastic',
       'recycling'
     ],
+
     forbidden:[
       'brick',
       'bricks',
@@ -547,27 +646,31 @@ const TOPIC_RULES={
       'bee',
       'bees'
     ],
+
     label:'plastic bottles'
   }
 
 };
 
-function hasPhrase(text,phrase){
-  const t=
+function hasPhrase(
+  text,
+  phrase
+){
+  const target=
     ' '
     +
     norm(text)
     +
     ' ';
 
-  const p=
+  const search=
     ' '
     +
     norm(phrase)
     +
     ' ';
 
-  return t.includes(p);
+  return target.includes(search);
 }
 
 function topicCheck(text){
@@ -583,23 +686,24 @@ function topicCheck(text){
   }
 
   return {
+
     requiredOK:
       rule.required.some(
-        x=>
-        hasPhrase(
-          text,
-          x
-        )
+        item=>
+          hasPhrase(
+            text,
+            item
+          )
       ),
 
     wrong:[
       ...new Set(
         rule.forbidden.filter(
-          x=>
-          hasPhrase(
-            text,
-            x
-          )
+          item=>
+            hasPhrase(
+              text,
+              item
+            )
         )
       )
     ],
@@ -611,16 +715,89 @@ function topicCheck(text){
 
 
 /* =========================================================
+   SPELLING
+========================================================= */
+
+const COMMON_TYPOS={
+  manufactoring:'manufacturing',
+  manufactureing:'manufacturing',
+  prodution:'production',
+  proccess:'process',
+  proces:'process',
+
+  temparature:'temperature',
+  temprature:'temperature',
+
+  delievered:'delivered',
+  deliverd:'delivered',
+
+  packeged:'packaged',
+  pakaged:'packaged',
+
+  recyled:'recycled',
+  recycleing:'recycling',
+
+  continer:'container',
+  containner:'container',
+
+  vegtables:'vegetables',
+
+  seperated:'separated',
+  seperate:'separate',
+
+  compresssed:'compressed',
+  crushedd:'crushed',
+
+  washd:'washed',
+  coold:'cooled',
+  heatd:'heated',
+  boilied:'boiled',
+
+  labeld:'labelled',
+  tranported:'transported',
+  distrubuted:'distributed',
+
+  excuvator:'excavator',
+  cilinder:'cylinder',
+
+  celcius:'Celsius'
+};
+
+function spellingIssues(text){
+  const tokens=
+    String(text||'')
+    .toLowerCase()
+    .match(/[a-z]+/g)
+    ||
+    [];
+
+  const issues=[];
+
+  tokens.forEach(
+    word=>{
+      if(
+        COMMON_TYPOS[word]
+      ){
+        issues.push(
+          `Có thể sai chính tả: “${word}” → “${COMMON_TYPOS[word]}”.`
+        );
+      }
+    }
+  );
+
+  return unique(
+    issues
+  );
+}
+
+
+/* =========================================================
    GRAMMAR CHECK
 ========================================================= */
 
 function grammarIssues(text){
   const sentence=
-    String(
-      text
-      ||
-      ''
-    )
+    String(text||'')
     .trim();
 
   const normalized=
@@ -634,6 +811,9 @@ function grammarIssues(text){
     ];
   }
 
+
+  /* Capitalization */
+
   if(
     !/^[A-Z]/.test(sentence)
   ){
@@ -641,6 +821,9 @@ function grammarIssues(text){
       'Viết hoa chữ cái đầu câu/đoạn.'
     );
   }
+
+
+  /* Ending punctuation */
 
   if(
     !/[.!?]$/.test(sentence)
@@ -650,13 +833,19 @@ function grammarIssues(text){
     );
   }
 
+
+  /* Extra spaces */
+
   if(
-    /\s{2,}/.test(sentence)
+    /[^\n]\s{2,}[^\n]/.test(sentence)
   ){
     issues.push(
       'Có khoảng trắng thừa.'
     );
   }
+
+
+  /* Duplicated auxiliaries */
 
   if(
     /\b(is|are|was|were)\s+\1\b/i
@@ -667,6 +856,9 @@ function grammarIssues(text){
     );
   }
 
+
+  /* Duplicated articles */
+
   if(
     /\b(the|a|an)\s+\1\b/i
     .test(normalized)
@@ -676,22 +868,20 @@ function grammarIssues(text){
     );
   }
 
-  /*
-    ends with ... are delivered
-  */
+
+  /* ends with + clause */
 
   if(
     /\bends?\s+with\s+[^.!?]{0,100}\b(?:is|are|was|were)\b/i
     .test(sentence)
   ){
     issues.push(
-      'Cấu trúc “ends with ...” chưa đúng: dùng “ends with + noun/V-ing” (ví dụ: ends with the bricks being delivered) hoặc “ends when + clause”.'
+      'Cấu trúc “ends with ...” chưa đúng: dùng “ends with + noun/V-ing” hoặc “ends when + clause”.'
     );
   }
 
-  /*
-    begins with ... is/are ...
-  */
+
+  /* begins with + clause */
 
   if(
     /\bbegins?\s+with\s+[^.!?]{0,100}\b(?:is|are|was|were)\b/i
@@ -702,22 +892,195 @@ function grammarIssues(text){
     );
   }
 
-  /*
-    this allows they...
-  */
+
+  /* allows they */
 
   if(
     /\b(?:allows|enables)\s+(?:they|he|she|we|i)\s+to\b/i
     .test(sentence)
   ){
     issues.push(
-      'Sau allows/enables phải dùng tân ngữ: them/him/her/us/me + to V, không dùng chủ ngữ they/he/she/we/I.'
+      'Sau allows/enables phải dùng tân ngữ: them/him/her/us/me + to V.'
     );
   }
 
-  /*
-    subject + V3 without be
-  */
+
+  /* between X to Y */
+
+  if(
+    /\bbetween\s+[^,.!?;]{0,40}\s+to\s+[^,.!?;]{0,40}/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Cấu trúc khoảng giá trị chưa đúng: dùng “between X and Y”.'
+    );
+  }
+
+
+  /* from X and Y */
+
+  if(
+    /\bfrom\s+[^,.!?;]{0,40}\s+and\s+[^,.!?;]{0,40}/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Cấu trúc khoảng giá trị chưa đúng: dùng “from X to Y”.'
+    );
+  }
+
+
+  /* degree / degrees Celsius */
+
+  const degreeRegex=
+    /\b(\d+(?:\.\d+)?)\s+degree\s+celsius\b/gi;
+
+  let match;
+
+  while(
+    (
+      match=
+      degreeRegex.exec(sentence)
+    )
+  ){
+    if(
+      Number(match[1])!==1
+    ){
+      issues.push(
+        `“${match[0]}” chưa đúng: với ${match[1]} phải dùng “degrees Celsius”.`
+      );
+    }
+  }
+
+
+  /* hour / hours */
+
+  const hourRegex=
+    /\b(\d+)\s+hour\b/gi;
+
+  while(
+    (
+      match=
+      hourRegex.exec(sentence)
+    )
+  ){
+    if(
+      Number(match[1])!==1
+    ){
+      issues.push(
+        `“${match[0]}” nên dùng “hours”.`
+      );
+    }
+  }
+
+
+  /* day / days */
+
+  const dayRegex=
+    /\b(\d+)\s+day\b/gi;
+
+  while(
+    (
+      match=
+      dayRegex.exec(sentence)
+    )
+  ){
+    if(
+      Number(match[1])!==1
+    ){
+      issues.push(
+        `“${match[0]}” nên dùng “days”.`
+      );
+    }
+  }
+
+
+  /* Subject-verb agreement */
+
+  const agreementRules=[
+
+    [
+      /\bbricks\s+is\b/i,
+      '“bricks” là danh từ số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\bbottles\s+is\b/i,
+      '“bottles” là danh từ số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\bnoodles\s+is\b/i,
+      '“noodles” là danh từ số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\btomatoes\s+is\b/i,
+      '“tomatoes” là danh từ số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\beggs\s+is\b/i,
+      '“eggs” là danh từ số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\bclay\s+are\b/i,
+      '“clay” nên dùng với “is”.'
+    ],
+
+    [
+      /\bmixture\s+are\b/i,
+      '“mixture” là danh từ số ít, nên dùng “is”.'
+    ],
+
+    [
+      /\bwater\s+are\b/i,
+      '“water” nên dùng với “is”.'
+    ]
+
+  ];
+
+  agreementRules.forEach(
+    (
+      [
+        regex,
+        message
+      ]
+    )=>{
+      if(
+        regex.test(sentence)
+      ){
+        issues.push(message);
+      }
+    }
+  );
+
+
+  /* a/an + plural */
+
+  if(
+    /\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      '“a/an” không đứng trực tiếp trước danh từ số nhiều.'
+    );
+  }
+
+
+  /* one of the stage */
+
+  if(
+    /\bone\s+of\s+the\s+(?:stage|step|process)\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Sau “one of the” phải dùng danh từ số nhiều.'
+    );
+  }
+
+
+  /* Missing passive be */
 
   const passiveTargets=[
     'crushed',
@@ -741,34 +1104,470 @@ function grammarIssues(text){
     'collected'
   ];
 
-  for(
-    const target
-    of
-    passiveTargets
-  ){
-    const regex=
-      new RegExp(
-        `\\b(?:clay|bricks|bottles|tomatoes|noodles|mixture|plastic|eggs|tadpoles)\\s+${target}\\b`,
-        'i'
-      );
+  passiveTargets.forEach(
+    target=>{
+      const regex=
+        new RegExp(
+          `\\b(?:clay|bricks|bottles|tomatoes|noodles|mixture|plastic|eggs|tadpoles|pellets)\\s+${target}\\b`,
+          'i'
+        );
 
-    if(
-      regex.test(normalized)
-    ){
-      issues.push(
-        `Kiểm tra câu bị động với “${target}”: thường cần be + V3.`
-      );
+      if(
+        regex.test(normalized)
+      ){
+        issues.push(
+          `Kiểm tra câu bị động với “${target}”: thường cần be + V3.`
+        );
+      }
     }
-  }
+  );
 
-  return [
-    ...new Set(issues)
-  ];
+  return unique(
+    issues
+  );
+}
+
+function languageIssues(text){
+  return unique([
+    ...grammarIssues(text),
+    ...spellingIssues(text)
+  ]);
+}
+
+function seriousLanguageIssues(items){
+  return (
+    items
+    ||
+    []
+  )
+  .filter(
+    issue=>
+
+      !/khoảng trắng thừa/i
+      .test(issue)
+
+      &&
+
+      !/nên kết thúc bằng dấu câu/i
+      .test(issue)
+  );
 }
 
 
 /* =========================================================
-   BODY HELPERS
+   FACTUAL CONSISTENCY
+========================================================= */
+
+const FACT_RULES={
+
+  '01':{
+    allowedTemperatures:[
+      200,
+      980,
+      870,
+      1300
+    ],
+
+    allowedHours:[
+      24,
+      48,
+      72
+    ],
+
+    linear:true
+  },
+
+
+  '02':{
+    linear:true
+  },
+
+
+  '03':{
+    allowedHours:[
+      2
+    ],
+
+    linear:true
+  },
+
+
+  '04':{
+    lifeCycle:true
+  },
+
+
+  '05':{
+    allowedDays:[
+      3,
+      4,
+      5,
+      7,
+      9,
+      10,
+      34,
+      36
+    ],
+
+    lifeCycle:true
+  },
+
+
+  '06':{
+    linear:true
+  }
+
+};
+
+function factualIssues(
+  text,
+  step
+){
+  const issues=[];
+
+  const sentence=
+    String(text||'');
+
+  const normalized=
+    norm(sentence);
+
+  const rule=
+    FACT_RULES[ID]
+    ||
+    {};
+
+
+  /* linear vs cycle */
+
+  if(
+    rule.linear
+    &&
+    /\b(?:cyclical|cyclic|cycle)\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Bài này là linear process; không nên gọi toàn bộ quá trình là “cycle/cyclical”.'
+    );
+  }
+
+
+  if(
+    rule.lifeCycle
+    &&
+    /\blinear(?:\s+process|\s+sequence)?\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Đây là life cycle/cyclical process, không nên mô tả toàn bộ quá trình là linear.'
+    );
+  }
+
+
+  /* stage count */
+
+  const stageClaim=
+    detectStageCountClaim(
+      sentence
+    );
+
+  const expectedStages=
+    Number(
+      task.stages
+    );
+
+  if(
+    stageClaim.mentioned
+    &&
+    Number.isFinite(
+      expectedStages
+    )
+    &&
+    stageClaim.count
+    !==
+    expectedStages
+  ){
+    issues.push(
+      `Sai số giai đoạn: em viết ${stageClaim.count}, nhưng sơ đồ có ${expectedStages} main stages.`
+    );
+  }
+
+
+  /* Manufacturing Bricks */
+
+  if(
+    ID==='01'
+  ){
+    let match;
+
+    const temperatureRegex=
+      /\b(\d{2,4})\s*(?:°\s*c|degrees?\s+celsius)\b/gi;
+
+    while(
+      (
+        match=
+        temperatureRegex.exec(
+          sentence
+        )
+      )
+    ){
+      const value=
+        Number(
+          match[1]
+        );
+
+      if(
+        Number.isFinite(value)
+        &&
+        !rule.allowedTemperatures.includes(
+          value
+        )
+      ){
+        issues.push(
+          `Nhiệt độ ${value}°C không xuất hiện trong sơ đồ Manufacturing Bricks.`
+        );
+      }
+    }
+
+
+    const hourRegex=
+      /\b(\d+)\s*(?:hours?|hrs?)\b/gi;
+
+    while(
+      (
+        match=
+        hourRegex.exec(
+          sentence
+        )
+      )
+    ){
+      const value=
+        Number(
+          match[1]
+        );
+
+      if(
+        Number.isFinite(value)
+        &&
+        !rule.allowedHours.includes(
+          value
+        )
+      ){
+        issues.push(
+          `Mốc ${value} giờ không khớp dữ liệu của sơ đồ Manufacturing Bricks.`
+        );
+      }
+    }
+
+
+    const moderatePos=
+      normalized.indexOf(
+        'moderate'
+      );
+
+    const highPos=
+      normalized.indexOf(
+        'high'
+      );
+
+    if(
+      moderatePos>=0
+      &&
+      highPos>=0
+      &&
+      highPos<moderatePos
+    ){
+      issues.push(
+        'Thứ tự nhiệt độ đang bị đảo: nung ở nhiệt độ vừa trước, sau đó mới ở nhiệt độ cao.'
+      );
+    }
+  }
+
+
+  /* Ketchup */
+
+  if(
+    ID==='03'
+  ){
+    let match;
+
+    const hourRegex=
+      /\b(\d+)\s*(?:hours?|hrs?)\b/gi;
+
+    while(
+      (
+        match=
+        hourRegex.exec(
+          sentence
+        )
+      )
+    ){
+      const value=
+        Number(
+          match[1]
+        );
+
+      if(
+        value!==2
+      ){
+        issues.push(
+          `Mốc ${value} giờ không khớp sơ đồ làm ketchup; giai đoạn này được để trong 2 giờ.`
+        );
+      }
+    }
+  }
+
+
+  /* Bee life cycle */
+
+  if(
+    ID==='05'
+  ){
+    let match;
+
+    const dayRegex=
+      /\b(\d+)\s*(?:days?|day)\b/gi;
+
+    while(
+      (
+        match=
+        dayRegex.exec(
+          sentence
+        )
+      )
+    ){
+      const value=
+        Number(
+          match[1]
+        );
+
+      if(
+        Number.isFinite(value)
+        &&
+        !rule.allowedDays.includes(
+          value
+        )
+      ){
+        issues.push(
+          `Mốc ${value} ngày không xuất hiện trong sơ đồ vòng đời ong.`
+        );
+      }
+    }
+  }
+
+  return unique(
+    issues
+  );
+}
+
+
+/* =========================================================
+   IELTS STYLE CHECK
+========================================================= */
+
+function styleIssues(
+  text,
+  step
+){
+  const issues=[];
+
+  const sentence=
+    String(text||'');
+
+  const wc=
+    words(sentence);
+
+
+  /* Overview too detailed */
+
+  if(
+    step===2
+  ){
+    const bodyGroups=
+      globalBodyGroups();
+
+    const detailHits=
+      groupHits(
+        sentence,
+        bodyGroups
+      )
+      .filter(Boolean)
+      .length;
+
+    const detailedNumbers=
+      (
+        sentence.match(
+          /\b\d+(?:\s*[-–—]\s*\d+)?\s*(?:°c|degrees?\s+celsius|hours?|hrs?|days?)\b/gi
+        )
+        ||
+        []
+      )
+      .length;
+
+    if(
+      detailHits>=4
+    ){
+      issues.push(
+        `Overview đang liệt kê khá nhiều công đoạn cụ thể (${detailHits} nhóm stage). Nên ưu tiên đặc điểm tổng quát.`
+      );
+    }
+
+    if(
+      detailedNumbers>=2
+    ){
+      issues.push(
+        'Overview đang đưa nhiều số liệu chi tiết; nhiệt độ/thời gian cụ thể nên để ở Body paragraphs.'
+      );
+    }
+
+    if(
+      wc>55
+    ){
+      issues.push(
+        `Overview khá dài (${wc} từ). Nên viết cô đọng hơn.`
+      );
+    }
+  }
+
+
+  /* awkward collocation */
+
+  if(
+    /\bscreened\s+via\s+(?:a|the)\s+metal\s+grid\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      '“screened via a metal grid” hiểu được, nhưng “passed through a metal grid” tự nhiên hơn.'
+    );
+  }
+
+
+  if(
+    /\bthen\s+subsequently\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      '“then subsequently” bị lặp nghĩa; chỉ cần dùng một trong hai.'
+    );
+  }
+
+
+  if(
+    /\bafter\s+that\s*,?\s+then\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      '“after that, then” bị thừa từ nối.'
+    );
+  }
+
+  return unique(
+    issues
+  );
+}
+
+
+/* =========================================================
+   BODY / STAGE GROUPS
 ========================================================= */
 
 function globalBodyGroups(){
@@ -815,28 +1614,37 @@ function bodyPlanInfo(text){
 
   return {
     hits:result,
+
     count:
-      result.filter(Boolean).length,
+      result
+      .filter(Boolean)
+      .length,
+
     groups
   };
 }
 
-function bodyPlansAreDistinct(a,b){
+function bodyPlansAreDistinct(
+  first,
+  second
+){
   const A=
     new Set(
-      norm(a)
+      norm(first)
       .split(/\s+/)
       .filter(
-        x=>x.length>3
+        item=>
+          item.length>3
       )
     );
 
   const B=
     new Set(
-      norm(b)
+      norm(second)
       .split(/\s+/)
       .filter(
-        x=>x.length>3
+        item=>
+          item.length>3
       )
     );
 
@@ -877,7 +1685,166 @@ function bodyPlansAreDistinct(a,b){
 
 
 /* =========================================================
-   STYLE
+   SEQUENCE CHECK
+========================================================= */
+
+function findGroupPosition(
+  text,
+  group
+){
+  const normalized=
+    norm(text);
+
+  let best=-1;
+
+  (group||[])
+  .forEach(
+    variant=>{
+      const value=
+        norm(
+          variant
+        );
+
+      if(!value){
+        return;
+      }
+
+      const position=
+        normalized.indexOf(
+          value
+        );
+
+      if(
+        position>=0
+        &&
+        (
+          best<0
+          ||
+          position<best
+        )
+      ){
+        best=position;
+      }
+    }
+  );
+
+  return best;
+}
+
+function sequenceAudit(text){
+  const groups=
+    globalBodyGroups();
+
+  const found=[];
+
+  groups.forEach(
+    (
+      group,
+      index
+    )=>{
+      const position=
+        findGroupPosition(
+          text,
+          group
+        );
+
+      if(
+        position>=0
+      ){
+        found.push({
+          index,
+          position,
+
+          label:
+            group?.[0]
+            ||
+            `stage ${index+1}`
+        });
+      }
+    }
+  );
+
+  if(
+    found.length<3
+  ){
+    return {
+      ok:true,
+      violations:[],
+      found
+    };
+  }
+
+  const byText=[
+    ...found
+  ]
+  .sort(
+    (
+      a,
+      b
+    )=>
+      a.position
+      -
+      b.position
+  );
+
+  const violations=[];
+
+  for(
+    let i=1;
+    i<byText.length;
+    i++
+  ){
+    if(
+      byText[i].index
+      <
+      byText[i-1].index
+    ){
+      violations.push(
+        `“${byText[i].label}” đang xuất hiện sau một stage vốn đứng phía sau nó trong sơ đồ.`
+      );
+    }
+  }
+
+  return {
+    ok:
+      violations.length===0,
+
+    violations:
+      unique(
+        violations
+      ),
+
+    found
+  };
+}
+
+
+/* =========================================================
+   FIND OVERVIEW PARAGRAPH
+   ENTER 1 LẦN = TÁCH ĐOẠN
+========================================================= */
+
+function extractOverviewParagraph(text){
+  const paragraphs=
+    splitParagraphs(
+      text,
+      0
+    );
+
+  return (
+    paragraphs.find(
+      paragraph=>
+        /\boverall\b|\bin general\b|\bgenerally\b|\bit is clear that\b|\bit can be seen that\b/i
+        .test(paragraph)
+    )
+    ||
+    ''
+  );
+}
+
+
+/* =========================================================
+   UI STYLE
 ========================================================= */
 
 const style=`
@@ -947,9 +1914,7 @@ button{
   color:#fff;
 
   box-shadow:
-    0
-    8px
-    22px
+    0 8px 22px
     rgba(40,18,96,.14);
 }
 
@@ -973,6 +1938,7 @@ button{
   display:flex;
   align-items:center;
   gap:10px;
+
   min-width:0;
 }
 
@@ -981,13 +1947,10 @@ button{
   text-decoration:none;
 
   border:
-    1px
-    solid
+    1px solid
     rgba(255,255,255,.25);
 
-  padding:
-    7px
-    10px;
+  padding:7px 10px;
 
   border-radius:9px;
 
@@ -1011,13 +1974,10 @@ button{
     rgba(255,255,255,.1);
 
   border:
-    1px
-    solid
+    1px solid
     rgba(255,255,255,.18);
 
-  padding:
-    7px
-    10px;
+  padding:7px 10px;
 
   border-radius:999px;
 }
@@ -1030,10 +1990,7 @@ button{
 
   margin:auto;
 
-  padding:
-    16px
-    0
-    46px;
+  padding:16px 0 46px;
 }
 
 .hero{
@@ -1056,10 +2013,7 @@ button{
 }
 
 .hero p{
-  margin:
-    4px
-    0
-    0;
+  margin:4px 0 0;
 
   color:var(--muted);
 
@@ -1112,8 +2066,7 @@ button{
   display:grid;
 
   grid-template-columns:
-    420px
-    1fr;
+    420px 1fr;
 
   gap:12px;
 
@@ -1134,16 +2087,13 @@ button{
   background:#fff;
 
   border:
-    1px
-    solid
+    1px solid
     var(--line);
 
   border-radius:17px;
 
   box-shadow:
-    0
-    8px
-    24px
+    0 8px 24px
     rgba(35,25,75,.04);
 }
 
@@ -1173,9 +2123,7 @@ button{
   color:#6246bd;
   background:#f0ecff;
 
-  padding:
-    6px
-    8px;
+  padding:6px 8px;
 
   border-radius:999px;
 }
@@ -1184,14 +2132,12 @@ button{
   position:relative;
 
   border:
-    1px
-    solid
+    1px solid
     #e4e7ef;
 
   border-radius:12px;
 
   overflow:hidden;
-
   background:#fff;
 }
 
@@ -1207,8 +2153,7 @@ button{
   bottom:8px;
 
   border:
-    1px
-    solid
+    1px solid
     #dddff0;
 
   background:
@@ -1218,9 +2163,7 @@ button{
 
   border-radius:9px;
 
-  padding:
-    7px
-    9px;
+  padding:7px 9px;
 
   font-size:9.5px;
   font-weight:900;
@@ -1236,8 +2179,7 @@ button{
   background:#f7f5ff;
 
   border:
-    1px
-    solid
+    1px solid
     #e3def9;
 
   color:#41355f;
@@ -1257,8 +2199,7 @@ button{
   width:100%;
 
   border:
-    1px
-    solid
+    1px solid
     var(--line);
 
   background:#fff;
@@ -1272,8 +2213,7 @@ button{
   display:grid;
 
   grid-template-columns:
-    34px
-    1fr;
+    34px 1fr;
 
   gap:9px;
 
@@ -1287,7 +2227,6 @@ button{
   border-radius:8px;
 
   background:#eee9ff;
-
   color:#4b318e;
 
   display:grid;
@@ -1319,10 +2258,7 @@ button{
   border-color:#8269e8;
 
   box-shadow:
-    0
-    0
-    0
-    3px
+    0 0 0 3px
     rgba(117,89,232,.07);
 }
 
@@ -1345,9 +2281,7 @@ button{
 .main{
   min-height:650px;
 
-  padding:
-    20px
-    22px;
+  padding:20px 22px;
 }
 
 .ey{
@@ -1361,9 +2295,7 @@ button{
 }
 
 .chip{
-  padding:
-    7px
-    10px;
+  padding:7px 10px;
 
   border-radius:999px;
 
@@ -1384,10 +2316,7 @@ button{
 }
 
 .main h2{
-  margin:
-    0
-    0
-    5px;
+  margin:0 0 5px;
 
   color:#21164b;
 
@@ -1395,10 +2324,7 @@ button{
 }
 
 .sub{
-  margin:
-    0
-    0
-    14px;
+  margin:0 0 14px;
 
   color:var(--muted);
 
@@ -1407,13 +2333,10 @@ button{
 }
 
 .guide{
-  padding:
-    12px
-    13px;
+  padding:12px 13px;
 
   border:
-    1px
-    solid
+    1px solid
     #ded8f4;
 
   border-radius:12px;
@@ -1441,16 +2364,14 @@ button{
   display:grid;
 
   grid-template-columns:
-    1fr
-    1fr;
+    1fr 1fr;
 
   gap:9px;
 }
 
 .field{
   border:
-    1px
-    solid
+    1px solid
     var(--line);
 
   border-radius:11px;
@@ -1477,8 +2398,7 @@ button{
   width:100%;
 
   border:
-    1px
-    solid
+    1px solid
     #cfd4df;
 
   border-radius:8px;
@@ -1506,10 +2426,7 @@ button{
   border-color:#765ee0;
 
   box-shadow:
-    0
-    0
-    0
-    3px
+    0 0 0 3px
     rgba(117,89,232,.07);
 }
 
@@ -1521,8 +2438,7 @@ button{
   resize:vertical;
 
   border:
-    1px
-    solid
+    1px solid
     #cbd2df;
 
   border-radius:12px;
@@ -1548,10 +2464,7 @@ button{
 
   gap:10px;
 
-  margin:
-    8px
-    0
-    7px;
+  margin:8px 0 7px;
 
   font-size:10.5px;
   font-weight:900;
@@ -1566,9 +2479,7 @@ button{
   display:grid;
 
   grid-template-columns:
-    140px
-    1fr
-    140px;
+    140px 1fr 140px;
 
   gap:8px;
 
@@ -1577,8 +2488,7 @@ button{
 
 .btn{
   border:
-    1px
-    solid
+    1px solid
     #dcdfe7;
 
   background:#fff;
@@ -1587,9 +2497,7 @@ button{
 
   border-radius:10px;
 
-  padding:
-    10px
-    12px;
+  padding:10px 12px;
 
   font-size:10.5px;
   font-weight:950;
@@ -1629,13 +2537,10 @@ button{
 
   gap:12px;
 
-  padding:
-    12px
-    13px;
+  padding:12px 13px;
 
   border:
-    1px
-    solid
+    1px solid
     var(--line);
 
   border-radius:12px;
@@ -1668,17 +2573,13 @@ button{
 .detail{
   margin-top:8px;
 
-  padding:
-    11px
-    12px;
+  padding:11px 12px;
 
   border:
-    1px
-    solid
+    1px solid
     #eadfc3;
 
-  background:
-    var(--warnbg);
+  background:var(--warnbg);
 
   border-radius:11px;
 
@@ -1697,10 +2598,7 @@ button{
 }
 
 .detail ul{
-  margin:
-    6px
-    0
-    0;
+  margin:6px 0 0;
 
   padding-left:18px;
 }
@@ -1708,13 +2606,10 @@ button{
 .reference{
   margin-top:8px;
 
-  padding:
-    11px
-    12px;
+  padding:11px 12px;
 
   border:
-    1px
-    solid
+    1px solid
     #ded7fb;
 
   background:#f6f4ff;
@@ -1740,14 +2635,11 @@ button{
   display:grid;
 
   grid-template-columns:
-    150px
-    1fr;
+    150px 1fr;
 
   gap:8px;
 
-  padding:
-    7px
-    8px;
+  padding:7px 8px;
 
   border-radius:8px;
 
@@ -1758,13 +2650,11 @@ button{
 
 .rowcheck.ok{
   background:#f1fbf6;
-
   color:#126d4a;
 }
 
 .rowcheck.no{
   background:#fff6f7;
-
   color:#9b3241;
 }
 
@@ -1772,8 +2662,7 @@ button{
   display:grid;
 
   grid-template-columns:
-    1fr
-    1fr;
+    1fr 1fr;
 
   gap:8px;
 
@@ -1782,8 +2671,7 @@ button{
 
 .reviewparts details{
   border:
-    1px
-    solid
+    1px solid
     var(--line);
 
   border-radius:9px;
@@ -1808,10 +2696,7 @@ button{
 
   color:#656d7d;
 
-  margin:
-    7px
-    0
-    0;
+  margin:7px 0 0;
 
   white-space:pre-wrap;
 }
@@ -1822,8 +2707,7 @@ button{
   text-align:center;
 
   border:
-    1px
-    solid
+    1px solid
     #bde5ce;
 
   background:#f1fbf6;
@@ -1841,7 +2725,6 @@ button{
 
 .finaldone p{
   font-size:10.5px;
-
   color:#65706f;
 }
 
@@ -1860,9 +2743,7 @@ dialog{
   padding:0;
 
   box-shadow:
-    0
-    25px
-    80px
+    0 25px 80px
     rgba(0,0,0,.28);
 }
 
@@ -1876,29 +2757,23 @@ dialog::backdrop{
   justify-content:space-between;
   align-items:center;
 
-  padding:
-    10px
-    12px;
+  padding:10px 12px;
 
   border-bottom:
-    1px
-    solid
+    1px solid
     var(--line);
 }
 
 .modalhead button{
   border:
-    1px
-    solid
+    1px solid
     var(--line);
 
   background:#fff;
 
   border-radius:8px;
 
-  padding:
-    6px
-    9px;
+  padding:6px 9px;
 }
 
 .modalimg{
@@ -1921,7 +2796,10 @@ dialog::backdrop{
 
   .steps{
     grid-template-columns:
-      repeat(3,1fr);
+      repeat(
+        3,
+        1fr
+      );
   }
 
 }
@@ -1941,24 +2819,15 @@ dialog::backdrop{
     min-width:0;
   }
 
-  .steps{
-    grid-template-columns:1fr;
-  }
-
-  .formgrid{
-    grid-template-columns:1fr;
-  }
-
-  .actions{
+  .steps,
+  .formgrid,
+  .actions,
+  .reviewparts{
     grid-template-columns:1fr;
   }
 
   .main{
     padding:16px;
-  }
-
-  .reviewparts{
-    grid-template-columns:1fr;
   }
 
 }
@@ -1967,7 +2836,7 @@ dialog::backdrop{
 
 
 /* =========================================================
-   MOUNT UI
+   MOUNT
 ========================================================= */
 
 function mount(){
@@ -1992,7 +2861,7 @@ function mount(){
       </a>
 
       <div class="brand">
-        ${task.icon}
+        ${task.icon||'✍️'}
         ${esc(task.title)}
       </div>
 
@@ -2096,7 +2965,6 @@ function mount(){
 
       </section>
 
-
       <section
         id="stepNav"
         class="steps"
@@ -2139,13 +3007,20 @@ function mount(){
 
   `;
 
+
   try{
     const s=JSON.parse(
-      localStorage.getItem(STUDENT_KEY)||'null'
+      localStorage.getItem(STUDENT_KEY)
+      ||
+      'null'
     );
 
-    if(s?.name){
-      studentInfo.textContent=
+    if(
+      s?.name
+    ){
+      document.getElementById(
+        'studentInfo'
+      ).textContent=
         s.name
         +
         (
@@ -2160,21 +3035,44 @@ function mount(){
     }
   }catch(e){}
 
-  zoomBtn.onclick=
-    ()=>
-    imgDialog.showModal();
 
-  closeDialog.onclick=
+  document.getElementById(
+    'zoomBtn'
+  ).onclick=
     ()=>
-    imgDialog.close();
+      document.getElementById(
+        'imgDialog'
+      )
+      .showModal();
 
-  imgDialog.addEventListener(
+
+  document.getElementById(
+    'closeDialog'
+  ).onclick=
+    ()=>
+      document.getElementById(
+        'imgDialog'
+      )
+      .close();
+
+
+  document.getElementById(
+    'imgDialog'
+  )
+  .addEventListener(
     'click',
-    e=>{
+    event=>{
       if(
-        e.target===imgDialog
+        event.target
+        ===
+        document.getElementById(
+          'imgDialog'
+        )
       ){
-        imgDialog.close();
+        document.getElementById(
+          'imgDialog'
+        )
+        .close();
       }
     }
   );
@@ -2182,18 +3080,26 @@ function mount(){
 
 
 /* =========================================================
-   NAVIGATION UI
+   NAV
 ========================================================= */
 
 function renderNav(){
   const unlocked=
     unlockIndex();
 
-  stepNav.innerHTML=
+  const nav=
+    document.getElementById(
+      'stepNav'
+    );
+
+  nav.innerHTML=
     STEP_NAMES
     .map(
-      (name,index)=>{
-        const cls=[
+      (
+        name,
+        index
+      )=>{
+        const classes=[
           index===state.current
           ?
           'active'
@@ -2218,7 +3124,7 @@ function renderNav(){
         return `
 
 <button
-  class="stepbtn ${cls}"
+  class="stepbtn ${classes}"
   ${
     index>unlocked
     ?
@@ -2264,7 +3170,8 @@ function renderNav(){
     )
     .join('');
 
-  stepNav
+
+  nav
   .querySelectorAll(
     '[data-step]'
   )
@@ -2298,10 +3205,14 @@ function renderProgress(){
   const count=
     state.completed.length;
 
-  progressText.textContent=
+  document.getElementById(
+    'progressText'
+  ).textContent=
     `${count}/6 bước hoàn thành`;
 
-  progressBar.style.width=
+  document.getElementById(
+    'progressBar'
+  ).style.width=
     `${count/6*100}%`;
 }
 
@@ -2325,7 +3236,7 @@ function guideFor(step){
       <b>Mục tiêu:</b>
       Paraphrase đề bài trong 1 câu.
       Introduction cần đúng đối tượng chính
-      và đúng loại process đang được mô tả.
+      và đúng loại process.
     `,
 
     `
@@ -2354,8 +3265,8 @@ function guideFor(step){
       <b>Mục tiêu:</b>
       Viết lại toàn bài từ đầu:
       Introduction → Overview → Body 1 → Body 2.
-      Kiểm tra lại nội dung, trình tự,
-      ngữ pháp và chính tả trước khi nộp.
+      Chỉ cần bấm Enter 1 lần để sang đoạn mới.
+      Hệ thống sẽ nhận mỗi dòng mới là một paragraph.
     `
 
   ][step];
@@ -2363,7 +3274,7 @@ function guideFor(step){
 
 
 /* =========================================================
-   STEP 1 ANALYSIS
+   STEP 1
 ========================================================= */
 
 function renderAnalysis(){
@@ -2371,6 +3282,11 @@ function renderAnalysis(){
     state.drafts.analysis
     ||
     {};
+
+  const main=
+    document.getElementById(
+      'main'
+    );
 
   main.innerHTML=`
 
@@ -2395,8 +3311,7 @@ function renderAnalysis(){
 <p class="sub">
 
   Quan sát toàn bộ sơ đồ rồi hoàn thành 7 mục.
-  Riêng Body 1/Body 2,
-  em tự chọn cách chia hợp lý.
+  Riêng Body 1/Body 2, em tự chọn cách chia hợp lý.
 
 </p>
 
@@ -2479,7 +3394,9 @@ function renderAnalysis(){
 
   <div
     class="field"
-    style="grid-column:1/-1"
+    style="
+      grid-column:1/-1
+    "
   >
 
     <label>
@@ -2563,40 +3480,56 @@ function renderAnalysis(){
 
   `;
 
-  aType.value=
+
+  document.getElementById(
+    'aType'
+  ).value=
     draft.type
     ||
     '';
 
-  aStages.value=
+  document.getElementById(
+    'aStages'
+  ).value=
     draft.stages
     ||
     '';
 
-  aFirst.value=
+  document.getElementById(
+    'aFirst'
+  ).value=
     draft.first
     ||
     '';
 
-  aLast.value=
+  document.getElementById(
+    'aLast'
+  ).value=
     draft.last
     ||
     '';
 
-  aFeatures.value=
+  document.getElementById(
+    'aFeatures'
+  ).value=
     draft.features
     ||
     '';
 
-  aBody1.value=
+  document.getElementById(
+    'aBody1'
+  ).value=
     draft.body1
     ||
     '';
 
-  aBody2.value=
+  document.getElementById(
+    'aBody2'
+  ).value=
     draft.body2
     ||
     '';
+
 
   main
   .querySelectorAll(
@@ -2611,12 +3544,19 @@ function renderAnalysis(){
     }
   );
 
-  checkBtn.onclick=
+
+  document.getElementById(
+    'checkBtn'
+  ).onclick=
     checkAnalysis;
 
-  nextBtn.onclick=
+
+  document.getElementById(
+    'nextBtn'
+  ).onclick=
     ()=>
-    goStep(1);
+      goStep(1);
+
 
   if(
     state.scores[0]
@@ -2745,7 +3685,8 @@ function checkAnalysis(){
   const correct=
     checks
     .filter(
-      item=>item[1]
+      item=>
+        item[1]
     )
     .length;
 
@@ -2787,12 +3728,14 @@ function checkAnalysis(){
   renderNav();
   renderProgress();
 
-  nextBtn.disabled=
+  document.getElementById(
+    'nextBtn'
+  ).disabled=
     !done(0);
 }
 
 function analysisReference(){
-  const a=
+  const analysis=
     task.analysis;
 
   return `
@@ -2814,17 +3757,23 @@ ${task.stages}
 <br>
 
 • First stage:
-${esc(a.first.join(' / '))}
+${esc(
+  analysis.first.join(' / ')
+)}
 
 <br>
 
 • Last/return stage:
-${esc(a.last.join(' / '))}
+${esc(
+  analysis.last.join(' / ')
+)}
 
 <br>
 
 • Important features:
-${esc(a.features.join(' · '))}
+${esc(
+  analysis.features.join(' · ')
+)}
 
 <br><br>
 
@@ -2841,12 +3790,16 @@ Một cách tham khảo:
 <br>
 
 • Body 1:
-${esc(a.body1.join(' · '))}
+${esc(
+  analysis.body1.join(' · ')
+)}
 
 <br>
 
 • Body 2:
-${esc(a.body2.join(' · '))}
+${esc(
+  analysis.body2.join(' · ')
+)}
 
   `;
 }
@@ -2864,7 +3817,12 @@ function showAnalysisFeedback(result){
   const rows=
     result.checks
     .map(
-      ([name,ok])=>`
+      (
+        [
+          name,
+          ok
+        ]
+      )=>`
 
 <div
   class="
@@ -2910,9 +3868,9 @@ function showAnalysisFeedback(result){
     ?
 
     `
-<div class="reference">
-  ${analysisReference()}
-</div>
+      <div class="reference">
+        ${analysisReference()}
+      </div>
     `
 
     :
@@ -2957,9 +3915,8 @@ function showAnalysisFeedback(result){
 
   </div>
 
-
   <div class="counter">
-    Phải đúng đủ các mục chính
+    Body 1/2 được chấm linh hoạt
   </div>
 
 </div>
@@ -2977,18 +3934,40 @@ ${reference}
 
 
 /* =========================================================
-   INTRODUCTION
+   SECTION CONFIG
+========================================================= */
+
+function sectionConfig(step){
+  return task[
+    draftKey(step)
+  ];
+}
+
+
+/* =========================================================
+   INTRODUCTION GRADING
 ========================================================= */
 
 function gradeIntroduction(text){
   const wc=
     words(text);
 
-  const grammar=
-    grammarIssues(text);
+  const language=
+    languageIssues(text);
+
+  const serious=
+    seriousLanguageIssues(
+      language
+    );
 
   const topic=
     topicCheck(text);
+
+  const factual=
+    factualIssues(
+      text,
+      1
+    );
 
   const framingOK=
     containsAny(
@@ -3079,22 +4058,36 @@ function gradeIntroduction(text){
     );
   }
 
-  grammar.forEach(
+  factual.forEach(
     issue=>
-    issues.push(
-      'Ngữ pháp/trình bày: '
-      +
-      issue
-    )
+      issues.push(
+        'Nội dung/số liệu: '
+        +
+        issue
+      )
+  );
+
+  language.forEach(
+    issue=>
+      issues.push(
+        'Ngữ pháp/chính tả: '
+        +
+        issue
+      )
   );
 
   const topicPts=
+
     topic.requiredOK
     &&
-    topic.wrong.length===0
+    !topic.wrong.length
+
     ?
+
     45
+
     :
+
     0;
 
   const framingPts=
@@ -3119,20 +4112,25 @@ function gradeIntroduction(text){
     0;
 
   const lengthPts=
+
     wc>=8
+
     ?
+
     10
+
     :
+
     Math.round(
       wc/8*10
     );
 
-  const grammarPts=
+  const languagePts=
     Math.max(
       0,
       10
       -
-      grammar.length*5
+      serious.length*5
     );
 
   let score=
@@ -3146,7 +4144,7 @@ function gradeIntroduction(text){
     +
     lengthPts
     +
-    grammarPts;
+    languagePts;
 
   if(
     !topic.requiredOK
@@ -3160,16 +4158,32 @@ function gradeIntroduction(text){
       );
   }
 
+  if(
+    factual.length
+  ){
+    score=
+      Math.min(
+        score,
+        69
+      );
+  }
+
   const breakdown=[
 
     {
-      label:'Đúng đối tượng chính',
-      score:topicPts,
-      max:45,
+      label:
+        'Đúng đối tượng chính',
+
+      score:
+        topicPts,
+
+      max:
+        45,
+
       note:
         topic.requiredOK
         &&
-        topic.wrong.length===0
+        !topic.wrong.length
         ?
         `Đúng: ${topic.expected}`
         :
@@ -3177,21 +4191,33 @@ function gradeIntroduction(text){
     },
 
     {
-      label:'Paraphrase dạng sơ đồ',
-      score:framingPts,
-      max:10,
+      label:
+        'Paraphrase dạng sơ đồ',
+
+      score:
+        framingPts,
+
+      max:
+        10,
+
       note:
         framingOK
         ?
-        'Có diagram/figure'
+        'Đạt'
         :
         'Chưa rõ'
     },
 
     {
-      label:'Động từ mô tả',
-      score:describePts,
-      max:15,
+      label:
+        'Động từ mô tả',
+
+      score:
+        describePts,
+
+      max:
+        15,
+
       note:
         describeOK
         ?
@@ -3201,9 +4227,15 @@ function gradeIntroduction(text){
     },
 
     {
-      label:'Thể hiện process',
-      score:processPts,
-      max:10,
+      label:
+        'Thể hiện process',
+
+      score:
+        processPts,
+
+      max:
+        10,
+
       note:
         processOK
         ?
@@ -3213,20 +4245,33 @@ function gradeIntroduction(text){
     },
 
     {
-      label:'Độ dài',
-      score:lengthPts,
-      max:10,
-      note:`${wc} từ`
+      label:
+        'Độ dài',
+
+      score:
+        lengthPts,
+
+      max:
+        10,
+
+      note:
+        `${wc} từ`
     },
 
     {
-      label:'Ngữ pháp & trình bày',
-      score:grammarPts,
-      max:10,
+      label:
+        'Ngữ pháp & chính tả',
+
+      score:
+        languagePts,
+
+      max:
+        10,
+
       note:
-        grammar.length
+        serious.length
         ?
-        `${grammar.length} lỗi được phát hiện`
+        `${serious.length} lỗi quan trọng`
         :
         'Ổn'
     }
@@ -3246,7 +4291,7 @@ function gradeIntroduction(text){
 
       &&
 
-      topic.wrong.length===0
+      !topic.wrong.length
 
       &&
 
@@ -3266,29 +4311,39 @@ function gradeIntroduction(text){
 
       &&
 
-      grammar.length===0,
+      serious.length===0
+
+      &&
+
+      factual.length===0,
 
     wc,
-    grammar,
+
     issues,
+
     breakdown
   };
 }
 
 
 /* =========================================================
-   OVERVIEW
+   OVERVIEW GRADING
 ========================================================= */
 
 function gradeOverview(text){
-  const cfg=
+  const config=
     task.overview;
 
   const wc=
     words(text);
 
-  const grammar=
-    grammarIssues(text);
+  const language=
+    languageIssues(text);
+
+  const serious=
+    seriousLanguageIssues(
+      language
+    );
 
   const topic=
     topicCheck(text);
@@ -3317,34 +4372,40 @@ function gradeOverview(text){
       ]
     );
 
-  const h=
+  const hits=
     groupHits(
       text,
-      cfg.concepts||[]
+      config.concepts||[]
     );
 
   const ratio=
-    h.length
+
+    hits.length
+
     ?
-    h.filter(Boolean).length
+
+    hits
+    .filter(Boolean)
+    .length
     /
-    h.length
+    hits.length
+
     :
+
     1;
 
   const expectedStages=
-    Number(task.stages);
+    Number(
+      task.stages
+    );
 
   const stageClaim=
-    detectStageCountClaim(text);
+    detectStageCountClaim(
+      text
+    );
 
-  const analysisCount=
+  const step1Stages=
     analysisStageCount();
-
-  /*
-    Không bắt buộc Overview phải ghi số stage.
-    Nhưng nếu đã ghi thì phải đúng.
-  */
 
   const stageCountOK=
 
@@ -3356,19 +4417,31 @@ function gradeOverview(text){
     ===
     expectedStages;
 
-  const consistentWithAnalysis=
+  const consistentWithStep1=
 
     !stageClaim.mentioned
 
     ||
 
-    analysisCount==null
+    step1Stages==null
 
     ||
 
     stageClaim.count
     ===
-    analysisCount;
+    step1Stages;
+
+  const factual=
+    factualIssues(
+      text,
+      2
+    );
+
+  const style=
+    styleIssues(
+      text,
+      2
+    );
 
   const issues=[];
 
@@ -3400,7 +4473,7 @@ function gradeOverview(text){
     !lastOK
   ){
     issues.push(
-      'Overview chưa thể hiện rõ điểm kết thúc / return stage.'
+      'Overview chưa thể hiện rõ điểm kết thúc của process.'
     );
   }
 
@@ -3409,30 +4482,20 @@ function gradeOverview(text){
     &&
     !stageCountOK
   ){
-    let message=
-      `Sai số giai đoạn: em viết “${stageClaim.match}”, nhưng sơ đồ này có ${expectedStages} main stages.`;
-
-    if(
-      analysisCount!=null
-    ){
-      message+=
-        ` Ở Bước 1 em đã nhập ${analysisCount} stages.`;
-    }
-
     issues.push(
-      message
+      `Sai số giai đoạn: em viết ${stageClaim.count}, nhưng sơ đồ có ${expectedStages} main stages.`
     );
   }
 
   if(
     stageClaim.mentioned
     &&
-    !consistentWithAnalysis
+    !consistentWithStep1
     &&
-    analysisCount!=null
+    step1Stages!=null
   ){
     issues.push(
-      `Thông tin chưa nhất quán giữa các bước: Bước 1 = ${analysisCount} stages, Overview = ${stageClaim.count} stages.`
+      `Không nhất quán với Bước 1: Bước 1 = ${step1Stages} stages, Overview = ${stageClaim.count} stages.`
     );
   }
 
@@ -3452,13 +4515,31 @@ function gradeOverview(text){
     );
   }
 
-  grammar.forEach(
+  factual.forEach(
     issue=>
-    issues.push(
-      'Ngữ pháp/trình bày: '
-      +
-      issue
-    )
+      issues.push(
+        'Nội dung/số liệu: '
+        +
+        issue
+      )
+  );
+
+  language.forEach(
+    issue=>
+      issues.push(
+        'Ngữ pháp/chính tả: '
+        +
+        issue
+      )
+  );
+
+  style.forEach(
+    issue=>
+      issues.push(
+        'Cách viết IELTS Task 1: '
+        +
+        issue
+      )
   );
 
   const topicPts=
@@ -3490,12 +4571,17 @@ function gradeOverview(text){
     0;
 
   const stagePts=
+
     stageCountOK
     &&
-    consistentWithAnalysis
+    consistentWithStep1
+
     ?
+
     15
+
     :
+
     0;
 
   const featurePts=
@@ -3509,10 +4595,15 @@ function gradeOverview(text){
     );
 
   const lengthPts=
+
     wc>=25
+
     ?
+
     5
+
     :
+
     Math.round(
       Math.min(
         1,
@@ -3527,7 +4618,19 @@ function gradeOverview(text){
       0,
       10
       -
-      grammar.length*5
+      serious.length*5
+    );
+
+  const stylePenalty=
+    Math.min(
+      8,
+      style.length*3
+    );
+
+  const factualPenalty=
+    Math.min(
+      20,
+      factual.length*8
     );
 
   let score=
@@ -3545,11 +4648,11 @@ function gradeOverview(text){
     +
     lengthPts
     +
-    languagePts;
-
-  /*
-    Sai số stage = lỗi nội dung quan trọng.
-  */
+    languagePts
+    -
+    stylePenalty
+    -
+    factualPenalty;
 
   if(
     stageClaim.mentioned
@@ -3557,7 +4660,7 @@ function gradeOverview(text){
     (
       !stageCountOK
       ||
-      !consistentWithAnalysis
+      !consistentWithStep1
     )
   ){
     score=
@@ -3577,60 +4680,108 @@ function gradeOverview(text){
       );
   }
 
+  if(
+    factual.length
+  ){
+    score=
+      Math.min(
+        score,
+        74
+      );
+  }
+
+  score=
+    Math.max(
+      0,
+      Math.min(
+        100,
+        score
+      )
+    );
+
   const breakdown=[
 
     {
-      label:'Đúng chủ đề/process',
-      score:topicPts,
-      max:10,
+      label:
+        'Đúng chủ đề/process',
+
+      score:
+        topicPts,
+
+      max:
+        10,
+
       note:
         topic.wrong.length
         ?
-        `Có nội dung thuộc bài khác: ${topic.wrong.join(', ')}`
+        'Có nội dung thuộc bài khác'
         :
-        'Đúng bài đang làm'
+        'Đúng'
     },
 
     {
-      label:'Dấu hiệu Overview',
-      score:markerPts,
-      max:10,
+      label:
+        'Dấu hiệu Overview',
+
+      score:
+        markerPts,
+
+      max:
+        10,
+
       note:
         overviewMarker
         ?
-        'Có Overall/In general...'
+        'Đạt'
         :
-        'Chưa có'
+        'Thiếu'
     },
 
     {
-      label:'Điểm bắt đầu',
-      score:firstPts,
-      max:15,
+      label:
+        'Điểm bắt đầu',
+
+      score:
+        firstPts,
+
+      max:
+        15,
+
       note:
         firstOK
         ?
-        'Đã nêu đúng/đủ rõ'
+        'Đạt'
         :
         'Chưa rõ'
     },
 
     {
-      label:'Điểm kết thúc',
-      score:lastPts,
-      max:15,
+      label:
+        'Điểm kết thúc',
+
+      score:
+        lastPts,
+
+      max:
+        15,
+
       note:
         lastOK
         ?
-        'Đã nêu đúng/đủ rõ'
+        'Đạt'
         :
         'Chưa rõ'
     },
 
     {
-      label:'Số giai đoạn',
-      score:stagePts,
-      max:15,
+      label:
+        'Số giai đoạn',
+
+      score:
+        stagePts,
+
+      max:
+        15,
 
       note:
 
@@ -3641,68 +4792,116 @@ function gradeOverview(text){
         (
           stageCountOK
           &&
-          consistentWithAnalysis
+          consistentWithStep1
 
           ?
 
-          `Đúng: ${stageClaim.count} stages`
+          `Đúng: ${stageClaim.count}`
 
           :
 
-          `Sai/không nhất quán: em viết ${stageClaim.count}, sơ đồ có ${expectedStages}${
-            analysisCount!=null
-            ?
-            `, Bước 1 em nhập ${analysisCount}`
-            :
-            ''
-          }`
+          'Sai/không nhất quán'
         )
 
         :
 
-        'Không bắt buộc phải nêu số stage; nếu nêu thì phải đúng'
+        'Không bắt buộc nêu'
     },
 
     {
-      label:'Khái quát đặc điểm chính',
-      score:featurePts,
-      max:20,
+      label:
+        'Khái quát đặc điểm chính',
+
+      score:
+        featurePts,
+
+      max:
+        20,
+
       note:
-        `Mức bao quát ${Math.round(ratio*100)}%`
+        `${Math.round(ratio*100)}%`
     },
 
     {
-      label:'Độ dài',
-      score:lengthPts,
-      max:5,
+      label:
+        'Độ dài',
+
+      score:
+        lengthPts,
+
+      max:
+        5,
+
       note:
         `${wc} từ`
     },
 
     {
-      label:'Ngữ pháp & trình bày',
-      score:languagePts,
-      max:10,
+      label:
+        'Ngữ pháp & chính tả',
+
+      score:
+        languagePts,
+
+      max:
+        10,
+
       note:
-        grammar.length
+        serious.length
         ?
-        `${grammar.length} lỗi được phát hiện`
+        `${serious.length} lỗi quan trọng`
         :
-        'Không phát hiện lỗi chính'
+        'Ổn'
     }
 
   ];
 
+  if(
+    stylePenalty
+  ){
+    breakdown.push({
+
+      label:
+        'Khấu trừ Overview quá chi tiết',
+
+      score:
+        -stylePenalty,
+
+      max:
+        0,
+
+      note:
+        `${style.length} điểm cần cải thiện`
+
+    });
+  }
+
+  if(
+    factualPenalty
+  ){
+    breakdown.push({
+
+      label:
+        'Khấu trừ nội dung/số liệu',
+
+      score:
+        -factualPenalty,
+
+      max:
+        0,
+
+      note:
+        `${factual.length} lỗi`
+
+    });
+  }
+
   return {
-    total:
-      Math.min(
-        100,
-        score
-      ),
+    total:score,
 
     completed:
 
-      topic.wrong.length===0
+      !topic.wrong.length
 
       &&
 
@@ -3722,7 +4921,7 @@ function gradeOverview(text){
 
       &&
 
-      consistentWithAnalysis
+      consistentWithStep1
 
       &&
 
@@ -3734,13 +4933,17 @@ function gradeOverview(text){
 
       &&
 
-      grammar.length===0,
+      serious.length===0
+
+      &&
+
+      factual.length===0,
 
     wc,
+
     issues,
-    breakdown,
-    stageClaim,
-    expectedStages
+
+    breakdown
   };
 }
 
@@ -3749,27 +4952,26 @@ function gradeOverview(text){
    FLEXIBLE BODY GRADING
 ========================================================= */
 
-function sectionConfig(step){
-  return task[
-    draftKey(step)
-  ];
-}
-
-function flexibleBodyGrade(step,text){
-  const cfg=
+function flexibleBodyGrade(
+  step,
+  text
+){
+  const config=
     sectionConfig(step);
 
   const groups=
     globalBodyGroups();
 
-  const h=
+  const hits=
     groupHits(
       text,
       groups
     );
 
   const hitCount=
-    h.filter(Boolean).length;
+    hits
+    .filter(Boolean)
+    .length;
 
   const minHits=
     Math.max(
@@ -3785,21 +4987,43 @@ function flexibleBodyGrade(step,text){
   const wc=
     words(text);
 
-  const grammar=
-    grammarIssues(text);
+  const language=
+    languageIssues(text);
+
+  const serious=
+    seriousLanguageIssues(
+      language
+    );
 
   const topic=
     topicCheck(text);
 
-  const sequenceOK=
+  const factual=
+    factualIssues(
+      text,
+      step
+    );
 
-    !cfg.sequence?.length
+  const style=
+    styleIssues(
+      text,
+      step
+    );
+
+  const sequence=
+    sequenceAudit(
+      text
+    );
+
+  const connectorOK=
+
+    !config.sequence?.length
 
     ||
 
     containsAny(
       text,
-      cfg.sequence
+      config.sequence
     );
 
   let overlapPenalty=0;
@@ -3816,7 +5040,8 @@ function flexibleBodyGrade(step,text){
         )
         .split(/\s+/)
         .filter(
-          x=>x.length>3
+          word=>
+            word.length>3
         )
       );
 
@@ -3825,23 +5050,24 @@ function flexibleBodyGrade(step,text){
         norm(text)
         .split(/\s+/)
         .filter(
-          x=>x.length>3
+          word=>
+            word.length>3
         )
       );
 
     let overlap=0;
 
     A.forEach(
-      x=>{
+      word=>{
         if(
-          B.has(x)
+          B.has(word)
         ){
           overlap++;
         }
       }
     );
 
-    const ratio=
+    const overlapRatio=
       overlap
       /
       Math.max(
@@ -3853,7 +5079,7 @@ function flexibleBodyGrade(step,text){
       );
 
     if(
-      ratio>.72
+      overlapRatio>.72
     ){
       overlapPenalty=12;
     }
@@ -3866,25 +5092,19 @@ function flexibleBodyGrade(step,text){
     ?
 
     String(
-      state.drafts.body1
-      ||
-      ''
+      state.drafts.body1||''
     )
     +
     ' '
     +
     String(
-      text
-      ||
-      ''
+      text||''
     )
 
     :
 
     String(
-      text
-      ||
-      ''
+      text||''
     );
 
   const combinedHits=
@@ -3932,32 +5152,56 @@ function flexibleBodyGrade(step,text){
     );
 
   const lengthPts=
-    wc>=cfg.minWords
+
+    wc>=config.minWords
+
     ?
+
     15
+
     :
+
     Math.round(
       15
       *
       Math.min(
         1,
-        wc/cfg.minWords
+        wc/config.minWords
       )
     );
 
   const sequencePts=
-    sequenceOK
-    ?
-    10
-    :
-    0;
 
-  const grammarPts=
+    connectorOK
+    &&
+    sequence.ok
+
+    ?
+
+    10
+
+    :
+
+    (
+      connectorOK
+      ||
+      sequence.ok
+
+      ?
+
+      5
+
+      :
+
+      0
+    );
+
+  const languagePts=
     Math.max(
       0,
       10
       -
-      grammar.length*4
+      serious.length*4
     );
 
   const coveragePts=
@@ -3980,6 +5224,12 @@ function flexibleBodyGrade(step,text){
 
     10;
 
+  const factualPenalty=
+    Math.min(
+      18,
+      factual.length*7
+    );
+
   let score=
     contentPts
     +
@@ -3987,11 +5237,13 @@ function flexibleBodyGrade(step,text){
     +
     sequencePts
     +
-    grammarPts
+    languagePts
     +
     coveragePts
     -
-    overlapPenalty;
+    overlapPenalty
+    -
+    factualPenalty;
 
   score=
     Math.max(
@@ -4001,6 +5253,26 @@ function flexibleBodyGrade(step,text){
         score
       )
     );
+
+  if(
+    topic.wrong.length
+  ){
+    score=
+      Math.min(
+        score,
+        45
+      );
+  }
+
+  if(
+    factual.length
+  ){
+    score=
+      Math.min(
+        score,
+        74
+      );
+  }
 
   const issues=[];
 
@@ -4016,25 +5288,34 @@ function flexibleBodyGrade(step,text){
     hitCount<minHits
   ){
     issues.push(
-      `Đoạn chưa mô tả đủ stage cụ thể: hệ thống nhận ${hitCount}, nên có ít nhất khoảng ${minHits} ý/stage rõ ràng.`
+      `Đoạn chưa mô tả đủ stage cụ thể: hệ thống nhận ${hitCount}, cần khoảng ${minHits} ý/stage rõ ràng.`
     );
   }
 
   if(
-    wc<cfg.minWords
+    wc<config.minWords
   ){
     issues.push(
-      `Đoạn còn ngắn: ${wc} từ; mục tiêu khoảng ${cfg.minWords}+ từ.`
+      `Đoạn còn ngắn: ${wc} từ; mục tiêu khoảng ${config.minWords}+ từ.`
     );
   }
 
   if(
-    !sequenceOK
+    !connectorOK
   ){
     issues.push(
-      'Nên có từ/cụm nối để thể hiện đúng trình tự các stage.'
+      'Nên dùng từ/cụm nối để thể hiện trình tự rõ hơn.'
     );
   }
+
+  sequence.violations.forEach(
+    issue=>
+      issues.push(
+        'Thứ tự stage: '
+        +
+        issue
+      )
+  );
 
   if(
     step===4
@@ -4050,67 +5331,99 @@ function flexibleBodyGrade(step,text){
     overlapPenalty
   ){
     issues.push(
-      'Body 2 đang lặp khá nhiều nội dung của Body 1. Hãy tiếp tục từ điểm Body 1 đã dừng.'
+      'Body 2 đang lặp khá nhiều nội dung của Body 1.'
     );
   }
 
-  grammar.forEach(
+  factual.forEach(
     issue=>
-    issues.push(
-      'Ngữ pháp/trình bày: '
-      +
-      issue
-    )
+      issues.push(
+        'Nội dung/số liệu: '
+        +
+        issue
+      )
   );
 
-  if(
-    topic.wrong.length
-  ){
-    score=
-      Math.min(
-        score,
-        45
-      );
-  }
+  language.forEach(
+    issue=>
+      issues.push(
+        'Ngữ pháp/chính tả: '
+        +
+        issue
+      )
+  );
+
+  style.forEach(
+    issue=>
+      issues.push(
+        'Diễn đạt: '
+        +
+        issue
+      )
+  );
 
   const breakdown=[
 
     {
-      label:'Các stage/nội dung chính',
-      score:contentPts,
-      max:55,
+      label:
+        'Nội dung/stages',
+
+      score:
+        contentPts,
+
+      max:
+        55,
+
       note:
-        `Nhận diện ${hitCount} nhóm nội dung`
+        `Nhận diện ${hitCount} nhóm`
     },
 
     {
-      label:'Độ dài',
-      score:lengthPts,
-      max:15,
+      label:
+        'Độ dài',
+
+      score:
+        lengthPts,
+
+      max:
+        15,
+
       note:
         `${wc} từ`
     },
 
     {
-      label:'Trình tự & từ nối',
-      score:sequencePts,
-      max:10,
+      label:
+        'Trình tự',
+
+      score:
+        sequencePts,
+
+      max:
+        10,
+
       note:
-        sequenceOK
+        sequence.ok
         ?
-        'Đạt'
+        'Hợp lý'
         :
-        'Chưa rõ'
+        `${sequence.violations.length} vấn đề`
     },
 
     {
-      label:'Ngữ pháp & trình bày',
-      score:grammarPts,
-      max:10,
+      label:
+        'Ngữ pháp & chính tả',
+
+      score:
+        languagePts,
+
+      max:
+        10,
+
       note:
-        grammar.length
+        serious.length
         ?
-        `${grammar.length} lỗi được phát hiện`
+        `${serious.length} lỗi`
         :
         'Ổn'
     },
@@ -4119,29 +5432,72 @@ function flexibleBodyGrade(step,text){
       label:
         step===4
         ?
-        'Độ bao phủ khi ghép 2 body'
+        'Độ bao phủ 2 Body'
         :
-        'Tính độc lập của Body 1',
+        'Độ bao phủ Body 1',
 
-      score:coveragePts,
-      max:10,
+      score:
+        coveragePts,
+
+      max:
+        10,
 
       note:
         step===4
         ?
         `${Math.round(combinedRatio*100)}% process`
         :
-        'Được chấm linh hoạt'
+        'Chấm linh hoạt'
     }
 
   ];
+
+  if(
+    factualPenalty
+  ){
+    breakdown.push({
+
+      label:
+        'Khấu trừ nội dung/số liệu',
+
+      score:
+        -factualPenalty,
+
+      max:
+        0,
+
+      note:
+        `${factual.length} lỗi`
+
+    });
+  }
+
+  if(
+    overlapPenalty
+  ){
+    breakdown.push({
+
+      label:
+        'Khấu trừ lặp Body 1',
+
+      score:
+        -overlapPenalty,
+
+      max:
+        0,
+
+      note:
+        'Lặp nội dung'
+
+    });
+  }
 
   return {
     total:score,
 
     completed:
 
-      topic.wrong.length===0
+      !topic.wrong.length
 
       &&
 
@@ -4150,12 +5506,16 @@ function flexibleBodyGrade(step,text){
       &&
 
       wc>=Math.round(
-        cfg.minWords*.8
+        config.minWords*.8
       )
 
       &&
 
-      sequenceOK
+      connectorOK
+
+      &&
+
+      sequence.ok
 
       &&
 
@@ -4167,12 +5527,18 @@ function flexibleBodyGrade(step,text){
 
       &&
 
-      grammar.length<=1,
+      serious.length===0
+
+      &&
+
+      factual.length===0,
 
     wc,
+
     issues,
+
     breakdown,
-    flexibleBody:true,
+
     combinedRatio
   };
 }
@@ -4182,14 +5548,21 @@ function flexibleBodyGrade(step,text){
    GENERIC SECTION GRADING
 ========================================================= */
 
-function sectionGrade(step,text){
-  if(step===1){
+function sectionGrade(
+  step,
+  text
+){
+  if(
+    step===1
+  ){
     return gradeIntroduction(
       text
     );
   }
 
-  if(step===2){
+  if(
+    step===2
+  ){
     return gradeOverview(
       text
     );
@@ -4206,24 +5579,26 @@ function sectionGrade(step,text){
     );
   }
 
-  const cfg=
+  const config=
     sectionConfig(step);
 
-  const h=
+  const hits=
     groupHits(
       text,
-      cfg.concepts||[]
+      config.concepts||[]
     );
 
   const ratio=
 
-    h.length
+    hits.length
 
     ?
 
-    h.filter(Boolean).length
+    hits
+    .filter(Boolean)
+    .length
     /
-    h.length
+    hits.length
 
     :
 
@@ -4232,21 +5607,32 @@ function sectionGrade(step,text){
   const wc=
     words(text);
 
-  const grammar=
-    grammarIssues(text);
+  const language=
+    languageIssues(text);
+
+  const serious=
+    seriousLanguageIssues(
+      language
+    );
 
   const topic=
     topicCheck(text);
 
+  const factual=
+    factualIssues(
+      text,
+      step
+    );
+
   const sequenceOK=
 
-    !cfg.sequence?.length
+    !config.sequence?.length
 
     ||
 
     containsAny(
       text,
-      cfg.sequence
+      config.sequence
     );
 
   const issues=[];
@@ -4264,16 +5650,20 @@ function sectionGrade(step,text){
   ){
     const missing=
       (
-        cfg.concepts
+        config.concepts
         ||
         []
       )
       .filter(
-        (_,index)=>
-        !h[index]
+        (
+          _,
+          index
+        )=>
+          !hits[index]
       )
       .map(
-        group=>group[0]
+        group=>
+          group[0]
       );
 
     issues.push(
@@ -4286,10 +5676,10 @@ function sectionGrade(step,text){
   }
 
   if(
-    wc<cfg.minWords
+    wc<config.minWords
   ){
     issues.push(
-      `Đoạn còn ngắn: ${wc} từ; mục tiêu khoảng ${cfg.minWords}+ từ.`
+      `Đoạn còn ngắn: ${wc} từ; mục tiêu khoảng ${config.minWords}+ từ.`
     );
   }
 
@@ -4301,13 +5691,22 @@ function sectionGrade(step,text){
     );
   }
 
-  grammar.forEach(
+  factual.forEach(
     issue=>
-    issues.push(
-      'Ngữ pháp/trình bày: '
-      +
-      issue
-    )
+      issues.push(
+        'Nội dung/số liệu: '
+        +
+        issue
+      )
+  );
+
+  language.forEach(
+    issue=>
+      issues.push(
+        'Ngữ pháp/chính tả: '
+        +
+        issue
+      )
   );
 
   const contentPts=
@@ -4316,16 +5715,21 @@ function sectionGrade(step,text){
     );
 
   const lengthPts=
-    wc>=cfg.minWords
+
+    wc>=config.minWords
+
     ?
+
     15
+
     :
+
     Math.round(
       15
       *
       Math.min(
         1,
-        wc/cfg.minWords
+        wc/config.minWords
       )
     );
 
@@ -4336,12 +5740,18 @@ function sectionGrade(step,text){
     :
     0;
 
-  const grammarPts=
+  const languagePts=
     Math.max(
       0,
       7
       -
-      grammar.length*3
+      serious.length*3
+    );
+
+  const factualPenalty=
+    Math.min(
+      15,
+      factual.length*6
     );
 
   let score=
@@ -4351,12 +5761,17 @@ function sectionGrade(step,text){
     +
     sequencePts
     +
-    grammarPts;
+    languagePts
+    -
+    factualPenalty;
 
   score=
-    Math.min(
-      100,
-      score
+    Math.max(
+      0,
+      Math.min(
+        100,
+        score
+      )
     );
 
   if(
@@ -4374,7 +5789,7 @@ function sectionGrade(step,text){
 
     completed:
 
-      topic.wrong.length===0
+      !topic.wrong.length
 
       &&
 
@@ -4383,7 +5798,7 @@ function sectionGrade(step,text){
       &&
 
       wc>=Math.round(
-        cfg.minWords*.8
+        config.minWords*.8
       )
 
       &&
@@ -4392,10 +5807,650 @@ function sectionGrade(step,text){
 
       &&
 
-      grammar.length<=1,
+      serious.length<=1
+
+      &&
+
+      factual.length===0,
 
     wc,
+
     issues
+  };
+}
+
+
+/* =========================================================
+   FULL ESSAY GRADING
+   ENTER 1 LẦN = 1 PARAGRAPH MỚI
+========================================================= */
+
+function fullGrade(text){
+  const wc=
+    words(text);
+
+  const paragraphs=
+    splitParagraphs(
+      text,
+      20
+    );
+
+  const paragraphCount=
+    paragraphs.length;
+
+  const groups=[
+
+    ...task.intro.concepts,
+
+    ...task.overview.concepts,
+
+    ...task.body1.concepts,
+
+    ...task.body2.concepts
+
+  ];
+
+  const allHits=
+    groupHits(
+      text,
+      groups
+    );
+
+  const ratio=
+
+    allHits.length
+
+    ?
+
+    allHits
+    .filter(Boolean)
+    .length
+    /
+    allHits.length
+
+    :
+
+    0;
+
+  const language=
+    languageIssues(text);
+
+  const serious=
+    seriousLanguageIssues(
+      language
+    );
+
+  const topic=
+    topicCheck(text);
+
+  const factual=
+    factualIssues(
+      text,
+      5
+    );
+
+  const hasOverview=
+    /\boverall\b|\bin general\b|\bgenerally\b|\bit is clear that\b|\bit can be seen that\b/i
+    .test(text);
+
+  const stageClaim=
+    detectStageCountClaim(
+      text
+    );
+
+  const expectedStages=
+    Number(
+      task.stages
+    );
+
+  const stageCountOK=
+
+    !stageClaim.mentioned
+
+    ||
+
+    stageClaim.count
+    ===
+    expectedStages;
+
+  const overviewParagraph=
+    extractOverviewParagraph(
+      text
+    );
+
+  const overviewStyle=
+
+    overviewParagraph
+
+    ?
+
+    styleIssues(
+      overviewParagraph,
+      2
+    )
+
+    :
+
+    [];
+
+
+  /*
+    Paragraph:
+    0 = Intro
+    1 = Overview
+    2+ = Body
+  */
+
+  const bodyText=
+
+    paragraphCount>=4
+
+    ?
+
+    paragraphs
+    .slice(2)
+    .join(' ')
+
+    :
+
+    (
+      state.drafts.body1
+      +
+      ' '
+      +
+      state.drafts.body2
+    );
+
+  const sequence=
+    sequenceAudit(
+      bodyText
+    );
+
+  const issues=[];
+
+
+  /* Topic */
+
+  if(
+    !topic.requiredOK
+  ){
+    issues.push(
+      `Bài chưa thể hiện đúng đối tượng chính: “${topic.expected}”.`
+    );
+  }
+
+  if(
+    topic.wrong.length
+  ){
+    issues.push(
+      `Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
+    );
+  }
+
+
+  /* Stage count */
+
+  if(
+    stageClaim.mentioned
+    &&
+    !stageCountOK
+  ){
+    issues.push(
+      `Sai số giai đoạn: em viết ${stageClaim.count}, nhưng sơ đồ có ${expectedStages} main stages.`
+    );
+  }
+
+
+  /* Length */
+
+  if(
+    wc<150
+  ){
+    issues.push(
+      `Bài hiện có ${wc} từ; Writing Task 1 nên đạt tối thiểu 150 từ.`
+    );
+  }
+
+
+  /* Overview */
+
+  if(
+    !hasOverview
+  ){
+    issues.push(
+      'Chưa thấy Overview rõ ràng.'
+    );
+  }
+
+
+  /* Paragraphs */
+
+  if(
+    paragraphCount<4
+  ){
+    issues.push(
+      `Bài nên có 4 đoạn rõ ràng; hệ thống đang nhận ${paragraphCount} đoạn. Chỉ cần bấm Enter 1 lần để sang đoạn mới.`
+    );
+  }
+
+
+  /* Content coverage */
+
+  if(
+    ratio<.72
+  ){
+    const missing=
+      groups
+      .filter(
+        (
+          _,
+          index
+        )=>
+          !allHits[index]
+      )
+      .map(
+        group=>
+          group[0]
+      )
+      .slice(
+        0,
+        12
+      );
+
+    issues.push(
+      'Một số nội dung/stage chưa rõ: '
+      +
+      missing.join(', ')
+      +
+      '.'
+    );
+  }
+
+
+  /* Factual */
+
+  factual.forEach(
+    issue=>
+      issues.push(
+        'Nội dung/số liệu: '
+        +
+        issue
+      )
+  );
+
+
+  /* Sequence */
+
+  sequence.violations.forEach(
+    issue=>
+      issues.push(
+        'Thứ tự stage: '
+        +
+        issue
+      )
+  );
+
+
+  /* Grammar */
+
+  language.forEach(
+    issue=>
+      issues.push(
+        'Ngữ pháp/chính tả: '
+        +
+        issue
+      )
+  );
+
+
+  /* Overview quality */
+
+  overviewStyle.forEach(
+    issue=>
+      issues.push(
+        'Overview: '
+        +
+        issue
+      )
+  );
+
+
+  /* =========================
+     SCORE
+  ========================= */
+
+  const contentPts=
+    Math.round(
+      ratio*55
+    );
+
+  const wordPts=
+
+    wc>=150
+
+    ?
+
+    20
+
+    :
+
+    Math.round(
+      Math.min(
+        20,
+        wc/150*20
+      )
+    );
+
+  const overviewPts=
+    hasOverview
+    ?
+    10
+    :
+    0;
+
+  const paragraphPts=
+    paragraphCount>=4
+    ?
+    8
+    :
+    0;
+
+  const languagePts=
+    Math.max(
+      0,
+      7
+      -
+      serious.length*3
+    );
+
+  const factualPenalty=
+    Math.min(
+      18,
+      factual.length*5
+    );
+
+  const sequencePenalty=
+    Math.min(
+      10,
+      sequence.violations.length*5
+    );
+
+  const overviewPenalty=
+    Math.min(
+      6,
+      overviewStyle.length*3
+    );
+
+  let score=
+    contentPts
+    +
+    wordPts
+    +
+    overviewPts
+    +
+    paragraphPts
+    +
+    languagePts
+    -
+    factualPenalty
+    -
+    sequencePenalty
+    -
+    overviewPenalty;
+
+  score=
+    Math.max(
+      0,
+      Math.min(
+        100,
+        score
+      )
+    );
+
+
+  /* Wrong topic */
+
+  if(
+    !topic.requiredOK
+    ||
+    topic.wrong.length
+  ){
+    score=
+      Math.min(
+        score,
+        49
+      );
+  }
+
+
+  /* Wrong stage count */
+
+  if(
+    stageClaim.mentioned
+    &&
+    !stageCountOK
+  ){
+    score=
+      Math.min(
+        score,
+        69
+      );
+  }
+
+
+  /* Factual errors */
+
+  if(
+    factual.length
+  ){
+    score=
+      Math.min(
+        score,
+        79
+      );
+  }
+
+
+  /* =========================
+     SCORE BREAKDOWN
+  ========================= */
+
+  const breakdown=[
+
+    {
+      label:
+        'Nội dung & stages',
+
+      score:
+        contentPts,
+
+      max:
+        55,
+
+      note:
+        `Bao quát ${Math.round(ratio*100)}%`
+    },
+
+    {
+      label:
+        'Độ dài',
+
+      score:
+        wordPts,
+
+      max:
+        20,
+
+      note:
+        `${wc} từ`
+    },
+
+    {
+      label:
+        'Overview',
+
+      score:
+        overviewPts,
+
+      max:
+        10,
+
+      note:
+        hasOverview
+        ?
+        'Có'
+        :
+        'Thiếu'
+    },
+
+    {
+      label:
+        'Cấu trúc 4 đoạn',
+
+      score:
+        paragraphPts,
+
+      max:
+        8,
+
+      note:
+        `${paragraphCount} đoạn`
+    },
+
+    {
+      label:
+        'Ngữ pháp & chính tả',
+
+      score:
+        languagePts,
+
+      max:
+        7,
+
+      note:
+        serious.length
+        ?
+        `${serious.length} lỗi quan trọng`
+        :
+        'Ổn'
+    }
+
+  ];
+
+
+  if(
+    factualPenalty
+  ){
+    breakdown.push({
+
+      label:
+        'Khấu trừ sai nội dung/số liệu',
+
+      score:
+        -factualPenalty,
+
+      max:
+        0,
+
+      note:
+        `${factual.length} lỗi`
+
+    });
+  }
+
+
+  if(
+    sequencePenalty
+  ){
+    breakdown.push({
+
+      label:
+        'Khấu trừ sai thứ tự stage',
+
+      score:
+        -sequencePenalty,
+
+      max:
+        0,
+
+      note:
+        `${sequence.violations.length} vấn đề`
+
+    });
+  }
+
+
+  if(
+    overviewPenalty
+  ){
+    breakdown.push({
+
+      label:
+        'Khấu trừ Overview quá chi tiết',
+
+      score:
+        -overviewPenalty,
+
+      max:
+        0,
+
+      note:
+        `${overviewStyle.length} điểm cần cải thiện`
+
+    });
+  }
+
+
+  return {
+    total:score,
+
+    completed:
+
+      topic.requiredOK
+
+      &&
+
+      !topic.wrong.length
+
+      &&
+
+      stageCountOK
+
+      &&
+
+      wc>=150
+
+      &&
+
+      hasOverview
+
+      &&
+
+      paragraphCount>=4
+
+      &&
+
+      ratio>=.72
+
+      &&
+
+      serious.length===0
+
+      &&
+
+      factual.length===0
+
+      &&
+
+      sequence.ok,
+
+    wc,
+
+    paragraphCount,
+
+    issues,
+
+    breakdown
   };
 }
 
@@ -4487,6 +6542,11 @@ function renderWriting(step){
 
     '';
 
+  const main=
+    document.getElementById(
+      'main'
+    );
+
   main.innerHTML=`
 
 <div class="ey">
@@ -4516,7 +6576,7 @@ function renderWriting(step){
 
     `
       Viết lại toàn bộ bài từ trí nhớ.
-      Chỉ mở các phần xem lại khi thật sự cần.
+      Chỉ cần bấm Enter 1 lần để xuống đoạn mới.
     `
 
     :
@@ -4629,19 +6689,28 @@ ${review}
 ></div>
 
 
-<div id="finalDone"></div>
+<div
+  id="finalDone"
+></div>
 
   `;
 
+
   updateWordCount();
 
-  writeBox.addEventListener(
+
+  document.getElementById(
+    'writeBox'
+  )
+  .addEventListener(
     'input',
     ()=>{
       state.drafts[
         draftKey(step)
       ]=
-        writeBox.value;
+        document.getElementById(
+          'writeBox'
+        ).value;
 
       save();
 
@@ -4649,24 +6718,36 @@ ${review}
     }
   );
 
-  prevBtn.onclick=
-    ()=>
-    goStep(
-      step-1
-    );
 
-  checkBtn.onclick=
+  document.getElementById(
+    'prevBtn'
+  ).onclick=
     ()=>
-    checkWriting(step);
+      goStep(
+        step-1
+      );
 
-  nextBtn.onclick=
+
+  document.getElementById(
+    'checkBtn'
+  ).onclick=
+    ()=>
+      checkWriting(step);
+
+
+  document.getElementById(
+    'nextBtn'
+  ).onclick=
     ()=>{
-      if(step<5){
+      if(
+        step<5
+      ){
         goStep(
           step+1
         );
       }
     };
+
 
   if(
     state.scores[step]
@@ -4697,342 +6778,6 @@ function updateWordCount(){
     counter.textContent=
       `${words(box.value)} từ`;
   }
-}
-
-
-/* =========================================================
-   FULL ESSAY
-========================================================= */
-
-function fullGrade(text){
-  const wc=
-    words(text);
-
-  const paragraphs=
-    String(
-      text
-      ||
-      ''
-    )
-    .trim()
-    .split(
-      /\n\s*\n/
-    )
-    .filter(
-      paragraph=>
-      paragraph.trim().length>20
-    )
-    .length;
-
-  const groups=[
-    ...task.intro.concepts,
-    ...task.overview.concepts,
-    ...task.body1.concepts,
-    ...task.body2.concepts
-  ];
-
-  const h=
-    groupHits(
-      text,
-      groups
-    );
-
-  const ratio=
-
-    h.length
-
-    ?
-
-    h.filter(Boolean).length
-    /
-    h.length
-
-    :
-
-    0;
-
-  const grammar=
-    grammarIssues(text);
-
-  const topic=
-    topicCheck(text);
-
-  const hasOverview=
-    /\boverall\b/i
-    .test(text);
-
-  const stageClaim=
-    detectStageCountClaim(text);
-
-  const expectedStages=
-    Number(task.stages);
-
-  const stageCountOK=
-
-    !stageClaim.mentioned
-
-    ||
-
-    stageClaim.count===expectedStages;
-
-  const issues=[];
-
-  if(
-    !topic.requiredOK
-  ){
-    issues.push(
-      `Bài chưa thể hiện đúng đối tượng chính: “${topic.expected}”.`
-    );
-  }
-
-  if(
-    topic.wrong.length
-  ){
-    issues.push(
-      `Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
-    );
-  }
-
-  if(
-    stageClaim.mentioned
-    &&
-    !stageCountOK
-  ){
-    issues.push(
-      `Sai số giai đoạn: em viết ${stageClaim.count}, nhưng sơ đồ có ${expectedStages} main stages.`
-    );
-  }
-
-  if(
-    wc<150
-  ){
-    issues.push(
-      `Bài hiện có ${wc} từ; Writing Task 1 nên đạt tối thiểu 150 từ.`
-    );
-  }
-
-  if(
-    !hasOverview
-  ){
-    issues.push(
-      'Chưa thấy Overview rõ ràng.'
-    );
-  }
-
-  if(
-    paragraphs<4
-  ){
-    issues.push(
-      `Bài nên có 4 đoạn rõ ràng; hệ thống đang nhận ${paragraphs} đoạn.`
-    );
-  }
-
-  if(
-    ratio<.72
-  ){
-    const missing=
-      groups
-      .filter(
-        (_,index)=>
-        !h[index]
-      )
-      .map(
-        group=>group[0]
-      )
-      .slice(
-        0,
-        12
-      );
-
-    issues.push(
-      'Một số nội dung/stage chưa rõ: '
-      +
-      missing.join(', ')
-      +
-      '.'
-    );
-  }
-
-  grammar.forEach(
-    issue=>
-    issues.push(
-      'Ngữ pháp/trình bày: '
-      +
-      issue
-    )
-  );
-
-  const contentPts=
-    Math.round(
-      ratio*55
-    );
-
-  const wordPts=
-    wc>=150
-    ?
-    20
-    :
-    Math.round(
-      Math.min(
-        20,
-        wc/150*20
-      )
-    );
-
-  const overviewPts=
-    hasOverview
-    ?
-    10
-    :
-    0;
-
-  const paragraphPts=
-    paragraphs>=4
-    ?
-    8
-    :
-    0;
-
-  const grammarPts=
-    Math.max(
-      0,
-      7
-      -
-      grammar.length*3
-    );
-
-  let score=
-    contentPts
-    +
-    wordPts
-    +
-    overviewPts
-    +
-    paragraphPts
-    +
-    grammarPts;
-
-  score=
-    Math.min(
-      100,
-      score
-    );
-
-  if(
-    !topic.requiredOK
-    ||
-    topic.wrong.length
-  ){
-    score=
-      Math.min(
-        score,
-        49
-      );
-  }
-
-  if(
-    stageClaim.mentioned
-    &&
-    !stageCountOK
-  ){
-    score=
-      Math.min(
-        score,
-        69
-      );
-  }
-
-  const breakdown=[
-
-    {
-      label:'Nội dung & stages',
-      score:contentPts,
-      max:55,
-      note:
-        `Bao quát ${Math.round(ratio*100)}%`
-    },
-
-    {
-      label:'Độ dài',
-      score:wordPts,
-      max:20,
-      note:
-        `${wc} từ`
-    },
-
-    {
-      label:'Overview',
-      score:overviewPts,
-      max:10,
-      note:
-        hasOverview
-        ?
-        'Có'
-        :
-        'Thiếu'
-    },
-
-    {
-      label:'Cấu trúc 4 đoạn',
-      score:paragraphPts,
-      max:8,
-      note:
-        `${paragraphs} đoạn`
-    },
-
-    {
-      label:'Ngữ pháp & trình bày',
-      score:grammarPts,
-      max:7,
-      note:
-        grammar.length
-        ?
-        `${grammar.length} lỗi`
-        :
-        'Ổn'
-    }
-
-  ];
-
-  return {
-    total:score,
-
-    completed:
-
-      topic.requiredOK
-
-      &&
-
-      topic.wrong.length===0
-
-      &&
-
-      stageCountOK
-
-      &&
-
-      wc>=150
-
-      &&
-
-      hasOverview
-
-      &&
-
-      paragraphs>=4
-
-      &&
-
-      ratio>=.72
-
-      &&
-
-      grammar.length<=1,
-
-    wc,
-    issues,
-    breakdown
-  };
 }
 
 
@@ -5113,7 +6858,10 @@ function checkWriting(step){
    FEEDBACK
 ========================================================= */
 
-function showWritingFeedback(step,result){
+function showWritingFeedback(
+  step,
+  result
+){
   const feedback=
     document.getElementById(
       'feedback'
@@ -5258,9 +7006,11 @@ function showWritingFeedback(step,result){
       result.issues
       .map(
         issue=>`
-          <li>
-            ${esc(issue)}
-          </li>
+
+<li>
+  ${esc(issue)}
+</li>
+
         `
       )
       .join('')
@@ -5331,18 +7081,16 @@ function showWritingFeedback(step,result){
 
   </div>
 
-
   <div class="counter">
-
     Lần kiểm tra:
     ${attempts(step)}
-
   </div>
 
 </div>
 
 
 ${breakdown}
+
 
 ${detail}
 
@@ -5381,12 +7129,15 @@ ${
 
   `;
 
+
   if(
     step===5
     &&
     result.completed
   ){
-    finalDone.innerHTML=`
+    document.getElementById(
+      'finalDone'
+    ).innerHTML=`
 
 <div class="finaldone">
 
@@ -5448,7 +7199,7 @@ function goStep(index){
 
 
 /* =========================================================
-   RENDER
+   RENDER / START
 ========================================================= */
 
 function render(){
@@ -5467,10 +7218,6 @@ function render(){
   }
 }
 
-
-/* =========================================================
-   START
-========================================================= */
 
 load();
 
