@@ -16,7 +16,7 @@ if(!task){
 }
 
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
-const STORAGE_VERSION='V8';
+const STORAGE_VERSION='V10';
 
 const STEP_NAMES=[
   'Phân tích sơ đồ',
@@ -41,9 +41,9 @@ function studentScope(){
     if(s?.name){
       return encodeURIComponent(
         (
-          s.name
-          +'|'
-          +(s.className||'')
+          s.name+
+          '|'+
+          (s.className||'')
         ).toLowerCase()
       );
     }
@@ -74,9 +74,10 @@ let state={
 
 function load(){
   try{
-    const saved=JSON.parse(
-      localStorage.getItem(STORAGE_KEY)||'null'
-    );
+    const saved=
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)||'null'
+      );
 
     if(saved){
       state={
@@ -154,10 +155,15 @@ function containsAny(
     norm(text);
 
   return variants.some(
-    item=>
-      normalized.includes(
-        norm(item)
-      )
+    item=>{
+      const target=norm(item);
+
+      if(!target){
+        return false;
+      }
+
+      return normalized.includes(target);
+    }
   );
 }
 
@@ -216,8 +222,8 @@ function unique(items){
 
 
 /* =========================================================
-   PARAGRAPH DETECTION
-   ENTER 1 LẦN = ĐOẠN MỚI
+   PARAGRAPHS
+   ENTER 1 LẦN = 1 ĐOẠN
 ========================================================= */
 
 function splitParagraphs(
@@ -262,7 +268,8 @@ function completeStep(step){
     ...new Set(
       state.completed
     )
-  ].sort(
+  ]
+  .sort(
     (a,b)=>a-b
   );
 
@@ -284,9 +291,7 @@ function invalidateFrom(step){
     delete state.scores[i];
   }
 
-  if(
-    state.current>step
-  ){
+  if(state.current>step){
     state.current=step;
   }
 
@@ -371,7 +376,7 @@ function saveCurrentDraft(){
 
 
 /* =========================================================
-   NUMBERS / STAGE COUNT
+   NUMBER / STAGE COUNT
 ========================================================= */
 
 const NUMBER_WORDS={
@@ -484,16 +489,14 @@ function analysisStageCount(){
 
   return match
     ?
-    numberValue(
-      match[1]
-    )
+    numberValue(match[1])
     :
     null;
 }
 
 
 /* =========================================================
-   TOPIC CHECK
+   TOPIC RULES
 ========================================================= */
 
 const TOPIC_RULES={
@@ -699,7 +702,1041 @@ function topicCheck(text){
 
 
 /* =========================================================
-   SPELLING
+   GLOBAL BODY GROUPS
+========================================================= */
+
+function globalBodyGroups(){
+  const all=[
+    ...(task.body1?.concepts||[]),
+    ...(task.body2?.concepts||[])
+  ];
+
+  const seen=
+    new Set();
+
+  return all.filter(
+    group=>{
+
+      const key=
+        (group||[])
+        .map(norm)
+        .sort()
+        .join('|');
+
+      if(
+        !key
+        ||
+        seen.has(key)
+      ){
+        return false;
+      }
+
+      seen.add(key);
+
+      return true;
+    }
+  );
+}
+
+
+/* =========================================================
+   TRUE PROCESS STAGES
+   CÁC CHI TIẾT CÙNG BƯỚC ĐƯỢC GOM CHUNG
+========================================================= */
+
+const PROCESS_STAGE_GROUPS={
+
+  /* =======================================================
+     01 — MANUFACTURING BRICKS
+  ======================================================= */
+
+  '01':[
+
+    [
+      'clay is dug',
+      'clay is excavated',
+      'clay is extracted',
+      'dug from the ground',
+      'excavated from the ground',
+      'digger',
+      'excavator'
+    ],
+
+    [
+      'metal grid',
+      'grid',
+      'roller',
+      'rollers',
+      'screened',
+      'passed through a metal grid'
+    ],
+
+    [
+      'sand and water',
+      'water and sand',
+      'mixed with sand',
+      'mixed with water',
+      'sand',
+      'water'
+    ],
+
+    [
+      'mould',
+      'mold',
+      'moulded',
+      'molded',
+      'wire cutter',
+      'wire cutting',
+      'shaped into bricks',
+      'cut into bricks'
+    ],
+
+    [
+      'drying oven',
+      'dried',
+      'drying',
+      '24-48 hours',
+      '24 to 48 hours',
+      '24 hours',
+      '48 hours'
+    ],
+
+    [
+      'kiln',
+      'heated',
+      'fired',
+      'moderate temperature',
+      'high temperature',
+      '200°c',
+      '980°c',
+      '870°c',
+      '1300°c'
+    ],
+
+    [
+      'cooling chamber',
+      'cooled',
+      'cooling',
+      '48-72 hours',
+      '48 to 72 hours',
+      '72 hours'
+    ],
+
+    [
+      'packaged',
+      'packaging',
+      'packed'
+    ],
+
+    [
+      'delivered',
+      'delivery',
+      'transported to customers',
+      'transported to consumers'
+    ]
+
+  ],
+
+
+  /* =======================================================
+     02 — INSTANT NOODLES
+  ======================================================= */
+
+  '02':[
+
+    [
+      'storage silos',
+      'storage silo',
+      'flour is stored',
+      'flour storage'
+    ],
+
+    [
+      'mixer',
+      'mixed with water and oil',
+      'water and oil',
+      'mixing'
+    ],
+
+    [
+      'dough sheets',
+      'sheets of dough',
+      'rolled into sheets',
+      'rollers'
+    ],
+
+    [
+      'dough strips',
+      'strips of dough',
+      'cut into strips'
+    ],
+
+    [
+      'noodle discs',
+      'noodle disks',
+      'shaped into discs',
+      'formed into discs'
+    ],
+
+    [
+      'cooking in oil',
+      'cooked in oil',
+      'cooking oil',
+      'dried',
+      'drying'
+    ],
+
+    [
+      'cups',
+      'placed in cups',
+      'put into cups',
+      'vegetables and spices',
+      'vegetables',
+      'spices'
+    ],
+
+    [
+      'labelled',
+      'labeled',
+      'labelling',
+      'labeling',
+      'sealed',
+      'sealing'
+    ]
+
+  ],
+
+
+  /* =======================================================
+     03 — TOMATO KETCHUP
+  ======================================================= */
+
+  '03':[
+
+    [
+      'pick tomatoes',
+      'picked',
+      'harvested',
+      'put in baskets',
+      'placed in baskets',
+      'baskets'
+    ],
+
+    [
+      'sort',
+      'sorted',
+      'good tomatoes',
+      'bad tomatoes',
+      'classified'
+    ],
+
+    [
+      'sent to factory',
+      'transported to factory',
+      'taken to factory',
+      'processing factory'
+    ],
+
+    /*
+      STALK + SEEDS + SKIN
+      = CÙNG MỘT STAGE
+    */
+    [
+      'remove stalk',
+      'remove the stalk',
+      'stalk is removed',
+      'stalks are removed',
+
+      'remove seeds',
+      'seeds are removed',
+
+      'remove skin',
+      'skin is removed',
+      'skins are removed',
+
+      'stalk',
+      'stalks',
+      'seeds',
+      'skin',
+      'skins'
+    ],
+
+    [
+      'put into a container',
+      'placed in a container',
+      'put in a container'
+    ],
+
+    [
+      'crushed',
+      'crush',
+      'crushing',
+      'pulp',
+      'crushed into pulp'
+    ],
+
+    /*
+      SUGAR + VINEGAR + SALT
+      = CÙNG MỘT STAGE
+    */
+    [
+      'sugar',
+      'vinegar',
+      'salt',
+      'add sugar',
+      'add vinegar',
+      'add salt',
+      'ingredients are added',
+      'additives'
+    ],
+
+    [
+      'boiled',
+      'boiling',
+      'boil'
+    ],
+
+    [
+      'left for two hours',
+      'left for 2 hours',
+      'leave for two hours',
+      'leave for 2 hours',
+      'left to stand for two hours',
+      'left to stand for 2 hours',
+      'two hours',
+      '2 hours'
+    ],
+
+    [
+      'poured into bottles',
+      'poured into a bottle',
+      'filled into bottles',
+      'bottled',
+      'bottles are filled'
+    ],
+
+    [
+      'labelled',
+      'labeled',
+      'labelling',
+      'labeling'
+    ],
+
+    [
+      'quality control',
+      'quality checked',
+      'checked',
+      'inspected',
+      'inspection'
+    ],
+
+    [
+      'packed',
+      'packaged',
+      'boxes',
+      'packed into boxes'
+    ],
+
+    [
+      'supermarket',
+      'sent to supermarkets',
+      'delivered to supermarkets',
+      'transported to supermarkets'
+    ],
+
+    [
+      'consumed',
+      'consumption',
+      'hamburger',
+      'hamburgers',
+      'fries',
+      'ready for consumption'
+    ]
+
+  ],
+
+
+  /* =======================================================
+     04 — FROG LIFE CYCLE
+  ======================================================= */
+
+  '04':[
+
+    [
+      'eggs',
+      'frog eggs',
+      'eggs are laid',
+      'lays eggs'
+    ],
+
+    [
+      'embryo',
+      'embryos',
+      'embryonic'
+    ],
+
+    [
+      'tadpoles clinging to water plants',
+      'tadpoles cling to water plants',
+      'water plant',
+      'water plants'
+    ],
+
+    [
+      'external gills',
+      'gills',
+      'breathing'
+    ],
+
+    [
+      'tail keeps growing',
+      'tail grows',
+      'growing tail'
+    ],
+
+    [
+      'hindlegs appear',
+      'hind legs appear',
+      'hind legs',
+      'back legs'
+    ],
+
+    [
+      'food stored in the tail',
+      'stored in the tail',
+      'lives from food stored in the tail'
+    ],
+
+    [
+      'front legs appear',
+      'front legs'
+    ],
+
+    [
+      'tail becomes shorter',
+      'tail shortens',
+      'shorter tail'
+    ],
+
+    [
+      'young frog',
+      'froglet'
+    ],
+
+    [
+      'adult frog',
+      'mature frog'
+    ]
+
+  ],
+
+
+  /* =======================================================
+     05 — BEE LIFE CYCLE
+  ======================================================= */
+
+  '05':[
+
+    [
+      'female lays eggs',
+      'females lay eggs',
+      'eggs are laid',
+      'one or two eggs',
+      '1 or 2 eggs',
+      'every three days'
+    ],
+
+    [
+      'eggs hatch',
+      'hatch after 9',
+      '9-10 days',
+      '9 to 10 days'
+    ],
+
+    [
+      '5 days',
+      'five days'
+    ],
+
+    [
+      'first moulting',
+      'first molting',
+      'first moult',
+      'first molt'
+    ],
+
+    [
+      '7 days',
+      'seven days'
+    ],
+
+    [
+      'second moulting',
+      'second molting',
+      'second moult',
+      'second molt'
+    ],
+
+    [
+      '9 days',
+      'nine days'
+    ],
+
+    [
+      'young adult emerges',
+      'young adult',
+      'emerges'
+    ],
+
+    [
+      '4 days to maturity',
+      'four days to maturity',
+      'maturity',
+      'mature bee'
+    ]
+
+  ],
+
+
+  /* =======================================================
+     06 — PLASTIC BOTTLES
+  ======================================================= */
+
+  '06':[
+
+    [
+      'recycling bin',
+      'recycle bin',
+      'placed in recycling bins',
+      'put in recycling bins',
+      'discarded'
+    ],
+
+    [
+      'collection truck',
+      'collected',
+      'collection',
+      'transported'
+    ],
+
+    [
+      'recycling centre',
+      'recycling center',
+      'sorting',
+      'sorted'
+    ],
+
+    [
+      'compressed',
+      'compressing',
+      'compressed into blocks',
+      'blocks'
+    ],
+
+    /*
+      CRUSHING + WASHING
+      = CÙNG BƯỚC
+    */
+    [
+      'crushed',
+      'crushing',
+      'washed',
+      'washing',
+      'crushing and washing'
+    ],
+
+    [
+      'plastic pellets',
+      'pellets',
+      'producing plastic pellets',
+      'made into pellets'
+    ],
+
+    [
+      'heated',
+      'heating pellets',
+      'pellets are heated'
+    ],
+
+    [
+      'raw material',
+      'formed into raw material',
+      'plastic raw material'
+    ],
+
+    [
+      'end products',
+      'new products',
+      'producing end products',
+      'recycled products'
+    ]
+
+  ]
+
+};
+
+
+function processStageGroups(){
+  const groups=
+    PROCESS_STAGE_GROUPS[ID];
+
+  if(
+    Array.isArray(groups)
+    &&
+    groups.length
+  ){
+    return groups;
+  }
+
+  return globalBodyGroups();
+}
+
+
+/* =========================================================
+   STAGE PHRASE MATCHING
+========================================================= */
+
+function stagePhrasePosition(
+  text,
+  phrase
+){
+  const needle=
+    norm(phrase);
+
+  if(!needle){
+    return -1;
+  }
+
+  const haystack=
+    ' '
+    +
+    norm(text)
+    +
+    ' ';
+
+  const wrappedNeedle=
+    ' '
+    +
+    needle
+    +
+    ' ';
+
+  return haystack.indexOf(
+    wrappedNeedle
+  );
+}
+
+function stageGroupPosition(
+  text,
+  group
+){
+  let best=-1;
+
+  (group||[])
+  .forEach(
+    phrase=>{
+
+      const position=
+        stagePhrasePosition(
+          text,
+          phrase
+        );
+
+      if(
+        position>=0
+        &&
+        (
+          best<0
+          ||
+          position<best
+        )
+      ){
+        best=position;
+      }
+
+    }
+  );
+
+  return best;
+}
+
+function stageGroupHits(
+  text,
+  groups=processStageGroups()
+){
+  return groups.map(
+    group=>
+      stageGroupPosition(
+        text,
+        group
+      )
+      >=
+      0
+  );
+}
+
+
+/* =========================================================
+   BODY PLAN
+========================================================= */
+
+function bodyPlanInfo(text){
+  const groups=
+    processStageGroups();
+
+  const result=
+    stageGroupHits(
+      text,
+      groups
+    );
+
+  return {
+    hits:result,
+
+    count:
+      result
+      .filter(Boolean)
+      .length,
+
+    groups
+  };
+}
+
+function bodyPlansAreDistinct(
+  first,
+  second
+){
+  const A=
+    new Set(
+      norm(first)
+      .split(/\s+/)
+      .filter(
+        item=>
+          item.length>3
+      )
+    );
+
+  const B=
+    new Set(
+      norm(second)
+      .split(/\s+/)
+      .filter(
+        item=>
+          item.length>3
+      )
+    );
+
+  if(
+    !A.size
+    ||
+    !B.size
+  ){
+    return false;
+  }
+
+  let overlap=0;
+
+  A.forEach(
+    word=>{
+      if(B.has(word)){
+        overlap++;
+      }
+    }
+  );
+
+  return (
+    overlap
+    /
+    Math.max(
+      1,
+      Math.min(
+        A.size,
+        B.size
+      )
+    )
+    <
+    .78
+  );
+}
+
+
+/* =========================================================
+   STEP 1 BODY RANGE
+========================================================= */
+
+function parseStageRange(text){
+  const raw=
+    String(text||'')
+    .toLowerCase()
+    .replace(/[–—]/g,'-')
+    .replace(/\bstages?\b/g,' ')
+    .trim();
+
+
+  let match=
+    raw.match(
+      /\b(\d+)\s*-\s*(\d+)\b/
+    );
+
+  if(match){
+
+    const start=
+      Number(match[1]);
+
+    const end=
+      Number(match[2]);
+
+    if(
+      Number.isFinite(start)
+      &&
+      Number.isFinite(end)
+    ){
+      return {
+        valid:true,
+        start:Math.min(start,end),
+        end:Math.max(start,end)
+      };
+    }
+
+  }
+
+
+  match=
+    raw.match(
+      /\b(?:from\s+)?(\d+)\s+to\s+(\d+)\b/
+    );
+
+  if(match){
+
+    const start=
+      Number(match[1]);
+
+    const end=
+      Number(match[2]);
+
+    if(
+      Number.isFinite(start)
+      &&
+      Number.isFinite(end)
+    ){
+      return {
+        valid:true,
+        start:Math.min(start,end),
+        end:Math.max(start,end)
+      };
+    }
+
+  }
+
+
+  if(/^\d+$/.test(raw)){
+
+    const value=
+      Number(raw);
+
+    return {
+      valid:true,
+      start:value,
+      end:value
+    };
+
+  }
+
+
+  return {
+    valid:false,
+    start:null,
+    end:null
+  };
+}
+
+function validBodyPlan(text){
+  const expectedStages=
+    Number(task.stages);
+
+  const range=
+    parseStageRange(text);
+
+  if(range.valid){
+
+    return (
+      range.start>=1
+      &&
+      range.end<=expectedStages
+      &&
+      range.start<=range.end
+    );
+
+  }
+
+  const info=
+    bodyPlanInfo(text);
+
+  return (
+    words(text)>=2
+    &&
+    info.count>=1
+  );
+}
+
+function bodyPlansCompatible(
+  body1,
+  body2
+){
+  const total=
+    Number(task.stages);
+
+  const A=
+    parseStageRange(body1);
+
+  const B=
+    parseStageRange(body2);
+
+  if(
+    A.valid
+    &&
+    B.valid
+  ){
+
+    const bothInRange=
+      A.start>=1
+      &&
+      A.end<=total
+      &&
+      B.start>=1
+      &&
+      B.end<=total;
+
+    if(!bothInRange){
+      return false;
+    }
+
+    if(A.start>=B.start){
+      return false;
+    }
+
+    /*
+      Không overlap.
+      1-9 + 10-15 = đúng.
+      1-9 + 9-15 = sai.
+    */
+    if(A.end>=B.start){
+      return false;
+    }
+
+    return true;
+  }
+
+  return bodyPlansAreDistinct(
+    body1,
+    body2
+  );
+}
+
+
+/* =========================================================
+   IMPORTANT FEATURES
+========================================================= */
+
+function importantFeatureScore(text){
+  const groups=
+    processStageGroups();
+
+  const hits=
+    stageGroupHits(
+      text,
+      groups
+    )
+    .filter(Boolean)
+    .length;
+
+  const ratio=
+    groups.length
+    ?
+    hits/groups.length
+    :
+    0;
+
+  const actions=[
+
+    'picked',
+    'harvested',
+    'sorted',
+    'transported',
+    'sent',
+
+    'removed',
+
+    'crushed',
+    'mixed',
+    'added',
+
+    'boiled',
+    'heated',
+    'cooled',
+
+    'moulded',
+    'molded',
+    'shaped',
+    'cut',
+
+    'dried',
+
+    'labelled',
+    'labeled',
+
+    'checked',
+    'inspected',
+
+    'packaged',
+    'packed',
+
+    'delivered',
+    'distributed',
+
+    'washed',
+    'compressed',
+
+    'recycled',
+
+    'hatched',
+    'moulted',
+    'molted',
+
+    'emerged',
+    'developed'
+  ];
+
+  const normalized=
+    ' '
+    +
+    norm(text)
+    +
+    ' ';
+
+  const actionHits=
+    actions.filter(
+      action=>
+        normalized.includes(
+          ' '
+          +
+          norm(action)
+          +
+          ' '
+        )
+    )
+    .length;
+
+  return (
+    ratio>=.20
+    ||
+    actionHits>=3
+  );
+}
+
+
+/* =========================================================
+   SPELLING / LEXICAL
 ========================================================= */
 
 const COMMON_TYPOS={
@@ -707,7 +1744,6 @@ const COMMON_TYPOS={
   manufactureing:'manufacturing',
   prodution:'production',
   proccess:'process',
-  proces:'process',
 
   temparature:'temperature',
   temprature:'temperature',
@@ -759,13 +1795,28 @@ function spellingIssues(text){
 
   tokens.forEach(
     word=>{
+
       if(COMMON_TYPOS[word]){
         issues.push(
           `Có thể sai chính tả: “${word}” → “${COMMON_TYPOS[word]}”.`
         );
       }
+
     }
   );
+
+  /*
+    rip tomatoes là lỗi chọn từ,
+    không phải typo thuần túy.
+  */
+  if(
+    /\brip\s+tomatoes?\b/i
+    .test(text)
+  ){
+    issues.push(
+      'Dùng từ chưa đúng: “rip tomatoes” → “ripe tomatoes”.'
+    );
+  }
 
   return unique(issues);
 }
@@ -792,13 +1843,30 @@ function grammarIssues(text){
   }
 
 
-  if(
-    !/^[A-Z]/.test(sentence)
-  ){
-    issues.push(
-      'Viết hoa chữ cái đầu câu/đoạn.'
-    );
-  }
+  /*
+    Capital letter:
+    với bài nhiều đoạn, kiểm tra từng dòng.
+  */
+
+  splitParagraphs(
+    sentence,
+    0
+  )
+  .forEach(
+    paragraph=>{
+
+      if(
+        paragraph
+        &&
+        !/^[A-Z0-9]/.test(paragraph)
+      ){
+        issues.push(
+          'Một đoạn chưa viết hoa chữ cái đầu.'
+        );
+      }
+
+    }
+  );
 
 
   if(
@@ -840,26 +1908,6 @@ function grammarIssues(text){
 
 
   if(
-    /\bends?\s+with\s+[^.!?]{0,100}\b(?:is|are|was|were)\b/i
-    .test(sentence)
-  ){
-    issues.push(
-      'Cấu trúc “ends with ...” chưa đúng: dùng “ends with + noun/V-ing” hoặc “ends when + clause”.'
-    );
-  }
-
-
-  if(
-    /\bbegins?\s+with\s+[^.!?]{0,100}\b(?:is|are|was|were)\b/i
-    .test(sentence)
-  ){
-    issues.push(
-      'Cấu trúc “begins with ...” chưa đúng: dùng “begins with + noun/V-ing” hoặc “begins when + clause”.'
-    );
-  }
-
-
-  if(
     /\b(?:allows|enables)\s+(?:they|he|she|we|i)\s+to\b/i
     .test(sentence)
   ){
@@ -888,6 +1936,138 @@ function grammarIssues(text){
     );
   }
 
+
+  if(
+    /\bends?\s+with\s+[^.!?]{0,100}\b(?:is|are|was|were)\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Sau “ends with” nên dùng noun/V-ing; nếu dùng mệnh đề, có thể viết “ends when ...”.'
+    );
+  }
+
+
+  if(
+    /\bbegins?\s+with\s+[^.!?]{0,100}\b(?:is|are|was|were)\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Sau “begins with” nên dùng noun/V-ing; nếu dùng mệnh đề, có thể viết “begins when ...”.'
+    );
+  }
+
+
+  /*
+    KETCHUP:
+    they are removed stalk, seeds and skin
+  */
+
+  if(
+    /\b(?:they|it|these|those|tomatoes?|bottles?)\s+(?:is|are|was|were)\s+removed\s+(?!from\b|by\b)[a-z]/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Cấu trúc bị động với “remove” chưa đúng. Không viết “they are removed + bộ phận”. Có thể viết “their stalks, seeds and skins are removed”.'
+    );
+  }
+
+
+  if(
+    /\b(?:tomatoes?|products?|materials?)\s+(?:is|are|was|were)\s+removed\s+(?:stalks?|seeds?|skins?|parts?)/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Sau “are removed” không đặt trực tiếp bộ phận bị loại bỏ. Có thể viết “the stalks, seeds and skins are removed from the tomatoes”.'
+    );
+  }
+
+
+  /*
+    Subject-verb agreement
+  */
+
+  const agreementRules=[
+
+    [
+      /\bbricks\s+is\b/i,
+      '“bricks” là số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\bbottles\s+is\b/i,
+      '“bottles” là số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\bnoodles\s+is\b/i,
+      '“noodles” là số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\btomatoes\s+is\b/i,
+      '“tomatoes” là số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\beggs\s+is\b/i,
+      '“eggs” là số nhiều, nên dùng “are”.'
+    ],
+
+    [
+      /\bclay\s+are\b/i,
+      '“clay” nên dùng với “is”.'
+    ],
+
+    [
+      /\bmixture\s+are\b/i,
+      '“mixture” là số ít, nên dùng “is”.'
+    ],
+
+    [
+      /\bwater\s+are\b/i,
+      '“water” nên dùng với “is”.'
+    ]
+
+  ];
+
+  agreementRules.forEach(
+    ([regex,message])=>{
+
+      if(regex.test(sentence)){
+        issues.push(message);
+      }
+
+    }
+  );
+
+
+  /*
+    a/an + plural
+  */
+
+  if(
+    /\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      '“a/an” không đứng trực tiếp trước danh từ số nhiều.'
+    );
+  }
+
+
+  if(
+    /\bone\s+of\s+the\s+(?:stage|step|process)\b/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Sau “one of the” phải dùng danh từ số nhiều.'
+    );
+  }
+
+
+  /*
+    plural units
+  */
 
   let match;
 
@@ -949,83 +2129,9 @@ function grammarIssues(text){
   }
 
 
-  const agreementRules=[
-
-    [
-      /\bbricks\s+is\b/i,
-      '“bricks” là danh từ số nhiều, nên dùng “are”.'
-    ],
-
-    [
-      /\bbottles\s+is\b/i,
-      '“bottles” là danh từ số nhiều, nên dùng “are”.'
-    ],
-
-    [
-      /\bnoodles\s+is\b/i,
-      '“noodles” là danh từ số nhiều, nên dùng “are”.'
-    ],
-
-    [
-      /\btomatoes\s+is\b/i,
-      '“tomatoes” là danh từ số nhiều, nên dùng “are”.'
-    ],
-
-    [
-      /\beggs\s+is\b/i,
-      '“eggs” là danh từ số nhiều, nên dùng “are”.'
-    ],
-
-    [
-      /\bclay\s+are\b/i,
-      '“clay” nên dùng với “is”.'
-    ],
-
-    [
-      /\bmixture\s+are\b/i,
-      '“mixture” là danh từ số ít, nên dùng “is”.'
-    ],
-
-    [
-      /\bwater\s+are\b/i,
-      '“water” nên dùng với “is”.'
-    ]
-
-  ];
-
-  agreementRules.forEach(
-    (
-      [
-        regex,
-        message
-      ]
-    )=>{
-      if(regex.test(sentence)){
-        issues.push(message);
-      }
-    }
-  );
-
-
-  if(
-    /\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i
-    .test(sentence)
-  ){
-    issues.push(
-      '“a/an” không đứng trực tiếp trước danh từ số nhiều.'
-    );
-  }
-
-
-  if(
-    /\bone\s+of\s+the\s+(?:stage|step|process)\b/i
-    .test(sentence)
-  ){
-    issues.push(
-      'Sau “one of the” phải dùng danh từ số nhiều.'
-    );
-  }
-
+  /*
+    Missing passive be.
+  */
 
   const passiveTargets=[
     'crushed',
@@ -1067,6 +2173,22 @@ function grammarIssues(text){
     }
   );
 
+
+  /*
+    awkward "where they are removed X"
+    dạng rộng hơn.
+  */
+
+  if(
+    /\bwhere\s+(?:they|it)\s+(?:is|are)\s+removed\s+\w+/i
+    .test(sentence)
+  ){
+    issues.push(
+      'Cấu trúc “where they are removed + noun” chưa đúng. Hãy để phần bị loại bỏ làm chủ ngữ, ví dụ “where their stalks, seeds and skins are removed”.'
+    );
+  }
+
+
   return unique(issues);
 }
 
@@ -1096,7 +2218,7 @@ function seriousLanguageIssues(items){
 
 
 /* =========================================================
-   FACTUAL CHECK
+   FACTUAL RULES
 ========================================================= */
 
 const FACT_RULES={
@@ -1178,14 +2300,18 @@ function factualIssues(
     {};
 
 
+  /*
+    TYPE
+  */
+
   if(
     rule.linear
     &&
-    /\b(?:cyclical|cyclic|cycle)\b/i
+    /\b(?:cyclical|cyclic)\b/i
     .test(sentence)
   ){
     issues.push(
-      'Bài này là linear process; không nên gọi toàn bộ quá trình là “cycle/cyclical”.'
+      'Đây là linear process; không nên gọi toàn bộ quá trình là cyclical/cyclic.'
     );
   }
 
@@ -1201,6 +2327,10 @@ function factualIssues(
     );
   }
 
+
+  /*
+    STAGE COUNT
+  */
 
   const stageClaim=
     detectStageCountClaim(
@@ -1225,7 +2355,9 @@ function factualIssues(
   }
 
 
-  /* Manufacturing Bricks */
+  /* =======================================================
+     01 BRICKS
+  ======================================================= */
 
   if(ID==='01'){
 
@@ -1237,7 +2369,9 @@ function factualIssues(
     while(
       (
         match=
-        temperatureRegex.exec(sentence)
+        temperatureRegex.exec(
+          sentence
+        )
       )
     ){
       const value=
@@ -1261,7 +2395,9 @@ function factualIssues(
     while(
       (
         match=
-        hourRegex.exec(sentence)
+        hourRegex.exec(
+          sentence
+        )
       )
     ){
       const value=
@@ -1280,10 +2416,14 @@ function factualIssues(
 
 
     const moderatePos=
-      normalized.indexOf('moderate');
+      normalized.indexOf(
+        'moderate'
+      );
 
     const highPos=
-      normalized.indexOf('high');
+      normalized.indexOf(
+        'high'
+      );
 
     if(
       moderatePos>=0
@@ -1293,13 +2433,16 @@ function factualIssues(
       highPos<moderatePos
     ){
       issues.push(
-        'Thứ tự nhiệt độ đang bị đảo: nung ở nhiệt độ vừa trước, sau đó mới ở nhiệt độ cao.'
+        'Thứ tự nhiệt độ đang bị đảo: gạch được nung ở nhiệt độ vừa trước, sau đó mới ở nhiệt độ cao.'
       );
     }
+
   }
 
 
-  /* Ketchup */
+  /* =======================================================
+     03 KETCHUP
+  ======================================================= */
 
   if(ID==='03'){
 
@@ -1319,15 +2462,49 @@ function factualIssues(
 
       if(value!==2){
         issues.push(
-          `Mốc ${value} giờ không khớp sơ đồ làm ketchup; giai đoạn này được để trong 2 giờ.`
+          `Mốc ${value} giờ không khớp sơ đồ làm ketchup; sơ đồ chỉ thể hiện hỗn hợp được để trong 2 giờ.`
         );
       }
+    }
+
+
+    /*
+      Không được suy diễn thành cooling for 2 hours.
+    */
+
+    const unsupportedCooling=
+
+      /\b(?:cool|cools|cooled|cooling)\b[^.!?]{0,50}\b(?:two|2)\s+hours?\b/i
+      .test(sentence)
+
+      ||
+
+      /\b(?:two|2)\s+hours?\b[^.!?]{0,50}\b(?:cool|cools|cooled|cooling)\b/i
+      .test(sentence);
+
+
+    if(unsupportedCooling){
+      issues.push(
+        'Sơ đồ chỉ cho biết hỗn hợp được để trong 2 giờ; không nói rằng nó được “cooled for two hours”. Nên viết “left to stand for two hours”.'
+      );
+    }
+
+
+    if(
+      /\b(?:cooling stage|cooling process|cooling period)\b/i
+      .test(sentence)
+    ){
+      issues.push(
+        'Sơ đồ ketchup không có một “cooling stage”; bước 9 chỉ ghi “leave – two hours”.'
+      );
     }
 
   }
 
 
-  /* Bee life cycle */
+  /* =======================================================
+     05 BEE
+  ======================================================= */
 
   if(ID==='05'){
 
@@ -1358,12 +2535,13 @@ function factualIssues(
 
   }
 
+
   return unique(issues);
 }
 
 
 /* =========================================================
-   IELTS STYLE
+   STYLE
 ========================================================= */
 
 function styleIssues(
@@ -1381,13 +2559,13 @@ function styleIssues(
 
   if(step===2){
 
-    const bodyGroups=
-      globalBodyGroups();
+    const groups=
+      processStageGroups();
 
     const detailHits=
-      groupHits(
+      stageGroupHits(
         sentence,
-        bodyGroups
+        groups
       )
       .filter(Boolean)
       .length;
@@ -1404,7 +2582,7 @@ function styleIssues(
 
     if(detailHits>=4){
       issues.push(
-        `Overview đang liệt kê khá nhiều công đoạn cụ thể (${detailHits} nhóm stage). Nên ưu tiên đặc điểm tổng quát.`
+        `Overview đang liệt kê khá nhiều công đoạn cụ thể (${detailHits} stage). Nên ưu tiên đặc điểm tổng quát.`
       );
     }
 
@@ -1452,542 +2630,30 @@ function styleIssues(
     );
   }
 
+
   return unique(issues);
 }
 
 
 /* =========================================================
-   BODY GROUPS
-========================================================= */
-
-function globalBodyGroups(){
-  const all=[
-    ...(task.body1?.concepts||[]),
-    ...(task.body2?.concepts||[])
-  ];
-
-  const seen=
-    new Set();
-
-  return all.filter(
-    group=>{
-
-      const key=
-        (group||[])
-        .map(norm)
-        .sort()
-        .join('|');
-
-      if(
-        !key
-        ||
-        seen.has(key)
-      ){
-        return false;
-      }
-
-      seen.add(key);
-
-      return true;
-    }
-  );
-}
-
-function bodyPlanInfo(text){
-  const groups=
-    globalBodyGroups();
-
-  const result=
-    groupHits(
-      text,
-      groups
-    );
-
-  return {
-    hits:result,
-
-    count:
-      result
-      .filter(Boolean)
-      .length,
-
-    groups
-  };
-}
-
-function bodyPlansAreDistinct(
-  first,
-  second
-){
-  const A=
-    new Set(
-      norm(first)
-      .split(/\s+/)
-      .filter(
-        item=>
-          item.length>3
-      )
-    );
-
-  const B=
-    new Set(
-      norm(second)
-      .split(/\s+/)
-      .filter(
-        item=>
-          item.length>3
-      )
-    );
-
-  if(
-    !A.size
-    ||
-    !B.size
-  ){
-    return false;
-  }
-
-  let overlap=0;
-
-  A.forEach(
-    word=>{
-      if(B.has(word)){
-        overlap++;
-      }
-    }
-  );
-
-  return (
-    overlap
-    /
-    Math.max(
-      1,
-      Math.min(
-        A.size,
-        B.size
-      )
-    )
-    <
-    .78
-  );
-}
-
-
-/* =========================================================
-   STEP 1 — FLEXIBLE BODY RANGE
-========================================================= */
-
-function parseStageRange(text){
-
-  const raw=
-    String(text||'')
-    .toLowerCase()
-    .replace(/[–—]/g,'-')
-    .replace(/\bstages?\b/g,' ')
-    .trim();
-
-
-  /*
-    1-9
-    1 - 9
-  */
-
-  let match=
-    raw.match(
-      /\b(\d+)\s*-\s*(\d+)\b/
-    );
-
-  if(match){
-
-    const start=
-      Number(match[1]);
-
-    const end=
-      Number(match[2]);
-
-    if(
-      Number.isFinite(start)
-      &&
-      Number.isFinite(end)
-    ){
-      return {
-        valid:true,
-        start:Math.min(start,end),
-        end:Math.max(start,end)
-      };
-    }
-
-  }
-
-
-  /*
-    1 to 9
-  */
-
-  match=
-    raw.match(
-      /\b(\d+)\s+to\s+(\d+)\b/
-    );
-
-  if(match){
-
-    const start=
-      Number(match[1]);
-
-    const end=
-      Number(match[2]);
-
-    if(
-      Number.isFinite(start)
-      &&
-      Number.isFinite(end)
-    ){
-      return {
-        valid:true,
-        start:Math.min(start,end),
-        end:Math.max(start,end)
-      };
-    }
-
-  }
-
-
-  /*
-    from 1 to 9
-  */
-
-  match=
-    raw.match(
-      /\bfrom\s+(\d+)\s+to\s+(\d+)\b/
-    );
-
-  if(match){
-
-    const start=
-      Number(match[1]);
-
-    const end=
-      Number(match[2]);
-
-    return {
-      valid:true,
-      start:Math.min(start,end),
-      end:Math.max(start,end)
-    };
-
-  }
-
-
-  /*
-    Chỉ một stage
-  */
-
-  if(/^\d+$/.test(raw)){
-
-    const value=
-      Number(raw);
-
-    return {
-      valid:true,
-      start:value,
-      end:value
-    };
-
-  }
-
-
-  return {
-    valid:false,
-    start:null,
-    end:null
-  };
-}
-
-function validBodyPlan(text){
-
-  const expectedStages=
-    Number(task.stages);
-
-  const range=
-    parseStageRange(text);
-
-
-  /*
-    Nếu học sinh chia bằng số
-  */
-
-  if(range.valid){
-
-    return (
-      range.start>=1
-      &&
-      range.end<=expectedStages
-      &&
-      range.start<=range.end
-    );
-
-  }
-
-
-  /*
-    Nếu học sinh mô tả bằng chữ
-  */
-
-  const info=
-    bodyPlanInfo(text);
-
-  return (
-    words(text)>=2
-    &&
-    info.count>=1
-  );
-}
-
-function bodyPlansCompatible(
-  body1,
-  body2
-){
-
-  const total=
-    Number(task.stages);
-
-  const A=
-    parseStageRange(body1);
-
-  const B=
-    parseStageRange(body2);
-
-
-  /*
-    Cả hai đều chia bằng số stage
-  */
-
-  if(
-    A.valid
-    &&
-    B.valid
-  ){
-
-    const bothInRange=
-      A.start>=1
-      &&
-      A.end<=total
-      &&
-      B.start>=1
-      &&
-      B.end<=total;
-
-    if(!bothInRange){
-      return false;
-    }
-
-
-    /*
-      Body 1 phải đứng trước Body 2
-    */
-
-    if(
-      A.start>=B.start
-    ){
-      return false;
-    }
-
-
-    /*
-      Không overlap
-      1-9 / 9-15 => sai
-    */
-
-    if(
-      A.end>=B.start
-    ){
-      return false;
-    }
-
-
-    /*
-      Không bắt buộc phải chia tại đúng một mốc cố định.
-      Chỉ yêu cầu hai phần hợp lý, không chồng nhau.
-    */
-
-    return true;
-  }
-
-
-  /*
-    Nếu chia bằng chữ
-  */
-
-  return bodyPlansAreDistinct(
-    body1,
-    body2
-  );
-}
-
-
-/* =========================================================
-   STEP 1 — FLEXIBLE IMPORTANT FEATURES
-========================================================= */
-
-function importantFeatureScore(text){
-
-  const normalized=
-    norm(text);
-
-  const groups=
-    globalBodyGroups();
-
-  const hits=
-    groupHits(
-      text,
-      groups
-    )
-    .filter(Boolean)
-    .length;
-
-  const ratio=
-    groups.length
-    ?
-    hits/groups.length
-    :
-    0;
-
-
-  const processWords=[
-
-    'picked',
-    'sorted',
-    'sent',
-    'transported',
-
-    'removed',
-    'crushed',
-    'mixed',
-    'added',
-
-    'boiled',
-    'heated',
-    'cooled',
-
-    'moulded',
-    'molded',
-    'shaped',
-    'cut',
-
-    'dried',
-
-    'labelled',
-    'labeled',
-
-    'checked',
-    'quality control',
-
-    'packaged',
-    'packed',
-
-    'delivered',
-    'distributed',
-
-    'washed',
-    'compressed',
-
-    'recycled',
-
-    'hatched',
-    'moulted',
-    'molted',
-
-    'emerged',
-    'grown',
-    'developed'
-
-  ];
-
-  const generalHits=
-    processWords
-    .filter(
-      item=>
-        normalized.includes(
-          norm(item)
-        )
-    )
-    .length;
-
-
-  /*
-    Quan trọng:
-    không bắt học sinh phải viết đúng câu mẫu.
-    Chỉ cần nêu được nhiều đặc điểm/stage chính.
-  */
-
-  return (
-    ratio>=.20
-    ||
-    generalHits>=3
-  );
-}
-
-
-/* =========================================================
    SEQUENCE CHECK
+   SO THEO STAGE, KHÔNG THEO KEYWORD CON
 ========================================================= */
-
-function findGroupPosition(
-  text,
-  group
-){
-  const normalized=
-    norm(text);
-
-  let best=-1;
-
-  (group||[])
-  .forEach(
-    variant=>{
-
-      const value=
-        norm(variant);
-
-      if(!value){
-        return;
-      }
-
-      const position=
-        normalized.indexOf(value);
-
-      if(
-        position>=0
-        &&
-        (
-          best<0
-          ||
-          position<best
-        )
-      ){
-        best=position;
-      }
-
-    }
-  );
-
-  return best;
-}
 
 function sequenceAudit(text){
-
   const groups=
-    globalBodyGroups();
+    processStageGroups();
 
   const found=[];
 
   groups.forEach(
     (
       group,
-      index
+      stageIndex
     )=>{
 
       const position=
-        findGroupPosition(
+        stageGroupPosition(
           text,
           group
         );
@@ -1995,19 +2661,25 @@ function sequenceAudit(text){
       if(position>=0){
 
         found.push({
-          index,
+          index:stageIndex,
           position,
 
           label:
             group?.[0]
             ||
-            `stage ${index+1}`
+            `stage ${stageIndex+1}`
         });
 
       }
 
     }
   );
+
+
+  /*
+    Nếu bài chỉ nhắc 1-2 stage thì chưa đủ dữ liệu
+    để kết luận sai thứ tự.
+  */
 
   if(found.length<3){
     return {
@@ -2017,18 +2689,18 @@ function sequenceAudit(text){
     };
   }
 
+
   const byText=[
     ...found
   ]
   .sort(
-    (
-      a,
-      b
-    )=>
+    (a,b)=>
       a.position-b.position
   );
 
+
   const violations=[];
+
 
   for(
     let i=1;
@@ -2036,24 +2708,35 @@ function sequenceAudit(text){
     i++
   ){
 
+    const previous=
+      byText[i-1];
+
+    const current=
+      byText[i];
+
     if(
-      byText[i].index
+      current.index
       <
-      byText[i-1].index
+      previous.index
     ){
+
       violations.push(
-        `“${byText[i].label}” đang xuất hiện sau một stage vốn đứng phía sau nó trong sơ đồ.`
+        `Công đoạn “${current.label}” đang được trình bày chưa đúng thứ tự so với sơ đồ.`
       );
+
     }
 
   }
+
 
   return {
     ok:
       violations.length===0,
 
     violations:
-      unique(violations),
+      unique(
+        violations
+      ),
 
     found
   };
@@ -2065,7 +2748,6 @@ function sequenceAudit(text){
 ========================================================= */
 
 function extractOverviewParagraph(text){
-
   const paragraphs=
     splitParagraphs(
       text,
@@ -2085,7 +2767,7 @@ function extractOverviewParagraph(text){
 
 
 /* =========================================================
-   STYLE
+   CSS
 ========================================================= */
 
 const style=`
@@ -2166,6 +2848,7 @@ button{
   );
 
   min-height:62px;
+
   margin:auto;
 
   display:flex;
@@ -2178,12 +2861,15 @@ button{
 .left{
   display:flex;
   align-items:center;
+
   gap:10px;
+
   min-width:0;
 }
 
 .back{
   color:#fff;
+
   text-decoration:none;
 
   border:
@@ -2249,6 +2935,7 @@ button{
   color:#21164b;
 
   font-size:28px;
+
   letter-spacing:-.03em;
 }
 
@@ -2283,6 +2970,7 @@ button{
   background:#e5e8ef;
 
   border-radius:999px;
+
   overflow:hidden;
 }
 
@@ -2290,6 +2978,7 @@ button{
   display:block;
 
   height:100%;
+
   width:0;
 
   background:
@@ -2315,9 +3004,11 @@ button{
 
 .leftcol{
   display:grid;
+
   gap:12px;
 
   position:sticky;
+
   top:74px;
 }
 
@@ -2353,6 +3044,7 @@ button{
 
 .diagramtop b{
   color:#21164b;
+
   font-size:13px;
 }
 
@@ -2361,6 +3053,7 @@ button{
   font-weight:900;
 
   color:#6246bd;
+
   background:#f0ecff;
 
   padding:6px 8px;
@@ -2384,6 +3077,7 @@ button{
 
 .imgwrap img{
   width:100%;
+
   display:block;
 }
 
@@ -2433,6 +3127,7 @@ button{
   padding:12px;
 
   display:grid;
+
   gap:7px;
 }
 
@@ -2512,11 +3207,13 @@ button{
 
 .stepbtn.done .n{
   background:#dff3e8;
+
   color:#15764f;
 }
 
 .stepbtn.locked{
   opacity:.48;
+
   cursor:not-allowed;
 }
 
@@ -2571,6 +3268,7 @@ button{
   color:var(--muted);
 
   font-size:10.8px;
+
   line-height:1.55;
 }
 
@@ -2595,6 +3293,7 @@ button{
   color:#545d6f;
 
   font-size:10.5px;
+
   line-height:1.55;
 }
 
@@ -2658,6 +3357,7 @@ button{
 
 .field textarea{
   min-height:76px;
+
   resize:vertical;
 }
 
@@ -2692,6 +3392,7 @@ button{
   color:#202636;
 
   font-size:12.5px;
+
   line-height:1.7;
 }
 
@@ -2714,6 +3415,7 @@ button{
 
 .wc{
   color:#8a91a0;
+
   font-size:9.5px;
 }
 
@@ -2760,11 +3462,13 @@ button{
 
 .btn:disabled{
   opacity:.4;
+
   cursor:not-allowed;
 }
 
 .feedback{
   margin-top:12px;
+
   display:none;
 }
 
@@ -2790,6 +3494,7 @@ button{
 
 .score{
   font-size:24px;
+
   font-weight:950;
 
   color:#21164b;
@@ -2797,6 +3502,7 @@ button{
 
 .status{
   font-size:10.5px;
+
   font-weight:900;
 }
 
@@ -2826,16 +3532,19 @@ button{
   border-radius:11px;
 
   font-size:10.5px;
+
   line-height:1.55;
 }
 
 .detail.goodbox{
   border-color:#bde5ce;
+
   background:var(--goodbg);
 }
 
 .detail.badbox{
   border-color:#efc8ce;
+
   background:var(--badbg);
 }
 
@@ -2859,6 +3568,7 @@ button{
   border-radius:11px;
 
   font-size:10.5px;
+
   line-height:1.6;
 }
 
@@ -2868,6 +3578,7 @@ button{
 
 .analysis-result{
   display:grid;
+
   gap:6px;
 
   margin-top:8px;
@@ -2929,6 +3640,7 @@ button{
   cursor:pointer;
 
   font-size:10px;
+
   font-weight:900;
 
   color:#4b318e;
@@ -2936,6 +3648,7 @@ button{
 
 .reviewparts p{
   font-size:10px;
+
   line-height:1.5;
 
   color:#656d7d;
@@ -3057,6 +3770,7 @@ dialog::backdrop{
 
   .hero{
     flex-direction:column;
+
     align-items:stretch;
   }
 
@@ -3085,7 +3799,6 @@ dialog::backdrop{
 ========================================================= */
 
 function mount(){
-
   document.head.insertAdjacentHTML(
     'beforeend',
     `<style>${style}</style>`
@@ -3335,7 +4048,6 @@ function mount(){
 ========================================================= */
 
 function renderNav(){
-
   const unlocked=
     unlockIndex();
 
@@ -3445,8 +4157,7 @@ function renderNav(){
 
             saveCurrentDraft();
 
-            state.current=
-              index;
+            state.current=index;
 
             save();
 
@@ -3461,7 +4172,6 @@ function renderNav(){
 }
 
 function renderProgress(){
-
   const count=
     state.completed.length;
 
@@ -3482,7 +4192,6 @@ function renderProgress(){
 ========================================================= */
 
 function guideFor(step){
-
   return [
 
     `
@@ -3504,23 +4213,23 @@ function guideFor(step){
 
     `
       <b>Mục tiêu:</b>
-      Viết Overview khái quát quá trình:
-      cấu trúc chung, điểm bắt đầu,
+      Viết Overview khái quát:
+      loại/quy mô quá trình, điểm bắt đầu,
       điểm kết thúc và đặc điểm nổi bật.
-      Nếu nêu số stage thì số đó bắt buộc phải chính xác.
+      Nếu nêu số stage thì số đó phải chính xác.
     `,
 
     `
       <b>Mục tiêu:</b>
       Viết Body 1 theo cách chia em đã chọn.
-      Không có một mốc chia cố định;
-      cần đúng thứ tự và đủ một nhóm stage hợp lý.
+      Không có mốc chia cố định;
+      quan trọng là đúng thứ tự và mô tả rõ một nhóm stage hợp lý.
     `,
 
     `
       <b>Mục tiêu:</b>
       Viết Body 2 tiếp nối Body 1.
-      Hai body không nên lặp nhau và khi ghép lại
+      Hai đoạn không nên lặp nhau và khi ghép lại
       phải bao quát phần lớn toàn bộ process.
     `,
 
@@ -3529,11 +4238,9 @@ function guideFor(step){
       Viết lại toàn bài từ đầu:
       Introduction → Overview → Body 1 → Body 2.
       Chỉ cần bấm Enter 1 lần để sang đoạn mới.
-      Hệ thống sẽ nhận mỗi dòng mới là một paragraph.
     `
 
   ][step];
-
 }
 
 
@@ -3542,7 +4249,6 @@ function guideFor(step){
 ========================================================= */
 
 function renderAnalysis(){
-
   const draft=
     state.drafts.analysis
     ||
@@ -3575,7 +4281,7 @@ function renderAnalysis(){
 
 <p class="sub">
 
-  Quan sát toàn bộ sơ đồ rồi hoàn thành 7 mục.
+  Quan sát toàn bộ sơ đồ rồi hoàn thành các mục dưới đây.
   Body 1 và Body 2 được chia linh hoạt.
 
 </p>
@@ -3668,7 +4374,7 @@ function renderAnalysis(){
 
     <textarea
       id="aFeatures"
-      placeholder="Nêu một số đặc điểm/công đoạn nổi bật của toàn bộ quá trình..."
+      placeholder="Nêu các đặc điểm/công đoạn nổi bật của toàn bộ process..."
     ></textarea>
 
   </div>
@@ -3815,16 +4521,14 @@ function renderAnalysis(){
       state.scores[0]
     );
   }
-
 }
 
 
 /* =========================================================
-   STEP 1 CHECK
+   CHECK STEP 1
 ========================================================= */
 
 function checkAnalysis(){
-
   saveCurrentDraft();
 
   state.attempts[0]=
@@ -3832,7 +4536,6 @@ function checkAnalysis(){
 
   const answer=
     state.drafts.analysis;
-
 
   const body1OK=
     validBodyPlan(
@@ -3853,7 +4556,6 @@ function checkAnalysis(){
       answer.body1,
       answer.body2
     );
-
 
   const checks=[
 
@@ -3929,7 +4631,6 @@ function checkAnalysis(){
 
 
   const result={
-
     checks,
 
     total:
@@ -3943,22 +4644,16 @@ function checkAnalysis(){
 
     completed:
       correct===checks.length
-
   };
 
 
-  state.scores[0]=
-    result;
+  state.scores[0]=result;
 
 
   if(result.completed){
-
     completeStep(0);
-
   }else{
-
     invalidateFrom(0);
-
   }
 
 
@@ -3968,7 +4663,6 @@ function checkAnalysis(){
   showAnalysisFeedback(
     result
   );
-
 
   renderNav();
   renderProgress();
@@ -3983,7 +4677,6 @@ function checkAnalysis(){
     next.disabled=
       !done(0);
   }
-
 }
 
 
@@ -3992,7 +4685,6 @@ function checkAnalysis(){
 ========================================================= */
 
 function analysisReference(){
-
   const analysis=
     task.analysis;
 
@@ -4043,8 +4735,8 @@ Không có một đáp án duy nhất.
 
 <br>
 
-Học sinh có thể chia theo các nhóm stage hợp lý,
-miễn Body 1 và Body 2 tiếp nối nhau và không chồng lấn.
+Miễn hai body tạo thành các nhóm stage hợp lý,
+đi theo trình tự của process và không chồng lấn.
 
 <br><br>
 
@@ -4068,7 +4760,6 @@ ${esc(
 }
 
 function showAnalysisFeedback(result){
-
   const feedback=
     document.getElementById(
       'feedback'
@@ -4077,7 +4768,6 @@ function showAnalysisFeedback(result){
   if(!feedback){
     return;
   }
-
 
   const rows=
     result.checks
@@ -4198,7 +4888,6 @@ function showAnalysisFeedback(result){
 ${reference}
 
   `;
-
 }
 
 
@@ -4218,7 +4907,6 @@ function sectionConfig(step){
 ========================================================= */
 
 function gradeIntroduction(text){
-
   const wc=
     words(text);
 
@@ -4348,17 +5036,12 @@ function gradeIntroduction(text){
 
 
   const topicPts=
-
     topic.requiredOK
     &&
     !topic.wrong.length
-
     ?
-
     45
-
     :
-
     0;
 
 
@@ -4387,15 +5070,10 @@ function gradeIntroduction(text){
 
 
   const lengthPts=
-
     wc>=8
-
     ?
-
     10
-
     :
-
     Math.round(
       wc/8*10
     );
@@ -4404,23 +5082,16 @@ function gradeIntroduction(text){
   const languagePts=
     Math.max(
       0,
-      10
-      -
-      serious.length*5
+      10-serious.length*5
     );
 
 
   let score=
-    topicPts
-    +
-    framingPts
-    +
-    describePts
-    +
-    processPts
-    +
-    lengthPts
-    +
+    topicPts+
+    framingPts+
+    describePts+
+    processPts+
+    lengthPts+
     languagePts;
 
 
@@ -4556,7 +5227,6 @@ function gradeIntroduction(text){
     breakdown
 
   };
-
 }
 
 
@@ -4565,7 +5235,6 @@ function gradeIntroduction(text){
 ========================================================= */
 
 function gradeOverview(text){
-
   const config=
     task.overview;
 
@@ -4619,19 +5288,12 @@ function gradeOverview(text){
 
 
   const ratio=
-
     hits.length
-
     ?
-
-    hits
-    .filter(Boolean)
-    .length
+    hits.filter(Boolean).length
     /
     hits.length
-
     :
-
     1;
 
 
@@ -4652,24 +5314,16 @@ function gradeOverview(text){
 
 
   const stageCountOK=
-
     !stageClaim.mentioned
-
     ||
-
     stageClaim.count===expectedStages;
 
 
   const consistentWithStep1=
-
     !stageClaim.mentioned
-
     ||
-
     step1Stages==null
-
     ||
-
     stageClaim.count===step1Stages;
 
 
@@ -4749,9 +5403,9 @@ function gradeOverview(text){
   }
 
 
-  if(wc<25){
+  if(wc<20){
     issues.push(
-      `Overview còn ngắn (${wc} từ).`
+      `Overview còn khá ngắn (${wc} từ).`
     );
   }
 
@@ -4819,17 +5473,12 @@ function gradeOverview(text){
 
 
   const stagePts=
-
     stageCountOK
     &&
     consistentWithStep1
-
     ?
-
     15
-
     :
-
     0;
 
 
@@ -4845,19 +5494,14 @@ function gradeOverview(text){
 
 
   const lengthPts=
-
-    wc>=25
-
+    wc>=20
     ?
-
     5
-
     :
-
     Math.round(
       Math.min(
         1,
-        wc/25
+        wc/20
       )
       *
       5
@@ -4867,9 +5511,7 @@ function gradeOverview(text){
   const languagePts=
     Math.max(
       0,
-      10
-      -
-      serious.length*5
+      10-serious.length*5
     );
 
 
@@ -4888,24 +5530,15 @@ function gradeOverview(text){
 
 
   let score=
-    topicPts
-    +
-    markerPts
-    +
-    firstPts
-    +
-    lastPts
-    +
-    stagePts
-    +
-    featurePts
-    +
-    lengthPts
-    +
-    languagePts
-    -
-    stylePenalty
-    -
+    topicPts+
+    markerPts+
+    firstPts+
+    lastPts+
+    stagePts+
+    featurePts+
+    lengthPts+
+    languagePts-
+    stylePenalty-
     factualPenalty;
 
 
@@ -5014,27 +5647,18 @@ function gradeOverview(text){
       max:15,
 
       note:
-
         stageClaim.mentioned
-
         ?
-
         (
           stageCountOK
           &&
           consistentWithStep1
-
           ?
-
           `Đúng: ${stageClaim.count}`
-
           :
-
           'Sai/không nhất quán'
         )
-
         :
-
         'Không bắt buộc nêu'
     },
 
@@ -5128,7 +5752,7 @@ function gradeOverview(text){
       &&
       ratio>=.45
       &&
-      wc>=25
+      wc>=20
       &&
       serious.length===0
       &&
@@ -5139,36 +5763,37 @@ function gradeOverview(text){
     breakdown
 
   };
-
 }
 
 
 /* =========================================================
-   BODY GRADING
+   FLEXIBLE BODY GRADING
 ========================================================= */
 
 function flexibleBodyGrade(
   step,
   text
 ){
-
   const config=
     sectionConfig(step);
 
   const groups=
-    globalBodyGroups();
+    processStageGroups();
 
   const hits=
-    groupHits(
+    stageGroupHits(
       text,
       groups
     );
 
   const hitCount=
-    hits
-    .filter(Boolean)
-    .length;
+    hits.filter(Boolean).length;
 
+
+  /*
+    Số stage tối thiểu trong một body.
+    Chấm tương đối thoáng để không ép một cách chia.
+  */
 
   const minHits=
     Math.max(
@@ -5221,11 +5846,8 @@ function flexibleBodyGrade(
 
 
   const connectorOK=
-
     !config.sequence?.length
-
     ||
-
     containsAny(
       text,
       config.sequence
@@ -5241,67 +5863,54 @@ function flexibleBodyGrade(
     state.drafts.body1
   ){
 
-    const A=
-      new Set(
-        norm(
-          state.drafts.body1
-        )
-        .split(/\s+/)
-        .filter(
-          word=>
-            word.length>3
-        )
+    const body1StageHits=
+      stageGroupHits(
+        state.drafts.body1,
+        groups
       );
 
-
-    const B=
-      new Set(
-        norm(text)
-        .split(/\s+/)
-        .filter(
-          word=>
-            word.length>3
-        )
+    const body2StageHits=
+      stageGroupHits(
+        text,
+        groups
       );
 
+    let overlapCount=0;
 
-    let overlap=0;
-
-
-    A.forEach(
-      word=>{
-        if(B.has(word)){
-          overlap++;
-        }
+    for(
+      let i=0;
+      i<groups.length;
+      i++
+    ){
+      if(
+        body1StageHits[i]
+        &&
+        body2StageHits[i]
+      ){
+        overlapCount++;
       }
-    );
+    }
 
 
-    const overlapRatio=
-      overlap
-      /
-      Math.max(
-        1,
+    /*
+      Chỉ trừ khi lặp từ 2 stage trở lên,
+      không trừ nếu chỉ nhắc lại một stage để nối đoạn.
+    */
+
+    if(overlapCount>=2){
+      overlapPenalty=
         Math.min(
-          A.size,
-          B.size
-        )
-      );
-
-
-    if(overlapRatio>.72){
-      overlapPenalty=12;
+          12,
+          overlapCount*4
+        );
     }
 
   }
 
 
   const combined=
-
     step===4
-
     ?
-
     String(
       state.drafts.body1||''
     )
@@ -5311,48 +5920,32 @@ function flexibleBodyGrade(
     String(
       text||''
     )
-
     :
-
-    String(
-      text||''
-    );
+    String(text||'');
 
 
   const combinedHits=
-    groupHits(
+    stageGroupHits(
       combined,
       groups
     );
 
 
   const combinedRatio=
-
     combinedHits.length
-
     ?
-
-    combinedHits
-    .filter(Boolean)
-    .length
+    combinedHits.filter(Boolean).length
     /
     combinedHits.length
-
     :
-
     0;
 
 
   const coverageOK=
-
     step===4
-
     ?
-
     combinedRatio>=.48
-
     :
-
     true;
 
 
@@ -5367,49 +5960,39 @@ function flexibleBodyGrade(
     );
 
 
+  const minWords=
+    Number(config.minWords)||40;
+
+
   const lengthPts=
-
-    wc>=config.minWords
-
+    wc>=minWords
     ?
-
     15
-
     :
-
     Math.round(
       15
       *
       Math.min(
         1,
-        wc/config.minWords
+        wc/minWords
       )
     );
 
 
   const sequencePts=
-
     connectorOK
     &&
     sequence.ok
-
     ?
-
     10
-
     :
-
     (
       connectorOK
       ||
       sequence.ok
-
       ?
-
       5
-
       :
-
       0
     );
 
@@ -5417,18 +6000,13 @@ function flexibleBodyGrade(
   const languagePts=
     Math.max(
       0,
-      10
-      -
-      serious.length*4
+      10-serious.length*4
     );
 
 
   const coveragePts=
-
     step===4
-
     ?
-
     (
       coverageOK
       ?
@@ -5438,32 +6016,24 @@ function flexibleBodyGrade(
         combinedRatio/.48*10
       )
     )
-
     :
-
     10;
 
 
   const factualPenalty=
     Math.min(
-      18,
-      factual.length*7
+      20,
+      factual.length*8
     );
 
 
   let score=
-    contentPts
-    +
-    lengthPts
-    +
-    sequencePts
-    +
-    languagePts
-    +
-    coveragePts
-    -
-    overlapPenalty
-    -
+    contentPts+
+    lengthPts+
+    sequencePts+
+    languagePts+
+    coveragePts-
+    overlapPenalty-
     factualPenalty;
 
 
@@ -5495,6 +6065,15 @@ function flexibleBodyGrade(
   }
 
 
+  if(serious.length>=2){
+    score=
+      Math.min(
+        score,
+        79
+      );
+  }
+
+
   const issues=[];
 
 
@@ -5507,14 +6086,14 @@ function flexibleBodyGrade(
 
   if(hitCount<minHits){
     issues.push(
-      `Đoạn chưa mô tả đủ stage cụ thể: hệ thống nhận ${hitCount}, cần khoảng ${minHits} ý/stage rõ ràng.`
+      `Đoạn chưa mô tả đủ công đoạn rõ ràng: hệ thống nhận ${hitCount} stage, cần khoảng ${minHits} stage trở lên.`
     );
   }
 
 
-  if(wc<config.minWords){
+  if(wc<minWords){
     issues.push(
-      `Đoạn còn ngắn: ${wc} từ; mục tiêu khoảng ${config.minWords}+ từ.`
+      `Đoạn hiện có ${wc} từ; mục tiêu khoảng ${minWords}+ từ.`
     );
   }
 
@@ -5542,14 +6121,14 @@ function flexibleBodyGrade(
     !coverageOK
   ){
     issues.push(
-      'Khi ghép Body 1 và Body 2, vẫn còn khá nhiều stage chưa được thể hiện.'
+      'Khi ghép Body 1 và Body 2, vẫn còn khá nhiều stage của process chưa được thể hiện.'
     );
   }
 
 
   if(overlapPenalty){
     issues.push(
-      'Body 2 đang lặp khá nhiều nội dung của Body 1.'
+      'Body 2 đang lặp lại khá nhiều công đoạn đã được trình bày ở Body 1.'
     );
   }
 
@@ -5590,7 +6169,7 @@ function flexibleBodyGrade(
       label:'Nội dung/stages',
       score:contentPts,
       max:55,
-      note:`Nhận diện ${hitCount} nhóm`
+      note:`Nhận diện ${hitCount} stage`
     },
 
     {
@@ -5621,7 +6200,7 @@ function flexibleBodyGrade(
       note:
         serious.length
         ?
-        `${serious.length} lỗi`
+        `${serious.length} lỗi quan trọng`
         :
         'Ổn'
     },
@@ -5681,7 +6260,7 @@ function flexibleBodyGrade(
       max:0,
 
       note:
-        'Lặp nội dung'
+        'Lặp nhiều stage'
 
     });
 
@@ -5699,7 +6278,7 @@ function flexibleBodyGrade(
       hitCount>=minHits
       &&
       wc>=Math.round(
-        config.minWords*.8
+        minWords*.8
       )
       &&
       connectorOK
@@ -5720,28 +6299,24 @@ function flexibleBodyGrade(
     combinedRatio
 
   };
-
 }
 
 
 /* =========================================================
-   GENERIC SECTION
+   SECTION ROUTER
 ========================================================= */
 
 function sectionGrade(
   step,
   text
 ){
-
   if(step===1){
     return gradeIntroduction(text);
   }
 
-
   if(step===2){
     return gradeOverview(text);
   }
-
 
   if(
     step===3
@@ -5754,253 +6329,14 @@ function sectionGrade(
     );
   }
 
-
-  const config=
-    sectionConfig(step);
-
-
-  const hits=
-    groupHits(
-      text,
-      config.concepts||[]
-    );
-
-
-  const ratio=
-
-    hits.length
-
-    ?
-
-    hits
-    .filter(Boolean)
-    .length
-    /
-    hits.length
-
-    :
-
-    1;
-
-
-  const wc=
-    words(text);
-
-
-  const language=
-    languageIssues(text);
-
-
-  const serious=
-    seriousLanguageIssues(
-      language
-    );
-
-
-  const topic=
-    topicCheck(text);
-
-
-  const factual=
-    factualIssues(
-      text,
-      step
-    );
-
-
-  const sequenceOK=
-
-    !config.sequence?.length
-
-    ||
-
-    containsAny(
-      text,
-      config.sequence
-    );
-
-
-  const issues=[];
-
-
-  if(topic.wrong.length){
-    issues.push(
-      `Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
-    );
-  }
-
-
-  if(ratio<.75){
-
-    const missing=
-      (
-        config.concepts
-        ||
-        []
-      )
-      .filter(
-        (
-          _,
-          index
-        )=>
-          !hits[index]
-      )
-      .map(
-        group=>
-          group[0]
-      );
-
-    issues.push(
-      'Ý/stage còn thiếu hoặc chưa rõ: '
-      +
-      missing.join(', ')
-      +
-      '.'
-    );
-
-  }
-
-
-  if(wc<config.minWords){
-    issues.push(
-      `Đoạn còn ngắn: ${wc} từ; mục tiêu khoảng ${config.minWords}+ từ.`
-    );
-  }
-
-
-  if(!sequenceOK){
-    issues.push(
-      'Nên có từ/cụm nối để thể hiện đúng trình tự các stage.'
-    );
-  }
-
-
-  factual.forEach(
-    issue=>
-      issues.push(
-        'Nội dung/số liệu: '
-        +
-        issue
-      )
-  );
-
-
-  language.forEach(
-    issue=>
-      issues.push(
-        'Ngữ pháp/chính tả: '
-        +
-        issue
-      )
-  );
-
-
-  const contentPts=
-    Math.round(
-      ratio*70
-    );
-
-
-  const lengthPts=
-
-    wc>=config.minWords
-
-    ?
-
-    15
-
-    :
-
-    Math.round(
-      15
-      *
-      Math.min(
-        1,
-        wc/config.minWords
-      )
-    );
-
-
-  const sequencePts=
-    sequenceOK
-    ?
-    8
-    :
-    0;
-
-
-  const languagePts=
-    Math.max(
-      0,
-      7
-      -
-      serious.length*3
-    );
-
-
-  const factualPenalty=
-    Math.min(
-      15,
-      factual.length*6
-    );
-
-
-  let score=
-    contentPts
-    +
-    lengthPts
-    +
-    sequencePts
-    +
-    languagePts
-    -
-    factualPenalty;
-
-
-  score=
-    Math.max(
-      0,
-      Math.min(
-        100,
-        score
-      )
-    );
-
-
-  if(topic.wrong.length){
-    score=
-      Math.min(
-        score,
-        45
-      );
-  }
-
-
   return {
-
-    total:score,
-
-    completed:
-
-      !topic.wrong.length
-      &&
-      ratio>=.75
-      &&
-      wc>=Math.round(
-        config.minWords*.8
-      )
-      &&
-      sequenceOK
-      &&
-      serious.length<=1
-      &&
-      factual.length===0,
-
-    wc,
-    issues
-
+    total:0,
+    completed:false,
+    issues:[
+      'Không xác định được phần cần chấm.'
+    ],
+    breakdown:[]
   };
-
 }
 
 
@@ -6009,13 +6345,11 @@ function sectionGrade(
 ========================================================= */
 
 function fullGrade(text){
-
   const wc=
     words(text);
 
-
   /*
-    CHỈ ENTER 1 LẦN LÀ TÁCH ĐOẠN
+    ENTER 1 LẦN = ĐOẠN MỚI.
   */
 
   const paragraphs=
@@ -6029,40 +6363,26 @@ function fullGrade(text){
     paragraphs.length;
 
 
-  const groups=[
-
-    ...task.intro.concepts,
-
-    ...task.overview.concepts,
-
-    ...task.body1.concepts,
-
-    ...task.body2.concepts
-
-  ];
+  const groups=
+    processStageGroups();
 
 
   const allHits=
-    groupHits(
+    stageGroupHits(
       text,
       groups
     );
 
 
+  const hitCount=
+    allHits.filter(Boolean).length;
+
+
   const ratio=
-
     allHits.length
-
     ?
-
-    allHits
-    .filter(Boolean)
-    .length
-    /
-    allHits.length
-
+    hitCount/allHits.length
     :
-
     0;
 
 
@@ -6105,11 +6425,8 @@ function fullGrade(text){
 
 
   const stageCountOK=
-
     !stageClaim.mentioned
-
     ||
-
     stageClaim.count===expectedStages;
 
 
@@ -6120,33 +6437,23 @@ function fullGrade(text){
 
 
   const overviewStyle=
-
     overviewParagraph
-
     ?
-
     styleIssues(
       overviewParagraph,
       2
     )
-
     :
-
     [];
 
 
   const bodyText=
-
     paragraphCount>=4
-
     ?
-
     paragraphs
     .slice(2)
     .join(' ')
-
     :
-
     (
       state.drafts.body1
       +
@@ -6192,7 +6499,7 @@ function fullGrade(text){
 
   if(wc<150){
     issues.push(
-      `Bài hiện có ${wc} từ; Writing Task 1 nên đạt tối thiểu 150 từ.`
+      `Bài hiện có ${wc} từ; IELTS Writing Task 1 nên có ít nhất 150 từ.`
     );
   }
 
@@ -6206,7 +6513,7 @@ function fullGrade(text){
 
   if(paragraphCount<4){
     issues.push(
-      `Bài nên có 4 đoạn rõ ràng; hệ thống đang nhận ${paragraphCount} đoạn. Chỉ cần bấm Enter 1 lần để sang đoạn mới.`
+      `Hệ thống đang nhận ${paragraphCount} đoạn. Bài nên có 4 đoạn: Introduction, Overview, Body 1 và Body 2. Chỉ cần bấm Enter 1 lần để sang đoạn mới.`
     );
   }
 
@@ -6228,12 +6535,11 @@ function fullGrade(text){
       )
       .slice(
         0,
-        12
+        10
       );
 
-
     issues.push(
-      'Một số nội dung/stage chưa rõ: '
+      'Một số stage chưa được thể hiện rõ: '
       +
       missing.join(', ')
       +
@@ -6290,15 +6596,10 @@ function fullGrade(text){
 
 
   const wordPts=
-
     wc>=150
-
     ?
-
     20
-
     :
-
     Math.round(
       Math.min(
         20,
@@ -6320,29 +6621,29 @@ function fullGrade(text){
     ?
     8
     :
-    0;
+    Math.round(
+      paragraphCount/4*8
+    );
 
 
   const languagePts=
     Math.max(
       0,
-      7
-      -
-      serious.length*3
+      7-serious.length*3
     );
 
 
   const factualPenalty=
     Math.min(
-      18,
-      factual.length*5
+      20,
+      factual.length*6
     );
 
 
   const sequencePenalty=
     Math.min(
-      10,
-      sequence.violations.length*5
+      12,
+      sequence.violations.length*6
     );
 
 
@@ -6354,20 +6655,13 @@ function fullGrade(text){
 
 
   let score=
-    contentPts
-    +
-    wordPts
-    +
-    overviewPts
-    +
-    paragraphPts
-    +
-    languagePts
-    -
-    factualPenalty
-    -
-    sequencePenalty
-    -
+    contentPts+
+    wordPts+
+    overviewPts+
+    paragraphPts+
+    languagePts-
+    factualPenalty-
+    sequencePenalty-
     overviewPenalty;
 
 
@@ -6416,13 +6710,23 @@ function fullGrade(text){
   }
 
 
+  if(serious.length>=2){
+    score=
+      Math.min(
+        score,
+        79
+      );
+  }
+
+
   const breakdown=[
 
     {
       label:'Nội dung & stages',
       score:contentPts,
       max:55,
-      note:`Bao quát ${Math.round(ratio*100)}%`
+      note:
+        `Nhận diện ${hitCount}/${groups.length} stage · Bao quát ${Math.round(ratio*100)}%`
     },
 
     {
@@ -6446,7 +6750,7 @@ function fullGrade(text){
     },
 
     {
-      label:'Cấu trúc 4 đoạn',
+      label:'Cấu trúc đoạn',
       score:paragraphPts,
       max:8,
       note:`${paragraphCount} đoạn`
@@ -6560,7 +6864,6 @@ function fullGrade(text){
     breakdown
 
   };
-
 }
 
 
@@ -6569,10 +6872,8 @@ function fullGrade(text){
 ========================================================= */
 
 function renderWriting(step){
-
   const title=
     STEP_NAMES[step];
-
 
   const draft=
     state.drafts[
@@ -6581,17 +6882,13 @@ function renderWriting(step){
     ||
     '';
 
-
   const full=
     step===5;
 
 
   const review=
-
     full
-
     ?
-
     `
 
 <div class="reviewparts">
@@ -6650,9 +6947,7 @@ function renderWriting(step){
 </div>
 
     `
-
     :
-
     '';
 
 
@@ -6686,16 +6981,12 @@ function renderWriting(step){
 
   ${
     full
-
     ?
-
     `
-      Viết lại toàn bộ bài từ trí nhớ.
+      Viết lại toàn bộ bài từ đầu.
       Chỉ cần bấm Enter 1 lần để xuống đoạn mới.
     `
-
     :
-
     `
       Viết phần này dựa trên sơ đồ
       và kết quả phân tích ở Bước 1.
@@ -6874,11 +7165,9 @@ ${review}
     );
 
   }
-
 }
 
 function updateWordCount(){
-
   const counter=
     document.getElementById(
       'wordCount'
@@ -6897,7 +7186,6 @@ function updateWordCount(){
     counter.textContent=
       `${words(box.value)} từ`;
   }
-
 }
 
 
@@ -6906,7 +7194,6 @@ function updateWordCount(){
 ========================================================= */
 
 function checkWriting(step){
-
   saveCurrentDraft();
 
   state.attempts[step]=
@@ -6922,17 +7209,12 @@ function checkWriting(step){
 
 
   const result=
-
     step===5
-
     ?
-
     fullGrade(
       text
     )
-
     :
-
     sectionGrade(
       step,
       text
@@ -6944,13 +7226,9 @@ function checkWriting(step){
 
 
   if(result.completed){
-
     completeStep(step);
-
   }else{
-
     invalidateFrom(step);
-
   }
 
 
@@ -6981,7 +7259,6 @@ function checkWriting(step){
     next.disabled=
       !done(step);
   }
-
 }
 
 
@@ -6993,7 +7270,6 @@ function showWritingFeedback(
   step,
   result
 ){
-
   const feedback=
     document.getElementById(
       'feedback'
@@ -7009,50 +7285,34 @@ function showWritingFeedback(
 
 
   const showReference=
-
     !result.completed
-
     &&
-
     attempts(step)>=2;
 
 
   const reference=
-
     step===5
-
     ?
-
     task.fullReference
-
     :
-
-    sectionConfig(step).reference;
+    sectionConfig(step)?.reference;
 
 
   const referenceLabel=
-
     (
       step===3
       ||
       step===4
     )
-
     ?
-
     'Một cách triển khai tham khảo — không phải cách chia duy nhất:'
-
     :
-
     'Bài tham khảo:';
 
 
   const breakdown=
-
     result.breakdown?.length
-
     ?
-
     `
 
 <div class="detail">
@@ -7095,18 +7355,13 @@ function showWritingFeedback(
 </div>
 
     `
-
     :
-
     '';
 
 
   const detail=
-
     result.issues?.length
-
     ?
-
     `
 
 <div
@@ -7131,7 +7386,7 @@ function showWritingFeedback(
     ${
       result.completed
       ?
-      'Phần này đạt yêu cầu.'
+      'Phần này đạt yêu cầu nhưng vẫn có một số điểm có thể cải thiện:'
       :
       'Cần sửa:'
     }
@@ -7159,9 +7414,7 @@ function showWritingFeedback(
 </div>
 
     `
-
     :
-
     `
 
 <div class="detail goodbox">
@@ -7170,7 +7423,7 @@ function showWritingFeedback(
     Đạt yêu cầu.
   </b>
 
-  Nội dung, cấu trúc và trình tự chính phù hợp.
+  Nội dung, cấu trúc, ngữ pháp và trình tự chính phù hợp.
 
 </div>
 
@@ -7236,6 +7489,8 @@ ${detail}
 
 ${
   showReference
+  &&
+  reference
 
   ?
 
@@ -7287,7 +7542,7 @@ ${
   </h3>
 
   <p>
-    Em đã đi đủ 6 bước từ phân tích
+    Em đã hoàn thành đủ 6 bước từ phân tích
     đến bài Process hoàn chỉnh.
   </p>
 
@@ -7307,7 +7562,6 @@ ${
     `;
 
   }
-
 }
 
 
@@ -7316,7 +7570,6 @@ ${
 ========================================================= */
 
 function goStep(index){
-
   saveCurrentDraft();
 
   if(
@@ -7327,8 +7580,7 @@ function goStep(index){
     return;
   }
 
-  state.current=
-    index;
+  state.current=index;
 
   save();
 
@@ -7338,34 +7590,31 @@ function goStep(index){
     top:0,
     behavior:'smooth'
   });
-
 }
 
 
 /* =========================================================
-   RENDER / START
+   RENDER
 ========================================================= */
 
 function render(){
-
   renderNav();
 
   renderProgress();
 
   if(state.current===0){
-
     renderAnalysis();
-
   }else{
-
     renderWriting(
       state.current
     );
-
   }
-
 }
 
+
+/* =========================================================
+   START
+========================================================= */
 
 load();
 
