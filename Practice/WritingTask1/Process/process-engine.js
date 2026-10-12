@@ -16,7 +16,7 @@ if(!task){
 }
 
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
-const STORAGE_VERSION='V10';
+const STORAGE_VERSION='V11';
 
 const STEP_NAMES=[
   'Phân tích sơ đồ',
@@ -223,7 +223,7 @@ function unique(items){
 
 /* =========================================================
    PARAGRAPHS
-   ENTER 1 LẦN = 1 ĐOẠN
+   ENTER 1 LẦN = ĐOẠN MỚI
 ========================================================= */
 
 function splitParagraphs(
@@ -235,12 +235,10 @@ function splitParagraphs(
     .trim()
     .split(/\n+/)
     .map(
-      item=>
-        item.trim()
+      item=>item.trim()
     )
     .filter(
-      item=>
-        item.length>minLength
+      item=>item.length>minLength
     );
 }
 
@@ -268,8 +266,7 @@ function completeStep(step){
     ...new Set(
       state.completed
     )
-  ]
-  .sort(
+  ].sort(
     (a,b)=>a-b
   );
 
@@ -279,8 +276,7 @@ function completeStep(step){
 function invalidateFrom(step){
   state.completed=
     state.completed.filter(
-      index=>
-        index<step
+      index=>index<step
     );
 
   for(
@@ -340,8 +336,7 @@ function fieldValue(id){
 }
 
 function saveCurrentDraft(){
-  const step=
-    state.current;
+  const step=state.current;
 
   if(step===0){
 
@@ -447,9 +442,7 @@ function detectStageCountClaim(text){
     if(match){
       return {
         mentioned:true,
-        count:numberValue(
-          match[1]
-        ),
+        count:numberValue(match[1]),
         token:match[1],
         match:match[0]
       };
@@ -522,7 +515,6 @@ const TOPIC_RULES={
     label:'bricks'
   },
 
-
   '02':{
     required:[
       'noodle',
@@ -546,7 +538,6 @@ const TOPIC_RULES={
     label:'instant noodles'
   },
 
-
   '03':{
     required:[
       'ketchup',
@@ -569,7 +560,6 @@ const TOPIC_RULES={
     label:'tomato ketchup'
   },
 
-
   '04':{
     required:[
       'frog',
@@ -591,7 +581,6 @@ const TOPIC_RULES={
     label:'frog life cycle'
   },
 
-
   '05':{
     required:[
       'bee',
@@ -612,7 +601,6 @@ const TOPIC_RULES={
 
     label:'bee life cycle'
   },
-
 
   '06':{
     required:[
@@ -695,8 +683,7 @@ function topicCheck(text){
       )
     ],
 
-    expected:
-      rule.label
+    expected:rule.label
   };
 }
 
@@ -741,7 +728,6 @@ function globalBodyGroups(){
 
 /* =========================================================
    TRUE PROCESS STAGES
-   CÁC CHI TIẾT CÙNG BƯỚC ĐƯỢC GOM CHUNG
 ========================================================= */
 
 const PROCESS_STAGE_GROUPS={
@@ -756,8 +742,10 @@ const PROCESS_STAGE_GROUPS={
       'clay is dug',
       'clay is excavated',
       'clay is extracted',
+      'clay is collected',
       'dug from the ground',
       'excavated from the ground',
+      'extracted from the ground',
       'digger',
       'excavator'
     ],
@@ -848,7 +836,9 @@ const PROCESS_STAGE_GROUPS={
       'storage silos',
       'storage silo',
       'flour is stored',
-      'flour storage'
+      'flour storage',
+      'flour is kept',
+      'flour is collected'
     ],
 
     [
@@ -917,6 +907,9 @@ const PROCESS_STAGE_GROUPS={
       'pick tomatoes',
       'picked',
       'harvested',
+      'collected',
+      'tomatoes are collected',
+      'ripe tomatoes are collected',
       'put in baskets',
       'placed in baskets',
       'baskets'
@@ -937,23 +930,16 @@ const PROCESS_STAGE_GROUPS={
       'processing factory'
     ],
 
-    /*
-      STALK + SEEDS + SKIN
-      = CÙNG MỘT STAGE
-    */
     [
       'remove stalk',
       'remove the stalk',
       'stalk is removed',
       'stalks are removed',
-
       'remove seeds',
       'seeds are removed',
-
       'remove skin',
       'skin is removed',
       'skins are removed',
-
       'stalk',
       'stalks',
       'seeds',
@@ -975,10 +961,6 @@ const PROCESS_STAGE_GROUPS={
       'crushed into pulp'
     ],
 
-    /*
-      SUGAR + VINEGAR + SALT
-      = CÙNG MỘT STAGE
-    */
     [
       'sugar',
       'vinegar',
@@ -1050,7 +1032,12 @@ const PROCESS_STAGE_GROUPS={
       'hamburger',
       'hamburgers',
       'fries',
-      'ready for consumption'
+      'ready for consumption',
+      'served',
+      'served with food',
+      'served with foods',
+      'served with hamburgers and fries',
+      'eaten'
     ]
 
   ],
@@ -1066,7 +1053,8 @@ const PROCESS_STAGE_GROUPS={
       'eggs',
       'frog eggs',
       'eggs are laid',
-      'lays eggs'
+      'lays eggs',
+      'eggs are produced'
     ],
 
     [
@@ -1209,7 +1197,8 @@ const PROCESS_STAGE_GROUPS={
       'recycle bin',
       'placed in recycling bins',
       'put in recycling bins',
-      'discarded'
+      'discarded',
+      'bottles are collected'
     ],
 
     [
@@ -1233,10 +1222,6 @@ const PROCESS_STAGE_GROUPS={
       'blocks'
     ],
 
-    /*
-      CRUSHING + WASHING
-      = CÙNG BƯỚC
-    */
     [
       'crushed',
       'crushing',
@@ -1411,8 +1396,7 @@ function bodyPlansAreDistinct(
       norm(first)
       .split(/\s+/)
       .filter(
-        item=>
-          item.length>3
+        item=>item.length>3
       )
     );
 
@@ -1421,8 +1405,7 @@ function bodyPlansAreDistinct(
       norm(second)
       .split(/\s+/)
       .filter(
-        item=>
-          item.length>3
+        item=>item.length>3
       )
     );
 
@@ -1615,11 +1598,6 @@ function bodyPlansCompatible(
       return false;
     }
 
-    /*
-      Không overlap.
-      1-9 + 10-15 = đúng.
-      1-9 + 9-15 = sai.
-    */
     if(A.end>=B.start){
       return false;
     }
@@ -1664,47 +1642,35 @@ function importantFeatureScore(text){
     'sorted',
     'transported',
     'sent',
-
     'removed',
-
     'crushed',
     'mixed',
     'added',
-
     'boiled',
     'heated',
     'cooled',
-
     'moulded',
     'molded',
     'shaped',
     'cut',
-
     'dried',
-
     'labelled',
     'labeled',
-
     'checked',
     'inspected',
-
     'packaged',
     'packed',
-
     'delivered',
     'distributed',
-
     'washed',
     'compressed',
-
     'recycled',
-
     'hatched',
     'moulted',
     'molted',
-
     'emerged',
     'developed'
+
   ];
 
   const normalized=
@@ -1731,6 +1697,410 @@ function importantFeatureScore(text){
     ratio>=.20
     ||
     actionHits>=3
+  );
+}
+
+
+/* =========================================================
+   STEP 1 SMART ASSESSMENT
+========================================================= */
+
+function analysisTypeAssessment(text){
+  const ok=
+    containsAny(
+      text,
+      task.analysis.type
+    );
+
+  return {
+    ok,
+
+    hint:
+      ok
+      ?
+      'Em đã xác định đúng dạng của process.'
+      :
+      'Hãy xem quá trình có đi từ một điểm bắt đầu tới điểm kết thúc hay quay trở lại điểm đầu.'
+  };
+}
+
+function analysisStagesAssessment(text){
+  const value=
+    numberValue(
+      String(text||'').trim()
+    );
+
+  const expected=
+    Number(task.stages);
+
+  const ok=
+    value===expected
+    ||
+    containsAny(
+      text,
+      task.analysis.stages||[]
+    );
+
+  return {
+    ok,
+
+    hint:
+      ok
+      ?
+      `Đúng. Sơ đồ có ${expected} main stages.`
+      :
+      `Hãy đếm các bước chính trên sơ đồ. Bài này có ${expected} main stages.`
+  };
+}
+
+function analysisBoundaryAssessment(
+  kind,
+  text
+){
+  const groups=
+    processStageGroups();
+
+  const targetGroup=
+    kind==='first'
+    ?
+    groups[0]
+    :
+    groups[
+      groups.length-1
+    ];
+
+  const sourceKeywords=
+    task.analysis?.[kind]
+    ||
+    [];
+
+  const stageMatch=
+    stageGroupPosition(
+      text,
+      targetGroup
+    )
+    >=
+    0;
+
+  const sourceMatch=
+    containsAny(
+      text,
+      sourceKeywords
+    );
+
+  const ok=
+    stageMatch
+    ||
+    sourceMatch;
+
+
+  if(!ok){
+
+    return {
+      ok:false,
+
+      hint:
+        kind==='first'
+        ?
+        'Quan sát bước đầu tiên của sơ đồ và mô tả điều xảy ra trước tất cả các công đoạn khác.'
+        :
+        'Quan sát công đoạn cuối cùng của sơ đồ và mô tả trạng thái/kết quả cuối của quá trình.'
+    };
+
+  }
+
+
+  /*
+    Ketchup:
+    collected = vẫn đúng ý,
+    nhưng picked / harvested sát sơ đồ hơn.
+  */
+
+  if(
+    ID==='03'
+    &&
+    kind==='first'
+    &&
+    /\bcollect(?:ed|ing)?\b/i
+    .test(text)
+  ){
+    return {
+      ok:true,
+
+      hint:
+        'Đúng ý. “Collected” được chấp nhận, nhưng “picked” hoặc “harvested” sát với hình ở bước đầu hơn.'
+    };
+  }
+
+
+  if(
+    ID==='03'
+    &&
+    kind==='last'
+    &&
+    /\bserv(?:e|ed|ing)\b/i
+    .test(text)
+  ){
+    return {
+      ok:true,
+
+      hint:
+        'Đúng ý. Sơ đồ cho thấy ketchup được dùng cùng hamburger và fries; “served with food” được chấp nhận.'
+    };
+  }
+
+
+  return {
+    ok:true,
+
+    hint:
+      kind==='first'
+      ?
+      'Đúng. Em đã xác định đúng công đoạn bắt đầu.'
+      :
+      'Đúng. Em đã xác định đúng công đoạn cuối.'
+  };
+}
+
+function analysisFeaturesAssessment(text){
+  const ok=
+    importantFeatureScore(
+      text
+    );
+
+  return {
+    ok,
+
+    hint:
+      ok
+      ?
+      'Đạt. Em đã nêu được một số công đoạn/đặc điểm nổi bật của toàn bộ quá trình.'
+      :
+      'Nên nêu ít nhất khoảng 3 hành động hoặc công đoạn nổi bật của process, thay vì chỉ nhắc một chi tiết.'
+  };
+}
+
+function analysisBodyAssessment(
+  body1,
+  body2
+){
+  const body1OK=
+    validBodyPlan(
+      body1
+    );
+
+  const body2OK=
+    validBodyPlan(
+      body2
+    );
+
+  const togetherOK=
+    body1OK
+    &&
+    body2OK
+    &&
+    bodyPlansCompatible(
+      body1,
+      body2
+    );
+
+  return {
+
+    body1:{
+      ok:body1OK,
+
+      hint:
+        body1OK
+        ?
+        'Đạt. Đây là một phạm vi stage hợp lệ cho Body 1.'
+        :
+        `Chưa hợp lý. Em có thể nhập phạm vi như “1-9” hoặc mô tả rõ một nhóm stage từ 1 đến ${task.stages}.`
+    },
+
+    body2:{
+      ok:togetherOK,
+
+      hint:
+        togetherOK
+        ?
+        'Đạt. Body 2 nằm sau Body 1 và không bị chồng stage.'
+        :
+        body2OK
+        ?
+        'Phạm vi Body 2 hợp lệ nhưng đang chồng hoặc chưa nối tiếp hợp lý với Body 1.'
+        :
+        `Chưa hợp lý. Body 2 phải nằm trong các stage 1-${task.stages} và nên tiếp nối Body 1.`
+    }
+
+  };
+}
+
+function getAnalysisAssessments(answer){
+  const bodies=
+    analysisBodyAssessment(
+      answer.body1,
+      answer.body2
+    );
+
+  return {
+
+    type:
+      analysisTypeAssessment(
+        answer.type
+      ),
+
+    stages:
+      analysisStagesAssessment(
+        answer.stages
+      ),
+
+    first:
+      analysisBoundaryAssessment(
+        'first',
+        answer.first
+      ),
+
+    last:
+      analysisBoundaryAssessment(
+        'last',
+        answer.last
+      ),
+
+    features:
+      analysisFeaturesAssessment(
+        answer.features
+      ),
+
+    body1:
+      bodies.body1,
+
+    body2:
+      bodies.body2
+
+  };
+}
+
+
+/* =========================================================
+   INLINE STEP 1 FEEDBACK
+========================================================= */
+
+const INLINE_FEEDBACK_IDS={
+  aType:'fbType',
+  aStages:'fbStages',
+  aFirst:'fbFirst',
+  aLast:'fbLast',
+  aFeatures:'fbFeatures',
+  aBody1:'fbBody1',
+  aBody2:'fbBody2'
+};
+
+function clearInlineFeedback(
+  fieldId
+){
+  const feedbackId=
+    INLINE_FEEDBACK_IDS[
+      fieldId
+    ];
+
+  if(!feedbackId){
+    return;
+  }
+
+  const box=
+    document.getElementById(
+      feedbackId
+    );
+
+  if(!box){
+    return;
+  }
+
+  box.className=
+    'inline-feedback';
+
+  box.innerHTML='';
+}
+
+function setInlineFeedback(
+  id,
+  assessment
+){
+  const box=
+    document.getElementById(id);
+
+  if(!box){
+    return;
+  }
+
+  box.className=
+    'inline-feedback show '
+    +
+    (
+      assessment.ok
+      ?
+      'pass'
+      :
+      'fail'
+    );
+
+  box.innerHTML=`
+
+<div class="inline-state">
+
+  ${
+    assessment.ok
+    ?
+    '✓ Đạt'
+    :
+    '✕ Chưa đạt'
+  }
+
+</div>
+
+<div class="inline-tip">
+  ${esc(assessment.hint||'')}
+</div>
+
+  `;
+}
+
+function showAnalysisInline(
+  assessments
+){
+  setInlineFeedback(
+    'fbType',
+    assessments.type
+  );
+
+  setInlineFeedback(
+    'fbStages',
+    assessments.stages
+  );
+
+  setInlineFeedback(
+    'fbFirst',
+    assessments.first
+  );
+
+  setInlineFeedback(
+    'fbLast',
+    assessments.last
+  );
+
+  setInlineFeedback(
+    'fbFeatures',
+    assessments.features
+  );
+
+  setInlineFeedback(
+    'fbBody1',
+    assessments.body1
+  );
+
+  setInlineFeedback(
+    'fbBody2',
+    assessments.body2
   );
 }
 
@@ -1805,10 +2175,6 @@ function spellingIssues(text){
     }
   );
 
-  /*
-    rip tomatoes là lỗi chọn từ,
-    không phải typo thuần túy.
-  */
   if(
     /\brip\s+tomatoes?\b/i
     .test(text)
@@ -1842,11 +2208,6 @@ function grammarIssues(text){
     ];
   }
 
-
-  /*
-    Capital letter:
-    với bài nhiều đoạn, kiểm tra từng dòng.
-  */
 
   splitParagraphs(
     sentence,
@@ -1957,11 +2318,6 @@ function grammarIssues(text){
   }
 
 
-  /*
-    KETCHUP:
-    they are removed stalk, seeds and skin
-  */
-
   if(
     /\b(?:they|it|these|those|tomatoes?|bottles?)\s+(?:is|are|was|were)\s+removed\s+(?!from\b|by\b)[a-z]/i
     .test(sentence)
@@ -1981,10 +2337,6 @@ function grammarIssues(text){
     );
   }
 
-
-  /*
-    Subject-verb agreement
-  */
 
   const agreementRules=[
 
@@ -2041,10 +2393,6 @@ function grammarIssues(text){
   );
 
 
-  /*
-    a/an + plural
-  */
-
   if(
     /\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i
     .test(sentence)
@@ -2064,10 +2412,6 @@ function grammarIssues(text){
     );
   }
 
-
-  /*
-    plural units
-  */
 
   let match;
 
@@ -2129,10 +2473,6 @@ function grammarIssues(text){
   }
 
 
-  /*
-    Missing passive be.
-  */
-
   const passiveTargets=[
     'crushed',
     'mixed',
@@ -2173,11 +2513,6 @@ function grammarIssues(text){
     }
   );
 
-
-  /*
-    awkward "where they are removed X"
-    dạng rộng hơn.
-  */
 
   if(
     /\bwhere\s+(?:they|it)\s+(?:is|are)\s+removed\s+\w+/i
@@ -2240,11 +2575,9 @@ const FACT_RULES={
     linear:true
   },
 
-
   '02':{
     linear:true
   },
-
 
   '03':{
     allowedHours:[
@@ -2254,11 +2587,9 @@ const FACT_RULES={
     linear:true
   },
 
-
   '04':{
     lifeCycle:true
   },
-
 
   '05':{
     allowedDays:[
@@ -2274,7 +2605,6 @@ const FACT_RULES={
 
     lifeCycle:true
   },
-
 
   '06':{
     linear:true
@@ -2300,10 +2630,6 @@ function factualIssues(
     {};
 
 
-  /*
-    TYPE
-  */
-
   if(
     rule.linear
     &&
@@ -2327,10 +2653,6 @@ function factualIssues(
     );
   }
 
-
-  /*
-    STAGE COUNT
-  */
 
   const stageClaim=
     detectStageCountClaim(
@@ -2356,7 +2678,7 @@ function factualIssues(
 
 
   /* =======================================================
-     01 BRICKS
+     BRICKS
   ======================================================= */
 
   if(ID==='01'){
@@ -2441,7 +2763,7 @@ function factualIssues(
 
 
   /* =======================================================
-     03 KETCHUP
+     KETCHUP
   ======================================================= */
 
   if(ID==='03'){
@@ -2467,10 +2789,6 @@ function factualIssues(
       }
     }
 
-
-    /*
-      Không được suy diễn thành cooling for 2 hours.
-    */
 
     const unsupportedCooling=
 
@@ -2503,7 +2821,7 @@ function factualIssues(
 
 
   /* =======================================================
-     05 BEE
+     BEE
   ======================================================= */
 
   if(ID==='05'){
@@ -2637,7 +2955,6 @@ function styleIssues(
 
 /* =========================================================
    SEQUENCE CHECK
-   SO THEO STAGE, KHÔNG THEO KEYWORD CON
 ========================================================= */
 
 function sequenceAudit(text){
@@ -2675,11 +2992,6 @@ function sequenceAudit(text){
     }
   );
 
-
-  /*
-    Nếu bài chỉ nhắc 1-2 stage thì chưa đủ dữ liệu
-    để kết luận sai thứ tự.
-  */
 
   if(found.length<3){
     return {
@@ -2781,12 +3093,17 @@ const style=`
   --muted:#6f7890;
   --line:#e1e5ee;
   --bg:#f5f7fb;
+
   --good:#16845b;
   --goodbg:#f1fbf6;
+  --goodline:#bde5ce;
+
   --warn:#9b6b16;
   --warnbg:#fff9ed;
+
   --bad:#b83345;
   --badbg:#fff6f7;
+  --badline:#efc8ce;
 }
 
 *{
@@ -3307,7 +3624,7 @@ button{
   grid-template-columns:
     1fr 1fr;
 
-  gap:9px;
+  gap:11px;
 }
 
 .field{
@@ -3320,6 +3637,8 @@ button{
   padding:10px;
 
   background:#fff;
+
+  transition:.15s;
 }
 
 .field label{
@@ -3370,6 +3689,59 @@ button{
   box-shadow:
     0 0 0 3px
     rgba(117,89,232,.07);
+}
+
+
+/* =========================================================
+   INLINE ANALYSIS FEEDBACK
+========================================================= */
+
+.inline-feedback{
+  display:none;
+}
+
+.inline-feedback.show{
+  display:block;
+
+  margin-top:8px;
+
+  padding:8px 9px;
+
+  border-radius:8px;
+
+  font-size:9.7px;
+
+  line-height:1.45;
+}
+
+.inline-feedback.pass{
+  color:#126b49;
+
+  background:var(--goodbg);
+
+  border:
+    1px solid
+    var(--goodline);
+}
+
+.inline-feedback.fail{
+  color:#9d3142;
+
+  background:var(--badbg);
+
+  border:
+    1px solid
+    var(--badline);
+}
+
+.inline-state{
+  font-weight:950;
+
+  margin-bottom:2px;
+}
+
+.inline-tip{
+  opacity:.94;
 }
 
 .write{
@@ -3574,43 +3946,6 @@ button{
 
 .reference b{
   color:#4b318e;
-}
-
-.analysis-result{
-  display:grid;
-
-  gap:6px;
-
-  margin-top:8px;
-}
-
-.rowcheck{
-  display:grid;
-
-  grid-template-columns:
-    180px 1fr;
-
-  gap:8px;
-
-  padding:7px 8px;
-
-  border-radius:8px;
-
-  background:#f8f9fc;
-
-  font-size:10px;
-}
-
-.rowcheck.ok{
-  background:#f1fbf6;
-
-  color:#126d4a;
-}
-
-.rowcheck.no{
-  background:#fff6f7;
-
-  color:#9b3241;
 }
 
 .reviewparts{
@@ -4282,7 +4617,7 @@ function renderAnalysis(){
 <p class="sub">
 
   Quan sát toàn bộ sơ đồ rồi hoàn thành các mục dưới đây.
-  Body 1 và Body 2 được chia linh hoạt.
+  Sau khi kiểm tra, kết quả và gợi ý sẽ hiện ngay bên dưới từng ô.
 
 </p>
 
@@ -4320,6 +4655,11 @@ function renderAnalysis(){
 
     </select>
 
+    <div
+      id="fbType"
+      class="inline-feedback"
+    ></div>
+
   </div>
 
 
@@ -4334,6 +4674,11 @@ function renderAnalysis(){
       placeholder="Ví dụ: 15"
     >
 
+    <div
+      id="fbStages"
+      class="inline-feedback"
+    ></div>
+
   </div>
 
 
@@ -4347,6 +4692,11 @@ function renderAnalysis(){
       id="aFirst"
     ></textarea>
 
+    <div
+      id="fbFirst"
+      class="inline-feedback"
+    ></div>
+
   </div>
 
 
@@ -4359,6 +4709,11 @@ function renderAnalysis(){
     <textarea
       id="aLast"
     ></textarea>
+
+    <div
+      id="fbLast"
+      class="inline-feedback"
+    ></div>
 
   </div>
 
@@ -4377,6 +4732,11 @@ function renderAnalysis(){
       placeholder="Nêu các đặc điểm/công đoạn nổi bật của toàn bộ process..."
     ></textarea>
 
+    <div
+      id="fbFeatures"
+      class="inline-feedback"
+    ></div>
+
   </div>
 
 
@@ -4391,6 +4751,11 @@ function renderAnalysis(){
       placeholder="Ví dụ: 1-9 hoặc mô tả các stage bằng chữ"
     ></textarea>
 
+    <div
+      id="fbBody1"
+      class="inline-feedback"
+    ></div>
+
   </div>
 
 
@@ -4404,6 +4769,11 @@ function renderAnalysis(){
       id="aBody2"
       placeholder="Ví dụ: 10-15 hoặc mô tả các stage bằng chữ"
     ></textarea>
+
+    <div
+      id="fbBody2"
+      class="inline-feedback"
+    ></div>
 
   </div>
 
@@ -4496,7 +4866,28 @@ function renderAnalysis(){
 
       element.addEventListener(
         'input',
-        saveCurrentDraft
+        ()=>{
+
+          saveCurrentDraft();
+
+          clearInlineFeedback(
+            element.id
+          );
+
+        }
+      );
+
+      element.addEventListener(
+        'change',
+        ()=>{
+
+          saveCurrentDraft();
+
+          clearInlineFeedback(
+            element.id
+          );
+
+        }
       );
 
     }
@@ -4517,9 +4908,19 @@ function renderAnalysis(){
 
 
   if(state.scores[0]){
+
+    showAnalysisInline(
+      state.scores[0].assessments
+      ||
+      getAnalysisAssessments(
+        state.drafts.analysis
+      )
+    );
+
     showAnalysisFeedback(
       state.scores[0]
     );
+
   }
 }
 
@@ -4537,86 +4938,46 @@ function checkAnalysis(){
   const answer=
     state.drafts.analysis;
 
-  const body1OK=
-    validBodyPlan(
-      answer.body1
-    );
-
-  const body2OK=
-    validBodyPlan(
-      answer.body2
-    );
-
-  const bodyTogetherOK=
-    body1OK
-    &&
-    body2OK
-    &&
-    bodyPlansCompatible(
-      answer.body1,
-      answer.body2
+  const assessments=
+    getAnalysisAssessments(
+      answer
     );
 
   const checks=[
 
     [
       'Process type',
-
-      containsAny(
-        answer.type,
-        task.analysis.type
-      )
+      assessments.type.ok
     ],
 
     [
       'Main stages',
-
-      containsAny(
-        answer.stages,
-        task.analysis.stages
-      )
+      assessments.stages.ok
     ],
 
     [
       'First stage',
-
-      keywordScore(
-        answer.first,
-        task.analysis.first
-      )
-      >=
-      .4
+      assessments.first.ok
     ],
 
     [
       'Last / return stage',
-
-      keywordScore(
-        answer.last,
-        task.analysis.last
-      )
-      >=
-      .3
+      assessments.last.ok
     ],
 
     [
       'Important features',
-
-      importantFeatureScore(
-        answer.features
-      )
+      assessments.features.ok
     ],
 
     [
-      'Body 1: có một nhóm stage hợp lý',
-
-      body1OK
+      'Body 1',
+      assessments.body1.ok
     ],
 
     [
-      'Body 2: tiếp nối và không trùng Body 1',
-
-      bodyTogetherOK
+      'Body 2',
+      assessments.body2.ok
     ]
 
   ];
@@ -4632,6 +4993,10 @@ function checkAnalysis(){
 
   const result={
     checks,
+    assessments,
+
+    passedCount:
+      correct,
 
     total:
       Math.round(
@@ -4660,6 +5025,10 @@ function checkAnalysis(){
   save();
 
 
+  showAnalysisInline(
+    assessments
+  );
+
   showAnalysisFeedback(
     result
   );
@@ -4681,83 +5050,8 @@ function checkAnalysis(){
 
 
 /* =========================================================
-   STEP 1 REFERENCE
+   STEP 1 SUMMARY
 ========================================================= */
-
-function analysisReference(){
-  const analysis=
-    task.analysis;
-
-  return `
-
-<b>
-  Gợi ý phân tích:
-</b>
-
-<br>
-
-• Type:
-${esc(task.type)}
-
-<br>
-
-• Main stages:
-${task.stages}
-
-<br>
-
-• First stage:
-${esc(
-  analysis.first.join(' / ')
-)}
-
-<br>
-
-• Last/return stage:
-${esc(
-  analysis.last.join(' / ')
-)}
-
-<br>
-
-• Important features:
-${esc(
-  analysis.features.join(' · ')
-)}
-
-<br><br>
-
-<b>
-  Cách chia Body:
-</b>
-
-Không có một đáp án duy nhất.
-
-<br>
-
-Miễn hai body tạo thành các nhóm stage hợp lý,
-đi theo trình tự của process và không chồng lấn.
-
-<br><br>
-
-Một cách tham khảo:
-
-<br>
-
-• Body 1:
-${esc(
-  analysis.body1.join(' · ')
-)}
-
-<br>
-
-• Body 2:
-${esc(
-  analysis.body2.join(' · ')
-)}
-
-  `;
-}
 
 function showAnalysisFeedback(result){
   const feedback=
@@ -4769,70 +5063,16 @@ function showAnalysisFeedback(result){
     return;
   }
 
-  const rows=
-    result.checks
-    .map(
-      (
-        [
-          name,
-          ok
-        ]
-      )=>`
-
-<div
-  class="
-    rowcheck
-    ${
-      ok
-      ?
-      'ok'
-      :
-      'no'
-    }
-  "
->
-
-  <b>
-    ${name}
-  </b>
-
-  <span>
-
-    ${
-      ok
-      ?
-      '✓ Hợp lý / đủ ý'
-      :
-      'Cần sửa hoặc bổ sung'
-    }
-
-  </span>
-
-</div>
-
-      `
-    )
-    .join('');
-
-
-  const reference=
-
-    !result.completed
-    &&
-    attempts(0)>=2
-
-    ?
-
-    `
-      <div class="reference">
-        ${analysisReference()}
-      </div>
-    `
-
-    :
-
-    '';
-
+  const passed=
+    Number(
+      result.passedCount
+      ??
+      result.checks?.filter(
+        item=>item[1]
+      ).length
+      ??
+      0
+    );
 
   feedback.className=
     'feedback show';
@@ -4866,7 +5106,7 @@ function showAnalysisFeedback(result){
         ?
         '✓ Hoàn thành Bước 1'
         :
-        'Cần sửa các mục còn thiếu'
+        'Xem các ô màu đỏ phía trên để chỉnh'
       }
 
     </div>
@@ -4874,18 +5114,17 @@ function showAnalysisFeedback(result){
   </div>
 
   <div class="counter">
-    Body 1/2 được chấm linh hoạt
+
+    Đạt
+    ${passed}/7 mục
+
+    ·
+
+    Body 1/2 chấm linh hoạt
+
   </div>
 
 </div>
-
-
-<div class="analysis-result">
-  ${rows}
-</div>
-
-
-${reference}
 
   `;
 }
@@ -5790,11 +6029,6 @@ function flexibleBodyGrade(
     hits.filter(Boolean).length;
 
 
-  /*
-    Số stage tối thiểu trong một body.
-    Chấm tương đối thoáng để không ép một cách chia.
-  */
-
   const minHits=
     Math.max(
       2,
@@ -5891,11 +6125,6 @@ function flexibleBodyGrade(
       }
     }
 
-
-    /*
-      Chỉ trừ khi lặp từ 2 stage trở lên,
-      không trừ nếu chỉ nhắc lại một stage để nối đoạn.
-    */
 
     if(overlapCount>=2){
       overlapPenalty=
@@ -6348,10 +6577,6 @@ function fullGrade(text){
   const wc=
     words(text);
 
-  /*
-    ENTER 1 LẦN = ĐOẠN MỚI.
-  */
-
   const paragraphs=
     splitParagraphs(
       text,
@@ -6530,8 +6755,7 @@ function fullGrade(text){
           !allHits[index]
       )
       .map(
-        group=>
-          group[0]
+        group=>group[0]
       )
       .slice(
         0,
