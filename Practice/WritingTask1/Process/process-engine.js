@@ -1,11 +1,11 @@
 (()=>{
 'use strict';
 
-console.log('✅ PROCESS ENGINE V18.1 LOADED');
-window.PROCESS_ENGINE_VERSION='V18.1';
+console.log('✅ PROCESS ENGINE V18.2 LOADED');
+window.PROCESS_ENGINE_VERSION='V18.2';
 
 /* =========================================================
-   IELTS WRITING TASK 1 · PROCESS ENGINE V17
+   IELTS WRITING TASK 1 · PROCESS ENGINE V18.2
    ---------------------------------------------------------
    - 6-step guided practice
    - Step 1: analysis notes are graded flexibly
@@ -32,7 +32,7 @@ const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
   ENGINE_VERSION dùng để nhận biết logic chấm mới.
 */
 const STORAGE_VERSION='V18';
-const ENGINE_VERSION='V18.1';
+const ENGINE_VERSION='V18.2';
 
 const STEP_NAMES=[
   'Phân tích sơ đồ',
@@ -3516,7 +3516,7 @@ function analysisStagesAssessment(text){
   if(!raw){
     return{
       ok:false,
-      hint:`Hãy nhập số main stages của sơ đồ. Bài này có ${expected} main stages.`
+      hint:'Hãy quan sát sơ đồ và nhập số main stages em xác định được.'
     };
   }
 
@@ -3583,13 +3583,13 @@ function analysisStagesAssessment(text){
     hint:
       ok
       ?
-      `Đúng. Sơ đồ có ${expected} main stages.`
+      'Đúng. Em đã xác định đúng số main stages.'
       :
       value==null
       ?
-      `Chưa nhận diện được số em nhập. Có thể nhập ${expected}, “${expected===7?'seven':'số bằng tiếng Anh'}” hoặc “${expected===7?'bảy':'số bằng tiếng Việt'}”.`
+      'Hệ thống chưa nhận diện được cách em nhập. Hãy nhập bằng số hoặc viết số bằng tiếng Anh/tiếng Việt.'
       :
-      `Chưa đúng. Em đang nhập ${value}, trong khi sơ đồ có ${expected} main stages.`
+      'Chưa đúng. Hãy quan sát và đếm lại các main stages trên sơ đồ.'
   };
 }
 
@@ -8417,10 +8417,7 @@ function mount(){
           </b>
 
           <span class="pill">
-            ${esc(task.type)}
-            ·
-            ${task.stages}
-            main stages
+            Quan sát · phân tích
           </span>
 
         </div>
@@ -8862,7 +8859,7 @@ function renderAnalysis(){
 
   <input
     id="aStages"
-    placeholder="Ví dụ: 7 / seven / bảy"
+    placeholder="Nhập số giai đoạn em xác định"
   >
 
   <div
@@ -8880,7 +8877,7 @@ function renderAnalysis(){
 
   <textarea
     id="aFirst"
-    placeholder="Có thể ghi ngắn gọn: clay is dug"
+    placeholder="Nhập công đoạn bắt đầu"
   ></textarea>
 
   <div
@@ -8898,7 +8895,7 @@ function renderAnalysis(){
 
   <textarea
     id="aLast"
-    placeholder="Có thể ghi ngắn gọn công đoạn cuối"
+    placeholder="Nhập công đoạn cuối / quay lại"
   ></textarea>
 
   <div
@@ -8937,7 +8934,7 @@ function renderAnalysis(){
 
   <textarea
     id="aBody1"
-    placeholder="Ví dụ: 1-3"
+    placeholder="Nhập nhóm stage em chọn cho Body 1"
   ></textarea>
 
   <div
@@ -8955,7 +8952,7 @@ function renderAnalysis(){
 
   <textarea
     id="aBody2"
-    placeholder="Ví dụ: 4-7"
+    placeholder="Nhập nhóm stage em chọn cho Body 2"
   ></textarea>
 
   <div
