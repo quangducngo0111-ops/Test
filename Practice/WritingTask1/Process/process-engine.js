@@ -1,11 +1,11 @@
 (()=>{
 'use strict';
 
-console.log('✅ PROCESS ENGINE V18.2 LOADED');
-window.PROCESS_ENGINE_VERSION='V18.2';
+console.log('✅ PROCESS ENGINE V18.3 LOADED');
+window.PROCESS_ENGINE_VERSION='V18.3';
 
 /* =========================================================
-   IELTS WRITING TASK 1 · PROCESS ENGINE V18.2
+   IELTS WRITING TASK 1 · PROCESS ENGINE V18.3
    ---------------------------------------------------------
    - 6-step guided practice
    - Step 1: analysis notes are graded flexibly
@@ -32,7 +32,7 @@ const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
   ENGINE_VERSION dùng để nhận biết logic chấm mới.
 */
 const STORAGE_VERSION='V18';
-const ENGINE_VERSION='V18.2';
+const ENGINE_VERSION='V18.3';
 
 const STEP_NAMES=[
   'Phân tích sơ đồ',
@@ -4265,6 +4265,18 @@ function factualIssues(text){
 
     }
 
+
+    /*
+      Theo bài mẫu chuẩn của Manufacturing Bricks:
+      metal grid dùng để screen/filter và roller(s) dùng để convey/move clay.
+      Không coi “crush/break down clay” là thông tin đúng của sơ đồ này.
+    */
+    const brickBody1Fact=bricksBody1ModelAssessment(s);
+
+    brickBody1Fact.inaccuracies.forEach(
+      x=>out.push(x)
+    );
+
   }
 
 
@@ -4597,11 +4609,130 @@ function extractOverviewParagraph(text){
 }
 
 
+/* =========================================================
+   MANUFACTURING BRICKS · BODY 1 MODEL
+   ---------------------------------------------------------
+   Đây là bài mẫu do giáo viên/người dùng chốt.
+   Hệ thống dùng mẫu này để đối chiếu NỘI DUNG + TRÌNH TỰ,
+   không yêu cầu học sinh chép đúng từng chữ.
+========================================================= */
+
+const BRICKS_BODY1_MODEL=
+  'In the initial stages, clay is excavated and processed before being shaped into bricks. '
+  +'The clay is first extracted from the ground using an excavator before being screened through a metal grid. '
+  +'The filtered clay is then conveyed by a set of rotating rollers, after which it is combined with sand and water '
+  +'and shaped into bricks using either a mould or a wire cutter, in preparation for the subsequent stages.';
+
+
+function bricksBody1ModelAssessment(text){
+
+  const s=String(text||'');
+
+  const criteria=[
+
+    {
+      key:'extract',
+      label:'Đất sét được đào/khai thác từ mặt đất',
+      ok:
+        /\bclay\b[^.!?]{0,90}\b(?:dug|excavated|extracted)\b/i.test(s)
+        ||
+        /\b(?:dug|excavated|extracted)\b[^.!?]{0,90}\bclay\b/i.test(s)
+    },
+
+    {
+      key:'grid',
+      label:'Đất sét đi qua / được sàng qua lưới kim loại',
+      ok:
+        /\b(?:metal\s+grid|metal\s+screen|grid|screen)\b/i.test(s)
+        &&
+        /\b(?:screened|passed|passes|passing|filtered|fed|sent|goes|moved)\b/i.test(s)
+    },
+
+    {
+      key:'roller',
+      label:'Đất sét sau đó được chuyển qua/nhờ roller(s)',
+      ok:
+        /\brollers?\b/i.test(s)
+        &&
+        /\b(?:conveyed|moved|moves|moving|passed|passes|passing|carried|transferred|transported|travels?|fed)\b/i.test(s)
+    },
+
+    {
+      key:'mix',
+      label:'Cát và nước được thêm/kết hợp với đất sét',
+      ok:
+        /\bsand\b/i.test(s)
+        &&
+        /\bwater\b/i.test(s)
+        &&
+        /\b(?:mixed|combined|added|blended|joined)\b/i.test(s)
+    },
+
+    {
+      key:'shape',
+      label:'Hỗn hợp được tạo thành gạch bằng mould hoặc wire cutter',
+      ok:
+        /\bbricks?\b/i.test(s)
+        &&
+        /\b(?:shaped|formed|moulded|molded|cut)\b/i.test(s)
+        &&
+        /\b(?:mould|mold|wire\s+cutter)\b/i.test(s)
+    }
+
+  ];
+
+
+  const inaccuracies=[];
+
+  const badCrushPatterns=[
+    /\bclay\b[^.!?]{0,70}\b(?:is\s+|was\s+|being\s+)?(?:crushed|ground\s+down|ground\s+up|broken\s+down)\b/i,
+    /\b(?:crushed|ground\s+down|ground\s+up|broken\s+down)\b[^.!?]{0,70}\bclay\b/i,
+    /\brollers?\b[^.!?]{0,45}\b(?:crush(?:es|ed|ing)?|grind(?:s|ing)?|break(?:s|ing)?\s+down)\b/i,
+    /\b(?:crushed|ground\s+down|ground\s+up|broken\s+down)\b[^.!?]{0,45}\bby\s+(?:a\s+|the\s+|set\s+of\s+)?(?:rotating\s+)?rollers?\b/i
+  ];
+
+  if(badCrushPatterns.some(r=>r.test(s))){
+    inaccuracies.push(
+      'Không nên mô tả clay là “crushed / broken down / ground” bởi roller. Theo bài mẫu chuẩn, clay được screened through a metal grid rồi conveyed/moved over the roller(s).'
+    );
+  }
+
+
+  const covered=criteria.filter(x=>x.ok).length;
+  const missing=criteria.filter(x=>!x.ok).map(x=>x.label);
+
+  return{
+    criteria,
+    covered,
+    total:criteria.length,
+    ratio:criteria.length ? covered/criteria.length : 0,
+    missing,
+    inaccuracies,
+    reference:BRICKS_BODY1_MODEL
+  };
+
+}
+
+
 function sectionConfig(step){
 
-  return task[
+  const base=task[
     draftKey(step)
-  ];
+  ] || {};
+
+  /*
+    Bộ 01 · Body 1:
+    dùng đúng bài mẫu người dùng đã cung cấp làm reference chuẩn.
+    Không sửa process-data.js vẫn hoạt động.
+  */
+  if(ID==='01' && step===3){
+    return{
+      ...base,
+      reference:BRICKS_BODY1_MODEL
+    };
+  }
+
+  return base;
 
 }
 
@@ -5814,6 +5945,16 @@ function flexibleBodyGrade(
     );
 
 
+  const modelAssessment=
+    ID==='01'
+    &&
+    step===3
+    ?
+    bricksBody1ModelAssessment(text)
+    :
+    null;
+
+
   let overlap=0;
 
 
@@ -5920,6 +6061,14 @@ function flexibleBodyGrade(
 
 
   const p1=
+    modelAssessment
+    ?
+    Math.round(
+      modelAssessment.ratio
+      *
+      50
+    )
+    :
     Math.round(
       Math.min(
         1,
@@ -6071,7 +6220,21 @@ function flexibleBodyGrade(
   }
 
 
-  if(
+  if(modelAssessment){
+
+    modelAssessment.inaccuracies.forEach(
+      x=>issues.push('Đối chiếu bài mẫu: '+x)
+    );
+
+    if(modelAssessment.missing.length){
+      issues.push(
+        'Đối chiếu bài mẫu: còn thiếu hoặc chưa thể hiện rõ: '
+        +modelAssessment.missing.join('; ')
+        +'.'
+      );
+    }
+
+  }else if(
     hitCount<minHits
   ){
 
@@ -6167,7 +6330,17 @@ function flexibleBodyGrade(
     completed:
       !topic.wrong.length
       &&
-      hitCount>=minHits
+      (
+        modelAssessment
+        ?
+        (
+          modelAssessment.covered>=4
+          &&
+          modelAssessment.inaccuracies.length===0
+        )
+        :
+        hitCount>=minHits
+      )
       &&
       wc>=Math.round(
         minWords*.8
@@ -6192,10 +6365,20 @@ function flexibleBodyGrade(
     breakdown:[
 
       {
-        label:'Nội dung/stages',
+        label:
+          modelAssessment
+          ?
+          'Bám bài mẫu Body 1'
+          :
+          'Nội dung/stages',
         score:p1,
         max:50,
-        note:`Nhận diện ${hitCount} stage`
+        note:
+          modelAssessment
+          ?
+          `${modelAssessment.covered}/${modelAssessment.total} ý chuẩn`
+          :
+          `Nhận diện ${hitCount} stage`
       },
 
       {
@@ -9767,6 +9950,12 @@ function showWritingFeedback(
 
 
   const label=
+    ID==='01'
+    &&
+    step===3
+    ?
+    'Bài mẫu chuẩn dùng để đối chiếu nội dung & trình tự:'
+    :
     (
       step===3
       ||
