@@ -1,11 +1,11 @@
 (()=>{
 'use strict';
 
-console.log('✅ PROCESS ENGINE V18.3 LOADED');
-window.PROCESS_ENGINE_VERSION='V18.3';
+console.log('✅ PROCESS ENGINE V18.4 LOADED');
+window.PROCESS_ENGINE_VERSION='V18.4';
 
 /* =========================================================
-   IELTS WRITING TASK 1 · PROCESS ENGINE V18.3
+   IELTS WRITING TASK 1 · PROCESS ENGINE V18.4
    ---------------------------------------------------------
    - 6-step guided practice
    - Step 1: analysis notes are graded flexibly
@@ -32,7 +32,7 @@ const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
   ENGINE_VERSION dùng để nhận biết logic chấm mới.
 */
 const STORAGE_VERSION='V18';
-const ENGINE_VERSION='V18.3';
+const ENGINE_VERSION='V18.4';
 
 const STEP_NAMES=[
   'Phân tích sơ đồ',
@@ -4714,6 +4714,118 @@ function bricksBody1ModelAssessment(text){
 }
 
 
+function regexMatchPositions(text, regex){
+
+  const s=String(text||'');
+  const flags=regex.flags.includes('g') ? regex.flags : regex.flags+'g';
+  const r=new RegExp(regex.source, flags);
+  const out=[];
+  let m;
+
+  while((m=r.exec(s))){
+    out.push(m.index);
+    if(m[0].length===0) r.lastIndex++;
+  }
+
+  return out;
+}
+
+
+function firstPositionAfter(text, regex, after=-1){
+
+  const arr=regexMatchPositions(text, regex);
+  const p=arr.find(x=>x>after);
+  return p==null ? -1 : p;
+}
+
+
+function lastPositionBefore(text, regex, before=Infinity){
+
+  const arr=regexMatchPositions(text, regex).filter(x=>x<before);
+  return arr.length ? arr[arr.length-1] : -1;
+}
+
+
+function bricksBody1SequenceAudit(text){
+
+  /*
+    Riêng Body 1 của Manufacturing Bricks, không dùng sequenceAudit()
+    chung vì câu mở đầu của bài mẫu có thể tóm tắt trước rằng clay
+    "is ... shaped into bricks". Nếu chỉ nhìn lần xuất hiện đầu tiên,
+    hệ thống sẽ hiểu nhầm shaping xảy ra trước metal grid.
+
+    Ta chấm theo chuỗi CHI TIẾT thực tế của bài mẫu:
+    extract -> metal grid -> rollers -> sand/water -> final shaping.
+  */
+
+  const s=String(text||'');
+
+  const grid=firstPositionAfter(
+    s,
+    /\b(?:metal\s+grid|metal\s+screen)\b/i,
+    -1
+  );
+
+  const extract=lastPositionBefore(
+    s,
+    /\b(?:dug|excavated|extracted)\b/i,
+    grid>=0 ? grid : Infinity
+  );
+
+  const roller=firstPositionAfter(
+    s,
+    /\brollers?\b/i,
+    grid>=0 ? grid : -1
+  );
+
+  const mix=firstPositionAfter(
+    s,
+    /\b(?:sand|water)\b/i,
+    roller>=0 ? roller : -1
+  );
+
+  let shape=firstPositionAfter(
+    s,
+    /\b(?:shaped\s+into\s+bricks?|formed\s+into\s+bricks?|moulded\s+into\s+bricks?|molded\s+into\s+bricks?|wire\s+cutter|mould|mold)\b/i,
+    mix>=0 ? mix : -1
+  );
+
+  // Nếu cách diễn đạt chỉ nhắc mould/wire cutter ở cuối, vẫn lấy mốc đó.
+  if(shape<0 && mix>=0){
+    const later=regexMatchPositions(
+      s,
+      /\b(?:shaped|formed|moulded|molded|wire\s+cutter|mould|mold)\b/i
+    ).filter(x=>x>mix);
+    if(later.length) shape=later[0];
+  }
+
+  const anchors=[
+    ['khai thác clay',extract],
+    ['metal grid',grid],
+    ['roller(s)',roller],
+    ['sand and water',mix],
+    ['shaping',shape]
+  ];
+
+  const known=anchors.filter(([,p])=>p>=0);
+  const violations=[];
+
+  for(let i=1;i<known.length;i++){
+    if(known[i][1] < known[i-1][1]){
+      violations.push(
+        `Công đoạn “${known[i][0]}” đang được trình bày trước “${known[i-1][0]}”, chưa đúng trình tự chi tiết của sơ đồ.`
+      );
+    }
+  }
+
+  return{
+    ok:violations.length===0,
+    violations:unique(violations),
+    found:known.map(([label,position],index)=>({label,position,index}))
+  };
+}
+
+
 function sectionConfig(step){
 
   const base=task[
@@ -5924,6 +6036,12 @@ function flexibleBodyGrade(
 
 
   const seq=
+    ID==='01'
+    &&
+    step===3
+    ?
+    bricksBody1SequenceAudit(text)
+    :
     sequenceAudit(text);
 
 
@@ -8344,6 +8462,11 @@ button{
   color:#4b318e;
 }
 
+.reference-answer{
+  margin-top:6px;
+  color:#2d3150;
+}
+
 
 .finaldone{
 
@@ -10155,15 +10278,19 @@ ${
     ${label}
   </b>
 
-  <br>
-
-  ${
-    esc(ref)
-    .replace(
-      /\n/g,
-      '<br>'
-    )
-  }
+  <div
+    class="reference-answer notranslate"
+    translate="no"
+    lang="en"
+  >
+    ${
+      esc(ref)
+      .replace(
+        /\n/g,
+        '<br>'
+      )
+    }
+  </div>
 
 </div>
 
