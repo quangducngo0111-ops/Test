@@ -1,6 +1,9 @@
 (()=>{
 'use strict';
 
+console.log('✅ PROCESS ENGINE V18.1 LOADED');
+window.PROCESS_ENGINE_VERSION='V18.1';
+
 /* =========================================================
    IELTS WRITING TASK 1 · PROCESS ENGINE V17
    ---------------------------------------------------------
@@ -28,8 +31,8 @@ const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
   GIỮ V16 để không làm mất draft/progress cũ.
   ENGINE_VERSION dùng để nhận biết logic chấm mới.
 */
-const STORAGE_VERSION='V16';
-const ENGINE_VERSION='V17';
+const STORAGE_VERSION='V18';
+const ENGINE_VERSION='V18.1';
 
 const STEP_NAMES=[
   'Phân tích sơ đồ',
@@ -605,81 +608,88 @@ const NUMBER_WORDS={
 
 function numberValue(x){
 
-  const v=
+  const original=
     String(x||'')
+    .trim()
+    .toLowerCase();
 
-    .toLowerCase()
-
-    .trim();
-
-
-  if(
-    /^\d+$/.test(v)
-  ){
-
-    return Number(v);
-
+  if(!original){
+    return null;
   }
 
+  /*
+    Chuẩn hóa Unicode để "bảy" vẫn được nhận dù trình duyệt
+    lưu ký tự ở dạng tổ hợp (NFD) hay dựng sẵn (NFC).
+  */
+  const ascii=
+    original
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/đ/g,'d')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  if(/^\d+$/.test(original)){
+    return Number(original);
+  }
+
+  if(/^\d+$/.test(ascii)){
+    return Number(ascii);
+  }
 
   if(
     Object.prototype.hasOwnProperty.call(
       NUMBER_WORDS,
-      v
+      original
     )
   ){
-
-    return NUMBER_WORDS[v];
-
+    return NUMBER_WORDS[original];
   }
-
-
-  /*
-    Cho phép:
-    "7 stages"
-    "seven stages"
-    "bảy giai đoạn"
-  */
-
-  const cleaned=
-    v
-
-    .replace(
-      /\bmain\s+stages?\b/g,
-      ''
-    )
-
-    .replace(
-      /\bstages?\b/g,
-      ''
-    )
-
-    .replace(
-      /\bgiai\s+đoạn\b/g,
-      ''
-    )
-
-    .replace(
-      /\bgiai\s+doan\b/g,
-      ''
-    )
-
-    .trim();
-
 
   if(
-    /^\d+$/.test(cleaned)
+    Object.prototype.hasOwnProperty.call(
+      NUMBER_WORDS,
+      ascii
+    )
   ){
-
-    return Number(cleaned);
-
+    return NUMBER_WORDS[ascii];
   }
 
+  const cleanedOriginal=
+    original
+    .replace(/\bmain\s+stages?\b/g,'')
+    .replace(/\bstages?\b/g,'')
+    .replace(/\bgiai\s+đoạn\b/g,'')
+    .replace(/\bgiai\s+doan\b/g,'')
+    .replace(/\bcó\b/g,'')
+    .replace(/\bco\b/g,'')
+    .replace(/\s+/g,' ')
+    .trim();
 
-  return NUMBER_WORDS[cleaned]
+  const cleanedAscii=
+    ascii
+    .replace(/\bmain\s+stages?\b/g,'')
+    .replace(/\bstages?\b/g,'')
+    .replace(/\bgiai\s+doan\b/g,'')
+    .replace(/\bco\b/g,'')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  if(/^\d+$/.test(cleanedOriginal)){
+    return Number(cleanedOriginal);
+  }
+
+  if(/^\d+$/.test(cleanedAscii)){
+    return Number(cleanedAscii);
+  }
+
+  return (
+    NUMBER_WORDS[cleanedOriginal]
     ??
-    null;
-
+    NUMBER_WORDS[cleanedAscii]
+    ??
+    null
+  );
 }
 
 
@@ -3314,48 +3324,23 @@ function seriousLanguageIssues(items){
 
 function analysisNoteLanguageIssues(text){
 
-  const all=
-    languageIssues(text);
+  /*
+    BƯỚC 1 = ghi chú phân tích sơ đồ, KHÔNG phải bài viết hoàn chỉnh.
 
+    Vì vậy tuyệt đối không chấm:
+    - viết hoa chữ cái đầu;
+    - dấu chấm cuối câu;
+    - khoảng trắng trình bày.
 
-  return all.filter(
-    issue=>{
+    Chỉ giữ các lỗi ngôn ngữ thật sự có thể làm sai nghĩa/cấu trúc.
+  */
 
-      if(
-        /chưa viết hoa chữ cái đầu/i
-        .test(issue)
-      ){
-
-        return false;
-
-      }
-
-
-      if(
-        /nên kết thúc bằng dấu câu/i
-        .test(issue)
-      ){
-
-        return false;
-
-      }
-
-
-      if(
-        /khoảng trắng thừa/i
-        .test(issue)
-      ){
-
-        return false;
-
-      }
-
-
-      return true;
-
-    }
-  );
-
+  return unique([
+    ...parallelGrammarIssues(text),
+    ...passiveVerbFormIssues(text),
+    ...activeAgreementIssues(text),
+    ...spellingIssues(text)
+  ]);
 }
 
 
@@ -3522,121 +3507,90 @@ function analysisStagesAssessment(text){
 
   const raw=
     String(text||'')
-
     .trim()
-
     .toLowerCase();
-
 
   const expected=
     Number(task.stages);
 
+  if(!raw){
+    return{
+      ok:false,
+      hint:`Hãy nhập số main stages của sơ đồ. Bài này có ${expected} main stages.`
+    };
+  }
 
   let value=
     numberValue(raw);
 
-
   /*
-    Nếu học sinh nhập:
-    "there are seven stages"
-    hoặc
-    "có bảy giai đoạn"
+    Nếu học sinh viết cả cụm/câu:
+    - there are seven stages
+    - seven main stages
+    - có bảy giai đoạn
+    - bài này có 7 stages
   */
+  if(value==null){
 
-  if(
-    value==null
-  ){
+    const unicodeRaw=
+      raw.normalize('NFC');
 
-    const english=
-      raw.match(
-        /\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|\d+)\b/i
-      );
+    const asciiRaw=
+      raw
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/đ/g,'d');
 
-
-    if(english){
-
-      value=
-        numberValue(
-          english[1]
-        );
-
-    }
-
-  }
-
-
-  if(
-    value==null
-  ){
-
-    const viCandidates=[
-      'mười lăm',
-      'mười bốn',
-      'mười ba',
-      'mười hai',
-      'mười một',
-      'bảy',
-      'tám',
-      'chín',
-      'mười',
-      'một',
-      'hai',
-      'ba',
-      'bốn',
-      'năm',
-      'sáu',
-      'bay',
-      'tam',
-      'chin',
-      'muoi',
-      'mot',
-      'bon',
-      'nam',
-      'sau'
+    const candidates=[
+      'twenty','nineteen','eighteen','seventeen','sixteen','fifteen',
+      'fourteen','thirteen','twelve','eleven','ten','nine','eight',
+      'seven','six','five','four','three','two','one',
+      'mười lăm','mười bốn','mười ba','mười hai','mười một','mười',
+      'chín','tám','bảy','sáu','năm','bốn','ba','hai','một',
+      'muoi lam','muoi bon','muoi ba','muoi hai','muoi mot','muoi',
+      'chin','tam','bay','sau','nam','bon','ba','hai','mot'
     ];
 
+    const digitMatch=
+      raw.match(/\b\d+\b/);
 
-    const found=
-      viCandidates.find(
-        x=>
-          raw.includes(x)
-      );
-
-
-    if(found){
-
-      value=
-        numberValue(found);
-
+    if(digitMatch){
+      value=Number(digitMatch[0]);
+    }else{
+      for(const token of candidates){
+        if(
+          unicodeRaw.includes(token)
+          ||
+          asciiRaw.includes(
+            token
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g,'')
+            .replace(/đ/g,'d')
+          )
+        ){
+          value=numberValue(token);
+          break;
+        }
+      }
     }
-
   }
 
-
   const ok=
-    value===expected
-
-    ||
-
-    containsAny(
-      text,
-      task.analysis.stages||[]
-    );
-
+    value===expected;
 
   return{
-
     ok,
-
     hint:
       ok
       ?
       `Đúng. Sơ đồ có ${expected} main stages.`
       :
-      `Chưa đúng. Bài này có ${expected} main stages. Em có thể nhập “${expected}”, số bằng tiếng Anh hoặc tiếng Việt.`
-
+      value==null
+      ?
+      `Chưa nhận diện được số em nhập. Có thể nhập ${expected}, “${expected===7?'seven':'số bằng tiếng Anh'}” hoặc “${expected===7?'bảy':'số bằng tiếng Việt'}”.`
+      :
+      `Chưa đúng. Em đang nhập ${value}, trong khi sơ đồ có ${expected} main stages.`
   };
-
 }
 
 
@@ -3648,144 +3602,86 @@ function analysisBoundaryAssessment(
   const groups=
     processStageGroups();
 
-
   const target=
     kind==='first'
     ?
     groups[0]
     :
-    groups[
-      groups.length-1
-    ];
-
+    groups[groups.length-1];
 
   const source=
     task.analysis?.[kind]
     ||
     [];
 
-
   const trimmed=
-    String(text||'')
-    .trim();
-
+    String(text||'').trim();
 
   if(!trimmed){
-
     return{
-
       ok:false,
-
       hint:
         kind==='first'
         ?
         'Hãy ghi công đoạn đầu tiên của process.'
         :
         'Hãy ghi công đoạn cuối cùng của process.'
-
     };
-
   }
 
-
   const meaningOK=
-    stageGroupPosition(
-      text,
-      target
-    )>=0
-
+    stageGroupPosition(text,target)>=0
     ||
+    containsAny(text,source);
 
-    containsAny(
-      text,
-      source
-    );
-
-
-  /*
-    Step 1 dùng rule ghi chú:
-    không bắt viết hoa và dấu chấm.
-  */
-
-  const lang=
-    analysisNoteLanguageIssues(text);
-
-
-  if(
-    !meaningOK
-  ){
-
+  if(!meaningOK){
     return{
-
       ok:false,
-
       hint:
         kind==='first'
         ?
         'Chưa đúng công đoạn đầu. Hãy quan sát bước xảy ra đầu tiên trên sơ đồ.'
         :
         'Chưa đúng công đoạn cuối. Hãy quan sát kết quả cuối cùng của process.'
-
     };
-
   }
-
-
-  if(
-    lang.length
-  ){
-
-    return{
-
-      ok:false,
-
-      hint:
-        `Đúng ý nhưng còn lỗi cần sửa: ${lang[0]}`
-
-    };
-
-  }
-
 
   /*
-    Ketchup:
-    collected được chấp nhận nhưng picked/harvested sát hình hơn.
+    Đây chỉ là NOTE phân tích ở Bước 1.
+    Không bao giờ trừ vì viết thường hoặc thiếu dấu chấm.
   */
+  const lang=
+    analysisNoteLanguageIssues(text);
+
+  if(lang.length){
+    return{
+      ok:false,
+      hint:`Đúng ý nhưng còn lỗi từ vựng/ngữ pháp thực sự cần sửa: ${lang[0]}`
+    };
+  }
 
   if(
     ID==='03'
     &&
     kind==='first'
     &&
-    /\bcollect(?:ed|ing)?\b/i
-    .test(text)
+    /\bcollect(?:ed|ing)?\b/i.test(text)
   ){
-
     return{
-
       ok:true,
-
-      hint:
-        'Đạt. “Collected” được chấp nhận; “picked” hoặc “harvested” chỉ là cách diễn đạt sát hình hơn.'
-
+      hint:'Đạt. “Collected” được chấp nhận; “picked” hoặc “harvested” chỉ là cách diễn đạt sát hình hơn.'
     };
-
   }
 
-
   return{
-
     ok:true,
-
     hint:
       kind==='first'
       ?
-      'Đạt. Em đã xác định đúng công đoạn bắt đầu.'
+      'Đạt. Em đã xác định đúng công đoạn bắt đầu. Ở Bước 1 không bắt buộc viết hoa hay thêm dấu chấm.'
       :
-      'Đạt. Em đã xác định đúng công đoạn cuối.'
-
+      'Đạt. Em đã xác định đúng công đoạn cuối. Ở Bước 1 không bắt buộc viết hoa hay thêm dấu chấm.'
   };
-
 }
 
 
