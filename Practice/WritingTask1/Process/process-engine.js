@@ -1,24 +1,78 @@
 (()=>{
 'use strict';
 
-console.log('✅ PROCESS ENGINE V19.0 · STUDENT PLAN DRIVEN');
-window.PROCESS_ENGINE_VERSION='V19.0';
+/* =========================================================
+   IELTS WRITING TASK 1 · PROCESS ENGINE V20.0
+   Full replacement file — Student Plan Driven
+   ========================================================= */
 
-const TASKS=window.PROCESS_TASKS||{};
-const ID=String(window.PROCESS_TASK_ID||'01').padStart(2,'0');
-const task=TASKS[ID];
+console.log('✅ PROCESS ENGINE V20.0 LOADED');
+window.PROCESS_ENGINE_VERSION='V20.0';
 
-if(!task){
-  document.body.innerHTML=
-    '<p style="padding:30px;font-family:sans-serif">Không tìm thấy dữ liệu bài Process.</p>';
-  return;
-}
+/* =========================================================
+   BASIC CONFIG
+   ========================================================= */
 
-const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
-const STORE_VERSION='V19';
-const ENGINE_VERSION='V19.0';
+const URL_ID = (location.pathname.match(/\/Process\/(\d{1,2})\/?$/i)||[])[1];
+const ID = String(window.PROCESS_TASK_ID || URL_ID || '01').padStart(2,'0');
 
-const STEP_NAMES=[
+const FALLBACK_TASKS = {
+  '01':{
+    title:'Manufacturing Bricks',
+    icon:'🧱',
+    image:'bricks.png',
+    prompt:'The diagram shows the process by which bricks are manufactured for the building industry.',
+    type:'Linear',
+    stages:7
+  },
+  '02':{
+    title:'Manufacturing Instant Noodles',
+    icon:'🍜',
+    image:'instant-noodles.png',
+    prompt:'The diagram shows how instant noodles are manufactured.',
+    type:'Linear',
+    stages:8
+  },
+  '03':{
+    title:'Manufacturing Tomato Ketchup',
+    icon:'🍅',
+    image:'tomato-ketchup.png',
+    prompt:'The diagram shows the process used to produce tomato ketchup.',
+    type:'Linear',
+    stages:15
+  },
+  '04':{
+    title:'Frog Life Cycle',
+    icon:'🐸',
+    image:'frog-life-cycle.png',
+    prompt:'The diagram shows the life cycle of a frog.',
+    type:'Life Cycle',
+    stages:11
+  },
+  '05':{
+    title:'Bee Life Cycle',
+    icon:'🐝',
+    image:'bee-life-cycle.png',
+    prompt:'The diagram shows the life cycle of a bee.',
+    type:'Life Cycle',
+    stages:9
+  },
+  '06':{
+    title:'Recycling Plastic Bottles',
+    icon:'♻️',
+    image:'plastic-bottles.png',
+    prompt:'The diagram shows how plastic bottles are recycled.',
+    type:'Linear',
+    stages:9
+  }
+};
+
+const task = {
+  ...(FALLBACK_TASKS[ID] || FALLBACK_TASKS['01']),
+  ...((window.PROCESS_TASKS||{})[ID] || {})
+};
+
+const STEP_NAMES = [
   'Phân tích sơ đồ',
   'Introduction',
   'Overview',
@@ -27,802 +81,1005 @@ const STEP_NAMES=[
   'Bài hoàn chỉnh'
 ];
 
+const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
+const STORAGE_KEY=`WT1_PROCESS_V20_${ID}`;
 
 /* =========================================================
-   STAGE DATA
-========================================================= */
-
-const STAGES={
-
-'01':[
-
-  {
-    terms:[
-      'clay is dug',
-      'clay is excavated',
-      'clay is extracted',
-      'dug from the ground',
-      'excavated from the ground',
-      'extracted from the ground',
-      'digger',
-      'excavator'
-    ],
-
-    ref:
-      'Clay is first extracted from the ground using a digger.'
-  },
-
-  {
-    terms:[
-      'metal grid',
-      'metal screen',
-      'screened',
-      'passed through a metal grid',
-      'roller',
-      'rollers',
-      'conveyed by rollers',
-      'conveyed over a roller',
-      'moves over a roller',
-      'passed over a roller'
-    ],
-
-    ref:
-      'It is then passed through a metal grid and conveyed over a roller.'
-  },
-
-  {
-    terms:[
-      'sand and water',
-      'water and sand',
-      'mixed with sand',
-      'mixed with water',
-      'combined with sand',
-      'mould',
-      'mold',
-      'wire cutter',
-      'shaped into bricks',
-      'formed into bricks',
-      'moulded into bricks',
-      'molded into bricks'
-    ],
-
-    ref:
-      'Sand and water are added, and the resulting mixture is shaped into bricks using either a mould or a wire cutter.'
-  },
-
-  {
-    terms:[
-      'drying oven',
-      'dried',
-      'drying',
-      '24-48 hours',
-      '24 to 48 hours'
-    ],
-
-    ref:
-      'The newly formed bricks are dried in an oven for 24–48 hours.'
-  },
-
-  {
-    terms:[
-      'kiln',
-      'kilns',
-      'heated',
-      'fired',
-      'moderate temperature',
-      'high temperature',
-      'higher temperature',
-      '200°c',
-      '980°c',
-      '870°c',
-      '1300°c'
-    ],
-
-    ref:
-      'They are then fired in two kilns, first at a moderate temperature of 200–980°C and then at a higher temperature of 870–1300°C.'
-  },
-
-  {
-    terms:[
-      'cooling chamber',
-      'cooled',
-      'cooling',
-      '48-72 hours',
-      '48 to 72 hours'
-    ],
-
-    ref:
-      'Afterwards, the bricks are cooled in a cooling chamber for 48–72 hours.'
-  },
-
-  {
-    terms:[
-      'packaged',
-      'packaging',
-      'packed',
-      'delivered',
-      'delivery',
-      'being delivered',
-      'transported to customers',
-      'transported to consumers'
-    ],
-
-    ref:
-      'Finally, the bricks are packaged and delivered.'
-  }
-
-],
-
-
-'02':[
-
-  {
-    terms:[
-      'storage silos',
-      'storage silo',
-      'flour is stored',
-      'flour storage'
-    ],
-
-    ref:
-      'Flour is stored in storage silos before entering the production line.'
-  },
-
-  {
-    terms:[
-      'mixer',
-      'mixed with water and oil',
-      'water and oil',
-      'mixing'
-    ],
-
-    ref:
-      'It is then mixed with water and oil in a mixer.'
-  },
-
-  {
-    terms:[
-      'dough sheets',
-      'sheets of dough',
-      'rolled into sheets',
-      'rollers'
-    ],
-
-    ref:
-      'The dough passes through rollers and is formed into dough sheets.'
-  },
-
-  {
-    terms:[
-      'dough strips',
-      'strips of dough',
-      'cut into strips'
-    ],
-
-    ref:
-      'These sheets are cut into strips.'
-  },
-
-  {
-    terms:[
-      'noodle discs',
-      'noodle disks',
-      'shaped into discs',
-      'formed into discs'
-    ],
-
-    ref:
-      'The strips are then shaped into noodle discs.'
-  },
-
-  {
-    terms:[
-      'cooking in oil',
-      'cooked in oil',
-      'dried',
-      'drying'
-    ],
-
-    ref:
-      'The noodle discs are cooked in oil and dried.'
-  },
-
-  {
-    terms:[
-      'cups',
-      'placed in cups',
-      'put into cups',
-      'vegetables and spices',
-      'vegetables',
-      'spices'
-    ],
-
-    ref:
-      'They are placed into cups together with vegetables and spices.'
-  },
-
-  {
-    terms:[
-      'labelled',
-      'labeled',
-      'labelling',
-      'labeling',
-      'sealed',
-      'sealing'
-    ],
-
-    ref:
-      'Finally, the cups are sealed and labelled.'
-  }
-
-],
-
-
-'03':[
-
-  {
-    terms:[
-      'pick tomatoes',
-      'picked',
-      'harvested',
-      'collected',
-      'put in baskets',
-      'placed in baskets'
-    ],
-
-    ref:
-      'Ripe tomatoes are picked and placed in baskets.'
-  },
-
-  {
-    terms:[
-      'sort',
-      'sorted',
-      'good tomatoes',
-      'bad tomatoes',
-      'classified'
-    ],
-
-    ref:
-      'The tomatoes are sorted so that unsuitable ones are removed.'
-  },
-
-  {
-    terms:[
-      'sent to factory',
-      'transported to factory',
-      'taken to factory',
-      'processing factory'
-    ],
-
-    ref:
-      'The selected tomatoes are transported to the factory.'
-  },
-
-  {
-    terms:[
-      'remove stalk',
-      'stalk is removed',
-      'remove seeds',
-      'seeds are removed',
-      'remove skin',
-      'skin is removed',
-      'stalk',
-      'seeds',
-      'skin'
-    ],
-
-    ref:
-      'At the factory, their stalks, seeds and skins are removed.'
-  },
-
-  {
-    terms:[
-      'put into a container',
-      'placed in a container',
-      'put in a container'
-    ],
-
-    ref:
-      'The prepared tomatoes are placed in a container.'
-  },
-
-  {
-    terms:[
-      'crushed',
-      'crush',
-      'crushing',
-      'pulp',
-      'crushed into pulp'
-    ],
-
-    ref:
-      'They are then crushed into a pulp.'
-  },
-
-  {
-    terms:[
-      'sugar',
-      'vinegar',
-      'salt',
-      'ingredients are added',
-      'additives',
-      'combined with ingredients'
-    ],
-
-    ref:
-      'Sugar, vinegar and salt are added to the tomato mixture.'
-  },
-
-  {
-    terms:[
-      'boiled',
-      'boiling',
-      'boil'
-    ],
-
-    ref:
-      'The mixture is boiled.'
-  },
-
-  {
-    terms:[
-      'left for two hours',
-      'left for 2 hours',
-      'left to stand for two hours',
-      'left to stand for 2 hours',
-      'two hours',
-      '2 hours'
-    ],
-
-    ref:
-      'It is then left to stand for two hours.'
-  },
-
-  {
-    terms:[
-      'poured into bottles',
-      'filled into bottles',
-      'bottled',
-      'bottles are filled'
-    ],
-
-    ref:
-      'The ketchup is poured into bottles.'
-  },
-
-  {
-    terms:[
-      'labelled',
-      'labeled',
-      'labelling',
-      'labeling'
-    ],
-
-    ref:
-      'The bottles are labelled.'
-  },
-
-  {
-    terms:[
-      'quality control',
-      'quality checked',
-      'checked',
-      'inspected',
-      'inspection'
-    ],
-
-    ref:
-      'They then undergo quality control.'
-  },
-
-  {
-    terms:[
-      'packed',
-      'packaged',
-      'boxes',
-      'packed into boxes'
-    ],
-
-    ref:
-      'The checked bottles are packed into boxes.'
-  },
-
-  {
-    terms:[
-      'supermarket',
-      'sent to supermarkets',
-      'delivered to supermarkets',
-      'transported to supermarkets'
-    ],
-
-    ref:
-      'The packaged ketchup is transported to supermarkets.'
-  },
-
-  {
-    terms:[
-      'consumed',
-      'consumption',
-      'hamburger',
-      'hamburgers',
-      'fries',
-      'served',
-      'served with food',
-      'served with foods',
-      'eaten'
-    ],
-
-    ref:
-      'Finally, the ketchup is ready to be served with food.'
-  }
-
-],
-
-
-'04':[
-
-  {
-    terms:[
-      'eggs',
-      'frog eggs',
-      'eggs are laid',
-      'lays eggs'
-    ],
-
-    ref:
-      'The cycle begins when adult frogs lay eggs.'
-  },
-
-  {
-    terms:[
-      'embryo',
-      'embryos',
-      'embryonic'
-    ],
-
-    ref:
-      'Embryos develop inside the eggs.'
-  },
-
-  {
-    terms:[
-      'tadpoles clinging to water plants',
-      'tadpoles cling to water plants',
-      'water plants'
-    ],
-
-    ref:
-      'The resulting tadpoles cling to water plants.'
-  },
-
-  {
-    terms:[
-      'external gills',
-      'gills',
-      'breathing'
-    ],
-
-    ref:
-      'They develop external gills for breathing.'
-  },
-
-  {
-    terms:[
-      'tail keeps growing',
-      'tail grows',
-      'growing tail'
-    ],
-
-    ref:
-      'As the tadpoles grow, their tails become longer.'
-  },
-
-  {
-    terms:[
-      'hindlegs appear',
-      'hind legs appear',
-      'hind legs',
-      'back legs'
-    ],
-
-    ref:
-      'Hind legs then begin to appear.'
-  },
-
-  {
-    terms:[
-      'food stored in the tail',
-      'stored in the tail'
-    ],
-
-    ref:
-      'At this stage, the tadpoles rely on food stored in their tails.'
-  },
-
-  {
-    terms:[
-      'front legs appear',
-      'front legs'
-    ],
-
-    ref:
-      'Front legs subsequently develop.'
-  },
-
-  {
-    terms:[
-      'tail becomes shorter',
-      'tail shortens',
-      'shorter tail'
-    ],
-
-    ref:
-      'The tail then becomes shorter.'
-  },
-
-  {
-    terms:[
-      'young frog',
-      'froglet'
-    ],
-
-    ref:
-      'A young frog is formed.'
-  },
-
-  {
-    terms:[
-      'adult frog',
-      'mature frog'
-    ],
-
-    ref:
-      'Finally, it develops into an adult frog, allowing the cycle to continue.'
-  }
-
-],
-
-
-'05':[
-
-  {
-    terms:[
-      'female lays eggs',
-      'females lay eggs',
-      'eggs are laid',
-      'one or two eggs',
-      '1 or 2 eggs',
-      'every three days'
-    ],
-
-    ref:
-      'Female bees lay one or two eggs every three days.'
-  },
-
-  {
-    terms:[
-      'eggs hatch',
-      'hatch after 9',
-      '9-10 days',
-      '9 to 10 days'
-    ],
-
-    ref:
-      'The eggs hatch after about 9–10 days.'
-  },
-
-  {
-    terms:[
-      '5 days',
-      'five days'
-    ],
-
-    ref:
-      'The young bees then develop for a further five days.'
-  },
-
-  {
-    terms:[
-      'first moulting',
-      'first molting',
-      'first moult',
-      'first molt'
-    ],
-
-    ref:
-      'They undergo a first moulting stage.'
-  },
-
-  {
-    terms:[
-      '7 days',
-      'seven days'
-    ],
-
-    ref:
-      'After another seven days, further development takes place.'
-  },
-
-  {
-    terms:[
-      'second moulting',
-      'second molting',
-      'second moult',
-      'second molt'
-    ],
-
-    ref:
-      'A second moulting stage follows.'
-  },
-
-  {
-    terms:[
-      '9 days',
-      'nine days'
-    ],
-
-    ref:
-      'Nine days later, the bee continues to mature.'
-  },
-
-  {
-    terms:[
-      'young adult emerges',
-      'young adult',
-      'emerges'
-    ],
-
-    ref:
-      'A young adult then emerges.'
-  },
-
-  {
-    terms:[
-      '4 days to maturity',
-      'four days to maturity',
-      'maturity',
-      'mature bee'
-    ],
-
-    ref:
-      'Finally, the young adult takes about four days to reach maturity.'
-  }
-
-],
-
-
-'06':[
-
-  {
-    terms:[
-      'recycling bin',
-      'recycle bin',
-      'placed in recycling bins',
-      'put in recycling bins',
-      'discarded'
-    ],
-
-    ref:
-      'Used plastic bottles are placed in recycling bins.'
-  },
-
-  {
-    terms:[
-      'collection truck',
-      'collected',
-      'collection',
-      'transported'
-    ],
-
-    ref:
-      'They are collected and transported by truck.'
-  },
-
-  {
-    terms:[
-      'recycling centre',
-      'recycling center',
-      'sorting',
-      'sorted'
-    ],
-
-    ref:
-      'At a recycling centre, the bottles are sorted.'
-  },
-
-  {
-    terms:[
-      'compressed',
-      'compressing',
-      'compressed into blocks',
-      'blocks'
-    ],
-
-    ref:
-      'The selected bottles are compressed into blocks.'
-  },
-
-  {
-    terms:[
-      'crushed',
-      'crushing',
-      'washed',
-      'washing',
-      'crushing and washing'
-    ],
-
-    ref:
-      'The plastic is then crushed and washed.'
-  },
-
-  {
-    terms:[
-      'plastic pellets',
-      'pellets',
-      'producing plastic pellets',
-      'made into pellets'
-    ],
-
-    ref:
-      'Next, it is processed into plastic pellets.'
-  },
-
-  {
-    terms:[
-      'heated',
-      'heating pellets',
-      'pellets are heated'
-    ],
-
-    ref:
-      'The pellets are heated to form raw material.'
-  },
-
-  {
-    terms:[
-      'raw material',
-      'formed into raw material',
-      'plastic raw material'
-    ],
-
-    ref:
-      'This raw material is prepared for manufacturing.'
-  },
-
-  {
-    terms:[
-      'end products',
-      'new products',
-      'producing end products',
-      'recycled products'
-    ],
-
-    ref:
-      'Finally, it is used to produce new end products.'
-  }
-
-]
-
+   STAGE MODELS
+   ========================================================= */
+
+const MODELS = {
+  '01':[
+    {
+      terms:[
+        'clay is dug',
+        'clay is excavated',
+        'clay is extracted',
+        'dug from the ground',
+        'excavated from the ground',
+        'extracted from the ground',
+        'digger',
+        'excavator'
+      ],
+      ref:'Clay is first extracted from the ground using a digger.'
+    },
+    {
+      terms:[
+        'metal grid',
+        'metal screen',
+        'screened',
+        'passed through a metal grid',
+        'roller',
+        'rollers',
+        'conveyed by rollers',
+        'conveyed over a roller',
+        'moves over a roller',
+        'passed over a roller'
+      ],
+      ref:'It is then passed through a metal grid and conveyed over a roller.'
+    },
+    {
+      terms:[
+        'sand and water',
+        'water and sand',
+        'mixed with sand',
+        'mixed with water',
+        'combined with sand',
+        'mould',
+        'mold',
+        'wire cutter',
+        'shaped into bricks',
+        'formed into bricks',
+        'moulded into bricks',
+        'molded into bricks'
+      ],
+      ref:'Sand and water are added, and the resulting mixture is shaped into bricks using either a mould or a wire cutter.'
+    },
+    {
+      terms:[
+        'drying oven',
+        'dried',
+        'drying',
+        '24-48 hours',
+        '24 to 48 hours',
+        '24–48 hours'
+      ],
+      ref:'The newly formed bricks are dried in an oven for 24–48 hours.'
+    },
+    {
+      terms:[
+        'kiln',
+        'kilns',
+        'heated',
+        'fired',
+        'moderate temperature',
+        'high temperature',
+        'higher temperature',
+        '200°c',
+        '980°c',
+        '870°c',
+        '1300°c'
+      ],
+      ref:'They are then fired in two kilns, first at a moderate temperature of 200–980°C and then at a higher temperature of 870–1300°C.'
+    },
+    {
+      terms:[
+        'cooling chamber',
+        'cooled',
+        'cooling',
+        '48-72 hours',
+        '48 to 72 hours',
+        '48–72 hours',
+        'two to three days',
+        '2 to 3 days'
+      ],
+      ref:'Afterwards, the bricks are cooled in a cooling chamber for 48–72 hours.'
+    },
+    {
+      terms:[
+        'packaged',
+        'packaging',
+        'packed',
+        'delivered',
+        'delivery',
+        'being delivered',
+        'transported to customers',
+        'transported to consumers'
+      ],
+      ref:'Finally, the bricks are packaged and delivered.'
+    }
+  ],
+
+  '02':[
+    {
+      terms:[
+        'storage silos',
+        'storage silo',
+        'flour is stored',
+        'flour storage'
+      ],
+      ref:'Flour is stored in storage silos before entering the production line.'
+    },
+    {
+      terms:[
+        'mixer',
+        'mixed with water and oil',
+        'water and oil',
+        'mixing'
+      ],
+      ref:'It is then mixed with water and oil in a mixer.'
+    },
+    {
+      terms:[
+        'dough sheets',
+        'sheets of dough',
+        'rolled into sheets',
+        'rollers'
+      ],
+      ref:'The dough passes through rollers and is formed into dough sheets.'
+    },
+    {
+      terms:[
+        'dough strips',
+        'strips of dough',
+        'cut into strips'
+      ],
+      ref:'These sheets are cut into strips.'
+    },
+    {
+      terms:[
+        'noodle discs',
+        'noodle disks',
+        'shaped into discs',
+        'formed into discs'
+      ],
+      ref:'The strips are then shaped into noodle discs.'
+    },
+    {
+      terms:[
+        'cooking in oil',
+        'cooked in oil',
+        'dried',
+        'drying'
+      ],
+      ref:'The noodle discs are cooked in oil and dried.'
+    },
+    {
+      terms:[
+        'cups',
+        'placed in cups',
+        'put into cups',
+        'vegetables and spices',
+        'vegetables',
+        'spices'
+      ],
+      ref:'They are placed into cups together with vegetables and spices.'
+    },
+    {
+      terms:[
+        'labelled',
+        'labeled',
+        'labelling',
+        'labeling',
+        'sealed',
+        'sealing'
+      ],
+      ref:'Finally, the cups are sealed and labelled.'
+    }
+  ],
+
+  '03':[
+    {
+      terms:[
+        'pick tomatoes',
+        'picked',
+        'harvested',
+        'collected',
+        'put in baskets',
+        'placed in baskets'
+      ],
+      ref:'Ripe tomatoes are picked and placed in baskets.'
+    },
+    {
+      terms:[
+        'sort',
+        'sorted',
+        'good tomatoes',
+        'bad tomatoes',
+        'classified'
+      ],
+      ref:'The tomatoes are sorted so that unsuitable ones are removed.'
+    },
+    {
+      terms:[
+        'sent to factory',
+        'transported to factory',
+        'taken to factory',
+        'processing factory'
+      ],
+      ref:'The selected tomatoes are transported to the factory.'
+    },
+    {
+      terms:[
+        'remove stalk',
+        'stalk is removed',
+        'remove seeds',
+        'seeds are removed',
+        'remove skin',
+        'skin is removed',
+        'stalk',
+        'seeds',
+        'skin'
+      ],
+      ref:'At the factory, their stalks, seeds and skins are removed.'
+    },
+    {
+      terms:[
+        'put into a container',
+        'placed in a container',
+        'put in a container'
+      ],
+      ref:'The prepared tomatoes are placed in a container.'
+    },
+    {
+      terms:[
+        'crushed',
+        'crush',
+        'crushing',
+        'pulp',
+        'crushed into pulp'
+      ],
+      ref:'They are then crushed into a pulp.'
+    },
+    {
+      terms:[
+        'sugar',
+        'vinegar',
+        'salt',
+        'ingredients are added',
+        'additives',
+        'combined with ingredients'
+      ],
+      ref:'Sugar, vinegar and salt are added to the tomato mixture.'
+    },
+    {
+      terms:[
+        'boiled',
+        'boiling',
+        'boil'
+      ],
+      ref:'The mixture is boiled.'
+    },
+    {
+      terms:[
+        'left for two hours',
+        'left for 2 hours',
+        'left to stand for two hours',
+        'left to stand for 2 hours',
+        'two hours',
+        '2 hours'
+      ],
+      ref:'It is then left to stand for two hours.'
+    },
+    {
+      terms:[
+        'poured into bottles',
+        'filled into bottles',
+        'bottled',
+        'bottles are filled'
+      ],
+      ref:'The ketchup is poured into bottles.'
+    },
+    {
+      terms:[
+        'labelled',
+        'labeled',
+        'labelling',
+        'labeling'
+      ],
+      ref:'The bottles are labelled.'
+    },
+    {
+      terms:[
+        'quality control',
+        'quality checked',
+        'checked',
+        'inspected',
+        'inspection'
+      ],
+      ref:'They then undergo quality control.'
+    },
+    {
+      terms:[
+        'packed',
+        'packaged',
+        'boxes',
+        'packed into boxes'
+      ],
+      ref:'The checked bottles are packed into boxes.'
+    },
+    {
+      terms:[
+        'supermarket',
+        'sent to supermarkets',
+        'delivered to supermarkets',
+        'transported to supermarkets'
+      ],
+      ref:'The packaged ketchup is transported to supermarkets.'
+    },
+    {
+      terms:[
+        'consumed',
+        'consumption',
+        'hamburger',
+        'hamburgers',
+        'fries',
+        'served',
+        'served with food',
+        'served with foods',
+        'eaten'
+      ],
+      ref:'Finally, the ketchup is ready to be served with food.'
+    }
+  ],
+
+  '04':[
+    {
+      terms:[
+        'eggs',
+        'frog eggs',
+        'eggs are laid',
+        'lays eggs'
+      ],
+      ref:'The cycle begins when adult frogs lay eggs.'
+    },
+    {
+      terms:[
+        'embryo',
+        'embryos',
+        'embryonic'
+      ],
+      ref:'Embryos develop inside the eggs.'
+    },
+    {
+      terms:[
+        'tadpoles clinging to water plants',
+        'tadpoles cling to water plants',
+        'water plants'
+      ],
+      ref:'The resulting tadpoles cling to water plants.'
+    },
+    {
+      terms:[
+        'external gills',
+        'gills',
+        'breathing'
+      ],
+      ref:'They develop external gills for breathing.'
+    },
+    {
+      terms:[
+        'tail keeps growing',
+        'tail grows',
+        'growing tail'
+      ],
+      ref:'As the tadpoles grow, their tails become longer.'
+    },
+    {
+      terms:[
+        'hindlegs appear',
+        'hind legs appear',
+        'hind legs',
+        'back legs'
+      ],
+      ref:'Hind legs then begin to appear.'
+    },
+    {
+      terms:[
+        'food stored in the tail',
+        'stored in the tail'
+      ],
+      ref:'At this stage, the tadpoles rely on food stored in their tails.'
+    },
+    {
+      terms:[
+        'front legs appear',
+        'front legs'
+      ],
+      ref:'Front legs subsequently develop.'
+    },
+    {
+      terms:[
+        'tail becomes shorter',
+        'tail shortens',
+        'shorter tail'
+      ],
+      ref:'The tail then becomes shorter.'
+    },
+    {
+      terms:[
+        'young frog',
+        'froglet'
+      ],
+      ref:'A young frog is formed.'
+    },
+    {
+      terms:[
+        'adult frog',
+        'mature frog'
+      ],
+      ref:'Finally, it develops into an adult frog, allowing the cycle to continue.'
+    }
+  ],
+
+  '05':[
+    {
+      terms:[
+        'female lays eggs',
+        'females lay eggs',
+        'eggs are laid',
+        'one or two eggs',
+        '1 or 2 eggs',
+        'every three days'
+      ],
+      ref:'Female bees lay one or two eggs every three days.'
+    },
+    {
+      terms:[
+        'eggs hatch',
+        'hatch after 9',
+        '9-10 days',
+        '9 to 10 days'
+      ],
+      ref:'The eggs hatch after about 9–10 days.'
+    },
+    {
+      terms:[
+        '5 days',
+        'five days'
+      ],
+      ref:'The young bees then develop for a further five days.'
+    },
+    {
+      terms:[
+        'first moulting',
+        'first molting',
+        'first moult',
+        'first molt'
+      ],
+      ref:'They undergo a first moulting stage.'
+    },
+    {
+      terms:[
+        '7 days',
+        'seven days'
+      ],
+      ref:'After another seven days, further development takes place.'
+    },
+    {
+      terms:[
+        'second moulting',
+        'second molting',
+        'second moult',
+        'second molt'
+      ],
+      ref:'A second moulting stage follows.'
+    },
+    {
+      terms:[
+        '9 days',
+        'nine days'
+      ],
+      ref:'Nine days later, the bee continues to mature.'
+    },
+    {
+      terms:[
+        'young adult emerges',
+        'young adult',
+        'emerges'
+      ],
+      ref:'A young adult then emerges.'
+    },
+    {
+      terms:[
+        '4 days to maturity',
+        'four days to maturity',
+        'maturity',
+        'mature bee'
+      ],
+      ref:'Finally, the young adult takes about four days to reach maturity.'
+    }
+  ],
+
+  '06':[
+    {
+      terms:[
+        'recycling bin',
+        'recycle bin',
+        'placed in recycling bins',
+        'put in recycling bins',
+        'discarded'
+      ],
+      ref:'Used plastic bottles are placed in recycling bins.'
+    },
+    {
+      terms:[
+        'collection truck',
+        'collected',
+        'collection',
+        'transported'
+      ],
+      ref:'They are collected and transported by truck.'
+    },
+    {
+      terms:[
+        'recycling centre',
+        'recycling center',
+        'sorting',
+        'sorted'
+      ],
+      ref:'At a recycling centre, the bottles are sorted.'
+    },
+    {
+      terms:[
+        'compressed',
+        'compressing',
+        'compressed into blocks',
+        'blocks'
+      ],
+      ref:'The selected bottles are compressed into blocks.'
+    },
+    {
+      terms:[
+        'crushed',
+        'crushing',
+        'washed',
+        'washing',
+        'crushing and washing'
+      ],
+      ref:'The plastic is then crushed and washed.'
+    },
+    {
+      terms:[
+        'plastic pellets',
+        'pellets',
+        'producing plastic pellets',
+        'made into pellets'
+      ],
+      ref:'Next, it is processed into plastic pellets.'
+    },
+    {
+      terms:[
+        'heated',
+        'heating pellets',
+        'pellets are heated'
+      ],
+      ref:'The pellets are heated to form raw material.'
+    },
+    {
+      terms:[
+        'raw material',
+        'formed into raw material',
+        'plastic raw material'
+      ],
+      ref:'This raw material is prepared for manufacturing.'
+    },
+    {
+      terms:[
+        'end products',
+        'new products',
+        'producing end products',
+        'recycled products'
+      ],
+      ref:'Finally, it is used to produce new end products.'
+    }
+  ]
 };
 
+const BRICKS_BODY1_MODEL =
+  'In the initial stages, clay is excavated and processed before being shaped into bricks. '+
+  'The clay is first extracted from the ground using an excavator before being screened through a metal grid. '+
+  'The filtered clay is then conveyed by a set of rotating rollers, after which it is combined with sand and water '+
+  'and shaped into bricks using either a mould or a wire cutter, in preparation for the subsequent stages.';
 
 /* =========================================================
-   BRICKS MODEL
-========================================================= */
+   STATE
+   ========================================================= */
 
-const BRICKS_BODY1_MODEL=
-  'In the initial stages, clay is excavated and processed before being shaped into bricks. '
-  +'The clay is first extracted from the ground using an excavator before being screened through a metal grid. '
-  +'The filtered clay is then conveyed by a set of rotating rollers, after which it is combined with sand and water '
-  +'and shaped into bricks using either a mould or a wire cutter, in preparation for the subsequent stages.';
+let state = {
+  current:0,
+  completed:[],
+  attempts:{},
+  templateOpen:{
+    1:true,
+    2:true,
+    3:true,
+    4:true
+  },
+  drafts:{
+    analysis:{
+      type:'',
+      stages:'',
+      first:'',
+      last:'',
+      features:'',
+      body1:'',
+      body2:''
+    },
+    intro:'',
+    overview:'',
+    body1:'',
+    body2:'',
+    full:''
+  },
+  scores:{}
+};
 
+function loadState(){
+
+  try{
+
+    const s=
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+        ||
+        'null'
+      );
+
+    if(!s){
+      return;
+    }
+
+    state={
+      ...state,
+      ...s,
+
+      templateOpen:{
+        ...state.templateOpen,
+        ...(s.templateOpen||{})
+      },
+
+      drafts:{
+        ...state.drafts,
+        ...(s.drafts||{}),
+
+        analysis:{
+          ...state.drafts.analysis,
+          ...(s.drafts?.analysis||{})
+        }
+      }
+    };
+
+  }catch(e){
+
+    console.warn(
+      'State load failed:',
+      e
+    );
+
+  }
+
+}
+
+function saveState(){
+
+  try{
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(state)
+    );
+
+  }catch(e){
+
+    console.warn(
+      'State save failed:',
+      e
+    );
+
+  }
+
+}
+
+function isDone(i){
+
+  return state.completed.includes(i);
+
+}
+
+function attempts(i){
+
+  return Number(
+    state.attempts[i]
+    ||
+    0
+  );
+
+}
+
+function markDone(i){
+
+  if(!isDone(i)){
+
+    state.completed.push(i);
+
+  }
+
+  state.completed=[
+    ...new Set(
+      state.completed
+    )
+  ]
+  .sort(
+    (a,b)=>a-b
+  );
+
+  saveState();
+
+}
+
+function invalidateFrom(i){
+
+  state.completed=
+    state.completed.filter(
+      x=>x<i
+    );
+
+  for(
+    let j=i+1;
+    j<6;
+    j++
+  ){
+
+    delete state.scores[j];
+
+  }
+
+  saveState();
+
+}
+
+function unlockedMax(){
+
+  let u=0;
+
+  for(
+    let i=0;
+    i<6;
+    i++
+  ){
+
+    if(isDone(i)){
+
+      u=i+1;
+
+    }else{
+
+      break;
+
+    }
+
+  }
+
+  return Math.min(
+    5,
+    u
+  );
+
+}
 
 /* =========================================================
-   HELPERS
-========================================================= */
+   UTILITIES
+   ========================================================= */
 
-const NUM={
+function norm(v){
+
+  return String(v||'')
+
+    .toLowerCase()
+
+    .normalize('NFD')
+
+    .replace(
+      /[\u0300-\u036f]/g,
+      ''
+    )
+
+    .replace(
+      /đ/g,
+      'd'
+    )
+
+    .replace(
+      /[’‘]/g,
+      "'"
+    )
+
+    .replace(
+      /[–—]/g,
+      '-'
+    )
+
+    .replace(
+      /[^a-z0-9°%'\s.-]/g,
+      ' '
+    )
+
+    .replace(
+      /\s+/g,
+      ' '
+    )
+
+    .trim();
+
+}
+
+function esc(v){
+
+  return String(v??'')
+
+    .replace(
+      /[&<>"']/g,
+      c=>({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[c])
+    );
+
+}
+
+function wordCount(v){
+
+  const s=
+    String(v||'')
+    .trim();
+
+  return s
+    ?
+    s.split(/\s+/)
+      .filter(Boolean)
+      .length
+    :
+    0;
+
+}
+
+function uniq(a){
+
+  return [
+    ...new Set(
+      (a||[])
+      .filter(Boolean)
+    )
+  ];
+
+}
+
+function model(){
+
+  return MODELS[ID]
+    ||
+    [];
+
+}
+
+function containsAny(
+  text,
+  arr=[]
+){
+
+  const n=
+    ` ${norm(text)} `;
+
+  return arr.some(
+    x=>{
+
+      const q=
+        norm(x);
+
+      return q
+        &&
+        n.includes(
+          ` ${q} `
+        );
+
+    }
+  );
+
+}
+
+function stagePosition(
+  text,
+  stage
+){
+
+  const n=
+    ` ${norm(text)} `;
+
+  let best=-1;
+
+  for(
+    const phrase
+    of
+    stage?.terms||[]
+  ){
+
+    const q=
+      norm(phrase);
+
+    if(!q){
+      continue;
+    }
+
+    const p=
+      n.indexOf(
+        ` ${q} `
+      );
+
+    if(
+      p>=0
+      &&
+      (
+        best<0
+        ||
+        p<best
+      )
+    ){
+
+      best=p;
+
+    }
+
+  }
+
+  return best;
+
+}
+
+function stageHits(text){
+
+  return model()
+    .map(
+      stage=>
+        stagePosition(
+          text,
+          stage
+        )>=0
+    );
+
+}
+
+function splitParagraphs(text){
+
+  return String(text||'')
+
+    .replace(
+      /\r\n?/g,
+      '\n'
+    )
+
+    .trim()
+
+    .split(
+      /\n+/
+    )
+
+    .map(
+      x=>x.trim()
+    )
+
+    .filter(Boolean);
+
+}
+
+/* =========================================================
+   NUMBER / RANGE
+   ========================================================= */
+
+const NUMBER_WORDS={
   one:1,
   two:2,
   three:3,
@@ -853,21 +1110,556 @@ const NUM={
   bay:7,
   tam:8,
   chin:9,
-  muoi:10,
-
-  'một':1,
-  'bốn':4,
-  'năm':5,
-  'sáu':6,
-  'bảy':7,
-  'tám':8,
-  'chín':9,
-  'mười':10
+  muoi:10
 };
 
+function numberValue(v){
+
+  let s=
+    norm(v)
+
+    .replace(
+      /\bmain stages?\b/g,
+      ''
+    )
+
+    .replace(
+      /\bstages?\b/g,
+      ''
+    )
+
+    .replace(
+      /\bgiai doan\b/g,
+      ''
+    )
+
+    .trim();
+
+  if(
+    /^\d+$/.test(s)
+  ){
+
+    return Number(s);
+
+  }
+
+  if(
+    NUMBER_WORDS[s]
+    !=
+    null
+  ){
+
+    return NUMBER_WORDS[s];
+
+  }
+
+  const m=
+    s.match(
+      /\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)\b/
+    );
+
+  if(m){
+
+    return /^\d+$/.test(
+      m[1]
+    )
+    ?
+    Number(
+      m[1]
+    )
+    :
+    NUMBER_WORDS[
+      m[1]
+    ];
+
+  }
+
+  for(
+    const [k,n]
+    of
+    Object.entries(
+      NUMBER_WORDS
+    )
+  ){
+
+    if(
+      new RegExp(
+        `\\b${k}\\b`
+      )
+      .test(s)
+    ){
+
+      return n;
+
+    }
+
+  }
+
+  return null;
+
+}
+
+function parseRange(v){
+
+  const s=
+    norm(v)
+
+    .replace(
+      /\bstages?\b/g,
+      ''
+    )
+
+    .trim();
+
+  let m=
+    s.match(
+      /\b(\d+)\s*-\s*(\d+)\b/
+    )
+
+    ||
+
+    s.match(
+      /\b(?:from\s+)?(\d+)\s+to\s+(\d+)\b/
+    );
+
+  if(m){
+
+    const a=
+      Number(
+        m[1]
+      );
+
+    const b=
+      Number(
+        m[2]
+      );
+
+    return{
+      valid:true,
+      start:
+        Math.min(
+          a,
+          b
+        ),
+      end:
+        Math.max(
+          a,
+          b
+        )
+    };
+
+  }
+
+  if(
+    /^\d+$/.test(s)
+  ){
+
+    const n=
+      Number(s);
+
+    return{
+      valid:true,
+      start:n,
+      end:n
+    };
+
+  }
+
+  return{
+    valid:false,
+    start:null,
+    end:null
+  };
+
+}
+
+/* =========================================================
+   STUDENT PLAN
+   ========================================================= */
+
+function bodyPlan(step){
+
+  if(
+    step!==3
+    &&
+    step!==4
+  ){
+
+    return null;
+
+  }
+
+  const raw=
+    step===3
+    ?
+    state.drafts.analysis.body1
+    :
+    state.drafts.analysis.body2;
+
+  const r=
+    parseRange(raw);
+
+  const total=
+    model().length;
+
+  if(
+    !r.valid
+    ||
+    r.start<1
+    ||
+    r.end>total
+  ){
+
+    return null;
+
+  }
+
+  return{
+    ...r,
+
+    stages:
+      Array.from(
+        {
+          length:
+            r.end-r.start+1
+        },
+        (_,i)=>
+          r.start+i
+      ),
+
+    label:
+      `stage ${r.start}–${r.end}`
+  };
+
+}
+
+function planCoverage(
+  text,
+  p
+){
+
+  if(!p){
+
+    return{
+      covered:0,
+      total:0,
+      ratio:0,
+      missing:[]
+    };
+
+  }
+
+  const rows=
+    p.stages.map(
+      n=>({
+        n,
+
+        ok:
+          stagePosition(
+            text,
+            model()[n-1]
+          )>=0
+      })
+    );
+
+  const covered=
+    rows.filter(
+      x=>x.ok
+    )
+    .length;
+
+  return{
+    covered,
+    total:
+      rows.length,
+    ratio:
+      rows.length
+      ?
+      covered/rows.length
+      :
+      0,
+
+    missing:
+      rows.filter(
+        x=>!x.ok
+      )
+      .map(
+        x=>x.n
+      )
+  };
+
+}
+
+function outsidePlanStages(
+  text,
+  p
+){
+
+  if(!p){
+
+    return[];
+
+  }
+
+  return model()
+
+    .map(
+      (
+        s,
+        i
+      )=>({
+        n:i+1,
+
+        pos:
+          stagePosition(
+            text,
+            s
+          )
+      })
+    )
+
+    .filter(
+      x=>
+        x.pos>=0
+        &&
+        !p.stages.includes(
+          x.n
+        )
+    )
+
+    .map(
+      x=>x.n
+    );
+
+}
+
+/* =========================================================
+   SEQUENCE — FALSE-POSITIVE SAFE
+   ========================================================= */
+
+function sentenceSplit(text){
+
+  return String(text||'')
+
+    .replace(
+      /\s+/g,
+      ' '
+    )
+
+    .trim()
+
+    .split(
+      /(?<=[.!?])\s+/
+    )
+
+    .map(
+      x=>x.trim()
+    )
+
+    .filter(Boolean);
+
+}
+
+function stripTopicSentence(
+  text,
+  p
+){
+
+  const sentences=
+    sentenceSplit(text);
+
+  if(
+    sentences.length<2
+  ){
+
+    return String(
+      text||''
+    );
+
+  }
+
+  const first=
+    sentences[0];
+
+  const rest=
+    sentences
+    .slice(1)
+    .join(' ');
+
+  const broadTopic=
+    /\b(?:initial stages?|remaining stages?|later stages?|these stages?|the process|the procedure)\b/i
+    .test(first)
+
+    ||
+
+    /\b(?:consist(?:s)? of|deal(?:s)? with|involv(?:e|es)|include(?:s)?|followed by)\b/i
+    .test(first);
+
+  const restHits=
+    p
+    ?
+    p.stages.filter(
+      n=>
+        stagePosition(
+          rest,
+          model()[n-1]
+        )>=0
+    )
+    .length
+    :
+    stageHits(rest)
+    .filter(Boolean)
+    .length;
+
+  return(
+    broadTopic
+    &&
+    restHits>=2
+  )
+  ?
+  rest
+  :
+  String(
+    text||''
+  );
+
+}
+
+function sequenceForPlan(
+  text,
+  p
+){
+
+  if(!p){
+
+    return{
+      ok:true,
+      issues:[]
+    };
+
+  }
+
+  const detail=
+    stripTopicSentence(
+      text,
+      p
+    );
+
+  const found=
+    p.stages
+
+    .map(
+      n=>({
+        n,
+
+        pos:
+          stagePosition(
+            detail,
+            model()[n-1]
+          )
+      })
+    )
+
+    .filter(
+      x=>x.pos>=0
+    )
+
+    .sort(
+      (a,b)=>
+        a.pos-b.pos
+    );
+
+  const issues=[];
+
+  for(
+    let i=1;
+    i<found.length;
+    i++
+  ){
+
+    if(
+      found[i].n
+      <
+      found[i-1].n
+    ){
+
+      issues.push(
+        `Stage ${found[i].n} đang được trình bày trước stage ${found[i-1].n}.`
+      );
+
+    }
+
+  }
+
+  return{
+    ok:
+      issues.length===0,
+
+    issues
+  };
+
+}
+
+function fullEssaySequence(text){
+
+  const paras=
+    splitParagraphs(text);
+
+  if(
+    paras.length<4
+  ){
+
+    return{
+      ok:true,
+      issues:[]
+    };
+
+  }
+
+  const b1=
+    paras[2]
+    ||
+    '';
+
+  const b2=
+    paras
+    .slice(3)
+    .join(' ');
+
+  const r1=
+    sequenceForPlan(
+      b1,
+      bodyPlan(3)
+    );
+
+  const r2=
+    sequenceForPlan(
+      b2,
+      bodyPlan(4)
+    );
+
+  return{
+    ok:
+      r1.ok
+      &&
+      r2.ok,
+
+    issues:
+      uniq([
+        ...(r1.issues||[]),
+        ...(r2.issues||[])
+      ])
+  };
+
+}
+
+/* =========================================================
+   GRAMMAR / SPELLING
+   ========================================================= */
 
 const TYPO={
   manufactoring:'manufacturing',
+  manufactureing:'manufacturing',
   prodution:'production',
   proccess:'process',
   temparature:'temperature',
@@ -897,372 +1689,777 @@ const TYPO={
   recyling:'recycling'
 };
 
+function spellingIssues(text){
 
-function norm(v){
+  const out=[];
 
-  return String(v||'')
+  const tokens=
+    String(text||'')
 
     .toLowerCase()
 
-    .normalize('NFD')
-
-    .replace(
-      /[\u0300-\u036f]/g,
-      ''
+    .match(
+      /[a-z]+/g
     )
 
-    .replace(
-      /đ/g,
-      'd'
-    )
-
-    .replace(
-      /[’‘]/g,
-      "'"
-    )
-
-    .replace(
-      /[^a-z0-9°%–—'\s-]/g,
-      ' '
-    )
-
-    .replace(
-      /\s+/g,
-      ' '
-    )
-
-    .trim();
-
-}
-
-
-function esc(v){
-
-  return String(v??'')
-
-    .replace(
-      /[&<>"']/g,
-      c=>({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        '"':'&quot;',
-        "'":'&#39;'
-      }[c])
-    );
-
-}
-
-
-function words(v){
-
-  const s=
-    String(v||'')
-    .trim();
-
-  return s
-    ?
-    s.split(/\s+/)
-      .filter(Boolean)
-      .length
-    :
-    0;
-
-}
-
-
-function uniq(a){
-
-  return[
-    ...new Set(
-      (a||[])
-      .filter(Boolean)
-    )
-  ];
-
-}
-
-
-function containsAny(
-  text,
-  arr=[]
-){
-
-  const n=
-    norm(text);
-
-  return arr.some(
-    x=>
-      n.includes(
-        norm(x)
-      )
-  );
-
-}
-
-
-function paragraphs(text){
-
-  return String(text||'')
-
-    .replace(
-      /\r\n?/g,
-      '\n'
-    )
-
-    .trim()
-
-    .split(/\n+/)
-
-    .map(
-      x=>x.trim()
-    )
-
-    .filter(Boolean);
-
-}
-
-
-function stageList(){
-
-  return STAGES[ID]
     ||
     [];
 
-}
-
-
-function stagePos(
-  text,
-  stage
-){
-
-  let best=-1;
-
   for(
-    const x
+    const w
     of
-    stage?.terms||[]
+    tokens
   ){
 
-    const p=
-      (
-        ' '
-        +
-        norm(text)
-        +
-        ' '
-      )
-      .indexOf(
-        ' '
-        +
-        norm(x)
-        +
-        ' '
+    if(
+      TYPO[w]
+    ){
+
+      out.push(
+        `Có thể sai chính tả: “${w}” → “${TYPO[w]}”.`
       );
 
-
-    if(
-      p>=0
-      &&
-      (
-        best<0
-        ||
-        p<best
-      )
-    ){
-
-      best=p;
-
     }
 
   }
 
+  if(
+    /\brip\s+tomatoes?\b/i
+    .test(text)
+  ){
 
-  return best;
-
-}
-
-
-function stageHits(text){
-
-  return stageList()
-    .map(
-      s=>
-        stagePos(
-          text,
-          s
-        )>=0
+    out.push(
+      'Dùng “ripe tomatoes”, không dùng “rip tomatoes”.'
     );
 
-}
-
-
-function numberValue(v){
-
-  let s=
-    norm(v)
-
-    .replace(
-      /\b(main )?stages?\b/g,
-      ''
-    )
-
-    .replace(
-      /\bgiai doan\b/g,
-      ''
-    )
-
-    .replace(
-      /\bco\b/g,
-      ''
-    )
-
-    .trim();
-
-
-  if(
-    /^\d+$/.test(s)
-  ){
-
-    return +s;
-
   }
 
-
-  if(
-    NUM[s]!=null
-  ){
-
-    return NUM[s];
-
-  }
-
-
-  for(
-    const [k,n]
-    of
-    Object.entries(NUM)
-  ){
-
-    if(
-      (
-        ' '
-        +
-        s
-        +
-        ' '
-      )
-      .includes(
-        ' '
-        +
-        norm(k)
-        +
-        ' '
-      )
-    ){
-
-      return n;
-
-    }
-
-  }
-
-
-  const m=
-    s.match(
-      /\b\d+\b/
-    );
-
-
-  return m
-    ?
-    +m[0]
-    :
-    null;
+  return uniq(out);
 
 }
 
-
-function parseRange(v){
+function grammarIssues(
+  text,
+  {
+    note=false
+  }={}
+){
 
   const s=
-    norm(v)
-
-    .replace(
-      /[–—]/g,
-      '-'
-    )
-
-    .replace(
-      /\bstages?\b/g,
-      ''
-    )
-
+    String(text||'')
     .trim();
 
+  const out=[];
 
-  let m=
-    s.match(
-      /\b(\d+)\s*-\s*(\d+)\b/
-    )
+  if(!s){
 
-    ||
-
-    s.match(
-      /\b(?:from\s+)?(\d+)\s+to\s+(\d+)\b/
-    );
-
-
-  if(m){
-
-    const a=+m[1];
-    const b=+m[2];
-
-    return{
-      valid:true,
-      start:
-        Math.min(
-          a,
-          b
-        ),
-      end:
-        Math.max(
-          a,
-          b
-        )
-    };
+    return[
+      'Chưa có câu trả lời.'
+    ];
 
   }
 
+  if(!note){
+
+    const paras=
+      splitParagraphs(s);
+
+    for(
+      const p
+      of
+      paras
+    ){
+
+      if(
+        p
+        &&
+        !/^[A-Z0-9]/.test(p)
+      ){
+
+        out.push(
+          'Một đoạn chưa viết hoa chữ cái đầu.'
+        );
+
+      }
+
+    }
+
+    if(
+      !/[.!?]$/.test(s)
+    ){
+
+      out.push(
+        'Nên kết thúc bằng dấu câu.'
+      );
+
+    }
+
+  }
 
   if(
-    /^\d+$/.test(s)
+    /\b(?:allows|enables)\s+(?:they|he|she|we|i)\s+to\b/i
+    .test(s)
   ){
 
-    const n=+s;
-
-    return{
-      valid:true,
-      start:n,
-      end:n
-    };
+    out.push(
+      'Sau allows/enables phải dùng tân ngữ: them/him/her/us/me + to V.'
+    );
 
   }
 
+  if(
+    /\bbetween\s+[^,.!?;]{0,40}\s+to\s+[^,.!?;]{0,40}/i
+    .test(s)
+  ){
+
+    out.push(
+      'Dùng “between X and Y”, không dùng “between X to Y”.'
+    );
+
+  }
+
+  if(
+    /\bbegins?\s+with\b[^.!?]{0,180}\bto\s+ends?\s+with\b/i
+    .test(s)
+  ){
+
+    out.push(
+      'Dùng “begins with ... and ends with ...”, không dùng “begins with ... to ends with ...”.'
+    );
+
+  }
+
+  if(
+    /\bends?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i
+    .test(s)
+  ){
+
+    out.push(
+      'Sau “ends with” nên dùng noun/V-ing, ví dụ “ends with the bricks being delivered”.'
+    );
+
+  }
+
+  if(
+    /\bbegins?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i
+    .test(s)
+  ){
+
+    out.push(
+      'Sau “begins with” nên dùng noun/V-ing, ví dụ “begins with clay being dug from the ground”.'
+    );
+
+  }
+
+  /* clay is excavated, processed before... */
+  if(
+    /\b(?:is|are|was|were)\s+([a-z]+ed)\s*,\s*([a-z]+ed)\s+before\b/i
+    .test(s)
+  ){
+
+    const m=
+      s.match(
+        /\b(?:is|are|was|were)\s+([a-z]+ed)\s*,\s*([a-z]+ed)\s+before\b/i
+      );
+
+    out.push(
+      `Cấu trúc song song chưa tự nhiên: nên viết “${m[1]} and ${m[2]} before ...”.`
+    );
+
+  }
+
+  /* a moderate temperature kilns */
+  if(
+    /\ba\s+(?:moderate|high(?:er)?)[-\s]+temperature\s+kilns\b/i
+    .test(s)
+  ){
+
+    out.push(
+      'Dùng “a moderate-temperature kiln” hoặc “moderate-temperature kilns”, không dùng “a ... kilns”.'
+    );
+
+  }
+
+  /* heated in a kiln ... and another kiln ... */
+  if(
+    ID==='01'
+    &&
+    /\b(?:heated|fired)\s+in\s+(?:a|one)\s+kiln\b[^.!?]{0,220}\band\s+(?:another|a second)\s+kiln\b/i
+    .test(s)
+    &&
+    !/\band\s+in\s+(?:another|a second)\s+kiln\b/i
+    .test(s)
+  ){
+
+    out.push(
+      'Cấu trúc song song ở phần nung chưa tự nhiên: nên viết “heated in two kilns: first ... and then ...” hoặc “in one kiln ... and in another kiln ...”.'
+    );
+
+  }
+
+  const agreements=[
+    [
+      /\bbricks\s+is\b/i,
+      '“bricks” là số nhiều, dùng “are”.'
+    ],
+    [
+      /\bbottles\s+is\b/i,
+      '“bottles” là số nhiều, dùng “are”.'
+    ],
+    [
+      /\bnoodles\s+is\b/i,
+      '“noodles” là số nhiều, dùng “are”.'
+    ],
+    [
+      /\btomatoes\s+is\b/i,
+      '“tomatoes” là số nhiều, dùng “are”.'
+    ],
+    [
+      /\beggs\s+is\b/i,
+      '“eggs” là số nhiều, dùng “are”.'
+    ],
+    [
+      /\bpellets\s+is\b/i,
+      '“pellets” là số nhiều, dùng “are”.'
+    ],
+    [
+      /\bclay\s+are\b/i,
+      '“clay” nên đi với “is”.'
+    ],
+    [
+      /\bflour\s+are\b/i,
+      '“flour” nên đi với “is”.'
+    ],
+    [
+      /\bmixture\s+are\b/i,
+      '“mixture” là số ít, dùng “is”.'
+    ]
+  ];
+
+  agreements.forEach(
+    ([r,msg])=>{
+
+      if(
+        r.test(s)
+      ){
+
+        out.push(msg);
+
+      }
+
+    }
+  );
+
+  if(
+    /\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i
+    .test(s)
+  ){
+
+    out.push(
+      '“a/an” không đứng trực tiếp trước danh từ số nhiều.'
+    );
+
+  }
+
+  let m;
+
+  const deg=
+    /\b(\d+(?:\.\d+)?)\s+degree\s+celsius\b/gi;
+
+  while(
+    (
+      m=
+      deg.exec(s)
+    )
+  ){
+
+    if(
+      Number(m[1])!==1
+    ){
+
+      out.push(
+        `“${m[0]}” chưa đúng: dùng “degrees Celsius”.`
+      );
+
+    }
+
+  }
+
+  /* Bricks: roller does NOT crush clay */
+  if(
+    ID==='01'
+    &&
+    (
+      /\brollers?\b[^.!?]{0,60}\b(?:crush(?:es|ed|ing)?|grind(?:s|ing)?|break(?:s|ing)?\s+down)\b/i
+      .test(s)
+
+      ||
+
+      /\bclay\b[^.!?]{0,70}\b(?:crushed|ground\s+(?:down|up)|broken\s+down)\b/i
+      .test(s)
+    )
+  ){
+
+    out.push(
+      'Không mô tả roller là công đoạn nghiền clay. Theo sơ đồ, clay được sàng qua metal grid rồi chuyển qua roller(s).'
+    );
+
+  }
+
+  return uniq(out);
+
+}
+
+function languageIssues(
+  text,
+  opts={}
+){
+
+  return uniq([
+    ...grammarIssues(
+      text,
+      opts
+    ),
+
+    ...spellingIssues(text)
+  ]);
+
+}
+
+/* =========================================================
+   FACT / PRECISION
+   ========================================================= */
+
+function factualIssues(text){
+
+  const s=
+    String(text||'');
+
+  const out=[];
+
+  if(
+    [
+      '01',
+      '02',
+      '03',
+      '06'
+    ]
+    .includes(ID)
+
+    &&
+
+    /\b(?:cyclical|cyclic)\b/i
+    .test(s)
+  ){
+
+    out.push(
+      'Đây là linear process, không phải cyclical process.'
+    );
+
+  }
+
+  if(
+    [
+      '04',
+      '05'
+    ]
+    .includes(ID)
+
+    &&
+
+    /\blinear(?:\s+process|\s+sequence)?\b/i
+    .test(s)
+  ){
+
+    out.push(
+      'Đây là life cycle/cyclical process, không phải linear process.'
+    );
+
+  }
+
+  if(
+    ID==='03'
+    &&
+    /\b(?:cool|cooled|cooling)\b[^.!?]{0,50}\b(?:two|2)\s+hours?\b/i
+    .test(s)
+  ){
+
+    out.push(
+      'Sơ đồ chỉ cho biết hỗn hợp được để trong 2 giờ; nên viết “left to stand for two hours”.'
+    );
+
+  }
+
+  return uniq(out);
+
+}
+
+function precisionIssues(text){
+
+  const s=
+    String(text||'');
+
+  const out=[];
+
+  if(
+    ID==='01'
+    &&
+    /\b(?:metal\s+grid|grid)\b[^.!?]{0,80}\bto\s+(?:remove|filter\s+out|eliminate)\s+(?:larger\s+)?(?:particles?|impurities?|debris)\b/i
+    .test(s)
+  ){
+
+    out.push(
+      'Sơ đồ không ghi rõ metal grid dùng để loại bỏ particles/impurities. Để bám sát hình hơn, chỉ cần viết clay is passed/screened through a metal grid.'
+    );
+
+  }
+
+  return out;
+
+}
+
+/* =========================================================
+   ANALYSIS STEP
+   ========================================================= */
+
+function expectedType(){
+
+  const t=
+    norm(
+      task.type
+    );
+
+  return t.includes('life')
+    ?
+    'life cycle'
+    :
+    t.includes('cyc')
+    ?
+    'cyclical'
+    :
+    'linear';
+
+}
+
+function assessAnalysis(){
+
+  const a=
+    state.drafts.analysis;
+
+  const stages=
+    model();
+
+  const total=
+    Number(
+      task.stages
+      ||
+      stages.length
+    );
+
+  const typeOK=
+    norm(
+      a.type
+    )
+    .includes(
+      norm(
+        expectedType()
+      )
+      .split(' ')[0]
+    );
+
+  const stagesOK=
+    numberValue(
+      a.stages
+    )
+    ===
+    total;
+
+  const firstOK=
+    stagePosition(
+      a.first,
+      stages[0]
+    )>=0;
+
+  const lastOK=
+    stagePosition(
+      a.last,
+      stages[
+        stages.length-1
+      ]
+    )>=0;
+
+  const featureHits=
+    stageHits(
+      a.features
+    )
+    .filter(Boolean)
+    .length;
+
+  const featureLanguage=
+    languageIssues(
+      a.features
+    );
+
+  const featuresOK=
+    featureHits
+    >=
+    Math.min(
+      3,
+      total
+    )
+    &&
+    featureLanguage.length===0;
+
+  const r1=
+    parseRange(
+      a.body1
+    );
+
+  const r2=
+    parseRange(
+      a.body2
+    );
+
+  const body1OK=
+    r1.valid
+    &&
+    r1.start>=1
+    &&
+    r1.end<=total;
+
+  const body2OK=
+    r2.valid
+    &&
+    r2.start>=1
+    &&
+    r2.end<=total
+    &&
+    body1OK
+    &&
+    r1.end<r2.start;
 
   return{
-    valid:false,
-    start:null,
-    end:null
+
+    type:{
+      ok:typeOK,
+
+      hint:
+        typeOK
+        ?
+        'Đúng dạng process.'
+        :
+        'Hãy xác định đây là linear, cyclical hay life cycle.'
+    },
+
+    stages:{
+      ok:stagesOK,
+
+      hint:
+        stagesOK
+        ?
+        'Đúng số main stages.'
+        :
+        'Chưa đúng. Hãy quan sát và đếm lại các main stages.'
+    },
+
+    first:{
+      ok:
+        firstOK
+        &&
+        languageIssues(
+          a.first,
+          {
+            note:true
+          }
+        )
+        .length===0,
+
+      hint:
+        firstOK
+        ?
+        'Đúng công đoạn bắt đầu. Ở Bước 1 không bắt buộc viết hoa/dấu chấm.'
+        :
+        'Chưa đúng công đoạn bắt đầu.'
+    },
+
+    last:{
+      ok:
+        lastOK
+        &&
+        languageIssues(
+          a.last,
+          {
+            note:true
+          }
+        )
+        .length===0,
+
+      hint:
+        lastOK
+        ?
+        'Đúng công đoạn cuối. Ở Bước 1 không bắt buộc viết hoa/dấu chấm.'
+        :
+        'Chưa đúng công đoạn cuối.'
+    },
+
+    features:{
+      ok:
+        featuresOK,
+
+      hint:
+        featuresOK
+        ?
+        'Đạt. Em đã nêu được các công đoạn/đặc điểm nổi bật.'
+        :
+        (
+          featureLanguage[0]
+          ||
+          'Nên nêu ít nhất khoảng 3 công đoạn/đặc điểm nổi bật.'
+        )
+    },
+
+    body1:{
+      ok:
+        body1OK,
+
+      hint:
+        body1OK
+        ?
+        'Đạt. Đây là phạm vi stage hợp lệ cho Body 1.'
+        :
+        'Hãy nhập một phạm vi stage hợp lệ cho Body 1.'
+    },
+
+    body2:{
+      ok:
+        body2OK,
+
+      hint:
+        body2OK
+        ?
+        'Đạt. Body 2 tiếp nối Body 1 và không chồng stage.'
+        :
+        'Body 2 cần tiếp nối Body 1 và không chồng stage.'
+    }
+
   };
 
 }
 
+/* =========================================================
+   TEMPLATES / REFERENCES
+   ========================================================= */
 
-function topicRule(){
+const TEMPLATES={
+
+  linear:{
+    intro:'The diagram illustrates the stages involved in the production of __________.',
+    overview:'Overall, the procedure follows a linear, ______-stage sequence that begins with __________ being __________ and ends with __________ being __________. During these stages, __________ is/are __________ before __________ is/are __________.',
+    body1:'In the initial stages, __________. __________ is/are __________, where __________. Once __________ has/have been __________, __________ before being __________.',
+    body2:'The remaining stages deal with __________. __________ and subsequently __________. After this stage has been completed, __________ before __________, completing the process.'
+  },
+
+  life:{
+    intro:'The diagram illustrates the different stages in the life cycle of __________.',
+    overview:'Overall, the life cycle consists of ______ main stages, beginning with __________ and progressing through different stages of development before __________ reaches maturity and produces __________, beginning a new cycle.',
+    body1:'In the initial stages of the cycle, __________ develops into __________. As it grows, __________ before becoming __________.',
+    body2:'In the later stages of the cycle, __________ develops into __________ before reaching __________. At this point, __________ produces/gives rise to __________, which marks the beginning of a new cycle.'
+  },
+
+  cyclical:{
+    intro:'The diagram illustrates the stages involved in __________.',
+    overview:'Overall, the procedure follows a cyclical sequence that begins with __________ and progresses through __________ before returning to __________.',
+    body1:'In the initial stages, __________. Following this, __________. Once __________, __________.',
+    body2:'In the later stages, __________. Following this, __________ before returning to __________.'
+  }
+
+};
+
+function kind(){
+
+  const t=
+    norm(
+      task.type
+    );
+
+  return t.includes('life')
+    ?
+    'life'
+    :
+    t.includes('cyc')
+    ?
+    'cyclical'
+    :
+    'linear';
+
+}
+
+function templateFor(step){
+
+  const set=
+    TEMPLATES[
+      kind()
+    ]
+    ||
+    TEMPLATES.linear;
 
   return({
+    1:set.intro,
+    2:set.overview,
+    3:set.body1,
+    4:set.body2
+  })[step]
+  ||
+  '';
+
+}
+
+function dynamicReference(step){
+
+  const p=
+    bodyPlan(step);
+
+  if(!p){
+
+    return '';
+
+  }
+
+  if(
+    ID==='01'
+    &&
+    step===3
+    &&
+    p.start===1
+    &&
+    p.end===3
+  ){
+
+    return BRICKS_BODY1_MODEL;
+
+  }
+
+  return p.stages
+
+    .map(
+      n=>
+        model()[n-1]
+        ?.ref
+    )
+
+    .filter(Boolean)
+
+    .join(' ');
+
+}
+
+/* =========================================================
+   TOPIC
+   ========================================================= */
+
+function topicCheck(text){
+
+  const sets={
 
     '01':{
       need:[
@@ -1357,30 +2554,23 @@ function topicRule(){
       label:'plastic bottles'
     }
 
-  })[ID]
-
-  ||
-
-  {
-    need:[],
-    bad:[],
-    label:''
   };
 
-}
-
-
-function topicCheck(text){
-
   const r=
-    topicRule();
-
+    sets[ID]
+    ||
+    {
+      need:[],
+      bad:[],
+      label:''
+    };
 
   return{
-
     ok:
-      !r.need.length
+      r.need.length===0
+
       ||
+
       r.need.some(
         x=>
           containsAny(
@@ -1400,1625 +2590,159 @@ function topicCheck(text){
 
     label:
       r.label
-
   };
 
 }
-
-
-/* =========================================================
-   STORAGE
-========================================================= */
-
-function studentScope(){
-
-  try{
-
-    const s=
-      JSON.parse(
-        localStorage.getItem(
-          STUDENT_KEY
-        )
-        ||
-        'null'
-      );
-
-
-    if(
-      s?.name
-    ){
-
-      return encodeURIComponent(
-        (
-          s.name
-          +
-          '|'
-          +
-          (s.className||'')
-        )
-        .toLowerCase()
-      );
-
-    }
-
-  }catch(e){}
-
-
-  return 'guest';
-
-}
-
-
-const STORAGE_KEY=
-  `WT1_PROCESS_GUIDED_${STORE_VERSION}_${studentScope()}::${ID}`;
-
-
-let state={
-
-  engineVersion:
-    ENGINE_VERSION,
-
-  current:0,
-
-  completed:[],
-
-  attempts:{},
-
-  templateOpen:{
-    1:true,
-    2:true,
-    3:true,
-    4:true
-  },
-
-  drafts:{
-    analysis:{},
-    intro:'',
-    overview:'',
-    body1:'',
-    body2:'',
-    full:''
-  },
-
-  scores:{}
-
-};
-
-
-function load(){
-
-  try{
-
-    const s=
-      JSON.parse(
-        localStorage.getItem(
-          STORAGE_KEY
-        )
-        ||
-        'null'
-      );
-
-
-    if(s){
-
-      state={
-
-        ...state,
-
-        ...s,
-
-        templateOpen:{
-          ...state.templateOpen,
-          ...(s.templateOpen||{})
-        },
-
-        drafts:{
-          ...state.drafts,
-          ...(s.drafts||{}),
-
-          analysis:{
-            ...state.drafts.analysis,
-            ...(s.drafts?.analysis||{})
-          }
-        }
-
-      };
-
-
-      if(
-        s.engineVersion
-        !==
-        ENGINE_VERSION
-      ){
-
-        state.scores={};
-        state.engineVersion=
-          ENGINE_VERSION;
-
-      }
-
-    }
-
-  }catch(e){}
-
-}
-
-
-function save(){
-
-  state.engineVersion=
-    ENGINE_VERSION;
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(state)
-  );
-
-}
-
-
-function done(i){
-
-  return state.completed.includes(i);
-
-}
-
-
-function attempts(i){
-
-  return +(state.attempts[i]||0);
-
-}
-
-
-function complete(i){
-
-  if(
-    !done(i)
-  ){
-
-    state.completed.push(i);
-
-  }
-
-
-  state.completed=
-    uniq(
-      state.completed
-    )
-    .sort(
-      (a,b)=>a-b
-    );
-
-
-  save();
-
-}
-
-
-function invalidate(i){
-
-  state.completed=
-    state.completed.filter(
-      x=>x<i
-    );
-
-
-  for(
-    let j=i+1;
-    j<6;
-    j++
-  ){
-
-    delete state.scores[j];
-
-  }
-
-
-  if(
-    state.current>i
-  ){
-
-    state.current=i;
-
-  }
-
-
-  save();
-
-}
-
-
-function unlock(){
-
-  let u=0;
-
-
-  for(
-    let i=0;
-    i<6;
-    i++
-  ){
-
-    if(
-      done(i)
-    ){
-
-      u=i+1;
-
-    }else{
-
-      break;
-
-    }
-
-  }
-
-
-  return Math.min(
-    5,
-    u
-  );
-
-}
-
-
-function key(i){
-
-  return[
-    'analysis',
-    'intro',
-    'overview',
-    'body1',
-    'body2',
-    'full'
-  ][i];
-
-}
-
-
-function val(id){
-
-  return document.getElementById(id)
-    ?.value
-    ||
-    '';
-
-}
-
-
-function saveDraft(){
-
-  if(
-    state.current===0
-  ){
-
-    state.drafts.analysis={
-
-      type:
-        val('aType'),
-
-      stages:
-        val('aStages'),
-
-      first:
-        val('aFirst'),
-
-      last:
-        val('aLast'),
-
-      features:
-        val('aFeatures'),
-
-      body1:
-        val('aBody1'),
-
-      body2:
-        val('aBody2')
-
-    };
-
-  }else{
-
-    const b=
-      document.getElementById(
-        'writeBox'
-      );
-
-
-    if(b){
-
-      state.drafts[
-        key(
-          state.current
-        )
-      ]=
-        b.value;
-
-    }
-
-  }
-
-
-  save();
-
-}
-
-
-/* =========================================================
-   LANGUAGE CHECK
-========================================================= */
-
-function seriousLanguage(
-  text,
-  {
-    note=false
-  }={}
-){
-
-  const s=
-    String(text||'');
-
-  const out=[];
-
-
-  for(
-    const w
-    of
-    (
-      s
-      .toLowerCase()
-      .match(/[a-z]+/g)
-      ||
-      []
-    )
-  ){
-
-    if(
-      TYPO[w]
-    ){
-
-      out.push(
-        `Có thể sai chính tả: “${w}” → “${TYPO[w]}”.`
-      );
-
-    }
-
-  }
-
-
-  if(
-    /\brip\s+tomatoes?\b/i
-    .test(s)
-  ){
-
-    out.push(
-      'Dùng “ripe tomatoes”, không dùng “rip tomatoes”.'
-    );
-
-  }
-
-
-  if(
-    /\ba\s+(?:moderate|high(?:er)?)[-\s]+temperature\s+kilns\b/i
-    .test(s)
-  ){
-
-    out.push(
-      'Dùng “a moderate-temperature kiln” hoặc “moderate-temperature kilns”, không dùng “a ... kilns”.'
-    );
-
-  }
-
-
-  if(
-    /\bbricks\s+is\b/i
-    .test(s)
-  ){
-
-    out.push(
-      '“bricks” là số nhiều, dùng “are”.'
-    );
-
-  }
-
-
-  if(
-    /\btomatoes\s+is\b/i
-    .test(s)
-  ){
-
-    out.push(
-      '“tomatoes” là số nhiều, dùng “are”.'
-    );
-
-  }
-
-
-  if(
-    /\beggs\s+is\b/i
-    .test(s)
-  ){
-
-    out.push(
-      '“eggs” là số nhiều, dùng “are”.'
-    );
-
-  }
-
-
-  if(
-    /\bclay\s+are\b/i
-    .test(s)
-  ){
-
-    out.push(
-      '“clay” đi với “is”.'
-    );
-
-  }
-
-
-  if(
-    /\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i
-    .test(s)
-  ){
-
-    out.push(
-      '“a/an” không đứng trực tiếp trước danh từ số nhiều.'
-    );
-
-  }
-
-
-  if(
-    /\bbegins?\s+with\b[^.!?]{0,180}\bto\s+ends?\s+with\b/i
-    .test(s)
-  ){
-
-    out.push(
-      'Dùng “begins with ... and ends with ...”, không dùng “begins with ... to ends with ...”.'
-    );
-
-  }
-
-
-  if(
-    /\bbetween\s+[^,.!?;]{0,40}\s+to\s+[^,.!?;]{0,40}/i
-    .test(s)
-  ){
-
-    out.push(
-      'Dùng “between X and Y”, không dùng “between X to Y”.'
-    );
-
-  }
-
-
-  if(
-    ID==='01'
-    &&
-    (
-      /\brollers?\b[^.!?]{0,50}\b(?:crush(?:es|ed|ing)?|grind(?:s|ing)?|break(?:s|ing)?\s+down)\b/i
-      .test(s)
-
-      ||
-
-      /\bclay\b[^.!?]{0,70}\b(?:crushed|ground\s+(?:down|up)|broken\s+down)\b/i
-      .test(s)
-    )
-  ){
-
-    out.push(
-      'Không mô tả roller là công đoạn nghiền clay. Theo sơ đồ, clay được sàng qua metal grid rồi chuyển qua roller(s).'
-    );
-
-  }
-
-
-  if(
-    !note
-  ){
-
-    if(
-      s.trim()
-      &&
-      !/^[A-Z0-9]/.test(
-        s.trim()
-      )
-    ){
-
-      out.push(
-        'Cần viết hoa chữ cái đầu.'
-      );
-
-    }
-
-
-    if(
-      s.trim()
-      &&
-      !/[.!?]$/.test(
-        s.trim()
-      )
-    ){
-
-      out.push(
-        'Nên kết thúc bằng dấu câu.'
-      );
-
-    }
-
-  }
-
-
-  return uniq(out);
-
-}
-
-
-function factualIssues(text){
-
-  const s=
-    String(text||'');
-
-  const out=[];
-
-
-  if(
-    [
-      '01',
-      '02',
-      '03',
-      '06'
-    ]
-    .includes(ID)
-
-    &&
-
-    /\b(?:cyclical|cyclic)\b/i
-    .test(s)
-  ){
-
-    out.push(
-      'Đây là linear process, không phải cyclical process.'
-    );
-
-  }
-
-
-  if(
-    [
-      '04',
-      '05'
-    ]
-    .includes(ID)
-
-    &&
-
-    /\blinear(?:\s+process|\s+sequence)?\b/i
-    .test(s)
-  ){
-
-    out.push(
-      'Đây là life cycle/cyclical process, không phải linear process.'
-    );
-
-  }
-
-
-  if(
-    ID==='03'
-    &&
-    /\b(?:cool|cooled|cooling)\b[^.!?]{0,50}\b(?:two|2)\s+hours?\b/i
-    .test(s)
-  ){
-
-    out.push(
-      'Sơ đồ chỉ cho biết hỗn hợp được để trong 2 giờ; nên viết “left to stand for two hours”.'
-    );
-
-  }
-
-
-  return uniq(out);
-
-}
-
-
-/* =========================================================
-   TEMPLATES
-========================================================= */
-
-function processKind(){
-
-  const t=
-    norm(
-      state.drafts.analysis.type
-      ||
-      task.type
-      ||
-      ''
-    );
-
-
-  return t.includes('life')
-    ?
-    'life'
-    :
-    t.includes('cyc')
-    ?
-    'cyclical'
-    :
-    'linear';
-
-}
-
-
-const TPL={
-
-  linear:{
-
-    intro:
-      'The diagram illustrates the stages involved in the production of __________.',
-
-    overview:
-      'Overall, the procedure follows a linear, ______-stage sequence that begins with __________ being __________ and ends with __________ being __________. During these stages, __________ is/are __________ before __________ is/are __________.',
-
-    body1:
-      'In the initial stages, __________. __________ is/are __________, where __________. Once __________ has/have been __________, __________ before being __________.',
-
-    body2:
-      'The remaining stages deal with __________. __________ and subsequently __________. After this stage has been completed, __________ before __________, completing the process.'
-
-  },
-
-
-  life:{
-
-    intro:
-      'The diagram illustrates the different stages in the life cycle of __________.',
-
-    overview:
-      'Overall, the life cycle consists of ______ main stages, beginning with __________ and progressing through different stages of development before __________ reaches maturity and produces __________, beginning a new cycle.',
-
-    body1:
-      'In the initial stages of the cycle, __________ develops into __________. As it grows, __________ before becoming __________.',
-
-    body2:
-      'In the later stages of the cycle, __________ develops into __________ before reaching __________. At this point, __________ produces/gives rise to __________, which marks the beginning of a new cycle.'
-
-  },
-
-
-  cyclical:{
-
-    intro:
-      'The diagram illustrates the stages involved in __________.',
-
-    overview:
-      'Overall, the procedure follows a cyclical sequence that begins with __________ and progresses through __________ before returning to __________.',
-
-    body1:
-      'In the initial stages, __________. Following this, __________. Once __________, __________.',
-
-    body2:
-      'In the later stages, __________. Following this, __________ before returning to __________.'
-
-  }
-
-};
-
-
-function template(i){
-
-  const l=
-    TPL[
-      processKind()
-    ]
-    ||
-    TPL.linear;
-
-
-  return({
-
-    1:l.intro,
-
-    2:l.overview,
-
-    3:l.body1,
-
-    4:l.body2
-
-  })[i]
-  ||
-  '';
-
-}
-
-
-function templateCard(i){
-
-  if(
-    i<1
-    ||
-    i>4
-  ){
-
-    return '';
-
-  }
-
-
-  const open=
-    state.templateOpen[i]
-    !==
-    false;
-
-
-  return`
-
-<div class="template-card">
-
-  <div class="template-head">
-
-    <div>
-
-      <span class="template-badge">
-        TEMPLATE HỖ TRỢ
-      </span>
-
-      <b>
-        ${
-          [
-            '',
-            'Introduction',
-            'Overview',
-            'Body 1',
-            'Body 2'
-          ][i]
-        }
-      </b>
-
-    </div>
-
-    <button
-      type="button"
-      class="template-toggle"
-      id="templateToggle"
-    >
-      ${
-        open
-        ?
-        'Ẩn template'
-        :
-        'Xem template'
-      }
-    </button>
-
-  </div>
-
-  <div
-    class="template-body"
-    id="templateBody"
-    ${
-      open
-      ?
-      ''
-      :
-      'hidden'
-    }
-  >
-
-    <div class="template-text">
-      ${esc(
-        template(i)
-      )}
-    </div>
-
-    <div class="template-note">
-      Em có thể dùng khung này nhưng không cần chép nguyên văn.
-    </div>
-
-  </div>
-
-</div>
-
-  `;
-
-}
-
-
-function independentCard(){
-
-  return`
-
-<div class="independent-card">
-
-  <b>
-    ✍️ Bước tự viết — không còn template
-  </b>
-
-  <p>
-    Ở Bước 6, hãy nhìn sơ đồ và tự viết lại toàn bộ bài gồm
-    Introduction, Overview, Body 1 và Body 2.
-  </p>
-
-</div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   STUDENT PLAN
-========================================================= */
-
-function plan(step){
-
-  if(
-    step!==3
-    &&
-    step!==4
-  ){
-
-    return null;
-
-  }
-
-
-  const r=
-    parseRange(
-      step===3
-      ?
-      state.drafts.analysis.body1
-      :
-      state.drafts.analysis.body2
-    );
-
-
-  const total=
-    stageList().length;
-
-
-  if(
-    !r.valid
-    ||
-    r.start<1
-    ||
-    r.end>total
-  ){
-
-    return null;
-
-  }
-
-
-  return{
-
-    ...r,
-
-    label:
-      `stage ${r.start}–${r.end}`,
-
-    stages:
-      Array.from(
-        {
-          length:
-            r.end-r.start+1
-        },
-        (_,i)=>
-          r.start+i
-      )
-
-  };
-
-}
-
-
-function planCoverage(
-  text,
-  p
-){
-
-  if(!p){
-
-    return{
-      ratio:0,
-      covered:0,
-      total:0,
-      missing:[]
-    };
-
-  }
-
-
-  const rows=
-    p.stages.map(
-      n=>({
-        n,
-        ok:
-          stagePos(
-            text,
-            stageList()[n-1]
-          )>=0
-      })
-    );
-
-
-  return{
-
-    ratio:
-      rows.filter(
-        x=>x.ok
-      ).length
-      /
-      rows.length,
-
-    covered:
-      rows.filter(
-        x=>x.ok
-      ).length,
-
-    total:
-      rows.length,
-
-    missing:
-      rows.filter(
-        x=>!x.ok
-      )
-      .map(
-        x=>x.n
-      )
-
-  };
-
-}
-
-
-function outsideStages(
-  text,
-  p
-){
-
-  if(!p){
-
-    return[];
-
-  }
-
-
-  return stageList()
-
-    .map(
-      (
-        s,
-        i
-      )=>({
-        n:i+1,
-        p:
-          stagePos(
-            text,
-            s
-          )
-      })
-    )
-
-    .filter(
-      x=>
-        x.p>=0
-        &&
-        !p.stages.includes(
-          x.n
-        )
-    )
-
-    .map(
-      x=>x.n
-    );
-
-}
-
-
-function detailText(
-  text,
-  p
-){
-
-  const sentences=
-    String(text||'')
-
-    .replace(
-      /\s+/g,
-      ' '
-    )
-
-    .trim()
-
-    .split(
-      /(?<=[.!?])\s+/
-    )
-
-    .filter(Boolean);
-
-
-  if(
-    !p
-    ||
-    sentences.length<2
-  ){
-
-    return String(text||'');
-
-  }
-
-
-  const topic=
-    /\b(?:initial stages?|remaining stages?|later stages?|these stages?|the process|the procedure)\b/i
-    .test(
-      sentences[0]
-    )
-
-    ||
-
-    /\b(?:consist(?:s)? of|deal(?:s)? with|involv(?:e|es)|followed by|include(?:s)?)\b/i
-    .test(
-      sentences[0]
-    );
-
-
-  const first=
-    p.stages.filter(
-      n=>
-        stagePos(
-          sentences[0],
-          stageList()[n-1]
-        )>=0
-    )
-    .length;
-
-
-  const rest=
-    sentences
-    .slice(1)
-    .join(' ');
-
-
-  const restN=
-    p.stages.filter(
-      n=>
-        stagePos(
-          rest,
-          stageList()[n-1]
-        )>=0
-    )
-    .length;
-
-
-  return(
-    (
-      topic
-      &&
-      restN>=2
-    )
-
-    ||
-
-    (
-      first>=2
-      &&
-      restN>=2
-    )
-  )
-  ?
-  rest
-  :
-  String(text||'');
-
-}
-
-
-function sequencePlan(
-  text,
-  p
-){
-
-  if(!p){
-
-    return{
-      ok:true,
-      issues:[]
-    };
-
-  }
-
-
-  const s=
-    detailText(
-      text,
-      p
-    );
-
-
-  const found=
-    p.stages
-
-    .map(
-      n=>({
-        n,
-        pos:
-          stagePos(
-            s,
-            stageList()[n-1]
-          )
-      })
-    )
-
-    .filter(
-      x=>x.pos>=0
-    )
-
-    .sort(
-      (a,b)=>
-        a.pos-b.pos
-    );
-
-
-  const issues=[];
-
-
-  for(
-    let i=1;
-    i<found.length;
-    i++
-  ){
-
-    if(
-      found[i].n
-      <
-      found[i-1].n
-    ){
-
-      issues.push(
-        `Stage ${found[i].n} đang được trình bày trước stage ${found[i-1].n}.`
-      );
-
-    }
-
-  }
-
-
-  return{
-    ok:
-      !issues.length,
-    issues
-  };
-
-}
-
-
-function dynamicRef(step){
-
-  const p=
-    plan(step);
-
-
-  if(!p){
-
-    return null;
-
-  }
-
-
-  if(
-    ID==='01'
-    &&
-    step===3
-    &&
-    p.start===1
-    &&
-    p.end===3
-  ){
-
-    return BRICKS_BODY1_MODEL;
-
-  }
-
-
-  return p.stages
-
-    .map(
-      n=>
-        stageList()[n-1]
-        ?.ref
-    )
-
-    .filter(Boolean)
-
-    .join(' ');
-
-}
-
-
-/* =========================================================
-   STEP 1
-========================================================= */
-
-function assessAnalysis(){
-
-  const a=
-    state.drafts.analysis;
-
-
-  const total=
-    stageList().length;
-
-
-  const typeOK=
-    containsAny(
-      a.type,
-      task.analysis?.type
-      ||
-      [
-        task.type
-      ]
-    );
-
-
-  const count=
-    numberValue(
-      a.stages
-    );
-
-
-  const stageOK=
-    count
-    ===
-    Number(
-      task.stages
-      ||
-      total
-    );
-
-
-  const firstOK=
-    stagePos(
-      a.first,
-      stageList()[0]
-    )>=0
-
-    ||
-
-    containsAny(
-      a.first,
-      task.analysis?.first
-      ||
-      []
-    );
-
-
-  const lastOK=
-    stagePos(
-      a.last,
-      stageList()[total-1]
-    )>=0
-
-    ||
-
-    containsAny(
-      a.last,
-      task.analysis?.last
-      ||
-      []
-    );
-
-
-  const featureHits=
-    stageHits(
-      a.features
-    )
-    .filter(Boolean)
-    .length;
-
-
-  const featLang=
-    seriousLanguage(
-      a.features
-    );
-
-
-  const featuresOK=
-    featureHits
-    >=
-    Math.min(
-      3,
-      total
-    )
-
-    &&
-
-    !featLang.length;
-
-
-  const b1=
-    parseRange(
-      a.body1
-    );
-
-
-  const b2=
-    parseRange(
-      a.body2
-    );
-
-
-  const body1OK=
-    b1.valid
-    &&
-    b1.start>=1
-    &&
-    b1.end<=total;
-
-
-  const body2OK=
-    b2.valid
-    &&
-    b2.start>=1
-    &&
-    b2.end<=total
-    &&
-    body1OK
-    &&
-    b1.end<b2.start;
-
-
-  return{
-
-
-    type:{
-
-      ok:
-        typeOK,
-
-      hint:
-        typeOK
-        ?
-        'Đúng dạng process.'
-        :
-        'Hãy quan sát xem quá trình đi theo một chiều hay tạo thành vòng lặp.'
-
-    },
-
-
-    stages:{
-
-      ok:
-        stageOK,
-
-      hint:
-        stageOK
-        ?
-        'Đúng số main stages.'
-        :
-        'Chưa đúng. Hãy quan sát và đếm lại các main stages.'
-
-    },
-
-
-    first:{
-
-      ok:
-        firstOK
-        &&
-        !seriousLanguage(
-          a.first,
-          {
-            note:true
-          }
-        ).length,
-
-      hint:
-        firstOK
-        ?
-        'Đúng công đoạn bắt đầu. Ở Bước 1 không bắt buộc viết hoa/dấu chấm.'
-        :
-        'Chưa đúng công đoạn bắt đầu.'
-
-    },
-
-
-    last:{
-
-      ok:
-        lastOK
-        &&
-        !seriousLanguage(
-          a.last,
-          {
-            note:true
-          }
-        ).length,
-
-      hint:
-        lastOK
-        ?
-        'Đúng công đoạn cuối. Ở Bước 1 không bắt buộc viết hoa/dấu chấm.'
-        :
-        'Chưa đúng công đoạn cuối.'
-
-    },
-
-
-    features:{
-
-      ok:
-        featuresOK,
-
-      hint:
-        featuresOK
-        ?
-        'Đạt. Em đã nêu được các công đoạn/đặc điểm nổi bật.'
-        :
-        featLang[0]
-        ||
-        'Nên nêu ít nhất khoảng 3 công đoạn/đặc điểm nổi bật.'
-
-    },
-
-
-    body1:{
-
-      ok:
-        body1OK,
-
-      hint:
-        body1OK
-        ?
-        'Đạt. Đây là phạm vi stage hợp lệ cho Body 1.'
-        :
-        'Chưa hợp lý. Hãy nhập phạm vi stage em muốn dùng cho Body 1.'
-
-    },
-
-
-    body2:{
-
-      ok:
-        body2OK,
-
-      hint:
-        body2OK
-        ?
-        'Đạt. Body 2 tiếp nối Body 1 và không chồng stage.'
-        :
-        'Body 2 cần tiếp nối Body 1 và không chồng stage.'
-
-    }
-
-
-  };
-
-}
-
 
 /* =========================================================
    GRADING
-========================================================= */
+   ========================================================= */
 
 function gradeIntro(text){
 
   const wc=
-    words(text);
+    wordCount(text);
 
-
-  const t=
+  const topic=
     topicCheck(text);
 
-
-  const lang=
-    seriousLanguage(text);
-
+  const language=
+    languageIssues(text);
 
   const framing=
     /\b(?:diagram|figure|illustration)\b/i
     .test(text);
 
-
   const verb=
     /\b(?:illustrates?|shows?|depicts?|presents?|demonstrates?)\b/i
     .test(text);
-
 
   const process=
     /\b(?:process|stages|production|manufactur|recycl|life cycle)\w*/i
     .test(text);
 
+  const b=[
+    {
+      label:'Đúng đối tượng',
+      score:
+        topic.ok
+        &&
+        !topic.wrong.length
+        ?
+        35
+        :
+        0,
+      max:35
+    },
 
-  const pTopic=
-    t.ok
-    &&
-    !t.wrong.length
-    ?
-    40
-    :
-    0;
+    {
+      label:'Dạng sơ đồ + động từ mô tả',
+      score:
+        (
+          framing
+          ?
+          10
+          :
+          0
+        )
+        +
+        (
+          verb
+          ?
+          10
+          :
+          0
+        ),
+      max:20
+    },
 
+    {
+      label:'Thể hiện process',
+      score:
+        process
+        ?
+        15
+        :
+        0,
+      max:15
+    },
 
-  const pFrame=
-    framing
-    ?
-    10
-    :
-    0;
+    {
+      label:'Độ dài',
+      score:
+        wc>=8
+        ?
+        10
+        :
+        Math.round(
+          Math.min(
+            1,
+            wc/8
+          )
+          *
+          10
+        ),
+      max:10,
+      note:
+        `${wc} từ`
+    },
 
-
-  const pVerb=
-    verb
-    ?
-    10
-    :
-    0;
-
-
-  const pProcess=
-    process
-    ?
-    10
-    :
-    0;
-
-
-  const pLength=
-    wc>=8
-    ?
-    10
-    :
-    Math.round(
-      wc/8*10
-    );
-
-
-  const pGrammar=
-    Math.max(
-      0,
-      20-lang.length*7
-    );
-
+    {
+      label:'Ngữ pháp & chính tả',
+      score:
+        Math.max(
+          0,
+          20-language.length*7
+        ),
+      max:20,
+      note:
+        language.length
+        ?
+        `${language.length} lỗi`
+        :
+        'Ổn'
+    }
+  ];
 
   let score=
-    pTopic
-    +
-    pFrame
-    +
-    pVerb
-    +
-    pProcess
-    +
-    pLength
-    +
-    pGrammar;
+    b.reduce(
+      (
+        s,
+        x
+      )=>
+        s+x.score,
+      0
+    );
 
+  if(
+    !topic.ok
+    ||
+    topic.wrong.length
+  ){
+
+    score=
+      Math.min(
+        score,
+        49
+      );
+
+  }
 
   const issues=[];
 
-
   if(
-    !t.ok
+    !topic.ok
     ||
-    t.wrong.length
+    topic.wrong.length
   ){
 
     issues.push(
-      `Đối tượng chính phải là ${t.label}.`
+      `Đối tượng chính phải là ${topic.label}.`
     );
 
   }
 
-
-  if(
-    !framing
-  ){
+  if(!framing){
 
     issues.push(
       'Chưa thể hiện rõ đây là diagram/figure.'
@@ -3026,10 +2750,7 @@ function gradeIntro(text){
 
   }
 
-
-  if(
-    !verb
-  ){
+  if(!verb){
 
     issues.push(
       'Nên dùng illustrates/shows/depicts.'
@@ -3037,10 +2758,7 @@ function gradeIntro(text){
 
   }
 
-
-  if(
-    !process
-  ){
+  if(!process){
 
     issues.push(
       'Chưa thể hiện rõ process/life cycle.'
@@ -3048,8 +2766,7 @@ function gradeIntro(text){
 
   }
 
-
-  lang.forEach(
+  language.forEach(
     x=>
       issues.push(
         'Ngữ pháp/chính tả: '
@@ -3058,315 +2775,173 @@ function gradeIntro(text){
       )
   );
 
-
   return{
-
-    total:
-      Math.min(
-        100,
-        score
-      ),
+    total:score,
 
     completed:
-      t.ok
+      score>=85
       &&
-      !t.wrong.length
-      &&
-      framing
-      &&
-      verb
-      &&
-      process
-      &&
-      wc>=8
-      &&
-      !lang.length,
+      issues.length===0,
 
     issues,
 
-    breakdown:[
-
-      {
-        label:'Đúng đối tượng',
-        score:pTopic,
-        max:40
-      },
-
-      {
-        label:'Dạng + động từ mô tả',
-        score:
-          pFrame+pVerb,
-        max:20
-      },
-
-      {
-        label:'Thể hiện process',
-        score:pProcess,
-        max:10
-      },
-
-      {
-        label:'Độ dài',
-        score:pLength,
-        max:10,
-        note:
-          `${wc} từ`
-      },
-
-      {
-        label:'Ngữ pháp & chính tả',
-        score:pGrammar,
-        max:20
-      }
-
-    ]
-
+    breakdown:b
   };
 
 }
 
-
 function gradeOverview(text){
 
   const wc=
-    words(text);
+    wordCount(text);
 
-
-  const t=
-    topicCheck(text);
-
-
-  const lang=
-    seriousLanguage(text);
-
+  const language=
+    languageIssues(text);
 
   const facts=
     factualIssues(text);
 
+  const topic=
+    topicCheck(text);
 
   const marker=
     /\boverall\b|\bin general\b|\bgenerally\b/i
     .test(text);
 
-
   const first=
-    stagePos(
+    stagePosition(
       text,
-      stageList()[0]
+      model()[0]
     )>=0;
-
 
   const last=
-    stagePos(
+    stagePosition(
       text,
-      stageList().at(-1)
+      model()[
+        model().length-1
+      ]
     )>=0;
-
-
-  const claim=
-    text.match(
-      /\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|\d+)\s*(?:main\s+)?stages?\b/i
-    );
-
-
-  const countOK=
-    !claim
-    ||
-    numberValue(
-      claim[1]
-    )
-    ===
-    Number(
-      task.stages
-      ||
-      stageList().length
-    );
-
 
   const hits=
     stageHits(text)
     .filter(Boolean)
     .length;
 
-
   const ratio=
-    hits
-    /
-    stageList().length;
-
-
-  const bad=
-    /\bbegins?\s+with\b[^.!?]{0,180}\bto\s+ends?\s+with\b/i
-    .test(text);
-
-
-  const issues=[];
-
-
-  if(
-    !marker
-  ){
-
-    issues.push(
-      'Chưa có dấu hiệu mở Overview rõ ràng.'
-    );
-
-  }
-
-
-  if(
-    !first
-  ){
-
-    issues.push(
-      'Chưa thể hiện rõ điểm bắt đầu.'
-    );
-
-  }
-
-
-  if(
-    !last
-  ){
-
-    issues.push(
-      'Chưa thể hiện rõ điểm kết thúc.'
-    );
-
-  }
-
-
-  if(
-    !countOK
-  ){
-
-    issues.push(
-      'Số giai đoạn nêu trong Overview chưa đúng.'
-    );
-
-  }
-
-
-  if(
-    ratio<.35
-  ){
-
-    issues.push(
-      'Overview chưa khái quát đủ đặc điểm chính.'
-    );
-
-  }
-
-
-  lang.forEach(
-    x=>
-      issues.push(
-        'Ngữ pháp/chính tả: '
-        +
-        x
-      )
-  );
-
-
-  facts.forEach(
-    x=>
-      issues.push(
-        'Nội dung: '
-        +
-        x
-      )
-  );
-
-
-  const pTopic=
-    t.wrong.length
+    model().length
     ?
-    0
-    :
-    10;
-
-
-  const pMarker=
-    marker
-    ?
-    10
+    hits/model().length
     :
     0;
 
+  const b=[
+    {
+      label:'Chủ đề',
+      score:
+        topic.wrong.length
+        ?
+        0
+        :
+        10,
+      max:10
+    },
 
-  const pEndpoints=
-    (
-      first
-      ?
-      15
-      :
-      0
-    )
-    +
-    (
-      last
-      ?
-      15
-      :
-      0
-    );
+    {
+      label:'Dấu hiệu Overview',
+      score:
+        marker
+        ?
+        10
+        :
+        0,
+      max:10
+    },
 
+    {
+      label:'Điểm đầu + cuối',
+      score:
+        (
+          first
+          ?
+          15
+          :
+          0
+        )
+        +
+        (
+          last
+          ?
+          15
+          :
+          0
+        ),
+      max:30
+    },
 
-  const pCount=
-    countOK
-    ?
-    10
-    :
-    0;
+    {
+      label:'Khái quát đặc điểm chính',
+      score:
+        Math.round(
+          Math.min(
+            1,
+            ratio/.55
+          )
+          *
+          20
+        ),
+      max:20,
+      note:
+        `${Math.round(ratio*100)}%`
+    },
 
+    {
+      label:'Độ dài',
+      score:
+        wc>=20
+        ?
+        10
+        :
+        Math.round(
+          Math.min(
+            1,
+            wc/20
+          )
+          *
+          10
+        ),
+      max:10,
+      note:
+        `${wc} từ`
+    },
 
-  const pSummary=
-    Math.round(
-      Math.min(
-        1,
-        ratio/.55
-      )
-      *
-      15
-    );
-
-
-  const pLength=
-    wc>=20
-    ?
-    5
-    :
-    Math.round(
-      wc/20*5
-    );
-
-
-  const pGrammar=
-    Math.max(
-      0,
-      20-lang.length*6
-    );
-
+    {
+      label:'Ngữ pháp & chính tả',
+      score:
+        Math.max(
+          0,
+          20-language.length*6
+        ),
+      max:20,
+      note:
+        language.length
+        ?
+        `${language.length} lỗi`
+        :
+        'Ổn'
+    }
+  ];
 
   let score=
-    pTopic
-    +
-    pMarker
-    +
-    pEndpoints
-    +
-    pCount
-    +
-    pSummary
-    +
-    pLength
-    +
-    pGrammar;
-
+    b.reduce(
+      (
+        s,
+        x
+      )=>
+        s+x.score,
+      0
+    );
 
   if(
-    bad
-    ||
     facts.length
   ){
 
@@ -3378,224 +2953,43 @@ function gradeOverview(text){
 
   }
 
-
-  return{
-
-    total:
-      Math.max(
-        0,
-        Math.min(
-          100,
-          score
-        )
-      ),
-
-    completed:
-      !t.wrong.length
-      &&
-      marker
-      &&
-      first
-      &&
-      last
-      &&
-      countOK
-      &&
-      ratio>=.35
-      &&
-      wc>=20
-      &&
-      !lang.length
-      &&
-      !facts.length
-      &&
-      !bad,
-
-    issues,
-
-    breakdown:[
-
-      {
-        label:'Chủ đề',
-        score:pTopic,
-        max:10
-      },
-
-      {
-        label:'Dấu hiệu Overview',
-        score:pMarker,
-        max:10
-      },
-
-      {
-        label:'Điểm đầu + cuối',
-        score:pEndpoints,
-        max:30
-      },
-
-      {
-        label:'Số giai đoạn',
-        score:pCount,
-        max:10
-      },
-
-      {
-        label:'Khái quát',
-        score:pSummary,
-        max:15,
-        note:
-          `${Math.round(ratio*100)}%`
-      },
-
-      {
-        label:'Ngữ pháp',
-        score:pGrammar,
-        max:20
-      }
-
-    ]
-
-  };
-
-}
-
-
-function gradeBody(
-  step,
-  text
-){
-
-  const p=
-    plan(step);
-
-
-  const wc=
-    words(text);
-
-
-  const cov=
-    planCoverage(
-      text,
-      p
-    );
-
-
-  const seq=
-    sequencePlan(
-      text,
-      p
-    );
-
-
-  const outside=
-    outsideStages(
-      text,
-      p
-    );
-
-
-  const lang=
-    seriousLanguage(text);
-
-
-  const facts=
-    factualIssues(text);
-
-
-  const cfg=
-    task[
-      key(step)
-    ]
-    ||
-    {};
-
-
-  const min=
-    Number(
-      cfg.minWords
-    )
-    ||
-    40;
-
-
-  const connector=
-    !cfg.sequence?.length
-    ||
-    containsAny(
-      text,
-      cfg.sequence
-    );
-
-
   const issues=[];
 
-
-  if(!p){
+  if(!marker){
 
     issues.push(
-      'Hệ thống chưa đọc được phạm vi Body đã chọn ở Bước 1.'
+      'Chưa có dấu hiệu mở Overview rõ ràng.'
     );
 
   }
 
+  if(!first){
+
+    issues.push(
+      'Chưa thể hiện rõ điểm bắt đầu.'
+    );
+
+  }
+
+  if(!last){
+
+    issues.push(
+      'Chưa thể hiện rõ điểm kết thúc.'
+    );
+
+  }
 
   if(
-    p
-    &&
-    cov.missing.length
+    ratio<.35
   ){
 
     issues.push(
-      `Theo cách chia em đã chọn (${p.label}), còn thiếu hoặc chưa rõ stage: ${cov.missing.join(', ')}.`
+      'Overview chưa khái quát đủ đặc điểm chính.'
     );
 
   }
 
-
-  if(
-    outside.length>=2
-  ){
-
-    issues.push(
-      `Đoạn này đang triển khai khá nhiều stage ngoài phạm vi ${p?.label}: ${outside.join(', ')}.`
-    );
-
-  }
-
-
-  seq.issues.forEach(
-    x=>
-      issues.push(
-        'Thứ tự stage: '
-        +
-        x
-      )
-  );
-
-
-  if(
-    wc<min
-  ){
-
-    issues.push(
-      `Đoạn có ${wc} từ; mục tiêu khoảng ${min}+ từ.`
-    );
-
-  }
-
-
-  if(
-    !connector
-  ){
-
-    issues.push(
-      'Nên dùng từ/cụm nối để thể hiện trình tự rõ hơn.'
-    );
-
-  }
-
-
-  lang.forEach(
+  language.forEach(
     x=>
       issues.push(
         'Ngữ pháp/chính tả: '
@@ -3604,23 +2998,76 @@ function gradeBody(
       )
   );
 
-
   facts.forEach(
     x=>
       issues.push(
-        'Nội dung/số liệu: '
+        'Nội dung: '
         +
         x
       )
   );
 
+  return{
+    total:score,
+
+    completed:
+      score>=85
+      &&
+      issues.length===0,
+
+    issues,
+
+    breakdown:b
+  };
+
+}
+
+function gradeBody(
+  step,
+  text
+){
+
+  const p=
+    bodyPlan(step);
+
+  const wc=
+    wordCount(text);
+
+  const coverage=
+    planCoverage(
+      text,
+      p
+    );
+
+  const sequence=
+    sequenceForPlan(
+      text,
+      p
+    );
+
+  const outside=
+    outsidePlanStages(
+      text,
+      p
+    );
+
+  const language=
+    languageIssues(text);
+
+  const facts=
+    factualIssues(text);
+
+  const precision=
+    precisionIssues(text);
+
+  const minWords=40;
 
   const content=
     Math.round(
       (
         p
         ?
-        cov.ratio
+        coverage.ratio
         :
         0
       )
@@ -3628,70 +3075,72 @@ function gradeBody(
       55
     );
 
-
   const length=
-    wc>=min
+    wc>=minWords
     ?
     12
     :
     Math.round(
       Math.min(
         1,
-        wc/min
+        wc/minWords
       )
       *
       12
     );
 
-
-  const sequence=
-    connector
-    &&
-    seq.ok
+  const order=
+    sequence.ok
     ?
-    8
+    10
     :
     4;
-
 
   const grammar=
     Math.max(
       0,
-      10-lang.length*4
+      13-language.length*5
     );
 
-
-  const planPoints=
+  const planScore=
     !p
     ?
     0
     :
     outside.length<=1
     ?
-    5
+    10
     :
     Math.max(
       0,
-      5-(outside.length-1)*2
+      10-(outside.length-1)*3
     );
-
-
-  const templatePoints=10;
-
 
   let score=
     content
     +
     length
     +
-    sequence
+    order
     +
     grammar
     +
-    planPoints
-    +
-    templatePoints;
+    planScore;
 
+  score-=
+    Math.min(
+      2,
+      precision.length
+    );
+
+  score=
+    Math.max(
+      0,
+      Math.min(
+        100,
+        score
+      )
+    );
 
   if(
     facts.length
@@ -3705,9 +3154,8 @@ function gradeBody(
 
   }
 
-
   if(
-    lang.length>=2
+    language.length>=3
   ){
 
     score=
@@ -3718,11 +3166,301 @@ function gradeBody(
 
   }
 
+  const issues=[];
+
+  if(!p){
+
+    issues.push(
+      'Hệ thống chưa đọc được phạm vi Body đã chọn ở Bước 1.'
+    );
+
+  }
 
   if(
     p
     &&
-    cov.ratio<.6
+    coverage.missing.length
+  ){
+
+    issues.push(
+      `Theo cách chia em đã chọn (${p.label}), còn thiếu hoặc chưa rõ stage: ${coverage.missing.join(', ')}.`
+    );
+
+  }
+
+  if(
+    outside.length>=2
+  ){
+
+    issues.push(
+      `Đoạn này đang triển khai khá nhiều stage ngoài phạm vi ${p?.label}: ${outside.join(', ')}.`
+    );
+
+  }
+
+  sequence.issues.forEach(
+    x=>
+      issues.push(
+        'Thứ tự stage: '
+        +
+        x
+      )
+  );
+
+  language.forEach(
+    x=>
+      issues.push(
+        'Ngữ pháp/chính tả: '
+        +
+        x
+      )
+  );
+
+  facts.forEach(
+    x=>
+      issues.push(
+        'Nội dung/số liệu: '
+        +
+        x
+      )
+  );
+
+  precision.forEach(
+    x=>
+      issues.push(
+        'Gợi ý bám sát sơ đồ: '
+        +
+        x
+      )
+  );
+
+  const breakdown=[
+    {
+      label:
+        p
+        ?
+        `Nội dung theo ${p.label}`
+        :
+        'Nội dung',
+      score:content,
+      max:55,
+      note:
+        p
+        ?
+        `${coverage.covered}/${coverage.total} stage`
+        :
+        ''
+    },
+
+    {
+      label:'Độ dài',
+      score:length,
+      max:12,
+      note:
+        `${wc} từ`
+    },
+
+    {
+      label:'Trình tự',
+      score:order,
+      max:10,
+      note:
+        sequence.ok
+        ?
+        'Đúng'
+        :
+        'Cần sửa'
+    },
+
+    {
+      label:'Ngữ pháp & chính tả',
+      score:grammar,
+      max:13,
+      note:
+        language.length
+        ?
+        `${language.length} lỗi`
+        :
+        'Ổn'
+    },
+
+    {
+      label:'Bám cách chia Bước 1',
+      score:planScore,
+      max:10,
+      note:
+        p
+        ?
+        p.label
+        :
+        'Chưa đọc được plan'
+    }
+  ];
+
+  return{
+    total:score,
+
+    completed:
+      score>=85
+      &&
+      language.length===0
+      &&
+      facts.length===0
+      &&
+      sequence.ok
+      &&
+      !!p
+      &&
+      coverage.ratio>=.75,
+
+    issues,
+
+    breakdown,
+
+    reference:
+      dynamicReference(step)
+  };
+
+}
+
+function gradeFull(text){
+
+  const wc=
+    wordCount(text);
+
+  const paras=
+    splitParagraphs(text);
+
+  const topic=
+    topicCheck(text);
+
+  const language=
+    languageIssues(text);
+
+  const facts=
+    factualIssues(text);
+
+  const precision=
+    precisionIssues(text);
+
+  const seq=
+    fullEssaySequence(text);
+
+  const hits=
+    stageHits(text);
+
+  const hitCount=
+    hits.filter(Boolean)
+    .length;
+
+  const ratio=
+    hits.length
+    ?
+    hitCount/hits.length
+    :
+    0;
+
+  const overview=
+    paras.find(
+      p=>
+        /\boverall\b|\bin general\b|\bgenerally\b/i
+        .test(p)
+    );
+
+  const content=
+    Math.round(
+      ratio*55
+    );
+
+  const length=
+    wc>=150
+    ?
+    20
+    :
+    Math.round(
+      Math.min(
+        1,
+        wc/150
+      )
+      *
+      20
+    );
+
+  const overviewPts=
+    overview
+    ?
+    10
+    :
+    0;
+
+  const paragraphsPts=
+    paras.length>=4
+    ?
+    8
+    :
+    Math.round(
+      Math.min(
+        1,
+        paras.length/4
+      )
+      *
+      8
+    );
+
+  const grammar=
+    Math.max(
+      0,
+      7-language.length*3
+    );
+
+  let score=
+    content
+    +
+    length
+    +
+    overviewPts
+    +
+    paragraphsPts
+    +
+    grammar;
+
+  score-=
+    Math.min(
+      3,
+      precision.length
+    );
+
+  score-=
+    Math.min(
+      12,
+      seq.issues.length*6
+    );
+
+  score=
+    Math.max(
+      0,
+      Math.min(
+        100,
+        score
+      )
+    );
+
+  if(
+    !topic.ok
+    ||
+    topic.wrong.length
+  ){
+
+    score=
+      Math.min(
+        score,
+        49
+      );
+
+  }
+
+  if(
+    facts.length
   ){
 
     score=
@@ -3733,192 +3471,43 @@ function gradeBody(
 
   }
 
-
-  return{
-
-    total:
-      Math.max(
-        0,
-        Math.min(
-          100,
-          score
-        )
-      ),
-
-    completed:
-      !!p
-      &&
-      cov.ratio>=.75
-      &&
-      wc>=Math.round(
-        min*.8
-      )
-      &&
-      connector
-      &&
-      seq.ok
-      &&
-      outside.length<=1
-      &&
-      !lang.length
-      &&
-      !facts.length,
-
-    issues,
-
-    reference:
-      dynamicRef(step),
-
-    breakdown:[
-
-      {
-        label:
-          p
-          ?
-          `Nội dung theo ${p.label}`
-          :
-          'Nội dung',
-
-        score:content,
-
-        max:55,
-
-        note:
-          p
-          ?
-          `${cov.covered}/${cov.total} stage`
-          :
-          ''
-      },
-
-      {
-        label:'Độ dài',
-        score:length,
-        max:12,
-        note:`${wc} từ`
-      },
-
-      {
-        label:'Trình tự',
-        score:sequence,
-        max:8,
-        note:
-          seq.ok
-          ?
-          'Đúng'
-          :
-          'Cần sửa'
-      },
-
-      {
-        label:'Ngữ pháp & chính tả',
-        score:grammar,
-        max:10,
-        note:
-          lang.length
-          ?
-          `${lang.length} lỗi`
-          :
-          'Ổn'
-      },
-
-      {
-        label:'Bám cách chia Bước 1',
-        score:planPoints,
-        max:5,
-        note:
-          p
-          ?
-          `Phạm vi ${p.label}`
-          :
-          'Chưa đọc được plan'
-      },
-
-      {
-        label:'Vận dụng template',
-        score:templatePoints,
-        max:10,
-        note:
-          'Không yêu cầu chép nguyên văn'
-      }
-
-    ]
-
-  };
-
-}
-
-
-function gradeFull(text){
-
-  const wc=
-    words(text);
-
-
-  const ps=
-    paragraphs(text);
-
-
-  const t=
-    topicCheck(text);
-
-
-  const lang=
-    seriousLanguage(text);
-
-
-  const facts=
-    factualIssues(text);
-
-
-  const hits=
-    stageHits(text);
-
-
-  const ratio=
-    hits.filter(Boolean).length
-    /
-    hits.length;
-
-
-  const overview=
-    ps.find(
-      x=>
-        /\boverall\b|\bin general\b|\bgenerally\b/i
-        .test(x)
-    );
-
-
-  const issues=[];
-
-
   if(
-    !t.ok
-    ||
-    t.wrong.length
+    language.length>=4
   ){
 
-    issues.push(
-      `Đối tượng chính phải là ${t.label}.`
-    );
+    score=
+      Math.min(
+        score,
+        79
+      );
 
   }
 
+  const issues=[];
+
+  if(
+    !topic.ok
+    ||
+    topic.wrong.length
+  ){
+
+    issues.push(
+      `Đối tượng chính phải là ${topic.label}.`
+    );
+
+  }
 
   if(
     wc<150
   ){
 
     issues.push(
-      `Bài hiện có ${wc} từ; nên có ít nhất 150 từ.`
+      `Bài hiện có ${wc} từ; IELTS Writing Task 1 nên có ít nhất 150 từ.`
     );
 
   }
 
-
-  if(
-    !overview
-  ){
+  if(!overview){
 
     issues.push(
       'Chưa thấy Overview rõ ràng.'
@@ -3926,17 +3515,15 @@ function gradeFull(text){
 
   }
 
-
   if(
-    ps.length<4
+    paras.length<4
   ){
 
     issues.push(
-      `Hệ thống nhận ${ps.length} đoạn. Chỉ cần Enter 1 lần để sang đoạn mới.`
+      `Hệ thống đang nhận ${paras.length} đoạn. Chỉ cần Enter 1 lần để sang đoạn mới.`
     );
 
   }
-
 
   if(
     ratio<.72
@@ -3948,8 +3535,16 @@ function gradeFull(text){
 
   }
 
+  seq.issues.forEach(
+    x=>
+      issues.push(
+        'Thứ tự stage: '
+        +
+        x
+      )
+  );
 
-  lang.forEach(
+  language.forEach(
     x=>
       issues.push(
         'Ngữ pháp/chính tả: '
@@ -3957,7 +3552,6 @@ function gradeFull(text){
         x
       )
   );
-
 
   facts.forEach(
     x=>
@@ -3968,164 +3562,85 @@ function gradeFull(text){
       )
   );
 
+  precision.forEach(
+    x=>
+      issues.push(
+        'Gợi ý bám sát sơ đồ: '
+        +
+        x
+      )
+  );
 
-  const pContent=
-    Math.round(
-      ratio*55
-    );
+  const breakdown=[
+    {
+      label:'Nội dung & stages',
+      score:content,
+      max:55,
+      note:
+        `Nhận diện ${hitCount}/${hits.length} stage · Bao quát ${Math.round(ratio*100)}%`
+    },
 
+    {
+      label:'Độ dài',
+      score:length,
+      max:20,
+      note:
+        `${wc} từ`
+    },
 
-  const pLength=
-    wc>=150
-    ?
-    20
-    :
-    Math.round(
-      wc/150*20
-    );
+    {
+      label:'Overview',
+      score:overviewPts,
+      max:10,
+      note:
+        overview
+        ?
+        'Có'
+        :
+        'Thiếu'
+    },
 
+    {
+      label:'Cấu trúc đoạn',
+      score:paragraphsPts,
+      max:8,
+      note:
+        `${paras.length} đoạn`
+    },
 
-  const pOverview=
-    overview
-    ?
-    10
-    :
-    0;
-
-
-  const pParagraph=
-    ps.length>=4
-    ?
-    8
-    :
-    Math.round(
-      ps.length/4*8
-    );
-
-
-  const pGrammar=
-    Math.max(
-      0,
-      7-lang.length*3
-    );
-
-
-  let score=
-    pContent
-    +
-    pLength
-    +
-    pOverview
-    +
-    pParagraph
-    +
-    pGrammar;
-
-
-  if(
-    !t.ok
-    ||
-    t.wrong.length
-  ){
-
-    score=
-      Math.min(
-        score,
-        49
-      );
-
-  }
-
-
-  if(
-    facts.length
-    ||
-    lang.length>=2
-  ){
-
-    score=
-      Math.min(
-        score,
-        79
-      );
-
-  }
-
+    {
+      label:'Ngữ pháp & chính tả',
+      score:grammar,
+      max:7,
+      note:
+        language.length
+        ?
+        `${language.length} lỗi quan trọng`
+        :
+        'Ổn'
+    }
+  ];
 
   return{
-
-    total:
-      Math.max(
-        0,
-        Math.min(
-          100,
-          score
-        )
-      ),
+    total:score,
 
     completed:
-      t.ok
+      score>=85
       &&
-      !t.wrong.length
-      &&
-      wc>=150
-      &&
-      overview
-      &&
-      ps.length>=4
-      &&
-      ratio>=.72
-      &&
-      !lang.length
-      &&
-      !facts.length,
+      issues.filter(
+        x=>
+          !x.startsWith(
+            'Gợi ý bám sát'
+          )
+      )
+      .length===0,
 
     issues,
 
-    breakdown:[
-
-      {
-        label:'Nội dung & stages',
-        score:pContent,
-        max:55,
-        note:
-          `${Math.round(ratio*100)}%`
-      },
-
-      {
-        label:'Độ dài',
-        score:pLength,
-        max:20,
-        note:
-          `${wc} từ`
-      },
-
-      {
-        label:'Overview',
-        score:pOverview,
-        max:10
-      },
-
-      {
-        label:'Cấu trúc đoạn',
-        score:pParagraph,
-        max:8,
-        note:
-          `${ps.length} đoạn`
-      },
-
-      {
-        label:'Ngữ pháp & chính tả',
-        score:pGrammar,
-        max:7
-      }
-
-    ]
-
+    breakdown
   };
 
 }
-
 
 function grade(
   step,
@@ -4140,7 +3655,6 @@ function grade(
 
   }
 
-
   if(
     step===2
   ){
@@ -4148,7 +3662,6 @@ function grade(
     return gradeOverview(text);
 
   }
-
 
   if(
     step===3
@@ -4163,15 +3676,13 @@ function grade(
 
   }
 
-
   return gradeFull(text);
 
 }
 
-
 /* =========================================================
-   STYLE
-========================================================= */
+   UI CSS
+   ========================================================= */
 
 const CSS=`
 
@@ -4259,7 +3770,9 @@ button{
 .back{
   color:#fff;
   text-decoration:none;
-  border:1px solid #ffffff40;
+  border:
+    1px solid
+    #ffffff40;
   padding:7px 10px;
   border-radius:9px;
   font-size:11px;
@@ -4273,13 +3786,16 @@ button{
 .student{
   font-size:10px;
   background:#ffffff15;
-  border:1px solid #ffffff30;
+  border:
+    1px solid
+    #ffffff30;
   padding:7px 10px;
   border-radius:999px;
 }
 
 .page{
-  padding:16px 0 46px;
+  padding:
+    16px 0 46px;
 }
 
 .hero{
@@ -4297,7 +3813,8 @@ button{
 }
 
 .hero p{
-  margin:4px 0 0;
+  margin:
+    4px 0 0;
   color:var(--muted);
   font-size:11px;
 }
@@ -4335,7 +3852,8 @@ button{
 
 .layout{
   display:grid;
-  grid-template-columns:420px 1fr;
+  grid-template-columns:
+    420px 1fr;
   gap:12px;
   align-items:start;
 }
@@ -4351,7 +3869,9 @@ button{
 .steps,
 .main{
   background:#fff;
-  border:1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
   border-radius:17px;
   box-shadow:
     0 8px 24px
@@ -4388,7 +3908,9 @@ button{
 
 .imgwrap{
   position:relative;
-  border:1px solid #e4e7ef;
+  border:
+    1px solid
+    #e4e7ef;
   border-radius:12px;
   overflow:hidden;
 }
@@ -4402,7 +3924,9 @@ button{
   position:absolute;
   right:8px;
   bottom:8px;
-  border:1px solid #dddff0;
+  border:
+    1px solid
+    #dddff0;
   background:#fffffff0;
   color:#4f3d8b;
   border-radius:9px;
@@ -4416,7 +3940,9 @@ button{
   padding:11px;
   border-radius:11px;
   background:#f7f5ff;
-  border:1px solid #e3def9;
+  border:
+    1px solid
+    #e3def9;
   font-size:10.5px;
   line-height:1.5;
 }
@@ -4429,13 +3955,16 @@ button{
 
 .stepbtn{
   width:100%;
-  border:1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
   background:#fff;
   border-radius:11px;
   padding:9px;
   text-align:left;
   display:grid;
-  grid-template-columns:34px 1fr;
+  grid-template-columns:
+    34px 1fr;
   gap:9px;
   align-items:center;
 }
@@ -4502,20 +4031,24 @@ button{
 }
 
 .main h2{
-  margin:0 0 5px;
+  margin:
+    0 0 5px;
   color:#21164b;
   font-size:22px;
 }
 
 .sub{
-  margin:0 0 14px;
+  margin:
+    0 0 14px;
   color:var(--muted);
   font-size:10.8px;
 }
 
 .guide{
   padding:12px 13px;
-  border:1px solid #ded8f4;
+  border:
+    1px solid
+    #ded8f4;
   border-radius:12px;
   background:#fafaff;
   margin-bottom:12px;
@@ -4528,7 +4061,9 @@ button{
 }
 
 .template-card{
-  border:1px solid #d9d0ff;
+  border:
+    1px solid
+    #d9d0ff;
   border-radius:14px;
   background:#faf8ff;
   margin-bottom:14px;
@@ -4553,7 +4088,9 @@ button{
 }
 
 .template-toggle{
-  border:1px solid #d6cef5;
+  border:
+    1px solid
+    #d6cef5;
   background:#fff;
   color:#523b9f;
   border-radius:8px;
@@ -4563,12 +4100,15 @@ button{
 }
 
 .template-body{
-  padding:0 13px 13px;
+  padding:
+    0 13px 13px;
 }
 
 .template-text{
   padding:12px;
-  border:1px dashed #bdb0ef;
+  border:
+    1px dashed
+    #bdb0ef;
   background:#fff;
   border-radius:10px;
   color:#362768;
@@ -4586,24 +4126,25 @@ button{
 .independent-card{
   margin-bottom:14px;
   padding:13px;
-  border:1px solid #f0cf9c;
+  border:
+    1px solid
+    #f0cf9c;
   background:#fff9ef;
   border-radius:13px;
   font-size:10.5px;
 }
 
-.independent-card p{
-  margin:5px 0 0;
-}
-
 .formgrid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:
+    1fr 1fr;
   gap:11px;
 }
 
 .field{
-  border:1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
   border-radius:11px;
   padding:10px;
 }
@@ -4619,7 +4160,9 @@ button{
 .field select,
 .field textarea{
   width:100%;
-  border:1px solid #cfd4df;
+  border:
+    1px solid
+    #cfd4df;
   border-radius:8px;
   padding:9px;
   outline:none;
@@ -4647,13 +4190,17 @@ button{
 .inline-feedback.pass{
   color:#126b49;
   background:var(--goodbg);
-  border:1px solid #bde5ce;
+  border:
+    1px solid
+    #bde5ce;
 }
 
 .inline-feedback.fail{
   color:#9d3142;
   background:var(--badbg);
-  border:1px solid #efc8ce;
+  border:
+    1px solid
+    #efc8ce;
 }
 
 .inline-state{
@@ -4665,7 +4212,9 @@ button{
   width:100%;
   min-height:205px;
   resize:vertical;
-  border:1px solid #cbd2df;
+  border:
+    1px solid
+    #cbd2df;
   border-radius:12px;
   padding:13px;
   outline:none;
@@ -4678,20 +4227,24 @@ button{
 }
 
 .writehead{
-  margin:8px 0 7px;
+  margin:
+    8px 0 7px;
   font-size:10.5px;
   font-weight:900;
 }
 
 .actions{
   display:grid;
-  grid-template-columns:140px 1fr 140px;
+  grid-template-columns:
+    140px 1fr 140px;
   gap:8px;
   margin-top:11px;
 }
 
 .btn{
-  border:1px solid #dcdfe7;
+  border:
+    1px solid
+    #dcdfe7;
   background:#fff;
   color:#40345f;
   border-radius:10px;
@@ -4713,6 +4266,7 @@ button{
 
 .btn:disabled{
   opacity:.4;
+  cursor:not-allowed;
 }
 
 .feedback{
@@ -4726,7 +4280,9 @@ button{
 
 .scorebar{
   padding:12px 13px;
-  border:1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
   border-radius:12px;
 }
 
@@ -4763,7 +4319,9 @@ button{
 }
 
 .detail{
-  border:1px solid #eadfc3;
+  border:
+    1px solid
+    #eadfc3;
   background:var(--warnbg);
 }
 
@@ -4778,7 +4336,9 @@ button{
 }
 
 .reference{
-  border:1px solid #ded7fb;
+  border:
+    1px solid
+    #ded7fb;
   background:#f6f4ff;
 }
 
@@ -4794,14 +4354,19 @@ button{
 .finaldone{
   padding:20px;
   text-align:center;
-  border:1px solid #bde5ce;
+  border:
+    1px solid
+    #bde5ce;
   background:var(--goodbg);
   border-radius:14px;
   margin-top:10px;
 }
 
 dialog{
-  width:min(980px,96vw);
+  width:min(
+    980px,
+    96vw
+  );
   max-height:92vh;
   border:0;
   border-radius:15px;
@@ -4817,7 +4382,9 @@ dialog::backdrop{
   justify-content:space-between;
   align-items:center;
   padding:10px 12px;
-  border-bottom:1px solid var(--line);
+  border-bottom:
+    1px solid
+    var(--line);
 }
 
 .modalimg{
@@ -4838,7 +4405,10 @@ dialog::backdrop{
 
   .steps{
     grid-template-columns:
-      repeat(3,1fr);
+      repeat(
+        3,
+        1fr
+      );
   }
 
 }
@@ -4872,10 +4442,194 @@ dialog::backdrop{
 
 `;
 
+/* =========================================================
+   RENDER HELPERS
+   ========================================================= */
+
+function currentDraftKey(step){
+
+  return[
+    'analysis',
+    'intro',
+    'overview',
+    'body1',
+    'body2',
+    'full'
+  ][step];
+
+}
+
+function saveCurrentDraft(){
+
+  if(
+    state.current===0
+  ){
+
+    state.drafts.analysis={
+      type:
+        document.getElementById('aType')
+        ?.value
+        ||
+        '',
+
+      stages:
+        document.getElementById('aStages')
+        ?.value
+        ||
+        '',
+
+      first:
+        document.getElementById('aFirst')
+        ?.value
+        ||
+        '',
+
+      last:
+        document.getElementById('aLast')
+        ?.value
+        ||
+        '',
+
+      features:
+        document.getElementById('aFeatures')
+        ?.value
+        ||
+        '',
+
+      body1:
+        document.getElementById('aBody1')
+        ?.value
+        ||
+        '',
+
+      body2:
+        document.getElementById('aBody2')
+        ?.value
+        ||
+        ''
+    };
+
+  }else{
+
+    const box=
+      document.getElementById(
+        'writeBox'
+      );
+
+    if(box){
+
+      state.drafts[
+        currentDraftKey(
+          state.current
+        )
+      ]=
+        box.value;
+
+    }
+
+  }
+
+  saveState();
+
+}
+
+function templateCard(step){
+
+  if(
+    step<1
+    ||
+    step>4
+  ){
+
+    return '';
+
+  }
+
+  const open=
+    state.templateOpen[step]
+    !==
+    false;
+
+  return`
+
+<div class="template-card">
+
+  <div class="template-head">
+
+    <div>
+
+      <span class="template-badge">
+        TEMPLATE HỖ TRỢ
+      </span>
+
+      <b>
+        ${STEP_NAMES[step]}
+      </b>
+
+    </div>
+
+    <button
+      type="button"
+      class="template-toggle"
+      id="templateToggle"
+    >
+      ${
+        open
+        ?
+        'Ẩn template'
+        :
+        'Xem template'
+      }
+    </button>
+
+  </div>
+
+  <div
+    class="template-body"
+    id="templateBody"
+    ${
+      open
+      ?
+      ''
+      :
+      'hidden'
+    }
+  >
+
+    <div class="template-text">
+      ${esc(
+        templateFor(step)
+      )}
+    </div>
+
+    <div class="template-note">
+      Em có thể dùng khung này nhưng không cần chép nguyên văn.
+    </div>
+
+  </div>
+
+</div>
+
+  `;
+
+}
+
+function guide(step){
+
+  return[
+    '<b>Mục tiêu:</b> Nhận diện loại process, số giai đoạn, điểm đầu–cuối, đặc điểm nổi bật và tự chọn cách chia Body 1/Body 2 hợp lý.',
+    '<b>Mục tiêu:</b> Dùng template để paraphrase đề bài trong 1 câu.',
+    '<b>Mục tiêu:</b> Viết Overview gồm cấu trúc chung và đặc điểm nổi bật.',
+    '<b>Mục tiêu:</b> Viết Body 1 đúng các stage em đã chọn ở Bước 1.',
+    '<b>Mục tiêu:</b> Viết Body 2 đúng các stage em đã chọn ở Bước 1.',
+    '<b>Mục tiêu:</b> Tự viết toàn bộ bài, không dùng template.'
+  ][step];
+
+}
 
 /* =========================================================
-   UI
-========================================================= */
+   MOUNT
+   ========================================================= */
 
 function mount(){
 
@@ -4883,7 +4637,6 @@ function mount(){
     'beforeend',
     `<style>${CSS}</style>`
   );
-
 
   document.body.innerHTML=`
 
@@ -5001,14 +4754,12 @@ function mount(){
 
       </section>
 
-
       <section
         id="stepNav"
         class="steps"
       ></section>
 
     </aside>
-
 
     <section
       id="main"
@@ -5044,7 +4795,6 @@ function mount(){
 
   `;
 
-
   try{
 
     const s=
@@ -5055,7 +4805,6 @@ function mount(){
         ||
         'null'
       );
-
 
     if(
       s?.name
@@ -5081,7 +4830,6 @@ function mount(){
 
   }catch(e){}
 
-
   document.getElementById(
     'zoomBtn'
   )
@@ -5091,7 +4839,6 @@ function mount(){
         'imgDialog'
       )
       .showModal();
-
 
   document.getElementById(
     'closeDialog'
@@ -5105,18 +4852,19 @@ function mount(){
 
 }
 
+/* =========================================================
+   NAV / PROGRESS
+   ========================================================= */
 
 function renderNav(){
 
   const u=
-    unlock();
-
+    unlockedMax();
 
   const nav=
     document.getElementById(
       'stepNav'
     );
-
 
   nav.innerHTML=
     STEP_NAMES
@@ -5138,7 +4886,7 @@ function renderNav(){
       ''
     }
     ${
-      done(i)
+      isDone(i)
       ?
       'done'
       :
@@ -5174,7 +4922,7 @@ function renderNav(){
 
     <small>
       ${
-        done(i)
+        isDone(i)
         ?
         '✓ Hoàn thành'
         :
@@ -5195,30 +4943,30 @@ function renderNav(){
 
     .join('');
 
-
   nav
   .querySelectorAll(
     '[data-step]'
   )
   .forEach(
-    b=>{
+    btn=>{
 
-      b.onclick=
+      btn.onclick=
         ()=>{
 
           const i=
-            +b.dataset.step;
-
+            Number(
+              btn.dataset.step
+            );
 
           if(
-            i<=unlock()
+            i<=unlockedMax()
           ){
 
-            saveDraft();
+            saveCurrentDraft();
 
             state.current=i;
 
-            save();
+            saveState();
 
             render();
 
@@ -5231,19 +4979,16 @@ function renderNav(){
 
 }
 
-
 function renderProgress(){
 
   const c=
     state.completed.length;
-
 
   document.getElementById(
     'progressText'
   )
   .textContent=
     `${c}/6 bước hoàn thành`;
-
 
   document.getElementById(
     'progressBar'
@@ -5253,36 +4998,17 @@ function renderProgress(){
 
 }
 
+/* =========================================================
+   STEP 1 UI
+   ========================================================= */
 
-function guide(i){
-
-  return[
-
-    '<b>Mục tiêu:</b> Nhận diện loại process, số giai đoạn, điểm đầu–cuối, đặc điểm nổi bật và tự chọn cách chia Body 1/Body 2 hợp lý.',
-
-    '<b>Mục tiêu:</b> Dùng template để paraphrase đề bài trong 1 câu.',
-
-    '<b>Mục tiêu:</b> Viết Overview gồm cấu trúc chung và đặc điểm nổi bật.',
-
-    '<b>Mục tiêu:</b> Viết Body 1 đúng các stage em đã chọn ở Bước 1.',
-
-    '<b>Mục tiêu:</b> Viết Body 2 đúng các stage em đã chọn ở Bước 1.',
-
-    '<b>Mục tiêu:</b> Tự viết toàn bộ bài, không dùng template.'
-
-  ][i];
-
-}
-
-
-function setInline(
+function inlineFeedback(
   id,
   a
 ){
 
   const el=
     document.getElementById(id);
-
 
   const holder=
     el
@@ -5291,13 +5017,11 @@ function setInline(
       '.inline-feedback'
     );
 
-
   if(!holder){
 
     return;
 
   }
-
 
   holder.className=
     'inline-feedback show '
@@ -5309,7 +5033,6 @@ function setInline(
       :
       'fail'
     );
-
 
   holder.innerHTML=`
 
@@ -5331,24 +5054,15 @@ function setInline(
 
 }
 
-
-/* =========================================================
-   STEP 1 UI
-========================================================= */
-
 function renderAnalysis(){
 
   const d=
-    state.drafts.analysis
-    ||
-    {};
-
+    state.drafts.analysis;
 
   const main=
     document.getElementById(
       'main'
     );
-
 
   main.innerHTML=`
 
@@ -5536,7 +5250,7 @@ function renderAnalysis(){
     id="nextBtn"
     class="btn"
     ${
-      done(0)
+      isDone(0)
       ?
       ''
       :
@@ -5556,49 +5270,74 @@ function renderAnalysis(){
 
   `;
 
+  document.getElementById(
+    'aType'
+  ).value=
+    d.type
+    ||
+    '';
 
-  for(
-    const [id,k]
-    of
-    Object.entries({
+  document.getElementById(
+    'aStages'
+  ).value=
+    d.stages
+    ||
+    '';
 
-      aType:'type',
+  document.getElementById(
+    'aFirst'
+  ).value=
+    d.first
+    ||
+    '';
 
-      aStages:'stages',
+  document.getElementById(
+    'aLast'
+  ).value=
+    d.last
+    ||
+    '';
 
-      aFirst:'first',
+  document.getElementById(
+    'aFeatures'
+  ).value=
+    d.features
+    ||
+    '';
 
-      aLast:'last',
+  document.getElementById(
+    'aBody1'
+  ).value=
+    d.body1
+    ||
+    '';
 
-      aFeatures:'features',
-
-      aBody1:'body1',
-
-      aBody2:'body2'
-
-    })
-  ){
-
-    document.getElementById(id).value=
-      d[k]
-      ||
-      '';
-
-  }
-
+  document.getElementById(
+    'aBody2'
+  ).value=
+    d.body2
+    ||
+    '';
 
   main
   .querySelectorAll(
     'input,textarea,select'
   )
   .forEach(
-    el=>
+    el=>{
+
       el.addEventListener(
         'input',
-        saveDraft
-      )
-  );
+        saveCurrentDraft
+      );
 
+      el.addEventListener(
+        'change',
+        saveCurrentDraft
+      );
+
+    }
+  );
 
   document.getElementById(
     'checkBtn'
@@ -5606,19 +5345,17 @@ function renderAnalysis(){
   .onclick=
     checkAnalysis;
 
-
   document.getElementById(
     'nextBtn'
   )
   .onclick=
-    ()=>go(1);
-
+    ()=>goStep(1);
 
   if(
     state.scores[0]
   ){
 
-    showAnalysis(
+    showAnalysisResult(
       state.scores[0]
     );
 
@@ -5626,21 +5363,17 @@ function renderAnalysis(){
 
 }
 
-
 function checkAnalysis(){
 
-  saveDraft();
-
+  saveCurrentDraft();
 
   state.attempts[0]=
     attempts(0)+1;
 
-
   const a=
     assessAnalysis();
 
-
-  const arr=[
+  const list=[
     a.type,
     a.stages,
     a.first,
@@ -5650,117 +5383,110 @@ function checkAnalysis(){
     a.body2
   ];
 
-
-  const n=
-    arr.filter(
+  const passed=
+    list.filter(
       x=>x.ok
     )
     .length;
 
-
   const result={
-
     assessments:a,
+    passed,
 
     total:
       Math.round(
-        n/7*100
+        passed/7*100
       ),
 
     completed:
-      n===7,
-
-    passed:n
-
+      passed===7
   };
-
 
   state.scores[0]=
     result;
-
 
   if(
     result.completed
   ){
 
-    complete(0);
+    markDone(0);
 
   }else{
 
-    invalidate(0);
+    invalidateFrom(0);
 
   }
 
+  saveState();
 
-  save();
-
-
-  showAnalysis(
+  showAnalysisResult(
     result
   );
-
 
   renderNav();
 
   renderProgress();
 
-
-  document.getElementById(
-    'nextBtn'
-  )
-  .disabled=
-    !done(0);
-
-}
-
-
-function showAnalysis(r){
-
-  const a=
-    r.assessments
-    ||
-    assessAnalysis();
-
-
-  for(
-    const [id,k]
-    of
-    Object.entries({
-
-      aType:'type',
-
-      aStages:'stages',
-
-      aFirst:'first',
-
-      aLast:'last',
-
-      aFeatures:'features',
-
-      aBody1:'body1',
-
-      aBody2:'body2'
-
-    })
-  ){
-
-    setInline(
-      id,
-      a[k]
+  const next=
+    document.getElementById(
+      'nextBtn'
     );
+
+  if(next){
+
+    next.disabled=
+      !isDone(0);
 
   }
 
+}
+
+function showAnalysisResult(result){
+
+  const a=
+    result.assessments
+    ||
+    assessAnalysis();
+
+  const map={
+    aType:'type',
+    aStages:'stages',
+    aFirst:'first',
+    aLast:'last',
+    aFeatures:'features',
+    aBody1:'body1',
+    aBody2:'body2'
+  };
+
+  Object.entries(
+    map
+  )
+  .forEach(
+    (
+      [
+        id,
+        k
+      ]
+    )=>
+      inlineFeedback(
+        id,
+        a[k]
+      )
+  );
 
   const f=
     document.getElementById(
       'feedback'
     );
 
+  if(!f){
+
+    return;
+
+  }
 
   f.className=
     'feedback show';
-
 
   f.innerHTML=`
 
@@ -5769,14 +5495,14 @@ function showAnalysis(r){
   <div>
 
     <div class="score">
-      ${r.total}/100
+      ${result.total}/100
     </div>
 
     <div
       class="
         status
         ${
-          r.completed
+          result.completed
           ?
           'good'
           :
@@ -5785,7 +5511,7 @@ function showAnalysis(r){
       "
     >
       ${
-        r.completed
+        result.completed
         ?
         '✓ Hoàn thành Bước 1'
         :
@@ -5796,10 +5522,9 @@ function showAnalysis(r){
   </div>
 
   <div class="counter">
-
     Đạt
     ${
-      r.passed
+      result.passed
       ??
       Object.values(a)
       .filter(
@@ -5807,7 +5532,6 @@ function showAnalysis(r){
       )
       .length
     }/7 mục
-
   </div>
 
 </div>
@@ -5816,48 +5540,44 @@ function showAnalysis(r){
 
 }
 
-
 /* =========================================================
    WRITING UI
-========================================================= */
+   ========================================================= */
 
-function renderWriting(i){
-
-  const full=
-    i===5;
-
+function renderWriting(step){
 
   const main=
     document.getElementById(
       'main'
     );
 
+  const full=
+    step===5;
 
   const draft=
     state.drafts[
-      key(i)
+      currentDraftKey(step)
     ]
     ||
     '';
-
 
   main.innerHTML=`
 
 <div class="ey">
 
   <span class="chip">
-    BƯỚC ${i+1}
+    BƯỚC ${step+1}
   </span>
 
   <span class="counter">
-    ${STEP_NAMES[i]}
+    ${STEP_NAMES[step]}
   </span>
 
 </div>
 
 
 <h2>
-  ${STEP_NAMES[i]}
+  ${STEP_NAMES[step]}
 </h2>
 
 
@@ -5875,16 +5595,30 @@ function renderWriting(i){
 
 
 <div class="guide">
-  ${guide(i)}
+  ${guide(step)}
 </div>
 
 
 ${
   full
   ?
-  independentCard()
+  `
+
+<div class="independent-card">
+
+  <b>
+    ✍️ Bước tự viết — không còn template
+  </b>
+
+  <p>
+    Hãy tự viết Introduction, Overview, Body 1 và Body 2.
+  </p>
+
+</div>
+
+  `
   :
-  templateCard(i)
+  templateCard(step)
 }
 
 
@@ -5923,7 +5657,9 @@ ${
     :
     'Viết '
     +
-    STEP_NAMES[i]
+    esc(
+      STEP_NAMES[step]
+    )
     +
     ' tại đây...'
   }"
@@ -5943,16 +5679,16 @@ ${
     id="checkBtn"
     class="btn primary"
   >
-    Kiểm tra & chữa Bước ${i+1} ✓
+    Kiểm tra & chữa Bước ${step+1} ✓
   </button>
 
   <button
     id="nextBtn"
     class="btn"
     ${
-      done(i)
+      isDone(step)
       &&
-      i<5
+      step<5
       ?
       ''
       :
@@ -5960,7 +5696,7 @@ ${
     }
   >
     ${
-      i===5
+      step===5
       ?
       'Hoàn tất'
       :
@@ -5981,11 +5717,10 @@ ${
 
   `;
 
-
   if(
-    i>=1
+    step>=1
     &&
-    i<=4
+    step<=4
   ){
 
     const toggle=
@@ -5993,28 +5728,24 @@ ${
         'templateToggle'
       );
 
-
     if(toggle){
 
       toggle.onclick=
         ()=>{
 
-          state.templateOpen[i]=
-            !state.templateOpen[i];
+          state.templateOpen[step]=
+            !state.templateOpen[step];
 
-
-          save();
-
+          saveState();
 
           document.getElementById(
             'templateBody'
           )
           .hidden=
-            !state.templateOpen[i];
-
+            !state.templateOpen[step];
 
           toggle.textContent=
-            state.templateOpen[i]
+            state.templateOpen[step]
             ?
             'Ẩn template'
             :
@@ -6026,62 +5757,55 @@ ${
 
   }
 
-
   const box=
     document.getElementById(
       'writeBox'
     );
-
 
   const wc=
     document.getElementById(
       'wordCount'
     );
 
-
   const update=
     ()=>{
 
       wc.textContent=
-        `${words(box.value)} từ`;
+        `${wordCount(box.value)} từ`;
 
     };
-
 
   update();
 
-
-  box.oninput=
+  box.addEventListener(
+    'input',
     ()=>{
 
       state.drafts[
-        key(i)
+        currentDraftKey(step)
       ]=
         box.value;
 
-
-      save();
+      saveState();
 
       update();
 
-    };
-
+    }
+  );
 
   document.getElementById(
     'prevBtn'
   )
   .onclick=
-    ()=>go(
-      i-1
+    ()=>goStep(
+      step-1
     );
-
 
   document.getElementById(
     'checkBtn'
   )
   .onclick=
-    ()=>checkWriting(i);
-
+    ()=>checkWriting(step);
 
   document.getElementById(
     'nextBtn'
@@ -6090,105 +5814,96 @@ ${
     ()=>{
 
       if(
-        i<5
+        step<5
       ){
 
-        go(
-          i+1
+        goStep(
+          step+1
         );
 
       }
 
     };
 
-
   if(
-    state.scores[i]
+    state.scores[step]
   ){
 
-    showWriting(
-      i,
-      state.scores[i]
+    showWritingResult(
+      step,
+      state.scores[step]
     );
 
   }
 
 }
 
+function checkWriting(step){
 
-function checkWriting(i){
+  saveCurrentDraft();
 
-  saveDraft();
+  state.attempts[step]=
+    attempts(step)+1;
 
-
-  state.attempts[i]=
-    attempts(i)+1;
-
+  const text=
+    state.drafts[
+      currentDraftKey(step)
+    ]
+    ||
+    '';
 
   const result=
     grade(
-      i,
-      state.drafts[
-        key(i)
-      ]
-      ||
-      ''
+      step,
+      text
     );
 
-
-  state.scores[i]=
+  state.scores[step]=
     result;
-
 
   if(
     result.completed
   ){
 
-    complete(i);
+    markDone(step);
 
   }else{
 
-    invalidate(i);
+    invalidateFrom(step);
 
   }
 
+  saveState();
 
-  save();
-
-
-  showWriting(
-    i,
+  showWritingResult(
+    step,
     result
   );
-
 
   renderNav();
 
   renderProgress();
-
 
   const next=
     document.getElementById(
       'nextBtn'
     );
 
-
   if(
     next
     &&
-    i<5
+    step<5
   ){
 
     next.disabled=
-      !done(i);
+      !isDone(step);
 
   }
 
 }
 
-
-function showWriting(
-  i,
+function showWritingResult(
+  step,
   r
 ){
 
@@ -6197,53 +5912,46 @@ function showWriting(
       'feedback'
     );
 
+  if(!f){
 
-  f.className=
-    'feedback show';
+    return;
 
+  }
 
-  const studentPlan=
+  const p=
     (
-      i===3
+      step===3
       ||
-      i===4
+      step===4
     )
     ?
-    plan(i)
+    bodyPlan(step)
     :
     null;
 
-
   const reference=
     (
-      i===3
+      step===3
       ||
-      i===4
+      step===4
     )
     ?
     (
       r.reference
       ||
-      dynamicRef(i)
+      dynamicReference(step)
     )
     :
-    (
-      task[
-        key(i)
-      ]
-      ?.reference
-      ||
-      null
-    );
-
+    null;
 
   const showRef=
-    i<5
+    step<5
     &&
     !r.completed
     &&
-    attempts(i)>=2;
-
+    attempts(step)>=2
+    &&
+    reference;
 
   const breakdown=
     (
@@ -6277,7 +5985,6 @@ function showWriting(
     )
     .join('');
 
-
   const issues=
     (
       r.issues
@@ -6286,13 +5993,17 @@ function showWriting(
     )
     .map(
       x=>`
+
 <li>
   ${esc(x)}
 </li>
+
       `
     )
     .join('');
 
+  f.className=
+    'feedback show';
 
   f.innerHTML=`
 
@@ -6320,7 +6031,6 @@ function showWriting(
         }
       "
     >
-
       ${
         r.completed
         ?
@@ -6332,23 +6042,17 @@ function showWriting(
         :
         'Cần chỉnh lại'
       }
-
     </div>
 
   </div>
 
   <div class="counter">
     Lần kiểm tra:
-    ${attempts(i)}
+    ${attempts(step)}
   </div>
 
 </div>
 
-
-${
-  breakdown
-  ?
-  `
 
 <div class="detail">
 
@@ -6361,11 +6065,6 @@ ${
   </ul>
 
 </div>
-
-  `
-  :
-  ''
-}
 
 
 <div
@@ -6412,27 +6111,26 @@ ${
 
 ${
   showRef
-  &&
-  reference
   ?
   `
 
 <div class="reference">
 
   <b>
-
     ${
-      studentPlan
+      p
       ?
-      `Bài mẫu theo cách chia em đã chọn (${studentPlan.label}):`
+      `Bài mẫu theo cách chia em đã chọn (${p.label}):`
       :
       'Bài tham khảo:'
     }
-
   </b>
 
   <div
-    class="reference-answer notranslate"
+    class="
+      reference-answer
+      notranslate
+    "
     translate="no"
     lang="en"
   >
@@ -6448,9 +6146,8 @@ ${
 
   `;
 
-
   if(
-    i===5
+    step===5
     &&
     r.completed
   ){
@@ -6463,12 +6160,11 @@ ${
 <div class="finaldone">
 
   <h3>
-    🎉 Hoàn thành
-    ${esc(task.title)}
+    🎉 Hoàn thành ${esc(task.title)}
   </h3>
 
   <p>
-    Em đã tự viết và hoàn thành đủ 6 bước.
+    Em đã hoàn thành đủ 6 bước.
   </p>
 
 </div>
@@ -6479,33 +6175,29 @@ ${
 
 }
 
-
 /* =========================================================
    NAVIGATION
-========================================================= */
+   ========================================================= */
 
-function go(i){
+function goStep(i){
 
-  saveDraft();
-
+  saveCurrentDraft();
 
   if(
     i<0
     ||
-    i>unlock()
+    i>unlockedMax()
   ){
 
     return;
 
   }
 
-
   state.current=i;
 
-  save();
+  saveState();
 
   render();
-
 
   window.scrollTo({
     top:0,
@@ -6514,13 +6206,11 @@ function go(i){
 
 }
 
-
 function render(){
 
   renderNav();
 
   renderProgress();
-
 
   if(
     state.current===0
@@ -6538,1025 +6228,78 @@ function render(){
 
 }
 
-
 /* =========================================================
    START
-========================================================= */
-/* =========================================================
-V18.6 HOTFIX · FULL ESSAY ACCURACY
-Paste block này ngay trước phần START hoặc ngay trước dòng load();
-========================================================= */
+   ========================================================= */
 
-/* 1) Không nhầm gerund/danh từ như "processing, packaging and delivery"
-      thành động từ bị động cần đổi sang V3. */
-parallelGrammarIssues=function(text){
-const s=String(text||'');
-const out=[];
-const sentences=s
-.replace(/\s+/g,' ')
-.trim()
-.split(/(?<=[.!?])\s+/)
-.map(x=>x.trim())
-.filter(Boolean);
+try{
 
-sentences.forEach(sentence=>{
-const passiveMatch=
-sentence.match(
-new RegExp(
-`\\b(?:is|are|was|were|be|been)\\s+(?:${PASSIVE_V3_WORDS.join('|')})\\b`,
-'i'
-)
-);
+  loadState();
 
-if(!passiveMatch){
-return;
-}
+  mount();
 
-const start=
-passiveMatch.index+passiveMatch[0].length;
-const localTail=
-sentence.slice(start,start+120);
+  state.current=
+    Math.min(
+      Number(
+        state.current
+      )
+      ||
+      0,
+      unlockedMax()
+    );
 
-Object.entries(ING_TO_V3).forEach(([ing,v3])=>{
-const coordinated=
-new RegExp(
-`(?:,\\s*|\\band\\s+|\\bor\\s+)${ing}\\b`,
-'i'
-);
+  render();
 
-if(!coordinated.test(localTail)){
-return;
-}
+}catch(err){
 
-/* Danh sách danh từ/gerund hợp lệ:
-   thermal processing, packaging and delivery
-   stages include drying, heating and cooling
-*/
-const nominalContext=
-new RegExp(
-`\\b(?:deal(?:s)?\\s+with|consist(?:s)?\\s+of|include(?:s)?|involve(?:s)?|comprise(?:s)?|followed\\s+by)\\b[^.!?]{0,140}\\b${ing}\\b`,
-'i'
-);
-
-const nominalList=
-new RegExp(
-`\\b(?:thermal\\s+)?(?:processing|production|treatment|stages?|steps?)\\b[^.!?]{0,120}\\b${ing}\\b`,
-'i'
-);
-
-if(
-nominalContext.test(sentence)
-||
-nominalList.test(sentence)
-){
-return;
-}
-
-out.push(
-`Cấu trúc song song chưa đúng: trong chuỗi bị động, “${ing}” nên đổi thành “${v3}”.`
-);
-});
-});
-
-return unique(out);
-};
-
-
-/* 2) Chấm grammar chính xác hơn:
-      - bắt "is excavated, processed before"
-      - bắt "heated in a kiln ... and another kiln ..."
-      - KHÔNG bắt packaging trong cụm danh từ. */
-genericGrammarIssues=function(text){
-const s=
-String(text||'')
-.trim();
-
-const n=
-norm(s);
-
-const out=[];
-
-if(!s){
-return[
-'Chưa có câu trả lời.'
-];
-}
-
-splitParagraphs(
-s,
-0
-)
-.forEach(
-p=>{
-if(
-p
-&&
-!/^[A-Z0-9]/.test(p)
-){
-out.push(
-'Một đoạn chưa viết hoa chữ cái đầu.'
-);
-}
-}
-);
-
-if(
-!/[.!?]$/.test(s)
-){
-out.push(
-'Nên kết thúc bằng dấu câu.'
-);
-}
-
-if(
-/[^\n]\s{2,}[^\n]/.test(s)
-){
-out.push(
-'Có khoảng trắng thừa.'
-);
-}
-
-if(
-/\b(is|are|was|were)\s+\1\b/i.test(n)
-){
-out.push(
-'Có trợ động từ bị lặp.'
-);
-}
-
-if(
-/\b(the|a|an)\s+\1\b/i.test(n)
-){
-out.push(
-'Có mạo từ bị lặp.'
-);
-}
-
-if(
-/\b(?:allows|enables)\s+(?:they|he|she|we|i)\s+to\b/i.test(s)
-){
-out.push(
-'Sau allows/enables phải dùng tân ngữ: them/him/her/us/me + to V.'
-);
-}
-
-if(
-/\bbetween\s+[^,.!?;]{0,40}\s+to\s+[^,.!?;]{0,40}/i.test(s)
-){
-out.push(
-'Dùng “between X and Y”, không dùng “between X to Y”.'
-);
-}
-
-/* from X to Y: chỉ bắt khi thực sự là 2 mốc. */
-const badFromAndPatterns=[
-/\bfrom\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|days?|stages?|steps?)\b/i,
-/\bfrom\s+(\d+(?:\.\d+)?)\s*(?:°\s*c|degrees?\s+celsius)\s+and\s+(\d+(?:\.\d+)?)\s*(?:°\s*c|degrees?\s+celsius)\b/i,
-/\bfrom\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)\s*(?:°\s*c|degrees?\s+celsius)\b/i,
-/\bfrom\s+stage\s+(\d+)\s+and\s+(?:stage\s+)?(\d+)\b/i,
-/\bfrom\s+step\s+(\d+)\s+and\s+(?:step\s+)?(\d+)\b/i
-];
-
-if(
-badFromAndPatterns.some(r=>r.test(s))
-){
-out.push(
-'Khi mô tả một khoảng, dùng “from X to Y”, không dùng “from X and Y”.'
-);
-}
-
-/* begins with ... and ends with ... */
-if(
-/\bbegins?\s+with\b[^.!?]{0,180}\bto\s+ends?\s+with\b/i.test(s)
-){
-out.push(
-'Cấu trúc chưa đúng: dùng “begins with ... and ends with ...”, không dùng “begins with ... to ends with ...”.'
-);
-}
-
-if(
-/\bends?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i.test(s)
-){
-out.push(
-'Sau “ends with” nên dùng noun/V-ing, ví dụ “ends with the bricks being delivered”.'
-);
-}
-
-if(
-/\bbegins?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i.test(s)
-){
-out.push(
-'Sau “begins with” nên dùng noun/V-ing, ví dụ “begins with clay being dug from the ground”.'
-);
-}
-
-/* is excavated, processed before... */
-const parallelV3=
-unique([
-...PASSIVE_V3_WORDS,
-'excavated',
-'extracted',
-'screened',
-'filtered',
-'conveyed',
-'processed'
-]);
-
-const twoPassiveBefore=
-s.match(
-new RegExp(
-`\\b(?:is|are|was|were|been)\\s+(${parallelV3.join('|')})\\s*,\\s*(${parallelV3.join('|')})\\s+before\\b`,
-'i'
-)
-);
-
-if(twoPassiveBefore){
-out.push(
-`Cấu trúc song song chưa tự nhiên: nên viết “${twoPassiveBefore[1]} and ${twoPassiveBefore[2]} before ...”.`
-);
-}
-
-/* heated in a kiln ... and another kiln ... */
-if(
-ID==='01'
-&&
-/\b(?:heated|fired)\s+in\s+(?:a|one)\s+kiln\b[^.!?]{0,180}\band\s+(?:another|a second)\s+kiln\b/i.test(s)
-&&
-!/\band\s+in\s+(?:another|a second)\s+kiln\b/i.test(s)
-){
-out.push(
-'Cấu trúc song song ở phần nung chưa tự nhiên: nên viết “heated in two kilns: first ... and then ...” hoặc “in one kiln ... and in another kiln ...”.'
-);
-}
-
-const agreement=[
-[
-/\bbricks\s+is\b/i,
-'“bricks” là số nhiều, dùng “are”.'
-],
-[
-/\bottles\s+is\b/i,
-'“bottles” là số nhiều, dùng “are”.'
-],
-[
-/\bnoodles\s+is\b/i,
-'“noodles” là số nhiều, dùng “are”.'
-],
-[
-/\btomatoes\s+is\b/i,
-'“tomatoes” là số nhiều, dùng “are”.'
-],
-[
-/\beggs\s+is\b/i,
-'“eggs” là số nhiều, dùng “are”.'
-],
-[
-/\bpellets\s+is\b/i,
-'“pellets” là số nhiều, dùng “are”.'
-],
-[
-/\bclay\s+are\b/i,
-'“clay” nên đi với “is”.'
-],
-[
-/\bflour\s+are\b/i,
-'“flour” nên đi với “is”.'
-],
-[
-/\bmixture\s+are\b/i,
-'“mixture” là số ít, dùng “is”.'
-],
-[
-/\bwater\s+are\b/i,
-'“water” nên đi với “is”.'
-]
-];
-
-agreement.forEach(
-([r,m])=>{
-if(r.test(s)){
-out.push(m);
-}
-}
-);
-
-if(
-/\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i.test(s)
-){
-out.push(
-'“a/an” không đứng trực tiếp trước danh từ số nhiều.'
-);
-}
-
-if(
-/\bone\s+of\s+the\s+(?:stage|step|process)\b/i.test(s)
-){
-out.push(
-'Sau “one of the” phải dùng danh từ số nhiều.'
-);
-}
-
-let m;
-
-const deg=
-/\b(\d+(?:\.\d+)?)\s+degree\s+celsius\b/gi;
-
-while(
-(
-m=
-deg.exec(s)
-)
-){
-if(
-Number(m[1])!==1
-){
-out.push(
-`“${m[0]}” chưa đúng: dùng “degrees Celsius”.`
-);
-}
-}
-
-const hr=
-/\b(\d+)\s+hour\b/gi;
-
-while(
-(
-m=
-hr.exec(s)
-)
-){
-if(
-Number(m[1])!==1
-){
-out.push(
-`“${m[0]}” nên dùng “hours”.`
-);
-}
-}
-
-const day=
-/\b(\d+)\s+day\b/gi;
-
-while(
-(
-m=
-day.exec(s)
-)
-){
-if(
-Number(m[1])!==1
-){
-out.push(
-`“${m[0]}” nên dùng “days”.`
-);
-}
-}
-
-return unique(out);
-};
-
-
-/* 3) Chấm sequence của bài hoàn chỉnh theo TỪNG BODY,
-      dựa trên cách chia của học sinh ở Bước 1.
-      Topic sentence không còn làm đảo thứ tự giả. */
-function detailParagraphForSequence(text){
-const sentences=
-String(text||'')
-.replace(/\s+/g,' ')
-.trim()
-.split(/(?<=[.!?])\s+/)
-.map(x=>x.trim())
-.filter(Boolean);
-
-if(sentences.length<2){
-return String(text||'');
-}
-
-const first=
-sentences[0];
-
-const rest=
-sentences.slice(1).join(' ');
-
-const firstIsTopic=
-/\b(?:initial stages?|remaining stages?|later stages?|these stages?|the process|the procedure)\b/i.test(first)
-||
-/\b(?:consist(?:s)?\s+of|deal(?:s)?\s+with|involv(?:e|es)|include(?:s)?|followed\s+by)\b/i.test(first);
-
-/* Nếu phần chi tiết phía sau nhận diện được ít nhất 2 stage,
-   bỏ câu mở đoạn khái quát khỏi sequence audit. */
-const restStageCount=
-stageGroupHits(
-rest,
-processStageGroups()
-)
-.filter(Boolean)
-.length;
-
-if(
-firstIsTopic
-&&
-restStageCount>=2
-){
-return rest;
-}
-
-return String(text||'');
-}
-
-
-function fullEssaySequenceAudit(text,paras){
-const allParas=
-Array.isArray(paras)
-?
-paras
-:
-splitParagraphs(
-text,
-20
-);
-
-if(
-allParas.length>=4
-){
-const body1=
-allParas[2]
-||
-'';
-
-const body2=
-allParas
-.slice(3)
-.join(' ');
-
-const p1=
-studentPlanForStep(3);
-
-const p2=
-studentPlanForStep(4);
-
-const results=[];
-
-if(p1){
-results.push(
-sequenceAuditForPlan(
-body1,
-p1
-)
-);
-}else{
-results.push(
-sequenceAudit(
-detailParagraphForSequence(
-body1
-)
-)
-);
-}
-
-if(p2){
-results.push(
-sequenceAuditForPlan(
-body2,
-p2
-)
-);
-}else{
-results.push(
-sequenceAudit(
-detailParagraphForSequence(
-body2
-)
-)
-);
-}
-
-const violations=
-unique(
-results.flatMap(
-r=>
-r?.violations
-||
-[]
-)
-);
-
-return{
-ok:
-violations.length===0,
-violations,
-parts:
-results
-};
-}
-
-/* Fallback khi chưa đủ 4 đoạn. */
-return sequenceAudit(
-detailParagraphForSequence(
-String(text||'')
-)
-);
-}
-
-
-/* 4) Góp ý về độ sát sơ đồ, chỉ trừ NHẸ,
-      không coi là lỗi ngữ pháp nghiêm trọng. */
-function diagramPrecisionIssues(text){
-const s=
-String(text||'');
-
-const out=[];
-
-if(
-ID==='01'
-&&
-/\b(?:metal\s+grid|grid)\b[^.!?]{0,80}\bto\s+(?:remove|filter\s+out|eliminate)\s+(?:larger\s+)?(?:particles?|impurities?|debris)\b/i.test(s)
-){
-out.push(
-'Sơ đồ không ghi rõ metal grid dùng để “remove larger particles/impurities”. Để bám sát hình hơn, chỉ cần viết clay is passed/screened through a metal grid.'
-);
-}
-
-return unique(out);
-}
-
-
-/* 5) Full essay grading mới:
-      - không báo sai metal grid / drying oven nếu trình tự thật sự đúng
-      - không đổi packaging -> packaged trong cụm danh từ
-      - bắt đúng 2 lỗi thật của bài mẫu bạn vừa gửi
-      - precision chỉ trừ nhẹ
-*/
-fullGrade=function(text){
-const wc=
-words(text);
-
-const paras=
-splitParagraphs(
-text,
-20
-);
-
-const pc=
-paras.length;
-
-const groups=
-processStageGroups();
-
-const hits=
-stageGroupHits(
-text,
-groups
-);
-
-const hitCount=
-hits.filter(Boolean).length;
-
-const ratio=
-hits.length
-?
-hitCount/hits.length
-:
-0;
-
-const language=
-languageIssues(text);
-
-const serious=
-seriousLanguageIssues(
-language
-);
-
-const topic=
-topicCheck(text);
-
-const facts=
-factualIssues(text);
-
-const precision=
-diagramPrecisionIssues(text);
-
-const hasOverview=
-/\boverall\b|\bin general\b|\bgenerally\b|\bit is clear that\b|\bit can be seen that\b/i
-.test(text);
-
-const claim=
-detectStageCountClaim(text);
-
-const expected=
-Number(
-task.stages
-);
-
-const countOK=
-!claim.mentioned
-||
-claim.count===expected;
-
-const overview=
-extractOverviewParagraph(text);
-
-const overviewStyle=
-overview
-?
-styleIssues(
-overview,
-2
-)
-:
-[];
-
-const seq=
-fullEssaySequenceAudit(
-text,
-paras
-);
-
-const badOverviewConnector=
-overview
-?
-hasBadBeginEndConnector(
-overview
-)
-:
-false;
-
-const issues=[];
-
-if(
-!topic.requiredOK
-){
-issues.push(
-`Bài chưa thể hiện đúng đối tượng chính: “${topic.expected}”.`
-);
-}
-
-if(
-topic.wrong.length
-){
-issues.push(
-`Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
-);
-}
-
-if(
-claim.mentioned
-&&
-!countOK
-){
-issues.push(
-`Sai số giai đoạn: em viết ${claim.count}, nhưng sơ đồ có ${expected}.`
-);
-}
-
-if(
-wc<150
-){
-issues.push(
-`Bài hiện có ${wc} từ; IELTS Writing Task 1 nên có ít nhất 150 từ.`
-);
-}
-
-if(
-!hasOverview
-){
-issues.push(
-'Chưa thấy Overview rõ ràng.'
-);
-}
-
-if(
-pc<4
-){
-issues.push(
-`Hệ thống đang nhận ${pc} đoạn. Bài nên có 4 đoạn. Chỉ cần Enter 1 lần để sang đoạn mới.`
-);
-}
-
-if(
-ratio<.72
-){
-const missing=
-groups
-.filter(
-(_,i)=>
-!hits[i]
-)
-.map(
-g=>
-g[0]
-)
-.slice(
-0,
-10
-);
-
-issues.push(
-'Một số stage chưa được thể hiện rõ: '
-+
-missing.join(', ')
-+
-'.'
-);
-}
-
-facts.forEach(
-x=>
-issues.push(
-'Nội dung/số liệu: '
-+
-x
-)
-);
-
-seq.violations.forEach(
-x=>
-issues.push(
-'Thứ tự stage: '
-+
-x
-)
-);
-
-language.forEach(
-x=>
-issues.push(
-'Ngữ pháp/chính tả: '
-+
-x
-)
-);
-
-overviewStyle.forEach(
-x=>
-issues.push(
-'Overview: '
-+
-x
-)
-);
-
-precision.forEach(
-x=>
-issues.push(
-'Gợi ý bám sát sơ đồ: '
-+
-x
-)
-);
-
-const p1=
-Math.round(
-ratio*55
-);
-
-const p2=
-wc>=150
-?
-20
-:
-Math.round(
-Math.min(
-20,
-wc/150*20
-)
-);
-
-const p3=
-hasOverview
-?
-10
-:
-0;
-
-const p4=
-pc>=4
-?
-8
-:
-Math.round(
-pc/4*8
-);
-
-const p5=
-Math.max(
-0,
-7-serious.length*3
-);
-
-const fp=
-Math.min(
-20,
-facts.length*6
-);
-
-const sp=
-Math.min(
-12,
-seq.violations.length*6
-);
-
-const op=
-Math.min(
-6,
-overviewStyle.length*3
-);
-
-/* Góp ý suy diễn sơ đồ chỉ trừ tối đa 3 điểm. */
-const pp=
-Math.min(
-3,
-precision.length
-);
-
-let score=
-p1+
-p2+
-p3+
-p4+
-p5-
-fp-
-sp-
-op-
-pp;
-
-score=
-Math.max(
-0,
-Math.min(
-100,
-score
-)
-);
-
-if(
-!topic.requiredOK
-||
-topic.wrong.length
-){
-score=
-Math.min(
-score,
-49
-);
-}
-
-if(
-claim.mentioned
-&&
-!countOK
-){
-score=
-Math.min(
-score,
-69
-);
-}
-
-if(
-facts.length
-){
-score=
-Math.min(
-score,
-79
-);
-}
-
-/*
-2 lỗi ngữ pháp không còn bị ép xuống 79.
-Chỉ cap 79 khi có từ 4 lỗi quan trọng trở lên.
-*/
-if(
-serious.length>=4
-){
-score=
-Math.min(
-score,
-79
-);
-}
-
-if(
-badOverviewConnector
-){
-score=
-Math.min(
-score,
-79
-);
-}
-
-return{
-total:
-score,
-
-completed:
-topic.requiredOK
-&&
-!topic.wrong.length
-&&
-countOK
-&&
-wc>=150
-&&
-hasOverview
-&&
-pc>=4
-&&
-ratio>=.72
-&&
-serious.length===0
-&&
-facts.length===0
-&&
-seq.ok
-&&
-!badOverviewConnector,
-
-wc,
-
-paragraphCount:
-pc,
-
-issues,
-
-breakdown:[
-{
-label:
-'Nội dung & stages',
-score:
-p1,
-max:
-55,
-note:
-`Nhận diện ${hitCount}/${groups.length} stage · Bao quát ${Math.round(ratio*100)}%`
-},
-{
-label:
-'Độ dài',
-score:
-p2,
-max:
-20,
-note:
-`${wc} từ`
-},
-{
-label:
-'Overview',
-score:
-p3,
-max:
-10,
-note:
-hasOverview
-?
-'Có'
-:
-'Thiếu'
-},
-{
-label:
-'Cấu trúc đoạn',
-score:
-p4,
-max:
-8,
-note:
-`${pc} đoạn`
-},
-{
-label:
-'Ngữ pháp & chính tả',
-score:
-p5,
-max:
-7,
-note:
-serious.length
-?
-`${serious.length} lỗi quan trọng`
-:
-'Ổn'
-}
-]
-};
-};
-load();
-
-mount();
-
-
-state.current=
-  Math.min(
-    +state.current
-    ||
-    0,
-    unlock()
+  console.error(
+    'PROCESS ENGINE FATAL ERROR:',
+    err
   );
 
+  document.body.innerHTML=`
 
-render();
+<div
+  style="
+    max-width:900px;
+    margin:60px auto;
+    padding:24px;
+    font-family:Arial,sans-serif;
+    border:1px solid #efc8ce;
+    border-radius:16px;
+    background:#fff6f7;
+    color:#7d2634;
+  "
+>
+
+  <h2 style="margin-top:0">
+    Không thể tải bài Process
+  </h2>
+
+  <p>
+    JavaScript gặp lỗi khi khởi tạo.
+    Mở DevTools → Console để xem lỗi chi tiết.
+  </p>
+
+  <pre
+    style="
+      white-space:pre-wrap;
+      background:#fff;
+      padding:12px;
+      border-radius:8px;
+    "
+  >${esc(
+    String(
+      err?.message
+      ||
+      err
+    )
+  )}</pre>
+
+</div>
+
+  `;
+
+}
 
 })();
