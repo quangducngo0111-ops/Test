@@ -124,8 +124,9 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_V7';
-const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_V8';
+const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
+const ACTIVE_TAB_KEY='IELTS_PRACTICE_ACTIVE_TAB_V1';
 const CACHE_TTL=6*60*60*1000;
 
 const CATS={
@@ -145,6 +146,7 @@ const FALLBACK={
   listening:[
     {title:'Listening Part 1',icon:'🎧',desc:'IELTS Listening Part 1',url:'./Listening/Part1/'},
     {title:'Listening Part 2',icon:'🎧',desc:'IELTS Listening Part 2',url:'./Listening/Part2/'},
+    {title:'Listening Part 3',icon:'🎧',desc:'IELTS Listening Part 3',url:'./Listening/Part3/'},
     {title:'Intensive Listening',icon:'🎙️',desc:'Gap-fill + Dictation',url:'./Listening/IntensiveListening/'}
   ],
   writing1:[
@@ -160,7 +162,8 @@ const FALLBACK={
 };
 
 let catalog=cloneCatalog(FALLBACK);
-let current='reading';
+let current=localStorage.getItem(ACTIVE_TAB_KEY)||'reading';
+if(!CATS[current]) current='reading';
 
 function cloneCatalog(source){
   return Object.fromEntries(Object.keys(CATS).map(k=>[k,(source[k]||[]).map(x=>({...x}))]));
@@ -229,7 +232,7 @@ function item(path,root){
   if(/^README_TEMPLATE$/i.test(raw)) return null;
   const labels={
     ReadingPassage1:'Reading Passage 1',ReadingPassage2:'Reading Passage 2',
-    Part1:'Listening Part 1',Part2:'Listening Part 2',IntensiveListening:'Intensive Listening',
+    Part1:'Listening Part 1',Part2:'Listening Part 2',Part3:'Listening Part 3',IntensiveListening:'Intensive Listening',
     TrueFalseNotGiven:'True / False / Not Given',YesNoNotGiven:'Yes / No / Not Given',
     MatchingHeadings:'Matching Headings',MatchingInformation:'Matching Information',MatchingFeatures:'Matching Features',
     MatchingSentenceEndings:'Matching Sentence Endings',SentenceCompletion:'Sentence Completion',SummaryCompletion:'Summary Completion',
@@ -240,7 +243,7 @@ function item(path,root){
 
   const icons={
     ReadingPassage1:'📘',ReadingPassage2:'📗',
-    Part1:'🎧',Part2:'🎧',IntensiveListening:'🎙️',
+    Part1:'🎧',Part2:'🎧',Part3:'🎧',IntensiveListening:'🎙️',
     TrueFalseNotGiven:'✅',YesNoNotGiven:'☑️',
     MatchingHeadings:'🧩',MatchingInformation:'🔎',MatchingFeatures:'🔗',
     MatchingSentenceEndings:'🧷',SentenceCompletion:'✏️',SummaryCompletion:'📝',
@@ -250,6 +253,7 @@ function item(path,root){
   };
 
   const descriptions={
+    Part3:'IELTS Listening Part 3',
     DynamicDatasets:'Biểu đồ thể hiện sự thay đổi theo thời gian',
     Process:'6 bài luyện Process theo từng bước, có chữa bài',
     TranslationPractice:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback'
@@ -269,7 +273,7 @@ function renderTabs(){
       <span class="tab-icon">${v.icon||'📚'}</span>
       <span class="tab-copy">${v.label}<small>${v.sub}</small></span>
     </button>`).join('');
-  document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{current=b.dataset.cat;render()});
+  document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{current=b.dataset.cat;localStorage.setItem(ACTIVE_TAB_KEY,current);render()});
 }
 function render(){
   renderTabs();
@@ -307,8 +311,7 @@ function readCache(){
 function saveCache(){
   try{localStorage.setItem(CACHE_KEY,JSON.stringify({savedAt:Date.now(),catalog}));}catch(e){}
 }
-async function loadRemote(){
-  const cached=readCache();
+async function loadRemote(cached){
   if(cached && Date.now()-cached.savedAt<CACHE_TTL) return;
 
   const controller=new AbortController();
@@ -352,8 +355,9 @@ async function loadRemote(){
 }
 
 student();
-render();          // hiện fallback ngay, không bao giờ trắng
-loadRemote();      // cập nhật nền nếu GitHub API hoạt động
+const cached=readCache(); // đọc cache TRƯỚC khi render để không nháy 2 kiểu giao diện
+render();
+loadRemote(cached); // chỉ cập nhật nền khi cache cũ/hết hạn
 </script>
 </body>
 </html>
