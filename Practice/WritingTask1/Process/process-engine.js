@@ -2,12 +2,12 @@
 'use strict';
 
 /* =========================================================
-   IELTS WRITING TASK 1 · PROCESS ENGINE V20.0
+   IELTS WRITING TASK 1 · PROCESS ENGINE V20.1
    Full replacement file — Student Plan Driven
    ========================================================= */
 
-console.log('✅ PROCESS ENGINE V20.0 LOADED');
-window.PROCESS_ENGINE_VERSION='V20.0';
+console.log('✅ PROCESS ENGINE V20.1 LOADED');
+window.PROCESS_ENGINE_VERSION='V20.1';
 
 /* =========================================================
    BASIC CONFIG
@@ -82,10 +82,11 @@ const STEP_NAMES = [
 ];
 
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
-const STORAGE_KEY=`WT1_PROCESS_V20_${ID}`;
+const STORAGE_KEY=`WT1_PROCESS_V20_1_${ID}`;
 
 /* =========================================================
    STAGE MODELS
+   Each stage is one logical IELTS "main stage".
    ========================================================= */
 
 const MODELS = {
@@ -137,9 +138,11 @@ const MODELS = {
     },
     {
       terms:[
-        'drying oven',
+        'dry',
+        'dries',
         'dried',
         'drying',
+        'drying oven',
         '24-48 hours',
         '24 to 48 hours',
         '24–48 hours'
@@ -148,13 +151,22 @@ const MODELS = {
     },
     {
       terms:[
+        'heat',
+        'heats',
+        'heated',
+        'heating',
+        'fire',
+        'fires',
+        'fired',
+        'firing',
         'kiln',
         'kilns',
-        'heated',
-        'fired',
         'moderate temperature',
+        'moderate-temperature',
         'high temperature',
+        'high-temperature',
         'higher temperature',
+        'higher-temperature',
         '200°c',
         '980°c',
         '870°c',
@@ -164,9 +176,11 @@ const MODELS = {
     },
     {
       terms:[
-        'cooling chamber',
+        'cool',
+        'cools',
         'cooled',
         'cooling',
+        'cooling chamber',
         '48-72 hours',
         '48 to 72 hours',
         '48–72 hours',
@@ -177,9 +191,16 @@ const MODELS = {
     },
     {
       terms:[
+        'package',
+        'packages',
         'packaged',
         'packaging',
+        'pack',
+        'packs',
         'packed',
+        'packing',
+        'deliver',
+        'delivers',
         'delivered',
         'delivery',
         'being delivered',
@@ -192,485 +213,223 @@ const MODELS = {
 
   '02':[
     {
-      terms:[
-        'storage silos',
-        'storage silo',
-        'flour is stored',
-        'flour storage'
-      ],
+      terms:['storage silos','storage silo','flour is stored','flour storage'],
       ref:'Flour is stored in storage silos before entering the production line.'
     },
     {
-      terms:[
-        'mixer',
-        'mixed with water and oil',
-        'water and oil',
-        'mixing'
-      ],
+      terms:['mixer','mixed with water and oil','water and oil','mixing'],
       ref:'It is then mixed with water and oil in a mixer.'
     },
     {
-      terms:[
-        'dough sheets',
-        'sheets of dough',
-        'rolled into sheets',
-        'rollers'
-      ],
+      terms:['dough sheets','sheets of dough','rolled into sheets','rollers'],
       ref:'The dough passes through rollers and is formed into dough sheets.'
     },
     {
-      terms:[
-        'dough strips',
-        'strips of dough',
-        'cut into strips'
-      ],
+      terms:['dough strips','strips of dough','cut into strips'],
       ref:'These sheets are cut into strips.'
     },
     {
-      terms:[
-        'noodle discs',
-        'noodle disks',
-        'shaped into discs',
-        'formed into discs'
-      ],
+      terms:['noodle discs','noodle disks','shaped into discs','formed into discs'],
       ref:'The strips are then shaped into noodle discs.'
     },
     {
-      terms:[
-        'cooking in oil',
-        'cooked in oil',
-        'dried',
-        'drying'
-      ],
+      terms:['cooking in oil','cooked in oil','dried','drying'],
       ref:'The noodle discs are cooked in oil and dried.'
     },
     {
-      terms:[
-        'cups',
-        'placed in cups',
-        'put into cups',
-        'vegetables and spices',
-        'vegetables',
-        'spices'
-      ],
+      terms:['cups','placed in cups','put into cups','vegetables and spices','vegetables','spices'],
       ref:'They are placed into cups together with vegetables and spices.'
     },
     {
-      terms:[
-        'labelled',
-        'labeled',
-        'labelling',
-        'labeling',
-        'sealed',
-        'sealing'
-      ],
+      terms:['labelled','labeled','labelling','labeling','sealed','sealing'],
       ref:'Finally, the cups are sealed and labelled.'
     }
   ],
 
   '03':[
     {
-      terms:[
-        'pick tomatoes',
-        'picked',
-        'harvested',
-        'collected',
-        'put in baskets',
-        'placed in baskets'
-      ],
+      terms:['pick tomatoes','picked','harvested','collected','put in baskets','placed in baskets'],
       ref:'Ripe tomatoes are picked and placed in baskets.'
     },
     {
-      terms:[
-        'sort',
-        'sorted',
-        'good tomatoes',
-        'bad tomatoes',
-        'classified'
-      ],
+      terms:['sort','sorted','good tomatoes','bad tomatoes','classified'],
       ref:'The tomatoes are sorted so that unsuitable ones are removed.'
     },
     {
-      terms:[
-        'sent to factory',
-        'transported to factory',
-        'taken to factory',
-        'processing factory'
-      ],
+      terms:['sent to factory','transported to factory','taken to factory','processing factory'],
       ref:'The selected tomatoes are transported to the factory.'
     },
     {
-      terms:[
-        'remove stalk',
-        'stalk is removed',
-        'remove seeds',
-        'seeds are removed',
-        'remove skin',
-        'skin is removed',
-        'stalk',
-        'seeds',
-        'skin'
-      ],
+      terms:['remove stalk','stalk is removed','remove seeds','seeds are removed','remove skin','skin is removed','stalk','seeds','skin'],
       ref:'At the factory, their stalks, seeds and skins are removed.'
     },
     {
-      terms:[
-        'put into a container',
-        'placed in a container',
-        'put in a container'
-      ],
+      terms:['put into a container','placed in a container','put in a container'],
       ref:'The prepared tomatoes are placed in a container.'
     },
     {
-      terms:[
-        'crushed',
-        'crush',
-        'crushing',
-        'pulp',
-        'crushed into pulp'
-      ],
+      terms:['crushed','crush','crushing','pulp','crushed into pulp'],
       ref:'They are then crushed into a pulp.'
     },
     {
-      terms:[
-        'sugar',
-        'vinegar',
-        'salt',
-        'ingredients are added',
-        'additives',
-        'combined with ingredients'
-      ],
+      terms:['sugar','vinegar','salt','ingredients are added','additives','combined with ingredients'],
       ref:'Sugar, vinegar and salt are added to the tomato mixture.'
     },
     {
-      terms:[
-        'boiled',
-        'boiling',
-        'boil'
-      ],
+      terms:['boiled','boiling','boil'],
       ref:'The mixture is boiled.'
     },
     {
-      terms:[
-        'left for two hours',
-        'left for 2 hours',
-        'left to stand for two hours',
-        'left to stand for 2 hours',
-        'two hours',
-        '2 hours'
-      ],
+      terms:['left for two hours','left for 2 hours','left to stand for two hours','left to stand for 2 hours','two hours','2 hours'],
       ref:'It is then left to stand for two hours.'
     },
     {
-      terms:[
-        'poured into bottles',
-        'filled into bottles',
-        'bottled',
-        'bottles are filled'
-      ],
+      terms:['poured into bottles','filled into bottles','bottled','bottles are filled'],
       ref:'The ketchup is poured into bottles.'
     },
     {
-      terms:[
-        'labelled',
-        'labeled',
-        'labelling',
-        'labeling'
-      ],
+      terms:['labelled','labeled','labelling','labeling'],
       ref:'The bottles are labelled.'
     },
     {
-      terms:[
-        'quality control',
-        'quality checked',
-        'checked',
-        'inspected',
-        'inspection'
-      ],
+      terms:['quality control','quality checked','checked','inspected','inspection'],
       ref:'They then undergo quality control.'
     },
     {
-      terms:[
-        'packed',
-        'packaged',
-        'boxes',
-        'packed into boxes'
-      ],
+      terms:['packed','packaged','boxes','packed into boxes'],
       ref:'The checked bottles are packed into boxes.'
     },
     {
-      terms:[
-        'supermarket',
-        'sent to supermarkets',
-        'delivered to supermarkets',
-        'transported to supermarkets'
-      ],
+      terms:['supermarket','sent to supermarkets','delivered to supermarkets','transported to supermarkets'],
       ref:'The packaged ketchup is transported to supermarkets.'
     },
     {
-      terms:[
-        'consumed',
-        'consumption',
-        'hamburger',
-        'hamburgers',
-        'fries',
-        'served',
-        'served with food',
-        'served with foods',
-        'eaten'
-      ],
+      terms:['consumed','consumption','hamburger','hamburgers','fries','served','served with food','served with foods','eaten'],
       ref:'Finally, the ketchup is ready to be served with food.'
     }
   ],
 
   '04':[
     {
-      terms:[
-        'eggs',
-        'frog eggs',
-        'eggs are laid',
-        'lays eggs'
-      ],
+      terms:['eggs','frog eggs','eggs are laid','lays eggs'],
       ref:'The cycle begins when adult frogs lay eggs.'
     },
     {
-      terms:[
-        'embryo',
-        'embryos',
-        'embryonic'
-      ],
+      terms:['embryo','embryos','embryonic'],
       ref:'Embryos develop inside the eggs.'
     },
     {
-      terms:[
-        'tadpoles clinging to water plants',
-        'tadpoles cling to water plants',
-        'water plants'
-      ],
+      terms:['tadpoles clinging to water plants','tadpoles cling to water plants','water plants'],
       ref:'The resulting tadpoles cling to water plants.'
     },
     {
-      terms:[
-        'external gills',
-        'gills',
-        'breathing'
-      ],
+      terms:['external gills','gills','breathing'],
       ref:'They develop external gills for breathing.'
     },
     {
-      terms:[
-        'tail keeps growing',
-        'tail grows',
-        'growing tail'
-      ],
+      terms:['tail keeps growing','tail grows','growing tail'],
       ref:'As the tadpoles grow, their tails become longer.'
     },
     {
-      terms:[
-        'hindlegs appear',
-        'hind legs appear',
-        'hind legs',
-        'back legs'
-      ],
+      terms:['hindlegs appear','hind legs appear','hind legs','back legs'],
       ref:'Hind legs then begin to appear.'
     },
     {
-      terms:[
-        'food stored in the tail',
-        'stored in the tail'
-      ],
+      terms:['food stored in the tail','stored in the tail'],
       ref:'At this stage, the tadpoles rely on food stored in their tails.'
     },
     {
-      terms:[
-        'front legs appear',
-        'front legs'
-      ],
+      terms:['front legs appear','front legs'],
       ref:'Front legs subsequently develop.'
     },
     {
-      terms:[
-        'tail becomes shorter',
-        'tail shortens',
-        'shorter tail'
-      ],
+      terms:['tail becomes shorter','tail shortens','shorter tail'],
       ref:'The tail then becomes shorter.'
     },
     {
-      terms:[
-        'young frog',
-        'froglet'
-      ],
+      terms:['young frog','froglet'],
       ref:'A young frog is formed.'
     },
     {
-      terms:[
-        'adult frog',
-        'mature frog'
-      ],
+      terms:['adult frog','mature frog'],
       ref:'Finally, it develops into an adult frog, allowing the cycle to continue.'
     }
   ],
 
   '05':[
     {
-      terms:[
-        'female lays eggs',
-        'females lay eggs',
-        'eggs are laid',
-        'one or two eggs',
-        '1 or 2 eggs',
-        'every three days'
-      ],
+      terms:['female lays eggs','females lay eggs','eggs are laid','one or two eggs','1 or 2 eggs','every three days'],
       ref:'Female bees lay one or two eggs every three days.'
     },
     {
-      terms:[
-        'eggs hatch',
-        'hatch after 9',
-        '9-10 days',
-        '9 to 10 days'
-      ],
+      terms:['eggs hatch','hatch after 9','9-10 days','9 to 10 days'],
       ref:'The eggs hatch after about 9–10 days.'
     },
     {
-      terms:[
-        '5 days',
-        'five days'
-      ],
+      terms:['5 days','five days'],
       ref:'The young bees then develop for a further five days.'
     },
     {
-      terms:[
-        'first moulting',
-        'first molting',
-        'first moult',
-        'first molt'
-      ],
+      terms:['first moulting','first molting','first moult','first molt'],
       ref:'They undergo a first moulting stage.'
     },
     {
-      terms:[
-        '7 days',
-        'seven days'
-      ],
+      terms:['7 days','seven days'],
       ref:'After another seven days, further development takes place.'
     },
     {
-      terms:[
-        'second moulting',
-        'second molting',
-        'second moult',
-        'second molt'
-      ],
+      terms:['second moulting','second molting','second moult','second molt'],
       ref:'A second moulting stage follows.'
     },
     {
-      terms:[
-        '9 days',
-        'nine days'
-      ],
+      terms:['9 days','nine days'],
       ref:'Nine days later, the bee continues to mature.'
     },
     {
-      terms:[
-        'young adult emerges',
-        'young adult',
-        'emerges'
-      ],
+      terms:['young adult emerges','young adult','emerges'],
       ref:'A young adult then emerges.'
     },
     {
-      terms:[
-        '4 days to maturity',
-        'four days to maturity',
-        'maturity',
-        'mature bee'
-      ],
+      terms:['4 days to maturity','four days to maturity','maturity','mature bee'],
       ref:'Finally, the young adult takes about four days to reach maturity.'
     }
   ],
 
   '06':[
     {
-      terms:[
-        'recycling bin',
-        'recycle bin',
-        'placed in recycling bins',
-        'put in recycling bins',
-        'discarded'
-      ],
+      terms:['recycling bin','recycle bin','placed in recycling bins','put in recycling bins','discarded'],
       ref:'Used plastic bottles are placed in recycling bins.'
     },
     {
-      terms:[
-        'collection truck',
-        'collected',
-        'collection',
-        'transported'
-      ],
+      terms:['collection truck','collected','collection','transported'],
       ref:'They are collected and transported by truck.'
     },
     {
-      terms:[
-        'recycling centre',
-        'recycling center',
-        'sorting',
-        'sorted'
-      ],
+      terms:['recycling centre','recycling center','sorting','sorted'],
       ref:'At a recycling centre, the bottles are sorted.'
     },
     {
-      terms:[
-        'compressed',
-        'compressing',
-        'compressed into blocks',
-        'blocks'
-      ],
+      terms:['compressed','compressing','compressed into blocks','blocks'],
       ref:'The selected bottles are compressed into blocks.'
     },
     {
-      terms:[
-        'crushed',
-        'crushing',
-        'washed',
-        'washing',
-        'crushing and washing'
-      ],
+      terms:['crushed','crushing','washed','washing','crushing and washing'],
       ref:'The plastic is then crushed and washed.'
     },
     {
-      terms:[
-        'plastic pellets',
-        'pellets',
-        'producing plastic pellets',
-        'made into pellets'
-      ],
+      terms:['plastic pellets','pellets','producing plastic pellets','made into pellets'],
       ref:'Next, it is processed into plastic pellets.'
     },
     {
-      terms:[
-        'heated',
-        'heating pellets',
-        'pellets are heated'
-      ],
+      terms:['heated','heating pellets','pellets are heated'],
       ref:'The pellets are heated to form raw material.'
     },
     {
-      terms:[
-        'raw material',
-        'formed into raw material',
-        'plastic raw material'
-      ],
+      terms:['raw material','formed into raw material','plastic raw material'],
       ref:'This raw material is prepared for manufacturing.'
     },
     {
-      terms:[
-        'end products',
-        'new products',
-        'producing end products',
-        'recycled products'
-      ],
+      terms:['end products','new products','producing end products','recycled products'],
       ref:'Finally, it is used to produce new end products.'
     }
   ]
@@ -690,12 +449,7 @@ let state = {
   current:0,
   completed:[],
   attempts:{},
-  templateOpen:{
-    1:true,
-    2:true,
-    3:true,
-    4:true
-  },
+  templateOpen:{1:true,2:true,3:true,4:true},
   drafts:{
     analysis:{
       type:'',
@@ -716,156 +470,87 @@ let state = {
 };
 
 function loadState(){
-
   try{
-
-    const s=
-      JSON.parse(
-        localStorage.getItem(STORAGE_KEY)
-        ||
-        'null'
-      );
-
-    if(!s){
-      return;
-    }
+    const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+    if(!s) return;
 
     state={
       ...state,
       ...s,
-
       templateOpen:{
         ...state.templateOpen,
         ...(s.templateOpen||{})
       },
-
       drafts:{
         ...state.drafts,
         ...(s.drafts||{}),
-
         analysis:{
           ...state.drafts.analysis,
           ...(s.drafts?.analysis||{})
         }
       }
     };
-
   }catch(e){
-
-    console.warn(
-      'State load failed:',
-      e
-    );
-
+    console.warn('State load failed:',e);
   }
-
 }
 
 function saveState(){
-
   try{
-
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify(state)
     );
-
   }catch(e){
-
-    console.warn(
-      'State save failed:',
-      e
-    );
-
+    console.warn('State save failed:',e);
   }
-
 }
 
 function isDone(i){
-
   return state.completed.includes(i);
-
 }
 
 function attempts(i){
-
-  return Number(
-    state.attempts[i]
-    ||
-    0
-  );
-
+  return Number(state.attempts[i]||0);
 }
 
 function markDone(i){
-
   if(!isDone(i)){
-
     state.completed.push(i);
-
   }
 
   state.completed=[
-    ...new Set(
-      state.completed
-    )
-  ]
-  .sort(
-    (a,b)=>a-b
-  );
+    ...new Set(state.completed)
+  ].sort((a,b)=>a-b);
 
   saveState();
-
 }
 
 function invalidateFrom(i){
-
   state.completed=
     state.completed.filter(
       x=>x<i
     );
 
-  for(
-    let j=i+1;
-    j<6;
-    j++
-  ){
-
+  for(let j=i+1;j<6;j++){
     delete state.scores[j];
-
   }
 
   saveState();
-
 }
 
 function unlockedMax(){
-
   let u=0;
 
-  for(
-    let i=0;
-    i<6;
-    i++
-  ){
-
+  for(let i=0;i<6;i++){
     if(isDone(i)){
-
       u=i+1;
-
     }else{
-
       break;
-
     }
-
   }
 
-  return Math.min(
-    5,
-    u
-  );
-
+  return Math.min(5,u);
 }
 
 /* =========================================================
@@ -873,51 +558,20 @@ function unlockedMax(){
    ========================================================= */
 
 function norm(v){
-
   return String(v||'')
-
     .toLowerCase()
-
     .normalize('NFD')
-
-    .replace(
-      /[\u0300-\u036f]/g,
-      ''
-    )
-
-    .replace(
-      /đ/g,
-      'd'
-    )
-
-    .replace(
-      /[’‘]/g,
-      "'"
-    )
-
-    .replace(
-      /[–—]/g,
-      '-'
-    )
-
-    .replace(
-      /[^a-z0-9°%'\s.-]/g,
-      ' '
-    )
-
-    .replace(
-      /\s+/g,
-      ' '
-    )
-
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/đ/g,'d')
+    .replace(/[’‘]/g,"'")
+    .replace(/[–—]/g,'-')
+    .replace(/[^a-z0-9°%'\s-]/g,' ')
+    .replace(/\s+/g,' ')
     .trim();
-
 }
 
 function esc(v){
-
   return String(v??'')
-
     .replace(
       /[&<>"']/g,
       c=>({
@@ -928,14 +582,10 @@ function esc(v){
         "'":'&#39;'
       }[c])
     );
-
 }
 
 function wordCount(v){
-
-  const s=
-    String(v||'')
-    .trim();
+  const s=String(v||'').trim();
 
   return s
     ?
@@ -944,60 +594,45 @@ function wordCount(v){
       .length
     :
     0;
-
 }
 
 function uniq(a){
-
   return [
     ...new Set(
       (a||[])
       .filter(Boolean)
     )
   ];
-
 }
 
 function model(){
-
-  return MODELS[ID]
-    ||
-    [];
-
+  return MODELS[ID]||[];
 }
 
 function containsAny(
   text,
   arr=[]
 ){
-
-  const n=
-    ` ${norm(text)} `;
+  const n=` ${norm(text)} `;
 
   return arr.some(
     x=>{
-
-      const q=
-        norm(x);
+      const q=norm(x);
 
       return q
         &&
         n.includes(
           ` ${q} `
         );
-
     }
   );
-
 }
 
 function stagePosition(
   text,
   stage
 ){
-
-  const n=
-    ` ${norm(text)} `;
+  const n=` ${norm(text)} `;
 
   let best=-1;
 
@@ -1006,9 +641,7 @@ function stagePosition(
     of
     stage?.terms||[]
   ){
-
-    const q=
-      norm(phrase);
+    const q=norm(phrase);
 
     if(!q){
       continue;
@@ -1028,19 +661,14 @@ function stagePosition(
         p<best
       )
     ){
-
       best=p;
-
     }
-
   }
 
   return best;
-
 }
 
 function stageHits(text){
-
   return model()
     .map(
       stage=>
@@ -1049,30 +677,20 @@ function stageHits(text){
           stage
         )>=0
     );
-
 }
 
 function splitParagraphs(text){
-
   return String(text||'')
-
     .replace(
       /\r\n?/g,
       '\n'
     )
-
     .trim()
-
-    .split(
-      /\n+/
-    )
-
+    .split(/\n+/)
     .map(
       x=>x.trim()
     )
-
     .filter(Boolean);
-
 }
 
 /* =========================================================
@@ -1100,7 +718,6 @@ const NUMBER_WORDS={
   eighteen:18,
   nineteen:19,
   twenty:20,
-
   mot:1,
   hai:2,
   ba:3,
@@ -1114,43 +731,32 @@ const NUMBER_WORDS={
 };
 
 function numberValue(v){
-
   let s=
     norm(v)
-
     .replace(
       /\bmain stages?\b/g,
       ''
     )
-
     .replace(
       /\bstages?\b/g,
       ''
     )
-
     .replace(
       /\bgiai doan\b/g,
       ''
     )
-
     .trim();
 
   if(
     /^\d+$/.test(s)
   ){
-
     return Number(s);
-
   }
 
   if(
-    NUMBER_WORDS[s]
-    !=
-    null
+    NUMBER_WORDS[s]!=null
   ){
-
     return NUMBER_WORDS[s];
-
   }
 
   const m=
@@ -1159,110 +765,70 @@ function numberValue(v){
     );
 
   if(m){
-
-    return /^\d+$/.test(
-      m[1]
-    )
-    ?
-    Number(
-      m[1]
-    )
-    :
-    NUMBER_WORDS[
-      m[1]
-    ];
-
+    return /^\d+$/.test(m[1])
+      ?
+      Number(m[1])
+      :
+      NUMBER_WORDS[m[1]];
   }
 
   for(
     const [k,n]
     of
-    Object.entries(
-      NUMBER_WORDS
-    )
+    Object.entries(NUMBER_WORDS)
   ){
-
     if(
       new RegExp(
         `\\b${k}\\b`
       )
       .test(s)
     ){
-
       return n;
-
     }
-
   }
 
   return null;
-
 }
 
 function parseRange(v){
-
   const s=
     norm(v)
-
     .replace(
       /\bstages?\b/g,
       ''
     )
-
     .trim();
 
   let m=
     s.match(
       /\b(\d+)\s*-\s*(\d+)\b/
     )
-
     ||
-
     s.match(
       /\b(?:from\s+)?(\d+)\s+to\s+(\d+)\b/
     );
 
   if(m){
-
-    const a=
-      Number(
-        m[1]
-      );
-
-    const b=
-      Number(
-        m[2]
-      );
+    const a=Number(m[1]);
+    const b=Number(m[2]);
 
     return{
       valid:true,
-      start:
-        Math.min(
-          a,
-          b
-        ),
-      end:
-        Math.max(
-          a,
-          b
-        )
+      start:Math.min(a,b),
+      end:Math.max(a,b)
     };
-
   }
 
   if(
     /^\d+$/.test(s)
   ){
-
-    const n=
-      Number(s);
+    const n=Number(s);
 
     return{
       valid:true,
       start:n,
       end:n
     };
-
   }
 
   return{
@@ -1270,7 +836,6 @@ function parseRange(v){
     start:null,
     end:null
   };
-
 }
 
 /* =========================================================
@@ -1278,15 +843,12 @@ function parseRange(v){
    ========================================================= */
 
 function bodyPlan(step){
-
   if(
     step!==3
     &&
     step!==4
   ){
-
     return null;
-
   }
 
   const raw=
@@ -1296,11 +858,8 @@ function bodyPlan(step){
     :
     state.drafts.analysis.body2;
 
-  const r=
-    parseRange(raw);
-
-  const total=
-    model().length;
+  const r=parseRange(raw);
+  const total=model().length;
 
   if(
     !r.valid
@@ -1309,51 +868,38 @@ function bodyPlan(step){
     ||
     r.end>total
   ){
-
     return null;
-
   }
 
   return{
     ...r,
-
-    stages:
-      Array.from(
-        {
-          length:
-            r.end-r.start+1
-        },
-        (_,i)=>
-          r.start+i
-      ),
-
-    label:
-      `stage ${r.start}–${r.end}`
+    stages:Array.from(
+      {
+        length:r.end-r.start+1
+      },
+      (_,i)=>r.start+i
+    ),
+    label:`stage ${r.start}–${r.end}`
   };
-
 }
 
 function planCoverage(
   text,
   p
 ){
-
   if(!p){
-
     return{
       covered:0,
       total:0,
       ratio:0,
       missing:[]
     };
-
   }
 
   const rows=
     p.stages.map(
       n=>({
         n,
-
         ok:
           stagePosition(
             text,
@@ -1370,15 +916,13 @@ function planCoverage(
 
   return{
     covered,
-    total:
-      rows.length,
+    total:rows.length,
     ratio:
       rows.length
       ?
       covered/rows.length
       :
       0,
-
     missing:
       rows.filter(
         x=>!x.ok
@@ -1387,29 +931,20 @@ function planCoverage(
         x=>x.n
       )
   };
-
 }
 
 function outsidePlanStages(
   text,
   p
 ){
-
   if(!p){
-
     return[];
-
   }
 
   return model()
-
     .map(
-      (
-        s,
-        i
-      )=>({
+      (s,i)=>({
         n:i+1,
-
         pos:
           stagePosition(
             text,
@@ -1417,20 +952,15 @@ function outsidePlanStages(
           )
       })
     )
-
     .filter(
       x=>
         x.pos>=0
         &&
-        !p.stages.includes(
-          x.n
-        )
+        !p.stages.includes(x.n)
     )
-
     .map(
       x=>x.n
     );
-
 }
 
 /* =========================================================
@@ -1438,44 +968,32 @@ function outsidePlanStages(
    ========================================================= */
 
 function sentenceSplit(text){
-
   return String(text||'')
-
     .replace(
       /\s+/g,
       ' '
     )
-
     .trim()
-
     .split(
       /(?<=[.!?])\s+/
     )
-
     .map(
       x=>x.trim()
     )
-
     .filter(Boolean);
-
 }
 
 function stripTopicSentence(
   text,
   p
 ){
-
   const sentences=
     sentenceSplit(text);
 
   if(
     sentences.length<2
   ){
-
-    return String(
-      text||''
-    );
-
+    return String(text||'');
   }
 
   const first=
@@ -1489,9 +1007,7 @@ function stripTopicSentence(
   const broadTopic=
     /\b(?:initial stages?|remaining stages?|later stages?|these stages?|the process|the procedure)\b/i
     .test(first)
-
     ||
-
     /\b(?:consist(?:s)? of|deal(?:s)? with|involv(?:e|es)|include(?:s)?|followed by)\b/i
     .test(first);
 
@@ -1519,24 +1035,18 @@ function stripTopicSentence(
   ?
   rest
   :
-  String(
-    text||''
-  );
-
+  String(text||'');
 }
 
 function sequenceForPlan(
   text,
   p
 ){
-
   if(!p){
-
     return{
       ok:true,
       issues:[]
     };
-
   }
 
   const detail=
@@ -1547,11 +1057,9 @@ function sequenceForPlan(
 
   const found=
     p.stages
-
     .map(
       n=>({
         n,
-
         pos:
           stagePosition(
             detail,
@@ -1559,14 +1067,11 @@ function sequenceForPlan(
           )
       })
     )
-
     .filter(
       x=>x.pos>=0
     )
-
     .sort(
-      (a,b)=>
-        a.pos-b.pos
+      (a,b)=>a.pos-b.pos
     );
 
   const issues=[];
@@ -1576,44 +1081,35 @@ function sequenceForPlan(
     i<found.length;
     i++
   ){
-
     if(
       found[i].n
       <
       found[i-1].n
     ){
-
       issues.push(
         `Stage ${found[i].n} đang được trình bày trước stage ${found[i-1].n}.`
       );
-
     }
-
   }
 
   return{
     ok:
       issues.length===0,
-
     issues
   };
-
 }
 
 function fullEssaySequence(text){
-
   const paras=
     splitParagraphs(text);
 
   if(
     paras.length<4
   ){
-
     return{
       ok:true,
       issues:[]
     };
-
   }
 
   const b1=
@@ -1643,14 +1139,12 @@ function fullEssaySequence(text){
       r1.ok
       &&
       r2.ok,
-
     issues:
       uniq([
         ...(r1.issues||[]),
         ...(r2.issues||[])
       ])
   };
-
 }
 
 /* =========================================================
@@ -1690,18 +1184,12 @@ const TYPO={
 };
 
 function spellingIssues(text){
-
   const out=[];
 
   const tokens=
     String(text||'')
-
     .toLowerCase()
-
-    .match(
-      /[a-z]+/g
-    )
-
+    .match(/[a-z]+/g)
     ||
     [];
 
@@ -1710,32 +1198,25 @@ function spellingIssues(text){
     of
     tokens
   ){
-
     if(
       TYPO[w]
     ){
-
       out.push(
         `Có thể sai chính tả: “${w}” → “${TYPO[w]}”.`
       );
-
     }
-
   }
 
   if(
     /\brip\s+tomatoes?\b/i
     .test(text)
   ){
-
     out.push(
       'Dùng “ripe tomatoes”, không dùng “rip tomatoes”.'
     );
-
   }
 
   return uniq(out);
-
 }
 
 function grammarIssues(
@@ -1744,7 +1225,6 @@ function grammarIssues(
     note=false
   }={}
 ){
-
   const s=
     String(text||'')
     .trim();
@@ -1752,15 +1232,12 @@ function grammarIssues(
   const out=[];
 
   if(!s){
-
     return[
       'Chưa có câu trả lời.'
     ];
-
   }
 
   if(!note){
-
     const paras=
       splitParagraphs(s);
 
@@ -1769,94 +1246,75 @@ function grammarIssues(
       of
       paras
     ){
-
       if(
         p
         &&
         !/^[A-Z0-9]/.test(p)
       ){
-
         out.push(
           'Một đoạn chưa viết hoa chữ cái đầu.'
         );
-
       }
-
     }
 
     if(
       !/[.!?]$/.test(s)
     ){
-
       out.push(
         'Nên kết thúc bằng dấu câu.'
       );
-
     }
-
   }
 
   if(
     /\b(?:allows|enables)\s+(?:they|he|she|we|i)\s+to\b/i
     .test(s)
   ){
-
     out.push(
       'Sau allows/enables phải dùng tân ngữ: them/him/her/us/me + to V.'
     );
-
   }
 
   if(
     /\bbetween\s+[^,.!?;]{0,40}\s+to\s+[^,.!?;]{0,40}/i
     .test(s)
   ){
-
     out.push(
       'Dùng “between X and Y”, không dùng “between X to Y”.'
     );
-
   }
 
   if(
     /\bbegins?\s+with\b[^.!?]{0,180}\bto\s+ends?\s+with\b/i
     .test(s)
   ){
-
     out.push(
       'Dùng “begins with ... and ends with ...”, không dùng “begins with ... to ends with ...”.'
     );
-
   }
 
   if(
     /\bends?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i
     .test(s)
   ){
-
     out.push(
       'Sau “ends with” nên dùng noun/V-ing, ví dụ “ends with the bricks being delivered”.'
     );
-
   }
 
   if(
     /\bbegins?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i
     .test(s)
   ){
-
     out.push(
       'Sau “begins with” nên dùng noun/V-ing, ví dụ “begins with clay being dug from the ground”.'
     );
-
   }
 
-  /* clay is excavated, processed before... */
   if(
     /\b(?:is|are|was|were)\s+([a-z]+ed)\s*,\s*([a-z]+ed)\s+before\b/i
     .test(s)
   ){
-
     const m=
       s.match(
         /\b(?:is|are|was|were)\s+([a-z]+ed)\s*,\s*([a-z]+ed)\s+before\b/i
@@ -1865,22 +1323,17 @@ function grammarIssues(
     out.push(
       `Cấu trúc song song chưa tự nhiên: nên viết “${m[1]} and ${m[2]} before ...”.`
     );
-
   }
 
-  /* a moderate temperature kilns */
   if(
     /\ba\s+(?:moderate|high(?:er)?)[-\s]+temperature\s+kilns\b/i
     .test(s)
   ){
-
     out.push(
       'Dùng “a moderate-temperature kiln” hoặc “moderate-temperature kilns”, không dùng “a ... kilns”.'
     );
-
   }
 
-  /* heated in a kiln ... and another kiln ... */
   if(
     ID==='01'
     &&
@@ -1890,11 +1343,9 @@ function grammarIssues(
     !/\band\s+in\s+(?:another|a second)\s+kiln\b/i
     .test(s)
   ){
-
     out.push(
       'Cấu trúc song song ở phần nung chưa tự nhiên: nên viết “heated in two kilns: first ... and then ...” hoặc “in one kiln ... and in another kiln ...”.'
     );
-
   }
 
   const agreements=[
@@ -1938,15 +1389,11 @@ function grammarIssues(
 
   agreements.forEach(
     ([r,msg])=>{
-
       if(
         r.test(s)
       ){
-
         out.push(msg);
-
       }
-
     }
   );
 
@@ -1954,11 +1401,9 @@ function grammarIssues(
     /\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i
     .test(s)
   ){
-
     out.push(
       '“a/an” không đứng trực tiếp trước danh từ số nhiều.'
     );
-
   }
 
   let m;
@@ -1972,58 +1417,45 @@ function grammarIssues(
       deg.exec(s)
     )
   ){
-
     if(
       Number(m[1])!==1
     ){
-
       out.push(
         `“${m[0]}” chưa đúng: dùng “degrees Celsius”.`
       );
-
     }
-
   }
 
-  /* Bricks: roller does NOT crush clay */
   if(
     ID==='01'
     &&
     (
       /\brollers?\b[^.!?]{0,60}\b(?:crush(?:es|ed|ing)?|grind(?:s|ing)?|break(?:s|ing)?\s+down)\b/i
       .test(s)
-
       ||
-
       /\bclay\b[^.!?]{0,70}\b(?:crushed|ground\s+(?:down|up)|broken\s+down)\b/i
       .test(s)
     )
   ){
-
     out.push(
       'Không mô tả roller là công đoạn nghiền clay. Theo sơ đồ, clay được sàng qua metal grid rồi chuyển qua roller(s).'
     );
-
   }
 
   return uniq(out);
-
 }
 
 function languageIssues(
   text,
   opts={}
 ){
-
   return uniq([
     ...grammarIssues(
       text,
       opts
     ),
-
     ...spellingIssues(text)
   ]);
-
 }
 
 /* =========================================================
@@ -2031,50 +1463,31 @@ function languageIssues(
    ========================================================= */
 
 function factualIssues(text){
-
-  const s=
-    String(text||'');
-
+  const s=String(text||'');
   const out=[];
 
   if(
-    [
-      '01',
-      '02',
-      '03',
-      '06'
-    ]
+    ['01','02','03','06']
     .includes(ID)
-
     &&
-
     /\b(?:cyclical|cyclic)\b/i
     .test(s)
   ){
-
     out.push(
       'Đây là linear process, không phải cyclical process.'
     );
-
   }
 
   if(
-    [
-      '04',
-      '05'
-    ]
+    ['04','05']
     .includes(ID)
-
     &&
-
     /\blinear(?:\s+process|\s+sequence)?\b/i
     .test(s)
   ){
-
     out.push(
       'Đây là life cycle/cyclical process, không phải linear process.'
     );
-
   }
 
   if(
@@ -2083,22 +1496,16 @@ function factualIssues(text){
     /\b(?:cool|cooled|cooling)\b[^.!?]{0,50}\b(?:two|2)\s+hours?\b/i
     .test(s)
   ){
-
     out.push(
       'Sơ đồ chỉ cho biết hỗn hợp được để trong 2 giờ; nên viết “left to stand for two hours”.'
     );
-
   }
 
   return uniq(out);
-
 }
 
 function precisionIssues(text){
-
-  const s=
-    String(text||'');
-
+  const s=String(text||'');
   const out=[];
 
   if(
@@ -2107,15 +1514,12 @@ function precisionIssues(text){
     /\b(?:metal\s+grid|grid)\b[^.!?]{0,80}\bto\s+(?:remove|filter\s+out|eliminate)\s+(?:larger\s+)?(?:particles?|impurities?|debris)\b/i
     .test(s)
   ){
-
     out.push(
       'Sơ đồ không ghi rõ metal grid dùng để loại bỏ particles/impurities. Để bám sát hình hơn, chỉ cần viết clay is passed/screened through a metal grid.'
     );
-
   }
 
   return out;
-
 }
 
 /* =========================================================
@@ -2123,11 +1527,7 @@ function precisionIssues(text){
    ========================================================= */
 
 function expectedType(){
-
-  const t=
-    norm(
-      task.type
-    );
+  const t=norm(task.type);
 
   return t.includes('life')
     ?
@@ -2138,28 +1538,15 @@ function expectedType(){
     'cyclical'
     :
     'linear';
-
 }
 
 function assessAnalysis(){
-
-  const a=
-    state.drafts.analysis;
-
-  const stages=
-    model();
-
-  const total=
-    Number(
-      task.stages
-      ||
-      stages.length
-    );
+  const a=state.drafts.analysis;
+  const stages=model();
+  const total=Number(task.stages||stages.length);
 
   const typeOK=
-    norm(
-      a.type
-    )
+    norm(a.type)
     .includes(
       norm(
         expectedType()
@@ -2239,10 +1626,8 @@ function assessAnalysis(){
     r1.end<r2.start;
 
   return{
-
     type:{
       ok:typeOK,
-
       hint:
         typeOK
         ?
@@ -2253,7 +1638,6 @@ function assessAnalysis(){
 
     stages:{
       ok:stagesOK,
-
       hint:
         stagesOK
         ?
@@ -2273,7 +1657,6 @@ function assessAnalysis(){
           }
         )
         .length===0,
-
       hint:
         firstOK
         ?
@@ -2293,7 +1676,6 @@ function assessAnalysis(){
           }
         )
         .length===0,
-
       hint:
         lastOK
         ?
@@ -2303,9 +1685,7 @@ function assessAnalysis(){
     },
 
     features:{
-      ok:
-        featuresOK,
-
+      ok:featuresOK,
       hint:
         featuresOK
         ?
@@ -2319,9 +1699,7 @@ function assessAnalysis(){
     },
 
     body1:{
-      ok:
-        body1OK,
-
+      ok:body1OK,
       hint:
         body1OK
         ?
@@ -2331,9 +1709,7 @@ function assessAnalysis(){
     },
 
     body2:{
-      ok:
-        body2OK,
-
+      ok:body2OK,
       hint:
         body2OK
         ?
@@ -2341,9 +1717,7 @@ function assessAnalysis(){
         :
         'Body 2 cần tiếp nối Body 1 và không chồng stage.'
     }
-
   };
-
 }
 
 /* =========================================================
@@ -2351,7 +1725,6 @@ function assessAnalysis(){
    ========================================================= */
 
 const TEMPLATES={
-
   linear:{
     intro:'The diagram illustrates the stages involved in the production of __________.',
     overview:'Overall, the procedure follows a linear, ______-stage sequence that begins with __________ being __________ and ends with __________ being __________. During these stages, __________ is/are __________ before __________ is/are __________.',
@@ -2372,15 +1745,10 @@ const TEMPLATES={
     body1:'In the initial stages, __________. Following this, __________. Once __________, __________.',
     body2:'In the later stages, __________. Following this, __________ before returning to __________.'
   }
-
 };
 
 function kind(){
-
-  const t=
-    norm(
-      task.type
-    );
+  const t=norm(task.type);
 
   return t.includes('life')
     ?
@@ -2391,11 +1759,9 @@ function kind(){
     'cyclical'
     :
     'linear';
-
 }
 
 function templateFor(step){
-
   const set=
     TEMPLATES[
       kind()
@@ -2411,18 +1777,13 @@ function templateFor(step){
   })[step]
   ||
   '';
-
 }
 
 function dynamicReference(step){
-
-  const p=
-    bodyPlan(step);
+  const p=bodyPlan(step);
 
   if(!p){
-
     return '';
-
   }
 
   if(
@@ -2434,126 +1795,60 @@ function dynamicReference(step){
     &&
     p.end===3
   ){
-
     return BRICKS_BODY1_MODEL;
-
   }
 
   return p.stages
-
     .map(
       n=>
         model()[n-1]
         ?.ref
     )
-
     .filter(Boolean)
-
     .join(' ');
-
 }
 
 /* =========================================================
-   TOPIC
+   GRADING
    ========================================================= */
 
 function topicCheck(text){
-
   const sets={
-
     '01':{
-      need:[
-        'brick',
-        'bricks'
-      ],
-      bad:[
-        'noodle',
-        'ketchup',
-        'frog',
-        'bee',
-        'plastic bottle'
-      ],
+      need:['brick','bricks'],
+      bad:['noodle','ketchup','frog','bee','plastic bottle'],
       label:'bricks'
     },
 
     '02':{
-      need:[
-        'noodle',
-        'noodles',
-        'instant noodles'
-      ],
-      bad:[
-        'brick',
-        'ketchup',
-        'frog',
-        'bee',
-        'plastic bottle'
-      ],
+      need:['noodle','noodles','instant noodles'],
+      bad:['brick','ketchup','frog','bee','plastic bottle'],
       label:'instant noodles'
     },
 
     '03':{
-      need:[
-        'ketchup',
-        'tomato ketchup'
-      ],
-      bad:[
-        'brick',
-        'noodle',
-        'frog',
-        'bee',
-        'plastic bottle'
-      ],
+      need:['ketchup','tomato ketchup'],
+      bad:['brick','noodle','frog','bee','plastic bottle'],
       label:'tomato ketchup'
     },
 
     '04':{
-      need:[
-        'frog',
-        'frogs'
-      ],
-      bad:[
-        'brick',
-        'noodle',
-        'ketchup',
-        'bee',
-        'plastic bottle'
-      ],
+      need:['frog','frogs'],
+      bad:['brick','noodle','ketchup','bee','plastic bottle'],
       label:'frog life cycle'
     },
 
     '05':{
-      need:[
-        'bee',
-        'bees'
-      ],
-      bad:[
-        'brick',
-        'noodle',
-        'ketchup',
-        'frog',
-        'plastic bottle'
-      ],
+      need:['bee','bees'],
+      bad:['brick','noodle','ketchup','frog','plastic bottle'],
       label:'bee life cycle'
     },
 
     '06':{
-      need:[
-        'plastic',
-        'plastic bottle',
-        'plastic bottles',
-        'recycling'
-      ],
-      bad:[
-        'brick',
-        'noodle',
-        'ketchup',
-        'frog',
-        'bee'
-      ],
+      need:['plastic','plastic bottle','plastic bottles','recycling'],
+      bad:['brick','noodle','ketchup','frog','bee'],
       label:'plastic bottles'
     }
-
   };
 
   const r=
@@ -2568,9 +1863,7 @@ function topicCheck(text){
   return{
     ok:
       r.need.length===0
-
       ||
-
       r.need.some(
         x=>
           containsAny(
@@ -2591,15 +1884,9 @@ function topicCheck(text){
     label:
       r.label
   };
-
 }
 
-/* =========================================================
-   GRADING
-   ========================================================= */
-
 function gradeIntro(text){
-
   const wc=
     wordCount(text);
 
@@ -2719,13 +2006,11 @@ function gradeIntro(text){
     ||
     topic.wrong.length
   ){
-
     score=
       Math.min(
         score,
         49
       );
-
   }
 
   const issues=[];
@@ -2735,35 +2020,27 @@ function gradeIntro(text){
     ||
     topic.wrong.length
   ){
-
     issues.push(
       `Đối tượng chính phải là ${topic.label}.`
     );
-
   }
 
   if(!framing){
-
     issues.push(
       'Chưa thể hiện rõ đây là diagram/figure.'
     );
-
   }
 
   if(!verb){
-
     issues.push(
       'Nên dùng illustrates/shows/depicts.'
     );
-
   }
 
   if(!process){
-
     issues.push(
       'Chưa thể hiện rõ process/life cycle.'
     );
-
   }
 
   language.forEach(
@@ -2777,21 +2054,16 @@ function gradeIntro(text){
 
   return{
     total:score,
-
     completed:
       score>=85
       &&
       issues.length===0,
-
     issues,
-
     breakdown:b
   };
-
 }
 
 function gradeOverview(text){
-
   const wc=
     wordCount(text);
 
@@ -2944,49 +2216,39 @@ function gradeOverview(text){
   if(
     facts.length
   ){
-
     score=
       Math.min(
         score,
         79
       );
-
   }
 
   const issues=[];
 
   if(!marker){
-
     issues.push(
       'Chưa có dấu hiệu mở Overview rõ ràng.'
     );
-
   }
 
   if(!first){
-
     issues.push(
       'Chưa thể hiện rõ điểm bắt đầu.'
     );
-
   }
 
   if(!last){
-
     issues.push(
       'Chưa thể hiện rõ điểm kết thúc.'
     );
-
   }
 
   if(
     ratio<.35
   ){
-
     issues.push(
       'Overview chưa khái quát đủ đặc điểm chính.'
     );
-
   }
 
   language.forEach(
@@ -3009,24 +2271,19 @@ function gradeOverview(text){
 
   return{
     total:score,
-
     completed:
       score>=85
       &&
       issues.length===0,
-
     issues,
-
     breakdown:b
   };
-
 }
 
 function gradeBody(
   step,
   text
 ){
-
   const p=
     bodyPlan(step);
 
@@ -3145,35 +2402,29 @@ function gradeBody(
   if(
     facts.length
   ){
-
     score=
       Math.min(
         score,
         74
       );
-
   }
 
   if(
     language.length>=3
   ){
-
     score=
       Math.min(
         score,
         79
       );
-
   }
 
   const issues=[];
 
   if(!p){
-
     issues.push(
       'Hệ thống chưa đọc được phạm vi Body đã chọn ở Bước 1.'
     );
-
   }
 
   if(
@@ -3181,21 +2432,17 @@ function gradeBody(
     &&
     coverage.missing.length
   ){
-
     issues.push(
       `Theo cách chia em đã chọn (${p.label}), còn thiếu hoặc chưa rõ stage: ${coverage.missing.join(', ')}.`
     );
-
   }
 
   if(
     outside.length>=2
   ){
-
     issues.push(
       `Đoạn này đang triển khai khá nhiều stage ngoài phạm vi ${p?.label}: ${outside.join(', ')}.`
     );
-
   }
 
   sequence.issues.forEach(
@@ -3299,7 +2546,6 @@ function gradeBody(
 
   return{
     total:score,
-
     completed:
       score>=85
       &&
@@ -3312,19 +2558,14 @@ function gradeBody(
       !!p
       &&
       coverage.ratio>=.75,
-
     issues,
-
     breakdown,
-
     reference:
       dynamicReference(step)
   };
-
 }
 
 function gradeFull(text){
-
   const wc=
     wordCount(text);
 
@@ -3450,37 +2691,31 @@ function gradeFull(text){
     ||
     topic.wrong.length
   ){
-
     score=
       Math.min(
         score,
         49
       );
-
   }
 
   if(
     facts.length
   ){
-
     score=
       Math.min(
         score,
         79
       );
-
   }
 
   if(
     language.length>=4
   ){
-
     score=
       Math.min(
         score,
         79
       );
-
   }
 
   const issues=[];
@@ -3490,49 +2725,39 @@ function gradeFull(text){
     ||
     topic.wrong.length
   ){
-
     issues.push(
       `Đối tượng chính phải là ${topic.label}.`
     );
-
   }
 
   if(
     wc<150
   ){
-
     issues.push(
       `Bài hiện có ${wc} từ; IELTS Writing Task 1 nên có ít nhất 150 từ.`
     );
-
   }
 
   if(!overview){
-
     issues.push(
       'Chưa thấy Overview rõ ràng.'
     );
-
   }
 
   if(
     paras.length<4
   ){
-
     issues.push(
       `Hệ thống đang nhận ${paras.length} đoạn. Chỉ cần Enter 1 lần để sang đoạn mới.`
     );
-
   }
 
   if(
     ratio<.72
   ){
-
     issues.push(
       'Bài vẫn còn thiếu một số stage quan trọng.'
     );
-
   }
 
   seq.issues.forEach(
@@ -3623,7 +2848,6 @@ function gradeFull(text){
 
   return{
     total:score,
-
     completed:
       score>=85
       &&
@@ -3634,33 +2858,25 @@ function gradeFull(text){
           )
       )
       .length===0,
-
     issues,
-
     breakdown
   };
-
 }
 
 function grade(
   step,
   text
 ){
-
   if(
     step===1
   ){
-
     return gradeIntro(text);
-
   }
 
   if(
     step===2
   ){
-
     return gradeOverview(text);
-
   }
 
   if(
@@ -3668,16 +2884,13 @@ function grade(
     ||
     step===4
   ){
-
     return gradeBody(
       step,
       text
     );
-
   }
 
   return gradeFull(text);
-
 }
 
 /* =========================================================
@@ -3685,7 +2898,6 @@ function grade(
    ========================================================= */
 
 const CSS=`
-
 :root{
   --p:#281260;
   --v:#7358e7;
@@ -4394,7 +3606,6 @@ dialog::backdrop{
 }
 
 @media(max-width:1050px){
-
   .layout{
     grid-template-columns:1fr;
   }
@@ -4410,11 +3621,9 @@ dialog::backdrop{
         1fr
       );
   }
-
 }
 
 @media(max-width:650px){
-
   .student{
     display:none;
   }
@@ -4437,9 +3646,7 @@ dialog::backdrop{
   .main{
     padding:16px;
   }
-
 }
-
 `;
 
 /* =========================================================
@@ -4447,7 +3654,6 @@ dialog::backdrop{
    ========================================================= */
 
 function currentDraftKey(step){
-
   return[
     'analysis',
     'intro',
@@ -4456,93 +3662,88 @@ function currentDraftKey(step){
     'body2',
     'full'
   ][step];
-
 }
 
 function saveCurrentDraft(){
-
   if(
     state.current===0
   ){
-
     state.drafts.analysis={
       type:
-        document.getElementById('aType')
-        ?.value
+        document.getElementById(
+          'aType'
+        )?.value
         ||
         '',
 
       stages:
-        document.getElementById('aStages')
-        ?.value
+        document.getElementById(
+          'aStages'
+        )?.value
         ||
         '',
 
       first:
-        document.getElementById('aFirst')
-        ?.value
+        document.getElementById(
+          'aFirst'
+        )?.value
         ||
         '',
 
       last:
-        document.getElementById('aLast')
-        ?.value
+        document.getElementById(
+          'aLast'
+        )?.value
         ||
         '',
 
       features:
-        document.getElementById('aFeatures')
-        ?.value
+        document.getElementById(
+          'aFeatures'
+        )?.value
         ||
         '',
 
       body1:
-        document.getElementById('aBody1')
-        ?.value
+        document.getElementById(
+          'aBody1'
+        )?.value
         ||
         '',
 
       body2:
-        document.getElementById('aBody2')
-        ?.value
+        document.getElementById(
+          'aBody2'
+        )?.value
         ||
         ''
     };
-
   }else{
-
     const box=
       document.getElementById(
         'writeBox'
       );
 
     if(box){
-
       state.drafts[
         currentDraftKey(
           state.current
         )
       ]=
         box.value;
-
     }
-
   }
 
   saveState();
-
 }
 
 function templateCard(step){
-
   if(
     step<1
     ||
     step>4
   ){
-
     return '';
-
   }
 
   const open=
@@ -4551,21 +3752,11 @@ function templateCard(step){
     false;
 
   return`
-
 <div class="template-card">
-
   <div class="template-head">
-
     <div>
-
-      <span class="template-badge">
-        TEMPLATE HỖ TRỢ
-      </span>
-
-      <b>
-        ${STEP_NAMES[step]}
-      </b>
-
+      <span class="template-badge">TEMPLATE HỖ TRỢ</span>
+      <b>${STEP_NAMES[step]}</b>
     </div>
 
     <button
@@ -4573,49 +3764,27 @@ function templateCard(step){
       class="template-toggle"
       id="templateToggle"
     >
-      ${
-        open
-        ?
-        'Ẩn template'
-        :
-        'Xem template'
-      }
+      ${open?'Ẩn template':'Xem template'}
     </button>
-
   </div>
 
   <div
     class="template-body"
     id="templateBody"
-    ${
-      open
-      ?
-      ''
-      :
-      'hidden'
-    }
+    ${open?'':'hidden'}
   >
-
     <div class="template-text">
-      ${esc(
-        templateFor(step)
-      )}
+      ${esc(templateFor(step))}
     </div>
 
     <div class="template-note">
       Em có thể dùng khung này nhưng không cần chép nguyên văn.
     </div>
-
   </div>
-
-</div>
-
-  `;
-
+</div>`;
 }
 
 function guide(step){
-
   return[
     '<b>Mục tiêu:</b> Nhận diện loại process, số giai đoạn, điểm đầu–cuối, đặc điểm nổi bật và tự chọn cách chia Body 1/Body 2 hợp lý.',
     '<b>Mục tiêu:</b> Dùng template để paraphrase đề bài trong 1 câu.',
@@ -4624,7 +3793,6 @@ function guide(step){
     '<b>Mục tiêu:</b> Viết Body 2 đúng các stage em đã chọn ở Bước 1.',
     '<b>Mục tiêu:</b> Tự viết toàn bộ bài, không dùng template.'
   ][step];
-
 }
 
 /* =========================================================
@@ -4632,24 +3800,16 @@ function guide(step){
    ========================================================= */
 
 function mount(){
-
   document.head.insertAdjacentHTML(
     'beforeend',
     `<style>${CSS}</style>`
   );
 
   document.body.innerHTML=`
-
 <header class="top">
-
   <div class="topin">
-
     <div class="left">
-
-      <a
-        class="back"
-        href="../"
-      >
+      <a class="back" href="../">
         ← Process
       </a>
 
@@ -4657,55 +3817,36 @@ function mount(){
         ${task.icon||'✍️'}
         ${esc(task.title)}
       </div>
-
     </div>
 
     <div
       id="studentInfo"
       class="student"
     ></div>
-
   </div>
-
 </header>
-
 
 <main class="page">
 
   <section class="hero">
-
     <div>
-
-      <h1>
-        ${esc(task.title)}
-      </h1>
-
+      <h1>${esc(task.title)}</h1>
       <p>
         Bước 2–5 được dùng template · Bước 6 tự viết hoàn chỉnh.
       </p>
-
     </div>
 
     <div class="progresswrap">
-
       <div class="prow">
-
-        <span>
-          Tiến độ
-        </span>
-
+        <span>Tiến độ</span>
         <span id="progressText"></span>
-
       </div>
 
       <div class="progress">
         <i id="progressBar"></i>
       </div>
-
     </div>
-
   </section>
-
 
   <div class="layout">
 
@@ -4714,15 +3855,10 @@ function mount(){
       <section class="diagram">
 
         <div class="diagramtop">
-
-          <b>
-            Sơ đồ Process
-          </b>
-
+          <b>Sơ đồ Process</b>
           <span class="pill">
             Quan sát · phân tích
           </span>
-
         </div>
 
         <div class="imgwrap">
@@ -4739,50 +3875,33 @@ function mount(){
           >
             Phóng to sơ đồ ⤢
           </button>
-
         </div>
 
         <div class="prompt">
-
-          <b>
-            Đề bài:
-          </b>
-
+          <b>Đề bài:</b>
           ${esc(task.prompt)}
-
         </div>
-
       </section>
 
       <section
         id="stepNav"
         class="steps"
       ></section>
-
     </aside>
 
     <section
       id="main"
       class="main"
     ></section>
-
   </div>
-
 </main>
 
-
 <dialog id="imgDialog">
-
   <div class="modalhead">
-
-    <b>
-      ${esc(task.title)}
-    </b>
-
+    <b>${esc(task.title)}</b>
     <button id="closeDialog">
       Đóng ✕
     </button>
-
   </div>
 
   <img
@@ -4790,13 +3909,9 @@ function mount(){
     src="../assets/${esc(task.image)}"
     alt="${esc(task.title)}"
   >
-
-</dialog>
-
-  `;
+</dialog>`;
 
   try{
-
     const s=
       JSON.parse(
         localStorage.getItem(
@@ -4809,7 +3924,6 @@ function mount(){
     if(
       s?.name
     ){
-
       document.getElementById(
         'studentInfo'
       )
@@ -4825,9 +3939,7 @@ function mount(){
           :
           ''
         );
-
     }
-
   }catch(e){}
 
   document.getElementById(
@@ -4849,7 +3961,6 @@ function mount(){
         'imgDialog'
       )
       .close();
-
 }
 
 /* =========================================================
@@ -4857,7 +3968,6 @@ function mount(){
    ========================================================= */
 
 function renderNav(){
-
   const u=
     unlockedMax();
 
@@ -4868,54 +3978,26 @@ function renderNav(){
 
   nav.innerHTML=
     STEP_NAMES
-
     .map(
       (
         name,
         i
       )=>`
-
 <button
   class="
     stepbtn
-    ${
-      i===state.current
-      ?
-      'active'
-      :
-      ''
-    }
-    ${
-      isDone(i)
-      ?
-      'done'
-      :
-      ''
-    }
-    ${
-      i>u
-      ?
-      'locked'
-      :
-      ''
-    }
+    ${i===state.current?'active':''}
+    ${isDone(i)?'done':''}
+    ${i>u?'locked':''}
   "
-  ${
-    i>u
-    ?
-    'disabled'
-    :
-    ''
-  }
+  ${i>u?'disabled':''}
   data-step="${i}"
 >
-
   <span class="n">
     ${i+1}
   </span>
 
   <span>
-
     <strong>
       ${name}
     </strong>
@@ -4933,14 +4015,9 @@ function renderNav(){
         'Đang học'
       }
     </small>
-
   </span>
-
-</button>
-
-      `
+</button>`
     )
-
     .join('');
 
   nav
@@ -4949,10 +4026,8 @@ function renderNav(){
   )
   .forEach(
     btn=>{
-
       btn.onclick=
         ()=>{
-
           const i=
             Number(
               btn.dataset.step
@@ -4961,7 +4036,6 @@ function renderNav(){
           if(
             i<=unlockedMax()
           ){
-
             saveCurrentDraft();
 
             state.current=i;
@@ -4969,18 +4043,13 @@ function renderNav(){
             saveState();
 
             render();
-
           }
-
         };
-
     }
   );
-
 }
 
 function renderProgress(){
-
   const c=
     state.completed.length;
 
@@ -4995,7 +4064,6 @@ function renderProgress(){
   )
   .style.width=
     `${c/6*100}%`;
-
 }
 
 /* =========================================================
@@ -5006,7 +4074,6 @@ function inlineFeedback(
   id,
   a
 ){
-
   const el=
     document.getElementById(id);
 
@@ -5018,9 +4085,7 @@ function inlineFeedback(
     );
 
   if(!holder){
-
     return;
-
   }
 
   holder.className=
@@ -5035,27 +4100,16 @@ function inlineFeedback(
     );
 
   holder.innerHTML=`
-
 <div class="inline-state">
-  ${
-    a.ok
-    ?
-    '✓ Đạt'
-    :
-    '✕ Chưa đạt'
-  }
+  ${a.ok?'✓ Đạt':'✕ Chưa đạt'}
 </div>
 
 <div>
   ${esc(a.hint)}
-</div>
-
-  `;
-
+</div>`;
 }
 
 function renderAnalysis(){
-
   const d=
     state.drafts.analysis;
 
@@ -5065,9 +4119,7 @@ function renderAnalysis(){
     );
 
   main.innerHTML=`
-
 <div class="ey">
-
   <span class="chip">
     BƯỚC 1
   </span>
@@ -5075,36 +4127,28 @@ function renderAnalysis(){
   <span class="counter">
     Phân tích trước khi viết
   </span>
-
 </div>
-
 
 <h2>
   Phân tích sơ đồ
 </h2>
 
-
 <p class="sub">
   Kết quả Đạt / Chưa đạt và gợi ý sẽ hiện ngay dưới từng mục.
 </p>
-
 
 <div class="guide">
   ${guide(0)}
 </div>
 
-
 <div class="formgrid">
 
-
   <div class="field">
-
     <label>
       Process thuộc dạng nào?
     </label>
 
     <select id="aType">
-
       <option value="">
         — Chọn —
       </option>
@@ -5120,16 +4164,12 @@ function renderAnalysis(){
       <option>
         Life Cycle
       </option>
-
     </select>
 
     <div class="inline-feedback"></div>
-
   </div>
 
-
   <div class="field">
-
     <label>
       Có bao nhiêu main stages?
     </label>
@@ -5140,12 +4180,9 @@ function renderAnalysis(){
     >
 
     <div class="inline-feedback"></div>
-
   </div>
 
-
   <div class="field">
-
     <label>
       First stage là gì?
     </label>
@@ -5156,12 +4193,9 @@ function renderAnalysis(){
     ></textarea>
 
     <div class="inline-feedback"></div>
-
   </div>
 
-
   <div class="field">
-
     <label>
       Last / return stage là gì?
     </label>
@@ -5172,15 +4206,12 @@ function renderAnalysis(){
     ></textarea>
 
     <div class="inline-feedback"></div>
-
   </div>
-
 
   <div
     class="field"
     style="grid-column:1/-1"
   >
-
     <label>
       Important features là gì?
     </label>
@@ -5191,12 +4222,9 @@ function renderAnalysis(){
     ></textarea>
 
     <div class="inline-feedback"></div>
-
   </div>
 
-
   <div class="field">
-
     <label>
       Em chọn Body 1 gồm những stage nào?
     </label>
@@ -5207,12 +4235,9 @@ function renderAnalysis(){
     ></textarea>
 
     <div class="inline-feedback"></div>
-
   </div>
 
-
   <div class="field">
-
     <label>
       Em chọn Body 2 gồm những stage nào?
     </label>
@@ -5223,12 +4248,8 @@ function renderAnalysis(){
     ></textarea>
 
     <div class="inline-feedback"></div>
-
   </div>
-
-
 </div>
-
 
 <div class="actions">
 
@@ -5249,26 +4270,16 @@ function renderAnalysis(){
   <button
     id="nextBtn"
     class="btn"
-    ${
-      isDone(0)
-      ?
-      ''
-      :
-      'disabled'
-    }
+    ${isDone(0)?'':'disabled'}
   >
     Bước tiếp →
   </button>
-
 </div>
-
 
 <div
   id="feedback"
   class="feedback"
-></div>
-
-  `;
+></div>`;
 
   document.getElementById(
     'aType'
@@ -5325,7 +4336,6 @@ function renderAnalysis(){
   )
   .forEach(
     el=>{
-
       el.addEventListener(
         'input',
         saveCurrentDraft
@@ -5335,7 +4345,6 @@ function renderAnalysis(){
         'change',
         saveCurrentDraft
       );
-
     }
   );
 
@@ -5354,17 +4363,13 @@ function renderAnalysis(){
   if(
     state.scores[0]
   ){
-
     showAnalysisResult(
       state.scores[0]
     );
-
   }
-
 }
 
 function checkAnalysis(){
-
   saveCurrentDraft();
 
   state.attempts[0]=
@@ -5392,12 +4397,10 @@ function checkAnalysis(){
   const result={
     assessments:a,
     passed,
-
     total:
       Math.round(
         passed/7*100
       ),
-
     completed:
       passed===7
   };
@@ -5408,13 +4411,9 @@ function checkAnalysis(){
   if(
     result.completed
   ){
-
     markDone(0);
-
   }else{
-
     invalidateFrom(0);
-
   }
 
   saveState();
@@ -5424,7 +4423,6 @@ function checkAnalysis(){
   );
 
   renderNav();
-
   renderProgress();
 
   const next=
@@ -5433,16 +4431,12 @@ function checkAnalysis(){
     );
 
   if(next){
-
     next.disabled=
       !isDone(0);
-
   }
-
 }
 
 function showAnalysisResult(result){
-
   const a=
     result.assessments
     ||
@@ -5480,20 +4474,15 @@ function showAnalysisResult(result){
     );
 
   if(!f){
-
     return;
-
   }
 
   f.className=
     'feedback show';
 
   f.innerHTML=`
-
 <div class="scorebar">
-
   <div>
-
     <div class="score">
       ${result.total}/100
     </div>
@@ -5501,13 +4490,7 @@ function showAnalysisResult(result){
     <div
       class="
         status
-        ${
-          result.completed
-          ?
-          'good'
-          :
-          'warn'
-        }
+        ${result.completed?'good':'warn'}
       "
     >
       ${
@@ -5518,7 +4501,6 @@ function showAnalysisResult(result){
         'Xem các mục Chưa đạt phía trên'
       }
     </div>
-
   </div>
 
   <div class="counter">
@@ -5533,11 +4515,7 @@ function showAnalysisResult(result){
       .length
     }/7 mục
   </div>
-
-</div>
-
-  `;
-
+</div>`;
 }
 
 /* =========================================================
@@ -5545,7 +4523,6 @@ function showAnalysisResult(result){
    ========================================================= */
 
 function renderWriting(step){
-
   const main=
     document.getElementById(
       'main'
@@ -5562,9 +4539,7 @@ function renderWriting(step){
     '';
 
   main.innerHTML=`
-
 <div class="ey">
-
   <span class="chip">
     BƯỚC ${step+1}
   </span>
@@ -5572,17 +4547,13 @@ function renderWriting(step){
   <span class="counter">
     ${STEP_NAMES[step]}
   </span>
-
 </div>
-
 
 <h2>
   ${STEP_NAMES[step]}
 </h2>
 
-
 <p class="sub">
-
   ${
     full
     ?
@@ -5590,22 +4561,17 @@ function renderWriting(step){
     :
     'Viết phần này dựa trên sơ đồ, kết quả phân tích và template hỗ trợ.'
   }
-
 </p>
-
 
 <div class="guide">
   ${guide(step)}
 </div>
 
-
 ${
   full
   ?
   `
-
 <div class="independent-card">
-
   <b>
     ✍️ Bước tự viết — không còn template
   </b>
@@ -5613,17 +4579,13 @@ ${
   <p>
     Hãy tự viết Introduction, Overview, Body 1 và Body 2.
   </p>
-
 </div>
-
   `
   :
   templateCard(step)
 }
 
-
 <div class="writehead">
-
   <span>
     Bài viết của em
   </span>
@@ -5634,21 +4596,13 @@ ${
   >
     0 từ
   </span>
-
 </div>
-
 
 <textarea
   id="writeBox"
   class="
     write
-    ${
-      full
-      ?
-      'full'
-      :
-      ''
-    }
+    ${full?'full':''}
   "
   placeholder="${
     full
@@ -5664,7 +4618,6 @@ ${
     ' tại đây...'
   }"
 >${esc(draft)}</textarea>
-
 
 <div class="actions">
 
@@ -5703,36 +4656,28 @@ ${
       'Bước tiếp →'
     }
   </button>
-
 </div>
-
 
 <div
   id="feedback"
   class="feedback"
 ></div>
 
-
-<div id="finalDone"></div>
-
-  `;
+<div id="finalDone"></div>`;
 
   if(
     step>=1
     &&
     step<=4
   ){
-
     const toggle=
       document.getElementById(
         'templateToggle'
       );
 
     if(toggle){
-
       toggle.onclick=
         ()=>{
-
           state.templateOpen[step]=
             !state.templateOpen[step];
 
@@ -5750,11 +4695,8 @@ ${
             'Ẩn template'
             :
             'Xem template';
-
         };
-
     }
-
   }
 
   const box=
@@ -5769,10 +4711,8 @@ ${
 
   const update=
     ()=>{
-
       wc.textContent=
         `${wordCount(box.value)} từ`;
-
     };
 
   update();
@@ -5780,7 +4720,6 @@ ${
   box.addEventListener(
     'input',
     ()=>{
-
       state.drafts[
         currentDraftKey(step)
       ]=
@@ -5789,7 +4728,6 @@ ${
       saveState();
 
       update();
-
     }
   );
 
@@ -5812,34 +4750,26 @@ ${
   )
   .onclick=
     ()=>{
-
       if(
         step<5
       ){
-
         goStep(
           step+1
         );
-
       }
-
     };
 
   if(
     state.scores[step]
   ){
-
     showWritingResult(
       step,
       state.scores[step]
     );
-
   }
-
 }
 
 function checkWriting(step){
-
   saveCurrentDraft();
 
   state.attempts[step]=
@@ -5864,13 +4794,9 @@ function checkWriting(step){
   if(
     result.completed
   ){
-
     markDone(step);
-
   }else{
-
     invalidateFrom(step);
-
   }
 
   saveState();
@@ -5881,7 +4807,6 @@ function checkWriting(step){
   );
 
   renderNav();
-
   renderProgress();
 
   const next=
@@ -5894,28 +4819,22 @@ function checkWriting(step){
     &&
     step<5
   ){
-
     next.disabled=
       !isDone(step);
-
   }
-
 }
 
 function showWritingResult(
   step,
   r
 ){
-
   const f=
     document.getElementById(
       'feedback'
     );
 
   if(!f){
-
     return;
-
   }
 
   const p=
@@ -5961,9 +4880,7 @@ function showWritingResult(
     )
     .map(
       x=>`
-
 <li>
-
   <b>
     ${esc(x.label)}:
     ${x.score}/${x.max}
@@ -5978,10 +4895,7 @@ function showWritingResult(
     :
     ''
   }
-
-</li>
-
-      `
+</li>`
     )
     .join('');
 
@@ -5993,12 +4907,9 @@ function showWritingResult(
     )
     .map(
       x=>`
-
 <li>
   ${esc(x)}
-</li>
-
-      `
+</li>`
     )
     .join('');
 
@@ -6006,11 +4917,9 @@ function showWritingResult(
     'feedback show';
 
   f.innerHTML=`
-
 <div class="scorebar">
 
   <div>
-
     <div class="score">
       ${r.total}/100
     </div>
@@ -6043,16 +4952,13 @@ function showWritingResult(
         'Cần chỉnh lại'
       }
     </div>
-
   </div>
 
   <div class="counter">
     Lần kiểm tra:
     ${attempts(step)}
   </div>
-
 </div>
-
 
 <div class="detail">
 
@@ -6063,9 +4969,7 @@ function showWritingResult(
   <ul>
     ${breakdown}
   </ul>
-
 </div>
-
 
 <div
   class="
@@ -6083,7 +4987,6 @@ function showWritingResult(
     }
   "
 >
-
   <b>
     ${
       r.completed
@@ -6105,15 +5008,12 @@ function showWritingResult(
     :
     ' Nội dung, cấu trúc và trình tự chính phù hợp.'
   }
-
 </div>
-
 
 ${
   showRef
   ?
   `
-
 <div class="reference">
 
   <b>
@@ -6136,29 +5036,22 @@ ${
   >
     ${esc(reference)}
   </div>
-
 </div>
-
   `
   :
   ''
-}
-
-  `;
+}`;
 
   if(
     step===5
     &&
     r.completed
   ){
-
     document.getElementById(
       'finalDone'
     )
     .innerHTML=`
-
 <div class="finaldone">
-
   <h3>
     🎉 Hoàn thành ${esc(task.title)}
   </h3>
@@ -6166,13 +5059,8 @@ ${
   <p>
     Em đã hoàn thành đủ 6 bước.
   </p>
-
-</div>
-
-    `;
-
+</div>`;
   }
-
 }
 
 /* =========================================================
@@ -6180,7 +5068,6 @@ ${
    ========================================================= */
 
 function goStep(i){
-
   saveCurrentDraft();
 
   if(
@@ -6188,9 +5075,7 @@ function goStep(i){
     ||
     i>unlockedMax()
   ){
-
     return;
-
   }
 
   state.current=i;
@@ -6203,37 +5088,28 @@ function goStep(i){
     top:0,
     behavior:'smooth'
   });
-
 }
 
 function render(){
-
   renderNav();
-
   renderProgress();
 
   if(
     state.current===0
   ){
-
     renderAnalysis();
-
   }else{
-
     renderWriting(
       state.current
     );
-
   }
-
 }
 
 /* =========================================================
-   START
+   START — NOTHING AFTER THIS EXCEPT })();
    ========================================================= */
 
 try{
-
   loadState();
 
   mount();
@@ -6249,16 +5125,13 @@ try{
     );
 
   render();
-
 }catch(err){
-
   console.error(
     'PROCESS ENGINE FATAL ERROR:',
     err
   );
 
   document.body.innerHTML=`
-
 <div
   style="
     max-width:900px;
@@ -6271,7 +5144,6 @@ try{
     color:#7d2634;
   "
 >
-
   <h2 style="margin-top:0">
     Không thể tải bài Process
   </h2>
@@ -6295,11 +5167,7 @@ try{
       err
     )
   )}</pre>
-
-</div>
-
-  `;
-
+</div>`;
 }
 
 })();
