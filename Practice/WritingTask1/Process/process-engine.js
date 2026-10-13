@@ -6542,7 +6542,1007 @@ function render(){
 /* =========================================================
    START
 ========================================================= */
+/* =========================================================
+V18.6 HOTFIX · FULL ESSAY ACCURACY
+Paste block này ngay trước phần START hoặc ngay trước dòng load();
+========================================================= */
 
+/* 1) Không nhầm gerund/danh từ như "processing, packaging and delivery"
+      thành động từ bị động cần đổi sang V3. */
+parallelGrammarIssues=function(text){
+const s=String(text||'');
+const out=[];
+const sentences=s
+.replace(/\s+/g,' ')
+.trim()
+.split(/(?<=[.!?])\s+/)
+.map(x=>x.trim())
+.filter(Boolean);
+
+sentences.forEach(sentence=>{
+const passiveMatch=
+sentence.match(
+new RegExp(
+`\\b(?:is|are|was|were|be|been)\\s+(?:${PASSIVE_V3_WORDS.join('|')})\\b`,
+'i'
+)
+);
+
+if(!passiveMatch){
+return;
+}
+
+const start=
+passiveMatch.index+passiveMatch[0].length;
+const localTail=
+sentence.slice(start,start+120);
+
+Object.entries(ING_TO_V3).forEach(([ing,v3])=>{
+const coordinated=
+new RegExp(
+`(?:,\\s*|\\band\\s+|\\bor\\s+)${ing}\\b`,
+'i'
+);
+
+if(!coordinated.test(localTail)){
+return;
+}
+
+/* Danh sách danh từ/gerund hợp lệ:
+   thermal processing, packaging and delivery
+   stages include drying, heating and cooling
+*/
+const nominalContext=
+new RegExp(
+`\\b(?:deal(?:s)?\\s+with|consist(?:s)?\\s+of|include(?:s)?|involve(?:s)?|comprise(?:s)?|followed\\s+by)\\b[^.!?]{0,140}\\b${ing}\\b`,
+'i'
+);
+
+const nominalList=
+new RegExp(
+`\\b(?:thermal\\s+)?(?:processing|production|treatment|stages?|steps?)\\b[^.!?]{0,120}\\b${ing}\\b`,
+'i'
+);
+
+if(
+nominalContext.test(sentence)
+||
+nominalList.test(sentence)
+){
+return;
+}
+
+out.push(
+`Cấu trúc song song chưa đúng: trong chuỗi bị động, “${ing}” nên đổi thành “${v3}”.`
+);
+});
+});
+
+return unique(out);
+};
+
+
+/* 2) Chấm grammar chính xác hơn:
+      - bắt "is excavated, processed before"
+      - bắt "heated in a kiln ... and another kiln ..."
+      - KHÔNG bắt packaging trong cụm danh từ. */
+genericGrammarIssues=function(text){
+const s=
+String(text||'')
+.trim();
+
+const n=
+norm(s);
+
+const out=[];
+
+if(!s){
+return[
+'Chưa có câu trả lời.'
+];
+}
+
+splitParagraphs(
+s,
+0
+)
+.forEach(
+p=>{
+if(
+p
+&&
+!/^[A-Z0-9]/.test(p)
+){
+out.push(
+'Một đoạn chưa viết hoa chữ cái đầu.'
+);
+}
+}
+);
+
+if(
+!/[.!?]$/.test(s)
+){
+out.push(
+'Nên kết thúc bằng dấu câu.'
+);
+}
+
+if(
+/[^\n]\s{2,}[^\n]/.test(s)
+){
+out.push(
+'Có khoảng trắng thừa.'
+);
+}
+
+if(
+/\b(is|are|was|were)\s+\1\b/i.test(n)
+){
+out.push(
+'Có trợ động từ bị lặp.'
+);
+}
+
+if(
+/\b(the|a|an)\s+\1\b/i.test(n)
+){
+out.push(
+'Có mạo từ bị lặp.'
+);
+}
+
+if(
+/\b(?:allows|enables)\s+(?:they|he|she|we|i)\s+to\b/i.test(s)
+){
+out.push(
+'Sau allows/enables phải dùng tân ngữ: them/him/her/us/me + to V.'
+);
+}
+
+if(
+/\bbetween\s+[^,.!?;]{0,40}\s+to\s+[^,.!?;]{0,40}/i.test(s)
+){
+out.push(
+'Dùng “between X and Y”, không dùng “between X to Y”.'
+);
+}
+
+/* from X to Y: chỉ bắt khi thực sự là 2 mốc. */
+const badFromAndPatterns=[
+/\bfrom\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|days?|stages?|steps?)\b/i,
+/\bfrom\s+(\d+(?:\.\d+)?)\s*(?:°\s*c|degrees?\s+celsius)\s+and\s+(\d+(?:\.\d+)?)\s*(?:°\s*c|degrees?\s+celsius)\b/i,
+/\bfrom\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)\s*(?:°\s*c|degrees?\s+celsius)\b/i,
+/\bfrom\s+stage\s+(\d+)\s+and\s+(?:stage\s+)?(\d+)\b/i,
+/\bfrom\s+step\s+(\d+)\s+and\s+(?:step\s+)?(\d+)\b/i
+];
+
+if(
+badFromAndPatterns.some(r=>r.test(s))
+){
+out.push(
+'Khi mô tả một khoảng, dùng “from X to Y”, không dùng “from X and Y”.'
+);
+}
+
+/* begins with ... and ends with ... */
+if(
+/\bbegins?\s+with\b[^.!?]{0,180}\bto\s+ends?\s+with\b/i.test(s)
+){
+out.push(
+'Cấu trúc chưa đúng: dùng “begins with ... and ends with ...”, không dùng “begins with ... to ends with ...”.'
+);
+}
+
+if(
+/\bends?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i.test(s)
+){
+out.push(
+'Sau “ends with” nên dùng noun/V-ing, ví dụ “ends with the bricks being delivered”.'
+);
+}
+
+if(
+/\bbegins?\s+with\s+(?:the\s+)?[^,.!?]{0,50}\s+(?:is|are|was|were)\s+\w+/i.test(s)
+){
+out.push(
+'Sau “begins with” nên dùng noun/V-ing, ví dụ “begins with clay being dug from the ground”.'
+);
+}
+
+/* is excavated, processed before... */
+const parallelV3=
+unique([
+...PASSIVE_V3_WORDS,
+'excavated',
+'extracted',
+'screened',
+'filtered',
+'conveyed',
+'processed'
+]);
+
+const twoPassiveBefore=
+s.match(
+new RegExp(
+`\\b(?:is|are|was|were|been)\\s+(${parallelV3.join('|')})\\s*,\\s*(${parallelV3.join('|')})\\s+before\\b`,
+'i'
+)
+);
+
+if(twoPassiveBefore){
+out.push(
+`Cấu trúc song song chưa tự nhiên: nên viết “${twoPassiveBefore[1]} and ${twoPassiveBefore[2]} before ...”.`
+);
+}
+
+/* heated in a kiln ... and another kiln ... */
+if(
+ID==='01'
+&&
+/\b(?:heated|fired)\s+in\s+(?:a|one)\s+kiln\b[^.!?]{0,180}\band\s+(?:another|a second)\s+kiln\b/i.test(s)
+&&
+!/\band\s+in\s+(?:another|a second)\s+kiln\b/i.test(s)
+){
+out.push(
+'Cấu trúc song song ở phần nung chưa tự nhiên: nên viết “heated in two kilns: first ... and then ...” hoặc “in one kiln ... and in another kiln ...”.'
+);
+}
+
+const agreement=[
+[
+/\bbricks\s+is\b/i,
+'“bricks” là số nhiều, dùng “are”.'
+],
+[
+/\bottles\s+is\b/i,
+'“bottles” là số nhiều, dùng “are”.'
+],
+[
+/\bnoodles\s+is\b/i,
+'“noodles” là số nhiều, dùng “are”.'
+],
+[
+/\btomatoes\s+is\b/i,
+'“tomatoes” là số nhiều, dùng “are”.'
+],
+[
+/\beggs\s+is\b/i,
+'“eggs” là số nhiều, dùng “are”.'
+],
+[
+/\bpellets\s+is\b/i,
+'“pellets” là số nhiều, dùng “are”.'
+],
+[
+/\bclay\s+are\b/i,
+'“clay” nên đi với “is”.'
+],
+[
+/\bflour\s+are\b/i,
+'“flour” nên đi với “is”.'
+],
+[
+/\bmixture\s+are\b/i,
+'“mixture” là số ít, dùng “is”.'
+],
+[
+/\bwater\s+are\b/i,
+'“water” nên đi với “is”.'
+]
+];
+
+agreement.forEach(
+([r,m])=>{
+if(r.test(s)){
+out.push(m);
+}
+}
+);
+
+if(
+/\b(?:a|an)\s+(?:bricks|bottles|noodles|tomatoes|eggs|pellets|stages|products)\b/i.test(s)
+){
+out.push(
+'“a/an” không đứng trực tiếp trước danh từ số nhiều.'
+);
+}
+
+if(
+/\bone\s+of\s+the\s+(?:stage|step|process)\b/i.test(s)
+){
+out.push(
+'Sau “one of the” phải dùng danh từ số nhiều.'
+);
+}
+
+let m;
+
+const deg=
+/\b(\d+(?:\.\d+)?)\s+degree\s+celsius\b/gi;
+
+while(
+(
+m=
+deg.exec(s)
+)
+){
+if(
+Number(m[1])!==1
+){
+out.push(
+`“${m[0]}” chưa đúng: dùng “degrees Celsius”.`
+);
+}
+}
+
+const hr=
+/\b(\d+)\s+hour\b/gi;
+
+while(
+(
+m=
+hr.exec(s)
+)
+){
+if(
+Number(m[1])!==1
+){
+out.push(
+`“${m[0]}” nên dùng “hours”.`
+);
+}
+}
+
+const day=
+/\b(\d+)\s+day\b/gi;
+
+while(
+(
+m=
+day.exec(s)
+)
+){
+if(
+Number(m[1])!==1
+){
+out.push(
+`“${m[0]}” nên dùng “days”.`
+);
+}
+}
+
+return unique(out);
+};
+
+
+/* 3) Chấm sequence của bài hoàn chỉnh theo TỪNG BODY,
+      dựa trên cách chia của học sinh ở Bước 1.
+      Topic sentence không còn làm đảo thứ tự giả. */
+function detailParagraphForSequence(text){
+const sentences=
+String(text||'')
+.replace(/\s+/g,' ')
+.trim()
+.split(/(?<=[.!?])\s+/)
+.map(x=>x.trim())
+.filter(Boolean);
+
+if(sentences.length<2){
+return String(text||'');
+}
+
+const first=
+sentences[0];
+
+const rest=
+sentences.slice(1).join(' ');
+
+const firstIsTopic=
+/\b(?:initial stages?|remaining stages?|later stages?|these stages?|the process|the procedure)\b/i.test(first)
+||
+/\b(?:consist(?:s)?\s+of|deal(?:s)?\s+with|involv(?:e|es)|include(?:s)?|followed\s+by)\b/i.test(first);
+
+/* Nếu phần chi tiết phía sau nhận diện được ít nhất 2 stage,
+   bỏ câu mở đoạn khái quát khỏi sequence audit. */
+const restStageCount=
+stageGroupHits(
+rest,
+processStageGroups()
+)
+.filter(Boolean)
+.length;
+
+if(
+firstIsTopic
+&&
+restStageCount>=2
+){
+return rest;
+}
+
+return String(text||'');
+}
+
+
+function fullEssaySequenceAudit(text,paras){
+const allParas=
+Array.isArray(paras)
+?
+paras
+:
+splitParagraphs(
+text,
+20
+);
+
+if(
+allParas.length>=4
+){
+const body1=
+allParas[2]
+||
+'';
+
+const body2=
+allParas
+.slice(3)
+.join(' ');
+
+const p1=
+studentPlanForStep(3);
+
+const p2=
+studentPlanForStep(4);
+
+const results=[];
+
+if(p1){
+results.push(
+sequenceAuditForPlan(
+body1,
+p1
+)
+);
+}else{
+results.push(
+sequenceAudit(
+detailParagraphForSequence(
+body1
+)
+)
+);
+}
+
+if(p2){
+results.push(
+sequenceAuditForPlan(
+body2,
+p2
+)
+);
+}else{
+results.push(
+sequenceAudit(
+detailParagraphForSequence(
+body2
+)
+)
+);
+}
+
+const violations=
+unique(
+results.flatMap(
+r=>
+r?.violations
+||
+[]
+)
+);
+
+return{
+ok:
+violations.length===0,
+violations,
+parts:
+results
+};
+}
+
+/* Fallback khi chưa đủ 4 đoạn. */
+return sequenceAudit(
+detailParagraphForSequence(
+String(text||'')
+)
+);
+}
+
+
+/* 4) Góp ý về độ sát sơ đồ, chỉ trừ NHẸ,
+      không coi là lỗi ngữ pháp nghiêm trọng. */
+function diagramPrecisionIssues(text){
+const s=
+String(text||'');
+
+const out=[];
+
+if(
+ID==='01'
+&&
+/\b(?:metal\s+grid|grid)\b[^.!?]{0,80}\bto\s+(?:remove|filter\s+out|eliminate)\s+(?:larger\s+)?(?:particles?|impurities?|debris)\b/i.test(s)
+){
+out.push(
+'Sơ đồ không ghi rõ metal grid dùng để “remove larger particles/impurities”. Để bám sát hình hơn, chỉ cần viết clay is passed/screened through a metal grid.'
+);
+}
+
+return unique(out);
+}
+
+
+/* 5) Full essay grading mới:
+      - không báo sai metal grid / drying oven nếu trình tự thật sự đúng
+      - không đổi packaging -> packaged trong cụm danh từ
+      - bắt đúng 2 lỗi thật của bài mẫu bạn vừa gửi
+      - precision chỉ trừ nhẹ
+*/
+fullGrade=function(text){
+const wc=
+words(text);
+
+const paras=
+splitParagraphs(
+text,
+20
+);
+
+const pc=
+paras.length;
+
+const groups=
+processStageGroups();
+
+const hits=
+stageGroupHits(
+text,
+groups
+);
+
+const hitCount=
+hits.filter(Boolean).length;
+
+const ratio=
+hits.length
+?
+hitCount/hits.length
+:
+0;
+
+const language=
+languageIssues(text);
+
+const serious=
+seriousLanguageIssues(
+language
+);
+
+const topic=
+topicCheck(text);
+
+const facts=
+factualIssues(text);
+
+const precision=
+diagramPrecisionIssues(text);
+
+const hasOverview=
+/\boverall\b|\bin general\b|\bgenerally\b|\bit is clear that\b|\bit can be seen that\b/i
+.test(text);
+
+const claim=
+detectStageCountClaim(text);
+
+const expected=
+Number(
+task.stages
+);
+
+const countOK=
+!claim.mentioned
+||
+claim.count===expected;
+
+const overview=
+extractOverviewParagraph(text);
+
+const overviewStyle=
+overview
+?
+styleIssues(
+overview,
+2
+)
+:
+[];
+
+const seq=
+fullEssaySequenceAudit(
+text,
+paras
+);
+
+const badOverviewConnector=
+overview
+?
+hasBadBeginEndConnector(
+overview
+)
+:
+false;
+
+const issues=[];
+
+if(
+!topic.requiredOK
+){
+issues.push(
+`Bài chưa thể hiện đúng đối tượng chính: “${topic.expected}”.`
+);
+}
+
+if(
+topic.wrong.length
+){
+issues.push(
+`Có nội dung thuộc process khác: “${topic.wrong.join(', ')}”.`
+);
+}
+
+if(
+claim.mentioned
+&&
+!countOK
+){
+issues.push(
+`Sai số giai đoạn: em viết ${claim.count}, nhưng sơ đồ có ${expected}.`
+);
+}
+
+if(
+wc<150
+){
+issues.push(
+`Bài hiện có ${wc} từ; IELTS Writing Task 1 nên có ít nhất 150 từ.`
+);
+}
+
+if(
+!hasOverview
+){
+issues.push(
+'Chưa thấy Overview rõ ràng.'
+);
+}
+
+if(
+pc<4
+){
+issues.push(
+`Hệ thống đang nhận ${pc} đoạn. Bài nên có 4 đoạn. Chỉ cần Enter 1 lần để sang đoạn mới.`
+);
+}
+
+if(
+ratio<.72
+){
+const missing=
+groups
+.filter(
+(_,i)=>
+!hits[i]
+)
+.map(
+g=>
+g[0]
+)
+.slice(
+0,
+10
+);
+
+issues.push(
+'Một số stage chưa được thể hiện rõ: '
++
+missing.join(', ')
++
+'.'
+);
+}
+
+facts.forEach(
+x=>
+issues.push(
+'Nội dung/số liệu: '
++
+x
+)
+);
+
+seq.violations.forEach(
+x=>
+issues.push(
+'Thứ tự stage: '
++
+x
+)
+);
+
+language.forEach(
+x=>
+issues.push(
+'Ngữ pháp/chính tả: '
++
+x
+)
+);
+
+overviewStyle.forEach(
+x=>
+issues.push(
+'Overview: '
++
+x
+)
+);
+
+precision.forEach(
+x=>
+issues.push(
+'Gợi ý bám sát sơ đồ: '
++
+x
+)
+);
+
+const p1=
+Math.round(
+ratio*55
+);
+
+const p2=
+wc>=150
+?
+20
+:
+Math.round(
+Math.min(
+20,
+wc/150*20
+)
+);
+
+const p3=
+hasOverview
+?
+10
+:
+0;
+
+const p4=
+pc>=4
+?
+8
+:
+Math.round(
+pc/4*8
+);
+
+const p5=
+Math.max(
+0,
+7-serious.length*3
+);
+
+const fp=
+Math.min(
+20,
+facts.length*6
+);
+
+const sp=
+Math.min(
+12,
+seq.violations.length*6
+);
+
+const op=
+Math.min(
+6,
+overviewStyle.length*3
+);
+
+/* Góp ý suy diễn sơ đồ chỉ trừ tối đa 3 điểm. */
+const pp=
+Math.min(
+3,
+precision.length
+);
+
+let score=
+p1+
+p2+
+p3+
+p4+
+p5-
+fp-
+sp-
+op-
+pp;
+
+score=
+Math.max(
+0,
+Math.min(
+100,
+score
+)
+);
+
+if(
+!topic.requiredOK
+||
+topic.wrong.length
+){
+score=
+Math.min(
+score,
+49
+);
+}
+
+if(
+claim.mentioned
+&&
+!countOK
+){
+score=
+Math.min(
+score,
+69
+);
+}
+
+if(
+facts.length
+){
+score=
+Math.min(
+score,
+79
+);
+}
+
+/*
+2 lỗi ngữ pháp không còn bị ép xuống 79.
+Chỉ cap 79 khi có từ 4 lỗi quan trọng trở lên.
+*/
+if(
+serious.length>=4
+){
+score=
+Math.min(
+score,
+79
+);
+}
+
+if(
+badOverviewConnector
+){
+score=
+Math.min(
+score,
+79
+);
+}
+
+return{
+total:
+score,
+
+completed:
+topic.requiredOK
+&&
+!topic.wrong.length
+&&
+countOK
+&&
+wc>=150
+&&
+hasOverview
+&&
+pc>=4
+&&
+ratio>=.72
+&&
+serious.length===0
+&&
+facts.length===0
+&&
+seq.ok
+&&
+!badOverviewConnector,
+
+wc,
+
+paragraphCount:
+pc,
+
+issues,
+
+breakdown:[
+{
+label:
+'Nội dung & stages',
+score:
+p1,
+max:
+55,
+note:
+`Nhận diện ${hitCount}/${groups.length} stage · Bao quát ${Math.round(ratio*100)}%`
+},
+{
+label:
+'Độ dài',
+score:
+p2,
+max:
+20,
+note:
+`${wc} từ`
+},
+{
+label:
+'Overview',
+score:
+p3,
+max:
+10,
+note:
+hasOverview
+?
+'Có'
+:
+'Thiếu'
+},
+{
+label:
+'Cấu trúc đoạn',
+score:
+p4,
+max:
+8,
+note:
+`${pc} đoạn`
+},
+{
+label:
+'Ngữ pháp & chính tả',
+score:
+p5,
+max:
+7,
+note:
+serious.length
+?
+`${serious.length} lỗi quan trọng`
+:
+'Ổn'
+}
+]
+};
+};
 load();
 
 mount();
