@@ -75,7 +75,7 @@ function escapeLesson(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<
 function vocabularyMarkup(i){
  const l=VOCAB_LESSONS[i],passed=!!quizProgress[i];
  return `<section class="vocab-panel"><span class="mini-tag">GIAI ĐOẠN 1 · HỌC TỪ VỰNG</span><h2>${escapeLesson(l.title)}</h2><p>${escapeLesson(l.lead)}</p><div class="vocab-tablewrap"><table class="grid-table vocab-table"><thead><tr><th>Từ / cấu trúc</th><th>Nghĩa tiếng Việt</th><th>Cách dùng / ví dụ</th></tr></thead><tbody>${l.rows.map(r=>`<tr><td><b>${escapeLesson(r[0])}</b></td><td>${escapeLesson(r[1])}</td><td>${escapeLesson(r[2])}</td></tr>`).join('')}</tbody></table></div><div class="formula"><b>Cấu trúc ghi nhớ</b><p>${escapeLesson(l.formula)}</p></div>${passed?'<p class="passed">✓ Đã vượt qua kiểm tra từ vựng. Có thể thực hành viết.</p>':`<button class="primary" onclick="startVocabularyQuiz()">Đã học xong · Bắt đầu kiểm tra →</button>`}</section>
- <section id="quizSection" class="quiz-panel ${passed||quizStarted[i]?'':'hidden'}"><span class="mini-tag">GIAI ĐOẠN 2 · KIỂM TRA TỪ VỰNG</span><h2>Kiểm tra trước khi viết</h2><p>Chọn một đáp án cho mỗi câu. Cần đúng <b>6/6 câu</b> để mở phần thực hành. Có thể thử lại nếu chưa đạt.</p><div id="quizQuestions">${l.questions.map((q,j)=>`<fieldset class="quiz-question"><legend><b>Câu ${j+1}.</b> ${escapeLesson(q[0])}</legend>${q[1].map((a,k)=>`<label class="quiz-option"><input type="radio" name="vq_${i}_${j}" value="${k}"> <span>${escapeLesson(a)}</span></label>`).join('')}</fieldset>`).join('')}</div><button class="primary" onclick="markVocabularyQuiz()">Kiểm tra kết quả</button><div id="quizMessage" aria-live="polite"></div></section>
+ <section id="quizSection" class="quiz-panel ${passed||quizStarted[i]?'':'hidden'}"><span class="mini-tag">GIAI ĐOẠN 2 · KIỂM TRA TỪ VỰNG</span><h2>Kiểm tra trước khi viết</h2><p>Chọn một đáp án cho mỗi câu. Cần đúng <b>${l.questions.length}/${l.questions.length} câu</b> để mở phần thực hành. Có thể thử lại nếu chưa đạt.</p><div id="quizQuestions">${l.questions.map((q,j)=>`<fieldset class="quiz-question"><legend><b>Câu ${j+1}.</b> ${escapeLesson(q[0])}</legend>${q[1].map((a,k)=>`<label class="quiz-option"><input type="radio" name="vq_${i}_${j}" value="${k}"> <span>${escapeLesson(a)}</span></label>`).join('')}</fieldset>`).join('')}</div><button class="primary" onclick="markVocabularyQuiz()">Kiểm tra kết quả</button><div id="quizMessage" aria-live="polite"></div></section>
  <section class="practice-gate ${passed?'hidden':''}" id="practiceGate"><b><span aria-hidden="true">🔒</span> GIAI ĐOẠN 3 · THỰC HÀNH VIẾT</b><p>Hãy học và hoàn thành bài kiểm tra từ vựng phía trên để mở phần viết của bước này.</p></section>`;
 }
 function startVocabularyQuiz(){quizStarted[step]=true;save();render();document.getElementById('quizSection')?.scrollIntoView({behavior:'smooth',block:'start'})}
@@ -417,6 +417,22 @@ if(blocks.length<4)add('Bố cục bài hoàn chỉnh','medium',`${blocks.length
 if(!/\b(overall|in general|on the whole|generally)\b/i.test(t))add('Bố cục bài hoàn chỉnh','low','Overview','Kiểm tra xem bạn đã có đoạn Overview rõ ràng chưa.','Không bắt buộc dùng đúng từ Overall nếu nội dung vẫn là Overview.');
 }
 if(configs[part]&&part!=='Final'&&wc<configs[part].min)add('Độ đầy đủ','low',`${wc} từ`, `Xem lại độ đầy đủ của ${part}.`, 'Số từ chỉ là tín hiệu tham khảo, không phải tiêu chí bắt buộc cho từng đoạn.');
+// Timeline accuracy: the source map gives 20 years, not dated calendar years.
+if(part==='Introduction'||part==='Overview'||part==='Body 1'||part==='Body 2'||part==='Final'){
+ const timeErrors=[];
+ const spelled={thirty:30,forty:40,fifty:50,ten:10,fifteen:15,twenty:20,sixty:60};
+ const expr=/\b(\d{1,3}|thirty|forty|fifty|ten|fifteen|twenty|sixty)\s*(?:-|\s)?(?:year|years)\b/gi;
+ for(const hit of t.matchAll(expr)){
+  const n=/^\d/.test(hit[1])?Number(hit[1]):spelled[hit[1].toLowerCase()];
+  if(n!==20)timeErrors.push(hit[0]);
+ }
+ // Also catch explicit years / date ranges not supported by this question.
+ const dates=t.match(/\b(?:19|20)\d{2}\b/g)||[];
+ for(const year of dates)timeErrors.push(year);
+ for(const bad of [...new Set(timeErrors)])add('Đối chiếu bản đồ','high',bad,'Mốc thời gian của đề là 20 years ago and now. Hãy dùng “over the past 20 years” hoặc “twenty years ago and now”.','Không thay bằng 30 years hoặc tự thêm năm 2000, 2020 vì đề không cho mốc năm chính xác.');
+ if(part==='Introduction'&&!/\b(?:20[\s-]*years|twenty[\s-]*years)\b/i.test(t)&&!timeErrors.length)
+  add('Đúng yêu cầu đề','medium','Mốc thời gian chưa rõ','Nên nhắc tới khoảng 20 năm, chẳng hạn “over the past 20 years”.','Introduction cần paraphrase đúng mốc thời gian của đề.');
+}
 return {wc,issues,blank:false};
 }
 const groups=[['Câu và dấu câu','1. Dấu câu & diễn đạt'],['Chính tả','2. Chính tả & từ vựng'],['Ngữ pháp','3. Ngữ pháp & chia động từ'],['Thì và cấu trúc','4. Thì & cấu trúc'],['Đối chiếu bản đồ','5. Đối chiếu bản đồ'],['Đúng yêu cầu đề','6. Nội dung từng phần'],['Bố cục bài hoàn chỉnh','7. Bài hoàn chỉnh'],['Độ đầy đủ','8. Độ đầy đủ']];
@@ -438,6 +454,26 @@ render();
 })();
 
 
+
+/* Tense choices belong in the vocabulary checkpoint, not below the writing area. */
+const TENSE_CHECKS={
+ 1:['Chọn cách dùng thì phù hợp cho Introduction: “The two maps ___ how Pebbleton ___ over the past 20 years.”',['illustrate / has changed','illustrates / will change','illustrated / change'],0,'The two maps illustrate (hiện tại đơn) và Pebbleton has changed (hiện tại hoàn thành).'],
+ 2:['Overview mô tả thay đổi từ quá khứ đến hiện tại: chọn câu đúng.',['Overall, the village has become more developed.','Overall, the village will become more developed next year.','Overall, the village become more developed yesterday.'],0,'Hiện tại hoàn thành diễn tả sự thay đổi kéo dài đến hiện tại.'],
+ 3:['Body 1 mô tả bản đồ 20 năm trước: chọn thì phù hợp.',['The film studio stood near the coast.','The film studio will stand near the coast.','The film studio has stand near the coast.'],0,'Body 1 chủ yếu dùng quá khứ đơn để mô tả tình trạng trước đây.'],
+ 4:['Body 2 mô tả các thay đổi đã xảy ra và hiện tại: chọn câu đúng.',['The old fort has been replaced by a playground.','The old fort have replace by a playground.','The old fort will replaced by a playground.'],0,'Body 2 có thể dùng hiện tại hoàn thành bị động: has/have been + V3.']
+};
+for(const [part,q] of Object.entries(TENSE_CHECKS)){
+ const items=VOCAB_LESSONS[part]?.questions;
+ if(items && !items.some(x=>x[0]===q[0]))items.push(q);
+}
+// Changed checkpoint content; require a fresh pass to ensure the tense question was answered.
+const TENSE_VERSION='PEBBLETON_TENSE_QUIZ_V1';
+if(localStorage.getItem(TENSE_VERSION)!=='1'){
+ for(const part of ['1','2','3','4']){delete quizProgress[part];}
+ localStorage.setItem(QUIZ_KEY,JSON.stringify(quizProgress));
+ localStorage.setItem(TENSE_VERSION,'1');
+}
+
 /* Maps 01 UI integrity: one tense guide, one grading button, one review box per writing step. */
 (function(){
   function normalizeWritingControls(){
@@ -452,7 +488,7 @@ render();
     const actionNodes=[...work.querySelectorAll('.lesson-action')];
     const reviewNodes=[...work.querySelectorAll('#partReview')];
     // Prefer preserving an already populated review when reconciling duplicated elements.
-    const tense=tenseNodes[0] || null;
+    const tense=null;
     const action=actionNodes[0] || null;
     const review=reviewNodes.find(el=>el.textContent.trim()) || reviewNodes[0] || null;
     tenseNodes.forEach(el=>{if(el!==tense)el.remove()});
