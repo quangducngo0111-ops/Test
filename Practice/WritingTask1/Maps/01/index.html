@@ -193,5 +193,56 @@ pages[0]=analysisChecklist();
 const renderWithAnalysisNotes=render;
 render=function(){pages[0]=analysisChecklist();renderWithAnalysisNotes();if(step===3||step===4){const target=document.getElementById('lessonWork');if(target){target.insertAdjacentHTML('afterbegin',map01Notes());}}};
 
+
+/* Pebbleton vNext: persistent quiz answers and in-place writing feedback */
+const QANSWER_KEY='PEBBLETON_QUIZ_SELECTIONS_V3';
+let rememberedQuiz={};
+try{rememberedQuiz=JSON.parse(localStorage.getItem(QANSWER_KEY)||'{}')||{}}catch(e){rememberedQuiz={}}
+function keepQuizAnswers(){try{localStorage.setItem(QANSWER_KEY,JSON.stringify(rememberedQuiz))}catch(e){}}
+function restoreQuizAnswers(){
+ const panel=document.getElementById('quizSection');if(!panel)return;
+ panel.querySelectorAll('input[type="radio"][name^="vq_"]').forEach(input=>{
+  const stored=rememberedQuiz[input.name];
+  input.checked=stored!==undefined&&String(stored)===String(input.value);
+ });
+}
+document.addEventListener('change',e=>{
+ const input=e.target;
+ if(!input?.matches?.('input[type="radio"][name^="vq_"]'))return;
+ rememberedQuiz[input.name]=input.value;keepQuizAnswers();
+ const note=document.getElementById('quizMessage');
+ if(note){note.className='';note.textContent='Đã lưu lựa chọn. Nhấn Kiểm tra kết quả để chấm lại.'}
+});
+const originalMapRender=render;
+render=function(){
+ originalMapRender();
+ // Always re-check saved answers even when the vocabulary test is passed.
+ restoreQuizAnswers();
+ const quiz=document.getElementById('quizSection');
+ if(quiz && quizProgress[step]){
+  quiz.classList.remove('hidden');
+  const msg=document.getElementById('quizMessage');
+  if(msg && !msg.textContent.trim())msg.innerHTML='<p class="passed">✓ Đã đạt 6/6. Đáp án đã chọn được giữ lại để ôn tập.</p>';
+ }
+ // Place the writing-check button immediately BELOW the writing field.
+ if(step>=1&&step<=4&&quizProgress[step]){
+  const work=document.getElementById('lessonWork');
+  const review=work?.querySelector('.lesson-action');
+  const result=work?.querySelector('#partReview');
+  const writing=work?.querySelector('#'+['','intro','overview','body1','body2'][step]);
+  const field=writing?.closest('.field');
+  if(field && review && result){field.insertAdjacentElement('afterend',review);review.insertAdjacentElement('afterend',result);}
+ }
+};
+// Give targeted, locally verifiable grammar suggestions. Don't claim comprehensive AI correction.
+const originalLocalReview=localReview;
+localReview=function(value,section){
+ const findings=originalLocalReview(value,section),txt=String(value||'');
+ if(/\b(?:the\s+two\s+maps|these\s+maps|both\s+maps)\s+illustrates\b/i.test(txt))findings.unshift('Ngữ pháp: “The two maps illustrates” → “The two maps illustrate” (chủ ngữ số nhiều).');
+ if(/\b(?:the\s+plan|the\s+map)\s+illustrate\b/i.test(txt))findings.unshift('Ngữ pháp: “The plan/map illustrate” → “The plan/map illustrates” (chủ ngữ số ít).');
+ if(/\b(?:have|has)\s+been\s+build\b/i.test(txt))findings.unshift('Ngữ pháp: dùng “has/have been built”, không phải “been build”.');
+ return [...new Set(findings)];
+};
+
 render();
 </script></body></html>
