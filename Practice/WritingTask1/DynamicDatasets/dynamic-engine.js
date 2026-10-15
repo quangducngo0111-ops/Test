@@ -1,78 +1,217 @@
 
 /*
- SMARTCOM IELTS WRITING TASK 1
- DYNAMIC DATASETS — FREE GRADING ENGINE v6.0
+============================================================
+SMARTCOM ENGLISH
+IELTS WRITING TASK 1 — DYNAMIC DATASETS
+OFFLINE GRADING ENGINE v6.1
 
- - No paid API
- - Shared by lesson 01 and 02
- - 16 guided learning steps
- - Browser spellcheck
- - Local grammar and spelling diagnostics
- - Chart fact checks
- - Autosave and independent final writing
+Works with:
+  DynamicDatasets/01/index.html
+  DynamicDatasets/02/index.html
+  DynamicDatasets/dynamic-style.css
+
+Features:
+  - 16 guided steps
+  - Deterministic multiple choice grading
+  - Chart-based evidence checking
+  - Body grouping validation
+  - Rule-based spelling and grammar review
+  - Distinguishes errors from warnings
+  - Browser spellcheck
+  - Autosave
+  - Final independent writing
+  - Export essay
+
+No OpenAI API / No paid backend.
+
+Important:
+  This engine is NOT an AI semantic grader.
+  It cannot guarantee that every sentence is correct.
+============================================================
 */
 
 (() => {
   "use strict";
 
+  // ========================================================
+  // 1. INITIAL SETUP
+  // ========================================================
+
   const $ = id => document.getElementById(id);
+
   const lessonId = document.body.dataset.lesson;
 
+  const VERSION = "6.1";
+
+  const STORE =
+    "smartcom_dynamic_offline_v61_" + lessonId;
+
+  const REQUIRED_IDS = [
+    "welcome",
+    "practice",
+    "studentName",
+    "studentClass",
+    "startButton",
+    "startError",
+    "lessonTitle",
+    "prompt",
+    "userLabel",
+    "progressText",
+    "progress",
+    "nav",
+    "stepSection",
+    "stepTitle",
+    "question",
+    "hint",
+    "answerArea",
+    "feedback",
+    "checkButton",
+    "nextButton",
+    "backButton",
+    "resetButton",
+    "completedPanel",
+    "exportButton"
+  ];
+
+  const missing = REQUIRED_IDS.filter(id => !$(id));
+
+  if (missing.length) {
+    console.error(
+      "Dynamic Engine: Missing HTML elements:",
+      missing
+    );
+    return;
+  }
+
+  // ========================================================
+  // 2. DATASET CONFIGURATION
+  // ========================================================
+
   const LESSONS = {
+
     "01": {
       title: "International Conferences",
+
       prompt:
-        "The line graph provides information about the number of international conferences that took place in three different cities. Provide an overview of the information by identifying and describing the key details, and include comparisons where appropriate.",
-      names: ["City A", "City B", "City C"],
+        "The line graph provides information about " +
+        "the number of international conferences " +
+        "that took place in three different cities. " +
+        "Provide an overview of the information by " +
+        "identifying and describing the key details, " +
+        "and include comparisons where appropriate.",
+
       start: 1965,
       end: 2010,
       unit: "conferences",
-      trends: {
-        A: "down",
-        B: "down",
-        C: "up"
+
+      entities: [
+        "City A",
+        "City B",
+        "City C"
+      ],
+
+      /*
+       Data transcribed from the supplied chart.
+       Intermediate values are approximate where
+       the graph does not show exact labels.
+      */
+
+      data: {
+        years: [
+          1965, 1975, 1985,
+          1995, 2005, 2010
+        ],
+
+        series: {
+          "City A": [
+            35, 20, 30, 29, 30, 20
+          ],
+
+          "City B": [
+            31, 29, 29, 27.5, 29, 25
+          ],
+
+          "City C": [
+            0, 10, 20, 30, 24, 29
+          ]
+        }
       },
-      values: {
-        1965: {A:35, B:31, C:0},
-        1975: {A:20, B:29, C:10},
-        1985: {A:30, B:29, C:20},
-        1995: {A:29, B:27.5, C:30},
-        2005: {A:30, B:29, C:24},
-        2010: {A:20, B:25, C:29}
+
+      overall: {
+        "City A": "down",
+        "City B": "down",
+        "City C": "up"
       }
     },
+
     "02": {
       title: "Music Sales by Method",
+
       prompt:
-        "The graph below shows the percentage of total music sales by different methods between 2011 and 2018.",
-      names: ["Streaming", "Downloads", "CDs"],
+        "The graph below shows the percentage " +
+        "of total music sales by different methods " +
+        "between 2011 and 2018.",
+
       start: 2011,
       end: 2018,
       unit: "percentage",
-      trends: null,
-      values: null
+
+      entities: [
+        "Streaming",
+        "Downloads",
+        "CDs"
+      ],
+
+      /*
+       Exact dataset has not yet been verified.
+       Never invent missing chart values.
+      */
+
+      data: null,
+      overall: null
     }
+
   };
 
   const lesson = LESSONS[lessonId];
 
   if (!lesson) {
-    console.error("Unknown lesson:", lessonId);
+    console.error(
+      "Unknown Dynamic Dataset:",
+      lessonId
+    );
     return;
   }
 
-  const STORE = "smartcom_dynamic_evidence_v5_" + lessonId;
+  // ========================================================
+  // 3. TEXT UTILITIES
+  // ========================================================
 
-  const esc = value =>
-    String(value ?? "").replace(/[&<>"']/g, x => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    })[x]);
+  function escapeHTML(value) {
+    return String(value ?? "").replace(
+      /[&<>"']/g,
+      char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]
+    );
+  }
 
-  function words(text) {
+  function normalize(text) {
+    return String(text || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/[“”]/g, '"')
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function countWords(text) {
     return (
       String(text || "").match(
         /[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu
@@ -80,637 +219,1512 @@
     ).length;
   }
 
-  function normalized(text) {
-    return String(text || "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/đ/g, "d")
-      .replace(/\s+/g, " ")
-      .trim();
+  function unique(items) {
+    return [...new Set(items.filter(Boolean))];
   }
 
+  function paragraphs(text) {
+    return String(text || "")
+      .trim()
+      .split(/\n\s*\n/)
+      .map(part => part.trim())
+      .filter(Boolean);
+  }
+
+  function numbers(text) {
+    return (
+      String(text || "").match(
+        /\b\d+(?:[.,]\d+)?\b/g
+      ) || []
+    ).map(x => Number(x.replace(",", ".")));
+  }
+
+  function hasAny(text, patterns) {
+    return patterns.some(regex => regex.test(text));
+  }
+
+  function containsYear(text) {
+    return new RegExp(
+      "\\b(" + lesson.start +
+      "|" + lesson.end + ")\\b"
+    ).test(text);
+  }
+
+  function mentionEntity(text, entity) {
+    const t = normalize(text);
+
+    if (entity === "City A") {
+      return /\b(?:city|thanh pho)\s*a\b/.test(t);
+    }
+
+    if (entity === "City B") {
+      return /\b(?:city|thanh pho)\s*b\b/.test(t);
+    }
+
+    if (entity === "City C") {
+      return /\b(?:city|thanh pho)\s*c\b/.test(t);
+    }
+
+    if (entity === "Streaming") {
+      return /\bstreaming\b/.test(t);
+    }
+
+    if (entity === "Downloads") {
+      return /\bdownloads?\b/.test(t);
+    }
+
+    if (entity === "CDs") {
+      return /\bcds?\b/.test(t);
+    }
+
+    return false;
+  }
+
+  function entitiesIn(text) {
+    return lesson.entities.filter(entity =>
+      mentionEntity(text, entity)
+    );
+  }
+
+  // ========================================================
+  // 4. LEARNING STEPS
+  // ========================================================
+
   const STEPS = [
+
     {
-      section:"Phân tích",
-      title:"Xác định đề bài",
-      type:"choice",
-      question:"Biểu đồ thể hiện nội dung chính nào?",
-      options:lessonId === "01"
+      section: "Phân tích",
+      title: "Xác định đề bài",
+      type: "choice",
+
+      question:
+        "Biểu đồ đang thể hiện thông tin chính nào?",
+
+      options: lessonId === "01"
         ? [
           "Số hội nghị quốc tế tại ba thành phố",
           "Nguyên nhân thay đổi số hội nghị",
-          "Quan điểm cá nhân"
+          "Quan điểm cá nhân về các thành phố"
         ]
         : [
           "Tỷ lệ doanh số âm nhạc theo phương thức bán",
-          "Nguyên nhân khiến doanh số thay đổi",
-          "Số lượng ca sĩ"
+          "Nguyên nhân thay đổi doanh số",
+          "Số lượng ca sĩ trong ngành âm nhạc"
         ],
-      correct:0
+
+      correct: 0
     },
+
     {
-      section:"Phân tích",
-      title:"Cách đọc Dynamic Dataset",
-      type:"choice",
-      question:"Cần ưu tiên xác định điều gì?",
-      options:[
-        "Liệt kê tất cả số liệu",
-        "Xu hướng, thay đổi nổi bật và so sánh",
-        "Nguyên nhân xã hội"
+      section: "Phân tích",
+      title: "Cách đọc biểu đồ",
+      type: "choice",
+
+      question:
+        "Khi phân tích Dynamic Dataset, " +
+        "cần ưu tiên xác định những thông tin nào?",
+
+      options: [
+        "Liệt kê mọi số liệu của từng năm",
+        "Xu hướng, đặc điểm nổi bật và so sánh",
+        "Nguyên nhân xã hội dẫn tới thay đổi"
       ],
-      correct:1
+
+      correct: 1
     },
+
     {
-      section:"Phân tích",
-      title:"Nhận diện xu hướng",
-      type:"analysis",
-      min:8,
+      section: "Phân tích",
+      title: "Nhận diện xu hướng",
+      type: "analysis",
+      min: 8,
+
       question:
-        "Mô tả các xu hướng tổng thể nổi bật trong biểu đồ.",
+        "Quan sát biểu đồ và mô tả " +
+        "những xu hướng tổng thể quan trọng.",
+
       hint:
-        "Nêu rõ đối tượng nào tăng, giảm hoặc dao động."
+        "Nêu rõ tên đối tượng và xu hướng " +
+        "tăng, giảm, dao động hoặc ổn định. " +
+        "Có thể trả lời bằng tiếng Việt."
     },
+
     {
-      section:"Phân tích",
-      title:"Chia nhóm Body",
-      type:"group",
-      min:10,
+      section: "Phân tích",
+      title: "Chia nhóm Body",
+      type: "group",
+      min: 10,
+
       question:
-        "Em sẽ chia các đối tượng vào Body 1 và Body 2 như thế nào? Giải thích lý do.",
+        "Em sẽ chia các đối tượng vào " +
+        "Body 1 và Body 2 như thế nào? " +
+        "Giải thích lý do.",
+
       hint:
-        "Có thể có nhiều cách nhóm hợp lý. Không mô tả sai xu hướng."
+        "Có nhiều cách chia hợp lý. " +
+        "Quan trọng là đủ đối tượng, " +
+        "không trùng nhóm và giải thích đúng."
     },
+
     {
-      section:"Introduction",
-      title:"Xác định thành phần",
-      type:"choice",
-      question:"Introduction cần chứa thông tin nào?",
-      options:[
-        "Đối tượng, đại lượng và giai đoạn",
+      section: "Introduction",
+      title: "Xác định thành phần",
+      type: "choice",
+
+      question:
+        "Introduction cần chứa thông tin nào?",
+
+      options: [
+        "Đối tượng, đại lượng đo và khoảng thời gian",
         "Tất cả số liệu chi tiết",
-        "Nguyên nhân và ý kiến"
+        "Nguyên nhân và quan điểm cá nhân"
       ],
-      correct:0
+
+      correct: 0
     },
+
     {
-      section:"Introduction",
-      title:"Paraphrase đề bài",
-      type:"intro",
-      min:10,
-      question:"Paraphrase nội dung đề bài bằng tiếng Anh.",
-      hint:"Giữ nguyên ý nghĩa của đề."
+      section: "Introduction",
+      title: "Paraphrase đề bài",
+      type: "intro",
+      min: 10,
+
+      question:
+        "Paraphrase nội dung đề bài bằng tiếng Anh.",
+
+      hint:
+        "Giữ đúng ý nghĩa gốc, " +
+        "không mô tả xu hướng."
     },
+
     {
-      section:"Introduction",
-      title:"Viết Introduction",
-      type:"intro",
-      min:12,
-      question:"Viết một Introduction hoàn chỉnh.",
-      hint:"Không đưa nhận xét xu hướng vào phần này."
+      section: "Introduction",
+      title: "Viết Introduction",
+      type: "intro",
+      min: 12,
+
+      question:
+        "Viết một Introduction hoàn chỉnh.",
+
+      hint:
+        "Giới thiệu nội dung biểu đồ, " +
+        "đối tượng, đơn vị và thời gian."
     },
+
     {
-      section:"Overview",
-      title:"Chọn ý chính",
-      type:"choice",
-      question:"Overview cần tập trung vào điều gì?",
-      options:[
-        "Liệt kê mọi số liệu",
-        "Xu hướng và thay đổi nổi bật",
+      section: "Overview",
+      title: "Chọn ý chính",
+      type: "choice",
+
+      question:
+        "Overview cần tập trung vào điều gì?",
+
+      options: [
+        "Tất cả số liệu cụ thể",
+        "Những xu hướng và thay đổi nổi bật",
         "Giải thích nguyên nhân"
       ],
-      correct:1
+
+      correct: 1
     },
+
     {
-      section:"Overview",
-      title:"Viết Overview",
-      type:"overview",
-      min:18,
-      question:"Viết Overview bằng tiếng Anh.",
-      hint:"Nêu xu hướng và đặc điểm nổi bật. Hạn chế số liệu cụ thể."
-    },
-    {
-      section:"Body 1",
-      title:"Xác định số đầu kỳ",
-      type:"data",
-      min:5,
-      question:"Nêu đối tượng, năm đầu và giá trị đầu kỳ.",
-      hint:"Đọc trực tiếp dữ liệu trên biểu đồ."
-    },
-    {
-      section:"Body 1",
-      title:"Phân tích thay đổi",
-      type:"data",
-      min:10,
-      question:"Mô tả thay đổi, mốc nổi bật và số cuối kỳ.",
-      hint:"Có thể ghi dữ liệu bằng tiếng Việt hoặc tiếng Anh."
-    },
-    {
-      section:"Body 1",
-      title:"Viết Body 1",
-      type:"body",
-      min:30,
-      question:"Viết đoạn Body 1 hoàn chỉnh bằng tiếng Anh.",
-      hint:"Dùng số liệu tiêu biểu và trình tự hợp lý."
-    },
-    {
-      section:"Body 2",
-      title:"Xác định số đầu kỳ",
-      type:"data",
-      min:5,
-      question:"Xác định đối tượng của Body 2 và số đầu kỳ.",
-      hint:"Không bỏ sót đối tượng chưa mô tả."
-    },
-    {
-      section:"Body 2",
-      title:"So sánh số cuối kỳ",
-      type:"data",
-      min:10,
-      question:"Nêu số cuối kỳ và một điểm so sánh.",
-      hint:"Chú ý cùng mốc thời gian và đơn vị."
-    },
-    {
-      section:"Body 2",
-      title:"Viết Body 2",
-      type:"body",
-      min:30,
-      question:"Viết đoạn Body 2 hoàn chỉnh bằng tiếng Anh.",
-      hint:"Bổ sung các đối tượng còn lại."
-    },
-    {
-      section:"Final Writing",
-      title:"Tự viết toàn bài",
-      type:"essay",
-      min:150,
+      section: "Overview",
+      title: "Viết Overview",
+      type: "overview",
+      min: 18,
+
       question:
-        "Tự viết toàn bài IELTS Writing Task 1, tối thiểu 150 từ.",
+        "Viết Overview bằng tiếng Anh.",
+
       hint:
-        "Viết bốn đoạn: Introduction, Overview, Body 1, Body 2."
+        "Khái quát xu hướng tổng thể " +
+        "và điểm khác biệt nổi bật."
+    },
+
+    {
+      section: "Body 1",
+      title: "Xác định số đầu kỳ",
+      type: "data",
+      min: 5,
+
+      question:
+        "Nêu đối tượng của Body 1, " +
+        "năm đầu kỳ và giá trị tương ứng.",
+
+      hint:
+        "Ghi tên đối tượng, năm và số liệu."
+    },
+
+    {
+      section: "Body 1",
+      title: "Phân tích thay đổi",
+      type: "data",
+      min: 10,
+
+      question:
+        "Mô tả sự thay đổi nổi bật, " +
+        "các mốc quan trọng và số cuối kỳ.",
+
+      hint:
+        "Đối chiếu trực tiếp dữ liệu trên biểu đồ."
+    },
+
+    {
+      section: "Body 1",
+      title: "Viết Body 1",
+      type: "body",
+      min: 30,
+
+      question:
+        "Viết Body 1 hoàn chỉnh bằng tiếng Anh.",
+
+      hint:
+        "Sử dụng số liệu tiêu biểu " +
+        "và trình tự thời gian hợp lý."
+    },
+
+    {
+      section: "Body 2",
+      title: "Xác định số đầu kỳ",
+      type: "data",
+      min: 5,
+
+      question:
+        "Xác định đối tượng Body 2 " +
+        "và số liệu đầu kỳ.",
+
+      hint:
+        "Không bỏ sót các đối tượng còn lại."
+    },
+
+    {
+      section: "Body 2",
+      title: "So sánh số cuối kỳ",
+      type: "data",
+      min: 10,
+
+      question:
+        "Nêu số cuối kỳ và một điểm so sánh.",
+
+      hint:
+        "Chú ý năm, giá trị và đơn vị."
+    },
+
+    {
+      section: "Body 2",
+      title: "Viết Body 2",
+      type: "body",
+      min: 30,
+
+      question:
+        "Viết Body 2 hoàn chỉnh bằng tiếng Anh.",
+
+      hint:
+        "Làm rõ những thay đổi và " +
+        "so sánh giữa các đối tượng."
+    },
+
+    {
+      section: "Final Writing",
+      title: "Tự viết toàn bài",
+      type: "essay",
+      min: 150,
+
+      question:
+        "Tự viết một bài IELTS Writing Task 1 " +
+        "hoàn chỉnh, tối thiểu 150 từ.",
+
+      hint:
+        "Viết độc lập thành bốn đoạn. " +
+        "Không sử dụng template."
     }
   ];
 
-  function freshState() {
+  // ========================================================
+  // 5. STATE AND AUTOSAVE
+  // ========================================================
+
+  function defaultState() {
     return {
-      name:"",
-      className:"",
-      started:false,
-      current:0,
-      unlocked:0,
-      answers:{},
-      grades:{},
-      finished:false
+      version: VERSION,
+      name: "",
+      className: "",
+      started: false,
+      current: 0,
+      unlocked: 0,
+      answers: {},
+      grades: {},
+      finished: false,
+      completedAt: null
     };
   }
 
-  let state = freshState();
+  let state = defaultState();
 
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORE));
-    if (saved && typeof saved === "object") {
-      state = {...freshState(), ...saved};
-      state.answers = saved.answers || {};
-      state.grades = saved.grades || {};
-      state.started = Boolean(
-        saved.started || saved.startedAt
-      );
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORE);
+
+      if (!raw) return;
+
+      const saved = JSON.parse(raw);
+
+      if (!saved || typeof saved !== "object") {
+        return;
+      }
+
+      state = {
+        ...defaultState(),
+        ...saved,
+
+        answers:
+          saved.answers &&
+          typeof saved.answers === "object"
+            ? saved.answers
+            : {},
+
+        grades:
+          saved.grades &&
+          typeof saved.grades === "object"
+            ? saved.grades
+            : {}
+      };
+
       state.unlocked = Math.max(
         0,
-        Math.min(15, Number(saved.unlocked) || 0)
+        Math.min(
+          STEPS.length - 1,
+          Number(state.unlocked) || 0
+        )
       );
+
       state.current = Math.max(
         0,
-        Math.min(state.unlocked, Number(saved.current) || 0)
+        Math.min(
+          state.unlocked,
+          Number(state.current) || 0
+        )
+      );
+
+    } catch (error) {
+      console.warn(
+        "Cannot load practice state:",
+        error
       );
     }
-  } catch (e) {
-    console.warn("Autosave restore error", e);
   }
 
-  function save() {
+  function saveState() {
     try {
-      localStorage.setItem(STORE, JSON.stringify(state));
-    } catch (e) {
-      console.warn("Autosave unavailable", e);
+      localStorage.setItem(
+        STORE,
+        JSON.stringify(state)
+      );
+    } catch (error) {
+      console.warn(
+        "Cannot save progress:",
+        error
+      );
     }
   }
 
-  /*
-   SPELLING / GRAMMAR RULES
+  loadState();
 
-   These rules only detect specific known errors.
-   They cannot replace full contextual grammar checking.
-  */
+  // ========================================================
+  // 6. SPELLING RULES
+  // ========================================================
 
-  const RULES = [
+  const SPELLING_RULES = [
+
     {
-      id:"spelling-increase",
-      pattern:/\bincrese(?:d|s)?\b/gi,
-      correction:"increase / increased",
-      message:"Kiểm tra chính tả của increase."
+      regex: /\bincrese\b/gi,
+      correction: "increase",
+      explanation:
+        "Sai chính tả của increase."
     },
+
     {
-      id:"spelling-decrease",
-      pattern:/\bdecrese(?:d|s)?\b/gi,
-      correction:"decrease / decreased",
-      message:"Kiểm tra chính tả của decrease."
+      regex: /\bincresed\b/gi,
+      correction: "increased",
+      explanation:
+        "Sai chính tả của increased."
     },
+
     {
-      id:"spelling-significant",
-      pattern:/\bsignifcant\b/gi,
-      correction:"significant",
-      message:"Thiếu chữ i trong significant."
+      regex: /\bdecrese\b/gi,
+      correction: "decrease",
+      explanation:
+        "Sai chính tả của decrease."
     },
+
     {
-      id:"spelling-dramatically",
-      pattern:/\bdramitically\b/gi,
-      correction:"dramatically",
-      message:"Sai chính tả của dramatically."
+      regex: /\bdecresed\b/gi,
+      correction: "decreased",
+      explanation:
+        "Sai chính tả của decreased."
     },
+
     {
-      id:"spelling-percentage",
-      pattern:/\bpercantage\b/gi,
-      correction:"percentage",
-      message:"Sai chính tả của percentage."
+      regex: /\bsignifcant\b/gi,
+      correction: "significant",
+      explanation:
+        "Thiếu chữ i trong significant."
     },
+
     {
-      id:"tense-increased",
-      pattern:/\b(has|have|had)\s+increase\b/gi,
-      correction:"has/have/had increased",
-      message:"Sau have/has/had cần dùng past participle."
+      regex: /\bdramaticallyy\b/gi,
+      correction: "dramatically",
+      explanation:
+        "Sai chính tả của dramatically."
     },
+
     {
-      id:"tense-decreased",
-      pattern:/\b(has|have|had)\s+decrease\b/gi,
-      correction:"has/have/had decreased",
-      message:"Sau have/has/had cần dùng past participle."
+      regex: /\bdramitically\b/gi,
+      correction: "dramatically",
+      explanation:
+        "Sai chính tả của dramatically."
     },
+
     {
-      id:"tense-was-increase",
-      pattern:/\b(was|were)\s+increase\b/gi,
-      correction:"increased / was increasing",
-      message:"Không dùng was/were + động từ nguyên mẫu."
+      regex: /\bpercantage\b/gi,
+      correction: "percentage",
+      explanation:
+        "Sai chính tả của percentage."
     },
+
     {
-      id:"tense-was-decrease",
-      pattern:/\b(was|were)\s+decrease\b/gi,
-      correction:"decreased / was decreasing",
-      message:"Không dùng was/were + động từ nguyên mẫu."
+      regex: /\bcomparision\b/gi,
+      correction: "comparison",
+      explanation:
+        "Sai chính tả của comparison."
     },
+
     {
-      id:"wordform-dramatic",
-      pattern:/\b(increase|increased|rise|rose|grew|fell|decrease|decreased)\s+dramatic\b/gi,
-      correction:"... dramatically",
-      message:"Sau động từ chỉ xu hướng cần trạng từ."
+      regex: /\bfluctation\b/gi,
+      correction: "fluctuation",
+      explanation:
+        "Sai chính tả của fluctuation."
     },
+
     {
-      id:"wordform-significant",
-      pattern:/\b(increase|increased|decrease|decreased|rise|rose|fell)\s+significant\b/gi,
-      correction:"... significantly",
-      message:"Dùng trạng từ significantly để bổ nghĩa động từ."
+      regex: /\bfluctueted\b/gi,
+      correction: "fluctuated",
+      explanation:
+        "Sai chính tả của fluctuated."
     },
+
     {
-      id:"subject-number",
-      pattern:/\bthe number of\s+[\w\s]{1,35}?\s+(were|have)\b/gi,
-      correction:"was / has (tùy ngữ cảnh)",
-      message:"Chủ ngữ chính 'the number' thường dùng động từ số ít."
+      regex: /\bgradully\b/gi,
+      correction: "gradually",
+      explanation:
+        "Sai chính tả của gradually."
     },
+
     {
-      id:"subject-amount",
-      pattern:/\bthe amount of\s+[\w\s]{1,35}?\s+were\b/gi,
-      correction:"was",
-      message:"'The amount' là chủ ngữ số ít."
+      regex: /\baproximately\b/gi,
+      correction: "approximately",
+      explanation:
+        "Sai chính tả của approximately."
     },
+
     {
-      id:"subject-it",
-      pattern:/\bit were\b/gi,
-      correction:"it was",
-      message:"It đi với was ở quá khứ đơn."
+      regex: /\bsligtly\b/gi,
+      correction: "slightly",
+      explanation:
+        "Sai chính tả của slightly."
     },
+
     {
-      id:"subject-they",
-      pattern:/\bthey was\b/gi,
-      correction:"they were",
-      message:"They đi với were."
+      regex: /\bconferances\b/gi,
+      correction: "conferences",
+      explanation:
+        "Sai chính tả của conferences."
     },
+
     {
-      id:"double-comparative",
-      pattern:/\bmore higher\b|\bmore lower\b/gi,
-      correction:"higher / lower",
-      message:"Không dùng more trước higher hoặc lower."
-    },
-    {
-      id:"many-percentage",
-      pattern:/\bmany percentage\b/gi,
-      correction:"a high percentage / many percentage points",
-      message:"Cần diễn đạt rõ tỷ lệ hay số điểm phần trăm."
+      regex: /\bproprotion\b/gi,
+      correction: "proportion",
+      explanation:
+        "Sai chính tả của proportion."
     }
   ];
+
+  // ========================================================
+  // 7. GRAMMAR RULES
+  // ========================================================
+
+  /*
+   Only reasonably reliable local patterns.
+   No arbitrary full-sentence grammar claims.
+  */
+
+  const GRAMMAR_RULES = [
+
+    {
+      regex: /\bthey was\b/gi,
+      correction: "they were",
+      explanation:
+        "They đi với were ở quá khứ đơn."
+    },
+
+    {
+      regex: /\bit were\b/gi,
+      correction: "it was",
+      explanation:
+        "It đi với was ở quá khứ đơn."
+    },
+
+    {
+      regex: /\bthere were a\b/gi,
+      correction: "there was a",
+      explanation:
+        "Danh từ số ít đi sau 'a' thường cần there was."
+    },
+
+    {
+      regex: /\bthere was many\b/gi,
+      correction: "there were many",
+      explanation:
+        "Many thường đi với danh từ đếm được số nhiều."
+    },
+
+    {
+      regex: /\bhas increase\b/gi,
+      correction: "has increased",
+      explanation:
+        "Sau has cần dùng quá khứ phân từ."
+    },
+
+    {
+      regex: /\bhave increase\b/gi,
+      correction: "have increased",
+      explanation:
+        "Sau have cần dùng quá khứ phân từ."
+    },
+
+    {
+      regex: /\bhas decrease\b/gi,
+      correction: "has decreased",
+      explanation:
+        "Sau has cần dùng quá khứ phân từ."
+    },
+
+    {
+      regex: /\bhave decrease\b/gi,
+      correction: "have decreased",
+      explanation:
+        "Sau have cần dùng quá khứ phân từ."
+    },
+
+    {
+      regex: /\bwas increase\b/gi,
+      correction: "increased / was increasing",
+      explanation:
+        "Không dùng was + increase ở dạng chủ động. " +
+        "Chọn dạng phù hợp với ý nghĩa câu."
+    },
+
+    {
+      regex: /\bwere increase\b/gi,
+      correction: "increased / were increasing",
+      explanation:
+        "Cần sửa dạng động từ chỉ xu hướng."
+    },
+
+    {
+      regex: /\bwas decrease\b/gi,
+      correction: "decreased / was decreasing",
+      explanation:
+        "Cần sửa dạng động từ chỉ xu hướng."
+    },
+
+    {
+      regex:
+        /\b(increase|increased|decrease|decreased|rose|fell|grew)\s+dramatic\b/gi,
+
+      correction: "dramatically",
+
+      explanation:
+        "Sau động từ chỉ xu hướng, " +
+        "thường dùng trạng từ dramatically."
+    },
+
+    {
+      regex:
+        /\b(increase|increased|decrease|decreased|rose|fell|grew)\s+significant\b/gi,
+
+      correction: "significantly",
+
+      explanation:
+        "Cần dùng trạng từ significantly " +
+        "để bổ nghĩa động từ."
+    },
+
+    {
+      regex: /\ba sharply increase\b/gi,
+      correction: "a sharp increase",
+      explanation:
+        "Trước danh từ increase, dùng tính từ sharp."
+    },
+
+    {
+      regex: /\ba dramatically rise\b/gi,
+      correction: "a dramatic rise",
+      explanation:
+        "Dùng dramatic để bổ nghĩa danh từ rise."
+    },
+
+    {
+      regex: /\bmore higher\b/gi,
+      correction: "higher",
+      explanation:
+        "Không thêm more trước higher."
+    },
+
+    {
+      regex: /\bmore lower\b/gi,
+      correction: "lower",
+      explanation:
+        "Không thêm more trước lower."
+    },
+
+    {
+      regex: /\bmore faster\b/gi,
+      correction: "faster",
+      explanation:
+        "Faster đã là dạng so sánh hơn."
+    },
+
+    {
+      regex: /\bthe figures shows\b/gi,
+      correction: "the figures show",
+      explanation:
+        "Figures là danh từ số nhiều, " +
+        "đi với show."
+    },
+
+    {
+      regex: /\bthe graph show\b/gi,
+      correction: "the graph shows",
+      explanation:
+        "Graph là chủ ngữ số ít, " +
+        "cần động từ shows."
+    },
+
+    {
+      regex: /\bthe chart show\b/gi,
+      correction: "the chart shows",
+      explanation:
+        "Chart là chủ ngữ số ít, " +
+        "cần động từ shows."
+    },
+
+    {
+      regex: /\bthe charts shows\b/gi,
+      correction: "the charts show",
+      explanation:
+        "Charts là chủ ngữ số nhiều."
+    },
+
+    {
+      regex: /\bthe number of conferences are\b/gi,
+      correction: "the number of conferences is",
+      explanation:
+        "Chủ ngữ chính 'the number' là số ít. " +
+        "Chọn is hoặc was tùy thời gian."
+    },
+
+    {
+      regex: /\bthe number of conferences were\b/gi,
+      correction: "the number of conferences was",
+      explanation:
+        "Chủ ngữ chính 'the number' là số ít."
+    },
+
+    {
+      regex: /\bthe number of conferences have\b/gi,
+      correction: "the number of conferences has",
+      explanation:
+        "The number là chủ ngữ số ít."
+    },
+
+    {
+      regex: /\bthe amount of sales were\b/gi,
+      correction: "the amount of sales was",
+      explanation:
+        "The amount là chủ ngữ số ít."
+    },
+
+    {
+      regex: /\binformations\b/gi,
+      correction: "information",
+      explanation:
+        "Information là danh từ không đếm được."
+    },
+
+    {
+      regex: /\bmany information\b/gi,
+      correction: "much information",
+      explanation:
+        "Information không đếm được."
+    },
+
+    {
+      regex: /\ban increase dramatically\b/gi,
+      correction: "a dramatic increase",
+      explanation:
+        "Trước danh từ increase cần tính từ dramatic."
+    }
+  ];
+
+  // ========================================================
+  // 8. LANGUAGE DIAGNOSTIC
+  // ========================================================
 
   function checkLanguage(text) {
     const issues = [];
 
-    for (const rule of RULES) {
-      rule.pattern.lastIndex = 0;
+    const allRules = [
+      ...SPELLING_RULES.map(rule => ({
+        ...rule,
+        category: "Spelling"
+      })),
 
-      for (const match of text.matchAll(rule.pattern)) {
+      ...GRAMMAR_RULES.map(rule => ({
+        ...rule,
+        category: "Grammar"
+      }))
+    ];
+
+    for (const rule of allRules) {
+      rule.regex.lastIndex = 0;
+
+      for (const match of text.matchAll(rule.regex)) {
         issues.push({
-          start:match.index,
-          end:match.index + match[0].length,
-          original:match[0],
-          correction:rule.correction,
-          message:rule.message,
-          id:rule.id
+          category: rule.category,
+          original: match[0],
+          correction: rule.correction,
+          explanation: rule.explanation,
+          start: match.index,
+          end: match.index + match[0].length
         });
       }
     }
 
-    if (/\s+[,.!?;:]/.test(text)) {
+    const repeatedWords =
+      /\b([a-z]{2,})\s+\1\b/gi;
+
+    for (
+      const match of text.matchAll(repeatedWords)
+    ) {
       issues.push({
-        original:"Dấu câu",
-        correction:"Bỏ khoảng trắng trước dấu câu",
-        message:"Không đặt dấu cách trước dấu câu.",
-        id:"punctuation"
+        category: "Repetition",
+        original: match[0],
+        correction: match[1],
+        explanation:
+          "Có từ bị lặp liên tiếp.",
+        start: match.index,
+        end: match.index + match[0].length
       });
     }
 
-    const repeat = text.match(/\b([a-z]{2,})\s+\1\b/i);
-    if (repeat) {
-      issues.push({
-        original:repeat[0],
-        correction:repeat[1],
-        message:"Có từ bị lặp liên tiếp.",
-        id:"repetition"
-      });
+    /*
+     Overlapping matches may refer to
+     the same original error.
+    */
+
+    issues.sort((a, b) => a.start - b.start);
+
+    const filtered = [];
+
+    for (const issue of issues) {
+      if (filtered.some(
+        old =>
+          issue.start < old.end &&
+          issue.end > old.start
+      )) {
+        continue;
+      }
+
+      filtered.push(issue);
     }
 
-    return issues;
+    return filtered;
   }
 
-  /*
-   CHART CONTRADICTION DETECTION
+  // ========================================================
+  // 9. TREND LANGUAGE
+  // ========================================================
 
-   Only checks explicitly known overall trends.
-   It does not try to infer arbitrary sentence meaning.
-  */
+  const UP_WORDS = [
+    "increase", "increased", "increasing",
+    "rise", "rose", "rising",
+    "grow", "grew", "grown", "growth",
+    "climb", "climbed",
+    "surge", "surged",
+    "went up", "go up", "upward",
+    "tang", "tang len", "di len"
+  ];
 
-  const UP_EN =
-    "(?:increas\\w*|r[oia]s[een]*|grew|grow\\w*|climb\\w*|surge\\w*|upward)";
-  const DOWN_EN =
-    "(?:decreas\\w*|declin\\w*|fell|fall\\w*|drop\\w*|downward)";
+  const DOWN_WORDS = [
+    "decrease", "decreased", "decreasing",
+    "decline", "declined",
+    "fall", "fell", "fallen",
+    "drop", "dropped",
+    "went down", "go down", "downward",
+    "giam", "giam xuong", "sut giam"
+  ];
 
-  function checkChart(text, stepIndex) {
-    if (lessonId !== "01") {
-      return [];
+  const STABLE_WORDS = [
+    "stable", "stability", "unchanged",
+    "remained steady", "remained stable",
+    "on dinh", "khong thay doi"
+  ];
+
+  const FLUCTUATION_WORDS = [
+    "fluctuate", "fluctuated",
+    "fluctuation", "fluctuations",
+    "dao dong", "bien dong"
+  ];
+
+  function containsPhrase(text, phrases) {
+    return phrases.some(phrase => {
+      const escaped = phrase.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+
+      return new RegExp(
+        "(?:^|\\W)" + escaped + "(?:$|\\W)",
+        "i"
+      ).test(text);
+    });
+  }
+
+  function trendEvidence(text) {
+    const t = normalize(text);
+
+    return {
+      up: containsPhrase(t, UP_WORDS),
+      down: containsPhrase(t, DOWN_WORDS),
+      stable: containsPhrase(t, STABLE_WORDS),
+      fluctuate: containsPhrase(
+        t,
+        FLUCTUATION_WORDS
+      )
+    };
+  }
+
+  // ========================================================
+  // 10. CHART FACTS
+  // ========================================================
+
+  function chartValue(entity, year) {
+    if (!lesson.data) return null;
+
+    const index =
+      lesson.data.years.indexOf(Number(year));
+
+    if (index < 0) return null;
+
+    return (
+      lesson.data.series[entity]?.[index] ?? null
+    );
+  }
+
+  function chartDirection(entity, first, last) {
+    const a = chartValue(entity, first);
+    const b = chartValue(entity, last);
+
+    if (a === null || b === null) {
+      return null;
     }
 
-    const findings = [];
-    const t = normalized(text);
+    if (b > a) return "up";
+    if (b < a) return "down";
 
-    const upVi =
-      "(?:tang|di len|tang len)";
-    const downVi =
-      "(?:giam|di xuong|sut giam)";
+    return "stable";
+  }
 
-    const rising = `(?:${UP_EN}|${upVi})`;
-    const falling = `(?:${DOWN_EN}|${downVi})`;
+  function chartWarnings(text, index) {
+    const warnings = [];
+    const errors = [];
 
-    const pieces = t.split(
-      /[.;!?\n]+|\b(?:whereas|while|however|nhung|trong khi)\b/g
-    );
+    if (!lesson.data) {
+      warnings.push(
+        "Bài 02 chưa có dữ liệu biểu đồ " +
+        "được xác minh. Hệ thống chưa thể " +
+        "kiểm tra chính xác số liệu hoặc xu hướng."
+      );
 
-    for (const piece of pieces) {
-      for (const city of ["A","B","C"]) {
-        const name = `(?:city|thanh pho)\\s*${city.toLowerCase()}\\b`;
-        const up = new RegExp(
-          `${name}[\\s\\S]{0,52}\\b${rising}\\b|\\b${rising}[\\s\\S]{0,35}${name}`,
-          "i"
-        );
-        const down = new RegExp(
-          `${name}[\\s\\S]{0,52}\\b${falling}\\b|\\b${falling}[\\s\\S]{0,35}${name}`,
-          "i"
-        );
+      return {errors, warnings};
+    }
 
-        const trend = lesson.trends[city];
+    /*
+     Trend checking is scoped to clearly
+     identifiable overall claims.
 
-        if (trend === "down" && up.test(piece)) {
-          findings.push(
-            `City ${city} giảm xét từ ${lesson.start} đến ${lesson.end}, không tăng tổng thể.`
+     Do not flag a rising intermediate segment
+     as an incorrect overall trend.
+    */
+
+    if ([2, 3, 8].includes(index)) {
+
+      const sentences = normalize(text)
+        .split(/[.!?;\n]+|\b(?:whereas|while|nhung)\b/)
+        .map(x => x.trim())
+        .filter(Boolean);
+
+      for (const sentence of sentences) {
+        const found = entitiesIn(sentence);
+
+        if (found.length !== 1) {
+          continue;
+        }
+
+        const entity = found[0];
+        const evidence = trendEvidence(sentence);
+
+        const overall =
+          lesson.overall[entity];
+
+        const claimsOverall =
+          /\b(overall|generally|in general|throughout|entire|whole|nhin chung|tong the|ca giai doan|tu dau den cuoi)\b/i
+            .test(sentence) ||
+          /\bfrom\s*1965\s*to\s*2010\b/i
+            .test(sentence) ||
+          /\bbetween\s*1965\s*and\s*2010\b/i
+            .test(sentence);
+
+        /*
+         Step 2/3/8 asks for an overall trend.
+         A sentence explicitly restricted
+         to intermediate years is not checked
+         against the overall direction.
+        */
+
+        const internalYears =
+          /\b(1975|1985|1995|2005)\b/.test(sentence);
+
+        if (internalYears && !claimsOverall) {
+          continue;
+        }
+
+        const hasUp = evidence.up;
+        const hasDown = evidence.down;
+
+        if (hasUp && hasDown) {
+          warnings.push(
+            `Nhận xét về ${entity} có cả từ tăng ` +
+            `và giảm. Hãy kiểm tra xem em đang ` +
+            `mô tả dao động hay xu hướng tổng thể.`
+          );
+          continue;
+        }
+
+        if (!hasUp && !hasDown) {
+          continue;
+        }
+
+        if (overall === "down" && hasUp) {
+          errors.push(
+            `${entity} giảm xét từ năm ` +
+            `${lesson.start} đến ${lesson.end}, ` +
+            `không tăng tổng thể.`
           );
         }
 
-        if (trend === "up" && down.test(piece)) {
-          findings.push(
-            `City ${city} tăng xét từ ${lesson.start} đến ${lesson.end}, không giảm tổng thể.`
+        if (overall === "up" && hasDown) {
+          errors.push(
+            `${entity} tăng xét từ năm ` +
+            `${lesson.start} đến ${lesson.end}, ` +
+            `không giảm tổng thể.`
           );
         }
       }
     }
 
-    // Only apply trend conclusions where an overall
-    // trend is expected, not isolated intermediate moves.
-    const globalTrendSteps = [2,3,8];
-
-    return globalTrendSteps.includes(stepIndex)
-      ? [...new Set(findings)]
-      : [];
+    return {
+      errors: unique(errors),
+      warnings: unique(warnings)
+    };
   }
 
-  function checkLocal(answer, step, index) {
+  // ========================================================
+  // 11. NUMBER VALIDATION
+  // ========================================================
+
+  /*
+   Only verify simple, unambiguous pairs
+   like "City A ... 35 ... 1965" or
+   "City A in 1965: 35".
+
+   Complex prose is not automatically
+   rejected from numeric pattern matching.
+  */
+
+  function validateNumbers(text) {
     const errors = [];
     const warnings = [];
 
-    if (!answer.trim()) {
+    if (!lesson.data) {
       return {
-        verdict:"revise",
-        errors:["Em chưa nhập câu trả lời."],
-        warnings:[],
-        issues:[]
+        errors,
+        warnings
       };
     }
 
-    if (words(answer) < (step.min || 0)) {
-      errors.push(
-        `Cần tối thiểu ${step.min} từ. Hiện có ${words(answer)} từ.`
-      );
-    }
+    const lines = text
+      .split(/[\n;]+/)
+      .map(x => x.trim())
+      .filter(Boolean);
 
-    const issues = [
-      "intro","overview","body","essay"
-    ].includes(step.type)
-      ? checkLanguage(answer)
-      : [];
+    for (const line of lines) {
+      const found = entitiesIn(line);
 
-    if (issues.length) {
-      errors.push(
-        `Phát hiện ${issues.length} lỗi ngôn ngữ theo bộ quy tắc.`
-      );
-    }
-
-    errors.push(...checkChart(answer, index));
-
-    if (step.type === "group") {
-      const t = normalized(answer);
-
-      if (!/body\s*1|doan\s*1/.test(t) ||
-          !/body\s*2|doan\s*2/.test(t)) {
-        errors.push(
-          "Hãy nêu rõ nhóm Body 1 và Body 2."
-        );
+      if (found.length !== 1) {
+        continue;
       }
 
-      if (lessonId === "01") {
-        for (const city of ["a","b","c"]) {
-          if (!new RegExp(
-            `(?:city|thanh pho)\\s*${city}\\b`,
-            "i"
-          ).test(t)) {
-            errors.push(`Chưa xác định vị trí City ${city.toUpperCase()} trong hai Body.`);
-          }
-        }
-      } else {
-        for (const term of [
-          /streaming/i,
-          /downloads?/i,
-          /\bcds?\b/i
-        ]) {
-          if (!term.test(t)) {
-            errors.push(
-              "Cần phân nhóm đủ streaming, downloads và CDs."
-            );
-            break;
-          }
-        }
-      }
-    }
+      const entity = found[0];
+      const ns = numbers(line);
 
-    if (step.type === "analysis" ||
-        step.type === "overview") {
-      const t = normalized(answer);
+      const chartYears = ns.filter(x =>
+        lesson.data.years.includes(x)
+      );
+
+      if (chartYears.length !== 1) {
+        continue;
+      }
+
+      const year = chartYears[0];
+
+      const candidates = ns.filter(x =>
+        x !== year &&
+        !lesson.data.years.includes(x)
+      );
+
+      if (candidates.length !== 1) {
+        continue;
+      }
+
+      const claimed = candidates[0];
+
+      const expected = chartValue(
+        entity,
+        year
+      );
+
+      if (expected === null) continue;
+
+      /*
+       Fractional data on the original graph
+       are approximate. Allow small tolerance.
+      */
+
+      const tolerance = 1;
 
       if (
-        !/\b(tang|giam|dao dong|on dinh|vuot|rise|rose|increas|decreas|declin|fall|fell|fluctuat|stable|remain|drop|grow|grew)/i.test(t)
+        Math.abs(claimed - expected) > tolerance
       ) {
-        warnings.push(
-          "Hãy kiểm tra xem đã mô tả xu hướng tổng thể chưa."
+        errors.push(
+          `${entity} tại năm ${year}: ` +
+          `em ghi ${claimed}, trong khi ` +
+          `biểu đồ thể hiện khoảng ${expected}.`
         );
       }
     }
 
-    if (step.type === "data") {
-      const numbers = answer.match(/\d+(?:[.,]\d+)?/g) || [];
+    return {
+      errors: unique(errors),
+      warnings: unique(warnings)
+    };
+  }
 
-      if (!numbers.length) {
+  // ========================================================
+  // 12. GROUP VALIDATION
+  // ========================================================
+
+  function validateGrouping(text) {
+    const errors = [];
+    const warnings = [];
+
+    const t = normalize(text);
+
+    const body1Match =
+      /(?:body|doan)\s*1\s*[:\-]?([\s\S]*?)(?=(?:body|doan)\s*2\b|$)/i
+        .exec(t);
+
+    const body2Match =
+      /(?:body|doan)\s*2\s*[:\-]?([\s\S]*)/i
+        .exec(t);
+
+    if (!body1Match || !body2Match) {
+      errors.push(
+        "Hãy trình bày rõ Body 1 và Body 2 " +
+        "để hệ thống kiểm tra cách chia nhóm."
+      );
+
+      return {errors, warnings};
+    }
+
+    const body1 = body1Match[1];
+    const body2 = body2Match[1];
+
+    const group1 = entitiesIn(body1);
+    const group2 = entitiesIn(body2);
+
+    for (const entity of lesson.entities) {
+      if (
+        !group1.includes(entity) &&
+        !group2.includes(entity)
+      ) {
         errors.push(
-          "Cần đưa số liệu hoặc mốc thời gian từ biểu đồ."
+          `Chưa phân nhóm ${entity}.`
         );
       }
+
+      if (
+        group1.includes(entity) &&
+        group2.includes(entity)
+      ) {
+        errors.push(
+          `${entity} đang xuất hiện ở cả ` +
+          "Body 1 và Body 2."
+        );
+      }
+    }
+
+    if (!group1.length || !group2.length) {
+      errors.push(
+        "Mỗi Body cần có ít nhất một đối tượng."
+      );
+    }
+
+    if (
+      !/\b(vi|because|since|do|theo|nhom|xu huong|tuong dong|khac biet)\b/i
+        .test(t)
+    ) {
+      warnings.push(
+        "Hãy giải thích lý do chia nhóm " +
+        "thay vì chỉ liệt kê tên đối tượng."
+      );
+    }
+
+    return {
+      errors: unique(errors),
+      warnings: unique(warnings)
+    };
+  }
+
+  // ========================================================
+  // 13. STRUCTURE VALIDATION
+  // ========================================================
+
+  function validateStructure(text, step) {
+    const errors = [];
+    const warnings = [];
+
+    const count = countWords(text);
+
+    if (!text.trim()) {
+      errors.push("Em chưa nhập câu trả lời.");
+
+      return {errors, warnings};
+    }
+
+    if (count < (step.min || 0)) {
+      errors.push(
+        `Cần tối thiểu ${step.min} từ. ` +
+        `Hiện tại có ${count} từ.`
+      );
     }
 
     if (step.type === "essay") {
-      const paragraphs = answer.trim()
-        .split(/\n\s*\n/)
-        .filter(Boolean);
+      const parts = paragraphs(text);
 
-      if (paragraphs.length < 4) {
+      if (parts.length < 4) {
         errors.push(
-          "Bài hoàn chỉnh cần tối thiểu bốn đoạn tách biệt."
+          "Bài hoàn chỉnh cần tối thiểu bốn " +
+          "đoạn văn tách biệt bằng dòng trống."
+        );
+      }
+
+      if (parts.length > 5) {
+        warnings.push(
+          "Bài Task 1 thường nên viết gọn " +
+          "trong bốn đoạn."
+        );
+      }
+    }
+
+    if (
+      ["intro","overview","body","essay"]
+        .includes(step.type)
+    ) {
+      if (
+        /\b(i think|i believe|in my opinion)\b/i
+          .test(text)
+      ) {
+        errors.push(
+          "IELTS Academic Task 1 không yêu cầu " +
+          "trình bày quan điểm cá nhân."
         );
       }
     }
 
     if (step.type === "intro") {
-      if (lessonId === "01" &&
-          !/\bconferences?\b/i.test(answer)) {
+      if (
+        lessonId === "01" &&
+        !/\bconferences?\b/i.test(text)
+      ) {
         warnings.push(
-          "Kiểm tra lại đối tượng hội nghị quốc tế."
+          "Introduction cần thể hiện đúng " +
+          "đối tượng hội nghị quốc tế."
         );
       }
 
-      if (lessonId === "02" &&
-          !/\b(music|sales)\b/i.test(answer)) {
+      if (
+        lessonId === "02" &&
+        !/\b(music|sales)\b/i.test(text)
+      ) {
         warnings.push(
-          "Kiểm tra lại đối tượng music sales."
+          "Introduction cần thể hiện " +
+          "nội dung music sales."
+        );
+      }
+
+      if (!containsYear(text)) {
+        warnings.push(
+          "Hãy kiểm tra xem Introduction " +
+          "đã nêu khoảng thời gian chưa."
         );
       }
     }
 
-    if (["intro","overview","body","essay"].includes(step.type)) {
-      if (/\b(i think|i believe|in my opinion)\b/i.test(answer)) {
-        errors.push(
-          "IELTS Writing Task 1 không yêu cầu quan điểm cá nhân."
-        );
-      }
-    }
-
-    if (lessonId === "02" &&
-        [2,3,8,9,10,11,12,13,14,15].includes(index)) {
+    if (
+      step.type === "overview" &&
+      !hasAny(
+        normalize(text),
+        [
+          /\b(increase|increased|rise|rose|grow|grew)\b/,
+          /\b(decrease|decreased|fall|fell|decline|declined)\b/,
+          /\b(tang|giam|dao dong|on dinh)\b/
+        ]
+      )
+    ) {
       warnings.push(
-        "Dữ liệu chi tiết của biểu đồ 02 chưa được xác minh trong bộ chấm offline. Hãy đối chiếu trực tiếp hình gốc."
+        "Chưa nhận thấy cách diễn đạt xu hướng " +
+        "trong Overview. Hãy tự kiểm tra lại."
       );
     }
 
+    if (step.type === "data") {
+      if (!numbers(text).length) {
+        errors.push(
+          "Bước này cần số liệu " +
+          "hoặc mốc thời gian cụ thể."
+        );
+      }
+
+      if (!entitiesIn(text).length) {
+        warnings.push(
+          "Nên ghi rõ đối tượng tương ứng " +
+          "với số liệu."
+        );
+      }
+    }
+
+    if (step.type === "body") {
+      if (!numbers(text).length) {
+        warnings.push(
+          "Body nên có số liệu " +
+          "để minh họa các nhận xét."
+        );
+      }
+    }
+
     return {
-      verdict:errors.length ? "revise" : "pass",
-      errors:[...new Set(errors)],
-      warnings:[...new Set(warnings)],
-      issues
+      errors: unique(errors),
+      warnings: unique(warnings)
     };
   }
 
-  function grade(answer, step, index) {
+  // ========================================================
+  // 14. ASSESSMENT ORCHESTRATOR
+  // ========================================================
+
+  function gradeAnswer(answer, step, index) {
+
     if (step.type === "choice") {
       if (answer === "") {
         return {
-          verdict:"revise",
-          errors:["Hãy chọn một đáp án."],
-          warnings:[],
-          issues:[]
+          verdict: "revise",
+          errors: [
+            "Hãy chọn một đáp án."
+          ],
+          warnings: [],
+          issues: [],
+          verified: true
         };
       }
 
       return Number(answer) === step.correct
         ? {
-          verdict:"pass",
-          errors:[],
-          warnings:[],
-          issues:[]
+          verdict: "pass",
+          errors: [],
+          warnings: [],
+          issues: [],
+          verified: true
         }
         : {
-          verdict:"revise",
-          errors:["Đáp án chưa đúng. Hãy chọn lại."],
-          warnings:[],
-          issues:[]
+          verdict: "revise",
+          errors: [
+            "Đáp án chưa chính xác. " +
+            "Hãy đọc lại yêu cầu và chọn lại."
+          ],
+          warnings: [],
+          issues: [],
+          verified: true
         };
     }
 
-    return checkLocal(answer, step, index);
+    const structure =
+      validateStructure(answer, step);
+
+    const errors = [
+      ...structure.errors
+    ];
+
+    const warnings = [
+      ...structure.warnings
+    ];
+
+    let issues = [];
+
+    // Check known spelling and grammar errors.
+
+    if (
+      ["intro","overview","body","essay"]
+        .includes(step.type)
+    ) {
+      issues = checkLanguage(answer);
+
+      if (issues.length) {
+        errors.push(
+          `Phát hiện ${issues.length} vấn đề ` +
+          "ngôn ngữ theo bộ quy tắc."
+        );
+      }
+    }
+
+    // Check grouping.
+
+    if (step.type === "group") {
+      const grouping =
+        validateGrouping(answer);
+
+      errors.push(...grouping.errors);
+      warnings.push(...grouping.warnings);
+    }
+
+    // Check chart trends.
+
+    if (
+      ["analysis","group","overview"]
+        .includes(step.type)
+    ) {
+      const chart =
+        chartWarnings(answer, index);
+
+      errors.push(...chart.errors);
+      warnings.push(...chart.warnings);
+    }
+
+    // Check numeric facts.
+
+    if (
+      ["data","body","essay"]
+        .includes(step.type)
+    ) {
+      const numeric =
+        validateNumbers(answer);
+
+      errors.push(...numeric.errors);
+      warnings.push(...numeric.warnings);
+    }
+
+    if (
+      lessonId === "02" &&
+      [2,3,8,9,10,11,12,13,14,15]
+        .includes(index)
+    ) {
+      warnings.push(
+        "Chưa có bảng số liệu chuẩn cho " +
+        "Dynamic 02. Phần dữ liệu và xu hướng " +
+        "chưa được xác minh."
+      );
+    }
+
+    /*
+     The absence of detected errors is NOT
+     proof that free-form English is correct.
+    */
+
+    return {
+      verdict:
+        errors.length ? "revise" : "pass",
+
+      errors: unique(errors),
+      warnings: unique(warnings),
+      issues,
+
+      verified: false
+    };
   }
 
-  function renderFeedback(result) {
+  // ========================================================
+  // 15. FEEDBACK DISPLAY
+  // ========================================================
+
+  function renderFeedback(result, answer) {
     const box = $("feedback");
-    const passed = result.verdict === "pass";
+
+    const passed =
+      result.verdict === "pass";
 
     box.hidden = false;
     box.className =
-      "feedback " + (passed ? "success" : "warning");
+      "feedback " +
+      (passed ? "success" : "warning");
 
-    let html = `<strong>${
-      passed
-        ? "✓ Đạt kiểm tra tự động"
-        : "Cần chỉnh sửa trước khi tiếp tục"
-    }</strong>`;
+    let html = `
+      <strong>
+        ${
+          passed
+            ? "✓ Đạt kiểm tra tự động"
+            : "Cần chỉnh sửa trước khi tiếp tục"
+        }
+      </strong>
 
-    html += `<p>${
-      passed
-        ? "Không phát hiện lỗi bắt buộc theo các quy tắc hiện có. Kết quả không thay thế đánh giá của giáo viên."
-        : "Hãy xem lại các điểm dưới đây, sửa câu trả lời và kiểm tra lại."
-    }</p>`;
+      <p>
+        ${
+          passed
+            ? "Chưa phát hiện lỗi chắc chắn theo các quy tắc hiện có. Kết quả không xác nhận bài hoàn toàn đúng."
+            : "Hãy đọc phản hồi bên dưới và sửa câu trả lời."
+        }
+      </p>
+    `;
 
     if (result.errors.length) {
-      html += "<h4>Các vấn đề cần sửa</h4><ul>";
+      html +=
+        "<h4>Những vấn đề cần sửa</h4><ul>";
+
       for (const error of result.errors) {
-        html += `<li>${esc(error)}</li>`;
+        html += `<li>${escapeHTML(error)}</li>`;
       }
+
       html += "</ul>";
     }
 
@@ -720,116 +1734,223 @@
       for (const issue of result.issues) {
         html += `
           <div class="grading-issue">
-            <b>Lỗi:</b> ${esc(issue.original)}
-            <p><b>Gợi ý sửa:</b>
-            ${esc(issue.correction)}</p>
-            <p>${esc(issue.message)}</p>
+
+            <strong>
+              ${escapeHTML(issue.category)}
+            </strong>
+
+            <p>
+              <b>Cụm cần sửa:</b>
+              <span style="color:#bf3446">
+                ${escapeHTML(issue.original)}
+              </span>
+            </p>
+
+            <p>
+              <b>Đề xuất:</b>
+              <span style="color:#16845b">
+                ${escapeHTML(issue.correction)}
+              </span>
+            </p>
+
+            <p>
+              ${escapeHTML(issue.explanation)}
+            </p>
+
           </div>
         `;
       }
     }
 
     if (result.warnings.length) {
-      html += "<h4>Những điểm nên kiểm tra</h4><ul>";
+      html +=
+        "<h4>Những điểm cần tự kiểm tra</h4><ul>";
+
       for (const warning of result.warnings) {
-        html += `<li>${esc(warning)}</li>`;
+        html +=
+          `<li>${escapeHTML(warning)}</li>`;
       }
+
       html += "</ul>";
+    }
+
+    if (
+      !result.verified &&
+      result.verdict === "pass"
+    ) {
+      html += `
+        <p style="
+          font-size:11px;
+          margin-top:12px;
+          opacity:.9;
+        ">
+          Đây là kết quả kiểm tra offline theo
+          quy tắc. Giáo viên cần xác minh những
+          nội dung không thể đánh giá tự động.
+        </p>
+      `;
     }
 
     box.innerHTML = html;
   }
 
+  // ========================================================
+  // 16. NAVIGATION AND PROGRESS
+  // ========================================================
+
   function renderProgress() {
+    const total = STEPS.length;
+
     $("progressText").textContent =
-      `Đã mở ${state.unlocked + 1}/${STEPS.length} bước`;
+      `Đã mở ${state.unlocked + 1}/${total} bước`;
 
     $("progress").style.width =
-      ((state.unlocked + 1) / STEPS.length * 100) + "%";
+      ((state.unlocked + 1) / total * 100) + "%";
   }
 
   function renderNavigation() {
-    $("nav").innerHTML = STEPS.map((step,i) => {
-      const locked = i > state.unlocked;
-      const active = i === state.current;
-      return `
-        <button
-          type="button"
-          class="step-chip ${active ? "active" : ""} ${i < state.unlocked ? "done" : ""}"
-          data-step="${i}"
-          ${locked ? "disabled" : ""}
-        >
-          ${i < state.unlocked ? "✓" : i + 1}.
-          ${esc(step.section)}
-        </button>
-      `;
-    }).join("");
+    $("nav").innerHTML = STEPS.map(
+      (step, index) => {
+
+        const locked =
+          index > state.unlocked;
+
+        const active =
+          index === state.current;
+
+        const done =
+          index < state.unlocked;
+
+        return `
+          <button
+            type="button"
+            class="step-chip
+              ${active ? "active" : ""}
+              ${done ? "done" : ""}"
+            data-step="${index}"
+            ${locked ? "disabled" : ""}
+          >
+            ${done ? "✓" : index + 1}.
+            ${escapeHTML(step.section)}
+          </button>
+        `;
+      }
+    ).join("");
   }
+
+  // ========================================================
+  // 17. ANSWER HANDLING
+  // ========================================================
 
   function readAnswer() {
     const step = STEPS[state.current];
 
     if (step.type === "choice") {
-      return document.querySelector(
-        'input[name="answer"]:checked'
-      )?.value ?? "";
+      return (
+        document.querySelector(
+          'input[name="answer"]:checked'
+        )?.value ?? ""
+      );
     }
 
     return $("answer")?.value || "";
   }
 
-  function saveAnswer() {
+  function saveCurrentAnswer() {
     if (!state.started) return;
 
-    state.answers[state.current] = readAnswer();
-    save();
+    state.answers[state.current] =
+      readAnswer();
+
+    saveState();
   }
 
-  function renderQuestion() {
-    const i = state.current;
-    const step = STEPS[i];
-    const answer = state.answers[i] ?? "";
+  // ========================================================
+  // 18. STEP RENDERING
+  // ========================================================
 
-    $("stepSection").textContent = step.section;
+  function renderCurrentStep() {
+    const index = state.current;
+
+    const step = STEPS[index];
+
+    const answer =
+      state.answers[index] ?? "";
+
+    $("stepSection").textContent =
+      step.section;
+
     $("stepTitle").textContent =
-      `${i + 1}. ${step.title}`;
-    $("question").textContent = step.question;
-    $("hint").textContent = step.hint || "";
+      `${index + 1}. ${step.title}`;
+
+    $("question").textContent =
+      step.question;
+
+    $("hint").textContent =
+      step.hint || "";
+
     $("hint").hidden = !step.hint;
 
     if (step.type === "choice") {
       $("answerArea").innerHTML = `
         <div class="choices">
-          ${step.options.map((option,j) => `
-            <label>
-              <input
-                type="radio"
-                name="answer"
-                value="${j}"
-                ${String(answer) === String(j) ? "checked" : ""}
-              >
-              ${esc(option)}
-            </label>
-          `).join("")}
+
+          ${step.options.map(
+            (option, i) => `
+              <label>
+                <input
+                  type="radio"
+                  name="answer"
+                  value="${i}"
+                  ${
+                    String(answer) === String(i)
+                      ? "checked"
+                      : ""
+                  }
+                >
+
+                ${escapeHTML(option)}
+              </label>
+            `
+          ).join("")}
+
         </div>
       `;
+
     } else {
-      const rows = step.type === "essay"
-        ? 18 : step.type === "body" ? 7 : 4;
+
+      const rows =
+        step.type === "essay"
+          ? 18
+          : step.type === "body"
+            ? 7
+            : 4;
+
+      const lang =
+        ["analysis","group","data"]
+          .includes(step.type)
+            ? "vi"
+            : "en-GB";
 
       $("answerArea").innerHTML = `
         <textarea
           id="answer"
           rows="${rows}"
+          lang="${lang}"
           spellcheck="true"
-          lang="${["analysis","group","data"].includes(step.type) ? "vi" : "en-GB"}"
-          placeholder="Nhập câu trả lời tại đây..."
+          placeholder="Nhập câu trả lời..."
         ></textarea>
-        <div id="words" class="word-line"></div>
+
+        <div
+          id="words"
+          class="word-line"
+        ></div>
       `;
 
       $("answer").value = answer;
-      $("words").textContent = words(answer) + " từ";
+
+      $("words").textContent =
+        countWords(answer) + " từ";
     }
 
     $("checkButton").textContent =
@@ -838,65 +1959,104 @@
         : "Kiểm tra & mở khóa";
 
     $("nextButton").hidden =
-      i >= state.unlocked || i >= STEPS.length - 1;
+      index >= state.unlocked ||
+      index >= STEPS.length - 1;
 
-    $("backButton").disabled = i === 0;
+    $("backButton").disabled =
+      index === 0;
+
     $("feedback").hidden = true;
-    $("completedPanel").hidden = !state.finished;
+
+    $("completedPanel").hidden =
+      !state.finished;
   }
+
+  // ========================================================
+  // 19. MAIN RENDER
+  // ========================================================
 
   function render() {
     $("lessonTitle").textContent =
-      `Dynamic Datasets ${lessonId} · ${lesson.title}`;
+      `Dynamic Datasets ${lessonId} · ` +
+      lesson.title;
 
-    $("prompt").textContent = lesson.prompt;
+    $("prompt").textContent =
+      lesson.prompt;
 
-    $("welcome").hidden = state.started;
-    $("practice").hidden = !state.started;
+    $("welcome").hidden =
+      state.started;
+
+    $("practice").hidden =
+      !state.started;
 
     $("userLabel").textContent =
       state.name +
-      (state.className ? " · " + state.className : "");
+      (
+        state.className
+          ? " · " + state.className
+          : ""
+      );
 
     if (!state.started) {
-      $("studentName").value = state.name;
-      $("studentClass").value = state.className;
+      $("studentName").value =
+        state.name;
+
+      $("studentClass").value =
+        state.className;
+
       return;
     }
 
     renderProgress();
     renderNavigation();
-    renderQuestion();
+    renderCurrentStep();
   }
 
-  function checkCurrent() {
+  // ========================================================
+  // 20. CHECK STEP
+  // ========================================================
+
+  function checkCurrentStep() {
     const index = state.current;
+
     const step = STEPS[index];
-    const answer = readAnswer().trim();
 
-    saveAnswer();
+    const answer =
+      readAnswer().trim();
 
-    const result = grade(answer, step, index);
+    saveCurrentAnswer();
 
-    renderFeedback(result);
+    const result =
+      gradeAnswer(answer, step, index);
+
+    renderFeedback(result, answer);
 
     state.grades[index] = {
       answer,
-      verdict:result.verdict,
-      checkedAt:new Date().toISOString(),
-      errors:result.errors,
-      warnings:result.warnings
+      verdict: result.verdict,
+      errors: result.errors,
+      warnings: result.warnings,
+      issues: result.issues,
+      checkedAt: new Date().toISOString(),
+      verified: result.verified
     };
 
     if (result.verdict === "pass") {
+
       if (index < STEPS.length - 1) {
         state.unlocked = Math.max(
           state.unlocked,
           index + 1
         );
+
         $("nextButton").hidden = false;
+
       } else {
         state.finished = true;
+
+        state.completedAt =
+          new Date().toISOString();
+
         $("completedPanel").hidden = false;
       }
 
@@ -904,85 +2064,136 @@
       renderNavigation();
     }
 
-    save();
+    saveState();
   }
 
-  function goTo(index) {
+  // ========================================================
+  // 21. STEP NAVIGATION
+  // ========================================================
+
+  function goToStep(index) {
     if (
       index < 0 ||
       index >= STEPS.length ||
       index > state.unlocked
-    ) return;
+    ) {
+      return;
+    }
 
-    saveAnswer();
+    saveCurrentAnswer();
+
     state.current = index;
-    save();
+
+    saveState();
     render();
   }
 
-  function start() {
-    const name = $("studentName").value.trim();
+  // ========================================================
+  // 22. START PRACTICE
+  // ========================================================
+
+  function startPractice() {
+    const name =
+      $("studentName").value.trim();
+
+    const className =
+      $("studentClass").value.trim();
 
     if (!name) {
       $("startError").textContent =
         "Vui lòng nhập họ và tên.";
+
+      $("studentName").focus();
       return;
     }
 
     state.name = name;
-    state.className =
-      $("studentClass").value.trim();
+    state.className = className;
     state.started = true;
 
-    save();
+    $("startError").textContent = "";
+
+    saveState();
     render();
   }
 
-  function reset() {
+  // ========================================================
+  // 23. RESET
+  // ========================================================
+
+  function resetPractice() {
     if (!confirm(
-      "Xóa toàn bộ tiến độ bài học này?"
-    )) return;
-
-    localStorage.removeItem(STORE);
-    state = freshState();
-    render();
-  }
-
-  function exportEssay() {
-    const essay = state.answers[15] || "";
-
-    if (!essay.trim()) {
-      alert("Chưa có bài viết.");
+      "Bạn có chắc muốn xóa toàn bộ " +
+      "tiến độ bài học này?"
+    )) {
       return;
     }
 
-    const output = [
+    localStorage.removeItem(STORE);
+
+    state = defaultState();
+
+    render();
+  }
+
+  // ========================================================
+  // 24. EXPORT FINAL ESSAY
+  // ========================================================
+
+  function exportEssay() {
+    const essay =
+      state.answers[15] || "";
+
+    if (!essay.trim()) {
+      alert("Chưa có bài viết hoàn chỉnh.");
+      return;
+    }
+
+    const content = [
       "SMARTCOM IELTS WRITING TASK 1",
+      "",
+      `Dynamic Datasets ${lessonId}`,
       lesson.title,
       "",
       "Student: " + state.name,
       "Class: " + state.className,
       "",
+      "TASK",
       lesson.prompt,
       "",
       "STUDENT ESSAY",
       "",
       essay,
       "",
-      "Word count: " + words(essay),
+      "Word count: " +
+        countWords(essay),
       "",
-      "Offline check status: " +
-        (state.grades[15]?.verdict || "not_checked")
+      "Offline assessment: " +
+        (
+          state.grades[15]?.verdict ||
+          "not_checked"
+        ),
+      "",
+      "Note: This is a rule-based " +
+        "offline review, not an official " +
+        "IELTS band assessment."
     ].join("\n");
 
-    const blob = new Blob([output], {
-      type:"text/plain;charset=utf-8"
-    });
+    const blob = new Blob(
+      [content],
+      {
+        type: "text/plain;charset=utf-8"
+      }
+    );
 
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const url =
+      URL.createObjectURL(blob);
+
+    const a =
+      document.createElement("a");
 
     a.href = url;
+
     a.download =
       `Dynamic-${lessonId}-Writing.txt`;
 
@@ -990,41 +2201,83 @@
     a.click();
     a.remove();
 
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
   }
 
-  $("startButton").addEventListener("click", start);
-  $("checkButton").addEventListener("click", checkCurrent);
+  // ========================================================
+  // 25. EVENT LISTENERS
+  // ========================================================
+
+  $("startButton").addEventListener(
+    "click",
+    startPractice
+  );
+
+  $("checkButton").addEventListener(
+    "click",
+    checkCurrentStep
+  );
 
   $("nextButton").addEventListener(
-    "click", () => goTo(state.current + 1)
+    "click",
+    () => goToStep(state.current + 1)
   );
 
   $("backButton").addEventListener(
-    "click", () => goTo(state.current - 1)
+    "click",
+    () => goToStep(state.current - 1)
   );
 
-  $("resetButton").addEventListener("click", reset);
-  $("exportButton").addEventListener("click", exportEssay);
+  $("resetButton").addEventListener(
+    "click",
+    resetPractice
+  );
 
-  $("nav").addEventListener("click", event => {
-    const button = event.target.closest("[data-step]");
-    if (button) {
-      goTo(Number(button.dataset.step));
+  $("exportButton").addEventListener(
+    "click",
+    exportEssay
+  );
+
+  $("nav").addEventListener(
+    "click",
+    event => {
+      const button =
+        event.target.closest("[data-step]");
+
+      if (!button) return;
+
+      goToStep(
+        Number(button.dataset.step)
+      );
     }
-  });
+  );
 
-  $("answerArea").addEventListener("input", () => {
-    saveAnswer();
-    $("feedback").hidden = true;
+  $("answerArea").addEventListener(
+    "input",
+    () => {
+      saveCurrentAnswer();
 
-    if ($("words")) {
-      $("words").textContent =
-        words(readAnswer()) + " từ";
+      $("feedback").hidden = true;
+
+      if ($("words")) {
+        $("words").textContent =
+          countWords(readAnswer()) + " từ";
+      }
     }
-  });
+  );
 
-  $("answerArea").addEventListener("change", saveAnswer);
+  $("answerArea").addEventListener(
+    "change",
+    saveCurrentAnswer
+  );
+
+  // ========================================================
+  // 26. INITIALIZE
+  // ========================================================
 
   render();
+
 })();
