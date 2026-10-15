@@ -437,4 +437,37 @@ render=function(){priorRender();if(step>=1&&step<=4){let k=['','intro','overview
 render();
 })();
 
+
+/* Maps 01 UI integrity: one tense guide, one grading button, one review box per writing step. */
+(function(){
+  function normalizeWritingControls(){
+    if(step<1 || step>4 || !quizProgress[step])return;
+    const work=document.getElementById('lessonWork');
+    if(!work)return;
+    const target=work.querySelector('#'+['','intro','overview','body1','body2'][step]);
+    if(!target)return;
+    const anchor=target.closest('.field') || target.parentElement;
+    if(!anchor)return;
+    const tenseNodes=[...work.querySelectorAll('.tense-box')];
+    const actionNodes=[...work.querySelectorAll('.lesson-action')];
+    const reviewNodes=[...work.querySelectorAll('#partReview')];
+    // Prefer preserving an already populated review when reconciling duplicated elements.
+    const tense=tenseNodes[0] || null;
+    const action=actionNodes[0] || null;
+    const review=reviewNodes.find(el=>el.textContent.trim()) || reviewNodes[0] || null;
+    tenseNodes.forEach(el=>{if(el!==tense)el.remove()});
+    actionNodes.forEach(el=>{if(el!==action)el.remove()});
+    reviewNodes.forEach(el=>{if(el!==review)el.remove()});
+    // Keep controls directly below the text box in the natural study order.
+    let after=anchor;
+    for(const block of [tense,action,review]){
+      if(block){after.insertAdjacentElement('afterend',block);after=block;}
+    }
+  }
+  const oldFinalRender=render;
+  render=function(){oldFinalRender();normalizeWritingControls()};
+  const oldFinalMark=markVocabularyQuiz;
+  markVocabularyQuiz=function(){oldFinalMark();normalizeWritingControls()};
+  normalizeWritingControls();
+})();
 </script></body></html>
