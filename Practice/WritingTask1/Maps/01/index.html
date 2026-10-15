@@ -144,29 +144,39 @@ render=function(){oldPebbletonRender();if(step>=1&&step<=4&&quizProgress[step]){
 let quizAnswers={};try{quizAnswers=JSON.parse(localStorage.getItem('PEBBLETON_QUIZ_SELECTIONS')||'{}')}catch(e){}
 
 const MAP_FEATURES=[
- ['Lighthouse','unchanged'],['Sea','unchanged'],['River','unchanged'],['School','unchanged'],
- ['Playing field','unchanged'],['Coast Road','unchanged'],['Road bridge','unchanged'],
- ['Old Fort Road','unchanged'],['Original houses','unchanged'],
- ['Old fort','changed'],['Film studio','changed'],
- ['Children’s playground','new'],['Flats','new'],['Community centre','new'],
- ['Tennis courts','new'],['Footpaths','new'],['Additional houses','new']
+ ['Film studio','changed'],['School','unchanged'],['Community centre','new'],
+ ['Coast Road','unchanged'],['Additional houses','new'],['Old fort','changed'],
+ ['River','unchanged'],['Tennis courts','new'],['Lighthouse','unchanged'],
+ ['Flats','new'],['Sea','unchanged'],['Footpaths','new'],
+ ['Playing field','unchanged'],['Children’s playground','new'],['Road bridge','unchanged'],
+ ['Original houses','unchanged'],['Old Fort Road','unchanged']
 ];
 const CHANGE_QUESTIONS=[
- ['Old fort hiện nay là gì?',['Children’s playground','Community centre','Flats'],0],
+ ['Old fort được thay bằng công trình nào?',['Children’s playground','Community centre','Flats'],0],
  ['Film studio được thay bằng gì?',['Tennis courts','Flats','School'],1],
- ['Những hạng mục nào được xây mới?',['Community centre và tennis courts','Lighthouse và river','School và playing field'],0],
- ['Hệ thống đường đi bộ thay đổi thế nào?',['Các footpaths được bổ sung','Road bridge bị phá bỏ','Coast Road biến mất'],0]
+ ['Công trình nào xuất hiện gần lighthouse và houses?',['School','Community centre','Old fort'],1],
+ ['Khu vực sân thể thao có công trình mới nào?',['Tennis courts','Swimming pool','Cinema'],0],
+ ['Nhà ở thay đổi như thế nào?',['Ít nhà hơn','Không có nhà ở','Additional houses được xây thêm'],2],
+ ['Hệ thống đường đi bộ có thay đổi nào?',['Các footpaths được bổ sung','Road bridge bị phá bỏ','Coast Road biến mất'],0],
+ ['Điều gì đã xảy ra với playing field?',['Bị thay bởi flats','Vẫn giữ nguyên','Trở thành car park'],1]
 ];
 // The note is computed only from features and changes the student marked as correct;
 // it does not silently copy a hidden answer key into the student's notes.
-function mapSelections(){data.map01Checklist??={};data.map01Changes??={};return data;}
+function mapSelections(){
+ if(data.map01AnalysisVersion!==2){
+   data.map01Checklist={}; data.map01Changes={}; data.map01Checked=false;
+   data.map01ScoreText=''; data.map01AnalysisVersion=2;
+   localStorage.setItem(key,JSON.stringify(data));
+ }
+ data.map01Checklist??={};data.map01Changes??={};return data;
+}
 function setFeatureChoice(i,checked){mapSelections();data.map01Checklist[i]=checked;data.map01Checked=false;localStorage.setItem(key,JSON.stringify(data));updateAnalysisScore();}
 function setChangeChoice(i,v){mapSelections();data.map01Changes[i]=Number(v);data.map01Checked=false;localStorage.setItem(key,JSON.stringify(data));updateAnalysisScore();}
 function updateAnalysisScore(){const el=document.getElementById('map01AnalysisScore');if(el)el.textContent='Đã cập nhật lựa chọn. Bấm Chấm phân tích để xem kết quả.'}
 function selectedNotes(){mapSelections();const selected=MAP_FEATURES.filter((f,i)=>data.map01Checklist[i]===true).map(f=>f[0]);const entries=CHANGE_QUESTIONS.map((q,i)=>data.map01Changes[i]===undefined?null:q[1][data.map01Changes[i]]).filter(Boolean);return {selected,entries};}
 function analysisChecklist(){mapSelections();return `<h2>Bước 1. Phân tích bản đồ</h2><p>Quan sát hai bản đồ, sau đó tích chọn những đặc điểm <b>vẫn xuất hiện ở cả hai thời điểm</b>.</p>
 <section><h3>1. Những đặc điểm không thay đổi</h3><div class="feature-choices">${MAP_FEATURES.map((f,i)=>`<label class="feature-choice"><input type="checkbox" ${data.map01Checklist[i]?'checked':''} onchange="setFeatureChoice(${i},this.checked)"><span>${escapeLesson(f[0])}</span></label>`).join('')}</div></section>
-<section><h3>2. Những thay đổi nổi bật</h3><p class="small">Chọn một đáp án cho mỗi câu.</p>${CHANGE_QUESTIONS.map((q,i)=>`<fieldset class="quiz-question"><legend><b>Câu ${i+1}.</b> ${escapeLesson(q[0])}</legend>${q[1].map((a,j)=>`<label class="quiz-option"><input type="radio" name="map01chg_${i}" value="${j}" ${data.map01Changes[i]===j?'checked':''} onchange="setChangeChoice(${i},${j})"><span>${escapeLesson(a)}</span></label>`).join('')}</fieldset>`).join('')}</section>
+<section><h3>2. Những thay đổi nổi bật</h3><p class="small">Chọn một đáp án cho mỗi thay đổi, bao gồm cả nhà ở mới và lối đi bộ.</p>${CHANGE_QUESTIONS.map((q,i)=>`<fieldset class="quiz-question"><legend><b>Câu ${i+1}.</b> ${escapeLesson(q[0])}</legend>${q[1].map((a,j)=>`<label class="quiz-option"><input type="radio" name="map01chg_${i}" value="${j}" ${data.map01Changes[i]===j?'checked':''} onchange="setChangeChoice(${i},${j})"><span>${escapeLesson(a)}</span></label>`).join('')}</fieldset>`).join('')}</section>
 <button type="button" class="primary" onclick="gradeMap01Analysis()">Chấm phân tích</button><div id="map01AnalysisScore" aria-live="polite">${data.map01Checked?`<div class="analysis-score">${escapeLesson(data.map01ScoreText||'')}</div>`:''}</div>
 <p class="small">Các ý đã chọn sẽ được lưu thành ghi chú để bạn tham khảo khi viết Body 1 và Body 2.</p>`}
 function gradeMap01Analysis(){mapSelections();let score=0;const count=MAP_FEATURES.length+CHANGE_QUESTIONS.length;const errors=[];
