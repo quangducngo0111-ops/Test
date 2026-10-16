@@ -1,360 +1,83 @@
-
-<!doctype html>
-<html lang="vi">
-
-<head>
-  <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
-  <meta
-    name="theme-color"
-    content="#281260"
-  >
-
-  <title>
-    Dynamic Datasets 02 — Music Sales by Method
-  </title>
-
-  <link
-    rel="stylesheet"
-    href="../dynamic-style.css"
-  >
-</head>
-
-<body data-lesson="02">
-
-  <!-- ====================================
-       HEADER
-       ==================================== -->
-
-  <header class="top">
-
-    <a href="../">
-      ← Dynamic Datasets
-    </a>
-
-    <strong>
-      ✍️ Writing Task 1 · Guided Learning
-    </strong>
-
-    <span id="userLabel"></span>
-
-  </header>
-
-  <!-- ====================================
-       MAIN
-       ==================================== -->
-
-  <main class="page">
-
-    <div class="hero">
-
-      <h1 id="lessonTitle">
-        Dynamic Datasets 02
-      </h1>
-
-      <p>
-        Học từng bước → Kiểm tra và chữa lỗi
-        → Mở khóa → Tự viết toàn bài
-      </p>
-
-    </div>
-
-    <div class="workspace">
-
-      <!-- ================================
-           LEFT: TASK
-           ================================ -->
-
-      <aside class="card task">
-
-        <span class="eyebrow">
-          IELTS Writing Task 1 · Line Graph
-        </span>
-
-        <h2>
-          Music Sales by Method
-        </h2>
-
-        <p
-          id="prompt"
-          class="task-prompt"
-        >
-          The graph below shows the percentage
-          of total music sales by different
-          methods between 2011 and 2018.
-        </p>
-
-        <img
-          class="chart"
-          id="chart"
-          src="./chart.png"
-          alt="Line graph comparing streaming, downloads and CD sales between 2011 and 2018"
-        >
-
-        <p class="muted">
-          Quan sát xu hướng của ba phương thức:
-          streaming, downloads và CDs
-          trong giai đoạn 2011–2018.
-        </p>
-
-        <p class="muted">
-          <strong>Lưu ý:</strong>
-          Biểu đồ thể hiện tỷ lệ phần trăm
-          doanh số âm nhạc, không phải
-          số lượng sản phẩm bán ra.
-        </p>
-
-        <p class="muted">
-          <strong>Yêu cầu cuối bài:</strong>
-          Viết một bài IELTS Writing Task 1
-          hoàn chỉnh với ít nhất 150 từ.
-        </p>
-
-      </aside>
-
-      <!-- ================================
-           RIGHT: PRACTICE
-           ================================ -->
-
-      <section
-        class="card"
-        aria-label="Khu vực luyện tập"
-      >
-
-        <!-- START -->
-
-        <div id="welcome">
-
-          <span class="eyebrow">
-            Start Practice
-          </span>
-
-          <h2>
-            Bắt đầu bài học 02
-          </h2>
-
-          <p class="muted">
-            Em sẽ luyện cách mô tả xu hướng
-            thay đổi của các phương thức
-            bán nhạc theo thời gian.
-          </p>
-
-          <p class="muted">
-            Bài học bao gồm phân tích,
-            paraphrase, viết Overview,
-            Body 1, Body 2 và cuối cùng
-            là tự viết toàn bài.
-          </p>
-
-          <p class="muted">
-            Tiến độ được tự động lưu riêng
-            cho Dynamic Datasets 02.
-          </p>
-
-          <div class="field">
-
-            <label for="studentName">
-              Họ và tên
-            </label>
-
-            <input
-              id="studentName"
-              type="text"
-              autocomplete="name"
-              placeholder="Nguyễn Văn A"
-            >
-
-          </div>
-
-          <div class="field">
-
-            <label for="studentClass">
-              Lớp
-            </label>
-
-            <input
-              id="studentClass"
-              type="text"
-              placeholder="11A1"
-            >
-
-          </div>
-
-          <div
-            id="startError"
-            role="alert"
-          ></div>
-
-          <button
-            class="btn"
-            id="startButton"
-            type="button"
-          >
-            Bắt đầu học →
-          </button>
-
-        </div>
-
-        <!-- PRACTICE WORKSPACE -->
-
-        <div
-          id="practice"
-          hidden
-        >
-
-          <!-- PROGRESS -->
-
-          <div
-            class="eyebrow"
-            id="progressText"
-          ></div>
-
-          <div
-            class="progress-track"
-            role="progressbar"
-            aria-label="Tiến độ bài học"
-          >
-
-            <div id="progress"></div>
-
-          </div>
-
-          <!-- NAVIGATION -->
-
-          <nav
-            id="nav"
-            class="step-nav"
-            aria-label="Các bước bài học"
-          ></nav>
-
-          <!-- CURRENT STEP -->
-
-          <div class="step-head">
-
-            <span
-              class="eyebrow"
-              id="stepSection"
-            ></span>
-
-            <h2 id="stepTitle"></h2>
-
-          </div>
-
-          <p
-            class="question"
-            id="question"
-          ></p>
-
-          <p
-            class="tip"
-            id="hint"
-          ></p>
-
-          <!-- ANSWER INPUT -->
-
-          <div id="answerArea"></div>
-
-          <!-- FEEDBACK -->
-
-          <div
-            id="feedback"
-            class="feedback"
-            role="status"
-            aria-live="polite"
-            hidden
-          ></div>
-
-          <!-- CHECK / NEXT -->
-
-          <div class="actions">
-
-            <button
-              class="btn"
-              id="checkButton"
-              type="button"
-            >
-              Kiểm tra &amp; mở khóa
-            </button>
-
-            <button
-              class="btn secondary"
-              id="nextButton"
-              type="button"
-              hidden
-            >
-              Bước tiếp theo →
-            </button>
-
-          </div>
-
-          <!-- COMPLETE -->
-
-          <div
-            id="completedPanel"
-            class="result"
-            hidden
-          >
-
-            <strong>
-              Đã nộp bài viết hoàn chỉnh!
-            </strong>
-
-            <p>
-              Em đã hoàn thành phần viết độc lập.
-              Có thể tải bài viết xuống để
-              giáo viên kiểm tra và nhận xét.
-            </p>
-
-            <button
-              class="btn"
-              id="exportButton"
-              type="button"
-            >
-              Tải bài viết (.txt)
-            </button>
-
-          </div>
-
-          <!-- FOOTER CONTROLS -->
-
-          <div class="footer-control">
-
-            <button
-              id="backButton"
-              class="btn ghost"
-              type="button"
-            >
-              ← Quay lại
-            </button>
-
-            <button
-              id="resetButton"
-              class="btn ghost"
-              type="button"
-            >
-              Làm lại từ đầu
-            </button>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
-  <!-- ====================================
-       SHARED ENGINE
-       ==================================== -->
-
-<script src="../dynamic-engine.js?v=6.0" defer></script>
-
-</body>
-</html>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#281260"><title>Dynamic Datasets 02 — Music Sales by Method</title><style>
+:root{--purple:#281260;--violet:#6544d5;--text:#23283b;--muted:#68738e;--line:#e1e6f2;--bg:#f5f7fc;--ok:#13754c;--bad:#ba3349}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font:14px/1.65 Inter,system-ui,"Segoe UI",Arial,sans-serif;color:var(--text)}button,input,textarea,select{font:inherit}button{cursor:pointer}.top{height:60px;background:linear-gradient(100deg,#1d0d4b,#281260);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 max(18px,calc((100vw - 1500px)/2));position:sticky;top:0;z-index:30}.top a{color:white;text-decoration:none;border:1px solid #ffffff55;border-radius:9px;padding:7px 12px;font-size:12px}.page{max-width:1500px;margin:auto;padding:22px 18px 60px}.hero{background:linear-gradient(105deg,#fff,#f4f0ff,#edf6ff);border:1px solid white;padding:22px;border-radius:20px;margin-bottom:16px}.hero h1{margin:3px 0;color:#21144e;font-size:27px}.hero p{margin:0;color:var(--muted)}.workspace{display:grid;grid-template-columns:minmax(320px,45fr) minmax(0,55fr);gap:16px;align-items:start}.card{border:1px solid var(--line);border-radius:17px;background:white;padding:20px;min-width:0;box-shadow:0 5px 22px #20124808}.task{position:sticky;top:76px;max-height:calc(100vh - 91px);overflow:auto;overscroll-behavior:contain}.eyebrow{color:#6b49c6;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.task h2,.practice h2{color:#21144e;margin:8px 0}.task-prompt{font-size:13px;white-space:pre-line}.chart{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);margin:14px 0;cursor:zoom-in}.muted{font-size:12px;color:var(--muted)}.btn{padding:10px 14px;border:1px solid var(--violet);background:var(--violet);border-radius:10px;color:white;font-weight:800}.btn.secondary,.btn.ghost{background:white;color:#321b75;border-color:#dad6ef}.btn:disabled{opacity:.5;cursor:not-allowed}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.field{margin:13px 0}.field label{display:block;font-weight:800;font-size:12px;margin-bottom:5px}input[type=text],textarea,select{width:100%;background:white;border:1px solid #cbd4e7;border-radius:10px;padding:10px;outline:none;color:var(--text)}textarea{min-height:115px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--violet);box-shadow:0 0 0 3px #6544d518}.progress-track{height:8px;background:#e9e6f3;border-radius:10px;overflow:hidden;margin:8px 0 13px}.progress-track>div{height:100%;width:0;background:linear-gradient(90deg,#7153e5,#367fe0)}.step-nav{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 20px}.step-nav button{font-size:11px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px 10px;color:#281260;font-weight:800}.step-nav button.active{background:var(--violet);color:white}.step-nav button.done{border-color:#a9d9c1}.step-head{border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:16px}.step-head h2{margin:4px 0}.subhead{font-size:15px;font-weight:900;color:#26175a;margin:14px 0 7px}.mini{font-size:12px;color:var(--muted)}.question{font-weight:700;margin:6px 0}.quiz-item{padding:13px;border:1px solid var(--line);border-radius:12px;margin:9px 0}.quiz-item legend{font-weight:800;font-size:12px;padding:0 6px}.choice{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line);border-radius:8px;margin:7px 0;font-size:12px}.choice:has(input:checked){background:#f1edff;border-color:#8e72e7}.choice input{accent-color:#6544d5;margin-top:3px}.inline-feedback{font-size:12px;padding:8px 10px;margin-top:8px;background:#f6f8fd;border-radius:8px}.success{color:var(--ok)}.error{color:var(--bad)}.feedback{padding:13px;background:#f8f7ff;border:1px solid #dcd8f5;border-radius:11px;margin:10px 0}.feedback h3{margin:0 0 6px;color:#281260}.feedback li{margin:5px 0}.info{background:#f5f2ff;padding:12px;border-radius:11px;font-size:12px;margin:12px 0}.word-table{width:100%;border-collapse:collapse;font-size:12px}.word-table td,.word-table th{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.word-table th{background:#f5f2ff}.note-card{padding:12px;border:1px solid #d8cef9;border-radius:12px;background:#f9f7ff;position:sticky;top:76px;max-height:calc(100vh - 96px);overflow:auto}.note-card h3{font-size:14px;margin:0 0 8px;color:#49309a}.note-card ul{margin:5px 0;padding-left:18px;font-size:12px}.writing-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,32%);gap:12px;align-items:start}.writing-area{min-width:0}.writing-area textarea{min-height:195px}.draft{margin-top:12px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}.footer-controls{display:flex;justify-content:space-between;margin-top:24px;border-top:1px solid var(--line);padding-top:15px}.flag{padding:7px 9px;border-left:3px solid var(--violet);background:#faf9ff;border-radius:6px;font-size:12px;margin:7px 0}.flag.bad{border-color:var(--bad)}.flag.warn{border-color:#c88912}.flag.good{border-color:var(--ok)}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.tabs button{padding:7px 10px;border-radius:8px;background:#fff;border:1px solid #ddd6f2;color:#3c2a76}.tabs button.active{background:#5a3bc5;color:white}.example{white-space:pre-wrap;background:#f8f9fe;padding:15px;border:1px solid var(--line);border-radius:12px;font-size:13px}.zoom{position:fixed;inset:0;background:#141328ed;display:none;align-items:center;justify-content:center;padding:36px 18px;z-index:90}.zoom.show{display:flex}.zoom img{max-width:98vw;max-height:90vh;object-fit:contain;background:#fff}.zoom button{position:absolute;right:15px;top:10px;background:white;border:0;padding:7px 13px;border-radius:9px;font-size:22px}@media(max-width:1050px){.workspace{grid-template-columns:1fr}.task{position:relative;top:auto;max-height:60vh}.writing-layout{grid-template-columns:1fr}.note-card{position:static;max-height:250px}}@media(max-width:600px){.page{padding:12px 10px}.top{padding:0 10px}.top strong{font-size:11px}.card{padding:14px}.hero h1{font-size:23px}}
+
+.note-chip{display:inline-flex;margin:3px;padding:5px 8px;border-radius:7px;background:#f0edfc;font-size:12px}.analysis-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.analysis-opts label{border:1px solid var(--line);padding:9px;border-radius:9px;font-size:12px}.analysis-opts label:has(input:checked){background:#f2efff;border-color:#8e72e7}.quiz-help{font-size:11px;color:var(--muted)}.mini-input{max-width:145px}.note-card dl{font-size:12px}.note-card dt{font-weight:800;margin-top:8px}.note-card dd{margin:2px 0 8px}.mini-card{padding:12px;border:1px solid var(--line);border-radius:10px;margin:10px 0}.mini-card strong{display:block}.positive{color:var(--ok)}.question-answer{font-size:12px;margin:8px 0}.writing-area{min-width:0}.content-area{width:100%}.step-head{scroll-margin-top:75px}.navrow{display:flex;justify-content:space-between;gap:7px;flex-wrap:wrap}.status{font-size:11px;color:var(--muted)}
+</style></head><body>
+<header class="top"><a href="../">← Dynamic Datasets</a><strong>✍️ Writing Task 1 · Dynamic Datasets 02</strong><span id="userLabel"></span></header>
+<main class="page"><div class="hero"><span class="eyebrow">IELTS Writing Task 1 · Line Graph</span><h1>Music Sales by Method</h1><p>Phân tích dữ liệu, luyện từ vựng và thực hành viết từng đoạn.</p></div>
+<div class="workspace"><aside class="card task"><span class="eyebrow">Đề bài</span><h2>Music Sales by Method</h2><p class="task-prompt">The graph below shows the percentage of total music sales by different methods between 2011 and 2018.</p><img class="chart" id="chart" src="./chart.png" alt="Line graph: music sales by streaming, downloads and CDs, 2011–2018" title="Bấm vào biểu đồ để xem lớn"><p class="muted">Nhấn ảnh để phóng to. Đơn vị là <b>% tổng doanh số</b>, không phải số đĩa hay số lượt tải.</p><p class="muted">Đọc trực tiếp biểu đồ trước khi dùng số liệu; không tự điền các giá trị chưa được xác minh.</p></aside>
+<section class="card practice"><div id="welcome"><h2>Bắt đầu bài học 02</h2><p class="muted">Bài làm và kết quả kiểm tra được tự động lưu trên trình duyệt.</p><div class="field"><label>Họ và tên</label><input type="text" id="studentName" placeholder="Nguyễn Văn A"></div><div class="field"><label>Lớp</label><input type="text" id="studentClass" placeholder="11A1"></div><p id="startError" class="error"></p><button class="btn" id="startButton">Bắt đầu học →</button></div>
+<div id="practice" hidden><span class="eyebrow" id="progressText"></span><div class="progress-track"><div id="progress"></div></div><nav id="nav" class="step-nav"></nav><div class="step-head"><span class="eyebrow" id="stepSection"></span><h2 id="stepTitle"></h2></div><div id="stepRoot"></div><div class="footer-controls"><button class="btn ghost" id="backButton">← Bước trước</button><button class="btn secondary" id="nextButton">Bước tiếp →</button></div><p class="status" id="saveStatus">Tự động lưu trên thiết bị</p></div></section></div></main>
+<div class="zoom" id="zoom"><button id="closeZoom" aria-label="Đóng">×</button><img src="./chart.png" alt="Music sales graph enlarged"></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), KEY='DYNAMIC_DATASETS_02_GUIDED_V8';
+const TITLES=['Phân tích biểu đồ','Introduction','Overview','Body 1','Body 2','Bài hoàn chỉnh'];
+const PARTS={1:'intro',2:'overview',3:'body1',4:'body2',5:'full'};
+const WORDS={
+  intro:[['proportion / percentage','tỷ lệ phần trăm','The chart gives percentages, not absolute sales.'],['account for','chiếm (một tỷ lệ)','Streaming accounted for a share of sales.'],['sales by method','doanh số theo phương thức','A neutral description of the three methods.'],['over the period','trong giai đoạn','Use with 2011–2018.']],
+  overview:[['upward trend','xu hướng tăng','Use only where the graph supports it.'],['downward trend','xu hướng giảm','Use only where the graph supports it.'],['overtake','vượt qua','Only if two lines cross on the graph.'],['remain dominant','tiếp tục chiếm ưu thế','Check start and end before using.']],
+  body1:[['stand at','ở mức','Give the corresponding percentage.'],['fall from … to …','giảm từ … xuống …','Both values must be on the chart.'],['decline steadily','giảm đều','Use only with a consistently declining series.'],['percentage points','điểm phần trăm','For a change in percentage values.']],
+  body2:[['rise from … to …','tăng từ … lên …','Both percentages need checking.'],['surpass / overtake','vượt qua','Check where lines cross.'],['peak at','đạt đỉnh ở','Do not invent the peak value.'],['by the end of the period','vào cuối giai đoạn','Refers to 2018.']]
+};
+const QUIZZES={
+ intro:[['Biểu đồ đang đo điều gì?',['Tỷ lệ các phương thức bán nhạc trong tổng doanh số','Tổng số album được bán','Số người nghe nhạc trực tuyến'],0,'Đơn vị biểu đồ là phần trăm tổng doanh số.'],['Khoảng thời gian được cho là gì?',['2011–2018','2001–2018','2011–2020'],0,'Đọc mốc đầu và cuối trên đề.'],['Câu mở đầu dùng động từ nào đúng?',['The graph illustrates …','The graph illustrate …','The graph illustrating …'],0,'The graph là chủ ngữ số ít.'],['Nhóm nào gồm đúng ba phương thức?',['Streaming, downloads and CDs','Radio, CDs and concerts','Downloads, concerts and DVDs'],0,'Không thêm phương thức ngoài biểu đồ.']],
+ overview:[['Một Overview tốt cần làm gì?',['Nêu xu hướng chung và điểm tương phản nổi bật','Liệt kê toàn bộ giá trị từng năm','Giải thích nguyên nhân từ thị trường'],0,'Không suy diễn nguyên nhân.'],['Nếu đường biểu đồ tăng theo thời gian, nên mô tả bằng?',['an upward trend','a downward trend','a constant fall'],0,'Mô tả phải phù hợp dữ liệu.'],['Nếu 2 đường giao nhau, ta có thể nói?',['One method overtook the other','Both methods were always equal','The figures were invented'],0,'Chỉ dùng overtook khi có giao điểm.'],['Nguyên tắc số liệu trong Overview?',['Ưu tiên xu hướng; tránh nhiều số liệu chi tiết','Bắt buộc ghi tất cả năm','Đưa dự đoán sau 2018'],0,'Overview không cần chép mọi giá trị.']],
+ body1:[['Diễn đạt giảm từ 50% xuống 30%?',['fell from 50% to 30%','fell by 50% to 30%','fell of 50%'],0,'From dùng mức đầu; to dùng mức cuối.'],['Giảm từ 50% xuống 30% là?',['20 percentage points','20 percent of total sales','30 percentage points'],0,'Chênh lệch tuyệt đối giữa hai mức phần trăm là 20 điểm phần trăm.'],['Số liệu lịch sử nên dùng thì nào?',['Past simple','Future simple','Present continuous'],0,'Giai đoạn 2011–2018 kết thúc trong quá khứ.'],['Trong Body, cách mô tả đúng là?',['The proportion fell …','The proportion fall …','The proportion were fell …'],0,'Subject singular và past simple.']],
+ body2:[['Động từ mô tả xu hướng tăng trong quá khứ?',['rose','rised','raise up'],0,'Rise → rose.'],['Cách so sánh đúng?',['higher than','more higher than','highest than'],0,'Không dùng so sánh kép.'],['Dùng “overtook” khi nào?',['Khi một đường vượt lên đường khác','Khi hai số liệu luôn bằng nhau','Khi chưa nhìn thấy giao điểm'],0,'Kiểm tra đường giao trước khi diễn đạt.'],['Muốn đề cập đỉnh, dùng?',['peaked at','peaked to','was peak on'],0,'Peak at + tỷ lệ.']]
+};
+const ANALYSIS=[
+ ['metric','Đơn vị biểu đồ là gì?',['Phần trăm tổng doanh số','Số lượng CD','Triệu người'],0],
+ ['dates','Giai đoạn nào được thể hiện?',['2011 đến 2018','2011 đến 2028','2001 đến 2018'],0],
+ ['items','Có bao nhiêu phương thức được so sánh?',['3','2','4'],0],
+ ['kind','Đây là dữ liệu dạng nào?',['Biểu đồ đường theo thời gian','Biểu đồ tròn của một năm','Bảng giá sản phẩm'],0]
+];
+function fresh(){return {started:false,name:'',className:'',step:0,analysis:{},notes:{streaming:'',downloads:'',cds:'',turning:'',bodyPlan:''},quiz:{},passed:{},drafts:{intro:'',overview:'',body1:'',body2:'',full:''},reviews:{},mode:'corrected'}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')state={...fresh(),...s,notes:{...fresh().notes,...s.notes},drafts:{...fresh().drafts,...s.drafts},quiz:s.quiz||{},passed:s.passed||{}}}catch{}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));$('saveStatus').textContent='✓ Đã lưu trên trình duyệt'}catch{$('saveStatus').textContent='Không thể lưu trên trình duyệt'}}
+function h(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function wordCount(s){return (s.trim().match(/\b[\w]+(?:['’][\w]+)?\b/g)||[]).length}
+function setStep(i){state.step=Math.max(0,Math.min(5,i));save();render();document.querySelector('.practice').scrollIntoView({block:'start',behavior:'smooth'})}
+function quizHTML(key,questions,values){return questions.map((q,i)=>`<fieldset class="quiz-item" id="quiz_${key}_${i}"><legend>Câu ${i+1}. ${h(q[0])}</legend>${q[1].map((o,j)=>`<label class="choice"><input type="radio" name="${key}_${i}" value="${j}" ${String(values?.[i])===String(j)?'checked':''}><span>${h(o)}</span></label>`).join('')}<div class="inline-feedback" id="fb_${key}_${i}" hidden></div></fieldset>`).join('')}
+function bindQuiz(key,questions,container){const values=key==='analysis'?state.analysis:(state.quiz[key]||{});container.querySelectorAll(`input[name^="${key}_"]`).forEach(input=>{input.onchange=()=>{const i=Number(input.name.split('_')[1]);values[i]=Number(input.value);if(key!=='analysis')state.quiz[key]=values;else state.analysis=values;state.passed[key]=false;container.querySelectorAll(`[id^="fb_${key}_"]`).forEach(e=>e.hidden=true);save()}})}
+function markQuiz(key,questions){const values=key==='analysis'?state.analysis:state.quiz[key]||{};let ok=0;questions.forEach((q,i)=>{const correct=Number(values[i])===q[2];ok+=correct?1:0;const box=$(`fb_${key}_${i}`);box.hidden=false;box.innerHTML=correct?'<span class="success">✓ Chính xác</span>':`<span class="error">✗ Cần xem lại.</span> ${h(q[3]||'Đáp án đúng: '+q[1][q[2]])}`});state.passed[key]=ok===questions.length;save();const s=$('quizSummary');if(s)s.innerHTML=`<div class="feedback">${ok}/${questions.length} câu đúng. ${state.passed[key]?'Đã hoàn thành, có thể tiếp tục.':'Xem phản hồi dưới từng câu và thử lại.'}</div>`;updateNav()}
+function renderAnalysis(root){root.innerHTML=`<p class="question">Quan sát biểu đồ và xác định những thông tin có thể kiểm chứng.</p>${quizHTML('analysis',ANALYSIS,state.analysis)}<button class="btn" id="markAnalysis">Kiểm tra phân tích</button><div id="quizSummary"></div><div class="subhead">Ghi chú biểu đồ của em</div><p class="mini">Viết ngắn gọn theo số liệu em đọc trực tiếp. Ghi chú sẽ xuất hiện cạnh Body 1 và Body 2.</p>${Object.entries({streaming:'Streaming – xu hướng và các mốc đáng chú ý',downloads:'Downloads – xu hướng và các mốc đáng chú ý',cds:'CDs – xu hướng và các mốc đáng chú ý',turning:'Điểm giao nhau / thứ hạng đầu và cuối (nếu có)',bodyPlan:'Dự kiến phân chia Body 1 và Body 2'}).map(([k,label])=>`<div class="field"><label for="note_${k}">${label}</label><textarea id="note_${k}" rows="2" placeholder="Tự đọc biểu đồ và ghi lại...">${h(state.notes[k])}</textarea></div>`).join('')}`;bindQuiz('analysis',ANALYSIS,root);$('markAnalysis').onclick=()=>markQuiz('analysis',ANALYSIS);for(const k in state.notes)$('note_'+k).oninput=e=>{state.notes[k]=e.target.value;save()}}
+function noteHTML(){return `<aside class="note-card"><h3>📝 Ghi chú biểu đồ của em</h3>${Object.entries({streaming:'Streaming',downloads:'Downloads',cds:'CDs',turning:'So sánh / giao điểm',bodyPlan:'Phân chia đoạn'}).map(([k,t])=>`<dl><dt>${t}</dt><dd>${h(state.notes[k])||'<em>Chưa ghi chú</em>'}</dd></dl>`).join('')}<button type="button" class="btn secondary" id="editNotes">Chỉnh sửa ghi chú</button></aside>`}
+function renderLearning(root,step){const key=PARTS[step],items=WORDS[key],questions=QUIZZES[key];root.innerHTML=`<p class="mini">Học cách diễn đạt trước khi kiểm tra. Ví dụ dưới đây chỉ minh họa cấu trúc, không cung cấp số liệu của biểu đồ.</p><div class="subhead">Học từ vựng</div><table class="word-table"><thead><tr><th>Từ / cụm từ</th><th>Nghĩa</th><th>Cách dùng</th></tr></thead><tbody>${items.map(x=>`<tr><td><b>${h(x[0])}</b></td><td>${h(x[1])}</td><td>${h(x[2])}</td></tr>`).join('')}</tbody></table><div class="subhead">Kiểm tra trước khi viết</div>${quizHTML(key,questions,state.quiz[key]||{})}<button class="btn" id="checkQuiz">Kiểm tra từ vựng</button><div id="quizSummary"></div><div id="writeUnlock"></div>`;bindQuiz(key,questions,root);$('checkQuiz').onclick=()=>{markQuiz(key,questions);renderWriter()};renderWriter()}
+function renderWriter(){const key=PARTS[state.step];if(!key||key==='full')return;const target=$('writeUnlock');if(!state.passed[key]){target.innerHTML='<p class="mini">Hoàn thành bài kiểm tra để mở phần viết.</p>';return}target.innerHTML=`<div class="subhead">Thực hành viết ${TITLES[state.step]}</div><p class="mini">${state.step===1?'Viết một câu giới thiệu khách quan về biểu đồ.':state.step===2?'Tóm tắt 2 xu hướng nổi bật, không suy diễn nguyên nhân.':state.step===3?'Mô tả nhóm dữ liệu thứ nhất theo kế hoạch đã ghi chú.':'Mô tả nhóm dữ liệu còn lại và so sánh khi phù hợp.'}</p><div class="writing-layout"><div class="writing-area"><textarea id="draft" rows="8" placeholder="Viết bằng tiếng Anh...">${h(state.drafts[key])}</textarea><div class="actions"><button class="btn" id="checkWriting">Kiểm tra đoạn viết</button></div><div id="writingFeedback"></div></div>${noteHTML()}</div>`;$('draft').oninput=e=>{state.drafts[key]=e.target.value;delete state.reviews[key];$('writingFeedback').innerHTML='';save()};$('checkWriting').onclick=()=>reviewWriting(key);$('editNotes').onclick=()=>setStep(0);if(state.reviews[key])drawReview(key)}
+function checkText(t,part){const issues=[],add=(level,title,detail)=>issues.push({level,title,detail});if(!t.trim()){add('bad','Chưa có bài viết','Hãy viết nội dung trước khi kiểm tra.');return issues}
+if(/\b(?:2010|2001|2019|2020|2021|2025)\b/.test(t))add('warn','Kiểm tra thời gian','Đề cho giai đoạn 2011–2018. Kiểm tra xem năm khác có phải lỗi gõ hay không.');
+if(/\b(?:number of sales|millions? of (?:songs?|albums?|people)|total number of CDs)\b/i.test(t))add('warn','Kiểm tra đơn vị','Biểu đồ thể hiện tỷ lệ % tổng doanh số theo phương thức, không phải số lượng tuyệt đối.');
+if(/\b(?:the graph|the chart)\s+(?:show|illustrate|compare)\b/i.test(t))add('bad','Chủ ngữ – động từ','The graph/chart là số ít: shows / illustrates / compares.');
+if(/\b(?:the figures|the methods)\s+(?:shows|was|illustrates)\b/i.test(t))add('bad','Chủ ngữ – động từ','The figures/methods là số nhiều.');
+if(/\b(?:a|an)\s+(?:percentages|methods|figures|sales)\b/i.test(t))add('bad','Mạo từ và số nhiều','Không dùng a/an trước danh từ số nhiều hoặc sales.');
+if(/\b(?:an)\s+(?:sharp|steady|significant|dramatic)\s+(?:rise|fall|increase|decrease)\b/i.test(t))add('bad','Mạo từ a/an','Dùng a sharp/steady/significant/dramatic rise hoặc fall.');
+if(/\b(?:streaming|downloads|cds)\s+(?:account|represent)\s+for\b/i.test(t)&&/\b(?:streaming|cds)\s+account\s+for\b/i.test(t))add('warn','Cấu trúc account for','Với streaming như một phương thức số ít, dùng “streaming accounted for” khi mô tả quá khứ.');
+if(/\b(?:more higher|more lower|most highest)\b/i.test(t))add('bad','So sánh kép','Dùng higher, lower hoặc highest.');
+if(/\b(?:rised|falled|decreaced|streeming|donwloads|percentange|proprotion)\b/i.test(t))add('bad','Chính tả / dạng động từ','Kiểm tra rose, fell, decreased, streaming, downloads, percentage, proportion.');
+if(/\b(?:rise|fall|increase|decrease)\s+to\s+by\b/i.test(t))add('bad','Giới từ số liệu','Dùng “rose to X” hoặc “rose by X”, không dùng “to by”.');
+if(/\b(?:increased|fell|declined|rose)\s+(?:at)\s+\d/i.test(t))add('warn','Giới từ','Kiểm tra “increased to X”, “fell to X”; “stood at X”.');
+if(/\b(?:a lot of|very big)\s+(?:changes|increase|decrease)\b/i.test(t))add('warn','Độ tự nhiên','Có thể cân nhắc substantial/considerable changes, a sharp rise hoặc decline nếu dữ liệu phù hợp.');
+if(/\b(?:because|due to|thanks to)\b/i.test(t))add('warn','Suy luận nguyên nhân','Không giải thích lý do nếu biểu đồ không cung cấp.');
+if(part==='intro'&&!/2011|2018/.test(t))add('warn','Đề cập thời gian','Introduction nên nhắc giai đoạn 2011–2018.');
+if(part==='intro'&&!/(?:streaming|download|cds|methods|ways)/i.test(t))add('warn','Đối tượng','Nêu đối tượng là các phương thức bán nhạc.');
+if(part==='overview'&&!/overall|in general|on the whole/i.test(t))add('warn','Overview','Có thể dùng tín hiệu tóm tắt như Overall.');
+if(part==='overview'&&!/(?:streaming|download|cds)/i.test(t))add('warn','Xu hướng','Đề cập các phương thức chính hoặc tương phản nổi bật.');
+if(part==='full'){const paras=t.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);if(paras.length!==4)add('warn','Bố cục',`Nhận thấy ${paras.length} đoạn; nên viết 4 đoạn, ngăn nhau bằng một dòng trống.`);if(wordCount(t)<150)add('warn','Độ dài',`Hiện có ${wordCount(t)} từ; yêu cầu tối thiểu 150 từ.`);for(const s of ['streaming','download','CD'])if(!new RegExp(s,'i').test(t))add('warn','Độ bao phủ',`Chưa nhận diện được ${s} trong bài.`)}
+if(/\b(?:sales|figures|proportions)\s+(?:was|has)\b/i.test(t))add('bad','Hòa hợp số nhiều','Sales/figures/proportions là chủ ngữ số nhiều.');
+if(/[A-Za-z]\s{2,}[A-Za-z]/.test(t))add('warn','Khoảng trắng','Có khoảng trắng thừa.');if(!/[.!?]\s*$/.test(t))add('warn','Dấu kết câu','Thêm dấu kết câu nếu cần.');
+if(!issues.length)add('good','Chưa phát hiện lỗi theo quy tắc','Hãy tự đối chiếu mọi con số và điểm giao với biểu đồ. Bộ chấm không hiểu toàn diện ngữ cảnh.');return issues}
+function drawReview(key){const box=$('writingFeedback');if(!box)return;const items=state.reviews[key]||[];box.innerHTML=`<div class="feedback"><h3>Nhận xét ${h(key==='full'?'bài hoàn chỉnh':TITLES[state.step])}</h3><p class="mini">${wordCount(state.drafts[key]||'')} từ · ${items.filter(i=>i.level==='bad').length} lỗi theo quy tắc · ${items.filter(i=>i.level==='warn').length} lưu ý</p>${items.map(x=>`<div class="flag ${x.level}"><strong>${h(x.title)}</strong><div>${h(x.detail)}</div></div>`).join('')}<p class="mini">Kiểm tra offline có thể bỏ sót lỗi. Các tỷ lệ, xu hướng và mốc giao nhau phải đối chiếu biểu đồ; không phải chấm band IELTS.</p></div>`}
+function reviewWriting(key){state.reviews[key]=checkText(state.drafts[key]||'',key);save();drawReview(key)}
+const CORRECTIONS=[[/\bthe (graph|chart) show\b/gi,'the $1 shows'],[/\bmore higher\b/gi,'higher'],[/\bmore lower\b/gi,'lower'],[/\brised\b/gi,'rose'],[/\bfalled\b/gi,'fell'],[/\bstreeming\b/gi,'streaming'],[/\bdonwloads\b/gi,'downloads'],[/\bpercentange\b/gi,'percentage']];
+function corrected(s){let o=s;CORRECTIONS.forEach(([p,v])=>o=o.replace(p,v));return o.trim()}
+function improved(s){return corrected(s).replace(/\bwent up\b/gi,'rose').replace(/\bwent down\b/gi,'fell').replace(/\ba lot of changes\b/gi,'considerable changes')}
+const MODEL=['The line graph compares the proportions of total music sales generated through streaming, downloads and CDs from 2011 to 2018.','Overall, the three formats followed different patterns over the period. The key points are the relative positions of the formats at the beginning and end, together with any major changes in their rankings.','For CDs and downloads, the figures should be described using the starting and ending percentages shown in the graph, supported by a relevant intermediate point where appropriate. Comparisons should focus on which method held a larger share and how that relationship changed.','Streaming should be described in the same way, using only values that can be read from the chart. Any points at which it overtook another format should be identified by their actual year and percentage, rather than estimated without evidence.'];
+function renderFull(root){root.innerHTML=`<p class="mini">Ghép bốn phần, chỉnh sửa và hoàn thiện bài tối thiểu 150 từ.</p><div class="writing-layout"><div class="writing-area"><textarea id="fullDraft" rows="14">${h(state.drafts.full)}</textarea><div class="actions"><button class="btn secondary" id="merge">↻ Ghép 4 đoạn</button><button class="btn" id="checkFull">Kiểm tra bài viết</button><button class="btn secondary" id="export">Tải bài TXT</button></div><div id="writingFeedback"></div></div>${noteHTML()}</div><div class="subhead">Bản tham khảo dành cho em</div><p class="mini">Sửa lỗi và cải thiện bằng quy tắc. Chế độ tham khảo cung cấp khung bài, không giả lập số liệu chưa xác minh.</p><div class="tabs">${[['corrected','Sửa lỗi'],['improved','Cải thiện diễn đạt'],['model','Khung bài tham khảo']].map(([v,n])=>`<button data-mode="${v}" class="${state.mode===v?'active':''}">${n}</button>`).join('')}</div><button class="btn" id="generate">Tạo bản tham khảo</button><div id="generated"></div>`;const area=$('fullDraft');area.oninput=e=>{state.drafts.full=e.target.value;delete state.reviews.full;$('writingFeedback').innerHTML='';save()};$('merge').onclick=()=>{const blocks=['intro','overview','body1','body2'].map(k=>state.drafts[k].trim()).filter(Boolean);if(state.drafts.full.trim()&&!confirm('Thay bài hiện tại bằng 4 đoạn đã viết?'))return;state.drafts.full=blocks.join('\n\n');area.value=state.drafts.full;save()};$('checkFull').onclick=()=>reviewWriting('full');$('export').onclick=exportTxt;$('editNotes').onclick=()=>setStep(0);root.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;save();root.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('active',x===b))});$('generate').onclick=generateModel;if(state.reviews.full)drawReview('full')}
+function generateModel(){const t=state.drafts.full;if(!t.trim()){$('generated').innerHTML='<p class="error">Hãy viết bài trước khi tạo bản tham khảo.</p>';return}let out=state.mode==='corrected'?corrected(t):state.mode==='improved'?improved(t):MODEL.join('\n\n');$('generated').innerHTML=`<div class="example">${h(out)}</div><button class="btn secondary" id="copyText">Sao chép</button><p class="mini">${state.mode==='model'?'Đây là khung tham khảo, chưa phải bài mẫu hoàn chỉnh vì không có số liệu gốc để kiểm chứng.':'Hệ thống chỉ sửa được các lỗi có quy tắc; hãy tiếp tục tự rà soát.'}</p>`;$('copyText').onclick=()=>navigator.clipboard?.writeText(out)}
+function exportTxt(){const content=`Dynamic Datasets 02 — Music Sales by Method\nStudent: ${state.name}\nClass: ${state.className}\n\n${state.drafts.full}`;const url=URL.createObjectURL(new Blob([content],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='Dynamic_Datasets_02_Music_Sales.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function updateNav(){const nav=$('nav');nav.innerHTML=TITLES.map((t,i)=>`<button class="${state.step===i?'active':''} ${i===0?state.passed.analysis:state.passed[PARTS[i]]?'done':''}" data-step="${i}">${i+1}. ${h(t)}</button>`).join('');nav.querySelectorAll('button').forEach(b=>b.onclick=()=>setStep(+b.dataset.step));$('progress').style.width=((state.step+1)/6*100)+'%';$('progressText').textContent=`Bước ${state.step+1}/6`}
+function render(){if(!state.started){$('welcome').hidden=false;$('practice').hidden=true;$('studentName').value=state.name;$('studentClass').value=state.className;return}$('welcome').hidden=true;$('practice').hidden=false;$('userLabel').textContent=state.name;$('stepTitle').textContent=TITLES[state.step];$('stepSection').textContent='IELTS Writing Task 1 · Music Sales';updateNav();const root=$('stepRoot');if(state.step===0)renderAnalysis(root);else if(state.step===5)renderFull(root);else renderLearning(root,state.step);$('backButton').disabled=state.step===0;$('nextButton').disabled=state.step===5;save()}
+$('startButton').onclick=()=>{const name=$('studentName').value.trim();if(!name){$('startError').textContent='Vui lòng nhập họ và tên.';return}state.started=true;state.name=name;state.className=$('studentClass').value.trim();save();render()};$('backButton').onclick=()=>setStep(state.step-1);$('nextButton').onclick=()=>setStep(state.step+1);$('chart').onclick=()=>$('zoom').classList.add('show');$('closeZoom').onclick=()=>$('zoom').classList.remove('show');$('zoom').onclick=e=>{if(e.target===$('zoom'))$('zoom').classList.remove('show')};document.addEventListener('keydown',e=>{if(e.key==='Escape')$('zoom').classList.remove('show')});render();
+
+</script></body></html>
