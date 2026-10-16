@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>The Spirit Bear | Listening Part 4</title>
+<style>
+:root{
+  --ink:#172033;--muted:#6e768a;--line:#e3e7ef;
+  --purple:#6f51d6;--green:#187953;--red:#ca3d49
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+  background:radial-gradient(circle at 8% 0%,rgba(141,105,246,.12),transparent 24%),
+  linear-gradient(180deg,#f8f8ff,#f3f7fc);
+  min-height:100vh
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.wrap{width:min(1150px,calc(100% - 24px));margin:auto}
+.top{
+  position:sticky;top:0;z-index:30;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line)
+}
+.topin{
+  min-height:62px;display:flex;align-items:center;
+  justify-content:space-between;gap:10px
+}
+.top-left{display:flex;align-items:center;gap:10px}
+.back{
+  color:#3c315e;text-decoration:none;
+  border:1px solid var(--line);background:#fff;
+  border-radius:10px;padding:8px 11px;
+  font-size:11px;font-weight:900
+}
+.brand{font-weight:950;color:#21164b}
+.student{font-size:11px;color:#626a7d;font-weight:800}
+.hero{
+  margin:22px 0 16px;padding:25px;
+  border:1px solid white;border-radius:24px;
+  background:linear-gradient(115deg,#fff,#f7f3ff 55%,#eef7ff);
+  box-shadow:0 14px 34px rgba(48,42,90,.07)
+}
+.eyebrow{
+  color:#6048b6;font-size:11px;
+  letter-spacing:.08em;font-weight:900;text-transform:uppercase
+}
+.hero h1{
+  font-size:clamp(27px,4vw,36px);
+  letter-spacing:-.04em;color:#21164b;margin:8px 0
+}
+.hero p{font-size:13px;color:var(--muted);margin:0;line-height:1.6}
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 305px;
+  align-items:start;gap:17px;padding-bottom:55px
+}
+.panel{
+  background:white;border:1px solid var(--line);
+  border-radius:20px;padding:22px;
+  box-shadow:0 6px 18px rgba(46,40,76,.035);
+  margin-bottom:15px
+}
+.section-label{margin:0 0 12px;color:#21164b;font-size:19px}
+.directions{
+  border-left:4px solid var(--purple);
+  padding:12px 15px;background:#f7f4ff;
+  border-radius:0 10px 10px 0;
+  font-size:13px;line-height:1.65
+}
+.directions p{margin:0 0 6px}
+.directions p:last-child{margin:0}
+.notes-title{
+  text-align:center;font-size:22px;
+  margin:23px 0 20px;color:#201b33;letter-spacing:.03em
+}
+.group{margin:23px 0 8px}
+.group h3{
+  font-size:16px;color:#362362;
+  border-bottom:1px solid #e8e3f9;
+  padding:0 0 9px;margin:0 0 13px
+}
+.notes{list-style:none;padding:0;margin:0}
+.notes li{
+  position:relative;padding:6px 0 8px 23px;
+  font-size:14px;line-height:2
+}
+.notes li:before{
+  content:'●';font-size:9px;position:absolute;
+  top:9px;left:3px;color:#4b3b7c
+}
+.blank{
+  display:inline-flex;align-items:center;gap:6px;
+  vertical-align:middle;margin:2px 3px;white-space:nowrap
+}
+.blank label{
+  font-weight:900;color:#5f49aa;font-size:12px
+}
+.blank input{
+  width:155px;max-width:46vw;
+  border:0;border-bottom:2px solid #9f8be6;
+  border-radius:4px 4px 0 0;
+  padding:7px 8px;background:#f8f6ff;
+  outline:none;font-size:14px;color:var(--ink)
+}
+.blank input:focus{border-color:#5940bb;background:#f1edff}
+.blank input.correct{background:#e9f9f0;border-color:var(--green)}
+.blank input.wrong{background:#fff0f0;border-color:var(--red)}
+.blank input:disabled{opacity:1}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.btn{
+  border:1px solid #d8d9e6;background:#fff;
+  color:#35275d;border-radius:11px;
+  padding:11px 15px;font-size:12px;font-weight:900
+}
+.btn.primary{
+  background:var(--purple);border-color:var(--purple);color:#fff
+}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.side{position:sticky;top:79px}
+.small{font-size:12px;line-height:1.65;color:var(--muted)}
+audio{width:100%;margin-top:9px}
+.progress-track{
+  height:9px;border-radius:100px;background:#e9e5f5;
+  overflow:hidden;margin:13px 0
+}
+.progress-bar{
+  width:0;height:100%;background:var(--purple);
+  transition:width .2s
+}
+.stats{display:flex;justify-content:space-between;font-size:12px;font-weight:800}
+.result{
+  display:none;margin-top:12px;border-radius:12px;
+  padding:14px;background:#f3f0ff;color:#372476
+}
+.result strong{font-size:25px}
+.answer-row{
+  font-size:13px;padding:10px 0;
+  border-bottom:1px solid var(--line);line-height:1.5
+}
+.answer-row b{color:#5140a4}
+.answer-row .ok{color:var(--green);font-weight:800}
+.answer-row .bad{color:var(--red);font-weight:800}
+.transcript{
+  white-space:pre-wrap;line-height:1.85;font-size:13px;
+  background:#fafbff;border:1px solid var(--line);
+  border-radius:11px;padding:16px;max-height:500px;overflow:auto
+}
+.notice{
+  background:#fff9ec;border:1px solid #f2ddb0;
+  color:#76542a;border-radius:10px;
+  padding:10px;font-size:12px;line-height:1.55
+}
+.hidden{display:none!important}
+.segment{
+  display:flex;gap:8px;align-items:center;
+  margin:9px 0;flex-wrap:wrap;font-size:12px
+}
+.segment button{
+  border:1px solid #d9d3ec;border-radius:8px;
+  padding:6px 9px;background:#f7f4ff;color:#4c3886
+}
+.footer{text-align:center;padding:15px;color:#9aa0ad;font-size:11px}
+@media(max-width:880px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static;order:-1}
+  .student{display:none}
+}
+@media(max-width:560px){
+  .panel{padding:17px}
+  .hero{padding:19px}
+  .notes li{font-size:13px}
+  .blank input{width:127px}
+}
+</style>
+</head>
+
+<body>
+<header class="top">
+  <div class="wrap topin">
+    <div class="top-left">
+      <a class="back" href="../">← Part 4</a>
+      <div class="brand">🎧 Listening Practice 01</div>
+    </div>
+    <div class="student" id="studentInfo"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">IELTS Listening · Part 4 · Practice 01</div>
+    <h1>The Spirit Bear</h1>
+    <p>Questions 31–40 · Note Completion · Nghe và hoàn thành thông tin trong bài giảng.</p>
+  </section>
+
+  <div class="layout">
+    <div>
+      <section class="panel">
+        <h2 class="section-label">Questions 31–40</h2>
+        <div class="directions">
+          <p><strong>Complete the notes below.</strong></p>
+          <p><strong><em>Write ONE WORD ONLY for each answer.</em></strong></p>
+        </div>
+
+        <h2 class="notes-title">THE SPIRIT BEAR</h2>
+
+        <div class="group">
+          <h3>General facts</h3>
+          <ul class="notes">
+            <li>It is a white bear belonging to the black bear family.</li>
+            <li>Its colour comes from an uncommon
+              <span class="blank">
+                <label for="q31">31</label>
+                <input id="q31" data-q="31" aria-label="Answer 31" autocomplete="off" spellcheck="false">
+              </span>.
+            </li>
+            <li>Local people believe that it has unusual
+              <span class="blank">
+                <label for="q32">32</label>
+                <input id="q32" data-q="32" aria-label="Answer 32" autocomplete="off" spellcheck="false">
+              </span>.
+            </li>
+            <li>They protect the bear from
+              <span class="blank">
+                <label for="q33">33</label>
+                <input id="q33" data-q="33" aria-label="Answer 33" autocomplete="off" spellcheck="false">
+              </span>.
+            </li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Habitat</h3>
+          <ul class="notes">
+            <li>The bear’s relationship with the forest is complex.</li>
+            <li>Tree roots stop
+              <span class="blank">
+                <label for="q34">34</label>
+                <input id="q34" data-q="34" aria-label="Answer 34" autocomplete="off" spellcheck="false">
+              </span>
+              along salmon streams.
+            </li>
+            <li>The bears’ feeding habits provide nutrients for forest vegetation.</li>
+            <li>It is currently found on a small number of
+              <span class="blank">
+                <label for="q35">35</label>
+                <input id="q35" data-q="35" aria-label="Answer 35" autocomplete="off" spellcheck="false">
+              </span>.
+            </li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Threats</h3>
+          <ul class="notes">
+            <li>
+              Habitat is being lost due to deforestation and construction of
+              <span class="blank">
+                <label for="q36">36</label>
+                <input id="q36" data-q="36" aria-label="Answer 36" autocomplete="off" spellcheck="false">
+              </span>
+              by logging companies.
+            </li>
+            <li>
+              Unrestricted
+              <span class="blank">
+                <label for="q37">37</label>
+                <input id="q37" data-q="37" aria-label="Answer 37" autocomplete="off" spellcheck="false">
+              </span>
+              is affecting the salmon supply.
+            </li>
+            <li>
+              The bears’ existence is also threatened by their low rate of
+              <span class="blank">
+                <label for="q38">38</label>
+                <input id="q38" data-q="38" aria-label="Answer 38" autocomplete="off" spellcheck="false">
+              </span>.
+            </li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3>Going forward</h3>
+          <ul class="notes">
+            <li>Interested parties are working together.</li>
+            <li>
+              Logging companies must improve their
+              <span class="blank">
+                <label for="q39">39</label>
+                <input id="q39" data-q="39" aria-label="Answer 39" autocomplete="off" spellcheck="false">
+              </span>
+              of logging.
+            </li>
+            <li>
+              Maintenance and
+              <span class="blank">
+                <label for="q40">40</label>
+                <input id="q40" data-q="40" aria-label="Answer 40" autocomplete="off" spellcheck="false">
+              </span>
+              of the spirit bears’ territory is needed.
+            </li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="submitBtn">Nộp bài & chấm điểm</button>
+          <button class="btn" id="resetBtn">Làm lại</button>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="reviewPanel">
+        <h2 class="section-label">Kết quả & chữa bài</h2>
+        <p class="small">Đối chiếu đáp án và kiểm tra các câu đã trả lời sai.</p>
+        <div id="reviewList"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-label">Transcript</h2>
+        <p id="transcriptNotice" class="notice">
+          Chưa có transcript được cung cấp.
+          Đặt tệp transcript.txt trong cùng thư mục để hiển thị transcript chính xác.
+        </p>
+        <div id="transcriptBox" class="transcript hidden"></div>
+      </section>
+    </div>
+
+    <aside class="side">
+      <section class="panel">
+        <h2 class="section-label">Audio</h2>
+        <p class="small">
+          Nghe Section 4 trước khi trả lời.
+          Audio được phát từ tệp audio.mp3 cùng thư mục.
+        </p>
+        <audio id="player" controls preload="metadata">
+          <source src="./audio.mp3" type="audio/mpeg">
+          Your browser does not support audio playback.
+        </audio>
+        <div id="audioNotice" class="notice hidden">
+          Chưa tìm thấy hoặc không phát được audio.mp3.
+          Hãy tải file nghe gốc lên thư mục 01.
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-label">Tiến độ</h2>
+        <div class="stats">
+          <span>Đã trả lời</span>
+          <span id="progressText">0 / 10</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="result" id="result">
+          <div>Điểm số</div>
+          <strong id="scoreText">0/10</strong>
+          <p class="small" id="scoreDesc"></p>
+        </div>
+        <p class="small" id="saveStatus">
+          Bài làm được tự động lưu trên trình duyệt này.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-label">Nghe lại đáp án</h2>
+        <p class="small">
+          Sau khi nộp bài, có thể nghe lại từng đoạn
+          nếu đã cung cấp mốc thời gian trong segments.json.
+        </p>
+        <div id="segmentList" class="small">
+          Chưa có dữ liệu mốc thời gian.
+        </div>
+      </section>
+    </aside>
+  </div>
+  <div class="footer">IELTS Practice</div>
+</main>
+
+<script>
+'use strict';
+
+const KEY = 'IELTS_LISTENING_PART4_01_V1';
+
+const ANSWERS = {
+  31:['gene'],
+  32:['power','powers'],
+  33:['strangers'],
+  34:['erosion'],
+  35:['islands'],
+  36:['roads'],
+  37:['fishing'],
+  38:['reproduction'],
+  39:['method','methods'],
+  40:['expansion']
+};
+
+const $ = id => document.getElementById(id);
+const inputs = [...document.querySelectorAll('[data-q]')];
+
+let submitted = false;
+let segmentTimes = {};
+let segmentTimer = null;
+
+const norm = v =>
+  String(v || '').trim().toLowerCase().replace(/\s+/g,' ');
+
+function safeRead(){
+  try{
+    return JSON.parse(localStorage.getItem(KEY) || 'null');
+  }catch{
+    return null;
+  }
+}
+
+function persist(){
+  try{
+    const answers = Object.fromEntries(
+      inputs.map(el => [el.dataset.q, el.value])
+    );
+
+    localStorage.setItem(KEY, JSON.stringify({
+      answers,
+      submitted,
+      updatedAt:Date.now()
+    }));
+
+    $('saveStatus').textContent =
+      'Đã lưu bài làm trên thiết bị này.';
+  }catch{
+    $('saveStatus').textContent =
+      'Không thể lưu trên trình duyệt này.';
+  }
+}
+
+function updateProgress(){
+  const n = inputs.filter(el => el.value.trim()).length;
+  $('progressText').textContent = `${n} / 10`;
+  $('progressBar').style.width = `${n * 10}%`;
+}
+
+function applyStudent(){
+  try{
+    const s = JSON.parse(
+      localStorage.getItem('IELTS_PRACTICE_STUDENT') || 'null'
+    );
+
+    if(s?.name){
+      $('studentInfo').textContent =
+        s.name + (s.className ? ' · ' + s.className : '');
+    }
+
+    localStorage.setItem(
+      'IELTS_PRACTICE_ACTIVE_TAB_V1','listening'
+    );
+  }catch{}
+}
+
+function mark(){
+  let score = 0;
+  const list = [];
+
+  for(const el of inputs){
+    const q = Number(el.dataset.q);
+    const value = norm(el.value);
+    const ok = ANSWERS[q].includes(value);
+
+    if(ok) score++;
+
+    el.disabled = true;
+    el.classList.toggle('correct', ok);
+    el.classList.toggle('wrong', !ok);
+
+    const div = document.createElement('div');
+    div.className = 'answer-row';
+
+    const num = document.createElement('b');
+    num.textContent = `${q}. `;
+
+    const status = document.createElement('span');
+    status.className = ok ? 'ok' : 'bad';
+    status.textContent = ok
+      ? '✓ Đúng'
+      : '✗ ' + (value ? 'Sai' : 'Chưa trả lời');
+
+    const detail = document.createElement('div');
+    detail.textContent =
+      `Bạn điền: ${el.value.trim() || '—'} | ` +
+      `Đáp án: ${ANSWERS[q].join(' / ')}`;
+
+    div.append(num,status,detail);
+    list.push(div);
+  }
+
+  $('reviewList').replaceChildren(...list);
+  $('reviewPanel').classList.remove('hidden');
+
+  $('result').style.display = 'block';
+  $('scoreText').textContent = `${score}/10`;
+  $('scoreDesc').textContent =
+    `Đúng ${score} câu · Sai hoặc bỏ trống ${10-score} câu`;
+
+  $('submitBtn').disabled = true;
+  $('submitBtn').textContent = 'Đã nộp bài';
+
+  submitted = true;
+  persist();
+  renderSegments();
+}
+
+function submit(){
+  if(submitted) return;
+
+  const count = inputs.filter(el => el.value.trim()).length;
+
+  if(count < 10 && !confirm(
+    `Bạn mới điền ${count}/10 câu. Vẫn nộp bài?`
+  )) return;
+
+  mark();
+  $('reviewPanel').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+  });
+}
+
+function reset(){
+  if(!confirm(
+    'Xóa toàn bộ đáp án và làm lại bài từ đầu?'
+  )) return;
+
+  submitted = false;
+
+  inputs.forEach(el => {
+    el.disabled = false;
+    el.value = '';
+    el.classList.remove('correct','wrong');
+  });
+
+  $('reviewPanel').classList.add('hidden');
+  $('reviewList').replaceChildren();
+  $('result').style.display = 'none';
+
+  $('submitBtn').disabled = false;
+  $('submitBtn').textContent = 'Nộp bài & chấm điểm';
+
+  updateProgress();
+  persist();
+  renderSegments();
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderSegments(){
+  const box = $('segmentList');
+  box.replaceChildren();
+
+  if(!submitted){
+    box.textContent = 'Nộp bài để mở chức năng nghe lại.';
+    return;
+  }
+
+  const entries = Object.entries(segmentTimes)
+    .filter(([q,s]) =>
+      ANSWERS[q] &&
+      Number.isFinite(s.start) &&
+      Number.isFinite(s.end) &&
+      s.end > s.start
+    )
+    .sort((a,b) => Number(a[0])-Number(b[0]));
+
+  if(!entries.length){
+    box.textContent =
+      'Chưa có mốc thời gian cho từng câu. Thêm segments.json để sử dụng.';
+    return;
+  }
+
+  for(const [q,s] of entries){
+    const row = document.createElement('div');
+    row.className = 'segment';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = `▶ Câu ${q}`;
+
+    btn.onclick = () => {
+      const p = $('player');
+
+      if(segmentTimer){
+        clearInterval(segmentTimer);
+        segmentTimer = null;
+      }
+
+      p.currentTime = s.start;
+      p.play().catch(() => {});
+
+      segmentTimer = setInterval(() => {
+        if(p.currentTime >= s.end || p.paused){
+          p.pause();
+          clearInterval(segmentTimer);
+          segmentTimer = null;
+        }
+      },100);
+    };
+
+    row.append(btn);
+    box.append(row);
+  }
+}
+
+async function loadOptionalAssets(){
+  try{
+    const r = await fetch('./transcript.txt',{
+      cache:'no-store'
+    });
+
+    if(r.ok){
+      const t = (await r.text()).trim();
+
+      if(t && !/^<!doctype|^<html/i.test(t)){
+        $('transcriptBox').textContent = t;
+        $('transcriptBox').classList.remove('hidden');
+        $('transcriptNotice').classList.add('hidden');
+      }
+    }
+  }catch{}
+
+  try{
+    const r = await fetch('./segments.json',{
+      cache:'no-store'
+    });
+
+    if(r.ok){
+      const j = await r.json();
+
+      if(j && typeof j === 'object'){
+        segmentTimes = j;
+        renderSegments();
+      }
+    }
+  }catch{}
+}
+
+const audio = $('player');
+
+audio.addEventListener('error', () => {
+  $('audioNotice').classList.remove('hidden');
+},true);
+
+audio.addEventListener('loadedmetadata', () => {
+  $('audioNotice').classList.add('hidden');
+});
+
+audio.addEventListener('seeking', () => {
+  if(segmentTimer){
+    clearInterval(segmentTimer);
+    segmentTimer = null;
+  }
+});
+
+inputs.forEach((el,i) => {
+  el.addEventListener('input', () => {
+    updateProgress();
+    persist();
+  });
+
+  el.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      const next = inputs[i+1];
+      if(next) next.focus();
+    }
+  });
+});
+
+$('submitBtn').onclick = submit;
+$('resetBtn').onclick = reset;
+
+const saved = safeRead();
+
+if(saved?.answers){
+  inputs.forEach(el => {
+    el.value = saved.answers[el.dataset.q] || '';
+  });
+}
+
+updateProgress();
+
+if(saved?.submitted){
+  mark();
+}else{
+  renderSegments();
+}
+
+applyStudent();
+loadOptionalAssets();
+</script>
+</body>
+</html>
