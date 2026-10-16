@@ -121,7 +121,17 @@ const HANDOUT_WORDS={
  ['Stability','levelled out at ... / remained steady','Không dùng ổn định nếu liên tục biến động lớn.']
  ]
 };
-for(const stage of ['intro','overview','body1','body2']){
+WORDS.intro = [
+ ['The line graph / the chart','Loại biểu đồ (Graphic type)','Sử dụng trong phần mở đầu.'],
+ ['shows / presents / illustrates / compares','Thể hiện / trình bày / minh họa / so sánh','Chủ ngữ số ít: the chart shows / compares.'],
+ ['the percentage of / the proportion of','Tỷ lệ phần trăm / tỷ trọng','Đúng đơn vị của biểu đồ; không dùng the number of.'],
+ ['total music sales / music sales','Tổng doanh số âm nhạc / doanh số âm nhạc','Giữ ý nghĩa là doanh số, không chuyển thành số bài hát.'],
+ ['streaming / downloads / CDs','Nghe trực tuyến / tải nhạc / đĩa CD','Ba phương thức được so sánh.'],
+ ['different methods / different formats','Các phương thức khác nhau / các định dạng khác nhau','Dùng đúng ngữ cảnh phương thức bán nhạc.'],
+ ['between 2011 and 2018 / from 2011 to 2018','Giai đoạn 2011–2018','Không kết hợp between ... to ... .'],
+ ['over the period','Trong khoảng thời gian','Thích hợp để nói về toàn giai đoạn.']
+];
+for(const stage of ['overview','body1','body2']){
  const existing=new Set(WORDS[stage].map(w=>w[0].toLowerCase()));
  for(const [topic,expression,usage] of HANDOUT_WORDS[stage]){
   if(existing.has(expression.toLowerCase()))continue;
