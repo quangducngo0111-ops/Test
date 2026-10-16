@@ -125,7 +125,17 @@ const HANDOUT_WORDS={
  ['Stability','levelled out at ... / remained steady','Không dùng ổn định nếu liên tục biến động lớn.']
  ]
 };
-for(const stage of ['intro','overview','body1','body2']){
+WORDS.intro = [
+ ['The line graph / the chart','Loại biểu đồ (Graphic type)'],
+ ['shows / presents / illustrates / compares','Động từ giới thiệu biểu đồ (chia theo chủ ngữ số ít)'],
+ ['the number of / the figure for','Số lượng / số liệu (Description)'],
+ ['international conferences / international meetings','Hội nghị quốc tế / các cuộc họp quốc tế'],
+ ['three different cities / three cities','Ba thành phố khác nhau / ba thành phố'],
+ ['took place / were held','Diễn ra / được tổ chức'],
+ ['between 1965 and 2010 / from 1965 to 2010','Khoảng thời gian 1965–2010'],
+ ['over the period','Trong suốt giai đoạn được đề cập']
+];
+for(const stage of ['overview','body1','body2']){
  const existing=new Set(WORDS[stage].map(w=>w[0].toLowerCase()));
  for(const [topic,expression,usage] of HANDOUT_WORDS[stage]){
   if(existing.has(expression.toLowerCase()))continue;
