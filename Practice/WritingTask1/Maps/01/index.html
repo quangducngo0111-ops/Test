@@ -47,7 +47,11 @@
   }
 }
 .overview-idea{border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;background:#fcfcff}.overview-idea h4{margin:0 0 5px;color:var(--ink);font-size:16px}.overview-idea .field{margin:9px 0}.overview-idea .small{margin:2px 0 10px}@media(max-width:680px){.overview-idea{padding:12px}}
-.body1-open-vocab{background:#f7f8fd;border:1px solid #e0e4f2;border-radius:12px;padding:14px 16px;margin:12px 0}.body1-open-vocab b{color:#281260}.body1-open-vocab .tip{font-size:12px}.body1-open-vocab p{margin:8px 0}</style><style>
+.body1-open-vocab{background:#f7f8fd;border:1px solid #e0e4f2;border-radius:12px;padding:14px 16px;margin:12px 0}.body1-open-vocab b{color:#281260}.body1-open-vocab .tip{font-size:12px}.body1-open-vocab p{margin:8px 0}
+/* Personalized writing assistant */
+.pwa-panel{margin:22px 0;padding:20px;border:1px solid #dcd7f4;border-radius:16px;background:#fff}
+.pwa-panel h3{margin:0 0 6px;color:#281260}.pwa-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.pwa-tabs button{font-size:13px;padding:9px 12px}.pwa-tabs button.on{background:#6945cf;color:white;border-color:#6945cf}.pwa-result{white-space:pre-wrap;background:#f7f7ff;border:1px solid #e4e1f5;border-radius:12px;padding:15px;line-height:1.8;font-size:14px;min-height:110px}.pwa-diff{font-size:13px;color:#5a526f;margin:8px 0}.pwa-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.pwa-status{font-size:12px;color:#6e6783}.pwa-warn{background:#fff8e9;border:1px solid #efddb3;padding:10px 12px;border-radius:10px;font-size:13px;margin:10px 0}.pwa-method{font-size:12px;color:#615d75}
+</style><style>
 .inline-question-feedback{margin:10px 2px 2px;padding:10px 12px;border-radius:9px;font-size:13px;font-weight:650;line-height:1.5}
 .inline-question-feedback.is-correct{background:#eaf8f0;color:#106442;border:1px solid #b6dfc8}
 .inline-question-feedback.is-wrong{background:#fff4e8;color:#8b450c;border:1px solid #f6d1aa}
@@ -372,7 +376,7 @@ const SPELL_FREQUENCY={"abandoned":72,"abdominal":47,"able":201,"about":1497,"ab
 function distance(a,b){let prev=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let current=[i];for(let j=1;j<=b.length;j++)current[j]=Math.min(current[j-1]+1,prev[j]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));prev=current}return prev[b.length]}
 function analyze(input,part){
 const t=String(input||'').replace(/\r\n?/g,'\n').trim();const issues=[],ids=new Set();
-const add=(layer,rank,quote,suggestion,why)=>{const key=layer+'|'+quote+'|'+suggestion;if(ids.has(key))return;ids.add(key);issues.push({layer,rank,quote,suggestion,why})};
+const add=(layer,rank,quote,suggestion,why)=>{const key=layer+'|'+String(quote).toLowerCase();if(ids.has(key))return;ids.add(key);issues.push({layer,rank,quote,suggestion,why})};
 const words=(t.match(/\b[A-Za-z]+(?:['’\-][A-Za-z]+)*\b/g)||[]);const wc=words.length;
 if(!t)return {wc,issues:[],blank:true};
 // 1. Surface errors: avoid marking acceptable one-line layout inside a paragraph.
@@ -455,6 +459,47 @@ if(part==='Introduction' || part==='Overview' || part==='Final'){
   add('Ngữ pháp','high',m[0],m[0].replace(/changed\s+(the\s+)?/i,'changed over the '),'Cần giới từ over trong cụm over the past 20 years.');
  }
 }
+// 3b. Determiners, countability, articles and subject–verb agreement.
+// Conservative, phrase-level rules: avoid guessing the correct article from a single word.
+const nounUnits='village|town|city|island|school|lighthouse|studio|castle|fort|playground|centre|center|building|house|road|bridge|river|park|hotel|restaurant|cafe|shop|library|museum|facility|footpath|court|area|place|map|plan|book';
+const adjectiveUnits='relatively|quite|rather|very|fairly|extremely|particularly|small|large|tiny|beautiful|modern|old|new|coastal|rural|urban|industrial|residential|historic|historical|central|western|eastern|northern|southern|significant|major|public|local|popular|modernised|modernized|developed|undeveloped|traditional|green|natural|spacious|quiet';
+const articleContext=new RegExp('\\b(?:is|was|were|be|become|became|remains?|stood as|served as|turned into|converted into|developed into)\\s+((?:(?:'+adjectiveUnits+')\\s+){0,5}(?:'+nounUnits+'))\\b','gi');
+for(const m of t.matchAll(articleContext)){
+ const phrase=m[1],bits=phrase.toLowerCase().trim().split(/\s+/),noun=bits[bits.length-1];
+ // Only singular count nouns; not uncountable nouns such as redevelopment or facilities.
+ if(/\b(?:were|are)\b/i.test(m[0].slice(0,m[0].length-phrase.length)))continue;
+ const first=bits[0];const article=/^[aeiou]/i.test(first)?'an':'a';
+ add('Ngữ pháp','high',m[0],m[0].replace(phrase,article+' '+phrase),
+ 'Danh từ đếm được số ít cần một từ hạn định (a/an, the, this...). Với lời giới thiệu chưa xác định, thường dùng a/an trước cả cụm tính từ + danh từ.');
+}
+// Common patterns with missing determiner before subject nouns and nearby modifiers.
+const missingNoun=new RegExp('\\b(?:there (?:is|was)|included|featured|contained)\\s+((?:(?:'+adjectiveUnits+')\\s+){0,3}(?:'+nounUnits+'))\\b','gi');
+for(const m of t.matchAll(missingNoun)){
+ const noun=m[1];const first=noun.split(/\s+/)[0];const article=/^[aeiou]/i.test(first)?'an':'a';
+ add('Ngữ pháp','high',m[0],m[0].replace(noun,article+' '+noun),'Một danh từ đếm được số ít thường cần a/an khi được đề cập lần đầu.');
+}
+// Avoid triggering on 'book' as part of another word. Catch noun-number errors with plural verbs.
+const irregularSingular={child:'children',person:'people',man:'men',woman:'women'};
+const singularNouns='book|map|plan|house|school|road|building|shop|hotel|river|bridge|facility|tree|student|lighthouse|village|footpath|park|court';
+const numberAgreement=new RegExp('\\b(?:(the|these|those|some|many|several|two|three|four|five|multiple)\\s+)?('+singularNouns+')\\s+(are|were|have|do)\\b','gi');
+for(const m of t.matchAll(numberAgreement)){
+ const determiner=(m[1]||'').toLowerCase(),noun=m[2].toLowerCase(),verb=m[3].toLowerCase();
+ if(determiner==='the' || !determiner || /^(these|those|some|many|several|two|three|four|five|multiple)$/.test(determiner)){
+  const plural=irregularSingular[noun]||(/[^aeiou]y$/.test(noun)?noun.slice(0,-1)+'ies':noun+'s');
+  const replacement=m[0].replace(new RegExp('\\b'+noun+'\\b','i'),plural);
+  const alternative=m[0].replace(new RegExp('\\b'+verb+'\\b','i'),({are:'is',were:'was',have:'has',do:'does'})[verb]);
+  const mustPlural=/^(these|those|some|many|several|two|three|four|five|multiple)$/.test(determiner);
+  add('Ngữ pháp',mustPlural?'high':'medium',m[0],mustPlural?replacement:replacement+' (hoặc '+alternative+' nếu muốn nói số ít)',
+   'Kiểm tra sự hòa hợp giữa số ít/số nhiều của danh từ và động từ; dùng danh từ số nhiều với are/were/have/do.');
+ }
+}
+// Frequent error: singular countable noun after adjective phrase without a determiner.
+for(const m of t.matchAll(/\b(?:was|is|became)\s+(relatively\s+)?(small|large|modern|old|new)\s+(coastal\s+)?(village|town|city|island)\b/gi)){
+ const phrase=[m[1]||'',m[2],m[3]||'',m[4]].join(' ').replace(/\s+/g,' ').trim();
+ const article=/^[aeiou]/i.test(phrase)?'an':'a';
+ add('Ngữ pháp','high',m[0],m[0].replace(phrase,article+' '+phrase),'Thiếu mạo từ trước cụm danh từ đếm được số ít.');
+}
+
 // 4. Time & tense, tailored to the two dates.
 if(part==='Body 1'&&!/\b(was|were|stood|lay|ran|had|occupied|contained|featured|located|situated)\b/i.test(t))add('Thì và cấu trúc','medium','Body 1','Dùng quá khứ đơn cho bản đồ 20 năm trước.','Ví dụ: The school was situated south of the river.');
 if(part==='Body 1'&&/\b(twenty years ago|20 years ago)\b[^.!?]{0,95}\b(is located|are located|stands|lies|has been)\b/i.test(t))add('Thì và cấu trúc','medium','20 years ago + hiện tại','Đổi động từ miêu tả thời điểm cũ sang quá khứ đơn.','Mốc 20 years ago thường dùng past simple.');
@@ -537,12 +582,36 @@ if(part==='Introduction'||part==='Overview'||part==='Body 1'||part==='Body 2'||p
  if(part==='Introduction'&&!/\b(?:20[\s-]*years|twenty[\s-]*years)\b/i.test(t)&&!timeErrors.length)
   add('Đúng yêu cầu đề','medium','Mốc thời gian chưa rõ','Nên nhắc tới khoảng 20 năm, chẳng hạn “over the past 20 years”.','Introduction cần paraphrase đúng mốc thời gian của đề.');
 }
+// 9. Collocation and naturalness: prefer conservative, contextual suggestions.
+// "medium" means awkward usage, not necessarily a grammatical error.
+const collocationRules=[
+ {re:/\breally\s+recommend\b/gi,to:'highly recommend',why:'“Really recommend” vẫn hiểu được và có thể dùng trong hội thoại; “highly recommend” là kết hợp từ phổ biến hơn trong văn viết. Không phải lỗi ngữ pháp.'},
+ {re:/\bmake\s+(?:a\s+)?development\b/gi,to:'undergo development / experience development',why:'Khi một địa điểm thay đổi theo thời gian, “undergo/experience development” thường tự nhiên hơn “make development”.'},
+ {re:/\bdo\s+(?:a\s+)?change\b/gi,to:'make a change / undergo changes',why:'Kết hợp từ thông dụng là “make a change” khi chủ thể chủ động thay đổi, hoặc “undergo changes” khi địa điểm trải qua thay đổi.'},
+ {re:/\bvery\s+developed\b/gi,to:'highly developed / more developed',why:'“Very developed” có thể hiểu được, nhưng “highly developed” hoặc “more developed” rõ và tự nhiên hơn tùy ý so sánh.'},
+ {re:/\bstrong\s+development\b/gi,to:'significant development / substantial development',why:'Trong văn cảnh mô tả thay đổi, “significant/substantial development” là kết hợp từ phù hợp hơn.'},
+ {re:/\ba\s+lot\s+of\s+changes\b/gi,to:'numerous changes / considerable changes',why:'“A lot of changes” không sai, nhưng văn phong Task 1 có thể trang trọng hơn với “numerous/considerable changes”.'},
+ {re:/\bcompletely\s+unchanged\b/gi,to:'remained unchanged / was left unchanged',why:'Nếu muốn mô tả một đặc điểm vẫn giữ nguyên, “remained unchanged” thường gọn và đúng văn cảnh hơn; “completely unchanged” không tự động sai.'},
+ {re:/\bpeople\s+living\s+number\b/gi,to:'population / the number of residents',why:'Dùng “population” hoặc “the number of residents” để nói về dân số.'},
+ {re:/\bthe\s+village\s+was\s+changed\s+a\s+lot\b/gi,to:'the village underwent substantial changes',why:'Câu gốc có thể hiểu được nhưng bị động không cần thiết; “underwent substantial changes” tự nhiên hơn trong Overview.'},
+ {re:/\bmore\s+houses\s+were\s+appeared\b/gi,to:'more houses appeared / more houses were built',why:'“Appear” là nội động từ, không dùng “were appeared”. Nếu nhấn mạnh xây dựng, dùng “were built”.'}
+];
+const checkedPhrases=new Set();
+for(const rule of collocationRules){
+ for(const m of t.matchAll(rule.re)){
+  const key=m.index+'|'+m[0].toLowerCase();if(checkedPhrases.has(key))continue;checkedPhrases.add(key);
+  add('Tự nhiên & Collocation','low',m[0],`Có thể cân nhắc: “${rule.to}”.`,rule.why);
+ }
+}
+// Verify appropriate lexical choices; correct common collocations are never flagged merely for being advanced.
+// e.g. significant redevelopment, remained unchanged, highly recommend.
+
 return {wc,issues,blank:false};
 }
-const groups=[['Câu và dấu câu','1. Dấu câu & diễn đạt'],['Chính tả','2. Chính tả & từ vựng'],['Ngữ pháp','3. Ngữ pháp & chia động từ'],['Thì và cấu trúc','4. Thì & cấu trúc'],['Đối chiếu bản đồ','5. Đối chiếu bản đồ'],['Đúng yêu cầu đề','6. Nội dung từng phần'],['Bố cục bài hoàn chỉnh','7. Bài hoàn chỉnh'],['Độ đầy đủ','8. Độ đầy đủ']];
+const groups=[['Câu và dấu câu','1. Dấu câu & diễn đạt'],['Chính tả','2. Chính tả & từ vựng'],['Ngữ pháp','3. Ngữ pháp & chia động từ'],['Thì và cấu trúc','4. Thì & cấu trúc'],['Đối chiếu bản đồ','5. Đối chiếu bản đồ'],['Đúng yêu cầu đề','6. Nội dung từng phần'],['Bố cục bài hoàn chỉnh','7. Bài hoàn chỉnh'],['Độ đầy đủ','8. Độ đầy đủ'],['Tự nhiên & Collocation','9. Collocation & độ tự nhiên']];
 function safe(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function draw(id,value,section){let r=analyze(value,section);if(r.blank)return `<div class="multi-review" id="${id}">Hãy viết bài trước khi kiểm tra.</div>`;
-let out=`<div class="multi-review" id="${id}"><h3>Nhận xét ${safe(section)}</h3><div class="review-meta">${r.wc} từ · ${r.issues.length} điểm cần kiểm tra · 8 tầng rà soát</div>`;
+let out=`<div class="multi-review" id="${id}"><h3>Nhận xét ${safe(section)}</h3><div class="review-meta">${r.wc} từ · ${r.issues.length} điểm cần kiểm tra · 9 tầng rà soát</div>`;
 if(!r.issues.length)out+='<p class="review-ok">Chưa phát hiện lỗi trong phạm vi các quy tắc hiện có.</p>';
 for(let [name,label] of groups){let items=r.issues.filter(x=>x.layer===name);if(!items.length)continue;out+=`<section class="review-layer"><h4>${label} (${items.length})</h4>`;for(let f of items){out+=`<div class="review-finding ${f.rank}"><div class="tag">${f.rank==='high'?'Cần sửa':f.rank==='medium'?'Nên kiểm tra':'Gợi ý'}</div><div class="quote">${safe(f.quote)}</div><div class="suggest">${safe(f.suggestion)}</div><div class="detail">${safe(f.why)}</div></div>`;}out+='</section>'}
 out+='<p class="review-uncertain">Đây là bộ rà soát offline nhiều tầng. Có thể bỏ sót lỗi hoặc đưa ra gợi ý không phù hợp ngữ cảnh; không chấm band IELTS. Khi cần, đối chiếu với giáo viên.</p></div>';return out;}
@@ -633,5 +702,100 @@ if(localStorage.getItem(TENSE_VERSION)!=='1'){
    wrapper.append(main,sidebar);work.appendChild(wrapper);
  }
  render=function(){previousRender();placeNotes();};
+})();
+
+/* Free offline, evidence-bounded personalized writing assistant. */
+(function(){
+ const KEY='pebbleton-personalized-v1';
+ const escape=(v)=>String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const facts=[
+  {id:'fort',test:/\b(old fort|fort|playground)\b/i,phrase:'The old fort near the lighthouse has been replaced by a children’s playground.'},
+  {id:'studio',test:/\b(film studio|studio|flats|apartments)\b/i,phrase:'The former film studio on the western side has given way to flats.'},
+  {id:'centre',test:/\b(community cent(?:re|er))\b/i,phrase:'A community centre has been introduced near the lighthouse and the residential area.'},
+  {id:'tennis',test:/\btennis\b/i,phrase:'Tennis courts have also been added close to Lighthouse Road.'},
+  {id:'paths',test:/\bfootpaths?\b/i,phrase:'New footpaths now connect the coastal road with the northern part of the village.'},
+  {id:'housing',test:/\b(houses?|housing|residential)\b/i,phrase:'The number of houses along the northern side has increased.'},
+  {id:'retained',test:/\b(lighthouse|school|river|playing field|coast road|road bridge)\b/i,phrase:'Meanwhile, the lighthouse, river, school and playing field have remained in their original locations.'}
+ ];
+ const normalize=(t)=>String(t||'').replace(/\r\n?/g,'\n').trim();
+ const repairs=[
+  [/\b(twenty|20)\s+year\s+ago\b/gi,'$1 years ago','Sửa “year ago” → “years ago”'],
+  [/\bthe two maps illustrates\b/gi,'the two maps illustrate','Chia động từ với chủ ngữ số nhiều'],
+  [/\bthe maps shows\b/gi,'the maps show','Chia động từ với chủ ngữ số nhiều'],
+  [/\b(village|Pebbleton) have changed\b/gi,'$1 has changed','Chia động từ với chủ ngữ số ít'],
+  [/\bhas been build\b/gi,'has been built','Dùng quá khứ phân từ'],
+  [/\bhave been build\b/gi,'have been built','Dùng quá khứ phân từ'],
+  [/\b(have|has) unchanged\b/gi,'$1 remained unchanged','Bổ sung động từ chính'],
+  [/\bwas (relatively |quite |rather |very )?(small|quiet|traditional|coastal) (coastal )?village\b/gi,(m,mod,adj,coast)=>'was a '+(mod||'')+adj+' '+(coast||'')+'village','Thêm mạo từ cho danh từ đếm được số ít'],
+  [/\bthe past (\d+) years\b/gi,(m,n)=>Number(n)===20?m:'the past 20 years','Chỉnh khoảng thời gian về 20 năm theo đề'],
+  [/\bthe past thirty years\b/gi,'the past twenty years','Chỉnh khoảng thời gian về 20 năm theo đề'],
+  [/\brelatviely\b/gi,'relatively','Lỗi chính tả'],
+  [/\blighhouse\b/gi,'lighthouse','Lỗi chính tả'],
+  [/\bligthouse\b/gi,'lighthouse','Lỗi chính tả'],
+  [/\bvillge\b/gi,'village','Lỗi chính tả']
+ ];
+ function corrected(original){
+   let text=normalize(original),changes=[];
+   for(const [regex,replacement,why] of repairs){
+     const before=text;text=text.replace(regex,replacement);
+     if(text!==before)changes.push(why);
+   }
+   return {text,changes:[...new Set(changes)]};
+ }
+ function improved(original){
+   const base=corrected(original);let text=base.text;let changes=[...base.changes];
+   for(const [a,b,why] of [
+    [/\ba lot of changes\b/gi,'substantial changes','Nâng phong cách học thuật'],
+    [/\bvery big changes\b/gi,'significant changes','Collocation tự nhiên hơn'],
+    [/\bmade many changes\b/gi,'underwent several changes','Cách diễn đạt phù hợp Maps'],
+    [/\bmore and more houses\b/gi,'an increasing number of houses','Tránh cách nói thân mật']
+   ]){const before=text;text=text.replace(a,b);if(before!==text)changes.push(why);}
+   return {text,changes:[...new Set(changes)]};
+ }
+ const wordCount=(t)=>(t.match(/\b[\w’'-]+\b/g)||[]).length;
+ function personalized(source){
+   const original=normalize(source);
+   const matched=facts.filter(f=>f.test.test(original));
+   const more=facts.filter(f=>!f.test.test(original));
+   const prioritized=[...matched,...more];
+   const intro='The two maps illustrate how the coastal village of Pebbleton has changed over the past 20 years.';
+   const overview='Overall, the village has undergone substantial redevelopment, with new residential and recreational facilities added and several older structures replaced. However, important geographical and public features have been preserved.';
+   const body1='Twenty years ago, Pebbleton was a small coastal settlement. A lighthouse stood in the north-west near an old fort, while a film studio was situated further south. Several houses lined Lighthouse Road, and a playing field lay close to Old Fort Road. The school stood south of the river, near Coast Road.';
+   const group1=prioritized.filter(f=>f.id!=='retained').slice(0,5).map(f=>f.phrase).join(' ');
+   const tail='The road bridge and Coast Road remain in place, and the playing field and school are still present.';
+   const body2='Today, substantial changes can be seen in the built-up area. '+group1+' '+tail;
+   const text=[intro,overview,body1,body2].join('\n\n');
+   return {text,changes:[`Đã ưu tiên ${matched.length} nhóm thông tin xuất hiện trong bài học sinh.`,`Đã bổ sung ${more.length} nhóm dữ kiện cần thiết từ bản đồ.`],newFacts:more.map(f=>f.id),length:wordCount(text)};
+ }
+ function getInput(){return document.getElementById('final')?.value||'';}
+ function getPanel(){return document.getElementById('pwa-panel')}
+ let currentMode='corrected',outputs=null,sourceSnapshot='';
+ function setMode(mode){currentMode=mode;drawResult()}
+ function drawResult(){
+   const panel=getPanel();if(!panel||!outputs)return;
+   panel.querySelectorAll('[data-pwa-mode]').forEach(b=>b.classList.toggle('on',b.dataset.pwaMode===currentMode));
+   const res=outputs[currentMode];panel.querySelector('#pwa-text').textContent=res.text;
+   panel.querySelector('#pwa-changes').textContent=res.changes.length?'Điều chỉnh: '+res.changes.join(' · '):'Chưa phát hiện lỗi chắc chắn trong danh sách quy tắc hiện có.';
+   panel.querySelector('#pwa-extra').textContent=currentMode==='model'?'Đây là bài tham khảo dựng từ dữ kiện bản đồ; không phải AI tự do viết lại toàn bộ ý của bạn. Đối chiếu bản đồ trước khi sử dụng.':'';
+ }
+ function generate(){
+   const raw=getInput().trim();const panel=getPanel();
+   if(!raw){panel.querySelector('#pwa-error').textContent='Hãy hoàn thành bài viết trước khi tạo bản tham khảo.';return}
+   panel.querySelector('#pwa-error').textContent='';sourceSnapshot=raw;
+   outputs={corrected:corrected(raw),improved:improved(raw),model:personalized(raw)};
+   panel.querySelector('#pwa-output').hidden=false;drawResult();
+ }
+ function markup(){return `<section id="pwa-panel" class="pwa-panel"><h3>Bài viết tham khảo dành cho bạn</h3><p class="small">So sánh bài gốc với ba cách hỗ trợ viết. Bài của bạn không bị thay thế.</p><div class="pwa-actions"><button type="button" class="primary" id="pwa-generate">Tạo bản tham khảo</button></div><p id="pwa-error" class="warn" aria-live="polite"></p><div id="pwa-output" hidden><div class="pwa-tabs"><button type="button" data-pwa-mode="corrected">1. Sửa lỗi</button><button type="button" data-pwa-mode="improved">2. Cải thiện diễn đạt</button><button type="button" data-pwa-mode="model">3. Bài tham khảo</button></div><div id="pwa-text" class="pwa-result"></div><p id="pwa-changes" class="pwa-diff"></p><p id="pwa-extra" class="pwa-warn"></p><div class="pwa-actions"><button type="button" id="pwa-copy">Sao chép bản này</button></div><p class="pwa-method">Công cụ miễn phí hoạt động bằng quy tắc và nội dung bản đồ. Không thể bảo đảm sửa mọi lỗi hoặc tạo bài mẫu AI thực sự. Không nên coi kết quả là điểm IELTS.</p></div></section>`}
+ function mount(){
+   if(step!==5)return;
+   const field=document.getElementById('final')?.closest('.field');
+   if(!field)return;
+   let panel=getPanel();if(!panel){field.insertAdjacentHTML('afterend',markup());panel=getPanel()}
+   panel.querySelector('#pwa-generate').addEventListener('click',generate);
+   panel.querySelectorAll('[data-pwa-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.pwaMode)));
+   panel.querySelector('#pwa-copy').addEventListener('click',()=>{if(outputs)navigator.clipboard.writeText(outputs[currentMode].text).catch(()=>{panel.querySelector('#pwa-error').textContent='Không thể sao chép tự động; hãy chọn văn bản để sao chép.'})});
+ }
+ const oldRender=render;render=function(){oldRender();mount()};
+ mount();
 })();
 </script></body></html>
