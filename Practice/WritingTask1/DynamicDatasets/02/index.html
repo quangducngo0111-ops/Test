@@ -55,7 +55,7 @@ function noteHTML(){
 }
 function renderLearning(root,step){const key=PARTS[step],items=WORDS[key],questions=QUIZZES[key];root.innerHTML=`<p class="mini">Học cách diễn đạt trước khi kiểm tra. Ví dụ dưới đây chỉ minh họa cấu trúc, không cung cấp số liệu của biểu đồ.</p><div class="subhead">Học từ vựng</div><table class="word-table"><thead><tr><th>Từ / cụm từ</th><th>Nghĩa</th><th>Cách dùng</th></tr></thead><tbody>${items.map(x=>`<tr><td><b>${h(x[0])}</b></td><td>${h(x[1])}</td><td>${h(x[2])}</td></tr>`).join('')}</tbody></table><div class="subhead">Kiểm tra trước khi viết</div>${quizHTML(key,questions,state.quiz[key]||{})}<button class="btn" id="checkQuiz">Kiểm tra từ vựng</button><div id="quizSummary"></div><div id="writeUnlock"></div>`;bindQuiz(key,questions,root);$('checkQuiz').onclick=()=>{markQuiz(key,questions);renderWriter()};renderWriter()}
 function renderWriter(){const key=PARTS[state.step];if(!key||key==='full')return;const target=$('writeUnlock');if(!state.passed[key]){target.innerHTML='<p class="mini">Hoàn thành bài kiểm tra để mở phần viết.</p>';return}target.innerHTML=`<div class="subhead">Thực hành viết ${TITLES[state.step]}</div><p class="mini">${state.step===1?'Viết một câu giới thiệu khách quan về biểu đồ.':state.step===2?'Tóm tắt 2 xu hướng nổi bật, không suy diễn nguyên nhân.':state.step===3?'Mô tả nhóm dữ liệu thứ nhất theo kế hoạch đã ghi chú.':'Mô tả nhóm dữ liệu còn lại và so sánh khi phù hợp.'}</p><div class="writing-layout"><div class="writing-area"><textarea id="draft" rows="8" placeholder="Viết bằng tiếng Anh...">${h(state.drafts[key])}</textarea><div class="actions"><button class="btn" id="checkWriting">Kiểm tra đoạn viết</button></div><div id="writingFeedback"></div></div>${noteHTML()}</div>`;$('draft').oninput=e=>{state.drafts[key]=e.target.value;delete state.reviews[key];$('writingFeedback').innerHTML='';save()};$('checkWriting').onclick=()=>reviewWriting(key);$('editNotes').onclick=()=>setStep(0);if(state.reviews[key])drawReview(key)}
-function checkText(t,part){const issues=[],add=(level,title,detail)=>issues.push({level,title,detail});if(!t.trim()){add('bad','Chưa có bài viết','Hãy viết nội dung trước khi kiểm tra.');return issues}
+function base_checkText(t,part){const issues=[],add=(level,title,detail)=>issues.push({level,title,detail});if(!t.trim()){add('bad','Chưa có bài viết','Hãy viết nội dung trước khi kiểm tra.');return issues}
 if(/\b(?:2010|2001|2019|2020|2021|2025)\b/.test(t))add('warn','Kiểm tra thời gian','Đề cho giai đoạn 2011–2018. Kiểm tra xem năm khác có phải lỗi gõ hay không.');
 if(/\b(?:number of sales|millions? of (?:songs?|albums?|people)|total number of CDs)\b/i.test(t))add('warn','Kiểm tra đơn vị','Biểu đồ thể hiện tỷ lệ % tổng doanh số theo phương thức, không phải số lượng tuyệt đối.');
 if(/\b(?:the graph|the chart)\s+(?:show|illustrate|compare)\b/i.test(t))add('bad','Chủ ngữ – động từ','The graph/chart là số ít: shows / illustrates / compares.');
@@ -88,6 +88,137 @@ function generateModel(){const t=state.drafts.full;if(!t.trim()){$('generated').
 function exportTxt(){const content=`Dynamic Datasets 02 — Music Sales by Method\nStudent: ${state.name}\nClass: ${state.className}\n\n${state.drafts.full}`;const url=URL.createObjectURL(new Blob([content],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='Dynamic_Datasets_02_Music_Sales.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function updateNav(){const nav=$('nav');nav.innerHTML=TITLES.map((t,i)=>`<button class="${state.step===i?'active':''} ${i===0?state.passed.analysis:state.passed[PARTS[i]]?'done':''}" data-step="${i}">${i+1}. ${h(t)}</button>`).join('');nav.querySelectorAll('button').forEach(b=>b.onclick=()=>setStep(+b.dataset.step));$('progress').style.width=((state.step+1)/6*100)+'%';$('progressText').textContent=`Bước ${state.step+1}/6`}
 function render(){if(!state.started){$('welcome').hidden=false;$('practice').hidden=true;$('studentName').value=state.name;$('studentClass').value=state.className;return}$('welcome').hidden=true;$('practice').hidden=false;$('userLabel').textContent=state.name;$('stepTitle').textContent=TITLES[state.step];$('stepSection').textContent='IELTS Writing Task 1 · Music Sales';updateNav();const root=$('stepRoot');if(state.step===0)renderAnalysis(root);else if(state.step===5)renderFull(root);else renderLearning(root,state.step);$('backButton').disabled=state.step===0;$('nextButton').disabled=state.step===5;save()}
-$('startButton').onclick=()=>{const name=$('studentName').value.trim();if(!name){$('startError').textContent='Vui lòng nhập họ và tên.';return}state.started=true;state.name=name;state.className=$('studentClass').value.trim();save();render()};$('backButton').onclick=()=>setStep(state.step-1);$('nextButton').onclick=()=>setStep(state.step+1);$('chart').onclick=()=>$('zoom').classList.add('show');$('closeZoom').onclick=()=>$('zoom').classList.remove('show');$('zoom').onclick=e=>{if(e.target===$('zoom'))$('zoom').classList.remove('show')};document.addEventListener('keydown',e=>{if(e.key==='Escape')$('zoom').classList.remove('show')});render();
+$('startButton').onclick=()=>{const name=$('studentName').value.trim();if(!name){$('startError').textContent='Vui lòng nhập họ và tên.';return}state.started=true;state.name=name;state.className=$('studentClass').value.trim();save();render()};$('backButton').onclick=()=>setStep(state.step-1);$('nextButton').onclick=()=>setStep(state.step+1);$('chart').onclick=()=>$('zoom').classList.add('show');$('closeZoom').onclick=()=>$('zoom').classList.remove('show');$('zoom').onclick=e=>{if(e.target===$('zoom'))$('zoom').classList.remove('show')};document.addEventListener('keydown',e=>{if(e.key==='Escape')$('zoom').classList.remove('show')});
+// ===== V8: Handout-aligned vocabulary + context-aware offline grammar =====
+const HANDOUT_WORDS={
+ intro:[
+ ['Graphic type','The line graph / the chart','Loại biểu đồ; không chép nguyên cả câu.'],
+ ['Verb','shows / presents / illustrates','The line graph = chủ ngữ số ít → shows / presents / illustrates.'],
+ ['Description','the number of / the figure for / data on','Dùng number khi đếm; proportion/percentage khi nói tỷ lệ.'],
+ ['Scope','between ... and ... / from ... to ...','Đọc đúng mốc thời gian trong biểu đồ.']
+ ],
+ overview:[
+ ['Upward trends','increase / rise / climb / go up','Động từ diễn đạt tăng; chọn mức độ theo biểu đồ.'],
+ ['Downward trends','decrease / fall / decline / drop / go down','Động từ diễn đạt giảm.'],
+ ['Steady trends','remain steady / remain constant / stay the same / plateau','Chỉ dùng nếu thật sự ổn định.'],
+ ['Fluctuations','fluctuate / show fluctuations / experience fluctuations','Dao động theo thời gian.'],
+ ['Overall changes','experience a significant increase / a noticeable decline','Collocation học trên lớp; cần phù hợp xu hướng thực tế.']
+ ],
+ body1:[
+ ['Upward – số liệu','rose to ... / rose from ... to ... / rose by ...','to = mức cuối, from...to = 2 mức, by = lượng thay đổi.'],
+ ['Downward – số liệu','fell to ... / fell from ... to ... / fell by ...','Không hoán đổi to và by.'],
+ ['Degree','slight / slightly; moderate / moderately','Tính từ trước danh từ; trạng từ bổ nghĩa động từ.'],
+ ['Degree','significant / significantly; considerable / considerably; substantial / substantially','Chọn mức độ theo biên độ thực tế.'],
+ ['Period','at the beginning of the period / during the period','Đầu kỳ / trong kỳ.'],
+ ['Peak and low','reach a peak of ... / reach a low of ...','Kiểm tra giá trị cực trị trên biểu đồ.']
+ ],
+ body2:[
+ ['Comparison','A surpassed B / A exceeded B','Chỉ dùng khi dữ liệu cho thấy A vượt B.'],
+ ['Comparison','A was higher than B / A was the lowest','So sánh số liệu, không tự suy ra nguyên nhân.'],
+ ['Upward – degree','climbed considerably / increased significantly','Adverb sau động từ; đúng xu hướng thực tế.'],
+ ['Peak','reached its highest point at ... / reached a high of ...','Phân biệt cực đại với mức cuối kỳ.'],
+ ['Time expressions','throughout the period / at the end of the period / over the period','throughout đòi hỏi xu hướng kéo dài xuyên suốt.'],
+ ['Stability','levelled out at ... / remained steady','Không dùng ổn định nếu liên tục biến động lớn.']
+ ]
+};
+for(const stage of ['intro','overview','body1','body2']){
+ const existing=new Set(WORDS[stage].map(w=>w[0].toLowerCase()));
+ for(const [topic,expression,usage] of HANDOUT_WORDS[stage]){
+  if(existing.has(expression.toLowerCase()))continue;
+  WORDS[stage].push([expression,topic+' — '+usage,usage]);
+ }
+}
+// New quiz items teach what the handout distinguishes, without revealing chart answers.
+const NEW_QUIZ={
+ intro:[
+ ['Chọn cấu trúc đúng với chủ ngữ “The line graph”.',['The line graph illustrates ...','The line graph illustrate ...','The line graph illustrating ...'],0,'Chủ ngữ số ít + động từ hiện tại đơn thêm -s.'],
+ ['Khi đề mô tả số lượng tuyệt đối, nhóm nào đúng?',['the number of / the figure for','the percentage of / the proportion of','the percent of'],0,'Number/figure chỉ số lượng; percentage/proportion chỉ tỷ lệ.']
+ ],
+ overview:[
+ ['Cụm nào là collocation diễn đạt tăng đúng?',['experienced a significant increase','experienced significantly increase','was a significant increased'],0,'Experience + a/an + adjective + noun.'],
+ ['Câu nào thể hiện ổn định đúng?',['The figure remained steady.','The figure stayed steadily.','The figure remained steadily.'],0,'Remain + adjective: remained steady.']
+ ],
+ body1:[
+ ['Giá trị từ 20 lên 30: “rose by” phải điền gì?',['10','30','20 to 30'],0,'Rose by = biên độ thay đổi (30 − 20).'],
+ ['Chọn tính từ/trạng từ chính xác.',['The figure increased significantly.','The figure increased significant.','There was a significantly increase.'],0,'Động từ + trạng từ; a + tính từ + danh từ.']
+ ],
+ body2:[
+ ['Chọn collocation mô tả mức cao nhất.',['reached a peak of 30','reached a peak by 30','reached a peaked 30'],0,'Peak of + giá trị; peak at + giá trị đều có thể.'],
+ ['Chọn câu so sánh đúng cấu trúc.',['A surpassed B.','A was surpassed than B.','A was more higher than B.'],0,'Surpass + tân ngữ, không dùng than.']
+ ]
+};
+for(const stage of ['intro','overview','body1','body2']){
+ const exists=QUIZZES[stage].some(x=>x[0]===NEW_QUIZ[stage][0][0]);
+ if(!exists)QUIZZES[stage].push(...NEW_QUIZ[stage]);
+}
+// Keep previously typed answers, only recheck updated vocabulary lessons.
+const curriculumVersion='HANDOUT_V8_20261016';
+if(state.curriculumVersion!==curriculumVersion){
+ for(const stage of ['intro','overview','body1','body2'])state.passed[stage]=false;
+ state.curriculumVersion=curriculumVersion;
+ save();
+}
+const GRAMMAR_LEXICON={
+ 'comparision':'comparison','conferenses':'conferences','conferance':'conference',
+ 'informations':'information','comparision':'comparison','increasement':'increase',
+ 'significanly':'significantly','sligtly':'slightly','substancial':'substantial',
+ 'declinned':'declined','fluctation':'fluctuation','fluctuaction':'fluctuation',
+ 'appproximately':'approximately','amout':'amount','ammount':'amount',
+ 'precentage':'percentage','percentange':'percentage','percenatge':'percentage',
+ 'illustrats':'illustrates','compair':'compare','becouse':'because',
+ 'streeming':'streaming','donwloads':'downloads','dowloads':'downloads'
+};
+function handoutExtra(text,part,dataset){
+ const found=[];const seen=new Set();
+ const push=(level,title,detail)=>{const id=title+'|'+detail;if(!seen.has(id)){seen.add(id);found.push({level,title,detail})}};
+ const t=String(text||'');if(!t.trim())return found;
+ const apply=(regex,title,message,level='bad')=>{if(regex.test(t))push(level,title,message)};
+ for(const token of t.match(/\b[A-Za-z]+\b/g)||[]){const fix=GRAMMAR_LEXICON[token.toLowerCase()];if(fix)push('bad','Chính tả: '+token,'Kiểm tra “'+token+'” → “'+fix+'”.')}
+ apply(/\b(?:the\s+)?(?:line\s+graph|bar\s+graph|pie\s+chart|chart|graph|table)\s+(?:compare|present|show|illustrate|depict)\b/i,'Chủ ngữ – động từ','The line graph/chart là số ít: compares / presents / shows / illustrates.');
+ apply(/\bbetween\s+(?:19\d{2}|20\d{2})\s+to\s+(?:19\d{2}|20\d{2})\b/i,'Cặp giới từ chỉ thời gian','Dùng “between X and Y” hoặc “from X to Y”, không dùng “between X to Y”.');
+ apply(/\bfrom\s+(?:19\d{2}|20\d{2})\s+and\s+(?:19\d{2}|20\d{2})\b/i,'Cặp giới từ chỉ thời gian','Dùng “from X to Y” hoặc “between X and Y”.');
+ apply(/\b(?:the\s+)?(?:line\s+graph|chart|table)\s+(?:is\s+)?(?:comparing|showing|illustrating)\s+the\s+(?:figure|number|percentage)\s+for\b/i,'Introduction – cách diễn đạt','Cấu trúc V-ing có thể đúng ở một số câu, nhưng dạng đơn giản “The graph compares/shows...” thường rõ ràng hơn.','warn');
 
+ apply(/\b(?:conferences?|sales|streaming|downloads?|CDs)\s+(?:holding|holded|happening)\b/i,'Bổ nghĩa danh từ / bị động','“conferences held”, “conferences that took place”; không viết “conferences holding” khi chỉ hội nghị được tổ chức.');
+ apply(/\b(?:figure|number|percentage|proportion|amount)\s+for\b[^.!?\n]{0,55}\b(?:were|have|are)\b/i,'Hòa hợp chủ ngữ – động từ','“The figure/number/percentage” số ít: was / has / is.');
+ apply(/\b(?:figures|conferences|cities|methods|percentages)\s+(?:was|has|is)\b/i,'Hòa hợp chủ ngữ – động từ','Chủ ngữ số nhiều: were / have / are.');
+ apply(/\b(?:a|an)\s+(?:conferences|cities|methods|percentages|figures)\b/i,'Mạo từ và danh từ đếm được','Không đặt a/an trước danh từ số nhiều.');
+ apply(/\b(?:a)\s+(?:increase|upward\s+trend)\b/i,'Mạo từ','Viết “an increase” hoặc “an upward trend”.');
+ apply(/\b(?:an)\s+(?:significant|slight|moderate|considerable|substantial|steep)\b/i,'Mạo từ','Viết “a significant/slight/moderate/considerable/substantial/steep ...”.');
+ apply(/\b(?:experience|experienced)\s+(?:significant|slight|considerable|substantial|noticeable)\s+(?:increase|decrease|decline|rise|fall)\b/i,'Thiếu mạo từ trong collocation','Dùng “experienced a significant increase”, “experienced a slight decline”, ...');
+ apply(/\b(?:experience|experienced)\s+(?:significantly|slightly|considerably|substantially)\s+(?:increase|decrease|decline)\b/i,'Collocation: adjective + noun','“Experienced a significant increase” (không dùng trạng từ đứng trước danh từ increase).');
+ apply(/\b(?:increase|increased|rise|rose|decrease|decreased|fall|fell|decline|declined|climb|climbed)\s+(?:significant|slight|considerable|substantial|steep|noticeable)\b/i,'Trạng từ chỉ mức độ','Động từ cần trạng từ: rose significantly, fell slightly, declined considerably.');
+ apply(/\b(?:there\s+was|there\s+is)\s+(?:a|an)\s+(?:significantly|slightly|considerably|substantially|steeply)\s+(?:increase|decrease|decline|rise|fall)\b/i,'Tính từ chỉ mức độ','Viết “a significant increase”, “a slight decrease” thay vì trạng từ + danh từ.');
+ apply(/\b(?:rose|fell|increased|decreased|declined|climbed|dropped)\s+to\s+by\b/i,'Giới từ chỉ số liệu','“Rose to 30” là mức đạt tới; “rose by 10” là lượng tăng.');
+ apply(/\b(?:rose|fell|increased|decreased|declined|climbed|dropped)\s+by\s+to\b/i,'Giới từ chỉ số liệu','Không dùng “by to”; chọn rose by X hoặc rose to Y.');
+ apply(/\b(?:rose|fell|increased|decreased|declined|climbed|dropped)\s+from\s+\d+(?:\.\d+)?\s+by\s+\d+/i,'Giới từ từ mức đầu đến mức cuối','Muốn nêu hai mức, dùng from X to Y; “by” chỉ mức thay đổi.');
+ apply(/\b(?:reach|reached)\s+(?:a|its)\s+(?:peak|high|low|highest\s+point|lowest\s+point)\s+by\s+\d/i,'Giới từ mức cực trị','“Reached a peak of X” / “reached its highest point at X”.');
+ apply(/\b(?:more\s+higher|more\s+lower|more\s+cheaper|more\s+greater)\b/i,'So sánh kép','Higher/lower/cheaper/greater đã là dạng so sánh hơn.');
+ apply(/\b(?:surpassed|exceeded)\s+than\b/i,'Động từ so sánh','Surpassed/exceeded + object, không thêm than.');
+ apply(/\b(?:remain|remained|stayed)\s+(?:steadily|constantly|stably)\b/i,'Collocation trạng thái','“Remained steady/constant”, “stayed the same”; dùng tính từ, không dùng trạng từ.');
+ apply(/\b(?:levelled|leveled)\s+out\s+by\s+\d/i,'Level out + at','“Levelled out at X” khi đường xu hướng chững ở mức X.');
+ apply(/\b(?:peak|peaked)\s+(?:of|to)\s+\d/i,'Cấu trúc đạt đỉnh','“Peaked at X”, “reached a peak of X”.','warn');
+ apply(/\b(?:increased|rose|climbed|fell|declined|decreased)\s+(?:in|on)\s+(?:19\d\d|20\d\d)\s+to\s+\d/i,'Diễn đạt số liệu','Kiểm tra xem “in YEAR” là mốc thời gian hay “to NUMBER” là mức cuối; đặt giới từ rõ ràng.','warn');
+ apply(/\b(?:increased|decreased|rose|fell|declined|climbed)\s+very\s+(?:large|big|much)\b/i,'Collocation mức độ','Dùng “increased significantly/considerably”, nhưng chỉ khi biểu đồ thực sự có biến động đáng kể.','warn');
+ if(part==='intro'){
+  apply(/\b(?:holding|holded)\b/i,'Introduction – sai cấu trúc','Với “conferences”, dùng “held” hoặc “that took place”.');
+  apply(/\b(?:significant\s+increase|dramatic\s+decrease|rose\s+sharply)\b/i,'Introduction – nội dung','Introduction chỉ paraphrase đề; để xu hướng cho Overview.','warn');
+ }
+ if(part==='overview'){
+  apply(/\b(?:because|due\s+to|owing\s+to)\b/i,'Task Achievement – suy diễn nguyên nhân','Không nêu nguyên nhân nếu biểu đồ không cung cấp.','warn');
+ }
+ if(dataset===1){
+   if(/\b2001\b/.test(t))push('bad','Sai mốc thời gian: 2001','Biểu đồ kết thúc năm 2010, không phải 2001. Sửa 2001 → 2010.');
+   if(/\b(?:proportion|percentage|percent)\b/i.test(t))push('warn','Đơn vị cần kiểm tra','Bài 01 là “the number of conferences”; không mô tả dữ liệu này thành tỷ lệ phần trăm nếu không có căn cứ.');
+   if(/\b(?:conferences|meetings)\s+holding\b/i.test(t))push('bad','Cấu trúc “conferences holding”','Cần quá khứ phân từ “held”, không dùng V-ing theo nghĩa bị động.');
+ }else{
+   if(/\b(?:number\s+of\s+(?:music\s+)?sales|number\s+of\s+downloads)\b/i.test(t))push('warn','Sai loại dữ liệu','Bài 02 mô tả percentage/proportion of total music sales, không phải số lượng tuyệt đối.');
+   if(/\b(?:2001|2020|2010|2019)\b/.test(t))push('bad','Mốc thời gian ngoài đề','Biểu đồ bài 02 cho giai đoạn 2011–2018.');
+ }
+ return found;
+}
+
+function checkText(text,part){const base=base_checkText(text,part);const extra=handoutExtra(text,part,2);const duplicate=new Set(extra.map(x=>x.title+"|"+x.detail));return [...extra,...base.filter(x=>!duplicate.has(x.title+"|"+x.detail))];}
+
+render();
 </script></body></html>
