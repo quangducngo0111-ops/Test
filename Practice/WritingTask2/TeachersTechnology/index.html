@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#281260">
+<title>Teachers & Technology | IELTS Writing Task 2</title>
+<style>
+:root{--ink:#21164b;--muted:#69738d;--line:#dfe4f0;--purple:#6741d9}*{box-sizing:border-box}body{margin:0;font:14px/1.6 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#273149;background:radial-gradient(circle at top left,#eee9ff,transparent 32%),#f6f8ff}.wrap{width:min(1260px,calc(100% - 30px));margin:auto}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:4}.top .wrap{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px}.back{text-decoration:none;font-weight:800;color:var(--ink);border:1px solid var(--line);padding:9px 13px;border-radius:11px}.crumb{font-weight:800;color:var(--ink)}.hero{background:linear-gradient(115deg,#fff,#f2ecff 53%,#eef7ff);padding:32px;border:1px solid #fff;border-radius:25px;margin:28px 0 24px;box-shadow:0 16px 35px #24164b0a}.tag{display:inline-block;border-radius:40px;background:#eee7ff;color:#6541bc;font-size:11px;font-weight:900;letter-spacing:.07em;padding:6px 12px}.hero h1{font-size:38px;line-height:1.2;margin:12px 0 8px;color:var(--ink)}.hero p{margin:0;color:var(--muted);max-width:760px}.heading{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:16px}.heading h2{color:var(--ink);margin:0;font-size:24px}.heading p{color:var(--muted);margin:3px 0 0;font-size:12px}.count{font-size:12px;color:var(--muted);font-weight:850}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{min-height:126px;display:flex;align-items:center;gap:15px;background:white;border:1px solid var(--line);border-radius:18px;padding:19px;text-decoration:none;color:inherit;box-shadow:0 7px 18px #25244b08;transition:transform .18s,border-color .18s}.card:hover{transform:translateY(-2px);border-color:#b8a8f2}.num{min-width:64px;height:64px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(130deg,#eee8ff,#e9f4ff);color:#5639a7;font-size:21px;font-weight:900}.info{flex:1;min-width:0}.info strong{display:block;color:var(--ink);font-size:16px}.info small{display:block;color:var(--muted);font-size:12px;margin-top:5px}.arrow{color:#9a95ae;font-size:21px}.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:15px 0}.refresh{border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font-weight:800;padding:10px 13px;cursor:pointer}.status{color:var(--muted);font-size:12px}.empty{background:#fff;border:1px dashed #d2c9ec;border-radius:16px;padding:26px;color:var(--muted)}.footer{text-align:center;color:#9aa2b3;font-size:12px;padding:38px 0}@media(max-width:720px){.grid{grid-template-columns:1fr}.hero{padding:23px}.hero h1{font-size:29px}.crumb{font-size:12px}.heading{align-items:start}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><span class="crumb">🎯 Kho Luyện Tập / Writing Task 2 / Teachers & Technology</span><a class="back" href="../">← Writing Task 2</a></div></header>
+<main class="wrap">
+<section class="hero"><span class="tag">IELTS WRITING TASK 2 · TOPIC</span><h1>Teachers & Technology</h1><p>Chọn đề để luyện phân tích, từ vựng, logic chain, dịch Việt–Anh và viết bài hoàn chỉnh theo từng bước.</p></section>
+<div class="heading"><div><h2>Chọn đề luyện</h2><p>Danh sách tự cập nhật khi bạn thêm bài mới vào GitHub.</p></div><span class="count" id="count">Đang tải...</span></div>
+<div class="toolbar"><span class="status" id="status" role="status" aria-live="polite">Đang tìm bài luyện...</span><button class="refresh" id="refresh" type="button">↻ Cập nhật danh sách</button></div>
+<div id="grid" class="grid"></div>
+<div class="footer">IELTS Practice · Writing Task 2</div>
+</main>
+<script>
+'use strict';
+// Đọc thư mục từ repository GitHub công khai (GitHub Pages không tự liệt kê thư mục).
+const REPO='quangducngo0111-ops/Test';
+const FOLDER='Practice/WritingTask2/TeachersTechnology';
+const CACHE='WT2_TEACHERS_TECHNOLOGY_LESSONS_V1';
+const KNOWN={
+ '01':{title:'Can technology replace teachers?',description:'Agree or Disagree · Completely Disagree · Guided Writing'}
+};
+const grid=document.getElementById('grid'),count=document.getElementById('count'),status=document.getElementById('status');
+const numeric=s=>/^\d{2,}$/.test(s);
+function render(items,source){
+ const folders=[...new Set(items.filter(numeric))].sort((a,b)=>Number(a)-Number(b));
+ grid.replaceChildren(); count.textContent=folders.length+' bài';
+ for(const id of folders){
+  const a=document.createElement('a');a.className='card';a.href='./'+encodeURIComponent(id)+'/';
+  const number=document.createElement('span');number.className='num';number.textContent=id;
+  const info=document.createElement('span');info.className='info';const title=document.createElement('strong');title.textContent='Đề '+id+' · '+(KNOWN[id]?.title||'Teachers & Technology');const desc=document.createElement('small');desc.textContent=KNOWN[id]?.description||'Luyện IELTS Writing Task 2 theo từng bước';info.append(title,desc);
+  const arrow=document.createElement('span');arrow.className='arrow';arrow.textContent='→';a.append(number,info,arrow);grid.append(a);
+ }
+ if(!folders.length){const box=document.createElement('div');box.className='empty';box.textContent='Chưa tìm thấy đề nào có index.html. Hãy tạo thư mục 01/index.html để bắt đầu.';grid.append(box)}
+ status.textContent=source;
+}
+async function getJson(url){const r=await fetch(url,{cache:'no-store',headers:{'Accept':'application/vnd.github+json'}});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+async function discover(){
+ status.textContent='Đang cập nhật từ GitHub...';document.getElementById('refresh').disabled=true;
+ try{
+  const repo=await getJson('https://api.github.com/repos/'+REPO);
+  const branch=encodeURIComponent(repo.default_branch||'main');
+  const listing=await getJson('https://api.github.com/repos/'+REPO+'/contents/'+FOLDER+'?ref='+branch);
+  if(!Array.isArray(listing))throw Error('Không đọc được thư mục');
+  const candidates=listing.filter(x=>x.type==='dir'&&numeric(x.name));
+  const results=await Promise.all(candidates.map(async x=>{
+   try{const files=await getJson('https://api.github.com/repos/'+REPO+'/contents/'+FOLDER+'/'+encodeURIComponent(x.name)+'?ref='+branch);return files.some(f=>f.type==='file'&&f.name==='index.html')?x.name:null}catch{return null}
+  }));
+  const folders=results.filter(Boolean);
+  localStorage.setItem(CACHE,JSON.stringify(folders));
+  render(folders,'Danh sách đã cập nhật từ GitHub.');
+ }catch(e){
+  let saved=[];try{saved=JSON.parse(localStorage.getItem(CACHE)||'[]')}catch{}
+  if(!saved.length){
+   // Fallback một bài đã được tạo. Bài khác chỉ xuất hiện sau khi API hoạt động.
+   saved=['01'];
+  }
+  render(saved,'Không kết nối được GitHub lúc này; đang hiển thị danh sách dự phòng. Nhấn Cập nhật để thử lại.');
+ }finally{document.getElementById('refresh').disabled=false}
+}
+document.getElementById('refresh').addEventListener('click',discover);
+let cached=[];try{cached=JSON.parse(localStorage.getItem(CACHE)||'[]')}catch{}
+if(cached.length)render(cached,'Danh sách đã lưu, đang kiểm tra cập nhật...');
+discover();
+</script>
+</body>
+</html>
