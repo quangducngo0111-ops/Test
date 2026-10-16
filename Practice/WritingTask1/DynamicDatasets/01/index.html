@@ -1,352 +1,57 @@
-
-<!doctype html>
-<html lang="vi">
-
-<head>
-  <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
-  <meta
-    name="theme-color"
-    content="#281260"
-  >
-
-  <title>
-    Dynamic Datasets 01 — International Conferences
-  </title>
-
-  <link
-    rel="stylesheet"
-    href="../dynamic-style.css"
-  >
-</head>
-
-<body data-lesson="01">
-
-  <!-- ====================================
-       HEADER
-       ==================================== -->
-
-  <header class="top">
-
-    <a href="../">
-      ← Dynamic Datasets
-    </a>
-
-    <strong>
-      ✍️ Writing Task 1 · Guided Learning
-    </strong>
-
-    <span id="userLabel"></span>
-
-  </header>
-
-  <!-- ====================================
-       MAIN
-       ==================================== -->
-
-  <main class="page">
-
-    <div class="hero">
-
-      <h1 id="lessonTitle">
-        Dynamic Datasets 01
-      </h1>
-
-      <p>
-        Học từng bước → Kiểm tra và chữa lỗi
-        → Mở khóa → Tự viết toàn bài
-      </p>
-
-    </div>
-
-    <div class="workspace">
-
-      <!-- ================================
-           LEFT: TASK
-           ================================ -->
-
-      <aside class="card task">
-
-        <span class="eyebrow">
-          IELTS Writing Task 1 · Line Graph
-        </span>
-
-        <h2>
-          International Conferences
-        </h2>
-
-        <p
-          id="prompt"
-          class="task-prompt"
-        >
-          The line graph provides information
-          about the number of international
-          conferences that took place in three
-          different cities.
-
-          Provide an overview of the information
-          by identifying and describing the key
-          details, and include comparisons
-          where appropriate.
-        </p>
-
-        <img
-          class="chart"
-          id="chart"
-          src="./chart.png"
-          alt="Line graph illustrating international conferences in three cities"
-        >
-
-        <p class="muted">
-          Quan sát trực tiếp biểu đồ để xác định
-          mốc thời gian, số liệu và xu hướng.
-        </p>
-
-        <p class="muted">
-          <strong>Yêu cầu cuối bài:</strong>
-          Tự viết một bài IELTS Writing Task 1
-          hoàn chỉnh với ít nhất 150 từ.
-        </p>
-
-      </aside>
-
-      <!-- ================================
-           RIGHT: PRACTICE
-           ================================ -->
-
-      <section
-        class="card"
-        aria-label="Khu vực luyện tập"
-      >
-
-        <!-- START -->
-
-        <div id="welcome">
-
-          <span class="eyebrow">
-            Start Practice
-          </span>
-
-          <h2>
-            Bắt đầu bài học 01
-          </h2>
-
-          <p class="muted">
-            Em sẽ học cách phân tích biểu đồ,
-            viết Introduction, Overview,
-            Body 1 và Body 2 trước khi
-            tự viết bài hoàn chỉnh.
-          </p>
-
-          <p class="muted">
-            Tiến độ và câu trả lời được tự động
-            lưu trên trình duyệt này.
-          </p>
-
-          <div class="field">
-
-            <label for="studentName">
-              Họ và tên
-            </label>
-
-            <input
-              id="studentName"
-              type="text"
-              autocomplete="name"
-              placeholder="Nguyễn Văn A"
-            >
-
-          </div>
-
-          <div class="field">
-
-            <label for="studentClass">
-              Lớp
-            </label>
-
-            <input
-              id="studentClass"
-              type="text"
-              placeholder="11A1"
-            >
-
-          </div>
-
-          <div
-            id="startError"
-            role="alert"
-          ></div>
-
-          <button
-            class="btn"
-            id="startButton"
-            type="button"
-          >
-            Bắt đầu học →
-          </button>
-
-        </div>
-
-        <!-- PRACTICE WORKSPACE -->
-
-        <div
-          id="practice"
-          hidden
-        >
-
-          <!-- PROGRESS -->
-
-          <div
-            class="eyebrow"
-            id="progressText"
-          ></div>
-
-          <div
-            class="progress-track"
-            role="progressbar"
-            aria-label="Tiến độ bài học"
-          >
-
-            <div id="progress"></div>
-
-          </div>
-
-          <!-- NAVIGATION -->
-
-          <nav
-            id="nav"
-            class="step-nav"
-            aria-label="Các bước bài học"
-          ></nav>
-
-          <!-- CURRENT STEP -->
-
-          <div class="step-head">
-
-            <span
-              class="eyebrow"
-              id="stepSection"
-            ></span>
-
-            <h2 id="stepTitle"></h2>
-
-          </div>
-
-          <p
-            class="question"
-            id="question"
-          ></p>
-
-          <p
-            class="tip"
-            id="hint"
-          ></p>
-
-          <!-- ANSWER INPUT -->
-
-          <div id="answerArea"></div>
-
-          <!-- FEEDBACK -->
-
-          <div
-            id="feedback"
-            class="feedback"
-            role="status"
-            aria-live="polite"
-            hidden
-          ></div>
-
-          <!-- CHECK / NEXT -->
-
-          <div class="actions">
-
-            <button
-              class="btn"
-              id="checkButton"
-              type="button"
-            >
-              Kiểm tra &amp; mở khóa
-            </button>
-
-            <button
-              class="btn secondary"
-              id="nextButton"
-              type="button"
-              hidden
-            >
-              Bước tiếp theo →
-            </button>
-
-          </div>
-
-          <!-- COMPLETE -->
-
-          <div
-            id="completedPanel"
-            class="result"
-            hidden
-          >
-
-            <strong>
-              Đã nộp bài viết hoàn chỉnh!
-            </strong>
-
-            <p>
-              Bài viết đã được lưu trên trình
-              duyệt. Em có thể xuất file để
-              giáo viên tiếp tục nhận xét.
-            </p>
-
-            <button
-              class="btn"
-              id="exportButton"
-              type="button"
-            >
-              Tải bài viết (.txt)
-            </button>
-
-          </div>
-
-          <!-- FOOTER CONTROLS -->
-
-          <div class="footer-control">
-
-            <button
-              id="backButton"
-              class="btn ghost"
-              type="button"
-            >
-              ← Quay lại
-            </button>
-
-            <button
-              id="resetButton"
-              class="btn ghost"
-              type="button"
-            >
-              Làm lại từ đầu
-            </button>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
-  <!-- ====================================
-       SHARED ENGINE
-       ==================================== -->
-
-<script src="../dynamic-engine.js?v=6.0" defer></script>
-
-</body>
-</html>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#281260"><title>Dynamic Datasets 01 — International Conferences</title><style>
+:root{--purple:#281260;--violet:#6544d5;--text:#23283b;--muted:#68738e;--line:#e1e6f2;--bg:#f5f7fc;--ok:#13754c;--bad:#ba3349}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font:14px/1.65 Inter,system-ui,"Segoe UI",Arial,sans-serif;color:var(--text)}button,input,textarea,select{font:inherit}button{cursor:pointer}.top{height:60px;background:linear-gradient(100deg,#1d0d4b,#281260);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 max(18px,calc((100vw - 1500px)/2));position:sticky;top:0;z-index:30}.top a{color:white;text-decoration:none;border:1px solid #ffffff55;border-radius:9px;padding:7px 12px;font-size:12px}.page{max-width:1500px;margin:auto;padding:22px 18px 60px}.hero{background:linear-gradient(105deg,#fff,#f4f0ff,#edf6ff);border:1px solid white;padding:22px;border-radius:20px;margin-bottom:16px}.hero h1{margin:3px 0;color:#21144e;font-size:27px}.hero p{margin:0;color:var(--muted)}.workspace{display:grid;grid-template-columns:minmax(320px,45fr) minmax(0,55fr);gap:16px;align-items:start}.card{border:1px solid var(--line);border-radius:17px;background:white;padding:20px;min-width:0;box-shadow:0 5px 22px #20124808}.task{position:sticky;top:76px;max-height:calc(100vh - 91px);overflow:auto;overscroll-behavior:contain}.eyebrow{color:#6b49c6;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.task h2,.practice h2{color:#21144e;margin:8px 0}.task-prompt{font-size:13px;white-space:pre-line}.chart{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);margin:14px 0;cursor:zoom-in}.muted{font-size:12px;color:var(--muted)}.btn{padding:10px 14px;border:1px solid var(--violet);background:var(--violet);border-radius:10px;color:white;font-weight:800}.btn.secondary,.btn.ghost{background:white;color:#321b75;border-color:#dad6ef}.btn:disabled{opacity:.5;cursor:not-allowed}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.field{margin:13px 0}.field label{display:block;font-weight:800;font-size:12px;margin-bottom:5px}input[type=text],textarea,select{width:100%;background:white;border:1px solid #cbd4e7;border-radius:10px;padding:10px;outline:none;color:var(--text)}textarea{min-height:115px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--violet);box-shadow:0 0 0 3px #6544d518}.progress-track{height:8px;background:#e9e6f3;border-radius:10px;overflow:hidden;margin:8px 0 13px}.progress-track>div{height:100%;width:0;background:linear-gradient(90deg,#7153e5,#367fe0)}.step-nav{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 20px}.step-nav button{font-size:11px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px 10px;color:#281260;font-weight:800}.step-nav button.active{background:var(--violet);color:white}.step-nav button.done{border-color:#a9d9c1}.step-head{border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:16px}.step-head h2{margin:4px 0}.subhead{font-size:15px;font-weight:900;color:#26175a;margin:14px 0 7px}.mini{font-size:12px;color:var(--muted)}.question{font-weight:700;margin:6px 0}.quiz-item{padding:13px;border:1px solid var(--line);border-radius:12px;margin:9px 0}.quiz-item legend{font-weight:800;font-size:12px;padding:0 6px}.choice{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line);border-radius:8px;margin:7px 0;font-size:12px}.choice:has(input:checked){background:#f1edff;border-color:#8e72e7}.choice input{accent-color:#6544d5;margin-top:3px}.inline-feedback{font-size:12px;padding:8px 10px;margin-top:8px;background:#f6f8fd;border-radius:8px}.success{color:var(--ok)}.error{color:var(--bad)}.feedback{padding:13px;background:#f8f7ff;border:1px solid #dcd8f5;border-radius:11px;margin:10px 0}.feedback h3{margin:0 0 6px;color:#281260}.feedback li{margin:5px 0}.info{background:#f5f2ff;padding:12px;border-radius:11px;font-size:12px;margin:12px 0}.word-table{width:100%;border-collapse:collapse;font-size:12px}.word-table td,.word-table th{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.word-table th{background:#f5f2ff}.note-card{padding:12px;border:1px solid #d8cef9;border-radius:12px;background:#f9f7ff;position:sticky;top:76px;max-height:calc(100vh - 96px);overflow:auto}.note-card h3{font-size:14px;margin:0 0 8px;color:#49309a}.note-card ul{margin:5px 0;padding-left:18px;font-size:12px}.writing-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,32%);gap:12px;align-items:start}.writing-area{min-width:0}.writing-area textarea{min-height:195px}.draft{margin-top:12px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}.footer-controls{display:flex;justify-content:space-between;margin-top:24px;border-top:1px solid var(--line);padding-top:15px}.flag{padding:7px 9px;border-left:3px solid var(--violet);background:#faf9ff;border-radius:6px;font-size:12px;margin:7px 0}.flag.bad{border-color:var(--bad)}.flag.warn{border-color:#c88912}.flag.good{border-color:var(--ok)}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.tabs button{padding:7px 10px;border-radius:8px;background:#fff;border:1px solid #ddd6f2;color:#3c2a76}.tabs button.active{background:#5a3bc5;color:white}.example{white-space:pre-wrap;background:#f8f9fe;padding:15px;border:1px solid var(--line);border-radius:12px;font-size:13px}.zoom{position:fixed;inset:0;background:#141328ed;display:none;align-items:center;justify-content:center;padding:36px 18px;z-index:90}.zoom.show{display:flex}.zoom img{max-width:98vw;max-height:90vh;object-fit:contain;background:#fff}.zoom button{position:absolute;right:15px;top:10px;background:white;border:0;padding:7px 13px;border-radius:9px;font-size:22px}@media(max-width:1050px){.workspace{grid-template-columns:1fr}.task{position:relative;top:auto;max-height:60vh}.writing-layout{grid-template-columns:1fr}.note-card{position:static;max-height:250px}}@media(max-width:600px){.page{padding:12px 10px}.top{padding:0 10px}.top strong{font-size:11px}.card{padding:14px}.hero h1{font-size:23px}}
+</style></head><body><header class="top"><a href="../">← Dynamic Datasets</a><strong>✍️ Writing Task 1 · Dynamic Datasets 01</strong><span id="userLabel"></span></header><main class="page"><div class="hero"><span class="eyebrow">IELTS Writing Task 1 · Line Graph</span><h1>International Conferences</h1><p>Phân tích biểu đồ, luyện từ vựng và tự viết bài theo từng bước.</p></div><div class="workspace"><aside class="card task"><span class="eyebrow">Đề bài</span><h2>International Conferences</h2><p class="task-prompt">The line graph provides information about the number of international conferences that took place in three different cities. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p><img class="chart" id="chart" src="./chart.png" alt="Line graph of international conferences" title="Bấm để phóng to"><p class="muted">Nhấn vào biểu đồ để phóng to. Dữ liệu ở các điểm không có nhãn chỉ mang tính xấp xỉ.</p></aside><section class="card practice"><div id="welcome"><h2>Bắt đầu bài học</h2><p class="muted">Tiến độ được lưu trên trình duyệt.</p><div class="field"><label for="studentName">Họ và tên</label><input id="studentName" type="text" placeholder="Nguyễn Văn A"></div><div class="field"><label for="studentClass">Lớp</label><input id="studentClass" type="text" placeholder="11A1"></div><p id="startError" class="error"></p><button class="btn" id="startButton">Bắt đầu học →</button></div><div id="practice" hidden><span class="eyebrow" id="progressText"></span><div class="progress-track"><div id="progress"></div></div><nav id="nav" class="step-nav" aria-label="Các bước học"></nav><div class="step-head"><span class="eyebrow" id="stepSection"></span><h2 id="stepTitle"></h2></div><div id="stepRoot"></div><div class="footer-controls"><button class="btn ghost" id="backButton">← Bước trước</button><button class="btn secondary" id="nextButton">Bước tiếp →</button></div><p class="mini" id="saveStatus">Đã bật tự lưu</p></div></section></div></main><div class="zoom" id="zoom"><button id="closeZoom" aria-label="Đóng">×</button><img src="./chart.png" alt="Biểu đồ phóng to"></div><script>
+'use strict';
+const $=id=>document.getElementById(id);
+const KEY='DYNAMIC_DATASETS_01_GUIDED_V7';
+const SECTIONS=['Phân tích','Introduction','Overview','Body 1','Body 2','Bài hoàn chỉnh'];
+const YEARS=[1965,1975,1985,1995,2005,2010];
+const SERIES={'City A':[35,20,30,29,30,20],'City B':[31,29,29,27.5,29,25],'City C':[0,10,20,30,24,29]};
+const FEATURES=[
+ ['subject','Biểu đồ thể hiện điều gì?',['Số hội nghị quốc tế của ba thành phố','Số khách du lịch đến ba thành phố','Tỷ lệ thành phố tổ chức hội nghị'],0,'Đơn vị là số hội nghị, không phải phần trăm.'],
+ ['years','Khoảng thời gian nào được thể hiện?',['1965–2010','1965–2000','1975–2010'],0,'Đọc năm đầu và năm cuối trên trục ngang.'],
+ ['a','Xu hướng chung của City A là gì?',['Giảm nhưng có dao động','Tăng liên tục','Không đổi'],0,'City A bắt đầu cao và kết thúc thấp hơn.'],
+ ['b','City B có đặc điểm gì?',['Tăng nhanh nhất','Dao động nhẹ và giảm nhẹ về cuối kỳ','Luôn bằng City A'],1,'Đường City B tương đối ổn định nhưng cuối kỳ thấp hơn.'],
+ ['c','City C biến động như thế nào?',['Nhìn chung tăng mạnh','Giảm đều','Duy trì bằng 0'],0,'City C tăng rõ từ mức gần 0 ở đầu kỳ.'],
+ ['group','Cách nhóm ý Body nào hợp lý?',['Body 1: City A/B; Body 2: City C','Body 1: City A/C; Body 2: nguyên nhân','Chỉ viết City A'],0,'Có thể nhóm hai thành phố có xu hướng giảm, đối chiếu với thành phố tăng.']
+];
+const QUIZZES={
+ intro:[['Cụm nào diễn đạt “the number of” đúng nghĩa?',['the figure for','the reason for','the proportion of'],0,'Figure for phù hợp dữ liệu đếm.'],['“took place” có thể thay bằng?',['were held','were invented','were visited'],0,'Were held = được tổ chức.'],['Giới thiệu biểu đồ dùng thì nào?',['Hiện tại đơn: the graph shows','Tương lai đơn','Quá khứ hoàn thành'],0,'Dùng hiện tại đơn để mô tả bản thân biểu đồ.'],['Cụm thời gian đúng?',['between 1965 and 2010','from 1965 until 2050','for 20 years'],0,'Không tự thay đổi số năm.']],
+ overview:[['City A và City B nhìn chung...?',['kết thúc thấp hơn điểm đầu','tăng đều','không thay đổi'],0,'So sánh đầu và cuối kỳ.'],['City C nhìn chung...?',['tăng đáng kể','giảm liên tục','bằng 0'],0,'City C tăng mạnh qua toàn kỳ.'],['Overview nên ưu tiên gì?',['Xu hướng lớn và điểm tương phản','Liệt kê tất cả 18 số liệu','Lý do thành phố phát triển'],0,'Chọn 2 ý chính, không liệt kê chi tiết.'],['Cấu trúc nào đúng?',['City C experienced an overall increase','City C was increased overallly','City C increase overall'],0,'Experienced an increase là kết hợp từ đúng.']],
+ body1:[['Dùng thì nào để mô tả số liệu quá khứ?',['Quá khứ đơn','Tương lai đơn','Hiện tại tiếp diễn'],0,'Các năm 1965–2010 đã kết thúc.'],['Cụm chỉ xấp xỉ là?',['approximately','exactly','definitely'],0,'Các điểm không ghi nhãn nên ưu tiên approximately/about.'],['Collocation phù hợp với mức giảm?',['fell to approximately 20','fell at approximately 20','fell with approximately 20'],0,'Fall to một mức; fall by một lượng.'],['“fluctuated” có nghĩa?',['dao động','tăng liên tục','biến mất'],0,'Dao động quanh mức.']],
+ body2:[['Dùng thì nào cho số liệu 1965–2010?',['Quá khứ đơn','Hiện tại hoàn thành là bắt buộc','Tương lai hoàn thành'],0,'Mốc thời gian đã hoàn tất nên dùng quá khứ đơn.'],['Cách nói tăng từ 0 lên gần 30?',['rose from 0 to around 30','rose by 0 to around 30','was rose to 30'],0,'From...to diễn đạt điểm đầu và điểm cuối.'],['“overtook” dùng khi nào?',['một đường vượt lên trên đường khác','hai đường không giao nhau','một đường luôn đứng đầu'],0,'Cần đối chiếu giao điểm trên biểu đồ.'],['Cách so sánh đúng?',['higher than','higher to','more higher than'],0,'Higher than là so sánh đúng.']]
+};
+const WORDS={intro:[['illustrate / show','thể hiện'],['the number of / the figure for','số lượng / số liệu'],['international conferences','hội nghị quốc tế'],['were held / took place','được tổ chức / diễn ra'],['over the period','trong khoảng thời gian']],overview:[['overall / in general','nhìn chung'],['upward trend / downward trend','xu hướng tăng / giảm'],['in contrast / whereas','ngược lại / trong khi'],['remain relatively stable','tương đối ổn định'],['fluctuate','dao động']],body1:[['start at / end at','bắt đầu / kết thúc ở mức'],['fall to / fall by','giảm xuống / giảm một lượng'],['approximately / roughly','xấp xỉ'],['a gradual decline','sự giảm dần'],['fluctuate around','dao động quanh']],body2:[['rise from ... to ...','tăng từ ... lên ...'],['reach a peak of','đạt đỉnh'],['overtake / surpass','vượt qua'],['by comparison','để so sánh'],['at the end of the period','cuối giai đoạn']]};
+const TASK_META={intro:{title:'Introduction',prompt:'Viết 1 câu giới thiệu đối tượng, đơn vị và khoảng thời gian; không viết xu hướng.'},overview:{title:'Overview',prompt:'Viết 2 câu: xu hướng chung và sự đối lập nổi bật; chưa cần số liệu chi tiết.'},body1:{title:'Body 1',prompt:'Miêu tả City A và City B bằng số liệu chính, theo trình tự thời gian.'},body2:{title:'Body 2',prompt:'Miêu tả City C và so sánh với hai thành phố còn lại khi phù hợp.'},full:{title:'Bài hoàn chỉnh',prompt:'Ghép Introduction, Overview, Body 1 và Body 2; tối thiểu 150 từ.'}};
+const PARTS=['intro','overview','body1','body2'];
+const empty=()=>({started:false,name:'',className:'',step:0,analysis:{},quizzes:{},passed:{},drafts:{intro:'',overview:'',body1:'',body2:'',full:''},reviews:{},modelMode:'corrected'});
+let state=empty();try{state={...empty(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));$('saveStatus').textContent='✓ Đã lưu trên trình duyệt'}catch{$('saveStatus').textContent='Không thể lưu trên thiết bị'}}
+function escape(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function countWords(s){return (String(s).match(/[\p{L}\p{N}]+(?:[’'-][\p{L}\p{N}]+)*/gu)||[]).length}
+function quizHTML(items,category){return items.map(([keyOrText,questionOrOptions,optionsOrCorrect,answerOrExplanation,maybeExplanation],index)=>{const isAnalysis=category==='analysis';const id=isAnalysis?keyOrText:`${category}-${index}`;const title=isAnalysis?questionOrOptions:keyOrText;const options=isAnalysis?optionsOrCorrect:questionOrOptions;const answer=isAnalysis?answerOrExplanation:optionsOrCorrect;const note=isAnalysis?maybeExplanation:answerOrExplanation;const selected=isAnalysis?state.analysis[id]:state.quizzes[id];const show=(state.passed[category]||state.reviews[category+'Quiz'])===true;return `<fieldset class="quiz-item"><legend>${index+1}. ${escape(title)}</legend>${options.map((option,i)=>`<label class="choice"><input type="radio" name="${escape(id)}" data-quiz="${escape(category)}" data-question="${escape(id)}" value="${i}" ${selected===i?'checked':''}><span>${escape(option)}</span></label>`).join('')}<div class="inline-feedback" data-feedback="${escape(id)}" ${show?'':'hidden'}>${selected===answer?'<span class="success">✓ Đúng</span>':`<span class="error">Chưa đúng.</span> ${escape(note)}`}</div></fieldset>`}).join('')}
+function noteHTML(){const a=FEATURES.filter(f=>state.analysis[f[0]]===f[3]).map(f=>f[1]);return `<aside class="note-card"><h3>📝 Ghi chú biểu đồ</h3><p class="mini">Thông tin đã xác định trong bước phân tích:</p><ul><li>Giai đoạn: 1965–2010</li><li>Đơn vị: số hội nghị</li><li>City A: giảm nhìn chung, có dao động</li><li>City B: khá ổn định, giảm nhẹ</li><li>City C: tăng rõ rệt</li></ul><p class="mini">Đã xác nhận ${a.length}/6 câu phân tích. <button class="btn ghost" style="padding:4px 7px" data-goto="0">Sửa phân tích</button></p><p class="mini">Số liệu tham khảo chỉ xấp xỉ: City A 35 → 20; City B 31 → 25; City C 0 → 29. Hãy đối chiếu biểu đồ trước khi sử dụng.</p></aside>`}
+function render(){if(!state.started){$('welcome').hidden=false;$('practice').hidden=true;return}$('welcome').hidden=true;$('practice').hidden=false;$('userLabel').textContent=state.name;const step=state.step;$('stepSection').textContent=SECTIONS[step];$('stepTitle').textContent=['Phân tích biểu đồ','Học & viết Introduction','Học & viết Overview','Học & viết Body 1','Học & viết Body 2','Hoàn thiện bài viết'][step];$('progressText').textContent=`Bước ${step+1}/6`;$('progress').style.width=`${(step+1)/6*100}%`;$('nav').innerHTML=SECTIONS.map((s,i)=>`<button data-goto="${i}" class="${i===step?'active':''} ${i<step?'done':''}">${i+1}. ${s}</button>`).join('');$('backButton').disabled=step===0;$('nextButton').hidden=step===5;$('nextButton').textContent=step===4?'Bài hoàn chỉnh →':'Bước tiếp →';$('stepRoot').innerHTML=step===0?renderAnalysis():step===5?renderFull():renderPart(PARTS[step-1]);wireStep()}
+function renderAnalysis(){return `<p class="question">Quan sát biểu đồ và chọn câu trả lời chính xác. Kết quả sẽ được lưu thành ghi chú để sử dụng khi viết bài.</p>${quizHTML(FEATURES,'analysis')}<button class="btn" id="checkQuiz" data-category="analysis">Kiểm tra phân tích</button><div class="feedback" id="quizSummary" hidden></div><div class="info">Không cần sao chép toàn bộ số liệu. Chọn xu hướng chung và những số liệu đáng chú ý.</div>`}
+function renderPart(part){const m=TASK_META[part];const pass=!!state.passed[part];const qa=QUIZZES[part];const list=WORDS[part];return `<h3 class="subhead">1. Học từ vựng & cấu trúc</h3><table class="word-table"><thead><tr><th>Từ/cụm từ</th><th>Ý nghĩa</th></tr></thead><tbody>${list.map(v=>`<tr><td>${escape(v[0])}</td><td>${escape(v[1])}</td></tr>`).join('')}</tbody></table><h3 class="subhead">2. Kiểm tra trước khi viết</h3><p class="mini">Chọn đáp án phù hợp. Đạt ${qa.length}/${qa.length} để mở phần viết. Có thể ôn và làm lại.</p>${quizHTML(qa,part)}<div class="actions"><button class="btn secondary" id="checkQuiz" data-category="${part}">Kiểm tra từ vựng</button><span class="mini">${pass?'✓ Đã đạt, phần viết được mở khóa':''}</span></div><div class="feedback" id="quizSummary" hidden></div>${pass?`<h3 class="subhead">3. Thực hành viết ${m.title}</h3><p class="question">${escape(m.prompt)}</p><div class="writing-layout"><div class="writing-area"><textarea id="writeBox" spellcheck="true" placeholder="Nhập đoạn viết tiếng Anh của bạn...">${escape(state.drafts[part]||'')}</textarea><div class="actions"><button class="btn" id="checkWrite">Kiểm tra đoạn viết</button></div><div id="writingFeedback"></div></div>${noteHTML()}</div>`:''}`}
+function renderFull(){const d=state.drafts;return `<p class="question">${TASK_META.full.prompt}</p><div class="writing-layout"><div class="writing-area"><div class="actions"><button class="btn secondary" id="assemble">Ghép 4 đoạn đã viết</button><button class="btn secondary" id="exportTxt">Tải bài (.txt)</button></div><textarea id="writeBox" spellcheck="true" style="min-height:360px">${escape(d.full||'')}</textarea><div class="mini" id="wordCount">${countWords(d.full||'')} từ</div><div class="actions"><button class="btn" id="checkWrite">Kiểm tra bài hoàn chỉnh</button></div><div id="writingFeedback"></div><div class="feedback"><h3>Bài tham khảo miễn phí</h3><p class="mini">Chỉ mở sau khi tự viết. Các bản chỉnh sửa dựa trên quy tắc, không phải AI chấm IELTS.</p><div class="tabs"><button data-mode="corrected" class="${state.modelMode==='corrected'?'active':''}">Sửa lỗi</button><button data-mode="improved" class="${state.modelMode==='improved'?'active':''}">Diễn đạt tốt hơn</button><button data-mode="model" class="${state.modelMode==='model'?'active':''}">Bài tham khảo</button></div><button class="btn secondary" id="generate">Tạo bản tham khảo</button><div id="generated"></div></div></div>${noteHTML()}</div>`}
+function wireStep(){document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{state.step=Number(b.dataset.goto);save();render()});document.querySelectorAll('[data-quiz]').forEach(input=>input.onchange=()=>{const k=input.dataset.question;const cat=input.dataset.quiz;if(cat==='analysis')state.analysis[k]=Number(input.value);else state.quizzes[k]=Number(input.value);state.reviews[cat+'Quiz']=false;save();document.querySelectorAll('[data-feedback]').forEach(n=>n.hidden=true);$('quizSummary').hidden=true});const c=$('checkQuiz');if(c)c.onclick=()=>gradeQuiz(c.dataset.category);const area=$('writeBox');if(area)area.oninput=()=>{const part=state.step===5?'full':PARTS[state.step-1];state.drafts[part]=area.value;delete state.reviews[part];if($('writingFeedback'))$('writingFeedback').innerHTML='';if($('generated'))$('generated').innerHTML='';if($('wordCount'))$('wordCount').textContent=`${countWords(area.value)} từ`;save()};if($('checkWrite'))$('checkWrite').onclick=checkWriting;if($('assemble'))$('assemble').onclick=()=>{state.drafts.full=PARTS.map(p=>state.drafts[p].trim()).filter(Boolean).join('\n\n');save();render()};if($('exportTxt'))$('exportTxt').onclick=exportTxt;document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.modelMode=b.dataset.mode;save();document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('active',x===b))});if($('generate'))$('generate').onclick=generateModel}
+function gradeQuiz(category){let total=0,score=0;const rows=category==='analysis'?FEATURES:QUIZZES[category];for(let i=0;i<rows.length;i++){const id=category==='analysis'?rows[i][0]:category+'-'+i;const expected=category==='analysis'?rows[i][3]:rows[i][2];const given=category==='analysis'?state.analysis[id]:state.quizzes[id];total++;if(given===expected)score++;const fb=document.querySelector(`[data-feedback="${id}"]`);if(fb){fb.hidden=false;fb.innerHTML=given===expected?'<span class="success">✓ Chính xác</span>':`<span class="error">✗ Chưa đúng.</span> ${escape(category==='analysis'?rows[i][4]:rows[i][3])}`}}state.reviews[category+'Quiz']=true;state.passed[category]=score===total;save();$('quizSummary').hidden=false;$('quizSummary').innerHTML=`<strong>${score}/${total} câu đúng</strong>${score===total?' · Đã mở khóa thực hành.':' · Ôn lại những câu sai rồi kiểm tra lại.'}`;if(category!=='analysis'&&score===total){render();const n=$('writeBox');if(n)n.focus()}}
+function reviewText(text,part){const issues=[];const add=(level,title,detail)=>{if(!issues.some(x=>x.title===title&&x.detail===detail))issues.push({level,title,detail})};const t=text.trim();if(!t){add('bad','Chưa có bài viết','Hãy nhập đoạn viết trước khi kiểm tra.');return issues}if(/\b(?:1964|1966|2011|2020|2050)\b/.test(t))add('bad','Mốc thời gian','Biểu đồ thể hiện giai đoạn 1965–2010. Kiểm tra lại năm đã viết.');const years=[...t.matchAll(/\b(19\d{2}|20\d{2})\b/g)].map(m=>Number(m[1]));if(years.some(y=>y<1965||y>2010))add('bad','Mốc năm ngoài biểu đồ','Chỉ sử dụng những năm trong khoảng 1965–2010; không tự suy diễn sau 2010.');if(/\b(?:percentage|percent|%|million people|thousand people)\b/i.test(t))add('bad','Đơn vị không phù hợp','Biểu đồ đếm số hội nghị, không phải phần trăm hoặc số người.');if(/\b(?:alot|recieve|informations|conferenses|conferance|appproximately)\b/i.test(t))add('bad','Chính tả hoặc danh từ','Kiểm tra: a lot, receive, information, conferences, approximately.');if(/\b(?:the graph|the chart|the line graph)\s+(?:illustrate|show|depict)\b/i.test(t))add('bad','Hòa hợp chủ ngữ – động từ','“The graph” số ít: shows / illustrates / depicts.');if(/\b(?:the graphs|the figures|the cities)\s+(?:illustrates|shows|depicts|was)\b/i.test(t))add('bad','Hòa hợp chủ ngữ – động từ','Chủ ngữ số nhiều: show / illustrate / were.');if(/\b(?:city [abc])\s+(?:were|have|are)\b/i.test(t))add('bad','Hòa hợp chủ ngữ – động từ','Một thành phố là chủ ngữ số ít: was / has / is tùy ngữ cảnh.');if(/\b(?:a|an)\s+(?:international conferences|cities|figures)\b/i.test(t))add('bad','Mạo từ và số nhiều','Không dùng a/an trước danh từ số nhiều.');if(/\b(?:a number of)\s+(?:conference)\b/i.test(t))add('bad','Danh từ số nhiều','Sau “a number of” dùng “conferences”.');if(/\b(?:an)\s+(?:significant|sharp|gradual|steady)\s+(?:increase|decrease|rise|fall)\b/i.test(t))add('bad','Mạo từ a/an','Các tính từ này mở đầu bằng phụ âm; dùng “a significant increase”, v.v.');if(/\b(?:increased|rose|grew)\s+to\s+by\b/i.test(t))add('bad','Giới từ của mức tăng','Dùng “rose to X” hoặc “rose by X”, không dùng cả to by.');if(/\b(?:decreased|fell|dropped)\s+to\s+by\b/i.test(t))add('bad','Giới từ của mức giảm','Dùng “fell to X” hoặc “fell by X”.');if(/\b(?:more higher|more lower|more fewer)\b/i.test(t))add('bad','So sánh kép','Không dùng “more higher/lower”.');if(/\b(?:City\s+[ABC])\s+(?:increase|decrease|rise|fall)\s+(?:to|from|by|in)\b/i.test(t) && /(19\d{2}|20\d{2})/.test(t))add('warn','Thì động từ','Dữ liệu ở quá khứ: kiểm tra động từ dạng increased / decreased / rose / fell.');if(/\b(?:was|were)\s+(?:increased|decreased)\s+(?:to|from|by)\b/i.test(t))add('warn','Bị động không cần thiết','Với chủ ngữ là con số, ưu tiên “the number increased/decreased”, không cần “was increased”.');if(/\b(?:dramatically|significantly|sharply)\s+(?:stable|unchanged)\b/i.test(t))add('warn','Collocation','“Stable/unchanged” thường đi với relatively/largely; kiểm tra trạng từ.');if(/\b(?:the city has witnessed)\s+(?:a number of conferences)\b/i.test(t))add('warn','Độ tự nhiên','Cách nói “the number of conferences held in City ...” thường chính xác hơn.');if(/\b(?:very many|a lot of)\s+(?:conferences|changes)\b/i.test(t))add('warn','Văn phong','Có thể dùng “numerous conferences”, “substantial changes” nếu phù hợp dữ liệu.');if(/\b(?:the line graph shows)\b/i.test(t)&&part==='body1')add('warn','Chức năng đoạn','Body nên mô tả số liệu; không cần giới thiệu biểu đồ lần nữa.');if(part==='intro'&&!/(?:graph|chart|figure|illustrat|depict|show)/i.test(t))add('warn','Introduction','Cân nhắc nêu biểu đồ mô tả điều gì.');if(part==='intro'&&!/(?:1965|2010|period|years|between|from)/i.test(t))add('warn','Thời gian','Introduction nên có khoảng thời gian từ biểu đồ.');if(part==='overview'){if(!/(?:overall|in general|on the whole)/i.test(t))add('warn','Overview','Có thể bắt đầu bằng tín hiệu tổng quan như “Overall”.');if(!/(?:city\s*c)/i.test(t))add('warn','Xu hướng quan trọng','Cân nhắc nhắc City C vì đây là đường tăng rõ nhất.');if(/\b(?:because|due to|as a result of)\b/i.test(t))add('warn','Không suy diễn nguyên nhân','Biểu đồ không cung cấp lý do thay đổi.');}if(part==='body1'&&!/city\s*a/i.test(t))add('warn','Độ bao phủ','Body 1 dự kiến mô tả City A.');if(part==='body1'&&!/city\s*b/i.test(t))add('warn','Độ bao phủ','Body 1 dự kiến mô tả City B.');if(part==='body2'&&!/city\s*c/i.test(t))add('warn','Độ bao phủ','Body 2 dự kiến mô tả City C.');if(part==='full'){const paras=t.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);if(paras.length!==4)add('warn','Bố cục','Nên có bốn đoạn, cách nhau bằng một dòng trống (Enter hai lần).');if(countWords(t)<150)add('warn','Độ dài',`Bài có ${countWords(t)} từ; Task 1 yêu cầu tối thiểu 150 từ.`);for(const city of ['A','B','C'])if(!new RegExp('\\bcity\\s*'+city+'\\b','i').test(t))add('warn','Độ bao phủ',`Chưa nhận diện được City ${city}.`)}
+// Evidence-aware checks avoid treating all approximations as facts.
+const claims=[...t.matchAll(/city\s*([abc])[^.!?;\n]{0,85}?(?:in|by|during)\s+(1965|1975|1985|1995|2005|2010)[^.!?;\n]{0,35}?(?:approximately|about|around|roughly|at|to)\s*(\d+(?:\.\d+)?)/gi)];for(const m of claims){const city='City '+m[1].toUpperCase(),year=Number(m[2]),val=Number(m[3]),ix=YEARS.indexOf(year);if(ix>=0 && Math.abs(val-SERIES[city][ix])>5)add('warn','Đối chiếu số liệu',`Kiểm tra lại ${city} tại ${year}: em viết gần ${val}, biểu đồ cho thấy xấp xỉ ${SERIES[city][ix]}. Các giá trị không có nhãn là ước lượng.`)}
+if(/city\s*c[^.!?]{0,90}\b(?:declined|fell|decreased)\s+(?:overall|throughout|over the period)/i.test(t))add('warn','Xu hướng City C','City C nhìn chung tăng trong cả giai đoạn, dù có giảm giữa kỳ.');if(/city\s*a[^.!?]{0,90}\b(?:rose|increased)\s+(?:overall|throughout|over the period)/i.test(t))add('warn','Xu hướng City A','City A kết thúc thấp hơn đầu kỳ.');if(/[a-zA-Z]\s{2,}[a-zA-Z]/.test(t))add('warn','Khoảng trắng','Có khoảng trắng thừa.');if(!/[.!?]\s*$/.test(t))add('warn','Dấu câu','Kiểm tra dấu kết thúc câu.');if(issues.length===0)add('good','Chưa thấy lỗi trong phạm vi kiểm tra','Vẫn cần đối chiếu biểu đồ và tự rà các cấu trúc phức tạp.');return issues}
+function checkWriting(){const part=state.step===5?'full':PARTS[state.step-1],text=state.drafts[part]||'',flags=reviewText(text,part);state.reviews[part]=flags;save();const box=$('writingFeedback');if(!box)return;box.innerHTML=`<div class="feedback"><h3>Nhận xét ${escape(TASK_META[part].title)}</h3><div class="mini">${countWords(text)} từ · ${flags.filter(f=>f.level==='bad').length} vấn đề cần sửa · ${flags.filter(f=>f.level==='warn').length} gợi ý cần xem xét</div>${flags.map(f=>`<div class="flag ${f.level}"><strong>${escape(f.title)}</strong><div>${escape(f.detail)}</div></div>`).join('')}<p class="mini">Kiểm tra offline theo quy tắc: không đảm bảo phát hiện mọi lỗi, không phải điểm IELTS.</p></div>`}
+const MODEL=[
+ 'The line graph compares the number of international conferences held in three cities between 1965 and 2010.',
+ 'Overall, City C experienced a substantial increase, whereas the figures for Cities A and B ended lower than their initial levels. City B remained comparatively stable for much of the period.',
+ 'In 1965, City A hosted approximately 35 conferences, more than City B at just over 30. The figure for City A fell to around 20 in 1975, then recovered to approximately 30 by 1985. After fluctuating close to this level, it declined again to about 20 in 2010. Meanwhile, City B varied only slightly, finishing at roughly 25 conferences.',
+ 'By contrast, City C began at about zero conferences in 1965 and climbed steadily to around 30 in 1995. It then dropped to approximately 24 in 2005 before recovering to almost 30 by the end of the period. As a result, City C finished ahead of both other cities.'
+].join('\n\n');
+const CORRECTIONS=[[/\bthe\s+(?:graph|chart)\s+(?:show|illustrate|depict)\b/gi,m=>m.replace(/\b(show|illustrate|depict)$/i,x=>x.toLowerCase()==='show'?'shows':x.toLowerCase()==='illustrate'?'illustrates':'depicts')],[/\bmore higher\b/gi,'higher'],[/\bmore lower\b/gi,'lower'],[/\bconferenses\b/gi,'conferences'],[/\bconferance\b/gi,'conference'],[/\bappproximately\b/gi,'approximately'],[/\balot\b/gi,'a lot']];
+function corrected(text){let out=text;for(const [pattern,replacement] of CORRECTIONS)out=out.replace(pattern,replacement);return out.replace(/ {2,}/g,' ').trim()}
+function improved(text){return corrected(text).replace(/\ba lot of changes\b/gi,'substantial changes').replace(/\bwent up\b/gi,'rose').replace(/\bwent down\b/gi,'declined').replace(/\babout ([0-9]+)\b/gi,'approximately $1')}
+function generateModel(){const text=state.drafts.full||'';if(!text.trim()){$('generated').innerHTML='<p class="error">Hãy viết bài trước khi tạo bản tham khảo.</p>';return}const mode=state.modelMode;const out=mode==='corrected'?corrected(text):mode==='improved'?improved(text):MODEL;$('generated').innerHTML=`<p class="mini">${mode==='model'?'Bài tham khảo được soạn trước từ dữ liệu biểu đồ, không phải AI viết lại riêng bài của em.':'Các thay đổi chỉ dựa trên mẫu lỗi/collocation đã biết; có thể còn lỗi chưa được sửa.'}</p><div class="example">${escape(out)}</div><button class="btn secondary" id="copyGenerated">Sao chép</button>`;$('copyGenerated').onclick=async()=>{try{await navigator.clipboard.writeText(out)}catch{const e=document.createElement('textarea');e.value=out;document.body.appendChild(e);e.select();document.execCommand('copy');e.remove()}}}
+function exportTxt(){const name=(state.name||'Student').replace(/[^\w\p{L}\s-]/gu,'').trim();const content=`International Conferences — Dynamic Datasets 01\nStudent: ${state.name}\nClass: ${state.className}\n\n${state.drafts.full||''}`;const blob=new Blob([content],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`Dynamic_Datasets_01_${name||'Student'}.txt`;a.click();URL.revokeObjectURL(url)}
+$('startButton').onclick=()=>{const name=$('studentName').value.trim(),className=$('studentClass').value.trim();if(!name){$('startError').textContent='Vui lòng điền họ tên.';return}state.started=true;state.name=name;state.className=className;save();render()};$('backButton').onclick=()=>{state.step=Math.max(0,state.step-1);save();render()};$('nextButton').onclick=()=>{state.step=Math.min(5,state.step+1);save();render()};$('chart').onclick=()=>$('zoom').classList.add('show');$('closeZoom').onclick=()=>$('zoom').classList.remove('show');$('zoom').onclick=e=>{if(e.target===$('zoom'))$('zoom').classList.remove('show')};document.addEventListener('keydown',e=>{if(e.key==='Escape')$('zoom').classList.remove('show')});render();
+</script></body></html>
