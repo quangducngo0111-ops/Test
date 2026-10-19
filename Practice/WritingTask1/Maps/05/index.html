@@ -306,4 +306,71 @@ buildNotes=function(){let keep=extras.analysis.keep||[],changes=extras.analysis.
 
 render();
 })();
-</script></body></html>
+</script><style id="maps-completion-style">
+.mc-finish-btn{margin:16px 0!important;width:100%;min-height:48px;background:#6540dc!important;color:#fff!important;border:0!important;font-weight:850!important}
+.mc-review{background:#fff;border:1px solid #dfe2f0;border-radius:17px;padding:20px;margin-top:20px;color:#28264e;line-height:1.7}
+.mc-review h2{color:#21164b;margin:0 0 8px}.mc-review h3{color:#21164b;margin:18px 0 8px;font-size:17px}.mc-meta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.mc-chip{background:#f1edff;border-radius:30px;padding:5px 11px;color:#4d318e;font-size:12px;font-weight:750}.mc-card{background:#fcfbff;border:1px solid #e4e0f0;border-radius:12px;padding:14px;margin:10px 0;overflow-wrap:anywhere}.mc-card summary{font-weight:800;color:#352367;cursor:pointer}.mc-card p{margin:7px 0;font-size:14px;white-space:pre-wrap}.mc-original{white-space:pre-wrap;word-break:break-word;line-height:1.85;background:#f8f9ff;border:1px solid #e3e7f2;padding:16px;border-radius:12px}.mc-warning{padding:12px 14px;background:#fff8ec;border-radius:10px;color:#7d5423;font-size:13px;margin-top:12px}.mc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.mc-actions button,.mc-actions a{padding:10px 14px;border:1px solid #ddd7ee;border-radius:9px;background:white;text-decoration:none;color:#312266;font-weight:750;cursor:pointer}.mc-heading-status{color:#156746;font-weight:850}
+@media(max-width:700px){.mc-review{padding:15px}}
+</style>
+<script>
+/* Completion & review – retains original Map data, checks and notes. */
+(function(){
+  const num=5;
+  const doneKey='IELTS_MAPS_COMPLETION_'+String(num).padStart(2,'0')+'_V1';
+  const byId=id=>document.getElementById(id);
+  const text=(node,value)=>{node.textContent=String(value??'');return node};
+  const make=(tag,cl='',value)=>{const n=document.createElement(tag);if(cl)n.className=cl;if(value!==undefined)text(n,value);return n};
+  const wc=v=>(String(v||'').trim().match(/\S+/g)||[]).length;
+  const finished=()=>{try{return JSON.parse(localStorage.getItem(doneKey)||'null')}catch{return null}};
+  const draft=()=>String(state.answers.Final||'');
+  function mount(){
+    const root=byId('page');if(!root)return;
+    if(state.step!==5)return;
+    if(root.querySelector('#mc-finish'))return;
+    const btn=make('button','primary mc-finish-btn',finished()?'✓ Xem lại bài đã hoàn thành':'✓ Hoàn thành bài '+String(num).padStart(2,'0'));
+    btn.id='mc-finish';btn.type='button';btn.addEventListener('click',()=>complete());root.append(btn);
+    if(finished())showReview(false);
+  }
+  function complete(){
+    const essay=draft().trim();if(!essay){alert('Hãy viết hoặc ghép bài hoàn chỉnh trước khi hoàn thành.');return}
+    if(wc(essay)<150&&!confirm('Bài hiện có '+wc(essay)+' từ (dưới 150 từ). Vẫn đánh dấu hoàn thành và xem lại?'))return;
+    const saved={finishedAt:new Date().toISOString(),essay:essay};
+    localStorage.setItem(doneKey,JSON.stringify(saved));
+    showReview(true);
+  }
+  function showReview(scroll){
+    const root=byId('page');if(!root)return;
+    root.querySelector('#mc-review')?.remove();
+    const saved=finished();if(!saved)return;
+    const essay=saved.essay||draft();
+    const wrap=make('section','mc-review');wrap.id='mc-review';
+    wrap.append(make('h2','','✓ Đã hoàn thành bài '+String(num).padStart(2,'0')+' — '+LESSON.name));
+    wrap.append(make('p','mc-heading-status','Bài đã được đánh dấu hoàn thành trên trình duyệt này.'));
+    const meta=make('div','mc-meta');meta.append(make('span','mc-chip',wc(essay)+' từ'),make('span','mc-chip','Hoàn thành: '+new Date(saved.finishedAt).toLocaleString('vi-VN')));wrap.append(meta);
+    wrap.append(make('h3','','1. Bài viết của học sinh'),make('div','mc-original',essay));
+    wrap.append(make('h3','','2. Nhận xét và những điểm cần kiểm tra'));
+    const issues=typeof localReview==='function'?localReview(essay,'Final'):[];
+    if(!issues.length)wrap.append(make('p','','Chưa có nhận xét theo bộ quy tắc hiện tại.'));
+    issues.forEach((entry,i)=>{
+      const card=make('details','mc-card');if(i===0)card.open=true;
+      card.append(make('summary','','Điểm cần xem '+(i+1)));
+      card.append(make('p','',typeof entry==='string'?entry:JSON.stringify(entry)));
+      wrap.append(card);
+    });
+    if(wc(essay)<150){wrap.append(make('div','mc-warning','Bài dưới 150 từ. Đây là lưu ý về độ dài, không phải điểm IELTS.'))}
+    wrap.append(make('h3','','3. Bài mẫu của đề'));
+    wrap.append(make('div','mc-original',[LESSON.intro,LESSON.overview,LESSON.body1,LESSON.body2].filter(Boolean).join('\n\n')));
+    wrap.append(make('div','mc-warning','Phản hồi được tạo bằng quy tắc offline, chỉ là gợi ý học tập; cần kiểm tra ngữ cảnh và không được xem là điểm IELTS chính thức.'));
+    const actions=make('div','mc-actions');const edit=make('button','','← Quay lại chỉnh sửa');edit.type='button';edit.onclick=()=>{byId('mc-review')?.remove();byId('mc-finish')?.scrollIntoView({behavior:'smooth',block:'center'})};
+    const back=make('a','','← Danh sách Maps');back.href='../';actions.append(edit,back);wrap.append(actions);
+    root.append(wrap);
+    const btn=byId('mc-finish');if(btn)btn.textContent='✓ Xem lại bài đã hoàn thành';
+    if(scroll)wrap.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  const oldRender=render;
+  render=function(){oldRender.apply(this,arguments);mount()};
+  document.addEventListener('DOMContentLoaded',mount);
+  if(document.readyState!=='loading')mount();
+})();
+</script>
+</body></html>
