@@ -21,4 +21,60 @@ function formatReport(r){if(!r)return '';const issues=r.issues||[];return `<div 
 function wire(){document.querySelectorAll('[data-feature]').forEach(el=>el.onchange=()=>{const x=facts.options[+el.dataset.feature];s.analysis.selected=el.checked?[...new Set([...s.analysis.selected,x])]:s.analysis.selected.filter(v=>v!==x);s.analysis.checked=false;save();render()});if($('checkAnalysis'))$('checkAnalysis').onclick=()=>{s.analysis.checked=true;save();render()};document.querySelectorAll('[data-change]').forEach(el=>el.onchange=()=>{s.analysis.changeAnswers[el.dataset.change]=el.value;s.analysis.changesChecked=false;save();const msg=el.closest('.question')?.querySelector('.feedback.bad');if(msg)msg.remove()});if($('route'))$('route').onchange=e=>{s.analysis.route=e.target.value;save()};if($('bodyRoute'))$('bodyRoute').onchange=e=>{s.analysis.route=e.target.value;save()};if($('finishAnalysis'))$('finishAnalysis').onclick=()=>{let correct=facts.changes.every(([,v],i)=>s.analysis.changeAnswers[i]===v);if(!correct){s.analysis.changesChecked=true;save();render();return alert('Kiểm tra lại các thay đổi đã chọn. Các câu chưa trả lời sẽ không bị đánh dấu sai.')}s.completed=Math.max(s.completed,1);s.step=1;save();render()};if(s.step>0&&s.step<5){let i=s.step-1,l=lessons[i],id=['intro','overview','body1','body2'][i];document.querySelectorAll('[data-quiz]').forEach(e=>e.onchange=()=>{let a=s.answers[id]||[];a[+e.dataset.quiz]=e.value;s.answers[id]=a;delete s.feedback[id+'_quiz'];save()});if($('checkQuiz'))$('checkQuiz').onclick=()=>{const a=s.answers[id]||[],score=l.quiz.filter((q,j)=>Number(a[j])===q[2]).length;s.feedback[id+'_quiz']={checked:true,passed:score===l.quiz.length,score};save();render()};if($('write'))$('write').oninput=e=>{s.writing[id]=e.target.value;delete s.feedback[id+'_write'];save()};if($('checkWriting'))$('checkWriting').onclick=()=>{if(count(s.writing[id])<({intro:7,overview:16,body1:25,body2:25}[id]))return alert('Hãy viết đầy đủ đoạn trước khi chấm và chuyển bước.');s.feedback[id+'_write']=checkText(s.writing[id],id);$('writingFeedback').innerHTML=formatReport(s.feedback[id+'_write']);s.completed=Math.max(s.completed,s.step+1);save();renderTabsOnly()}}if(s.step===5){$('writeFull').oninput=e=>{s.writing.full=e.target.value;delete s.feedback.full;save()};$('merge').onclick=()=>{const v=[s.writing.intro,s.writing.overview,s.writing.body1,s.writing.body2].map(sentence).filter(Boolean).join('\n\n');if(s.writing.full&&!confirm('Thay bài hoàn chỉnh hiện tại bằng các đoạn đã viết?'))return;s.writing.full=v;$('writeFull').value=v;delete s.feedback.full;save()};$('checkFull').onclick=()=>{s.feedback.full=checkText(s.writing.full,'full');$('fullFeedback').innerHTML=formatReport(s.feedback.full);save()};$('export').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s.writing.full],{type:'text/plain;charset=utf-8'}));a.download='Maps_07_Nelson_Writing.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};document.querySelectorAll('[data-suggestion]').forEach(b=>b.onclick=()=>{const type=b.dataset.suggestion,t=s.writing.full;if(!t.trim())return alert('Hãy viết hoặc ghép bài của em trước.');let out='';if(type==='correct'){out=t;for(const [re,r] of commonFix)out=out.replace(re,r);out='Bản điều chỉnh theo quy tắc (không đảm bảo đã sửa mọi lỗi):\n\n'+out;}else if(type==='improve'){out='Các đề xuất để tự cải thiện:\n• Giữ nguyên dữ kiện đúng và trình tự đã chọn.\n• Tránh dùng lặp lại “there is/was”; cân nhắc be situated, lie, occupy, stand.\n• Body 2: has been replaced by, has been relocated, has been converted into, while/although.\n• Với chi tiết không chắc, kiểm tra bản đồ trước khi bổ sung.\n\nBài của em:\n'+t;}else out=Object.values(reference).join('\n\n');$('suggestions').textContent=out;$('suggestions').classList.remove('hidden')})}}
 function renderTabsOnly(){$('tabs').querySelectorAll('[data-step]').forEach(b=>b.disabled=+b.dataset.step>s.completed);$('next').disabled=s.step>=s.completed||s.step===5}
 $('prev').onclick=()=>{if(s.step>0){s.step--;save();render()}};$('next').onclick=()=>{if(s.step<s.completed&&s.step<5){s.step++;save();render()}};$('mapImg').onclick=()=>$('zoom').classList.add('show');$('zoom').onclick=()=>$('zoom').classList.remove('show');document.addEventListener('keydown',e=>{if(e.key==='Escape')$('zoom').classList.remove('show')});render();
-</script></body></html>
+</script><style id="maps-completion-style">
+.mc-finish-btn{margin:16px 0!important;width:100%;min-height:48px;background:#6540dc!important;color:#fff!important;border:0!important;font-weight:850!important}
+.mc-review{background:#fff;border:1px solid #dfe2f0;border-radius:17px;padding:20px;margin-top:20px;color:#28264e;line-height:1.7}
+.mc-review h2{color:#21164b;margin:0 0 8px}.mc-review h3{color:#21164b;margin:18px 0 8px;font-size:17px}.mc-meta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.mc-chip{background:#f1edff;border-radius:30px;padding:5px 11px;color:#4d318e;font-size:12px;font-weight:750}.mc-card{background:#fcfbff;border:1px solid #e4e0f0;border-radius:12px;padding:14px;margin:10px 0;overflow-wrap:anywhere}.mc-card summary{font-weight:800;color:#352367;cursor:pointer}.mc-card p{margin:7px 0;font-size:14px;white-space:pre-wrap}.mc-original{white-space:pre-wrap;word-break:break-word;line-height:1.85;background:#f8f9ff;border:1px solid #e3e7f2;padding:16px;border-radius:12px}.mc-warning{padding:12px 14px;background:#fff8ec;border-radius:10px;color:#7d5423;font-size:13px;margin-top:12px}.mc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.mc-actions button,.mc-actions a{padding:10px 14px;border:1px solid #ddd7ee;border-radius:9px;background:white;text-decoration:none;color:#312266;font-weight:750;cursor:pointer}.mc-heading-status{color:#156746;font-weight:850}
+@media(max-width:700px){.mc-review{padding:15px}}
+</style>
+<script>
+/* Completion & review for Maps 07 – Nelson. */
+(function(){
+  const $c=id=>document.getElementById(id),key='IELTS_MAPS_COMPLETION_07_V1';
+  const el=(tag,cls='',val)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(val!==undefined)n.textContent=val;return n};
+  const words=t=>(String(t||'').trim().match(/\S+/g)||[]).length;
+  const completed=()=>{try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null}};
+  function mount(){
+    if(s.step!==5)return;
+    const anchor=$c('mainPanel');if(!anchor||$c('mc-finish'))return;
+    const b=el('button','btn main mc-finish-btn',completed()?'✓ Xem lại bài đã hoàn thành':'✓ Hoàn thành bài 07');b.id='mc-finish';b.onclick=finish;anchor.append(b);
+    if(completed())show(false);
+  }
+  function finish(){
+    const essay=String(s.writing.full||'').trim();if(!essay){alert('Hãy hoàn thiện bài viết trước.');return}
+    if(words(essay)<150&&!confirm('Bài mới có '+words(essay)+' từ. Vẫn hoàn thành và xem lại?'))return;
+    localStorage.setItem(key,JSON.stringify({finishedAt:new Date().toISOString(),essay}));show(true);
+  }
+  function show(scroll){
+    const root=$c('mainPanel');if(!root)return;
+    $c('mc-review')?.remove();const done=completed();if(!done)return;
+    const essay=done.essay||s.writing.full;
+    const wrap=el('section','mc-review');wrap.id='mc-review';
+    wrap.append(el('h2','','✓ Đã hoàn thành bài 07 — Nelson'),el('p','mc-heading-status','Trạng thái hoàn thành đã lưu trên trình duyệt này.'));
+    const meta=el('div','mc-meta');meta.append(el('span','mc-chip',words(essay)+' từ'),el('span','mc-chip',new Date(done.finishedAt).toLocaleString('vi-VN')));wrap.append(meta);
+    wrap.append(el('h3','','1. Bài viết của học sinh'),el('div','mc-original',essay));
+    wrap.append(el('h3','','2. Các lỗi và gợi ý từ bộ kiểm tra hiện tại'));
+    let report=null;
+    try{report=typeof checkText==='function'?checkText(essay,'full'):null}catch(e){console.warn(e)}
+    const issues=report?.issues||[];
+    if(!issues.length)wrap.append(el('div','mc-card','Chưa có lỗi được phát hiện theo bộ quy tắc hiện tại; không có nghĩa bài đã hoàn toàn chính xác.'));
+    issues.forEach((issue,i)=>{
+      const card=el('details','mc-card');if(i===0)card.open=true;
+      card.append(el('summary','',String(issue.cat||'Điểm cần kiểm tra')+' · '+(i+1)));
+      card.append(el('p','',String(issue.msg||'')));
+      if(issue.fix)card.append(el('p','','Gợi ý sửa: '+String(issue.fix)));
+      wrap.append(card);
+    });
+    if(words(essay)<150)wrap.append(el('div','mc-warning','Bài dưới 150 từ, nên bổ sung nội dung phù hợp với bản đồ.'));
+    wrap.append(el('h3','','3. Bài mẫu Nelson'),el('div','mc-original',Object.values(reference).join('\n\n')));
+    wrap.append(el('div','mc-warning','Phản hồi offline theo quy tắc, không phải kết quả chấm band IELTS chính thức.'));
+    const actions=el('div','mc-actions'),edit=el('button','','← Quay lại bài viết');edit.onclick=()=>{$c('mc-review')?.remove();$c('writeFull')?.focus()};const back=el('a','','← Danh sách Maps');back.href='../';actions.append(edit,back);wrap.append(actions);root.append(wrap);
+    $c('mc-finish').textContent='✓ Xem lại bài đã hoàn thành';
+    if(scroll)wrap.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  const originalRender=render;
+  render=function(){originalRender.apply(this,arguments);mount()};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
+})();
+</script>
+</body></html>
