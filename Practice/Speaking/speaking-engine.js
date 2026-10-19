@@ -3,23 +3,34 @@
 
 (() => {
   const $ = id => document.getElementById(id);
-
   const params = new URLSearchParams(location.search);
+
   const topicId = params.get('topic') || '01';
+  const part = Number(params.get('part') || 1);
   const errorBox = $('error');
+
+  if (![1, 2, 3].includes(part)) {
+    errorBox.textContent = 'Part không hợp lệ.';
+    return;
+  }
 
   if (!/^\d{2,5}$/.test(topicId)) {
     errorBox.textContent = 'Mã topic không hợp lệ.';
     return;
   }
 
-  const KEY = 'IELTS_SPEAKING_TOPIC_' + topicId + '_V2';
+  const KEY =
+    'IELTS_SPEAKING_PART_' +
+    part +
+    '_TOPIC_' +
+    topicId +
+    '_V3';
 
   const Recognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-  let topic;
+  let topic = null;
 
   let state = {
     index: 0,
@@ -36,8 +47,12 @@
   let recognition = null;
   let listening = false;
   let recognized = '';
+  let activeQuestionIndex = -1;
   let recordQuestionIndex = -1;
-  let speakingNow = false;
+
+  let clockInterval = null;
+  let clockEndTime = 0;
+  let clockMode = '';
 
   const countWords = s =>
     (
@@ -62,15 +77,14 @@
       : intro;
   }
 
-  /* =========================================
-     TEXT TO SPEECH
-  ========================================= */
+  // ==========================================
+  // TEXT TO SPEECH
+  // ==========================================
 
   function stopSpeech() {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
-    speakingNow = false;
   }
 
   function speak(text) {
@@ -83,21 +97,75 @@
     stopSpeech();
 
     const utterance = new SpeechSynthesisUtterance(text);
-
     utterance.lang = 'en-GB';
     utterance.rate = 0.9;
 
-    utterance.onend = () => {
-      speakingNow = false;
-    };
-
-    speakingNow = true;
     window.speechSynthesis.speak(utterance);
   }
 
-  /* =========================================
-     SPEECH RECOGNITION
-  ========================================= */
+  // ==========================================
+  // PART 2 TIMER
+  // ==========================================
+
+  function formatTime(seconds) {
+    seconds = Math.max(0, Math.ceil(seconds));
+
+    return (
+      String(Math.floor(seconds / 60)).padStart(2, '0') +
+      ':' +
+      String(seconds % 60).padStart(2, '0')
+    );
+  }
+
+  function stopClock() {
+    if (clockInterval !== null) {
+      clearInterval(clockInterval);
+      clockInterval = null;
+    }
+  }
+
+  function updateClock() {
+    const remaining = Math.max(
+      0,
+      Math.ceil((clockEndTime - Date.now()) / 1000)
+    );
+
+    $('partTimer').textContent = formatTime(remaining);
+
+    if (remaining <= 0) {
+      stopClock();
+
+      if (clockMode === 'prep') {
+        $('status').textContent =
+          'Hết thời gian chuẩn bị. Em có thể bắt đầu nói.';
+      } else {
+        $('status').textContent =
+          'Đã hết thời gian nói. Hãy hoàn thành câu trả lời.';
+      }
+    }
+  }
+
+  function startClock(seconds, mode) {
+    if (part !== 2) return;
+
+    stopClock();
+
+    clockMode = mode;
+    clockEndTime = Date.now() + seconds * 1000;
+
+    updateClock();
+
+    clockInterval = setInterval(updateClock, 250);
+
+    $('status').textContent =
+      mode === 'prep'
+        ? 'Đang đếm thời gian chuẩn bị.'
+        : 'Đang đếm thời gian nói.';
+  }
+
+  // ==========================================
+  // MICROPHONE
+  // ==========================================
 
   function stopRecognition() {
     if (!recognition) return;
@@ -113,15 +181,11 @@
     } catch (e) {}
   }
 
-  /* =========================================
-     MICROPHONE / AUDIO RECORDING
-  ========================================= */
-
   function closeStream() {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-      stream = null;
-    }
+    if (!stream) return;
+
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
   }
 
   function stopRecording() {
@@ -140,16 +204,18 @@
     $('stop').disabled = true;
 
     $('status').textContent =
-      'Đã dừng. Hãy nghe lại và nhấn “Nhận gợi ý”.';
+      'Đã dừng ghi âm. Hãy nghe lại và nhận gợi ý.';
   }
 
   function releaseAudio() {
+    const player = $('recordingPlayer');
+
+    player.replaceChildren();
+
     if (audioUrl) {
       URL.revokeObjectURL(audioUrl);
       audioUrl = null;
     }
-
-    $('recordingPlayer').replaceChildren();
   }
 
   async function startRecording() {
@@ -160,7 +226,7 @@
       !window.MediaRecorder
     ) {
       $('status').textContent =
-        'Trình duyệt không hỗ trợ ghi âm hoặc chưa dùng HTTPS.';
+        'Trình duyệt không hỗ trợ ghi âm hoặc chưa sử dụng HTTPS.';
       return;
     }
 
@@ -172,29 +238,35 @@
 
     const questionIndex = state.index;
 
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: true
-      });
+    $('record').disabled = true;
 
-      // Học sinh có thể chuyển câu trong khi đang cấp quyền micro.
+    try {
+      const acquiredStream =
+        await navigator.mediaDevices.getUserMedia({
+          audio: true
+        });
+
       if (questionIndex !== state.index) {
-        closeStream();
+        acquiredStream.getTracks().forEach(t => t.stop());
+        $('record').disabled = false;
         return;
       }
 
-      recorder = new MediaRecorder(stream);
+      stream = acquiredStream;
+
+      const activeRecorder = new MediaRecorder(stream);
+      recorder = activeRecorder;
       recordQuestionIndex = questionIndex;
 
-      recorder.ondataavailable = event => {
+      activeRecorder.ondataavailable = event => {
         if (event.data.size) {
           chunks.push(event.data);
         }
       };
 
-      recorder.onstop = () => {
+      activeRecorder.onstop = () => {
         const blob = new Blob(chunks, {
-          type: recorder.mimeType || 'audio/webm'
+          type: activeRecorder.mimeType || 'audio/webm'
         });
 
         if (
@@ -213,28 +285,31 @@
         closeStream();
       };
 
-      recorder.start();
+      activeRecorder.start();
+
       listening = true;
 
       $('record').disabled = true;
       $('stop').disabled = false;
 
       $('status').textContent =
-        'Đang ghi âm — nói tiếng Anh vào microphone.';
+        'Đang ghi âm. Hãy trả lời bằng tiếng Anh.';
 
-      /* SPEECH TO TEXT */
+      // ======================================
+      // SPEECH RECOGNITION
+      // ======================================
 
       if (Recognition) {
         try {
-          recognition = new Recognition();
-
-          const active = recognition;
+          const active = new Recognition();
+          recognition = active;
 
           active.lang = 'en-US';
           active.continuous = true;
           active.interimResults = true;
 
-          const previous = state.answers[questionIndex] || '';
+          const previous =
+            state.answers[questionIndex] || '';
 
           active.onresult = event => {
             if (
@@ -249,7 +324,8 @@
               i < event.results.length;
               i++
             ) {
-              const phrase = event.results[i][0].transcript;
+              const phrase =
+                event.results[i][0].transcript;
 
               if (event.results[i].isFinal) {
                 recognized += phrase + ' ';
@@ -258,14 +334,16 @@
               }
             }
 
-            const incoming = (recognized + interim).trim();
+            const incoming =
+              (recognized + interim).trim();
 
             $('answer').value = [
               previous,
               incoming
             ].filter(Boolean).join(' ').trim();
 
-            state.answers[questionIndex] = $('answer').value;
+            state.answers[questionIndex] =
+              $('answer').value;
 
             save();
           };
@@ -282,39 +360,45 @@
 
         } catch (e) {
           $('status').textContent =
-            'Đang ghi âm; thiết bị không hỗ trợ nhận diện giọng nói.';
+            'Đang ghi âm nhưng nhận diện giọng nói không khả dụng.';
         }
       }
 
     } catch (e) {
       closeStream();
+
       listening = false;
 
       $('record').disabled = false;
       $('stop').disabled = true;
 
       $('status').textContent =
-        'Không truy cập được microphone: ' + e.message;
+        'Không truy cập được microphone: ' +
+        e.message;
     }
   }
 
-  /* =========================================
-     RENDER LESSON
-  ========================================= */
+  // ==========================================
+  // RENDER
+  // ==========================================
 
   function render() {
-    $('topicId').textContent = 'TOPIC ' + topicId;
+    $('topicId').textContent =
+      'PART ' + part + ' · TOPIC ' + topicId;
+
     $('topicTitle').textContent = topic.title;
 
     $('topicDescription').textContent =
       topic.description ||
-      'Luyện IELTS Speaking Guided Practice.';
+      'IELTS Speaking Guided Practice';
 
     $('questionNumber').textContent =
       'Question ' + (state.index + 1);
 
     $('progressText').textContent =
-      (state.index + 1) + ' / ' + topic.questions.length;
+      (state.index + 1) +
+      ' / ' +
+      topic.questions.length;
 
     $('progressBar').style.width =
       (
@@ -323,7 +407,8 @@
         100
       ) + '%';
 
-    $('question').textContent = current().question;
+    $('question').textContent =
+      current().question;
 
     $('answer').value =
       state.answers[state.index] || '';
@@ -333,34 +418,68 @@
     $('next').disabled =
       state.index === topic.questions.length - 1;
 
-    /* RENDER HISTORY */
+    // Cue card của Speaking Part 2
 
-    const historyBox = $('history');
-    historyBox.replaceChildren();
+    const cueBox = $('cueBullets');
+    const bullets = current().bullets || [];
 
-    state.history.slice(-10).reverse().forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'history-item';
+    if (part === 2 && bullets.length) {
+      cueBox.hidden = false;
+      cueBox.replaceChildren();
+
+      const heading = document.createElement('b');
+      heading.textContent = 'You should say:';
+      cueBox.append(heading);
+
+      const list = document.createElement('ul');
+
+      bullets.forEach(text => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        list.append(li);
+      });
+
+      cueBox.append(list);
+    } else {
+      cueBox.hidden = true;
+      cueBox.replaceChildren();
+    }
+
+    $('prepPanel').hidden = part !== 2;
+
+    if (part === 2 && clockInterval === null) {
+      $('partTimer').textContent =
+        formatTime(Number(topic.prepSeconds) || 60);
+    }
+
+    // History
+
+    const box = $('history');
+    box.replaceChildren();
+
+    state.history.slice(-10).reverse().forEach(h => {
+      const item = document.createElement('div');
+      item.className = 'history-item';
 
       const strong = document.createElement('b');
 
       strong.textContent =
         'Question ' +
-        item.question +
+        h.question +
         ' · ' +
-        item.date;
+        h.date;
 
       const answer = document.createElement('div');
-      answer.textContent = item.answer;
+      answer.textContent = h.answer;
 
-      div.append(strong, answer);
-      historyBox.append(div);
+      item.append(strong, answer);
+      box.append(item);
     });
   }
 
-  /* =========================================
-     SPEAKING COACH
-  ========================================= */
+  // ==========================================
+  // SPEAKING COACH
+  // ==========================================
 
   function showHint(kind, read = true) {
     const hint = current().followUps[kind];
@@ -379,9 +498,7 @@
 
     save();
 
-    if (read) {
-      speak(hint);
-    }
+    if (read) speak(hint);
   }
 
   function analyze() {
@@ -409,15 +526,8 @@
     const words = countWords(answer);
     const hinted = state.hinted[state.index] || {};
 
-    /*
-      Bộ quy tắc miễn phí:
-      - Dưới 12 từ: gợi ý lý do.
-      - Dưới 25 từ: gợi ý ví dụ.
-      - Từ 25 từ: gợi ý bổ sung chi tiết.
-
-      Đây không phải hệ thống AI chấm ngữ nghĩa
-      hay chấm band IELTS.
-    */
+    // Bộ quy tắc gợi ý miễn phí.
+    // Không phải hệ thống chấm band IELTS.
 
     let kind =
       words < 12
@@ -437,24 +547,32 @@
     save();
     render();
 
-    const message =
-      words < 12
-        ? 'Câu trả lời còn khá ngắn. Em thử giải thích lý do nhé.'
-        : words < 25
-          ? 'Câu trả lời đã có ý chính. Hãy thêm một ví dụ cụ thể.'
-          : 'Em đã phát triển câu trả lời. Thử bổ sung chi tiết nếu còn ý, hoặc chuyển câu mới.';
+    let message;
+
+    if (words < 12) {
+      message =
+        'Câu trả lời còn khá ngắn. Em thử bổ sung lý do nhé.';
+    } else if (words < 25) {
+      message =
+        'Câu trả lời đã có ý chính. Em hãy thêm một ví dụ cụ thể.';
+    } else {
+      message =
+        'Câu trả lời đã được phát triển. Em có thể bổ sung chi tiết hoặc chuyển câu mới.';
+    }
 
     showCoach(message);
+
     showHint(kind, true);
   }
 
-  /* =========================================
-     QUESTION NAVIGATION
-  ========================================= */
+  // ==========================================
+  // NAVIGATION
+  // ==========================================
 
   function go(delta) {
     if (listening) stopRecording();
 
+    stopClock();
     stopSpeech();
     releaseAudio();
 
@@ -472,6 +590,7 @@
   function resetAnswer() {
     if (listening) stopRecording();
 
+    stopClock();
     stopSpeech();
     releaseAudio();
 
@@ -482,26 +601,28 @@
     render();
 
     showCoach(
-      'Hãy thử lại: nêu ý chính, giải thích vì sao, sau đó thêm ví dụ.'
+      'Hãy thử trả lời lại bằng cách nêu ý chính, giải thích lý do rồi thêm ví dụ.'
     );
   }
 
-  /* =========================================
-     EXPORT HISTORY
-  ========================================= */
+  // ==========================================
+  // EXPORT
+  // ==========================================
 
   function exportHistory() {
     const lines = [
       'IELTS Speaking Guided Practice',
-      `Topic ${topicId}: ${topic.title}`,
+      `Part ${part} · Topic ${topicId}: ${topic.title}`,
       ''
     ];
 
-    state.history.forEach(item => {
+    state.history.forEach(h => {
       lines.push(
-        'Question ' + item.question + ': ' +
-        topic.questions[item.question - 1].question,
-        item.answer,
+        'Question ' +
+        h.question +
+        ': ' +
+        topic.questions[h.question - 1].question,
+        h.answer,
         ''
       );
     });
@@ -512,27 +633,28 @@
     );
 
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
 
-    link.href = url;
-    link.download =
-      `Speaking_${topicId}_history.txt`;
+    const a = document.createElement('a');
+    a.href = url;
 
-    link.click();
+    a.download =
+      `Speaking_Part${part}_${topicId}_history.txt`;
+
+    a.click();
 
     setTimeout(() => {
       URL.revokeObjectURL(url);
     }, 1000);
   }
 
-  /* =========================================
-     LOAD TOPIC JSON
-  ========================================= */
+  // ==========================================
+  // LOAD TOPIC
+  // ==========================================
 
   async function init() {
     try {
       const response = await fetch(
-        `./topics/${topicId}.json`,
+        `./Part${part}/topics/${topicId}.json`,
         { cache: 'no-store' }
       );
 
@@ -543,39 +665,36 @@
       topic = await response.json();
 
       if (
-        topic.id !== topicId ||
+        String(topic.id) !== topicId ||
         !Array.isArray(topic.questions) ||
         !topic.questions.length
       ) {
-        throw new Error('Dữ liệu topic không hợp lệ');
+        throw new Error('Dữ liệu topic không hợp lệ.');
       }
 
-      for (const question of topic.questions) {
+      for (const q of topic.questions) {
         if (
-          typeof question.question !== 'string' ||
-          !question.followUps ||
+          typeof q.question !== 'string' ||
+          !q.followUps ||
           ['reason', 'example', 'detail'].some(
             key =>
-              typeof question.followUps[key] !== 'string'
+              typeof q.followUps[key] !== 'string'
           )
         ) {
           throw new Error(
-            'Topic thiếu câu hỏi hoặc gợi ý'
+            'Topic thiếu câu hỏi hoặc gợi ý.'
           );
         }
       }
 
-      /* RESTORE PROGRESS */
+      // Restore progress
 
       try {
         const saved = JSON.parse(
           localStorage.getItem(KEY) || 'null'
         );
 
-        if (
-          saved &&
-          typeof saved === 'object'
-        ) {
+        if (saved && typeof saved === 'object') {
           state = {
             ...state,
             ...saved,
@@ -603,24 +722,48 @@
 
     } catch (e) {
       errorBox.textContent =
-        'Không tải được chủ đề. Kiểm tra topics/' +
+        'Không tải được chủ đề. Kiểm tra file Part' +
+        part +
+        '/topics/' +
         topicId +
-        '.json và đường dẫn của website.';
+        '.json';
 
       console.error(e);
       return;
     }
 
-    /* =========================================
-       EVENTS
-    ========================================= */
+    // ========================================
+    // EVENTS
+    // ========================================
 
     $('speechSupport').textContent = Recognition
-      ? 'Nhận diện giọng nói phụ thuộc trình duyệt; có thể sử dụng dịch vụ trực tuyến.'
-      : 'Trình duyệt chưa hỗ trợ nhận diện giọng nói. Có thể ghi âm và nhập transcript thủ công.';
+      ? 'Nhận diện giọng nói phụ thuộc trình duyệt và có thể sử dụng dịch vụ trực tuyến.'
+      : 'Trình duyệt không hỗ trợ nhận diện giọng nói. Có thể ghi âm và nhập transcript thủ công.';
+
+    $('prepStart').onclick = () => {
+      startClock(
+        Number(topic.prepSeconds) || 60,
+        'prep'
+      );
+    };
+
+    $('speakTimerStart').onclick = () => {
+      startClock(
+        Number(topic.speakSeconds) || 120,
+        'speak'
+      );
+    };
 
     $('readQuestion').onclick = () => {
-      speak(current().question);
+      const q = current();
+
+      const text = part === 2 && q.bullets?.length
+        ? q.question +
+          '. You should say: ' +
+          q.bullets.join('. ')
+        : q.question;
+
+      speak(text);
     };
 
     $('record').onclick = startRecording;
@@ -628,18 +771,21 @@
     $('analyze').onclick = analyze;
 
     $('answer').oninput = event => {
-      state.answers[state.index] = event.target.value;
+      state.answers[state.index] =
+        event.target.value;
+
       save();
     };
 
-    document.querySelectorAll('[data-hint]').forEach(button => {
-      button.onclick = () => {
-        showHint(button.dataset.hint);
-      };
-    });
+    document
+      .querySelectorAll('[data-hint]')
+      .forEach(button => {
+        button.onclick = () => {
+          showHint(button.dataset.hint);
+        };
+      });
 
     $('retry').onclick = resetAnswer;
-
     $('prev').onclick = () => go(-1);
     $('next').onclick = () => go(1);
 
@@ -648,16 +794,17 @@
     $('reset').onclick = () => {
       if (
         !confirm(
-          'Xóa toàn bộ tiến độ của Topic ' +
+          'Xóa toàn bộ tiến độ Part ' +
+          part +
+          ' · Topic ' +
           topicId +
           '?'
         )
-      ) {
-        return;
-      }
+      ) return;
 
       if (listening) stopRecording();
 
+      stopClock();
       stopSpeech();
       releaseAudio();
 
@@ -675,11 +822,13 @@
     };
   }
 
-  /* =========================================
-     CLEANUP
-  ========================================= */
+  // ==========================================
+  // CLEANUP
+  // ==========================================
 
   window.addEventListener('pagehide', () => {
+    stopClock();
+
     if (listening) stopRecording();
 
     closeStream();
@@ -688,4 +837,5 @@
   });
 
   init();
+
 })();
