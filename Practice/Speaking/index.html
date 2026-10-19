@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS Speaking · Guided Practice</title>
+<style>
+:root {
+  --purple: #281260;
+  --line: #e3e7ef;
+  --muted: #6f7890;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font: 14px/1.6 Inter, system-ui, Arial, sans-serif;
+  color: #202636;
+  background:
+    radial-gradient(circle at 8% 0%, #eeeaff, transparent 29%),
+    #f5f7fb;
+}
+a { text-decoration: none; color: inherit; }
+.top {
+  background: linear-gradient(100deg, #1c0e49, #37217e);
+  color: white;
+  padding: 18px max(16px, calc((100% - 1050px)/2));
+}
+.top a { color: white; }
+.wrap {
+  max-width: 1050px;
+  margin: auto;
+  padding: 24px 16px 60px;
+}
+.hero {
+  background: linear-gradient(110deg, #fff, #f4f0ff, #edf6ff);
+  border: 1px solid #fff;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: 30px;
+  color: var(--purple);
+  margin: 5px 0;
+}
+.hero p {
+  color: var(--muted);
+  font-size: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.card {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 18px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 105px;
+  box-shadow: 0 6px 20px #23194b0a;
+}
+.card:hover {
+  border-color: #8067d8;
+  transform: translateY(-2px);
+}
+.number {
+  background: #eee9ff;
+  color: #5135a6;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  font-weight: 950;
+}
+.copy { flex: 1; }
+.copy b {
+  display: block;
+  color: var(--purple);
+  font-size: 15px;
+}
+.copy span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.arrow {
+  color: #8067d8;
+  font-size: 20px;
+}
+@media(max-width:700px) {
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="../">← Practice</a>
+  &nbsp; 🎙️ IELTS Speaking
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <small>IELTS SPEAKING · FREE GUIDED PRACTICE</small>
+    <h1>Speaking Practice</h1>
+    <p>
+      Chọn một chủ đề, trả lời bằng microphone và
+      nhận gợi ý mở rộng ý. Không cần API key.
+    </p>
+  </section>
+
+  <h2>Danh sách chủ đề</h2>
+  <section class="grid" id="grid"></section>
+</main>
+
+<script>
+'use strict';
+
+const topics = [
+  [
+    '01',
+    'Hobbies & Free Time',
+    '4 câu hỏi về sở thích và thời gian rảnh'
+  ],
+  [
+    '02',
+    'Study & Learning',
+    '4 câu hỏi về việc học và kỹ năng'
+  ],
+  [
+    '03',
+    'Home & Hometown',
+    '4 câu hỏi về nơi ở và quê hương'
+  ]
+];
+
+document.getElementById('grid').innerHTML =
+  topics.map(([id, title, desc]) => `
+    <a class="card" href="./${id}/">
+      <span class="number">${id}</span>
+      <span class="copy">
+        <b>${title}</b>
+        <span>${desc}</span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+  `).join('');
+</script>
+</body>
+</html>
