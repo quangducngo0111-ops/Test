@@ -124,7 +124,7 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_V12';
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_V13_FULLTEST';
 const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V8','IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
 const ACTIVE_TAB_KEY='IELTS_PRACTICE_ACTIVE_TAB_V1';
 const CACHE_TTL=6*60*60*1000;
@@ -148,6 +148,7 @@ const FALLBACK={
     {title:'Listening Part 1',icon:'🎧',desc:'IELTS Listening Part 1',url:'./Listening/Part1/'},
     {title:'Listening Part 2',icon:'🎧',desc:'IELTS Listening Part 2',url:'./Listening/Part2/'},
     {title:'Listening Part 3',icon:'🎧',desc:'IELTS Listening Part 3',url:'./Listening/Part3/'},
+    {title:'Listening Full Test',icon:'🎧',desc:'4 Parts · 40 câu · Danh sách bài 01, 02...',url:'./Listening/FullTest/'},
     {title:'Intensive Listening',icon:'🎙️',desc:'Gap-fill + Dictation',url:'./Listening/IntensiveListening/'}
   ],
   speaking:[
@@ -199,7 +200,7 @@ function mergeItems(base=[],extra=[]){
     merged.set(key,next);
   });
 
-  return [...merged.values()];
+  return [...merged.values()].filter(x=>!/^\.\/Listening\/FullTest02\/?$/i.test(x.url||''));
 }
 
 function mergeCatalogWithFallback(source){
@@ -238,9 +239,10 @@ function item(path,root){
   if(parts.length!==1)return null;
   const raw=parts[0];
   if(/^README_TEMPLATE$/i.test(raw)) return null;
+  if(/^FullTest02$/i.test(raw)) return null; // Bài 02 nằm bên trong FullTest, không là mục riêng
   const labels={
     ReadingPassage1:'Reading Passage 1',ReadingPassage2:'Reading Passage 2',
-    Part1:'Listening Part 1',Part2:'Listening Part 2',Part3:'Listening Part 3',IntensiveListening:'Intensive Listening',
+    Part1:'Listening Part 1',Part2:'Listening Part 2',Part3:'Listening Part 3',FullTest:'Listening Full Test',IntensiveListening:'Intensive Listening',
     TrueFalseNotGiven:'True / False / Not Given',YesNoNotGiven:'Yes / No / Not Given',
     MatchingHeadings:'Matching Headings',MatchingInformation:'Matching Information',MatchingFeatures:'Matching Features',
     MatchingSentenceEndings:'Matching Sentence Endings',SentenceCompletion:'Sentence Completion',SummaryCompletion:'Summary Completion',
@@ -251,7 +253,7 @@ function item(path,root){
 
   const icons={
     ReadingPassage1:'📘',ReadingPassage2:'📗',
-    Part1:'🎧',Part2:'🎧',Part3:'🎧',IntensiveListening:'🎙️',
+    Part1:'🎧',Part2:'🎧',Part3:'🎧',FullTest:'🎧',IntensiveListening:'🎙️',
     TrueFalseNotGiven:'✅',YesNoNotGiven:'☑️',
     MatchingHeadings:'🧩',MatchingInformation:'🔎',MatchingFeatures:'🔗',
     MatchingSentenceEndings:'🧷',SentenceCompletion:'✏️',SummaryCompletion:'📝',
@@ -262,6 +264,7 @@ function item(path,root){
 
   const descriptions={
     Part3:'IELTS Listening Part 3',
+    FullTest:'4 Parts · 40 câu · Danh sách bài 01, 02...',
     DynamicDatasets:'Biểu đồ thể hiện sự thay đổi theo thời gian',
     Process:'6 bài luyện Process theo từng bước, có chữa bài',
      Maps:'Mô tả những thay đổi trên bản đồ theo từng bước',
