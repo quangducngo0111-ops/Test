@@ -105,7 +105,6 @@ $('tabs').innerHTML=sections.map(z=>`<button type="button" class="${z.id===s?'ac
 $('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.section=Number(b.dataset.section);save();render()});
 // Custom player is the same across all four sections (speed, seek, +/-10s and volume).
 $('audioHost').innerHTML=`<div class="player-box">
-  <div class="player-tabs">${sections.map(z=>`<button type="button" class="player-tab ${z.id===s?'active':''}" data-audio-section="${z.id}">🎧 Audio Part ${z.id}</button>`).join('')}</div>
   <div class="player-head"><span class="player-icon">🎧</span><div><b>Audio Part ${s}</b><p>Nghe lại, tua và đổi tốc độ tùy ý</p></div><span class="player-time" id="playerTime">00:00 / 00:00</span></div>
   <audio id="audio" preload="metadata" src="${info.audio}"></audio>
   <div class="player-controls">
@@ -116,7 +115,7 @@ $('audioHost').innerHTML=`<div class="player-box">
     <label>Tốc độ <select id="speedAudio" aria-label="Tốc độ phát"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2×</option></select></label>
     <label>Âm lượng <input id="volumeAudio" class="player-volume" type="range" min="0" max="1" step="0.01" value="1"></label>
   </div>
-  <div class="player-note">4 phần sử dụng 4 audio riêng của Cam 10 Listening Test 04. Khi chuyển Part, audio hiện tại sẽ tạm dừng.</div>
+  <div class="player-note">Mỗi Section có audio riêng. Khi chuyển Section, audio đang phát sẽ dừng.</div>
   <div id="audioStatus" class="player-msg" role="status"></div>
 </div>`;
 const player=$('audio');
@@ -142,7 +141,6 @@ $('forward10').onclick=()=>{if(Number.isFinite(player.duration))player.currentTi
 $('seekAudio').oninput=e=>{if(Number.isFinite(player.duration))player.currentTime=(Number(e.target.value)/1000)*player.duration};
 $('speedAudio').onchange=e=>{player.playbackRate=Number(e.target.value);localStorage.setItem('IELTS_LISTENING_AUDIO_SPEED',e.target.value)};
 $('volumeAudio').oninput=e=>{player.volume=Number(e.target.value);localStorage.setItem('IELTS_LISTENING_AUDIO_VOLUME',e.target.value)};
-$('audioHost').querySelectorAll('[data-audio-section]').forEach(b=>b.onclick=()=>{player.pause();state.section=Number(b.dataset.audioSection);save();render()});
 updatePlayer();
 const qs=questions.filter(x=>x.s===s);let out='',rendered=new Set();let group='';
 for(const q of qs){
