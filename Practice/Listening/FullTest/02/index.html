@@ -31,6 +31,13 @@
 .player-note{margin-top:11px;padding:10px;background:#f8f6ff;border-radius:9px;color:#7b82a4;font-size:11px;line-height:1.6}
 .player-msg{color:#b4485a;margin-top:8px;font-size:12px}
 @media(max-width:650px){.player-controls{gap:7px}.player-seek{order:3;flex-basis:100%}.player-controls label{flex:1}}
+
+/* Full Test 02: IELTS paper-style completion panels */
+.ielts-sheet{margin:21px 0 27px;padding:22px;border:1px solid #e0def3;border-radius:18px;background:linear-gradient(180deg,#fff 0%,#fdfcff 100%);box-shadow:0 7px 24px #28126009}
+.ielts-sheet h3{margin:0 0 7px!important;color:#21164b;font-size:19px}.sheet-instruction{color:#6b7189;font-size:13px;line-height:1.7;margin:0 0 17px}.sheet-frame{border:1px solid #dddff0;border-radius:13px;overflow:hidden;background:#fff}.sheet-title{text-align:center;font-size:19px;font-weight:850;color:#281260;background:#f6f2ff;border-bottom:1px solid #e6def9;padding:17px}.table-scroll{overflow-x:auto}.paper-table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:680px}.paper-table th{background:#f7f5ff;color:#281260;font-size:12px;font-weight:800;text-align:center;padding:14px;border-bottom:1px solid #e2e2f0}.paper-table td{vertical-align:top;border-top:1px solid #e8e9f2;border-right:1px solid #e8e9f2;padding:17px 14px;font-size:13px;line-height:1.9;overflow-wrap:break-word}.paper-table td:last-child,.paper-table th:last-child{border-right:0}.paper-table td strong{color:#281260}.paper-table .paper-row:nth-child(even){background:#fcfbff}.paper-table p{margin:0 0 9px}.paper-table p:last-child{margin-bottom:0}.paper-notes{padding:21px 25px}.paper-notes h4{color:#281260;font-size:15px;margin:18px 0 9px}.paper-notes h4:first-child{margin-top:0}.paper-notes ul{padding-left:22px;margin:5px 0 12px}.paper-notes li{margin:9px 0;line-height:1.9;font-size:14px}.paper-notes ul ul{padding-left:25px;list-style:circle}.paper-notes li::marker{color:#7759cb}.blank-inline{display:inline-block!important;vertical-align:middle;width:115px;max-width:45vw;min-width:80px;height:34px;line-height:1.2;border:1.5px solid #bfb2eb;border-bottom:2px solid #6742d0;border-radius:8px;background:#faf8ff;color:#281260;text-align:center;font-weight:700;padding:5px 7px;margin:3px 4px;outline:none;transition:.15s}.blank-inline:focus{background:white;border-color:#6540cc;box-shadow:0 0 0 3px #6540cc20}.sheet-q-num{color:#6742d0;font-weight:900;margin-right:2px}.sheet-feedback{margin:10px 0 0;font-size:12px;line-height:1.5;padding:8px 10px;border-radius:9px;background:#f8f8fd}.sheet-feedback.right{color:#147243;background:#effbf3}.sheet-feedback.incorrect{color:#aa384e;background:#fff4f5}.blank-inline.good-answer{border-color:#279363;background:#effbf3}.blank-inline.bad-answer{border-color:#c85b6b;background:#fff5f6}
+/* Unified round selection controls: pair still permits TWO answers */
+.options .option input[type=radio],.options .option input[type=checkbox]{appearance:none;-webkit-appearance:none;display:inline-grid;place-items:center;flex:none;width:18px;height:18px;border:1.8px solid #aab1c8;border-radius:50%;background:white;cursor:pointer;margin:1px 2px 0 0;transition:.15s}.options .option input[type=radio]:checked,.options .option input[type=checkbox]:checked{background:#6540cc;border-color:#6540cc}.options .option input[type=radio]:checked::after,.options .option input[type=checkbox]:checked::after{content:'';width:7px;height:7px;background:#fff;border-radius:50%}.options .option input:focus-visible{outline:3px solid #c9b9ff;outline-offset:2px}.options .option input:disabled{cursor:default}
+@media(max-width:760px){.ielts-sheet{padding:14px}.paper-notes{padding:15px}.paper-table{min-width:600px}.sheet-title{font-size:17px}.blank-inline{width:95px}}
 </style></head><body>
 <header class="top"><div class="wrap topin"><a class="back" href="../">← Listening</a><div class="brand">🎧 IELTS Listening · Full Test</div><span class="status" id="student"></span></div></header>
 <main class="wrap"><section class="hero"><div class="eyebrow">IELTS PRACTICE · FULL LISTENING</div><h1>Listening Full Test 02 · Part 1–4</h1><p>40 câu hỏi trong 4 Section. Hoàn thành bài để xem điểm, đáp án và transcript theo từng phần.</p></section>
@@ -61,6 +68,25 @@ function inlineLead(q){
  return esc(raw.slice(0,pos))+field+esc(raw.slice(pos+gap.length));
 }
 
+
+// IELTS sheet: all blanks sit inside the original table/note rather than separate cards.
+function field(n){return `<span class="sheet-q-num">${n}</span><input class="blank-inline" type="text" data-n="${n}" aria-label="Answer ${n}" value="${esc(state.answers[n]||'')}" ${state.submitted?'disabled':''} autocomplete="off" spellcheck="false"><span class="sheet-feedback-slot" data-feedback="${n}"></span>`}
+function sheetFrame(title,body){return `<div class="sheet-frame"><div class="sheet-title">${title}</div>${body}</div>`}
+function sheetOne(){return `<section class="ielts-sheet"><h3>Questions 1–10</h3><p class="sheet-instruction">Complete the table below. Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p>${sheetFrame('Restaurant Recommendations',`<div class="table-scroll"><table class="paper-table"><colgroup><col style="width:18%"><col style="width:21%"><col style="width:29%"><col style="width:32%"></colgroup><thead><tr><th>Name of restaurant</th><th>Location</th><th>Reason for recommendation</th><th>Other comments</th></tr></thead><tbody>
+<tr class="paper-row"><td><strong>The Junction</strong></td><td>Greyson Street, near the station</td><td>Good for people who are especially keen on ${field(1)}</td><td><p>Quite expensive</p><p>The ${field(2)} is a good place for a drink</p></td></tr>
+<tr class="paper-row"><td><strong>Paloma</strong></td><td>In Bow Street next to the cinema</td><td>${field(3)} food, good for sharing</td><td><p>Staff are very friendly</p><p>Need to pay £50 deposit</p><p>A limited selection of ${field(4)} food on the menu</p></td></tr>
+<tr class="paper-row"><td><strong>The ${field(5)}</strong></td><td>At the top of a ${field(6)}</td><td><p>A famous chef</p><p>All the ${field(7)} are very good</p><p>Only uses ${field(8)} ingredients</p></td><td><p>Set lunch costs £${field(9)} per person</p><p>Portions probably of ${field(10)} size</p></td></tr>
+</tbody></table></div>` )}</section>`}
+function sheetFour(){return `<section class="ielts-sheet"><h3>Questions 31–40</h3><p class="sheet-instruction">Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.</p>${sheetFrame('Reclaiming urban rivers',`<div class="paper-notes">
+<h4>Historical background</h4><ul>
+<li>Nearly all major cities were built on a river.</li><li>Rivers were traditionally used by city dwellers for transport, fishing and recreation.</li>
+<li>Industrial development and rising populations later led to:<ul><li>more sewage from houses being discharged into the river</li><li>pollution from ${field(31)} on the river bank.</li></ul></li>
+<li>In 1957, the River Thames in London was declared biologically ${field(32)}.</li></ul>
+<h4>Recent improvements</h4><ul><li>Seals and even a ${field(33)} have been seen in the River Thames.</li><li>Riverside warehouses are converted to restaurants and ${field(34)}.</li>
+<li>In Los Angeles, there are plans to:<ul><li>build a riverside ${field(35)}</li><li>display ${field(36)} projects.</li></ul></li><li>In Paris, ${field(37)} are created on the sides of the river every summer.</li></ul>
+<h4>Transport possibilities</h4><ul><li>Over 2 billion passengers already travel by ${field(38)} in cities round the world.</li><li>Changes in shopping habits mean the number of deliveries that are made is increasing.</li><li>Instead of road transport, goods could be transported by large freight barges and electric ${field(39)} or, in future, by ${field(40)}.</li></ul>
+</div>` )}</section>`}
+
 function render(){
 const s=state.section;
 const info=sections.find(x=>x.id===s);
@@ -70,7 +96,6 @@ $('progress').textContent=questions.filter(x=>state.answers[x.n]&&String(state.a
 $('tabs').innerHTML=sections.map(z=>`<button type="button" class="${z.id===s?'active':''}" data-section="${z.id}">Section ${z.id}</button>`).join('');
 $('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.section=Number(b.dataset.section);save();render()});
 $('audioHost').innerHTML=`<div class="player-box">
-  <div class="player-tabs">${sections.map(z=>`<button type="button" class="player-tab ${z.id===s?'active':''}" data-audio-section="${z.id}">🎧 Audio Part ${z.id}</button>`).join('')}</div>
   <div class="player-head"><span class="player-icon">🎧</span><div><b>Audio Part ${s}</b><p>Nghe lại, tua và đổi tốc độ tùy ý</p></div><span class="player-time" id="playerTime">00:00 / 00:00</span></div>
   <audio id="audio" preload="metadata" src="${info.audio}"></audio>
   <div class="player-controls">
@@ -81,7 +106,7 @@ $('audioHost').innerHTML=`<div class="player-box">
     <label>Tốc độ <select id="speedAudio" aria-label="Tốc độ phát"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2×</option></select></label>
     <label>Âm lượng <input id="volumeAudio" class="player-volume" type="range" min="0" max="1" step="0.01" value="1"></label>
   </div>
-  <div class="player-note">Mỗi Part sử dụng một audio riêng. Khi chuyển Part, audio đang phát sẽ dừng.</div>
+  <div class="player-note">Mỗi Section có audio riêng. Khi chuyển Section, audio đang phát sẽ dừng.</div>
   <div id="audioStatus" class="player-msg" role="status"></div>
 </div>`;
 const player=$('audio');
@@ -107,10 +132,10 @@ $('forward10').onclick=()=>{if(Number.isFinite(player.duration))player.currentTi
 $('seekAudio').oninput=e=>{if(Number.isFinite(player.duration))player.currentTime=(Number(e.target.value)/1000)*player.duration};
 $('speedAudio').onchange=e=>{player.playbackRate=Number(e.target.value);localStorage.setItem('IELTS_LISTENING_AUDIO_SPEED',e.target.value)};
 $('volumeAudio').oninput=e=>{player.volume=Number(e.target.value);localStorage.setItem('IELTS_LISTENING_AUDIO_VOLUME',e.target.value)};
-$('audioHost').querySelectorAll('[data-audio-section]').forEach(b=>b.onclick=()=>{player.pause();state.section=Number(b.dataset.audioSection);save();render()});
 updatePlayer();
-const qs=questions.filter(x=>x.s===s);let out='',rendered=new Set();let group='';
+const qs=questions.filter(x=>x.s===s);let out=s===1?sheetOne():s===4?sheetFour():'',rendered=new Set();let group='';
 for(const q of qs){
+ if((s===1||s===4)&&q.t==='blank')continue;
  if(q.g!==group){group=q.g;out+=`<h3 style="color:#21164b;margin:26px 0 8px">${esc(group)}</h3>`;if(s===3&&q.n===25)out+='<p class="hint">A company manager · B company personnel department · C personal tutor · D psychology department · E mentor · F university careers officer · G internet</p>'}
  if(q.t==='pair'){
   if(rendered.has(q.pair))continue;rendered.add(q.pair);
@@ -132,7 +157,7 @@ const rd=$('result');rd.innerHTML='';
 const details=$('transcriptDetails');details.classList.toggle('hide',!state.submitted);
 $('transcript').textContent=transcripts[s]||'';
 if(state.submitted){const total=score();rd.innerHTML=`<div class="result"><b>✓ Đã hoàn thành bài Listening</b><div class="score">${total}/40</div><p class="hint">Đã lưu kết quả trên trình duyệt. Đáp án được hiển thị ngay dưới mỗi câu hỏi, transcript theo từng Section ở bên dưới.</p><button class="softbtn" id="restart" type="button">Làm lại toàn bộ bài</button></div>`;$('restart').onclick=()=>{if(confirm('Xóa câu trả lời và kết quả của bài này để làm lại?')){state={section:1,answers:{},submitted:false,submittedAt:null};save();render()}};
- for(const q of qs){if(q.t==='pair'){const box=$('pair-'+q.pair);if(!box)continue;const n=q.pair.split('-').map(Number);const a=n.map(x=>state.answers[x]);const correct=q.ans.every(x=>a.includes(x))&&a.filter(Boolean).length===2;box.classList.add(correct?'correct':'wrong');const fb=$('fb-'+q.n);fb.innerHTML=`<b>${correct?'✓ Đúng':'✕ Cần xem lại'}</b> · Đáp án: <b>${q.ans.join(', ')}</b>`}else{const fb=$('fb-'+q.n);const correct=hasCorrect(q,state.answers[q.n]);$('q-'+q.n)?.classList.add(correct?'correct':'wrong');if(q.t==='blank')$('q-'+q.n)?.querySelector('.blank-inline')?.classList.add(correct?'good-answer':'bad-answer');fb.innerHTML=`<b>${correct?'✓ Đúng':'✕ Cần xem lại'}</b> · Đáp án: <b>${esc(q.ans.join(' / '))}</b>`}};
+ for(const q of qs){if((s===1||s===4)&&q.t==='blank'){const correct=hasCorrect(q,state.answers[q.n]);const input=$('questions').querySelector(`input.blank-inline[data-n="${q.n}"]`);input?.classList.add(correct?'good-answer':'bad-answer');const slot=$('questions').querySelector(`[data-feedback="${q.n}"]`);if(slot){slot.innerHTML=`<span class="sheet-feedback ${correct?'right':'incorrect'}">${correct?'✓':'✕'} Đáp án: ${esc(q.ans.join(' / '))}</span>`}continue}if(q.t==='pair'){const box=$('pair-'+q.pair);if(!box)continue;const n=q.pair.split('-').map(Number);const a=n.map(x=>state.answers[x]);const correct=q.ans.every(x=>a.includes(x))&&a.filter(Boolean).length===2;box.classList.add(correct?'correct':'wrong');const fb=$('fb-'+q.n);fb.innerHTML=`<b>${correct?'✓ Đúng':'✕ Cần xem lại'}</b> · Đáp án: <b>${q.ans.join(', ')}</b>`}else{const fb=$('fb-'+q.n);const correct=hasCorrect(q,state.answers[q.n]);$('q-'+q.n)?.classList.add(correct?'correct':'wrong');if(q.t==='blank')$('q-'+q.n)?.querySelector('.blank-inline')?.classList.add(correct?'good-answer':'bad-answer');if(fb)fb.innerHTML=`<b>${correct?'✓ Đúng':'✕ Cần xem lại'}</b> · Đáp án: <b>${esc(q.ans.join(' / '))}</b>`}};
 }
 }
 function score(){let total=0;const done=new Set();for(const q of questions){if(q.t==='pair'){if(done.has(q.pair))continue;done.add(q.pair);const ns=q.pair.split('-').map(Number);const given=ns.map(n=>state.answers[n]);const matched=q.ans.filter(x=>given.includes(x)).length;total+=matched;}else if(hasCorrect(q,state.answers[q.n]))total++}return total}
