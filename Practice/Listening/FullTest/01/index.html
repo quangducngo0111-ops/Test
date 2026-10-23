@@ -147,7 +147,7 @@ const updatePlayer=()=>{
  $('playPause').setAttribute('aria-label',player.paused?'Phát':'Tạm dừng');
 };
 ['loadedmetadata','timeupdate','durationchange','play','pause','ended','ratechange'].forEach(e=>player.addEventListener(e,updatePlayer));
-player.addEventListener('error',()=>{$('audioStatus').textContent='Không thể tải audio. Kiểm tra file part'+s+'.mp3 nằm cạnh index.html trên GitHub.'});
+player.addEventListener('error',()=>{if(!player.isConnected)return;const code=player.error?.code||0;$('audioStatus').textContent='Audio không tải được (mã '+code+'). Nguồn: '+new URL(info.audio,location.href).pathname;});
 $('playPause').onclick=async()=>{if(!player.paused){player.pause();return}try{await player.play()}catch(e){$('audioStatus').textContent='Trình duyệt không phát được audio: '+e.message}};
 $('back10').onclick=()=>{player.currentTime=Math.max(0,player.currentTime-10)};
 $('forward10').onclick=()=>{if(Number.isFinite(player.duration))player.currentTime=Math.min(player.duration,player.currentTime+10)};
@@ -184,6 +184,7 @@ $('transcript').innerHTML=buildTranscriptMarkup(s);
 if(state.submitted){const total=score();rd.innerHTML=`<div class="result"><b>✓ Đã hoàn thành bài Listening</b><div class="score">${total}/40</div><p class="hint">Đã lưu kết quả trên trình duyệt. Đáp án được hiển thị ngay dưới mỗi câu hỏi, transcript theo từng Section ở bên dưới.</p><button class="softbtn" id="restart" type="button">Làm lại toàn bộ bài</button></div>`;$('restart').onclick=()=>{if(confirm('Xóa câu trả lời và kết quả của bài này để làm lại?')){state={section:1,answers:{},submitted:false,submittedAt:null};save();render()}};
  for(const q of qs){if(q.t==='pair'){const box=$('pair-'+q.pair);if(!box)continue;const n=q.pair.split('-').map(Number);const a=n.map(x=>state.answers[x]);const correct=q.ans.every(x=>a.includes(x))&&a.filter(Boolean).length===2;box.classList.add(correct?'correct':'wrong');const fb=$('fb-'+q.n);fb.innerHTML=`<b>${correct?'✓ Đúng':'✕ Cần xem lại'}</b> · Đáp án: <b>${q.ans.join(', ')}</b>`}else{const fb=$('fb-'+q.n);const correct=hasCorrect(q,state.answers[q.n]);$('q-'+q.n)?.classList.add(correct?'correct':'wrong');if(q.t==='blank')$('q-'+q.n)?.querySelector('.blank-inline')?.classList.add(correct?'good-answer':'bad-answer');fb.innerHTML=`<b>${correct?'✓ Đúng':'✕ Cần xem lại'}</b> · Đáp án: <b>${esc(q.ans.join(' / '))}</b>`}};
 }
+if(state.submitted)injectReview();
 }
 
 const REVIEW_EVIDENCE=JSON.parse(document.getElementById('review-evidence-data').textContent);
@@ -266,7 +267,6 @@ function injectReview(){
  host.insertAdjacentHTML('beforeend',`<section class="review-detail-list"><h3>Giải thích · Trích transcript · Nghe lại</h3><p class="hint">Đối chiếu đáp án với đoạn lời thoại có liên quan. Có thể mở transcript đầy đủ và nghe lại Section.</p>${html}</section>`);
  host.querySelectorAll('[data-replay]').forEach(btn=>btn.onclick=()=>jumpToEvidenceAudio(Number(btn.dataset.replay)));
  host.querySelectorAll('[data-show-transcript]').forEach(btn=>btn.onclick=()=>jumpToEvidenceText(Number(btn.dataset.showTranscript)));
- injectReview();
 }
 function score(){let total=0;const done=new Set();for(const q of questions){if(q.t==='pair'){if(done.has(q.pair))continue;done.add(q.pair);const ns=q.pair.split('-').map(Number);const given=ns.map(n=>state.answers[n]);const matched=q.ans.filter(x=>given.includes(x)).length;total+=matched;}else if(hasCorrect(q,state.answers[q.n]))total++}return total}
 $('submit').onclick=()=>{const count=questions.filter(x=>state.answers[x.n]&&String(state.answers[x.n]).trim()).length;if(count===0){alert('Bạn chưa điền câu trả lời nào.');return}if(count<40&&!confirm(`Bạn mới trả lời ${count}/40 câu. Vẫn hoàn thành và chấm bài?`))return;state.submitted=true;state.submittedAt=new Date().toISOString();save();render();window.scrollTo({top:0,behavior:'smooth'})};
