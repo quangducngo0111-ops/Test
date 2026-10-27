@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="practice-title" content="Translation Practice">
-<meta name="practice-description" content="Mixed Structures · 12+ IELTS Topics · Grammar & Spelling Feedback">
-<meta name="practice-questions" content="20">
+<meta name="practice-description" content="24 câu mới · 9 tầng kiểm tra">
+<meta name="practice-questions" content="24">
 <title>Writing Task 2 · Translation Practice</title>
 <style>
 :root{
@@ -38,13 +38,15 @@ button{cursor:pointer}
 .start-overlay{position:fixed;inset:0;z-index:100;background:rgba(15,11,35,.62);display:grid;place-items:center;padding:18px}.start-card{width:min(470px,100%);background:#fff;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(18,10,53,.28)}.start-card h2{margin:7px 0;color:#21164b}.start-card p{font-size:11.5px;color:#6f7890;line-height:1.55}.field{margin:9px 0}.field label{display:block;margin-bottom:5px;font-size:10.5px;font-weight:900}.field input{width:100%;padding:10px;border:1px solid #d5d9e2;border-radius:9px}.start-card .btn{width:100%;margin-top:10px}
 @media(max-width:900px){.workspace{grid-template-columns:1fr}.sidebar{max-height:none;border-right:0;border-bottom:1px solid var(--line)}.question-list{grid-template-columns:repeat(2,1fr)}.main{max-height:none}.hero{flex-direction:column;align-items:stretch}.progress-wrap{min-width:0}}
 @media(max-width:620px){.student{display:none}.question-list{grid-template-columns:1fr}.main{padding:17px}.actions{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}.summary-grid{grid-template-columns:1fr 1fr}.vi{font-size:14px}}
+
+.tier-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.tier{display:flex;flex-direction:column;gap:4px;border:1px solid #e1e5ee;border-radius:10px;padding:10px;background:white;font-size:11px}.tier b{color:#33245e}.tier span{font-weight:800}.tier small{color:#6b7280;line-height:1.4}.tier.pass{border-color:#b9e4d0;background:#f4fcf7}.tier.pass span{color:#16845b}.tier.fail{border-color:#f0d0d2;background:#fff8f8}.tier.fail span{color:#b83345}@media(max-width:700px){.tier-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="startOverlay" class="start-overlay">
   <div class="start-card">
     <div style="font-size:10px;font-weight:950;color:#6a4db4;letter-spacing:.08em">WRITING TASK 2 · TRANSLATION PRACTICE</div>
-    <h2>Mixed Structures</h2>
+    <h2>Sentence Builder · Practice</h2>
     <p>Dịch câu Việt → Anh bằng cấu trúc phù hợp. Hệ thống kiểm tra cấu trúc mục tiêu, ý chính, hòa hợp chủ-vị, dạng động từ, mạo từ, số ít/số nhiều, đại từ, chính tả và cách trình bày câu.</p>
     <div class="field"><label>Họ và tên</label><input id="studentName" placeholder="Nguyễn Văn A"></div>
     <div class="field"><label>Lớp</label><input id="studentClass" placeholder="11A1"></div>
@@ -52,14 +54,14 @@ button{cursor:pointer}
     <div id="startError" style="font-size:10px;color:#b83345;margin-top:7px"></div>
   </div>
 </div>
-<header class="top"><div class="topin"><div class="left"><a class="back" href="../../">← Writing Task 2</a><div class="brand">✍️ Translation Practice · Mixed Structures</div></div><div id="studentInfo" class="student"></div></div></header>
+<header class="top"><div class="topin"><div class="left"><a class="back" href="../../">← Writing Task 2</a><div class="brand">✍️ Translation Practice · Sentence Builder · Practice</div></div><div id="studentInfo" class="student"></div></div></header>
 <main class="page">
   <section class="hero">
-    <div><h1>Translation Practice · Mixed Structures</h1><p>Luyện cùng một nhóm cấu trúc qua nhiều chủ đề IELTS Writing Task 2: môi trường, giáo dục, sức khỏe, công nghệ, việc làm, đô thị, gia đình, văn hóa, tội phạm và hơn thế nữa.</p></div>
-    <div class="progress-wrap"><div class="progress-row"><span>Tiến độ</span><span id="progressText">0/20 câu hoàn thành</span></div><div class="progress"><i id="progressBar"></i></div></div>
+    <div><h1>Translation Practice · Sentence Builder · Practice</h1><p>24 câu dịch hoàn toàn mới, bám sát Sentence Builder cập nhật · 9 tầng kiểm tra và góp ý.</p></div>
+    <div class="progress-wrap"><div class="progress-row"><span>Tiến độ</span><span id="progressText">0/24 câu hoàn thành</span></div><div class="progress"><i id="progressBar"></i></div></div>
   </section>
   <section class="workspace">
-    <aside class="sidebar"><div class="side-head"><b>20 câu · nhiều chủ đề IELTS</b><span>Chấp nhận nhiều cách diễn đạt tương đương. Câu hoàn thành khi đúng cấu trúc, đủ ý và không còn lỗi ngữ pháp/chính tả quan trọng.</span></div><div id="questionList" class="question-list"></div></aside>
+    <aside class="sidebar"><div class="side-head"><b>24 câu mới · 14 nhóm cấu trúc</b><span>Chấp nhận nhiều cách diễn đạt tương đương. Câu hoàn thành khi vượt qua cả 9 tầng kiểm tra tự động. Kết quả chỉ có tính chất hỗ trợ học tập.</span></div><div id="questionList" class="question-list"></div></aside>
     <section class="main">
       <div class="eyebrow"><span id="structureChip" class="chip"></span><span id="counter" class="counter"></span></div>
       <div class="prompt-box"><div class="prompt-label">Dịch sang tiếng Anh</div><div id="viPrompt" class="vi"></div><div class="structure-hint"><b>Cấu trúc mục tiêu:</b> <span id="formula"></span></div></div>
@@ -72,172 +74,620 @@ button{cursor:pointer}
   </section>
 </main>
 <script>
-const STORAGE_KEY='WT2_TRANSLATION_MIXED_STRUCTURES_V4_DIVERSE';
+const STORAGE_KEY='WT2_TRANSLATION_SENTENCE_BUILDER_V5_NEW_24';
 const LEGACY_STORAGE_KEYS=[];
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 
 const QUESTIONS=[
   {
-    id:1, topic:'Môi trường', structure:'By + V-ing', formula:'By + V-ing, S + V.',
-    vi:'Bằng cách sử dụng phương tiện giao thông công cộng thường xuyên hơn, người dân có thể giảm lượng khí thải carbon từ việc đi lại hằng ngày.',
-    reference:'By using public transport more regularly, people can reduce carbon emissions from their daily travel.',
-    patterns:[/\bby\s+[a-z]+(?:ing)\b/i],
-    concepts:[['public transport','public transportation','mass transit'],['people','commuters','residents'],['reduce carbon emissions','cut carbon emissions','lower carbon emissions','reduce greenhouse gas emissions'],['daily travel','daily commuting','commuting']],
-    structureTip:'Mở đầu bằng By + V-ing.'
+    "id": 1,
+    "structure": "By + V-ing",
+    "formula": "By + V-ing, S + V.",
+    "topic": "Môi trường",
+    "vi": "Bằng cách lắp đặt các tấm pin mặt trời trên mái nhà, các gia đình có thể giảm hóa đơn tiền điện.",
+    "reference": "By installing solar panels on rooftops, households can reduce their electricity bills.",
+    "concepts": [
+      [
+        "solar panels"
+      ],
+      [
+        "rooftops"
+      ],
+      [
+        "households"
+      ],
+      [
+        "electricity bills"
+      ]
+    ],
+    "patterns": [
+      "\\bby\\s+\\w+ing\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:2, topic:'Giáo dục', structure:'This allows + somebody + to V', formula:'S + V. This allows + somebody + to + V.',
-    vi:'Các nền tảng học trực tuyến cung cấp bài học theo yêu cầu. Điều này cho phép sinh viên học theo tốc độ của riêng mình.',
-    reference:'Online learning platforms provide lessons on demand. This allows students to study at their own pace.',
-    patterns:[/\bthis\s+allows\s+\w+\s+to\s+\w+/i],
-    concepts:[['online learning platforms','online education platforms','e-learning platforms'],['lessons on demand','on-demand lessons','flexible lessons'],['students','learners','undergraduates'],['study at their own pace','learn at their own pace','study more flexibly']],
-    structureTip:'Câu thứ hai cần có This allows + somebody + to V.'
+    "id": 2,
+    "structure": "By + V-ing",
+    "formula": "By + V-ing, S + V.",
+    "topic": "Giáo dục",
+    "vi": "Bằng cách xem lại ghi chú sau mỗi buổi học, sinh viên có thể ghi nhớ thông tin lâu hơn.",
+    "reference": "By reviewing notes after each lesson, students can remember information for longer.",
+    "concepts": [
+      [
+        "reviewing notes"
+      ],
+      [
+        "each lesson"
+      ],
+      [
+        "students"
+      ],
+      [
+        "remember information"
+      ]
+    ],
+    "patterns": [
+      "\\bby\\s+\\w+ing\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:3, topic:'Sức khỏe', structure:'thereby + V-ing', formula:'S + V, thereby + V-ing...',
-    vi:'Tập thể dục thường xuyên giúp tăng cường sức khỏe tim mạch, qua đó làm giảm nguy cơ mắc các bệnh mãn tính.',
-    reference:'Regular exercise strengthens cardiovascular health, thereby reducing the risk of chronic diseases.',
-    patterns:[/\bthereby\s+[a-z]+ing\b/i],
-    concepts:[['regular exercise','exercising regularly','physical exercise'],['cardiovascular health','heart health'],['reducing the risk','lowering the risk','decreasing the risk'],['chronic diseases','chronic illness','long-term diseases']],
-    structureTip:'Sau thereby dùng V-ing.'
+    "id": 3,
+    "structure": "This allows + somebody + to V",
+    "formula": "S + V. This allows + somebody + to V.",
+    "topic": "Đô thị",
+    "vi": "Thành phố xây dựng thêm thư viện công cộng. Điều này cho phép cư dân tiếp cận sách miễn phí.",
+    "reference": "The city builds more public libraries. This allows residents to access books for free.",
+    "concepts": [
+      [
+        "public libraries"
+      ],
+      [
+        "residents"
+      ],
+      [
+        "access books"
+      ],
+      [
+        "free"
+      ]
+    ],
+    "patterns": [
+      "\\bthis\\s+allows\\s+\\w+\\s+to\\s+\\w+"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:4, topic:'Công nghệ & việc làm', structure:'Therefore,', formula:'S + V. Therefore, S + V.',
-    vi:'Tự động hóa đang thay thế nhiều nhiệm vụ lặp đi lặp lại. Vì vậy, người lao động cần phát triển các kỹ năng số mới.',
-    reference:'Automation is replacing many repetitive tasks. Therefore, workers need to develop new digital skills.',
-    patterns:[/\btherefore,?/i],
-    concepts:[['automation'],['repetitive tasks','routine tasks'],['workers','employees'],['develop new digital skills','develop digital skills','acquire new digital skills','learn new digital skills']],
-    structureTip:'Dùng Therefore ở đầu câu nêu hệ quả.'
+    "id": 4,
+    "structure": "This enables + somebody + to V",
+    "formula": "S + V. This enables + somebody + to V.",
+    "topic": "Y tế",
+    "vi": "Bệnh viện triển khai hệ thống đặt lịch trực tuyến. Điều này giúp bệnh nhân có thể đặt lịch khám dễ dàng hơn.",
+    "reference": "The hospital introduces an online booking system. This enables patients to schedule appointments more easily.",
+    "concepts": [
+      [
+        "hospital"
+      ],
+      [
+        "online booking"
+      ],
+      [
+        "patients"
+      ],
+      [
+        "appointments"
+      ]
+    ],
+    "patterns": [
+      "\\bthis\\s+enables\\s+\\w+\\s+to\\s+\\w+"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:5, topic:'Đô thị & môi trường', structure:'Not only... but also...', formula:'S + not only + V... but also + V...',
-    vi:'Không gian xanh trong thành phố không chỉ giúp giảm ô nhiễm không khí mà còn cải thiện sức khỏe tinh thần của cư dân.',
-    reference:'Urban green spaces not only reduce air pollution but also improve residents\' mental well-being.',
-    patterns:[/\bnot\s+only\b[\s\S]*\bbut\s+also\b/i],
-    concepts:[['urban green spaces','green spaces','public parks'],['reduce air pollution','lower air pollution','cut air pollution'],['improve mental well-being','improve mental health','support mental well-being'],['residents','city residents','urban residents']],
-    structureTip:'Hai vế sau not only và but also cần song song về ngữ pháp.'
+    "id": 5,
+    "structure": "As a result,",
+    "formula": "S + V. As a result, S + V.",
+    "topic": "Giao thông",
+    "vi": "Thành phố mở thêm các tuyến tàu điện. Kết quả là, thời gian di chuyển của người dân giảm xuống.",
+    "reference": "The city opens more metro lines. As a result, residents spend less time commuting.",
+    "concepts": [
+      [
+        "city"
+      ],
+      [
+        "metro lines"
+      ],
+      [
+        "residents"
+      ],
+      [
+        "commuting"
+      ]
+    ],
+    "patterns": [
+      "\\bas\\s+a\\s+result\\s*,"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:6, topic:'Tội phạm & cộng đồng', structure:'By + V-ing', formula:'By + V-ing, S + V.',
-    vi:'Bằng cách tăng cường hoạt động cảnh sát cộng đồng, chính quyền có thể xây dựng lòng tin và ngăn ngừa tội phạm hiệu quả hơn.',
-    reference:'By strengthening community policing, authorities can build trust and prevent crime more effectively.',
-    patterns:[/\bby\s+[a-z]+(?:ing)\b/i],
-    concepts:[['community policing'],['authorities','local authorities','police'],['build trust','increase trust','strengthen trust'],['prevent crime','reduce crime','crime prevention'],['effectively','more effectively']],
-    structureTip:'Mở đầu bằng By + V-ing, sau đó là mệnh đề chính.'
+    "id": 6,
+    "structure": "Consequently,",
+    "formula": "S + V. Consequently, S + V.",
+    "topic": "Môi trường",
+    "vi": "Một số khu rừng bị chặt phá để lấy đất nông nghiệp. Do đó, nhiều loài động vật mất môi trường sống.",
+    "reference": "Some forests are cleared for farmland. Consequently, many animal species lose their habitats.",
+    "concepts": [
+      [
+        "forests"
+      ],
+      [
+        "farmland"
+      ],
+      [
+        "animal species"
+      ],
+      [
+        "habitats"
+      ]
+    ],
+    "patterns": [
+      "\\bconsequently\\s*,"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:7, topic:'Gia đình', structure:'This allows + somebody + to V', formula:'S + V. This allows + somebody + to + V.',
-    vi:'Chính sách nghỉ phép dành cho cha mẹ cho họ nhiều thời gian hơn ở nhà. Điều này cho phép họ chăm sóc con nhỏ và xây dựng mối quan hệ gia đình bền chặt hơn.',
-    reference:'Parental leave policies give parents more time at home. This allows them to care for young children and build stronger family bonds.',
-    patterns:[/\bthis\s+allows\s+\w+\s+to\s+\w+/i],
-    concepts:[['parental leave policies','parental leave'],['parents'],['more time at home','time at home'],['care for young children','look after young children','care for their children'],['build stronger family bonds','strengthen family bonds','build close family relationships']],
-    structureTip:'Sau allows phải có tân ngữ + to V.'
+    "id": 7,
+    "structure": "Therefore,",
+    "formula": "S + V. Therefore, S + V.",
+    "topic": "Công nghệ",
+    "vi": "Nhiều giao dịch ngân hàng hiện được thực hiện trực tuyến. Vì vậy, các ngân hàng cần đầu tư nhiều hơn vào an ninh mạng.",
+    "reference": "Many banking transactions now take place online. Therefore, banks need to invest more in cybersecurity.",
+    "concepts": [
+      [
+        "banking transactions"
+      ],
+      [
+        "online"
+      ],
+      [
+        "banks"
+      ],
+      [
+        "cybersecurity"
+      ]
+    ],
+    "patterns": [
+      "\\btherefore\\s*,"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:8, topic:'Du lịch & văn hóa', structure:'This enables + somebody + to V', formula:'S + V. This enables + somebody + to + V.',
-    vi:'Du lịch bền vững tạo ra thu nhập cho cộng đồng địa phương. Điều này giúp họ có khả năng bảo tồn di sản văn hóa tốt hơn.',
-    reference:'Sustainable tourism generates income for local communities. This enables them to preserve cultural heritage more effectively.',
-    patterns:[/\bthis\s+enables\s+\w+\s+to\s+\w+/i],
-    concepts:[['sustainable tourism'],['income','revenue'],['local communities','local people'],['preserve cultural heritage','protect cultural heritage','conserve cultural heritage'],['effectively','more effectively']],
-    structureTip:'Cấu trúc: This enables + somebody + to V.'
+    "id": 8,
+    "structure": "S + result(s) in / lead(s) to + N/V-ing",
+    "formula": "S + result(s) in / lead(s) to + N/V-ing.",
+    "topic": "Sức khỏe",
+    "vi": "Việc thiếu ngủ thường xuyên dẫn đến khả năng tập trung kém ở người trưởng thành.",
+    "reference": "Regular sleep deprivation leads to poor concentration among adults.",
+    "concepts": [
+      [
+        "sleep deprivation"
+      ],
+      [
+        "poor concentration"
+      ],
+      [
+        "adults"
+      ]
+    ],
+    "patterns": [
+      "\\b(?:result|results)\\s+in\\b|\\b(?:lead|leads)\\s+to\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:9, topic:'Năng lượng', structure:'As a result,', formula:'S + V. As a result, S + V.',
-    vi:'Nhiều quốc gia đang đầu tư vào năng lượng tái tạo. Kết quả là, sự phụ thuộc vào nhiên liệu hóa thạch đang giảm dần.',
-    reference:'Many countries are investing in renewable energy. As a result, their dependence on fossil fuels is gradually decreasing.',
-    patterns:[/\bas\s+a\s+result,?/i],
-    concepts:[['countries','nations'],['investing in renewable energy','investment in renewable energy'],['dependence on fossil fuels','reliance on fossil fuels'],['decreasing','declining','falling','being reduced']],
-    structureTip:'Dùng As a result ở câu nêu kết quả.'
+    "id": 9,
+    "structure": "S + result(s) in / lead(s) to + N/V-ing",
+    "formula": "S + result(s) in / lead(s) to + N/V-ing.",
+    "topic": "Kinh tế",
+    "vi": "Sự gia tăng giá nhiên liệu dẫn đến chi phí vận chuyển cao hơn.",
+    "reference": "Rising fuel prices result in higher transportation costs.",
+    "concepts": [
+      [
+        "fuel prices"
+      ],
+      [
+        "transportation costs"
+      ]
+    ],
+    "patterns": [
+      "\\b(?:result|results)\\s+in\\b|\\b(?:lead|leads)\\s+to\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:10, topic:'Công việc', structure:'Consequently,', formula:'S + V. Consequently, S + V.',
-    vi:'Làm việc từ xa làm giảm thời gian đi lại hằng ngày. Do đó, nhân viên có thể tiết kiệm cả thời gian và chi phí vận chuyển.',
-    reference:'Remote work reduces daily commuting time. Consequently, employees can save both time and transport costs.',
-    patterns:[/\bconsequently,?/i],
-    concepts:[['remote work','working remotely','working from home'],['daily commuting time','commuting time','travel time to work'],['employees','workers'],['save both time and transport costs','save time and transport costs','save time and commuting costs']],
-    structureTip:'Consequently dùng để giới thiệu hệ quả trực tiếp.'
+    "id": 10,
+    "structure": "S + V, resulting in / leading to + N/V-ing",
+    "formula": "S + V, resulting in / leading to + N/V-ing.",
+    "topic": "Du lịch",
+    "vi": "Lượng khách du lịch tăng mạnh vào mùa hè, dẫn đến tình trạng quá tải tại nhiều bãi biển.",
+    "reference": "Tourist numbers rise sharply in summer, resulting in overcrowding at many beaches.",
+    "concepts": [
+      [
+        "tourist numbers"
+      ],
+      [
+        "summer"
+      ],
+      [
+        "overcrowding"
+      ],
+      [
+        "beaches"
+      ]
+    ],
+    "patterns": [
+      ",\\s*(?:resulting\\s+in|leading\\s+to)\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:11, topic:'Y tế công', structure:'Therefore,', formula:'S + V. Therefore, S + V.',
-    vi:'Các chương trình y tế dự phòng có thể làm giảm số ca bệnh nghiêm trọng. Vì vậy, áp lực lên bệnh viện có thể được giảm bớt.',
-    reference:'Preventive healthcare programmes can reduce the number of serious illnesses. Therefore, pressure on hospitals can be reduced.',
-    patterns:[/\btherefore,?/i],
-    concepts:[['preventive healthcare programmes','preventive health programmes','preventive healthcare programs'],['reduce the number of serious illnesses','reduce serious illnesses','prevent serious illnesses'],['pressure on hospitals','hospital pressure','burden on hospitals'],['reduced','lowered','eased']],
-    structureTip:'Therefore đứng ở câu nêu hệ quả.'
+    "id": 11,
+    "structure": "S + V, resulting in / leading to + N/V-ing",
+    "formula": "S + V, resulting in / leading to + N/V-ing.",
+    "topic": "Công việc",
+    "vi": "Nhiều doanh nghiệp rút ngắn giờ làm việc, dẫn đến sự cải thiện về mức độ hài lòng của nhân viên.",
+    "reference": "Many companies shorten working hours, leading to greater employee satisfaction.",
+    "concepts": [
+      [
+        "companies"
+      ],
+      [
+        "working hours"
+      ],
+      [
+        "employee satisfaction"
+      ]
+    ],
+    "patterns": [
+      ",\\s*(?:resulting\\s+in|leading\\s+to)\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:12, topic:'Nông nghiệp', structure:'thereby + V-ing', formula:'S + V, thereby + V-ing...',
-    vi:'Nông dân áp dụng các phương pháp canh tác bền vững, qua đó duy trì độ phì nhiêu của đất trong dài hạn.',
-    reference:'Farmers adopt sustainable farming methods, thereby maintaining soil fertility in the long term.',
-    patterns:[/\bthereby\s+[a-z]+ing\b/i],
-    concepts:[['farmers'],['sustainable farming methods','sustainable agricultural methods','sustainable farming practices'],['maintaining soil fertility','preserving soil fertility','protecting soil fertility'],['long term','long-term']],
-    structureTip:'Sau thereby dùng V-ing, không dùng động từ nguyên mẫu.'
+    "id": 12,
+    "structure": "S + V, thereby + V-ing",
+    "formula": "S + V, thereby + V-ing.",
+    "topic": "Năng lượng",
+    "vi": "Các tòa nhà sử dụng hệ thống chiếu sáng tiết kiệm điện, qua đó giảm lượng năng lượng tiêu thụ.",
+    "reference": "Buildings use energy-efficient lighting systems, thereby reducing energy consumption.",
+    "concepts": [
+      [
+        "buildings"
+      ],
+      [
+        "lighting systems"
+      ],
+      [
+        "energy consumption"
+      ]
+    ],
+    "patterns": [
+      "\\bthereby\\s+\\w+ing\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:13, topic:'Trí tuệ nhân tạo', structure:'which-clause', formula:'S + V, which + V...',
-    vi:'Trí tuệ nhân tạo có thể xử lý nhiều nhiệm vụ hành chính lặp đi lặp lại, điều này cho phép nhân viên tập trung vào công việc sáng tạo hơn.',
-    reference:'Artificial intelligence can handle many repetitive administrative tasks, which allows employees to focus on more creative work.',
-    patterns:[/,\s*which\s+\w+/i],
-    concepts:[['artificial intelligence','ai'],['repetitive administrative tasks','routine administrative tasks','administrative tasks'],['employees','workers'],['focus on more creative work','focus on creative work','concentrate on creative tasks']],
-    structureTip:'Dùng dấu phẩy + which-clause để nêu kết quả.'
+    "id": 13,
+    "structure": "S + V, thereby + V-ing",
+    "formula": "S + V, thereby + V-ing.",
+    "topic": "Giáo dục",
+    "vi": "Các trường tổ chức hoạt động tình nguyện, qua đó khuyến khích tinh thần trách nhiệm xã hội của học sinh.",
+    "reference": "Schools organise volunteer activities, thereby encouraging students to develop social responsibility.",
+    "concepts": [
+      [
+        "schools"
+      ],
+      [
+        "volunteer activities"
+      ],
+      [
+        "students"
+      ],
+      [
+        "social responsibility"
+      ]
+    ],
+    "patterns": [
+      "\\bthereby\\s+\\w+ing\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:14, topic:'Giáo dục', structure:'V-ing Clause', formula:'S + V, V-ing...',
-    vi:'Học sinh thường xuyên làm việc theo nhóm, qua đó phát triển kỹ năng làm việc nhóm và giải quyết vấn đề.',
-    reference:'Students regularly work in groups, developing teamwork and problem-solving skills.',
-    patterns:[/,\s*[a-z]+ing\b/i],
-    concepts:[['students','learners'],['work in groups','work in teams','group work'],['developing teamwork','develop teamwork','teamwork skills'],['problem-solving skills','problem solving skills']],
-    structureTip:'Sau dấu phẩy dùng V-ing clause.'
+    "id": 14,
+    "structure": "S + V, which + V",
+    "formula": "S + V, which + V...",
+    "topic": "Công nghệ",
+    "vi": "Các ứng dụng bản đồ cung cấp thông tin giao thông theo thời gian thực, điều này giúp người lái xe tránh những tuyến đường đông đúc.",
+    "reference": "Navigation apps provide real-time traffic information, which helps drivers avoid busy roads.",
+    "concepts": [
+      [
+        "navigation apps"
+      ],
+      [
+        "traffic information"
+      ],
+      [
+        "drivers"
+      ],
+      [
+        "busy roads"
+      ]
+    ],
+    "patterns": [
+      ",\\s*which\\s+\\w+"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:15, topic:'Quảng cáo & trẻ em', structure:'Not only... but also...', formula:'S + not only + V... but also + V...',
-    vi:'Quảng cáo nhắm vào trẻ em không chỉ ảnh hưởng đến thói quen mua sắm mà còn khuyến khích việc tiêu thụ thực phẩm không lành mạnh.',
-    reference:'Advertising aimed at children not only influences purchasing habits but also encourages the consumption of unhealthy food.',
-    patterns:[/\bnot\s+only\b[\s\S]*\bbut\s+also\b/i],
-    concepts:[['advertising aimed at children','advertising targeting children','advertisements aimed at children'],['influences purchasing habits','affects purchasing habits','influences buying habits'],['encourages the consumption of unhealthy food','encourages unhealthy eating','promotes unhealthy food consumption']],
-    structureTip:'Hai vế sau not only / but also cần song song về ngữ pháp.'
+    "id": 15,
+    "structure": "S + V, which + V",
+    "formula": "S + V, which + V...",
+    "topic": "Văn hóa",
+    "vi": "Các bảo tàng mở cửa miễn phí vào cuối tuần, điều này thu hút nhiều gia đình đến tham quan hơn.",
+    "reference": "Museums offer free admission at weekends, which attracts more families.",
+    "concepts": [
+      [
+        "museums"
+      ],
+      [
+        "free admission"
+      ],
+      [
+        "weekends"
+      ],
+      [
+        "families"
+      ]
+    ],
+    "patterns": [
+      ",\\s*which\\s+\\w+"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:16, topic:'Giao thông đô thị', structure:'By + V-ing', formula:'By + V-ing, S + V.',
-    vi:'Bằng cách xây dựng thêm làn đường dành cho xe đạp, thành phố có thể giảm ùn tắc giao thông và cải thiện chất lượng không khí.',
-    reference:'By building more cycle lanes, cities can reduce traffic congestion and improve air quality.',
-    patterns:[/\bby\s+[a-z]+(?:ing)\b/i],
-    concepts:[['cycle lanes','bike lanes','bicycle lanes'],['cities','city authorities','urban areas'],['reduce traffic congestion','ease traffic congestion','cut congestion'],['improve air quality','increase air quality']],
-    structureTip:'By phải đi với V-ing.'
+    "id": 16,
+    "structure": "S + V, V-ing (result clause)",
+    "formula": "S + V, V-ing...",
+    "topic": "Sức khỏe",
+    "vi": "Nhiều công ty cung cấp bữa ăn lành mạnh tại nơi làm việc, nhờ đó giúp nhân viên hình thành thói quen ăn uống tốt hơn.",
+    "reference": "Many companies provide healthy meals at work, helping employees develop better eating habits.",
+    "concepts": [
+      [
+        "companies"
+      ],
+      [
+        "healthy meals"
+      ],
+      [
+        "employees"
+      ],
+      [
+        "eating habits"
+      ]
+    ],
+    "patterns": [
+      ",\\s*\\w+ing\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:17, topic:'Nhà ở', structure:'Consequently,', formula:'S + V. Consequently, S + V.',
-    vi:'Dân số đô thị tăng nhanh đang làm tăng nhu cầu về nhà ở. Do đó, giá thuê nhà trở nên kém khả năng chi trả hơn đối với nhiều gia đình.',
-    reference:'Rapid urban population growth is increasing demand for housing. Consequently, rents are becoming less affordable for many families.',
-    patterns:[/\bconsequently,?/i],
-    concepts:[['urban population growth','rapid urban population growth','population growth in cities'],['demand for housing','housing demand'],['rents','rental prices','housing rents'],['less affordable','more expensive','increasingly unaffordable'],['families','households']],
-    structureTip:'Consequently dùng để giới thiệu hệ quả trực tiếp.'
+    "id": 17,
+    "structure": "S + V, V-ing (result clause)",
+    "formula": "S + V, V-ing...",
+    "topic": "Môi trường",
+    "vi": "Chính quyền mở rộng không gian dành cho người đi bộ, từ đó làm giảm tiếng ồn giao thông ở trung tâm thành phố.",
+    "reference": "Local authorities expand pedestrian areas, reducing traffic noise in the city centre.",
+    "concepts": [
+      [
+        "authorities"
+      ],
+      [
+        "pedestrian areas"
+      ],
+      [
+        "traffic noise"
+      ],
+      [
+        "city centre"
+      ]
+    ],
+    "patterns": [
+      ",\\s*\\w+ing\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:18, topic:'Chế độ ăn & sức khỏe', structure:'As a result,', formula:'S + V. As a result, S + V.',
-    vi:'Nhiều người tiêu thụ quá nhiều thực phẩm chế biến sẵn. Kết quả là, nguy cơ béo phì và các vấn đề sức khỏe liên quan tăng lên.',
-    reference:'Many people consume too much processed food. As a result, the risk of obesity and related health problems increases.',
-    patterns:[/\bas\s+a\s+result,?/i],
-    concepts:[['people','individuals'],['processed food','processed foods','highly processed food'],['risk of obesity','obesity risk'],['related health problems','associated health problems','health problems'],['increases','rises','grows']],
-    structureTip:'Câu thứ hai mở đầu bằng As a result.'
+    "id": 18,
+    "structure": "Not only ... but also ...",
+    "formula": "S + not only + V... but also + V...",
+    "topic": "Việc làm",
+    "vi": "Chương trình thực tập không chỉ giúp sinh viên tích lũy kinh nghiệm mà còn mở rộng mạng lưới nghề nghiệp của họ.",
+    "reference": "Internship programmes not only help students gain experience but also expand their professional networks.",
+    "concepts": [
+      [
+        "internship programmes"
+      ],
+      [
+        "students"
+      ],
+      [
+        "experience"
+      ],
+      [
+        "professional networks"
+      ]
+    ],
+    "patterns": [
+      "\\bnot\\s+only\\b[\\s\\S]*\\bbut\\s+also\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:19, topic:'Di sản văn hóa', structure:'which-clause', formula:'S + V, which + V...',
-    vi:'Việc trùng tu các tòa nhà lịch sử thu hút nhiều du khách hơn, điều này tạo thêm doanh thu cho các doanh nghiệp địa phương.',
-    reference:'Restoring historic buildings attracts more visitors, which generates additional revenue for local businesses.',
-    patterns:[/,\s*which\s+\w+/i],
-    concepts:[['restoring historic buildings','restoration of historic buildings','restoring historical buildings'],['attracts more visitors','attracts tourists','brings in more visitors'],['generates additional revenue','generates revenue','creates additional income','creates revenue'],['local businesses']],
-    structureTip:'which-clause phải nối trực tiếp với ý đứng trước nó.'
+    "id": 19,
+    "structure": "Not only ... but also ...",
+    "formula": "S + not only + V... but also + V...",
+    "topic": "Gia đình",
+    "vi": "Các bữa ăn gia đình không chỉ cải thiện sự gắn kết mà còn tạo cơ hội để cha mẹ lắng nghe con cái.",
+    "reference": "Family meals not only strengthen relationships but also give parents opportunities to listen to their children.",
+    "concepts": [
+      [
+        "family meals"
+      ],
+      [
+        "relationships"
+      ],
+      [
+        "parents"
+      ],
+      [
+        "children"
+      ]
+    ],
+    "patterns": [
+      "\\bnot\\s+only\\b[\\s\\S]*\\bbut\\s+also\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   },
   {
-    id:20, topic:'Khoa học & hợp tác quốc tế', structure:'This enables + somebody + to V', formula:'S + V. This enables + somebody + to + V.',
-    vi:'Các nhà nghiên cứu ở nhiều quốc gia chia sẻ dữ liệu nhanh chóng. Điều này giúp họ phản ứng hiệu quả hơn trước các mối đe dọa sức khỏe toàn cầu.',
-    reference:'Researchers in different countries share data quickly. This enables them to respond more effectively to global health threats.',
-    patterns:[/\bthis\s+enables\s+\w+\s+to\s+\w+/i],
-    concepts:[['researchers','scientists'],['different countries','multiple countries','countries around the world'],['share data quickly','share research data quickly','exchange data quickly'],['respond more effectively','respond effectively','react more effectively'],['global health threats','global health risks','international health threats']],
-    structureTip:'This enables + somebody + to V.'
+    "id": 20,
+    "structure": "Although / Even though",
+    "formula": "Although/Even though + S + V, S + V.",
+    "topic": "Giao thông",
+    "vi": "Mặc dù xe điện có chi phí mua ban đầu cao, chúng có thể tiết kiệm tiền nhiên liệu về lâu dài.",
+    "reference": "Although electric cars have high upfront costs, they can save money on fuel in the long run.",
+    "concepts": [
+      [
+        "electric cars"
+      ],
+      [
+        "upfront costs"
+      ],
+      [
+        "fuel"
+      ],
+      [
+        "long run"
+      ]
+    ],
+    "patterns": [
+      "\\b(?:although|even\\s+though)\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
+  },
+  {
+    "id": 21,
+    "structure": "Although / Even though",
+    "formula": "Although/Even though + S + V, S + V.",
+    "topic": "Giáo dục",
+    "vi": "Mặc dù các lớp học đông có thể tiết kiệm chi phí, giáo viên thường khó quan tâm đến từng học sinh.",
+    "reference": "Even though large classes can reduce costs, teachers often struggle to give individual attention to students.",
+    "concepts": [
+      [
+        "large classes"
+      ],
+      [
+        "costs"
+      ],
+      [
+        "teachers"
+      ],
+      [
+        "individual attention"
+      ]
+    ],
+    "patterns": [
+      "\\b(?:although|even\\s+though)\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
+  },
+  {
+    "id": 22,
+    "structure": "Despite / In spite of",
+    "formula": "Despite/In spite of + N/V-ing, S + V.",
+    "topic": "Môi trường",
+    "vi": "Mặc dù thời tiết xấu, hàng trăm tình nguyện viên vẫn tham gia dọn rác trên bãi biển.",
+    "reference": "Despite the bad weather, hundreds of volunteers took part in a beach clean-up.",
+    "concepts": [
+      [
+        "bad weather"
+      ],
+      [
+        "volunteers"
+      ],
+      [
+        "beach clean-up"
+      ]
+    ],
+    "patterns": [
+      "\\b(?:despite|in\\s+spite\\s+of)\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
+  },
+  {
+    "id": 23,
+    "structure": "Despite / In spite of",
+    "formula": "Despite/In spite of + N/V-ing, S + V.",
+    "topic": "Công việc",
+    "vi": "Mặc dù phải đi làm xa mỗi ngày, cô ấy vẫn duy trì thói quen tập thể dục buổi sáng.",
+    "reference": "In spite of commuting a long distance every day, she maintains a morning exercise routine.",
+    "concepts": [
+      [
+        "commuting"
+      ],
+      [
+        "every day"
+      ],
+      [
+        "she"
+      ],
+      [
+        "exercise routine"
+      ]
+    ],
+    "patterns": [
+      "\\b(?:despite|in\\s+spite\\s+of)\\b"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
+  },
+  {
+    "id": 24,
+    "structure": "This enables + somebody + to V",
+    "formula": "S + V. This enables + somebody + to V.",
+    "topic": "Tài chính",
+    "vi": "Các ứng dụng quản lý chi tiêu phân loại giao dịch tự động. Điều này cho phép người dùng theo dõi ngân sách của mình chính xác hơn.",
+    "reference": "Budgeting apps categorise transactions automatically. This enables users to track their budgets more accurately.",
+    "concepts": [
+      [
+        "budgeting apps"
+      ],
+      [
+        "transactions"
+      ],
+      [
+        "users"
+      ],
+      [
+        "budgets"
+      ]
+    ],
+    "patterns": [
+      "\\bthis\\s+enables\\s+\\w+\\s+to\\s+\\w+"
+    ],
+    "structureTip": "Sử dụng đúng công thức mục tiêu, đồng thời giữ đủ ý chính."
   }
 ];
+
+QUESTIONS.forEach(q=>{q.patterns=q.patterns.map(p=>new RegExp(p,"i"));});
 
 let currentIndex=0;
 let state={answers:{},attempts:{},completed:[],scores:{}};
@@ -265,7 +715,7 @@ const SEMANTIC_EQUIVALENTS=[
   ['improve','develop','enhance'],
   ['native speakers','native english speakers'],
   ['new words','vocabulary','new vocabulary'],
-  ['international qualifications','global qualifications','internationally recognised qualifications','internationally recognized qualifications']
+  ['international qualifications','global qualifications','internationally recognised qualifications','internationally recognized qualifications'],
   ['public transport','public transportation','mass transit'],
   ['carbon emissions','greenhouse gas emissions','co2 emissions'],
   ['online learning platforms','online education platforms','e-learning platforms'],
@@ -586,46 +1036,28 @@ function grammarIssues(q,text){
 }
 
 function grade(q,text){
-  const structureOK=structureScore(q,text);
-  const meaning=conceptScore(q,text);
-  const grammarDetails=grammarIssues(q,text);
-  const spelling=spellingIssues(q,text);
-  const majorGrammar=grammarDetails.filter(x=>x.severity!=='minor');
-  const minorGrammar=grammarDetails.filter(x=>x.severity==='minor');
-
-  let structurePts=structureOK?30:0;
-  let meaningPts=Math.round(35*meaning.ratio);
-  let grammarPts=Math.max(0,25-majorGrammar.length*9-minorGrammar.length*3);
-  let spellingPts=Math.max(0,10-spelling.length*5);
-
-  const exact=normalize(text)===normalize(q.reference);
-  if(exact){structurePts=30;meaningPts=35;grammarPts=25;spellingPts=10}
-
-  const total=Math.min(100,structurePts+meaningPts+grammarPts+spellingPts);
-  const completed=
-    total>=85 &&
-    structureOK &&
-    meaning.ratio>=0.75 &&
-    majorGrammar.length===0 &&
-    spelling.length===0;
-
-  const issues=[];
-  if(!structureOK) issues.push(`Cấu trúc chưa đúng mục tiêu. ${q.structureTip}`);
-  if(meaning.ratio<0.75){
-    const missing=q.concepts.filter((_,i)=>!meaning.hits[i]).map(g=>g[0]);
-    issues.push('Ý còn thiếu/chưa rõ: '+missing.join(', ')+'.');
-  }
-  grammarDetails.forEach(x=>issues.push(`${x.severity==='major'?'Ngữ pháp':'Trình bày'}: ${x.message}`));
-  if(spelling.length) issues.push('Chính tả: '+spelling.join('; ')+'.');
-
-  return {
-    total,completed,structureOK,
-    meaningPct:Math.round(meaning.ratio*100),
-    grammarPts,spellingPts,issues,
-    majorGrammarCount:majorGrammar.length,
-    minorGrammarCount:minorGrammar.length,
-    spellingCount:spelling.length
-  };
+ const s=String(text||'').trim(), n=normalize(s);
+ const structureOK=structureScore(q,s), meaning=conceptScore(q,s);
+ const allGrammar=grammarIssues(q,s), spelling=spellingIssues(q,s);
+ const tests=[
+  {name:'1. Cấu trúc mục tiêu',ok:structureOK,reason:structureOK?'Đúng cấu trúc yêu cầu.':q.structureTip},
+  {name:'2. Nội dung và đủ ý',ok:meaning.ratio>=.75,reason:meaning.ratio>=.75?'Đã nhận diện được phần lớn ý chính.':'Cần kiểm tra ý: '+q.concepts.filter((_,i)=>!meaning.hits[i]).map(x=>x[0]).join(', ')},
+  {name:'3. Hòa hợp chủ–vị',ok:!allGrammar.some(x=>/sva|this-allows|this-enables/.test(x.code)),reason:'Kiểm tra chia động từ theo chủ ngữ.'},
+  {name:'4. Dạng động từ',ok:!allGrammar.some(x=>/modal-base|to-base|allows-to|enables-to|parallelism/.test(x.code)),reason:'Kiểm tra V-ing, to V và cấu trúc song song.'},
+  {name:'5. Mạo từ',ok:!/(?:\ba\s+[aeiou]\w+|\ban\s+[^aeiou\W]\w+)/i.test(s),reason:'Rà soát a / an / the theo danh từ.'},
+  {name:'6. Số ít / số nhiều',ok:!allGrammar.some(x=>/plural/.test(x.code)),reason:'Kiểm tra danh từ đếm được và lượng từ.'},
+  {name:'7. Đại từ / tân ngữ',ok:!allGrammar.some(x=>/pronoun/.test(x.code)),reason:'Kiểm tra đại từ chủ ngữ và tân ngữ.'},
+  {name:'8. Chính tả',ok:spelling.length===0,reason:spelling.length?'Từ cần kiểm tra: '+spelling.join('; '):'Không phát hiện lỗi từ điển thông dụng.'},
+  {name:'9. Viết hoa / dấu câu',ok:!allGrammar.some(x=>['capital','punct-end','spaces','linker-punctuation'].includes(x.code)),reason:'Viết hoa đầu câu, dấu câu và khoảng trắng.'}
+ ];
+ // A rule-based checker: flag likely problems, not a definitive language examiner.
+ const passed=tests.filter(x=>x.ok).length;
+ const total=Math.round(passed/9*100);
+ const completed=structureOK && meaning.ratio>=.75 && tests.every(x=>x.ok);
+ const issues=[];
+ tests.filter(x=>!x.ok).forEach(x=>issues.push(x.name+': '+x.reason));
+ allGrammar.filter(x=>!['capital','punct-end','spaces'].includes(x.code)).forEach(x=>{if(!issues.some(y=>y.includes(x.message)))issues.push('Lưu ý ngữ pháp: '+x.message)});
+ return {total,completed,structureOK,meaningPct:Math.round(meaning.ratio*100),grammarPts:tests.slice(2,7).filter(x=>x.ok).length*5,spellingPts:tests[7].ok?10:0,issues,tests,majorGrammarCount:allGrammar.filter(x=>x.severity!=='minor').length,minorGrammarCount:allGrammar.filter(x=>x.severity==='minor').length,spellingCount:spelling.length};
 }
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function regradeSavedAnswers(){
@@ -669,13 +1101,13 @@ function go(i){state.answers[q().id]=answer.value;save();currentIndex=Math.max(0
 function mainScrollTop(){document.querySelector('.main')?.scrollTo({top:0,behavior:'smooth'})}
 
 function renderFeedback(result,afterCheck=true){
-  const x=q(); const a=attemptsFor(x.id); const cls=result.completed?'good':result.total>=70?'warn':'bad';
-  let detail=result.issues.length?`<div class="detail ${result.completed?'good':cls==='bad'?'bad':''}"><b>${result.completed?'Câu đạt yêu cầu.':'Cần chỉnh:'}</b>${result.issues.length?`<ul>${result.issues.map(v=>`<li>${v}</li>`).join('')}</ul>`:''}</div>`:`<div class="detail good"><b>Câu đạt yêu cầu.</b> Cấu trúc, ý chính và hình thức câu đều ổn.</div>`;
-  const showRef=!result.completed && a>=2;
-  feedback.innerHTML=`<div class="scorebar"><div><div class="scorebig">${result.total}/100</div><div class="status ${cls}">${result.completed?'✓ Hoàn thành':result.total>=70?'Gần đạt — sửa thêm một chút':'Cần chỉnh lại'}</div></div><div style="font-size:10px;color:#7c8392;text-align:right">Mục tiêu hoàn thành<br><b style="color:#2a3040">≥85 + đúng cấu trúc + ý chính ≥75% + không lỗi ngữ pháp nghiêm trọng/chính tả</b></div></div><div class="metric-grid"><div class="metric"><span>Cấu trúc</span><b>${result.structureOK?'Đúng':'Chưa đúng'}</b></div><div class="metric"><span>Ý chính</span><b>${result.meaningPct}%</b></div><div class="metric"><span>Ngữ pháp</span><b>${result.grammarPts}/25</b></div><div class="metric"><span>Chính tả</span><b>${result.spellingPts}/10</b></div></div>${detail}${showRef?`<div class="reference"><b>Gợi ý tham khảo sau 2 lần chưa đạt:</b><br>${x.reference}</div>`:''}`;
-  feedback.className='feedback show';
+ const x=q(), a=attemptsFor(x.id), cls=result.completed?'good':result.total>=70?'warn':'bad';
+ const safe=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const tiers=(result.tests||[]).map(t=>`<div class="tier ${t.ok?'pass':'fail'}"><b>${safe(t.name)}</b><span>${t.ok?'✓ Đạt':'! Cần xem lại'}</span><small>${safe(t.reason)}</small></div>`).join('');
+ const details=result.issues.length?`<div class="detail ${cls}"><b>Gợi ý sửa:</b><ul>${result.issues.map(x=>`<li>${safe(x)}</li>`).join('')}</ul></div>`:`<div class="detail good"><b>Đã vượt qua các phép kiểm tra tự động.</b></div>`;
+ feedback.innerHTML=`<div class="scorebar"><div><div class="scorebig">${result.total}/100</div><div class="status ${cls}">${result.completed?'✓ Đạt 9/9 tầng':'Cần xem các tầng chưa đạt'}</div></div><div class="counter">Bộ kiểm tra dựa trên quy tắc; học sinh vẫn cần giáo viên đánh giá nghĩa tự nhiên.</div></div><div class="tier-grid">${tiers}</div>${details}${!result.completed&&a>=2?`<div class="reference"><b>Câu tham khảo (sau 2 lần kiểm tra):</b><br>${safe(x.reference)}</div>`:''}`;
+ feedback.className='feedback show';
 }
-
 function checkCurrent(){
   const x=q(); const text=answer.value.trim();
   if(!text){feedback.innerHTML='<div class="detail bad"><b>Chưa có câu trả lời.</b> Hãy viết câu tiếng Anh trước khi kiểm tra.</div>';feedback.className='feedback show';return}
@@ -684,11 +1116,11 @@ function checkCurrent(){
 function renderSummary(){
   const vals=QUESTIONS.map(x=>state.scores[x.id]).filter(Boolean); if(!vals.length)return;
   const avg=key=>Math.round(vals.reduce((s,v)=>s+(v[key]||0),0)/vals.length);
-  summary.innerHTML=`<h3>Hoàn thành bộ Mixed Structures 🎉</h3><div class="summary-grid"><div class="summary-cell"><span>Hoàn thành</span><b>${completedSet().size}/${QUESTIONS.length}</b></div><div class="summary-cell"><span>Điểm TB</span><b>${avg('total')}</b></div><div class="summary-cell"><span>Ý chính</span><b>${avg('meaningPct')}%</b></div><div class="summary-cell"><span>Ngữ pháp</span><b>${avg('grammarPts')}/25</b></div><div class="summary-cell"><span>Chính tả</span><b>${avg('spellingPts')}/10</b></div></div>`;summary.classList.remove('hidden')
+  summary.innerHTML=`<h3>Hoàn thành bộ Sentence Builder · Practice 🎉</h3><div class="summary-grid"><div class="summary-cell"><span>Hoàn thành</span><b>${completedSet().size}/${QUESTIONS.length}</b></div><div class="summary-cell"><span>Điểm TB</span><b>${avg('total')}</b></div><div class="summary-cell"><span>Ý chính</span><b>${avg('meaningPct')}%</b></div><div class="summary-cell"><span>Ngữ pháp</span><b>${avg('grammarPts')}/25</b></div><div class="summary-cell"><span>Chính tả</span><b>${avg('spellingPts')}/10</b></div></div>`;summary.classList.remove('hidden')
 }
 function startPractice(){const name=studentName.value.trim(),cls=studentClass.value.trim();if(!name||!cls){startError.textContent='Vui lòng nhập đầy đủ họ tên và lớp.';return}localStorage.setItem(STUDENT_KEY,JSON.stringify({name,className:cls}));studentInfo.textContent=`${name} · ${cls}`;startOverlay.classList.add('hidden');renderQuestion()}
 function restoreStudent(){try{const s=JSON.parse(localStorage.getItem(STUDENT_KEY)||'null');if(s?.name)studentName.value=s.name;if(s?.className)studentClass.value=s.className;if(s?.name&&s?.className)studentInfo.textContent=`${s.name} · ${s.className}`}catch(e){}}
-answer.addEventListener('input',()=>{state.answers[q().id]=answer.value;save();renderList()});checkBtn.addEventListener('click',checkCurrent);prevBtn.addEventListener('click',()=>go(currentIndex-1));nextBtn.addEventListener('click',()=>go(currentIndex+1));
+answer.addEventListener('input',()=>{const id=q().id;state.answers[id]=answer.value;delete state.scores[id];state.completed=state.completed.filter(v=>Number(v)!==id);save();renderList();renderProgress();feedback.className='feedback';});checkBtn.addEventListener('click',checkCurrent);prevBtn.addEventListener('click',()=>go(currentIndex-1));nextBtn.addEventListener('click',()=>go(currentIndex+1));
 load();restoreStudent();renderQuestion();
 </script>
 </body>
