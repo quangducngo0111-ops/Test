@@ -695,107 +695,122 @@ let state={answers:{},attempts:{},completed:[],scores:{}};
 function normalize(s){return String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9'\s.,-]/g,' ').replace(/\s+/g,' ').trim()}
 function tokenize(s){return normalize(s).replace(/[.,]/g,' ').split(/\s+/).filter(Boolean)}
 function editDistance(a,b){a=String(a);b=String(b);const m=a.length,n=b.length,dp=Array.from({length:m+1},()=>Array(n+1).fill(0));for(let i=0;i<=m;i++)dp[i][0]=i;for(let j=0;j<=n;j++)dp[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return dp[m][n]}
+/* Context-aware synonym bank: match complete phrases, not arbitrary substrings.
+   These are scoped to the 24 questions, not a universal English thesaurus. */
 const SEMANTIC_EQUIVALENTS=[
-  ['students','student','learners','learner','undergraduates','undergraduate','university students','college students'],
-  ['employees','employee','workers','worker','staff','staff members'],
-  ['people','persons','individuals'],
-  ['international workplaces','international workplace','international work environments','international work environment','international environments','international environment','global workplaces','global workplace','global work environments','global work environment','international working environments','international working environment'],
-  ['career prospects','career opportunities','employment prospects','job prospects','career chances'],
-  ['employment opportunities','job opportunities','career opportunities','work opportunities'],
-  ['authentic materials','authentic resources','real-world materials','real world materials','real-life materials','real life materials'],
-  ['language ability','language skills','language proficiency','english proficiency','linguistic ability'],
-  ['build international relationships','develop international relationships','establish international relationships','form international relationships','build global relationships','develop global relationships','build international connections','develop international connections'],
-  ['communicate','communication','interact','interaction'],
-  ['different cultures','various cultures','other cultures','diverse cultures','a range of cultures'],
-  ['cultural awareness','culture awareness','awareness of other cultures','awareness of different cultures'],
-  ['speaking skills','speaking ability','oral communication skills'],
-  ['reading skills','reading ability'],
-  ['knowledge','understanding'],
-  ['broaden','expand','widen'],
-  ['improve','develop','enhance'],
-  ['native speakers','native english speakers'],
-  ['new words','vocabulary','new vocabulary'],
-  ['international qualifications','global qualifications','internationally recognised qualifications','internationally recognized qualifications'],
-  ['public transport','public transportation','mass transit'],
-  ['carbon emissions','greenhouse gas emissions','co2 emissions'],
-  ['online learning platforms','online education platforms','e-learning platforms'],
-  ['study at their own pace','learn at their own pace','study more flexibly'],
-  ['regular exercise','physical exercise','exercising regularly'],
-  ['cardiovascular health','heart health'],
-  ['chronic diseases','chronic illness','long-term diseases'],
-  ['repetitive tasks','routine tasks'],
-  ['digital skills','technology skills','technical skills'],
-  ['urban green spaces','green spaces','public parks'],
-  ['mental well-being','mental wellbeing','mental health'],
-  ['community policing','community-based policing'],
-  ['build trust','increase trust','strengthen trust'],
-  ['prevent crime','reduce crime','crime prevention'],
-  ['parental leave policies','parental leave'],
-  ['family bonds','family relationships','close family relationships'],
-  ['sustainable tourism','responsible tourism'],
-  ['cultural heritage','cultural sites','heritage'],
-  ['renewable energy','clean energy','renewable power'],
-  ['fossil fuels','coal oil and gas','non-renewable fuels'],
-  ['remote work','working remotely','working from home'],
-  ['commuting time','travel time to work','daily commuting time'],
-  ['preventive healthcare programmes','preventive health programmes','preventive healthcare programs'],
-  ['pressure on hospitals','burden on hospitals','hospital pressure'],
-  ['sustainable farming methods','sustainable farming practices','sustainable agricultural methods'],
-  ['soil fertility','soil quality'],
-  ['artificial intelligence','ai'],
-  ['administrative tasks','repetitive administrative tasks','routine administrative tasks'],
-  ['creative work','creative tasks'],
-  ['teamwork skills','collaboration skills'],
-  ['problem-solving skills','problem solving skills'],
-  ['advertising aimed at children','advertising targeting children','advertisements aimed at children'],
-  ['purchasing habits','buying habits','consumer habits'],
-  ['unhealthy food','unhealthy foods','junk food'],
-  ['cycle lanes','bike lanes','bicycle lanes'],
-  ['traffic congestion','traffic jams','congestion'],
-  ['air quality','quality of the air'],
-  ['demand for housing','housing demand'],
-  ['rents','rental prices','housing rents'],
-  ['less affordable','more expensive','increasingly unaffordable'],
-  ['processed food','processed foods','highly processed food'],
-  ['risk of obesity','obesity risk'],
-  ['historic buildings','historical buildings','heritage buildings'],
-  ['local businesses','local firms','local companies'],
-  ['researchers','scientists'],
-  ['global health threats','global health risks','international health threats'],
+ ['city','the city','city authorities','municipal government','local government','local authorities'],
+ ['residents','local residents','citizens','local people','city dwellers','the public','members of the public','people living in the city','inhabitants'],
+ ['public libraries','public library','community libraries','municipal libraries','libraries open to the public','publicly accessible libraries'],
+ ['access books','access free books','get access to books','borrow books','read books','obtain books','get books','have access to books','access reading materials'],
+ ['free','for free','free of charge','at no cost','without paying','without charge','free books','free reading materials'],
+ ['solar panels','photovoltaic panels','solar power panels','solar energy panels','solar cells'],
+ ['rooftops','roofs','house roofs','on their roofs','on the roof','on rooftops'],
+ ['households','families','homes','homeowners'],
+ ['electricity bills','power bills','energy bills','electricity costs','electricity expenses'],
+ ['reviewing notes','going over notes','revising notes','re-reading notes','looking over notes'],
+ ['each lesson','every lesson','each class','every class','after lessons','after class'],
+ ['students','learners','pupils','schoolchildren','university students','college students'],
+ ['remember information','retain information','memorise information','memorize information','remember what they learn','retain knowledge'],
+ ['hospital','the hospital','medical centre','medical center','healthcare facility'],
+ ['online booking','online booking system','digital appointment system','web-based appointment system','online appointment scheduling'],
+ ['patients','people receiving medical care','hospital patients'],
+ ['appointments','medical appointments','doctor appointments','consultations','hospital visits'],
+ ['metro lines','subway lines','underground routes','rail transit lines','metro routes','subway routes'],
+ ['commuting','traveling to work','travelling to work','daily travel','commute','commuting time','travel time','journey time'],
+ ['forests','woodlands','forest areas'],['farmland','agricultural land','farming land','land for agriculture'],
+ ['animal species','wildlife species','animals','wildlife'],['habitats','natural habitats','homes','living environments'],
+ ['banking transactions','bank transactions','financial transactions','banking operations'],
+ ['banks','financial institutions','banking institutions'],['cybersecurity','cyber security','online security','digital security','information security'],
+ ['sleep deprivation','lack of sleep','insufficient sleep','not getting enough sleep','poor sleep'],
+ ['poor concentration','reduced concentration','difficulty concentrating','lack of focus','impaired concentration'],
+ ['adults','grown-ups','adult people'],['fuel prices','petrol prices','gasoline prices','fuel costs'],
+ ['transportation costs','transport costs','shipping costs','delivery costs','transport expenses'],
+ ['tourist numbers','number of tourists','number of visitors','tourism numbers','visitor numbers'],
+ ['summer','the summer','summer months','summertime'],['overcrowding','crowding','congestion','being overcrowded'],
+ ['beaches','coastal beaches','beach areas','seaside destinations'],
+ ['companies','firms','businesses','enterprises','employers'],
+ ['working hours','work hours','hours at work','work schedules'],
+ ['employee satisfaction','job satisfaction','staff satisfaction','worker satisfaction'],
+ ['buildings','properties','office buildings','commercial buildings'],
+ ['energy-efficient lighting','energy saving lighting','low-energy lighting','led lighting','energy-efficient lighting systems'],
+ ['energy consumption','energy use','power consumption','electricity consumption','energy usage'],
+ ['schools','educational institutions','school institutions'],
+ ['volunteer activities','volunteering activities','volunteer programmes','community service activities'],
+ ['social responsibility','civic responsibility','sense of social responsibility','social awareness'],
+ ['navigation apps','map apps','mapping applications','gps apps','navigation applications'],
+ ['real-time traffic information','live traffic updates','real-time road information','live traffic data'],
+ ['drivers','motorists','car drivers','vehicle drivers'],['busy roads','congested roads','crowded roads','traffic-heavy routes'],
+ ['museums','museum venues'],['free admission','free entry','no admission fee','free access'],
+ ['weekends','the weekend','on weekends','at weekends'],['families','households','parents and children'],
+ ['healthy meals','nutritious meals','healthy food','nutritious food'],
+ ['eating habits','dietary habits','food habits','dietary patterns'],
+ ['local authorities','the authorities','municipal authorities','city government','city council'],
+ ['pedestrian areas','pedestrian zones','walking areas','pedestrian spaces','car-free areas'],
+ ['traffic noise','road noise','noise from traffic','vehicle noise'],
+ ['city centre','city center','downtown','central urban area'],
+ ['internship programmes','internship programs','work placement programmes','internships','internship schemes'],
+ ['gain experience','obtain experience','acquire experience','build experience','get practical experience'],
+ ['professional networks','career networks','professional connections','work-related networks','industry contacts'],
+ ['family meals','meals with family','shared family meals','family dinners'],
+ ['relationships','family relationships','family bonds','family ties','emotional bonds'],
+ ['parents','mothers and fathers','caregivers'],['children','kids','their children','sons and daughters'],
+ ['electric cars','electric vehicles','evs','battery electric vehicles'],
+ ['upfront costs','initial costs','purchase costs','initial purchase price','upfront purchase costs'],
+ ['fuel','petrol','gasoline','fuel expenses','fuel costs'],['long run','long term','over time'],
+ ['large classes','large class sizes','overcrowded classrooms','big classes'],
+ ['teachers','educators','instructors'],['individual attention','personal attention','one-on-one attention','personalised attention'],
+ ['bad weather','poor weather','adverse weather','unfavourable weather','unfavorable weather'],
+ ['volunteers','volunteer workers','community volunteers'],
+ ['beach clean-up','beach cleanup','beach cleaning event','coastal clean-up'],
+ ['commuting a long distance','travelling far to work','traveling far to work','long daily commute','commuting far'],
+ ['exercise routine','workout routine','fitness routine','regular exercise','morning workout'],
+ ['budgeting apps','budget apps','expense tracking apps','personal finance apps','money management applications'],
+ ['transactions','financial transactions','expenses','payments'],
+ ['users','app users','people using the apps','consumers'],
+ ['budgets','personal budgets','spending budgets','finances','expenses'],
+ ['accurately','more accurately','precisely','more precisely','with greater accuracy']
 ];
-
-function equivalentVariants(variants){
-  const out=new Set(variants.map(v=>normalize(v)));
-  for(const family of SEMANTIC_EQUIVALENTS){
-    const normFamily=family.map(normalize);
-    if(normFamily.some(x=>out.has(x))){
-      normFamily.forEach(x=>out.add(x));
-    }
-  }
-  return [...out];
+const QUESTION_EXTRA={
+ 3:[['public libraries','libraries for the public'],['residents','the general public'],['access books','get free books']],
+ 4:[['online booking','online scheduling platform'],['appointments','medical visits']],
+ 5:[['metro lines','public rail lines']],
+ 24:[['budgeting apps','expense management software']]
+};
+function canonical(s){return normalize(s).replace(/\b(?:the|a|an)\b/g,' ').replace(/\s+/g,' ').trim()}
+function equivalentVariants(variants,qid){
+ const out=new Set(variants.map(normalize));
+ const families=[...SEMANTIC_EQUIVALENTS,...(QUESTION_EXTRA[qid]||[])];
+ // Only one-hop expansion. Avoid transitive links such as family -> households -> all people.
+ for(const family of families){
+  if(family.some(v=>variants.some(seed=>canonical(v)===canonical(seed)))) family.forEach(v=>out.add(normalize(v)));
+ }
+ return [...out];
 }
-
-function containsAny(text,variants){
-  const t=normalize(text);
-  return equivalentVariants(variants).some(v=>t.includes(v));
+function hasPhrase(text,phrase){
+ const t=' '+normalize(text).replace(/[.,-]/g,' ')+' ';
+ const p=normalize(phrase).replace(/[.,-]/g,' ').trim();
+ if(!p)return false;
+ return t.includes(' '+p+' ');
 }
-
+function containsAny(text,variants,qid){return equivalentVariants(variants,qid).some(v=>hasPhrase(text,v))}
 function conceptScore(q,text){
-  const hits=q.concepts.map(group=>containsAny(text,group));
-  return {hits,ratio:hits.filter(Boolean).length/q.concepts.length};
+ const hits=q.concepts.map(group=>containsAny(text,group,q.id));
+ return {hits,ratio:hits.filter(Boolean).length/q.concepts.length};
 }
-
 function structureScore(q,text){
-  const raw=String(text||'');
-  const basic=q.patterns.some(re=>re.test(raw));
-  if(!basic) return false;
-
-  /* allows/enables cần một tân ngữ hợp lệ, không phải subject pronoun như they/he/we. */
-  if(['This allows + somebody + to V','This enables + somebody + to V'].includes(q.structure)){
-    if(/\b(?:allows|enables)\s+(?:i|he|she|we|they)\b/i.test(raw)) return false;
-  }
-
-  return true;
+ const raw=String(text||'');
+ if(['This allows + somebody + to V','This enables + somebody + to V'].includes(q.structure)){
+   // Allow an arbitrary valid multiword noun phrase, pronoun, or "the public" as object.
+   const m=raw.match(/\bthis\s+(allows|enables)\s+([^.!?;,]+?)\s+to\s+([a-z]+)\b/i);
+   if(!m)return false;
+   if(!(/^(allows|enables)$/i.test(m[1])))return false;
+   const obj=m[2].trim().toLowerCase();
+   if(/^(?:i|he|she|we|they|my|his|our|their|her)$/.test(obj))return false;
+   if(obj.split(/\s+/).length>7)return false;
+   if(/^(?:helps|allows|enables|improves|studies)$/.test(m[3].toLowerCase()))return false;
+   return true;
+ }
+ return q.patterns.some(re=>re.test(raw));
 }
 
 const COMMON=new Set(`a an the this that these those i you he she it we they them their his her our your can could may might will would should must is are was were be been being have has had do does did to of in on at for from with by as and or but not only also more most many much some any into than then therefore consequently result which while people person students student learners learner employees employee workers worker english language languages skills skill materials material resources resource books book words word world work workplace workplaces environment environments cultures culture cultural career careers opportunities opportunity prospects prospect communication communicate communicating speaking reading learning learn studying study helps help improve improves improving improved develop develops developing developed use uses used using access accesses accessed accessing become becomes became becoming around regularly effectively naturally international authentic different good new wide range native speakers speaker qualification qualifications employment job jobs relationship relationships fluency confidence awareness foreign foreigners ability abilities benefits advantages provides provide providing increases increase increasing broaden broadens broadening expand expands expanding enhance enhances enhancing obtain obtains obtaining understand understands understanding build builds building allow allows allowing enable enables enabling read reads reading talk talks talking practise practises practised practising practice practices practiced practicing exposed exposure used widely clear clearer deepen deeper public transportation mass transit carbon emissions greenhouse co2 commuters residents online education e-learning platforms on-demand flexible pace regular exercise physical cardiovascular heart chronic illness diseases automation repetitive routine digital urban green spaces pollution mental well-being wellbeing community policing authorities crime parental leave parents newborn children bonds sustainable tourism income revenue local communities preserve protect conserve heritage renewable energy fossil fuels dependence reliance remote commuting transport costs preventive healthcare programmes programs serious illnesses pressure hospitals burden farmers farming agricultural methods practices soil fertility artificial intelligence ai administrative creative teamwork collaboration problem-solving advertising aimed targeting advertisements purchasing buying consumer unhealthy consumption cycle bike bicycle lanes traffic congestion jams air quality housing demand rents rental prices affordable unaffordable families households processed obesity related associated restoring historic historical buildings attracts visitors generates businesses researchers scientists data threats risks government governments city cities country countries nations public health sustainable strengthen strengthening maintaining maintain generates generate reducing reduce lowered lower declining decline falling response respond effectively global`.split(/\s+/));
@@ -850,6 +865,7 @@ function buildKnownWords(){
     tokenize(item.reference).forEach(w=>set.add(w));
     (item.concepts||[]).flat().forEach(phrase=>tokenize(phrase).forEach(w=>set.add(w)));
   });
+  SEMANTIC_EQUIVALENTS.flat().forEach(phrase=>tokenize(phrase).forEach(w=>set.add(w)));
   Object.values(SPELLING_OVERRIDES).forEach(w=>set.add(w));
   return set;
 }
@@ -875,15 +891,14 @@ function spellingIssues(q,text){
   const issues=[];
   for(const raw of words){
     const w=raw.replace(/^'+|'+$/g,'');
-    if(w.length<4 || COMMON.has(w) || KNOWN_WORDS.has(w)) continue;
+    if(w.length<4) continue;
+    if(SPELLING_OVERRIDES[w]){issues.push(`${w} → ${SPELLING_OVERRIDES[w]}`);continue;}
+    if(COMMON.has(w) || KNOWN_WORDS.has(w)) continue;
 
-    if(SPELLING_OVERRIDES[w]){
-      issues.push(`${w} → ${SPELLING_OVERRIDES[w]}`);
-      continue;
-    }
+    
 
     const near=nearestKnownWord(w);
-    if(near){
+    if(near && near.distance===1 && w.length>=7 && !/[a-z](?:ed|ing|ly|tion|s)$/.test(w)){
       issues.push(`${w} → ${near.word}?`);
     }
   }
@@ -918,8 +933,8 @@ function grammarIssues(q,text){
     pushGrammar(issues,'object-pronoun-possessive','Sau “allows/enables” cần đại từ tân ngữ, không dùng tính từ sở hữu. Ví dụ: “allows them to ...”.');
   }
 
-  if(/\ballows\s+(?:him|her|them|us|me|you|\w+)\s+(?!to\b)/i.test(s)) pushGrammar(issues,'allows-to','Cấu trúc đúng: allows + somebody + to V.');
-  if(/\benables\s+(?:him|her|them|us|me|you|\w+)\s+(?!to\b)/i.test(s)) pushGrammar(issues,'enables-to','Cấu trúc đúng: enables + somebody + to V.');
+  if(/\ballows\s+(?:him|her|them|us|me|you)\s+(?!to\b)\w+/i.test(s)) pushGrammar(issues,'allows-to','Cấu trúc đúng: allows + somebody + to V.');
+  if(/\benables\s+(?:him|her|them|us|me|you)\s+(?!to\b)\w+/i.test(s)) pushGrammar(issues,'enables-to','Cấu trúc đúng: enables + somebody + to V.');
 
   /* more/many/several + danh từ đếm được phải ở dạng số nhiều. */
   if(/\bmore\s+(person|student|learner|employee|worker|culture|custom|material|resource|book|word|skill|opportunity|relationship|qualification|workplace|environment)\b/i.test(n)){
