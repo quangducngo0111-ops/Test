@@ -125,8 +125,8 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_V14_GRAMMAR';
-const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V13_FULLTEST','IELTS_PRACTICE_CATALOG_V8','IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_V15_GRAMMAR_DIRECT';
+const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V14_GRAMMAR','IELTS_PRACTICE_CATALOG_V13_FULLTEST','IELTS_PRACTICE_CATALOG_V8','IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
 const ACTIVE_TAB_KEY='IELTS_PRACTICE_ACTIVE_TAB_V1';
 const CACHE_TTL=6*60*60*1000;
 
@@ -167,16 +167,16 @@ const FALLBACK={
     {title:'Translation Practice',icon:'🔤',desc:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',url:'./WritingTask2/TranslationPractice/'}
   ],
   grammar:[
-    {title:'Bài 01 · Subject–Verb Agreement',icon:'📐',desc:'Hòa hợp chủ ngữ – động từ · Học lý thuyết và luyện tập',url:'./Grammar/Topic01/'},
-    {title:'Bài 02 · Tenses',icon:'📐',desc:'Các thì trong tiếng Anh · Học lý thuyết và luyện tập',url:'./Grammar/Topic02/'},
-    {title:'Bài 03 · Articles',icon:'📐',desc:'Mạo từ a / an / the · Học lý thuyết và luyện tập',url:'./Grammar/Topic03/'},
-    {title:'Bài 04 · Countable & Uncountable Nouns',icon:'📐',desc:'Danh từ đếm được và không đếm được · Học lý thuyết và luyện tập',url:'./Grammar/Topic04/'},
-    {title:'Bài 05 · Quantifiers',icon:'📐',desc:'Few, a few, little, a little, many, much · Học lý thuyết và luyện tập',url:'./Grammar/Topic05/'},
-    {title:'Bài 06 · Conditionals',icon:'📐',desc:'Câu điều kiện · Học lý thuyết và luyện tập',url:'./Grammar/Topic06/'},
-    {title:'Bài 07 · Relative Clauses',icon:'📐',desc:'Mệnh đề quan hệ · Học lý thuyết và luyện tập',url:'./Grammar/Topic07/'},
-    {title:'Bài 08 · Gerunds & Infinitives',icon:'📐',desc:'Danh động từ và động từ nguyên mẫu · Học lý thuyết và luyện tập',url:'./Grammar/Topic08/'},
-    {title:'Bài 09 · Linking & Clauses',icon:'📐',desc:'Liên từ và mệnh đề · Học lý thuyết và luyện tập',url:'./Grammar/Topic09/'},
-    {title:'Bài 10 · Passive Voice',icon:'📐',desc:'Câu bị động · Học lý thuyết và luyện tập',url:'./Grammar/Topic10/'}
+    {title:'Bài 01 · Subject–Verb Agreement',icon:'📐',desc:'Hòa hợp chủ ngữ – động từ · Học lý thuyết và luyện tập',url:'./Grammar/Topic01/index.html'},
+    {title:'Bài 02 · Tenses',icon:'📐',desc:'Các thì trong tiếng Anh · Học lý thuyết và luyện tập',url:'./Grammar/Topic02/index.html'},
+    {title:'Bài 03 · Articles',icon:'📐',desc:'Mạo từ a / an / the · Học lý thuyết và luyện tập',url:'./Grammar/Topic03/index.html'},
+    {title:'Bài 04 · Countable & Uncountable Nouns',icon:'📐',desc:'Danh từ đếm được và không đếm được · Học lý thuyết và luyện tập',url:'./Grammar/Topic04/index.html'},
+    {title:'Bài 05 · Quantifiers',icon:'📐',desc:'Few, a few, little, a little, many, much · Học lý thuyết và luyện tập',url:'./Grammar/Topic05/index.html'},
+    {title:'Bài 06 · Conditionals',icon:'📐',desc:'Câu điều kiện · Học lý thuyết và luyện tập',url:'./Grammar/Topic06/index.html'},
+    {title:'Bài 07 · Relative Clauses',icon:'📐',desc:'Mệnh đề quan hệ · Học lý thuyết và luyện tập',url:'./Grammar/Topic07/index.html'},
+    {title:'Bài 08 · Gerunds & Infinitives',icon:'📐',desc:'Danh động từ và động từ nguyên mẫu · Học lý thuyết và luyện tập',url:'./Grammar/Topic08/index.html'},
+    {title:'Bài 09 · Linking & Clauses',icon:'📐',desc:'Liên từ và mệnh đề · Học lý thuyết và luyện tập',url:'./Grammar/Topic09/index.html'},
+    {title:'Bài 10 · Passive Voice',icon:'📐',desc:'Câu bị động · Học lý thuyết và luyện tập',url:'./Grammar/Topic10/index.html'}
   ],
   vocabulary:[
     {title:'Vocabulary Practice',icon:'🎮',desc:'Từ vựng & trò chơi',url:'./Vocabulary/'}
@@ -221,7 +221,7 @@ function mergeCatalogWithFallback(source){
   const merged=cloneCatalog(FALLBACK);
 
   for(const key of Object.keys(CATS)){
-    if(key==='speaking'){merged[key]=FALLBACK.speaking;continue;}
+    if(key==='speaking'||key==='grammar'){merged[key]=FALLBACK[key];continue;}
     merged[key]=mergeItems(
       FALLBACK[key]||[],
       source?.[key]||[]
@@ -363,7 +363,7 @@ async function loadRemote(cached){
         GitHub tree có thể chậm/stale và thiếu folder mới; nếu thay toàn bộ
         danh sách bằng found thì Reading Passage 1 sẽ biến mất.
       */
-      if(k==='speaking'){ next[k]=FALLBACK.speaking; continue; }
+      if(k==='speaking'||k==='grammar'){ next[k]=FALLBACK[k]; continue; }
       next[k]=mergeItems(
         FALLBACK[k]||[],
         found
