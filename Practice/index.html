@@ -125,8 +125,8 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_STATIC_01_20261030';
-const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V14_GRAMMAR','IELTS_PRACTICE_CATALOG_V13_FULLTEST','IELTS_PRACTICE_CATALOG_V8','IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_READING_PRACTICE_3_PASSAGES_V2';
+const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V14_GRAMMAR','IELTS_PRACTICE_CATALOG_V14_READINGFULL','IELTS_PRACTICE_CATALOG_V8','IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
 const ACTIVE_TAB_KEY='IELTS_PRACTICE_ACTIVE_TAB_V1';
 const CACHE_TTL=6*60*60*1000;
 
@@ -143,8 +143,10 @@ const CATS={
 /* Fallback chỉ dùng khi GitHub API tạm lỗi / rate limit. */
 const FALLBACK={
   reading:[
-    {title:'Reading Passage 1',icon:'📘',desc:'Reading practice',url:'./Reading/ReadingPassage1/'},
-    {title:'Reading Passage 2',icon:'📗',desc:'Reading practice',url:'./Reading/ReadingPassage2/'}
+    {title:'Reading 3 Passages',icon:'📚',desc:'Bài luyện 01 · 3 passages · 40 câu',url:'./Reading/ReadingPractice3Passages/'},
+    {title:'Reading Passage 1',icon:'📘',desc:'Ambergris · Câu 1–13',url:'./Reading/ReadingPassage1/'},
+    {title:'Reading Passage 2',icon:'📗',desc:'Photography · Câu 14–26',url:'./Reading/ReadingPassage2/'},
+    {title:'Reading Passage 3',icon:'📚',desc:'The long view · Câu 27–40',url:'./Reading/ReadingPassage3/'}
   ],
   listening:[
     {title:'Listening Part 1',icon:'🎧',desc:'IELTS Listening Part 1',url:'./Listening/Part1/'},
@@ -204,7 +206,7 @@ function mergeItems(base=[],extra=[]){
     if(!item) return;
 
     const key=String(item.url||item.title||'').trim().toLowerCase();
-    if(!key) return;
+    if(!key || /readingfulltest/i.test(key)) return;
 
     const previous=merged.get(key)||{};
     const next={...previous,...item};
@@ -256,7 +258,7 @@ function item(path,root){
   if(/^README_TEMPLATE$/i.test(raw)) return null;
   if(/^FullTest02$/i.test(raw)) return null; // Bài 02 nằm bên trong FullTest, không là mục riêng
   const labels={
-    ReadingPassage1:'Reading Passage 1',ReadingPassage2:'Reading Passage 2',
+    ReadingPassage1:'Reading Passage 1',ReadingPassage2:'Reading Passage 2',ReadingPassage3:'Reading Passage 3',
     Part1:'Listening Part 1',Part2:'Listening Part 2',Part3:'Listening Part 3',FullTest:'Listening Full Test',IntensiveListening:'Intensive Listening',
     TrueFalseNotGiven:'True / False / Not Given',YesNoNotGiven:'Yes / No / Not Given',
     MatchingHeadings:'Matching Headings',MatchingInformation:'Matching Information',MatchingFeatures:'Matching Features',
@@ -267,7 +269,7 @@ function item(path,root){
   };
 
   const icons={
-    ReadingPassage1:'📘',ReadingPassage2:'📗',
+    ReadingPassage1:'📘',ReadingPassage2:'📗',ReadingPassage3:'📚',
     Part1:'🎧',Part2:'🎧',Part3:'🎧',FullTest:'🎧',IntensiveListening:'🎙️',
     TrueFalseNotGiven:'✅',YesNoNotGiven:'☑️',
     MatchingHeadings:'🧩',MatchingInformation:'🔎',MatchingFeatures:'🔗',
