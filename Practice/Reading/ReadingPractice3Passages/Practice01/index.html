@@ -149,97 +149,117 @@ document.querySelectorAll('[data-num]').forEach(el=>el.addEventListener(el.type=
 document.querySelectorAll('[data-find]').forEach(b=>{b.onclick=()=>findEvidence(Number(b.dataset.find));b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();findEvidence(Number(b.dataset.find))}}});
  document.querySelectorAll('[data-three]').forEach(el=>el.addEventListener('change',()=>{const selected=[...document.querySelectorAll('[data-three]:checked')];if(selected.length>3){el.checked=false;return;}updateThree()}));
 $('submitHost').innerHTML=`<div class="submitbar"><div><b>${done?'✓ Passage đã nộp':'Nộp bài Passage '+(i+1)}</b><div class="small" id="submitNote">${done?`${marks(i)}/${questions(i).length} câu đúng. Có thể xem phần chữa phía trên.`:'Hãy làm đủ '+questions(i).length+' câu trước khi nộp.'}</div></div><button id="submitPass" class="action" ${done||!allAnswered(i)?'disabled':''}>${done?'Đã nộp':'Nộp Passage '+(i+1)}</button></div>`;
-$('submitPass').onclick=()=>{if(state.submitted[i]||!allAnswered(i))return;state.submitted[i]=true;state.reportLog ||= {};state.reportLog['p'+(i+1)]={status:'pending',submittedAt:new Date().toISOString()};if(PASSAGES.every((_,j)=>state.submitted[j]))state.reportLog.full={status:'pending',submittedAt:new Date().toISOString()};saveMarkup();save();render();$('questionsPane').scrollTo({top:0,behavior:'smooth'});void sendReadingReport('p'+(i+1));if(state.reportLog.full?.status==='pending')void sendReadingReport('full');};
+$('submitPass').onclick=()=>{
+ if(state.submitted[i]||!allAnswered(i))return;
+ state.submitted[i]=true;
+ // Điểm từng Passage chỉ lưu trong trình duyệt để chữa bài.
+ // Sau khi NỘP ĐỦ BA Passage (đã trả lời cả 40 câu), mới gửi đúng MỘT báo cáo tổng.
+ if(readyForFinalReport()){
+   state.reportLog ||= {};
+   if(!state.reportLog.full){
+     state.reportLog.full={status:'pending',submittedAt:new Date().toISOString()};
+   }
+ }
+ saveMarkup();save();render();
+ $('questionsPane').scrollTo({top:0,behavior:'smooth'});
+ if(readyForFinalReport())void sendReadingReport();
+};
 $('bottomnav').innerHTML=d.q.map(q=>`<button data-goto="${q.n}" title="Câu ${q.n}">${q.n}</button>`).join('');document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{$('q'+b.dataset.goto)?.scrollIntoView({block:'center',behavior:'smooth'})});updateNav();updateProgress();showSummary();}
 function updateNav(){for(const q of questions(state.active)){const b=document.querySelector(`[data-goto="${q.n}"]`);if(b){b.className=state.submitted[state.active]?(right(q,state.answers[q.n])?'correct':'wrong'):(normal(state.answers[q.n])?'answered':'')}}}
 function updateSubmitButton(){const b=$('submitPass');if(b)b.disabled=!!state.submitted[state.active]||!allAnswered(state.active);const t=$('submitNote');if(t&&!state.submitted[state.active])t.textContent=`${questions(state.active).filter(q=>normal(state.answers[q.n])).length}/${questions(state.active).length} câu đã trả lời · Cần hoàn thành trước khi nộp.`}
 function updateProgress(){const n=totalAnswered();$('progressText').textContent=n+'/40 câu đã trả lời';$('progressFill').style.width=n/40*100+'%'}
-// ===== GỬI KẾT QUẢ VỀ GOOGLE SHEETS (tương thích biểu mẫu Practice cũ) =====
-// LƯU Ý: POST no-cors không thể đọc phản hồi của Apps Script; "đã gửi yêu cầu"
-// không đồng nghĩa với việc đã kiểm chứng dòng mới trên Google Sheets.
+// ===== BÁO CÁO GOOGLE SHEETS: CHỈ GỬI MỘT LẦN KHI HOÀN THÀNH 40 CÂU =====
+// KHÔNG gửi dữ liệu sau khi nộp Passage 1 hoặc Passage 2.
+// POST no-cors không cho phép xác minh Google Sheets đã ghi hàng mới hay chưa.
 const RESULT_ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
-const reportInFlight=new Set();
-function reportReady(key){return key==='full'?PASSAGES.every((_,i)=>state.submitted[i]):/^p[123]$/.test(key)&&!!state.submitted[Number(key[1])-1]}
-function reportKeysAvailable(){const keys=[];for(let i=0;i<3;i++)if(state.submitted[i])keys.push('p'+(i+1));if(reportReady('full'))keys.push('full');return keys}
-function makeReportBody(key){
- const isFull=key==='full',i=isFull?-1:Number(key[1])-1;
- const rows=isFull?PASSAGES.flatMap(x=>x.data.q):questions(i);
+let reportInFlight=false;
+function readyForFinalReport(){
+ return PASSAGES.every((_,i)=>!!state.submitted[i]&&allAnswered(i)) &&
+   totalAnswered()===40 && !!state.name.trim() && !!state.className.trim();
+}
+function makeFinalReportBody(){
+ if(!readyForFinalReport())return null;
+ const rows=PASSAGES.flatMap(p=>p.data.q);
  const answers={},correctAnswers={};
- for(const q of rows){answers[q.n]=state.answers[q.n]||'';correctAnswers[q.n]=q.answer}
- const score=isFull?fullScore():marks(i),total=rows.length;
- const parts=PASSAGES.map((p,j)=>({passage:j+1,submitted:!!state.submitted[j],score:state.submitted[j]?marks(j):null,total:p.data.q.length}));
- const submittedAt=state.reportLog?.[key]?.submittedAt||new Date().toISOString();
- if(!state.reportId)state.reportId='R3P01-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
- const durationSeconds=isFull?Math.floor((state.elapsed||0)/1000):Math.floor((state.passageTimes?.[i]||0)/1000);
+ for(const q of rows){answers[q.n]=state.answers[q.n]||'';correctAnswers[q.n]=q.answer;}
+ const parts=PASSAGES.map((p,i)=>({
+   passage:i+1,submitted:true,score:marks(i),total:p.data.q.length
+ }));
+ if(!state.reportId){
+   state.reportId='R3P01-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
+ }
  const details=JSON.stringify({
-   title:isFull?'Reading 3 Passages - Practice 01':`Reading 3 Passages - Practice 01 - Passage ${i+1}`,
-   reportId:state.reportId+'-'+key,
+   title:'Reading 3 Passages - Practice 01',
+   reportId:state.reportId+'-full',
    answers,correctAnswers,passages:parts,
-   note:'Thời gian từng Passage được theo dõi từ phiên bản cập nhật; các bài đã làm trước đó có thể thiếu số liệu này.'
+   note:'Một báo cáo tổng hợp sau khi hoàn thành 3 Passage (40 câu).'
  });
- // Các trường mode/name/className/... đúng giao thức ghi bảng Theo dõi BTVN hiện có.
  return new URLSearchParams({
-   mode:'PRACTICE',name:state.name||'',className:state.className||'',skill:'Reading',
-   practiceType:isFull?'Reading 3 Passages':`Reading 3 Passages - Passage ${i+1}`,
-   practiceId:isFull?'01':`01-P${i+1}`,score:String(score),total:String(total),
-   durationSeconds:String(durationSeconds),details,submittedAt
+   mode:'PRACTICE',name:state.name,className:state.className,skill:'Reading',
+   practiceType:'Reading 3 Passages',practiceId:'01',
+   score:String(fullScore()),total:'40',
+   durationSeconds:String(Math.floor((state.elapsed||0)/1000)),
+   details,submittedAt:state.reportLog?.full?.submittedAt||new Date().toISOString()
  });
 }
 function reportStatusText(status){
- if(status==='sent')return 'Đã gửi yêu cầu · cần kiểm tra Google Sheets';
- if(status==='sending')return 'Đang gửi…';
- if(status==='failed')return 'Gửi chưa thành công · cần thử lại';
- return 'Chưa gửi lên bảng báo cáo';
+ if(status==='sent')return 'Đã gửi yêu cầu báo cáo tổng /40';
+ if(status==='sending')return 'Đang gửi báo cáo tổng…';
+ if(status==='failed')return 'Chưa gửi thành công';
+ return 'Chưa gửi';
 }
 function refreshReportStatus(){
  const host=$('sheetReportStatus');if(!host)return;
- const keys=reportKeysAvailable();
- if(!keys.length){host.innerHTML='<p class="small">Sau khi nộp Passage, kết quả sẽ được gửi vào bảng Theo dõi BTVN.</p>';return}
- const rows=keys.map(key=>{
-   const label=key==='full'?'Tổng kết 40 câu':`Passage ${key[1]}`;
-   const status=state.reportLog?.[key]?.status||'not-sent';
-   return `<div class="report-line"><strong>${label}</strong><span class="report-state ${esc(status)}">${reportStatusText(status)}</span></div>`
- }).join('');
- host.innerHTML=`<div class="report-head">📊 Báo cáo kết quả về Google Sheets</div>${rows}<button id="resendReport" class="action secondary" type="button">Gửi lại kết quả đã nộp</button><p class="small">Không thể xác nhận trực tiếp dòng mới từ trang web (Google Apps Script dùng no-cors). Nếu nhấn gửi lại nhiều lần, bảng có thể có dòng trùng.</p>`;
- $('resendReport').onclick=()=>void resendSavedReports();
+ if(!readyForFinalReport()){
+   const done=PASSAGES.filter((_,i)=>state.submitted[i]).length;
+   host.innerHTML=`<div class="report-head">📊 Báo cáo kết quả</div><p class="small">Đã nộp ${done}/3 Passage. Kết quả chỉ gửi lên Google Sheets sau khi hoàn thành và nộp cả 40 câu.</p>`;
+   return;
+ }
+ const status=state.reportLog?.full?.status||'pending';
+ const retry=status==='failed'
+   ?'<button id="retryFinalReport" class="action secondary" type="button">Thử gửi lại báo cáo tổng</button>':'';
+ host.innerHTML=`<div class="report-head">📊 Báo cáo tổng kết /40</div><div class="report-line"><strong>Tổng ${fullScore()}/40 câu đúng</strong><span class="report-state ${esc(status)}">${reportStatusText(status)}</span></div>${retry}<p class="small">Mỗi bài hoàn chỉnh chỉ tự động gửi một yêu cầu tổng hợp. Phản hồi của Google Apps Script không thể được xác minh trực tiếp từ trang này.</p>`;
+ const b=$('retryFinalReport');if(b)b.onclick=()=>void sendReadingReport(true);
 }
-async function sendReadingReport(key,force=false){
- if(!reportReady(key)||reportInFlight.has(key))return;
+async function sendReadingReport(force=false){
+ if(!readyForFinalReport()||reportInFlight)return;
  state.reportLog ||= {};
- if(!force&&state.reportLog[key]?.status==='sent')return;
- const old=state.reportLog[key]||{};
- const stamp=old.submittedAt||new Date().toISOString();
- const body=makeReportBody(key);
- reportInFlight.add(key);
- state.reportLog[key]={...old,submittedAt:stamp,status:'sending'};
+ const prior=state.reportLog.full||{};
+ if(prior.status==='sent')return; // Không gửi trùng sau tải lại trang.
+ if(!force&&prior.status==='sending')return;
+ const stamp=prior.submittedAt||new Date().toISOString();
+ state.reportLog.full={...prior,submittedAt:stamp,status:'sending'};
+ const body=makeFinalReportBody();
+ if(!body)return;
+ reportInFlight=true;
  save();refreshReportStatus();
  try{
-   // Tái sử dụng chính endpoint và URLSearchParams đang hoạt động ở Reading Passage 1.
    await fetch(RESULT_ENDPOINT,{
      method:'POST',mode:'no-cors',keepalive:true,
      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
      body:body.toString()
    });
-   state.reportLog[key]={submittedAt:stamp,status:'sent',lastSentAt:new Date().toISOString()};
+   state.reportLog.full={submittedAt:stamp,status:'sent',lastSentAt:new Date().toISOString()};
  }catch(err){
-   console.warn('Không gửi được Reading Practice 01 ('+key+'):',err);
-   state.reportLog[key]={submittedAt:stamp,status:'failed',lastError:String(err)};
- }finally{reportInFlight.delete(key);save();refreshReportStatus()}
-}
-async function resendSavedReports(){
- const keys=reportKeysAvailable();
- if(!keys.length)return;
- const alreadySent=keys.filter(k=>state.reportLog?.[k]?.status==='sent');
- if(alreadySent.length&&!confirm('Một số yêu cầu gửi đã được thực hiện. Gửi lại có thể tạo các dòng trùng trong Google Sheets. Tiếp tục?'))return;
- await Promise.all(keys.map(k=>sendReadingReport(k,true)));
+   console.warn('Không gửi được báo cáo tổng Reading Practice 01:',err);
+   state.reportLog.full={submittedAt:stamp,status:'failed',lastError:String(err)};
+ }finally{
+   reportInFlight=false;
+   save();refreshReportStatus();
+ }
 }
 window.addEventListener('online',()=>{
- for(const key of reportKeysAvailable())if(['pending','failed'].includes(state.reportLog?.[key]?.status))void sendReadingReport(key);
+ if(readyForFinalReport()&&['pending','failed'].includes(state.reportLog?.full?.status))void sendReadingReport();
 });
-// Tiếp tục những lần gửi bị lỗi mạng sau khi học sinh tải lại trang.
 function retryPendingReports(){
  if(typeof navigator!=='undefined'&&navigator.onLine===false)return;
- for(const key of reportKeysAvailable())if(['pending','failed','sending'].includes(state.reportLog?.[key]?.status))void sendReadingReport(key);
+ if(!readyForFinalReport())return;
+ const status=state.reportLog?.full?.status;
+ // Nếu browser đóng giữa lúc gửi, thử lại kết quả cuối; không đụng các báo cáo Passage cũ.
+ if(!status||['pending','failed','sending'].includes(status)){
+   if(status==='sending')state.reportLog.full.status='pending';
+   void sendReadingReport();
+ }
 }
 function showSummary(){const done=PASSAGES.filter((x,i)=>state.submitted[i]).length;const per=PASSAGES.map((p,i)=>`Passage ${i+1}: ${state.submitted[i]?`${marks(i)}/${questions(i).length} câu đúng`:'Chưa nộp'}`).join(' · ');$('totalScore').innerHTML=`<b>${done===3?'TỔNG KẾT LUYỆN TẬP':'KẾT QUẢ TẠM THỜI'}</b><div class="score">${done===3?fullScore()+'/40':done+'/3 Passage đã nộp'}</div><div class="small">${per}</div>${done===3?'<p class="small">Đã nộp đủ 3 Passage. Có thể chuyển giữa các bài để xem chữa chi tiết.</p>':''}<div id="sheetReportStatus" class="sheet-report"></div>`;refreshReportStatus()}
 function renderNotes(){const list=state.notes[state.active]||[];$('notesHost').innerHTML=list.length?list.map((n,j)=>`<div class="entry"><small>“${esc(n.quote)}”</small><div>${esc(n.text)}</div><button class="action secondary" data-del-note="${j}" style="padding:3px 8px;font-size:10px">Xóa ghi chú</button></div>`).join(''):'<p class="small">Chưa có ghi chú. Bôi đen đoạn văn để thêm.</p>';document.querySelectorAll('[data-del-note]').forEach(b=>b.onclick=()=>{state.notes[state.active].splice(Number(b.dataset.delNote),1);save();renderNotes()})}
