@@ -14,6 +14,56 @@
 .flow-check{max-width:700px;margin:12px auto;text-align:left}
 .flow-check .result{margin:8px 0}
 @media(max-width:620px){.flowchart{padding:16px 8px}.flow-step{font-size:12px}.flow-blank input{width:90px}}
+</style><style>
+.choice-guide{background:#f8f6ff;border:1px solid #cfc3f6;border-radius:12px;padding:13px 15px;margin:13px 0 17px;display:grid;gap:8px}.choice-guide-title{font-size:13px;font-weight:900;color:#281260;margin-bottom:3px}.choice-guide-row{display:flex;align-items:flex-start;gap:11px;background:white;border:1px solid #e4dff6;border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.55}.choice-letter{display:inline-flex;justify-content:center;align-items:center;flex:0 0 30px;width:30px;height:30px;background:#e9e3ff;border:1px solid #d1c6fa;border-radius:8px;color:#372177;font-weight:950}.summary-passage{border:1px solid #d8dff0;border-radius:13px;padding:17px 20px;background:#fff;margin-top:12px}.summary-passage h4{text-align:center;color:#21164b;margin:0 0 15px;font-size:17px}.summary-passage p{font-size:14px;line-height:2.7;margin:0;text-align:left}.inline-answer{white-space:nowrap;display:inline-flex;gap:5px;align-items:center;vertical-align:baseline}.inline-answer label{color:#35217c;font-size:12px;font-weight:950}.inline-answer input{min-width:0!important;width:120px!important;padding:6px 8px!important;display:inline-block;border-radius:6px!important;font-size:13px!important}.three-choice{margin-top:12px}.question-emphasis{font-size:13px;font-weight:900;color:#21164b}.three-option{display:flex;align-items:flex-start;gap:11px;padding:12px;margin:7px 0;border:1px solid #dfe4f1;border-radius:10px;background:#fff;line-height:1.55;font-size:13px;cursor:pointer}.three-option:has(input:checked){background:#f1edff;border-color:#8268dd}.three-option input{margin-top:8px;accent-color:#6544d5}.three-status{padding:11px;background:#f4f1ff;border-radius:9px;font-weight:850;color:#45278b;margin-top:12px}.three-option .choice-letter{margin-top:0}.group>p.small{line-height:1.7}
+
+/* Các lựa chọn dùng cùng một kiểu nút tròn.
+   Questions 38–40 vẫn là nhiều lựa chọn (checkbox về hành vi),
+   nhưng hiển thị hình tròn giống radio để nhất quán giao diện. */
+.answer-choice input[type="radio"],
+.three-option input[type="checkbox"][data-three] {
+  flex: 0 0 19px;
+  width: 19px;
+  height: 19px;
+  margin: 3px 0 0;
+  accent-color: var(--violet);
+  cursor: pointer;
+}
+.three-option input[type="checkbox"][data-three] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-content: center;
+  border-radius: 50%;
+  border: 2px solid #8b91a6;
+  background: #fff;
+  transition: border-color .15s, background-color .15s;
+}
+.three-option input[type="checkbox"][data-three]::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--violet);
+  transform: scale(0);
+  transition: transform .12s ease;
+}
+.three-option input[type="checkbox"][data-three]:checked {
+  border-color: var(--violet);
+}
+.three-option input[type="checkbox"][data-three]:checked::before {
+  transform: scale(1);
+}
+.three-option input[type="checkbox"][data-three]:focus-visible,
+.answer-choice input[type="radio"]:focus-visible {
+  outline: 3px solid #9f8be9;
+  outline-offset: 3px;
+}
+.three-option input[type="checkbox"][data-three]:disabled {
+  cursor: not-allowed;
+  opacity: .72;
+}
+
 </style></head><body><div class="overlay" id="startOverlay"><div class="modal"><span class="eyebrow">READING PRACTICE</span><h2>Reading 3 Passages · Practice 01</h2><p class="small">3 bài đọc · 40 câu · Có giải thích và dẫn chứng sau khi nộp từng Passage.</p><div class="field"><label>Họ và tên</label><input id="studentName" autocomplete="name" placeholder="Nguyễn Văn A"></div><div class="field"><label>Lớp</label><input id="studentClass" placeholder="11A1"></div><p id="startError" style="color:#ba354e;font-size:12px"></p><button class="action" id="startBtn" style="width:100%">Bắt đầu luyện</button></div></div>
 <header class="top"><a href="../index.html">← Reading 3 Passages</a><span class="top-mid">📖 Reading 3 Passages · Practice 01</span><div class="top-right"><span class="student" id="studentLabel"></span><span class="timer" id="timer">00:00</span></div></header>
 <main class="page"><section class="hero"><div style="flex:1"></div><div style="flex:2"><h1 id="heroTitle">Reading Practice 01</h1><p>3 Passages · 40 câu · Luyện tập và chữa bài theo từng Passage</p></div><div class="progress-area" style="flex:1"><div class="progress-head"><span>Tiến độ</span><span id="progressText">0/40 câu</span></div><div class="track"><div id="progressFill"></div></div></div></section>
@@ -40,12 +90,36 @@ setInterval(tick,1000);
 function flowBlank(n){const value=state.answers[n]||'';const locked=!!state.submitted[0];return `<span class="flow-blank"><label class="flow-num" for="flow${n}">${n}</label><input id="flow${n}" data-num="${n}" type="text" value="${esc(value)}" placeholder="........" aria-label="Answer ${n}" autocomplete="off" ${locked?'disabled':''}></span>`}
 function flowReview(n){if(!state.submitted[0])return '';const q=questions(0).find(x=>x.n===n),value=state.answers[n]||'',ok=right(q,value);return `<div class="result ${ok?'correct':'incorrect'}"><b>${ok?'✓ Chính xác':'✗ Chưa đúng'} · Câu ${n}</b><div>Đáp án của em: <b>${esc(value||'Chưa trả lời')}</b> · Đáp án đúng: <b>${esc(q.answer)}</b></div><div><b>Giải thích:</b> ${esc(q.explanation)}</div>${q.evidence?`<div class="evidence" data-find="${n}" title="Bấm để đối chiếu bài đọc">📖 ${esc(q.evidence)}<div class="hint">Bấm để tìm dẫn chứng trong bài đọc</div></div>`:''}</div>`}
 function flowChartHTML(){return `<div class="flowchart" aria-label="How ambergris is formed"><h4>How ambergris is formed</h4><div class="flow-step">Ambergris is formed in whales because of problems digesting the ${flowBlank(7)} of giant squid.</div><div class="flow-arrow" aria-hidden="true">↓</div><div class="flow-step">Black liquid is produced and is ${flowBlank(8)} from time to time</div><div class="flow-arrow" aria-hidden="true">↓</div><div class="flow-step">The liquid ${flowBlank(9)} on contact with the air.</div></div><div class="flow-check" id="flowFeedback">${[7,8,9].map(flowReview).join('')}</div>`}
+
+const CHOICE_GUIDES={
+ classify:[['A','ambergris only'],['B','amber only'],['C','both ambergris and amber'],['D','neither ambergris nor amber']],
+ people:[['A','Philip Watts'],['B','Dr James Canton'],['C','Robin Gunston'],['D','Alan Beckley'],['E','Bill Rammell'],['F','Steve Brant']]
+};
+const THREE_OPTIONS=[
+ ['A','Present-day futurology can focus on achieving a particular outcome.'],
+ ['B','Futurists recognise that most governments have already made long-term plans.'],
+ ['C',"The world's first futurology was hosted by Finland."],
+ ['D','Futurists need to talk to people from various areas of expertise.'],
+ ['E','Futurists should carry out internet research to keep up with popular trends.'],
+ ['F','Aspects of modern culture prepare people well for a career in futurology.'],
+ ['G','Conducting future studies can affect whether a company continues to be successful.']
+];
+function choiceGuide(g){const rows=CHOICE_GUIDES[g.type];if(!rows)return '';return `<div class="choice-guide"><div class="choice-guide-title">Danh sách lựa chọn ${g.type==='people'?'– List of People':'– Classification'}</div>${rows.map(([k,v])=>`<div class="choice-guide-row"><span class="choice-letter">${k}</span><span>${esc(v)}</span></div>`).join('')}${g.type==='people'?'<div class="small">You may use any letter more than once.</div>':''}</div>`}
+function summaryBlank(n){return `<span class="inline-answer"><label for="summary${n}">${n}</label><input id="summary${n}" data-num="${n}" type="text" value="${esc(state.answers[n]||'')}" placeholder="..........." aria-label="Answer ${n}" autocomplete="off" ${state.submitted[1]?'disabled':''}></span>`}
+function summaryHTML(){return `<div class="summary-passage"><h4>Photographers’ responses to criticism</h4><p>In response to the suggestion that photography could not be considered an art form, photographers acted in two ways. Some of them rejected this criticism, certain that they could create pictures similar to ${summaryBlank(18)}. They did this by carefully setting up the different parts of the ${summaryBlank(19)} before taking the photograph. Other things they did included causing the picture to be rather ${summaryBlank(20)}, and some who wanted to try to make the print look like a canvas even ${summaryBlank(21)} their photographs. Others were anxious that their work should not be looked upon as some sort of ${summaryBlank(22)} painting and were much more concerned with the fact that the camera seemed to be able to produce a more accurate representation of what they could see around them.</p></div>${state.submitted[1]?[18,19,20,21,22].map(n=>inlineReview(n)).join(''):''}`}
+function inlineReview(n){const q=PASSAGES[state.active].data.q.find(x=>x.n===n),a=state.answers[n]||'',ok=right(q,a);return `<div class="result ${ok?'correct':'incorrect'}"><b>Câu ${n} · ${ok?'✓ Chính xác':'✗ Chưa đúng'}</b><div>Em điền: ${esc(a||'Chưa trả lời')} · Đáp án: <b>${esc(q.answer)}</b></div><div>${esc(q.explanation)}</div>${q.evidence?`<div class="evidence" data-find="${n}">${esc(q.evidence)}</div>`:''}</div>`}
+function threeChoiceHTML(){const chosen=[38,39,40].map(n=>String(state.answers[n]||'').toUpperCase()).filter(Boolean);return `<div class="three-choice"><p class="question-emphasis">Which THREE of the following statements are true according to the passage?</p><p class="small">Chọn đúng 3 phương án A–G; mỗi phương án chỉ được chọn một lần. Không cần chọn theo thứ tự.</p>${THREE_OPTIONS.map(([k,v])=>`<label class="three-option"><input type="checkbox" data-three="${k}" ${chosen.includes(k)?'checked':''} ${state.submitted[2]?'disabled':''}><span class="choice-letter">${k}</span><span>${esc(v)}</span></label>`).join('')}<div class="three-status" id="threeStatus">Đã chọn ${chosen.length}/3: ${chosen.join(', ')||'—'}</div></div>${state.submitted[2]?[38,39,40].map(n=>inlineReview(n)).join(''):''}`}
+function questionHTML(q,g,done){const a=state.answers[q.n]||'';const opts=g.options||q.options||[];const input=opts.length?opts.map(opt=>`<label class="answer-choice"><input type="radio" name="q${q.n}" data-num="${q.n}" value="${esc(opt)}" ${normal(a)===normal(opt)?'checked':''} ${done?'disabled':''}>${esc(opt)}</label>`).join(''):`<input type="text" data-num="${q.n}" value="${esc(a)}" placeholder="Đáp án câu ${q.n}" autocomplete="off" ${done?'disabled':''}>`;return `<div class="quiz-line" id="q${q.n}"><strong>${q.n}. ${esc(q.text)}</strong>${input}${done?inlineReview(q.n):''}</div>`}
+function groupHTML(g,i,done){const qs=PASSAGES[i].data.q.filter(q=>q.n>=g.start&&q.n<=g.end);let content=i===0&&g.start===7?flowChartHTML():i===1&&g.start===18?summaryHTML():i===2&&g.start===38?threeChoiceHTML():qs.map(q=>questionHTML(q,g,done)).join('');return `<section class="group"><h3>${esc(g.title)}</h3><p class="small">${esc(g.instruction)}</p>${choiceGuide(g)}${content}</section>`}
+function updateThree(){const selected=[...document.querySelectorAll('[data-three]:checked')].map(x=>x.dataset.three);[38,39,40].forEach((n,j)=>state.answers[n]=selected[j]||'');save();updateProgress();updateSubmitButton();updateNav();const info=$('threeStatus');if(info)info.textContent=`Đã chọn ${selected.length}/3: ${selected.join(', ')||'—'}`;}
+
 function render(){if(!state.started)return;const i=state.active,p=PASSAGES[i],d=p.data,done=!!state.submitted[i];$('studentLabel').textContent=state.name+' · '+state.className;$('heroTitle').textContent=`Reading Practice 01 · Passage ${i+1}`;
 $('passTabs').innerHTML=PASSAGES.map((x,j)=>`<button class="${i===j?'active':''}" data-pass="${j}">Passage ${j+1} · ${questions(j).length} câu ${state.submitted[j]?'✓':''}</button>`).join('');document.querySelectorAll('[data-pass]').forEach(b=>b.onclick=()=>{saveMarkup();state.active=Number(b.dataset.pass);save();render();$('readingPane').scrollTop=0;$('questionsPane').scrollTop=0;window.scrollTo({top:0})});
 $('passageHost').innerHTML=state.markup[i]||p.article;renderNotes();
-$('questionHost').innerHTML=`<span class="eyebrow">Reading Passage ${i+1} · Questions ${d.q[0].n}–${d.q.at(-1).n}</span><h2>${esc(d.title)}</h2><p class="small">Trả lời đầy đủ ${d.q.length} câu để nộp Passage. Sau khi nộp, em sẽ xem được đáp án và giải thích.</p>`+d.groups.map(g=>{const qs=d.q.filter(q=>q.n>=g.start&&q.n<=g.end);return `<section class="group"><h3>${esc(g.title)}</h3><p class="small">${esc(g.instruction)}</p>`+(i===0&&g.start===7&&g.end===9?flowChartHTML():qs.map(q=>{const a=state.answers[q.n]||'';const opts=g.options||q.options||[];const input=opts.length?opts.map(opt=>`<label class="answer-choice"><input type="radio" name="q${q.n}" data-num="${q.n}" value="${esc(opt)}" ${normal(a)===normal(opt)?'checked':''} ${done?'disabled':''}>${esc(opt)}</label>`).join(''):`<input type="text" data-num="${q.n}" value="${esc(a)}" placeholder="Đáp án câu ${q.n}" autocomplete="off" ${done?'disabled':''}>`;const ok=right(q,a);return `<div class="quiz-line" id="q${q.n}"><strong>${q.n}. ${esc(q.text)}</strong>${input}${done?`<div class="result ${ok?'correct':'incorrect'}"><b style="color:${ok?'#137d50':'#ba354e'}">${ok?'✓ Chính xác':'✗ Chưa đúng'}</b><div>Đáp án của em: <b>${esc(a)}</b> · Đáp án đúng: <b>${esc(q.answer)}</b></div><div style="margin-top:7px"><b>Giải thích:</b> ${esc(q.explanation)}</div>${q.evidence?`<div class="evidence" title="Bấm để tìm dẫn chứng trong bài đọc" data-find="${q.n}">📖 ${esc(q.evidence)}<div class="hint">Bấm để tìm vị trí có đáp án trong bài đọc</div></div>`:`<div class="hint">Câu này cần đối chiếu thông tin trên toàn bài, không có một câu trích dẫn đơn lẻ.</div>`}</div>`:''}</div>`}).join(''))+`</section>`}).join('');
+$('questionHost').innerHTML=`<span class="eyebrow">Reading Passage ${i+1} · Questions ${d.q[0].n}–${d.q.at(-1).n}</span><h2>${esc(d.title)}</h2><p class="small">Trả lời đầy đủ ${d.q.length} câu để nộp Passage. Sau khi nộp, em sẽ xem được đáp án và giải thích.</p>`+d.groups.map(g=>groupHTML(g,i,done)).join('');
 document.querySelectorAll('[data-num]').forEach(el=>el.addEventListener(el.type==='text'?'input':'change',()=>{if(state.submitted[i])return;state.answers[el.dataset.num]=el.value;save();updateProgress();updateSubmitButton();updateNav()}));
 document.querySelectorAll('[data-find]').forEach(b=>b.onclick=()=>findEvidence(Number(b.dataset.find)));
+ document.querySelectorAll('[data-three]').forEach(el=>el.addEventListener('change',()=>{const selected=[...document.querySelectorAll('[data-three]:checked')];if(selected.length>3){el.checked=false;return;}updateThree()}));
 $('submitHost').innerHTML=`<div class="submitbar"><div><b>${done?'✓ Passage đã nộp':'Nộp bài Passage '+(i+1)}</b><div class="small" id="submitNote">${done?`${marks(i)}/${questions(i).length} câu đúng. Có thể xem phần chữa phía trên.`:'Hãy làm đủ '+questions(i).length+' câu trước khi nộp.'}</div></div><button id="submitPass" class="action" ${done||!allAnswered(i)?'disabled':''}>${done?'Đã nộp':'Nộp Passage '+(i+1)}</button></div>`;
 $('submitPass').onclick=()=>{if(state.submitted[i]||!allAnswered(i))return;state.submitted[i]=true;saveMarkup();save();render();$('questionsPane').scrollTo({top:0,behavior:'smooth'})};
 $('bottomnav').innerHTML=d.q.map(q=>`<button data-goto="${q.n}" title="Câu ${q.n}">${q.n}</button>`).join('');document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{$('q'+b.dataset.goto)?.scrollIntoView({block:'center',behavior:'smooth'})});updateNav();updateProgress();showSummary();}
