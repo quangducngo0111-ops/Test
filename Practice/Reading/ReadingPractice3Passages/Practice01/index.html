@@ -31,7 +31,7 @@
 .evidence-note{font-size:11px;background:#fff;border:1px dashed #d4d9e5;color:#5a6070;border-radius:8px;padding:9px 10px;margin-top:8px}
 mark.auto-evidence-focus{background:#ffe66b;color:inherit;box-shadow:0 0 0 2px rgba(250,203,60,.25);border-radius:3px;padding:1px 0;transition:background .2s}
 @media(max-width:600px){.evidence mark.evidence-quote{font-size:12px}}
-</style><style>
+.sheet-report{margin-top:14px;border-top:1px solid #dcd6f5;padding-top:12px}.report-head{font-weight:900;color:#281260;margin-bottom:7px}.report-line{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #e9e5f6;font-size:11px}.report-state.sent{color:#256d60}.report-state.failed{color:#b52e41}.report-state.sending{color:#6b4db6}.sheet-report button{margin:10px 0 5px}.sheet-report .small{line-height:1.55}</style><style>
 .choice-guide{background:#f8f6ff;border:1px solid #cfc3f6;border-radius:12px;padding:13px 15px;margin:13px 0 17px;display:grid;gap:8px}.choice-guide-title{font-size:13px;font-weight:900;color:#281260;margin-bottom:3px}.choice-guide-row{display:flex;align-items:flex-start;gap:11px;background:white;border:1px solid #e4dff6;border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.55}.choice-letter{display:inline-flex;justify-content:center;align-items:center;flex:0 0 30px;width:30px;height:30px;background:#e9e3ff;border:1px solid #d1c6fa;border-radius:8px;color:#372177;font-weight:950}.summary-passage{border:1px solid #d8dff0;border-radius:13px;padding:17px 20px;background:#fff;margin-top:12px}.summary-passage h4{text-align:center;color:#21164b;margin:0 0 15px;font-size:17px}.summary-passage p{font-size:14px;line-height:2.7;margin:0;text-align:left}.inline-answer{white-space:nowrap;display:inline-flex;gap:5px;align-items:center;vertical-align:baseline}.inline-answer label{color:#35217c;font-size:12px;font-weight:950}.inline-answer input{min-width:0!important;width:120px!important;padding:6px 8px!important;display:inline-block;border-radius:6px!important;font-size:13px!important}.three-choice{margin-top:12px}.question-emphasis{font-size:13px;font-weight:900;color:#21164b}.three-option{display:flex;align-items:flex-start;gap:11px;padding:12px;margin:7px 0;border:1px solid #dfe4f1;border-radius:10px;background:#fff;line-height:1.55;font-size:13px;cursor:pointer}.three-option:has(input:checked){background:#f1edff;border-color:#8268dd}.three-option input{margin-top:8px;accent-color:#6544d5}.three-status{padding:11px;background:#f4f1ff;border-radius:9px;font-weight:850;color:#45278b;margin-top:12px}.three-option .choice-letter{margin-top:0}.group>p.small{line-height:1.7}
 
 /* Các lựa chọn dùng cùng một kiểu nút tròn.
@@ -91,7 +91,7 @@ const OLD_KEY='IELTS_READING_THREE_PASSAGES_PRACTICE_01_V1';
 const $=id=>document.getElementById(id);
 const normal=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ').replace(/[.!?,;:]+$/g,'');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const defaults={active:0,answers:{},submitted:{},name:'',className:'',started:false,elapsed:0,lastTick:0,notes:{},markup:{}};
+const defaults={active:0,answers:{},submitted:{},name:'',className:'',started:false,elapsed:0,lastTick:0,notes:{},markup:{},reportLog:{},passageTimes:{},reportId:''};
 let state={...defaults};
 try{let saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved)state={...defaults,...saved};else{let old=JSON.parse(localStorage.getItem(OLD_KEY)||'null');if(old){state.answers=old.answers||{};state.active=old.active||0}}}catch{}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
@@ -102,7 +102,7 @@ function marks(i){return questions(i).reduce((n,q)=>n+(right(q,state.answers[q.n
 function fullScore(){let total=0;for(let i=0;i<3;i++)if(state.submitted[i])total+=marks(i);return total}
 function totalAnswered(){return PASSAGES.reduce((n,p)=>n+p.data.q.filter(q=>normal(state.answers[q.n])).length,0)}
 function fmt(seconds){seconds=Math.max(0,Math.floor(seconds));const h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;return h?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
-function tick(){if(!state.started)return;const now=Date.now();if(state.lastTick)state.elapsed+=Math.max(0,Math.min(2000,now-state.lastTick));state.lastTick=now;$('timer').textContent=fmt(state.elapsed/1000);if(now%5000<1100)save()}
+function tick(){if(!state.started)return;const now=Date.now();if(state.lastTick){const delta=Math.max(0,Math.min(2000,now-state.lastTick));state.elapsed+=delta;if(!state.submitted[state.active]){state.passageTimes ||= {};state.passageTimes[state.active]=(state.passageTimes[state.active]||0)+delta;}}state.lastTick=now;$('timer').textContent=fmt(state.elapsed/1000);if(now%5000<1100)save()}
 setInterval(tick,1000);
 function flowBlank(n){const value=state.answers[n]||'';const locked=!!state.submitted[0];return `<span class="flow-blank"><label class="flow-num" for="flow${n}">${n}</label><input id="flow${n}" data-num="${n}" type="text" value="${esc(value)}" placeholder="........" aria-label="Answer ${n}" autocomplete="off" ${locked?'disabled':''}></span>`}
 function flowReview(n){if(!state.submitted[0])return '';const q=questions(0).find(x=>x.n===n);return reviewCard(q,state.answers[n]||'')}
@@ -149,12 +149,99 @@ document.querySelectorAll('[data-num]').forEach(el=>el.addEventListener(el.type=
 document.querySelectorAll('[data-find]').forEach(b=>{b.onclick=()=>findEvidence(Number(b.dataset.find));b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();findEvidence(Number(b.dataset.find))}}});
  document.querySelectorAll('[data-three]').forEach(el=>el.addEventListener('change',()=>{const selected=[...document.querySelectorAll('[data-three]:checked')];if(selected.length>3){el.checked=false;return;}updateThree()}));
 $('submitHost').innerHTML=`<div class="submitbar"><div><b>${done?'✓ Passage đã nộp':'Nộp bài Passage '+(i+1)}</b><div class="small" id="submitNote">${done?`${marks(i)}/${questions(i).length} câu đúng. Có thể xem phần chữa phía trên.`:'Hãy làm đủ '+questions(i).length+' câu trước khi nộp.'}</div></div><button id="submitPass" class="action" ${done||!allAnswered(i)?'disabled':''}>${done?'Đã nộp':'Nộp Passage '+(i+1)}</button></div>`;
-$('submitPass').onclick=()=>{if(state.submitted[i]||!allAnswered(i))return;state.submitted[i]=true;saveMarkup();save();render();$('questionsPane').scrollTo({top:0,behavior:'smooth'})};
+$('submitPass').onclick=()=>{if(state.submitted[i]||!allAnswered(i))return;state.submitted[i]=true;state.reportLog ||= {};state.reportLog['p'+(i+1)]={status:'pending',submittedAt:new Date().toISOString()};if(PASSAGES.every((_,j)=>state.submitted[j]))state.reportLog.full={status:'pending',submittedAt:new Date().toISOString()};saveMarkup();save();render();$('questionsPane').scrollTo({top:0,behavior:'smooth'});void sendReadingReport('p'+(i+1));if(state.reportLog.full?.status==='pending')void sendReadingReport('full');};
 $('bottomnav').innerHTML=d.q.map(q=>`<button data-goto="${q.n}" title="Câu ${q.n}">${q.n}</button>`).join('');document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{$('q'+b.dataset.goto)?.scrollIntoView({block:'center',behavior:'smooth'})});updateNav();updateProgress();showSummary();}
 function updateNav(){for(const q of questions(state.active)){const b=document.querySelector(`[data-goto="${q.n}"]`);if(b){b.className=state.submitted[state.active]?(right(q,state.answers[q.n])?'correct':'wrong'):(normal(state.answers[q.n])?'answered':'')}}}
 function updateSubmitButton(){const b=$('submitPass');if(b)b.disabled=!!state.submitted[state.active]||!allAnswered(state.active);const t=$('submitNote');if(t&&!state.submitted[state.active])t.textContent=`${questions(state.active).filter(q=>normal(state.answers[q.n])).length}/${questions(state.active).length} câu đã trả lời · Cần hoàn thành trước khi nộp.`}
 function updateProgress(){const n=totalAnswered();$('progressText').textContent=n+'/40 câu đã trả lời';$('progressFill').style.width=n/40*100+'%'}
-function showSummary(){const done=PASSAGES.filter((x,i)=>state.submitted[i]).length;const per=PASSAGES.map((p,i)=>`Passage ${i+1}: ${state.submitted[i]?`${marks(i)}/${questions(i).length} câu đúng`:'Chưa nộp'}`).join(' · ');$('totalScore').innerHTML=`<b>${done===3?'TỔNG KẾT LUYỆN TẬP':'KẾT QUẢ TẠM THỜI'}</b><div class="score">${done===3?fullScore()+'/40':done+'/3 Passage đã nộp'}</div><div class="small">${per}</div>${done===3?'<p class="small">Đã nộp đủ 3 Passage. Có thể chuyển giữa các bài để xem chữa chi tiết.</p>':''}`}
+// ===== GỬI KẾT QUẢ VỀ GOOGLE SHEETS (tương thích biểu mẫu Practice cũ) =====
+// LƯU Ý: POST no-cors không thể đọc phản hồi của Apps Script; "đã gửi yêu cầu"
+// không đồng nghĩa với việc đã kiểm chứng dòng mới trên Google Sheets.
+const RESULT_ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+const reportInFlight=new Set();
+function reportReady(key){return key==='full'?PASSAGES.every((_,i)=>state.submitted[i]):/^p[123]$/.test(key)&&!!state.submitted[Number(key[1])-1]}
+function reportKeysAvailable(){const keys=[];for(let i=0;i<3;i++)if(state.submitted[i])keys.push('p'+(i+1));if(reportReady('full'))keys.push('full');return keys}
+function makeReportBody(key){
+ const isFull=key==='full',i=isFull?-1:Number(key[1])-1;
+ const rows=isFull?PASSAGES.flatMap(x=>x.data.q):questions(i);
+ const answers={},correctAnswers={};
+ for(const q of rows){answers[q.n]=state.answers[q.n]||'';correctAnswers[q.n]=q.answer}
+ const score=isFull?fullScore():marks(i),total=rows.length;
+ const parts=PASSAGES.map((p,j)=>({passage:j+1,submitted:!!state.submitted[j],score:state.submitted[j]?marks(j):null,total:p.data.q.length}));
+ const submittedAt=state.reportLog?.[key]?.submittedAt||new Date().toISOString();
+ if(!state.reportId)state.reportId='R3P01-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
+ const durationSeconds=isFull?Math.floor((state.elapsed||0)/1000):Math.floor((state.passageTimes?.[i]||0)/1000);
+ const details=JSON.stringify({
+   title:isFull?'Reading 3 Passages - Practice 01':`Reading 3 Passages - Practice 01 - Passage ${i+1}`,
+   reportId:state.reportId+'-'+key,
+   answers,correctAnswers,passages:parts,
+   note:'Thời gian từng Passage được theo dõi từ phiên bản cập nhật; các bài đã làm trước đó có thể thiếu số liệu này.'
+ });
+ // Các trường mode/name/className/... đúng giao thức ghi bảng Theo dõi BTVN hiện có.
+ return new URLSearchParams({
+   mode:'PRACTICE',name:state.name||'',className:state.className||'',skill:'Reading',
+   practiceType:isFull?'Reading 3 Passages':`Reading 3 Passages - Passage ${i+1}`,
+   practiceId:isFull?'01':`01-P${i+1}`,score:String(score),total:String(total),
+   durationSeconds:String(durationSeconds),details,submittedAt
+ });
+}
+function reportStatusText(status){
+ if(status==='sent')return 'Đã gửi yêu cầu · cần kiểm tra Google Sheets';
+ if(status==='sending')return 'Đang gửi…';
+ if(status==='failed')return 'Gửi chưa thành công · cần thử lại';
+ return 'Chưa gửi lên bảng báo cáo';
+}
+function refreshReportStatus(){
+ const host=$('sheetReportStatus');if(!host)return;
+ const keys=reportKeysAvailable();
+ if(!keys.length){host.innerHTML='<p class="small">Sau khi nộp Passage, kết quả sẽ được gửi vào bảng Theo dõi BTVN.</p>';return}
+ const rows=keys.map(key=>{
+   const label=key==='full'?'Tổng kết 40 câu':`Passage ${key[1]}`;
+   const status=state.reportLog?.[key]?.status||'not-sent';
+   return `<div class="report-line"><strong>${label}</strong><span class="report-state ${esc(status)}">${reportStatusText(status)}</span></div>`
+ }).join('');
+ host.innerHTML=`<div class="report-head">📊 Báo cáo kết quả về Google Sheets</div>${rows}<button id="resendReport" class="action secondary" type="button">Gửi lại kết quả đã nộp</button><p class="small">Không thể xác nhận trực tiếp dòng mới từ trang web (Google Apps Script dùng no-cors). Nếu nhấn gửi lại nhiều lần, bảng có thể có dòng trùng.</p>`;
+ $('resendReport').onclick=()=>void resendSavedReports();
+}
+async function sendReadingReport(key,force=false){
+ if(!reportReady(key)||reportInFlight.has(key))return;
+ state.reportLog ||= {};
+ if(!force&&state.reportLog[key]?.status==='sent')return;
+ const old=state.reportLog[key]||{};
+ const stamp=old.submittedAt||new Date().toISOString();
+ const body=makeReportBody(key);
+ reportInFlight.add(key);
+ state.reportLog[key]={...old,submittedAt:stamp,status:'sending'};
+ save();refreshReportStatus();
+ try{
+   // Tái sử dụng chính endpoint và URLSearchParams đang hoạt động ở Reading Passage 1.
+   await fetch(RESULT_ENDPOINT,{
+     method:'POST',mode:'no-cors',keepalive:true,
+     headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+     body:body.toString()
+   });
+   state.reportLog[key]={submittedAt:stamp,status:'sent',lastSentAt:new Date().toISOString()};
+ }catch(err){
+   console.warn('Không gửi được Reading Practice 01 ('+key+'):',err);
+   state.reportLog[key]={submittedAt:stamp,status:'failed',lastError:String(err)};
+ }finally{reportInFlight.delete(key);save();refreshReportStatus()}
+}
+async function resendSavedReports(){
+ const keys=reportKeysAvailable();
+ if(!keys.length)return;
+ const alreadySent=keys.filter(k=>state.reportLog?.[k]?.status==='sent');
+ if(alreadySent.length&&!confirm('Một số yêu cầu gửi đã được thực hiện. Gửi lại có thể tạo các dòng trùng trong Google Sheets. Tiếp tục?'))return;
+ await Promise.all(keys.map(k=>sendReadingReport(k,true)));
+}
+window.addEventListener('online',()=>{
+ for(const key of reportKeysAvailable())if(['pending','failed'].includes(state.reportLog?.[key]?.status))void sendReadingReport(key);
+});
+// Tiếp tục những lần gửi bị lỗi mạng sau khi học sinh tải lại trang.
+function retryPendingReports(){
+ if(typeof navigator!=='undefined'&&navigator.onLine===false)return;
+ for(const key of reportKeysAvailable())if(['pending','failed','sending'].includes(state.reportLog?.[key]?.status))void sendReadingReport(key);
+}
+function showSummary(){const done=PASSAGES.filter((x,i)=>state.submitted[i]).length;const per=PASSAGES.map((p,i)=>`Passage ${i+1}: ${state.submitted[i]?`${marks(i)}/${questions(i).length} câu đúng`:'Chưa nộp'}`).join(' · ');$('totalScore').innerHTML=`<b>${done===3?'TỔNG KẾT LUYỆN TẬP':'KẾT QUẢ TẠM THỜI'}</b><div class="score">${done===3?fullScore()+'/40':done+'/3 Passage đã nộp'}</div><div class="small">${per}</div>${done===3?'<p class="small">Đã nộp đủ 3 Passage. Có thể chuyển giữa các bài để xem chữa chi tiết.</p>':''}<div id="sheetReportStatus" class="sheet-report"></div>`;refreshReportStatus()}
 function renderNotes(){const list=state.notes[state.active]||[];$('notesHost').innerHTML=list.length?list.map((n,j)=>`<div class="entry"><small>“${esc(n.quote)}”</small><div>${esc(n.text)}</div><button class="action secondary" data-del-note="${j}" style="padding:3px 8px;font-size:10px">Xóa ghi chú</button></div>`).join(''):'<p class="small">Chưa có ghi chú. Bôi đen đoạn văn để thêm.</p>';document.querySelectorAll('[data-del-note]').forEach(b=>b.onclick=()=>{state.notes[state.active].splice(Number(b.dataset.delNote),1);save();renderNotes()})}
 function saveMarkup(){const panel=$('passageHost');if(panel&&state.started){clearEvidenceFocus();state.markup[state.active]=panel.innerHTML;}save()}
 let selectedRange=null,selectedText='';
@@ -216,5 +303,5 @@ function findEvidence(n){
 function start(){const name=$('studentName').value.trim(),cl=$('studentClass').value.trim();if(!name||!cl){$('startError').textContent='Vui lòng nhập họ tên và lớp.';return}state.name=name;state.className=cl;state.started=true;state.lastTick=Date.now();save();$('startOverlay').classList.add('hidden');render()}
 $('startBtn').onclick=start;
 try{const info=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');if(info){$('studentName').value=info.name||'';$('studentClass').value=info.className||''}}catch{}
-if(state.started){state.lastTick=Date.now();$('startOverlay').classList.add('hidden');render()}else $('startOverlay').classList.remove('hidden');
+if(state.started){state.lastTick=Date.now();$('startOverlay').classList.add('hidden');render();retryPendingReports()}else $('startOverlay').classList.remove('hidden');
 </script></body></html>
