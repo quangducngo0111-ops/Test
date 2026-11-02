@@ -115,7 +115,7 @@ function $(id){return document.getElementById(id)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function norm(s){return String(s??'').toLowerCase().normalize('NFKC').replace(/[’‘]/g,"'").replace(/\s+/g,' ').replace(/[.!?]+$/,'').trim()}
 function pKey(){return LESSON_KEY+'_'+activeStudent.name.toLowerCase()+'_'+activeStudent.className.toLowerCase()}
-function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}catch(e){};if(!progress||typeof progress!=='object')progress={seen:0,answers:{},graded:{}};progress.answers||={};progress.graded||={};if(progress.reviewEngineVersion!=='CHUA_BAI_20261102_V2'){delete progress.graded.write;progress.reviewEngineVersion='CHUA_BAI_20261102_V2';}phase=progress.seen>=UNIT.theory.length?'practice':'learn'}
+function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}catch(e){};if(!progress||typeof progress!=='object')progress={seen:0,answers:{},graded:{}};progress.answers||={};progress.graded||={};if(progress.reviewEngineVersion!=='CHUA_BAI_20261102_V3'){delete progress.graded.write;progress.reviewEngineVersion='CHUA_BAI_20261102_V2';}phase=progress.seen>=UNIT.theory.length?'practice':'learn'}
 function save(){try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}}
 function backNav(){}
 function render(){if(!progress)return;const prog=Math.min(progress.seen,UNIT.theory.length);$('meter').style.width=(phase==='learn'?prog/UNIT.theory.length*28:28+(Object.keys(progress.graded).length/5*72))+'%';$('meterLabel').textContent=phase==='learn'?'Học kiến thức '+prog+'/'+UNIT.theory.length+' phần':'Luyện tập '+Object.keys(progress.graded).length+'/5 dạng';if(phase==='learn')showTheory();else showExercise();backNav();}
@@ -244,9 +244,40 @@ function grammarReview(text,caseData,questionIndex){
     const task=issues.find(x=>x.kind==='task'&&x.label==='Chưa dùng cấu trúc yêu cầu');
     if(task){task.fix='It can be fixed.';task.why='Câu cần dùng can + be + V3; “fixde” sai chính tả và phải sửa thành “fixed”.';}
   }
+  // Detect modal + V3 without BE in passive exercises, independent of the question index.
+  // E.g. "The homework should finished" -> "The homework should be finished".
+  if(topic===10){
+    const modalBare=t.match(/\b(can|could|should|must|may|might|will|would)\s+(not\s+)?([a-z]+)\b/i);
+    if(modalBare){
+      const aux=modalBare[1],not=modalBare[2]||'',word=modalBare[3].toLowerCase();
+      // Avoid forms where the bare infinitive and past participle look identical.
+      const sameBase=new Set(['read','cut','put','hit','set','let','cost','spread','split','shut']);
+      if(grammarIsV3(word) && word!=='be' && !sameBase.has(word)){
+        const source=modalBare[0];
+        const replacement=aux+' '+not+'be '+modalBare[3];
+        const corrected=t.slice(0,modalBare.index)+replacement+t.slice(modalBare.index+source.length);
+        add('grammar','Thiếu “be” trong cấu trúc bị động',source,corrected,
+          'Sau '+aux.toLowerCase()+' cần dùng be + V3 khi muốn diễn đạt ý bị động.');
+      }
+    }
+    // Detect modal + be + infinitive where a past participle is required.
+    const modalBase=t.match(/\b(can|could|should|must|may|might|will|would)\s+(?:not\s+)?be\s+([a-z]+)\b/i);
+    if(modalBase){
+      const base=modalBase[2].toLowerCase();
+      if(GRAMMAR_V3_FORMS[base] && !grammarIsV3(base)){
+        const corrected=t.slice(0,modalBase.index)+modalBase[0].slice(0,-modalBase[2].length)+GRAMMAR_V3_FORMS[base]+t.slice(modalBase.index+modalBase[0].length);
+        add('grammar','Sau “be” cần dùng V3',modalBase[0],corrected,'Cấu trúc bị động: modal + be + past participle (V3).');
+      }
+    }
+  }
   // Extra diagnostic for common malformed passive constructions in any topic.
   const malformed=t.match(/\b(?:is|are|was|were|be|been)\s+(?:fix|build|write|send|do|make|lose|break|take|choose|give|drive|eat|teach|speak)\b/i);
   if(malformed){const verb=malformed[0].split(/\s+/).pop().toLowerCase();add('grammar','Bị động cần V3',malformed[0],malformed[0].replace(new RegExp(verb+'$','i'),GRAMMAR_V3_FORMS[verb]||verb),'Sau be trong câu bị động cần quá khứ phân từ, không dùng nguyên mẫu.');}
+  if(topic===10 && issues.some(x=>x.label==='Thiếu “be” trong cấu trúc bị động'||x.label==='Sau “be” cần dùng V3')){
+    for(let i=issues.length-1;i>=0;i--){
+      if(issues[i].kind==='task' && issues[i].label==='Chưa dùng cấu trúc yêu cầu') issues.splice(i,1);
+    }
+  }
   return issues;
 }
 
@@ -280,7 +311,40 @@ function feedback(type,c,g){
  }
  return `<div class="feedback ${g.good?'':'bad'}"><div class="label">${g.good?'✓ Chính xác':'✗ Chưa đúng'}</div><p>Đáp án tham khảo: <b>${esc(g.expected)}</b></p><p>Giải thích: ${esc(g.explain)}</p></div>`;
 }
-function showExercise(){const all=TYPES.every(x=>progress.graded[x[0]]);$('area').innerHTML=`<h2 class="section-title">Phase 2 · Luyện tập</h2><p class="subtle">Mỗi dạng có 5 câu. Kiểm tra ngay dưới từng Exercise, xem đáp án và giải thích. Bài viết tự do được nhận xét riêng.</p>${TYPES.map(([t,title,desc],i)=>`<section class="exercise"><div class="bar"><span>${esc(title)}</span><span>5 câu</span></div><div class="intro">${esc(desc)}</div>${UNIT.cases.map((c,j)=>makeQuestion(t,c,j)).join('')}<div class="exfoot"><button class="btn" data-grade="${t}">Kiểm tra Exercise ${i+1}</button>${progress.graded[t]?`<span class="small">${t==='write'?'Đã nhận xét 5 bài viết':progress.graded[t].filter(x=>x.good).length+'/5 câu đúng'}</span>`:''}</div></section>`).join('')}${all?summary():''}`;document.querySelectorAll('[data-answer]').forEach(el=>el.addEventListener('input',()=>{progress.answers[el.dataset.answer]=el.value;delete progress.graded[el.dataset.answer.split('_')[0]];save()}));document.querySelectorAll('input[type=radio]').forEach(el=>el.addEventListener('change',()=>{const t=el.name.split('_')[0];progress.answers[el.name]=el.value;delete progress.graded[t];save()}));document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{const t=b.dataset.grade;progress.graded[t]=UNIT.cases.map((c,i)=>gradeQuestion(t,c,progress.answers[qKey(t,i)]||'',i));save();const scroll=window.scrollY;showExercise();window.scrollTo({top:scroll});});}
+function showExercise(){
+ const all=TYPES.every(x=>progress.graded[x[0]]);
+ $('area').innerHTML=`<h2 class="section-title">Phase 2 · Luyện tập</h2><p class="subtle">Mỗi dạng có 5 câu. Kiểm tra ngay dưới từng Exercise. Sau khi chữa lần đầu, phần nhận xét bài tự viết tự cập nhật khi em sửa câu.</p>${TYPES.map(([t,title,desc],i)=>`<section class="exercise"><div class="bar"><span>${esc(title)}</span><span>5 câu</span></div><div class="intro">${esc(desc)}</div>${UNIT.cases.map((c,j)=>makeQuestion(t,c,j)).join('')}<div class="exfoot"><button class="btn" data-grade="${t}">Kiểm tra Exercise ${i+1}</button>${progress.graded[t]?`<span class="small">${t==='write'?'Đã nhận xét 5 bài viết':progress.graded[t].filter(x=>x.good).length+'/5 câu đúng'}</span>`:''}</div></section>`).join('')}${all?summary():''}`;
+ document.querySelectorAll('[data-answer]').forEach(el=>el.addEventListener('input',()=>{
+  const key=el.dataset.answer;
+  const type=key.split('_')[0];
+  progress.answers[key]=el.value;
+  const box=el.closest('.q');
+  const previous=box?.querySelector('.feedback');
+  if(type==='write' && progress.graded.write){
+   // Re-grade exactly this answer so feedback can never describe stale content.
+   const i=Number(key.split('_')[1]);
+   const updated=gradeQuestion('write',UNIT.cases[i],el.value,i);
+   progress.graded.write[i]=updated;
+   if(previous)previous.outerHTML=feedback('write',UNIT.cases[i],updated);
+  } else {
+   delete progress.graded[type];
+   if(previous)previous.remove();
+  }
+  save();
+ }));
+ document.querySelectorAll('input[type=radio]').forEach(el=>el.addEventListener('change',()=>{
+  const type=el.name.split('_')[0];
+  progress.answers[el.name]=el.value;
+  delete progress.graded[type];
+  const old=el.closest('.q')?.querySelector('.feedback');if(old)old.remove();
+  save();
+ }));
+ document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{
+  const type=b.dataset.grade;
+  progress.graded[type]=UNIT.cases.map((c,i)=>gradeQuestion(type,c,progress.answers[qKey(type,i)]||'',i));
+  save();const scroll=window.scrollY;showExercise();window.scrollTo({top:scroll});
+ });
+}
 function summary(){const scored=['choice','fill','correct','order'];const correct=scored.reduce((n,t)=>n+progress.graded[t].filter(x=>x.good).length,0);const writes=progress.graded.write.filter(x=>!x.empty).length;return `<div class="summary" id="summary"><div class="eyebrow">TỔNG KẾT BÀI HỌC</div><strong>${correct}/20 câu đúng</strong><p>Đã nhận xét ${writes}/5 câu tự viết. Điểm đúng/sai chỉ tính 20 câu khách quan; phần tự viết không bị chấm sai vì khác mẫu.</p><div class="progress"><i style="width:${correct/20*100}%"></i></div><p class="small">Em có thể sửa câu và kiểm tra lại từng Exercise. Tiến độ được lưu theo họ tên và lớp trên trình duyệt này.</p><button class="btn secondary" id="restartBtn">Ôn lại lý thuyết</button></div>`}
 document.addEventListener('click',e=>{if(e.target?.id==='restartBtn'){phase='learn';progress.seen=0;save();render();window.scrollTo({top:100,behavior:'smooth'})}});
 
