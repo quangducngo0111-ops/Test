@@ -135,7 +135,7 @@ const CATS={
   listening:{label:'Listening',icon:'🎧',root:'Practice/Listening/',sub:'Part & dạng bài'},
   speaking:{label:'Speaking',icon:'🎙️',root:'Practice/Speaking/',sub:'Part 1, 2, 3'},
   writing1:{label:'Writing Task 1',icon:'✍️',root:'Practice/WritingTask1/',sub:'Task 1'},
-  writing2:{label:'Writing Task 2',icon:'📝',root:'Practice/WritingTask2/',sub:'Task 2'},
+  writing2:{label:'Writing Task 2',icon:'📝',root:'Practice/WritingTask2/',sub:'5 dạng bài · luyện theo đề'},
   grammar:{label:'Grammar',icon:'📐',root:'Practice/Grammar/',sub:'10 chủ đề · 30 bài theo tuần'},
   vocabulary:{label:'Vocabulary',icon:'🎮',root:'Practice/Vocabulary/',sub:'Từ vựng & trò chơi'}
 };
@@ -164,10 +164,13 @@ const FALLBACK={
     {title:'Maps',icon:'🗺️',desc:'Luyện viết bản đồ theo từng bước · Pebbleton',url:'./WritingTask1/Maps/'}
   ],
   writing2:[
-    {title:'Translation Practice',icon:'🔤',desc:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',url:'./WritingTask2/TranslationPractice/'},
-    {title:'Teachers Technology',icon:'📚',desc:'Guided Writing · Opinion Essay',url:'./WritingTask2/TeachersTechnology/'},
-    {title:'Language Learning & Translation Software',icon:'🌐',desc:'Opinion Essay · Logic Chain · Guided Writing',url:'./WritingTask2/LanguageLearning/'}
+    {title:'Opinion Essay',icon:'✍️',desc:'Agree / Disagree · Bài 01, Bài 02',url:'./WritingTask2/OpinionEssay/'},
+    {title:'Discussion Essay',icon:'💬',desc:'Discuss both views & give your opinion',url:'./WritingTask2/DiscussionEssay/'},
+    {title:'Advantages & Disadvantages',icon:'⚖️',desc:'Bài 01 · University Students & Part-time Jobs',url:'./WritingTask2/AdvantagesDisadvantages/'},
+    {title:'Problem & Solution',icon:'🧩',desc:'Nguyên nhân, vấn đề và giải pháp',url:'./WritingTask2/ProblemSolution/'},
+    {title:'Two-part Questions',icon:'📝',desc:'Trả lời hai câu hỏi trong đề',url:'./WritingTask2/TwoPartQuestions/'}
   ],
+
   grammar:[
     {title:'Chủ đề 01 · Subject–Verb Agreement',icon:'📘',desc:'Hòa hợp chủ ngữ – động từ · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=01'},
     {title:'Chủ đề 02 · Tenses',icon:'📘',desc:'Các thì trong tiếng Anh · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=02'},
@@ -224,7 +227,7 @@ function mergeCatalogWithFallback(source){
 
   for(const key of Object.keys(CATS)){
     if(key==='speaking'){merged[key]=FALLBACK.speaking;continue;}
-    if(key==='grammar'){merged[key]=FALLBACK.grammar;continue;}
+    if(key==='grammar'||key==='writing2'){merged[key]=FALLBACK[key];continue;}
     merged[key]=mergeItems(
       FALLBACK[key]||[],
       source?.[key]||[]
@@ -310,7 +313,7 @@ function render(){
   renderTabs();
   const c=CATS[current],list=catalog[current]||[];
   title.textContent=c.label;
-  subtitle.textContent=current==='grammar'?'10 chủ đề · 30 bài học nhỏ để luyện từng tuần':`${list.length} mục luyện tập`;
+  subtitle.textContent=current==='grammar'?'10 chủ đề · 30 bài học nhỏ để luyện từng tuần':current==='writing2'?'5 dạng bài IELTS Writing Task 2':`${list.length} mục luyện tập`;
   count.textContent=`${list.length} mục`;
   grid.innerHTML=list.length?list.map((x,i)=>`
     <a class="card" href="${x.url}?practice=1">
@@ -370,7 +373,7 @@ async function loadRemote(cached){
         GitHub tree có thể chậm/stale và thiếu folder mới; nếu thay toàn bộ
         danh sách bằng found thì Reading Passage 1 sẽ biến mất.
       */
-      if(k==='speaking'){ next[k]=FALLBACK.speaking; continue; }
+      if(k==='speaking'||k==='writing2'){ next[k]=FALLBACK[k]; continue; }
       next[k]=mergeItems(
         FALLBACK[k]||[],
         found
@@ -379,6 +382,7 @@ async function loadRemote(cached){
     /* Vocabulary có trang chính ở root, giữ card ổn định thay vì liệt kê asset/game con. */
     next.vocabulary=FALLBACK.vocabulary;
     next.grammar=FALLBACK.grammar;
+    next.writing2=FALLBACK.writing2;
     catalog=next;
     saveCache();
     render();
