@@ -74,7 +74,78 @@ body.question-open .question-dock-text{white-space:normal;overflow:visible;font-
 .body-example-note p{white-space:pre-wrap;overflow-wrap:anywhere;margin:4px 0}
 .logic-mid-text small{font-size:11px}
 </style>
-</head><body><header><div class="top"><a href="../">← Opinion Essay</a><strong>✍️ Guided Writing · Language Learning</strong><span id="userInfo" class="small"></span></div></header><div class="wrap"><section class="hero"><span class="pill">IELTS WRITING TASK 2 · AGREE / DISAGREE</span><h1>Language Learning & Translation Tools</h1><p>Hiểu đề → Học collocations → Luyện từ → Logic chain → Dịch theo ý của em → Viết 4 đoạn → Chữa bài</p></section><section class="essay-question" aria-labelledby="essayPromptTitle">
+<style>
+/* Kho tu vung dang luoi ban dau: giu nguyen cac o tu vung, chi co dinh khi cuon. */
+.logic-chain-workarea{position:relative}
+.logic-palette{
+  position:sticky!important;
+  top:var(--logic-sticky-top,155px)!important;
+  z-index:14!important;
+  background:#fbfaff!important;
+  border:1px solid #dcd3fb!important;
+  border-radius:12px!important;
+  padding:12px!important;
+  margin:12px 0!important;
+  max-height:min(260px,38vh)!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  box-shadow:0 8px 22px rgba(41,18,96,.12)!important;
+  scrollbar-width:thin;
+}
+.logic-palette-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+.logic-palette-top strong{font-size:12px;color:#30176d}
+.logic-palette-top small{font-size:11px;color:#675780;font-weight:600}
+.logic-palette-list{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  align-content:flex-start;
+  gap:7px;
+  padding:2px 0 3px;
+  white-space:normal;
+  overflow:visible;
+  min-height:0;
+}
+.logic-palette .logic-term{
+  display:inline-block;
+  flex:0 1 auto;
+  max-width:100%;
+  margin:0!important;
+  padding:7px 10px!important;
+  border:1px solid #b9aaed!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  color:#38206f!important;
+  text-align:left;
+  white-space:normal;
+  font-size:12px;
+  line-height:1.5;
+  cursor:grab;
+  user-select:none;
+}
+.logic-palette .logic-term:hover{background:#f0eaff!important;border-color:#754fe3!important}
+.logic-palette .logic-term:focus-visible{outline:2px solid #6948dd;outline-offset:2px}
+.logic-palette-empty{font-size:11px;color:#5136a3;padding:5px 3px;white-space:normal}
+/* Cột trái và phải cân bằng để câu nằm đúng trên trục mũi tên. */
+#nodes1 .chain-node,#nodes2 .chain-node{display:grid!important;
+ grid-template-columns:114px minmax(0,1fr) 114px;
+ grid-template-areas:'handle text tools';gap:5px;align-items:center!important;
+ margin-left:8px;margin-right:8px;}
+#nodes1 .drag-handle,#nodes2 .drag-handle{grid-area:handle;justify-self:start;padding-left:5px}
+#nodes1 .logic-mid-text,#nodes2 .logic-mid-text{grid-area:text;text-align:center!important;padding:5px 0!important;min-width:0}
+#nodes1 .logic-mid-text strong,#nodes2 .logic-mid-text strong{text-align:center!important}
+#nodes1 .node-tools,#nodes2 .node-tools{grid-area:tools;display:flex;justify-self:end;
+ justify-content:flex-end;gap:4px;width:auto!important;flex-wrap:nowrap!important}
+#nodes1 .node-tools button,#nodes2 .node-tools button{min-width:29px;padding:5px 7px}
+@media(max-width:680px){
+ .logic-palette{padding:8px!important;top:var(--logic-sticky-top,135px)!important}
+ .logic-palette-top small{font-size:10px}
+ #nodes1 .chain-node,#nodes2 .chain-node{grid-template-columns:1fr 1fr;
+   grid-template-areas:'text text' 'handle tools';row-gap:2px}
+ #nodes1 .logic-mid-text,#nodes2 .logic-mid-text{padding:3px 0 4px!important}
+ #nodes1 .node-tools,#nodes2 .node-tools{justify-self:end}
+}
+</style></head><body><header><div class="top"><a href="../">← Opinion Essay</a><strong>✍️ Guided Writing · Language Learning</strong><span id="userInfo" class="small"></span></div></header><div class="wrap"><section class="hero"><span class="pill">IELTS WRITING TASK 2 · AGREE / DISAGREE</span><h1>Language Learning & Translation Tools</h1><p>Hiểu đề → Học collocations → Luyện từ → Logic chain → Dịch theo ý của em → Viết 4 đoạn → Chữa bài</p></section><section class="essay-question" aria-labelledby="essayPromptTitle">
   <div class="essay-question-top"><span class="essay-question-kicker">ĐỀ BÀI · IELTS WRITING TASK 2</span><span class="essay-question-kind">Opinion Essay · Agree / Disagree</span></div>
   <h2 id="essayPromptTitle">Read the question carefully</h2>
   <blockquote class="essay-question-text">Although there is a lot of translation software available, learning a language could still be advantageous. <strong>To what extent do you agree or disagree?</strong></blockquote>
@@ -169,11 +240,31 @@ function flexNodes(i){
 function persistNodes(i){state.translationGrades={};state.logic['b'+i+'nodes']=flexNodes(i);flexNodes(i).forEach((n,j)=>{state.logic['b'+i+(j+1)]=n.text||''});save();}
 function renderNodeList(i){
   const nodes=flexNodes(i);
-  const slot=(at)=>`<div class="chain-arrow">↓</div><div class="logic-drop-slot" data-slot-index="${at}" role="group" aria-label="Thả mắt xích vào vị trí ${at+1}"><span class="drop-icon">＋</span><span>Thả mắt xích ${at+1} vào đây</span></div>`;
-  if(!nodes.length)return slot(0).replace('<div class="chain-arrow">↓</div>','');
-  return nodes.map((node,j)=>`<div class="chain-node" draggable="true" data-node-body="${i}" data-node-index="${j}"><span class="drag-handle" title="Kéo để đổi thứ tự">☰</span><div class="logic-mid-text"><small>Mắt xích ${j+1}</small><strong>${esc(node.text||node.term||'Chọn một cụm từ')}</strong></div><div class="node-tools"><button type="button" data-node-move="up" data-body="${i}" data-index="${j}" title="Lên">↑</button><button type="button" data-node-move="down" data-body="${i}" data-index="${j}" title="Xuống">↓</button><button type="button" data-node-delete data-body="${i}" data-index="${j}" title="Xóa">×</button></div></div>${j+1<MAX_LOGIC_NODES?slot(j+1):''}`).join('');
+  // Chỉ hiển thị vị trí thả tiếp theo ở cuối; không tạo ô thả xen giữa các mắt xích.
+  const slot=(at)=>`<div class="logic-drop-slot" data-slot-index="${at}" role="group" aria-label="Thả mắt xích vào vị trí ${at+1}"><span class="drop-icon">＋</span><span>Thả mắt xích ${at+1} vào đây</span></div>`;
+  const item=(node,j)=>`<div class="chain-node" draggable="true" data-node-body="${i}" data-node-index="${j}"><span class="drag-handle" title="Kéo để đổi thứ tự">☰</span><div class="logic-mid-text"><small>Mắt xích ${j+1}</small><strong>${esc(node.text||node.term||'Chọn một cụm từ')}</strong></div><div class="node-tools"><button type="button" data-node-move="up" data-body="${i}" data-index="${j}" title="Lên">↑</button><button type="button" data-node-move="down" data-body="${i}" data-index="${j}" title="Xuống">↓</button><button type="button" data-node-delete data-body="${i}" data-index="${j}" title="Xóa">×</button></div></div>`;
+  const filled=nodes.map((node,j)=>(j?'<div class="chain-arrow">↓</div>':'')+item(node,j)).join('');
+  if(nodes.length>=MAX_LOGIC_NODES)return filled;
+  return filled+(nodes.length?'<div class="chain-arrow">↓</div>':'')+slot(nodes.length);
 }
-function refreshNodes(i){let e=document.getElementById('nodes'+i);if(e)e.innerHTML=renderNodeList(i);persistNodes(i)}
+
+// Từ đã dùng không còn nằm trong kho; khi xóa mắt xích, từ trở lại.
+function logicUsedTerms(i){return new Set(flexNodes(i).map(n=>String(n.term||n.text||'').toLocaleLowerCase().trim()).filter(Boolean));}
+function renderLogicTerms(i){
+ const group=VOCAB_GROUPS[i===1?'B':'C'];
+ const used=logicUsedTerms(i);
+ const available=group.rows.map(([en,vi],j)=>({en,vi,j})).filter(t=>!used.has(t.en.toLocaleLowerCase().trim()));
+ if(!available.length)return '<span class="logic-palette-empty">Đã dùng hết các cụm từ trong nhóm. Xóa một mắt xích để đưa từ đó trở lại.</span>';
+ return available.map(({en,vi,j})=>`<button type="button" draggable="true" class="logic-term" data-term-body="${i}" data-term-index="${j}" title="${esc(vi)} · Bấm để thêm ngay">${esc(en)}</button>`).join('');
+}
+function refreshLogicPalette(i){
+ const e=document.getElementById('logicPaletteTerms'+i);
+ if(e)e.innerHTML=renderLogicTerms(i);
+ const c=document.getElementById('logicPaletteCount'+i);
+ if(c){const total=VOCAB_GROUPS[i===1?'B':'C'].rows.length;c.textContent=VOCAB_GROUPS[i===1?'B':'C'].rows.filter(([en])=>!logicUsedTerms(i).has(en.toLocaleLowerCase().trim())).length+'/'+total+' cụm còn lại';}
+}
+
+function refreshNodes(i){let e=document.getElementById('nodes'+i);if(e)e.innerHTML=renderNodeList(i);persistNodes(i);refreshLogicPalette(i)}
 function chainText(i){return flexNodes(i).map(n=>n.text.trim()).filter(Boolean);}
 function renderFrozenVocab(){return `<details class="vocab-freeze" open><summary>📚 Vocabulary Support · Nhóm B/C (cố định khi cuộn) · Bấm để thu gọn</summary><p class="small">Từ vựng theo handout, dùng lại trong các câu dịch. Không cần thuộc lòng một câu mẫu.</p><div class="support-grid">${['B','C'].map(g=>VOCAB_GROUPS[g].rows.map(([en,vi])=>`<div><strong>${esc(en)}</strong><span>${esc(vi)}</span></div>`).join('')).join('')}</div></details>`}
 function logicNote(i){return `<div class="logic-note"><h4>📝 Ghi chú Body ${i}</h4><div class="body-main-idea"><span class="fixed-label">Ý CHÍNH BODY ${i}</span><strong>${esc(MAIN_IDEAS[i])}</strong></div><div class="logic-start logic-fixed-node"><span class="fixed-label">ĐIỂM BẮT ĐẦU</span>${esc('Learn a foreign language.')}</div>${chainText(i).map((t,j)=>`<div class="chain-part"><b>Mắt xích ${j+1}</b><p>${esc(t)}</p></div>`).join('')}<div class="body-example-note"><b>Ví dụ minh họa</b><p>${esc(state.logic['b'+i+'example']||'Chưa ghi')}</p></div></div>`}
@@ -191,7 +282,7 @@ function renderAnalysis(){return `<p><b>Opinion Essay</b> — câu hỏi “To w
 
 function renderVocab(){return `<p class="small">Từ vựng và collocations lấy từ tài liệu. Nhóm A dùng cho Introduction/Conclusion, nhóm B dùng cho Body 1, nhóm C dùng cho Body 2. Có thể chọn từ phù hợp thay vì phải dùng toàn bộ.</p>${Object.entries(VOCAB_GROUPS).map(([k,g])=>`<section class="q"><h3 class="sub">${esc(g.title)}</h3><table class="vocab"><thead><tr><th>English / Collocation</th><th>Nghĩa tiếng Việt</th></tr></thead><tbody>${g.rows.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></section>`).join('')}`}
 function renderQuiz(){return `<p>Kiểm tra nghĩa từ, collocation và điền từ vựng. Hãy làm đúng <b>12/12</b> câu để chuyển sang Logic Chain. Khi chấm, mỗi câu có nhận xét riêng.</p>${quizzes.map((q,i)=>`<div class="q"><b>Câu ${i+1}. ${esc(q.q)}</b>${q.type==='mc'?q.opts.map((op,j)=>`<label class="option"><input type="radio" name="quiz${i}" value="${j}" ${String(state.quiz[i])===String(j)?'checked':''}>${esc(op)}</label>`).join(''):`<input type="text" data-quiz="${i}" value="${esc(state.quiz[i]??'')}" placeholder="Điền một từ...">`}<div id="quizFeedback${i}" class="small"></div></div>`).join('')}<button class="btn" id="gradeQuiz">Kiểm tra 12 câu</button><div id="quizResult"></div>`}
-function renderLogic(){return `<p>Sắp xếp các cụm từ theo <b>nguyên nhân → hành động → kết quả</b>. Bấm hoặc kéo vào ô trống; dùng ↑ ↓ để thay đổi thứ tự.</p>${[1,2].map(i=>`<section class="q"><h3 class="sub">Logic Chain – Body ${i}</h3><div class="body-main-idea chain-idea"><span class="fixed-label">Ý CHÍNH</span><strong>${esc(MAIN_IDEAS[i])}</strong></div><div class="logic-palette"><b>Kho từ vựng nhóm ${i===1?'B':'C'} · kéo vào chuỗi</b><div>${VOCAB_GROUPS[i===1?'B':'C'].rows.map(([en,vi],j)=>`<button type="button" draggable="true" class="logic-term" data-term-body="${i}" data-term-index="${j}" title="${esc(vi)}">${esc(en)}</button>`).join('')}</div></div><div class="logic-start logic-fixed-node"><span class="fixed-label">ĐIỂM BẮT ĐẦU</span>Learn a foreign language.</div><div class="chain-arrow">↓</div><div id="nodes${i}" data-drop-body="${i}">${renderNodeList(i)}</div><p class="small">Ưu tiên: trước hết có cơ hội/khả năng mới, sau đó thực hiện hành động và dẫn tới một lợi ích cụ thể. Bấm từ vựng để thêm, hoặc kéo vào đúng vị trí. Mỗi vị trí có ô trống cho đến mắt xích 5.</p><div class="logic-after-chain"><h4>Ví dụ và đánh giá · Body ${i}</h4><label>Ví dụ minh họa</label>${value('logic.b'+i+'example',i===1?'Ví dụ: một người tiếp cận tài liệu gốc / tìm hiểu văn hóa...':'Ví dụ: nhân viên giao tiếp với khách hàng quốc tế...',2)}<div class="logic-review-actions"><button type="button" class="btn alt" data-clear-nodes="${i}">Xóa chuỗi để làm lại</button><button type="button" class="btn" data-evaluate-logic="${i}">Đánh giá Logic Chain</button></div><div id="logicReview${i}" aria-live="polite"></div></div></section>`).join('')}`}
+function renderLogic(){return `<p>Sắp xếp các cụm từ theo <b>nguyên nhân → hành động → kết quả</b>. Bấm hoặc kéo vào ô trống; dùng ↑ ↓ để thay đổi thứ tự.</p>${[1,2].map(i=>`<section class="q"><h3 class="sub">Logic Chain – Body ${i}</h3><div class="body-main-idea chain-idea"><span class="fixed-label">Ý CHÍNH</span><strong>${esc(MAIN_IDEAS[i])}</strong></div><div class="logic-chain-workarea"><div class="logic-palette"><div class="logic-palette-top"><strong>📚 Kho từ vựng nhóm ${i===1?'B':'C'}</strong><small><span id="logicPaletteCount${i}">${VOCAB_GROUPS[i===1?'B':'C'].rows.filter(([en])=>!logicUsedTerms(i).has(en.toLocaleLowerCase().trim())).length}/${VOCAB_GROUPS[i===1?'B':'C'].rows.length} cụm còn lại</span> · Bấm để thêm / kéo để thả</small></div><div class="logic-palette-list" id="logicPaletteTerms${i}">${renderLogicTerms(i)}</div></div><div class="logic-start logic-fixed-node"><span class="fixed-label">ĐIỂM BẮT ĐẦU</span>Learn a foreign language.</div><div class="chain-arrow">↓</div><div id="nodes${i}" data-drop-body="${i}">${renderNodeList(i)}</div><p class="small">Ưu tiên: trước hết có cơ hội/khả năng mới, sau đó thực hiện hành động và dẫn tới một lợi ích cụ thể. Bấm từ vựng để thêm, hoặc kéo vào đúng vị trí. Mỗi vị trí có ô trống cho đến mắt xích 5.</p></div><div class="logic-after-chain"><h4>Ví dụ và đánh giá · Body ${i}</h4><label>Ví dụ minh họa</label>${value('logic.b'+i+'example',i===1?'Ví dụ: một người tiếp cận tài liệu gốc / tìm hiểu văn hóa...':'Ví dụ: nhân viên giao tiếp với khách hàng quốc tế...',2)}<div class="logic-review-actions"><button type="button" class="btn alt" data-clear-nodes="${i}">Xóa chuỗi để làm lại</button><button type="button" class="btn" data-evaluate-logic="${i}">Đánh giá Logic Chain</button></div><div id="logicReview${i}" aria-live="polite"></div></div></section>`).join('')}`}
 const LOGIC_PHASES={
  1:[['learn a foreign language','gain access to authentic materials','communicate with native speakers'],['explore traditions and customs','have a deeper understanding of different cultures'],['develop cultural awareness','broaden knowledge','broaden horizons']],
  2:[['qualify for international positions','communicate with international clients','work in multinational companies'],['gain access to employment opportunities','enhance employability'],['secure better-paid jobs','improve career prospects']]
@@ -375,14 +466,14 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-copy-vocab
 // Events for flexible, ordered logic nodes. Up/down buttons also work on touchscreens.
 let dragging=null;
 document.addEventListener('dragstart',e=>{const term=e.target.closest('[data-term-body]'),node=e.target.closest('[data-node-body]');if(term)dragging={kind:'term',body:+term.dataset.termBody,index:+term.dataset.termIndex};else if(node)dragging={kind:'node',body:+node.dataset.nodeBody,index:+node.dataset.nodeIndex};else return;if(e.dataTransfer)e.dataTransfer.setData('text/plain','logic-node');});
-document.addEventListener('dragover',e=>{if(!dragging)return;const area=e.target.closest('[data-drop-body]');if(!area || +area.dataset.dropBody!==dragging.body)return;e.preventDefault();document.querySelectorAll('.logic-drop-slot.drag-hover').forEach(el=>el.classList.remove('drag-hover'));const slot=e.target.closest('[data-slot-index]');if(slot)slot.classList.add('drag-hover');});
+document.addEventListener('dragover',e=>{if(!dragging)return;const edge=64;if(e.clientY>innerHeight-edge)window.scrollBy(0,18);else if(e.clientY<edge)window.scrollBy(0,-18);const area=e.target.closest('[data-drop-body]');if(!area || +area.dataset.dropBody!==dragging.body)return;e.preventDefault();document.querySelectorAll('.logic-drop-slot.drag-hover').forEach(el=>el.classList.remove('drag-hover'));const slot=e.target.closest('[data-slot-index]');if(slot)slot.classList.add('drag-hover');});
 document.addEventListener('dragend',()=>{dragging=null;document.querySelectorAll('.logic-drop-slot.drag-hover').forEach(el=>el.classList.remove('drag-hover'));});
-document.addEventListener('drop',e=>{const area=e.target.closest('[data-drop-body]');if(!area||!dragging)return;e.preventDefault();const body=+area.dataset.dropBody;if(body!==dragging.body){dragging=null;return}const slot=e.target.closest('[data-slot-index]');const hit=e.target.closest('[data-node-index]');let at=slot?+slot.dataset.slotIndex:(hit?+hit.dataset.nodeIndex:flexNodes(body).length);const nodes=flexNodes(body);if(dragging.kind==='term'){if(nodes.length>=MAX_LOGIC_NODES){notify('Chuỗi đã có đủ 5 mắt xích. Xóa hoặc thay một mắt xích nếu cần chỉnh.');dragging=null;return;}const [en,vi]=VOCAB_GROUPS[body===1?'B':'C'].rows[dragging.index];nodes.splice(at,0,{id:'term'+Date.now(),term:en,text:en});}else{const [n]=nodes.splice(dragging.index,1);if(dragging.index<at)at--;nodes.splice(at,0,n);}refreshNodes(body);dragging=null;document.querySelectorAll('.logic-drop-slot.drag-hover').forEach(el=>el.classList.remove('drag-hover'));});
-document.addEventListener('click',e=>{const clear=e.target.closest('[data-clear-nodes]'),add=e.target.closest('[data-add-node]'),term=e.target.closest('[data-term-body]'),del=e.target.closest('[data-node-delete]'),move=e.target.closest('[data-node-move]');const review=e.target.closest('[data-evaluate-logic]');if(review){const i=+review.dataset.evaluateLogic;document.getElementById('logicReview'+i).innerHTML=renderLogicEvaluation(i);return;}if(clear){const i=+clear.dataset.clearNodes;if(confirm('Xóa toàn bộ mắt xích của Body '+i+'? Điểm bắt đầu và ý chính Body vẫn giữ nguyên.')){state.logic['b'+i+'nodes']=[];refreshNodes(i)}return;}if(add){const i=+add.dataset.addNode;if(flexNodes(i).length>=MAX_LOGIC_NODES){notify('Mắt xích 5 là mắt xích cuối cùng.');return;}flexNodes(i).push({id:'new'+Date.now(),text:'',term:''});refreshNodes(i)}else if(term){const i=+term.dataset.termBody;if(flexNodes(i).length>=MAX_LOGIC_NODES){notify('Chuỗi đã đủ 5 mắt xích. Có thể đổi thứ tự hoặc xóa mắt xích.');return;}const [en,vi]=VOCAB_GROUPS[i===1?'B':'C'].rows[+term.dataset.termIndex];flexNodes(i).push({id:'term'+Date.now(),term:en,text:en});refreshNodes(i)}else if(del){const i=+del.dataset.body;flexNodes(i).splice(+del.dataset.index,1);refreshNodes(i)}else if(move){const i=+move.dataset.body,a=flexNodes(i),idx=+move.dataset.index,to=idx+(move.dataset.nodeMove==='up'?-1:1);if(to>=0&&to<a.length){[a[idx],a[to]]=[a[to],a[idx]];refreshNodes(i)}}});
+document.addEventListener('drop',e=>{const area=e.target.closest('[data-drop-body]');if(!area||!dragging)return;e.preventDefault();const body=+area.dataset.dropBody;if(body!==dragging.body){dragging=null;return}const slot=e.target.closest('[data-slot-index]');const hit=e.target.closest('[data-node-index]');let at=slot?+slot.dataset.slotIndex:(hit?+hit.dataset.nodeIndex:flexNodes(body).length);const nodes=flexNodes(body);if(dragging.kind==='term'){if(nodes.length>=MAX_LOGIC_NODES){notify('Chuỗi đã có đủ 5 mắt xích. Xóa hoặc thay một mắt xích nếu cần chỉnh.');dragging=null;return;}const [en,vi]=VOCAB_GROUPS[body===1?'B':'C'].rows[dragging.index];if(logicUsedTerms(body).has(en.toLocaleLowerCase().trim())){dragging=null;return;}nodes.splice(at,0,{id:'term'+Date.now(),term:en,text:en});}else{const [n]=nodes.splice(dragging.index,1);if(dragging.index<at)at--;nodes.splice(at,0,n);}refreshNodes(body);dragging=null;document.querySelectorAll('.logic-drop-slot.drag-hover').forEach(el=>el.classList.remove('drag-hover'));});
+document.addEventListener('click',e=>{const clear=e.target.closest('[data-clear-nodes]'),add=e.target.closest('[data-add-node]'),term=e.target.closest('[data-term-body]'),del=e.target.closest('[data-node-delete]'),move=e.target.closest('[data-node-move]');const review=e.target.closest('[data-evaluate-logic]');if(review){const i=+review.dataset.evaluateLogic;document.getElementById('logicReview'+i).innerHTML=renderLogicEvaluation(i);return;}if(clear){const i=+clear.dataset.clearNodes;if(confirm('Xóa toàn bộ mắt xích của Body '+i+'? Điểm bắt đầu và ý chính Body vẫn giữ nguyên.')){state.logic['b'+i+'nodes']=[];refreshNodes(i)}return;}if(add){const i=+add.dataset.addNode;if(flexNodes(i).length>=MAX_LOGIC_NODES){notify('Mắt xích 5 là mắt xích cuối cùng.');return;}flexNodes(i).push({id:'new'+Date.now(),text:'',term:''});refreshNodes(i)}else if(term){const i=+term.dataset.termBody;if(flexNodes(i).length>=MAX_LOGIC_NODES){notify('Chuỗi đã đủ 5 mắt xích. Có thể đổi thứ tự hoặc xóa mắt xích.');return;}const [en,vi]=VOCAB_GROUPS[i===1?'B':'C'].rows[+term.dataset.termIndex];if(logicUsedTerms(i).has(en.toLocaleLowerCase().trim()))return;flexNodes(i).push({id:'term'+Date.now(),term:en,text:en});refreshNodes(i)}else if(del){const i=+del.dataset.body;flexNodes(i).splice(+del.dataset.index,1);refreshNodes(i)}else if(move){const i=+move.dataset.body,a=flexNodes(i),idx=+move.dataset.index,to=idx+(move.dataset.nodeMove==='up'?-1:1);if(to>=0&&to<a.length){[a[idx],a[to]]=[a[to],a[idx]];refreshNodes(i)}}});
 document.addEventListener('input',e=>{const el=e.target.closest('[data-chain-text]');if(!el)return;const i=+el.dataset.chainText,j=+el.dataset.chainIndex;if(flexNodes(i)[j]){flexNodes(i)[j].text=el.value;persistNodes(i)}});
 
 // Keep the question visible after students scroll past the full-width prompt.
 (()=>{const prompt=document.querySelector('.essay-question'),dock=document.getElementById('questionDock'),btn=document.getElementById('toggleQuestion');if(!prompt||!dock||!btn)return;
-const update=()=>{const bottom=prompt.getBoundingClientRect().bottom;dock.classList.toggle('visible',bottom<65);if(bottom>=65){document.body.classList.remove('question-open');btn.setAttribute('aria-expanded','false');btn.textContent='Xem toàn bộ đề ↓';}};
-window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update,{passive:true});btn.addEventListener('click',()=>{const expanded=document.body.classList.toggle('question-open');btn.setAttribute('aria-expanded',String(expanded));btn.textContent=expanded?'Thu gọn ↑':'Xem toàn bộ đề ↓';});update();})();
+const update=()=>{const bottom=prompt.getBoundingClientRect().bottom;dock.classList.toggle('visible',bottom<65);document.documentElement.style.setProperty('--logic-sticky-top',Math.ceil((document.querySelector('header')?.offsetHeight||59)+(bottom<65?dock.offsetHeight:0)+8)+'px');if(bottom>=65){document.body.classList.remove('question-open');btn.setAttribute('aria-expanded','false');btn.textContent='Xem toàn bộ đề ↓';}};
+window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update,{passive:true});btn.addEventListener('click',()=>{const expanded=document.body.classList.toggle('question-open');btn.setAttribute('aria-expanded',String(expanded));btn.textContent=expanded?'Thu gọn ↑':'Xem toàn bộ đề ↓';requestAnimationFrame(update);});update();})();
 </script></body></html>
