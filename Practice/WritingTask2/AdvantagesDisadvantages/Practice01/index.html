@@ -305,9 +305,12 @@ function flexNodes(i){
 function persistNodes(i){state.translationGrades={};state.logic['b'+i+'nodes']=flexNodes(i);flexNodes(i).forEach((n,j)=>{state.logic['b'+i+(j+1)]=n.text||''});save();}
 function renderNodeList(i){
   const nodes=flexNodes(i);
-  const slot=(at)=>`<div class="chain-arrow">↓</div><div class="logic-drop-slot" data-slot-index="${at}" role="group" aria-label="Thả mắt xích vào vị trí ${at+1}"><span class="drop-icon">＋</span><span>Thả mắt xích ${at+1} vào đây</span></div>`;
-  if(!nodes.length)return slot(0).replace('<div class="chain-arrow">↓</div>','');
-  return nodes.map((node,j)=>`<div class="chain-node" draggable="true" data-node-body="${i}" data-node-index="${j}"><span class="drag-handle" title="Kéo để đổi thứ tự">☰</span><div class="logic-mid-text"><small>Mắt xích ${j+1}</small><strong>${esc(node.text||node.term||'Chọn một cụm từ')}</strong></div><div class="node-tools"><button type="button" data-node-move="up" data-body="${i}" data-index="${j}" title="Lên">↑</button><button type="button" data-node-move="down" data-body="${i}" data-index="${j}" title="Xuống">↓</button><button type="button" data-node-delete data-body="${i}" data-index="${j}" title="Xóa">×</button></div></div>${j+1<MAX_LOGIC_NODES?slot(j+1):''}`).join('');
+  // Hiển thị một vị trí trống duy nhất ở CUỐI chuỗi; các vị trí đã điền không tạo ô thả mới.
+  const slot=(at)=>`<div class="logic-drop-slot" data-slot-index="${at}" role="group" aria-label="Thả mắt xích vào vị trí ${at+1}"><span class="drop-icon">＋</span><span>Thả mắt xích ${at+1} vào đây</span></div>`;
+  const item=(node,j)=>`<div class="chain-node" draggable="true" data-node-body="${i}" data-node-index="${j}"><span class="drag-handle" title="Kéo để đổi thứ tự">☰</span><div class="logic-mid-text"><small>Mắt xích ${j+1}</small><strong>${esc(node.text||node.term||'Chọn một cụm từ')}</strong></div><div class="node-tools"><button type="button" data-node-move="up" data-body="${i}" data-index="${j}" title="Lên">↑</button><button type="button" data-node-move="down" data-body="${i}" data-index="${j}" title="Xuống">↓</button><button type="button" data-node-delete data-body="${i}" data-index="${j}" title="Xóa">×</button></div></div>`;
+  const filled=nodes.map((node,j)=>(j?'<div class="chain-arrow">↓</div>':'')+item(node,j)).join('');
+  if(nodes.length>=MAX_LOGIC_NODES)return filled;
+  return filled+(nodes.length?'<div class="chain-arrow">↓</div>':'')+slot(nodes.length);
 }
 function refreshNodes(i){let e=document.getElementById('nodes'+i);if(e)e.innerHTML=renderNodeList(i);persistNodes(i)}
 function chainText(i){return flexNodes(i).map(n=>n.text.trim()).filter(Boolean);}
