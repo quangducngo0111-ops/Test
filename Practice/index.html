@@ -125,8 +125,8 @@ main{padding:24px 0 50px}
 
 <script>
 const TREE='https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
-const CACHE_KEY='IELTS_PRACTICE_CATALOG_V14_GRAMMAR';
-const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V13_FULLTEST','IELTS_PRACTICE_CATALOG_V8','IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
+const CACHE_KEY='IELTS_PRACTICE_CATALOG_V16_LANGUAGE_ESSAY';
+const OLD_CACHE_KEYS=['IELTS_PRACTICE_CATALOG_V14_GRAMMAR','IELTS_PRACTICE_CATALOG_V13_FULLTEST','IELTS_PRACTICE_CATALOG_V8','IELTS_PRACTICE_CATALOG_V7','IELTS_PRACTICE_CATALOG_V6','IELTS_PRACTICE_CATALOG_V5','IELTS_PRACTICE_CATALOG_V4'];
 const ACTIVE_TAB_KEY='IELTS_PRACTICE_ACTIVE_TAB_V1';
 const CACHE_TTL=6*60*60*1000;
 
@@ -136,7 +136,7 @@ const CATS={
   speaking:{label:'Speaking',icon:'🎙️',root:'Practice/Speaking/',sub:'Part 1, 2, 3'},
   writing1:{label:'Writing Task 1',icon:'✍️',root:'Practice/WritingTask1/',sub:'Task 1'},
   writing2:{label:'Writing Task 2',icon:'📝',root:'Practice/WritingTask2/',sub:'Task 2'},
-  grammar:{label:'Grammar',icon:'📐',root:'Practice/Grammar/',sub:'Ngữ pháp & bài tập'},
+  grammar:{label:'Grammar',icon:'📐',root:'Practice/Grammar/',sub:'10 chủ đề · 30 bài theo tuần'},
   vocabulary:{label:'Vocabulary',icon:'🎮',root:'Practice/Vocabulary/',sub:'Từ vựng & trò chơi'}
 };
 
@@ -164,19 +164,21 @@ const FALLBACK={
     {title:'Maps',icon:'🗺️',desc:'Luyện viết bản đồ theo từng bước · Pebbleton',url:'./WritingTask1/Maps/'}
   ],
   writing2:[
-    {title:'Translation Practice',icon:'🔤',desc:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',url:'./WritingTask2/TranslationPractice/'}
+    {title:'Translation Practice',icon:'🔤',desc:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',url:'./WritingTask2/TranslationPractice/'},
+    {title:'Teachers Technology',icon:'📚',desc:'Guided Writing · Opinion Essay',url:'./WritingTask2/TeachersTechnology/'},
+    {title:'Language Learning & Translation Software',icon:'🌐',desc:'Opinion Essay · Logic Chain · Guided Writing',url:'./WritingTask2/LanguageLearning/'}
   ],
   grammar:[
-    {title:'Chủ đề 01 · Subject–Verb Agreement',icon:'📘',desc:'Hòa hợp chủ ngữ – động từ · 3 bài nhỏ theo tuần',url:'./Grammar/Topic01/'},
-    {title:'Chủ đề 02 · Tenses',icon:'📘',desc:'Các thì trong tiếng Anh · 3 bài nhỏ theo tuần',url:'./Grammar/Topic02/'},
-    {title:'Chủ đề 03 · Articles',icon:'📘',desc:'Mạo từ · 3 bài nhỏ theo tuần',url:'./Grammar/Topic03/'},
-    {title:'Chủ đề 04 · Countable & Uncountable Nouns',icon:'📘',desc:'Danh từ đếm được và không đếm được · 3 bài nhỏ theo tuần',url:'./Grammar/Topic04/'},
-    {title:'Chủ đề 05 · Quantifiers',icon:'📘',desc:'Từ chỉ số lượng · 3 bài nhỏ theo tuần',url:'./Grammar/Topic05/'},
-    {title:'Chủ đề 06 · Conditionals',icon:'📘',desc:'Câu điều kiện · 3 bài nhỏ theo tuần',url:'./Grammar/Topic06/'},
-    {title:'Chủ đề 07 · Relative Clauses',icon:'📘',desc:'Mệnh đề quan hệ · 3 bài nhỏ theo tuần',url:'./Grammar/Topic07/'},
-    {title:'Chủ đề 08 · Gerunds & Infinitives',icon:'📘',desc:'V-ing và to V · 3 bài nhỏ theo tuần',url:'./Grammar/Topic08/'},
-    {title:'Chủ đề 09 · Linking & Clauses',icon:'📘',desc:'Liên từ và mệnh đề · 3 bài nhỏ theo tuần',url:'./Grammar/Topic09/'},
-    {title:'Chủ đề 10 · Passive Voice',icon:'📘',desc:'Câu bị động · 3 bài nhỏ theo tuần',url:'./Grammar/Topic10/'}
+    {title:'Chủ đề 01 · Subject–Verb Agreement',icon:'📘',desc:'Hòa hợp chủ ngữ – động từ · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=01'},
+    {title:'Chủ đề 02 · Tenses',icon:'📘',desc:'Các thì trong tiếng Anh · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=02'},
+    {title:'Chủ đề 03 · Articles',icon:'📘',desc:'Mạo từ · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=03'},
+    {title:'Chủ đề 04 · Countable & Uncountable Nouns',icon:'📘',desc:'Danh từ đếm được và không đếm được · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=04'},
+    {title:'Chủ đề 05 · Quantifiers',icon:'📘',desc:'Từ chỉ số lượng · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=05'},
+    {title:'Chủ đề 06 · Conditionals',icon:'📘',desc:'Câu điều kiện · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=06'},
+    {title:'Chủ đề 07 · Relative Clauses',icon:'📘',desc:'Mệnh đề quan hệ · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=07'},
+    {title:'Chủ đề 08 · Gerunds & Infinitives',icon:'📘',desc:'V-ing và to V · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=08'},
+    {title:'Chủ đề 09 · Linking & Clauses',icon:'📘',desc:'Liên từ và mệnh đề · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=09'},
+    {title:'Chủ đề 10 · Passive Voice',icon:'📘',desc:'Câu bị động · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=10'}
   ],
   vocabulary:[
     {title:'Vocabulary Practice',icon:'🎮',desc:'Từ vựng & trò chơi',url:'./Vocabulary/'}
@@ -222,6 +224,7 @@ function mergeCatalogWithFallback(source){
 
   for(const key of Object.keys(CATS)){
     if(key==='speaking'){merged[key]=FALLBACK.speaking;continue;}
+    if(key==='grammar'){merged[key]=FALLBACK.grammar;continue;}
     merged[key]=mergeItems(
       FALLBACK[key]||[],
       source?.[key]||[]
@@ -262,7 +265,7 @@ function item(path,root){
     MatchingSentenceEndings:'Matching Sentence Endings',SentenceCompletion:'Sentence Completion',SummaryCompletion:'Summary Completion',
     TableCompletion:'Table Completion',NoteCompletion:'Note Completion',FlowChartCompletion:'Flow-chart Completion',
     ShortAnswerQuestions:'Short Answer Questions',MultipleChoice:'Multiple Choice',DiagramLabelling:'Diagram Labelling',
-    DynamicDatasets:'Dynamic Datasets',Process:'Process',Maps:'Maps',TranslationPractice:'Translation Practice',Grammar:'Grammar Practice'
+    DynamicDatasets:'Dynamic Datasets',Process:'Process',Maps:'Maps',TranslationPractice:'Translation Practice',TeachersTechnology:'Teachers Technology',LanguageLearning:'Language Learning & Translation Software',Grammar:'Grammar Practice'
   };
 
   const icons={
@@ -273,7 +276,7 @@ function item(path,root){
     MatchingSentenceEndings:'🧷',SentenceCompletion:'✏️',SummaryCompletion:'📝',
     TableCompletion:'📋',NoteCompletion:'🗒️',FlowChartCompletion:'🔀',
     ShortAnswerQuestions:'💬',MultipleChoice:'🔘',DiagramLabelling:'🏷️',
-    DynamicDatasets:'📈',Process:'✍️',Maps:'🗺️',TranslationPractice:'🔤',Grammar:'📐'
+    DynamicDatasets:'📈',Process:'✍️',Maps:'🗺️',TranslationPractice:'🔤',TeachersTechnology:'📚',LanguageLearning:'🌐',Grammar:'📐'
   };
 
   const descriptions={
@@ -283,6 +286,7 @@ function item(path,root){
     Process:'6 bài luyện Process theo từng bước, có chữa bài',
      Maps:'Mô tả những thay đổi trên bản đồ theo từng bước',
     TranslationPractice:'Mixed Structures · Dịch Việt–Anh · Grammar & Spelling Feedback',
+    LanguageLearning:'Opinion Essay · Logic Chain · Guided Writing',
     Grammar:'10 chủ đề · 30 bài nhỏ · Học lý thuyết và luyện tập'
   };
   return{
@@ -306,7 +310,7 @@ function render(){
   renderTabs();
   const c=CATS[current],list=catalog[current]||[];
   title.textContent=c.label;
-  subtitle.textContent=`${list.length} mục luyện tập`;
+  subtitle.textContent=current==='grammar'?'10 chủ đề · 30 bài học nhỏ để luyện từng tuần':`${list.length} mục luyện tập`;
   count.textContent=`${list.length} mục`;
   grid.innerHTML=list.length?list.map((x,i)=>`
     <a class="card" href="${x.url}?practice=1">
@@ -315,6 +319,9 @@ function render(){
       <span class="item-no">${String(i+1).padStart(2,'0')}</span>
       <div class="arrow">→</div>
     </a>`).join(''):'<div class="empty">Chưa có mục luyện tập trong nhóm này.</div>';
+  if(current==='grammar'){
+    grid.insertAdjacentHTML('afterbegin',`<div style="grid-column:1/-1;padding:16px 20px;background:#f1edff;border:1px solid #d7cbff;border-radius:16px;color:#2d1768"><strong style="font-size:16px">📘 Grammar – 10 chủ đề, 30 bài nhỏ</strong><div style="font-size:13px;margin-top:5px;color:#63528f">Bấm vào một <b>chủ đề</b> để chọn <b>Bài 01 · Tuần 1</b>, <b>Bài 02 · Tuần 2</b> hoặc <b>Bài 03 · Tuần 3</b>. Mỗi bài có kiến thức, ví dụ, xác nhận đã hiểu và bài tập chấm chữa.</div></div>`);
+  }
 }
 function readCache(){
   try{
@@ -393,12 +400,12 @@ loadRemote(cached); // chỉ cập nhật nền khi cache cũ/hết hạn
 /* Chỉ chuyển tiếp thông tin khi học sinh đã nhập tên/lớp ở trang tổng.
    Link mở trực tiếp không mang phiếu chuyển tiếp nên vẫn yêu cầu nhập lại. */
 document.addEventListener('click',function(evt){
- const anchor=evt.target.closest('a[href*="Grammar/Topic"]');
+ const anchor=evt.target.closest('a[href*="Grammar/index.html?topic="]');
  if(!anchor)return;
  try{
   const s=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
   if(!s?.name||!s?.className)return;
-  const target=new URL(anchor.href,location.href).pathname.replace(/\/+$/,'')+'/';
+  const u=new URL(anchor.href,location.href);const target=u.pathname+u.search;
   sessionStorage.setItem('IELTS_GRAMMAR_ONE_NAV_V1',JSON.stringify({target,time:Date.now(),student:{name:s.name,className:s.className}}));
  }catch(e){}
 });
