@@ -40,7 +40,13 @@ let UNIT=LESSONS['5']['1'];
 let phase='learn',progress=null;
 function urlRoute(){
   const q=new URLSearchParams(location.search);
-  const t=Number(q.get('topic')),w=Number(q.get('week'));
+  // Support both proper links (?topic=01&practice=1) and older malformed
+  // bookmarks (?topic=01?practice=1) without resetting to all 10 topics.
+  const readNumber=name=>{
+    const match=String(q.get(name)||'').match(/^0*(\d{1,2})(?:\?|$)/);
+    return match?Number(match[1]):null;
+  };
+  const t=readNumber('topic'),w=readNumber('week');
   return {topic:t>=1&&t<=10?t:null,week:w>=1&&w<=3?w:null};
 }
 function savedStudent(x){
