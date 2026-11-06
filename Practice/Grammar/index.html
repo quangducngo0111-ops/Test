@@ -18,6 +18,7 @@
 /* Detailed, topic-aware writing feedback */
 .grammar-issue{background:#fff;border:1px solid #f0d6d9;border-left:4px solid #c43a50;padding:12px 14px;border-radius:10px;margin:10px 0;color:#263047;line-height:1.65}
 .grammar-issue.task-issue{background:#fffdf8;border-color:#eedfc3;border-left-color:#b47816}
+.grammar-issue.tip-issue{background:#f1f7ff;border-color:#cbdcf9;border-left-color:#3576c5}.grammar-issue.tip-issue>b{color:#2369aa}
 .grammar-issue>b{display:block;color:#aa2542;margin-bottom:5px;font-size:12px}
 .grammar-issue.task-issue>b{color:#956000}
 .grammar-label{color:#64738b;font-weight:700}
@@ -150,7 +151,7 @@ function $(id){return document.getElementById(id)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function norm(s){return String(s??'').toLowerCase().normalize('NFKC').replace(/[’‘]/g,"'").replace(/\s+/g,' ').replace(/[.!?]+$/,'').trim()}
 function pKey(){return LESSON_KEY+'_'+activeStudent.name.toLowerCase()+'_'+activeStudent.className.toLowerCase()}
-function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}catch(e){};if(!progress||typeof progress!=='object')progress={seen:0,answers:{},graded:{}};progress.answers||={};progress.graded||={};if(progress.reviewEngineVersion!=='CHUA_BAI_20261102_V3'){if(Array.isArray(progress.graded.write)){progress.graded.write=bankFor('write').map((c,i)=>gradeQuestion('write',c,progress.answers[qKey('write',i)]||'',i));}progress.reviewEngineVersion='CHUA_BAI_20261102_V3';}if(progress.questionSetVersion!==PROBLEM_SET_VERSION){
+function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}catch(e){};if(!progress||typeof progress!=='object')progress={seen:0,answers:{},graded:{}};progress.answers||={};progress.graded||={};if(progress.reviewEngineVersion!=='CHUA_BAI_20261106_SVA_V4'){if(Array.isArray(progress.graded.write)){progress.graded.write=bankFor('write').map((c,i)=>gradeQuestion('write',c,progress.answers[qKey('write',i)]||'',i));}progress.reviewEngineVersion='CHUA_BAI_20261106_SVA_V4';try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}}if(progress.questionSetVersion!==PROBLEM_SET_VERSION){
   try{if(Object.keys(progress.answers).length || Object.keys(progress.graded).length)localStorage.setItem(pKey()+'_legacy_backup',JSON.stringify({answers:progress.answers,graded:progress.graded,seen:progress.seen}));}catch(e){}
   progress.answers={};progress.graded={};progress.submittedAt=null;delete progress.initialSubmission;delete progress.retryMode;delete progress.retryTargets;delete progress.retryDraft;delete progress.retryHistory;progress.questionSetVersion=PROBLEM_SET_VERSION;
   try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}
@@ -257,6 +258,100 @@ function grammarSuggestWord(raw){
   }
   return '';
 }
+
+/* SVA: đánh giá động từ với CHỦ NGỮ, không dùng danh sách keyword để phán sai. */
+const SVA_BASE_VERBS = new Set(`
+commute participate go study play work like want need live eat know walk read write speak
+cook make take give fix repair solve drive learn visit watch use help contain offer attend
+travel exercise practise practice volunteer manage teach explain open close improve receive
+prepare wash catch carry try fly cry pay spend save show serve buy sell love prefer enjoy
+understand choose believe create move develop join increase reduce support provide grow
+raise check clean call listen wait finish complete collect deliver require allow enable
+run swim come get begin become expect recommend talk happen seem look start stop send
+bring build publish shop train employ recycle transport produce cover pack inspect place
+arrive rise fall return lead agree disagree pass fail study improve investigate discuss
+have do be
+`.trim().split(/\s+/));
+const SVA_EXCEPTIONAL = {be:'is',have:'has',do:'does'};
+const SVA_PLURAL_HEADS = new Set('people children men women mice teeth feet geese police cattle staff'.split(' '));
+const SVA_SINGULAR_ENDING_S = new Set('news physics mathematics economics bus class glass address business series species'.split(' '));
+const SVA_ADVERBS = new Set('always usually often sometimes rarely never generally frequently regularly already normally occasionally'.split(' '));
+const SVA_MODALS = new Set('can could may might must should will would shall ought'.split(' '));
+const SVA_CLAUSE_BOUNDARIES = new Set('to of in on at for with from by who which that where when whose and or but because after before during while although since until'.split(' '));
+function svaThird(base){
+ if(SVA_EXCEPTIONAL[base])return SVA_EXCEPTIONAL[base];
+ if(/[^aeiou]y$/.test(base))return base.slice(0,-1)+'ies';
+ if(/(?:s|sh|ch|x|z|o)$/.test(base))return base+'es';
+ return base+'s';
+}
+function svaLexeme(word){
+ if(word==='am'||word==='is'||word==='are')return {base:'be',form:word};
+ if(word==='was'||word==='were')return {base:'be',form:word};
+ if(word==='has')return {base:'have',form:'third'};
+ if(word==='does')return {base:'do',form:'third'};
+ if(word==='have'||word==='do')return {base:word,form:'base'};
+ if(SVA_BASE_VERBS.has(word))return {base:word,form:'base'};
+ for(const base of SVA_BASE_VERBS){if(svaThird(base)===word)return {base,form:'third'};}
+ return null; // Không đủ chắc chắn thì không đánh dấu lỗi.
+}
+function svaSubjectNumber(subjectWords){
+ if(!subjectWords?.length)return null;
+ const a=subjectWords.map(w=>w.toLowerCase());const h=a[0];
+ if(h==='i')return 'i';
+ if(h==='you'||h==='we'||h==='they')return 'plural';
+ if(['he','she','it','this','that','someone','anyone','everyone','nobody','each','every'].includes(h)&&a.length===1)return 'singular';
+ if(['these','those','both','many','several','few'].includes(h))return 'plural';
+ if(['a','an','each','every','another'].includes(h))return 'singular';
+ if(!['my','your','his','her','our','their','the','this','that','these','those','some','all','many','several','two','three','four','five'].includes(h))return null;
+ const head=a[a.length-1];
+ if(a.includes('and'))return 'plural';
+ if(['this','that'].includes(h))return 'singular';
+ if(['these','those','many','several','two','three','four','five'].includes(h))return 'plural';
+ if(SVA_PLURAL_HEADS.has(head))return 'plural';
+ if(SVA_SINGULAR_ENDING_S.has(head))return 'singular';
+ if(head.endsWith('s')&&!head.endsWith('ss'))return 'plural';
+ if(/^[a-z]+$/.test(head))return 'singular';
+ return null;
+}
+function svaCheck(text){
+ // Chỉ bắt câu trần thuật đơn rõ ràng; không suy diễn ngữ pháp từ câu phức.
+ const m=String(text||'').trim().match(/^([A-Za-z]+(?:\s+[A-Za-z]+){1,8})/);
+ if(!m)return {status:'unknown'};
+ const toks=m[1].split(/\s+/); let subject=[],verbIndex=-1,lex=null;
+ const first=toks[0].toLowerCase();
+ if(['i','you','he','she','it','we','they'].includes(first)){
+  subject=toks.slice(0,1);let j=1;
+  while(j<toks.length&&SVA_ADVERBS.has(toks[j].toLowerCase()))j++;
+  if(j<toks.length){lex=svaLexeme(toks[j].toLowerCase());verbIndex=j;}
+ }else{
+  // Đầu câu là một cụm danh từ có hạn định từ, ví dụ "My younger sister".
+  const determiners=new Set('my your his her our their the a an this that these those each every some all many several two three four five both'.split(' '));
+  if(!determiners.has(first))return {status:'unknown'};
+  for(let j=2;j<Math.min(toks.length,8);j++){
+   if(SVA_ADVERBS.has(toks[j].toLowerCase()))continue;
+   if(SVA_MODALS.has(toks[j].toLowerCase())||SVA_CLAUSE_BOUNDARIES.has(toks[j].toLowerCase()))return {status:'unknown'};
+   const candidate=svaLexeme(toks[j].toLowerCase());
+   if(candidate){subject=toks.slice(0,j).filter(w=>!SVA_ADVERBS.has(w.toLowerCase()));verbIndex=j;lex=candidate;break;}
+  }
+ }
+ if(!lex||verbIndex<0)return {status:'unknown'};
+ const number=svaSubjectNumber(subject);
+ if(!number)return {status:'unknown'};
+ const actual=toks[verbIndex];const word=actual.toLowerCase();
+ if(SVA_MODALS.has(word))return {status:'unknown'};
+ let expected='';
+ if(lex.base==='be'){
+  if(word==='was'||word==='were')expected=number==='plural'||number==='you'?'were':'was';
+  else expected=number==='i'?'am':number==='plural'?'are':'is';
+ }else expected=number==='singular'?svaThird(lex.base):lex.base;
+ if(word===expected)return {status:'ok',number,subject:subject.join(' '),verb:actual};
+ const allWords=String(text).match(/[A-Za-z]+(?:'[A-Za-z]+)?|[^A-Za-z]+/g)||[];
+ // Thay chỉ đúng động từ được phân tích, không thay từ giống nhau ở vị trí khác.
+ const before=toks.slice(0,verbIndex).join(' '), full=new RegExp('^('+before.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s+)'+actual+'\\b','i');
+ const fix=full.test(text)?text.replace(full,(_all,prefix)=>prefix+expected):subject.join(' ')+' '+expected+' ...';
+ return {status:'error',number,subject:subject.join(' '),verb:actual,expected,fix};
+}
+
 function grammarReview(text,caseData,questionIndex){
   const issues=[], seen=new Set(),t=String(text||'').trim(),low=t.toLowerCase();
   const add=(kind,label,wrong,fix,why)=>{
@@ -273,7 +368,10 @@ function grammarReview(text,caseData,questionIndex){
   for(const tok of t.match(/\b[A-Za-z]+(?:'[A-Za-z]+)?\b/g)||[]){const sug=grammarSuggestWord(tok);if(sug)add('spelling','Chính tả: '+tok,tok,sug,'Kiểm tra lại cách viết từ này.');}
   // Foundational grammar checks.
   match(/(?<!\bdoes\s)(?<!\bdid\s)(?<!\bdo\s)\b(?:he|she|it|this|that)\s+(?:have|do|go|study|play|work|like|want|need|live|eat|know|walk|read|write|speak|cook|make|take|give|fix|repair|solve|drive|learn|visit|watch|use|help)\b/i,'Hòa hợp chủ ngữ – động từ','Với he/she/it ở hiện tại đơn: has/does/goes/studies/plays...','Chủ ngữ số ít cần chia động từ phù hợp.');
-  match(/\b(?:they|we|you|students|teachers|people|children)\s+(?:is|was|has|does|goes|studies|plays|works)\b/i,'Hòa hợp chủ ngữ – động từ','Dùng are/were/have/do hoặc động từ nguyên mẫu phù hợp','Chủ ngữ số nhiều không dùng dạng hiện tại đơn ngôi thứ ba số ít.');
+  if(!/\b(?:the|a)\s+number\s+of\b/i.test(t))
+    match(/\b(?:they|we|you|students|teachers|people|children)\s+(?:is|was|has|does|goes|studies|plays|works)\b/i,'Hòa hợp chủ ngữ – động từ','Dùng are/were/have/do hoặc động từ nguyên mẫu phù hợp','Chủ ngữ số nhiều không dùng dạng hiện tại đơn ngôi thứ ba số ít.');
+  match(/\bthe\s+number\s+of\s+[a-z]+\s+(?:are|were|have|do)\b/i,'The number of + động từ số ít','the number of ... is/was/has/does','Chủ ngữ chính là the number, không phải danh từ số nhiều sau of.');
+  match(/\ba\s+number\s+of\s+[a-z]+\s+(?:is|was|has|does)\b/i,'A number of + động từ số nhiều','a number of ... are/were/have/do','A number of có nghĩa là nhiều, động từ chia theo số nhiều.');
   match(/\b(?:he|she|it|this|that)\s+(?:are|were|do|don't|have)\b/i,'Chủ ngữ số ít','is/was/does/doesn’t/has (tùy ngữ cảnh)','Đối chiếu chủ ngữ và động từ.');
   match(/\bthere\s+is\s+(?:many|several|two|three|four|five|a few|some)\s+\w+s\b/i,'There is / there are','There are ...','Chủ ngữ thực số nhiều cần there are.');
   match(/\bthere\s+are\s+(?:much|a little|little|an?|one)\s+\w+\b/i,'There is / there are','There is ...','Danh từ số ít/không đếm được thường đi với there is.');
@@ -332,8 +430,9 @@ function grammarReview(text,caseData,questionIndex){
     const pattern=week===1?/\b(?:and|but|or|so|for|yet|nor)\b/i:week===2?/\b(?:although|though|because|despite|in spite of|because of)\b/i:/\b(?:however|therefore|whereas|nevertheless|consequently|as a result)\b/i;
     requirePattern(pattern.test(t),'Chưa dùng từ nối trong bài','Nối hai ý bằng từ nối đang luyện.','Viết câu thể hiện đúng quan hệ ý nghĩa giữa hai vế.');
   } else if(topic===3){
-    const requirement=week===1?/\b(?:a|an)\s+\w+/i:week===2?/\bthe\b|\b(?:water|children|students)\b/i: /\b(?:a|an|by\s+\w+|breakfast|lunch|dinner|street)\b/i;
-    requirePattern(requirement.test(t),'Chưa thấy ví dụ rõ cho quy tắc mạo từ','Thử viết câu có các cụm danh từ thuộc chủ điểm.','Câu viết cần giúp người học nhận diện cách dùng mạo từ hoặc trường hợp bỏ mạo từ.');
+    // Zero article = intentionally no article. Never flag a correct generic plural/uncountable
+    // subject or a meal such as 'brunch' merely for omitting arbitrary example keywords.
+    if(week===1)requirePattern(/\b(?:a|an)\s+\w+/i.test(t),'Chưa sử dụng a/an trong ví dụ','Viết một câu có a/an trước danh từ số ít.','Bài học này yêu cầu luyện mạo từ a hoặc an.');
   } else if(topic===2){
     const test=week===1?/\b(?:am|is|are)\s+[a-z]+ing\b|\b(?:every|usually|always|often|sometimes|know|likes|plays|studies|goes)\b/i:week===2?/\b(?:was|were)\s+[a-z]+ing\b|\b(?:yesterday|last|ago|watched|visited|went|played|arrived)\b/i:/\b(?:have|has|had)\s+(?:been\s+)?(?:[a-z]+ed|[a-z]+en|seen|gone|done|left|had|been|read|written)\b|\b(?:yesterday|last|ago|finished|visited|watched|left)\b/i;
     requirePattern(test.test(t),'Chưa xác định được thì đang luyện','Viết câu dùng rõ thì và dấu hiệu thời gian khi phù hợp.','Hệ thống chưa nhận diện cấu trúc thì của bài trong câu này.');
@@ -341,7 +440,9 @@ function grammarReview(text,caseData,questionIndex){
     const test=week===1?/\b(?:information|advice|homework|traffic|facilities|books|chairs|students|equipment)\b/i:week===2?/\b(?:children|people|women|men|leaves|buses|cities|families|books|classes)\b/i:/\b(?:pieces?|bottles?|cartons?|cups?|glasses?|lots?|a lot of)\b/i;
     requirePattern(test.test(t),'Chưa thấy ví dụ điển hình của bài','Thử viết câu với một danh từ hoặc cụm chỉ số lượng đã học.','Bài tập cần minh họa kiến thức về danh từ đang luyện.');
   } else if(topic===1){
-    requirePattern(/\b(?:is|are|was|were|has|have|does|do|goes|plays|studies|works|contains|likes|wants|needs|reads|writes|learns|students|teachers|each|every|there|neither|either|number of)\b/i.test(t),'Chưa nhận diện rõ cấu trúc hòa hợp chủ–vị','Dùng chủ ngữ và động từ chia số ít/số nhiều đúng cách.','Bài học luyện sự phù hợp giữa chủ ngữ và động từ.');
+    // Không kết luận sai chỉ vì động từ của học sinh nằm ngoài danh sách mẫu.
+    // Ví dụ: 'My mother commutes by bus.' và 'My sisters participate ...' đều đúng.
+    // svaCheck ở cuối hàm sẽ chỉ cảnh báo khi tìm được lỗi chia động từ rõ ràng.
   }
   if(topic===10 && week===2 && q===3 && /^it\s+can\s+fixde\s*[.!?]?$/i.test(t)){
     const task=issues.find(x=>x.kind==='task'&&x.label==='Chưa dùng cấu trúc yêu cầu');
@@ -381,6 +482,20 @@ function grammarReview(text,caseData,questionIndex){
       if(issues[i].kind==='task' && issues[i].label==='Chưa dùng cấu trúc yêu cầu') issues.splice(i,1);
     }
   }
+  if(topic===1){
+    const agreement=svaCheck(t);
+    const hasExistingAgreementError=issues.some(x=>x.kind==='grammar'&&/chủ ngữ|hòa hợp/i.test(x.label));
+    if(agreement.status==='error'&&!hasExistingAgreementError){
+      add('grammar','Hòa hợp chủ ngữ – động từ',agreement.subject+' '+agreement.verb,
+          agreement.fix,`Chủ ngữ “${agreement.subject}” ${agreement.number==='singular'?'là số ít':'là số nhiều / không thuộc ngôi thứ ba số ít'}; ở hiện tại đơn hoặc với be/have/do, động từ cần dùng dạng “${agreement.expected}”.`);
+    }
+    // Bám sát mục tiêu học: số nhiều có thể đúng ngữ pháp nhưng bài đang ưu tiên số ít.
+    if(week===1&&agreement.status==='ok'&&agreement.number==='plural'&&
+       /he\s*\/\s*she\s*\/\s*it|danh từ số ít/i.test(caseData?.prompt||'') ){
+      add('tip','Gợi ý bám sát đề bài','','Có thể đổi sang chủ ngữ số ít và chia động từ theo ngôi thứ ba số ít.',
+          'Câu hiện tại đúng về hòa hợp chủ–vị. Tuy nhiên, bài tập này muốn luyện riêng chủ ngữ số ít (he/she/it hoặc một danh từ số ít).');
+    }
+  }
   return issues;
 }
 
@@ -395,18 +510,19 @@ function gradeQuestion(type,c,v,i){
 
 function feedback(type,c,g){
  if(type==='write'){
-  const bad=g.issues.filter(x=>x.kind!=='missing');
+  const bad=g.issues.filter(x=>x.kind!=='missing'&&x.kind!=='tip');
+  const tips=g.issues.filter(x=>x.kind==='tip');
   const problems=bad.filter(x=>x.kind!=='task');
   const tasks=bad.filter(x=>x.kind==='task');
   const title=g.empty?'Chưa có câu viết':bad.length?`Phát hiện ${bad.length} điểm cần xem lại`:'Đã kiểm tra: chưa phát hiện lỗi rõ ràng';
-  const renderIssue = x=>`<div class="grammar-issue ${x.kind==='task'?'task-issue':''}">
-    <b>${x.kind==='task'?'⚠️ '+esc(x.label):'✗ '+esc(x.label)}</b>
+  const renderIssue = x=>`<div class="grammar-issue ${x.kind==='task'?'task-issue':x.kind==='tip'?'tip-issue':''}">
+    <b>${x.kind==='task'?'⚠️ ':x.kind==='tip'?'ℹ️ ':'✗ '}${esc(x.label)}</b>
     ${x.wrong?`<div><span class="grammar-label">Phần cần xem:</span> <span class="grammar-wrong">${esc(x.wrong)}</span></div>`:''}
     ${x.fix?`<div><span class="grammar-label">Gợi ý sửa:</span> <span class="grammar-correct">${esc(x.fix)}</span></div>`:''}
     ${x.why?`<p class="grammar-why">${esc(x.why)}</p>`:''}
   </div>`;
   return `<div class="feedback ${bad.length?'bad':'neutral'}"><b>${esc(title)}</b>
-    ${problems.map(renderIssue).join('')}${tasks.map(renderIssue).join('')}
+    ${problems.map(renderIssue).join('')}${tasks.map(renderIssue).join('')}${tips.map(renderIssue).join('')}
     ${!bad.length && !g.empty?'<p class="small">Câu này chưa xuất hiện lỗi thuộc phạm vi bộ kiểm tra. Điều đó không đồng nghĩa bài viết đã hoàn toàn chính xác.</p>':''}
     <p style="margin-top:12px">Ví dụ đúng với chủ điểm: <b>${esc(g.sample)}</b></p>
     <p class="small">Hệ thống chữa tự động dựa trên mẫu lỗi và yêu cầu của từng bài. Cách dùng từ, ý nghĩa và các cấu trúc phức tạp vẫn có thể cần giáo viên đánh giá.</p>
