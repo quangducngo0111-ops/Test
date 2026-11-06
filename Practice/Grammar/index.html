@@ -149,12 +149,28 @@ document.getElementById('studentForm').addEventListener('submit',studentSubmit);
 let LESSON_KEY='IELTS_GRAMMAR_WEEKLY_V2_'+UNIT.topic+'_'+UNIT.week;
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function norm(s){return String(s??'').toLowerCase().normalize('NFKC').replace(/[’‘]/g,"'").replace(/\s+/g,' ').replace(/[.!?]+$/,'').trim()}
+function norm(s){
+  // Chỉ bỏ khác biệt trình bày không ảnh hưởng cấu trúc: khoảng trắng, viết hoa, dấu câu.
+  return String(s??'').normalize('NFKC').toLowerCase()
+    .replace(/[\u200b-\u200d\ufeff\u00ad]/g,'')
+    .replace(/[’‘]/g,"'").replace(/[“”]/g,'"')
+    .replace(/[.,!?;:]/g,' ').replace(/\s+/g,' ').trim();
+}
 function pKey(){return LESSON_KEY+'_'+activeStudent.name.toLowerCase()+'_'+activeStudent.className.toLowerCase()}
 function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}catch(e){};if(!progress||typeof progress!=='object')progress={seen:0,answers:{},graded:{}};progress.answers||={};progress.graded||={};if(progress.reviewEngineVersion!=='CHUA_BAI_20261106_SVA_V4'){if(Array.isArray(progress.graded.write)){progress.graded.write=bankFor('write').map((c,i)=>gradeQuestion('write',c,progress.answers[qKey('write',i)]||'',i));}progress.reviewEngineVersion='CHUA_BAI_20261106_SVA_V4';try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}}if(progress.questionSetVersion!==PROBLEM_SET_VERSION){
   try{if(Object.keys(progress.answers).length || Object.keys(progress.graded).length)localStorage.setItem(pKey()+'_legacy_backup',JSON.stringify({answers:progress.answers,graded:progress.graded,seen:progress.seen}));}catch(e){}
   progress.answers={};progress.graded={};progress.submittedAt=null;delete progress.initialSubmission;delete progress.retryMode;delete progress.retryTargets;delete progress.retryDraft;delete progress.retryHistory;progress.questionSetVersion=PROBLEM_SET_VERSION;
   try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}
+ }
+ // Đồng bộ đáp án/nhận xét sau nâng cấp bộ chấm, không xóa bài học sinh đã làm.
+ if(progress.correctionEngineVersion!=='CORRECTION_20261106_V5'){
+   for(const [type] of TYPES){
+     if(Array.isArray(progress.graded[type])){
+       progress.graded[type]=bankFor(type).map((c,i)=>gradeQuestion(type,c,progress.answers[qKey(type,i)]||'',i));
+     }
+   }
+   progress.correctionEngineVersion='CORRECTION_20261106_V5';
+   try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}
  }
  if(progress.submittedAt && !progress.initialSubmission){
    const first=scoreDetails();progress.initialSubmission={right:first.right,total:first.total,submittedAt:progress.submittedAt};
@@ -499,13 +515,49 @@ function grammarReview(text,caseData,questionIndex){
   return issues;
 }
 
+/* Sửa lỗi: phân biệt "câu đúng ngữ pháp" với "sửa đúng câu gốc".
+   Không được thay chủ ngữ/nghĩa gốc để né lỗi hòa hợp chủ-vị. */
+function correctionDifference(c){
+ const a=String(c.wrong||'').trim().split(/\s+/),b=String(c.correct||'').trim().split(/\s+/);
+ let k=0;
+ while(k<a.length&&k<b.length&&norm(a[k])===norm(b[k]))k++;
+ let tail=0;
+ while(tail<a.length-k&&tail<b.length-k&&norm(a[a.length-1-tail])===norm(b[b.length-1-tail]))tail++;
+ return {
+   samePrefix:a.slice(0,k).join(' '),
+   before:a.slice(k,a.length-tail).join(' '),
+   after:b.slice(k,b.length-tail).join(' '),
+   commonTokens:k
+ };
+}
+function correctionExplanation(c){
+ const diff=correctionDifference(c);
+ if(UNIT.topic===1&&UNIT.week===1&&diff.commonTokens>=2&&diff.before&&diff.after){
+   return `Giữ nguyên chủ ngữ “${diff.samePrefix}” và sửa “${diff.before}” thành “${diff.after}” để hòa hợp chủ ngữ – động từ.`;
+ }
+ return c.explain;
+}
+function correctionChangeReason(c,v){
+ const diff=correctionDifference(c);
+ // Chỉ suy luận khi có đoạn đầu là chủ ngữ rõ ràng (hai từ trở lên),
+ // tránh áp dụng máy móc cho các chủ đề khác.
+ if(UNIT.topic===1&&diff.commonTokens>=2&&diff.commonTokens<=6){
+   const source=norm(diff.samePrefix),typed=norm(v);
+   if(source&&!typed.startsWith(source+' ')&&typed!==source){
+     return `Em đã đổi chủ ngữ của câu gốc. Cần giữ “${diff.samePrefix}” và chỉ sửa phần sai về ngữ pháp.`;
+   }
+ }
+ return '';
+}
 function gradeQuestion(type,c,v,i){
  const empty=!String(v||'').trim();
  if(type==='write')return {empty,issues:grammarReview(v,c,i),sample:c.correct,checked:!empty};
  const expected=type==='edit'?editSpan(c).fixed:
    ['correct','order','judge'].includes(type)?c.correct:c.answer;
- const valid=norm(v)===norm(expected)||(['correct','order','judge'].includes(type)&&norm(String(v||'').replace(/[,]/g,''))===norm(expected.replace(/[,]/g,'')));
- return {good:!empty&&valid,empty,expected,explain:c.explain};
+ const valid=norm(v)===norm(expected);
+ const explanation=type==='correct'?correctionExplanation(c):c.explain;
+ const reason=type==='correct'&&!valid&&!empty?correctionChangeReason(c,v):'';
+ return {good:!empty&&valid,empty,expected,explain:explanation,reason};
 }
 
 function feedback(type,c,g){
@@ -528,7 +580,7 @@ function feedback(type,c,g){
     <p class="small">Hệ thống chữa tự động dựa trên mẫu lỗi và yêu cầu của từng bài. Cách dùng từ, ý nghĩa và các cấu trúc phức tạp vẫn có thể cần giáo viên đánh giá.</p>
   </div>`;
  }
- return `<div class="feedback ${g.good?'':'bad'}"><div class="label">${g.good?'✓ Chính xác':'✗ Chưa đúng'}</div><p>Đáp án tham khảo: <b>${esc(g.expected)}</b></p><p>Giải thích: ${esc(g.explain)}</p></div>`;
+ return `<div class="feedback ${g.good?'':'bad'}"><div class="label">${g.good?'✓ Chính xác':g.reason?'✗ Cần giữ nguyên ý câu gốc':'✗ Chưa đúng'}</div>${g.reason?`<p><b>Lý do:</b> ${esc(g.reason)}</p>`:''}<p>Đáp án tham khảo: <b>${esc(g.expected)}</b></p><p>Giải thích: ${esc(g.explain)}</p></div>`;
 }
 function countCorrect(type){return (progress.graded[type]||[]).filter(x=>x.good).length}
 function answeredCount(type){return bankFor(type).filter((c,i)=>String(progress.answers[qKey(type,i)]||'').trim()).length}
@@ -546,17 +598,27 @@ function showExercise(){
    progress.answers[key]=el.value;
    progress.submittedAt=null;
    const box=el.closest('.q'),fb=box?.querySelector('.q-feedback');
-   if(type==='write'&&progress.graded.write){
-     const updated=gradeQuestion('write',getCase('write',i),el.value,i);
-     progress.graded.write[i]=updated;
-     if(fb)fb.innerHTML=feedback('write',getCase('write',i),updated);
-   }else{delete progress.graded[type];if(fb)fb.innerHTML='';}
+   if(Array.isArray(progress.graded[type])){
+     // Đã từng bấm Kiểm tra: tính lại ngay theo câu hiện tại và cập nhật nhận xét.
+     const updated=gradeQuestion(type,getCase(type,i),el.value,i);
+     progress.graded[type][i]=updated;
+     if(fb)fb.innerHTML=feedback(type,getCase(type,i),updated);
+     const foot=document.querySelector(`#exercise-${type} .exfoot .small`);
+     if(foot)foot.textContent=type==='write'?`Đã nhận xét ${answeredCount(type)}/5 câu viết`:`✓ ${countCorrect(type)}/5 câu đúng`;
+   }else if(fb)fb.innerHTML='';
    document.getElementById('summary')?.remove();
    save();updateSubmitState();
  }));
  document.querySelectorAll('input[type="radio"]').forEach(el=>el.addEventListener('change',()=>{
    const type=el.name.split('_')[0];progress.answers[el.name]=el.value;progress.submittedAt=null;
-   delete progress.graded[type];const fb=el.closest('.q')?.querySelector('.q-feedback');if(fb)fb.innerHTML='';
+   const fb=el.closest('.q')?.querySelector('.q-feedback');
+   if(Array.isArray(progress.graded[type])){
+     const index=[...el.closest('.q').parentElement.querySelectorAll('.q')].indexOf(el.closest('.q'));
+     progress.graded[type][index]=gradeQuestion(type,getCase(type,index),el.value,index);
+     if(fb)fb.innerHTML=feedback(type,getCase(type,index),progress.graded[type][index]);
+     const foot=document.querySelector(`#exercise-${type} .exfoot .small`);
+     if(foot)foot.textContent=`✓ ${countCorrect(type)}/5 câu đúng`;
+   }else if(fb)fb.innerHTML='';
    document.getElementById('summary')?.remove();save();updateSubmitState();
  }));
  document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{
