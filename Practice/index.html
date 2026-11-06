@@ -316,7 +316,7 @@ function render(){
   subtitle.textContent=current==='grammar'?'10 chủ đề · 30 bài học nhỏ để luyện từng tuần':current==='writing2'?'5 dạng bài IELTS Writing Task 2':`${list.length} mục luyện tập`;
   count.textContent=`${list.length} mục`;
   grid.innerHTML=list.length?list.map((x,i)=>`
-    <a class="card" href="${x.url}?practice=1">
+    <a class="card" href="${x.url}${x.url.includes('?')?'&':'?'}practice=1">
       <div class="item-icon">${x.icon||'📚'}</div>
       <div class="copy"><b>${x.title}</b><span>${x.desc}</span></div>
       <span class="item-no">${String(i+1).padStart(2,'0')}</span>
