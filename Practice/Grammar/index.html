@@ -1,4 +1,4 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Grammar · 10 chủ đề · 30 bài học nhỏ</title><style>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Grammar · 30 bài · Chấm chữa offline miễn phí</title><style>
 :root{--navy:#261355;--purple:#6947d5;--blue:#2372db;--ink:#1f2a40;--muted:#63708a;--line:#dde5f2;--bg:#f5f7fd;--ok:#15815e;--bad:#b83548}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f5f2ff,#f2f8ff);color:var(--ink);font:15px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
 .top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;padding:12px max(18px,calc((100vw - 1200px)/2));display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:58px}.top a{border:1px solid #ffffff66;padding:7px 12px;border-radius:10px;font-size:12px}.top strong{font-size:13px}.top .person{font-size:12px;opacity:.85}
@@ -54,6 +54,31 @@
 .retry-bottom .btn:disabled{opacity:.5}.report-comparison{background:#eefaf5;border:1px solid #c5e9d9;padding:12px 16px;border-radius:10px;margin:10px 0;font-size:13px;color:#135c45;font-weight:750}
 .report-comparison span{margin-right:18px;display:inline-block}.retry-action{background:#5c3bd1}.retry-action[hidden]{display:none!important}
 @media(max-width:600px){.retry-score span{width:100%}.retry-bottom .btn{width:100%}}
+
+/* Student-specific correction feedback in Exercise 3 */
+.attempt-details{background:#fff;border:1px solid #efcbd1;border-radius:10px;padding:12px 14px;margin:12px 0;line-height:1.65}
+.attempt-issue{border-top:1px solid #e9edf6;padding:8px 0;font-size:13px}
+.attempt-issue:first-of-type{margin-top:6px}
+.attempt-issue>b{color:#751e31}
+.bad-text{color:#bd3149;font-weight:750;text-decoration:line-through}
+.good-text{color:#08764d;font-weight:850}
+
+/* Advanced context-aware grammar review */
+.ai-check-panel{margin:16px;padding:16px;border:1px solid #c7baf3;background:#f8f6ff;border-radius:12px}
+.ai-check-panel h3{margin:0 0 8px;color:#2b175f;font-size:15px}
+.ai-check-panel p{font-size:12px;color:#556580;margin:5px 0 10px}
+.ai-check-panel .ai-consent{display:flex;gap:9px;align-items:start;font-size:12px;color:#293957;line-height:1.6;margin-bottom:11px}
+.ai-check-panel .ai-consent input{margin-top:5px;accent-color:#6947d5}
+.ai-status{font-size:12px;margin-top:10px;color:#4f5979}
+.ai-review{border:1px solid #bde1d2;background:#f2fbf7;padding:12px;border-radius:10px;margin-top:11px;font-size:12px}
+.ai-review.warn{background:#fffaf1;border-color:#f0d29c}
+.ai-review b{color:#194b42}
+.ai-corrected{border-left:3px solid #15936f;background:#fff;margin:8px 0;padding:10px;border-radius:7px;white-space:pre-wrap;word-break:break-word}
+.ai-issue{border-top:1px solid #d6e4e6;padding-top:8px;margin-top:9px}
+.ai-issue .fix{color:#157c5b;font-weight:700}.ai-issue .wrong{color:#b3324b;font-weight:700}
+.ai-mode-notice{background:#eef3ff;border:1px solid #dae4fa;padding:10px 13px;border-radius:9px;font-size:12px;margin:12px 0}
+.offline-guide{margin:14px 0;padding:14px 16px;border-radius:12px;background:#f3f7ff;border:1px solid #cedcf9;font-size:13px;line-height:1.6}
+.offline-guide b{color:#2c225f}.offline-guide p{margin:6px 0;color:#475772}
 </style></head><body>
 <header class="top"><a id="headerBack" href="../index.html">← Kho luyện tập</a><strong id="headerHeading">Grammar · 10 chủ đề</strong><span class="person" id="personLabel"></span></header>
 <main class="wrap" id="directory"></main>
@@ -157,19 +182,19 @@ function norm(s){
     .replace(/[.,!?;:]/g,' ').replace(/\s+/g,' ').trim();
 }
 function pKey(){return LESSON_KEY+'_'+activeStudent.name.toLowerCase()+'_'+activeStudent.className.toLowerCase()}
-function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}catch(e){};if(!progress||typeof progress!=='object')progress={seen:0,answers:{},graded:{}};progress.answers||={};progress.graded||={};if(progress.reviewEngineVersion!=='CHUA_BAI_20261106_SVA_V4'){if(Array.isArray(progress.graded.write)){progress.graded.write=bankFor('write').map((c,i)=>gradeQuestion('write',c,progress.answers[qKey('write',i)]||'',i));}progress.reviewEngineVersion='CHUA_BAI_20261106_SVA_V4';try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}}if(progress.questionSetVersion!==PROBLEM_SET_VERSION){
+function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}catch(e){};if(!progress||typeof progress!=='object')progress={seen:0,answers:{},graded:{}};progress.answers||={};progress.graded||={};if(progress.reviewEngineVersion!=='GRAMMAR_FREE_V1_20261107'){if(Array.isArray(progress.graded.write)){progress.graded.write=bankFor('write').map((c,i)=>gradeQuestion('write',c,progress.answers[qKey('write',i)]||'',i));}progress.reviewEngineVersion='GRAMMAR_FREE_V1_20261107';try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}}if(progress.questionSetVersion!==PROBLEM_SET_VERSION){
   try{if(Object.keys(progress.answers).length || Object.keys(progress.graded).length)localStorage.setItem(pKey()+'_legacy_backup',JSON.stringify({answers:progress.answers,graded:progress.graded,seen:progress.seen}));}catch(e){}
   progress.answers={};progress.graded={};progress.submittedAt=null;delete progress.initialSubmission;delete progress.retryMode;delete progress.retryTargets;delete progress.retryDraft;delete progress.retryHistory;progress.questionSetVersion=PROBLEM_SET_VERSION;
   try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}
  }
  // Đồng bộ đáp án/nhận xét sau nâng cấp bộ chấm, không xóa bài học sinh đã làm.
- if(progress.correctionEngineVersion!=='CORRECTION_20261106_V5'){
+ if(progress.correctionEngineVersion!=='CORRECTION_FREE_V1_20261107'){
    for(const [type] of TYPES){
      if(Array.isArray(progress.graded[type])){
        progress.graded[type]=bankFor(type).map((c,i)=>gradeQuestion(type,c,progress.answers[qKey(type,i)]||'',i));
      }
    }
-   progress.correctionEngineVersion='CORRECTION_20261106_V5';
+   progress.correctionEngineVersion='CORRECTION_FREE_V1_20261107';
    try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}
  }
  if(progress.submittedAt && !progress.initialSubmission){
@@ -220,11 +245,11 @@ function makeQuestion(type,c,i){
    const ordered=[...opts.slice(shift),...opts.slice(0,shift)];
    input=`<div class="choice-list">${ordered.map(o=>`<label class="choice"><input type="radio" name="${key}" value="${esc(o)}" ${old===o?'checked':''}><span>${esc(o)}</span></label>`).join('')}</div>`;
  }else if(type==='fill'){
-   prompt=c.stem;input=`<input class="entry" data-answer="${key}" value="${esc(old)}" placeholder="Điền từ hoặc cụm từ..." autocomplete="off">`;
+   prompt=c.stem;input=`<input class="entry" spellcheck="true" lang="en-US" data-answer="${key}" value="${esc(old)}" placeholder="Điền từ hoặc cụm từ..." autocomplete="off">`;
  }else if(type==='correct'){
-   prompt=`Câu cần sửa: ${c.wrong}`;input=`<input class="entry" data-answer="${key}" value="${esc(old)}" placeholder="Viết lại cả câu..." autocomplete="off">`;
+   prompt=`Câu cần sửa: ${c.wrong}`;input=`<input class="entry" spellcheck="true" lang="en-US" data-answer="${key}" value="${esc(old)}" placeholder="Viết lại cả câu..." autocomplete="off">`;
  }else if(type==='order'){
-   prompt='Dùng tất cả các từ để tạo câu đúng:';input=`<div class="reorder">${esc(words(c,i))}</div><input class="entry" data-answer="${key}" value="${esc(old)}" placeholder="Nhập câu hoàn chỉnh..." autocomplete="off">`;
+   prompt='Dùng tất cả các từ để tạo câu đúng:';input=`<div class="reorder">${esc(words(c,i))}</div><input class="entry" spellcheck="true" lang="en-US" data-answer="${key}" value="${esc(old)}" placeholder="Nhập câu hoàn chỉnh..." autocomplete="off">`;
  }else if(type==='judge'){
    prompt='Trong hai câu sau, câu nào đúng hoặc phù hợp hơn?';
    const options=(UNIT.topic+UNIT.week+i)%2?[c.correct,c.wrong]:[c.wrong,c.correct];
@@ -236,12 +261,12 @@ function makeQuestion(type,c,i){
      const at=c.wrong.indexOf(diff.wrong);
      input=`<div class="reorder edit-line">${esc(c.wrong.slice(0,at))}<mark>${esc(diff.wrong)}</mark>${esc(c.wrong.slice(at+diff.wrong.length))}</div>`;
    }else{const pos=diff.prefix.length;input=`<div class="reorder edit-line">${esc(c.wrong.slice(0,pos))} <mark>______</mark>${esc(c.wrong.slice(pos))}</div>`;}
-   input+=`<input class="entry" data-answer="${key}" value="${esc(old)}" placeholder="Chỉ nhập cụm từ cần thay thế..." autocomplete="off">`;
+   input+=`<input class="entry" spellcheck="true" lang="en-US" data-answer="${key}" value="${esc(old)}" placeholder="Chỉ nhập cụm từ cần thay thế..." autocomplete="off">`;
  }else{
    prompt=c.prompt;
-   input=`<textarea class="entry write" data-answer="${key}" placeholder="Viết một câu tiếng Anh của em...">${esc(old)}</textarea>`;
+   input=`<textarea class="entry write" spellcheck="true" lang="en-US" data-answer="${key}" placeholder="Viết một câu tiếng Anh của em...">${esc(old)}</textarea>`;
  }
- return `<article class="q"><label class="heading"><span class="qnumber">${i+1}.</span> ${esc(prompt)}</label>${input}<div class="q-feedback">${graded?feedback(type,c,graded):''}</div></article>`;
+ return `<article class="q"><label class="heading"><span class="qnumber">${i+1}.</span> ${esc(prompt)}</label>${input}<div class="q-feedback">${graded?feedback(type,c,graded,i):''}</div></article>`;
 }
 
 /* FEEDBACK ENGINE: offline, lesson-aware; only reports issues it can justify. */
@@ -368,6 +393,49 @@ function svaCheck(text){
  return {status:'error',number,subject:subject.join(' '),verb:actual,expected,fix};
 }
 
+/* Các kiểm tra ngoại tuyến bổ sung: ưu tiên độ chính xác hơn số lượng cảnh báo.
+   Chỉ đề xuất sửa khi cấu trúc sai có thể nhận ra rõ; không khẳng định bắt mọi lỗi. */
+function extraOfflineIssues(s){
+ const t=String(s||'').trim(),out=[];
+ const push=(label,wrong,fix,why)=>{
+   if(!out.some(x=>x.label===label&&x.wrong===wrong))out.push({kind:'grammar',label,wrong,fix,why});
+ };
+ const report=(regex,label,replace,why)=>{
+   const m=t.match(regex);
+   if(m){
+     const replacement=typeof replace==='function'?replace(m):replace;
+     push(label,m[0],t.slice(0,m.index)+replacement+t.slice(m.index+m[0].length),why);
+   }
+ };
+ // An auxiliary do/does/did already carries tense and agreement.
+ report(/\b(?:does|doesn't|does not)\s+(?:goes|works|plays|studies|wants|needs|likes|has|does|writes|reads|takes|makes|uses)\b/i,
+ 'Sau does/doesn’t cần V nguyên mẫu',m=>m[0].replace(/(goes|works|plays|studies|wants|needs|likes|has|does|writes|reads|takes|makes|uses)$/i,v=>({goes:'go',works:'work',plays:'play',studies:'study',wants:'want',needs:'need',likes:'like',has:'have',does:'do',writes:'write',reads:'read',takes:'take',makes:'make',uses:'use'}[v.toLowerCase()]||v)),
+ 'Does/doesn’t đã thể hiện ngôi và thì; động từ chính đứng sau phải là dạng nguyên mẫu.');
+ report(/\b(?:did|didn't|did not)\s+(?:went|saw|ate|wrote|took|gave|did|had|played|studied|worked|visited|watched|finished)\b/i,
+ 'Sau did/didn’t cần V nguyên mẫu',m=>m[0].replace(/(went|saw|ate|wrote|took|gave|did|had|played|studied|worked|visited|watched|finished)$/i,v=>({went:'go',saw:'see',ate:'eat',wrote:'write',took:'take',gave:'give',did:'do',had:'have',played:'play',studied:'study',worked:'work',visited:'visit',watched:'watch',finished:'finish'}[v.toLowerCase()]||v)),
+ 'Did/didn’t đã mang thì quá khứ; động từ sau nó trở về nguyên mẫu.');
+ // Infinitive and -ing sequences clear enough to avoid syntax ambiguity.
+ report(/\b(?:is|are|am|was|were)\s+(?:go|study|play|work|write|eat|learn|drive|talk|shop|watch|cook|swim)\b(?=\s+(?:now|currently|at the moment|for|in|to|with|on|every)|[.!?]|$)/i,
+ 'Thì tiếp diễn cần V-ing',m=>m[0].replace(/\b(go|study|play|work|write|eat|learn|drive|talk|shop|watch|cook|swim)$/i,v=>({write:'writing',drive:'driving',swim:'swimming'}[v.toLowerCase()]||v.replace(/e$/i,'')+'ing')),
+ 'Sau am/is/are/was/were khi diễn tả hành động đang diễn ra, dùng V-ing.');
+ if(Number(UNIT.topic)!==10) report(/\b(?:can|could|should|must|may|might|will|would)\s+(?:went|saw|ate|wrote|took|gave|played|studied|worked|visited|watched|finished)\b/i,
+ 'Sau modal phải dùng V nguyên mẫu',m=>m[0].replace(/(went|saw|ate|wrote|took|gave|played|studied|worked|visited|watched|finished)$/i,v=>({went:'go',saw:'see',ate:'eat',wrote:'write',took:'take',gave:'give',played:'play',studied:'study',worked:'work',visited:'visit',watched:'watch',finished:'finish'}[v.toLowerCase()]||v)),
+ 'Sau can/could/should/must/will/would... dùng động từ nguyên mẫu; nếu muốn bị động, cần modal + be + V3.');
+ report(/\bmore\s+(?:better|worse|easier|harder)\b/i,'So sánh kép',m=>m[0].replace(/^more\s+/i,''),
+ 'Better/worse/easier/harder đã là dạng so sánh hơn; không thêm more trước các từ này.');
+ report(/\b(?:he|she|it)\s+(?:don't|dont)\b/i,'Phủ định ngôi thứ ba số ít',m=>m[0].replace(/\b(?:don't|dont)\b/i,"doesn't"),
+ 'Trong hiện tại đơn với he/she/it dùng doesn’t + V nguyên mẫu.');
+ // Do not assume semantic correction for every possible sentence.
+ const simple=t.match(/^((?:my|your|his|her|our|their|the|a|an)\s+[A-Za-z-]+)\s+(going|studying|playing|working|reading|writing|walking|driving)\s+(to|at|in|on|by|with|for)\b/i);
+ if(simple&&!/\b(?:am|is|are|was|were)\b/i.test(t.slice(simple[0].length))){
+   const subj= simple[1];const ing=simple[2];
+   const plural=/\b(?:students|teachers|friends|sisters|brothers|parents|children|people|workers|players)\b$/i.test(subj);
+   const aux=plural?'are':'is';
+   push('V-ing không có trợ động từ',simple[0], t.replace(simple[0],`${subj} ${aux} ${ing} ${simple[3]}`),
+    'Nếu dùng thì tiếp diễn cần am/is/are + V-ing; nếu dùng hiện tại đơn, hãy chia động từ chính theo chủ ngữ.');
+ }
+ return out;
+}
 function grammarReview(text,caseData,questionIndex){
   const issues=[], seen=new Set(),t=String(text||'').trim(),low=t.toLowerCase();
   const add=(kind,label,wrong,fix,why)=>{
@@ -405,6 +473,18 @@ function grammarReview(text,caseData,questionIndex){
   match(/\balthough\b[^.!?]{0,140}?\bbut\b/i,'Although / but','Although ..., ... hoặc ..., but ...','Không dùng đồng thời although và but để nối cùng một cặp mệnh đề.');
   match(/\b(?:despite|in spite of)\s+(?:he|she|it|they|we)\s+(?:is|are|was|were|has|have)\b/i,'Despite + noun/V-ing','although + mệnh đề hoặc despite + noun/V-ing','Sau despite/in spite of không dùng trực tiếp mệnh đề có chủ ngữ và động từ chia thì.');
   match(/\b(?:a|an)\s+(?:students|books|children|teachers|cars)\b/i,'Mạo từ trước danh từ số nhiều','students/books/children... (bỏ a/an)','A/an chỉ đi với danh từ đếm được số ít.');
+   match(/\b(?:by)\s+(?:a|an|the)\s+(?:taxi|bus|train|plane|car|bicycle|motorbike)\b/i,
+     'Cụm chỉ phương tiện',m=>m[0].replace(/\s+(?:a|an|the)\s+/i,' '),
+     'Khi diễn đạt cách đi lại thông thường, nói “by taxi / by bus / by car” (hoặc “in a taxi”).');
+   match(/\b(?:he|she|it)\s+don['’]?t\b/i,
+     'Phủ định ngôi thứ ba số ít','does not / doesn’t',
+     'Với he/she/it ở hiện tại đơn, dùng does not + V nguyên mẫu.');
+   match(/\b(?:there)\s+(?:is|are)\s+(?:an?|the)\s+(?:informations|advices|equipments)\b/i,
+     'Danh từ không đếm được','information / advice / equipment',
+     'Không dùng dạng số nhiều giả đối với danh từ không đếm được.');
+   match(/\b(?:i|he|she|we|they|you|it)\s+(?:going|working|studying|playing|writing)\s+(?:to|in|at|for|on|with)\b/i,
+     'V-ing thiếu trợ động từ','am / is / are + V-ing (hoặc động từ chia ở thì phù hợp)',
+     'Một câu trần thuật độc lập cần vị ngữ có động từ chia thì; V-ing đứng riêng không đủ.');
   match(/\bat\s+exact\s+(?:\d|[a-z]*\d)/i,'Từ loại: exact/exactly','at exactly 7:00 a.m.','Exactly là trạng từ, dùng để bổ nghĩa cho thời gian cụ thể.','wording');
   // Topic-specific validation: a grammatical sentence can still fail the requested pattern.
   const topic=Number(UNIT.topic),week=Number(UNIT.week),q=questionIndex;
@@ -512,6 +592,7 @@ function grammarReview(text,caseData,questionIndex){
           'Câu hiện tại đúng về hòa hợp chủ–vị. Tuy nhiên, bài tập này muốn luyện riêng chủ ngữ số ít (he/she/it hoặc một danh từ số ít).');
     }
   }
+  for(const x of extraOfflineIssues(t))add(x.kind,x.label,x.wrong,x.fix,x.why);
   return issues;
 }
 
@@ -549,6 +630,57 @@ function correctionChangeReason(c,v){
  }
  return '';
 }
+
+/* Explain the actual student's attempted correction instead of only repeating
+   the source error. Conservative rules: uncertain paraphrases are not called errors. */
+function correctionAttemptIssues(c, value){
+ const s=String(value||'').trim(), items=[];
+ if(!s)return items;
+ const add=(title,source,replacement,explanation)=>{
+  if(!items.some(x=>x.title===title&&x.source===source))
+   items.push({title,source,replacement,explanation});
+ };
+ const subjectFix=correctionDifference(c);
+ const sourceSubject=subjectFix.samePrefix;
+ // Direct subject–verb agreement in a simple present statement.
+ const agreement=svaCheck(s);
+ if(agreement.status==='error'){
+  add('Hòa hợp chủ ngữ – động từ',agreement.subject+' '+agreement.verb,
+      agreement.subject+' '+agreement.expected,
+      'Chủ ngữ '+(agreement.number==='singular'?'số ít':'số nhiều')+
+      ' cần dạng động từ phù hợp.');
+ }
+ // E.g. "My neighbour going to work..." is a sentence fragment: going
+ // requires a finite auxiliary in the progressive, and the target is present simple.
+ if(Number(UNIT.topic)===1 && Number(UNIT.week)===1 && sourceSubject){
+  const subjRe=new RegExp('^\\s*'+sourceSubject.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s+([a-z]+ing)\\b','i');
+  const m=s.match(subjRe);
+  if(m){
+   const expectedMatch=String(c.correct||'').match(new RegExp('^\\s*'+sourceSubject.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s+([a-z]+)\\b','i'));
+   if(expectedMatch&&expectedMatch[1].toLowerCase()!==m[1].toLowerCase()){
+    add('Thiếu động từ chính được chia thì',m[1],expectedMatch[1],
+      '“'+m[1]+'” là dạng V-ing. Khi đứng một mình sau chủ ngữ, nó không tạo thành vị ngữ hoàn chỉnh. Bài này yêu cầu hiện tại đơn; dùng “'+expectedMatch[1]+'”.');
+   }
+  }
+ }
+ // Detect a highly specific method-of-travel construction, not all "by the ...".
+ const travel=s.match(/\bby\s+(?:a|an|the)\s+(taxi|bus|car|train|plane|bicycle|bike|metro|motorbike)\b/i);
+ if(travel && norm(c.correct).includes('by '+travel[1].toLowerCase())){
+  const tail=s.slice((travel.index||0)+travel[0].length).toLowerCase();
+  if(!/^\s+(?:stop|station|driver|door|window|route|company)\b/.test(tail)){
+   add('Cụm chỉ phương tiện đi lại',travel[0],'by '+travel[1].toLowerCase(),
+    'Khi nói đi bằng phương tiện nói chung, dùng “by + phương tiện” không có a/an/the. Cũng có thể dùng “in a taxi” nếu viết lại cả cụm phù hợp.');
+  }
+ }
+ // A limited modal passive check, where the student accidentally omits "be".
+ const mp=s.match(/\b(can|could|should|must|will|may|might)\s+(?!be\b)([a-z]+(?:ed|en)|built|written|made|done|sent|lost|found)\b/i);
+ if(mp && Number(UNIT.topic)===10){
+  add('Cấu trúc bị động với động từ khuyết thiếu',mp[0],mp[1]+' be '+mp[2],
+      'Modal passive có dạng modal + be + V3.');
+ }
+ return items;
+}
+
 function gradeQuestion(type,c,v,i){
  const empty=!String(v||'').trim();
  if(type==='write')return {empty,issues:grammarReview(v,c,i),sample:c.correct,checked:!empty};
@@ -557,10 +689,18 @@ function gradeQuestion(type,c,v,i){
  const valid=norm(v)===norm(expected);
  const explanation=type==='correct'?correctionExplanation(c):c.explain;
  const reason=type==='correct'&&!valid&&!empty?correctionChangeReason(c,v):'';
- return {good:!empty&&valid,empty,expected,explain:explanation,reason};
+ return {good:!empty&&valid,empty,expected,explain:explanation,reason,diagnostics:type==='correct'&&!valid&&!empty?correctionAttemptIssues(c,v):[]};
 }
 
-function feedback(type,c,g){
+
+/* Bản hoàn toàn miễn phí: mọi nhận xét chạy trực tiếp trên trình duyệt.
+   Không API, không gửi dữ liệu, không dịch vụ bên ngoài. */
+function offlineGuidePanel(){
+ return `<section class="offline-guide"><b>Kiểm tra miễn phí ngay trên trang</b>
+ <p>Bấm <strong>Kiểm tra Exercise 7</strong> để nhận nhận xét theo từng câu. Chrome/Edge có thể gạch chân từ sai chính tả: hãy <strong>nhấp chuột phải</strong> vào từ đó để xem cách viết gợi ý. Đặt ngôn ngữ kiểm tra là tiếng Anh.</p>
+ <p class="small">Nhận xét được tạo từ các quy tắc và yêu cầu của bài học; câu phức tạp vẫn cần giáo viên rà soát. Không gửi bài viết đến bên thứ ba.</p></section>`;
+}
+function feedback(type,c,g,i){
  if(type==='write'){
   const bad=g.issues.filter(x=>x.kind!=='missing'&&x.kind!=='tip');
   const tips=g.issues.filter(x=>x.kind==='tip');
@@ -580,7 +720,8 @@ function feedback(type,c,g){
     <p class="small">Hệ thống chữa tự động dựa trên mẫu lỗi và yêu cầu của từng bài. Cách dùng từ, ý nghĩa và các cấu trúc phức tạp vẫn có thể cần giáo viên đánh giá.</p>
   </div>`;
  }
- return `<div class="feedback ${g.good?'':'bad'}"><div class="label">${g.good?'✓ Chính xác':g.reason?'✗ Cần giữ nguyên ý câu gốc':'✗ Chưa đúng'}</div>${g.reason?`<p><b>Lý do:</b> ${esc(g.reason)}</p>`:''}<p>Đáp án tham khảo: <b>${esc(g.expected)}</b></p><p>Giải thích: ${esc(g.explain)}</p></div>`;
+ const detail=!g.good&&g.diagnostics?.length?`<div class="attempt-details"><b>Chữa theo đúng câu em đã viết:</b>${g.diagnostics.map(x=>`<div class="attempt-issue"><b>${esc(x.title)}</b><div><span class="bad-text">${esc(x.source)}</span> → <span class="good-text">${esc(x.replacement)}</span></div><div>${esc(x.explanation)}</div></div>`).join('')}</div>`:'';
+ return `<div class="feedback ${g.good?'':'bad'}"><div class="label">${g.good?'✓ Chính xác':g.reason?'✗ Cần giữ nguyên ý câu gốc':'✗ Chưa đúng'}</div>${detail}${g.reason?`<p><b>Lý do:</b> ${esc(g.reason)}</p>`:''}<p>Đáp án tham khảo: <b>${esc(g.expected)}</b></p><p>Giải thích yêu cầu của bài: ${esc(g.explain)}</p></div>`;
 }
 function countCorrect(type){return (progress.graded[type]||[]).filter(x=>x.good).length}
 function answeredCount(type){return bankFor(type).filter((c,i)=>String(progress.answers[qKey(type,i)]||'').trim()).length}
@@ -589,20 +730,20 @@ function showExercise(){
  const all=allSubmitted();
  const labels={};for(const [t,title] of TYPES)labels[t]=title.replace(/^EXERCISE\s+\d+\s*·\s*/,'');
  $('area').innerHTML=`<h2 class="section-title">Phase 2 · Luyện tập</h2><p class="subtle">7 dạng luyện tập, 35 câu/nhiệm vụ. Mỗi Exercise có 5 câu mới; đáp án và giải thích xuất hiện sau khi kiểm tra.</p>
- ${TYPES.map(([t,title,desc],i)=>`<section class="exercise" id="exercise-${t}"><div class="bar"><span>${esc(title)}</span><span>5 câu</span></div><div class="intro">${esc(desc)}</div>${bankFor(t).map((c,j)=>makeQuestion(t,c,j)).join('')}<div class="exfoot"><button class="btn" data-grade="${t}">Kiểm tra Exercise ${i+1}</button><span class="small">${progress.graded[t]?(t==='write'?`Đã nhận xét ${answeredCount(t)}/5 câu viết`:`✓ ${countCorrect(t)}/5 câu đúng`):`Đã điền ${answeredCount(t)}/5`}</span></div></section>`).join('')}
+ ${TYPES.map(([t,title,desc],i)=>`<section class="exercise" id="exercise-${t}"><div class="bar"><span>${esc(title)}</span><span>5 câu</span></div><div class="intro">${esc(desc)}</div>${bankFor(t).map((c,j)=>makeQuestion(t,c,j)).join('')}<div class="exfoot"><button class="btn" data-grade="${t}">Kiểm tra Exercise ${i+1}</button><span class="small">${progress.graded[t]?(t==='write'?`Đã nhận xét ${answeredCount(t)}/5 câu viết`:`✓ ${countCorrect(t)}/5 câu đúng`):`Đã điền ${answeredCount(t)}/5`}</span></div>${t==='write'?offlineGuidePanel():''}</section>`).join('')}
  <div class="submission-area"><h3>Hoàn thành bài học</h3><p class="small">Đã kiểm tra ${TYPES.filter(([t])=>progress.graded[t]).length}/7 Exercise · Đã trả lời ${TYPES.reduce((n,[t])=>n+answeredCount(t),0)}/35 câu/nhiệm vụ.</p>
  <button class="btn" id="submitAll" ${all?'':'disabled'}>${progress.submittedAt?'Xem lại bảng tổng kết':'Nộp toàn bộ bài & xem tổng kết'}</button>${all?'':`<p class="small">Cần điền đủ 35 câu/nhiệm vụ và bấm Kiểm tra ở cả 7 Exercise để nộp.</p>`}</div>
  ${progress.submittedAt&&all?summary():''}`;
  document.querySelectorAll('[data-answer]').forEach(el=>el.addEventListener('input',()=>{
    const key=el.dataset.answer,type=key.split('_')[0],i=Number(key.split('_')[1]);
    progress.answers[key]=el.value;
-   progress.submittedAt=null;
+    progress.submittedAt=null;
    const box=el.closest('.q'),fb=box?.querySelector('.q-feedback');
    if(Array.isArray(progress.graded[type])){
      // Đã từng bấm Kiểm tra: tính lại ngay theo câu hiện tại và cập nhật nhận xét.
      const updated=gradeQuestion(type,getCase(type,i),el.value,i);
      progress.graded[type][i]=updated;
-     if(fb)fb.innerHTML=feedback(type,getCase(type,i),updated);
+     if(fb)fb.innerHTML=feedback(type,getCase(type,i),updated,i);
      const foot=document.querySelector(`#exercise-${type} .exfoot .small`);
      if(foot)foot.textContent=type==='write'?`Đã nhận xét ${answeredCount(type)}/5 câu viết`:`✓ ${countCorrect(type)}/5 câu đúng`;
    }else if(fb)fb.innerHTML='';
@@ -615,7 +756,7 @@ function showExercise(){
    if(Array.isArray(progress.graded[type])){
      const index=[...el.closest('.q').parentElement.querySelectorAll('.q')].indexOf(el.closest('.q'));
      progress.graded[type][index]=gradeQuestion(type,getCase(type,index),el.value,index);
-     if(fb)fb.innerHTML=feedback(type,getCase(type,index),progress.graded[type][index]);
+     if(fb)fb.innerHTML=feedback(type,getCase(type,index),progress.graded[type][index],index);
      const foot=document.querySelector(`#exercise-${type} .exfoot .small`);
      if(foot)foot.textContent=`✓ ${countCorrect(type)}/5 câu đúng`;
    }else if(fb)fb.innerHTML='';
@@ -627,6 +768,7 @@ function showExercise(){
    progress.submittedAt=null;save();const anchor=document.getElementById('exercise-'+type);const y=anchor?.getBoundingClientRect().top||0;
    showExercise(); const newAnchor=document.getElementById('exercise-'+type);if(newAnchor)window.scrollBy(0,(newAnchor.getBoundingClientRect().top||0)-y);
  });
+
  const submit=$('submitAll');if(submit)submit.onclick=()=>{
    if(!allSubmitted())return;
    progress.submittedAt=progress.submittedAt||new Date().toISOString();
@@ -740,7 +882,7 @@ function summary(){
  <div class="report-actions">${d.mistakes.length?`<button class="btn retry-action" id="reportRedo">↻ Làm lại ${d.mistakes.length} câu sai</button>`:''}<button class="btn" id="reportPng">Tải ảnh kết quả PNG</button><button class="btn secondary" id="reportPrint">In / Lưu PDF</button><button class="btn secondary" id="reportBack">Quay lại bài tập</button><button class="btn secondary" id="reportRestart">Xem lại lý thuyết</button></div>
  <h3>Chi tiết câu chưa đúng (${d.mistakes.length})</h3>
  ${d.mistakes.length?`<div class="report-error-list">${d.mistakes.map(x=>`<article class="report-mistake"><b>✗ ${esc(x.title)} · Câu ${x.number}</b><p>Em trả lời: <span class="wrong">${esc(x.answer)}</span></p><p>Đáp án: <span class="right">${esc(x.correct)}</span></p><p class="small">${esc(x.explain)}</p></article>`).join('')}</div>`:'<p class="small">Không có câu nào sai trong 30 câu được chấm tự động.</p>'}
- <p class="report-note">Lưu ý: Các câu tự viết chỉ được hệ thống phát hiện một số lỗi theo quy tắc; không tính đúng/sai và cần giáo viên kiểm tra ý nghĩa, ngữ cảnh.</p>
+ <p class="report-note">Chấm tự động miễn phí, thực hiện trên trình duyệt. Các câu tự viết được rà lỗi phổ biến; không khẳng định phát hiện hết lỗi và cần giáo viên kiểm tra ý nghĩa, ngữ cảnh.</p>
  </section>`;
 }
 function exportReportPng(){
