@@ -702,7 +702,7 @@ function fmt(sec){
     : `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
 }
 setInterval(()=>{
-  if(startedAt){timer.textContent=fmt((Date.now()-startedAt)/1000);}
+  if(startedAt&&!submitted){timer.textContent=fmt((Date.now()-startedAt)/1000);}
 },500);
 
 /* ANSWERS */
@@ -968,6 +968,6 @@ function escapeHTML(value){
 buildControls();
 prefill();
 </script>
-<script src="../../reading-standard.js?v=20261109-v1"></script>
+<script src="../../reading-standard.js?v=20261109-v2"></script>
 </body>
 </html>
