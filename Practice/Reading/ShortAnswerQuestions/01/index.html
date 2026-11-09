@@ -393,7 +393,7 @@ function fmt(sec){
 }
 
 setInterval(()=>{
-  if(startedAt)timer.textContent=fmt((Date.now()-startedAt)/1000);
+  if(startedAt&&!submitted)timer.textContent=fmt((Date.now()-startedAt)/1000);
 },500);
 
 function saveAnswer(n,v){
@@ -777,6 +777,6 @@ function escapeHTML(s){
 
 prefill();
 </script>
-<script src="../../reading-standard.js?v=20261109-v1"></script>
+<script src="../../reading-standard.js?v=20261109-v2"></script>
 </body>
 </html>
