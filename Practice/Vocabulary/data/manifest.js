@@ -95,6 +95,9 @@ window.VOCAB_MANIFEST = [
 
   "./data/speaking/part1.js",
   "./data/speaking/part2.js",
-  "./data/speaking/part3.js"
+  "./data/speaking/part3.js",
+  "./data/speaking/expanded-part1.js",
+  "./data/speaking/expanded-part2.js",
+  "./data/speaking/expanded-part3.js"
 
 ];
