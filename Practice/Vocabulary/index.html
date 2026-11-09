@@ -12110,13 +12110,9 @@ function saveVocabularyTestStore(data){
 
 function currentVocabularyTestKey(){
 
-  return(
-    selectedSkill
-    +
-    "::"
-    +
-    selectedSet
-  );
+  return selectedSkill+"::"+selectedSet+
+    (/^speaking-part-[123]$/.test(selectedSkill)
+      ? "::"+(window.SPEAKING_ACTIVE_LEVEL||"B1") : "");
 
 }
 
@@ -19645,7 +19641,7 @@ async function loadManifestFile(){
   try{
 
     await loadVocabularyScript(
-      "./data/manifest.js?v=20261109-speaking-topics-v1"
+      "./data/manifest.js?v=20261109-cefr-expanded-v2"
     );
 
   }
@@ -19691,16 +19687,17 @@ async function loadExtraVocabularyData(){
     đã có nhiều bộ từ, thay vì chờ từng file một.
   */
 
-  const results =
-  await Promise.allSettled(
-    files.map(
-      file =>
-      loadVocabularyScript(
-        file
-      )
-    )
+  // Load base topic packs first. Legacy Speaking packs replace their sets,
+  // so expansion packs must load only AFTER those packs have finished.
+  const baseFiles=files.filter(file=>!/expanded-part[123]\.js/.test(file));
+  const expansionFiles=files.filter(file=>/expanded-part[123]\.js/.test(file));
+  const results=await Promise.allSettled(
+    baseFiles.map(file=>loadVocabularyScript(file))
   );
-
+  const expandedResults=await Promise.allSettled(
+    expansionFiles.map(file=>loadVocabularyScript(file))
+  );
+  results.push(...expandedResults);
 
   results
   .forEach(
@@ -20277,7 +20274,7 @@ init();
 })();
 </script>
 
-<script src="./speaking-study.js?v=20261109-b1-c2-v1"></script>
+<script src="./speaking-study.js?v=20261109-game-level-v2"></script>
 <script src="./audio/audio-engine.js?v=20260918-audio-v4"></script>
 <script src="./process/process-step-media.js?v=20261005-step-1"></script>
 </body>
