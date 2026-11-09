@@ -690,6 +690,7 @@ mark.user-highlight{
   }
 
 }
+#passageRoot .evidence-focus{background:#ffe66a!important;box-shadow:0 0 0 5px #ffe66a66;border-radius:6px;padding:2px} #questionsRoot .passage-evidence{cursor:pointer}
 </style>
 </head>
 
@@ -2244,7 +2245,7 @@ function renderReview(
               Passage
             </div>
 
-            <div class="passage-evidence">
+            <div class="passage-evidence" role="button" tabindex="0" onclick="focusEvidence(${n})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusEvidence(${n})}">
               “${EVIDENCE[n]}”
             </div>
 
@@ -2285,6 +2286,24 @@ function renderReview(
 
 }
 
+
+function focusEvidence(n){
+ const root=document.getElementById('passageRoot');
+ if(!root)return;
+ root.querySelectorAll('.evidence-focus').forEach(el=>el.classList.remove('evidence-focus'));
+ const clean=s=>String(s||'').toLowerCase().normalize('NFKC')
+    .replace(/[^a-z0-9\s]+/g,' ').replace(/\s+/g,' ').trim();
+ const words=clean(EVIDENCE[n]).split(' ').filter(w=>w.length>3);
+ const paragraphs=[...root.querySelectorAll('p')];
+ const ranked=paragraphs.map(p=>{
+   const text=clean(p.textContent);
+   return {p,score:words.filter(w=>text.includes(w)).length};
+ }).sort((a,b)=>b.score-a.score);
+ if(!ranked.length||ranked[0].score===0)return;
+ const target=ranked[0].p;
+ target.classList.add('evidence-focus');
+ target.scrollIntoView({behavior:'smooth',block:'center'});
+}
 
 function closeResult(){
 
