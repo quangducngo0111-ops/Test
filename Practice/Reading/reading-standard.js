@@ -99,7 +99,7 @@ function placeReview(n,element){
  if(!element)return;
  const q=$('q'+n)||$('a'+n)||$('tf'+n);
  if(!q)return;
- let container=q.closest('.qcard,.note-line,.table-row,.flow-step,.question-row,.heading-row,.sentence-row,li,tr');
+ let container=q.closest('.qcard,.question-card,.note-line,.table-row,.flow-step,.question-row,.heading-row,.sentence-row,li,tr');
  if(!container){container=q.closest('.question-section')||q.closest('.note-section');}
  if(!container||container.contains(element))return;
  if(container.tagName==='TR'){
