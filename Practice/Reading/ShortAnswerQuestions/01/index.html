@@ -191,6 +191,7 @@ mark.user-highlight{background:#fff29a;color:inherit;border-radius:3px;cursor:po
   .hero{align-items:stretch;flex-direction:column}
   .progress-wrap{min-width:0}
 }
+#passageRoot .evidence-focus{background:#ffe66a!important;box-shadow:0 0 0 5px #ffe66a66;border-radius:6px;padding:2px} #questionsRoot .inline-review .evidence{cursor:pointer}
 </style>
 </head>
 <body>
@@ -475,8 +476,22 @@ function reviewHTML(n,user,correct){
         <div class="review-correct">${escapeHTML(correct)}</div>
       </div>
       <div class="explain">${EXPLAIN[n]}</div>
-      <div class="evidence">↗ ${EVIDENCE[n]}</div>
+      <div class="evidence" role="button" tabindex="0" onclick="focusEvidence(n)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();focusEvidence(n)}">↗ ${EVIDENCE[n]}<small style="display:block;font-weight:600">Nhấn để tô vàng trích dẫn trong bài đọc bên trái</small></div>
     </div>`;
+}
+
+function focusEvidence(n){
+  const root=document.getElementById('passageRoot');
+  if(!root)return;
+  root.querySelectorAll('.evidence-focus').forEach(el=>el.classList.remove('evidence-focus'));
+  const phrase=String(EVIDENCE[n]||'').toLowerCase().replace(/\\s+/g,' ').trim();
+  const paragraphs=[...root.querySelectorAll('p')];
+  const normalized=paragraphs.map(el=>({el,text:(el.textContent||'').toLowerCase().replace(/\\s+/g,' ').trim()}));
+  const target=normalized.find(x=>x.text.includes(phrase))
+    ||normalized.find(x=>x.text.includes(phrase.split(' ').slice(0,5).join(' ')));
+  if(!target)return;
+  target.el.classList.add('evidence-focus');
+  target.el.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 function closeResult(){
