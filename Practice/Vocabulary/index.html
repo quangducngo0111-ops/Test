@@ -19639,7 +19639,7 @@ async function loadManifestFile(){
   try{
 
     await loadVocabularyScript(
-      "./data/manifest.js?v=20260925-manifest-v2"
+      "./data/manifest.js?v=20261109-speaking-topics-v1"
     );
 
   }
@@ -19900,15 +19900,16 @@ async function init(){
     await loadManifestFile();
     await loadExtraVocabularyData();
 
-    // Nếu người dùng đang đứng ở màn hình danh sách bộ, cập nhật lại.
+    // Cập nhật các bộ Speaking mới sau khi tải dữ liệu động.
+    // Hỗ trợ cả link trực tiếp tới Part 1/2/3 và trang chọn nội dung.
     const setsScreen = $("setsScreen");
+    const homeScreen = $("homeScreen");
 
-    if(
-      setsScreen
-      &&
-      !setsScreen.classList.contains("hidden")
-    ){
+    if(setsScreen && !setsScreen.classList.contains("hidden")){
       renderSets();
+    }
+    if(homeScreen && !homeScreen.classList.contains("hidden")){
+      renderHome();
     }
 
   })()
