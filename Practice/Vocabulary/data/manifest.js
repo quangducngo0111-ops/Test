@@ -86,6 +86,15 @@ window.VOCAB_MANIFEST = [
   "./data/topics/transport/03.js",
   "./data/topics/transport/04.js",
   "./data/topics/transport/05.js",
-  "./data/topics/transport/06.js"
+  "./data/topics/transport/06.js",
+
+  /* =========================
+     IELTS SPEAKING · 30 TOPIC SETS
+     10 SETS PER PART · 12 ITEMS PER SET
+  ========================= */
+
+  "./data/speaking/part1.js",
+  "./data/speaking/part2.js",
+  "./data/speaking/part3.js"
 
 ];
