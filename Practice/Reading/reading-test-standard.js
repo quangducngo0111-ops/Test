@@ -1,5 +1,5 @@
 /* IELTS Reading Test: consistent exam-only annotation controls.
-   Dictionary and notes are intentionally unavailable during timed tests. */
+   Dictionary is unavailable during timed tests; annotations use the Practice workflow. */
 (function(){
 'use strict';
 document.documentElement.dataset.readingUxApplied='test';
@@ -51,9 +51,8 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!
 
 .reading-test-guide{padding:10px 15px;background:#e9f0f9;border-bottom:1px solid #cbd9e8;color:#234158;font:600 12px/1.6 system-ui}
 .reading-test-guide strong{color:#12334e}
-.exam .notes-panel,.exam .note-anchor{background:transparent!important;border-bottom:0!important;pointer-events:none}
-.exam .notes-panel{display:none!important}
-.exam .annotation-bar [onclick*="addNote("],.exam .annotation-bar [onclick*="toggleNotes("],.exam .annot-bar [onclick*="addNote("],.exam .annot-bar [onclick*="toggleNotes("]{display:none!important}
+.exam .note-anchor{background:#fff0b7!important;border-bottom:2px dotted #7b48cb!important;cursor:help}
+.exam .notes-panel{background:#faf8ff;border:1px solid #ded3f3;border-radius:12px;padding:11px;margin:10px 0}
 .exam .annotation-bar .annotation-tip,.exam .annot-tip{color:#56677a}
 .exam .reading-bold-btn{background:#f5f9ff;border:1px solid #afc2d7;border-radius:6px;color:#19364f;padding:6px 9px;font-size:12px;font-weight:700;cursor:pointer}
 .exam strong.user-bold{font-weight:850!important;text-decoration:none}
@@ -67,7 +66,7 @@ const exam=document.getElementById('exam');
 if(exam){
  const guide=document.createElement('div');
  guide.className='reading-test-guide';
- guide.innerHTML='<strong>🧪 Reading Test · Hướng dẫn:</strong> Thời gian <b>đếm ngược 60 phút</b> · Bôi đen văn bản để <b>Highlight</b> hoặc <b>Bôi đậm</b> · Không có tra từ điển và Take note · Sau khi nộp bài, xem đáp án/giải thích dưới mỗi câu và nhấn trích dẫn để tô vàng vị trí trong Passage.';
+ guide.innerHTML='<strong>🧪 Reading Test · Hướng dẫn:</strong> Thời gian <b>đếm ngược 60 phút</b> · Bôi đen văn bản để <b>Highlight</b>, <b>Take note</b> hoặc <b>Bôi đậm</b> · Không có tra từ điển · Sau khi nộp bài, xem đáp án/giải thích dưới mỗi câu và nhấn trích dẫn để tô vàng vị trí trong Passage.';
  const tabs=exam.querySelector('.tabs');
  if(tabs)tabs.insertAdjacentElement('afterend',guide);
  else exam.prepend(guide);
@@ -97,7 +96,7 @@ selectionMenu.className='reading-test-selection';
 selectionMenu.hidden=true;
 selectionMenu.setAttribute('role','toolbar');
 selectionMenu.setAttribute('aria-label','Công cụ chọn văn bản Reading Test');
-selectionMenu.innerHTML='<button type="button" data-action="highlight">🖍 Highlight</button><button type="button" data-action="bold">𝐁 Bôi đậm</button>';
+selectionMenu.innerHTML='<button type="button" data-action="highlight">🖍 Highlight</button><button type="button" data-action="note">📝 Take note</button><button type="button" data-action="bold">𝐁 Bôi đậm</button>';
 document.body.appendChild(selectionMenu);
 let selectionZone=null;
 function closeSelectionMenu(){selectionMenu.hidden=true;selectionZone=null}
@@ -108,6 +107,7 @@ selectionMenu.addEventListener('click',event=>{
  const zone=selectionZone;
  closeSelectionMenu();
  if(button.dataset.action==='highlight'&&typeof window.addHighlight==='function')window.addHighlight(zone);
+ if(button.dataset.action==='note'&&typeof window.addNote==='function')window.addNote(zone);
  if(button.dataset.action==='bold')window.boldReadingSelection(zone);
 });
 document.addEventListener('mouseup',event=>{
@@ -124,7 +124,7 @@ document.addEventListener('mouseup',event=>{
   const rect=range.getBoundingClientRect();
   selectionZone=zone;
   selectionMenu.hidden=false;
-  selectionMenu.style.left=Math.max(12,Math.min(innerWidth-210,rect.left))+'px';
+  selectionMenu.style.left=Math.max(12,Math.min(innerWidth-330,rect.left))+'px';
   selectionMenu.style.top=Math.max(12,rect.top>58?rect.top-52:rect.bottom+8)+'px';
  },35);
 });
@@ -132,6 +132,73 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape')closeSelecti
 document.addEventListener('pointerdown',event=>{
  if(!event.target.closest('.reading-test-selection')&&!event.target.closest('#passageCopy,#questionsCopy'))closeSelectionMenu();
 });
+
+// Re-insert Take note in both passage and question toolbars generated on navigation.
+function installNoteButtons(){
+  document.querySelectorAll('#exam .annotation-bar,#exam .annot-bar').forEach(bar=>{
+    if(bar.querySelector('.reading-note-btn'))return;
+    const highlight=bar.querySelector('button[onclick*="addHighlight"]');
+    if(!highlight)return;
+    const params=(highlight.getAttribute('onclick')||'').match(/addHighlight\('(passage|questions)'\)/);
+    if(!params)return;
+    const zone=params[1];
+    const note=document.createElement('button');
+    note.type='button';
+    note.className=(highlight.classList.contains('annotation-btn')?'annotation-btn':'annot-btn')+' reading-note-btn';
+    note.textContent='📝 Take note';
+    note.addEventListener('click',()=>window.addNote(zone));
+    highlight.insertAdjacentElement('afterend',note);
+    // A notes drawer remains available, but normal reading only needs a hover.
+    const drawer=document.createElement('button');
+    drawer.type='button';
+    drawer.className=(highlight.classList.contains('annotation-btn')?'annotation-btn':'annot-btn')+' reading-notes-list';
+    drawer.textContent='Ghi chú';
+    drawer.addEventListener('click',()=>window.toggleNotes(zone));
+    note.insertAdjacentElement('afterend',drawer);
+  });
+}
+const noteObserver=new MutationObserver(()=>installNoteButtons());
+if(exam)noteObserver.observe(exam,{childList:true,subtree:true});
+installNoteButtons();
+const noteTooltip=document.createElement('div');
+noteTooltip.className='reading-test-note-tooltip';
+noteTooltip.hidden=true;
+noteTooltip.style.cssText='position:fixed;z-index:4000;max-width:min(330px,calc(100vw - 24px));border-radius:13px;padding:12px 15px;background:#281260;color:white;box-shadow:0 12px 34px #160a3955;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 system-ui;pointer-events:none';
+noteTooltip.setAttribute('role','tooltip');
+document.body.appendChild(noteTooltip);
+let hoveredNote=null;
+function noteValue(el){
+  const inline=el.dataset.note;
+  if(inline)return inline;
+  const id=el.dataset.noteId;
+  const zone=el.closest('#passageCopy')?'passage':'questions';
+  if(id&&typeof window.loadNotes==='function'){
+    try{return window.loadNotes(zone).find(n=>n.id===id)?.text||'';}catch(e){}
+  }
+  return '';
+}
+function updateTooltipPosition(el){
+ const r=el.getBoundingClientRect(),w=noteTooltip.offsetWidth,h=noteTooltip.offsetHeight;
+ noteTooltip.style.left=Math.max(12,Math.min(innerWidth-w-12,r.left))+'px';
+ noteTooltip.style.top=Math.max(12,r.top>h+18?r.top-h-10:Math.min(innerHeight-h-12,r.bottom+10))+'px';
+}
+document.addEventListener('pointerover',event=>{
+ const el=event.target.closest?.('#exam .note-anchor');
+ if(!el||el===hoveredNote)return;
+ const value=noteValue(el);if(!value)return;
+ hoveredNote=el;noteTooltip.textContent='📝 Ghi chú\n'+value;noteTooltip.hidden=false;updateTooltipPosition(el);
+});
+document.addEventListener('pointerout',event=>{
+ if(hoveredNote&&event.target.closest?.('.note-anchor')===hoveredNote&&!hoveredNote.contains(event.relatedTarget)){
+   hoveredNote=null;noteTooltip.hidden=true;
+ }
+});
+document.addEventListener('touchstart',event=>{
+ const el=event.target.closest?.('#exam .note-anchor');
+ if(!el){hoveredNote=null;noteTooltip.hidden=true;return}
+ const value=noteValue(el);if(!value)return;
+ hoveredNote=el;noteTooltip.textContent='📝 Ghi chú\n'+value;noteTooltip.hidden=false;updateTooltipPosition(el);
+},{passive:true});
 
 window.boldReadingSelection=function(zone){
  if(typeof submitted!=='undefined'&&submitted)return;
