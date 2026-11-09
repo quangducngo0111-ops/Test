@@ -1482,6 +1482,16 @@ button.skill-card:hover{
 
 }
 
+
+/* Student class selection and personal photo */
+.class-help{display:block;margin-top:6px;font-size:12px;color:#697386}
+.student-photo-field{margin:16px 0 12px}
+.student-photo-field>label{display:block;font-weight:800;color:#342358;margin-bottom:8px}
+.student-photo-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.student-photo-row input[type=file]{max-width:100%;font-size:13px}
+.student-photo-preview,.student-avatar{width:74px;height:74px;object-fit:cover;border-radius:50%;border:3px solid #e3ddfa;background:#f2f0ff}
+.student-avatar{width:82px;height:82px;margin:0 auto 10px;display:block}
+.student-avatar[hidden],.student-photo-preview[hidden]{display:none}
 </style>
 </head>
 
@@ -1590,13 +1600,40 @@ button.skill-card:hover{
 
               <input
                 id="studentClass"
-                placeholder="11A1"
+                list="studentClassOptions"
+                autocomplete="off"
+                placeholder="Tìm lớp, ví dụ XD..."
+                aria-describedby="classHelp"
+                required
               >
+              <datalist id="studentClassOptions">
+                <option value="XD25A02.1"></option>
+                <option value="XD25A02.2"></option>
+                <option value="XD26A03.1"></option>
+                <option value="SS26.1"></option>
+                <option value="SS25A01.1"></option>
+                <option value="SS25IE2"></option>
+                <option value="OP.AD.07"></option>
+                <option value="OP.ESS.11"></option>
+              </datalist>
+              <small id="classHelp" class="class-help">Chỉ chọn một trong 8 lớp có sẵn.</small>
 
             </div>
 
           </div>
 
+
+
+          <div class="student-photo-field">
+            <label for="studentPhotoInput">Ảnh đại diện học sinh (không bắt buộc)</label>
+            <div class="student-photo-row">
+              <img id="studentPhotoPreview" class="student-photo-preview" alt="Xem trước ảnh đại diện" hidden>
+              <div>
+                <input id="studentPhotoInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" aria-describedby="photoHint">
+                <small id="photoHint" class="class-help">Chọn ảnh JPG, PNG hoặc WebP (tối đa 3 MB). Ảnh được lưu trên thiết bị này.</small>
+              </div>
+            </div>
+          </div>
 
           <div
             class="error"
@@ -1706,6 +1743,8 @@ button.skill-card:hover{
 
 
         <div class="hero-profile-area">
+
+          <img id="studentAvatar" class="student-avatar" alt="Ảnh đại diện học sinh" hidden>
 
           <div class="profile-pill">
 
@@ -2108,6 +2147,89 @@ const STUDENT_KEY=
 'IELTS_PRACTICE_STUDENT';
 
 
+const VALID_CLASSES = Object.freeze(["XD25A02.1","XD25A02.2","XD26A03.1","SS26.1","SS25A01.1","SS25IE2","OP.AD.07","OP.ESS.11"]);
+
+function canonicalClass(value) {
+  const input = String(value || '').trim().toUpperCase();
+  return VALID_CLASSES.find(value => value.toUpperCase() === input) || '';
+}
+
+const PHOTO_DB = 'IELTS_PRACTICE_PROFILE_PHOTOS';
+const PHOTO_STORE = 'photos';
+let photoPreviewUrl = null;
+let pendingStudentPhoto = null;
+let photoStoreRequest = null;
+
+function openPhotoDb() {
+  return new Promise((resolve,reject) => {
+    if(!window.indexedDB) return reject(new Error('Không có IndexedDB'));
+    const request = indexedDB.open(PHOTO_DB, 1);
+    request.onupgradeneeded = () => {
+      if (!request.result.objectStoreNames.contains(PHOTO_STORE)) {
+        request.result.createObjectStore(PHOTO_STORE);
+      }
+    };
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+}
+async function storeStudentPhoto(student,file){
+  const db=await openPhotoDb();
+  try {
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(PHOTO_STORE,'readwrite');
+      tx.objectStore(PHOTO_STORE).put(file, student.name.toLowerCase()+'::'+student.className);
+      tx.oncomplete=resolve;
+      tx.onerror=()=>reject(tx.error);
+    });
+  } finally { db.close(); }
+}
+async function readStudentPhoto(student){
+  if(!student)return null;
+  const db=await openPhotoDb();
+  try{
+    return await new Promise((resolve,reject)=>{
+      const tx=db.transaction(PHOTO_STORE,'readonly');
+      const req=tx.objectStore(PHOTO_STORE).get(student.name.toLowerCase()+'::'+student.className);
+      req.onsuccess=()=>resolve(req.result||null);
+      req.onerror=()=>reject(req.error);
+    });
+  } finally { db.close(); }
+}
+async function displayStudentPhoto(student){
+  const file=await readStudentPhoto(student).catch(()=>null);
+  if(photoPreviewUrl) URL.revokeObjectURL(photoPreviewUrl);
+  photoPreviewUrl=file ? URL.createObjectURL(file) : null;
+  for(const id of ['studentAvatar','studentPhotoPreview']){
+    const image=$(id);
+    if(!image)continue;
+    image.hidden=!photoPreviewUrl;
+    if(photoPreviewUrl)image.src=photoPreviewUrl;
+    else image.removeAttribute('src');
+  }
+}
+const photoInput=document.getElementById('studentPhotoInput');
+if(photoInput){
+  photoInput.addEventListener('change',()=>{
+    const file=photoInput.files?.[0]||null;
+    if(!file){pendingStudentPhoto=null;displayStudentPhoto(currentStudent);return;}
+    if(!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)||file.size>3*1024*1024){
+      photoInput.value='';
+      pendingStudentPhoto=null;
+      $('formError').textContent='Ảnh phải là JPG/PNG/WebP/GIF và không quá 3 MB.';
+      return;
+    }
+    pendingStudentPhoto=file;
+    $('formError').textContent='';
+    const preview=$('studentPhotoPreview');
+    if(photoPreviewUrl) URL.revokeObjectURL(photoPreviewUrl);
+    photoPreviewUrl=URL.createObjectURL(file);
+    preview.src=photoPreviewUrl;
+    preview.hidden=false;
+  });
+}
+
+
 const TEST_TREE=
 'https://api.github.com/repos/quangducngo0111-ops/Test/git/trees/main?recursive=1';
 
@@ -2300,10 +2422,7 @@ function normalizeStudent(v){
 
 
   const className=
-    String(
-      v.className||''
-    )
-    .trim();
+    canonicalClass(v.className);
 
 
   return(
@@ -2490,6 +2609,8 @@ function showLogin(
   }
 
 
+  displayStudentPhoto(prefill?currentStudent:null);
+
   $('studentName')
   .focus();
 
@@ -2544,6 +2665,8 @@ function showDashboard(){
 
   $('profileClass').textContent=
     currentStudent.className;
+
+  displayStudentPhoto(currentStudent);
 
 
   $('miniInfo').textContent=
@@ -3289,7 +3412,7 @@ function launchTest(path){
 $('studentForm')
 .addEventListener(
   'submit',
-  event=>{
+  async event=>{
 
     event.preventDefault();
 
@@ -3320,11 +3443,22 @@ $('studentForm')
       '';
 
 
-    saveStudent(
-      student
-    );
+    const submitButton = $('studentForm').querySelector('button[type=submit]');
+    if(pendingStudentPhoto){
+      submitButton.disabled=true;
+      try{
+        await storeStudentPhoto(student,pendingStudentPhoto);
+        pendingStudentPhoto=null;
+        $('studentPhotoInput').value='';
+      }catch(error){
+        $('formError').textContent='Không thể lưu ảnh trên thiết bị này. Hãy kiểm tra dung lượng/bộ nhớ trình duyệt.';
+        submitButton.disabled=false;
+        return;
+      }
+      submitButton.disabled=false;
+    }
 
-
+    saveStudent(student);
     showDashboard();
 
   }
