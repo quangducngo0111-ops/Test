@@ -36,7 +36,7 @@ function renderDiagnostics(){
 }
 function startExam(){const n=document.getElementById('studentName').value.trim(),c=document.getElementById('studentClass').value.trim();if(!n||!c){document.getElementById('startError').textContent='Vui lòng nhập đầy đủ Họ tên và Lớp.';return}clearAttempt();document.getElementById('topName').textContent=n;document.getElementById('topClass').textContent=c;document.getElementById('startScreen').classList.add('hidden');document.getElementById('exam').classList.remove('hidden');startedAt=Date.now();endAt=startedAt+3600000;buildNav();showPassage(1);tick();timerHandle=setInterval(tick,250)}
 function tick(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));const m=Math.floor(remaining/60),s=remaining%60,e=document.getElementById('timer');e.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;e.classList.toggle('warning',remaining<=600&&remaining>300);e.classList.toggle('danger',remaining<=300);if(remaining<=0&&!submitted){clearInterval(timerHandle);submitExam(true)}}
-function annotationToolbar(zone){return `<div class="annot-bar"><button class="annot-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button><button class="annot-btn" onclick="clearHighlight('${zone}')">Xóa HL</button><button class="annot-btn" onclick="addNote('${zone}')">📝 Add note</button><button class="annot-btn" onclick="toggleNotes('${zone}')">Ghi chú</button><span class="annot-tip">Bôi đen chữ rồi chọn công cụ.</span></div>`}
+function annotationToolbar(zone){return `<div class="annot-bar"><button class="annot-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button><button type="button" class="annot-btn reading-bold-btn" onclick="boldReadingSelection('${zone}')">𝐁 Bôi đậm</button><button class="annot-btn" onclick="clearHighlight('${zone}')">Xóa HL</button><span class="annot-tip">Bôi đen chữ rồi chọn công cụ.</span></div>`}
 function zoneRoot(zone){return document.getElementById(zone==='passage'?'passageCopy':'questionsCopy')} function notesKey(zone,p=current){return `notes_${zone}_${p}`} function markupKey(zone,p=current){return `markup_${zone}_${p}`}
 function loadNotes(zone){try{return JSON.parse(ssGet(notesKey(zone))||'[]')}catch(e){return[]}} function saveNotes(zone,a){ssSet(notesKey(zone),JSON.stringify(a))}
 function captureSelection(zone){if(submitted)return;const sel=window.getSelection(),root=zoneRoot(zone);if(!sel||!root||!sel.rangeCount||sel.isCollapsed)return;const r=sel.getRangeAt(0);if(root.contains(r.commonAncestorContainer)){savedSelection=r.cloneRange();savedSelectionZone=zone}}
@@ -330,7 +330,7 @@ function reviewHTML(q,u){
 }
 function placeReview(q,u,ok){
   document.querySelectorAll(`[data-review="${q.n}"]`).forEach(e=>e.remove());
-  if(ok)return;
+  
   const c=document.getElementById('card'+q.n);
   if(!c)return;
   const host=c.classList.contains('card')?c:(c.closest('.flow-step,p,.match-row')||c.parentElement);
@@ -475,4 +475,4 @@ function closeResult(){
   document.getElementById('resultOverlay').classList.add('hidden');
   markPassage(current);
 }
-</script></body></html>
+</script><script src="../Practice/Reading/reading-test-standard.js?v=20261109-v1"></script></body></html>
