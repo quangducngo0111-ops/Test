@@ -418,10 +418,10 @@ function annotationToolbar(zone){
   const countId=isQ?'notesCountQuestions':'notesCountPassage';
   return `<div class="annotation-bar">
     <span class="annotation-zone-label">${label}</span>
-    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button>
+    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button><button type="button" class="annotation-btn reading-bold-btn" onclick="boldReadingSelection('${zone}')">𝐁 Bôi đậm</button>
     <button type="button" class="annotation-btn" onclick="clearHighlight('${zone}')">Xóa HL</button>
-    <button type="button" class="annotation-btn" onclick="addNote('${zone}')">📝 Add note</button>
-    <button type="button" class="annotation-btn" onclick="toggleNotes('${zone}')">Ghi chú (<span id="${countId}">0</span>)</button>
+    
+    
     <span class="annotation-tip">Bôi đen phần chữ rồi chọn công cụ.</span>
   </div>`;
 }
@@ -492,7 +492,7 @@ function inlineReviewHTML(q,user){
   return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
     <div class="inline-review-title">
       <span class="inline-review-badge">Q${q.n}</span>
-      <span>Giải thích câu trả lời sai</span>
+      <span>Giải thích và đối chiếu đáp án</span>
     </div>
     <div class="inline-review-row">
       <div class="inline-review-label">Bạn trả lời</div>
@@ -517,7 +517,7 @@ function removeInlineReview(n){
 
 function renderInlineReview(q,user,ok){
   removeInlineReview(q.n);
-  if(ok)return;
+  
 
   const card=document.getElementById('card'+q.n);
   if(!card)return;
@@ -620,7 +620,7 @@ function renderWrongReview(details){
     return;
   }
   box.innerHTML=`<h3 class="review-title">${wrong.length} câu cần xem lại</h3>
-    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích và trích dẫn được hiển thị dưới từng câu</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
 }
 function gotoEvidence(n){
   document.getElementById('overlay').classList.add('hidden');
@@ -629,4 +629,4 @@ function gotoEvidence(n){
 
 async function submitExam(auto=false){if(submitted)return;saveCurrentMarkups();const unanswered=questions.filter(q=>!(ssGet('q'+q.n)||'').trim()).length;if(!auto&&unanswered&& !confirm(`Bạn còn ${unanswered} câu chưa trả lời. Vẫn nộp bài?`))return;submitted=true;clearInterval(timerHandle);let total=0,s=[0,0,0,0],details=[];for(const q of questions){const u=ssGet('q'+q.n)||'',ok=correct(q,u);if(ok){total++;s[q.p]++}details.push({q:q.n,answer:u,correct:ok,key:Array.isArray(q.ans)?q.ans.join(' / '):q.ans});const ne=document.getElementById('nav'+q.n);if(ne){ne.classList.remove('answered');ne.classList.add(ok?'correct':'wrong')}}markPassage(current);saveZoneMarkup('questions');const name=document.getElementById('studentName').value.trim(),cls=document.getElementById('studentClass').value.trim(),dur=Math.round((Date.now()-startedAt)/1000);document.getElementById('rstudent').textContent=`${name} — ${cls}`;document.getElementById('rscore').textContent=`${total} / 40`;document.getElementById('rpercent').textContent=`${Math.round(total/40*100)}% correct`;document.getElementById('p1s').textContent=`${s[1]} / 13`;document.getElementById('p2s').textContent=`${s[2]} / 13`;document.getElementById('p3s').textContent=`${s[3]} / 14`;renderWrongReview(details);document.getElementById('overlay').classList.remove('hidden');document.getElementById('status').textContent='Đang gửi kết quả về Google Sheet...';const p=new URLSearchParams({name,className:cls,total:String(total),maxScore:'40',durationSeconds:String(dur),activity:'IELTS Reading - Cane Toad / Farmers / Life on Mars',reading:String(s[1]),grammar:String(s[2]),ing:String(s[3]),writingA:JSON.stringify(details),submittedAt:new Date().toISOString()});try{await fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});document.getElementById('status').textContent='✓ Đã gửi kết quả về Google Sheet.'}catch(e){document.getElementById('status').textContent='Không gửi được kết quả về Google Sheet. Hãy kiểm tra Web App URL hoặc kết nối mạng.'}}
 function closeResult(){document.getElementById('overlay').classList.add('hidden');markPassage(current);saveZoneMarkup('questions')}
-</script></body></html>
+</script><script src="../Practice/Reading/reading-test-standard.js?v=20261109-v1"></script></body></html>
