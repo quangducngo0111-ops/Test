@@ -1492,6 +1492,7 @@ button.skill-card:hover{
 .student-photo-preview,.student-avatar{width:74px;height:74px;object-fit:cover;border-radius:50%;border:3px solid #e3ddfa;background:#f2f0ff}
 .student-avatar{width:82px;height:82px;margin:0 auto 10px;display:block}
 .student-avatar[hidden],.student-photo-preview[hidden]{display:none}
+.hero-art img.student-photo-active{aspect-ratio:3/4;object-fit:cover;object-position:center;}
 </style>
 </head>
 
@@ -1732,9 +1733,10 @@ button.skill-card:hover{
           <div class="hero-art">
 
             <img
+              id="studentHeroPhoto"
               src="./4FXyF.jpg"
-              alt="Nhân vật đồng hành"
-              onerror="this.style.display='none'"
+              alt="Ảnh đại diện học sinh hoặc nhân vật đồng hành"
+              onerror="this.src='./4FXyF.jpg';this.onerror=null"
             >
 
           </div>
@@ -1743,8 +1745,6 @@ button.skill-card:hover{
 
 
         <div class="hero-profile-area">
-
-          <img id="studentAvatar" class="student-avatar" alt="Ảnh đại diện học sinh" hidden>
 
           <div class="profile-pill">
 
@@ -2196,16 +2196,25 @@ async function readStudentPhoto(student){
     });
   } finally { db.close(); }
 }
+let photoDisplaySequence=0;
 async function displayStudentPhoto(student){
+  const sequence=++photoDisplaySequence;
   const file=await readStudentPhoto(student).catch(()=>null);
-  if(photoPreviewUrl) URL.revokeObjectURL(photoPreviewUrl);
+  if(sequence!==photoDisplaySequence)return;
+  if(photoPreviewUrl)URL.revokeObjectURL(photoPreviewUrl);
   photoPreviewUrl=file ? URL.createObjectURL(file) : null;
-  for(const id of ['studentAvatar','studentPhotoPreview']){
-    const image=$(id);
-    if(!image)continue;
-    image.hidden=!photoPreviewUrl;
-    if(photoPreviewUrl)image.src=photoPreviewUrl;
-    else image.removeAttribute('src');
+  const hero=$('studentHeroPhoto');
+  if(hero){
+    hero.onerror=()=>{hero.onerror=null;hero.src='./4FXyF.jpg';};
+    hero.src=photoPreviewUrl||'./4FXyF.jpg';
+    hero.classList.toggle('student-photo-active',Boolean(photoPreviewUrl));
+    hero.alt=photoPreviewUrl?'Ảnh đại diện của học sinh':'Nhân vật đồng hành mặc định';
+  }
+  const preview=$('studentPhotoPreview');
+  if(preview){
+    preview.hidden=!photoPreviewUrl;
+    if(photoPreviewUrl)preview.src=photoPreviewUrl;
+    else preview.removeAttribute('src');
   }
 }
 const photoInput=document.getElementById('studentPhotoInput');
