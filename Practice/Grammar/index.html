@@ -82,7 +82,7 @@
 </style></head><body>
 <header class="top"><a id="headerBack" href="../index.html">← Kho luyện tập</a><strong id="headerHeading">Grammar · 10 chủ đề</strong><span class="person" id="personLabel"></span></header>
 <main class="wrap" id="directory"></main>
-<main class="wrap" id="lessonWrap" hidden><section class="hero"><div class="eyebrow" id="lessonEyebrow"></div><h1 id="lessonTitle"></h1><p id="lessonDescription"></p><div class="progress"><i id="meter" style="width:0%"></i></div><div class="subtle" id="meterLabel">Bắt đầu học</div></section><div class="layout"><aside class="aside"><b>Tiến trình</b><p>1. Học từng phần kiến thức</p><p>2. Bấm “Đã hiểu” để tiếp tục</p><p>3. Hoàn thành 5 Exercise</p><p>4. Nhận chữa bài & tổng kết</p><a class="navlink" id="weekBack" data-route href="index.html">← Về danh sách bài nhỏ</a><a class="navlink" id="grammarBack" data-route href="index.html">← 10 chủ đề Grammar</a></aside><section class="panel" id="area"></section></div></main>
+<main class="wrap" id="lessonWrap" hidden><section class="hero"><div class="eyebrow" id="lessonEyebrow"></div><h1 id="lessonTitle"></h1><p id="lessonDescription"></p><div class="progress"><i id="meter" style="width:0%"></i></div><div class="subtle" id="meterLabel">Bắt đầu học</div></section><div class="layout"><aside class="aside"><b>Tiến trình</b><p>1. Học từng phần kiến thức</p><p>2. Bấm “Đã hiểu” để tiếp tục</p><p>3. Hoàn thành 5 Exercise</p><p>4. Nhận chữa bài & tổng kết</p><a class="navlink" id="weekBack" data-route href="index.html">← Về danh sách bài nhỏ</a><a class="navlink" id="grammarBack" href="../index.html">← Kho luyện tập · Grammar</a></aside><section class="panel" id="area"></section></div></main>
 <div id="nameModal" class="modal" hidden><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="eyebrow">Grammar · Luyện tập</div><h2 id="modalTitle">Thông tin học sinh</h2><p>Hãy nhập họ tên và lớp trước khi bắt đầu. Nếu đi từ trang tổng đã nhập thông tin, bước này sẽ được bỏ qua.</p><form id="studentForm"><label for="studentName">Họ và tên</label><input id="studentName" maxlength="90" autocomplete="name" required placeholder="Nguyễn Văn A"><label for="studentClass">Lớp</label><input id="studentClass" maxlength="45" required placeholder="10A1"><div class="error" id="nameError"></div><button class="btn" type="submit">Bắt đầu học →</button></form></div></div>
 <script>
 'use strict';
@@ -150,8 +150,8 @@ function renderRoute(){
  const d=document.getElementById('directory'),l=document.getElementById('lessonWrap'),b=document.getElementById('headerBack'),head=document.getElementById('headerHeading');
  d.hidden=isLesson;l.hidden=!isLesson;
  const backTopic=isLesson?topic:null;
- b.setAttribute('href',backTopic?routeHref(backTopic):topic?routeHref(): '../index.html');
- b.textContent=isLesson?'← Danh sách bài nhỏ':topic?'← 10 chủ đề':'← Kho luyện tập';
+ b.setAttribute('href',backTopic?routeHref(backTopic):'../index.html');
+ b.textContent=isLesson?'← Danh sách bài nhỏ':'← Kho luyện tập · Grammar';
  head.textContent=isLesson?'Grammar · '+TOPICS[topic-1].name+' · Bài '+String(week).padStart(2,'0'):topic?'Grammar · '+TOPICS[topic-1].name:'Grammar · 10 chủ đề';
  if(!isLesson){d.innerHTML=directoryHtml(topic);return;}
  UNIT=LESSONS[String(topic)][String(week)];LESSON_KEY='IELTS_GRAMMAR_WEEKLY_V2_'+topic+'_'+week;
@@ -160,12 +160,17 @@ function renderRoute(){
  document.getElementById('lessonTitle').textContent=UNIT.title;
  document.getElementById('lessonDescription').textContent=TOPICS[topic-1].name+' · Học lý thuyết có ví dụ trước khi làm các bài tập.';
  document.getElementById('weekBack').href=routeHref(topic);
- document.getElementById('grammarBack').href=routeHref();
+ document.getElementById('grammarBack').href='../index.html';
  if(activeStudent){load();render();}else document.getElementById('area').innerHTML='';
 }
 document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;
+ const u=new URL(a.href,location.href);
+ const practiceHome=new URL('../index.html',location.href);
+ if(u.origin===practiceHome.origin && u.pathname===practiceHome.pathname){
+   try{localStorage.setItem('IELTS_PRACTICE_ACTIVE_TAB_V1','grammar');}catch(err){}
+   return;
+ }
  if(a.dataset.route!==undefined || a.id==='headerBack'||a.id==='weekBack'||a.id==='grammarBack'){
-   const u=new URL(a.href,location.href);
    if(u.origin===location.origin&&u.pathname.endsWith('/Grammar/index.html')){e.preventDefault();goTo(u.href);}
  }
 });
