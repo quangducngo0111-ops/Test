@@ -184,13 +184,20 @@ const FALLBACK={
     {title:'Chủ đề 10 · Passive Voice',icon:'📘',desc:'Câu bị động · 3 bài nhỏ theo tuần',url:'./Grammar/index.html?topic=10'}
   ],
   vocabulary:[
-    {title:'Vocabulary Practice',icon:'🎮',desc:'Từ vựng & trò chơi',url:'./Vocabulary/'}
+    {title:'Reading',icon:'📖',desc:'Bộ từ vựng theo bài đọc IELTS',url:'./Vocabulary/index.html?skill=reading'},
+    {title:'Listening',icon:'🎧',desc:'Bộ từ vựng Listening',url:'./Vocabulary/index.html?skill=listening'},
+    {title:'Speaking Part 1',icon:'🗣️',desc:'Từ vựng cho Speaking Part 1',url:'./Vocabulary/index.html?skill=speaking-part-1'},
+    {title:'Speaking Part 2',icon:'🗣️',desc:'Từ vựng cho Speaking Part 2',url:'./Vocabulary/index.html?skill=speaking-part-2'},
+    {title:'Speaking Part 3',icon:'💬',desc:'Từ vựng cho Speaking Part 3',url:'./Vocabulary/index.html?skill=speaking-part-3'},
+    {title:'Writing Task 1',icon:'📊',desc:'Từ vựng cho Writing Task 1',url:'./Vocabulary/index.html?skill=writing-task-1'},
+    {title:'Writing Task 2',icon:'✍️',desc:'Từ vựng cho Writing Task 2',url:'./Vocabulary/index.html?skill=writing-task-2'},
+    {title:'Từ vựng theo chủ đề',icon:'🧠',desc:'8 chủ đề từ vựng để lựa chọn',url:'./Vocabulary/index.html?view=topics'}
   ]
 };
 
 let catalog=cloneCatalog(FALLBACK);
 let current=localStorage.getItem(ACTIVE_TAB_KEY)||'reading';
-if(!CATS[current] || current==='vocabulary') current='reading';
+if(!CATS[current]) current='reading';
 
 function cloneCatalog(source){
   return Object.fromEntries(Object.keys(CATS).map(k=>[k,(source[k]||[]).map(x=>({...x}))]));
@@ -227,7 +234,7 @@ function mergeCatalogWithFallback(source){
 
   for(const key of Object.keys(CATS)){
     if(key==='speaking'){merged[key]=FALLBACK.speaking;continue;}
-    if(key==='grammar'||key==='writing2'){merged[key]=FALLBACK[key];continue;}
+    if(key==='grammar'||key==='writing2'||key==='vocabulary'){merged[key]=FALLBACK[key];continue;}
     merged[key]=mergeItems(
       FALLBACK[key]||[],
       source?.[key]||[]
@@ -308,13 +315,7 @@ function renderTabs(){
       <span class="tab-copy">${v.label}<small>${v.sub}</small></span>
     </button>`).join('');
   document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{
-    const selected=b.dataset.cat;
-    if(selected==='vocabulary'){
-      // Mở thẳng màn hình "Chọn nội dung", không qua thẻ "Vocabulary Practice".
-      window.location.assign(new URL('./Vocabulary/',window.location.href).href);
-      return;
-    }
-    current=selected;
+    current=b.dataset.cat;
     localStorage.setItem(ACTIVE_TAB_KEY,current);
     render();
   });
@@ -323,7 +324,7 @@ function render(){
   renderTabs();
   const c=CATS[current],list=catalog[current]||[];
   title.textContent=c.label;
-  subtitle.textContent=current==='grammar'?'10 chủ đề · 30 bài học nhỏ để luyện từng tuần':current==='writing2'?'5 dạng bài IELTS Writing Task 2':`${list.length} mục luyện tập`;
+  subtitle.textContent=current==='grammar'?'10 chủ đề · 30 bài học nhỏ để luyện từng tuần':current==='writing2'?'5 dạng bài IELTS Writing Task 2':current==='vocabulary'?'Chọn kỹ năng và bộ từ muốn luyện.':`${list.length} mục luyện tập`;
   count.textContent=`${list.length} mục`;
   grid.innerHTML=list.length?list.map((x,i)=>`
     <a class="card" href="${x.url}${x.url.includes('?')?'&':'?'}practice=1">
