@@ -188,13 +188,13 @@ function load(){try{progress=JSON.parse(localStorage.getItem(pKey())||'null')}ca
   try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}
  }
  // Đồng bộ đáp án/nhận xét sau nâng cấp bộ chấm, không xóa bài học sinh đã làm.
- if(progress.correctionEngineVersion!=='CORRECTION_FREE_V1_20261107'){
+ if(progress.correctionEngineVersion!=='CORRECTION_CONTEXT_V2_20261107'){
    for(const [type] of TYPES){
      if(Array.isArray(progress.graded[type])){
        progress.graded[type]=bankFor(type).map((c,i)=>gradeQuestion(type,c,progress.answers[qKey(type,i)]||'',i));
      }
    }
-   progress.correctionEngineVersion='CORRECTION_FREE_V1_20261107';
+   progress.correctionEngineVersion='CORRECTION_CONTEXT_V2_20261107';
    try{localStorage.setItem(pKey(),JSON.stringify(progress))}catch(e){}
  }
  if(progress.submittedAt && !progress.initialSubmission){
@@ -681,15 +681,69 @@ function correctionAttemptIssues(c, value){
  return items;
 }
 
+/* ----------------------------------------------------
+   ACCEPT LEGITIMATE ALTERNATIVE ANSWERS (OFFLINE)
+   - Only when a contextual rule can justify the meaning.
+   - Do not expand article, conditional, or auxiliary answers
+     where word choice changes the target grammar.
+   - The exact reference answer is always accepted.
+   ---------------------------------------------------- */
+function answerVariants(type,c){
+ const accepted=new Set([norm(type==='edit'?editSpan(c).fixed:['correct','order','judge'].includes(type)?c.correct:c.answer)]);
+ if(type!=='fill')return accepted;
+ const stem=String(c.stem||'').toLowerCase(),base=norm(c.answer);
+ if(Number(UNIT.topic)===1&&Number(UNIT.week)===1){
+   if(base==='goes' && /___\s+to\s+(?:work|school|college)\s+by\s+(?:bus|coach|taxi|tram|train|ferry|car|metro|bicycle|bike|motorbike)\b/.test(stem)){
+     // "My grandfather commutes/travels to work by coach" are both legitimate.
+     accepted.add('commutes');accepted.add('travels');
+   }
+   if(base==='studies' && /___\s+(?:english|french|spanish|german|korean|japanese)\b/.test(stem)){
+     accepted.add('learns');
+   }
+   if(base==='contains' && /___\s+(?:many|numerous|several|plenty of|a lot of)\s+/.test(stem)){
+     accepted.add('includes');accepted.add('provides');accepted.add('offers');
+   }
+   if(base==='have' && /___\s+(?:one|two|three|four|five|several|many)\s+(?:english|french|spanish|korean|japanese|german)?\s*classes\b/.test(stem)){
+     accepted.add('attend');accepted.add('take');
+   }
+ }
+ // Future additions should be explicitly validated against each sentence.
+ return accepted;
+}
+function subjectFromStem(c){
+ const s=String(c.stem||'');
+ const p=s.indexOf('___');
+ return p>0?s.slice(0,p).trim():'';
+}
+function explainAnswer(type,c,response,valid){
+ if(Number(UNIT.topic)===1&&Number(UNIT.week)===1){
+   const subject=subjectFromStem(c);
+   const base=norm(c.answer);
+   const chosen=norm(response);
+   if(type!=='correct'&&subject){
+     if(base==='goes'){
+       if(valid&&chosen!=='goes')return `“${subject}” là chủ ngữ số ít. “${chosen}” được chia đúng ngôi thứ ba số ít và diễn đạt hợp lý việc đi làm/đi học bằng phương tiện nêu trong câu. “Goes” là đáp án mẫu, không phải đáp án duy nhất.`;
+       return `“${subject}” là chủ ngữ số ít; ở hiện tại đơn phải chia go → goes.${type==='fill'?' Trong ô điền từ này, commutes/travels cũng có thể đúng.':''}`;
+     }
+     if(base==='studies')return `“${subject}” là chủ ngữ số ít. Ở hiện tại đơn dùng studies.${type==='fill'?' Learns cũng được chấp nhận khi nói học một ngôn ngữ.':''}`;
+     if(base==='contains')return `“${subject}” là chủ ngữ số ít. Contains được chia đúng ở hiện tại đơn.${type==='fill'?' Includes/provides/offers cũng có thể phù hợp với ngữ cảnh ví dụ hoặc tài liệu.':''}`;
+     if(base==='are')return `“${subject}” là chủ ngữ số nhiều nên dùng are, không dùng is.`;
+     if(base==='have')return `“${subject}” là chủ ngữ số nhiều; have được chia đúng.${type==='fill'?' Attend/take cũng có thể diễn đạt việc tham gia các lớp học trong ngữ cảnh này.':''}`;
+   }
+ }
+ return type==='correct'?correctionExplanation(c):c.explain;
+}
 function gradeQuestion(type,c,v,i){
  const empty=!String(v||'').trim();
  if(type==='write')return {empty,issues:grammarReview(v,c,i),sample:c.correct,checked:!empty};
  const expected=type==='edit'?editSpan(c).fixed:
    ['correct','order','judge'].includes(type)?c.correct:c.answer;
- const valid=norm(v)===norm(expected);
- const explanation=type==='correct'?correctionExplanation(c):c.explain;
+ const valid=answerVariants(type,c).has(norm(v));
+ const explanation=explainAnswer(type,c,v,valid);
  const reason=type==='correct'&&!valid&&!empty?correctionChangeReason(c,v):'';
- return {good:!empty&&valid,empty,expected,explain:explanation,reason,diagnostics:type==='correct'&&!valid&&!empty?correctionAttemptIssues(c,v):[]};
+ return {good:!empty&&valid,empty,expected,explain:explanation,reason,
+   alternate:valid&&norm(v)!==norm(expected),
+   diagnostics:type==='correct'&&!valid&&!empty?correctionAttemptIssues(c,v):[]};
 }
 
 
@@ -721,7 +775,7 @@ function feedback(type,c,g,i){
   </div>`;
  }
  const detail=!g.good&&g.diagnostics?.length?`<div class="attempt-details"><b>Chữa theo đúng câu em đã viết:</b>${g.diagnostics.map(x=>`<div class="attempt-issue"><b>${esc(x.title)}</b><div><span class="bad-text">${esc(x.source)}</span> → <span class="good-text">${esc(x.replacement)}</span></div><div>${esc(x.explanation)}</div></div>`).join('')}</div>`:'';
- return `<div class="feedback ${g.good?'':'bad'}"><div class="label">${g.good?'✓ Chính xác':g.reason?'✗ Cần giữ nguyên ý câu gốc':'✗ Chưa đúng'}</div>${detail}${g.reason?`<p><b>Lý do:</b> ${esc(g.reason)}</p>`:''}<p>Đáp án tham khảo: <b>${esc(g.expected)}</b></p><p>Giải thích yêu cầu của bài: ${esc(g.explain)}</p></div>`;
+ return `<div class="feedback ${g.good?'':'bad'}"><div class="label">${g.good?(g.alternate?'✓ Chính xác · Cách diễn đạt khác hợp lệ':'✓ Chính xác'):g.reason?'✗ Cần giữ nguyên ý câu gốc':'✗ Chưa đúng'}</div>${detail}${g.reason?`<p><b>Lý do:</b> ${esc(g.reason)}</p>`:''}${g.alternate?'<p>Đáp án của em phù hợp với câu và cấu trúc đang học.</p>':''}<p>Đáp án tham khảo: <b>${esc(g.expected)}</b></p><p>Giải thích yêu cầu của bài: ${esc(g.explain)}</p></div>`;
 }
 function countCorrect(type){return (progress.graded[type]||[]).filter(x=>x.good).length}
 function answeredCount(type){return bankFor(type).filter((c,i)=>String(progress.answers[qKey(type,i)]||'').trim()).length}
