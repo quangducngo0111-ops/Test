@@ -9656,7 +9656,8 @@ button:disabled{
 
     <a
       class="back"
-      href="../"
+      href="../index.html"
+      onclick="goVocabularyHome();return false;"
     >
       ← Luyện tập
     </a>
@@ -12966,11 +12967,16 @@ function showHome(sync=true){
 
 
 function goVocabularyHome(){
-  showHome(true);
+  // Kho luyện tập đã hiển thị Vocabulary theo 8 nhóm ở thanh kỹ năng.
+  // Quay về tab này, không quay lại màn hình Vocabulary Arcade trùng lặp.
+  try{
+    localStorage.setItem("IELTS_PRACTICE_ACTIVE_TAB_V1","vocabulary");
+  }catch(error){}
+  window.location.assign(new URL("../index.html",window.location.href).href);
 }
 
 // Đảm bảo các nút onclick trong HTML luôn gọi được hàm này.
-window.showHome = showHome;
+window.showHome = goVocabularyHome;
 window.goVocabularyHome = goVocabularyHome;
 
 
@@ -13034,7 +13040,7 @@ function openSkill(skill, sync=true){
     !TOPIC_META[skill]
   ){
 
-    showHome(sync);
+    goVocabularyHome();
     return;
 
   }
@@ -19815,7 +19821,7 @@ function routeFromUrl(){
   }
 
 
-  showHome(false);
+  goVocabularyHome();
 
 }
 
