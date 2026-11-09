@@ -34,9 +34,15 @@ if(exam){
 document.addEventListener('click',event=>{
   const quote=event.target.closest('.inline-review-quote,.inline-review .evidence');
   if(!quote)return;
+  if(typeof window.focusEvidence!=='function')return;
   const review=quote.closest('[data-inline-review],[data-review]');
-  if(!review||typeof window.focusEvidence!=='function')return;
-  const n=Number(review.dataset.inlineReview||review.dataset.review);
+  let n=review?Number(review.dataset.inlineReview||review.dataset.review):NaN;
+  if(!Number.isInteger(n)){
+    // Multi-answer group explanations store the target in a sibling button.
+    const button=quote.closest('.inline-review')?.querySelector('[onclick*="focusEvidence"]');
+    const match=button?.getAttribute('onclick')?.match(/focusEvidence\((\d+)\)/);
+    n=match?Number(match[1]):NaN;
+  }
   if(Number.isInteger(n)){
     try{window.focusEvidence(n);}catch(e){console.warn('Could not locate evidence',e);}
   }
