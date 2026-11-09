@@ -450,10 +450,10 @@ function annotationToolbar(zone){
   const countId=isQ?'notesCountQuestions':'notesCountPassage';
   return `<div class="annotation-bar">
     <span class="annotation-zone-label">${label}</span>
-    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button>
+    <button type="button" class="annotation-btn" onclick="addHighlight('${zone}')">🖍 Highlight</button><button type="button" class="annotation-btn reading-bold-btn" onclick="boldReadingSelection('${zone}')">𝐁 Bôi đậm</button>
     <button type="button" class="annotation-btn" onclick="clearHighlight('${zone}')">Xóa HL</button>
-    <button type="button" class="annotation-btn" onclick="addNote('${zone}')">📝 Add note</button>
-    <button type="button" class="annotation-btn" onclick="toggleNotes('${zone}')">Ghi chú (<span id="${countId}">0</span>)</button>
+    
+    
     <span class="annotation-tip">Bôi đen phần chữ rồi chọn công cụ.</span>
   </div>`;
 }
@@ -651,7 +651,7 @@ function inlineReviewHTML(q,user){
   return `<div class="inline-review${q.type==='text'||q.type==='select'?' integrated':''}" data-inline-review="${q.n}">
     <div class="inline-review-title">
       <span class="inline-review-badge">Q${q.n}</span>
-      <span>Giải thích câu trả lời sai</span>
+      <span>Giải thích và đối chiếu đáp án</span>
     </div>
     <div class="inline-review-row">
       <div class="inline-review-label">Bạn trả lời</div>
@@ -676,7 +676,7 @@ function removeInlineReview(n){
 
 function renderInlineReview(q,user,ok){
   removeInlineReview(q.n);
-  if(ok)return;
+  
 
   const card=document.getElementById('card'+q.n);
   if(!card)return;
@@ -799,7 +799,7 @@ function renderWrongReview(details){
     return;
   }
   box.innerHTML=`<h3 class="review-title">${wrong.length} câu cần xem lại</h3>
-    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu sai</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
+    <div class="review-mode-note">Đóng bảng điểm để xem <b>giải thích + evidence được ghim trực tiếp ngay dưới từng câu</b>. Khi chuyển Passage, phần giải thích vẫn còn để bạn đối chiếu với bài đọc.</div>`;
 }
 function gotoEvidence(n){
   document.getElementById('overlay').classList.add('hidden');
@@ -845,4 +845,4 @@ function closeResult(){document.getElementById('overlay').classList.add('hidden'
   }
 })();
 
-</script></body></html>
+</script><script src="../Practice/Reading/reading-test-standard.js?v=20261109-v1"></script></body></html>
