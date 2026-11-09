@@ -16,7 +16,7 @@ style.textContent=`
 .exam strong.user-bold{font-weight:850!important;text-decoration:none}
 .exam #questionsCopy .inline-review{border-left:4px solid #5179a5;background:#f4f8ff;border-radius:9px;padding:11px;margin-top:12px}
 .exam .evidence-pulse{background:#ffe66a!important;outline:3px solid #eebc30!important;box-shadow:0 0 0 5px #ffe36b66}
-.exam .inline-review-btn,.exam .evidence-btn{cursor:pointer}
+.exam .inline-review-btn,.exam .evidence-btn,.exam .inline-review-quote,.exam .inline-review .evidence{cursor:pointer}
 .exam .timer{font-variant-numeric:tabular-nums}
 `;
 document.head.appendChild(style);
@@ -29,6 +29,19 @@ if(exam){
  if(tabs)tabs.insertAdjacentElement('afterend',guide);
  else exam.prepend(guide);
 }
+
+// The quote itself is clickable, not just the separate evidence button.
+document.addEventListener('click',event=>{
+  const quote=event.target.closest('.inline-review-quote,.inline-review .evidence');
+  if(!quote)return;
+  const review=quote.closest('[data-inline-review],[data-review]');
+  if(!review||typeof window.focusEvidence!=='function')return;
+  const n=Number(review.dataset.inlineReview||review.dataset.review);
+  if(Number.isInteger(n)){
+    try{window.focusEvidence(n);}catch(e){console.warn('Could not locate evidence',e);}
+  }
+});
+
 window.boldReadingSelection=function(zone){
  if(typeof submitted!=='undefined'&&submitted)return;
  let range=null;
