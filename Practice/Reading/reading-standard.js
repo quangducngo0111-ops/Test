@@ -11,6 +11,10 @@ style.textContent=`
 :root{--reading-purple:#3b0e90}
 .reading-ux-guide{margin:12px auto;padding:13px 17px;max-width:1400px;border-radius:14px;background:#f4efff;border:1px solid #d7c6fc;color:#332256;font:600 13px/1.6 system-ui}
 .reading-ux-guide strong{color:#32106f}
+.reading-note-tooltip{position:fixed;z-index:100100;max-width:min(330px,calc(100vw - 24px));min-width:150px;padding:12px 15px;border-radius:13px;background:#281260;color:#fff;box-shadow:0 12px 32px rgba(27,14,67,.3);font:13px/1.55 system-ui;pointer-events:none;overflow-wrap:anywhere;white-space:pre-wrap}
+.reading-note-tooltip[hidden]{display:none}
+.reading-note-tooltip-label{font-size:11px;font-weight:800;color:#ddcbff;display:block;margin-bottom:5px}
+#passageRoot .note-anchor,#questionsRoot .note-anchor{background:#fff0b7;border-bottom:2px dotted #7b48cb;border-radius:3px;cursor:help}
 .reading-dict{position:fixed;z-index:100000;width:min(330px,calc(100vw - 24px));padding:16px;border-radius:16px;background:white;border:1px solid #ddd3fa;box-shadow:0 15px 50px #160a3960;color:#25314b;font:14px/1.5 system-ui}
 .reading-dict[hidden]{display:none}
 .reading-dict-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -39,10 +43,82 @@ document.addEventListener('pointerdown',e=>{if(!panel.hidden&&!panel.contains(e.
 document.addEventListener('keydown',e=>{if(e.key==='Escape')panel.hidden=true});
 const guide=document.createElement('div');
 guide.className='reading-ux-guide';
-guide.innerHTML='<strong>📖 Reading Practice · Hướng dẫn:</strong> Đồng hồ <b>đếm xuôi</b> · Bôi đen để <b>highlight</b> hoặc <b>Take note</b> · <b>Nhấp đúp một từ trong bài đọc</b> để xem nghĩa tiếng Việt · Sau khi nộp, xem đáp án và giải thích <b>ngay dưới từng câu</b>; nhấp trích dẫn để tô vàng câu trong bài đọc bên trái.';
+guide.innerHTML='<strong>📖 Reading Practice · Hướng dẫn:</strong> Đồng hồ <b>đếm xuôi</b> · Bôi đen để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Nhấp đúp một từ trong bài đọc</b> để xem nghĩa tiếng Việt · Sau khi nộp, xem đáp án và giải thích <b>ngay dưới từng câu</b>; nhấp trích dẫn để tô vàng câu trong bài đọc bên trái.';
 const anchor=document.querySelector('.page,.workspace,main');
 if(anchor)anchor.insertBefore(guide,anchor.firstChild);
 else document.body.prepend(guide);
+
+// Show saved notes on hover, even when a previous attempt restored its markup.
+const noteTip=document.createElement('div');
+noteTip.className='reading-note-tooltip';
+noteTip.hidden=true;
+noteTip.setAttribute('role','tooltip');
+noteTip.innerHTML='<span class="reading-note-tooltip-label">📝 Ghi chú</span><span class="reading-note-tooltip-body"></span>';
+document.body.appendChild(noteTip);
+let activeNote=null;
+const fetchNoteText=element=>{
+  const direct=element.dataset.note||element.getAttribute('title')||'';
+  if(direct&&direct!=='Bấm để xem ghi chú')return direct;
+  const id=element.dataset.noteId;
+  if(!id)return '';
+  const zone=element.closest('#passageRoot')?'passage':'questions';
+  if(typeof window.loadNotes==='function'){
+    try{
+      const found=window.loadNotes(zone).find(x=>x.id===id);
+      if(found?.text)return found.text;
+    }catch(e){}
+  }
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i)||'';
+      if(!key.endsWith('_notes_'+zone))continue;
+      const notes=JSON.parse(localStorage.getItem(key)||'[]');
+      const match=notes.find(x=>x.id===id);
+      if(match?.text)return match.text;
+    }
+  }catch(e){}
+  return '';
+};
+function positionNote(el){
+  const bounds=el.getBoundingClientRect();
+  const tipBounds=noteTip.getBoundingClientRect();
+  const width=tipBounds.width||250;
+  const height=tipBounds.height||95;
+  noteTip.style.left=Math.max(12,Math.min(innerWidth-width-12,bounds.left+bounds.width/2-width/2))+'px';
+  noteTip.style.top=Math.max(12,bounds.top>height+18?bounds.top-height-10:Math.min(innerHeight-height-12,bounds.bottom+10))+'px';
+}
+function showNote(el){
+  const value=fetchNoteText(el);
+  if(!value)return;
+  activeNote=el;
+  noteTip.querySelector('.reading-note-tooltip-body').textContent=value;
+  noteTip.hidden=false;
+  positionNote(el);
+}
+function hideNote(){
+  activeNote=null;
+  noteTip.hidden=true;
+}
+document.addEventListener('pointerover',e=>{
+  if(e.pointerType==='touch')return;
+  const note=e.target.closest?.('#passageRoot .note-anchor,#questionsRoot .note-anchor');
+  if(!note||note===activeNote)return;
+  showNote(note);
+});
+document.addEventListener('pointerout',e=>{
+  if(activeNote&&e.target.closest?.('.note-anchor')===activeNote&&!activeNote.contains(e.relatedTarget))hideNote();
+});
+window.addEventListener('scroll',()=>{if(activeNote)positionNote(activeNote);},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideNote();});
+document.addEventListener('focusin',e=>{
+  const note=e.target.closest?.('#passageRoot .note-anchor,#questionsRoot .note-anchor');
+  if(note)showNote(note);
+});
+document.addEventListener('focusout',e=>{if(activeNote===e.target)hideNote();});
+document.addEventListener('touchstart',e=>{
+  const note=e.target.closest?.('#passageRoot .note-anchor,#questionsRoot .note-anchor');
+  if(note)showNote(note);else hideNote();
+},{passive:true});
 
 let sequence=0;
 const getWordFromSelection=()=>{
