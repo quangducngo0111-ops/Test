@@ -190,7 +190,7 @@ const FALLBACK={
 
 let catalog=cloneCatalog(FALLBACK);
 let current=localStorage.getItem(ACTIVE_TAB_KEY)||'reading';
-if(!CATS[current]) current='reading';
+if(!CATS[current] || current==='vocabulary') current='reading';
 
 function cloneCatalog(source){
   return Object.fromEntries(Object.keys(CATS).map(k=>[k,(source[k]||[]).map(x=>({...x}))]));
@@ -307,7 +307,17 @@ function renderTabs(){
       <span class="tab-icon">${v.icon||'📚'}</span>
       <span class="tab-copy">${v.label}<small>${v.sub}</small></span>
     </button>`).join('');
-  document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{current=b.dataset.cat;localStorage.setItem(ACTIVE_TAB_KEY,current);render()});
+  document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{
+    const selected=b.dataset.cat;
+    if(selected==='vocabulary'){
+      // Mở thẳng màn hình "Chọn nội dung", không qua thẻ "Vocabulary Practice".
+      window.location.assign(new URL('./Vocabulary/',window.location.href).href);
+      return;
+    }
+    current=selected;
+    localStorage.setItem(ACTIVE_TAB_KEY,current);
+    render();
+  });
 }
 function render(){
   renderTabs();
