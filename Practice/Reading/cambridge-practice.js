@@ -170,7 +170,7 @@ function maryDiagram(){
  '<div class="mary-diagram-canvas"><img class="mary-diagram-image" src="https://ielts-vuive.com/wp-content/uploads/2020/04/boate.png" alt="Sơ đồ Raising the Mary Rose, các vị trí 9–13" loading="lazy" referrerpolicy="no-referrer"></div>'+
  '<div class="diagram-answers-heading">Điền đáp án cho các vị trí trên sơ đồ</div>'+
  '<div class="diagram-answer-grid">'+fields+'</div>'+
- '<p class="diagram-help">Quan sát vị trí số 9–13 trên hình rồi điền câu trả lời vào ô tương ứng bên dưới. <a target="_blank" rel="noopener" href="https://ielts-vuive.com/r10-raising-the-mary-rose/">Xem hình tham chiếu</a></p>'+
+
  '<div class="mary-review-list">'+reviews+'</div></div>';
 }
 let cards='';
