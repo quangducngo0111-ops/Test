@@ -244,7 +244,7 @@ window.boldReadingSelection=function(zone){
 function groupReadingNavigator(){
  const nav=exam?.querySelector('#nav,#navigator');
  if(!nav)return;
- const direct=[...nav.children].filter(el=>el.tagName==='BUTTON'&&/^\\d+$/.test(el.textContent.trim()));
+ const direct=[...nav.children].filter(el=>el.tagName==='BUTTON'&&/^\d+$/.test(el.textContent.trim()));
  if(!direct.length)return;
  const buckets=new Map([[1,[]],[2,[]],[3,[]]]);
  for(const button of direct){
