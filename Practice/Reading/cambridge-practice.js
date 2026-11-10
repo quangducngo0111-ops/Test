@@ -70,7 +70,12 @@ function questionPrompt(text,num){
 }
 function questionCard(n,prompt,instruction){
  const selectType=/TRUE[\s\S]{0,200}FALSE[\s\S]{0,200}NOT GIVEN/i.test(instruction)?['TRUE','FALSE','NOT GIVEN']:
-   /YES[\s\S]{0,200}NO[\s\S]{0,200}NOT GIVEN/i.test(instruction)?['YES','NO','NOT GIVEN']:null;
+   /YES[\s\S]{0,200}NO[\s\S]{0,200}NOT GIVEN/i.test(instruction)?['YES','NO','NOT GIVEN']:
+   /match|list of headings|list of (?:people|scientists|dates)/i.test(instruction)?(
+      /(?:\bi\s*[-–]\s*(?:viii|ix|x|xi)\b)|list of headings/i.test(instruction)?['i','ii','iii','iv','v','vi','vii','viii','ix','x','xi']:
+      ['A','B','C','D','E','F','G','H','I','J']
+   ):
+   /choose (?:TWO|THREE)?\s*(?:correct )?letters?|choose the correct letter/i.test(instruction)?['A','B','C','D','E','F','G','H','I','J']:null;
  const input=selectType?
   '<select id="q'+n+'" class="answer-select" data-n="'+n+'"><option value="">Chọn đáp án</option>'+
   selectType.map(value=>'<option value="'+value+'"'+(norm(answers[n])===norm(value)?' selected':'')+'>'+value+'</option>').join('')+'</select>':
@@ -86,7 +91,7 @@ if(groups.length){
   const firstQuestion=new RegExp('(?:^|\\n)\\s*'+gStart+'(?:[.\\s]+)');
   const m=firstQuestion.exec(groupText);
   const instruction=m?groupText.slice(0,m.index).trim():groupText;
-  cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+esc(instruction).replace(/\n\s*\n/g,'</p><p>').replace(/\n/g,'<br class="soft-break">')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION':'READING QUESTIONS')+'</div></div></div>';
+  cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+esc(instruction).replace(/\n\s*\n/g,'<br><br>').replace(/\n/g,'<br class="soft-break">')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION':'READING QUESTIONS')+'</div></div></div>';
   for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction);
   cards+='</section>';
  }
