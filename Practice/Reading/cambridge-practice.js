@@ -145,9 +145,9 @@ function questionCard(n,prompt,instruction,groupText){
    body+='<div class="answer-options '+(Object.keys(descriptions).length?'answer-options-stacked':'answer-options-letters')+'">'+options.map(value=>
     '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span><strong>'+value+'</strong>'+ (descriptions[value]?' '+esc(descriptions[value]):'') +'</span></label>'
    ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
-  }else body+='<div class="answer-under">'+answerInput(n,'Nhập đáp án')+'</div>';
+  }else body+=' '+answerInput(n,'Điền từ');
  }
- const typeClass=hasBlank&&!selectType?' fill-inline':selectType?' choice-card':'';
+ const typeClass=!selectType&&!options?' fill-inline':hasBlank&&!selectType?' fill-inline':selectType?' choice-card':'';
  return '<div class="question-card'+typeClass+'" id="row'+n+'"><div class="question-row"><span class="qno">'+n+'</span><div class="qcopy">'+body+'</div></div><div class="review" id="review'+n+'" hidden></div></div>';
 }
 function maryDiagram(){
