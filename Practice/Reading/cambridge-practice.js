@@ -141,6 +141,7 @@ function questionCard(n,prompt,instruction,groupText){
   if(selectType)body+=optionMarkup(n,selectType);
   else if(options){
    const descriptions=questionOptionsText(groupText,n);
+   if(Object.keys(descriptions).length>=2)options=Object.keys(descriptions);
    body+='<div class="answer-options '+(Object.keys(descriptions).length?'answer-options-stacked':'answer-options-letters')+'">'+options.map(value=>
     '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span><strong>'+value+'</strong>'+ (descriptions[value]?' '+esc(descriptions[value]):'') +'</span></label>'
    ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
