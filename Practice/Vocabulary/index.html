@@ -9642,6 +9642,16 @@ button:disabled{
 
 }
 
+
+/* Vocabulary flow: vocabulary selection always precedes game selection. */
+.vocab-flow{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0;padding:13px 16px;border:1px solid #e3dcf6;border-radius:13px;background:#f5f1ff;color:#3b246e;font-size:12px;font-weight:750}
+.vocab-flow b{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin-right:5px;border-radius:8px;background:#3b0e90;color:#fff;font-size:11px}
+.vocab-flow-arrow{color:#8c7fb2;font-size:16px}
+#collectionScreen .sv-panel{margin:12px 0 18px}
+#collectionScreen .game-settings{margin-top:16px}
+#collectionScreen .game-grid{margin-bottom:24px}
+#collectionScreen .section-head h2{color:#281260}
+@media(max-width:650px){.vocab-flow{gap:7px;font-size:11px;padding:10px}.vocab-flow-arrow{display:none}.vocab-flow span:not(.vocab-flow-arrow){width:100%}}
 </style>
 
 </head>
@@ -9821,6 +9831,363 @@ button:disabled{
 
 <main
   class="page hidden"
+  id="collectionScreen"
+>
+
+  <div class="screen-head">
+
+    <button
+      class="screen-back"
+      id="collectionBack"
+    >
+      ← Danh sách bộ
+    </button>
+
+    <h1 id="collectionTitle">
+      Reading · Bộ 01
+    </h1>
+
+    <p id="collectionSubtitle"></p>
+
+  </div>
+
+
+  <div
+    class="completion-banner hidden"
+    id="completionBanner"
+  >
+
+    <div>
+
+      <strong id="completionTitle">
+        🎯 Em đã hoàn thành giai đoạn học!
+      </strong>
+
+      <span id="completionText">
+        Bây giờ hãy làm bài kiểm tra để xác nhận mức độ ghi nhớ.
+      </span>
+
+    </div>
+
+
+    <div class="completion-actions">
+
+      <button
+        class="secondary hidden"
+        id="completionReviewBtn"
+        type="button"
+        onclick="reviewWrongTestWords()"
+      >
+        Ôn từ sai
+      </button>
+
+      <button
+        class="secondary hidden"
+        id="completionWrongRetryBtn"
+        type="button"
+        onclick="retryWrongOnlyVocabularyTest()"
+      >
+        Làm lại câu sai →
+      </button>
+
+      <button
+        class="test-start-btn"
+        id="completionTestBtn"
+        type="button"
+        onclick="startVocabularyTest()"
+      >
+        Bắt đầu kiểm tra →
+      </button>
+
+      <button
+        class="study-again"
+        type="button"
+        onclick="resetCurrentLearning()"
+      >
+        ↻ Học lại bộ này
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <section class="stats">
+
+    <div class="stat">
+      <small>Total</small>
+      <b id="statTotal">0</b>
+    </div>
+
+    <div class="stat">
+      <small>Đã học</small>
+      <b id="statMastered">0</b>
+    </div>
+
+    <div class="stat">
+      <small>Đang học</small>
+      <b id="statLearning">0</b>
+    </div>
+
+    <div class="stat">
+      <small>Chưa gặp</small>
+      <b id="statNew">0</b>
+    </div>
+
+  </section>
+
+
+  <section class="game-settings">
+
+    <span>
+      Chiều luyện
+    </span>
+
+    <select id="directionSelect">
+
+      <option value="vi-en">
+        Tiếng Việt → English
+      </option>
+
+      <option value="en-vi">
+        English → Tiếng Việt
+      </option>
+
+    </select>
+
+  </section>
+
+
+  <div class="vocab-flow" aria-label="Lộ trình luyện từ vựng">
+    <span><b>01</b> Chọn cấp độ và nhóm từ</span>
+    <span class="vocab-flow-arrow">→</span>
+    <span><b>02</b> Chọn game</span>
+    <span class="vocab-flow-arrow">→</span>
+    <span><b>03</b> Luyện tập và kiểm tra</span>
+  </div>
+
+
+
+
+
+
+
+
+  <div class="section-head">
+
+    <h2>
+      Bước 2 · Chọn game
+    </h2>
+
+    <p>
+      Sau khi chọn nhóm từ ở Bước 1, chọn một game để luyện. Từ trả lời đúng sẽ được loại khỏi các game trong vòng học này.
+    </p>
+
+  </div>
+
+
+  <section class="game-grid">
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🐹
+      </div>
+
+      <h3>
+        Whack a Word
+      </h3>
+
+      <p>
+        Đập con chuột mang đáp án đúng trước khi nó biến mất.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startWhack()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🍎
+      </div>
+
+      <h3>
+        Word Catcher
+      </h3>
+
+      <p>
+        Điều khiển giỏ để hứng đúng từ đang rơi xuống.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startCatcher()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🏎️
+      </div>
+
+      <h3>
+        Vocab Racer 3D
+      </h3>
+
+      <p>
+        Đua xe 3D góc nhìn sau xe: chọn đúng cổng từ vựng để kích hoạt Nitro và vượt các xe đối thủ.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startRacer()" title="Mở Vocab Racer 3D Three.js"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        👨‍🚀
+      </div>
+
+      <h3>
+        Alien Escape
+      </h3>
+
+      <p>
+        Điều khiển astronaut tới đúng đáp án trước khi aliens bắt kịp.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startMatch()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🦜
+      </div>
+
+      <h3>
+        Flappy Kākāpō
+      </h3>
+
+      <p>
+        Giữ kākāpō trên không và bay vào đúng nghĩa của từ.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startFlappy()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🎈
+      </div>
+
+      <h3>
+        Balloon Pop
+      </h3>
+
+      <p>
+        Bắn quả bóng mang đáp án chính xác trước khi nó bay mất.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startBalloon()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🦈
+      </div>
+
+      <h3>
+        Shark Escape
+      </h3>
+
+      <p>
+        Chọn đúng phao nghĩa để bơi nhanh hơn trước khi cá mập đuổi kịp.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startShark()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+
+    <article class="game-card">
+
+      <div class="game-icon">
+        🔐
+      </div>
+
+      <h3>
+        Monkey Code Lock
+      </h3>
+
+      <p>
+        Xoay ổ khóa mật mã để giúp chú khỉ mở cửa trước khi chết rét.
+      </p>
+
+      <button
+        class="game-play"
+        data-game-button
+        onclick="startMonkey()"
+      >
+        Chơi →
+      </button>
+
+    </article>
+
+  </section>s="page hidden"
   id="collectionScreen"
 >
 
