@@ -60,6 +60,22 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!
 .exam .evidence-pulse{background:#ffe66a!important;outline:3px solid #eebc30!important;box-shadow:0 0 0 5px #ffe36b66}
 .exam .inline-review-btn,.exam .evidence-btn,.exam .inline-review-quote,.exam .inline-review .evidence{cursor:pointer}
 .exam .timer{font-variant-numeric:tabular-nums}
+
+/* Practice-style guide, while preserving the Test workspace and toolbars. */
+.exam .reading-test-guide{margin:12px 18px 10px!important;padding:13px 17px!important;border:1px solid #dcd3ef!important;border-radius:14px!important;background:#f5f2fc!important;box-shadow:none!important;color:#2a1956!important;font-size:13px!important;line-height:1.7!important;font-weight:500!important}
+.exam .reading-test-guide strong{font-weight:850!important;color:#281260!important}
+.exam .bottom{gap:12px!important;align-items:center!important;min-height:83px;padding:8px 14px!important}
+.exam .nav{display:flex!important;flex:1;align-items:stretch;gap:10px!important;min-width:0;overflow-x:auto;overflow-y:hidden;padding:2px 2px 4px;scrollbar-width:thin}
+.exam .reading-nav-group{display:flex;flex-direction:column;flex:0 0 auto;gap:5px;padding:6px 9px;border:1px solid #e6e0f3;border-radius:11px;background:#faf9fe;min-width:max-content}
+.exam .reading-nav-group.is-current{border-color:#9f86db;background:#f1eafa}
+.exam .reading-nav-title{font-size:11px;line-height:1.2;font-weight:850;color:#3b0e90;letter-spacing:.01em}
+.exam .reading-nav-buttons{display:flex;gap:4px;align-items:center}
+.exam .reading-nav-buttons button{min-width:29px;width:29px;height:29px;padding:0!important;flex:0 0 29px;font-size:11px!important;font-weight:750!important;cursor:pointer;border:1px solid #e1dbe9!important;border-radius:7px!important;background:#fff;color:#281260}
+.exam .reading-nav-buttons button.answered{background:#dfeafe!important;border-color:#b1c7ef!important}
+.exam .reading-nav-buttons button.correct{background:#e0f4e9!important;border-color:#95d9b1!important}
+.exam .reading-nav-buttons button.wrong{background:#fde7e4!important;border-color:#e7aaaa!important}
+.exam .reading-nav-buttons button.reading-current-question{outline:2px solid #3b0e90;outline-offset:1px}
+@media(max-width:850px){.exam .reading-test-guide{margin:8px 10px!important;padding:10px 12px!important;font-size:11px!important}.exam .bottom{min-height:76px;padding:7px 9px!important}.exam .reading-nav-group{padding:5px 7px}.exam .reading-nav-buttons button{min-width:27px;width:27px;flex-basis:27px;height:27px}}
 `;
 document.head.appendChild(style);
 const exam=document.getElementById('exam');
@@ -68,7 +84,7 @@ if(exam){
  guide.className='reading-test-guide';
  guide.innerHTML='<strong>🧪 Reading Test · Hướng dẫn:</strong> Thời gian <b>đếm ngược 60 phút</b> · Bôi đen văn bản để <b>Highlight</b>, <b>Take note</b> hoặc <b>Bôi đậm</b> · Không có tra từ điển · Sau khi nộp bài, xem đáp án/giải thích dưới mỗi câu và nhấn trích dẫn để tô vàng vị trí trong Passage.';
  const tabs=exam.querySelector('.tabs');
- if(tabs)tabs.insertAdjacentElement('afterend',guide);
+ if(tabs)tabs.insertAdjacentElement('beforebegin',guide);
  else exam.prepend(guide);
 }
 
@@ -222,4 +238,71 @@ window.boldReadingSelection=function(zone){
    if(selection)selection.removeAllRanges();
  } catch(e){alert('Không thể bôi đậm đoạn này. Hãy chọn một đoạn ngắn hơn.');}
 };
+
+/* Group each passage's existing navigator buttons without replacing their handlers.
+   This retains the original save, scoring, timer and question-navigation logic. */
+function groupReadingNavigator(){
+ const nav=exam?.querySelector('#nav,#navigator');
+ if(!nav)return;
+ const direct=[...nav.children].filter(el=>el.tagName==='BUTTON'&&/^\\d+$/.test(el.textContent.trim()));
+ if(!direct.length)return;
+ const buckets=new Map([[1,[]],[2,[]],[3,[]]]);
+ for(const button of direct){
+  const n=Number(button.textContent.trim());
+  const passage=(typeof questions!=='undefined'&&Array.isArray(questions))
+   ? (questions.find(q=>q.n===n)?.p || (n<=13?1:n<=26?2:3))
+   : (n<=13?1:n<=26?2:3);
+  buckets.get(passage)?.push(button);
+ }
+ for(const [p,buttons] of buckets){
+  if(!buttons.length)continue;
+  let section=nav.querySelector('[data-reading-passage="'+p+'"]');
+  if(!section){
+   section=document.createElement('div');
+   section.className='reading-nav-group';
+   section.dataset.readingPassage=String(p);
+   const title=document.createElement('div');
+   title.className='reading-nav-title';
+   title.textContent='Reading Passage '+p;
+   const items=document.createElement('div');
+   items.className='reading-nav-buttons';
+   section.append(title,items);
+   nav.appendChild(section);
+  }
+  section.querySelector('.reading-nav-buttons').append(...buttons);
+ }
+ updateReadingNavigator();
+}
+let lastReadingQuestion=null;
+function updateReadingNavigator(){
+ const nav=exam?.querySelector('#nav,#navigator');
+ if(!nav)return;
+ const active=Number(exam.querySelector('.tabs .tab.active')?.dataset.p||1);
+ nav.querySelectorAll('.reading-nav-group').forEach(group=>{
+  group.classList.toggle('is-current',Number(group.dataset.readingPassage)===active);
+ });
+ nav.querySelectorAll('.reading-current-question').forEach(button=>button.classList.remove('reading-current-question'));
+ if(lastReadingQuestion!==null)document.getElementById('nav'+lastReadingQuestion)?.classList.add('reading-current-question');
+}
+if(exam){
+ const nav=exam.querySelector('#nav,#navigator');
+ if(nav){
+  let grouping=false;
+  new MutationObserver(()=>{
+   if(grouping)return;
+   if([...nav.children].some(el=>el.tagName==='BUTTON')){
+    grouping=true;
+    try{groupReadingNavigator()}finally{grouping=false}
+   }
+  }).observe(nav,{childList:true});
+  groupReadingNavigator();
+ }
+ exam.querySelector('.tabs')?.addEventListener('click',()=>setTimeout(updateReadingNavigator,0));
+ exam.querySelector('#nav,#navigator')?.addEventListener('click',event=>{
+  const button=event.target.closest('button[id^="nav"]');
+  if(!button)return;
+  const n=Number(button.id.slice(3));
+  if(Number.isInteger(n)){lastReadingQuestion=n;setTimeout(updateReadingNavigator,0)}
+ });
+}
 })();
