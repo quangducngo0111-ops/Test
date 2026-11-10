@@ -74,7 +74,8 @@ function questionPrompt(text,num){
   while(follow<lines.length && line.length<240 && lines[follow].trim() &&
     !/^\s*\d{1,2}(?:[\s.…_]|$)/.test(lines[follow]) &&
     !/^\s*[A-H]\s{1,}/.test(lines[follow]) &&
-    !/^Questions?\s+\d+/i.test(lines[follow])){
+    !/^Questions?\s+\d+/i.test(lines[follow]) &&
+    !/^List of (?:Dates|Headings|People|Researchers|Words|Options)/i.test(lines[follow])){
     line+=' '+lines[follow].trim();follow++;
   }
   return line.replace(/\s+/g,' ').slice(0,360).trim();
@@ -130,6 +131,7 @@ function questionCard(n,prompt,instruction,groupText){
   else if(/(?:match each|which paragraph|list of (?:people|scientists|dates|researchers))/i.test(instruction))options=['A','B','C','D','E','F','G','H','I'];
   else if(/(?:choose|write) (?:TWO |THREE )?(?:correct )?letters?|correct letter|list of words/i.test(instruction))options=['A','B','C','D','E','F','G','H'];
  }
+ if(D.id==='cam11-test2-p1'&&n===8)prompt=prompt.split(/\bList of Dates\b/i)[0].trim();
  const escapedPrompt=esc(prompt||'Xem câu hỏi trong phần hướng dẫn của nhóm.');
  const hasBlank=/[.…·_]{3,}/.test(prompt);
  let body='';
@@ -150,18 +152,25 @@ function questionCard(n,prompt,instruction,groupText){
  const typeClass=!selectType&&!options?' fill-inline':hasBlank&&!selectType?' fill-inline':selectType?' choice-card':'';
  return '<div class="question-card'+typeClass+'" id="row'+n+'"><div class="question-row"><span class="qno">'+n+'</span><div class="qcopy">'+body+'</div></div><div class="review" id="review'+n+'" hidden></div></div>';
 }
+function maryDateBank(){
+ return '<aside class="ielts-option-bank" aria-label="List of Dates"><div class="option-bank-title">List of Dates</div>'+
+ '<div class="date-bank-grid">'+
+ [['A','1836'],['E','1971'],['B','1840'],['F','1979'],['C','1965'],['G','1982'],['D','1967']].map(([letter,year])=>
+  '<div class="date-bank-item"><strong>'+letter+'</strong><span>'+year+'</span></div>').join('')+
+ '</div></aside>';
+}
 function maryDiagram(){
- const points={9:[45.5,5.1],10:[11.0,34],11:[83.5,80],12:[10.5,91.6],13:[41.5,97]};
- const fields=[9,10,11,12,13].map(n=>{
-  const [x,y]=points[n];
-  return '<div id="row'+n+'" class="diagram-answer" style="left:'+x+'%;top:'+y+'%"><label class="sr-only" for="q'+n+'">Câu '+n+'</label>'+
-   '<input id="q'+n+'" class="inline-answer" data-n="'+n+'" placeholder="Câu '+n+'" autocomplete="off" spellcheck="false" value="'+esc(answers[n]||'')+'"></div>';
- }).join('');
+ const fields=[9,10,11,12,13].map(n=>
+  '<label class="diagram-field" id="row'+n+'" for="q'+n+'"><span class="diagram-number">'+n+'</span>'+
+  '<input id="q'+n+'" class="inline-answer" data-n="'+n+'" placeholder="Nhập đáp án" autocomplete="off" spellcheck="false" value="'+esc(answers[n]||'')+'"></label>'
+ ).join('');
  const reviews=[9,10,11,12,13].map(n=>'<div class="diagram-review" id="review'+n+'" hidden></div>').join('');
  return '<div class="mary-diagram" role="group" aria-label="Raising the hull of the Mary Rose: stages one and two">'+
  '<div class="mary-diagram-title">Raising the hull of the Mary Rose: Stages one and two</div>'+
- '<div class="mary-diagram-canvas"><img class="mary-diagram-image" src="https://ielts-vuive.com/wp-content/uploads/2020/04/boate.png" alt="Sơ đồ Raising the Mary Rose, các vị trí 9–13" loading="lazy" referrerpolicy="no-referrer">'+fields+'</div>'+
- '<p class="diagram-help">Điền câu trả lời trực tiếp vào các ô số 9–13 trên sơ đồ. Nếu sơ đồ không hiển thị, <a target="_blank" rel="noopener" href="https://ielts-vuive.com/r10-raising-the-mary-rose/">xem hình tham chiếu</a>.</p>'+
+ '<div class="mary-diagram-canvas"><img class="mary-diagram-image" src="https://ielts-vuive.com/wp-content/uploads/2020/04/boate.png" alt="Sơ đồ Raising the Mary Rose, các vị trí 9–13" loading="lazy" referrerpolicy="no-referrer"></div>'+
+ '<div class="diagram-answers-heading">Điền đáp án cho các vị trí trên sơ đồ</div>'+
+ '<div class="diagram-answer-grid">'+fields+'</div>'+
+ '<p class="diagram-help">Quan sát vị trí số 9–13 trên hình rồi điền câu trả lời vào ô tương ứng bên dưới. <a target="_blank" rel="noopener" href="https://ielts-vuive.com/r10-raising-the-mary-rose/">Xem hình tham chiếu</a></p>'+
  '<div class="mary-review-list">'+reviews+'</div></div>';
 }
 let cards='';
@@ -174,9 +183,11 @@ if(groups.length){
   const m=firstQuestion.exec(groupText);
   const inlineFirst=new RegExp('(?:^|\\n)[^\\n]{0,160}\\b'+gStart+'[.…·_]{3,}','m').exec(groupText);
   let instruction=(m?groupText.slice(0,m.index):inlineFirst?groupText.slice(0,inlineFirst.index):groupText).trim();
+  if(D.id==='cam11-test2-p1'&&gStart===5)instruction=instruction.split(/\bList of Dates\b/i)[0].trim();
   if(D.id==='cam11-test2-p1'&&gStart===9)instruction=instruction.replace(/Raising the hull of the Mary Rose: Stages one and two\s*$/i,'').trim();
   cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+instruction.split(/\n+/).map(line=>esc(line.trim())).filter(Boolean).join('<br>')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION' : /label the diagram/i.test(instruction)?'DIAGRAM LABEL COMPLETION':'READING QUESTIONS')+'</div></div></div>';
   if(D.id==='cam11-test2-p1' && gStart===9){cards+=maryDiagram();}else{for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction,groupText);}
+  if(D.id==='cam11-test2-p1' && gStart===5)cards+=maryDateBank();
   cards+='</section>';
  }
 }else{
