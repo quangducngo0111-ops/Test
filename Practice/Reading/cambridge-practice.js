@@ -6,16 +6,100 @@ const norm=s=>String(s||'').normalize('NFKC').toLowerCase().replace(/[‘’]/g,
 let student={name:'',className:''},elapsed=0,started=false,submitted=false,tick=null,answers={},selectedRange=null,selectedZone=null;
 const beginning=D.passage===1?1:D.passage===2?14:27,ending=D.passage===3?40:D.passage===2?26:13;
 let history=JSON.parse(localStorage.getItem(key+'_answers')||'{}');answers={...history};
+
 document.title=D.title+' | Reading Passage '+D.passage;
-$('back').href='../';$('pageLabel').textContent='Reading Passage '+D.passage+' — '+D.folder;
-$('title').textContent=D.title;$('subtitle').textContent='Cambridge '+D.book+' · Test '+D.test+' · Questions '+beginning+'–'+ending;
-$('source').textContent=D.passageText;
-$('questionsSource').textContent=D.questionsText;
-$('guide').innerHTML='<b>Reading Practice · Hướng dẫn:</b> Đồng hồ <b>đếm xuôi</b> · Bôi đen đoạn văn để <b>Highlight</b>, <b>Take note</b> · Nhấp đúp từ tiếng Anh trong bài đọc để tra nghĩa · Sau khi nộp bài, xem đáp án ngay dưới mỗi câu.';
-$('answerList').innerHTML=Array.from({length:ending-beginning+1},(_,i)=>{let n=i+beginning;return '<div class="answer-item" id="row'+n+'"><label for="q'+n+'">Câu '+n+'</label><input id="q'+n+'" data-n="'+n+'" autocomplete="off" placeholder="Nhập đáp án..." value="'+esc(answers[n]||'')+'"><div class="review" id="review'+n+'" hidden></div></div>'}).join('');
+$('back').href='../';
+$('pageLabel').textContent='Reading Passage '+D.passage+' — Bài '+D.folder;
+$('subtitle').textContent=D.title+' · Cambridge '+D.book+' Test '+D.test+' · Questions '+beginning+'–'+ending;
+$('title').textContent=D.title;
+$('guide').innerHTML='<b>▤ Reading Practice · Hướng dẫn:</b> Đồng hồ <b>đếm xuôi</b> · Bôi đen văn bản để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Nhấp đúp một từ trong bài đọc</b> để tra nghĩa tiếng Việt · Sau khi nộp bài, xem đáp án và giải thích ngay dưới từng câu.';
+/* Exact structural classes of the existing The History of Glass template. */
+const head=document.querySelector('body > header');
+head.className='top';
+const headInner=document.createElement('div');
+headInner.className='topin';
+const headLeft=document.createElement('div');
+headLeft.className='left';
+const headBrand=document.createElement('div');
+headBrand.className='brand';
+headBrand.textContent='📖 Reading Passage '+D.passage+' — '+D.folder;
+headLeft.append($('back'),headBrand);
+headInner.append(headLeft,$('studentInfo'),$('timer'));
+head.replaceChildren(headInner);
+document.querySelector('.progressWrap')?.classList.add('progress-wrap');
+document.querySelector('.progressTrack')?.classList.add('progress');
+const leftPane=document.querySelector('.workspace .pane:first-child');
+const rightPane=document.querySelector('.workspace .pane:nth-child(2)');
+leftPane.classList.add('passage');
+rightPane.classList.add('questions');
+const passageBody=D.passageText.replace(/^You should spend[^\n]*\n\s*/i,'').trim();
+const firstLineBreak=passageBody.indexOf('\n');
+const titleLine=passageBody.slice(0,firstLineBreak).trim();
+let passageRest=titleLine.toLowerCase()===D.title.trim().toLowerCase()?passageBody.slice(firstLineBreak).trim():passageBody;
+if(passageRest.startsWith(D.title))passageRest=passageRest.slice(D.title.length).trim();
+function paragraphMarkup(raw){
+ let sections=raw.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+ if(sections.length===1&&sections[0].length>1800)sections=raw.split(/\n(?=[A-H]\n|[A-H]\s{2,}|[A-Z][^.\n]{0,20}:\s)/);
+ return sections.map(p=>{
+  const clean=p.replace(/([^\n])\n(?=[^\n])/g,'$1 ').replace(/\s+/g,' ').trim();
+  if(/^[A-H]$/.test(clean))return '<div class="paragraph-letter-inline">'+esc(clean)+'</div>';
+  const letter=clean.match(/^([A-H])\s+(?=[A-Z])/);
+  return '<div class="passage-paragraph" style="padding-left:0">'+(letter?'<strong class="paragraph-prefix">'+letter[1]+'</strong> ':'')+esc(letter?clean.slice(letter[0].length):clean)+'</div>';
+ }).join('');
+}
+const passageRoot=document.createElement('div');
+passageRoot.className='content';
+passageRoot.innerHTML='<div class="passage-title"><div class="label">Reading Passage '+D.passage+'</div><h2>'+esc(D.title)+'</h2><p>You should spend about 20 minutes on Questions '+beginning+'–'+ending+'.</p></div>';
+$('source').classList.add('passageSource');
+$('source').innerHTML=paragraphMarkup(passageRest);
+passageRoot.append($('source'));
+leftPane.replaceChildren(passageRoot);
+const questionRoot=document.createElement('div');
+questionRoot.className='content';
+questionRoot.append($('diagramNotice'),$('questionsSource'),$('answerList'),$('result'));
+rightPane.replaceChildren(questionRoot);
+$('questionsSource').classList.add('questionSource');
+$('questionsSource').replaceChildren();
+const rawQuestions=D.questionsText.replace(/\u200b/g,'');
+const groups=[...rawQuestions.matchAll(/^Questions?\s+(\d+)(?:\s*(?:[-–]|and)\s*(\d+))?\s*$/gm)];
+function questionPrompt(text,num){
+ const re=new RegExp('(?:^|\\n)\\s*'+num+'(?:[.\\s]+)([^\\n]+(?:\\n(?!\\s*\\d{1,2}[.\\s])[^\\n]+){0,2})','m');
+ const match=text.match(re);
+ if(!match)return '';
+ return match[1].trim().replace(/\s*\n\s*/g,' ').replace(/\s+/g,' ').slice(0,450);
+}
+function questionCard(n,prompt,instruction){
+ const selectType=/TRUE[\s\S]{0,200}FALSE[\s\S]{0,200}NOT GIVEN/i.test(instruction)?['TRUE','FALSE','NOT GIVEN']:
+   /YES[\s\S]{0,200}NO[\s\S]{0,200}NOT GIVEN/i.test(instruction)?['YES','NO','NOT GIVEN']:null;
+ const input=selectType?
+  '<select id="q'+n+'" class="answer-select" data-n="'+n+'"><option value="">Chọn đáp án</option>'+
+  selectType.map(value=>'<option value="'+value+'"'+(norm(answers[n])===norm(value)?' selected':'')+'>'+value+'</option>').join('')+'</select>':
+  '<input id="q'+n+'" class="answer-select" data-n="'+n+'" autocomplete="off" placeholder="Nhập đáp án..." value="'+esc(answers[n]||'')+'">';
+ return '<div class="question-card" id="row'+n+'"><div class="question-row"><span class="qno">'+n+'</span><div class="qcopy">'+esc(prompt||('Question '+n+' — Xem yêu cầu phía trên'))+'</div></div>'+input+'<div class="review" id="review'+n+'" hidden></div></div>';
+}
+let cards='';
+if(groups.length){
+ for(let i=0;i<groups.length;i++){
+  const g=groups[i],next=groups[i+1];
+  const gStart=Number(g[1]),gEnd=g[2]?Number(g[2]):gStart;
+  const groupText=rawQuestions.slice(g.index+(g[0]||'').length,next?next.index:undefined).trim();
+  const firstQuestion=new RegExp('(?:^|\\n)\\s*'+gStart+'(?:[.\\s]+)');
+  const m=firstQuestion.exec(groupText);
+  const instruction=m?groupText.slice(0,m.index).trim():groupText;
+  cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+esc(instruction).replace(/\n\s*\n/g,'</p><p>').replace(/\n/g,'<br class="soft-break">')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION':'READING QUESTIONS')+'</div></div></div>';
+  for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction);
+  cards+='</section>';
+ }
+}else{
+ cards='<section class="question-section"><div class="instructions"><h3>Questions '+beginning+'–'+ending+'</h3><p>'+esc(rawQuestions)+'</p></div>';
+ for(let n=beginning;n<=ending;n++)cards+=questionCard(n,'',rawQuestions);
+ cards+='</section>';
+}
+$('answerList').innerHTML=cards;
 $('nav').innerHTML=Array.from({length:ending-beginning+1},(_,i)=>{let n=i+beginning;return '<button id="nav'+n+'" type="button" data-n="'+n+'">'+n+'</button>'}).join('');
 function updateNav(){let count=0;for(let n=beginning;n<=ending;n++){const ok=!!String(answers[n]||'').trim();if(ok)count++;$('nav'+n)?.classList.toggle('answered',ok)}$('progress').textContent=count+'/'+(ending-beginning+1)+' câu đã trả lời';$('progressFill').style.width=100*count/(ending-beginning+1)+'%'}
-$('answerList').addEventListener('input',e=>{if(!e.target.matches('input[data-n]'))return;answers[e.target.dataset.n]=e.target.value;localStorage.setItem(key+'_answers',JSON.stringify(answers));updateNav()});
+$('answerList').addEventListener('input',e=>{if(!e.target.matches('input[data-n],select[data-n]'))return;answers[e.target.dataset.n]=e.target.value;localStorage.setItem(key+'_answers',JSON.stringify(answers));updateNav()});
+$('answerList').addEventListener('change',e=>{if(e.target.matches('select[data-n]')){answers[e.target.dataset.n]=e.target.value;localStorage.setItem(key+'_answers',JSON.stringify(answers));updateNav()}});
 $('nav').addEventListener('click',e=>{const n=e.target.closest('[data-n]')?.dataset.n;if(n){$('row'+n)?.scrollIntoView({behavior:'smooth',block:'center'});$('q'+n)?.focus({preventScroll:true})}});
 function fmt(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
 function getProfile(){try{const s=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');if(s?.name&&s?.className)return s}catch(e){}const params=new URLSearchParams(location.search);return {name:params.get('name')||'',className:params.get('class')||params.get('className')||''}}
