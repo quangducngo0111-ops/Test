@@ -568,6 +568,13 @@ main{
 
 }
 
+
+/* Cambridge passage catalog: upcoming source files are visible but not playable. */
+.card-pending{background:#fafbff;border-style:dashed;cursor:default;box-shadow:none}
+.card-pending:hover{transform:none;box-shadow:none;border-color:var(--line)}
+.card-pending .badge{background:#eeeef4;color:#7d8295}
+.card-pending .practice-label{color:#7a8092}
+.card-pending .start{color:#777e90}
 </style>
 
 </head>
@@ -1115,10 +1122,11 @@ function renderCard(
     "Reading";
 
 
+  const pending = !!item.pending;
   return `
     <a
-      class="card"
-      href="${item.url}"
+      class="card${pending ? " card-pending" : ""}"
+      ${pending ? 'aria-disabled="true" tabindex="-1"' : `href="${item.url}"`}
     >
 
       <div class="card-top">
@@ -1166,11 +1174,9 @@ function renderCard(
 
       <div class="start">
 
-        Bắt đầu luyện
+        ${pending ? "Chờ bổ sung đề gốc" : "Bắt đầu luyện"}
 
-        <span class="arrow">
-          →
-        </span>
+        <span class="arrow">${pending ? "🔒" : "→"}</span>
 
       </div>
 
@@ -1245,7 +1251,14 @@ async function loadExercises(){
       title:"The History of Glass",
       description:"Note Completion + TRUE / FALSE / NOT GIVEN",
       questions:13
-    }
+    },
+    {number:2,folder:"02",title:"Crop-growing Skyscrapers",description:"Cam 11 · Test 1 · Academic",questions:13,pending:true},
+    {number:3,folder:"03",title:"Raising the Mary Rose",description:"Cam 11 · Test 2 · Academic",questions:13,pending:true},
+    {number:4,folder:"04",title:"The Story of Silk",description:"Cam 11 · Test 3 · Academic",questions:13,pending:true},
+    {number:5,folder:"05",title:"Research Using Twins",description:"Cam 11 · Test 4 · Academic",questions:13,pending:true},
+    {number:6,folder:"06",title:"Cork",description:"Cam 12 · Test 1 · Academic",questions:13,pending:true},
+    {number:7,folder:"07",title:"The Risks Agriculture Faces in Developing Countries",description:"Cam 12 · Test 2 · Academic",questions:13,pending:true},
+    {number:8,folder:"08",title:"Flying Tortoises",description:"Cam 12 · Test 3 · Academic",questions:13,pending:true}
   ];
 
   async function renderItems(items){
