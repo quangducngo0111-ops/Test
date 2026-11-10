@@ -465,7 +465,7 @@ function showPassage(p){
 
   const passageMarkup=ssGet(zoneMarkupKey('passage',p))||passages[p].text;
   document.getElementById('passage').innerHTML=
-    annotationToolbar('passage')+
+    ''+
     `<div id="notesPanelPassage" class="notes-panel"></div>
      <h2>${passages[p].title}</h2>
      <div class="copy" id="passageCopy">${passageMarkup}</div>`;
@@ -587,7 +587,7 @@ function buildQuestions(p){
   const savedQuestionMarkup=ssGet(zoneMarkupKey('questions',p));
   const questionMarkup=savedQuestionMarkup||h;
   document.getElementById('questions').innerHTML=
-    annotationToolbar('questions')+
+    ''+
     `<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${questionMarkup}</div>`;
 
   restore(p);
