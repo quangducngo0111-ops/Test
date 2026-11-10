@@ -51,7 +51,7 @@ function toggleNotes(zone){document.getElementById(zone==='passage'?'notesPassag
   if(r) ssSet(markupKey(zone),r.innerHTML);
 }
 function bindAnnotations(zone){const r=zoneRoot(zone);if(!r)return;r.addEventListener('mouseup',()=>captureSelection(zone));r.addEventListener('keyup',()=>captureSelection(zone));r.addEventListener('click',e=>{const m=e.target.closest('mark.user-highlight');if(m){activeHighlight=m;activeHighlightZone=zone}})}
-function passageHTML(p){const d=passages[p],saved=ssGet(markupKey('passage',p));return annotationToolbar('passage')+`<div id="notesPassage" class="notes-panel"></div><h2 class="passage-title">${d.title}</h2>${d.subtitle?`<div class="passage-sub">${d.subtitle}</div>`:''}<div id="passageCopy" class="passage-copy">${saved||d.text}</div>`}
+function passageHTML(p){const d=passages[p],saved=ssGet(markupKey('passage',p));return ''+`<div id="notesPassage" class="notes-panel"></div><h2 class="passage-title">${d.title}</h2>${d.subtitle?`<div class="passage-sub">${d.subtitle}</div>`:''}<div id="passageCopy" class="passage-copy">${saved||d.text}</div>`}
 function inlineText(n){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><input class="ans" id="q${n}" data-q="${n}" type="text"></span>`}
 function inlineSelect(n,opts){return `<span class="inline" id="card${n}"><span class="qnum">${n}</span><select class="ans" id="q${n}" data-q="${n}"><option value="">-- choose --</option>${opts.map(x=>`<option value="${optionValue(x)}">${x}</option>`).join('')}</select></span>`}
 function card(q){return `<div class="card" id="card${q.n}"><div class="card-head"><span class="qnum">${q.n}</span><div class="qtext">${q.text}</div></div>${q.opts.map(x=>`<label class="option" data-q="${q.n}" data-val="${optionValue(x)}"><input type="radio" name="q${q.n}" value="${optionValue(x)}"> ${x}</label>`).join('')}<div id="fb${q.n}" class="feedback"></div></div>`}
@@ -219,7 +219,7 @@ function buildQuestions(p){
   const h=freshQuestionsHTML(p);
 
   document.getElementById('questionsPane').innerHTML=
-    annotationToolbar('questions')+
+    ''+
     `<div id="notesQuestions" class="notes-panel"></div>`+
     `<div id="questionsCopy">${h}</div>`;
 
