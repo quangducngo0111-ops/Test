@@ -150,6 +150,20 @@ function questionCard(n,prompt,instruction,groupText){
  const typeClass=hasBlank&&!selectType?' fill-inline':selectType?' choice-card':'';
  return '<div class="question-card'+typeClass+'" id="row'+n+'"><div class="question-row"><span class="qno">'+n+'</span><div class="qcopy">'+body+'</div></div><div class="review" id="review'+n+'" hidden></div></div>';
 }
+function maryDiagram(){
+ const points={9:[45.5,5.1],10:[11.0,34],11:[83.5,80],12:[10.5,91.6],13:[41.5,97]};
+ const fields=[9,10,11,12,13].map(n=>{
+  const [x,y]=points[n];
+  return '<div id="row'+n+'" class="diagram-answer" style="left:'+x+'%;top:'+y+'%"><label class="sr-only" for="q'+n+'">Câu '+n+'</label>'+
+   '<input id="q'+n+'" class="inline-answer" data-n="'+n+'" placeholder="Câu '+n+'" autocomplete="off" spellcheck="false" value="'+esc(answers[n]||'')+'"></div>';
+ }).join('');
+ const reviews=[9,10,11,12,13].map(n=>'<div class="diagram-review" id="review'+n+'" hidden></div>').join('');
+ return '<div class="mary-diagram" role="group" aria-label="Raising the hull of the Mary Rose: stages one and two">'+
+ '<div class="mary-diagram-title">Raising the hull of the Mary Rose: Stages one and two</div>'+
+ '<div class="mary-diagram-canvas"><img class="mary-diagram-image" src="https://ielts-vuive.com/wp-content/uploads/2020/04/boate.png" alt="Sơ đồ Raising the Mary Rose, các vị trí 9–13" loading="lazy" referrerpolicy="no-referrer">'+fields+'</div>'+
+ '<p class="diagram-help">Điền câu trả lời trực tiếp vào các ô số 9–13 trên sơ đồ. Nếu sơ đồ không hiển thị, <a target="_blank" rel="noopener" href="https://ielts-vuive.com/r10-raising-the-mary-rose/">xem hình tham chiếu</a>.</p>'+
+ '<div class="mary-review-list">'+reviews+'</div></div>';
+}
 let cards='';
 if(groups.length){
  for(let i=0;i<groups.length;i++){
@@ -159,8 +173,8 @@ if(groups.length){
   const firstQuestion=new RegExp('(?:^|\\n)\\s*'+gStart+'(?:[.\\s]+)');
   const m=firstQuestion.exec(groupText);
   const instruction=m?groupText.slice(0,m.index).trim():groupText;
-  cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+esc(instruction).replace(/\n\s*\n/g,'<br><br>').replace(/\n/g,'<br class="soft-break">')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION':'READING QUESTIONS')+'</div></div></div>';
-  for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction,groupText);
+  cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+instruction.split(/\n+/).map(line=>esc(line.trim())).filter(Boolean).join('<br>')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION':'READING QUESTIONS')+'</div></div></div>';
+  if(D.id==='cam11-test2-p1' && gStart===9){cards+=maryDiagram();}else{for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction,groupText);}
   cards+='</section>';
  }
 }else{
@@ -187,7 +201,7 @@ function findEvidence(answer){const source=$('source').textContent.toLowerCase()
 function focusEvidence(n){let hit=findEvidence(n);if(!hit)return;const full=$('source').textContent,before=full.slice(0,hit.pos),word=full.slice(hit.pos,hit.pos+hit.len),after=full.slice(hit.pos+hit.len);
  const source=$('source');source.textContent='';source.append(document.createTextNode(before));const mark=document.createElement('mark');mark.className='evidence-focus';mark.textContent=word;source.append(mark,document.createTextNode(after));mark.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>{if(mark.isConnected)mark.replaceWith(document.createTextNode(word));source.normalize()},7000)}
 $('submit').addEventListener('click',async()=>{if(submitted)return;if(!confirm('Nộp bài và xem đáp án?'))return;submitted=true;clearInterval(tick);localStorage.setItem(key+'_seconds',String(elapsed));
- let score=0;for(let n=beginning;n<=ending;n++){const result=isCorrect(n,answers[n]||'');if(result)score++;let review=$('review'+n);review.hidden=false;review.innerHTML='<div class="'+(result?'good':'bad')+'">'+(result?'✓ Chính xác':'✕ Chưa chính xác')+'</div><div>Đáp án: <strong>'+esc(D.answers[n]||'Đang đối chiếu')+'</strong></div><div class="evidenceHint">'+(findEvidence(n)?'<button type="button" data-focus="'+n+'">Tìm từ khóa trong Passage</button>':'Đối chiếu thông tin trong đoạn đọc bên trái')+'</div>';$('row'+n).querySelectorAll('input,select').forEach(el=>el.disabled=true);$('nav'+n).classList.add(result?'correct':'wrong')}
+ let score=0;for(let n=beginning;n<=ending;n++){const result=isCorrect(n,answers[n]||'');if(result)score++;let review=$('review'+n);review.hidden=false;review.innerHTML='<div class="'+(result?'good':'bad')+'">'+(result?'✓ Chính xác':'✕ Chưa chính xác')+'</div><div>Đáp án: <strong>'+esc(D.answers[n]||'Đang đối chiếu')+'</strong></div><div class="evidenceHint">'+(findEvidence(n)?'<button type="button" data-focus="'+n+'">Tìm từ khóa trong Passage</button>':'Đối chiếu thông tin trong đoạn đọc bên trái')+'</div>';$('row'+n)?.querySelectorAll('input,select').forEach(el=>el.disabled=true);$('nav'+n).classList.add(result?'correct':'wrong')}
  $('result').hidden=false;$('result').textContent='Kết quả: '+score+'/'+(ending-beginning+1)+' · Thời gian '+fmt(elapsed);$('submit').disabled=true;
  const endpoint=D.resultEndpoint||'';if(endpoint){try{await fetch(endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Reading',practiceType:'Reading Passage '+D.passage,practiceId:D.folder,score:String(score),total:String(ending-beginning+1),durationSeconds:String(elapsed),details:JSON.stringify({source:D.id,answers,answerKey:D.answers}),submittedAt:new Date().toISOString()})})}catch(e){console.warn('Could not submit practice result',e)}}});
 $('answerList').addEventListener('click',e=>{const n=e.target.closest('[data-focus]')?.dataset.focus;if(n)focusEvidence(Number(n))});
