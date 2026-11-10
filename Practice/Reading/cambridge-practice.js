@@ -173,8 +173,9 @@ if(groups.length){
   const firstQuestion=new RegExp('(?:^|\\n)\\s*'+gStart+'(?:[.\\s]+)');
   const m=firstQuestion.exec(groupText);
   const inlineFirst=new RegExp('(?:^|\\n)[^\\n]{0,160}\\b'+gStart+'[.…·_]{3,}','m').exec(groupText);
-  const instruction=(m?groupText.slice(0,m.index):inlineFirst?groupText.slice(0,inlineFirst.index):groupText).trim();
-  cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+instruction.split(/\n+/).map(line=>esc(line.trim())).filter(Boolean).join('<br>')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION':'READING QUESTIONS')+'</div></div></div>';
+  let instruction=(m?groupText.slice(0,m.index):inlineFirst?groupText.slice(0,inlineFirst.index):groupText).trim();
+  if(D.id==='cam11-test2-p1'&&gStart===9)instruction=instruction.replace(/Raising the hull of the Mary Rose: Stages one and two\s*$/i,'').trim();
+  cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+instruction.split(/\n+/).map(line=>esc(line.trim())).filter(Boolean).join('<br>')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION' : /label the diagram/i.test(instruction)?'DIAGRAM LABEL COMPLETION':'READING QUESTIONS')+'</div></div></div>';
   if(D.id==='cam11-test2-p1' && gStart===9){cards+=maryDiagram();}else{for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction,groupText);}
   cards+='</section>';
  }
