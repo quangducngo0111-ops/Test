@@ -1371,3 +1371,14 @@ html,body{min-height:100%;height:auto}
 .question-card .review[hidden]{display:none}
 .question-card:focus-within{border-color:#aa92de;box-shadow:0 0 0 3px #f1ebff}
 @media(max-width:620px){.question-card .inline-answer{width:130px!important;font-size:14px!important}.question-card .answer-option{padding:7px 10px}.question-card .qcopy{font-size:12px;line-height:2.45}.question-card .question-row{gap:6px}}
+
+
+/* Small, readable choice cards rather than a detached answer sheet. */
+.question-card .answer-options-stacked{display:grid;grid-template-columns:1fr;gap:7px;margin-top:12px}
+.question-card .answer-options-stacked .answer-option{justify-content:flex-start;align-items:flex-start;text-align:left;min-width:0;line-height:1.55;font-size:11.7px;padding:9px 12px}
+.question-card .answer-options-stacked .answer-option strong{display:inline-block;min-width:18px;color:#381480}
+.question-card .answer-options-stacked .answer-option input{margin-top:2px;flex:0 0 auto}
+.question-card .inline-choice{width:110px!important;min-width:95px;max-width:160px;cursor:pointer;text-align:left}
+.question-card.fill-inline .qcopy{white-space:normal}
+.question-card .answer-option input:focus-visible{outline:2px solid #5135a6;outline-offset:3px}
+@media(max-width:620px){.question-card .answer-options-stacked .answer-option{font-size:11.5px;padding:8px 10px}}
