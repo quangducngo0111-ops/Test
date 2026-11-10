@@ -437,7 +437,7 @@ function showPassage(p){
 
   const passageMarkup=ssGet(zoneMarkupKey('passage',p))||passages[p].text;
   document.getElementById('passage').innerHTML=
-    annotationToolbar('passage')+
+    ''+
     `<div id="notesPanelPassage" class="notes-panel"></div>
      <h2>${passages[p].title}</h2>
      <div class="copy" id="passageCopy">${passageMarkup}</div>`;
@@ -476,7 +476,7 @@ function buildQuestions(p){
  else{h+=renderStandardGroup(questions.filter(q=>q.n>=27&&q.n<=32),'Questions 27–32','Which paragraph contains the following information? Choose A–H.');h+=renderStandardGroup(questions.filter(q=>q.n>=33&&q.n<=36),'Questions 33–36','Choose the correct answer.');h+=renderStandardGroup(questions.filter(q=>q.n>=37&&q.n<=40),'Questions 37–40','Choose YES, NO or NOT GIVEN.');}
  const savedQuestionMarkup=ssGet(zoneMarkupKey('questions',p));
  const questionMarkup=savedQuestionMarkup||h;
- document.getElementById('questions').innerHTML=annotationToolbar('questions')+`<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${questionMarkup}</div>`;
+ document.getElementById('questions').innerHTML=''+`<div id="notesPanelQuestions" class="notes-panel"></div><div id="questionsCopy">${questionMarkup}</div>`;
  restore(p);bindTrack();bindAnnotations('questions');renderNotesPanel('questions',p,false);
  if(submitted){const copy=document.getElementById('questionsCopy');if(copy&&!copy.querySelector('.review-mode-note.top-review-note'))copy.insertAdjacentHTML('afterbegin','<div class="review-mode-note top-review-note">Review mode: câu sai có giải thích và evidence ngay bên dưới. Bấm “Đối chiếu trong bài đọc” để đưa đoạn bằng chứng ở cột trái vào vị trí xem.</div>');markPassage(p);}
 }
