@@ -99,6 +99,27 @@ function optionMarkup(n,choices){
   '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" id="opt'+n+'-'+value+'" value="'+esc(value)+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span>'+esc(value)+'</span></label>'
  ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
 }
+
+function questionOptionsText(text,n){
+ const lines=text.replace(/\u200b/g,'').split('\n');
+ const startRe=new RegExp('^\\s*'+n+'[.\\s]+');
+ const start=lines.findIndex(line=>startRe.test(line));
+ if(start<0)return {};
+ const nextNumber=/^\s*\d{1,2}(?:[.\s]+|$)/;
+ const opts={};let active='';
+ for(let i=start+1;i<lines.length;i++){
+  const line=lines[i].trim();
+  if(nextNumber.test(line))break;
+  const m=line.match(/^([A-H])\s{1,}(.+)$/);
+  if(m){active=m[1];opts[active]=m[2].trim();continue}
+  if(active&&line&&!/^Questions?\s+/i.test(line))opts[active]+=' '+line;
+ }
+ return opts;
+}
+function inlineChoice(n,choices){
+ return '<select id="q'+n+'" class="inline-answer inline-choice" data-n="'+n+'" aria-label="Đáp án câu '+n+'"><option value="">Chọn</option>'+
+ choices.map(value=>'<option value="'+esc(value)+'"'+(norm(answers[n])===norm(value)?' selected':'')+'>'+esc(value)+'</option>').join('')+'</select>';
+}
 function questionCard(n,prompt,instruction,groupText){
  const isTfn=/TRUE[\s\S]{0,200}FALSE[\s\S]{0,200}NOT GIVEN/i.test(instruction);
  const isYnn=/YES[\s\S]{0,200}NO[\s\S]{0,200}NOT GIVEN/i.test(instruction);
@@ -112,22 +133,20 @@ function questionCard(n,prompt,instruction,groupText){
  const escapedPrompt=esc(prompt||'Xem câu hỏi trong phần hướng dẫn của nhóm.');
  const hasBlank=/[.…·_]{3,}/.test(prompt);
  let body='';
- if(hasBlank && !selectType && !options){
-  // The answer field replaces the blank itself; no duplicate input underneath.
-  body=escapedPrompt.replace(/[.…·_]{3,}/,()=>answerInput(n));
-  // A trailing fragment can contain a second numbered blank: keep it as text.
+ if(hasBlank && !selectType){
+  // Place a text answer or a word-bank choice directly inside the gap.
+  body=escapedPrompt.replace(/[.…·_]{3,}/,()=>options?inlineChoice(n,options):answerInput(n));
  }else{
   body=escapedPrompt;
   if(selectType)body+=optionMarkup(n,selectType);
   else if(options){
-   const isMc=/choose (?:TWO |THREE )?(?:the )?correct letter/i.test(instruction);
-   // Compact answer choices for matching; MCQ can show letter-based selection too.
-   body+='<div class="answer-options answer-options-letters">'+options.map(value=>
-    '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span>'+value+'</span></label>'
+   const descriptions=questionOptionsText(groupText,n);
+   body+='<div class="answer-options '+(Object.keys(descriptions).length?'answer-options-stacked':'answer-options-letters')+'">'+options.map(value=>
+    '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span><strong>'+value+'</strong>'+ (descriptions[value]?' '+esc(descriptions[value]):'') +'</span></label>'
    ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
   }else body+='<div class="answer-under">'+answerInput(n,'Nhập đáp án')+'</div>';
  }
- const typeClass=hasBlank&&!selectType&&!options?' fill-inline':selectType?' choice-card':'';
+ const typeClass=hasBlank&&!selectType?' fill-inline':selectType?' choice-card':'';
  return '<div class="question-card'+typeClass+'" id="row'+n+'"><div class="question-row"><span class="qno">'+n+'</span><div class="qcopy">'+body+'</div></div><div class="review" id="review'+n+'" hidden></div></div>';
 }
 let cards='';
