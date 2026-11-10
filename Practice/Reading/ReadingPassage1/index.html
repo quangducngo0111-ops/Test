@@ -1335,7 +1335,7 @@ async function loadExercises(){
 
     for(const item of discovered){
       const key = String(item.folder || item.number).padStart(2,"0");
-      merged.set(key,{...(merged.get(key)||{}),...item});
+      merged.set(key,{...(merged.get(key)||{}),...item,pending:false});
     }
 
     await renderItems([...merged.values()]);
