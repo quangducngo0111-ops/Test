@@ -61,6 +61,8 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!
 .exam .inline-review-btn,.exam .evidence-btn,.exam .inline-review-quote,.exam .inline-review .evidence{cursor:pointer}
 .exam .timer{font-variant-numeric:tabular-nums}
 
+/* Hide the persistent toolbar in both reading columns. Text-selection popup remains available. */
+.exam .annotation-bar,.exam .annot-bar{display:none!important}
 /* Practice-style guide, while preserving the Test workspace and toolbars. */
 .exam .reading-test-guide{margin:12px 18px 10px!important;padding:13px 17px!important;border:1px solid #dcd3ef!important;border-radius:14px!important;background:#f5f2fc!important;box-shadow:none!important;color:#2a1956!important;font-size:13px!important;line-height:1.7!important;font-weight:500!important}
 .exam .reading-test-guide strong{font-weight:850!important;color:#281260!important}
