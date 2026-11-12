@@ -96,9 +96,8 @@ function answerInput(n,placeholder='Điền từ'){
  return '<input id="q'+n+'" class="inline-answer" data-n="'+n+'" aria-label="Đáp án câu '+n+'" autocomplete="off" spellcheck="false" placeholder="'+placeholder+'" value="'+esc(answers[n]||'')+'">';
 }
 function optionMarkup(n,choices){
- return '<div class="answer-options" role="radiogroup" aria-label="Câu '+n+'">'+choices.map(value=>
-  '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" id="opt'+n+'-'+value+'" value="'+esc(value)+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span>'+esc(value)+'</span></label>'
- ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
+ return '<select id="q'+n+'" class="answer-select choice-dropdown" data-n="'+n+'" aria-label="Câu '+n+'"><option value="">Chọn đáp án</option>'+
+ choices.map(value=>'<option value="'+esc(value)+'"'+(norm(answers[n])===norm(value)?' selected':'')+'>'+esc(value)+'</option>').join('')+'</select>';
 }
 
 function questionOptionsText(text,n){
@@ -226,23 +225,100 @@ $('startButton').addEventListener('click',begin);const profile=getProfile();$('s
 function accepted(n){const text=String(D.answers[n]||'').replace(/^\d+\.\s*/,'').trim();const variants=new Set([text,text.replace(/[()]/g,''),text.replace(/\([^)]*\)/g,'').trim()]);const split=text.split(/\s*\/\s*/);if(split.length>1){split.forEach(v=>variants.add(v.trim()));if(split.length===2&&split[0].includes(' ')&&!split[1].includes(' '))variants.add(split[0].replace(/\S+$/,split[1]));}return [...variants].map(v=>v.trim()).filter(Boolean)}
 function isCorrect(n,answer){const choices=accepted(n);return choices.some(x=>norm(x)===norm(answer)||norm(x.replace(/[()]/g,''))===norm(answer))}
 function findEvidence(answer){const source=$('source').textContent.toLowerCase();const candidates=accepted(answer);for(const item of candidates){let term=item.replace(/\(.+?\)/g,'').trim().toLowerCase();if(term.length<4)continue;let pos=source.indexOf(term);if(pos>=0)return {pos,len:term.length}}return null}
-function focusEvidence(n){let hit=findEvidence(n);if(!hit)return;const full=$('source').textContent,before=full.slice(0,hit.pos),word=full.slice(hit.pos,hit.pos+hit.len),after=full.slice(hit.pos+hit.len);
- const source=$('source');source.textContent='';source.append(document.createTextNode(before));const mark=document.createElement('mark');mark.className='evidence-focus';mark.textContent=word;source.append(mark,document.createTextNode(after));mark.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>{if(mark.isConnected)mark.replaceWith(document.createTextNode(word));source.normalize()},7000)}
+function focusEvidence(n){
+ const hit=findEvidence(n);if(!hit)return;
+ const source=$('source'),walker=document.createTreeWalker(source,NodeFilter.SHOW_TEXT);
+ let node,offset=0;
+ while((node=walker.nextNode())){
+  const length=node.textContent.length;
+  if(hit.pos<offset+length){
+   const pos=hit.pos-offset,range=document.createRange();
+   range.setStart(node,Math.max(0,pos));range.setEnd(node,Math.min(length,pos+hit.len));
+   const mark=document.createElement('mark');mark.className='evidence-focus';
+   try{range.surroundContents(mark)}catch(err){node.parentElement?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+   mark.scrollIntoView({behavior:'smooth',block:'center'});
+   setTimeout(()=>{if(mark.isConnected)mark.replaceWith(...mark.childNodes)},6000);
+   return;
+  }
+  offset+=length;
+ }
+}
 $('submit').addEventListener('click',async()=>{if(submitted)return;if(!confirm('Nộp bài và xem đáp án?'))return;submitted=true;clearInterval(tick);localStorage.setItem(key+'_seconds',String(elapsed));
  let score=0;for(let n=beginning;n<=ending;n++){const result=isCorrect(n,answers[n]||'');if(result)score++;let review=$('review'+n);review.hidden=false;review.innerHTML='<div class="'+(result?'good':'bad')+'">'+(result?'✓ Chính xác':'✕ Chưa chính xác')+'</div><div>Đáp án: <strong>'+esc(D.answers[n]||'Đang đối chiếu')+'</strong></div><div class="evidenceHint">'+(findEvidence(n)?'<button type="button" data-focus="'+n+'">Tìm từ khóa trong Passage</button>':'Đối chiếu thông tin trong đoạn đọc bên trái')+'</div>';$('row'+n)?.querySelectorAll('input,select').forEach(el=>el.disabled=true);$('nav'+n).classList.add(result?'correct':'wrong')}
  $('result').hidden=false;$('result').textContent='Kết quả: '+score+'/'+(ending-beginning+1)+' · Thời gian '+fmt(elapsed);$('submit').disabled=true;
  const endpoint=D.resultEndpoint||'';if(endpoint){try{await fetch(endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Reading',practiceType:'Reading Passage '+D.passage,practiceId:D.folder,score:String(score),total:String(ending-beginning+1),durationSeconds:String(elapsed),details:JSON.stringify({source:D.id,answers,answerKey:D.answers}),submittedAt:new Date().toISOString()})})}catch(e){console.warn('Could not submit practice result',e)}}});
 $('answerList').addEventListener('click',e=>{const n=e.target.closest('[data-focus]')?.dataset.focus;if(n)focusEvidence(Number(n))});
-const selectionMenu=$('selectionMenu');function closeMenu(){selectionMenu.hidden=true}
-document.addEventListener('selectionchange',()=>{});
-document.addEventListener('mouseup',e=>{if(selectionMenu.contains(e.target))return;const sel=getSelection();if(!sel||sel.isCollapsed||!sel.toString().trim()){closeMenu();return}const range=sel.getRangeAt(0);const root=range.commonAncestorContainer.nodeType===1?range.commonAncestorContainer:range.commonAncestorContainer.parentElement;
- selectedZone=root?.closest('#source,#questionsSource')||null;if(!selectedZone){closeMenu();return}selectedRange=range.cloneRange();const box=range.getBoundingClientRect();selectionMenu.hidden=false;selectionMenu.style.left=Math.max(8,Math.min(innerWidth-200,box.left))+'px';selectionMenu.style.top=Math.max(8,box.top-50)+'px'});
-selectionMenu.addEventListener('mousedown',e=>e.preventDefault());
-selectionMenu.addEventListener('click',e=>{const action=e.target.closest('[data-action]')?.dataset.action;if(!action||!selectedRange||!selectedZone)return;const r=selectedRange.cloneRange();try{const el=document.createElement(action==='highlight'?'mark':'span');el.className=action==='highlight'?'user-highlight':'note-anchor';if(action==='note'){const note=prompt('Nhập ghi chú:');if(note===null||!note.trim())return;el.dataset.note=note.trim();el.title=note.trim()}el.append(r.extractContents());r.insertNode(el);saveMarks();getSelection()?.removeAllRanges()}catch(err){alert('Vui lòng bôi đen một đoạn ngắn hơn.')}finally{closeMenu()}});
+const selectionMenu=$('selectionMenu');
 const passageMarkupKey=D.id==='cam11-test2-p3'?'_passageMarkup_neuro_paragraphs_v3':'_passageMarkup_v2';
-function saveMarks(){localStorage.setItem(key+passageMarkupKey,$('source').innerHTML)}
-for(const [id,storage] of [['source',passageMarkupKey]]){const saved=localStorage.getItem(key+storage);if(saved)$(id).innerHTML=saved}
-document.addEventListener('click',e=>{const target=e.target.closest('.user-highlight,.note-anchor');if(target){if(target.classList.contains('note-anchor')){alert('Ghi chú: '+(target.dataset.note||''))}else if(confirm('Xóa highlight này?')){target.replaceWith(...target.childNodes);saveMarks()}}});
-$('source').addEventListener('dblclick',e=>{const sel=getSelection();const word=sel?.toString()?.trim();if(!word||!/^[a-zA-Z-]{2,30}$/.test(word))return;const link='https://translate.google.com/?sl=en&tl=vi&text='+encodeURIComponent(word)+'&op=translate';const go=confirm('Tra nghĩa tiếng Việt của "'+word+'" trong Google Translate?');if(go)window.open(link,'_blank','noopener')});
+let markTarget=null;
+const markKey=key+'_questionMarks_v4';
+function resetMenu(){selectionMenu.hidden=true;markTarget=null;for(const button of selectionMenu.querySelectorAll('[data-action]')){button.hidden=false;button.textContent=button.dataset.action==='note'?'📝 Take note':'🖍 Highlight';}}
+function getRoot(node){
+ const el=node?.nodeType===1?node:node?.parentElement;
+ if(!el||el.closest('input,select,textarea,button,.review,.neuro-inline-gap,.selectionMenu'))return null;
+ return el.closest('#source,#questionsSource');
+}
+function persist(root){
+ if(root?.id==='source')localStorage.setItem(key+passageMarkupKey,root.innerHTML);
+}
+function capture(){
+ const selection=window.getSelection();
+ if(!selection||selection.isCollapsed||!selection.rangeCount||!selection.toString().trim()){resetMenu();return;}
+ const range=selection.getRangeAt(0),from=getRoot(range.startContainer),to=getRoot(range.endContainer);
+ if(!from||from!==to||range.cloneContents().querySelector('input,select,textarea,button')){resetMenu();return;}
+ selectedRange=range.cloneRange();selectedZone=from;markTarget=null;resetMenu();
+ const r=range.getBoundingClientRect();if(!r.width&&!r.height)return;
+ selectionMenu.hidden=false;
+ const width=selectionMenu.offsetWidth||190;
+ selectionMenu.style.left=Math.max(8,Math.min(innerWidth-width-8,r.left+r.width/2-width/2))+'px';
+ selectionMenu.style.top=Math.max(8,r.top-45)+'px';
+}
+function addAnnotation(action){
+ if(!selectedRange||!selectedZone)return;
+ const range=selectedRange.cloneRange(),root=selectedZone;
+ const note=action==='note'?prompt('Nhập ghi chú:'):null;
+ if(action==='note'&&(note===null||!note.trim())){resetMenu();return;}
+ try{
+  const el=document.createElement(action==='note'?'span':'mark');
+  el.className=action==='note'?'note-anchor':'user-highlight';
+  if(action==='note'){el.dataset.note=note.trim();el.title=note.trim();}
+  el.append(range.extractContents());range.insertNode(el);
+  persist(root);window.getSelection()?.removeAllRanges();selectedRange=null;selectedZone=null;
+ }catch(error){alert('Vui lòng bôi đen đoạn văn ngắn hơn.')}
+ resetMenu();
+}
+selectionMenu.addEventListener('mousedown',event=>event.preventDefault());
+selectionMenu.addEventListener('click',event=>{
+ const action=event.target.closest('[data-action]')?.dataset.action;
+ if(!action)return;event.stopPropagation();
+ if(markTarget){
+  const target=markTarget,root=getRoot(target);
+  if(root){const parent=target.parentNode;target.replaceWith(...target.childNodes);parent.normalize();persist(root);}
+  resetMenu();return;
+ }
+ addAnnotation(action);
+});
+document.addEventListener('mouseup',event=>{if(!selectionMenu.contains(event.target))setTimeout(capture,0)});
+document.addEventListener('touchend',event=>{if(!selectionMenu.contains(event.target))setTimeout(capture,120)});
+document.addEventListener('mousedown',event=>{if(!selectionMenu.contains(event.target)&&!event.target.closest('.user-highlight,.note-anchor'))resetMenu()});
+document.addEventListener('click',event=>{
+ const target=event.target.closest('mark.user-highlight,span.note-anchor');
+ if(!target||window.getSelection()?.toString().trim())return;
+ if(!getRoot(target))return;
+ markTarget=target;selectedRange=null;selectedZone=null;
+ const b1=selectionMenu.querySelector('[data-action="highlight"]'),b2=selectionMenu.querySelector('[data-action="note"]');
+ b1.hidden=target.classList.contains('note-anchor');b2.hidden=!b1.hidden;
+ b1.textContent='✕ Xóa Highlight';b2.textContent='✕ Xóa Note';
+ const r=target.getBoundingClientRect();selectionMenu.hidden=false;
+ selectionMenu.style.left=Math.max(8,Math.min(innerWidth-170,r.left))+'px';
+ selectionMenu.style.top=Math.max(8,r.top-45)+'px';
+});
+const stored=localStorage.getItem(key+passageMarkupKey);
+if(stored)$('source').innerHTML=stored;
+$('source').addEventListener('dblclick',()=>{
+ const word=window.getSelection()?.toString()?.trim();
+ if(!word||!/^[a-zA-Z-]{2,30}$/.test(word))return;
+ if(confirm('Tra nghĩa tiếng Việt của "'+word+'"?'))window.open('https://translate.google.com/?sl=en&tl=vi&text='+encodeURIComponent(word)+'&op=translate','_blank','noopener');
+});
 updateNav();
 })();
