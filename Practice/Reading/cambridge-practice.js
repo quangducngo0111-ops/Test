@@ -259,7 +259,27 @@ function getRoot(node){
  return el.closest('#source,#questionsSource');
 }
 function persist(root){
- if(root?.id==='source')localStorage.setItem(key+passageMarkupKey,root.innerHTML);
+ if(root?.id==='source'){localStorage.setItem(key+passageMarkupKey,root.innerHTML);return;}
+ if(root?.id==='questionsSource'){
+  // Save only static question-text nodes, never a parent with live input elements.
+  const items={};
+  root.querySelectorAll('.qcopy').forEach((copy,i)=>{
+   if(copy.querySelector('.note-anchor,.user-highlight'))items[i]=copy.innerHTML;
+  });
+  localStorage.setItem(markKey,JSON.stringify(items));
+ }
+}
+function restoreQuestionMarks(){
+ let saved={};try{saved=JSON.parse(localStorage.getItem(markKey)||'{}')}catch(e){return}
+ const copies=[...$('questionsSource').querySelectorAll('.qcopy')];
+ for(const [index,markup] of Object.entries(saved)){
+  const el=copies[Number(index)];if(!el||!/<(?:mark|span)\b/.test(markup))continue;
+  // Avoid rehydrating forms from storage; annotation is rebuilt from decorated text.
+  if(el.querySelector('input,select,textarea,button'))continue;
+  const tpl=document.createElement('template');tpl.innerHTML=markup;
+  if(tpl.content.querySelector('input,select,textarea,button,script,iframe'))continue;
+  el.innerHTML=markup;
+ }
 }
 function capture(){
  const selection=window.getSelection();
@@ -315,6 +335,7 @@ document.addEventListener('click',event=>{
 });
 const stored=localStorage.getItem(key+passageMarkupKey);
 if(stored)$('source').innerHTML=stored;
+restoreQuestionMarks();
 $('source').addEventListener('dblclick',()=>{
  const word=window.getSelection()?.toString()?.trim();
  if(!word||!/^[a-zA-Z-]{2,30}$/.test(word))return;
