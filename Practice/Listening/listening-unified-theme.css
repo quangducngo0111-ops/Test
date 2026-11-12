@@ -1,0 +1,82 @@
+/* Smartcom Listening Practice UI v1 — reference: Cambridge 10 Test 4 Thorndyke's Builders
+   Visual-only overrides. Leave each lesson's scoring, audio, annotation and storage scripts intact. */
+:root{--listening-purple:#3b0e90;--listening-ink:#281260;--listening-lilac:#f0ecff;--listening-border:#e1e4ee;--listening-muted:#6d768e;--listening-bg:#f5f6fc;}
+html{scroll-behavior:smooth}
+body.listening-unified{background:linear-gradient(145deg,#f5f3fc,#f3f7fe 46%,#f8faff)!important;color:#262338!important;font-family:Inter,system-ui,-apple-system,'Segoe UI',Arial,sans-serif!important}
+body.listening-unified .top{background:linear-gradient(105deg,#1d1049,#3b0e90)!important;color:#fff!important;border-bottom:0!important;box-shadow:0 3px 15px #1a0b4710}
+body.listening-unified .top .topin,body.listening-unified .top .wrap,body.listening-unified header.top>.wrap{max-width:1180px!important;margin-left:auto!important;margin-right:auto!important}
+body.listening-unified header.top .back{border:1px solid #ffffff55!important;border-radius:9px!important;color:white!important;background:#ffffff14!important;padding:9px 13px!important;text-decoration:none!important}
+body.listening-unified .top .brand{color:white!important;font-weight:900!important}
+body.listening-unified .page,body.listening-unified main.wrap,body.listening-unified .wrap:has(> .hero){width:min(1180px,calc(100% - 24px))!important;max-width:1180px!important;margin-left:auto!important;margin-right:auto!important}
+body.listening-unified .hero{padding:20px 0 13px!important;margin:0 0 12px!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+body.listening-unified .hero h1{font-size:clamp(21px,2.15vw,27px)!important;line-height:1.22!important;letter-spacing:-.4px!important;font-weight:900!important;color:#251459!important;margin:0 0 6px!important}
+body.listening-unified .hero p,body.listening-unified .hero .eyebrow{color:#657089!important;line-height:1.55!important}
+body.listening-unified .hero .progress-wrap{width:min(240px,100%)!important;max-width:240px!important}
+body.listening-unified .hero .progress{border-radius:999px!important;overflow:hidden!important;background:#e3e6f0!important}
+body.listening-unified .hero .progress i{background:linear-gradient(90deg,#3b0e90,#4d80de)!important}
+body.listening-unified .audio-panel,body.listening-unified .audio-box,body.listening-unified .panel,body.listening-unified .paper,body.listening-unified .tile,body.listening-unified .notes-panel,body.listening-unified .card,body.listening-unified .section,body.listening-unified .part-card{background:#fff!important;border:1px solid var(--listening-border)!important;border-radius:15px!important;box-shadow:0 5px 20px #22124509!important}
+body.listening-unified .audio-panel{padding:16px 20px!important;margin:12px 0 17px!important}
+body.listening-unified .audio-head{align-items:center!important;gap:13px!important;margin:0 0 10px!important}
+body.listening-unified .audio-title b,body.listening-unified .audio-title strong{color:#281260!important;font-size:13.5px!important;font-weight:900!important}
+body.listening-unified .audio-title span,body.listening-unified .audio-time{color:#64718b!important;font-size:11px!important}
+body.listening-unified .audio-icon{border-radius:12px!important;background:#eee8ff!important;color:#3b0e90!important;border:0!important}
+body.listening-unified .audio-controls{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:9px!important}
+body.listening-unified .audio-btn,body.listening-unified .practice-audio-btn,body.listening-unified .softbtn,body.listening-unified .audio-controls button{border:1px solid #dad5e9!important;border-radius:9px!important;background:#fff!important;color:#281260!important;font-size:12px!important;font-weight:850!important;box-shadow:none!important;min-height:36px}
+body.listening-unified .audio-btn.primary,body.listening-unified .audio-controls .primary,body.listening-unified .audio-controls button.primary{background:#3b0e90!important;color:#fff!important;border-color:#3b0e90!important}
+body.listening-unified .seek,body.listening-unified .audio-controls input[type="range"],body.listening-unified .practice-audio-tools input[type="range"]{accent-color:#3b0e90!important}
+body.listening-unified .speed-wrap,body.listening-unified .volume-wrap,body.listening-unified .speed{color:#52446c!important;font-size:11px!important}
+body.listening-unified .speed-wrap select,body.listening-unified .speed select,body.listening-unified .audio-controls select{border:1px solid #dad5e9!important;border-radius:8px!important;background:white!important;color:#281260!important;padding:7px!important}
+body.listening-unified .practice-note,body.listening-unified .audio-note{font-size:11px!important;color:#66718a!important;line-height:1.5!important;margin:8px 0 0!important}
+body.listening-unified .paper{margin:15px 0!important;padding:0!important;overflow:hidden}
+body.listening-unified .paper-inner{padding:18px 21px!important;max-width:none!important}
+body.listening-unified .question-block{border:1px solid #e5e4ef!important;border-radius:12px!important;background:#fff!important;margin:0 0 13px!important;padding:15px 17px!important;box-shadow:none!important}
+body.listening-unified .question-title,body.listening-unified .question-block h3,body.listening-unified .question-block h4{font-size:15px!important;font-weight:900!important;color:#281260!important;line-height:1.4!important;margin-bottom:7px!important}
+body.listening-unified .question-instruction,body.listening-unified .instruction,body.listening-unified .question-block .hint{font-size:11.5px!important;line-height:1.5!important;color:#657188!important;margin:3px 0 9px!important}
+body.listening-unified .qno,body.listening-unified .rownum,body.listening-unified .question-number{background:#eee8ff!important;color:#3b0e90!important;border-radius:8px!important;font-weight:900!important}
+body.listening-unified .options{gap:6px!important}
+body.listening-unified .option{background:white!important;border:1px solid #e5e3ed!important;border-radius:9px!important;box-shadow:none!important;line-height:1.5!important;font-size:12px!important}
+body.listening-unified .option:hover{border-color:#a691d4!important;background:#faf8ff!important}
+body.listening-unified .option:has(input:checked){background:#eee8ff!important;border-color:#9679d5!important}
+body.listening-unified input[type=radio],body.listening-unified input[type=checkbox]{accent-color:#3b0e90}
+body.listening-unified .ans,body.listening-unified input.answer,body.listening-unified input[type="text"],body.listening-unified select.answer,body.listening-unified .question-block select{border:1px solid #c9bde2!important;border-radius:8px!important;background:#fff!important;color:#281260!important;box-shadow:none!important}
+body.listening-unified input:focus,body.listening-unified select:focus{outline-color:#7152c6!important}
+body.listening-unified .question-block table,body.listening-unified .notes table,body.listening-unified .paper table{border-color:#e4e4ef!important;border-collapse:separate!important;border-spacing:0!important;border-radius:10px!important;overflow:hidden!important}
+body.listening-unified .question-block th,body.listening-unified .paper th{background:#f0ebff!important;color:#281260!important;border-color:#e3dfed!important;font-size:12px!important}
+body.listening-unified .question-block td,body.listening-unified .paper td{border-color:#ebeaf1!important;font-size:12px!important}
+body.listening-unified .question-block tr:nth-child(even),body.listening-unified .paper tr:nth-child(even){background:#fcfbff}
+body.listening-unified .question-block select,body.listening-unified .paper select{min-height:33px}
+body.listening-unified .bottom,body.listening-unified .cam-actions{background:#ffffffee!important;border-top:1px solid #e5e4ef!important;backdrop-filter:blur(8px)!important}
+body.listening-unified .bottom .nav button,body.listening-unified .nav button{border:1px solid #e0dbe9!important;border-radius:7px!important;background:#fff!important;color:#281260!important;font-weight:850!important}
+body.listening-unified .bottom .nav button.answered,body.listening-unified .nav button.answered{background:#e5ebff!important;border-color:#bec9eb!important}
+body.listening-unified .bottom button#submitButton,body.listening-unified .bottom button#submitBtn,body.listening-unified .primary,body.listening-unified button.primary,body.listening-unified button#submitButton{background:#3b0e90!important;border-color:#3b0e90!important;color:#fff!important;border-radius:9px!important}
+body.listening-unified .review-list .inline-review,body.listening-unified .inline-review,body.listening-unified .review,body.listening-unified .review-card{background:#fbfaff!important;border:1px solid #e4dfee!important;border-radius:11px!important;padding:12px!important}
+body.listening-unified .transcript-panel,body.listening-unified .transcriptbox,body.listening-unified .transcript-body{border-color:#e0d9ee!important;border-radius:12px!important;background:#fff!important}
+body.listening-unified .tline{font-size:12px!important;line-height:1.8!important}
+body.listening-unified .tline.transcript-focus,body.listening-unified .cue-focus{background:#fff0b7!important;border-color:#dbad29!important}
+body.listening-unified .hero .eyebrow{font-size:10px!important;letter-spacing:.08em!important;color:#6744b0!important}
+body.listening-unified .panel{margin:12px 0!important;overflow:hidden}
+body.listening-unified .panel>.toolbar,body.listening-unified .panel-head{background:#faf9ff!important;border-bottom:1px solid #e6e1ed!important;padding:14px 18px!important}
+body.listening-unified .panel-body{padding:14px 19px!important}
+body.listening-unified .section-tabs{display:flex!important;flex-wrap:wrap!important;gap:7px!important}
+body.listening-unified .section-tabs button,body.listening-unified .phase-step{border-radius:10px!important;border:1px solid #e1d9ee!important;background:#fff!important;color:#332158!important}
+body.listening-unified .section-tabs button.active,body.listening-unified .phase-step.active{background:#eee7ff!important;border-color:#947bd8!important;color:#281260!important}
+body.listening-unified .qcard,body.listening-unified .question-card,body.listening-unified .notes,body.listening-unified .flow-box{border:1px solid #e7e2ef!important;background:#fff!important;border-radius:11px!important}
+body.listening-unified .rowactions{padding:12px 0!important}
+body.listening-unified .cards{gap:12px!important}
+body.listening-unified .tile{padding:17px!important}
+body.listening-unified .tile h3{color:#281260!important}
+body.listening-unified .phase-nav{gap:12px!important;margin:10px 0 18px!important}
+body.listening-unified .audio-box{padding:14px 16px!important}
+body.listening-unified .audio-box audio{width:100%!important;accent-color:#3b0e90}
+body.listening-unified .dictation-list>*,body.listening-unified .script,body.listening-unified .dictation-card{border-radius:11px!important;border-color:#e3deeb!important}
+body.listening-unified .part-heading{border-radius:9px!important;color:#281260!important;background:#eee9ff!important;padding:10px 13px!important}
+body.listening-unified .flow-option-list,body.listening-unified .notes{padding:12px 15px!important}
+@media(max-width:760px){
+body.listening-unified .page,body.listening-unified main.wrap{width:calc(100% - 16px)!important}
+body.listening-unified .hero{padding-top:16px!important}
+body.listening-unified .hero .progress-wrap{max-width:100%!important}
+body.listening-unified .audio-panel{padding:13px!important}
+body.listening-unified .audio-controls .seek{flex:1 1 180px!important}
+body.listening-unified .paper-inner{padding:12px!important}
+body.listening-unified .question-block{padding:12px!important}
+}
