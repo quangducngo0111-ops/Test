@@ -13,18 +13,24 @@ $("heading").textContent="Part "+L.part+" · Bài "+String(L.number).padStart(2,
 const audio=$("audio");if(L.audio)audio.src=L.audio;
 /* Audio is provided by the lesson itself; the shared sidebar owns all playback controls. */
 function lcs(a,b){const x=words(a),y=words(b);let prev=Array(y.length+1).fill(0);for(let i=1;i<=x.length;i++){let cur=Array(y.length+1).fill(0);for(let j=1;j<=y.length;j++)cur[j]=x[i-1]===y[j-1]?prev[j-1]+1:Math.max(cur[j-1],prev[j]);prev=cur}return prev[y.length]/Math.max(x.length,y.length,1)}
-function pct(){return Math.round(100*L.dictations.reduce((s,t,i)=>s+lcs(state.dict[i]||"",t),0)/L.dictations.length)}
-function header(){const allowed=[true,state.gapsDone,state.unlocked];$("steps").innerHTML=["1 · Nghe điền từ","2 · Dictation (≥80%)","3 · Bài nghe chính"].map((x,i)=>'<button '+(!allowed[i]?'disabled':'')+' data-stage="'+i+'" class="'+(state.stage===i?'active':'')+'">'+x+(!allowed[i]?' 🔒':'')+'</button>').join("");document.querySelectorAll("[data-stage]").forEach(e=>e.onclick=()=>{state.stage=+e.dataset.stage;save();render()})}
-function renderGaps(){let n=0;let body=L.turns.map(turn=>'<div class="turn"><b>'+esc(turn.speaker)+'</b><div>'+esc(turn.text).replace(/\[\[([^\]]+)\]\]/g,()=>{let i=n++;return '<input class="gap" data-i="'+i+'" value="'+esc(state.gaps[i]||"")+'" placeholder="Điền từ" aria-label="Chỗ trống '+(i+1)+'">'})+'</div></div>').join("");
-$("panel").innerHTML='<h2>Giai đoạn 1 · Nghe điền từ</h2><p>Nghe audio và hoàn thành những từ bị khuyết trong transcript, sau đó chuyển sang Dictation.</p>'+body+'<button class="primary" id="gapDone">Chấm bài và chuyển sang Dictation</button>';
-document.querySelectorAll(".gap").forEach(e=>e.oninput=()=>{state.gaps[e.dataset.i]=e.value;save()});
-$("gapDone").onclick=()=>{let count=0;const fields=[...document.querySelectorAll(".gap")];fields.forEach(e=>{let ok=same(e.value,L.gapAnswers[+e.dataset.i]);if(ok)count++;e.style.background=ok?"#e9f8ef":"#fff0f2";e.title=ok?"Chính xác":"Đáp án đúng: "+L.gapAnswers[+e.dataset.i]});state.gapScore=count;state.gapTotal=fields.length;state.gapsDone=true;state.stage=1;save();render();};}
+function pct(){return 100*L.dictations.reduce((s,t,i)=>s+lcs(state.dict[i]||"",t),0)/L.dictations.length}
+function header(){const allowed=[true,!!state.gapsDone&&state.gapScore/state.gapTotal>0.8,!!state.unlocked];$("steps").innerHTML=["1 · Nghe điền từ (>80%)","2 · Dictation (>80%)","3 · Bài nghe chính"].map((x,i)=>'<button '+(!allowed[i]?'disabled':'')+' data-stage="'+i+'" class="'+(state.stage===i?'active':'')+'">'+x+(!allowed[i]?' 🔒':'')+'</button>').join("");document.querySelectorAll("[data-stage]").forEach(e=>e.onclick=()=>{state.stage=+e.dataset.stage;save();render()})}
+function renderGaps(){
+let n=0;
+const body=L.turns.map(turn=>'<div class="turn"><b>'+esc(turn.speaker)+'</b><div>'+esc(turn.text).replace(/\[\[([^\]]+)\]\]/g,()=>{const i=n++;const ok=same(state.gaps[i]||"",L.gapAnswers[i]);const attempted=!!state.gapChecked;return '<span class="gap-field"><input class="gap '+(attempted?(ok?"correct":"wrong"):"")+'" data-i="'+i+'" value="'+esc(state.gaps[i]||"")+'" placeholder="Điền từ" aria-label="Chỗ trống '+(i+1)+'">'+(attempted?'<small class="'+(ok?"right":"wrong")+'">'+(ok?"✓ Đúng":"✕ Sai · "+esc(L.gapAnswers[i]))+'</small>':"")+'</span>'})+'</div></div>').join("");
+const count=Number(state.gapScore)||0,total=L.gapAnswers.length,percent=total?count/total*100:0;
+const passed=state.gapsDone&&percent>80;
+$("panel").innerHTML='<h2>Giai đoạn 1 · Nghe điền từ</h2><p>Điền đáp án trực tiếp trong transcript. Sau khi chấm sẽ biết từng câu đúng/sai. Cần đạt <b>trên 80%</b> để vào Dictation.</p>'+(state.gapChecked?'<div class="score '+(passed?"right":"wrong")+'">Kết quả: '+count+'/'+total+' · '+percent.toFixed(1)+'% · '+(passed?"Đạt, đã mở Dictation":"Chưa đạt 80%, hãy sửa các ô sai rồi chấm lại")+'</div>':'')+body+'<button class="primary" id="gapDone">Chấm lại Gap-fill</button>'+(passed?'<button class="primary" id="toDict">Tiếp tục Dictation →</button>':"");
+document.querySelectorAll(".gap").forEach(e=>e.oninput=()=>{state.gaps[e.dataset.i]=e.value;state.gapChecked=false;state.gapsDone=false;state.unlocked=false;state.dictChecked=false;save();});
+$("gapDone").onclick=()=>{state.gapScore=L.gapAnswers.filter((ans,i)=>same(state.gaps[i]||"",ans)).length;state.gapTotal=L.gapAnswers.length;state.gapChecked=true;state.gapsDone=state.gapScore/state.gapTotal>0.8;if(!state.gapsDone)state.unlocked=false;save();render()};
+if($("toDict"))$("toDict").onclick=()=>{state.stage=1;save();render()};
+}
 function renderDict(){let score=state.dictChecked?pct():null;
-$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Chép đầy đủ các đoạn sau. Chấm theo tỷ lệ từ chính xác (không tính hoa/thường và dấu câu); phải đạt ít nhất 80% trung bình toàn bộ các đoạn để mở bài nghe chính.</p><div class="score">'+(score===null?'Chưa chấm':"Độ chính xác: "+score+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: 80%")+'</div>'+L.dictations.map((t,i)=>'<div class="card"><h3>Đoạn '+(i+1)+'/'+L.dictations.length+'</h3>'+(L.dictationCues?.[i]?'<button class="secondary" type="button" data-listen="'+i+'">▶ Nghe đoạn '+(i+1)+'</button>':'')+'<textarea data-dict="'+i+'" placeholder="Gõ lại những gì em nghe được...">'+esc(state.dict[i]||"")+'</textarea>'+(state.dictChecked?'<div class="review"><b>Chính xác: '+Math.round(lcs(state.dict[i]||"",t)*100)+'%</b><p>'+esc(t)+'</p></div>':'')+'</div>').join("")+'<button class="primary" id="dictGrade">Chấm lại Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':'');
+$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Chép đầy đủ các đoạn sau. Chấm theo tỷ lệ từ chính xác (không tính hoa/thường và dấu câu); phải đạt trên 80% trung bình toàn bộ các đoạn để mở bài nghe chính.</p><div class="score">'+(score===null?'Chưa chấm':"Độ chính xác: "+score.toFixed(1)+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: trên 80%")+'</div>'+L.dictations.map((t,i)=>'<div class="card"><h3>Đoạn '+(i+1)+'/'+L.dictations.length+'</h3>'+(L.dictationCues?.[i]?'<button class="secondary" type="button" data-listen="'+i+'">▶ Nghe đoạn '+(i+1)+'</button>':'')+'<textarea data-dict="'+i+'" placeholder="Gõ lại những gì em nghe được...">'+esc(state.dict[i]||"")+'</textarea>'+(state.dictChecked?'<div class="review"><b>Chính xác: '+(lcs(state.dict[i]||"",t)*100).toFixed(1)+'%</b><p>'+esc(t)+'</p></div>':'')+'</div>').join("")+'<button class="primary" id="dictGrade">Chấm lại Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':'');
 document.querySelectorAll("[data-dict]").forEach(e=>e.oninput=()=>{state.dict[e.dataset.dict]=e.value;state.dictChecked=false;save()});
 document.querySelectorAll("[data-listen]").forEach(button=>button.onclick=async()=>{const cue=L.dictationCues?.[+button.dataset.listen];if(!cue||!audio.src)return;segmentEnd=cue.end;audio.currentTime=Math.max(0,cue.start);try{await audio.play()}catch(error){console.warn("Dictation audio cannot be played",error)}});
 
-$("dictGrade").onclick=()=>{state.dictChecked=true;state.dictScore=pct();if(state.dictScore>=80)state.unlocked=true;save();render()};
+$("dictGrade").onclick=()=>{state.dictChecked=true;state.dictScore=pct();state.unlocked=state.dictScore>80;save();render()};
 if($("toExam"))$("toExam").onclick=()=>{state.stage=2;state.examStartedAt=state.examStartedAt||Date.now();save();render()};}
 function correct(q){const v=state.exam[q.n];if(q.type==="two"){return Array.isArray(v)&&v.length===2&&v.every(x=>q.answers.includes(x))&&new Set(v).size===2}return q.answers.some(a=>words(a).join(" ")===words(v||"").join(" "))}
 
@@ -34,9 +40,9 @@ audio.addEventListener("timeupdate",()=>{if(segmentEnd>0&&audio.currentTime>=seg
 function replayCue(n){
  const q=L.exam.find(x=>x.n===n);
  if(!q?.cue)return;
- if(!audio.src){$("audioStatus").textContent="Chưa có audio: hãy chọn MP3 để phát trích đoạn";return}
+ if(!audio.src)return
  segmentEnd=q.cue.end;audio.currentTime=Math.max(0,q.cue.start-1);
- audio.play().catch(()=>{$("audioStatus").textContent="Không phát được audio, hãy chọn MP3 rồi thử lại."});
+ audio.play().catch(error=>console.warn("Audio unavailable",error));
  audio.scrollIntoView({behavior:"smooth",block:"center"});
 }
 function reviewHTML(q){
