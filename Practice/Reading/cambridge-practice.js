@@ -239,8 +239,9 @@ document.addEventListener('mouseup',e=>{if(selectionMenu.contains(e.target))retu
  selectedZone=root?.closest('#source,#questionsSource')||null;if(!selectedZone){closeMenu();return}selectedRange=range.cloneRange();const box=range.getBoundingClientRect();selectionMenu.hidden=false;selectionMenu.style.left=Math.max(8,Math.min(innerWidth-200,box.left))+'px';selectionMenu.style.top=Math.max(8,box.top-50)+'px'});
 selectionMenu.addEventListener('mousedown',e=>e.preventDefault());
 selectionMenu.addEventListener('click',e=>{const action=e.target.closest('[data-action]')?.dataset.action;if(!action||!selectedRange||!selectedZone)return;const r=selectedRange.cloneRange();try{const el=document.createElement(action==='highlight'?'mark':'span');el.className=action==='highlight'?'user-highlight':'note-anchor';if(action==='note'){const note=prompt('Nhập ghi chú:');if(note===null||!note.trim())return;el.dataset.note=note.trim();el.title=note.trim()}el.append(r.extractContents());r.insertNode(el);saveMarks();getSelection()?.removeAllRanges()}catch(err){alert('Vui lòng bôi đen một đoạn ngắn hơn.')}finally{closeMenu()}});
-function saveMarks(){localStorage.setItem(key+'_passageMarkup_v2',$('source').innerHTML)}
-for(const [id,storage] of [['source','_passageMarkup_v2']]){const saved=localStorage.getItem(key+storage);if(saved)$(id).innerHTML=saved}
+const passageMarkupKey=D.id==='cam11-test2-p3'?'_passageMarkup_neuro_paragraphs_v3':'_passageMarkup_v2';
+function saveMarks(){localStorage.setItem(key+passageMarkupKey,$('source').innerHTML)}
+for(const [id,storage] of [['source',passageMarkupKey]]){const saved=localStorage.getItem(key+storage);if(saved)$(id).innerHTML=saved}
 document.addEventListener('click',e=>{const target=e.target.closest('.user-highlight,.note-anchor');if(target){if(target.classList.contains('note-anchor')){alert('Ghi chú: '+(target.dataset.note||''))}else if(confirm('Xóa highlight này?')){target.replaceWith(...target.childNodes);saveMarks()}}});
 $('source').addEventListener('dblclick',e=>{const sel=getSelection();const word=sel?.toString()?.trim();if(!word||!/^[a-zA-Z-]{2,30}$/.test(word))return;const link='https://translate.google.com/?sl=en&tl=vi&text='+encodeURIComponent(word)+'&op=translate';const go=confirm('Tra nghĩa tiếng Việt của "'+word+'" trong Google Translate?');if(go)window.open(link,'_blank','noopener')});
 updateNav();
