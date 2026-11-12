@@ -25,13 +25,30 @@ document.querySelectorAll(".gap").forEach(e=>e.oninput=()=>{state.gaps[e.dataset
 $("gapDone").onclick=()=>{state.gapScore=L.gapAnswers.filter((ans,i)=>same(state.gaps[i]||"",ans)).length;state.gapTotal=L.gapAnswers.length;state.gapChecked=true;state.gapsDone=state.gapScore/state.gapTotal>0.8;if(!state.gapsDone)state.unlocked=false;save();render()};
 if($("toDict"))$("toDict").onclick=()=>{state.stage=1;save();render()};
 }
-function renderDict(){let score=state.dictChecked?pct():null;
-$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Chép đầy đủ các đoạn sau. Chấm theo tỷ lệ từ chính xác (không tính hoa/thường và dấu câu); phải đạt trên 80% trung bình toàn bộ các đoạn để mở bài nghe chính.</p><div class="score">'+(score===null?'Chưa chấm':"Độ chính xác: "+score.toFixed(1)+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: trên 80%")+'</div>'+L.dictations.map((t,i)=>'<div class="card"><h3>Đoạn '+(i+1)+'/'+L.dictations.length+'</h3>'+(L.dictationCues?.[i]?'<button class="secondary" type="button" data-listen="'+i+'">▶ Nghe đoạn '+(i+1)+'</button>':'')+'<textarea data-dict="'+i+'" placeholder="Gõ lại những gì em nghe được...">'+esc(state.dict[i]||"")+'</textarea>'+(state.dictChecked?'<div class="review"><b>Chính xác: '+(lcs(state.dict[i]||"",t)*100).toFixed(1)+'%</b><p>'+esc(t)+'</p></div>':'')+'</div>').join("")+'<button class="primary" id="dictGrade">Chấm lại Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':'');
+function renderDict(){
+const score=state.dictChecked?pct():null;
+const fmt=t=>{t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+":"+String(t%60).padStart(2,"0")};
+const cards=L.dictations.map((t,i)=>{
+ const cue=L.dictationCues?.[i],duration=cue?Math.max(0,cue.end-cue.start):0;
+ return '<article class="dictation-card card" data-dict-card="'+i+'"><div class="dictation-top"><div class="q-label">Dictation '+String(i+1).padStart(2,"0")+'</div><span class="duration">'+(cue?fmt(duration):"Nghe cả bài")+'</span></div><div class="clip-player"><button class="play-clip" data-clip-action="toggle" data-i="'+i+'">▶ Nghe đoạn</button><input type="range" class="clip-progress" data-clip-seek="'+i+'" min="0" max="'+(duration||1)+'" step=".1" value="0" '+(!cue?"disabled":"")+'><span class="clip-time" data-clip-time="'+i+'">0:00 / '+fmt(duration)+'</span></div><div class="clip-controls"><button type="button" class="speed-btn" data-clip-action="back" data-i="'+i+'">↶ 3s</button><button type="button" class="speed-btn" data-clip-action="replay" data-i="'+i+'">↻ Nghe lại</button><button type="button" class="speed-btn" data-clip-action="forward" data-i="'+i+'">3s ↷</button><span class="speed-label">Tốc độ:</span>'+[0.5,0.75,1].map(rate=>'<button type="button" class="speed-btn '+(rate===1?"active":"")+'" data-speed="'+rate+'" data-i="'+i+'">'+rate+'×</button>').join("")+'</div><textarea class="dictation-input" data-dict="'+i+'" placeholder="Chép lại chính xác những gì bạn nghe được...">'+esc(state.dict[i]||"")+'</textarea>'+(state.dictChecked?'<div class="review"><b>Chính xác: '+(lcs(state.dict[i]||"",t)*100).toFixed(1)+'%</b><p>'+esc(t)+'</p></div>':'')+'</article>'
+}).join("");
+$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Nghe từng đoạn, tua và điều chỉnh tốc độ rồi chép chính tả. <b>Phải đạt trên 80%</b> độ chính xác trung bình mới mở Listening chính.</p><div class="score">'+(score===null?"Chưa chấm":"Độ chính xác: "+score.toFixed(1)+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: trên 80%")+'</div>'+cards+'<button class="primary" id="dictGrade">Chấm Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':"");
 document.querySelectorAll("[data-dict]").forEach(e=>e.oninput=()=>{state.dict[e.dataset.dict]=e.value;state.dictChecked=false;save()});
-document.querySelectorAll("[data-listen]").forEach(button=>button.onclick=async()=>{const cue=L.dictationCues?.[+button.dataset.listen];if(!cue||!audio.src)return;segmentEnd=cue.end;audio.currentTime=Math.max(0,cue.start);try{await audio.play()}catch(error){console.warn("Dictation audio cannot be played",error)}});
-
+let activeClip=null;
+const cues=L.dictationCues||[];
+function cueFor(i){return cues[i]||null}
+function listen(i,offset=0){const cue=cueFor(i);if(!cue||!audio.src)return;activeClip=i;segmentEnd=cue.end;audio.currentTime=Math.max(cue.start,Math.min(cue.end-0.1,cue.start+offset));audio.play().catch(error=>console.warn("Cannot play dictation clip",error))}
+document.querySelectorAll("[data-clip-action]").forEach(button=>button.onclick=()=>{const i=+button.dataset.i,act=button.dataset.clipAction,cue=cueFor(i);if(!cue)return;
+if(act==="toggle"){if(activeClip===i&&!audio.paused){audio.pause();return}listen(i)}
+if(act==="replay")listen(i);
+if(act==="back"||act==="forward"){const offset=activeClip===i?audio.currentTime-cue.start:0;listen(i,offset+(act==="back"?-3:3))}});
+document.querySelectorAll("[data-clip-seek]").forEach(e=>e.oninput=()=>{const i=+e.dataset.clipSeek;listen(i,+e.value)});
+document.querySelectorAll("[data-speed]").forEach(button=>button.onclick=()=>{const speed=+button.dataset.speed;audio.playbackRate=speed;document.querySelectorAll('[data-speed][data-i="'+button.dataset.i+'"]').forEach(b=>b.classList.toggle("active",+b.dataset.speed===speed));const mainSpeed=document.getElementById("ilSpeed");if(mainSpeed)mainSpeed.value=String(speed)});
+const onTime=()=>{if(activeClip===null)return;const cue=cueFor(activeClip);if(!cue)return;const elapsed=Math.max(0,Math.min(cue.end-cue.start,audio.currentTime-cue.start));const seek=document.querySelector('[data-clip-seek="'+activeClip+'"]');const time=document.querySelector('[data-clip-time="'+activeClip+'"]');if(seek)seek.value=String(elapsed);if(time)time.textContent=fmt(elapsed)+" / "+fmt(cue.end-cue.start);if(audio.currentTime>=cue.end){audio.pause();activeClip=null}};
+audio.addEventListener("timeupdate",onTime,{signal:clipEvents.signal});
 $("dictGrade").onclick=()=>{state.dictChecked=true;state.dictScore=pct();state.unlocked=state.dictScore>80;save();render()};
-if($("toExam"))$("toExam").onclick=()=>{state.stage=2;state.examStartedAt=state.examStartedAt||Date.now();save();render()};}
+if($("toExam"))$("toExam").onclick=()=>{state.stage=2;state.examStartedAt=state.examStartedAt||Date.now();save();render()};
+}
 function correct(q){const v=state.exam[q.n];if(q.type==="two"){return Array.isArray(v)&&v.length===2&&v.every(x=>q.answers.includes(x))&&new Set(v).size===2}return q.answers.some(a=>words(a).join(" ")===words(v||"").join(" "))}
 
 function formatTime(t){t=Math.max(0,Math.floor(Number(t)||0));return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0")}
@@ -81,6 +98,6 @@ if($("submit"))$("submit").onclick=()=>{const freshScore=L.exam.reduce((n,q)=>q.
 
 // Styles for detailed answer review and evidence replay
 const evidenceStyle=document.createElement("style");evidenceStyle.textContent=`.evidence-details{margin-top:10px;background:#faf8ff;border:1px solid #e1d8ff;border-radius:12px;padding:11px}.evidence-details summary{cursor:pointer;color:#4d2da2;font-size:12px;font-weight:850}.evidence-details p{font-size:12px}.evidence-quote{margin:10px 0;padding:10px 14px;border-left:3px solid #7954d8;background:#fff;color:#29344b;line-height:1.75}.evidence-details small{font-size:11px;color:#69758c}.evidence-play{font-size:12px;padding:8px 12px}.transcript-jump{font-size:12px;padding:8px 12px}.transcript-all{background:white;border:1px solid #d8d9ec;border-radius:13px;padding:15px;margin-top:22px}.transcript-all summary{font-weight:850;color:#4a2d93;cursor:pointer}.transcript-turn{border-bottom:1px solid #e9eaf4;padding:12px 0}.transcript-turn b{font-size:11px;color:#6e4cbe}.transcript-turn p{margin:2px 0;white-space:pre-wrap;color:#29354e}.active-evidence{background:#fff7c7;border-left:4px solid #e49d23;padding-left:8px}`;document.head.appendChild(evidenceStyle);
-function render(){header();if(state.stage===0)renderGaps();else if(state.stage===1)renderDict();else renderExam();$("progress").textContent="Giai đoạn "+(state.stage+1)+"/3"+(state.unlocked?" · Listening đã mở khóa":"");}
+let clipEvents=new AbortController();function render(){clipEvents.abort();clipEvents=new AbortController();header();if(state.stage===0)renderGaps();else if(state.stage===1)renderDict();else renderExam();$("progress").textContent="Giai đoạn "+(state.stage+1)+"/3"+(state.unlocked?" · Listening đã mở khóa":"");}
 render();
 })();
