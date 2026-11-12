@@ -5,7 +5,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const words=s=>String(s??"").normalize("NFKC").toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").trim().split(/\s+/).filter(Boolean);
 const same=(a,b)=>words(a).join(" ")===words(b).join(" ");
 let student={};try{student=JSON.parse(localStorage.getItem("IELTS_PRACTICE_STUDENT")||"{}")}catch{}
-const key="INTENSIVE_STAGE_V1_"+L.id+"_"+String(student.name||"guest").toLowerCase()+"_"+(student.className||"");
+const key="INTENSIVE_STAGE_V2_"+L.id+"_"+String(student.name||"guest").toLowerCase()+"_"+(student.className||"");
 let state={stage:0,gaps:{},gapsDone:false,dict:{},dictChecked:false,dictScore:0,unlocked:false,exam:{},submitted:false};try{state={...state,...JSON.parse(localStorage.getItem(key)||"{}")}}catch{}
 const save=()=>localStorage.setItem(key,JSON.stringify(state));
 $("student").textContent=student.name?student.name+" · "+(student.className||""):"";
