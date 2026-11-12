@@ -157,13 +157,13 @@ body.question-open .question-dock-text{white-space:normal;overflow:visible;font-
 'use strict';
 const C=__WT2_DATA__;
 const KEY='WT2_ORIGINAL_UI_V3_'+C.type+'_'+C.n;
+const VOCAB_QUIZ_VERSION=1;
+const KIND={discussion:['Discussion Essay','Quan điểm 1','Quan điểm 2'],advantages:['Advantages & Disadvantages','Lợi ích','Hạn chế'],problem:['Problem & Solution','Vấn đề','Giải pháp'],twopart:['Two-part Questions','Câu hỏi 1','Câu hỏi 2']}[C.type];
 document.getElementById('currentLessonTitle').textContent=C.title;
 document.getElementById('currentLessonType').textContent=KIND[0];
 document.getElementById('currentLessonQuestion').textContent=C.prompt;
 document.getElementById('currentLessonDock').textContent=C.prompt;
 document.querySelector('.hero .pill').textContent=KIND[0];
-const VOCAB_QUIZ_VERSION=1;
-const KIND={discussion:['Discussion Essay','Quan điểm 1','Quan điểm 2'],advantages:['Advantages & Disadvantages','Lợi ích','Hạn chế'],problem:['Problem & Solution','Vấn đề','Giải pháp'],twopart:['Two-part Questions','Câu hỏi 1','Câu hỏi 2']}[C.type];
 const steps=[
 ['Hiểu đề bài','Phân tích đề '+KIND[0]],
 ['Học từ vựng','Nhóm A: Introduction/Conclusion · B: '+KIND[1]+' · C: '+KIND[2]],
