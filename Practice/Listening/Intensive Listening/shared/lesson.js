@@ -113,7 +113,7 @@ async function reportListening(score,total){
  catch(e){const x=$("sheetStatus");if(x)x.textContent="Không thể gửi kết quả. Vui lòng kiểm tra kết nối và nộp lại bài.";console.warn("Sheet request failed",e)}
 }
 
-function renderExam(){if(!state.unlocked){state.stage=1;render();return}let total=L.exam.reduce((n,q)=>n+(q.type==="two"?2:1),0),score=L.exam.reduce((n,q)=>{
+function renderExam(){if(!state.unlocked||!(state.gapScore/state.gapTotal>0.8)||!(Number(state.dictScore)>80)){state.stage=state.gapsDone?1:0;render();return}let total=L.exam.reduce((n,q)=>n+(q.type==="two"?2:1),0),score=L.exam.reduce((n,q)=>{
  if(q.type==="two"){const choices=Array.isArray(state.exam[q.n])?state.exam[q.n]:[];return n+choices.filter(x=>q.answers.includes(x)).length}
  return n+(correct(q)?1:0)
 },0),done=state.submitted;
@@ -128,6 +128,11 @@ if($("submit"))$("submit").onclick=()=>{const freshScore=L.exam.reduce((n,q)=>q.
 
 // Styles for detailed answer review and evidence replay
 const evidenceStyle=document.createElement("style");evidenceStyle.textContent=`.evidence-details{margin-top:10px;background:#faf8ff;border:1px solid #e1d8ff;border-radius:12px;padding:11px}.evidence-details summary{cursor:pointer;color:#4d2da2;font-size:12px;font-weight:850}.evidence-details p{font-size:12px}.evidence-quote{margin:10px 0;padding:10px 14px;border-left:3px solid #7954d8;background:#fff;color:#29344b;line-height:1.75}.evidence-details small{font-size:11px;color:#69758c}.evidence-play{font-size:12px;padding:8px 12px}.transcript-jump{font-size:12px;padding:8px 12px}.transcript-all{background:white;border:1px solid #d8d9ec;border-radius:13px;padding:15px;margin-top:22px}.transcript-all summary{font-weight:850;color:#4a2d93;cursor:pointer}.transcript-turn{border-bottom:1px solid #e9eaf4;padding:12px 0}.transcript-turn b{font-size:11px;color:#6e4cbe}.transcript-turn p{margin:2px 0;white-space:pre-wrap;color:#29354e}.active-evidence{background:#fff7c7;border-left:4px solid #e49d23;padding-left:8px}`;document.head.appendChild(evidenceStyle);
-let clipEvents=new AbortController();function render(){clipEvents.abort();clipEvents=new AbortController();header();if(state.stage===0)renderGaps();else if(state.stage===1)renderDict();else renderExam();$("progress").textContent="Giai đoạn "+(state.stage+1)+"/3"+(state.unlocked?" · Listening đã mở khóa":"");}
+let clipEvents=new AbortController();function render(){
+clipEvents.abort();clipEvents=new AbortController();
+const gapPassed=!!state.gapsDone&&Number(state.gapTotal)>0&&Number(state.gapScore)/Number(state.gapTotal)>0.8;
+if(!gapPassed){state.unlocked=false;if(state.stage>0)state.stage=0}
+else if(!(Number(state.dictScore)>80)){state.unlocked=false;if(state.stage>1)state.stage=1}
+header();if(state.stage===0)renderGaps();else if(state.stage===1)renderDict();else renderExam();$("progress").textContent="Giai đoạn "+(state.stage+1)+"/3"+(state.unlocked?" · Listening đã mở khóa":"");}
 render();
 })();
