@@ -145,12 +145,26 @@ function questionCard(n,prompt,instruction,groupText){
    const descriptions=questionOptionsText(groupText,n);
    if(Object.keys(descriptions).length>=2)options=Object.keys(descriptions);
    body+='<div class="answer-options '+(Object.keys(descriptions).length?'answer-options-stacked':'answer-options-letters')+'">'+options.map(value=>
-    '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span><strong>'+value+'</strong>'+ (descriptions[value]?' '+esc(descriptions[value]):'') +'</span></label>'
+    '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span><span class="option-letter">'+value+'</span>'+ (descriptions[value]?' '+esc(descriptions[value]):'') +'</span></label>'
    ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
   }else body+=' '+answerInput(n,'Điền từ');
  }
  const typeClass=!selectType&&!options?' fill-inline':hasBlank&&!selectType?' fill-inline':selectType?' choice-card':'';
  return '<div class="question-card'+typeClass+'" id="row'+n+'"><div class="question-row"><span class="qno">'+n+'</span><div class="qcopy">'+body+'</div></div><div class="review" id="review'+n+'" hidden></div></div>';
+}
+function neuroaestheticsSummary(){
+ const choices=[['A','interpretation'],['B','complexity'],['C','emotions'],['D','movements'],['E','skill'],['F','layout'],['G','concern'],['H','images']];
+ const bank='<div class="neuro-word-bank" aria-label="List of Words">'+choices.map(([letter,word])=>
+   '<div class="neuro-bank-item"><span>'+letter+'</span><span>'+word+'</span></div>'
+ ).join('')+'</div>';
+ const blank=n=>'<span class="neuro-inline-gap" id="row'+n+'"><span class="neuro-gap-number">'+n+'</span>'+inlineChoice(n,choices.map(x=>x[0]))+'</span>';
+ const reviews=[31,32,33].map(n=>'<div class="review neuro-review" id="review'+n+'" hidden></div>').join('');
+ return '<div class="neuro-summary"><h4>Art and the Brain</h4>'+
+ '<p>The discipline of neuroaesthetics aims to bring scientific objectivity to the study of art. Neurological studies of the brain, for example, demonstrate the impact which Impressionist paintings have on our '+blank(31)+
+ '. Alex Forsythe of the University of Liverpool believes many artists give their works the precise degree of '+blank(32)+
+ ' which most appeals to the viewer’s brain. She also observes that pleasing works of art often contain certain repeated '+blank(33)+
+ ' which occur frequently in the natural world.</p>'+
+ bank+'<div class="neuro-review-list">'+reviews+'</div></div>';
 }
 function maryDateBank(){
  return '<aside class="ielts-option-bank" aria-label="List of Dates"><div class="option-bank-title">List of Dates</div>'+
@@ -184,9 +198,10 @@ if(groups.length){
   const inlineFirst=new RegExp('(?:^|\\n)[^\\n]{0,160}\\b'+gStart+'[.…·_]{3,}','m').exec(groupText);
   let instruction=(m?groupText.slice(0,m.index):inlineFirst?groupText.slice(0,inlineFirst.index):groupText).trim();
   if(D.id==='cam11-test2-p1'&&gStart===5)instruction=instruction.split(/\bList of Dates\b/i)[0].trim();
+  if(D.id==='cam11-test2-p3'&&gStart===31)instruction='Complete the summary using the list of words, A–H, below.\nWrite the correct letters, A–H, in boxes 31–33 on your answer sheet.';
   if(D.id==='cam11-test2-p1'&&gStart===9)instruction=instruction.replace(/Raising the hull of the Mary Rose: Stages one and two\s*$/i,'').trim();
   cards+='<section class="question-section"><div class="questionsIntro"><div class="instructions"><h3>Questions '+gStart+'–'+gEnd+'</h3><div class="instruction-line">'+instruction.split(/\n+/).map(line=>esc(line.trim())).filter(Boolean).join('<br>')+'</div><div class="rule">'+(/TRUE.*FALSE.*NOT GIVEN/is.test(instruction)?'TRUE / FALSE / NOT GIVEN':/YES.*NO.*NOT GIVEN/is.test(instruction)?'YES / NO / NOT GIVEN':/Choose.*letters?/i.test(instruction)?'MULTIPLE CHOICE':/headings/i.test(instruction)?'MATCHING HEADINGS':/summary/i.test(instruction)?'SUMMARY COMPLETION' : /label the diagram/i.test(instruction)?'DIAGRAM LABEL COMPLETION':'READING QUESTIONS')+'</div></div></div>';
-  if(D.id==='cam11-test2-p1' && gStart===9){cards+=maryDiagram();}else{for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction,groupText);}
+  if(D.id==='cam11-test2-p1' && gStart===9){cards+=maryDiagram();}else if(D.id==='cam11-test2-p3' && gStart===31){cards+=neuroaestheticsSummary();}else{for(let n=Math.max(beginning,gStart);n<=Math.min(ending,gEnd);n++)cards+=questionCard(n,questionPrompt(groupText,n),instruction,groupText);}
   if(D.id==='cam11-test2-p1' && gStart===5)cards+=maryDateBank();
   cards+='</section>';
  }
