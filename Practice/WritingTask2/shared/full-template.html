@@ -187,20 +187,8 @@ const C_WORDS=[['address underlying causes','giải quyết nguyên nhân sâu x
 const VOCAB_GROUPS={A:{title:'Nhóm A – Introduction & Conclusion',rows:A_WORDS},B:{title:'Nhóm B – '+KIND[1],rows:[...(TOPIC_TERMS[C.topic]||TOPIC_TERMS.Society),...B_WORDS]},C:{title:'Nhóm C – '+KIND[2],rows:[...(TOPIC_TERMS[C.topic]||TOPIC_TERMS.Society),...C_WORDS]}};
 const vocab=Object.values(VOCAB_GROUPS).flatMap(g=>g.rows);
 const builders=[['By + V-ing','By + V-ing, S + V.','Phương thức'],['This allows/enables + sb + to V','S + V. This allows/enables + sb + to V.','Tạo điều kiện'],['As a result / Consequently','S + V. As a result, S + V.','Hệ quả'],['Therefore','S + V. Therefore, S + V.','Kết luận lập luận'],['lead to / result in','S + leads to/results in + N/V-ing.','Hệ quả trực tiếp'],['resulting in / leading to','S + V, resulting in + N/V-ing.','Hệ quả dạng V-ing'],['thereby + V-ing','S + V, thereby + V-ing.','Phương thức tạo kết quả'],['which + V','S + V, which + V.','Bổ sung kết quả của mệnh đề'],[', V-ing','S + V, V-ing...','Rút gọn nêu hệ quả'],['not only ... but also ...','S + not only + V ... but also + V ...','Hai ý song song'],['Although / Even though','Although + S + V, S + V.','Nhượng bộ'],['Despite / In spite of','Despite + N/V-ing, S + V.','Nhượng bộ bằng danh từ']];
-const quizzes=[
- {type:'mc',q:'[A] translation software có nghĩa là gì?',opts:['phần mềm dịch thuật','công nghệ giáo dục','tài liệu gốc'],a:0,why:'translation software = phần mềm dịch thuật.'},
- {type:'mc',q:'[A] remain beneficial = ?',opts:['trở nên phổ biến','vẫn mang lại lợi ích','bị thay thế'],a:1,why:'remain beneficial = vẫn có lợi.'},
- {type:'fill',q:'[A] widely ________ (có sẵn rộng rãi)',a:'available',why:'widely available.'},
- {type:'fill',q:'[B] gain ________ to authentic materials',a:'access',why:'gain access to = tiếp cận.'},
- {type:'mc',q:'[B] develop cultural awareness nghĩa là gì?',opts:['đạt điểm thi cao','phát triển nhận thức văn hóa','làm việc ở nước ngoài'],a:1,why:'develop cultural awareness = phát triển nhận thức văn hóa.'},
- {type:'fill',q:'[B] broaden your ________ (mở rộng tầm nhìn)',a:'horizons',why:'broaden horizons.'},
- {type:'mc',q:'[B] communicate with native speakers = ?',opts:['giao tiếp với người bản xứ','dịch tài liệu','học ngữ pháp'],a:0,why:'communicate with native speakers.'},
- {type:'fill',q:'[B] explore traditions and ________',a:'customs',why:'explore traditions and customs.'},
- {type:'fill',q:'[C] qualify ________ international positions',a:'for',why:'qualify for a position.'},
- {type:'mc',q:'[C] secure better-paid jobs nghĩa là gì?',opts:['xin việc không lương','có được công việc lương cao hơn','thăng chức nhanh'],a:1,why:'secure better-paid jobs.'},
- {type:'fill',q:'[C] ________ employability (nâng cao khả năng được tuyển dụng)',a:'enhance',why:'enhance employability.'},
- {type:'mc',q:'[C] improve career prospects = ?',opts:['cải thiện triển vọng nghề nghiệp','mở rộng vốn từ','giảm cạnh tranh'],a:0,why:'improve career prospects.'}
-];
+const quizPairs=[...VOCAB_GROUPS.A.rows.slice(0,4).map(x=>['A',x]),...VOCAB_GROUPS.B.rows.slice(0,4).map(x=>['B',x]),...VOCAB_GROUPS.C.rows.slice(0,4).map(x=>['C',x])];
+const quizzes=quizPairs.map(([g,p],i)=>{const other=quizPairs.filter((x,j)=>j!==i).slice(0,2).map(x=>x[1][1]);const a=i%3;const opts=a===0?[p[1],...other]:a===1?[other[0],p[1],other[1]]:[...other,p[1]];return {type:'mc',q:'['+g+'] '+p[0]+' nghĩa là gì?',opts,a,why:p[0]+' = '+p[1]};});
 const defaults={step:0,stage:{},analysis:{stance:'disagree',pro:'',con:''},quiz:{},quizPassed:false,logic:{},translation:{},translationGrades:{},translationAttempts:{},writing:{},feedback:{},completeDraft:''};
 let state;try{state=Object.assign({},defaults,JSON.parse(localStorage.getItem(KEY)||'null'));}catch(e){state=structuredClone(defaults)};for(const k of ['stage','analysis','quiz','logic','translation','translationGrades','translationAttempts','writing','feedback'])state[k]??={};
 if(state.vocabQuizVersion!==VOCAB_QUIZ_VERSION){state.quiz={};state.quizPassed=false;state.vocabQuizVersion=VOCAB_QUIZ_VERSION;}
