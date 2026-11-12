@@ -46,14 +46,34 @@ function lcs(a,b){const x=words(a),y=words(b);let prev=Array(y.length+1).fill(0)
 function pct(){return 100*L.dictations.reduce((s,t,i)=>s+lcs(state.dict[i]||"",t),0)/L.dictations.length}
 function header(){const allowed=[true,!!state.gapsDone&&state.gapScore/state.gapTotal>0.8,!!state.unlocked];$("steps").innerHTML=["1 · Nghe điền từ (>80%)","2 · Dictation (>80%)","3 · Bài nghe chính"].map((x,i)=>'<button '+(!allowed[i]?'disabled':'')+' data-stage="'+i+'" class="'+(state.stage===i?'active':'')+'">'+x+(!allowed[i]?' 🔒':'')+'</button>').join("");document.querySelectorAll("[data-stage]").forEach(e=>e.onclick=()=>{state.stage=+e.dataset.stage;save();render()})}
 function renderGaps(){
-let n=0;
-const body=L.turns.map(turn=>'<div class="turn"><b>'+esc(turn.speaker)+'</b><div>'+esc(turn.text).replace(/\[\[([^\]]+)\]\]/g,()=>{const i=n++;const ok=same(state.gaps[i]||"",L.gapAnswers[i]);const attempted=!!state.gapChecked;return '<span class="gap-field"><input class="gap '+(attempted?(ok?"correct":"wrong"):"")+'" data-i="'+i+'" value="'+esc(state.gaps[i]||"")+'" placeholder="Điền từ" aria-label="Chỗ trống '+(i+1)+'">'+(attempted?'<small class="'+(ok?"right":"wrong")+'">'+(ok?"✓ Đúng":"✕ Sai · "+esc(L.gapAnswers[i]))+'</small>':"")+'</span>'})+'</div></div>').join("");
-const count=Number(state.gapScore)||0,total=L.gapAnswers.length,percent=total?count/total*100:0;
-const passed=state.gapsDone&&percent>80;
-$("panel").innerHTML='<h2>Giai đoạn 1 · Nghe điền từ</h2><p>Điền đáp án trực tiếp trong transcript. Sau khi chấm sẽ biết từng câu đúng/sai. Cần đạt <b>trên 80%</b> để vào Dictation.</p><div class="vocab-tip">🔎 <b>Tra từ tiếng Việt:</b> bôi đen hoặc nháy đúp vào từ/cụm từ trong transcript để xem nghĩa theo ngữ cảnh.</div>'+(state.gapChecked?'<div class="score '+(passed?"right":"wrong")+'">Kết quả: '+count+'/'+total+' · '+percent.toFixed(1)+'% · '+(passed?"Đạt, đã mở Dictation":"Chưa đạt 80%, hãy sửa các ô sai rồi chấm lại")+'</div>':'')+body+'<button class="primary" id="gapDone">Chấm lại Gap-fill</button>'+(passed?'<button class="primary" id="toDict">Tiếp tục Dictation →</button>':"");
-document.querySelectorAll(".gap").forEach(e=>e.oninput=()=>{state.gaps[e.dataset.i]=e.value;state.gapChecked=false;state.gapsDone=false;state.unlocked=false;state.dictChecked=false;save();});
-$("gapDone").onclick=()=>{state.gapScore=L.gapAnswers.filter((ans,i)=>same(state.gaps[i]||"",ans)).length;state.gapTotal=L.gapAnswers.length;state.gapChecked=true;state.gapsDone=state.gapScore/state.gapTotal>0.8;if(!state.gapsDone)state.unlocked=false;save();render()};
-if($("toDict"))$("toDict").onclick=()=>{state.stage=1;save();render()};
+ const reviewed=state.gapChecked===true;
+ let n=0;
+ const body=L.turns.map(turn=>'<div class="turn"><b>'+esc(turn.speaker)+'</b><div>'+esc(turn.text).replace(/\[\[([^\]]+)\]\]/g,()=>{
+  const i=n++,correct=reviewed&&same(state.gaps[i]||"",L.gapAnswers[i]);
+  return '<span class="gap-field"><input class="gap '+(reviewed?(correct?"correct":"wrong"):"")+'" data-i="'+i+'" value="'+esc(state.gaps[i]||"")+'" placeholder="Điền từ" aria-label="Chỗ trống '+(i+1)+'" autocomplete="off" spellcheck="false" '+(reviewed?'readonly aria-readonly="true"':'')+'>'+(reviewed?'<small class="'+(correct?"right":"wrong")+'">'+(correct?"✓ Đúng":"✕ Sai · "+esc(L.gapAnswers[i]))+'</small>':"")+'</span>';
+ })+'</div></div>').join("");
+ const count=Number(state.gapScore)||0,total=L.gapAnswers.length,percent=total?count/total*100:0;
+ const passed=reviewed&&count/total>0.8;
+ $("panel").innerHTML='<h2>Giai đoạn 1 · Nghe điền từ</h2><p>Nghe và điền vào transcript. Bài chỉ được chấm sau khi nộp; cần đạt <b>trên 80%</b> để mở Dictation.</p><div class="vocab-tip">🔎 <b>Tra từ tiếng Việt:</b> bôi đen hoặc nháy đúp vào từ/cụm từ trong transcript để xem nghĩa theo ngữ cảnh.</div>'+(reviewed?'<div class="score '+(passed?"right":"wrong")+'">Kết quả: '+count+'/'+total+' · '+percent.toFixed(1)+'% · '+(passed?"Đã đạt, có thể tiếp tục Dictation.":"Chưa đạt yêu cầu. Nhấn Làm lại để bắt đầu với các ô trống mới.")+'</div><p class="help">Đây là kết quả của lượt vừa nộp. Ô trả lời được khóa để không sửa đáp án sau khi xem chữa bài.</p>':'')+body+'<div class="toolbar">'+(reviewed?'<button type="button" class="secondary" id="retryGap">↻ Làm lại Gap-fill (xóa toàn bộ câu trả lời)</button>': '<button type="button" class="primary" id="gapDone">Nộp Gap-fill & xem kết quả</button>')+(passed?'<button type="button" class="primary" id="toDict">Tiếp tục Dictation →</button>':"")+'</div>';
+ if(!reviewed){
+  document.querySelectorAll(".gap").forEach(e=>e.oninput=()=>{state.gaps[e.dataset.i]=e.value;save()});
+  $("gapDone").onclick=()=>{
+   state.gapScore=L.gapAnswers.filter((ans,i)=>same(state.gaps[i]||"",ans)).length;
+   state.gapTotal=L.gapAnswers.length;state.gapChecked=true;state.gapsDone=state.gapScore/state.gapTotal>0.8;
+   if(!state.gapsDone)state.unlocked=false;
+   save();render();
+  };
+ }else{
+  $("retryGap").onclick=()=>{
+   if(passed&&!confirm("Làm lại sẽ xóa kết quả Gap-fill và tiến độ Dictation/Listening hiện tại. Tiếp tục?"))return;
+   state.stage=0;state.gaps={};state.gapChecked=false;state.gapsDone=false;state.gapScore=0;state.gapTotal=0;
+   state.dict={};state.dictChecked=false;state.dictScore=0;state.unlocked=false;
+   state.exam={};state.submitted=false;state.reportedAt=null;state.examStartedAt=null;
+   save();render();
+   const first=document.querySelector(".gap");if(first)first.focus({preventScroll:true});
+  };
+ }
+ if($("toDict"))$("toDict").onclick=()=>{state.stage=1;save();render()};
 }
 function renderDict(){
 const score=state.dictChecked?pct():null;
