@@ -10195,7 +10195,7 @@ button:disabled{
 
     </article>
 
-  </section>
+  <article class="game-card"><div class="game-icon">🏰</div><h3>Lexicon Guardians</h3><p>Chiến thuật xây tháp: nhớ đúng từ để triệu hồi phép thuật, phòng thủ 5 đợt Quái Quên Lãng.</p><button class="game-play" data-game-button type="button" onclick="startLexiconGuardians()">Chơi →</button></article></section>
 
 
 
@@ -20296,5 +20296,16 @@ init();
 <script src="./speaking-study.js?v=20261109-game-level-v2"></script>
 <script src="./audio/audio-engine.js?v=20260918-audio-v4"></script>
 <script src="./process/process-step-media.js?v=20261005-step-1"></script>
+<script>
+function startLexiconGuardians(){
+  const collection=typeof currentCollection!=="undefined"?currentCollection:[];
+  if(!Array.isArray(collection)||collection.length===0){alert("Hãy chọn một nhóm từ trước khi bắt đầu Lexicon Guardians.");return}
+  try{
+    sessionStorage.setItem("LEXICON_GUARDIANS_WORDS",JSON.stringify(collection.map(item=>({word:item.word,meaning:item.meaning,example:item.example,collocation:item.collocation}))));
+    sessionStorage.setItem("LEXICON_GUARDIANS_TOPIC",String(typeof selectedSkill!=="undefined"?selectedSkill:"Vocabulary"));
+  }catch(err){console.warn("Không lưu được nhóm từ",err);alert("Không thể tải nhóm từ, vui lòng kiểm tra trình duyệt.");return}
+  window.location.href="./lexicon-guardians/";
+}
+</script>
 </body>
 </html>
