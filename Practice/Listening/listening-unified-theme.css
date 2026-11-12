@@ -80,3 +80,25 @@ body.listening-unified .audio-controls .seek{flex:1 1 180px!important}
 body.listening-unified .paper-inner{padding:12px!important}
 body.listening-unified .question-block{padding:12px!important}
 }
+
+/* Shared question-left / audio-right arrangement, modeled on Thorndyke’s Builders. */
+body.listening-unified .listening-unified-shell{display:grid;grid-template-columns:minmax(0,1fr) 310px;align-items:start;gap:15px;margin:15px 0}
+body.listening-unified .listening-unified-work{min-width:0}
+body.listening-unified .listening-unified-paper{margin:0!important;min-width:0}
+body.listening-unified .listening-unified-aside{min-width:0;position:sticky;top:78px;align-self:start}
+body.listening-unified .listening-unified-audio{margin:0!important;padding:16px!important;border-radius:15px!important}
+body.listening-unified .listening-unified-audio .audio-head{display:flex!important;flex-wrap:wrap!important;gap:9px!important}
+body.listening-unified .listening-unified-audio .audio-title{min-width:0!important}
+body.listening-unified .listening-unified-audio .audio-controls{display:flex!important;gap:7px!important;flex-wrap:wrap!important;align-items:center!important}
+body.listening-unified .listening-unified-audio .audio-controls>.seek,body.listening-unified .listening-unified-audio .audio-controls>#seek{flex:1 1 100%!important;width:100%!important;order:5!important;margin:4px 0!important}
+body.listening-unified .listening-unified-audio .audio-controls>.audio-btn,body.listening-unified .listening-unified-audio .audio-controls>#playBtn{flex:1 1 29%!important;width:auto!important;max-width:none!important;margin:0!important}
+body.listening-unified .listening-unified-audio .audio-controls>.speed-wrap,body.listening-unified .listening-unified-audio .audio-controls>.volume-wrap,body.listening-unified .listening-unified-audio .audio-controls>.speed,body.listening-unified .listening-unified-audio .audio-controls>.volume{flex:1 1 100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:9px!important;margin:0!important;min-width:0!important}
+body.listening-unified .listening-unified-audio .audio-controls input.volume,body.listening-unified .listening-unified-audio .audio-controls #volume{width:120px!important;max-width:60%!important}
+body.listening-unified .listening-unified-audio .audio-controls #speedSelect,body.listening-unified .listening-unified-audio .audio-controls #speed{max-width:130px!important}
+body.listening-unified .listening-unified-audio .audio-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+body.listening-unified .listening-unified-audio .audio-tabs button{padding:8px;border-radius:8px;border:1px solid #dcd4ed;color:#281260;background:#fff;font-weight:800;font-size:11px}
+body.listening-unified .listening-unified-audio .audio-tabs button.active{background:#eee8ff;border-color:#987cdb}
+body.listening-unified .listening-unified-work .notes-panel{margin:0 0 12px!important}
+body.listening-unified .listening-unified-audio .audio-note,body.listening-unified .listening-unified-audio .practice-note{font-size:10.5px!important}
+body.listening-unified .listening-unified-paper .paper-inner{padding:17px!important}
+@media(max-width:920px){body.listening-unified .listening-unified-shell{grid-template-columns:minmax(0,1fr)}body.listening-unified .listening-unified-aside{position:static;order:-1}body.listening-unified .listening-unified-audio .audio-controls>.seek,body.listening-unified .listening-unified-audio .audio-controls>#seek{order:0!important}body.listening-unified .listening-unified-audio .audio-controls>.audio-btn{flex:0 0 auto!important}}
