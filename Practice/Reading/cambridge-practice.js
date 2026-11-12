@@ -71,14 +71,14 @@ function questionPrompt(text,num){
  let at=lines.findIndex(line=>re.test(line));
  if(at>=0){
   let line=lines[at].replace(re,'$1').trim(),follow=at+1;
-  while(follow<lines.length && line.length<240 && lines[follow].trim() &&
+  while(follow<lines.length && line.length<900 && lines[follow].trim() &&
     !/^\s*\d{1,2}(?:[\s.…_]|$)/.test(lines[follow]) &&
     !/^\s*[A-H]\s{1,}/.test(lines[follow]) &&
     !/^Questions?\s+\d+/i.test(lines[follow]) &&
     !/^List of (?:Dates|Headings|People|Researchers|Words|Options)/i.test(lines[follow])){
     line+=' '+lines[follow].trim();follow++;
   }
-  return line.replace(/\s+/g,' ').slice(0,360).trim();
+  return line.replace(/\s+/g,' ').slice(0,1000).trim();
  }
  // Some Cambridge notes/summaries embed the number immediately before a blank.
  const inline=new RegExp('(?:^|\\s)'+num+'\\s*[.…·_]{2,}','m');
@@ -88,7 +88,7 @@ function questionPrompt(text,num){
    const to=normalized.indexOf('\n',found.index+found[0].length);
    return normalized.slice(from<0?0:from+1,to<0?undefined:to).trim()
      .replace(new RegExp('(^|\\s)'+num+'\\s*(?=[.…·_]{2,})'),'$1')
-     .replace(/\s+/g,' ').slice(0,360);
+     .replace(/\s+/g,' ').slice(0,1000);
  }
  return '';
 }
@@ -132,23 +132,33 @@ function questionCard(n,prompt,instruction,groupText){
  }
  if(D.id==='cam11-test2-p1'&&n===8)prompt=prompt.split(/\bList of Dates\b/i)[0].trim();
  const escapedPrompt=esc(prompt||'Xem câu hỏi trong phần hướng dẫn của nhóm.');
- const hasBlank=/[.…·_]{3,}/.test(prompt);
+ // Cambridge transcripts use several gap styles: repeated dots, ellipsis characters,
+ // underscores, or a mixture of dots and ellipses.
+ const gapPattern=/(?:[.…·_]{2,}(?:\\s*[.…·_]{2,})*|_{2,})/;
+ const hasBlank=gapPattern.test(prompt);
+ const isSentenceEnding=/correct ending|complete each sentence with the correct (?:letter|ending)|match each|list of (?:headings|words)|correct heading/i.test(instruction);
  let body='';
- if(hasBlank && !selectType){
-  // Place a text answer or a word-bank choice directly inside the gap.
-  body=escapedPrompt.replace(/[.…·_]{3,}/,()=>options?inlineChoice(n,options):answerInput(n));
+ if(selectType){
+  body=escapedPrompt+optionMarkup(n,selectType);
+ }else if(hasBlank){
+  // Replace the printed gap with the real editable field in the SAME text flow.
+  body=escapedPrompt.replace(gapPattern,()=>options?inlineChoice(n,options):answerInput(n));
+ }else if(options && isSentenceEnding){
+  // Sentence endings have no printed underscores; put the choice immediately
+  // after the sentence stem, not on a separate answer row.
+  body=escapedPrompt+' '+inlineChoice(n,options);
+ }else if(options){
+  const descriptions=questionOptionsText(groupText,n);
+  if(Object.keys(descriptions).length>=2)options=Object.keys(descriptions);
+  body=escapedPrompt+'<div class="answer-options '+(Object.keys(descriptions).length?'answer-options-stacked':'answer-options-letters')+'">'+options.map(value=>
+   '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span><span class="option-letter">'+value+'</span>'+ (descriptions[value]?' '+esc(descriptions[value]):'') +'</span></label>'
+  ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
  }else{
-  body=escapedPrompt;
-  if(selectType)body+=optionMarkup(n,selectType);
-  else if(options){
-   const descriptions=questionOptionsText(groupText,n);
-   if(Object.keys(descriptions).length>=2)options=Object.keys(descriptions);
-   body+='<div class="answer-options '+(Object.keys(descriptions).length?'answer-options-stacked':'answer-options-letters')+'">'+options.map(value=>
-    '<label class="answer-option"><input type="radio" name="answer'+n+'" data-n="'+n+'" value="'+value+'"'+(norm(answers[n])===norm(value)?' checked':'')+'><span><span class="option-letter">'+value+'</span>'+ (descriptions[value]?' '+esc(descriptions[value]):'') +'</span></label>'
-   ).join('')+'</div><input type="hidden" id="q'+n+'" value="'+esc(answers[n]||'')+'">';
-  }else body+=' '+answerInput(n,'Điền từ');
+  // Fallback for source questions without a recognizable dotted blank:
+  // never create a detached answer row below the sentence.
+  body=escapedPrompt+' '+answerInput(n,'Điền từ');
  }
- const typeClass=!selectType&&!options?' fill-inline':hasBlank&&!selectType?' fill-inline':selectType?' choice-card':'';
+ const typeClass=!selectType&&(!options||isSentenceEnding||hasBlank)?' fill-inline':selectType?' choice-card':'';
  return '<div class="question-card'+typeClass+'" id="row'+n+'"><div class="question-row"><span class="qno">'+n+'</span><div class="qcopy">'+body+'</div></div><div class="review" id="review'+n+'" hidden></div></div>';
 }
 function neuroaestheticsSummary(){
