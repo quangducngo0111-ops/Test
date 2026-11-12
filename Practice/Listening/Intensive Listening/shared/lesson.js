@@ -76,7 +76,8 @@ function renderGaps(){
  if($("toDict"))$("toDict").onclick=()=>{state.stage=1;save();render()};
 }
 function renderDict(){
-const score=state.dictChecked?pct():null;
+const pending=Object.values(state.dictRetrying||{}).some(Boolean);
+const score=state.dictChecked&&!pending?pct():null;
 const fmt=t=>{t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+":"+String(t%60).padStart(2,"0")};
 state.clipOverrides=state.clipOverrides||{};
 state.dictRetrying=state.dictRetrying||{};
@@ -95,11 +96,11 @@ const cards=L.dictations.map((t,i)=>{
  (checked?'<div class="review"><b>Chính xác: '+cardScore+'%</b><p>'+esc(t)+'</p></div>':'')+
  '<div class="dictation-retry-row"><button type="button" class="secondary dict-retry" data-dict-retry="'+i+'">↻ Làm lại câu '+(i+1)+'</button><span class="dictation-attempt-state">'+(state.dictRetrying[i]?"Đã xóa câu này, các câu khác được giữ nguyên.":checked?"Đã chấm":"Đang luyện tập")+'</span></div></article>';
 }).join("");
-$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Nghe từng đoạn, tua và điều chỉnh tốc độ rồi chép chính tả. <b>Phải đạt trên 80%</b> độ chính xác trung bình mới mở Listening chính. Nhấn <b>Làm lại câu</b> để xóa riêng câu đó, không mất bài đã làm.</p><div class="score">'+(score===null?"Chưa chấm":"Độ chính xác: "+score.toFixed(1)+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: trên 80%")+'</div>'+cards+'<button class="primary" id="dictGrade">Chấm Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':"");
-document.querySelectorAll("[data-dict]").forEach(el=>el.oninput=()=>{state.dict[el.dataset.dict]=el.value;state.dictRetrying[el.dataset.dict]=true;state.dictChecked=false;state.unlocked=false;save()});
+$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Nghe từng đoạn, tua và điều chỉnh tốc độ rồi chép chính tả. <b>Phải đạt trên 80%</b> độ chính xác trung bình mới mở Listening chính. Nhấn <b>Làm lại câu</b> để xóa riêng câu đó, không mất bài đã làm.</p><div class="score">'+(pending?"Có câu đang làm lại · Chấm Dictation để cập nhật điểm":score===null?"Chưa chấm":"Độ chính xác: "+score.toFixed(1)+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: trên 80%")+'</div>'+cards+'<button class="primary" id="dictGrade">Chấm Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':"");
+document.querySelectorAll("[data-dict]").forEach(el=>el.oninput=()=>{state.dict[el.dataset.dict]=el.value;state.dictRetrying[el.dataset.dict]=true;state.unlocked=false;state.dictScore=0;save()});
 document.querySelectorAll("[data-dict-retry]").forEach(btn=>btn.onclick=()=>{
  const i=Number(btn.dataset.dictRetry);
- state.dict[i]="";state.dictRetrying[i]=true;state.dictChecked=false;state.dictScore=0;state.unlocked=false;save();render();
+ state.dict[i]="";state.dictRetrying[i]=true;state.dictScore=0;state.unlocked=false;save();render();
  const input=document.querySelector('[data-dict="'+i+'"]');if(input){input.scrollIntoView({block:"center"});input.focus({preventScroll:true})}
 });
 let activeClip=null;
