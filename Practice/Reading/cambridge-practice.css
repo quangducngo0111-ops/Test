@@ -1429,3 +1429,31 @@ html,body{min-height:100%;height:auto}
 .mary-diagram .diagram-field input:focus{outline:2px solid #8665d5;outline-offset:1px}
 .mary-diagram .diagram-field input::placeholder{font-size:11px!important;color:#9195a2!important}
 @media(max-width:620px){.mary-diagram .diagram-answer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mary-diagram .diagram-field{gap:5px;padding:6px}.mary-diagram .diagram-number{flex-basis:23px;height:23px;font-size:11px}.mary-diagram .diagram-field input{font-size:13px!important;padding:5px!important}}
+
+
+/* Reading: neutral exam-like answer options instead of bold purple option text. */
+.question-card .answer-options .answer-option,
+.question-card .answer-options-stacked .answer-option,
+.question-card .answer-option>span,
+.question-card .answer-option>span .option-letter{font-weight:400!important;color:#303444!important}
+.question-card .answer-option .option-letter{display:inline-block;min-width:19px;font-weight:600!important;color:#29213d!important}
+.question-card .answer-option:has(input:checked)>span{font-weight:400!important}
+.question-card .answer-options-stacked .answer-option{background:#fff!important}
+.question-card .answer-options-stacked .answer-option:has(input:checked){background:#f3efff!important;border-color:#9578cd!important}
+/* Passage paragraphs: preserve each meaningful paragraph with clear breathing space. */
+.passageSource .passage-paragraph{display:block!important;margin:0 0 19px!important;padding:0!important;text-align:left!important;line-height:1.8!important;white-space:normal!important}
+.passageSource .passage-paragraph:last-child{margin-bottom:5px!important}
+/* Cambridge 11 / Test 2 / Passage 3: original summary layout. */
+.neuro-summary{padding:15px 18px;border:1px solid #e2ddec;border-radius:12px;background:#fff;margin:10px 0 16px;color:#292838}
+.neuro-summary h4{font-size:16px!important;line-height:1.35!important;color:#261554!important;text-align:center!important;margin:0 0 13px!important;font-weight:800!important}
+.neuro-summary>p{font-size:12.5px!important;line-height:2.7!important;margin:0 0 14px!important;color:#292838!important;white-space:normal!important}
+.neuro-inline-gap{display:inline-flex!important;align-items:center!important;gap:3px!important;vertical-align:middle!important;white-space:nowrap!important;margin:0 3px!important}
+.neuro-gap-number{font-size:11px!important;font-weight:700!important;color:#3b0e90!important}
+.neuro-inline-gap .inline-choice{display:inline-block!important;min-width:88px!important;width:88px!important;height:32px!important;margin:0!important;padding:4px 7px!important;font-size:12px!important;text-align:left!important;vertical-align:middle!important;border-radius:7px!important;background:#f8f5ff!important}
+.neuro-word-bank{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 16px;margin:16px auto 5px;padding:13px 17px;border:1px solid #e7e0f2;border-radius:10px;background:#faf8ff;max-width:550px}
+.neuro-bank-item{display:flex;gap:10px;align-items:baseline;font-size:12px;line-height:1.5;color:#343344;font-weight:400}
+.neuro-bank-item span:first-child{font-weight:650;color:#372264;min-width:15px}
+.neuro-review-list{display:grid;gap:7px;margin-top:12px}
+.neuro-review-list .review{margin:0!important;padding:9px 12px;border:1px solid #e5dff0;border-radius:9px;background:#fbfaff;font-size:11px}
+.neuro-review-list .review[hidden]{display:none!important}
+@media(max-width:650px){.neuro-summary{padding:11px 12px}.neuro-summary>p{font-size:12px!important;line-height:2.9!important}.neuro-word-bank{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 10px;padding:10px}.neuro-inline-gap .inline-choice{width:78px!important;min-width:78px!important}}
