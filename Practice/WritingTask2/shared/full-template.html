@@ -158,47 +158,33 @@ body.question-open .question-dock-text{white-space:normal;overflow:visible;font-
 const C=__WT2_DATA__;
 const KEY='WT2_OPINION_MATCH_'+C.type+'_'+C.n;
 const VOCAB_QUIZ_VERSION=1;
+const KIND={discussion:['Discussion Essay','Quan điểm 1','Quan điểm 2'],advantages:['Advantages & Disadvantages','Lợi ích','Hạn chế'],problem:['Problem & Solution','Vấn đề','Giải pháp'],twopart:['Two-part Questions','Câu hỏi 1','Câu hỏi 2']}[C.type];
 const steps=[
- ['Hiểu đề bài','Nhận diện Opinion Essay và lập trường completely agree'],
- ['Học từ vựng','Nhóm A: mở/kết bài · B: kiến thức · C: nghề nghiệp'],
- ['Kiểm tra từ vựng','Nối nghĩa, collocations và điền từ'],
- ['Logic chain','Tự tạo chuỗi nguyên nhân → hành động → kết quả cho hai luận điểm'],
- ['Dịch Việt – Anh','Chuyển các mắt xích tự chọn thành câu lập luận'],
- ['Introduction','Paraphrase đề + nêu lập trường trong hai câu'],
- ['Body 1','Broaden knowledge · Ý chính → logic → ví dụ → link back'],
- ['Body 2','Career prospects · Ý chính → logic → ví dụ → link back'],
- ['Conclusion','Nhắc lại quan điểm và cả hai lợi ích'],
- ['Bài hoàn chỉnh','Ghép bốn đoạn và rà soát trước khi xuất bài']
+['Hiểu đề bài','Phân tích đề '+KIND[0]],
+['Học từ vựng','Nhóm A: Introduction/Conclusion · B: '+KIND[1]+' · C: '+KIND[2]],
+['Kiểm tra từ vựng','12 câu nghĩa từ và collocations'],
+['Logic chain','Kéo thả cụm từ → hành động → kết quả'],
+['Dịch Việt – Anh','Dịch các ý từ chuỗi logic sang tiếng Anh'],
+['Introduction','Paraphrase đề và nêu thesis'],
+['Body 1',KIND[1]+' · logic → ví dụ → link back'],
+['Body 2',KIND[2]+' · logic → ví dụ → link back'],
+['Conclusion','Trả lời lại hai ý chính của đề'],
+['Bài hoàn chỉnh','Ghép 4 đoạn, kiểm tra và xuất bài']
 ];
-const VOCAB_GROUPS={
- A:{title:'Nhóm A – Introduction & Conclusion',rows:[
-  ['translation software','phần mềm dịch thuật'],
-  ['widely available','có sẵn rộng rãi'],
-  ['remain beneficial','vẫn mang lại lợi ích'],
-  ['digital tools','công cụ kỹ thuật số'],
-  ['convenient','tiện lợi'],
-  ['advantageous','có lợi']
- ]},
- B:{title:'Nhóm B – Body 1: Broaden Knowledge',rows:[
-  ['learn a foreign language','học ngoại ngữ'],
-  ['gain access to authentic materials','tiếp cận tài liệu gốc'],
-  ['communicate with native speakers','giao tiếp với người bản xứ'],
-  ['have a deeper understanding of different cultures','hiểu sâu hơn về các nền văn hóa khác nhau'],
-  ['explore traditions and customs','khám phá truyền thống và phong tục'],
-  ['develop cultural awareness','phát triển nhận thức văn hóa'],
-  ['broaden knowledge','mở rộng kiến thức'],
-  ['broaden horizons','mở rộng tầm nhìn']
- ]},
- C:{title:'Nhóm C – Body 2: Improve Career Prospects',rows:[
-  ['qualify for international positions','đủ điều kiện ứng tuyển vị trí quốc tế'],
-  ['gain access to employment opportunities','có thêm cơ hội việc làm'],
-  ['secure better-paid jobs','có được công việc lương cao hơn'],
-  ['work in multinational companies','làm việc tại công ty đa quốc gia'],
-  ['communicate with international clients','giao tiếp với khách hàng quốc tế'],
-  ['enhance employability','nâng cao khả năng được tuyển dụng'],
-  ['improve career prospects','cải thiện triển vọng nghề nghiệp']
- ]}
+const TOPIC_TERMS={
+Education:[['academic knowledge','kiến thức học thuật'],['practical skills','kỹ năng thực hành']],
+Technology:[['digital tools','công cụ số'],['online platforms','nền tảng trực tuyến']],
+Transport:[['public transport','giao thông công cộng'],['traffic congestion','ùn tắc giao thông']],
+Environment:[['natural resources','tài nguyên thiên nhiên'],['environmental protection','bảo vệ môi trường']],
+Health:[['healthcare services','dịch vụ y tế'],['healthy lifestyles','lối sống lành mạnh']],
+Work:[['job opportunities','cơ hội việc làm'],['working conditions','điều kiện làm việc']],
+Society:[['community support','hỗ trợ cộng đồng'],['social relationships','quan hệ xã hội']],
+Culture:[['cultural heritage','di sản văn hóa'],['local traditions','truyền thống địa phương']]
 };
+const A_WORDS=[['an ongoing debate','một cuộc tranh luận đang diễn ra'],['a growing concern','mối lo ngại ngày càng tăng'],['a balanced approach','một cách tiếp cận cân bằng'],['different viewpoints','những quan điểm khác nhau'],['long-term consequences','hệ quả dài hạn'],['from my perspective','theo quan điểm của tôi']];
+const B_WORDS=[['play an important role in','đóng vai trò quan trọng trong'],['have an impact on','có tác động đến'],['provide opportunities for','tạo cơ hội cho'],['take into account','cân nhắc / tính đến'],['in practical terms','về mặt thực tiễn'],['as a result','kết quả là']];
+const C_WORDS=[['address underlying causes','giải quyết nguyên nhân sâu xa'],['reduce the risk of','giảm nguy cơ'],['contribute to','góp phần vào'],['lead to improvements','dẫn đến sự cải thiện'],['in the long run','về lâu dài'],['ensure that','đảm bảo rằng']];
+const VOCAB_GROUPS={A:{title:'Nhóm A – Introduction & Conclusion',rows:A_WORDS},B:{title:'Nhóm B – '+KIND[1],rows:[...(TOPIC_TERMS[C.topic]||TOPIC_TERMS.Society),...B_WORDS]},C:{title:'Nhóm C – '+KIND[2],rows:[...(TOPIC_TERMS[C.topic]||TOPIC_TERMS.Society),...C_WORDS]}};
 const vocab=Object.values(VOCAB_GROUPS).flatMap(g=>g.rows);
 const builders=[['By + V-ing','By + V-ing, S + V.','Phương thức'],['This allows/enables + sb + to V','S + V. This allows/enables + sb + to V.','Tạo điều kiện'],['As a result / Consequently','S + V. As a result, S + V.','Hệ quả'],['Therefore','S + V. Therefore, S + V.','Kết luận lập luận'],['lead to / result in','S + leads to/results in + N/V-ing.','Hệ quả trực tiếp'],['resulting in / leading to','S + V, resulting in + N/V-ing.','Hệ quả dạng V-ing'],['thereby + V-ing','S + V, thereby + V-ing.','Phương thức tạo kết quả'],['which + V','S + V, which + V.','Bổ sung kết quả của mệnh đề'],[', V-ing','S + V, V-ing...','Rút gọn nêu hệ quả'],['not only ... but also ...','S + not only + V ... but also + V ...','Hai ý song song'],['Although / Even though','Although + S + V, S + V.','Nhượng bộ'],['Despite / In spite of','Despite + N/V-ing, S + V.','Nhượng bộ bằng danh từ']];
 const quizzes=[
