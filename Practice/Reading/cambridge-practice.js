@@ -10,7 +10,7 @@ let history=JSON.parse(localStorage.getItem(key+'_answers')||'{}');answers={...h
 document.title=D.title+' | Reading Passage '+D.passage;
 $('back').href='../';
 $('pageLabel').textContent='Reading Passage '+D.passage+' — Bài '+D.folder;
-$('subtitle').textContent=D.title+' · Cambridge '+D.book+' Test '+D.test+' · Questions '+beginning+'–'+ending;
+$('subtitle').textContent=D.title+' · Questions '+beginning+'–'+ending;
 $('title').textContent=D.title;
 $('guide').innerHTML='<b>▤ Reading Practice · Hướng dẫn:</b> Đồng hồ <b>đếm xuôi</b> · Bôi đen văn bản để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Nhấp đúp một từ trong bài đọc</b> để tra nghĩa tiếng Việt · Sau khi nộp bài, xem đáp án và giải thích ngay dưới từng câu.';
 /* Exact structural classes of the existing The History of Glass template. */
