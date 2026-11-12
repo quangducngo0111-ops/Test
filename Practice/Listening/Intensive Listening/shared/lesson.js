@@ -11,8 +11,7 @@ const save=()=>localStorage.setItem(key,JSON.stringify(state));
 $("student").textContent=student.name?student.name+" · "+(student.className||""):"";
 $("heading").textContent="Part "+L.part+" · Bài "+String(L.number).padStart(2,"0")+" · "+L.title;
 const audio=$("audio");if(L.audio)audio.src=L.audio;
-$("audioFile").onchange=e=>{const f=e.target.files?.[0];if(f){audio.src=URL.createObjectURL(f);audio.load();$("audioStatus").textContent="Đang dùng audio từ thiết bị: "+f.name}};
-$("speed").onchange=e=>audio.playbackRate=Number(e.target.value);
+/* Audio is provided by the lesson itself; the shared sidebar owns all playback controls. */
 function lcs(a,b){const x=words(a),y=words(b);let prev=Array(y.length+1).fill(0);for(let i=1;i<=x.length;i++){let cur=Array(y.length+1).fill(0);for(let j=1;j<=y.length;j++)cur[j]=x[i-1]===y[j-1]?prev[j-1]+1:Math.max(cur[j-1],prev[j]);prev=cur}return prev[y.length]/Math.max(x.length,y.length,1)}
 function pct(){return Math.round(100*L.dictations.reduce((s,t,i)=>s+lcs(state.dict[i]||"",t),0)/L.dictations.length)}
 function header(){const allowed=[true,state.gapsDone,state.unlocked];$("steps").innerHTML=["1 · Nghe điền từ","2 · Dictation (≥80%)","3 · Bài nghe chính"].map((x,i)=>'<button '+(!allowed[i]?'disabled':'')+' data-stage="'+i+'" class="'+(state.stage===i?'active':'')+'">'+x+(!allowed[i]?' 🔒':'')+'</button>').join("");document.querySelectorAll("[data-stage]").forEach(e=>e.onclick=()=>{state.stage=+e.dataset.stage;save();render()})}
