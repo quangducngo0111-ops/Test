@@ -53,16 +53,42 @@ $('questionsRoot').innerHTML=html;
 $('nav').innerHTML=Array.from({length:10},(_,i)=>{let n=FIRST+i;return '<button id="nav'+n+'" type="button" data-nav="'+n+'">'+n+'</button>'}).join('')+'<button class="nav-submit" id="footerSubmit">Nộp bài</button>';
 $('footerSubmit').addEventListener('click',submit);
 }
-function initAudio(){const el=$('player');el.src=D.audio;el.addEventListener('loadedmetadata',()=>{hasAudio=true;$('audioStatus').textContent='Audio đã sẵn sàng';});el.addEventListener('error',()=>{hasAudio=false;$('audioStatus').textContent='Audio chưa được tải lên GitHub. Các câu hỏi và transcript vẫn có thể luyện tập.'});el.addEventListener('timeupdate',()=>{if(segmentEnd!==null&&el.currentTime>=segmentEnd){el.pause();segmentEnd=null}});}
+function formatAudio(seconds){const n=Math.max(0,Math.floor(Number(seconds)||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
+function syncAudioControls(){
+ const player=$('player'),duration=Number.isFinite(player.duration)?player.duration:0;
+ $('audioPlay').textContent=player.paused?'▶ Phát':'Ⅱ Tạm dừng';
+ $('audioTime').textContent=formatAudio(player.currentTime)+' / '+formatAudio(duration);
+ $('audioSeek').value=duration?Math.min(100,100*player.currentTime/duration):0;
+ $('audioSpeed').value=String(player.playbackRate);
+}
+function initAudio(){
+ const player=$('player');
+ player.src=D.audio;
+ player.playbackRate=1;
+ const sync=()=>syncAudioControls();
+ player.addEventListener('loadedmetadata',()=>{hasAudio=true;$('audioStatus').textContent='Sẵn sàng luyện nghe';sync()});
+ player.addEventListener('canplay',()=>{hasAudio=true;$('audioStatus').textContent='Sẵn sàng luyện nghe'});
+ player.addEventListener('error',()=>{hasAudio=false;$('audioStatus').textContent='Chưa thể phát bản nghe này. Vui lòng thử lại sau.';sync()});
+ player.addEventListener('timeupdate',()=>{if(segmentEnd!==null&&player.currentTime>=segmentEnd){player.pause();segmentEnd=null}sync()});
+ player.addEventListener('play',sync);
+ player.addEventListener('pause',sync);
+ player.addEventListener('durationchange',sync);
+ $('audioPlay').addEventListener('click',()=>{segmentEnd=null;if(player.paused)player.play().catch(()=>{$('audioStatus').textContent='Không thể phát audio hiện tại.'});else player.pause()});
+ $('audioBack').addEventListener('click',()=>{if(!Number.isFinite(player.duration))return;segmentEnd=null;player.currentTime=Math.max(0,player.currentTime-10);sync()});
+ $('audioForward').addEventListener('click',()=>{if(!Number.isFinite(player.duration))return;segmentEnd=null;player.currentTime=Math.min(player.duration,player.currentTime+10);sync()});
+ $('audioSeek').addEventListener('input',v=>{if(!Number.isFinite(player.duration))return;segmentEnd=null;player.currentTime=Number(v.target.value)*player.duration/100;sync()});
+ $('audioSpeed').addEventListener('change',v=>{player.playbackRate=Number(v.target.value)||1;sync()});
+ sync();
+}
 function updateProgress(){let n=0;for(let i=FIRST;i<=LAST;i++){let answer=answers[i];const filled=Boolean(String(answer||'').trim());$('nav'+i)?.classList.toggle('is-answered',filled);if(filled)n++}$('progressText').textContent=n+'/10 câu đã trả lời';$('progressBar').style.width=(n*10)+'%'}
 function acceptable(n){return String(D.answers[n]||'').split(/\s*\/\s*/).map(normalize)}
 function correct(n){if(number===3&&(n===21||n===22||n===23||n===24)){const a=n<=22?21:23,b=a+1;const chosen=[normalize(answers[a]),normalize(answers[b])].filter(Boolean).sort();const key=[normalize(D.answers[a]),normalize(D.answers[b])].sort();return chosen.length===2&&chosen[0]===key[0]&&chosen[1]===key[1]}return acceptable(n).includes(normalize(answers[n]||''))}
 function relevant(n){const lines=D.transcript.split(/\n+/).filter(Boolean);const regex=new RegExp('\\(Q'+n+'(?:\\b|&|\\))');let i=lines.findIndex(s=>regex.test(s));if(i<0&&n===13)i=lines.findIndex(s=>s.includes('(Q3)'));if(i<0&&n===30)i=lines.findIndex(s=>s.includes('(Q3)'));if(i<0)i=Math.min(lines.length-1,Math.max(0,Math.round((n-FIRST+0.5)*lines.length/10)));const txt=lines[i]?.replace(/\(Q\d+(?:&Q\d+)?\)/g,'').trim()||'';return {text:txt,index:i,count:lines.length};}
 function estimate(n){const whole=D.transcript,match=new RegExp('\\(Q'+n+'(?:\\b|&|\\))').exec(whole);const rel=match?match.index/whole.length:(n-FIRST+0.5)/10;const pre=Math.max(0,Math.round(D.durationSeconds*0.12));const end=Math.max(pre+60,Math.floor(D.durationSeconds*0.96));return Math.max(0,Math.round(pre+rel*(end-pre)-12));}
-function seek(n){if(!hasAudio){$('audioStatus').textContent='Chưa có file audio trên GitHub nên chưa thể tua đến đoạn trả lời.';return}const seconds=estimate(n);const player=$('player');player.currentTime=seconds;segmentEnd=Math.min(D.durationSeconds,seconds+35);player.play().catch(()=>{});$('audioStatus').textContent='Đang phát gần đoạn câu '+n+' ('+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0')+') · Mốc ước lượng từ transcript';}
+function seek(n){if(!hasAudio){$('audioStatus').textContent='Audio chưa sẵn sàng để nghe lại đoạn này.';return}const seconds=estimate(n);const player=$('player');player.currentTime=seconds;segmentEnd=Math.min(D.durationSeconds,seconds+35);player.play().catch(()=>{});$('audioStatus').textContent='Đang phát gần đoạn câu '+n+' ('+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0')+') · Mốc ước lượng từ transcript';}
 function transcriptMarkup(){const lines=D.transcript.split(/\n+/).filter(Boolean);$('transcriptText').innerHTML=lines.map((t,i)=>{const q=[...t.matchAll(/\(Q(\d+)(?:&Q(\d+))?\)/g)].flatMap(m=>[m[1],m[2]].filter(Boolean));return '<p class="cue-line" data-transcript="'+(q[0]||'')+'" id="transcriptLine'+i+'">'+e(t)+'</p>'}).join('')}
 function review(){let score=0,out='';for(let n=FIRST;n<=LAST;n++){const ok=correct(n);if(ok)score++;const ev=relevant(n);out+='<div class="cam-review" id="review'+n+'"><strong>Câu '+n+'</strong> · <span class="'+(ok?'good':'bad')+'">'+(ok?'✓ Đúng':'✕ Cần sửa')+'</span><div>Đã chọn: '+e(answers[n]||'Chưa trả lời')+' · Đáp án: <strong>'+e(D.answers[n])+'</strong></div><div style="color:#67677f">Giải thích: '+(number===4?part4Why[n]||'Đối chiếu câu diễn đạt tương đương trong transcript.':'Transcript cho thấy thông tin phù hợp với đáp án này. Xem đoạn dẫn chứng dưới đây.')+'</div><button class="cam-evidence" data-seek="'+n+'"><b>▶ Nghe đoạn chứa đáp án · Câu '+n+'</b><span style="display:block">'+e(ev.text.slice(0,360))+'</span><small>Nhấn để tua audio tới mốc tham khảo và đối chiếu transcript.</small></button></div>';}
-$('reviews').innerHTML=out;$('score').textContent='Kết quả: '+score+'/10';$('reviewPanel').classList.remove('cam-nodisplay');$('transcriptPanel').open=true;document.querySelectorAll('[data-answer]').forEach(el=>el.disabled=true);$('submit').disabled=true;$('footerSubmit').disabled=true;
+$('reviews').innerHTML=out;$('score').textContent='Kết quả: '+score+'/10';$('reviewPanel').classList.remove('cam-nodisplay');$('transcriptPanel').classList.remove('cam-nodisplay');$('transcriptPanel').open=true;document.querySelectorAll('[data-answer]').forEach(el=>el.disabled=true);$('submit').disabled=true;$('footerSubmit').disabled=true;
 }
 const part4Why={31:'Người nói nhấn mạnh xã hội thường hiểu sai về khả năng của công nghệ nano, không khẳng định việc giám sát con người đã xảy ra.',32:'Các nhà khoa học đề nghị kiểm tra an toàn, dán nhãn rõ và thận trọng hơn khi sử dụng hạt nano.',33:'“Plough ahead” nghĩa là tiếp tục tiến hành nghiên cứu, thay vì dừng lại.',34:'“More durable metals” diễn đạt lại ý vật liệu kim loại bền chắc hơn.',35:'“Travelling into space” cho biết loại hình du lịch là space travel.',36:'Máy tính trong tương lai sẽ có “a million times more memory”.',37:'Giá thành “solar cells” giảm làm năng lượng mặt trời dễ tiếp cận.',38:'Người nói nhắc việc loại bỏ “oil and other contaminants” khỏi nước.',39:'Sản xuất đúng lượng cần dùng nên không tạo ra “waste”.',40:'Biosensors sẽ phân tích “tests” trong vài phút thay vì vài ngày.'};
 const RESULT_ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
