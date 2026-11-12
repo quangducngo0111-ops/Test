@@ -134,7 +134,7 @@ function questionCard(n,prompt,instruction,groupText){
  const escapedPrompt=esc(prompt||'Xem câu hỏi trong phần hướng dẫn của nhóm.');
  // Cambridge transcripts use several gap styles: repeated dots, ellipsis characters,
  // underscores, or a mixture of dots and ellipses.
- const gapPattern=/(?:[.…·_]{2,}(?:\\s*[.…·_]{2,})*|_{2,})/;
+ const gapPattern=/(?:[.…·_]{2,}(?:\s*[.…·_]{2,})*|_{2,})/;
  const hasBlank=gapPattern.test(prompt);
  const isSentenceEnding=/correct ending|complete each sentence with the correct (?:letter|ending)|match each|list of (?:headings|words)|correct heading/i.test(instruction);
  let body='';
