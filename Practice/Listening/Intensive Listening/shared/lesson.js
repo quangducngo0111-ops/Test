@@ -78,25 +78,71 @@ function renderGaps(){
 function renderDict(){
 const score=state.dictChecked?pct():null;
 const fmt=t=>{t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+":"+String(t%60).padStart(2,"0")};
-const cards=L.dictations.map((t,i)=>{
- const cue=L.dictationCues?.[i],duration=cue?Math.max(0,cue.end-cue.start):0;
- return '<article class="dictation-card card" data-dict-card="'+i+'"><div class="dictation-top"><div class="q-label">Dictation '+String(i+1).padStart(2,"0")+'</div><span class="duration">'+(cue?fmt(duration):"Nghe cả bài")+'</span></div><div class="clip-player"><button class="play-clip" data-clip-action="toggle" data-i="'+i+'">▶ Nghe đoạn</button><input type="range" class="clip-progress" data-clip-seek="'+i+'" min="0" max="'+(duration||1)+'" step=".1" value="0" '+(!cue?"disabled":"")+'><span class="clip-time" data-clip-time="'+i+'">0:00 / '+fmt(duration)+'</span></div><div class="clip-controls"><button type="button" class="speed-btn" data-clip-action="back" data-i="'+i+'">↶ 3s</button><button type="button" class="speed-btn" data-clip-action="replay" data-i="'+i+'">↻ Nghe lại</button><button type="button" class="speed-btn" data-clip-action="forward" data-i="'+i+'">3s ↷</button><span class="speed-label">Tốc độ:</span>'+[0.5,0.75,1].map(rate=>'<button type="button" class="speed-btn '+(rate===1?"active":"")+'" data-speed="'+rate+'" data-i="'+i+'">'+rate+'×</button>').join("")+'</div><textarea class="dictation-input" data-dict="'+i+'" placeholder="Chép lại chính xác những gì bạn nghe được...">'+esc(state.dict[i]||"")+'</textarea>'+(state.dictChecked?'<div class="review"><b>Chính xác: '+(lcs(state.dict[i]||"",t)*100).toFixed(1)+'%</b><p>'+esc(t)+'</p></div>':'')+'</article>'
-}).join("");
-$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Nghe từng đoạn, tua và điều chỉnh tốc độ rồi chép chính tả. <b>Phải đạt trên 80%</b> độ chính xác trung bình mới mở Listening chính.</p><div class="score">'+(score===null?"Chưa chấm":"Độ chính xác: "+score.toFixed(1)+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: trên 80%")+'</div>'+cards+'<button class="primary" id="dictGrade">Chấm Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':"");
-document.querySelectorAll("[data-dict]").forEach(e=>e.oninput=()=>{state.dict[e.dataset.dict]=e.value;state.dictChecked=false;save()});
-let activeClip=null;
+state.clipOverrides=state.clipOverrides||{};
+state.dictRetrying=state.dictRetrying||{};
 const cues=L.dictationCues||[];
-function cueFor(i){return cues[i]||null}
-function listen(i,offset=0){const cue=cueFor(i);if(!cue||!audio.src)return;activeClip=i;segmentEnd=cue.end;audio.currentTime=Math.max(cue.start,Math.min(cue.end-0.1,cue.start+offset));audio.play().catch(error=>console.warn("Cannot play dictation clip",error))}
-document.querySelectorAll("[data-clip-action]").forEach(button=>button.onclick=()=>{const i=+button.dataset.i,act=button.dataset.clipAction,cue=cueFor(i);if(!cue)return;
-if(act==="toggle"){if(activeClip===i&&!audio.paused){audio.pause();return}listen(i)}
-if(act==="replay")listen(i);
-if(act==="back"||act==="forward"){const offset=activeClip===i?audio.currentTime-cue.start:0;listen(i,offset+(act==="back"?-3:3))}});
-document.querySelectorAll("[data-clip-seek]").forEach(e=>e.oninput=()=>{const i=+e.dataset.clipSeek;listen(i,+e.value)});
-document.querySelectorAll("[data-speed]").forEach(button=>button.onclick=()=>{const speed=+button.dataset.speed;audio.playbackRate=speed;document.querySelectorAll('[data-speed][data-i="'+button.dataset.i+'"]').forEach(b=>b.classList.toggle("active",+b.dataset.speed===speed));const mainSpeed=document.getElementById("ilSpeed");if(mainSpeed)mainSpeed.value=String(speed)});
-const onTime=()=>{if(activeClip===null)return;const cue=cueFor(activeClip);if(!cue)return;const elapsed=Math.max(0,Math.min(cue.end-cue.start,audio.currentTime-cue.start));const seek=document.querySelector('[data-clip-seek="'+activeClip+'"]');const time=document.querySelector('[data-clip-time="'+activeClip+'"]');if(seek)seek.value=String(elapsed);if(time)time.textContent=fmt(elapsed)+" / "+fmt(cue.end-cue.start);if(audio.currentTime>=cue.end){audio.pause();activeClip=null}};
+const effectiveCue=i=>state.clipOverrides[i]||cues[i]||null;
+const cards=L.dictations.map((t,i)=>{
+ const cue=effectiveCue(i), duration=cue?Math.max(0,cue.end-cue.start):0;
+ const checked=state.dictChecked&&!state.dictRetrying[i];
+ const cardScore=(lcs(state.dict[i]||"",t)*100).toFixed(1);
+ const calibrated=!!state.clipOverrides[i];
+ return '<article class="dictation-card card" data-dict-card="'+i+'"><div class="dictation-top"><div class="q-label">Dictation '+String(i+1).padStart(2,"0")+'</div><span class="duration">'+(cue?fmt(duration):"Chưa định vị")+'</span></div>'+
+ '<div class="clip-player"><button type="button" class="play-clip" data-clip-action="toggle" data-i="'+i+'">▶ Nghe đoạn</button><input type="range" class="clip-progress" data-clip-seek="'+i+'" min="0" max="'+(duration||1)+'" step=".1" value="0" '+(!cue?"disabled":"")+'><span class="clip-time" data-clip-time="'+i+'">0:00 / '+fmt(duration)+'</span></div>'+
+ '<div class="clip-controls"><button type="button" class="speed-btn" data-clip-action="back" data-i="'+i+'">↶ 3s</button><button type="button" class="speed-btn" data-clip-action="replay" data-i="'+i+'">↻ Nghe lại</button><button type="button" class="speed-btn" data-clip-action="forward" data-i="'+i+'">3s ↷</button><span class="speed-label">Tốc độ:</span>'+[0.5,0.75,1].map(rate=>'<button type="button" class="speed-btn '+(rate===1?"active":"")+'" data-speed="'+rate+'" data-i="'+i+'">'+rate+'×</button>').join("")+'</div>'+
+ '<details class="clip-tune"><summary>⚙ Chỉnh mốc audio nếu đoạn nghe chưa khớp'+(calibrated?" · đã lưu":"")+'</summary><div class="clip-tune-controls"><label>Bắt đầu <input data-cue-start="'+i+'" type="number" min="0" max="9999" step=".5" value="'+(cue?.start??0)+'"> giây</label><label>Kết thúc <input data-cue-end="'+i+'" type="number" min="0" max="9999" step=".5" value="'+(cue?.end??0)+'"> giây</label><button type="button" data-cue-save="'+i+'" class="speed-btn">Lưu & nghe thử</button><button type="button" data-cue-reset="'+i+'" class="speed-btn">Khôi phục mốc</button></div><small>Chỉnh mốc chỉ ảnh hưởng câu này và được lưu trên thiết bị. Mốc gốc có thể lệch nếu chưa được căn chỉnh theo audio.</small></details>'+
+ '<textarea class="dictation-input" data-dict="'+i+'" placeholder="Chép lại chính xác những gì bạn nghe được...">'+esc(state.dict[i]||"")+'</textarea>'+
+ (checked?'<div class="review"><b>Chính xác: '+cardScore+'%</b><p>'+esc(t)+'</p></div>':'')+
+ '<div class="dictation-retry-row"><button type="button" class="secondary dict-retry" data-dict-retry="'+i+'">↻ Làm lại câu '+(i+1)+'</button><span class="dictation-attempt-state">'+(state.dictRetrying[i]?"Đã xóa câu này, các câu khác được giữ nguyên.":checked?"Đã chấm":"Đang luyện tập")+'</span></div></article>';
+}).join("");
+$("panel").innerHTML='<h2>Giai đoạn 2 · Dictation</h2><p class="score">Điểm Gap-fill: '+(state.gapScore??0)+'/'+(state.gapTotal??L.gapAnswers.length)+'</p><p>Nghe từng đoạn, tua và điều chỉnh tốc độ rồi chép chính tả. <b>Phải đạt trên 80%</b> độ chính xác trung bình mới mở Listening chính. Nhấn <b>Làm lại câu</b> để xóa riêng câu đó, không mất bài đã làm.</p><div class="score">'+(score===null?"Chưa chấm":"Độ chính xác: "+score.toFixed(1)+"%")+(state.unlocked?" · Đã mở khóa":" · Mục tiêu: trên 80%")+'</div>'+cards+'<button class="primary" id="dictGrade">Chấm Dictation</button>'+(state.unlocked?'<button class="primary" id="toExam">Vào bài Listening →</button>':"");
+document.querySelectorAll("[data-dict]").forEach(el=>el.oninput=()=>{state.dict[el.dataset.dict]=el.value;state.dictRetrying[el.dataset.dict]=true;state.dictChecked=false;state.unlocked=false;save()});
+document.querySelectorAll("[data-dict-retry]").forEach(btn=>btn.onclick=()=>{
+ const i=Number(btn.dataset.dictRetry);
+ state.dict[i]="";state.dictRetrying[i]=true;state.dictChecked=false;state.dictScore=0;state.unlocked=false;save();render();
+ const input=document.querySelector('[data-dict="'+i+'"]');if(input){input.scrollIntoView({block:"center"});input.focus({preventScroll:true})}
+});
+let activeClip=null;
+function listen(i,offset=0){
+ const cue=effectiveCue(i);if(!cue||!audio.src)return;
+ if(!Number.isFinite(cue.start)||!Number.isFinite(cue.end)||cue.end<=cue.start)return;
+ activeClip=i;segmentEnd=cue.end;
+ const start=Math.max(0,cue.start+offset);
+ const seek=()=>{audio.currentTime=Math.max(cue.start,Math.min(cue.end-0.1,start));audio.play().catch(error=>console.warn("Cannot play Dictation clip",error))};
+ if(audio.readyState===0)audio.addEventListener("loadedmetadata",seek,{once:true,signal:clipEvents.signal});else seek();
+}
+document.querySelectorAll("[data-clip-action]").forEach(button=>button.onclick=()=>{
+ const i=Number(button.dataset.i),act=button.dataset.clipAction,cue=effectiveCue(i);if(!cue)return;
+ if(act==="toggle"){if(activeClip===i&&!audio.paused){audio.pause();return}listen(i)}
+ if(act==="replay")listen(i);
+ if(act==="back"||act==="forward"){const offset=activeClip===i?audio.currentTime-cue.start:0;listen(i,offset+(act==="back"?-3:3))}
+});
+document.querySelectorAll("[data-clip-seek]").forEach(el=>el.oninput=()=>{const i=Number(el.dataset.clipSeek);listen(i,Number(el.value))});
+document.querySelectorAll("[data-speed]").forEach(button=>button.onclick=()=>{
+ const speed=Number(button.dataset.speed);audio.playbackRate=speed;
+ document.querySelectorAll('[data-speed][data-i="'+button.dataset.i+'"]').forEach(b=>b.classList.toggle("active",Number(b.dataset.speed)===speed));
+ const mainSpeed=document.getElementById("ilSpeed");if(mainSpeed)mainSpeed.value=String(speed)
+});
+document.querySelectorAll("[data-cue-save]").forEach(button=>button.onclick=()=>{
+ const i=Number(button.dataset.cueSave);
+ const start=Number(document.querySelector('[data-cue-start="'+i+'"]').value),end=Number(document.querySelector('[data-cue-end="'+i+'"]').value);
+ if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end-start<0.5||(Number.isFinite(audio.duration)&&end>audio.duration+1)){alert("Mốc không hợp lệ. Vui lòng đặt thời điểm kết thúc sau thời điểm bắt đầu và trong thời lượng audio.");return}
+ state.clipOverrides[i]={start,end};save();render();listen(i);
+});
+document.querySelectorAll("[data-cue-reset]").forEach(button=>button.onclick=()=>{
+ const i=Number(button.dataset.cueReset);delete state.clipOverrides[i];save();render();listen(i)
+});
+const onTime=()=>{
+ if(activeClip===null)return;
+ const cue=effectiveCue(activeClip);if(!cue)return;
+ const elapsed=Math.max(0,Math.min(cue.end-cue.start,audio.currentTime-cue.start));
+ const seek=document.querySelector('[data-clip-seek="'+activeClip+'"]'),time=document.querySelector('[data-clip-time="'+activeClip+'"]');
+ if(seek)seek.value=String(elapsed);
+ if(time)time.textContent=fmt(elapsed)+" / "+fmt(cue.end-cue.start);
+ if(audio.currentTime>=cue.end){audio.pause();activeClip=null}
+};
 audio.addEventListener("timeupdate",onTime,{signal:clipEvents.signal});
-$("dictGrade").onclick=()=>{state.dictChecked=true;state.dictScore=pct();state.unlocked=state.dictScore>80;save();render()};
+$("dictGrade").onclick=()=>{state.dictRetrying={};state.dictChecked=true;state.dictScore=pct();state.unlocked=state.dictScore>80;save();render()};
 if($("toExam"))$("toExam").onclick=()=>{state.stage=2;state.examStartedAt=state.examStartedAt||Date.now();save();render()};
 }
 function correct(q){const v=state.exam[q.n];if(q.type==="two"){return Array.isArray(v)&&v.length===2&&v.every(x=>q.answers.includes(x))&&new Set(v).size===2}return q.answers.some(a=>words(a).join(" ")===words(v||"").join(" "))}
