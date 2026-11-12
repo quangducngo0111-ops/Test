@@ -12,6 +12,36 @@ $("student").textContent=student.name?student.name+" · "+(student.className||""
 $("heading").textContent="Part "+L.part+" · Bài "+String(L.number).padStart(2,"0")+" · "+L.title;
 const audio=$("audio");if(L.audio)audio.src=L.audio;
 /* Audio is provided by the lesson itself; the shared sidebar owns all playback controls. */
+
+/* Contextual Vietnamese vocabulary: select/double-click a word or phrase in transcript. */
+const meaningMap=Object.fromEntries(Object.entries(L.dictionary||{}).map(([k,v])=>[k.toLowerCase().trim(),v]));
+function meaningFor(raw){
+ const k=String(raw||"").toLowerCase().replace(/[“”"‘’]/g,"'").replace(/[.,!?;:()[\]{}]/g," ").replace(/\s+/g," ").trim();
+ if(!k)return "";
+ if(meaningMap[k])return meaningMap[k];
+ for(const variant of [k.replace(/ies$/,"y"),k.replace(/s$/,""),k.replace(/ing$/,""),k.replace(/ing$/,"e"),k.replace(/ed$/,""),k.replace(/ed$/,"e")])if(meaningMap[variant])return meaningMap[variant];
+ return "";
+}
+const vocabPopup=document.createElement("div");vocabPopup.id="intensiveVocabPopup";vocabPopup.setAttribute("role","status");vocabPopup.hidden=true;document.body.appendChild(vocabPopup);
+function hideVocab(){vocabPopup.hidden=true}
+function showVocab(){
+ const selection=window.getSelection();if(!selection||selection.isCollapsed||!selection.rangeCount)return;
+ const range=selection.getRangeAt(0),text=selection.toString().trim();
+ if(!text||text.length>80)return;
+ const region=range.commonAncestorContainer;const node=region.nodeType===1?region:region.parentElement;
+ if(!node||!$("panel")?.contains(node)||state.stage!==0)return;
+ const meaning=meaningFor(text);if(!meaning){hideVocab();return}
+ vocabPopup.innerHTML="<b>"+esc(text)+"</b><span>"+esc(meaning)+"</span><small>Nghĩa theo ngữ cảnh bài nghe</small>";
+ vocabPopup.hidden=false;
+ const rect=range.getBoundingClientRect();
+ requestAnimationFrame(()=>{const w=vocabPopup.offsetWidth,h=vocabPopup.offsetHeight;vocabPopup.style.left=Math.max(10,Math.min(innerWidth-w-10,rect.left+rect.width/2-w/2))+"px";vocabPopup.style.top=Math.max(65,rect.bottom+h+12>innerHeight?rect.top-h-10:rect.bottom+9)+"px"});
+}
+document.addEventListener("mouseup",()=>setTimeout(showVocab,15));
+document.addEventListener("touchend",()=>setTimeout(showVocab,80),{passive:true});
+document.addEventListener("pointerdown",event=>{if(!vocabPopup.contains(event.target))hideVocab()});
+window.addEventListener("scroll",hideVocab,{passive:true});
+const vocabStyle=document.createElement("style");vocabStyle.textContent="#intensiveVocabPopup{position:fixed;z-index:9999;max-width:min(340px,90vw);min-width:130px;background:#fff;border:1px solid #d8c7fa;border-radius:12px;box-shadow:0 9px 32px #28126030;padding:11px 14px;color:#21164b;font-size:12px;line-height:1.5}#intensiveVocabPopup[hidden]{display:none!important}#intensiveVocabPopup b,#intensiveVocabPopup span,#intensiveVocabPopup small{display:block}#intensiveVocabPopup b{font-weight:900;color:#3b0e90;font-size:13px}#intensiveVocabPopup small{color:#8585a0;font-size:10px;margin-top:5px}.vocab-tip{border:1px solid #e5ddff;background:#faf8ff;border-radius:9px;padding:9px 11px;color:#574287;font-size:11px;margin:10px 0 16px}";document.head.appendChild(vocabStyle);
+
 function lcs(a,b){const x=words(a),y=words(b);let prev=Array(y.length+1).fill(0);for(let i=1;i<=x.length;i++){let cur=Array(y.length+1).fill(0);for(let j=1;j<=y.length;j++)cur[j]=x[i-1]===y[j-1]?prev[j-1]+1:Math.max(cur[j-1],prev[j]);prev=cur}return prev[y.length]/Math.max(x.length,y.length,1)}
 function pct(){return 100*L.dictations.reduce((s,t,i)=>s+lcs(state.dict[i]||"",t),0)/L.dictations.length}
 function header(){const allowed=[true,!!state.gapsDone&&state.gapScore/state.gapTotal>0.8,!!state.unlocked];$("steps").innerHTML=["1 · Nghe điền từ (>80%)","2 · Dictation (>80%)","3 · Bài nghe chính"].map((x,i)=>'<button '+(!allowed[i]?'disabled':'')+' data-stage="'+i+'" class="'+(state.stage===i?'active':'')+'">'+x+(!allowed[i]?' 🔒':'')+'</button>').join("");document.querySelectorAll("[data-stage]").forEach(e=>e.onclick=()=>{state.stage=+e.dataset.stage;save();render()})}
@@ -20,7 +50,7 @@ let n=0;
 const body=L.turns.map(turn=>'<div class="turn"><b>'+esc(turn.speaker)+'</b><div>'+esc(turn.text).replace(/\[\[([^\]]+)\]\]/g,()=>{const i=n++;const ok=same(state.gaps[i]||"",L.gapAnswers[i]);const attempted=!!state.gapChecked;return '<span class="gap-field"><input class="gap '+(attempted?(ok?"correct":"wrong"):"")+'" data-i="'+i+'" value="'+esc(state.gaps[i]||"")+'" placeholder="Điền từ" aria-label="Chỗ trống '+(i+1)+'">'+(attempted?'<small class="'+(ok?"right":"wrong")+'">'+(ok?"✓ Đúng":"✕ Sai · "+esc(L.gapAnswers[i]))+'</small>':"")+'</span>'})+'</div></div>').join("");
 const count=Number(state.gapScore)||0,total=L.gapAnswers.length,percent=total?count/total*100:0;
 const passed=state.gapsDone&&percent>80;
-$("panel").innerHTML='<h2>Giai đoạn 1 · Nghe điền từ</h2><p>Điền đáp án trực tiếp trong transcript. Sau khi chấm sẽ biết từng câu đúng/sai. Cần đạt <b>trên 80%</b> để vào Dictation.</p>'+(state.gapChecked?'<div class="score '+(passed?"right":"wrong")+'">Kết quả: '+count+'/'+total+' · '+percent.toFixed(1)+'% · '+(passed?"Đạt, đã mở Dictation":"Chưa đạt 80%, hãy sửa các ô sai rồi chấm lại")+'</div>':'')+body+'<button class="primary" id="gapDone">Chấm lại Gap-fill</button>'+(passed?'<button class="primary" id="toDict">Tiếp tục Dictation →</button>':"");
+$("panel").innerHTML='<h2>Giai đoạn 1 · Nghe điền từ</h2><p>Điền đáp án trực tiếp trong transcript. Sau khi chấm sẽ biết từng câu đúng/sai. Cần đạt <b>trên 80%</b> để vào Dictation.</p><div class="vocab-tip">🔎 <b>Tra từ tiếng Việt:</b> bôi đen hoặc nháy đúp vào từ/cụm từ trong transcript để xem nghĩa theo ngữ cảnh.</div>'+(state.gapChecked?'<div class="score '+(passed?"right":"wrong")+'">Kết quả: '+count+'/'+total+' · '+percent.toFixed(1)+'% · '+(passed?"Đạt, đã mở Dictation":"Chưa đạt 80%, hãy sửa các ô sai rồi chấm lại")+'</div>':'')+body+'<button class="primary" id="gapDone">Chấm lại Gap-fill</button>'+(passed?'<button class="primary" id="toDict">Tiếp tục Dictation →</button>':"");
 document.querySelectorAll(".gap").forEach(e=>e.oninput=()=>{state.gaps[e.dataset.i]=e.value;state.gapChecked=false;state.gapsDone=false;state.unlocked=false;state.dictChecked=false;save();});
 $("gapDone").onclick=()=>{state.gapScore=L.gapAnswers.filter((ans,i)=>same(state.gaps[i]||"",ans)).length;state.gapTotal=L.gapAnswers.length;state.gapChecked=true;state.gapsDone=state.gapScore/state.gapTotal>0.8;if(!state.gapsDone)state.unlocked=false;save();render()};
 if($("toDict"))$("toDict").onclick=()=>{state.stage=1;save();render()};
