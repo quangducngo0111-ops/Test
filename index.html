@@ -1895,7 +1895,7 @@ button.skill-card:hover{
       </button>
 
 
-      <article class="skill-card speaking">
+      <button class="skill-card speaking" type="button" id="speakingMockDoor" aria-label="Vào thi thử IELTS Speaking Part 1, 2, 3">
 
         <div class="skill-top">
 
@@ -1913,7 +1913,7 @@ button.skill-card:hover{
           </h3>
 
           <p>
-            Khu Speaking sẽ được bổ sung sau.
+            Thi thử IELTS Speaking với giám khảo đọc câu hỏi, cue card và ghi âm.
           </p>
 
           <div class="character-circle">
@@ -1928,16 +1928,16 @@ button.skill-card:hover{
         <div class="skill-footer">
 
           <div class="skill-count">
-            SẮP CÓ
+            3 PARTS
           </div>
 
           <div class="skill-hint">
-            Chưa mở
+            Vào thi →
           </div>
 
         </div>
 
-      </article>
+      </button>
 
 
       <button
@@ -3491,6 +3491,15 @@ document
   )
 );
 
+
+const speakingMockDoor=$('speakingMockDoor');
+if(speakingMockDoor){
+  speakingMockDoor.addEventListener('click',()=>{
+    if(!currentStudent){showLogin(false);return;}
+    saveStudent(currentStudent);
+    location.href='./Practice/Vocabulary/speaking-mock-test/';
+  });
+}
 
 const practiceDoor=
 $('practiceDoor');
