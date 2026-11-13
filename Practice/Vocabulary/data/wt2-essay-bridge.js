@@ -101,8 +101,17 @@ async function loadLesson(type,n){
      set:key,topics:[type,config?.topic||"IELTS Writing Task 2"],
      collocation:normalizeText(word),category:info.title||"Nhóm "+group
   }))).filter(w=>w.word&&w.meaning);
-  if(!rows.length)throw new Error("Bài "+n+" chưa có từ vựng.");
-  return {lesson,words:rows,groups};
+  // The shared writing template repeats topic phrases across Body 1 and 2.
+  // Keep each expression once to avoid ambiguous duplicate quiz choices.
+  const seen=new Set();
+  const uniqueRows=rows.filter(w=>{
+    const k=w.word.toLocaleLowerCase();
+    if(seen.has(k))return false;
+    seen.add(k);
+    return true;
+  });
+  if(!uniqueRows.length)throw new Error("Bài "+n+" chưa có từ vựng.");
+  return {lesson,words:uniqueRows,groups};
  })();
  lessonCache.set(key,promise);
  try{return await promise}catch(e){lessonCache.delete(key);throw e}
