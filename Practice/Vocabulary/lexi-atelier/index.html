@@ -1,50 +1,260 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#fff4ee"><title>Lexi Atelier · Phố Lexi</title><link rel="stylesheet" href="./style.css?v=20261113-guide-v2"></head>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF6EC">
+<title>Lexi Atelier · Phố Lexi</title>
+<meta name="description" content="Lexi Atelier - trò chơi học từ vựng bằng thời trang, pha chế và vườn hoa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"></script>
+<style>
+:root{--cream:#FFF6EC;--paper:#FFFDF8;--plum:#4A2C5E;--pink:#F6A5B0;--darkpink:#D9577E;--lav:#B9A4E8;--mint:#A8DCC8;--gold:#F5C453}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#ede0ed;color:var(--plum);font-family:"Baloo 2",system-ui,sans-serif}
+#game{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 35%,#fff4ed,#d7c7ec)}
+#game canvas{max-width:100%;max-height:100%;box-shadow:0 8px 50px #8e76af3d;touch-action:none}
+#hudback{position:fixed;z-index:11;left:12px;top:10px;padding:8px 14px;border:1px solid #d5b0d9;background:#fffcf2e8;border-radius:20px;text-decoration:none;color:#583168;font-weight:800;font-size:13px}
+#modal{position:fixed;z-index:40;inset:0;display:grid;place-items:center;background:#342149a8;padding:14px;backdrop-filter:blur(5px)}
+#modal[hidden]{display:none}
+.sheet{position:relative;max-height:min(92vh,840px);overflow:auto;width:min(620px,100%);border-radius:30px;padding:23px;background:linear-gradient(145deg,#fffdf8,#fff0f0);border:2px solid #dcbaca;box-shadow:0 25px 80px #7654a655, inset 0 2px #fff}
+.sheet:before{content:"✦";position:absolute;right:15px;top:10px;color:#e5ad60;font-size:22px}
+.sheet h2{font-size:clamp(23px,5vw,34px);margin:0 30px 8px;color:#59356e;line-height:1.16}
+.sheet p{font-size:15px;line-height:1.5;margin:8px 0;color:#69546d}
+.sheet .eyebrow{font-size:11px;letter-spacing:.1em;color:#bd6c96;font-weight:800;margin-bottom:5px}
+.sheet button{border:1.5px solid #c9a9d7;background:linear-gradient(#fffdf8,#f9eaf7);color:#603b70;border-radius:18px;padding:11px 14px;font:800 15px "Baloo 2";cursor:pointer;transition:transform .17s,box-shadow .17s}
+.sheet button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 15px #aa86c74d}
+.sheet button:focus-visible{outline:3px solid #d9577e;outline-offset:2px}
+.sheet button.primary{background:linear-gradient(#ffc3cc,#ee8eaa);border-color:#b86a95;color:#4a2c5e;box-shadow:inset 0 2px #fff8,0 4px #b5679147}
+.sheet button:disabled{opacity:.48;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;margin-top:18px}
+.actions button{min-height:43px}
+.steps{list-style:none;display:grid;gap:9px;padding:0;margin:15px 0}
+.steps li{padding:10px 13px;background:linear-gradient(#fff,#fff8f0);border:1px solid #ebd5e6;border-radius:13px}
+.steps b{display:block;font-size:15px;color:#6b4887}
+.steps span{display:block;font-size:13px;line-height:1.5}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0}
+.choices button{font-size:14px;min-height:49px;text-align:center}
+.choices button.chosen{background:linear-gradient(#d5f3e6,#aedfca);border-color:#438a76}
+.callout{padding:12px 14px;border-radius:15px;background:#f6eefc;border:1px solid #d8c7ec;font-size:14px;line-height:1.6}
+.preview{font-size:55px;text-align:center;padding:8px;filter:drop-shadow(0 8px 10px #b9a4e880)}
+.feedback{margin-top:10px;padding:10px 13px;border-radius:12px;background:#e9f8ed;color:#3f785d;font-size:14px}
+.feedback.bad{background:#fff0e2;color:#95673e}
+.scene-label{display:flex;gap:8px;align-items:center;margin-bottom:9px}
+.progress-track{height:10px;border-radius:99px;background:#eadbe8;overflow:hidden}
+.progress-track>span{display:block;height:100%;background:linear-gradient(90deg,#b9a4e8,#f6a5b0)}
+#announce{position:fixed;z-index:32;left:50%;bottom:24px;transform:translate(-50%,25px);opacity:0;max-width:90vw;pointer-events:none;text-align:center;padding:10px 17px;border-radius:30px;border:1px solid #e8bed3;background:#fffaf4ed;color:#633e76;font-weight:800;box-shadow:0 8px 30px #78579944;transition:.25s}
+#announce.show{opacity:1;transform:translate(-50%,0)}
+#fallback{display:none;position:fixed;z-index:50;inset:0;place-items:center;padding:25px;background:#fff6ec;text-align:center}
+@media(max-width:450px){.sheet{padding:17px;border-radius:22px}.choices{gap:6px}.choices button{padding:8px 7px;font-size:12px}.actions button{flex:1 1 100%}}
+@media(prefers-reduced-motion:reduce){.sheet button,#announce{transition:none}}
+</style>
+</head>
 <body>
-<div class="app">
-<header class="masthead">
- <a href="../" class="return" title="Về danh sách game">← Games</a>
- <div class="brand"><span class="flower">✿</span><div><b>Lexi Atelier</b><small>PHỐ LEXI · A LITTLE WORLD OF WORDS</small></div></div>
- <div class="stats"><span title="Hoa Vàng">🌼 <b id="coins">0</b></span><span title="Vải Quý">🎀 <b id="fabric">0</b></span><span title="Từ đã học">📖 <b id="learned">0</b></span><button id="sound" class="round" title="Giọng đọc">🔊</button></div>
-</header>
-<section class="welcome">
- <div><span class="eyebrow">YOUR COZY ADVENTURE BEGINS HERE ✦</span><h1>A little town,<br><em>a thousand stories.</em></h1><p>Khôi phục con phố nhỏ bằng phép màu của tiếng Anh. Không đồng hồ đếm ngược, chỉ có những câu chuyện và những điều xinh đẹp do bạn tạo ra.</p><button class="primary" id="welcomePlay">Khám phá Phố Lexi <span>→</span></button></div>
- <div class="welcome-art" aria-hidden="true"><div class="sun"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div><div class="ribbon">✦ a lovely day ✦</div><span class="hstar one">✦</span><span class="hstar two">✿</span><div class="welcome-cottage"><div class="roof"></div><div class="wall"><span>✿</span><div class="door"></div><div class="windows">▤&nbsp;&nbsp;▤</div></div></div><div class="welcome-tree">🌳</div><div class="welcome-girl">👩🏻‍🎨</div><div class="welcome-petal">🌸 🌼</div></div>
-</section>
-<section class="sectionhead" id="town"><span class="eyebrow">CHAPTER 01 · A NEW BEGINNING</span><h2>Chào mừng tới Phố Lexi <span>✿</span></h2><p>Chọn một cửa hiệu để gặp khách, học từ mới và làm đẹp con phố.</p></section>
-<div class="town-scene">
- <div class="scene-sky"><span class="cloudlet c1">☁</span><span class="cloudlet c2">☁</span><span class="cloudlet c3">☁</span><span class="bird">⌁</span></div>
- <div class="town-row">
- <button class="building atelier-building" data-place="atelier"><span class="building-roof"></span><span class="building-face"><span class="sign">✂ Atelier</span><span class="shop-awning"></span><span class="shop-windows">🪡 &nbsp; 👗</span><span class="shop-door">♡</span></span><span class="building-ground">✿ ✿ ✿</span><span class="building-caption">ATELIER · THỜI TRANG</span></button>
- <button class="building cafe-building" data-place="cafe"><span class="building-roof"></span><span class="building-face"><span class="sign">☕ Café Lexi</span><span class="shop-awning"></span><span class="shop-windows">🥐 &nbsp; 🍓</span><span class="shop-door">♡</span></span><span class="building-ground">🪴 ✿ 🪴</span><span class="building-caption">CAFÉ · PHA CHẾ</span></button>
- <button class="building garden-building" data-place="garden"><span class="building-roof"></span><span class="building-face"><span class="sign">❀ Flower Garden</span><span class="shop-awning"></span><span class="shop-windows">🌷 &nbsp; 🌿</span><span class="shop-door">♡</span></span><span class="building-ground">🌼 🌸 🌼</span><span class="building-caption">GARDEN · TRỒNG HOA</span></button>
- </div><div class="cobblestone"></div>
- <div class="town-helper"><span>🦉</span><div><strong>Oliver:</strong> “Every word is a little seed of magic!”</div><button id="oliverTip">Hỏi Oliver ✦</button></div>
+<a id="hudback" href="../" aria-label="Về Vocabulary Practice">← Vocabulary</a>
+<div id="game"></div>
+<div id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="sheet"><div id="modalBody"></div><div class="actions" id="modalActions"></div></div>
 </div>
-<section class="dashboard">
- <article class="dashcard"><div class="dashicon">💌</div><div><h3>Những người bạn của Phố Lexi</h3><p id="friendSummary">Mia, Hana, Rosa và Linh đang mong gặp bạn.</p><button class="linklike" id="openStories">Xem nhật ký câu chuyện →</button></div></article>
- <article class="dashcard"><div class="dashicon">📔</div><div><h3>Lookbook & Bộ sưu tập</h3><p id="lookSummary">Chưa có thiết kế nào được lưu.</p><button class="linklike" id="openLookbook">Mở album của mình →</button></div></article>
- <article class="dashcard"><div class="dashicon">🎐</div><div><h3>Trang trí con phố</h3><p>Mua đồ trang trí bằng Hoa Vàng kiếm được từ nhiệm vụ.</p><button class="linklike" id="openDecor">Mở tiệm đồ xinh →</button></div></article>
-</section>
-<footer>Made with words & little wonders · Lexi Atelier · Vocabulary Practice</footer>
-</div>
-<div id="scene" class="scene-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="sceneTitle"><div class="scene-frame">
- <div class="scene-titlebar"><button id="backToTown" class="icon-button" aria-label="Trở về phố">←</button><div><span id="sceneOverline" class="eyebrow">PHỐ LEXI</span><h2 id="sceneTitle">Cửa hiệu</h2></div><span class="scene-stamp">✿ LEXI</span></div>
- <div id="sceneBody" class="scene-body"></div>
- </div></div>
-<div class="atelier-tutorial" id="atelierTutorial" role="dialog" aria-modal="true" aria-labelledby="atelierTutorialTitle">
- <div class="atelier-guide-card">
-  <span class="atelier-guide-kicker">✿ HOW TO PLAY · LEXI ATELIER</span>
-  <h2 id="atelierTutorialTitle">Chào mừng đến Phố Lexi!</h2>
-  <p>Hoàn thành nhiệm vụ từ vựng để giúp những người bạn và làm đẹp con phố.</p>
-  <ol>
-   <li><b>🏠 Chọn một cửa hiệu</b><span>Atelier: thiết kế trang phục · Café: pha chế đồ uống · Garden: trồng hoa.</span></li>
-   <li><b>💬 Đọc hoặc nghe yêu cầu</b><span>Khách hàng sẽ nói bằng tiếng Anh. Đọc gợi ý và chọn câu trả lời phù hợp.</span></li>
-   <li><b>🎨 Hoàn thành thử thách</b><span>Chọn đúng từ và thành phần để tạo sản phẩm, nhận Hoa Vàng và Vải Quý.</span></li>
-   <li><b>🌼 Trang trí phố</b><span>Dùng phần thưởng để mở bộ sưu tập và mua vật trang trí.</span></li>
-  </ol>
-  <div class="atelier-guide-actions"><button id="atelierTutorialStart" type="button">Đã hiểu · Khám phá Phố Lexi →</button></div>
- </div>
-</div>
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script src="./game.js?v=20261113-guide-v2" defer></script></body></html>
+<div id="announce" role="status" aria-live="polite"></div>
+<div id="fallback">Không thể khởi chạy Phaser 3. Hãy kiểm tra kết nối mạng để tải thư viện từ CDN.<br><a href="../">Quay lại Vocabulary</a></div>
+<script>
+(function(){
+"use strict";
+const COLORS={cream:"#FFF6EC",paper:"#FFFDF8",plum:"#4A2C5E",pink:"#F6A5B0",dark:"#D9577E",lav:"#B9A4E8",mint:"#A8DCC8",green:"#3F8F78",gold:"#F5C453",peach:"#F8A978",sky:"#A7D3F2",wood:"#8A5A44",night:"#2B2A55"};
+const DEMO=[
+["elegant","thanh lịch","She chose an elegant dress."],["cozy","ấm cúng","This café is cozy."],["vintage","cổ điển","I love vintage clothes."],["fabric","vải","This fabric feels soft."],["stylish","phong cách","The jacket looks stylish."],["casual","thường ngày","I prefer casual outfits."],["formal","trang trọng","Wear formal clothes to the event."],["colorful","nhiều màu sắc","The garden is colorful."],["comfortable","thoải mái","These shoes are comfortable."],["trendy","hợp xu hướng","Trendy designs attract customers."],["pattern","hoa văn","The pattern has small flowers."],["accessory","phụ kiện","A scarf is a useful accessory."]
+].map(([word,vi,example])=>({word,vi,example,topic:"Fashion"}));
+function normalizeWords(data){return (Array.isArray(data)?data:[]).map(x=>({word:String(x.word||"").trim(),vi:String(x.vi||x.meaning||"").trim(),example:String(x.example||"").trim(),topic:String(x.topic||"Vocabulary")})).filter(x=>x.word&&x.vi)}
+let imported=[];try{imported=normalizeWords(JSON.parse(sessionStorage.getItem("LEXI_ATELIER_WORDS")||"[]"))}catch(e){}
+const WORDS=normalizeWords(window.LEXI_WORDS).length?normalizeWords(window.LEXI_WORDS):(imported.length?imported:DEMO);
+window.LEXI_WORDS=WORDS;
+const saveKey="LEXI_ATELIER_PHASER_V1";
+let state={coins:80,stars:0,day:0,season:0,done:0,stage:{},review:{},looks:[],history:[],decor:[]};
+try{const s=JSON.parse(localStorage.getItem(saveKey)||"null");if(s&&typeof s==="object")state=Object.assign(state,s)}catch(e){}
+function save(){try{localStorage.setItem(saveKey,JSON.stringify(state))}catch(e){}}
+const $=id=>document.getElementById(id);
+const htmlSafe=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function say(t){$("announce").textContent=t;$("announce").classList.add("show");clearTimeout(say.timer);say.timer=setTimeout(()=>$("announce").classList.remove("show"),2600)}
+function speak(t){try{if(!("speechSynthesis" in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.86;window.speechSynthesis.speak(u)}catch(e){}}
+function modal(title,body,buttons){
+ $("modalBody").innerHTML='<div class="eyebrow">✿ LEXI ATELIER · LITTLE WONDERS</div><h2 id="modalTitle">'+htmlSafe(title)+'</h2>'+body;
+ const actions=$("modalActions");actions.innerHTML="";
+ (buttons||[{text:"Đã hiểu · Bắt đầu →",action:closeModal,primary:true}]).forEach(b=>{
+ const el=document.createElement("button");el.type="button";el.textContent=b.text;el.className=b.primary?"primary":"";el.onclick=b.action;actions.appendChild(el)});
+ $("modal").hidden=false;const focus=actions.querySelector("button");if(focus)focus.focus();
+}
+function closeModal(){$("modal").hidden=true}
+function gain(coins,stars){state.coins+=coins;state.stars+=stars;state.done++;save();say("✨ +"+coins+" xu · +"+stars+" sao!")}
+function tutorial(onClose){
+ modal("Chào mừng đến Phố Lexi!","<p>Học từ vựng bằng cách giúp khách, pha đồ uống và chăm sóc khu vườn nhỏ. Chơi theo nhịp của bạn, không giới hạn thời gian.</p><ol class='steps'><li><b>👗 Atelier</b><span>Đọc yêu cầu tiếng Anh, chọn trang phục phù hợp và cho người mẫu trình diễn.</span></li><li><b>☕ Café Lexi</b><span>Nghe khách gọi món, chọn nguyên liệu rồi pha chế.</span></li><li><b>🌷 Vườn Từ Vựng</b><span>Chọn ô đất, đoán nghĩa tiếng Anh để trồng và chăm sóc hoa.</span></li><li><b>🌼 Phần thưởng</b><span>Nhận xu, sao và trang trí Phố Lexi. Có thể đổi mùa, ngày, hoàng hôn và đêm.</span></li></ol>",[{text:"Đã hiểu · Khám phá Phố Lexi →",primary:true,action:()=>{closeModal();if(onClose)onClose()}}]);
+}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function wordQuestion(onComplete,word){
+ const target=word||pick(WORDS),pool=WORDS.filter(x=>x.word!==target.word&&x.vi!==target.vi);
+ const options=[target,...pool.sort(()=>Math.random()-.5).slice(0,3)].sort(()=>Math.random()-.5);
+ const body="<p>Chọn nghĩa tiếng Việt chính xác của từ:</p><div class='callout' style='font-size:24px;text-align:center'><b>"+htmlSafe(target.word)+"</b></div><div class='choices'>"+options.map((w,i)=>'<button type="button" data-choice="'+i+'">'+htmlSafe(w.vi)+"</button>").join("")+"</div><div id='answerFeedback' aria-live='polite'></div>";
+ modal("Gieo một hạt giống từ vựng",body,[{text:"🔊 Nghe từ",action:()=>speak(target.word)},{text:"Để sau",action:closeModal}]);
+ document.querySelectorAll("[data-choice]").forEach(el=>el.onclick=()=>{
+ const chosen=options[Number(el.dataset.choice)];if(chosen.word===target.word){el.classList.add("chosen");$("answerFeedback").innerHTML='<div class="feedback">✓ Đúng rồi! '+htmlSafe(target.example||"")+"</div>";setTimeout(()=>{closeModal();onComplete(true,target)},850)}
+ else{$("answerFeedback").innerHTML='<div class="feedback bad">Thử lại nhé! Gợi ý: '+htmlSafe(target.example||"Hãy nhớ nghĩa của từ.")+"</div>";el.disabled=true}
+ });
+}
+function text(scene,x,y,content,size=32,color=COLORS.plum,align="center"){return scene.add.text(x,y,content,{fontFamily:'"Baloo 2", sans-serif',fontSize:size+"px",color,align,stroke:"#fffdf8",strokeThickness:size>26?3:0,wordWrap:{width:880}}).setOrigin(.5)}
+function label(scene,x,y,content,size=24){return text(scene,x,y,content,size,COLORS.plum)}
+function button(scene,x,y,w,h,caption,callback,tint=0xf6a5b0){
+ let back=scene.add.image(x,y,"pill").setDisplaySize(w,h).setTint(tint).setInteractive({useHandCursor:true});
+ let title=label(scene,x,y,caption,h>70?28:24);
+ back.on("pointerover",()=>{scene.tweens.add({targets:[back,title],scaleX:1.04,scaleY:1.04,duration:130})});
+ back.on("pointerout",()=>{scene.tweens.add({targets:[back,title],scaleX:1,scaleY:1,duration:130})});
+ back.on("pointerdown",()=>{scene.tweens.add({targets:[back,title],scaleX:.95,scaleY:.95,duration:75,yoyo:true});callback()});
+ return {back,title};
+}
+function item(scene,key,x,y,scale=1){return scene.add.image(x,y,key).setScale(scale).setInteractive({useHandCursor:true})}
+function decorateScene(scene){scene.add.tileSprite(540,960,1080,1920,"paperNoise").setAlpha(.14).setBlendMode(Phaser.BlendModes.MULTIPLY).setDepth(98);}
+
+// Make each illustration once as a texture, with painterly gradients and soft highlights.
+function texture(scene,key,w,h,draw){
+ const cn=document.createElement("canvas");cn.width=w;cn.height=h;const c=cn.getContext("2d");draw(c,w,h);scene.textures.addCanvas(key,cn);
+}
+function gradient(c,x,y,w,h,stops){const g=c.createLinearGradient(x,y,x+w,y+h);stops.forEach(([at,color])=>g.addColorStop(at,color));return g}
+function radial(c,x,y,r,colors){const g=c.createRadialGradient(x-r*.25,y-r*.35,0,x,y,r);colors.forEach(([at,color])=>g.addColorStop(at,color));return g}
+function round(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r)}
+function pillTexture(scene){
+ texture(scene,"pill",390,100,(c,w,h)=>{c.shadowColor="#b9a4e866";c.shadowBlur=15;c.shadowOffsetY=5;round(c,8,4,w-16,h-14,45);c.fillStyle=gradient(c,0,0,0,h,[[0,"#fff1f4"],[.33,"#fac2cc"],[1,"#e899c1"]]);c.fill();c.shadowBlur=0;c.lineWidth=3;c.strokeStyle="#4a2c5e80";c.stroke();round(c,26,11,w-52,24,18);c.fillStyle="#ffffffa0";c.fill()});
+}
+function createArt(scene){
+ texture(scene,"sky",1080,1920,(c,w,h)=>{c.fillStyle=gradient(c,0,0,0,h,[[0,"#a7d3f2"],[.35,"#c5dcf0"],[.66,"#f8d3c9"],[1,"#fff6ec"]]);c.fill()});
+ texture(scene,"cloud",310,155,(c,w,h)=>{c.fillStyle=radial(c,151,84,130,[[0,"#ffffffef"],[.73,"#fffcffe0"],[1,"#ffffff00"]]);c.beginPath();c.ellipse(155,90,143,53,0,0,Math.PI*2);c.fill();for(const [x,y,r] of [[85,70,51],[145,49,66],[211,78,56]]){c.fillStyle=radial(c,x,y,r,[[0,"#ffffff"],[.75,"#ffffffef"],[1,"#fffafa13"]]);c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()}});
+ texture(scene,"hill",1000,450,(c,w,h)=>{c.fillStyle=gradient(c,0,0,0,h,[[0,"#bfdcc6"],[1,"#7fb7a6"]]);c.beginPath();c.moveTo(0,h);c.bezierCurveTo(120,120,300,130,490,250);c.bezierCurveTo(710,40,880,110,w,260);c.lineTo(w,h);c.fill()});
+ texture(scene,"paperNoise",256,256,(c,w,h)=>{const im=c.createImageData(w,h);for(let k=0;k<im.data.length;k+=4){let v=Math.floor(Math.random()*255);im.data[k]=v;im.data[k+1]=v;im.data[k+2]=v;im.data[k+3]=22}c.putImageData(im,0,0)});
+ texture(scene,"panel",880,430,(c,w,h)=>{c.shadowColor="#b9a4e866";c.shadowBlur=25;c.shadowOffsetY=12;round(c,15,12,w-30,h-38,32);c.fillStyle=gradient(c,0,0,0,h,[[0,"#fffdf8"],[1,"#fff0ed"]]);c.fill();c.shadowBlur=0;c.lineWidth=4;c.strokeStyle="#e3c5d3";c.stroke();c.save();c.translate(120,14);c.rotate(-.11);c.fillStyle="#f6a5b0bb";c.fillRect(-55,0,105,24);c.restore()});
+ texture(scene,"flower",145,155,(c,w,h)=>{c.save();c.translate(72,73);for(let i=0;i<7;i++){c.rotate(Math.PI*2/7);c.fillStyle=radial(c,0,-38,43,[[0,"#fff9f1"],[.3,"#ffdbed"],[1,"#dc83bb"]]);c.beginPath();c.ellipse(0,-39,22,40,0,0,Math.PI*2);c.fill();c.lineWidth=2;c.strokeStyle="#4a2c5e50";c.stroke()}c.fillStyle=radial(c,0,0,23,[[0,"#fff5c7"],[1,"#f5c453"]]);c.beginPath();c.arc(0,0,21,0,7);c.fill();c.restore()});
+ texture(scene,"star",75,75,(c,w,h)=>{c.translate(37,37);c.fillStyle=radial(c,0,0,37,[[0,"#fffdea"],[.45,"#f5c453"],[1,"#f4bc5200"]]);c.beginPath();for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,r=k%2?10:30;c.lineTo(Math.cos(a)*r,Math.sin(a)*r)}c.closePath();c.fill()});
+ texture(scene,"coin",75,75,(c,w,h)=>{c.fillStyle=radial(c,37,37,34,[[0,"#fff9d6"],[.63,"#f5c453"],[1,"#c99a44"]]);c.beginPath();c.arc(37,37,32,0,7);c.fill();c.lineWidth=3;c.strokeStyle="#b8894e";c.stroke();c.fillStyle="#fffce0";c.font="bold 32px sans-serif";c.fillText("✦",24,50)});
+ for(const [key,color,roof,kind] of [["shopFashion","#c3b2f3","#9b74cf","👗"],["shopCafe","#ffc3a4","#e39b78","☕"],["shopGarden","#b3ebd5","#79bfa3","🌱"]]){
+  texture(scene,key,290,440,(c,w,h)=>{c.shadowColor="#b9a4e875";c.shadowBlur=20;c.shadowOffsetY=15;round(c,30,155,230,255,21);c.fillStyle=gradient(c,0,150,0,280,[[0,"#fffdf8"],[.18,color],[1,"#f6e4d7"]]);c.fill();c.shadowBlur=0;c.lineWidth=4;c.strokeStyle="#4a2c5e";c.stroke();c.fillStyle=gradient(c,0,12,0,155,[[0,"#fff7f8"],[.45,roof],[1,color]]);c.beginPath();c.moveTo(10,160);c.lineTo(142,17);c.lineTo(280,160);c.closePath();c.fill();c.stroke();c.fillStyle="#ffffff90";c.beginPath();c.moveTo(38,138);c.lineTo(140,40);c.lineTo(163,45);c.lineTo(65,149);c.fill();for(const x of [65,188]){round(c,x,200,40,60,8);c.fillStyle="#d2e8ec";c.fill();c.strokeStyle="#a084a8";c.stroke();round(c,x+6,207,10,15,6);c.fillStyle="#ffffffaa";c.fill()}round(c,114,300,64,107,25);c.fillStyle="#92779d";c.fill();c.fillStyle="#ead9c3";round(c,120,306,52,98,20);c.fill();c.fillStyle="#f5c453";c.font="bold 60px sans-serif";c.textAlign="center";c.fillText(kind,145,283)});
+ }
+ texture(scene,"mia",280,515,(c,w,h)=>{c.shadowColor="#b9a4e855";c.shadowBlur=13;c.fillStyle="#7d617f44";c.beginPath();c.ellipse(143,488,72,13,0,0,7);c.fill();c.shadowBlur=0;const ell=(x,y,rx,ry,fill)=>{c.fillStyle=fill;c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fill()};ell(140,140,77,102,"#8b4a3b");c.fillStyle=gradient(c,0,230,0,250,[[0,"#fff7ec"],[1,"#cbb4ad"]]);round(c,80,232,124,216,30);c.fill();c.fillStyle="#d9577e";round(c,127,223,28,172,12);c.fill();c.fillStyle="#a281a8";round(c,93,414,35,62,12);c.fill();round(c,154,414,35,62,12);c.fill();ell(140,143,63,82,"#f2c9a5");ell(114,142,16,20,"#fff");ell(166,142,16,20,"#fff");ell(116,146,10,15,"#715c92");ell(167,146,10,15,"#715c92");ell(113,141,4,5,"#fff");ell(164,141,4,5,"#fff");ell(107,180,12,7,"#f6a5b080");ell(176,180,12,7,"#f6a5b080");c.strokeStyle="#a9576c";c.lineWidth=4;c.beginPath();c.arc(140,183,18,.15,Math.PI-.15);c.stroke();c.fillStyle="#8b4a3b";c.beginPath();c.ellipse(140,74,78,53,0,Math.PI,2*Math.PI);c.fill();c.beginPath();c.ellipse(87,142,18,105,-.1,0,7);c.fill();});
+ texture(scene,"owl",180,186,(c,w,h)=>{const e=(x,y,rx,ry,col)=>{c.fillStyle=col;c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fill()};e(90,96,70,76,"#c9a27a");e(90,122,47,49,"#f6e6cc");e(64,78,23,26,"#fffdf8");e(117,78,23,26,"#fffdf8");e(64,79,10,12,"#574268");e(117,79,10,12,"#574268");e(61,75,4,4,"#fff");e(114,75,4,4,"#fff");c.strokeStyle="#e0b050";c.lineWidth=6;c.beginPath();c.arc(64,78,25,0,7);c.moveTo(93,78);c.arc(117,78,25,0,7);c.stroke();c.fillStyle="#f5c453";c.beginPath();c.moveTo(86,102);c.lineTo(100,102);c.lineTo(92,119);c.fill()});
+ pillTexture(scene);
+}
+class Boot extends Phaser.Scene{
+ constructor(){super("Boot")}
+ create(){createArt(this);this.scene.start("Town");}
+}
+class BaseScene extends Phaser.Scene{
+ constructor(key){super(key)}
+ addBackground(){this.add.image(540,960,"sky").setDisplaySize(1080,1920);this.add.image(250,650,"cloud").setAlpha(.8);this.add.image(840,400,"cloud").setScale(.7);this.add.image(560,1580,"hill").setScale(1.3);this.add.image(540,1870,"panel").setDisplaySize(1040,230).setAlpha(.45)}
+ header(title){this.add.image(540,100,"panel").setDisplaySize(960,140);text(this,540,88,title,49);button(this,180,205,270,75,"← Phố Lexi",()=>this.scene.start("Town"),0xffe6ef)}
+ foot(){decorateScene(this)}
+ sparkle(x,y,count=18){for(let i=0;i<count;i++){const p=this.add.image(x,y,"star").setScale(.25+Math.random()*.37).setAlpha(.8);this.tweens.add({targets:p,x:x+(Math.random()-.5)*270,y:y-80-Math.random()*210,alpha:0,angle:Math.random()*280,duration:550+Math.random()*750,onComplete:()=>p.destroy()})}}
+}
+class Town extends BaseScene{
+ constructor(){super("Town")}
+ create(){
+ this.addBackground();this.add.image(555,1665,"panel").setDisplaySize(1060,360);
+ text(this,540,116,"Lexi Atelier",75,COLORS.plum);text(this,540,194,"✿ A little town, a thousand stories ✿",27);
+ this.add.image(140,350,"cloud").setScale(.8);this.add.image(905,310,"cloud").setScale(.7);
+ this.tweens.add({targets:this.children.list.filter(x=>x.texture&&x.texture.key==="cloud"),x:"+=42",duration:8400,yoyo:true,repeat:-1,ease:"Sine.inOut"});
+ this.add.image(500,1430,"hill").setDisplaySize(1400,510);
+ const shops=[{key:"shopFashion",title:"Atelier",scene:"Fashion",x:160,subtitle:"Thiết kế thời trang"},{key:"shopCafe",title:"Café Lexi",scene:"Cafe",x:530,subtitle:"Pha chế đồ uống"},{key:"shopGarden",title:"Vườn Từ Vựng",scene:"Garden",x:900,subtitle:"Ươm mầm tri thức"}];
+ shops.forEach((sh,i)=>{const image=this.add.image(sh.x,1050,sh.key).setDisplaySize(330,525).setInteractive({useHandCursor:true});this.tweens.add({targets:image,y:1040+i%2*18,duration:1900+i*320,yoyo:true,repeat:-1,ease:"Sine.inOut"});image.on("pointerover",()=>image.setTint(0xfff8d5));image.on("pointerout",()=>image.clearTint());image.on("pointerdown",()=>{this.sparkle(sh.x,960,17);this.cameras.main.fadeOut(290,255,245,235);this.cameras.main.once("camerafadeoutcomplete",()=>this.scene.start(sh.scene))});text(this,sh.x,1340,sh.title,31);text(this,sh.x,1385,sh.subtitle,19)});
+ let mia=this.add.image(286,1390,"mia").setDisplaySize(155,290);this.tweens.add({targets:mia,scaleY:mia.scaleY*1.015,duration:1300,yoyo:true,repeat:-1});mia.setInteractive({useHandCursor:true}).on("pointerdown",()=>say("Mia: Welcome to Lexi Atelier! ✿"));
+ let owl=this.add.image(890,780,"owl").setDisplaySize(107,110).setInteractive({useHandCursor:true});this.tweens.add({targets:owl,angle:9,duration:1750,yoyo:true,repeat:-1});owl.on("pointerdown",()=>this.help());
+ text(this,540,1650,"Chạm vào một cửa hiệu để bắt đầu học từ!",29);
+ button(this,305,1777,310,83,"☀ Ngày / Hoàng hôn",()=>{state.day=(state.day+1)%3;save();this.scene.restart()},0xf8a978);
+ button(this,777,1777,310,83,"🌸 Đổi mùa",()=>{state.season=(state.season+1)%4;save();this.scene.restart()},0xa8dcc8);
+ button(this,540,1900,550,70,"? Hướng dẫn cách chơi",()=>this.help(),0xb9a4e8);
+ text(this,910,236,"🌼 "+state.coins+"  ·  ⭐ "+state.stars,29);
+ this.particles();
+ if(state.day===1)this.add.rectangle(540,960,1080,1920,0xffd9a0,.22).setDepth(0.5);
+ if(state.day===2)this.add.rectangle(540,960,1080,1920,0x2b2a55,.47).setDepth(.5);
+ this.foot();
+ }
+ help(){tutorial()}
+ particles(){const symbols=state.season===0?["✿","❀","✦"]:state.season===1?["✧","☼"]:state.season===2?["🍂","✦"]:["❄","✧"];for(let i=0;i<44;i++){const p=text(this,Math.random()*1080,-80+Math.random()*1800,pick(symbols),17+Math.random()*18,i%2?"#f6a5b0":"#fffdf8");p.setAlpha(.4+Math.random()*.4);this.tweens.add({targets:p,y:2050,x:p.x-110+Math.random()*220,angle:Math.random()*260,duration:7800+Math.random()*7400,repeat:-1,delay:Math.random()*9000})}}
+}
+class ShopScene extends BaseScene{
+ constructor(key,setting){super(key);this.setting=setting}
+ create(){
+ this.addBackground();this.header(this.setting.title);this.add.image(540,1050,"panel").setDisplaySize(1000,1280);
+ this.add.image(540,660,this.setting.icon).setDisplaySize(350,490);
+ text(this,540,1020,this.setting.tagline,36);
+ text(this,540,1130,this.setting.desc,26);
+ button(this,540,1390,620,100,"✦ Nhận nhiệm vụ mới",()=>this.startTask(),0xf6a5b0);
+ button(this,540,1520,620,87,"📜 Cách chơi",()=>this.help(),0xb9a4e8);
+ button(this,540,1650,620,87,"📔 Nhật ký thành tích",()=>this.history(),0xa8dcc8);
+ this.foot();this.help(true)
+ }
+ help(initial=false){const name=this.setting.title;const body=this.setting.help;modal("Hướng dẫn · "+name,"<p>"+body+"</p><ol class='steps'><li><b>1. Đọc hoặc nghe lời khách</b><span>Thông tin tiếng Anh chứa các từ trong bộ Vocabulary đang học.</span></li><li><b>2. Chọn phương án phù hợp</b><span>Không có áp lực thời gian. Khi sai bạn sẽ nhận gợi ý.</span></li><li><b>3. Nhận phần thưởng</b><span>Hoàn thành nhiệm vụ để nhận xu và sao, làm đẹp Phố Lexi.</span></li></ol>",[{text:initial?"Đã hiểu · Vào cửa hiệu →":"Đã hiểu",primary:true,action:closeModal}])}
+ history(){modal("Nhật ký Phố Lexi","<p>Bạn đã hoàn thành <b>"+state.done+"</b> nhiệm vụ, thu thập <b>"+state.stars+"</b> sao và <b>"+state.coins+"</b> xu.</p><div class='callout'>"+(state.history.slice(-6).reverse().map(x=>htmlSafe(x)).join("<br>")||"Hãy hoàn thành nhiệm vụ đầu tiên nhé!")+"</div>",[{text:"Đóng",action:closeModal}])}
+}
+class Fashion extends ShopScene{
+ constructor(){super("Fashion",{title:"Mia's Atelier",icon:"shopFashion",tagline:"👗 Dress up & learn English",desc:"Thiết kế trang phục theo lời khách",help:"Chọn kiểu trang phục, màu sắc và phụ kiện theo câu tiếng Anh mà khách mô tả."})}
+ startTask(){
+ const vocab=pick(WORDS),req=pick([{color:"pink",style:"formal",accessory:"scarf"},{color:"blue",style:"casual",accessory:"hat"},{color:"green",style:"comfortable",accessory:"bag"}]);
+ const colorNames={pink:"hồng",blue:"xanh dương",green:"xanh lá"},accNames={scarf:"khăn",hat:"mũ",bag:"túi"},styleNames={formal:"trang trọng",casual:"thường ngày",comfortable:"thoải mái"};
+ const line="I need a "+req.color+" "+req.style+" outfit with a "+req.accessory+".";
+ let chosen={color:null,style:null,accessory:null};
+ const options=(id,values)=>"<div class='scene-label'><b>"+(id==="color"?"Màu sắc":id==="style"?"Phong cách":"Phụ kiện")+"</b></div><div class='choices'>"+values.map(x=>'<button type="button" data-field="'+id+'" data-value="'+x+'">'+htmlSafe(x)+"</button>").join("")+"</div>";
+ const body="<div class='preview' id='fashionPreview'>👗</div><div class='callout'><b>💬 Hana:</b> “"+htmlSafe(line)+"”</div><p>Gợi ý: "+colorNames[req.color]+" · "+styleNames[req.style]+" · "+accNames[req.accessory]+"</p>"+options("color",["pink","blue","green"])+options("style",["formal","casual","comfortable"])+options("accessory",["scarf","hat","bag"])+"<div id='taskFeedback'></div>";
+ modal("Thiết kế một bộ trang phục",body,[{text:"🔊 Nghe lời khách",action:()=>speak(line)},{text:"✨ Trình diễn",primary:true,action:()=>{
+ if(Object.values(chosen).some(x=>!x)){$("taskFeedback").innerHTML="<div class='feedback bad'>Hãy chọn đủ màu, phong cách và phụ kiện nhé.</div>";return}
+ const correct=Object.keys(req).filter(k=>req[k]===chosen[k]).length;
+ if(correct<3){$("taskFeedback").innerHTML="<div class='feedback bad'>Hana: So close! Hãy chọn "+colorNames[req.color]+", "+styleNames[req.style]+" và "+accNames[req.accessory]+".</div>";return}
+ this.sparkle(540,780,60);gain(30,5);state.looks.push(chosen);state.history.push("👗 "+vocab.word+" · Thiết kế "+req.color+" "+req.style);save();
+ modal("Fashion Show ✨","<div class='preview'>👗 ✨ 🌷</div><p>Hana: Absolutely lovely! 5 / 5 ⭐</p><div class='callout'>Từ đang ôn: <b>"+htmlSafe(vocab.word)+"</b> — "+htmlSafe(vocab.vi)+"</div>",[{text:"Tiếp tục thiết kế",primary:true,action:()=>this.startTask()},{text:"Về cửa hiệu",action:closeModal}]);
+ }}]);
+ document.querySelectorAll("[data-field]").forEach(btn=>btn.onclick=()=>{chosen[btn.dataset.field]=btn.dataset.value;document.querySelectorAll('[data-field="'+btn.dataset.field+'"]').forEach(b=>b.classList.toggle("chosen",b===btn));$("fashionPreview").textContent=chosen.color==="pink"?"👚":chosen.color==="blue"?"👔":chosen.color==="green"?"🥼":"👗"});
+ }
+}
+class Cafe extends ShopScene{
+ constructor(){super("Cafe",{title:"Café Lexi",icon:"shopCafe",tagline:"☕ Listen, mix & serve",desc:"Học cách gọi món bằng tiếng Anh",help:"Đọc và nghe yêu cầu của khách, chọn đúng đồ uống và nhiệt độ để pha chế."})}
+ startTask(){
+ const drink=pick([{name:"latte",temperature:"hot",emoji:"☕",vi:"cà phê sữa"},{name:"matcha",temperature:"cold",emoji:"🍵",vi:"matcha"},{name:"cocoa",temperature:"hot",emoji:"🫖",vi:"ca cao"},{name:"juice",temperature:"cold",emoji:"🧃",vi:"nước ép"}]),word=pick(WORDS);
+ let chosen={name:null,temperature:null};
+ const line="Could I have a "+drink.temperature+" "+drink.name+", please?";
+ const body="<div class='preview' id='cafePreview'>☕</div><div class='callout'>💬 A customer: “"+htmlSafe(line)+"”</div><p>Gợi ý: "+drink.vi+" · "+(drink.temperature==="hot"?"nóng":"lạnh")+"</p><b>Chọn thức uống</b><div class='choices'>"+["latte","matcha","cocoa","juice"].map(s=>'<button data-drink="'+s+'">'+s+"</button>").join("")+"</div><b>Chọn nhiệt độ</b><div class='choices'>"+["hot","cold"].map(s=>'<button data-temperature="'+s+'">'+(s==="hot"?"🔥 Hot":"🧊 Cold")+"</button>").join("")+"</div><div id='taskFeedback'></div>";
+ modal("Nhận đơn tại Café Lexi",body,[{text:"🔊 Nghe khách nói",action:()=>speak(line)},{text:"🍹 Pha chế",primary:true,action:()=>{
+ if(!chosen.name||!chosen.temperature){$("taskFeedback").innerHTML="<div class='feedback bad'>Hãy chọn thức uống và nhiệt độ.</div>";return}
+ if(chosen.name!==drink.name||chosen.temperature!==drink.temperature){$("taskFeedback").innerHTML="<div class='feedback bad'>Try again! Khách muốn "+drink.temperature+" "+drink.name+".</div>";return}
+ gain(25,5);this.sparkle(540,780,55);state.history.push("☕ Pha chế "+drink.name+" · "+word.word);save();
+ modal("Perfect drink! 🌷","<div class='preview'>"+drink.emoji+" ✨</div><p>Khách: Thank you! That's exactly what I wanted. ⭐⭐⭐⭐⭐</p><div class='callout'>Từ đang ôn: <b>"+htmlSafe(word.word)+"</b> — "+htmlSafe(word.vi)+"</div>",[{text:"Đơn tiếp theo",primary:true,action:()=>this.startTask()},{text:"Về cửa hiệu",action:closeModal}])
+ }}]);
+ document.querySelectorAll("[data-drink]").forEach(b=>b.onclick=()=>{chosen.name=b.dataset.drink;document.querySelectorAll("[data-drink]").forEach(el=>el.classList.toggle("chosen",el===b));$("cafePreview").textContent={latte:"☕",matcha:"🍵",cocoa:"🫖",juice:"🧃"}[chosen.name]});
+ document.querySelectorAll("[data-temperature]").forEach(b=>b.onclick=()=>{chosen.temperature=b.dataset.temperature;document.querySelectorAll("[data-temperature]").forEach(el=>el.classList.toggle("chosen",el===b))});
+ }
+}
+class Garden extends BaseScene{
+ constructor(){super("Garden")}
+ create(){
+ this.addBackground();this.header("Vườn Từ Vựng 🌷");
+ this.add.image(540,1060,"panel").setDisplaySize(1010,1370);
+ text(this,540,370,"Mỗi từ là một hạt giống nhỏ.",36);
+ text(this,540,429,"Trả lời đúng để cây lớn lên và nở hoa!",25);
+ const entries=WORDS.slice(0,12);this.plots=[];
+ entries.forEach((w,i)=>{const col=i%3,row=Math.floor(i/3),x=235+col*300,y=635+row*245,stage=Number(state.stage[w.word]||0);let plot=this.add.image(x,y,"panel").setDisplaySize(260,205).setInteractive({useHandCursor:true});let flower;
+ if(stage>=4){flower=this.add.image(x,y-35,"flower").setScale(.8);this.tweens.add({targets:flower,angle:9,duration:1500+i*70,yoyo:true,repeat:-1})}
+ else{text(this,x,y-37,["🌰","🌱","🌿","🌷"][stage],57)}
+ text(this,x,y+42,w.word,24);text(this,x,y+79,["Hạt giống","Mầm non","Cây non","Nụ hoa","Hoa nở"][stage],17);
+ plot.on("pointerover",()=>plot.setTint(0xfff4d0));plot.on("pointerout",()=>plot.clearTint());plot.on("pointerdown",()=>this.openWord(w));
+ this.plots.push(plot);
+ });
+ button(this,540,1720,640,82,"🔊 Ôn một từ ngẫu nhiên",()=>this.openWord(pick(entries)),0xa8dcc8);
+ button(this,540,1838,640,74,"? Hướng dẫn khu vườn",()=>this.help(),0xb9a4e8);
+ this.foot();this.help(true)
+ }
+ help(initial=false){modal("Cách chăm sóc Vườn Từ Vựng","<p>Nhấn vào ô đất có từ tiếng Anh. Đọc nghĩa, nghe phát âm và trả lời câu hỏi để cây lớn thêm một giai đoạn.</p><ol class='steps'><li><b>🌰 → 🌱 → 🌿 → 🌷 → 🌸</b><span>Mỗi lần trả lời đúng, cây tiến lên một bậc.</span></li><li><b>💦 Ôn tập lại</b><span>Trả lời lại từ chưa nhớ. Sai không bị phạt xu hay mất cây.</span></li><li><b>🦋 Cây nở hoa</b><span>Khi đạt bậc 4, cây nở và bạn nhận phần thưởng.</span></li></ol>",[{text:initial?"Bắt đầu chăm vườn →":"Đã hiểu",primary:true,action:closeModal}])}
+ openWord(word){const stage=Number(state.stage[word.word]||0);
+ modal("Từ vựng · "+word.word,"<div class='preview'>"+["🌰","🌱","🌿","🌷","🌸"][stage]+"</div><p><b>"+htmlSafe(word.word)+"</b> — "+htmlSafe(word.vi)+"</p><div class='callout'>"+htmlSafe(word.example||"Luyện từ vựng trong ngữ cảnh tiếng Anh.")+"</div><p>Tiến độ cây: "+stage+"/4</p><div class='progress-track'><span style='width:"+(stage*25)+"%'></span></div>",[{text:"🔊 Phát âm",action:()=>speak(word.word)},{text:"🌱 Kiểm tra để tưới cây",primary:true,action:()=>wordQuestion((ok)=>{
+ if(!ok)return;const old=Number(state.stage[word.word]||0);state.stage[word.word]=Math.min(4,old+1);gain(old<4?10:3,old===3?5:1);state.history.push("🌷 Đã ôn từ "+word.word);save();this.scene.restart();say("Cây đã lớn thêm một giai đoạn!")},word)},{text:"Để sau",action:closeModal}])}
+}
+if(!window.Phaser){$("fallback").style.display="grid";return}
+const config={type:Phaser.AUTO,parent:"game",width:1080,height:1920,backgroundColor:"#FFF6EC",render:{pixelArt:false,antialias:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},fps:{target:60,forceSetTimeOut:false},scene:[Boot,Town,Fashion,Cafe,Garden]};
+try{new Phaser.Game(config);window.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("modal").hidden)closeModal()});setTimeout(()=>{if(!$("modal").hidden)return;tutorial()},550)}catch(e){console.error(e);$("fallback").style.display="grid"}
+})();
+</script>
+</body>
+</html>
