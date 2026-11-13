@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IELTS Speaking Mock Test | Smartcom</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#281260;background:#f6f4fc}
+*{box-sizing:border-box}body{margin:0}button,textarea,select{font:inherit}button{cursor:pointer}
+.shell{max-width:1060px;margin:auto;padding:22px 18px 70px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;color:#3b0e90;font-size:18px}.muted{color:#6d7080;font-size:13px;line-height:1.6}
+.card{background:#fff;border:1px solid #e4dff1;border-radius:22px;padding:25px;box-shadow:0 8px 32px #2812600c;margin-top:18px}
+h1{font-size:clamp(25px,4vw,38px);margin:8px 0}h2{margin:0 0 12px;font-size:22px}
+.nav{background:#fff;border:1px solid #e2d8f4;padding:10px 15px;border-radius:12px;color:#3b0e90;font-weight:800}
+.primary{background:#3b0e90;color:white;border:0;padding:14px 21px;border-radius:12px;font-weight:800}
+.secondary{background:#f3effb;color:#3b0e90;border:1px solid #ddd3f0;padding:13px 17px;border-radius:12px;font-weight:750}
+button:disabled{opacity:.5;cursor:not-allowed}
+fieldset{border:0;padding:0;margin:20px 0}legend{font-weight:800;margin-bottom:10px}
+.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mode{display:block;padding:14px;border:2px solid #e3daef;border-radius:13px;background:#fff;cursor:pointer;font-size:14px;font-weight:700}
+.mode:has(input:checked){border-color:#3b0e90;background:#f2edff}
+.mode input{accent-color:#3b0e90}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#eee7fb;border-radius:100px;padding:7px 12px;font-size:12px;font-weight:800}
+.question{font-size:clamp(22px,3.2vw,33px);line-height:1.5;color:#22114d;font-weight:760;padding:22px 0}
+.status{color:#655b78;font-size:14px;min-height:24px}
+.timer{font-size:clamp(44px,8vw,72px);font-weight:900;font-variant-numeric:tabular-nums;color:#3b0e90}
+.timer.small{font-size:32px}
+.progress{height:9px;border-radius:9px;background:#eee9f6;overflow:hidden;margin:16px 0}
+.progress>div{background:#ff9c00;height:100%;transition:width .3s}
+.cue{border:2px solid #31225a;background:#fff;border-radius:16px;padding:26px;margin:15px 0}
+.cue h3{font-size:23px;margin:0 0 16px}.cue li{margin:10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.notes{width:100%;min-height:230px;padding:15px;border:1px solid #cfc5df;border-radius:13px;resize:vertical;line-height:1.65;background:repeating-linear-gradient(white,white 31px,#e9e5f1 32px)}
+.record{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:13px;border:1px solid #e8e0f1;border-radius:15px;margin:16px 0}
+.record audio{max-width:100%}
+[hidden]{display:none!important}
+.notice{background:#fff8e7;border:1px solid #f5d99d;padding:12px 15px;border-radius:12px;color:#68501b}
+a{color:#3b0e90}
+@media(max-width:680px){.modes{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.card{padding:17px}}
+</style></head>
+<body><div class="shell">
+<div class="top"><div class="brand">SMARTCOM · IELTS SPEAKING</div><a class="nav" href="../index.html">← Vocabulary</a></div>
+<section class="card" id="setup">
+<div class="pills"><span class="pill">Exam simulation</span><span class="pill">Part 1 · Part 2 · Part 3</span></div>
+<h1>IELTS Speaking Mock Test</h1>
+<p class="muted">Questions are read aloud in English in an examiner-style sequence using your browser's speech voice. The voice is synthetic, not a recording of an official IELTS examiner. Use headphones, allow microphone access if you want to record, and take the test in a quiet room.</p>
+<fieldset><legend>Choose your test</legend><div class="modes">
+<label class="mode"><input name="mode" type="radio" value="all" checked> Full Speaking</label>
+<label class="mode"><input name="mode" type="radio" value="1"> Part 1</label>
+<label class="mode"><input name="mode" type="radio" value="2"> Part 2</label>
+<label class="mode"><input name="mode" type="radio" value="3"> Part 3</label>
+</div></fieldset>
+<label for="topic">Question set</label>
+<select id="topic" class="secondary" style="width:100%;margin-top:8px"><option value="0">Set 01 · Hometown & Experiences</option><option value="1">Set 02 · Study & Technology</option><option value="2">Set 03 · Leisure & Environment</option></select>
+<p class="muted">Part 2: exactly 60 seconds of preparation and up to 120 seconds of speaking. Notes stay on screen during the talk. Part 1 and Part 3 advance when you select Next, allowing natural-length answers.</p>
+<div class="actions"><button class="primary" id="start">Start speaking test →</button></div>
+</section>
+<section class="card" id="exam" hidden>
+<div class="top"><div class="pills"><span class="pill" id="partLabel"></span><span class="pill" id="stepLabel"></span></div><button class="nav" id="end">End test</button></div>
+<div class="progress"><div id="progressFill"></div></div>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+<div id="introBlock"><div class="question" id="question"></div></div>
+<div id="cueBlock" hidden>
+<div class="grid"><div><div class="cue"><div class="muted">IELTS SPEAKING · PART 2 · TASK CARD</div><h3 id="cueTitle"></h3><p>You should say:</p><ul id="cueBullets"></ul><p>and explain <strong id="cueExplain"></strong></p></div></div>
+<div><h2>Preparation notes</h2><p class="muted">Use keywords or short bullet points, like a sheet of scrap paper. Notes are available during your 2-minute talk.</p><textarea id="notes" class="notes" placeholder="Write your notes here..." spellcheck="false"></textarea></div></div>
+<div class="top"><div><div class="muted" id="timerLabel">Preparation time</div><div class="timer" id="timer">01:00</div></div><div class="actions"><button class="secondary" id="skipPrep" hidden>Start speaking now</button><button class="secondary" id="finishTalk" hidden>Finish speaking</button></div></div>
+</div>
+<div class="record"><span id="micStatus" class="muted">Microphone optional · recording stays on this device</span><button id="micToggle" class="secondary" type="button">● Start recording</button><button id="saveRecord" class="secondary" hidden>Save recording</button><audio controls id="playback" hidden></audio></div>
+<div class="actions"><button id="repeat" class="secondary">🔊 Repeat question</button><button id="next" class="primary">Next question →</button></div>
+<p id="warning" class="muted"></p>
+</section>
+<section class="card" id="complete" hidden><h1>Speaking test completed</h1><p>You have completed the selected speaking sections. You can save your audio recording using the button below if you enabled the microphone.</p><p class="notice">This is a speaking practice simulation. It does not provide an IELTS band score or official examiner feedback.</p><div id="review"></div><div class="actions"><button class="primary" id="restart">Take another test</button><a class="secondary" href="../index.html">Back to Vocabulary</a></div></section>
+</div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const SETS=[
+ {p1:["Do you work or are you a student?","What do you enjoy most about your work or studies?","Let's talk about your hometown. What is it like?","Has your hometown changed much in recent years?","Do you prefer spending time indoors or outdoors?","Why?"],
+  p2:{title:"Describe a place in your hometown that you enjoy visiting.",bullets:["where this place is","how often you go there","what you do when you are there"],explain:"why you enjoy visiting this place"},
+  p3:["Why do people become attached to certain places?","How can cities preserve local identity while developing?","Do you think public spaces are important for communities?","What challenges do growing cities face?"]},
+ {p1:["Are you currently studying or working?","What subject do you find most interesting?","How often do you use technology in your daily life?","What device do you use most often?","Do you think it is important to learn new skills?","Why?"],
+  p2:{title:"Describe a useful skill you learned recently.",bullets:["what the skill is","how you learned it","when you use it"],explain:"why this skill is useful to you"},
+  p3:["How has technology changed the way people learn?","Should schools focus more on practical skills?","What are the advantages of learning from other people?","Will online learning replace traditional classrooms?"]},
+ {p1:["What do you normally do in your free time?","Do you prefer spending free time alone or with others?","What activities did you enjoy as a child?","Do you often visit parks?","How important is nature to you?","Would you like to spend more time outdoors?"],
+  p2:{title:"Describe an outdoor activity you would like to try.",bullets:["what the activity is","where you would do it","who you would do it with"],explain:"why you would like to try this activity"},
+  p3:["Why do some people prefer outdoor activities to indoor ones?","What can governments do to encourage exercise?","How do modern lifestyles affect people's relationship with nature?","Should protecting the environment be an individual or government responsibility?"]}
+];
+let selection=[],i=0,stage='',set=null,secs=0,deadline=0,tick=null,run=0,media=null,recorder=null,chunks=[],audioURL=null,recordedBlob=null;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&quot;'}[c]));
+function show(id){['setup','exam','complete'].forEach(x=>$(x).hidden=x!==id)}
+function voice(text,done){const token=++run; $('status').textContent='Examiner is speaking…';if(!('speechSynthesis' in window)){ $('status').textContent='Audio unavailable. Please read the question.';done?.();return}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=.9;u.pitch=1;
+ const voices=speechSynthesis.getVoices();u.voice=voices.find(v=>v.lang.toLowerCase()==='en-gb')||voices.find(v=>/^en-/i.test(v.lang))||null;
+ let ended=false;const finish=()=>{if(ended||token!==run)return;ended=true;$('status').textContent='Your turn to speak';done?.()};
+ u.onend=finish;u.onerror=()=>{$('status').textContent='Audio playback unavailable. Please read the question.';finish()};speechSynthesis.speak(u);
+}
+function silence(){run++;if('speechSynthesis' in window)speechSynthesis.cancel()}
+function clearClock(){clearInterval(tick);tick=null}
+function setClock(n,label){clearClock();secs=n;deadline=Date.now()+n*1000;$('timerLabel').textContent=label;updateClock();tick=setInterval(()=>{secs=Math.max(0,Math.ceil((deadline-Date.now())/1000));updateClock();if(!secs){clearClock();if(stage==='prep')beginTalk();else if(stage==='talk')advance()}},200)}
+function updateClock(){$('timer').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')}
+function partName(p){return 'PART '+p}
+function draw(){silence();clearClock();const item=selection[i];if(!item){finish();return}stage='question';
+ $('cueBlock').hidden=true;$('introBlock').hidden=false;$('next').hidden=false;$('repeat').hidden=false;
+ $('partLabel').textContent=partName(item.part);$('stepLabel').textContent=(i+1)+' / '+selection.length;
+ $('progressFill').style.width=(i/selection.length*100)+'%';
+ if(item.part===2){
+   stage='prep-intro';$('introBlock').hidden=true;$('cueBlock').hidden=false;$('next').hidden=true;
+   $('repeat').hidden=false;$('skipPrep').hidden=false;$('finishTalk').hidden=true;
+   $('notes').value='';$('notes').disabled=false;$('cueTitle').textContent=set.p2.title;
+   $('cueBullets').innerHTML=set.p2.bullets.map(x=>'<li>'+esc(x)+'</li>').join('');
+   $('cueExplain').textContent=set.p2.explain;
+   $('timer').textContent='01:00';$('timerLabel').textContent='Preparation time';
+   voice('Now I am going to give you a topic. You will have one minute to prepare. You can make notes if you wish. You will then have up to two minutes to speak. Here is your topic.',()=>{if(stage==='prep-intro'){stage='prep';setClock(60,'Preparation · 1 minute')}});
+ }else{$('question').textContent=item.q;voice(item.q)}
+}
+function beginTalk(){if(stage!=='prep'&&stage!=='prep-intro')return;silence();stage='talk';$('skipPrep').hidden=true;$('finishTalk').hidden=false;$('notes').disabled=false;$('repeat').hidden=true;setClock(120,'Speaking · 2 minutes');$('status').textContent='Please speak now.'}
+function advance(){clearClock();silence();i++;draw()}
+function finish(){clearClock();silence();$('progressFill').style.width='100%';stopRecording();$('review').innerHTML='<p class="muted">You answered '+selection.length+' prompts/sections. Part 2 notes are kept only until you restart.</p>';show('complete')}
+function start(){set=SETS[Number($('topic').value)]||SETS[0];const mode=document.querySelector('input[name="mode"]:checked').value;selection=[];
+ if(mode==='all'||mode==='1')set.p1.forEach(q=>selection.push({part:1,q}));
+ if(mode==='all'||mode==='2')selection.push({part:2,q:set.p2.title});
+ if(mode==='all'||mode==='3')set.p3.forEach(q=>selection.push({part:3,q}));
+ i=0;show('exam');draw()}
+function stopRecording(){if(recorder&&recorder.state!=='inactive')recorder.stop();$('micToggle').textContent='● Start recording'}
+$('start').onclick=start;$('restart').onclick=()=>{clearClock();silence();show('setup')};
+$('end').onclick=()=>{if(confirm('End this speaking test?'))finish()};
+$('next').onclick=advance;$('skipPrep').onclick=beginTalk;$('finishTalk').onclick=advance;
+$('repeat').onclick=()=>{const item=selection[i];if(!item)return;if(item.part===2){if(stage==='prep-intro'||stage==='prep')voice('You have one minute to prepare. Your topic is: '+set.p2.title)}else voice(item.q)};
+$('micToggle').onclick=async()=>{
+ if(recorder&&recorder.state==='recording'){stopRecording();return}
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){$('micStatus').textContent='Recording is not supported. Use a secure HTTPS page in Chrome or Edge.';return}
+ try{if(!media)media=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];recordedBlob=null;if(audioURL)URL.revokeObjectURL(audioURL);$('playback').hidden=true;$('saveRecord').hidden=true;
+ const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t));
+ recorder=new MediaRecorder(media,mime?{mimeType:mime}:undefined);
+ recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+ recorder.onstop=()=>{recordedBlob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});audioURL=URL.createObjectURL(recordedBlob);$('playback').src=audioURL;$('playback').hidden=false;$('saveRecord').hidden=false;$('micStatus').textContent='Recording finished · save it before leaving'};
+ recorder.start();$('micToggle').textContent='■ Stop recording';$('micStatus').textContent='● Recording in progress';
+ }catch(e){$('micStatus').textContent='Microphone permission unavailable: '+e.message}
+};
+$('saveRecord').onclick=()=>{if(!recordedBlob)return;const a=document.createElement('a');a.href=audioURL;a.download='speaking-mock-'+new Date().toISOString().replace(/[:.]/g,'-')+(recordedBlob.type.includes('mp4')?'.mp4':'.webm');a.click()};
+window.addEventListener('pagehide',()=>{clearClock();silence();stopRecording();media?.getTracks().forEach(t=>t.stop());if(audioURL)URL.revokeObjectURL(audioURL)});
+const part=new URLSearchParams(location.search).get('part');if(['1','2','3'].includes(part))document.querySelector('input[name="mode"][value="'+part+'"]').checked=true;
+})();
+</script></body></html>
