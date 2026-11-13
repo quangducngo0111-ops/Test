@@ -1,1 +1,72 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#281260"><title>LEXICON GUARDIANS · Vệ Binh Từ Vựng</title><link rel="stylesheet" href="./style.css?v=1"></head><body><div class="app"><header class="top"><a href="../" class="back">← Vocabulary Games</a><div class="brand"><span>📖</span><div><strong>LEXICON GUARDIANS</strong><small>Vệ Binh Từ Vựng · Vương quốc Lexica</small></div></div><div class="headstats"><span id="topicLabel">🌿 Environment</span><span id="levelLabel">A2–C1</span></div></header><div class="hud"><div class="meter"><span>🏰 Thành trì</span><b id="hpText">100 / 100</b><div class="track"><i id="hpFill"></i></div></div><div class="metric">💎 Năng lượng <strong id="mana">120</strong></div><div class="metric">⭐ Điểm <strong id="score">0</strong></div><div class="metric">🌊 Đợt quái <strong id="wave">0 / 5</strong></div><div class="metric">🧠 Đúng <strong id="accuracy">0%</strong></div><button class="smallbtn" id="soundBtn" title="Bật hoặc tắt âm thanh">🔊</button></div><div class="layout"><section class="boardPanel"><div class="stagehead"><div><span class="eyebrow">THE KINGDOM OF LEXICA</span><h1 id="stageTitle">Rừng Ngôn Từ</h1></div><div class="pill" id="stageBadge">Chuẩn bị phép thuật</div></div><div class="canvasWrap"><canvas id="board" width="1000" height="610" aria-label="Bản đồ phòng thủ. Bấm vào ô sáng để chọn vị trí xây tháp."></canvas><div class="boardTip" id="boardTip">✨ Lật thẻ từ để nạp sức mạnh trước khi chiến đấu</div></div><div class="bottom"><div class="towerLegend"><span>📜 Chính Tả</span><span>🔮 Nghĩa</span><span>🌱 Ngữ Cảnh</span></div><button class="primary" id="waveBtn" disabled>▶ Bắt đầu đợt quái</button></div></section><aside class="right"><section class="sidePanel"><div class="sideTop"><h2>📚 Sách Phép</h2><span id="learnedCount">0 / 8</span></div><p class="muted">Nhấn thẻ để xem nghĩa, ví dụ, sau đó nghe phát âm.</p><div id="grimoire" class="wordList"></div><div class="sideBtns"><button id="speakBtn" type="button">🔊 Nghe từ</button><button id="nextCardBtn" type="button">Thẻ tiếp →</button></div></section><section class="sidePanel"><h2>🛡️ Tháp phòng thủ</h2><p class="muted">Chọn một tháp, sau đó nhấn vị trí ✦ trên bản đồ để triệu hồi. Trả lời đúng mới có tháp mạnh.</p><div id="towerTypes" class="towerTypes"><button data-tower="spell" class="selected"><strong>📜 Chính Tả</strong><small>45 💎 · Viết từ</small></button><button data-tower="meaning"><strong>🔮 Ý Nghĩa</strong><small>50 💎 · Chọn nghĩa</small></button><button data-tower="context"><strong>🌱 Ngữ Cảnh</strong><small>65 💎 · Điền từ</small></button></div><div class="statusBox" id="gameStatus" aria-live="polite">Chọn tháp để xây. Đáp án đúng sẽ tạo ra phép thuật mạnh!</div></section><section class="sidePanel progressPanel"><h2>🔁 Từ cần ôn</h2><p class="muted">Các từ trả lời sai sẽ xuất hiện trở lại ở những đợt tiếp theo.</p><div id="wrongWords" class="chips">Chưa có từ cần ôn</div></section></aside></div><footer>Prototype chiến thuật + từ vựng · Phù hợp màn hình máy tính, máy tính bảng và điện thoại · Tiến độ lưu trên thiết bị</footer></div><div class="overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden><section class="dialog"><div class="dialogTop"><div><span class="eyebrow" id="modalKicker">WORDS ARE MAGIC</span><h2 id="modalTitle">Triệu hồi tháp</h2></div><button id="closeModal" class="close" aria-label="Đóng">×</button></div><p id="modalDesc"></p><div id="modalQuestion"></div><div id="modalFeedback" aria-live="polite"></div><div class="modalButtons"><button id="skipBtn" class="secondary">Đóng</button><button id="answerBtn" class="primary">Xác nhận →</button></div></section></div><script src="./game.js?v=1" defer></script></body></html>
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#201b45">
+<meta name="description" content="Lexicon Guardians — game chiến thuật phòng thủ học từ vựng tiếng Anh">
+<title>Lexicon Guardians — Vệ Binh Từ Vựng</title>
+<link rel="stylesheet" href="./style.css?v=20261113-v2">
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <a class="back" href="../">← Vocabulary Practice</a>
+  <div class="brand"><span class="brand-sigil">✦</span><div><strong>LEXICON <em>GUARDIANS</em></strong><small>VỆ BINH TỪ VỰNG • VƯƠNG QUỐC LEXICA</small></div></div>
+  <div class="top-actions"><span class="realm-tag">🌿 Rừng Ngôn Từ</span><button id="soundBtn" class="iconbtn" title="Bật/tắt hiệu ứng âm thanh">🔊</button><button id="helpBtn" class="iconbtn" title="Hướng dẫn">?</button></div>
+</header>
+<main>
+<section class="game-intro">
+  <div><span class="eyebrow">CHAPTER 01 · THE FORGOTTEN FOREST</span><h1>Thức tỉnh phép thuật <span>ngôn từ</span></h1><p>Quái Quên Lãng đang tiến tới Cổ Thành. Mỗi từ bạn ghi nhớ sẽ biến thành sức mạnh phòng thủ!</p></div>
+  <div class="realm-badges"><span>🏹 TOWER DEFENSE</span><span>📚 A2–C1</span><span>✨ 5 WAVES</span></div>
+</section>
+<section class="hud">
+ <div class="hud-health"><div class="hud-title"><span>❤️ SỨC MẠNH THÀNH TRÌ</span><b id="hpText">100 / 100</b></div><div class="meter"><i id="hpFill"></i></div></div>
+ <div class="hud-stat"><span class="stat-icon">🖋️</span><div><small>MỰC PHÉP</small><strong id="inkText">200</strong></div></div>
+ <div class="hud-stat"><span class="stat-icon">🌊</span><div><small>ĐỢT QUÁI</small><strong id="waveText">0 / 5</strong></div></div>
+ <div class="hud-stat"><span class="stat-icon">⭐</span><div><small>ĐIỂM</small><strong id="scoreText">0</strong></div></div>
+ <div class="hud-stat"><span class="stat-icon">🔥</span><div><small>COMBO</small><strong id="comboText">×1</strong></div></div>
+ <div class="hud-stat"><span class="stat-icon">🎯</span><div><small>CHÍNH XÁC</small><strong id="accuracyText">—</strong></div></div>
+</section>
+<div class="layout">
+ <section class="arena-shell">
+  <div class="arena-head"><div><span class="eyebrow">THE LIVING KINGDOM</span><h2>🌳 Rừng Lexica</h2></div><div class="arena-controls"><span class="battle-state" id="phaseText">Đang nghiên cứu phép thuật</span><button id="pauseBtn" class="iconbtn" title="Tạm dừng" disabled>Ⅱ</button><button id="speedBtn" class="iconbtn" title="Tốc độ">1×</button></div></div>
+  <div class="canvas-shell"><canvas id="board" width="1120" height="660" aria-label="Bản đồ phòng thủ. Chọn bệ sáng để xây hoặc nâng cấp tháp."></canvas><div id="floatingNotice" class="floating-notice">Lật thẻ trong Sách Phép để bắt đầu cuộc phiêu lưu</div><div id="waveNotice" class="wave-notice" aria-live="polite" hidden></div></div>
+  <div class="arena-bottom">
+   <div class="legend"><span><i class="legend-dot normal"></i> Bệ thường</span><span><i class="legend-dot hill"></i> Đồi cao</span><span><i class="legend-dot water"></i> Bến nước</span><span><i class="legend-dot well"></i> Giếng Mực</span></div>
+   <div class="arena-buttons"><button id="criticalBtn" class="btn critical" disabled>⚡ Phép chí mạng <small>SPACE</small></button><button id="waveBtn" class="btn primary" disabled>▶ Bắt đầu đợt 1</button></div>
+  </div>
+  <div class="battle-log"><span>📜 NHẬT KÝ CHIẾN ĐẤU</span><p id="battleLog">Chạm vào Sách Phép bên phải, ghi nhớ ít nhất 8 từ để thức tỉnh vương quốc.</p></div>
+ </section>
+ <aside class="rightbar">
+  <section class="panel grimoire-panel">
+   <div class="panel-title"><h2>📖 Sách Phép Grimoire</h2><span id="studyProgress">0/8</span></div>
+   <p class="hint">Ôn nghĩa, ví dụ và nghe phát âm trước khi ra trận.</p>
+   <div class="featured-card" id="featuredCard"><div class="card-top"><span>✦ WORD SPELL</span><span id="wordIndex">01 / 08</span></div><div class="bigword" id="wordText">Lexica</div><div class="meaning" id="wordMeaning">Vương quốc ngôn từ</div><p id="wordExample">Words are the magic that protects this kingdom.</p><div class="card-foot"><button id="pronounceBtn">🔊 Nghe phát âm</button><button id="flipCardBtn">Lật thẻ ↻</button></div></div>
+   <div class="grimoire-actions"><button id="prevWord">← Từ trước</button><button id="nextWord">Từ tiếp →</button></div>
+   <div class="study-bar"><i id="studyFill"></i></div><div class="tiny" id="studyHint">Lật 8 thẻ để mở khóa phòng thủ</div>
+  </section>
+  <section class="panel arsenal-panel">
+   <div class="panel-title"><h2>🏰 Kho Tháp Ma Pháp</h2><span class="tiny">CHỌN 1 THÁP</span></div><p class="hint">Tháp mạnh hay yếu phụ thuộc vào câu trả lời của bạn.</p>
+   <div class="tower-list" id="towerList"></div>
+  </section>
+  <section class="panel selected-panel" id="selectedPanel"><div class="panel-title"><h2>🛡️ Tháp đang chọn</h2><span id="slotTitle">Chưa chọn bệ</span></div><div id="towerDetails" class="hint">Chạm một bệ trên bản đồ để xây tháp. Chạm tháp đã xây để nâng cấp hoặc bán.</div><div class="upgrade-actions"><button id="upgradeBtn" class="btn secondary" disabled>⬆ Nâng cấp</button><button id="repairBtn" class="btn secondary" disabled>✨ Sửa tháp Mờ</button><button id="sellBtn" class="btn secondary danger" disabled>Bán 70%</button></div></section>
+  <section class="panel review-panel"><div class="panel-title"><h2>👾 Từ cần đánh bại</h2><span id="missedCount">0</span></div><div id="missedList" class="review-chips">Chưa có từ cần ôn</div><p class="hint">Từ sai sẽ trở lại qua những quái mạnh ở đợt sau.</p></section>
+ </aside>
+</div>
+<section class="below"><div><strong>✦ Học để mạnh hơn · Mạnh lên để bảo vệ Lexica ✦</strong><p>Bản v2 mở rộng: 5 tháp chiến thuật, 5 nhóm quái, 12 bệ xây, 3 cấp nâng cấp, Mực Phép và hiệu ứng chiến đấu.</p></div><button id="restartBtn" class="btn secondary">↺ Bắt đầu lại</button></section>
+</main>
+<footer>LEXICON GUARDIANS · Bản chơi thử học từ vựng · Tiến độ lưu cục bộ trên thiết bị</footer>
+</div>
+<div class="overlay" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="dialog">
+  <div class="dialog-art"><div class="dialog-rune">✦</div><div class="dialog-stars">✧ ✦ ✧</div></div>
+  <div class="dialog-content">
+   <div class="modal-header"><span class="eyebrow" id="modalKicker">MAGIC CHALLENGE</span><button id="closeModal" class="iconbtn" aria-label="Đóng">×</button></div>
+   <h2 id="modalTitle">Triệu hồi phép thuật</h2><p id="modalDesc"></p><div id="modalQuestion"></div><div id="modalFeedback" aria-live="polite"></div>
+   <div class="modal-actions"><button id="skipBtn" class="btn secondary">Để sau</button><button id="answerBtn" class="btn primary">Kích hoạt phép ✨</button></div>
+  </div>
+ </div>
+</div>
+<script src="./game.js?v=20261113-v2" defer></script>
+</body></html>
