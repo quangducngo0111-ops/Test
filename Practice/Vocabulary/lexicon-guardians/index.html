@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#201b45">
 <meta name="description" content="Lexicon Guardians — game chiến thuật phòng thủ học từ vựng tiếng Anh">
 <title>Lexicon Guardians — Vệ Binh Từ Vựng</title>
-<link rel="stylesheet" href="./style.css?v=20261113-hover-tutorial-v3">
+<link rel="stylesheet" href="./style.css?v=20261113-context-difficulty-v4">
 </head>
 <body>
 <div class="app">
@@ -18,7 +18,7 @@
 <main>
 <section class="game-intro">
   <div><span class="eyebrow">CHAPTER 01 · THE FORGOTTEN FOREST</span><h1>Thức tỉnh phép thuật <span>ngôn từ</span></h1><p>Quái Quên Lãng đang tiến tới Cổ Thành. Mỗi từ bạn ghi nhớ sẽ biến thành sức mạnh phòng thủ!</p></div>
-  <div class="realm-badges"><span>🏹 TOWER DEFENSE</span><span>📚 A2–C1</span><span>✨ 5 WAVES</span></div>
+  <div class="realm-badges"><span>🏹 TOWER DEFENSE</span><span>📚 A2–C1</span><span>✨ 5 WAVES</span><span id="difficultyBadge">🌿 DỄ</span></div>
 </section>
 <section class="hud">
  <div class="hud-health"><div class="hud-title"><span>❤️ SỨC MẠNH THÀNH TRÌ</span><b id="hpText">100 / 100</b></div><div class="meter"><i id="hpFill"></i></div></div>
@@ -46,15 +46,15 @@
    <div class="grimoire-actions"><button id="prevWord">← Từ trước</button><button id="nextWord">Từ tiếp →</button></div>
    <div class="study-bar"><i id="studyFill"></i></div><div class="tiny" id="studyHint">Lật 8 thẻ để mở khóa phòng thủ</div>
   </section>
-  <section class="panel arsenal-panel">
-   <div class="panel-title"><h2>🏰 Kho Tháp Ma Pháp</h2><span class="tiny">CHỌN 1 THÁP</span></div><p class="hint">Tháp mạnh hay yếu phụ thuộc vào câu trả lời của bạn.</p>
+  <section class="panel arsenal-panel" id="arsenalPanel" hidden>
+   <div class="panel-title"><h2>🏰 Xây tháp tại bệ này</h2><span class="tiny" id="buildSlotName">BỆ TRỐNG</span></div><p class="hint">Tháp mạnh hay yếu phụ thuộc vào câu trả lời của bạn.</p>
    <div class="tower-list" id="towerList"></div>
   </section>
-  <section class="panel selected-panel" id="selectedPanel"><div class="panel-title"><h2>🛡️ Tháp đang chọn</h2><span id="slotTitle">Chưa chọn bệ</span></div><div id="towerDetails" class="hint">Chạm một bệ trên bản đồ để xây tháp. Chạm tháp đã xây để nâng cấp hoặc bán.</div><div class="upgrade-actions"><button id="upgradeBtn" class="btn secondary" disabled>⬆ Nâng cấp</button><button id="repairBtn" class="btn secondary" disabled>✨ Sửa tháp Mờ</button><button id="sellBtn" class="btn secondary danger" disabled>Bán 70%</button></div></section>
+  <section class="panel selected-panel" id="selectedPanel" hidden><div class="panel-title"><h2>🛡️ Tháp đang chọn</h2><span id="slotTitle">Chưa chọn bệ</span></div><div id="towerDetails" class="hint">Chạm một bệ trên bản đồ để xây tháp. Chạm tháp đã xây để nâng cấp hoặc bán.</div><div class="upgrade-actions"><button id="upgradeBtn" class="btn secondary" disabled>⬆ Nâng cấp</button><button id="repairBtn" class="btn secondary" disabled>✨ Sửa tháp Mờ</button><button id="sellBtn" class="btn secondary danger" disabled>Bán 70%</button><button id="closeSelectionBtn" class="btn secondary">✕ Đóng</button></div></section>
   <section class="panel review-panel"><div class="panel-title"><h2>👾 Từ cần đánh bại</h2><span id="missedCount">0</span></div><div id="missedList" class="review-chips">Chưa có từ cần ôn</div><p class="hint">Từ sai sẽ trở lại qua những quái mạnh ở đợt sau.</p></section>
  </aside>
 </div>
-<section class="below"><div><strong>✦ Học để mạnh hơn · Mạnh lên để bảo vệ Lexica ✦</strong><p>Bản v2 mở rộng: 5 tháp chiến thuật, 5 nhóm quái, 12 bệ xây, 3 cấp nâng cấp, Mực Phép và hiệu ứng chiến đấu.</p></div><button id="restartBtn" class="btn secondary">↺ Bắt đầu lại</button></section>
+<section class="below"><div><strong>✦ Học để mạnh hơn · Mạnh lên để bảo vệ Lexica ✦</strong><p>Bản v3: Click bệ để xây, click tháp để nâng cấp, 3 độ khó và 6 kiểu tháp ma pháp.</p></div><button id="restartBtn" class="btn secondary">↺ Bắt đầu lại</button></section>
 </main>
 <footer>LEXICON GUARDIANS · Bản chơi thử học từ vựng · Tiến độ lưu cục bộ trên thiết bị</footer>
 </div>
@@ -62,12 +62,12 @@
  <div class="lex-tutorial-card">
   <span class="lex-tutorial-eyebrow">✦ HƯỚNG DẪN TRƯỚC KHI CHƠI</span>
   <h2 id="lexTutorialTitle">Bảo vệ vương quốc Lexica</h2>
-  <p>Hoàn thành 4 bước để dựng tháp và ngăn quái vật tiến vào thành.</p>
+  <p>Chọn độ khó, sau đó hoàn thành 4 bước để bảo vệ thành.</p><div class="difficulty-picker" id="difficultyPicker" role="group" aria-label="Chọn độ khó"><button type="button" data-difficulty="easy" class="active"><b>🌿 Dễ</b><small>Thêm mực · quái yếu hơn</small></button><button type="button" data-difficulty="hard"><b>⚔️ Khó</b><small>Chiến thuật cân bằng</small></button><button type="button" data-difficulty="hell"><b>🔥 Địa ngục</b><small>Quái đông, trâu và nhanh</small></button></div>
   <ol class="lex-tutorial-steps">
    <li><b>📖 Học phép</b><span>Lật ít nhất <strong>8 thẻ từ vựng</strong> trong Sách Phép.</span></li>
-   <li><b>🏰 Xây tháp</b><span>Chọn loại tháp ở bên phải, sau đó <strong>di chuột vào bệ tròn sáng lên và bấm</strong> để xây. Trả lời đúng thử thách để tháp mạnh hơn.</span></li>
+   <li><b>🏰 Xây tháp</b><span><strong>Bấm trực tiếp vào bệ đất trống</strong>, sau đó chọn tháp trong menu vừa mở. Trả lời thử thách từ vựng để xây.</span></li>
    <li><b>⚔️ Chống quái</b><span>Nhấn <strong>Bắt đầu đợt</strong> sau khi xây tháp. Tháp tự tấn công; dùng Phép Chí Mạng (SPACE) để hỗ trợ.</span></li>
-   <li><b>✨ Nâng cấp</b><span>Bấm tháp đã xây để nâng cấp, sửa hoặc bán bằng Mực Phép.</span></li>
+   <li><b>✨ Nâng cấp</b><span><strong>Bấm trực tiếp vào trụ đang có</strong> để hiện nút nâng cấp, sửa hoặc bán. Click ra ngoài để đóng.</span></li>
   </ol>
   <div class="lex-tutorial-actions"><button id="lexTutorialHelp" class="btn secondary" type="button">Xem lại luật chơi</button><button id="lexTutorialStart" class="btn primary" type="button">Đã hiểu · Bắt đầu chơi →</button></div>
  </div>
@@ -82,5 +82,5 @@
   </div>
  </div>
 </div>
-<script src="./game.js?v=20261113-hover-tutorial-v3" defer></script>
+<script src="./game.js?v=20261113-context-difficulty-v4" defer></script>
 </body></html>
