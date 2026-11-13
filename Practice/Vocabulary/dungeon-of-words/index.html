@@ -163,7 +163,7 @@ class DungeonScene extends Phaser.Scene{
   }
   e.hp-=damage;e.sprite.setTintFill(0xffffff);this.time.delayedCall(100,()=>{if(e.hp>0)e.sprite.clearTint()});
   this.add.text(e.sprite.x,e.sprite.y-34,"-"+damage,{fontSize:"16px",color:"#ffe3a1"}).setDepth(20).setOrigin(.5).setData("floorDecor",true);
-  if(e.hp<=0){const x=e.sprite.x,y=e.sprite.y;e.sprite.destroy();e.sprite.setActive(false);reward(e.boss?20:3,e.boss?30:5,e.boss?30:9);this.pickup(x,y,Math.random()<.6?"gem":"gold");if(e.boss){this.bossDown=true;this.exit.setFillStyle(0x2c906e);this.exitText.setText("🔓\nCỔNG");note("🐉 Boss bị hạ! Tới cổng bên phải và bấm E.")}else note("⚔️ Quái bị tiêu diệt!")}
+  if(e.hp<=0){const x=e.sprite.x,y=e.sprite.y;e.sprite.destroy();reward(e.boss?20:3,e.boss?30:5,e.boss?30:9);this.pickup(x,y,Math.random()<.6?"gem":"gold");if(e.boss){this.bossDown=true;this.exit.setFillStyle(0x2c906e);this.exitText.setText("🔓\nCỔNG");note("🐉 Boss bị hạ! Tới cổng bên phải và bấm E.")}else note("⚔️ Quái bị tiêu diệt!")}
  }
  spell(){
   if(profile.locked)return;
@@ -191,7 +191,6 @@ class DungeonScene extends Phaser.Scene{
 const phaserReady=typeof Phaser!=="undefined";
 if(phaserReady){
  const game=new Phaser.Game({type:Phaser.AUTO,parent:"game",width:800,height:600,backgroundColor:"#141524",render:{pixelArt:false,antialias:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},physics:{default:"arcade",arcade:{debug:false}},scene:[DungeonScene]});
- const controls={up:false,down:false,left:false,right:false};
  for(const b of document.querySelectorAll("[data-move]")){const dir=b.dataset.move;const set=flag=>{if(profile.scene)profile.scene.move[dir]=flag};b.addEventListener("pointerdown",e=>{e.preventDefault();b.setPointerCapture(e.pointerId);set(true)});for(const ev of ["pointerup","pointercancel","lostpointercapture"])b.addEventListener(ev,()=>set(false))}
  $("touchAttack").onclick=()=>profile.scene?.attack();$("touchSpell").onclick=()=>profile.scene?.spell();$("touchUse").onclick=()=>profile.scene?.use();
 }else{document.getElementById("game").textContent="Không tải được Phaser. Vui lòng kiểm tra kết nối internet."}
