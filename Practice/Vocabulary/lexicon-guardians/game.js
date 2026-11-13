@@ -204,7 +204,7 @@ if(S.phase==="done")return;
 S.selectedPad=i;
 const existing=selectedTower();renderSelected();if(existing)return;
 const pad=pads[i],def=TOWERS[S.selectedType];
-if(pad.type==="locked"){quiz(randWord(),"spell",good=>{if(good){pad.type="stone";addFX(pad.x,pad.y,"#ffe9a0",32);log("🔓 Đã phá chướng ngại! Bệ bí mật được mở.")}else log("Bệ bí mật chưa mở. Thử lại để giải mã.");renderSelected()});return}
+if(pad.type==="locked"){quiz(randWord(),"spell",good=>{if(good){pad.type="stone";addFX(pad.x,pad.y,"#ffe9a0",32);log("🔓 Đã mở bệ bí mật! Chọn loại tháp để xây.");renderArsenal()}else log("Bệ bí mật chưa mở. Thử lại để giải mã.");renderSelected()});return}
 if(!canBuildOn(S.selectedType,pad)){log(pad.type==="well"?"Giếng Mực chỉ cho phép xây Tháp Giếng Mực.":"Tháp Giếng Mực chỉ được xây trên ô Giếng.");return}
 if(S.ink<def.price){log("Chưa đủ "+def.price+" Mực Phép để xây tháp này.");return}
 const type=S.selectedType,challengeWord=randWord();
@@ -391,23 +391,49 @@ else{ctx.fillStyle=isActive?"#fff":"#5c4b8d";ctx.font="28px serif";ctx.textAlign
 ctx.restore();
 }
 function drawTower(t,x,y){
-const def=TOWERS[t.type],lvl=t.level,tm=S.time;ctx.save();ctx.translate(x,y);if(t.faded)ctx.globalAlpha=.65;
-let outline=t.type==="fire"?"#a44950":t.type==="ice"?"#4c9cbb":t.type==="well"?"#ac7b50":"#66529b";
-ctx.fillStyle=outline;rounded(-20,-39,40,43,7);ctx.fill();
-ctx.fillStyle=lvl===3?"#f3e9bd":"#bfb2d8";rounded(-15,-44,30,15,4);ctx.fill();
-ctx.fillStyle=def.color;ctx.shadowColor=def.color;ctx.shadowBlur=14+t.glow*21;
-switch(t.type){
-case"quill":line([[-4,-37],[7,-69-lvl*4]],"#f7ecd4",7);polygon([[6,-72-lvl*4],[17,-91-lvl*5],[17,-60-lvl*5]],"#55ccbc");ctx.font="24px serif";ctx.fillText("✒",-13,-44);break;
-case"spell":polygon([[0,-88-lvl*6],[20,-61],[8,-40],[-14,-40],[-22,-61]],"#b9a3ff");polygon([[0,-88-lvl*6],[20,-61],[0,-48]],"#f1d7ff");break;
-case"echo":ctx.strokeStyle="#ffd889";ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,-62,20+lvl*3,Math.PI,0);ctx.stroke();ellipse(0,-56,12+lvl*2,17,"#d8ad62");ctx.font="15px serif";ctx.fillText("♫",17,-72);break;
-case"ice":for(let i=0;i<6;i++){const a=i*Math.PI/3;line([[0,-59],[Math.cos(a)*(20+lvl*3),-59+Math.sin(a)*(20+lvl*3)]],"#c6fdff",6)}ellipse(0,-59,12,12,"#8df3ef");break;
-case"fire":polygon([[-18,-45],[4,-99-lvl*4],[14,-72],[22,-48],[0,-42]],"#f9a557");polygon([[-5,-45],[7,-82],[15,-48]],"#ffdf7c");break;
-case"well":ellipse(0,-38,22,9,"#9775c2");ellipse(0,-39,16,6,"#ffda78");ctx.font="18px serif";ctx.fillText("✦",-7,-46);break;
-}
-ctx.shadowBlur=0;if(lvl===3){ctx.strokeStyle=def.color;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,-55,33,10,Math.sin(tm)*.15,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#f4e6a5";ctx.font="15px serif";ctx.textAlign="center";ctx.fillText("✦",0,-108)}
-if(lvl>=2){ctx.fillStyle="#ffdf93";ctx.font="14px serif";ctx.textAlign="center";ctx.fillText("✦".repeat(lvl-1),0,14)}
-if(t.faded){ctx.fillStyle="#aea9b6bb";rounded(-25,-90,50,90,8);ctx.fill();ctx.fillStyle="#fbf8fc";ctx.font="12px sans-serif";ctx.fillText("MỜ",-13,-46)}
-ctx.restore();
+ const def=TOWERS[t.type],lvl=t.level,tm=S.time;ctx.save();ctx.translate(x,y);if(t.faded)ctx.globalAlpha=.64;
+ const palette={quill:["#305a70","#85dddb","#dafaf1"],spell:["#55508b","#bdabff","#f1e1ff"],echo:["#3b6889","#92d7ff","#e3f9ff"],ice:["#3b8291","#a1efff","#f5ffff"],fire:["#88435b","#ffad6d","#fff2a0"],well:["#755175","#efd08e","#fff1b6"]}[t.type];
+ const [base,bright,light]=palette;
+ ctx.shadowColor="#101a3b";ctx.shadowBlur=12;ellipse(0,11,28,10,"#151e3b77");ctx.shadowBlur=0;
+ ctx.fillStyle="#4d4266";polygon([[-28,1],[-18,-7],[18,-7],[28,1],[17,11],[-17,11]],"#574767");
+ polygon([[-24,-15],[-15,-29],[15,-29],[24,-15],[20,1],[-20,1]],base);
+ polygon([[-15,-29],[0,-35],[15,-29],[15,-16],[-15,-16]],bright);
+ polygon([[-17,-13],[-10,-19],[-10,-2],[-17,1]],"#ffffff55");
+ ctx.fillStyle="#f9e8b1";rounded(-5,-17,10,14,3);ctx.fill();
+ const top=-49-(lvl-1)*5;
+ ctx.save();ctx.shadowBlur=17+t.glow*16;ctx.shadowColor=bright;
+ if(t.type==="quill"){
+   polygon([[-10,-33],[-15,top-12],[2,top-44],[9,top-13],[15,-33]],bright);
+   polygon([[-8,-37],[0,top-25],[5,-38]],light);
+   line([[1,-31],[5,top-36]],"#fff4dc",3);
+   ellipse(3,top-41,5,8,"#f6f0cc");
+ }else if(t.type==="spell"){
+   polygon([[0,top-38],[22,top-11],[12,top+14],[-14,top+14],[-22,top-11]],bright);
+   polygon([[0,top-38],[22,top-11],[0,top+12]],"#7866d2");
+   polygon([[0,top-38],[-14,top+14],[0,top+12]],light);
+   strokeCircle(0,top-10,29+lvl*2,"#d3baff",2);
+ }else if(t.type==="echo"){
+   ellipse(0,top-8,20,22,"#8a6a50");ellipse(0,top-11,14,17,bright);
+   ellipse(0,top-13,5,7,light);
+   ctx.strokeStyle=light;ctx.lineWidth=3;
+   for(let i=0;i<2;i++){ctx.beginPath();ctx.arc(0,top-13,25+i*12,-1,1);ctx.stroke()}
+ }else if(t.type==="ice"){
+   for(let i=0;i<6;i++){const a=i*Math.PI/3;line([[0,top-8],[Math.cos(a)*24,top-8+Math.sin(a)*24]],bright,7);ellipse(Math.cos(a)*24,top-8+Math.sin(a)*24,5,5,light)}
+   polygon([[0,top-30],[13,top-8],[0,top+14],[-13,top-8]],light);
+ }else if(t.type==="fire"){
+   polygon([[-19,-33],[-12,top-13],[-4,top-33],[8,top-44],[11,top-15],[24,-33],[11,-29],[-10,-29]],bright);
+   polygon([[-9,-32],[5,top-24],[12,-33]],light);
+   ellipse(1,-31,9,5,"#fff5d2");
+ }else{
+   ellipse(0,-29,26,10,base);ellipse(0,-31,23,9,bright);
+   ellipse(0,-32,16,6,"#bc88d2");ellipse(0,-34,10,4,light);
+   for(let i=0;i<3;i++){const a=tm*1.5+i*Math.PI*2/3;ellipse(Math.cos(a)*18,-48+Math.sin(a)*5,3,5,"#f7dc86")}
+ }
+ ctx.restore();
+ if(lvl>=2){strokeCircle(0,-31,26+lvl*3,bright,2);for(let i=0;i<lvl-1;i++)ellipse(-8+i*16,-4,4,4,"#fff2ae")}
+ if(lvl===3){ctx.strokeStyle=light;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(0,top-12,34,9,Math.sin(tm)*.2,0,Math.PI*2);ctx.stroke()}
+ if(t.faded){ctx.fillStyle="#b8b0c18c";rounded(-29,top-46,58,top*-1+55,9);ctx.fill();ctx.font="800 12px sans-serif";ctx.textAlign="center";ctx.fillStyle="#fff";ctx.fillText("MỜ",0,-39)}
+ ctx.restore();
 }
 function drawEnemy(e){
 ctx.save();const bob=Math.sin(S.time*4+e.seed)*5;ctx.translate(e.x,e.y+bob);let scale=e.boss?1.45:1;ctx.scale(scale,scale);
@@ -438,5 +464,5 @@ if(!S.paused){if(!S.challengeLock)update(dt*S.speed);for(const f of S.fx){f.x+=f
 S.fx=S.fx.filter(f=>f.life>0);S.floating=S.floating.filter(f=>f.life>0);
 render();if(!S.lastHUD||now-S.lastHUD>=200){updateHUD();S.lastHUD=now}requestAnimationFrame(loop);
 }
-showWord();renderArsenal();renderSelected();showMode();updateHUD();log("📖 Lật 8 thẻ Sách Phép để bắt đầu. Mỗi từ đúng sẽ tạo nên sức mạnh cho Lexica.");openTutorial();requestAnimationFrame(loop);
+restart();log("📖 Lật 8 thẻ Sách Phép để bắt đầu. Mỗi từ đúng sẽ tạo nên sức mạnh cho Lexica.");openTutorial();requestAnimationFrame(loop);
 })();
