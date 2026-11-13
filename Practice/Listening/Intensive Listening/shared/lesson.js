@@ -7,6 +7,19 @@ const same=(a,b)=>words(a).join(" ")===words(b).join(" ");
 let student={};try{student=JSON.parse(localStorage.getItem("IELTS_PRACTICE_STUDENT")||"{}")}catch{}
 const key="INTENSIVE_STAGE_V2_"+L.id+"_"+String(student.name||"guest").toLowerCase()+"_"+(student.className||"");
 let state={stage:0,gaps:{},gapsDone:false,dict:{},dictChecked:false,dictScore:0,unlocked:false,exam:{},submitted:false};try{state={...state,...JSON.parse(localStorage.getItem(key)||"{}")}}catch{}
+// When a lesson receives an authoritative transcript/cue revision, discard only stale Dictation data
+// and old browser-specific clip overrides; preserve completed Gap-fill and Listening answers.
+if(L.dictationRevision&&state.dictationRevision!==L.dictationRevision){
+ state.dict={};
+ state.dictChecked=false;
+ state.dictScore=0;
+ state.dictRetrying={};
+ state.clipOverrides={};
+ state.unlocked=false;
+ if(state.stage>=2)state.stage=state.gapsDone?1:0;
+ state.dictationRevision=L.dictationRevision;
+ localStorage.setItem(key,JSON.stringify(state));
+}
 const save=()=>localStorage.setItem(key,JSON.stringify(state));
 $("student").textContent=student.name?student.name+" · "+(student.className||""):"";
 $("heading").textContent="Part "+L.part+" · Bài "+String(L.number).padStart(2,"0")+" · "+L.title;
