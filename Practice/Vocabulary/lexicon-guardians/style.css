@@ -39,3 +39,19 @@
 .lex-tutorial-actions button{min-height:44px}
 @media(max-width:600px){.lex-tutorial-actions button{flex:1 1 100%}}
 @media(prefers-reduced-motion:reduce){.lex-tutorial{backdrop-filter:none}}
+
+/* V3: keep actions hidden until a map pad is actively selected */
+.arsenal-panel[hidden],.selected-panel[hidden]{display:none!important}
+.difficulty-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:13px 0 17px}
+.difficulty-picker button{min-width:0;padding:14px 9px;text-align:center;border:2px solid #e0d7ee;border-radius:15px;background:#fff;color:#4c3a76;transition:transform .16s,border-color .16s,background .16s}
+.difficulty-picker button b{display:block;font-size:17px}
+.difficulty-picker button small{display:block;margin-top:4px;font-size:11px;line-height:1.4;color:#695e7a}
+.difficulty-picker button.active{background:#fff2c9;border-color:#c49337;box-shadow:0 4px 13px #aa894644}
+.difficulty-picker button:hover{transform:translateY(-2px)}
+.arsenal-panel,.selected-panel{border:2px solid #cab087!important;background:linear-gradient(145deg,#fffef9,#f2ebff)!important;animation:lexMenuAppear .18s ease-out}
+.arsenal-panel .tower-list{display:grid;grid-template-columns:1fr;gap:8px}
+.arsenal-panel .tower-choice{min-height:68px}
+.selected-panel .upgrade-actions{display:flex;flex-wrap:wrap;gap:8px}
+.selected-panel .upgrade-actions .btn{flex:1 1 43%;min-height:42px}
+@keyframes lexMenuAppear{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.difficulty-picker{grid-template-columns:1fr}.difficulty-picker button{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left}.difficulty-picker button small{margin:0;text-align:right}}
