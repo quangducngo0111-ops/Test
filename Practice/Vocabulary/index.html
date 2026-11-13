@@ -6862,27 +6862,53 @@ button:disabled{
 .topic-set-card:focus-visible{outline:3px solid #ff9c00;outline-offset:3px}
 @media(max-width:650px){.topic-set-card{min-height:160px;padding:16px}.topic-set-card .topic-set-name{font-size:17px}}
 
-/* Economy theme: light decorative falling dollar symbols, never cover content */
+/* Economy: Option A — 9 subtle, slowly falling illustrated dollar banknotes */
 #setsScreen.economy-sets{position:relative;isolation:isolate}
 #setsScreen.economy-sets>.screen-head,
 #setsScreen.economy-sets>#setGrid{position:relative;z-index:1}
-#setsScreen .economy-dollar-rain{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;border-radius:24px}
-#setsScreen .economy-dollar-rain span{
-  position:absolute;top:-72px;left:var(--x);
-  color:#3b0e90;opacity:0;font-weight:900;font-size:var(--size);
-  line-height:1;user-select:none;text-shadow:0 3px 10px rgba(59,14,144,.1);
-  animation:economy-dollar-fall var(--duration) linear infinite;
+#setsScreen .economy-dollar-rain{
+  position:absolute;inset:0;z-index:0;overflow:hidden;
+  pointer-events:none;border-radius:24px
+}
+#setsScreen .economy-dollar-rain .economy-bill{
+  position:absolute;top:-65px;left:var(--x);
+  width:66px;height:34px;box-sizing:border-box;
+  border-radius:6px;border:1px solid rgba(40,116,66,.30);
+  background:linear-gradient(135deg,#e3f8e8,#b4e5bf 52%,#d0f1d9);
+  box-shadow:0 5px 14px rgba(34,90,48,.09),inset 0 0 0 3px rgba(255,255,255,.26);
+  opacity:0;transform:translate3d(0,-35px,0) rotate(var(--rotate));
+  animation:economy-banknote-fall var(--duration) linear infinite;
   animation-delay:var(--delay);will-change:transform,opacity
 }
-#setsScreen .economy-dollar-rain span:nth-child(3n){color:#dbab40}
-#setsScreen .economy-dollar-rain span:nth-child(4n){color:#79bda7}
-@keyframes economy-dollar-fall{
-  0%{transform:translate3d(0,-50px,0) rotate(-20deg);opacity:0}
-  12%{opacity:.22}
-  85%{opacity:.17}
-  100%{transform:translate3d(var(--drift),830px,0) rotate(180deg);opacity:0}
+#setsScreen .economy-dollar-rain .economy-bill::before{
+  content:"";position:absolute;inset:4px;border:1px solid rgba(39,108,58,.24);
+  border-radius:3px
 }
-@media(prefers-reduced-motion:reduce){#setsScreen .economy-dollar-rain span{animation:none;opacity:.1;top:var(--static-y)}}
+#setsScreen .economy-dollar-rain .economy-bill::after{
+  content:"$";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  display:grid;place-items:center;width:23px;height:23px;
+  border-radius:50%;border:1px solid rgba(47,113,66,.25);
+  font-size:15px;font-weight:850;color:#367b4c
+}
+#setsScreen .economy-dollar-rain .economy-bill i{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:6px;height:12px;border-top:1px solid #5a9b6c;
+  border-bottom:1px solid #5a9b6c;opacity:.55
+}
+#setsScreen .economy-dollar-rain .economy-bill i:first-child{left:8px}
+#setsScreen .economy-dollar-rain .economy-bill i:last-child{right:8px}
+@keyframes economy-banknote-fall{
+  0%{transform:translate3d(0,-45px,0) rotate(var(--rotate));opacity:0}
+  14%{opacity:.17}
+  80%{opacity:.15}
+  100%{transform:translate3d(var(--drift),max(850px,110vh),0) rotate(calc(var(--rotate) + 150deg));opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  #setsScreen .economy-dollar-rain .economy-bill{
+    animation:none;opacity:.09;top:var(--static-y);
+    transform:rotate(var(--rotate))
+  }
+}
 /* Reading cards: gọn hơn, ưu tiên tên bài đọc */
 .reading-set-card{
   min-height:152px;
@@ -13208,16 +13234,21 @@ function syncEconomySetBackground(){
   rain=document.createElement("div");
   rain.className="economy-dollar-rain";
   rain.setAttribute("aria-hidden","true");
-  const symbols=["$","＄","$","$","＄","$","$","＄","$","$","＄","$","$","＄"];
-  rain.innerHTML=symbols.map((symbol,i)=>{
-    const x=(7+i*37)%94;
-    const size=16+(i*7)%19;
-    const duration=11+(i*3)%10;
-    const delay=-((i*5)%19);
-    const drift=((i*19)%81)-40;
-    const y=(i*47)%85;
-    return '<span style="--x:'+x+'%;--size:'+size+'px;--duration:'+duration+'s;--delay:'+delay+'s;--drift:'+drift+'px;--static-y:'+y+'%">'+symbol+'</span>';
-  }).join("");
+  // Quiet ambience: nine distinct bills, deliberately staggered and very slow.
+  const bills=[
+    {x:8,d:22,delay:-3,drift:24,rotate:-17,y:7},
+    {x:29,d:26,delay:-18,drift:-30,rotate:14,y:30},
+    {x:53,d:24,delay:-11,drift:36,rotate:-12,y:53},
+    {x:78,d:28,delay:-23,drift:-27,rotate:19,y:75},
+    {x:91,d:25,delay:-7,drift:-32,rotate:-21,y:12},
+    {x:17,d:29,delay:-25,drift:25,rotate:10,y:62},
+    {x:42,d:27,delay:-4,drift:-19,rotate:18,y:24},
+    {x:67,d:23,delay:-16,drift:29,rotate:-8,y:86},
+    {x:86,d:30,delay:-27,drift:-22,rotate:12,y:45}
+  ];
+  rain.innerHTML=bills.map(b=>
+    '<div class="economy-bill" style="--x:'+b.x+'%;--duration:'+b.d+'s;--delay:'+b.delay+'s;--drift:'+b.drift+'px;--rotate:'+b.rotate+'deg;--static-y:'+b.y+'%"><i></i><i></i></div>'
+  ).join("");
   screen.insertBefore(rain,screen.querySelector("#setGrid"));
 }
 
