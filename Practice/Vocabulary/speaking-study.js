@@ -163,6 +163,15 @@ if(typeof originalRender==='function'){
     return output;
   };
 }
+// Rehydrate the selector when the page opens directly with ?skill=...&set=...
+window.refreshSpeakingVocabularyStage=function(){
+  if(!isSpeaking()||!selectedSet||!Array.isArray(currentCollection)||!currentCollection.length)return;
+  applyLevel();
+  if(typeof vocabularyStage!=='undefined'&&vocabularyStage==='select')showGameList();
+};
+if(isSpeaking()&&selectedSet&&Array.isArray(currentCollection)&&currentCollection.length){
+  window.refreshSpeakingVocabularyStage();
+}
 window.addEventListener('pagehide',()=>{
   if('speechSynthesis' in window)window.speechSynthesis.cancel();
 });
