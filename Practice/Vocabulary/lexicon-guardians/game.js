@@ -242,7 +242,9 @@ let range=def.range*(pads[tower.pad].type==="hill"?1.25:1)*(1+(tower.level-1)*.1
 let candidates=S.enemies.filter(e=>e.hp>0&&Math.hypot(e.x-tower.x,e.y-tower.y)<range).sort((a,b)=>b.distance-a.distance);
 if(candidates.length&&tower.cooldown<=0){
 const target=candidates[0],rate=def.rate/(1+.21*(tower.level-1));tower.cooldown=rate;tower.aim=Math.atan2(target.y-tower.y,target.x-tower.x);tower.glow=1;
-const damage=def.damage*(tower.faded?.30:1)*(1+(tower.level-1)*.75)*(pads[tower.pad].type==="water"?1.2:1);
+let damage=def.damage*(tower.faded?.30:1)*(1+(tower.level-1)*.75)*(pads[tower.pad].type==="water"?1.2:1);
+const resonance=S.towers.some(other=>other!==tower&&((tower.type==="ice"&&other.type==="fire")||(tower.type==="fire"&&other.type==="ice"))&&Math.hypot(other.x-tower.x,other.y-tower.y)<260);
+if(resonance)damage*=1.2;
 S.bullets.push({x:tower.x,y:tower.y-20,target,damage,speed:tower.type==="echo"?430:590,type:tower.type,life:2});
 }
 }
