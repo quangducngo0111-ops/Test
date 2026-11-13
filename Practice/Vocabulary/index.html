@@ -9768,6 +9768,9 @@ button:disabled{
 /* Optional enriched vocabulary metadata: hidden when fields are absent. */
 #vocabSelectionStage .word-row:has(.vocab-enrichment){grid-template-columns:38px minmax(0,1fr) auto;grid-template-rows:auto auto auto}
 #vocabSelectionStage .word-row .vocab-enrichment{grid-column:2/4;grid-row:3;display:grid;gap:9px;padding-top:11px;margin-top:6px;border-top:1px solid #eee8f8;min-width:0}
+#vocabSelectionStage .vocab-word-heading{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+#vocabSelectionStage .vocab-audio-button{flex:0 0 auto;border:1px solid #e1d8f5;border-radius:9px;background:#f3eeff;color:#3b0e90;padding:5px 7px;font-size:14px;line-height:1;cursor:pointer;transition:.15s}
+#vocabSelectionStage .vocab-audio-button:hover,#vocabSelectionStage .vocab-audio-button:focus-visible{background:#e6dcff;border-color:#957ed8;outline-offset:2px}
 #vocabSelectionStage .vocab-phonetic{display:block;margin-top:3px;color:#7a6698;font-size:12px;font-weight:650;letter-spacing:.01em}
 #vocabSelectionStage .vocab-example{font-size:12px;line-height:1.55;color:#504967}
 #vocabSelectionStage .vocab-example strong{font-weight:850;color:#3b0e90}
@@ -13372,32 +13375,55 @@ function syncVocabularyStage(){
    OPEN SET
 ========================================================= */
 
+/* Merge duplicate vocabulary entries within the selected set while preserving richer metadata. */
+function uniqueVocabularyWords(words){
+ const index=new Map();
+ for(const word of words){
+  if(!word||!String(word.word||"").trim())continue;
+  const key=String(word.word).normalize("NFKC").toLocaleLowerCase().replace(/\s+/g," ").trim();
+  const previous=index.get(key);
+  if(!previous){index.set(key,{...word});continue}
+  const result={...previous};
+  for(const field of ["phonetic","example","example_vi","image","meaning","collocation"]){
+   if(!String(result[field]||"").trim()&&String(word[field]||"").trim())result[field]=word[field];
+  }
+  // The illustrated example pack is authoritative for its own pilot set.
+  for(const field of ["phonetic","example","example_vi","image"]){
+   if(String(word.id||"").startsWith("economy-01-")&&String(word[field]||"").trim())result[field]=word[field];
+  }
+  index.set(key,result);
+ }
+ return Array.from(index.values());
+}
+function playVocabularyPronunciation(event,button){
+ event.preventDefault();
+ event.stopPropagation();
+ const word=button?.getAttribute("data-speak")||"";
+ if(!word)return;
+ if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined"){
+  alert("Trình duyệt này chưa hỗ trợ phát âm. Hãy thử Chrome hoặc Edge.");return;
+ }
+ try{
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(word);
+  utterance.lang="en-GB";
+  utterance.rate=0.85;
+  utterance.pitch=1;
+  const voices=window.speechSynthesis.getVoices();
+  const voice=voices.find(v=>v.lang.toLowerCase()==="en-gb")||voices.find(v=>v.lang.toLowerCase().startsWith("en-"));
+  if(voice)utterance.voice=voice;
+  window.speechSynthesis.speak(utterance);
+ }catch(error){console.warn("Vocabulary audio could not be played",error);alert("Không phát được âm thanh trên trình duyệt này.");}
+}
+
 function openSet(set, sync=true){
 
   selectedSet =
   set;
   vocabularyStage="select";
 
-  currentCollection =
-  VOCABULARY_DATA
-  .filter(
-    word =>
-    (
-      word.skills
-      ||
-      []
-    )
-    .includes(
-      selectedSkill
-    )
-    &&
-    String(
-      word.set
-    )
-    ===
-    String(
-      set
-    )
+  currentCollection = uniqueVocabularyWords(
+    VOCABULARY_DATA.filter(word=>(word.skills||[]).includes(selectedSkill)&&String(word.set)===String(set))
   );
 
 
@@ -13593,7 +13619,10 @@ function renderCollection(){
         <article class="word-row" data-search="${escapeHTML((word.word+" "+word.meaning+" "+example+" "+exampleVi).toLocaleLowerCase())}">
           <span class="vocab-card-icon" aria-hidden="true">✦</span>
           <div class="word">
-            ${escapeHTML(word.word)}
+            <span class="vocab-word-heading"><span>${escapeHTML(word.word)}</span>
+              <button type="button" class="vocab-audio-button" data-speak="${escapeHTML(word.word)}"
+                onclick="playVocabularyPronunciation(event,this)" aria-label="Nghe phát âm ${escapeHTML(word.word)}" title="Nghe phát âm (Anh-Anh)">🔊</button>
+            </span>
             ${phonetic?`<span class="vocab-phonetic">${escapeHTML(phonetic)}</span>`:""}
           </div>
 
