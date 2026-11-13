@@ -63,7 +63,7 @@ function css(){
   .sv-entry .sv-meaning{font-size:13px;color:#444b59;margin-top:7px}
   .sv-entry .sv-example{font-size:12px;color:#717a8b;margin-top:7px;line-height:1.55}
   .sv-speak{min-width:40px;min-height:40px;border:1px solid #cfc4e9;background:#efebfc;border-radius:11px;cursor:pointer;font-size:19px}
-  @media(max-width:650px){.sv-grid{grid-template-columns:1fr}.sv-panel{padding:14px}}
+  .sv-panel .sv-next{display:block;width:100%;margin:16px 0 0;padding:15px;border:0;border-radius:13px;background:linear-gradient(90deg,#3b0e90,#6541cf);color:#fff;font-weight:900;font-size:16px;cursor:pointer}\n  .sv-panel .sv-next:hover{filter:brightness(1.1)}\n  .sv-panel .sv-grid{max-height:min(40vh,360px);overflow:auto;scrollbar-color:#c3b6e5 transparent}\n  .sv-panel .sv-preview-toggle{background:none;border:0;color:#5931ac;cursor:pointer;font-weight:800;padding:8px 0}\n  .sv-panel .sv-preview[hidden]{display:none!important}\n  @media(max-width:650px){.sv-grid{grid-template-columns:1fr}.sv-panel{padding:14px}}
   `;
   document.head.appendChild(style);
 }
@@ -71,7 +71,7 @@ function render(){
   const list=document.getElementById('wordList');
   if(!list)return;
   let panel=document.getElementById('speakingStudyPanel');
-  if(!isSpeaking()){
+  if(!isSpeaking()||(typeof vocabularyStage!=='undefined'&&vocabularyStage==='games')){
     if(panel)panel.remove();
     list.style.display='';
     return;
@@ -88,12 +88,11 @@ function render(){
   const show=entries.filter(x=>tab==='all'||x._kind===tab);
   const kinds=[['all','Tất cả'],['vocabulary','Vocabulary'],['collocation','Collocations']];
   panel.innerHTML=`
-  <h3>📚 Vocabulary · ${escape(level)}</h3>
-  <p>Mỗi trình độ có bộ từ riêng. Chọn B1–C2 trước khi chơi game: trò chơi và bài kiểm tra chỉ sử dụng mục học trong trình độ đang chọn. Phân cấp CEFR mang tính định hướng học tập.</p>
+  <h3>📚 Chọn cấp độ từ vựng</h3>\n  <p>Chọn trình độ phù hợp. Bộ từ của cấp độ này sẽ được sử dụng trong trò chơi và bài kiểm tra.</p>
   <div class="sv-controls" role="group" aria-label="Chọn trình độ">
     ${levels.map(x=>`<button type="button" class="sv-chip" data-level="${x}" aria-pressed="${x===level}">${x}</button>`).join('')}
   </div>
-  <div class="sv-controls" role="group" aria-label="Lọc loại từ">
+  <div class="sv-preview" id="svPreview" hidden>\n  <div class="sv-controls" role="group" aria-label="Lọc loại từ">
     ${kinds.map(([x,label])=>`<button type="button" class="sv-chip" data-kind="${x}" aria-pressed="${x===tab}">${label}</button>`).join('')}
   </div>
   <div class="sv-count">${entries.length} mục học cấp ${level} · ${show.length} mục đang hiển thị · Game dùng cả Vocabulary và Collocations của ${level}</div>
@@ -109,9 +108,7 @@ function render(){
         ${item.example?'<div class="sv-example">Example: '+escape(item.example)+'</div>':''}
       </article>
     `).join('')}
-  </div>
-  `;
-  panel.onclick=e=>{
+  </div>\n  </div>\n  <button type="button" class="sv-preview-toggle" data-preview aria-expanded="false">Xem trước ${entries.length} từ vựng ↓</button>\n  <button type="button" class="sv-next" data-continue>Tiếp tục với ${escape(level)} → Chọn game</button>\n  `;\n  panel.onclick=e=>{
     const button=e.target.closest('button');if(!button)return;
     if(button.hasAttribute('data-level')){
       level=button.dataset.level;
@@ -122,7 +119,7 @@ function render(){
       showGameList();
       return;
     }
-    if(button.hasAttribute('data-kind')){tab=button.dataset.kind;render();return;}
+    if(button.hasAttribute('data-continue')){window.openVocabularyGameStage?.();return;}\n    if(button.hasAttribute('data-preview')){const preview=panel.querySelector('#svPreview');preview.hidden=!preview.hidden;button.setAttribute('aria-expanded',String(!preview.hidden));button.textContent=preview.hidden?'Xem trước '+entries.length+' từ vựng ↓':'Thu gọn danh sách từ ↑';return;}\n    if(button.hasAttribute('data-kind')){tab=button.dataset.kind;render();return;}
     if(button.hasAttribute('data-say')){
       const item=show[Number(button.dataset.say)];
       if(item)speak(item.word);
