@@ -5,8 +5,55 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const words=s=>String(s??"").normalize("NFKC").toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").trim().split(/\s+/).filter(Boolean);
 const same=(a,b)=>words(a).join(" ")===words(b).join(" ");
 let student={};try{student=JSON.parse(localStorage.getItem("IELTS_PRACTICE_STUDENT")||"{}")}catch{}
+const isValidStudent=obj=>obj&&typeof obj.name==="string"&&obj.name.trim()&&typeof obj.className==="string"&&obj.className.trim();
+const identityStyle=document.createElement("style");
+identityStyle.textContent=String.raw`
+#ilIdentityGate{max-width:620px;margin:22px auto;background:#fff;border:1px solid #dcd4f1;border-radius:16px;padding:24px;box-shadow:0 12px 40px #28126018}
+#ilIdentityGate h2{margin:0 0 5px;color:#281260}
+#ilIdentityGate p{font-size:13px;color:#6c7085;margin:4px 0 18px}
+#ilIdentityGate .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#ilIdentityGate label{display:block;font-weight:800;color:#44356d;font-size:12px}
+#ilIdentityGate input{display:block;width:100%;margin-top:5px;border:1px solid #c7c4df;padding:11px;border-radius:9px;background:#fff}
+#ilIdentityGate button{background:#5834ae;color:#fff;border:0;border-radius:9px;padding:12px 18px;font-weight:850;cursor:pointer;margin-top:15px}
+#ilIdentityGate .error{color:#b83448;font-size:12px;margin-top:9px;min-height:18px}
+.il-student-edit{margin-left:7px;border:1px solid #ddd2f3;background:#f8f5ff;color:#56389b;border-radius:7px;font-size:11px;padding:4px 8px;cursor:pointer}
+@media(max-width:540px){#ilIdentityGate .fields{grid-template-columns:1fr}#ilIdentityGate{padding:17px}}
+`;
+document.head.appendChild(identityStyle);
+function showIdentityForm(){
+ const panel=document.getElementById("panel"),steps=document.getElementById("steps");
+ if(steps)steps.hidden=true;
+ const savedName=student.name||"",savedClass=student.className||"";
+ if(panel)panel.innerHTML='<section id="ilIdentityGate"><h2>Thông tin học sinh</h2><p>Nhập họ tên và lớp trước khi bắt đầu bài Intensive Listening. Kết quả sẽ gắn với đúng học sinh khi nộp bài.</p><form id="ilStudentForm"><div class="fields"><label>Họ và tên *<input id="ilStudentName" name="studentName" maxlength="100" required autocomplete="name" placeholder="Nguyễn Văn A"></label><label>Lớp *<input id="ilStudentClass" name="studentClass" maxlength="70" required placeholder="VD: XD25A02.1"></label></div><div class="error" id="ilStudentError" role="alert"></div><button type="submit">Bắt đầu luyện nghe →</button></form></section>';
+ const nameInput=document.getElementById("ilStudentName"),classInput=document.getElementById("ilStudentClass");
+ if(nameInput)nameInput.value=savedName;
+ if(classInput)classInput.value=savedClass;
+ const form=document.getElementById("ilStudentForm");
+ if(form)form.onsubmit=event=>{
+  event.preventDefault();
+  const name=(nameInput.value||"").trim().replace(/\s+/g," "),className=(classInput.value||"").trim().replace(/\s+/g," ");
+  if(!name||!className){document.getElementById("ilStudentError").textContent="Vui lòng nhập đủ họ tên và lớp.";return}
+  localStorage.setItem("IELTS_PRACTICE_STUDENT",JSON.stringify({...student,name,className}));
+  window.location.reload();
+ };
+}
+if(!isValidStudent(student)){showIdentityForm();return}
+const studentBar=document.getElementById("student");
+if(studentBar){
+ studentBar.innerHTML='<span id="ilStudentLabel"></span> <button id="ilChangeStudent" type="button" class="il-student-edit">Đổi học sinh</button>';
+ document.getElementById("ilStudentLabel").textContent=student.name+" · "+student.className;
+ document.getElementById("ilChangeStudent").onclick=()=>{showIdentityForm();const a=document.getElementById("audio");if(a)a.pause()};
+}
 const key="INTENSIVE_STAGE_V2_"+L.id+"_"+String(student.name||"guest").toLowerCase()+"_"+(student.className||"");
 let state={stage:0,gaps:{},gapsDone:false,dict:{},dictChecked:false,dictScore:0,unlocked:false,exam:{},submitted:false};try{state={...state,...JSON.parse(localStorage.getItem(key)||"{}")}}catch{}
+// Reset only Phase 1 progress when the actual gap set changes, to avoid old indices and grades.
+if(L.gapRevision&&state.gapRevision!==L.gapRevision){
+ state.gaps={};state.gapChecked=false;state.gapsDone=false;state.gapScore=0;state.gapTotal=L.gapAnswers.length;
+ state.dict={};state.dictChecked=false;state.dictScore=0;state.dictRetrying={};state.unlocked=false;
+ state.stage=0;
+ state.gapRevision=L.gapRevision;
+ localStorage.setItem(key,JSON.stringify(state));
+}
 // When a lesson receives an authoritative transcript/cue revision, discard only stale Dictation data
 // and old browser-specific clip overrides; preserve completed Gap-fill and Listening answers.
 if(L.dictationRevision&&state.dictationRevision!==L.dictationRevision){
@@ -21,7 +68,7 @@ if(L.dictationRevision&&state.dictationRevision!==L.dictationRevision){
  localStorage.setItem(key,JSON.stringify(state));
 }
 const save=()=>localStorage.setItem(key,JSON.stringify(state));
-$("student").textContent=student.name?student.name+" · "+(student.className||""):"";
+// Student name/class and switch control are populated by the entry form above.
 $("heading").textContent="Part "+L.part+" · Bài "+String(L.number).padStart(2,"0")+" · "+L.title;
 const audio=$("audio");if(L.audio)audio.src=L.audio;
 /* Audio is provided by the lesson itself; the shared sidebar owns all playback controls. */
