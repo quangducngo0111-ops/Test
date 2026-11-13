@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#201b45">
 <meta name="description" content="Lexicon Guardians — game chiến thuật phòng thủ học từ vựng tiếng Anh">
 <title>Lexicon Guardians — Vệ Binh Từ Vựng</title>
-<link rel="stylesheet" href="./style.css?v=20261113-v2">
+<link rel="stylesheet" href="./style.css?v=20261113-hover-tutorial-v3">
 </head>
 <body>
 <div class="app">
@@ -31,7 +31,7 @@
 <div class="layout">
  <section class="arena-shell">
   <div class="arena-head"><div><span class="eyebrow">THE LIVING KINGDOM</span><h2>🌳 Rừng Lexica</h2></div><div class="arena-controls"><span class="battle-state" id="phaseText">Đang nghiên cứu phép thuật</span><button id="pauseBtn" class="iconbtn" title="Tạm dừng" disabled>Ⅱ</button><button id="speedBtn" class="iconbtn" title="Tốc độ">1×</button></div></div>
-  <div class="canvas-shell"><canvas id="board" width="1120" height="660" aria-label="Bản đồ phòng thủ. Chọn bệ sáng để xây hoặc nâng cấp tháp."></canvas><div id="floatingNotice" class="floating-notice">Lật thẻ trong Sách Phép để bắt đầu cuộc phiêu lưu</div><div id="waveNotice" class="wave-notice" aria-live="polite" hidden></div></div>
+  <div class="canvas-shell"><canvas id="board" width="1120" height="660" aria-label="Bản đồ phòng thủ. Di chuột hoặc chạm vào bệ tròn có viền sáng, rồi bấm để xây hoặc nâng cấp tháp."></canvas><div class="pad-hover-tip" id="padHoverTip" hidden role="status">✦ Bấm để chọn bệ</div><div id="floatingNotice" class="floating-notice">Lật thẻ trong Sách Phép để bắt đầu cuộc phiêu lưu</div><div id="waveNotice" class="wave-notice" aria-live="polite" hidden></div></div>
   <div class="arena-bottom">
    <div class="legend"><span><i class="legend-dot normal"></i> Bệ thường</span><span><i class="legend-dot hill"></i> Đồi cao</span><span><i class="legend-dot water"></i> Bến nước</span><span><i class="legend-dot well"></i> Giếng Mực</span></div>
    <div class="arena-buttons"><button id="criticalBtn" class="btn critical" disabled>⚡ Phép chí mạng <small>SPACE</small></button><button id="waveBtn" class="btn primary" disabled>▶ Bắt đầu đợt 1</button></div>
@@ -58,6 +58,20 @@
 </main>
 <footer>LEXICON GUARDIANS · Bản chơi thử học từ vựng · Tiến độ lưu cục bộ trên thiết bị</footer>
 </div>
+<div class="lex-tutorial" id="lexTutorial" role="dialog" aria-modal="true" aria-labelledby="lexTutorialTitle">
+ <div class="lex-tutorial-card">
+  <span class="lex-tutorial-eyebrow">✦ HƯỚNG DẪN TRƯỚC KHI CHƠI</span>
+  <h2 id="lexTutorialTitle">Bảo vệ vương quốc Lexica</h2>
+  <p>Hoàn thành 4 bước để dựng tháp và ngăn quái vật tiến vào thành.</p>
+  <ol class="lex-tutorial-steps">
+   <li><b>📖 Học phép</b><span>Lật ít nhất <strong>8 thẻ từ vựng</strong> trong Sách Phép.</span></li>
+   <li><b>🏰 Xây tháp</b><span>Chọn loại tháp ở bên phải, sau đó <strong>di chuột vào bệ tròn sáng lên và bấm</strong> để xây. Trả lời đúng thử thách để tháp mạnh hơn.</span></li>
+   <li><b>⚔️ Chống quái</b><span>Nhấn <strong>Bắt đầu đợt</strong> sau khi xây tháp. Tháp tự tấn công; dùng Phép Chí Mạng (SPACE) để hỗ trợ.</span></li>
+   <li><b>✨ Nâng cấp</b><span>Bấm tháp đã xây để nâng cấp, sửa hoặc bán bằng Mực Phép.</span></li>
+  </ol>
+  <div class="lex-tutorial-actions"><button id="lexTutorialHelp" class="btn secondary" type="button">Xem lại luật chơi</button><button id="lexTutorialStart" class="btn primary" type="button">Đã hiểu · Bắt đầu chơi →</button></div>
+ </div>
+</div>
 <div class="overlay" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
  <div class="dialog">
   <div class="dialog-art"><div class="dialog-rune">✦</div><div class="dialog-stars">✧ ✦ ✧</div></div>
@@ -68,5 +82,5 @@
   </div>
  </div>
 </div>
-<script src="./game.js?v=20261113-v2" defer></script>
+<script src="./game.js?v=20261113-hover-tutorial-v3" defer></script>
 </body></html>
