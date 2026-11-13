@@ -6140,6 +6140,8 @@ for (const [num, group] of Object.entries(sets)) window.VOCABULARY_SET_INFO.read
 })();
 </script>
 
+<!-- Economy topic: illustrated vocabulary pilot -->
+<script src="./data/economy-sample.js?v=20261113-economy-v1"></script>
 <!-- Writing Task 2 · Five topic-specific sets (100 contextual expressions) -->
 <script src="./data/writing-task-2-topics.js?v=20261113-topic-02"></script>
 <!-- Lesson-aligned Opinion Essay 23-24 vocabulary -->
@@ -9763,6 +9765,18 @@ button:disabled{
 #vocabSelectionStage .word-row .word{grid-column:2;grid-row:1;font-size:15px;line-height:1.4;font-weight:900;color:#291856;overflow-wrap:anywhere}
 #vocabSelectionStage .word-row .meaning{grid-column:2/4;grid-row:2;font-size:12px;line-height:1.5;color:#6b7188;overflow-wrap:anywhere}
 #vocabSelectionStage .word-row .word-status{grid-column:3;grid-row:1;font-size:10px;padding:6px 9px;white-space:nowrap}
+/* Optional enriched vocabulary metadata: hidden when fields are absent. */
+#vocabSelectionStage .word-row:has(.vocab-enrichment){grid-template-columns:38px minmax(0,1fr) auto;grid-template-rows:auto auto auto}
+#vocabSelectionStage .word-row .vocab-enrichment{grid-column:2/4;grid-row:3;display:grid;gap:9px;padding-top:11px;margin-top:6px;border-top:1px solid #eee8f8;min-width:0}
+#vocabSelectionStage .vocab-phonetic{display:block;margin-top:3px;color:#7a6698;font-size:12px;font-weight:650;letter-spacing:.01em}
+#vocabSelectionStage .vocab-example{font-size:12px;line-height:1.55;color:#504967}
+#vocabSelectionStage .vocab-example strong{font-weight:850;color:#3b0e90}
+#vocabSelectionStage .vocab-translation{font-size:11px;line-height:1.55;color:#7b718c}
+#vocabSelectionStage .vocab-example-image{display:block;width:92px;height:92px;object-fit:contain;border-radius:13px;border:1px solid #e7def7;background:#f5f0ff}
+#vocabSelectionStage .vocab-extra-content{display:flex;gap:13px;align-items:flex-start;flex-wrap:wrap}
+#vocabSelectionStage .vocab-extra-text{flex:1 1 190px;min-width:0}
+@media(max-width:550px){#vocabSelectionStage .vocab-example-image{width:72px;height:72px}}
+
 .vocab-empty-search{padding:25px;text-align:center;background:#f9f6ff;color:#786e8f;margin-top:12px;border-radius:14px}
 #vocabSelectionStage .vocab-stage-actions{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:22px 0 0;padding-top:18px;border-top:1px solid #ede8f4}
 #vocabSelectionSummary{font-size:12px;color:#77718c}
@@ -13562,23 +13576,38 @@ function renderCollection(){
       "○ Chưa gặp";
 
 
+      const phonetic=String(word.phonetic||"").trim();
+      const example=String(word.example||"").trim();
+      const exampleVi=String(word.example_vi||"").trim();
+      const image=String(word.image||"").trim();
+      // Only allow embedded illustrations or secure remote images.
+      const safeImage=/^(data:image\/svg\+xml;charset=utf-8,|https:\/\/)/i.test(image)?image:"";
+      const hasExtra=Boolean(phonetic||example||exampleVi||safeImage);
+      const extraText=(example||exampleVi)
+        ?`<div class="vocab-extra-text">
+             ${example?`<div class="vocab-example"><strong>Ví dụ:</strong> ${escapeHTML(example)}</div>`:""}
+             ${exampleVi?`<div class="vocab-translation">${escapeHTML(exampleVi)}</div>`:""}
+           </div>`
+        :"";
       return`
-        <article class="word-row" data-search="${escapeHTML((word.word+" "+word.meaning).toLocaleLowerCase())}">
+        <article class="word-row" data-search="${escapeHTML((word.word+" "+word.meaning+" "+example+" "+exampleVi).toLocaleLowerCase())}">
           <span class="vocab-card-icon" aria-hidden="true">✦</span>
           <div class="word">
             ${escapeHTML(word.word)}
+            ${phonetic?`<span class="vocab-phonetic">${escapeHTML(phonetic)}</span>`:""}
           </div>
 
           <div class="meaning">
             ${escapeHTML(word.meaning)}
           </div>
 
-          <div
-            class="word-status ${status}"
-          >
-            ${label}
-          </div>
-
+          <div class="word-status ${status}">${label}</div>
+          ${hasExtra?`<div class="vocab-enrichment">
+            <div class="vocab-extra-content">
+              ${safeImage?`<img class="vocab-example-image" loading="lazy" decoding="async" src="${escapeHTML(safeImage)}" alt="Minh họa ${escapeHTML(word.word)}">`:""}
+              ${extraText}
+            </div>
+          </div>`:""}
         </article>
       `;
 
