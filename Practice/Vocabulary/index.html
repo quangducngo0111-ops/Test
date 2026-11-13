@@ -6144,6 +6144,8 @@ for (const [num, group] of Object.entries(sets)) window.VOCABULARY_SET_INFO.read
 <script src="./data/writing-task-2-topics.js?v=20261113-topic-02"></script>
 <!-- Lesson-aligned Opinion Essay 23-24 vocabulary -->
 <script src="./data/opinion-essay-23-24.js?v=20261113-opinion-23-24-v1"></script>
+<script src="./data/wt2-legacy-opinion.js?v=20261113-v1"></script>
+<script src="./data/wt2-essay-bridge.js?v=20261113-essay-types-v1"></script>
 
 <!-- Writing Task 1 · Process · Bộ 01–06 -->
 <script>
@@ -12529,6 +12531,7 @@ function setRoute(params={}, replace=false){
     [
       "view",
       "skill",
+      "essay",
       "set"
     ]
     .forEach(
@@ -12902,6 +12905,8 @@ function openTopics(sync=true){
    SETS
 ========================================================= */
 
+let selectedEssayType = "";
+
 function openSkill(skill, sync=true){
 
   if(
@@ -12918,6 +12923,8 @@ function openSkill(skill, sync=true){
 
   selectedSkill =
   skill;
+
+  if(skill === "writing-task-2") selectedEssayType = "";
 
 
   selectedSet =
@@ -12984,7 +12991,75 @@ function openSkill(skill, sync=true){
 }
 
 
+
+function essayVocabError(error){
+  const grid = $("setGrid");
+  grid.innerHTML = '<div class="empty" style="grid-column:1/-1;padding:20px;border:1px solid #ded7fa;border-radius:13px;background:white;color:#664c92">'+
+    'Không thể tải từ vựng từ bài luyện viết. '+escapeHTML(error?.message || String(error))+
+    ' <button type="button" onclick="renderSets()" style="margin-left:8px;padding:8px;border-radius:8px">Thử lại</button></div>';
+}
+async function renderEssaySets(){
+  const bridge=window.WT2_ESSAY_VOCAB;
+  if(!bridge){essayVocabError(new Error("Chưa tải được dữ liệu Writing Task 2."));return}
+  const grid=$("setGrid");
+  if(!selectedEssayType){
+    $("setsTitle").textContent="✍️ Writing Task 2 · 5 dạng bài";
+    $("setsBack").textContent="← Vocabulary";
+    $("setsBack").onclick=goVocabularyHome;
+    grid.innerHTML=bridge.TYPES.map((t,i)=>'<button type="button" class="set-card" onclick="openEssayVocabType(\''+t.key+'\')">'+
+      '<div class="set-number">Dạng '+String(i+1).padStart(2,"0")+'</div>'+
+      '<h3>'+escapeHTML(t.title)+'</h3>'+
+      '<p>'+escapeHTML(t.description)+'</p><div style="margin-top:12px;color:#6948dd;font-weight:850">Xem các bài từ vựng →</div></button>').join("");
+    return;
+  }
+  const type=selectedEssayType,t=bridge.TYPES.find(x=>x.key===type);
+  if(!t){essayVocabError(new Error("Dạng bài không hợp lệ."));return}
+  $("setsTitle").textContent="✍️ Writing Task 2 · "+t.title;
+  $("setsBack").textContent="← 5 dạng bài";
+  $("setsBack").onclick=()=>openSkill("writing-task-2");
+  grid.innerHTML='<div style="grid-column:1/-1;padding:20px;color:#71658a">Đang tải danh sách bài luyện...</div>';
+  try{
+    const entries=await bridge.catalog(type);
+    if(selectedEssayType!==type||selectedSkill!=="writing-task-2")return;
+    grid.innerHTML=entries.map(e=>'<button type="button" class="set-card" onclick="openEssayVocabLesson(\''+type+'\','+e.n+')">'+
+      '<div class="set-number">Bài '+String(e.n).padStart(2,"0")+'</div>'+
+      '<h3>'+escapeHTML(e.title)+'</h3>'+
+      '<p>Từ vựng trùng với bài Guided Writing '+String(e.n).padStart(2,"0")+'</p>'+
+      '<div style="margin-top:12px;color:#6948dd;font-weight:850">Vào học từ vựng →</div></button>').join("");
+  }catch(error){if(selectedEssayType===type)essayVocabError(error)}
+}
+function openEssayVocabType(type,sync=true){
+ const bridge=window.WT2_ESSAY_VOCAB;
+ if(!bridge?.TYPES.some(t=>t.key===type))return;
+ selectedSkill="writing-task-2";
+ selectedEssayType=type;
+ selectedSet="";
+ currentCollection=[];
+ hideScreens();
+ $("setsScreen").classList.remove("hidden");
+ renderEssaySets();
+ if(sync)setRoute({skill:"writing-task-2",essay:type});
+}
+async function openEssayVocabLesson(type,n,sync=true){
+ const bridge=window.WT2_ESSAY_VOCAB;
+ if(!bridge?.TYPES.some(t=>t.key===type))return;
+ const grid=$("setGrid");
+ if(grid)grid.innerHTML='<div style="grid-column:1/-1;padding:22px;color:#71658a">Đang nạp từ vựng chính xác từ bài Guided Writing '+n+'...</div>';
+ try{
+   const pack=await bridge.attach(type,n);
+   selectedSkill="writing-task-2";
+   selectedEssayType=type;
+   VOCABULARY_DATA=window.VOCABULARY_DATA;
+   openSet(bridge.code(type,n),false);
+   if(sync)setRoute({skill:"writing-task-2",essay:type,set:bridge.code(type,n)});
+ }catch(error){essayVocabError(error)}
+}
+
 function renderSets(){
+  if(selectedSkill === "writing-task-2"){
+    renderEssaySets();
+    return;
+  }
 
   const words =
   VOCABULARY_DATA
@@ -13306,11 +13381,11 @@ function showGameList(){
   $("collectionBack")
   .onclick =
   ()=>{
-
-    openSkill(
-      selectedSkill
-    );
-
+    if(selectedSkill === "writing-task-2" && selectedEssayType){
+      openEssayVocabType(selectedEssayType);
+    }else{
+      openSkill(selectedSkill);
+    }
   };
 
 
@@ -19621,6 +19696,8 @@ function routeFromUrl(){
   ||
   "";
 
+  const essay = params.get("essay") || "";
+
 
   if(
     skill
@@ -19637,6 +19714,13 @@ function routeFromUrl(){
       false
     );
 
+    if(skill === "writing-task-2" && essay && window.WT2_ESSAY_VOCAB?.TYPES.some(t=>t.key===essay)){
+      openEssayVocabType(essay,false);
+      if(set && set===window.WT2_ESSAY_VOCAB.code(essay,Number(set.split("-").at(-1)))){
+        openEssayVocabLesson(essay,Number(set.split("-").at(-1)),false);
+      }
+      return;
+    }
 
     if(set){
 
