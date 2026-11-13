@@ -9690,6 +9690,8 @@ button:disabled{
 #collectionScreen .game-mode-tile.theme-ocean{background:radial-gradient(circle at 50% 28%,#47b4c8,#203f77 92%);border-color:#8de6e9}
 #collectionScreen .game-mode-tile.theme-gold{background:radial-gradient(circle at 50% 28%,#ba8c65,#4b2c65 92%);border-color:#f8c978}
 #collectionScreen .game-mode-tile.theme-castle{background:radial-gradient(circle at 50% 28%,#9870cb,#342062 92%);border-color:#efd394}
+
+#collectionScreen .game-mode-tile.theme-atelier{background:radial-gradient(circle at 50% 28%,#f4bfc7,#9c76b8 72%,#6d4e91 100%);border-color:#ffdbbb}
 </style>
 
 </head>
@@ -10042,6 +10044,7 @@ button:disabled{
 <button type="button" class="game-card game-mode-tile theme-ocean" data-game-button data-game-name="Shark Escape" onclick="startShark()" aria-label="Chơi Shark Escape" title="Chơi Shark Escape"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/shark.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 <button type="button" class="game-card game-mode-tile theme-gold" data-game-button data-game-name="Monkey Code Lock" onclick="startMonkey()" aria-label="Chơi Monkey Code Lock" title="Chơi Monkey Code Lock"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/monkey.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 <button type="button" class="game-card game-mode-tile theme-castle" data-game-button data-game-name="Lexicon Guardians" onclick="startLexiconGuardians()" aria-label="Chơi Lexicon Guardians" title="Chơi Lexicon Guardians"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/lexicon.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-atelier" data-game-button data-game-name="Lexi Atelier" onclick="startLexiAtelier()" aria-label="Chơi Lexi Atelier" title="Chơi Lexi Atelier"><span class="game-mode-spark one" aria-hidden="true">✿</span><img src="./assets/game-logos/lexi-atelier.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 </section>
 
 
@@ -20130,6 +20133,17 @@ function startLexiconGuardians(){
     sessionStorage.setItem("LEXICON_GUARDIANS_TOPIC",String(typeof selectedSkill!=="undefined"?selectedSkill:"Vocabulary"));
   }catch(err){console.warn("Không lưu được nhóm từ",err);alert("Không thể tải nhóm từ, vui lòng kiểm tra trình duyệt.");return}
   window.location.href="./lexicon-guardians/";
+}
+</script>
+
+<script>
+function startLexiAtelier(){
+ const collection=typeof currentCollection!=="undefined"?currentCollection:[];
+ if(!Array.isArray(collection)||collection.length===0){alert("Hãy chọn một nhóm từ trước khi bắt đầu Lexi Atelier.");return}
+ try{
+  sessionStorage.setItem("LEXI_ATELIER_WORDS",JSON.stringify(collection.map(item=>({word:item.word,meaning:item.meaning,example:item.example,collocation:item.collocation}))));
+ }catch(err){console.warn("Lexi Atelier collection load failed",err);alert("Không thể tải nhóm từ. Vui lòng thử lại.");return}
+ window.location.href="./lexi-atelier/";
 }
 </script>
 </body>
