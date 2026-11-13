@@ -9733,6 +9733,45 @@ button:disabled{
 #vocabGameStage .game-grid{margin-top:14px}
 @media(max-width:650px){.vocab-stage-top{align-items:flex-start;flex-direction:column}.vocab-stage-top h2{font-size:20px}}
 </style>
+<style>
+
+#collectionScreen .screen-head{padding:22px 28px;background:linear-gradient(110deg,#fff,#f7f3ff 65%,#f0f7ff);border:1px solid #e5dff5;border-radius:22px;margin:5px 0 18px;box-shadow:0 10px 25px #2f186b0a}
+#collectionScreen .screen-head h1{font-size:clamp(24px,3vw,34px);line-height:1.2}
+#collectionScreen .screen-head p{font-size:12px}
+#collectionScreen>.stats{gap:12px;margin-bottom:20px}
+#collectionScreen>.stats .stat{text-align:left;min-height:84px;padding:16px 19px;border-radius:15px;border:1px solid #e6e0f2;box-shadow:0 4px 16px #26165a08;border-left:4px solid #8660d9}
+#collectionScreen>.stats .stat:nth-child(2){border-left-color:#28a67c}
+#collectionScreen>.stats .stat:nth-child(3){border-left-color:#e6ab55}
+#collectionScreen>.stats .stat:nth-child(4){border-left-color:#a3aabb}
+#collectionScreen>.stats .stat small{font-size:10px}
+#collectionScreen>.stats .stat b{font-size:28px;color:#24164d}
+#vocabSelectionStage{padding:24px;background:#fff;border:1px solid #e9e3f4;border-radius:22px;box-shadow:0 10px 30px #26165a08}
+#vocabSelectionStage>.section-head{display:none}
+.vocab-selection-toolbar{display:flex;justify-content:space-between;align-items:center;gap:17px;flex-wrap:wrap;margin-bottom:21px}
+.vocab-selection-toolbar h2{display:flex;align-items:center;gap:12px;margin:4px 0;font-size:clamp(21px,2.5vw,26px);color:#271650}
+.vocab-selection-toolbar h2 span{font-size:12px;padding:6px 10px;background:#eee8fc;border-radius:30px;color:#5c36ae}
+.vocab-selection-toolbar p{font-size:12px;margin:0;color:#7c7790}
+.vocab-eyebrow{font-size:10px;font-weight:950;letter-spacing:.1em;color:#7954c8}
+.vocab-search-wrap{height:46px;display:flex;align-items:center;gap:8px;padding:0 14px;border-radius:13px;background:#faf8ff;border:1px solid #ddd4ef;color:#6842b2;font-size:23px}
+.vocab-search-wrap:focus-within{outline:3px solid #dfd1ff}
+#vocabWordSearch{min-width:230px;background:transparent;border:0;outline:0;color:#281b50;font:700 13px Nunito,system-ui}
+#vocabSelectionStage .vocab-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0;background:transparent;border:0;border-radius:0;overflow:visible}
+#vocabSelectionStage .word-row{display:grid;grid-template-columns:38px minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:4px 10px;padding:17px;border:1px solid #eae5f3;border-radius:15px;background:linear-gradient(115deg,#fff,#fdfbff);min-height:104px;box-shadow:0 4px 12px #22105006;transition:.18s ease}
+#vocabSelectionStage .word-row:hover{transform:translateY(-2px);border-color:#bda7ed;box-shadow:0 8px 20px #3b0e9015}
+#vocabSelectionStage .word-row[hidden]{display:none!important}
+.vocab-card-icon{grid-column:1;grid-row:1/3;display:grid;place-items:center;width:36px;height:36px;background:#efe9ff;border-radius:11px;color:#6b47bb;font-size:19px}
+#vocabSelectionStage .word-row .word{grid-column:2;grid-row:1;font-size:15px;line-height:1.4;font-weight:900;color:#291856;overflow-wrap:anywhere}
+#vocabSelectionStage .word-row .meaning{grid-column:2/4;grid-row:2;font-size:12px;line-height:1.5;color:#6b7188;overflow-wrap:anywhere}
+#vocabSelectionStage .word-row .word-status{grid-column:3;grid-row:1;font-size:10px;padding:6px 9px;white-space:nowrap}
+.vocab-empty-search{padding:25px;text-align:center;background:#f9f6ff;color:#786e8f;margin-top:12px;border-radius:14px}
+#vocabSelectionStage .vocab-stage-actions{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:22px 0 0;padding-top:18px;border-top:1px solid #ede8f4}
+#vocabSelectionSummary{font-size:12px;color:#77718c}
+#vocabSelectionStage .vocab-stage-actions button{min-width:235px;font-size:14px;border:0;border-radius:13px;padding:14px 20px;background:linear-gradient(90deg,#3b0e90,#6941c8);color:#fff;font-weight:900;box-shadow:0 8px 18px #3b0e9023}
+#vocabSelectionStage.speaking-selection>.vocab-selection-toolbar,#vocabSelectionStage.speaking-selection>#wordList,#vocabSelectionStage.speaking-selection>.vocab-stage-actions{display:none!important}
+@media(max-width:850px){#vocabSelectionStage .vocab-card-grid{grid-template-columns:1fr}}
+@media(max-width:650px){#collectionScreen .screen-head{padding:17px}#collectionScreen>.stats{grid-template-columns:repeat(2,1fr);gap:8px}#collectionScreen>.stats .stat{padding:12px;min-height:69px}#collectionScreen>.stats .stat b{font-size:23px}#vocabSelectionStage{padding:15px}#vocabSelectionStage .vocab-stage-actions{flex-direction:column;align-items:stretch}#vocabSelectionStage .vocab-stage-actions button{width:100%;min-width:0}.vocab-search-wrap,#vocabWordSearch{width:100%;min-width:0}}
+
+</style>
 </head>
 
 
@@ -10036,11 +10075,10 @@ button:disabled{
   </div>
 
 
-  <section
-    class="word-list"
-    id="wordList"
-  ></section>
-  <div class="vocab-stage-actions"><button id="continueVocabGames" type="button" onclick="openVocabularyGameStage()">Tiếp tục → Chọn game</button></div>
+  <div class="vocab-selection-toolbar"><div><span class="vocab-eyebrow">BỘ TỪ VỰNG</span><h2>Khám phá từ vựng <span id="vocabWordCount"></span></h2><p>Xem nhanh các từ, sau đó chuyển sang game để luyện tập.</p></div><label class="vocab-search-wrap">⌕ <input id="vocabWordSearch" type="search" placeholder="Tìm từ hoặc nghĩa..." aria-label="Tìm từ vựng"></label></div>
+  <section class="word-list vocab-card-grid" id="wordList"></section>
+  <div class="vocab-empty-search hidden" id="vocabEmptySearch">Không có từ phù hợp với tìm kiếm.</div>
+  <div class="vocab-stage-actions"><span id="vocabSelectionSummary"></span><button id="continueVocabGames" type="button" onclick="openVocabularyGameStage()">Chọn game để luyện →</button></div>
   </div>
   <div id="vocabGameStage" class="hidden">
     <div class="vocab-stage-top"><button type="button" id="changeVocabLevel" class="screen-back hidden" onclick="openVocabularySelectionStage()">← Đổi cấp độ</button><div><h2>🎮 Chọn trò chơi</h2><p>Chọn một game để bắt đầu luyện tập bộ từ đã chọn.</p></div></div>
@@ -13451,6 +13489,12 @@ function showGameList(){
    COLLECTION
 ========================================================= */
 
+function filterVocabularyCards(query){
+ const q=String(query||"").trim().toLocaleLowerCase();let visible=0;
+ for(const card of document.querySelectorAll("#wordList .word-row")){const show=!q||card.dataset.search.includes(q);card.hidden=!show;if(show)visible++}
+ $("vocabEmptySearch").classList.toggle("hidden",visible!==0);
+}
+$("vocabWordSearch").addEventListener("input",e=>filterVocabularyCards(e.target.value));
 function renderCollection(){
 
   const stats =
@@ -13519,8 +13563,8 @@ function renderCollection(){
 
 
       return`
-        <div class="word-row">
-
+        <article class="word-row" data-search="${escapeHTML((word.word+" "+word.meaning).toLocaleLowerCase())}">
+          <span class="vocab-card-icon" aria-hidden="true">✦</span>
           <div class="word">
             ${escapeHTML(word.word)}
           </div>
@@ -13535,12 +13579,15 @@ function renderCollection(){
             ${label}
           </div>
 
-        </div>
+        </article>
       `;
 
     }
   )
   .join("");
+  $("vocabWordCount").textContent=currentCollection.length+" từ";
+  $("vocabSelectionSummary").textContent=currentCollection.length+" từ sẵn sàng luyện tập";
+  filterVocabularyCards($("vocabWordSearch").value);
 
 
   const complete =
