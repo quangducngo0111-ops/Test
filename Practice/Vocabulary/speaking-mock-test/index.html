@@ -40,19 +40,14 @@ a{color:#3b0e90}
 @media(max-width:680px){.modes{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.card{padding:17px}}
 </style></head>
 <body><div class="shell">
-<div class="top"><div class="brand">SMARTCOM · IELTS SPEAKING</div><a class="nav" href="../index.html">← Vocabulary</a></div>
+<div class="top"><div class="brand">SMARTCOM · IELTS SPEAKING</div><a class="nav" href="../../../index.html?skill=speaking">← Danh sách đề Speaking</a></div>
 <section class="card" id="setup">
 <div class="pills"><span class="pill">Exam simulation</span><span class="pill">Part 1 · Part 2 · Part 3</span></div>
 <h1>IELTS Speaking Mock Test</h1>
 <p class="muted">Questions are read aloud in English in an examiner-style sequence using your browser's speech voice. The voice is synthetic, not a recording of an official IELTS examiner. Use headphones, allow microphone access if you want to record, and take the test in a quiet room.</p>
-<fieldset><legend>Choose your test</legend><div class="modes">
-<label class="mode"><input name="mode" type="radio" value="all" checked> Full Speaking</label>
-<label class="mode"><input name="mode" type="radio" value="1"> Part 1</label>
-<label class="mode"><input name="mode" type="radio" value="2"> Part 2</label>
-<label class="mode"><input name="mode" type="radio" value="3"> Part 3</label>
-</div></fieldset>
+<p class="notice"><strong>Full Speaking Test:</strong> Each test includes Part 1, Part 2 and Part 3. Part 2 has 1 minute to prepare and up to 2 minutes to speak.</p>
 <label for="topic">Question set</label>
-<select id="topic" class="secondary" style="width:100%;margin-top:8px"><option value="0">Set 01 · Hometown & Experiences</option><option value="1">Set 02 · Study & Technology</option><option value="2">Set 03 · Leisure & Environment</option></select>
+<select id="topic" class="secondary" style="width:100%;margin-top:8px"><option value="0">Speaking Test 01</option><option value="1">Speaking Test 02</option><option value="2">Speaking Test 03</option><option value="3">Speaking Test 04</option><option value="4">Speaking Test 05</option><option value="5">Speaking Test 06</option><option value="6">Speaking Test 07</option><option value="7">Speaking Test 08</option><option value="8">Speaking Test 09</option><option value="9">Speaking Test 10</option></select>
 <p class="muted">Part 2: exactly 60 seconds of preparation and up to 120 seconds of speaking. Notes stay on screen during the talk. Part 1 and Part 3 advance when you select Next, allowing natural-length answers.</p>
 <div class="actions"><button class="primary" id="start">Start speaking test →</button></div>
 </section>
@@ -84,7 +79,14 @@ const SETS=[
   p3:["How has technology changed the way people learn?","Should schools focus more on practical skills?","What are the advantages of learning from other people?","Will online learning replace traditional classrooms?"]},
  {p1:["What do you normally do in your free time?","Do you prefer spending free time alone or with others?","What activities did you enjoy as a child?","Do you often visit parks?","How important is nature to you?","Would you like to spend more time outdoors?"],
   p2:{title:"Describe an outdoor activity you would like to try.",bullets:["what the activity is","where you would do it","who you would do it with"],explain:"why you would like to try this activity"},
-  p3:["Why do some people prefer outdoor activities to indoor ones?","What can governments do to encourage exercise?","How do modern lifestyles affect people's relationship with nature?","Should protecting the environment be an individual or government responsibility?"]}
+  p3:["Why do some people prefer outdoor activities to indoor ones?","What can governments do to encourage exercise?","How do modern lifestyles affect people's relationship with nature?","Should protecting the environment be an individual or government responsibility?"]},
+{"p1":["Do you enjoy reading books?","What kind of books do you like?","Did you read a lot as a child?","Do you prefer printed or digital books?","Do you like visiting libraries?","Why?"],"p2":{"title":"Describe a book you enjoyed reading.","bullets":["what the book was about","when you read it","who recommended it to you"],"explain":"why you enjoyed this book"},"p3":["How can schools encourage children to read?","Why do some adults read less than they used to?","Are public libraries still important today?","How might reading habits change in the future?"]},
+{"p1":["Do you like travelling?","How often do you travel?","Do you prefer travelling with friends or family?","What type of transport do you use most?","Do you usually plan trips carefully?","Why?"],"p2":{"title":"Describe a memorable journey you took.","bullets":["where you travelled","who you travelled with","what happened during the journey"],"explain":"why this journey was memorable"},"p3":["How does tourism benefit local communities?","What problems can mass tourism cause?","Should people travel by public transport more often?","How might tourism change in the coming decades?"]},
+{"p1":["Do you enjoy cooking?","What food do you eat most often?","Did you learn to cook at school or at home?","Do you like eating at restaurants?","Are healthy meals important to you?","Why?"],"p2":{"title":"Describe a special meal you shared with other people.","bullets":["when and where you had it","who was there","what you ate"],"explain":"why this meal was special"},"p3":["How have eating habits changed in recent years?","Should schools teach children how to cook?","Why are traditional dishes important to a culture?","How might food production change in the future?"]},
+{"p1":["Do you enjoy listening to music?","What kind of music do you prefer?","Do you play a musical instrument?","Have your music preferences changed?","Do you attend live performances?","Why?"],"p2":{"title":"Describe a performance you enjoyed watching.","bullets":["what kind of performance it was","where you saw it","who performed"],"explain":"why you enjoyed watching it"},"p3":["Why do people value live performances?","Should the arts receive government funding?","How does music influence younger generations?","Can technology replace live entertainment?"]},
+{"p1":["Do you like taking photographs?","What do you usually photograph?","Do you prefer photos on paper or on your phone?","Did your family take many photos when you were young?","Do you share photos online?","Why?"],"p2":{"title":"Describe an important photograph you have.","bullets":["what the photograph shows","when it was taken","who took it"],"explain":"why this photograph is important to you"},"p3":["Why do people record important moments?","Has social media changed photography?","Can photographs help people understand history?","What are the disadvantages of sharing personal photos online?"]},
+{"p1":["Do you enjoy shopping?","Where do you usually buy clothes?","Do you prefer online or in-store shopping?","Do you compare prices before buying things?","Have your shopping habits changed?","Why?"],"p2":{"title":"Describe something useful you bought recently.","bullets":["what you bought","where you bought it","how you use it"],"explain":"why it was a good purchase"},"p3":["What affects people's purchasing decisions?","Why do some people buy things they do not need?","Should advertising to children be restricted?","How might shopping change in the future?"]},
+{"p1":["Do you often exercise?","What sports are popular where you live?","Did you play sports as a child?","Do you prefer team or individual sports?","Do you watch sporting events?","Why?"],"p2":{"title":"Describe a sporting event you enjoyed.","bullets":["what the event was","where and when it took place","who you watched it with"],"explain":"why you found the event exciting"},"p3":["How can schools encourage physical activity?","Should professional athletes be role models?","Why do some sporting events attract large audiences?","What can governments do to improve public health?"]}
 ];
 let selection=[],i=0,stage='',set=null,secs=0,deadline=0,tick=null,run=0,media=null,recorder=null,chunks=[],audioURL=null,recordedBlob=null;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&quot;'}[c]));
@@ -117,11 +119,15 @@ function draw(){silence();clearClock();const item=selection[i];if(!item){finish(
 function beginTalk(){if(stage!=='prep'&&stage!=='prep-intro')return;silence();stage='talk';$('skipPrep').hidden=true;$('finishTalk').hidden=false;$('notes').disabled=false;$('repeat').hidden=true;setClock(120,'Speaking · 2 minutes');$('status').textContent='Please speak now.'}
 function advance(){clearClock();silence();i++;draw()}
 function finish(){clearClock();silence();$('progressFill').style.width='100%';stopRecording();$('review').innerHTML='<p class="muted">You answered '+selection.length+' prompts/sections. Part 2 notes are kept only until you restart.</p>';show('complete')}
-function start(){set=SETS[Number($('topic').value)]||SETS[0];const mode=document.querySelector('input[name="mode"]:checked').value;selection=[];
- if(mode==='all'||mode==='1')set.p1.forEach(q=>selection.push({part:1,q}));
- if(mode==='all'||mode==='2')selection.push({part:2,q:set.p2.title});
- if(mode==='all'||mode==='3')set.p3.forEach(q=>selection.push({part:3,q}));
- i=0;show('exam');draw()}
+function start(){
+ set=SETS[Number($('topic').value)]||SETS[0];
+ selection=[];
+ set.p1.forEach(q=>selection.push({part:1,q}));
+ selection.push({part:2,q:set.p2.title});
+ set.p3.forEach(q=>selection.push({part:3,q}));
+ i=0;show('exam');draw()
+}
+
 function stopRecording(){if(recorder&&recorder.state!=='inactive')recorder.stop();$('micToggle').textContent='● Start recording'}
 $('start').onclick=start;$('restart').onclick=()=>{clearClock();silence();show('setup')};
 $('end').onclick=()=>{if(confirm('End this speaking test?'))finish()};
@@ -140,6 +146,11 @@ $('micToggle').onclick=async()=>{
 };
 $('saveRecord').onclick=()=>{if(!recordedBlob)return;const a=document.createElement('a');a.href=audioURL;a.download='speaking-mock-'+new Date().toISOString().replace(/[:.]/g,'-')+(recordedBlob.type.includes('mp4')?'.mp4':'.webm');a.click()};
 window.addEventListener('pagehide',()=>{clearClock();silence();stopRecording();media?.getTracks().forEach(t=>t.stop());if(audioURL)URL.revokeObjectURL(audioURL)});
-const part=new URLSearchParams(location.search).get('part');if(['1','2','3'].includes(part))document.querySelector('input[name="mode"][value="'+part+'"]').checked=true;
+const requestedSet=Number(new URLSearchParams(location.search).get('set'));
+if(Number.isInteger(requestedSet)&&requestedSet>=1&&requestedSet<=SETS.length){
+ $('topic').value=String(requestedSet-1);
+ $('topic').disabled=true;
+}
+
 })();
 </script></body></html>
