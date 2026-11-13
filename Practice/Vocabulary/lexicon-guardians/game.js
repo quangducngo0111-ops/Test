@@ -367,7 +367,7 @@ switch(t.type){
 case"quill":line([[-4,-37],[7,-69-lvl*4]],"#f7ecd4",7);polygon([[6,-72-lvl*4],[17,-91-lvl*5],[17,-60-lvl*5]],"#55ccbc");ctx.font="24px serif";ctx.fillText("✒",-13,-44);break;
 case"spell":polygon([[0,-88-lvl*6],[20,-61],[8,-40],[-14,-40],[-22,-61]],"#b9a3ff");polygon([[0,-88-lvl*6],[20,-61],[0,-48]],"#f1d7ff");break;
 case"echo":ctx.strokeStyle="#ffd889";ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,-62,20+lvl*3,Math.PI,0);ctx.stroke();ellipse(0,-56,12+lvl*2,17,"#d8ad62");ctx.font="15px serif";ctx.fillText("♫",17,-72);break;
-case"ice":for(let i=0;i<6;i++){const a=i*Math.PI/3;line([[0,-59],[Math.cos(a)*(20+lvl*3),-59+Math.sin(a)*(20+lvl*3)]],"#c6fdff",6)}ellipse(0,-59,12,"12","#8df3ef");break;
+case"ice":for(let i=0;i<6;i++){const a=i*Math.PI/3;line([[0,-59],[Math.cos(a)*(20+lvl*3),-59+Math.sin(a)*(20+lvl*3)]],"#c6fdff",6)}ellipse(0,-59,12,12,"#8df3ef");break;
 case"fire":polygon([[-18,-45],[4,-99-lvl*4],[14,-72],[22,-48],[0,-42]],"#f9a557");polygon([[-5,-45],[7,-82],[15,-48]],"#ffdf7c");break;
 case"well":ellipse(0,-38,22,9,"#9775c2");ellipse(0,-39,16,6,"#ffda78");ctx.font="18px serif";ctx.fillText("✦",-7,-46);break;
 }
@@ -403,7 +403,7 @@ function loop(now){
 let dt=S.last?Math.min(.04,(now-S.last)/1000):0;S.last=now;
 if(!S.paused){if(!S.challengeLock)update(dt*S.speed);for(const f of S.fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.life-=dt}for(const p of S.floating){p.y-=27*dt;p.life-=dt}}
 S.fx=S.fx.filter(f=>f.life>0);S.floating=S.floating.filter(f=>f.life>0);
-render();updateHUD();requestAnimationFrame(loop);
+render();if(!S.lastHUD||now-S.lastHUD>=200){updateHUD();S.lastHUD=now}requestAnimationFrame(loop);
 }
 showWord();renderArsenal();renderSelected();updateHUD();log("📖 Lật 8 thẻ Sách Phép để bắt đầu. Mỗi từ đúng sẽ tạo nên sức mạnh cho Lexica.");requestAnimationFrame(loop);
 })();
