@@ -178,17 +178,17 @@ const pad=pads[i],def=TOWERS[S.selectedType];
 if(pad.type==="locked"){quiz(randWord(),"spell",good=>{if(good){pad.type="stone";addFX(pad.x,pad.y,"#ffe9a0",32);log("🔓 Đã phá chướng ngại! Bệ bí mật được mở.")}else log("Bệ bí mật chưa mở. Thử lại để giải mã.");renderSelected()});return}
 if(!canBuildOn(S.selectedType,pad)){log(pad.type==="well"?"Giếng Mực chỉ cho phép xây Tháp Giếng Mực.":"Tháp Giếng Mực chỉ được xây trên ô Giếng.");return}
 if(S.ink<def.price){log("Chưa đủ "+def.price+" Mực Phép để xây tháp này.");return}
-const type=S.selectedType;
-quiz(randWord(),def.kind,(good,cancelled)=>{
+const type=S.selectedType,challengeWord=randWord();
+quiz(challengeWord,def.kind,(good,cancelled)=>{
 if(cancelled)return;
-S.ink-=def.price;S.towers.push({pad:i,type,x:pad.x,y:pad.y,level:1,spent:def.price,faded:!good,word:randWord(),cooldown:rnd(0,.5),aim:0,glow:0});
+S.ink-=def.price;S.towers.push({pad:i,type,x:pad.x,y:pad.y,level:1,spent:def.price,faded:!good,word:challengeWord,cooldown:rnd(0,.5),aim:0,glow:0});
 addFX(pad.x,pad.y,good?"#fff4b8":"#c7c0d9",35);floater(pad.x,pad.y,good?"✨ SUMMON!":"🌫 THÁP MỜ");log(good?"Triệu hồi thành công "+def.name+"!":"Trả lời chưa đúng: tháp Mờ chỉ có 30% sức mạnh. Chạm tháp và nhấn Sửa.");renderSelected();updateHUD();
 });
 }
 canvas.addEventListener("click",event=>{
 const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left)*canvas.width/rect.width,y=(event.clientY-rect.top)*canvas.height/rect.height;
 const target=pads.map((p,i)=>({i,dist:Math.hypot(x-p.x,y-p.y)})).sort((a,b)=>a.dist-b.dist)[0];
-if(target.dist<38)build(target.i);else{S.selectedPad=null;renderSelected()}
+if(target.dist<(rect.width<700?65:43))build(target.i);else{S.selectedPad=null;renderSelected()}
 });
 $("waveBtn").onclick=()=>startWave();
 function startWave(){
