@@ -18,3 +18,24 @@
   .arena-head:after{content:"Vuốt bản đồ →";font-size:9px;color:#ffe1a0;font-weight:900}
   .wave-notice{position:sticky;left:50%;top:0;transform:none;width:max-content;margin:12px auto -60px}
 }
+
+/* Discoverable, mouse-accessible build pads and first-run guide */
+.canvas-shell canvas{cursor:default}
+.canvas-shell canvas.pad-interactive{cursor:pointer}
+.canvas-shell canvas.pad-interactive:active{cursor:grabbing}
+.pad-hover-tip{position:absolute;z-index:4;left:0;top:0;transform:translate(-50%,-115%);padding:7px 11px;border:1px solid #ffe8aa;border-radius:9px;background:#261a56ec;color:#fff5ce;font:800 12px Nunito,system-ui,sans-serif;white-space:nowrap;box-shadow:0 5px 18px #24134b60;pointer-events:none}
+.pad-hover-tip[hidden]{display:none}
+.lex-tutorial{position:fixed;z-index:120;inset:0;background:#180e34d9;display:grid;place-items:center;padding:20px;overflow-y:auto;backdrop-filter:blur(6px)}
+.lex-tutorial[hidden]{display:none}
+.lex-tutorial-card{width:min(650px,100%);max-height:min(92vh,900px);overflow:auto;border:2px solid #dec399;border-radius:23px;padding:clamp(20px,4vw,34px);background:linear-gradient(150deg,#fffdf7,#f5efff);box-shadow:0 25px 90px #0008;color:#30234d}
+.lex-tutorial-eyebrow{color:#7950b0;font-weight:900;font-size:12px;letter-spacing:.07em}
+.lex-tutorial-card h2{margin:9px 0 5px;font:800 clamp(24px,4vw,34px) 'Baloo 2',system-ui;color:#35206d}
+.lex-tutorial-card>p{margin:0 0 16px;color:#665c7b}
+.lex-tutorial-steps{padding:0;list-style:none;display:grid;gap:10px}
+.lex-tutorial-steps li{display:grid;gap:4px;padding:12px 15px;border:1px solid #e4d9f6;border-radius:12px;background:#fff}
+.lex-tutorial-steps li b{color:#3c267b;font-size:14px}
+.lex-tutorial-steps li span{color:#584d70;line-height:1.5;font-size:13px}
+.lex-tutorial-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:18px}
+.lex-tutorial-actions button{min-height:44px}
+@media(max-width:600px){.lex-tutorial-actions button{flex:1 1 100%}}
+@media(prefers-reduced-motion:reduce){.lex-tutorial{backdrop-filter:none}}
