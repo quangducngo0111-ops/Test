@@ -9720,7 +9720,12 @@ button:disabled{
 .vocab-stage-top{display:flex;align-items:center;gap:15px;margin:17px 0 7px}
 .vocab-stage-top h2{font-size:23px;margin:0;color:#281260}
 .vocab-stage-top p{font-size:12px;color:#7b8498;margin:4px 0}
-#vocabSelectionStage .section-head{display:none}
+#vocabSelectionStage .section-head{display:block}
+#vocabSelectionStage.speaking-selection .section-head{display:none}
+.vocab-stage-actions{display:flex;justify-content:flex-end;margin:18px 0 22px}
+.vocab-stage-actions button{background:#3b0e90;border:0;border-radius:13px;padding:14px 22px;color:white;font-weight:850;cursor:pointer;min-height:48px}
+.vocab-stage-actions button:hover{background:#5629ae}
+.vocab-stage-actions button.hidden{display:none!important}
 #vocabSelectionStage #wordListDescription{display:none}
 #vocabGameStage>.section-head{margin-top:6px}
 #vocabGameStage>.section-head h2{display:none}
@@ -10035,7 +10040,7 @@ button:disabled{
     class="word-list"
     id="wordList"
   ></section>
-
+  <div class="vocab-stage-actions"><button id="continueVocabGames" type="button" onclick="openVocabularyGameStage()">Tiếp tục → Chọn game</button></div>
   </div>
   <div id="vocabGameStage" class="hidden">
     <div class="vocab-stage-top"><button type="button" id="changeVocabLevel" class="screen-back hidden" onclick="openVocabularySelectionStage()">← Đổi cấp độ</button><div><h2>🎮 Chọn trò chơi</h2><p>Chọn một game để bắt đầu luyện tập bộ từ đã chọn.</p></div></div>
@@ -13297,17 +13302,19 @@ function renderSets(){
 }
 
 
-let vocabularyStage="games";
+let vocabularyStage="select";
 function openVocabularyGameStage(){vocabularyStage="games";showGameList();window.scrollTo({top:0,behavior:"instant"})}
 function openVocabularySelectionStage(){vocabularyStage="select";showGameList();window.scrollTo({top:0,behavior:"instant"})}
 function syncVocabularyStage(){
  const speaking=/^speaking-part-[123]$/.test(selectedSkill);
- const choosing=speaking&&vocabularyStage==="select";
+ const choosing=vocabularyStage==="select";
  $("vocabSelectionStage").classList.toggle("hidden",!choosing);
  $("vocabGameStage").classList.toggle("hidden",choosing);
  $("changeVocabLevel").classList.toggle("hidden",!speaking);
+ $("continueVocabGames").classList.toggle("hidden",speaking);
+ $("vocabSelectionStage").classList.toggle("speaking-selection",speaking);
  $("vocabFlow").classList.add("hidden");
- if(!speaking){const p=document.getElementById("speakingStudyPanel");if(p)p.remove()}
+ if(!speaking){const p=document.getElementById("speakingStudyPanel");if(p)p.remove();$("wordList").style.display=""}
 }
 /* =========================================================
    OPEN SET
@@ -13317,7 +13324,7 @@ function openSet(set, sync=true){
 
   selectedSet =
   set;
-  vocabularyStage=/^speaking-part-[123]$/.test(selectedSkill)?"select":"games";
+  vocabularyStage="select";
 
   currentCollection =
   VOCABULARY_DATA
@@ -20264,7 +20271,7 @@ init();
 })();
 </script>
 
-<script src="./speaking-study.js?v=20261109-game-level-v2"></script>
+<script src="./speaking-study.js?v=20261113-screen-fix-v5"></script>
 <script src="./audio/audio-engine.js?v=20260918-audio-v4"></script>
 <script src="./process/process-step-media.js?v=20261005-step-1"></script>
 <script>
