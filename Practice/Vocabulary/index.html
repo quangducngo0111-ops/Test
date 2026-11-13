@@ -9664,6 +9664,32 @@ button:disabled{
 .game-card p{font-size:11px;line-height:1.5}
 .game-play{margin-top:auto;align-self:flex-start;min-width:77px}
 @media(max-width:600px){.game-card{min-height:250px;padding:14px}.game-icon.game-icon-art{height:108px}.game-card h3{font-size:14px}.game-card p{font-size:10px}}
+
+/* Logo-only selector: the illustration itself is the play button. */
+#collectionScreen .game-mode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:stretch;margin:22px 0 30px}
+#collectionScreen .game-mode-tile{position:relative;display:grid;place-items:center;width:100%;min-height:210px;aspect-ratio:1.32;padding:10px;margin:0;overflow:hidden;isolation:isolate;cursor:pointer;border:2px solid #7651ba;border-radius:23px;background:radial-gradient(ellipse at 50% 25%,#8161c4,#2d164f);box-shadow:0 7px 0 #281342,0 15px 25px #30154c30,inset 0 1px 0 #fff5;transition:transform .2s,box-shadow .2s,border-color .2s}
+#collectionScreen .game-mode-tile:before{content:"";position:absolute;inset:-45% -70%;z-index:-1;background:repeating-conic-gradient(from 0deg at 50% 50%,#ffffff00 0deg 24deg,#ffffff0a 26deg 49deg,#ffffff00 52deg 75deg);transform:rotate(-15deg)}
+#collectionScreen .game-mode-tile:after{content:"";position:absolute;inset:7px;border:1px solid #ffffff2e;border-radius:15px;pointer-events:none}
+#collectionScreen .game-mode-tile img{display:block;width:100%;max-width:330px;max-height:100%;height:auto;object-fit:contain;filter:drop-shadow(0 10px 3px #17102c6b);transform:scale(1.1);transition:transform .22s,filter .22s;pointer-events:none}
+#collectionScreen .game-mode-spark{position:absolute;color:#fff1b5;text-shadow:0 0 15px #ffe099;pointer-events:none}
+#collectionScreen .game-mode-spark.one{top:8px;left:13px;font-size:20px}
+#collectionScreen .game-mode-spark.two{bottom:5px;right:13px;font-size:24px}
+#collectionScreen .game-mode-tile:not(:disabled):hover{transform:translateY(-5px) scale(1.02);border-color:#fff1ba;box-shadow:0 9px 0 #281342,0 22px 38px #3313514a}
+#collectionScreen .game-mode-tile:not(:disabled):hover img{transform:scale(1.2) rotate(-2deg);filter:drop-shadow(0 13px 5px #17102c83) saturate(1.15)}
+#collectionScreen .game-mode-tile:focus-visible{outline:4px solid #ffce61;outline-offset:4px}
+#collectionScreen .game-mode-tile.game-mode-locked{opacity:.48;filter:grayscale(.45);cursor:not-allowed}
+@media(max-width:1050px){#collectionScreen .game-mode-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:680px){#collectionScreen .game-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:15px 0 25px}#collectionScreen .game-mode-tile{min-height:135px;aspect-ratio:1.18;border-radius:17px;padding:4px}#collectionScreen .game-mode-tile img{transform:scale(1.06)}}
+@media(prefers-reduced-motion:reduce){#collectionScreen .game-mode-tile,#collectionScreen .game-mode-tile img{transition:none}}
+#collectionScreen .game-mode-tile.theme-peach{background:radial-gradient(circle at 50% 28%,#a35ca9,#322052 92%);border-color:#ba80d8}
+#collectionScreen .game-mode-tile.theme-sky{background:radial-gradient(circle at 50% 28%,#479ac9,#2a356b 92%);border-color:#81c9f1}
+#collectionScreen .game-mode-tile.theme-speed{background:radial-gradient(circle at 50% 28%,#aa568d,#392057 92%);border-color:#f8a960}
+#collectionScreen .game-mode-tile.theme-galaxy{background:radial-gradient(circle at 50% 28%,#8565cd,#2e1f61 92%);border-color:#ac92eb}
+#collectionScreen .game-mode-tile.theme-forest{background:radial-gradient(circle at 50% 28%,#58b2a2,#214e66 92%);border-color:#96dfb0}
+#collectionScreen .game-mode-tile.theme-candy{background:radial-gradient(circle at 50% 28%,#bf70ba,#4b236b 92%);border-color:#f49bdd}
+#collectionScreen .game-mode-tile.theme-ocean{background:radial-gradient(circle at 50% 28%,#47b4c8,#203f77 92%);border-color:#8de6e9}
+#collectionScreen .game-mode-tile.theme-gold{background:radial-gradient(circle at 50% 28%,#ba8c65,#4b2c65 92%);border-color:#f8c978}
+#collectionScreen .game-mode-tile.theme-castle{background:radial-gradient(circle at 50% 28%,#9870cb,#342062 92%);border-color:#efd394}
 </style>
 
 </head>
@@ -10006,192 +10032,17 @@ button:disabled{
   </div>
 
 
-  <section class="game-grid">
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/whack.svg?v=20261113" alt="whack game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Whack a Word
-      </h3>
-
-      <p>
-        Đập con chuột mang đáp án đúng trước khi nó biến mất.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startWhack()"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/catcher.svg?v=20261113" alt="catcher game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Word Catcher
-      </h3>
-
-      <p>
-        Điều khiển giỏ để hứng đúng từ đang rơi xuống.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startCatcher()"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/racer.svg?v=20261113" alt="racer game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Vocab Racer 3D
-      </h3>
-
-      <p>
-        Đua xe 3D góc nhìn sau xe: chọn đúng cổng từ vựng để kích hoạt Nitro và vượt các xe đối thủ.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startRacer()" title="Mở Vocab Racer 3D Three.js"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/alien.svg?v=20261113" alt="alien game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Alien Escape
-      </h3>
-
-      <p>
-        Điều khiển astronaut tới đúng đáp án trước khi aliens bắt kịp.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startMatch()"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/flappy.svg?v=20261113" alt="flappy game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Flappy Kākāpō
-      </h3>
-
-      <p>
-        Giữ kākāpō trên không và bay vào đúng nghĩa của từ.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startFlappy()"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/balloon.svg?v=20261113" alt="balloon game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Balloon Pop
-      </h3>
-
-      <p>
-        Bắn quả bóng mang đáp án chính xác trước khi nó bay mất.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startBalloon()"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/shark.svg?v=20261113" alt="shark game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Shark Escape
-      </h3>
-
-      <p>
-        Chọn đúng phao nghĩa để bơi nhanh hơn trước khi cá mập đuổi kịp.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startShark()"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-
-    <article class="game-card">
-
-      <div class="game-icon game-icon-art"><img src="./assets/game-logos/monkey.svg?v=20261113" alt="monkey game logo" loading="lazy" decoding="async"></div>
-
-      <h3>
-        Monkey Code Lock
-      </h3>
-
-      <p>
-        Xoay ổ khóa mật mã để giúp chú khỉ mở cửa trước khi chết rét.
-      </p>
-
-      <button
-        class="game-play"
-        data-game-button
-        onclick="startMonkey()"
-      >
-        Chơi →
-      </button>
-
-    </article>
-
-  <article class="game-card"><div class="game-icon game-icon-art"><img src="./assets/game-logos/lexicon.svg?v=20261113" alt="Lexicon Guardians game logo" loading="lazy" decoding="async"></div><h3>Lexicon Guardians</h3><p>Chiến thuật xây tháp: nhớ đúng từ để triệu hồi phép thuật, phòng thủ 5 đợt Quái Quên Lãng.</p><button class="game-play" data-game-button type="button" onclick="startLexiconGuardians()">Chơi →</button></article></section>
+  <section class="game-grid game-mode-grid" aria-label="Chọn trò chơi từ vựng">
+<button type="button" class="game-card game-mode-tile theme-peach" data-game-button data-game-name="Whack a Word" onclick="startWhack()" aria-label="Chơi Whack a Word" title="Chơi Whack a Word"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/whack.svg?v=20261113" alt="" loading="eager" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-sky" data-game-button data-game-name="Word Catcher" onclick="startCatcher()" aria-label="Chơi Word Catcher" title="Chơi Word Catcher"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/catcher.svg?v=20261113" alt="" loading="eager" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-speed" data-game-button data-game-name="Vocab Racer 3D" onclick="startRacer()" aria-label="Chơi Vocab Racer 3D" title="Chơi Vocab Racer 3D"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/racer.svg?v=20261113" alt="" loading="eager" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-galaxy" data-game-button data-game-name="Alien Escape" onclick="startMatch()" aria-label="Chơi Alien Escape" title="Chơi Alien Escape"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/alien.svg?v=20261113" alt="" loading="eager" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-forest" data-game-button data-game-name="Flappy Kākāpō" onclick="startFlappy()" aria-label="Chơi Flappy Kākāpō" title="Chơi Flappy Kākāpō"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/flappy.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-candy" data-game-button data-game-name="Balloon Pop" onclick="startBalloon()" aria-label="Chơi Balloon Pop" title="Chơi Balloon Pop"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/balloon.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-ocean" data-game-button data-game-name="Shark Escape" onclick="startShark()" aria-label="Chơi Shark Escape" title="Chơi Shark Escape"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/shark.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-gold" data-game-button data-game-name="Monkey Code Lock" onclick="startMonkey()" aria-label="Chơi Monkey Code Lock" title="Chơi Monkey Code Lock"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/monkey.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-castle" data-game-button data-game-name="Lexicon Guardians" onclick="startLexiconGuardians()" aria-label="Chơi Lexicon Guardians" title="Chơi Lexicon Guardians"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/lexicon.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+</section>
 
 
 
@@ -13673,36 +13524,14 @@ function renderCollection(){
   }
 
 
-  document
-  .querySelectorAll(
-    "[data-game-button]"
-  )
-  .forEach(
-    button => {
-
-      button.disabled =
-      complete;
-
-
-      button.textContent =
-      complete
-
-      ?
-
-      (
-        hasPassedCurrentVocabularyTest()
-        ?
-        "Đã hoàn thành ✓"
-        :
-        "Chờ kiểm tra"
-      )
-
-      :
-
-      "Chơi →";
-
-    }
-  );
+  document.querySelectorAll("[data-game-button]").forEach(button => {
+    button.disabled = complete;
+    const name = button.dataset.gameName || "Game";
+    const stateLabel = complete ? (hasPassedCurrentVocabularyTest() ? "Đã hoàn thành" : "Chờ kiểm tra") : "Chơi " + name;
+    button.setAttribute("aria-label", complete ? stateLabel + " · " + name : stateLabel);
+    button.title = complete ? stateLabel + " · " + name : stateLabel;
+    button.classList.toggle("game-mode-locked", complete);
+  });
 
 }
 
