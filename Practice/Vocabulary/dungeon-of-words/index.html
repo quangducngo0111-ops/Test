@@ -1,66 +1,201 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dungeon of Words</title><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet"><style>
-*{box-sizing:border-box}body{margin:0;background:#0c1730;color:#fff4dc;font-family:"Baloo 2",system-ui,sans-serif}button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #ffdd87}
-main{max-width:1100px;margin:auto;padding:15px}header{display:flex;justify-content:space-between;align-items:center;gap:10px}a{color:#fff5d9;text-decoration:none;border:1px solid #a99fc4;border-radius:12px;padding:8px}
-h1{font-size:clamp(30px,5vw,50px);text-align:center;color:#ffdfa5;margin:7px}p.sub{text-align:center;margin:0 0 12px;color:#d0c5e6}
-.hud{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px}.hud span{background:#29375e;padding:7px 13px;border-radius:12px;border:1px solid #9587bb}
-.layout{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}.map{position:relative;min-height:535px;border:4px solid #927dab;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 50% 45%,#3c7774,#243856 53%,#101b35)}
-.map:before{content:"";position:absolute;inset:0;opacity:.5;background-image:radial-gradient(#ffe9ab 1px,transparent 1px);background-size:44px 48px}
-.area{text-align:center;position:relative;padding:18px;color:#ffdf9c;font-size:23px;font-weight:800}.rooms{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:22px}
-.room{min-height:112px;border:2px solid #ada0c2;border-radius:15px;background:linear-gradient(#655477,#24324e);color:#fff6e4;font-size:25px;box-shadow:0 7px #0d1732}.room small{display:block;font-size:12px}.room.active{border-color:#fff1ab;box-shadow:0 0 30px #ffdc8888;cursor:pointer}.room.active:hover{filter:brightness(1.3);transform:translateY(-3px)}.room:disabled{opacity:.45;cursor:default}.room.done{background:#306256;opacity:.9}
-.lantern{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);font-size:44px;animation:bob 2s infinite ease-in-out}@keyframes bob{50%{transform:translate(-50%,-9px)}}
-.side{background:linear-gradient(140deg,#fff8e9,#e8e1f4);color:#2c3650;border:3px solid #c6a977;border-radius:21px;padding:19px;min-height:535px}.side h2{margin:2px 0;font-size:24px}.hero{display:flex;align-items:center;gap:12px;background:#fffaf0;border-radius:14px;padding:13px}.hero span{font-size:46px}
-.meter{height:12px;border-radius:50px;background:#dbcddc;overflow:hidden;margin:10px 0}.meter i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#a4e6b0,#369a72)}
-.inventory{display:flex;gap:7px;flex-wrap:wrap;padding:9px 0}.inventory span{font-size:12px;background:#fff;border:1px solid #dfcda9;border-radius:9px;padding:6px}.log{padding:12px;background:#fff8ee;border-radius:12px;min-height:75px}
-.action{border-radius:12px;padding:10px 14px;border:2px solid #b38d62;background:linear-gradient(#ffe9b0,#ebc678);color:#3b3255;font-weight:800}.action.secondary{background:linear-gradient(#fff,#e3dbf7);border-color:#9b8abb}
-.modal{position:fixed;z-index:30;inset:0;display:grid;place-items:center;padding:15px;background:#071329dc;backdrop-filter:blur(5px)}[hidden]{display:none!important}
-.dialog{background:linear-gradient(140deg,#fffaf0,#e8e1f7);color:#293653;border:3px solid #d8bc80;border-radius:22px;width:min(620px,100%);max-height:92vh;overflow:auto;padding:23px;box-shadow:0 25px 70px #0009}.dialog h2{font-size:30px;margin:0;color:#4f3b75}.dialog p{line-height:1.5}
-.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}.options button{padding:13px;border:2px solid #ac9cc7;border-radius:12px;background:#fff;color:#253757;font-weight:800}.options button:hover{background:#fff1c9}.options input{grid-column:1/-1;border:2px solid #9f91c0;border-radius:12px;padding:12px;font:inherit}
-.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}.feedback{padding:10px;background:#e0f2df;color:#366a4a;border-radius:12px}.feedback.bad{background:#ffeede;color:#926a37}.clock{height:10px;background:#e2dbe6;border-radius:20px;overflow:hidden}.clock i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#7edac0,#f5bc79)}
-.classes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.classes button{background:#fff;border:2px solid #cfb9dd;border-radius:12px;padding:10px;font:inherit;color:#483c65}.classes button.selected{background:#fff0b7;border-color:#aa803b}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.map,.side{min-height:auto}.rooms{gap:7px;padding:12px}.room{min-height:80px;font-size:21px}.side{padding:13px}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head><body><main><header><a href="../">← Vocabulary</a><b>🏮 HỘI THÁM HIỂM ĐÈN LỒNG</b><button id="help" class="action secondary">? Cách chơi</button></header><h1>🏰 DUNGEON OF WORDS</h1><p class="sub">Lexiconia · Phá Khiên Chữ · Khôi phục Thư Viện Vĩnh Cửu</p><div class="hud"><span id="floor">⛏️ Tầng 1</span><span id="hp">❤️ 100</span><span id="gems">💎 0</span><span id="combo">✨ Combo 0</span><span id="roomCounter">🗝️ Phòng 1 / 9</span></div>
-<div class="layout"><section class="map"><div class="area" id="area">🍃 HANG RÊU XANH</div><div class="rooms" id="rooms"></div><div class="lantern">🏮</div></section><aside class="side"><h2>🏕️ Trại Thám Hiểm</h2><div class="hero"><span id="avatar">🛡️</span><div><b id="heroName">Kael · Chiến binh</b><p id="heroAbility">Khiên Từ</p></div></div><b>❤️ Sinh lực</b><div class="meter"><i id="hpMeter"></i></div><h2>🎒 Trang bị</h2><div class="inventory" id="inventory"></div><h2>📜 Nhật ký</h2><p class="log" id="log">Chọn nhân vật để bắt đầu.</p><div class="actions"><button id="switch" class="action secondary">Đổi lớp</button><button id="restart" class="action">Chuyến đi mới</button></div></aside></div></main>
-<div class="modal" id="modal"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalContent"></div><div class="options" id="options"></div><div class="clock" id="clock" hidden><i id="clockBar"></i></div><div id="feedback"></div><div class="actions" id="modalActions"></div></div></div>
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dungeon of Words · Action RPG</title>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
+<style>
+:root{color-scheme:dark;--gold:#f4d392;--ink:#e9e7fa;--line:#5c597a}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:#0b0f20;color:var(--ink)}
+header{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:12px max(12px,calc((100vw - 1100px)/2));background:#171a30;border-bottom:1px solid #44415f}
+header a{color:var(--gold);text-decoration:none}h1{font-size:20px;margin:0}
+.layout{max-width:1100px;margin:14px auto;padding:0 12px;display:grid;grid-template-columns:minmax(0,800px) 280px;gap:14px}
+#game{position:relative;min-width:0;border:3px solid #9c7c4f;border-radius:13px;overflow:hidden;background:#151627}
+#game canvas{width:100%;height:auto;display:block}
+aside{background:#1c2038;border:1px solid #625a75;border-radius:12px;padding:15px;align-self:start}
+.stat{display:flex;justify-content:space-between;gap:8px;margin:10px 0}.bar{height:12px;background:#35334e;border-radius:12px;overflow:hidden}.bar i{display:block;background:linear-gradient(90deg,#ef6d70,#ffd38a);height:100%;width:100%}
+button{font:inherit;color:#17243e;background:#f2d18f;border:0;border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:750}
+button:disabled{opacity:.55;cursor:default}
+.small{font-size:13px;color:#b8bdd9;line-height:1.6}
+#status{min-height:56px;color:#f6ddad}
+#inventory{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 8px;background:#333450;border:1px solid #66637d;border-radius:8px;font-size:12px}
+kbd{background:#343958;padding:3px 6px;border-radius:5px;color:#fff}
+#touch{display:none;position:relative;grid-column:1/-1;justify-content:space-between;align-items:center;gap:15px}
+.pad{display:grid;grid-template-columns:repeat(3,52px);gap:5px}
+.pad button,.actions button{min-height:47px;touch-action:none}
+.pad button:nth-child(1){grid-column:2}.pad button:nth-child(2){grid-column:1;grid-row:2}.pad button:nth-child(3){grid-column:2;grid-row:2}.pad button:nth-child(4){grid-column:3;grid-row:2}
+.actions{display:flex;gap:9px}
+#modal{position:fixed;z-index:20;inset:0;display:grid;place-items:center;background:#090d1fe8;padding:15px}
+#modal[hidden]{display:none}
+.dialog{max-width:600px;width:100%;padding:23px;background:#242742;border:2px solid var(--gold);border-radius:18px;box-shadow:0 25px 60px #0008}
+.dialog h2{color:var(--gold);margin:0 0 12px}
+#options{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:18px 0}
+#options button{background:#e9e7fa;color:#22223c;min-height:52px}
+#options button:hover{background:#ffe1a1}
+#prompt{font-size:17px}#feedback{min-height:24px;color:#f6d584}
+#modalActions{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:850px){.layout{grid-template-columns:1fr}aside{display:grid;grid-template-columns:1fr 1fr;gap:8px}aside h2,aside #status,aside .small,aside #inventory{grid-column:1/-1}#touch{display:flex}}
+@media(max-width:430px){aside{display:block}#options{grid-template-columns:1fr}.pad{grid-template-columns:repeat(3,43px)}}
+</style></head>
+<body><header><a href="../">← Vocabulary</a><h1>🏰 Dungeon of Words · Action RPG</h1><span>Lexiconia</span></header>
+<div class="layout">
+<div id="game" aria-label="Dungeon of Words action game"></div>
+<aside><h2>⚔️ Trại thám hiểm</h2>
+<div class="stat"><b id="heroName">Kael · Warrior</b><b id="floor">Tầng 1</b></div>
+<div class="stat"><span>❤️ HP</span><span id="hp">100 / 100</span></div><div class="bar"><i id="hpbar"></i></div>
+<div class="stat"><span>🔮 Mana</span><span id="mana">0</span></div>
+<div class="stat"><span>💎 Gems</span><span id="gems">0</span></div>
+<div class="stat"><span>🪙 Gold</span><span id="gold">0</span></div>
+<div class="stat"><span>⭐ Level / EXP</span><span id="level">1 / 0</span></div>
+<h3>🎒 Trang bị</h3><div id="inventory"></div>
+<p id="status">Chọn lớp nhân vật để bắt đầu.</p>
+<p class="small"><kbd>WASD</kbd> / phím mũi tên: di chuyển<br><kbd>Space</kbd>: đánh thường<br><kbd>Q</kbd>: dùng phép từ vựng<br><kbd>E</kbd>: tương tác với rương/cổng<br>Chạm nút điều khiển trên điện thoại.</p>
+<button id="help">Hướng dẫn / đổi lớp</button>
+</aside>
+<div id="touch"><div class="pad"><button data-move="up">↑</button><button data-move="left">←</button><button data-move="down">↓</button><button data-move="right">→</button></div><div class="actions"><button id="touchAttack">⚔️</button><button id="touchSpell">🔮 Q</button><button id="touchUse">🗝️ E</button></div></div>
+</div>
+<div id="modal"><div class="dialog"><h2 id="modalTitle"></h2><p id="prompt"></p><div id="options"></div><p id="feedback"></p><div id="modalActions"></div></div></div>
 <script>
-(function(){"use strict";
-const $=id=>document.getElementById(id),sample=[["protect","bảo vệ"],["knowledge","kiến thức"],["progress","tiến bộ"],["sustainable","bền vững"],["environment","môi trường"],["language","ngôn ngữ"],["resource","tài nguyên"],["develop","phát triển"],["community","cộng đồng"],["challenge","thử thách"]].map(p=>({word:p[0],meaning:p[1]}));
-let words=[];try{words=JSON.parse(sessionStorage.getItem("DUNGEON_WORDS_WORDS")||"[]")}catch(e){}words=(Array.isArray(words)?words:[]).filter(w=>w&&w.word&&w.meaning);if(words.length<4)words=sample;words=[...new Map(words.map(w=>[String(w.word).toLowerCase(),w])).values()];
-const chars=[["🛡️","Kael · Chiến binh",110,"Khiên Từ: combo 3 giúp đỡ một đòn"],["🪄","Lyra · Pháp sư",80,"Tạo Phép: rèn chính tả"],["🏹","Finn · Cung thủ",90,"Tai Thính: luyện nghe"],["🧪","Zuri · Giả kim sư",100,"Pha Chế: hồi máu khi đúng"]];
-const icons={battle:"👾",riddle:"📜",treasure:"🎁",camp:"🔥",merchant:"🛒",trap:"🕸️",boss:"🐉"},labels={battle:"Chiến đấu",riddle:"Câu đố",treasure:"Kho báu",camp:"Lửa trại",merchant:"Cửa hàng",trap:"Bẫy",boss:"Boss"};
-let s={floor:1,character:0,max:110,hp:110,gems:0,combo:0,room:0,rooms:[],gear:["🏮 Đèn lồng"],missed:[],active:false,completed:0};
-try{const o=JSON.parse(localStorage.getItem("DUNGEON_WORDS_PROGRESS")||"null");if(o){s.gems=o.gems||0;s.gear=Array.isArray(o.gear)?o.gear:s.gear;s.missed=Array.isArray(o.missed)?o.missed:[];s.floor=Math.max(1,Math.min(10,o.floor||1))}}catch(e){}
-function save(){try{localStorage.setItem("DUNGEON_WORDS_PROGRESS",JSON.stringify({gems:s.gems,gear:s.gear,missed:s.missed.slice(-40),floor:s.floor}))}catch(e){}}
-const choose=a=>a[Math.floor(Math.random()*a.length)],shuffle=a=>[...a].sort(()=>Math.random()-.5),safe=x=>String(x||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function show(title,content,buttons){$("modal").hidden=false;$("modalTitle").textContent=title;$("modalContent").innerHTML=content;$("options").innerHTML="";$("feedback").innerHTML="";$("clock").hidden=true;$("modalActions").innerHTML="";(buttons||[]).forEach(b=>{const btn=document.createElement("button");btn.className="action"+(b.secondary?" secondary":"");btn.textContent=b.title;btn.onclick=b.click;$("modalActions").appendChild(btn)});$("modalActions").querySelector("button")?.focus()}
-const close=()=>{$("modal").hidden=true},log=t=>{$("log").textContent=t};
-function area(){return s.floor<=3?"🍃 HANG RÊU XANH":s.floor<=5?"📚 THƯ VIỆN CHÌM":s.floor<=7?"🔥 LÒ RÈN DUNG NHAM":s.floor<=9?"❄️ PHÁO ĐÀI BĂNG":"👑 NGAI VÀNG QUÊN LÃNG"}
-function render(){const c=chars[s.character];$("area").textContent=area();$("floor").textContent="⛏️ Tầng "+s.floor+"/10";$("hp").textContent="❤️ "+Math.max(0,s.hp)+"/"+s.max;$("gems").textContent="💎 "+s.gems;$("combo").textContent="✨ Combo "+s.combo;$("roomCounter").textContent="🗝️ Phòng "+(s.room+1)+"/9";$("avatar").textContent=c[0];$("heroName").textContent=c[1];$("heroAbility").textContent=c[3];$("hpMeter").style.width=Math.max(0,s.hp/s.max*100)+"%";$("inventory").innerHTML=s.gear.slice(-8).map(x=>"<span>"+safe(x)+"</span>").join("");
- $("rooms").innerHTML="";s.rooms.forEach((kind,i)=>{const b=document.createElement("button");b.className="room "+(i<s.room?"done":i===s.room&&s.active?"active":"");b.disabled=i!==s.room||!s.active;b.innerHTML=(i<s.room?"✅":icons[kind])+"<small>"+labels[kind]+"</small>";b.onclick=()=>visit(kind);$("rooms").appendChild(b)})}
-function newFloor(){s.rooms=[...shuffle(["battle","riddle","treasure","battle","camp","trap","battle","merchant"]),"boss"];s.room=0;s.active=true;log("Chọn phòng sáng để khám phá. Glim sẽ dẫn đường!");render()}
-function run(){s.max=chars[s.character][2];s.hp=s.max;s.combo=0;newFloor()}
-function advance(){s.room++;if(s.room>=9){if(s.floor===10){s.active=false;save();show("👑 Thư viện Vĩnh Cửu hồi sinh!","<p>Bạn đã cứu các mảnh chữ ở Lexiconia. Tổng đá quý: "+s.gems+"</p>",[{title:"Chơi lại",click:()=>{close();s.floor=1;run()}}]);render();return}s.floor++;save();newFloor()}else{s.active=true;render();log("Hoàn tất phòng! Chọn phòng kế tiếp.")}}
-function hurt(n){if(s.character===0&&s.combo>=3){log("🛡️ Khiên Từ đã chặn đòn!");return true}s.hp-=n;render();if(s.hp>0)return true;s.hp=0;s.active=false;save();show("🏕️ Trở về trại","<p>Hết sinh lực! Bạn vẫn giữ đá quý và trang bị. Những từ sai sẽ xuất hiện lại.</p>",[{title:"Chuyến đi mới",click:()=>{close();s.floor=1;run()}}]);return false}
-function word(){return s.missed.length&&Math.random()<.4?choose(s.missed):choose(words)}
-function ask(title,w,callback,mode="meaning"){
- const input=mode==="spell";show(title,"<p>"+(input?"Viết từ tiếng Anh mang nghĩa: <b>"+safe(w.meaning)+"</b>":"Chọn nghĩa đúng của <b>“"+safe(w.word)+"”</b>")+" để phá Khiên Chữ.</p>");
- $("clock").hidden=false;const started=performance.now();let done=false;let interval=setInterval(()=>{$("clockBar").style.width=Math.max(4,100-(performance.now()-started)/180)+"%"},150);
- function finish(ok){if(done)return;done=true;clearInterval(interval);$("options").querySelectorAll("button,input").forEach(x=>x.disabled=true);$("clock").hidden=true;if(ok){s.combo++;s.gems+=3}else{s.combo=0;s.missed.push(w)}save();$("feedback").innerHTML='<p class="feedback '+(ok?"":"bad")+'">'+(ok?"✨ Chính xác!":"💡 Đáp án: "+safe(w.word)+" — "+safe(w.meaning))+"</p>";$("modalActions").innerHTML="";const speed=Math.max(.25,1-(performance.now()-started)/18000);setTimeout(()=>{close();callback(ok,speed);render()},700)}
- if(input){const e=document.createElement("input");e.placeholder="Nhập từ tiếng Anh";$("options").appendChild(e);const b=document.createElement("button");b.className="action";b.textContent="✨ Kích hoạt";b.onclick=()=>{if(e.value.trim())finish(e.value.trim().toLowerCase()===String(w.word).toLowerCase())};$("modalActions").appendChild(b);e.onkeydown=k=>{if(k.key==="Enter")b.click()};e.focus()}
- else{shuffle([w,...shuffle(words.filter(x=>x.word!==w.word&&x.meaning!==w.meaning)).slice(0,3)]).forEach(x=>{const b=document.createElement("button");b.textContent=x.meaning;b.onclick=()=>finish(x.word===w.word);$("options").appendChild(b)})}
+(()=>{"use strict";
+const $=id=>document.getElementById(id);
+const samples=[["protect","bảo vệ"],["knowledge","kiến thức"],["progress","tiến bộ"],["sustainable","bền vững"],["environment","môi trường"],["language","ngôn ngữ"],["resource","tài nguyên"],["develop","phát triển"]];
+let words=[];try{words=JSON.parse(sessionStorage.getItem("DUNGEON_WORDS_WORDS")||"[]")}catch(e){}
+words=(Array.isArray(words)?words:[]).filter(w=>w&&typeof w.word==="string"&&typeof w.meaning==="string"&&w.word.trim()&&w.meaning.trim());
+words=[...new Map(words.map(w=>[w.word.toLowerCase(),w])).values()];
+if(words.length<4)words=samples.map(([word,meaning])=>({word,meaning}));
+const heroes=[{name:"Kael · Warrior",hp:120,speed:182,damage:26,range:75,skill:"Lá chắn",tint:0xe96a67},{name:"Lyra · Mage",hp:90,speed:190,damage:22,range:230,skill:"Fireball",tint:0xa693f5},{name:"Finn · Ranger",hp:100,speed:215,damage:20,range:250,skill:"Tên phép",tint:0x7fd9b2},{name:"Zuri · Alchemist",hp:105,speed:185,damage:24,range:180,skill:"Hồi phục",tint:0xf2be72}];
+let saved={};try{saved=JSON.parse(localStorage.getItem("DUNGEON_WORDS_RPG_V2")||"{}")||{}}catch(e){}
+let profile={classId:Math.max(0,Math.min(3,Number(saved.classId)||0)),floor:Math.max(1,Math.min(10,Number(saved.floor)||1)),gems:Number(saved.gems)||0,gold:Number(saved.gold)||0,level:Math.max(1,Number(saved.level)||1),exp:Number(saved.exp)||0,gear:Array.isArray(saved.gear)?saved.gear:["🏮 Đèn lồng"],missed:[],hp:100,mana:1,locked:true,scene:null};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+function persist(){try{localStorage.setItem("DUNGEON_WORDS_RPG_V2",JSON.stringify({classId:profile.classId,floor:profile.floor,gems:profile.gems,gold:profile.gold,level:profile.level,exp:profile.exp,gear:profile.gear}))}catch(e){}}
+function hud(){const hero=heroes[profile.classId];$("heroName").textContent=hero.name;$("floor").textContent="Tầng "+profile.floor+"/10";$("hp").textContent=Math.max(0,Math.ceil(profile.hp))+" / "+hero.hp;$("hpbar").style.width=Math.min(100,100*profile.hp/hero.hp)+"%";$("mana").textContent=profile.mana+"/3";$("gems").textContent=profile.gems;$("gold").textContent=profile.gold;$("level").textContent=profile.level+" / "+profile.exp;$("inventory").replaceChildren(...profile.gear.slice(-9).map(v=>{const e=document.createElement("span");e.className="chip";e.textContent=v;return e}))}
+function note(t){$("status").textContent=t}
+function openModal(title,prompt,choices=[]){profile.locked=true;$("modal").hidden=false;$("modalTitle").textContent=title;$("prompt").textContent=prompt;$("options").replaceChildren();$("feedback").textContent="";$("modalActions").replaceChildren();for(const option of choices){const b=document.createElement("button");b.textContent=option.label;b.onclick=option.fn;$("options").append(b)}}
+function closeModal(){profile.locked=false;$("modal").hidden=true;hud()}
+function action(label,fn){const b=document.createElement("button");b.textContent=label;b.onclick=fn;$("modalActions").append(b)}
+function reward(gems=0,gold=0,exp=0){profile.gems+=gems;profile.gold+=gold;profile.exp+=exp;while(profile.exp>=profile.level*30){profile.exp-=profile.level*30;profile.level++;profile.hp=Math.min(heroes[profile.classId].hp,profile.hp+20);note("⭐ Lên cấp "+profile.level+"!")}persist();hud()}
+function quiz(title,onAnswer){const w=profile.missed.length&&Math.random()<.35?pick(profile.missed):pick(words),distractors=shuffle(words.filter(x=>x.word!==w.word&&x.meaning!==w.meaning)).slice(0,3);
+openModal(title,"Chọn đúng nghĩa của “"+w.word+"” để kích hoạt sức mạnh.",shuffle([w,...distractors]).map(x=>({label:x.meaning,fn:()=>{const ok=x.word===w.word;$("options").querySelectorAll("button").forEach(b=>b.disabled=true);$("feedback").textContent=ok?"✅ Chính xác! Khiên bị phá.":"❌ Đáp án đúng: "+w.meaning;if(ok){profile.mana=Math.min(3,profile.mana+1);reward(3,0,6)}else profile.missed.push(w);$("modalActions").replaceChildren();action("Tiếp tục →",()=>{closeModal();onAnswer(ok)})}})))}
+function chooseClass(){const opts=heroes.map((h,i)=>({label:h.name+" · "+h.skill,fn:()=>{profile.classId=i;profile.hp=h.hp;profile.mana=1;profile.floor=1;persist();closeModal();profile.scene?.restartFloor()}}));openModal("🏕️ Chọn nhân vật","Điều khiển nhân vật, đánh quái và dùng kiến thức từ vựng để phá khiên. Tiến độ gems và trang bị sẽ được giữ lại.",opts)}
+function gameOver(){openModal("💀 Bạn đã gục ngã","Đá quý và trang bị vẫn được giữ. Chơi lại từ tầng 1.",[]);action("Hồi sinh",()=>{profile.floor=1;profile.hp=heroes[profile.classId].hp;profile.mana=1;closeModal();profile.scene?.restartFloor()})}
+function createTexture(scene,key,drawer,w=48,h=48){if(scene.textures.exists(key))return;const g=scene.make.graphics({x:0,y:0},false);drawer(g);g.generateTexture(key,w,h);g.destroy()}
+class DungeonScene extends Phaser.Scene{
+ constructor(){super("Dungeon");this.enemies=[];this.drops=[];this.treasure=[];this.projectiles=[];this.lastAttack=0;this.lastHurt=0;this.move={up:false,down:false,left:false,right:false}}
+ create(){
+  profile.scene=this;this.cameras.main.setBackgroundColor("#141524");
+  this.cursors=this.input.keyboard.createCursorKeys();this.keys=this.input.keyboard.addKeys("W,A,S,D,SPACE,Q,E");
+  this.input.keyboard.on("keydown-SPACE",()=>this.attack());
+  this.input.keyboard.on("keydown-Q",()=>this.spell());
+  this.input.keyboard.on("keydown-E",()=>this.use());
+  createTexture(this,"hero",g=>{g.fillStyle(0x243044).fillEllipse(24,42,29,9);g.fillStyle(0xffd3a2).fillCircle(24,13,9);g.fillStyle(0x735138).fillRect(15,3,18,6);g.fillStyle(0x59b7ee).fillRoundedRect(12,22,24,20,5);g.fillStyle(0x253764).fillRect(12,38,8,7).fillRect(28,38,8,7)});
+  createTexture(this,"enemy",g=>{g.fillStyle(0x55255c).fillEllipse(24,35,38,23);g.fillStyle(0x9e4aae).fillCircle(24,22,17);g.fillStyle(0xffffff).fillCircle(17,20,5).fillCircle(30,20,5);g.fillStyle(0x2c173b).fillCircle(17,20,2).fillCircle(30,20,2);g.fillStyle(0xf2e2aa).fillTriangle(20,30,27,30,23,37)});
+  createTexture(this,"boss",g=>{g.fillStyle(0x8f364e).fillEllipse(36,48,64,45);g.fillStyle(0xd85d68).fillCircle(36,28,27);g.fillStyle(0xffd2a0).fillTriangle(10,12,15,0,24,13).fillTriangle(49,13,59,0,64,16);g.fillStyle(0xffffff).fillCircle(25,25,7).fillCircle(47,25,7);g.fillStyle(0x221b33).fillCircle(25,25,3).fillCircle(47,25,3)},72,72);
+  createTexture(this,"gem",g=>{g.fillStyle(0x80e3f7).fillTriangle(15,1,28,15,15,31);g.fillStyle(0x2985bd).fillTriangle(15,1,2,15,15,31)},32,32);
+  createTexture(this,"chest",g=>{g.fillStyle(0x6f3b21).fillRoundedRect(3,11,34,26,4);g.fillStyle(0xe4b45c).fillRect(3,17,34,5).fillRect(18,11,5,26);g.fillStyle(0x70472f).fillRoundedRect(3,5,34,13,4)},40,40);
+  createTexture(this,"bullet",g=>{g.fillStyle(0xf6d27a).fillCircle(9,9,8)},18,18);
+  this.player=this.physics.add.sprite(100,300,"hero").setCircle(18,6,9).setCollideWorldBounds(true).setDepth(8);
+  this.player.setTint(heroes[profile.classId].tint);
+  this.message=this.add.text(400,22,"",{fontSize:"19px",fontFamily:"system-ui",color:"#f7e5bb",stroke:"#17182e",strokeThickness:4}).setOrigin(.5).setDepth(30);
+  this.restartFloor();
+ }
+ restartFloor(){
+  if(!this.player)return;
+  this.enemies.forEach(x=>x.sprite.destroy());this.drops.forEach(x=>x.sprite.destroy());this.treasure.forEach(x=>x.sprite.destroy());this.projectiles.forEach(x=>x.sprite.destroy());
+  this.enemies=[];this.drops=[];this.treasure=[];this.projectiles=[];
+  this.children.list.filter(x=>x.getData?.("floorDecor")).forEach(x=>x.destroy());
+  const add=(x,y,w,h,color,alpha=1)=>this.add.rectangle(x,y,w,h,color,alpha).setData("floorDecor",true);
+  for(let y=24;y<575;y+=48)for(let x=24;x<800;x+=48)add(x,y,46,46,(Math.floor(x/48)+Math.floor(y/48))%2?0x25283b:0x292e40);
+  for(let x=0;x<800;x+=48){add(x+24,12,48,24,0x676079);add(x+24,588,48,24,0x676079)}
+  for(let y=36;y<570;y+=48){add(12,y,24,48,0x676079);add(788,y,24,48,0x676079)}
+  this.exit=add(740,300,52,96,0x725c35);this.exit.setStrokeStyle(3,0xf3d28e);this.exitText=this.add.text(740,300,"🔒\nCỔNG",{fontSize:"18px",color:"#fff4bb",align:"center"}).setOrigin(.5).setData("floorDecor",true);
+  this.player.setPosition(90,300).setTint(heroes[profile.classId].tint);
+  this.bossDown=false;this.lastAttack=0;this.lastHurt=0;this.message.setText("TẦNG "+profile.floor+" · Diệt quái, mở rương, hạ boss!");
+  const count=Math.min(3+profile.floor,9);
+  for(let i=0;i<count;i++)this.spawnEnemy(260+(i%4)*125,120+Math.floor(i/4)*170,false);
+  this.spawnEnemy(660,300,true);
+  for(let i=0;i<2;i++)this.spawnChest(225+i*260,450-i*285);
+  this.physics.world.setBounds(28,28,744,544);hud();note("Di chuyển để khám phá. Đánh quái gần, nhấn Q để phá Khiên Chữ.");
+ }
+ spawnEnemy(x,y,boss){
+  const sprite=this.physics.add.sprite(x,y,boss?"boss":"enemy").setCollideWorldBounds(true).setDepth(7).setImmovable(false);
+  sprite.body.setSize(boss?55:32,boss?56:33);
+  const hp=(boss?145:55)+profile.floor*(boss?28:10);
+  this.enemies.push({sprite,boss,hp,max:hp,shield:boss?2:1,nextHit:0,lastShieldPrompt:0});
+ }
+ spawnChest(x,y){const sprite=this.add.image(x,y,"chest").setDepth(6);this.treasure.push({sprite,opened:false})}
+ pickup(x,y,kind){const sprite=this.add.image(x,y,"gem").setDepth(6);this.drops.push({sprite,kind})}
+ update(time,delta){
+  if(profile.locked){this.player.setVelocity(0);this.enemies.forEach(e=>e.sprite.setVelocity(0));return}
+  const k=this.keys,c=this.cursors,m=this.move;
+  let vx=Number(k.D.isDown||c.right.isDown||m.right)-Number(k.A.isDown||c.left.isDown||m.left);
+  let vy=Number(k.S.isDown||c.down.isDown||m.down)-Number(k.W.isDown||c.up.isDown||m.up);
+  const hero=heroes[profile.classId],mag=Math.hypot(vx,vy)||1;this.player.setVelocity(vx/mag*hero.speed,vy/mag*hero.speed);
+  if(vx||vy){this.facing={x:vx/mag,y:vy/mag};this.player.setFlipX(vx<0)}
+  for(const e of this.enemies){
+   if(e.hp<=0)continue;
+   const d=Phaser.Math.Distance.Between(this.player.x,this.player.y,e.sprite.x,e.sprite.y);
+   if(d<320&&d>35){const a=Math.atan2(this.player.y-e.sprite.y,this.player.x-e.sprite.x);e.sprite.setVelocity(Math.cos(a)*(e.boss?72:82),Math.sin(a)*(e.boss?72:82))}
+   else e.sprite.setVelocity(0);
+   if(d<43+(e.boss?16:0)&&time>e.nextHit&&time-this.lastHurt>750){this.damage(e.boss?19:11);e.nextHit=time+1300}
+  }
+  for(const d of [...this.drops]){
+   if(Phaser.Math.Distance.Between(this.player.x,this.player.y,d.sprite.x,d.sprite.y)<33){d.sprite.destroy();this.drops.splice(this.drops.indexOf(d),1);reward(d.kind==="gem"?5:0,d.kind==="gold"?8:0,2);note("✨ Nhặt "+(d.kind==="gem"?"5 đá quý":"8 vàng"))}
+  }
+  for(const b of [...this.projectiles]){
+   b.life-=delta;if(b.life<0||b.sprite.x<30||b.sprite.x>770||b.sprite.y<30||b.sprite.y>570){b.sprite.destroy();this.projectiles.splice(this.projectiles.indexOf(b),1);continue}
+   for(const e of this.enemies){if(e.hp<=0)continue;if(Phaser.Math.Distance.Between(b.sprite.x,b.sprite.y,e.sprite.x,e.sprite.y)<(e.boss?42:27)){this.hit(e,b.damage);b.sprite.destroy();this.projectiles.splice(this.projectiles.indexOf(b),1);break}}
+  }
+ }
+ damage(n){if(profile.locked)return;profile.hp=Math.max(0,profile.hp-n);this.lastHurt=this.time.now;this.player.setTintFill(0xff6262);this.time.delayedCall(160,()=>this.player?.setTint(heroes[profile.classId].tint));hud();if(profile.hp<=0){this.enemies.forEach(e=>e.sprite.setVelocity(0));gameOver()}}
+ attack(){
+  if(profile.locked||this.time.now-this.lastAttack<460)return;this.lastAttack=this.time.now;
+  const h=heroes[profile.classId],f=this.facing||{x:1,y:0};this.player.setAngle(12);this.time.delayedCall(130,()=>this.player?.setAngle(0));
+  const reach=h.range,targets=this.enemies.filter(e=>e.hp>0&&Phaser.Math.Distance.Between(this.player.x,this.player.y,e.sprite.x,e.sprite.y)<reach);
+  const e=targets.sort((a,b)=>Phaser.Math.Distance.Between(this.player.x,this.player.y,a.sprite.x,a.sprite.y)-Phaser.Math.Distance.Between(this.player.x,this.player.y,b.sprite.x,b.sprite.y))[0];
+  if(!e){note("⚔️ Không có quái trong tầm tấn công.");return}
+  if(reach>100){const bullet=this.physics.add.image(this.player.x,this.player.y,"bullet").setDepth(9);this.physics.moveToObject(bullet,e.sprite,420);this.projectiles.push({sprite:bullet,life:900,damage:h.damage+profile.level*3})}
+  else this.hit(e,h.damage+profile.level*3);
+ }
+ hit(e,damage){
+  if(e.shield>0){const now=this.time.now;if(now-e.lastShieldPrompt<650)return;e.lastShieldPrompt=now;
+   note("🛡️ Quái có Khiên Chữ! Trả lời đúng để phá khiên.");
+   quiz(e.boss?"🐉 BOSS · Phá Khiên Chữ":"🛡️ Word Shield",ok=>{if(ok){e.shield--;note("✨ Phá khiên thành công! "+(e.shield?"Còn "+e.shield+" lớp khiên.":"Hãy tấn công!"));if(e.shield===0)e.sprite.clearTint()}else{this.damage(6);note("Sai từ vựng: -6 HP")}});return
+  }
+  e.hp-=damage;e.sprite.setTintFill(0xffffff);this.time.delayedCall(100,()=>{if(e.hp>0)e.sprite.clearTint()});
+  this.add.text(e.sprite.x,e.sprite.y-34,"-"+damage,{fontSize:"16px",color:"#ffe3a1"}).setDepth(20).setOrigin(.5).setData("floorDecor",true);
+  if(e.hp<=0){const x=e.sprite.x,y=e.sprite.y;e.sprite.destroy();e.sprite.setActive(false);reward(e.boss?20:3,e.boss?30:5,e.boss?30:9);this.pickup(x,y,Math.random()<.6?"gem":"gold");if(e.boss){this.bossDown=true;this.exit.setFillStyle(0x2c906e);this.exitText.setText("🔓\nCỔNG");note("🐉 Boss bị hạ! Tới cổng bên phải và bấm E.")}else note("⚔️ Quái bị tiêu diệt!")}
+ }
+ spell(){
+  if(profile.locked)return;
+  quiz("🔮 Kích hoạt "+heroes[profile.classId].skill,ok=>{
+   if(!ok){note("Phép thất bại. Hãy ôn lại từ vừa sai.");return}
+   const cls=profile.classId;
+   if(cls===3){profile.hp=Math.min(heroes[cls].hp,profile.hp+35);hud();note("🧪 Hồi 35 HP");return}
+   if(cls===0){profile.hp=Math.min(heroes[cls].hp,profile.hp+18);hud()}
+   const target=this.enemies.filter(e=>e.hp>0).sort((a,b)=>Phaser.Math.Distance.Between(this.player.x,this.player.y,a.sprite.x,a.sprite.y)-Phaser.Math.Distance.Between(this.player.x,this.player.y,b.sprite.x,b.sprite.y))[0];
+   if(target){target.shield=0;target.sprite.clearTint();this.hit(target,cls===1?65:48);note("✨ Phép trúng mục tiêu, phá khiên và gây sát thương!")}
+  })
+ }
+ use(){
+  if(profile.locked)return;
+  const chest=this.treasure.find(t=>!t.opened&&Phaser.Math.Distance.Between(this.player.x,this.player.y,t.sprite.x,t.sprite.y)<75);
+  if(chest){quiz("🎁 Mở rương cổ",ok=>{if(ok){chest.opened=true;chest.sprite.setTint(0x777777);const prize=pick(["⚔️ Kiếm Từ","🛡️ Giáp Ngữ Pháp","💍 Nhẫn Tinh Tú","📘 Sách Tri Thức"]);profile.gear.push(prize);reward(12,18,14);note("🎁 Nhận "+prize+" và phần thưởng!")}else note("Rương chưa mở. Bấm E để thử lại.")});return}
+  if(this.bossDown&&Phaser.Math.Distance.Between(this.player.x,this.player.y,740,300)<95){
+    if(profile.floor===10){openModal("👑 THƯ VIỆN VĨNH CỬU","Bạn đã chiến thắng toàn bộ 10 tầng! Gems: "+profile.gems,[]);action("Chơi lại",()=>{profile.floor=1;profile.hp=heroes[profile.classId].hp;profile.mana=1;persist();closeModal();this.restartFloor()})}
+    else{profile.floor++;profile.hp=Math.min(heroes[profile.classId].hp,profile.hp+45);profile.mana=1;reward(20,20,30);persist();this.restartFloor()}
+    return
+  }
+  note(this.bossDown?"Đi đến cổng bên phải để lên tầng.":"Đến gần rương để mở hoặc đánh bại boss để mở cổng.")
+ }
 }
-function visit(kind){if(!s.active)return;s.active=false;render();
- if(kind==="battle"||kind==="boss"){let hits=0,total=kind==="boss"?3:2;const fight=()=>ask((kind==="boss"?"🐉 Boss":"👾 Quái vật")+" · Khiên "+(total-hits)+"/"+total,word(),ok=>{if(ok){hits++;if(s.character===3)s.hp=Math.min(s.max,s.hp+6)}else if(!hurt(kind==="boss"?17:10))return;
- if(hits>=total){const earn=kind==="boss"?28:12;s.gems+=earn;save();show("✨ Phá Khiên Chữ thành công!","<p>Quái tan biến. Bạn thu được "+earn+" 💎.</p>",[{title:"Tiếp tục →",click:()=>{close();advance()}}])}
- else show("⚔️ Quái vẫn còn khiên","<p>Còn "+(total-hits)+" lớp Khiên Chữ. Sẵn sàng trả lời tiếp?</p>",[{title:"Tiếp tục →",click:fight}])},hits===0&&s.character===1?"spell":"meaning");fight()}
- else if(kind==="riddle"||kind==="trap"){ask(kind==="riddle"?"📜 Cửa đá cổ":"🕸️ Bẫy chữ",word(),ok=>{if(ok)s.gems+=7;else if(kind==="trap"&&!hurt(12))return;advance()},kind==="riddle"?"spell":"meaning")}
- else if(kind==="treasure"){const prize=choose(["⚔️ Kiếm Từ","🏹 Cung Âm Thanh","🛡️ Giáp Cổ Tự","💍 Nhẫn Tinh Tú","📖 Sách Phép"]);s.gear.push(prize);s.gems+=18;save();show("🎁 Kho báu!","<p>Nhặt được "+prize+" và 18 💎.</p>",[{title:"Nhặt và đi tiếp",click:()=>{close();advance()}}])}
- else if(kind==="merchant"){show("🛒 Thương nhân","<p>Mua thuốc hồi 30 ❤️ bằng 12 💎?</p>",[{title:"Mua thuốc (12 💎)",click:()=>{if(s.gems<12){$("feedback").textContent="Không đủ đá quý";return}s.gems-=12;s.hp=Math.min(s.max,s.hp+30);save();close();advance()}},{title:"Bỏ qua",secondary:true,click:()=>{close();advance()}}])}
- else if(kind==="camp"){show("🔥 Lửa trại","<p>Ôn từ đã sai để hồi 32 ❤️ và nhận 7 💎; hoặc nghỉ để hồi 20 ❤️.</p>",[{title:"📖 Ôn từ",click:()=>{const w=s.missed.length?s.missed[s.missed.length-1]:word();ask("🔥 Ôn tập bên lửa trại",w,ok=>{s.hp=Math.min(s.max,s.hp+(ok?32:20));if(ok){s.gems+=7;s.missed=s.missed.filter(x=>x.word!==w.word)}save();advance()})}},{title:"Nghỉ ngơi",secondary:true,click:()=>{s.hp=Math.min(s.max,s.hp+20);close();advance()}}])}
-}
-function classes(){show("🏕️ Chọn nhân vật","<p>Giả kim sư mở khi đạt tầng 4.</p><div class='classes' id='charButtons'>"+chars.map((c,i)=>'<button data-i="'+i+'" '+(i===3&&s.floor<4?"disabled":"")+">"+c[0]+" "+safe(c[1])+"<br><small>"+safe(c[3])+"</small></button>").join("")+"</div>",[{title:"Bắt đầu thám hiểm →",click:()=>{close();run()}}]);$("charButtons").querySelectorAll("button").forEach(b=>b.onclick=()=>{s.character=Number(b.dataset.i);$("charButtons").querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x===b));render()})}
-function tutorial(){show("📖 Hướng dẫn Dungeon of Words","<ol><li>Chọn một trong các lớp nhân vật, mỗi lớp có kỹ năng khác nhau.</li><li>Chạm phòng <b>đang phát sáng</b> để khám phá mê cung.</li><li>Trả lời đúng câu hỏi từ vựng để phá Khiên Chữ và đánh quái. Trả lời nhanh để tăng sức mạnh.</li><li>Nhặt trang bị, mở kho báu, mua thuốc và ôn từ sai ở lửa trại.</li><li>Đánh bại boss, vượt 10 tầng. Thất bại vẫn giữ được đá quý và trang bị.</li></ol>",[{title:"Chọn nhân vật →",click:classes}])}
-$("help").onclick=tutorial;$("switch").onclick=classes;$("restart").onclick=()=>show("Chuyến đi mới?","<p>Tiến độ tầng hiện tại sẽ bắt đầu lại, nhưng giữ trang bị và đá quý.</p>",[{title:"Xác nhận",click:()=>{close();s.floor=1;run()}},{title:"Hủy",secondary:true,click:close}]);
-s.rooms=["battle","riddle","treasure","camp","battle","trap","merchant","battle","boss"];render();tutorial();
+const phaserReady=typeof Phaser!=="undefined";
+if(phaserReady){
+ const game=new Phaser.Game({type:Phaser.AUTO,parent:"game",width:800,height:600,backgroundColor:"#141524",render:{pixelArt:false,antialias:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},physics:{default:"arcade",arcade:{debug:false}},scene:[DungeonScene]});
+ const controls={up:false,down:false,left:false,right:false};
+ for(const b of document.querySelectorAll("[data-move]")){const dir=b.dataset.move;const set=flag=>{if(profile.scene)profile.scene.move[dir]=flag};b.addEventListener("pointerdown",e=>{e.preventDefault();b.setPointerCapture(e.pointerId);set(true)});for(const ev of ["pointerup","pointercancel","lostpointercapture"])b.addEventListener(ev,()=>set(false))}
+ $("touchAttack").onclick=()=>profile.scene?.attack();$("touchSpell").onclick=()=>profile.scene?.spell();$("touchUse").onclick=()=>profile.scene?.use();
+}else{document.getElementById("game").textContent="Không tải được Phaser. Vui lòng kiểm tra kết nối internet."}
+$("help").onclick=chooseClass;
+hud();chooseClass();
 })();
 </script></body></html>
