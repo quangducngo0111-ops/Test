@@ -68,6 +68,10 @@ function css(){
   .sv-panel .sv-grid{max-height:min(40vh,360px);overflow:auto;scrollbar-color:#c3b6e5 transparent}
   .sv-panel .sv-preview-toggle{background:none;border:0;color:#5931ac;cursor:pointer;font-weight:800;padding:8px 0}
   .sv-panel .sv-preview[hidden]{display:none!important}
+  .sv-mock-link{display:block;text-align:center;text-decoration:none;background:#fff6e9;border:1px solid #ffd5a0;color:#743a00;border-radius:13px;padding:14px 18px;font-weight:850;margin:12px 0}
+  .sv-mock-link:hover{background:#ffebd0}
+  .sv-mock-inline{margin:12px 0 18px;display:block;width:max-content;max-width:100%}
+
   @media(max-width:650px){.sv-grid{grid-template-columns:1fr}.sv-panel{padding:14px}}
   `;
   document.head.appendChild(style);
@@ -118,6 +122,7 @@ function render(){
   </div>
   </div>
   <button type="button" class="sv-preview-toggle" data-preview aria-expanded="false">Xem trước ${entries.length} từ vựng ↓</button>
+  <a class="sv-mock-link" href="./speaking-mock-test/?part=${selectedSkill.slice(-1)}">🎙️ Thi thử IELTS Speaking Part ${escape(selectedSkill.slice(-1))} →</a>
   <button type="button" class="sv-next" data-continue>Tiếp tục với ${escape(level)} → Chọn game</button>
   `;
   panel.onclick=e=>{
@@ -160,6 +165,20 @@ if(typeof originalRender==='function'){
   window.renderCollection=function(){
     const output=originalRender.apply(this,arguments);
     render();
+    const gameStage=document.getElementById('vocabGameStage');
+    let testLink=document.getElementById('speakingGameMockLink');
+    if(!isSpeaking()){
+      if(testLink)testLink.remove();
+    }else if(gameStage){
+      if(!testLink){
+        testLink=document.createElement('a');
+        testLink.id='speakingGameMockLink';
+        testLink.className='sv-mock-link sv-mock-inline';
+        gameStage.prepend(testLink);
+      }
+      testLink.href='./speaking-mock-test/?part='+selectedSkill.slice(-1);
+      testLink.textContent='🎙️ Thi thử IELTS Speaking Part '+selectedSkill.slice(-1)+' →';
+    }
     return output;
   };
 }
