@@ -1494,6 +1494,11 @@ button.skill-card:hover{
 .student-avatar[hidden],.student-photo-preview[hidden]{display:none}
 .hero-art img.student-photo-active{aspect-ratio:3/4;object-fit:cover;object-position:center;}
 </style>
+<style>
+.test-route-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 0 22px;color:#7669a5;font-size:12px;font-weight:900;letter-spacing:.07em}
+.test-back{border:1px solid #ddd7f2;background:#fff;color:#3b0e90;border-radius:12px;padding:11px 16px;font-weight:850}
+#testSection{margin-top:0;min-height:65vh}
+</style>
 </head>
 
 
@@ -1676,7 +1681,7 @@ button.skill-card:hover{
   >
 
 
-    <section class="hero">
+    <section class="hero" id="homeHero">
 
       <div class="hero-main">
 
@@ -1775,7 +1780,7 @@ button.skill-card:hover{
     </section>
 
 
-    <div class="section-title">
+    <div class="section-title" id="homeHeading">
 
       <h2>
         Chọn nội dung
@@ -1788,7 +1793,7 @@ button.skill-card:hover{
     </div>
 
 
-    <section class="skill-grid">
+    <section class="skill-grid" id="homeSkills">
 
 
       <button
@@ -1835,7 +1840,7 @@ button.skill-card:hover{
           </div>
 
           <div class="skill-hint">
-            Xem đề →
+            Vào thi →
           </div>
 
         </div>
@@ -1887,7 +1892,7 @@ button.skill-card:hover{
           </div>
 
           <div class="skill-hint">
-            Xem đề →
+            Vào thi →
           </div>
 
         </div>
@@ -1927,8 +1932,8 @@ button.skill-card:hover{
 
         <div class="skill-footer">
 
-          <div class="skill-count">
-            3 PARTS
+          <div class="skill-count" id="countSpeaking">
+            10 ĐỀ
           </div>
 
           <div class="skill-hint">
@@ -1984,7 +1989,7 @@ button.skill-card:hover{
           </div>
 
           <div class="skill-hint">
-            Xem đề →
+            Vào thi →
           </div>
 
         </div>
@@ -2097,8 +2102,9 @@ button.skill-card:hover{
 
     <section
       class="test-shell"
-      id="testSection"
+      id="testSection" class="hidden"
     >
+      <div class="test-route-head"><button type="button" id="backToSkills" class="test-back">← Quay lại trang chủ</button><span>IELTS TEST PORTAL</span></div>
 
       <div class="test-head">
 
@@ -2391,8 +2397,13 @@ let catalog={
     [...FALLBACK_READING],
 
   writing:
-    [...FALLBACK_WRITING]
-
+    [...FALLBACK_WRITING],
+  speaking:Array.from({length:10},(_,i)=>({
+    title:'Speaking Test '+String(i+1).padStart(2,'0'),
+    path:'./Practice/Vocabulary/speaking-mock-test/?set='+(i+1),
+    meta:['3 parts','11–14 phút','Cue card · Audio'],
+    desc:'IELTS Speaking full test · Part 1, Part 2 và Part 3.'
+  }))
 };
 
 
@@ -2683,10 +2694,10 @@ function showDashboard(){
     `${currentStudent.name} · ${currentStudent.className}`;
 
 
-  setSkill(
-    'listening',
-    false
-  );
+  setSkill('listening',false);
+  const requestedSkill=new URLSearchParams(location.search).get('skill');
+  if(['listening','reading','speaking','writing'].includes(requestedSkill))showTestCatalog(requestedSkill,false);
+  else showPortalHome(false);
 
 }
 
@@ -3110,6 +3121,8 @@ function updateCounts(){
     `${catalog.reading.length} ĐỀ`;
 
 
+  $('countSpeaking').textContent='10 ĐỀ';
+
   $('countWriting').textContent=
     `${catalog.writing.length} ĐỀ`;
 
@@ -3121,6 +3134,7 @@ function updateCounts(){
 
 
 function skillInfo(skill){
+  if(skill==='speaking')return {title:'Speaking Tests',desc:'10 đề thi đầy đủ Part 1, Part 2 và Part 3. Part 2 có 1 phút chuẩn bị và 2 phút nói.',icon:'🎙️',label:'Speaking'};
 
   if(
     skill==='reading'
@@ -3321,55 +3335,32 @@ function renderTests(){
 }
 
 
-function setSkill(
-  skill,
-  scroll=true
-){
-
-  currentSkill=
-    skill;
-
-
+function showTestCatalog(skill,updateUrl=true){
+  if(!currentStudent){showLogin(false);return}
+  currentSkill=skill;
   renderTests();
-
-
-  document
-  .querySelectorAll(
-    'button.skill-card[data-skill]'
-  )
-  .forEach(
-    button=>{
-
-      button.style.outline=
-
-        button.dataset.skill===skill
-
-        ?
-
-        '4px solid rgba(40,18,96,.14)'
-
-        :
-
-        'none';
-
-    }
-  );
-
-
-  if(scroll){
-
-    $('testSection')
-    .scrollIntoView({
-
-      behavior:'smooth',
-
-      block:'start'
-
-    });
-
-  }
-
+  ['homeHero','homeHeading','homeSkills'].forEach(id=>$(id)?.classList.add('hidden'));
+  $('testSection').classList.remove('hidden');
+  if(updateUrl)history.pushState({skill},'',location.pathname+'?skill='+encodeURIComponent(skill));
+  window.scrollTo({top:0,behavior:'instant'});
 }
+function showPortalHome(updateUrl=true){
+  ['homeHero','homeHeading','homeSkills'].forEach(id=>$(id)?.classList.remove('hidden'));
+  $('testSection').classList.add('hidden');
+  if(updateUrl)history.pushState({},'',location.pathname);
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function setSkill(skill,scroll=true){
+  currentSkill=skill;
+  renderTests();
+  if(scroll)showTestCatalog(skill);
+}
+window.addEventListener('popstate',()=>{
+  const skill=new URLSearchParams(location.search).get('skill');
+  if(['reading','listening','writing','speaking'].includes(skill))showTestCatalog(skill,false);
+  else showPortalHome(false);
+});
+$('backToSkills').addEventListener('click',()=>showPortalHome());
 
 
 function launchTest(path){
@@ -3494,11 +3485,7 @@ document
 
 const speakingMockDoor=$('speakingMockDoor');
 if(speakingMockDoor){
-  speakingMockDoor.addEventListener('click',()=>{
-    if(!currentStudent){showLogin(false);return;}
-    saveStudent(currentStudent);
-    location.href='./Practice/Vocabulary/speaking-mock-test/';
-  });
+  speakingMockDoor.addEventListener('click',()=>showTestCatalog('speaking'));
 }
 
 const practiceDoor=
