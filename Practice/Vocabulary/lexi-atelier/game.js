@@ -1,6 +1,13 @@
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
+const guide=$("atelierTutorial");
+const guideStart=$("atelierTutorialStart");
+if(guide&&guideStart){
+  guideStart.addEventListener("click",()=>{guide.hidden=true;document.querySelector('[data-place]')?.focus()});
+  requestAnimationFrame(()=>guideStart.focus());
+}
+
 const clean=s=>String(s||"").trim().toLowerCase();
 const safe=s=>String(s||"").replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[x]));
 let list=[];try{list=JSON.parse(sessionStorage.getItem("LEXI_ATELIER_WORDS")||"[]")}catch(err){}
