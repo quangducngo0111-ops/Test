@@ -19889,6 +19889,9 @@ async function init(){
 
   // Hiện giao diện ngay sau khi dữ liệu chính sẵn sàng.
   routeFromUrl();
+  // Speaking module may load before the async base vocabulary finishes.
+  // Ensure direct links still show the CEFR picker, not the game grid.
+  window.refreshSpeakingVocabularyStage?.();
 
 
   /*
