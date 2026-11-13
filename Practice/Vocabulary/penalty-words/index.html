@@ -32,9 +32,32 @@ h1{font-size:clamp(30px,5vw,55px);line-height:1.12;margin:10px 0 3px;text-align:
 [hidden]{display:none!important}
 @media(max-width:600px){.stadium{aspect-ratio:1.32}.goal{width:80%;left:10%}.board{padding:13px}.choice{font-size:13px;padding:8px}.keeper{font-size:45px}.ball{font-size:47px}.controls button{min-width:100px;flex:1}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+
+/* Penalty Words v2: illustrated players and connected kick/save states */
+.athlete{position:absolute;pointer-events:none;z-index:5;transform-origin:50% 90%;will-change:transform,left,top}
+.athlete svg{width:100%;height:100%;display:block;filter:drop-shadow(0 8px 4px #001b2b88)}
+.keeper.athlete{width:clamp(63px,11%,116px);height:39%;left:50%;top:36%;transform:translate(-50%,-35%);transition:left .53s ease,top .53s ease,transform .53s ease;z-index:4}
+.striker{left:33%;bottom:3%;height:39%;width:clamp(65px,12%,116px);transform:translateX(-50%);transition:left .37s ease,bottom .37s ease,transform .37s ease}
+.striker.runup{left:42%;bottom:8%;transform:translateX(-50%) rotate(-8deg)}
+.striker.kick{left:43%;bottom:8%;transform:translateX(-50%) rotate(10deg)}
+.striker.kick .legs{transform-origin:54px 118px;animation:penaltyLeg .37s ease-in-out both}
+.keeper.dive-left{transform:translate(-50%,-35%) rotate(-67deg) scale(1.12)}
+.keeper.dive-right{transform:translate(-50%,-35%) rotate(67deg) scale(1.12)}
+.keeper.dive-center{transform:translate(-50%,-55%) scale(1.12)}
+.keeper.celebrate{animation:penaltyCheer .48s ease-in-out 2 alternate}
+.striker.celebrate{animation:penaltyCheer .48s ease-in-out 2 alternate}
+.ball{z-index:7;pointer-events:none}
+.stadium-effect{z-index:9;position:absolute;top:26%;left:0;right:0;text-align:center;color:#fff0a1;font-size:clamp(25px,5vw,57px);font-weight:900;text-shadow:0 4px 15px #003;opacity:0;pointer-events:none;transform:scale(.7)}
+.stadium-effect.show{animation:penaltyFlash 1s ease both}
+.stadium.playing .zone{pointer-events:none}
+@keyframes penaltyLeg{0%{transform:rotate(0)}45%{transform:rotate(-37deg)}100%{transform:rotate(38deg)}}
+@keyframes penaltyCheer{from{transform:translateX(-50%) translateY(0)}to{transform:translateX(-50%) translateY(-16px)}}
+@keyframes penaltyFlash{0%{opacity:0;transform:scale(.7)}25%{opacity:1;transform:scale(1.05)}80%{opacity:1}100%{opacity:0;transform:scale(1.2)}}
+@media(max-width:600px){.striker{height:36%;width:17%}.keeper.athlete{height:36%;width:18%}}
+@media(prefers-reduced-motion:reduce){.striker.kick .legs,.keeper.celebrate,.striker.celebrate,.stadium-effect.show{animation:none!important}}
 </style></head><body><main class="screen"><header><a href="../">← Vocabulary</a><div>🏆 LEXI CUP · <b id="coins">⭐ 0</b></div><button class="secondary" id="help">? Cách chơi</button></header><h1>⚽ PENALTY WORDS</h1><p class="sub">Mỗi câu trả lời là một cơ hội ghi bàn · English vocabulary tournament</p><div class="pills"><span class="pill" id="modeLabel">Luân lưu 11m</span><span class="pill" id="roundLabel">Lượt 1 / 5</span><span class="pill" id="phaseLabel">Sút bóng</span></div>
 <div id="scoreboard"><div class="team">🔴 PHƯỢNG HOÀNG LỬA<div class="score" id="you">0</div><div class="turn" id="youMarks">○ ○ ○ ○ ○</div></div><div style="font-size:31px">VS</div><div class="team">🔵 SÓNG NGẦM<div class="score" id="ai">0</div><div class="turn" id="aiMarks">○ ○ ○ ○ ○</div></div></div>
-<section class="stadium" aria-label="Sân đá penalty"><div class="goal" id="goal"><button class="zone" data-z="0" aria-label="Góc cao trái">↖<span>cao</span></button><button class="zone" data-z="1" aria-label="Góc cao giữa">↑<span>cao</span></button><button class="zone" data-z="2" aria-label="Góc cao phải">↗<span>cao</span></button><button class="zone" data-z="3" aria-label="Góc thấp trái">↙<span>thấp</span></button><button class="zone" data-z="4" aria-label="Góc thấp giữa">↓<span>thấp</span></button><button class="zone" data-z="5" aria-label="Góc thấp phải">↘<span>thấp</span></button></div><div class="keeper" id="keeper">🧤</div><div class="ball" id="ball">⚽</div><div class="crowd"></div></section>
+<section class="stadium" id="stadium" aria-label="Sân đá penalty"><div class="goal" id="goal"><button class="zone" data-z="0" aria-label="Góc cao trái">↖<span>cao</span></button><button class="zone" data-z="1" aria-label="Góc cao giữa">↑<span>cao</span></button><button class="zone" data-z="2" aria-label="Góc cao phải">↗<span>cao</span></button><button class="zone" data-z="3" aria-label="Góc thấp trái">↙<span>thấp</span></button><button class="zone" data-z="4" aria-label="Góc thấp giữa">↓<span>thấp</span></button><button class="zone" data-z="5" aria-label="Góc thấp phải">↘<span>thấp</span></button></div><div class="keeper athlete" id="keeper"><svg viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="60" cy="172" rx="36" ry="6" fill="#092e35" opacity=".45"/><path d="M48 111L39 163M72 111L84 163" stroke="#19395b" stroke-width="17" stroke-linecap="round"/><path d="M34 163h22M73 163h23" stroke="#f4f8ff" stroke-width="12" stroke-linecap="round"/><path d="M37 56L14 91M84 56L106 88" stroke="#f4b885" stroke-width="17" stroke-linecap="round"/><ellipse cx="13" cy="96" rx="13" ry="15" fill="#e9efef"/><ellipse cx="107" cy="92" rx="13" ry="15" fill="#e9efef"/><path d="M39 48Q60 40 82 48L91 116H30Z" fill="#ffbf3c" stroke="#fff3c2" stroke-width="4"/><path d="M39 52L60 75L81 52" fill="none" stroke="#bc6e23" stroke-width="5"/><rect x="51" y="32" width="18" height="19" rx="7" fill="#e6a571"/><ellipse cx="60" cy="24" rx="22" ry="25" fill="#f4b885"/><path d="M38 20Q40-5 66 1Q87 5 82 25Q66 15 38 20" fill="#263d45"/><circle cx="52" cy="27" r="2" fill="#1b2838"/><circle cx="68" cy="27" r="2" fill="#1b2838"/></svg></div><div class="striker athlete" id="striker"><svg viewBox="0 0 120 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="59" cy="183" rx="40" ry="6" fill="#072d25" opacity=".4"/><g class="legs"><path d="M48 118L38 171M72 118L85 173" stroke="#213258" stroke-width="18" stroke-linecap="round"/><path d="M23 173h31M73 177h30" stroke="#f5f5fd" stroke-width="12" stroke-linecap="round"/></g><path d="M41 65L22 105M80 64L99 100" stroke="#db996e" stroke-width="16" stroke-linecap="round"/><path d="M43 53Q60 45 79 53L86 121H33Z" fill="#f25d56" stroke="#ffbd9b" stroke-width="4"/><path d="M57 54h9v42h-9" fill="#ffe1be"/><rect x="53" y="38" width="17" height="20" rx="7" fill="#e6ac82"/><ellipse cx="61" cy="27" rx="22" ry="25" fill="#e7b083"/><path d="M39 24Q35 2 57 3Q78 0 83 20L79 28Q66 17 39 24" fill="#1f263b"/><circle cx="54" cy="30" r="2" fill="#1d2030"/><circle cx="70" cy="30" r="2" fill="#1d2030"/></svg></div><div class="ball" id="ball">⚽</div><div class="stadium-effect" id="stadiumEffect" aria-live="polite"></div><div class="crowd"></div></section>
 <section class="board"><h2 id="questionTitle">Chuẩn bị vào giải!</h2><p id="question">Đọc hướng dẫn rồi chọn chế độ chơi.</p><div class="power"><i id="power"></i></div><div class="choices" id="answers"></div><p id="feedback" class="notice" style="color:#276e5d"></p><div class="controls" id="controls"><button id="shoot" class="primary" hidden>⚽ Sút ngay!</button><button id="continue" class="secondary" hidden>Tiếp tục →</button></div></section>
 <div class="overlay" id="intro"><div class="dialog"><h2>🏆 Chào mừng Lexi Cup!</h2><p>Đấu luân lưu bằng vốn từ vựng trong bộ từ bạn đã chọn.</p><ol><li><b>Đọc câu hỏi</b> và chọn nghĩa đúng. Càng nhanh, lực sút càng mạnh.</li><li><b>Chọn 1 trong 6 góc</b> khung thành rồi nhấn Sút. Góc cao khó cản nhưng cần lực tốt.</li><li><b>Đến lượt phòng thủ</b>, trả lời đúng để thủ môn cản cú sút.</li><li><b>5 lượt mỗi đội</b>; nếu hòa sẽ đá luân lưu lượt phụ. Từ sai sẽ quay lại để luyện.</li></ol><p><b>Chế độ:</b> Luân lưu 11m hoặc Giải đấu Lexi Cup (3 trận liên tiếp với cúp vô địch).</p><div class="controls"><button class="secondary" id="quick">⚽ Luân lưu 11m</button><button class="primary" id="cup">🏆 Giải đấu Lexi Cup</button></div></div></div>
 <div class="overlay" id="result" hidden><div class="dialog"><h2 id="resultTitle">Kết quả</h2><p id="resultText"></p><p id="missed"></p><div class="controls"><button class="primary" id="again">Chơi lại →</button><button class="secondary" onclick="location.href='../'">← Vocabulary</button></div></div></div></main>
@@ -43,7 +66,7 @@ h1{font-size:clamp(30px,5vw,55px);line-height:1.12;margin:10px 0 3px;text-align:
 const $=id=>document.getElementById(id),fallback=[["protect","bảo vệ"],["environment","môi trường"],["knowledge","kiến thức"],["progress","tiến bộ"],["develop","phát triển"],["improve","cải thiện"],["benefit","lợi ích"],["education","giáo dục"]];
 let words=[];try{words=JSON.parse(sessionStorage.getItem("PENALTY_WORDS_WORDS")||"[]")}catch(e){};words=(Array.isArray(words)?words:[]).filter(w=>w?.word&&w?.meaning);if(words.length<4)words=fallback.map(([word,meaning])=>({word,meaning}));
 const unique=new Map(words.map(w=>[String(w.word).toLowerCase(),w]));words=[...unique.values()];
-const st={mode:"quick",matches:1,match:1,turn:0,phase:"offense",score:[0,0],marks:[[],[]],queue:[],misses:[],start:0,answerOK:false,answered:false,zone:null,locked:false,stars:0,keeperZone:0,power:1};
+const st={mode:"quick",matches:1,match:1,turn:0,phase:"offense",score:[0,0],marks:[[],[]],queue:[],misses:[],start:0,answerOK:false,answered:false,zone:null,locked:false,animating:false,stars:0,keeperZone:0,power:1};
 const rand=a=>a[Math.floor(Math.random()*a.length)],shuffle=a=>[...a].sort(()=>Math.random()-.5);
 function view(){ $("you").textContent=st.score[0];$("ai").textContent=st.score[1];$("youMarks").textContent=st.marks[0].map(x=>x?"⚽":"✕").join(" ")+" "+Array(Math.max(0,5-st.marks[0].length)).fill("○").join(" ");$("aiMarks").textContent=st.marks[1].map(x=>x?"⚽":"✕").join(" ")+" "+Array(Math.max(0,5-st.marks[1].length)).fill("○").join(" ");$("roundLabel").textContent="Lượt "+Math.ceil((st.turn+1)/2)+"/5";$("modeLabel").textContent=st.mode==="cup"?"🏆 Lexi Cup · Trận "+st.match+"/3":"⚽ Luân lưu 11m";$("phaseLabel").textContent=st.phase==="offense"?"Tấn công":"Cản phá";$("coins").textContent="⭐ "+st.stars}
 function msg(t){$("feedback").textContent=t}
@@ -51,8 +74,9 @@ function showAnswers(show){$("answers").hidden=!show}
 function choices(w){const distractors=shuffle(words.filter(x=>x.word!==w.word&&x.meaning!==w.meaning)).slice(0,3);return shuffle([w,...distractors])}
 function nextWord(){if(st.misses.length&&Math.random()<.45)return rand(st.misses);return rand(words)}
 function round(){
- st.locked=false;st.answered=false;st.answerOK=false;st.zone=null;st.phase=st.turn%2?"defense":"offense";st.start=performance.now();st.keeperZone=Math.floor(Math.random()*6);st.power=1;
- $("ball").classList.remove("fly");$("ball").style.left="48%";$("ball").style.top="";$("ball").style.bottom="8%";$("keeper").style.left="49%";$("keeper").style.top="51%";
+ st.locked=false;st.animating=false;st.answered=false;st.answerOK=false;st.zone=null;st.phase=st.turn%2?"defense":"offense";st.start=performance.now();st.keeperZone=Math.floor(Math.random()*6);st.power=1;
+ $("stadiumEffect").classList.remove("show");$("stadium").classList.remove("playing");$("stadiumEffect").textContent="";$("striker").className="striker athlete";$("keeper").className="keeper athlete";
+ $("ball").classList.remove("fly");$("ball").style.left="48%";$("ball").style.top="";$("ball").style.bottom="8%";$("keeper").style.left="50%";$("keeper").style.top="36%";
  document.querySelectorAll(".zone").forEach(el=>{el.classList.remove("selected");el.disabled=st.phase!=="offense"});
  $("shoot").hidden=true;$("continue").hidden=true;msg("");
  const w=nextWord();st.word=w;
@@ -62,30 +86,56 @@ function round(){
  choices(w).forEach(x=>{const b=document.createElement("button");b.className="choice";b.textContent=x.meaning;b.onclick=()=>answer(x.word===w.word);$("answers").appendChild(b)});
  $("power").style.width="100%";showAnswers(true);view();
 }
+
+const pause=ms=>new Promise(resolve=>setTimeout(resolve,window.matchMedia("(prefers-reduced-motion: reduce)").matches?0:ms));
+async function animateShot(zone,scored,saved){
+ st.animating=true;$("stadium").classList.add("playing");$("shoot").hidden=true;
+ document.querySelectorAll(".zone").forEach(b=>b.disabled=true);
+ const keeper=$("keeper"),striker=$("striker"),ball=$("ball");
+ striker.classList.add("runup");await pause(340);
+ striker.classList.remove("runup");striker.classList.add("kick");
+ await pause(250);
+ const column=zone%3,row=zone<3?0:1;
+ ball.classList.add("fly");ball.style.left=(29+column*21)+"%";ball.style.top=(row===0?25:49)+"%";ball.style.bottom="auto";
+ const target=saved?zone:st.keeperZone;
+ keeper.style.left=(29+(target%3)*21)+"%";keeper.style.top=target<3?"25%":"47%";
+ keeper.classList.add(target%3===0?"dive-left":target%3===2?"dive-right":"dive-center");
+ await pause(670);
+ $("stadiumEffect").textContent=scored?"GOOOAL!":saved?"SAVED!":"MISSED!";
+ $("stadiumEffect").classList.remove("show");void $("stadiumEffect").offsetWidth;$("stadiumEffect").classList.add("show");
+ if(scored)striker.classList.add("celebrate");else keeper.classList.add("celebrate");
+ await pause(480);
+ st.animating=false;$("stadium").classList.remove("playing");
+}
+async function scoreTurn(goal,zone=st.zone??4,saved=!goal){
+ if(st.locked||st.animating)return;
+ st.locked=true;await animateShot(zone,goal,saved);
+ const ours=st.phase==="offense"?0:1;st.marks[ours].push(goal);if(goal)st.score[ours]++;
+ st.stars+=st.answerOK?3:0;view();$("shoot").hidden=true;
+ msg(st.phase==="offense"?(goal?"⚽ GOOOOAL! KHÁN ĐÀI BÙNG NỔ!":"🧤 Thủ môn đã cản phá / bóng ra ngoài!"):(goal?"⚽ Đối thủ đã ghi bàn!":"🧤 CẢN PHÁ XUẤT SẮC!"));
+ $("continue").hidden=false;$("continue").textContent="Tiếp tục →";
+}
 function answer(good){
- if(st.answered)return;st.answered=true;st.answerOK=good;st.power=Math.max(.12,1-(performance.now()-st.start)/14000);
+ if(st.answered||st.locked)return;st.answered=true;st.answerOK=good;st.power=Math.max(.12,1-(performance.now()-st.start)/14000);
  $("power").style.width=Math.round(st.power*100)+"%";
  $("answers").querySelectorAll("button").forEach(b=>b.disabled=true);
  if(!good)st.misses.push(st.word);
  if(st.phase==="offense"){
    if(good){msg("✅ Chính xác! Chọn một góc sút trong khung thành rồi nhấn Sút.");$("shoot").hidden=false}
-   else{msg("Từ này có nghĩa: "+st.word.meaning+". Bóng sút trượt!");scoreTurn(false)}
- }else{const saved=good&&Math.random()<(.7+st.power*.25);msg(good?(saved?"🧤 CẢN PHÁ XUẤT SẮC!":"Bóng đi quá hiểm, đối thủ ghi bàn!"):"Chưa chính xác — đối thủ ghi bàn. Đáp án: "+st.word.meaning);scoreTurn(!saved)}
-}
-function scoreTurn(goal){
- st.locked=true;const ours=st.phase==="offense"?0:1;st.marks[ours].push(goal);if(goal)st.score[ours]++;
- st.stars+=st.answerOK?3:0;view();$("shoot").hidden=true;
- $("keeper").style.left=(goal?"52%":"34%");$("keeper").style.top="44%";
- if(st.phase==="offense"){$("ball").classList.add("fly");$("ball").style.left=(24+((st.zone??2)%3)*26)+"%";$("ball").style.top=((st.zone??2)<3?"23%":"49%");$("ball").style.bottom="auto"}
- if(st.phase==="offense")msg(goal?"⚽ GOOOOAL! KHÁN ĐÀI BÙNG NỔ!":"🧤 Thủ môn đã cản phá / bóng ra ngoài! "+(st.answerOK?"Thử góc khác lần sau nhé.":""));
- $("continue").hidden=false;$("continue").textContent="Tiếp tục →";
+   else{msg("Từ này có nghĩa: "+st.word.meaning+". Bóng sút trượt!");scoreTurn(false,Math.floor(Math.random()*6),false)}
+ }else{
+   const saved=good&&Math.random()<(.7+st.power*.25);
+   const zone=Math.floor(Math.random()*6);
+   msg(good?"🧤 Thủ môn đang lao tới!":"Đáp án đúng: "+st.word.meaning);
+   scoreTurn(!saved,zone,saved);
+ }
 }
 function decideShot(){
- if(st.locked||!st.answered||!st.answerOK||st.zone===null){msg("Hãy chọn một góc sút trước!");return}
+ if(st.locked||st.animating||!st.answered||!st.answerOK||st.zone===null){msg("Hãy chọn một góc sút trước!");return}
  const high=st.zone<3,center=st.zone%3===1;
  const accuracy=st.power*.55+(high?.10:.33)+(center?-.08:.08);const saved=st.keeperZone===st.zone&&Math.random()<.75;
  const goal=accuracy>Math.random()*.84&&!saved;
- scoreTurn(goal);
+ scoreTurn(goal,st.zone,saved);
 }
 function continueRound(){
  if(!st.locked)return;st.turn++;
