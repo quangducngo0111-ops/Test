@@ -94,7 +94,7 @@ async function loadLesson(type,n){
   let config=null;
   if(dataNode){try{config=JSON.parse(dataNode.textContent)}catch(e){}}
   const keyNum=String(n).padStart(2,"0");
-  const curated=type==="discussion" ? window.WT2_DISCUSSION_VOCAB?.[keyNum] : type==="advantages" ? window.WT2_ADVANTAGES_VOCAB?.[keyNum] : type==="problem" ? window.WT2_PROBLEM_VOCAB?.[keyNum] : null;
+  const curated=type==="discussion" ? window.WT2_DISCUSSION_VOCAB?.[keyNum] : type==="advantages" ? window.WT2_ADVANTAGES_VOCAB?.[keyNum] : type==="problem" ? window.WT2_PROBLEM_VOCAB?.[keyNum] : type==="twopart" ? window.WT2_TWOPART_VOCAB?.[keyNum] : null;
   const groups=curated||parseExactGroups(page,type,n)||(config?templateGroups(config,type):null);
   if(!groups)throw new Error("Chưa trích xuất được từ vựng gốc từ bài "+n+".");
   const rows=Object.entries(groups).flatMap(([group,info])=>(info.rows||[]).map(([word,meaning],i)=>({
