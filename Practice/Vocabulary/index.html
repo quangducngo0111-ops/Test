@@ -9703,6 +9703,15 @@ button:disabled{
 #collectionScreen .game-mode-tile.theme-castle{background:radial-gradient(circle at 50% 28%,#9870cb,#342062 92%);border-color:#efd394}
 
 #collectionScreen .game-mode-tile.theme-atelier{background:radial-gradient(circle at 50% 28%,#f4bfc7,#9c76b8 72%,#6d4e91 100%);border-color:#ffdbbb}
+
+/* Featured vocabulary games: four new experiences at the beginning of the selector. */
+#collectionScreen .game-mode-tile.theme-penalty{background:radial-gradient(circle at 50% 24%,#27b9aa,#064b55 70%,#032b3d);border-color:#b4f0cf}
+#collectionScreen .game-mode-tile.theme-dungeon{background:radial-gradient(circle at 50% 24%,#8165c5,#332755 72%,#211b3c);border-color:#e6c78e}
+#collectionScreen .new-vocab-game{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:15px 8px;text-align:center;color:#fff}
+#collectionScreen .new-game-symbol{font-size:clamp(46px,5vw,84px);line-height:1.1;filter:drop-shadow(0 8px 12px #08101f88);transition:transform .2s}
+#collectionScreen .new-game-name{font-size:clamp(16px,1.8vw,25px);font-weight:900;line-height:1.1;text-shadow:0 3px 8px #0008}
+#collectionScreen .new-game-desc{font-size:11px;font-weight:750;line-height:1.25;color:#f2f6ee}
+#collectionScreen .new-vocab-game:hover .new-game-symbol{transform:scale(1.15) rotate(-4deg)}
 </style>
 
 </head>
@@ -10046,6 +10055,10 @@ button:disabled{
 
 
   <section class="game-grid game-mode-grid" aria-label="Chọn trò chơi từ vựng">
+<button type="button" class="game-card game-mode-tile theme-castle" data-game-button data-game-name="Lexicon Guardians" onclick="startLexiconGuardians()" aria-label="Chơi Lexicon Guardians" title="Chơi Lexicon Guardians"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/lexicon.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-atelier" data-game-button data-game-name="Lexi Atelier" onclick="startLexiAtelier()" aria-label="Chơi Lexi Atelier" title="Chơi Lexi Atelier"><span class="game-mode-spark one" aria-hidden="true">✿</span><img src="./assets/game-logos/lexi-atelier.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
+<button type="button" class="game-card game-mode-tile theme-penalty new-vocab-game" data-game-button data-game-name="Penalty Words" onclick="startPenaltyWords()" aria-label="Chơi Penalty Words" title="Penalty Words"><span class="new-game-symbol" aria-hidden="true">⚽</span><span class="new-game-name">Penalty Words</span><span class="new-game-desc">Luân lưu bóng đá · Lexi Cup</span></button>
+<button type="button" class="game-card game-mode-tile theme-dungeon new-vocab-game" data-game-button data-game-name="Dungeon of Words" onclick="startDungeonOfWords()" aria-label="Chơi Dungeon of Words" title="Dungeon of Words"><span class="new-game-symbol" aria-hidden="true">🏰</span><span class="new-game-name">Dungeon of Words</span><span class="new-game-desc">Phiêu lưu hầm ngục từ vựng</span></button>
 <button type="button" class="game-card game-mode-tile theme-peach" data-game-button data-game-name="Whack a Word" onclick="startWhack()" aria-label="Chơi Whack a Word" title="Chơi Whack a Word"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/whack.svg?v=20261113" alt="" loading="eager" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 <button type="button" class="game-card game-mode-tile theme-sky" data-game-button data-game-name="Word Catcher" onclick="startCatcher()" aria-label="Chơi Word Catcher" title="Chơi Word Catcher"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/catcher.svg?v=20261113" alt="" loading="eager" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 <button type="button" class="game-card game-mode-tile theme-speed" data-game-button data-game-name="Vocab Racer 3D" onclick="startRacer()" aria-label="Chơi Vocab Racer 3D" title="Chơi Vocab Racer 3D"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/racer.svg?v=20261113" alt="" loading="eager" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
@@ -10054,8 +10067,6 @@ button:disabled{
 <button type="button" class="game-card game-mode-tile theme-candy" data-game-button data-game-name="Balloon Pop" onclick="startBalloon()" aria-label="Chơi Balloon Pop" title="Chơi Balloon Pop"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/balloon.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 <button type="button" class="game-card game-mode-tile theme-ocean" data-game-button data-game-name="Shark Escape" onclick="startShark()" aria-label="Chơi Shark Escape" title="Chơi Shark Escape"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/shark.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 <button type="button" class="game-card game-mode-tile theme-gold" data-game-button data-game-name="Monkey Code Lock" onclick="startMonkey()" aria-label="Chơi Monkey Code Lock" title="Chơi Monkey Code Lock"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/monkey.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
-<button type="button" class="game-card game-mode-tile theme-castle" data-game-button data-game-name="Lexicon Guardians" onclick="startLexiconGuardians()" aria-label="Chơi Lexicon Guardians" title="Chơi Lexicon Guardians"><span class="game-mode-spark one" aria-hidden="true">✦</span><img src="./assets/game-logos/lexicon.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
-<button type="button" class="game-card game-mode-tile theme-atelier" data-game-button data-game-name="Lexi Atelier" onclick="startLexiAtelier()" aria-label="Chơi Lexi Atelier" title="Chơi Lexi Atelier"><span class="game-mode-spark one" aria-hidden="true">✿</span><img src="./assets/game-logos/lexi-atelier.svg?v=20261113" alt="" loading="lazy" decoding="async"><span class="game-mode-spark two" aria-hidden="true">✧</span></button>
 </section>
 
 
@@ -20246,6 +20257,22 @@ function startLexiAtelier(){
  }catch(err){console.warn("Lexi Atelier collection load failed",err);alert("Không thể tải nhóm từ. Vui lòng thử lại.");return}
  window.location.href="./lexi-atelier/";
 }
+</script>
+
+<script>
+function launchVocabularyStandaloneGame(path,key){
+ const collection=typeof currentCollection!=="undefined"?currentCollection:[];
+ if(!Array.isArray(collection)||collection.length<1){alert("Hãy chọn một bộ từ trước khi chơi.");return}
+ try{
+  sessionStorage.setItem(key,JSON.stringify(collection.map(item=>({
+   word:String(item.word||"").trim(),meaning:String(item.meaning||"").trim(),
+   example:String(item.example||""),collocation:String(item.collocation||"")
+  })).filter(item=>item.word&&item.meaning)));
+ }catch(error){console.error("Cannot pass vocabulary to game",error);alert("Không thể tải bộ từ. Hãy thử lại.");return}
+ window.location.href=path;
+}
+function startPenaltyWords(){launchVocabularyStandaloneGame("./penalty-words/","PENALTY_WORDS_WORDS")}
+function startDungeonOfWords(){launchVocabularyStandaloneGame("./dungeon-of-words/","DUNGEON_WORDS_WORDS")}
 </script>
 </body>
 </html>
