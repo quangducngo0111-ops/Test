@@ -66,7 +66,7 @@ const earned=10+stars*8;data.coins+=earned;data.done++;data.friends[guest.name]=
 let left=person()+'<div class="result-stars">'+("★".repeat(stars))+("☆".repeat(5-stars))+'</div><p>'+safe(feedback)+'</p><p class="reward">🌼 +'+earned+' Hoa Vàng</p><button id="again" class="scene-cta">Nhiệm vụ tiếp →</button> <button id="leave" class="scene-cta secondary">Về phố</button>';
 show("A lovely result ✿",card(left,'<div class="work-preview"><span class="preview-large">💐</span></div><p>Độ thân thiết ♡ '+data.friends[guest.name]+'</p>'));$("again").onclick=()=>begin(place);$("leave").onclick=close;
 }
-function journal(title,html){show(title,'<section class="paper-card">'+html+'<p><button id="backJournal" class="scene-cta secondary">← Về phố</button></p></section>');$("backJournal").onclick=close}
+function journal(title,html){show(title,'');$("sceneBody").innerHTML='<section class="paper-card">'+html+'<p><button id="backJournal" class="scene-cta secondary">← Về phố</button></p></section>';$("backJournal").onclick=close}
 $("openStories").onclick=()=>{let html="<h3>Nhật ký những người bạn</h3>";data.history.forEach(x=>html+='<p class="reward">'+safe(x.name)+' · '+x.stars+'★ · '+safe(x.quote)+'</p>');journal("Nhật ký câu chuyện",html)};
 $("openLookbook").onclick=()=>{let html="<h3>My Lookbook</h3>";data.looks.forEach(x=>html+='<p class="reward">👗 '+safe(x.style)+' · '+safe(x.color)+' · '+safe(x.item)+'</p>');journal("Lookbook",html)};
 const decor=[["🏮","Đèn lồng",35],["🪑","Ghế gỗ",45],["🌺","Chậu hoa",25],["⛲","Đài phun",90]];
