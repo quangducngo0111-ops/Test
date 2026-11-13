@@ -8,27 +8,8 @@ const TYPES=[
  {key:"problem",dir:"ProblemSolution",title:"Problem & Solution",description:"Phân tích vấn đề và giải pháp"},
  {key:"twopart",dir:"TwoPartQuestions",title:"Two-part Questions",description:"Trả lời hai câu hỏi"}
 ];
-const DEFAULT_GROUPS={
- A:[["an ongoing debate","một cuộc tranh luận đang diễn ra"],["a growing concern","mối lo ngại ngày càng tăng"],["a balanced approach","một cách tiếp cận cân bằng"],["different viewpoints","những quan điểm khác nhau"],["long-term consequences","hệ quả dài hạn"],["from my perspective","theo quan điểm của tôi"]],
- B:[["play an important role in","đóng vai trò quan trọng trong"],["have an impact on","có tác động đến"],["provide opportunities for","tạo cơ hội cho"],["take into account","cân nhắc / tính đến"],["in practical terms","về mặt thực tiễn"],["as a result","kết quả là"]],
- C:[["address underlying causes","giải quyết nguyên nhân sâu xa"],["reduce the risk of","giảm nguy cơ"],["contribute to","góp phần vào"],["lead to improvements","dẫn đến sự cải thiện"],["in the long run","về lâu dài"],["ensure that","đảm bảo rằng"]]
-};
-const TOPIC_TERMS={
- Education:[["academic knowledge","kiến thức học thuật"],["practical skills","kỹ năng thực hành"]],
- Technology:[["digital tools","công cụ số"],["online platforms","nền tảng trực tuyến"]],
- Transport:[["public transport","giao thông công cộng"],["traffic congestion","ùn tắc giao thông"]],
- Environment:[["natural resources","tài nguyên thiên nhiên"],["environmental protection","bảo vệ môi trường"]],
- Health:[["healthcare services","dịch vụ y tế"],["healthy lifestyles","lối sống lành mạnh"]],
- Work:[["job opportunities","cơ hội việc làm"],["working conditions","điều kiện làm việc"]],
- Society:[["community support","hỗ trợ cộng đồng"],["social relationships","quan hệ xã hội"]],
- Culture:[["cultural heritage","di sản văn hóa"],["local traditions","truyền thống địa phương"]]
-};
-const BODY_LABELS={
- discussion:["Quan điểm 1","Quan điểm 2"],
- advantages:["Lợi ích","Hạn chế"],
- problem:["Vấn đề","Giải pháp"],
- twopart:["Câu hỏi 1","Câu hỏi 2"]
-};
+// Each vocabulary pack must come from the corresponding Guided Writing lesson.
+// Generic filler packs are deliberately disallowed: they hide missing source content.
 const catalogCache=new Map();
 const lessonCache=new Map();
 function code(type,n){return "essay-"+type+"-"+String(n).padStart(2,"0")}
@@ -73,15 +54,6 @@ function parseExactGroups(page,type,n){
  }
  return null;
 }
-function templateGroups(config,type){
- const extra=TOPIC_TERMS[config.topic]||TOPIC_TERMS.Society;
- const labels=BODY_LABELS[type]||["Body 1","Body 2"];
- return {
- A:{title:"Nhóm A – Introduction & Conclusion",rows:DEFAULT_GROUPS.A},
- B:{title:"Nhóm B – "+labels[0],rows:[...extra,...DEFAULT_GROUPS.B]},
- C:{title:"Nhóm C – "+labels[1],rows:[...extra,...DEFAULT_GROUPS.C]}
- };
-}
 async function loadLesson(type,n){
  const key=code(type,n);
  if(lessonCache.has(key))return lessonCache.get(key);
@@ -95,8 +67,12 @@ async function loadLesson(type,n){
   if(dataNode){try{config=JSON.parse(dataNode.textContent)}catch(e){}}
   const keyNum=String(n).padStart(2,"0");
   const curated=type==="discussion" ? window.WT2_DISCUSSION_VOCAB?.[keyNum] : type==="advantages" ? window.WT2_ADVANTAGES_VOCAB?.[keyNum] : type==="problem" ? window.WT2_PROBLEM_VOCAB?.[keyNum] : type==="twopart" ? window.WT2_TWOPART_VOCAB?.[keyNum] : null;
-  const groups=curated||parseExactGroups(page,type,n)||(config?templateGroups(config,type):null);
-  if(!groups)throw new Error("Chưa trích xuất được từ vựng gốc từ bài "+n+".");
+  const groups=curated||parseExactGroups(page,type,n);
+  if(!groups)throw new Error("Bài "+String(n).padStart(2,"0")+" chưa có bộ từ vựng riêng theo đề. Không sử dụng bộ từ mẫu thay thế.");
+  const requiredGroups=["A","B","C"];
+  if(!requiredGroups.every(group=>Array.isArray(groups[group]?.rows)&&groups[group].rows.length)){
+    throw new Error("Bài "+String(n).padStart(2,"0")+" thiếu nhóm từ A, B hoặc C.");
+  }
   const rows=Object.entries(groups).flatMap(([group,info])=>(info.rows||[]).map(([word,meaning],i)=>({
      id:key+"-"+group.toLowerCase()+"-"+String(i+1).padStart(2,"0"),
      word:normalizeText(word),meaning:normalizeText(meaning),skills:["writing-task-2"],
@@ -129,7 +105,7 @@ async function attach(type,n){
  window.VOCABULARY_SET_INFO["writing-task-2"] ||= {};
  window.VOCABULARY_SET_INFO["writing-task-2"][key]={
    label:"Bài "+String(n).padStart(2,"0")+" · "+pack.lesson.title,
-   titles:["Từ vựng trích từ Guided Writing · "+pack.words.length+" cụm"]
+   titles:["Bộ từ theo đúng nội dung Guided Writing · "+pack.words.length+" cụm","Nhóm A: Introduction · Nhóm B/C: Phát triển luận điểm"]
  };
  return pack;
 }
