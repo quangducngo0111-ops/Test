@@ -6,7 +6,7 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src); // .../Test/ from .../Test/Practice/shared/
-const asset=new URL('./smartcom-ui.css?v=20261114-04',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261114-05',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 const pathname=location.pathname;
@@ -38,23 +38,62 @@ const groups=[
  ]},
  {heading:'Điều hướng',links:[['🏠','Trang chủ',''],['🧭','Kho luyện tập','Practice/']]}
 ];
-const shell=document.createElement('nav');shell.id='sc-quick-shell';shell.setAttribute('aria-label','Truy cập nhanh các phần học Smartcom');
-shell.innerHTML='<div class="sc-quick-panel" id="sc-quick-panel"><div class="sc-panel-top"><div><b>⚡ Truy cập nhanh</b><span>Chuyển phần học mà không cần quay về trang chủ</span></div><button class="sc-quick-close" type="button" aria-label="Đóng menu">✕</button></div></div><button type="button" class="sc-quick-trigger" aria-expanded="false" aria-controls="sc-quick-panel" title="Nhấn để mở truy cập nhanh" aria-label="Mở truy cập nhanh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg></button>';
-const panel=shell.querySelector('.sc-quick-panel'),trigger=shell.querySelector('.sc-quick-trigger');
+
+/* One continuous capsule: the original round lightning button expands upward. */
+const shell=document.createElement('nav');
+shell.id='sc-quick-shell';
+shell.className='sc-capsule';
+shell.setAttribute('aria-label','Chuyển nhanh giữa các phần học');
+const capsule=document.createElement('div');
+capsule.className='sc-capsule-frame';
+const tools=document.createElement('div');
+tools.className='sc-capsule-list';
+tools.id='sc-quick-panel';
+tools.setAttribute('aria-label','Các lối tắt');
 for(const group of groups){
- const h=document.createElement('div');h.className='sc-section-label';h.textContent=group.heading;panel.append(h);
- const wrap=document.createElement('div');wrap.className='sc-link-list';panel.append(wrap);
+ const heading=document.createElement('div');
+ heading.className='sc-capsule-divider';
+ heading.textContent=group.heading==='Thi thử IELTS'?'TEST':group.heading==='Kho luyện tập'?'HỌC':'KHÁC';
+ heading.setAttribute('aria-hidden','true');
+ tools.append(heading);
  for(const [icon,label,path] of group.links){
-  const a=document.createElement('a');a.className='sc-link'+(label==='Reading Test'?' sc-feature':'');
-  a.href=url(path);a.innerHTML='<span class="sc-icon" aria-hidden="true"></span><span></span>';
-  a.querySelector('.sc-icon').textContent=icon;a.lastElementChild.textContent=label;wrap.append(a);
+  const link=document.createElement('a');
+  link.href=url(path);
+  link.className='sc-capsule-link';
+  link.title=label;
+  link.setAttribute('aria-label',label);
+  const emoji=document.createElement('span');
+  emoji.className='sc-capsule-icon';
+  emoji.setAttribute('aria-hidden','true');
+  emoji.textContent=icon;
+  const tooltip=document.createElement('span');
+  tooltip.className='sc-capsule-tooltip';
+  tooltip.textContent=label;
+  tooltip.setAttribute('aria-hidden','true');
+  link.append(emoji,tooltip);
+  tools.append(link);
  }
 }
-const note=document.createElement('p');note.className='sc-panel-note';note.textContent='Đang làm bài thi? Hãy lưu hoặc nộp bài trước khi rời trang.';panel.append(note);
-function open(value){shell.classList.toggle('sc-open',value);trigger.setAttribute('aria-expanded',String(value))}
-trigger.addEventListener('click',()=>open(!shell.classList.contains('sc-open')));
-shell.querySelector('.sc-quick-close').addEventListener('click',()=>{open(false);trigger.focus()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')open(false)});
-document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))open(false)});
+const toggle=document.createElement('button');
+toggle.type='button';
+toggle.className='sc-capsule-trigger';
+toggle.setAttribute('aria-label','Mở menu truy cập nhanh');
+toggle.setAttribute('aria-controls','sc-quick-panel');
+toggle.setAttribute('aria-expanded','false');
+toggle.title='Truy cập nhanh';
+toggle.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg>';
+capsule.append(tools,toggle);
+shell.append(capsule);
+function setOpen(value){
+ shell.classList.toggle('sc-open',value);
+ toggle.setAttribute('aria-expanded',String(value));
+ toggle.setAttribute('aria-label',value?'Đóng menu truy cập nhanh':'Mở menu truy cập nhanh');
+ if(!value)tools.scrollTop=0;
+}
+toggle.addEventListener('click',()=>setOpen(!shell.classList.contains('sc-open')));
+document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))setOpen(false)});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'&&shell.classList.contains('sc-open')){setOpen(false);toggle.focus()}
+});
 document.body.append(shell);
 })();
