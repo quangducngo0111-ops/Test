@@ -243,3 +243,13 @@ body.sc-hub-refresh .section-head h2,body.sc-hub-refresh .section h2{font-size:2
  transform:translateY(-50%) translateX(0)!important
 }
 #sc-quick-shell.sc-capsule .sc-capsule-tooltip{display:none!important}
+
+/* Avoid reserving list padding while collapsed: trigger stays a perfect circle. */
+#sc-quick-shell.sc-capsule:not(.sc-open) .sc-capsule-list{
+ padding-top:0!important;padding-bottom:0!important;
+ height:0!important;flex-basis:0!important;overflow:hidden!important
+}
+#sc-quick-shell.sc-capsule.sc-open .sc-capsule-list{
+ padding-top:15px!important;padding-bottom:4px!important;
+ height:auto!important;flex-basis:auto!important
+}
