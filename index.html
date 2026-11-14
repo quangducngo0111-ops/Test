@@ -1501,39 +1501,11 @@ button.skill-card:hover{
 .student-avatar[hidden],.student-photo-preview[hidden]{display:none}
 .hero-art img.student-photo-active{aspect-ratio:3/4;object-fit:cover;object-position:center;}
 
-/* Chunky, skill-specific illustrated icon pairs for the six homepage cards. */
-.skill-decoration{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  min-height:70px;margin:12px auto 6px;pointer-events:none;
-  color:var(--skill-accent,#6b55c8);
-}
-.skill-deco-chip{
-  box-sizing:border-box;min-width:48px;height:48px;padding:0 10px;
-  border-radius:16px;display:inline-flex;align-items:center;justify-content:center;gap:5px;
-  font-size:22px;font-weight:900;line-height:1;
-  border:1px solid rgba(255,255,255,.94);
-  background:linear-gradient(155deg,#fff,rgba(255,255,255,.6));
-  box-shadow:0 9px 18px rgba(57,66,115,.09),inset 0 1px rgba(255,255,255,.8);
-  color:var(--skill-accent,#6b55c8);
-}
-.skill-deco-chip.wide{min-width:66px;font-size:17px}
-.skill-deco-chip.small{width:48px;padding:0}
-.skill-deco-connector{width:23px;height:4px;border-radius:10px;background:currentColor;opacity:.42}
-.skill-deco-arrow{font-size:24px;font-weight:900;color:var(--skill-accent,#6b55c8)}
-.skill-deco-glow{box-shadow:0 9px 18px rgba(85,55,150,.12),0 0 18px rgba(117,92,238,.22),inset 0 1px rgba(255,255,255,.95)}
-.skill-card.listening{--skill-accent:#1886db}
-.skill-card.reading{--skill-accent:#23924a}
-.skill-card.speaking{--skill-accent:#e67f22}
-.skill-card.writing{--skill-accent:#e65398}
-.skill-card.practice{--skill-accent:#674ec5}
-.skill-card.progress{--skill-accent:#3476c5}
-.skill-card.listening .skill-deco-chip{background:linear-gradient(160deg,#effaff,#dcefff)}
-.skill-card.reading .skill-deco-chip{background:linear-gradient(160deg,#edfff1,#d6f6df);box-shadow:0 9px 18px rgba(35,146,74,.12),inset 0 1px #fff}
-.skill-card.speaking .skill-deco-chip{background:linear-gradient(160deg,#fff5e9,#ffe5c9)}
-.skill-card.writing .skill-deco-chip{background:linear-gradient(160deg,#fff0f8,#ffdced)}
-.skill-card.practice .skill-deco-chip{background:linear-gradient(160deg,#f3efff,#e3d9ff)}
-.skill-card.progress .skill-deco-chip{background:linear-gradient(160deg,#eaf4ff,#d1e5ff);box-shadow:0 9px 18px rgba(52,118,197,.15),inset 0 1px #fff}
-.skill-card.progress .skill-deco-chip:last-child{background:linear-gradient(160deg,#d5f6ea,#baf0d8);color:#13875d}
+
+/* Simple centered footer: show only the existing number of tests/label. */
+#homeSkills .skill-footer{justify-content:center;align-items:center;min-height:64px;padding-top:5px}
+#homeSkills .skill-count{font-size:13px;font-weight:900;padding:10px 19px;min-width:74px;text-align:center;letter-spacing:.01em}
+#homeSkills .skill-copy{justify-content:flex-start}
 </style>
 <style>
 .test-route-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 0 22px;color:#7669a5;font-size:12px;font-weight:900;letter-spacing:.07em}
@@ -1870,9 +1842,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             Làm full Listening Test để kiểm tra trình độ và lưu kết quả.
           </p>
 
-          <div class="skill-decoration" aria-hidden="true"><span class="skill-deco-chip wide">🎧 1</span><span class="skill-deco-connector"></span><span class="skill-deco-chip wide">🎧 2</span></div>
-
-        </div>
+          </div>
 
 
         <div class="skill-footer">
@@ -1884,9 +1854,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             ĐỀ
           </div>
 
-          <div class="skill-hint">
-            Vào thi →
-          </div>
+          
 
         </div>
 
@@ -1918,9 +1886,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             Làm full Reading Test với 3 passages và 40 câu hỏi.
           </p>
 
-          <div class="skill-decoration" aria-hidden="true"><span class="skill-deco-chip small">A</span><span class="skill-deco-arrow">→</span><span class="skill-deco-chip small">Z</span></div>
-
-        </div>
+          </div>
 
 
         <div class="skill-footer">
@@ -1932,9 +1898,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             ĐỀ
           </div>
 
-          <div class="skill-hint">
-            Vào thi →
-          </div>
+          
 
         </div>
 
@@ -1962,9 +1926,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             Thi thử IELTS Speaking với giám khảo đọc câu hỏi, cue card và ghi âm.
           </p>
 
-          <div class="skill-decoration" aria-hidden="true"><span class="skill-deco-chip small">“</span><span class="skill-deco-chip small">”</span></div>
-
-        </div>
+          </div>
 
 
         <div class="skill-footer">
@@ -1973,9 +1935,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             10 ĐỀ
           </div>
 
-          <div class="skill-hint">
-            Vào thi →
-          </div>
+          
 
         </div>
 
@@ -2007,9 +1967,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             Luyện Writing trong giao diện riêng và lưu bài làm.
           </p>
 
-          <div class="skill-decoration" aria-hidden="true"><span class="skill-deco-chip small">✎</span><span class="skill-deco-chip small">✔</span></div>
-
-        </div>
+          </div>
 
 
         <div class="skill-footer">
@@ -2021,9 +1979,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             ĐỀ
           </div>
 
-          <div class="skill-hint">
-            Vào thi →
-          </div>
+          
 
         </div>
 
@@ -2055,9 +2011,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             Luyện từng dạng bài theo kỹ năng.
           </p>
 
-          <div class="skill-decoration" aria-hidden="true"><span class="skill-deco-chip small skill-deco-glow">✦</span><span class="skill-deco-connector"></span><span class="skill-deco-chip small skill-deco-glow">✧</span></div>
-
-        </div>
+          </div>
 
 
         <div class="skill-footer">
@@ -2069,9 +2023,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             KHO RIÊNG
           </div>
 
-          <div class="skill-hint">
-            Mở luyện tập →
-          </div>
+          
 
         </div>
 
@@ -2103,9 +2055,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             Xem kết quả TEST, band dự đoán và lịch sử làm bài của em.
           </p>
 
-          <div class="skill-decoration" aria-hidden="true"><span class="skill-deco-chip small">↗</span><span class="skill-deco-connector"></span><span class="skill-deco-chip small">✔</span></div>
-
-        </div>
+          </div>
 
 
         <div class="skill-footer">
@@ -2114,9 +2064,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
             KẾT QUẢ
           </div>
 
-          <div class="skill-hint">
-            Xem tiến độ →
-          </div>
+          
 
         </div>
 
