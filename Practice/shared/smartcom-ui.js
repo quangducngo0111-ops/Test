@@ -6,7 +6,7 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src); // .../Test/ from .../Test/Practice/shared/
-const asset=new URL('./smartcom-ui.css?v=20261114-06',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261114-07',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 const pathname=location.pathname;
