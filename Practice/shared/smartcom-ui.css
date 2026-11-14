@@ -222,3 +222,24 @@ body.sc-hub-refresh .section-head h2,body.sc-hub-refresh .section h2{font-size:2
  #sc-quick-shell.sc-capsule .sc-capsule-list,
  #sc-quick-shell.sc-capsule .sc-capsule-trigger svg{transition:none!important}
 }
+
+
+/* Overlay tooltip lives outside the scroll viewport; long labels never get clipped. */
+#sc-quick-shell.sc-capsule .sc-floating-label{
+ position:fixed!important;z-index:2147483001!important;
+ padding:8px 12px!important;border-radius:12px!important;
+ background:#2b165e!important;color:#fff!important;
+ font:800 12px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif!important;
+ white-space:nowrap!important;max-width:210px!important;
+ text-align:right!important;pointer-events:none!important;
+ box-shadow:0 8px 20px #24145430!important;
+ top:50%;right:95px;
+ opacity:0!important;visibility:hidden!important;
+ transform:translateY(-50%) translateX(8px)!important;
+ transition:opacity .14s,transform .14s,visibility .14s!important
+}
+#sc-quick-shell.sc-capsule .sc-floating-label.visible{
+ opacity:1!important;visibility:visible!important;
+ transform:translateY(-50%) translateX(0)!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-tooltip{display:none!important}
