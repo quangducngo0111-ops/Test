@@ -129,11 +129,11 @@ document.body.append(shell);
        typeof candidate.className==='string' && candidate.className.trim())
       profile={name:candidate.name.trim(),className:candidate.className.trim()};
   }catch(e){}
-  const fromPortal=params.get('fromPortal')==='1' && !!profile;
+  const root=new URL('../../',document.currentScript.src);
+  const fromPortal=!!profile && (params.get('fromPortal')==='1' || location.pathname===root.pathname || location.pathname===root.pathname+'index.html');
   if(!fromPortal)return;
   // Propagate the portal flow through all same-project internal links,
   // including the quick-navigation menu and dynamically inserted cards.
-  const root=new URL('../../',document.currentScript.src);
   document.addEventListener('click',function(event){
     const anchor=event.target.closest?.('a[href]');
     if(!anchor || event.defaultPrevented || event.button!==0 ||
