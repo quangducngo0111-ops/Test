@@ -253,3 +253,14 @@ body.sc-hub-refresh .section-head h2,body.sc-hub-refresh .section h2{font-size:2
  padding-top:15px!important;padding-bottom:4px!important;
  height:auto!important;flex-basis:auto!important
 }
+
+/* Quieter launcher when idle: readable content behind it stays visible. */
+#sc-quick-shell.sc-capsule:not(.sc-open) .sc-capsule-frame{
+ opacity:.42!important;
+ transition:height .38s cubic-bezier(.2,.85,.22,1),box-shadow .24s ease,opacity .2s ease!important;
+}
+#sc-quick-shell.sc-capsule:not(.sc-open):hover .sc-capsule-frame,
+#sc-quick-shell.sc-capsule:not(.sc-open):focus-within .sc-capsule-frame,
+#sc-quick-shell.sc-capsule.sc-open .sc-capsule-frame{
+ opacity:1!important;
+}
