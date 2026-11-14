@@ -85,4 +85,5 @@ $('year').onchange=buildSets;$('begin').onclick=fill;$('hear').onclick=speak;$('
 window.addEventListener('pagehide',()=>{stopClock();stopRecording();stopAudio()});
 Promise.all([1,2,3].map(async n=>{const r=await fetch('../Part'+n+'/topics/bank-2025-2026.json',{cache:'no-store'});if(!r.ok)throw Error('Part '+n+' HTTP '+r.status);const j=await r.json();banks[n]=j.topics})).then(buildSets).catch(e=>{$('loading').textContent='⚠ Không tải được ngân hàng đề: '+e.message});
 })();
-</script></body></html>
+</script><script src="../../../Practice/shared/smartcom-ui.js?v=20261114-01"></script>
+</body></html>
