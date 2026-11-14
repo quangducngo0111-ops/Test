@@ -230,7 +230,7 @@ a {
     font-size: 12px;
   }
 }
-</style>
+ .card{border:2px solid #eee5ff;border-radius:20px;box-shadow:0 7px 0 #d4c2ed48} .card:hover{border-color:#9a76df;transform:translateY(-4px)} .hero{background:linear-gradient(110deg,#fff5de,#f0e5ff,#e4f7ff)} .number{background:#f0e8ff;color:#4f1ca7} </style>
 </head>
 
 <body>
@@ -257,7 +257,7 @@ a {
     <h1>Speaking Part 1</h1>
 
     <p>
-      Luyện trả lời các câu hỏi về những chủ đề quen thuộc.
+      Luyện trả lời câu hỏi từ ngân hàng 2025–2026 và các chủ đề quen thuộc.
       Học sinh trả lời bằng giọng nói và nhận gợi ý
       mở rộng ý bằng lý do, ví dụ và chi tiết.
     </p>
@@ -379,52 +379,24 @@ function render(items) {
 }
 
 async function loadTopics() {
-  // Hiển thị dữ liệu dự phòng ngay lập tức.
   render(FALLBACK);
-
-  try {
-    const response = await fetch(INDEX_URL, {
-      cache: 'no-store'
-    });
-
-    if (!response.ok) {
-      throw new Error('HTTP ' + response.status);
-    }
-
-    const data = await response.json();
-
-    // Chấp nhận index.json là mảng trực tiếp
-    // hoặc object chứa thuộc tính "topics".
-    const remote = Array.isArray(data)
-      ? data
-      : Array.isArray(data.topics)
-        ? data.topics
-        : null;
-
-    if (!remote) {
-      throw new Error('Định dạng index.json không hợp lệ');
-    }
-
-    const merged = new Map();
-
-    for (const item of [...FALLBACK, ...remote]) {
-      const normalized = normalizeItem(item);
-
-      if (normalized) {
-        merged.set(normalized.id, normalized);
-      }
-    }
-
-    render([...merged.values()]);
-
-  } catch (error) {
-    console.warn(
-      'Không tải được danh sách Part 1. Giữ danh sách dự phòng.',
-      error
-    );
+  const [legacyResult, recentResult] = await Promise.allSettled([
+    fetch(INDEX_URL,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}),
+    fetch('./topics/bank-2025-2026.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
+  ]);
+  const merged=new Map(FALLBACK.map(x=>[x.id,x]));
+  if(legacyResult.status==='fulfilled'){
+    const data=legacyResult.value;
+    (Array.isArray(data)?data:data.topics||[]).forEach(x=>{const n=normalizeItem(x);if(n)merged.set(n.id,n)});
   }
+  if(recentResult.status==='fulfilled'){
+    (recentResult.value.topics||[]).forEach(x=>{
+      const n=normalizeItem({...x,description:x.year+' · Luyện tập theo nhóm chủ đề được ghi nhận'});
+      if(n)merged.set(n.id,n);
+    });
+  } else console.warn('Không tải được bộ topic 2025–2026',recentResult.reason);
+  render([...merged.values()]);
 }
-
 loadTopics();
 </script>
 
