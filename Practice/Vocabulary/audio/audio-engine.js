@@ -788,6 +788,7 @@
     multiplier=.35
 
   ){
+    if(window.OriginalGameMusic)return;
 
 
     if(
@@ -857,6 +858,8 @@
   ========================================================= */
 
   function startMusic(game){
+    currentGameAudio=game;
+    if(window.OriginalGameMusic){if(musicEnabled)window.OriginalGameMusic.start(game);return;}
 
     if(
       !game
@@ -990,6 +993,7 @@
     fade=true
 
   ){
+    if(window.OriginalGameMusic){window.OriginalGameMusic.stop();return;}
 
 
     clearTimeout(
@@ -2072,6 +2076,7 @@
 
 
     updateAudioButtons();
+    if(window.OriginalGameMusic)window.OriginalGameMusic.setEnabled(musicEnabled);
 
 
     if(
