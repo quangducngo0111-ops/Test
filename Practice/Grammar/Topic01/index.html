@@ -21,7 +21,19 @@ function readHandoff(){let r;try{r=JSON.parse(sessionStorage.getItem(ROUTE_KEY)|
 function goTo(href){if(!activeStudent){showStudent();return;}const url=new URL(href,location.href);const clean=s=>String(s||'').replace(/\/+$/,'')+'/';sessionStorage.setItem(ROUTE_KEY,JSON.stringify({target:clean(url.pathname),time:Date.now(),student:activeStudent}));location.href=url.href;}
 function showStudent(){document.getElementById('nameModal').hidden=false;document.getElementById('studentName').value='';document.getElementById('studentClass').value='';document.getElementById('studentName').focus();}
 function studentSubmit(e){e.preventDefault();const name=document.getElementById('studentName').value.trim(),className=document.getElementById('studentClass').value.trim();if(!name||!className){document.getElementById('nameError').textContent='Vui lòng nhập đầy đủ họ tên và lớp.';return;}saveStudent({name,className});document.getElementById('nameModal').hidden=true;const fn=window.afterStudentLogin;if(typeof fn==='function')fn();}
-function initStudent(){document.querySelector('#studentForm').addEventListener('submit',studentSubmit);if(!readHandoff())showStudent();}
+function initStudent(){
+ document.querySelector('#studentForm').addEventListener('submit',studentSubmit);
+ if(readHandoff())return;
+ if(new URLSearchParams(location.search).get('fromPortal')==='1'){
+  try{const profile=JSON.parse(localStorage.getItem(USER_KEY)||'null');
+   if(profile?.name?.trim()&&profile?.className?.trim()){
+    saveStudent({name:profile.name.trim(),className:profile.className.trim()});
+    document.getElementById('nameModal').hidden=true;return;
+   }
+  }catch(e){}
+ }
+ showStudent();
+}
 
 document.querySelectorAll('[data-handoff]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo(a.getAttribute('data-handoff'))}));initStudent();
 </script><script src="../../../Practice/shared/smartcom-ui.js?v=20261114-01"></script>
