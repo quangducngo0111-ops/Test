@@ -24,7 +24,7 @@ const groups=[
   ['🎙️','Speaking Mock','Practice/Speaking/mock-test/'],['✍️','Writing','Practice/WritingTask2/']
  ]},
  {heading:'Kho luyện tập',links:[
-  ['💬','Speaking','Practice/Speaking/'],['🌍','English Abroad','Practice/Speaking/english-abroad/'],
+  ['💬','Speaking','Practice/Speaking/'],
   ['🧠','Vocabulary','Practice/Vocabulary/'],['📗','Grammar','Practice/Grammar/'],
   ['📚','Reading Practice','Practice/Reading/ReadingPractice3Passages/'],
   ['🎧','Listening Practice','Practice/Listening/'],
@@ -39,7 +39,7 @@ for(const group of groups){
  const h=document.createElement('div');h.className='sc-section-label';h.textContent=group.heading;panel.append(h);
  const wrap=document.createElement('div');wrap.className='sc-link-list';panel.append(wrap);
  for(const [icon,label,path] of group.links){
-  const a=document.createElement('a');a.className='sc-link'+(label==='Reading Test'||label==='English Abroad'?' sc-feature':'');
+  const a=document.createElement('a');a.className='sc-link'+(label==='Reading Test'?' sc-feature':'');
   a.href=url(path);a.innerHTML='<span class="sc-icon" aria-hidden="true"></span><span></span>';
   a.querySelector('.sc-icon').textContent=icon;a.lastElementChild.textContent=label;wrap.append(a);
  }
