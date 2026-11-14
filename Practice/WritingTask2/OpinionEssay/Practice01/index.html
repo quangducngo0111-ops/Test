@@ -450,4 +450,5 @@ document.addEventListener('input',e=>{const el=e.target.closest('[data-chain-tex
 (()=>{const prompt=document.querySelector('.essay-question'),dock=document.getElementById('questionDock'),btn=document.getElementById('toggleQuestion');if(!prompt||!dock||!btn)return;
 const update=()=>{const bottom=prompt.getBoundingClientRect().bottom;dock.classList.toggle('visible',bottom<65);document.documentElement.style.setProperty('--logic-sticky-top',Math.ceil((document.querySelector('header')?.offsetHeight||59)+(bottom<65?dock.offsetHeight:0)+8)+'px');if(bottom>=65){document.body.classList.remove('question-open');btn.setAttribute('aria-expanded','false');btn.textContent='Xem toàn bộ đề ↓';}};
 window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update,{passive:true});btn.addEventListener('click',()=>{const expanded=document.body.classList.toggle('question-open');btn.setAttribute('aria-expanded',String(expanded));btn.textContent=expanded?'Thu gọn ↑':'Xem toàn bộ đề ↓';requestAnimationFrame(update);});update();})();
-</script></body></html>
+</script><script src="../../../../Practice/shared/smartcom-ui.js?v=20261114-01"></script>
+</body></html>
