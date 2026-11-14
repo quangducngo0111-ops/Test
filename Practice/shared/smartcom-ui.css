@@ -112,3 +112,113 @@ body.sc-hub-refresh .section-head h2,body.sc-hub-refresh .section h2{font-size:2
 @media(max-width:700px){
  body.sc-hub-refresh .grid>.card,body.sc-hub-refresh .cards>.tile{min-height:150px;padding:17px!important}
 }
+
+
+/* v5 · Morphing icon rail: single continuous circle-to-pill surface */
+#sc-quick-shell.sc-capsule{
+ position:fixed!important;z-index:2147483000!important;
+ right:max(18px,env(safe-area-inset-right))!important;
+ bottom:max(18px,env(safe-area-inset-bottom))!important;
+ width:66px!important;height:auto!important;
+ padding:0!important;pointer-events:auto!important;
+ color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif!important;
+ overflow:visible!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-frame{
+ width:66px!important;height:66px!important;min-height:66px!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;
+ background:linear-gradient(160deg,#8c56ec 0%,#5c26c7 48%,#3b0e90 100%)!important;
+ border:2px solid #ffffff!important;border-radius:999px!important;
+ box-shadow:0 6px 0 #260a70,0 14px 28px #2f167c48!important;
+ overflow:visible!important;
+ transition:height .38s cubic-bezier(.2,.85,.22,1),box-shadow .24s ease!important;
+ position:relative!important;isolation:isolate!important
+}
+#sc-quick-shell.sc-capsule.sc-open .sc-capsule-frame{
+ height:min(660px,82dvh)!important;
+ box-shadow:0 7px 0 #270e75,0 20px 36px #29106c55!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-trigger{
+ flex:none!important;order:2!important;
+ width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;
+ border:0!important;border-radius:50%!important;background:transparent!important;color:white!important;
+ display:grid!important;place-items:center!important;cursor:pointer!important;
+ padding:0!important;margin:0!important;box-shadow:none!important;
+ transform:none!important;float:none!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-trigger svg{
+ width:27px!important;height:27px!important;fill:none!important;stroke:currentColor!important;
+ stroke-width:2.2!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+ transition:transform .28s ease!important
+}
+#sc-quick-shell.sc-capsule.sc-open .sc-capsule-trigger svg{transform:rotate(12deg) scale(1.05)!important}
+#sc-quick-shell.sc-capsule .sc-capsule-list{
+ order:1!important;display:flex!important;flex-direction:column!important;align-items:center!important;
+ width:62px!important;min-height:0!important;max-height:none!important;flex:1 1 auto!important;
+ padding:15px 0 4px!important;margin:0!important;gap:6px!important;
+ overflow-x:visible!important;overflow-y:auto!important;
+ opacity:0!important;visibility:hidden!important;
+ scrollbar-width:none!important;overscroll-behavior:contain!important;
+ transform:translateY(18px) scaleY(.75)!important;
+ transform-origin:bottom center!important;
+ transition:opacity .18s ease,transform .32s ease,visibility .18s!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-list::-webkit-scrollbar{display:none!important}
+#sc-quick-shell.sc-capsule.sc-open .sc-capsule-list{
+ opacity:1!important;visibility:visible!important;transform:none!important;
+ transition-delay:.1s!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-divider{
+ flex:none!important;margin:8px 0 2px!important;
+ font-size:8px!important;font-weight:900!important;letter-spacing:1px!important;
+ line-height:1.3!important;color:#e5d7ff!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-link{
+ flex:0 0 42px!important;width:44px!important;height:42px!important;min-height:42px!important;
+ display:grid!important;place-items:center!important;
+ text-decoration:none!important;position:relative!important;overflow:visible!important;
+ background:#ffffff1f!important;border:1px solid #ffffff38!important;border-radius:18px!important;
+ color:white!important;box-shadow:none!important;padding:0!important;
+ transition:transform .17s ease,background .17s ease!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-link:hover,
+#sc-quick-shell.sc-capsule .sc-capsule-link:focus-visible{
+ background:#ffffff43!important;transform:scale(1.08)!important;outline:2px solid #fff4c7!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-icon{
+ font-size:23px!important;line-height:1!important;filter:drop-shadow(0 1px 1px #280b6550)!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-tooltip{
+ position:absolute!important;right:calc(100% + 18px)!important;top:50%!important;
+ transform:translate(6px,-50%)!important;
+ display:block!important;width:max-content!important;max-width:180px!important;
+ white-space:nowrap!important;background:#2b165e!important;color:white!important;
+ font-size:12px!important;font-weight:800!important;letter-spacing:0!important;
+ padding:8px 12px!important;border-radius:12px!important;
+ box-shadow:0 8px 20px #24145430!important;
+ opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+ transition:opacity .13s,transform .13s,visibility .13s!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-tooltip:after{
+ content:"";position:absolute;left:100%;top:50%;transform:translateY(-50%);
+ border:6px solid transparent;border-left-color:#2b165e
+}
+#sc-quick-shell.sc-capsule .sc-capsule-link:hover .sc-capsule-tooltip,
+#sc-quick-shell.sc-capsule .sc-capsule-link:focus-visible .sc-capsule-tooltip{
+ opacity:1!important;visibility:visible!important;transform:translate(0,-50%)!important
+}
+#sc-quick-shell.sc-capsule .sc-capsule-trigger:focus-visible{
+ outline:3px solid #ffca62!important;outline-offset:2px!important
+}
+@media(max-width:600px){
+ #sc-quick-shell.sc-capsule{right:12px!important;bottom:max(12px,env(safe-area-inset-bottom))!important;width:60px!important}
+ #sc-quick-shell.sc-capsule .sc-capsule-frame{width:60px!important;height:60px!important;min-height:60px!important}
+ #sc-quick-shell.sc-capsule .sc-capsule-trigger{width:56px!important;height:56px!important;min-width:56px!important;min-height:56px!important}
+ #sc-quick-shell.sc-capsule .sc-capsule-list{width:56px!important}
+ #sc-quick-shell.sc-capsule.sc-open .sc-capsule-frame{height:min(580px,78dvh)!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #sc-quick-shell.sc-capsule .sc-capsule-frame,
+ #sc-quick-shell.sc-capsule .sc-capsule-list,
+ #sc-quick-shell.sc-capsule .sc-capsule-trigger svg{transition:none!important}
+}
