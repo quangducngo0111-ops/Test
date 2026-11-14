@@ -93,8 +93,8 @@ function recordNow(){
  };
  try{rec.start(300)}catch(e){status('Không thể bắt đầu ghi âm: '+e.message);return}
  phase='answer';micState.textContent='● Đang ghi âm';micState.classList.add('recording');
- $('next').disabled=false;status('🔴 Đang ghi âm câu trả lời…');
- setTimer(session[index].part===3?75:45,'Thời gian trả lời',()=>advance());
+ $('next').disabled=session[index].part===2;status('🔴 Đang ghi âm câu trả lời…');
+ setTimer(session[index].part===2?120:session[index].part===3?75:45,session[index].part===2?'Speaking Part 2 · 2 phút':'Thời gian trả lời',()=>advance());
 }
 function countdown(){
  phase='countdown';$('gateTitle').textContent='Chuẩn bị trả lời';
@@ -105,12 +105,12 @@ function countdown(){
 }
 function prepPart2(){
  phase='prep';gate.hidden=true;
- $('answer').disabled=false;$('answer').value=noteText;
+ $('answer').disabled=false;$('answer').readOnly=false;$('answer').value=noteText;
  $('noteTitle').textContent='📝 Ghi chú trong 1 phút';
  $('noteHelp').textContent='Dùng từ khóa và dàn ý. Ghi chú vẫn hiển thị khi nói.';
  status('⏱ Part 2: 1 phút chuẩn bị và take notes.');
  setTimer(60,'Take notes · 1 phút',()=>{
-  noteText=$('answer').value;$('answer').disabled=true;countdown();
+  noteText=$('answer').value;$('answer').readOnly=true;countdown();
  });
 }
 function showAudio(){
@@ -145,7 +145,7 @@ function draw(){
   const list=document.createElement('ul');list.className='bullets';
   q.bullets.forEach(t=>{const li=document.createElement('li');li.textContent=t;list.append(li)});$('prompt').append(list)}
  $('phaseNote').textContent=q.part===2?'1 phút ghi chú · 5 giây chuẩn bị · 2 phút ghi âm':'Nghe câu hỏi · 5 giây chuẩn bị · tự ghi âm.';
- $('answer').value=q.part===2?noteText:'';$('answer').disabled=true;
+ $('answer').value=q.part===2?noteText:'';$('answer').disabled=true;$('answer').readOnly=false;
  $('noteTitle').textContent=q.part===2?'📝 Take notes':'🎤 Trả lời trực tiếp bằng giọng nói';
  $('noteHelp').textContent=q.part===2?'Ghi chú mở trong lúc chuẩn bị và vẫn hiển thị khi trả lời.':'Không có phần nhập câu trả lời: hãy trả lời qua micro.';
  $('next').disabled=true;$('next').textContent=index===session.length-1?'Hoàn thành →':'Câu tiếp →';
