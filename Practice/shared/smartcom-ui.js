@@ -6,7 +6,7 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src); // .../Test/ from .../Test/Practice/shared/
-const asset=new URL('./smartcom-ui.css?v=20261114-03',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261114-04',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 const pathname=location.pathname;
@@ -17,7 +17,13 @@ const hubPaths=[
  '/Practice/Listening/Part4/','/Practice/Reading/ReadingPractice3Passages/',
  '/Practice/Grammar/','/Practice/WritingTask1/','/Practice/WritingTask2/','/Practice/Vocabulary/'
 ];
-if(pathname===root.pathname||hubPaths.some(p=>pathname.endsWith(p)||pathname.endsWith(p.slice(0,-1))))document.body.classList.add('sc-hub-refresh');
+const nestedHub=(
+ /\/Practice\/Reading\/(?:ReadingPassage[123]|TrueFalseNotGiven|NoteCompletion|TableCompletion|ShortAnswerQuestions|Matching%20Headings)\/?$/i.test(pathname)||
+ /\/Practice\/WritingTask1\/(?:DynamicDatasets|StaticDatasets|Maps|Process)\/?$/i.test(pathname)||
+ /\/Practice\/WritingTask2\/(?:OpinionEssay|DiscussionEssay|AdvantagesDisadvantages|ProblemSolution|TwoPartQuestions)\/?$/i.test(pathname)||
+ /\/Practice\/Grammar\/Topic\d\d\/?$/i.test(pathname)
+);
+if(pathname===root.pathname||nestedHub||hubPaths.some(p=>pathname.endsWith(p)||pathname.endsWith(p.slice(0,-1))))document.body.classList.add('sc-hub-refresh');
 const groups=[
  {heading:'Thi thử IELTS',links:[
   ['📖','Reading Test','Read01/'],['🎧','Listening Test','Lis01/C21T4/'],
