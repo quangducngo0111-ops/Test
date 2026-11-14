@@ -115,4 +115,52 @@ document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&shell.classList.contains('sc-open')){setOpen(false);toggle.focus()}
 });
 document.body.append(shell);
+
+/* Student context: preserve Portal navigation, never require name/class again
+   for students who arrived from the homepage. Direct standalone links keep
+   their own identity form. No identity data is put in new URLs. */
+(function(){
+  const PROFILE_KEY='IELTS_PRACTICE_STUDENT';
+  const params=new URLSearchParams(location.search);
+  let profile=null;
+  try{
+    const candidate=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');
+    if(candidate && typeof candidate.name==='string' && candidate.name.trim() &&
+       typeof candidate.className==='string' && candidate.className.trim())
+      profile={name:candidate.name.trim(),className:candidate.className.trim()};
+  }catch(e){}
+  const fromPortal=params.get('fromPortal')==='1' && !!profile;
+  if(!fromPortal)return;
+  // Propagate the portal flow through all same-project internal links,
+  // including the quick-navigation menu and dynamically inserted cards.
+  const root=new URL('../../',document.currentScript.src);
+  document.addEventListener('click',function(event){
+    const anchor=event.target.closest?.('a[href]');
+    if(!anchor || event.defaultPrevented || event.button!==0 ||
+       event.ctrlKey || event.metaKey || event.shiftKey || event.altKey ||
+       (anchor.target && anchor.target!=='_self') || anchor.hasAttribute('download'))return;
+    const destination=new URL(anchor.href,location.href);
+    if(destination.origin!==location.origin || !destination.pathname.startsWith(root.pathname))return;
+    destination.searchParams.set('fromPortal','1');
+    anchor.href=destination.href;
+  },true);
+  // Scripts on standalone pages have already initialized by the time
+  // the shared UI script runs. Reuse the validated Portal profile.
+  const name=document.getElementById('studentName');
+  const cls=document.getElementById('studentClass');
+  if(name && cls && name.tagName==='INPUT' && cls.tagName==='INPUT'){
+    name.value=profile.name;
+    cls.value=profile.className;
+    [name,cls].forEach(input=>{
+      const wrapper=input.closest('.field')||input.closest('label');
+      if(wrapper && !wrapper.contains(document.querySelector('#startBtn')))wrapper.style.display='none';
+    });
+    const message=document.createElement('p');
+    message.className='sc-student-identified';
+    message.textContent='Học sinh: '+profile.name+' · Lớp '+profile.className;
+    message.style.cssText='font-size:14px;font-weight:700;color:#3b0e90;margin:8px 0 14px';
+    const start=document.getElementById('startBtn') || document.querySelector('button[onclick*="startExam"]');
+    if(start && !document.querySelector('.sc-student-identified'))start.parentNode.insertBefore(message,start);
+  }
+})();
 })();
