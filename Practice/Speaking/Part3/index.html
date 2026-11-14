@@ -1,0 +1,28 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Speaking Part 3 · Discussion Topics</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,Arial;color:#332451;background:radial-gradient(circle at 0 0,#dfcbff,transparent 45%),linear-gradient(135deg,#fffaf0,#e9f7ff)}a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cursor:pointer}
+header{background:linear-gradient(105deg,#42169e,#7552db);color:white;padding:15px max(18px,calc((100vw - 1120px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px}
+header a{color:white;font-weight:800}main{max-width:1120px;margin:auto;padding:25px 16px 70px}.hero{border:3px solid white;border-radius:26px;background:linear-gradient(120deg,#4516a2,#8555e4);color:white;padding:30px;box-shadow:0 12px 0 #ba9fe347,0 20px 35px #5b38992c}.hero small{font-weight:900;letter-spacing:2px;color:#ffde89}.hero h1{font-size:clamp(28px,4vw,43px);margin:9px 0}.hero p{max-width:770px;color:#f6edff}
+.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:28px 0 18px}.filters input,.filters select{border:2px solid #ddd1f7;background:white;border-radius:13px;padding:11px 14px;min-height:47px}.filters input{flex:1;min-width:220px}.filters select{min-width:130px}.count{font-weight:900;color:#5b329d}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.card{display:flex;gap:14px;align-items:flex-start;border:2px solid #eee4ff;background:#fffdfa;border-radius:20px;padding:18px;box-shadow:0 6px 0 #d9c9eb70;transition:transform .18s}.card:hover{border-color:#8d6add;transform:translateY(-3px)}.number{flex:0 0 54px;height:54px;border-radius:17px;background:linear-gradient(135deg,#ffcf74,#ff9c00);display:grid;place-items:center;color:#60357e;font-weight:900;font-size:17px}.content{flex:1}.content b{display:block;font-size:17px;color:#3a1a86}.content span{display:block;margin-top:5px;color:#7d7494;font-size:12px}.tag{font-weight:900;border-radius:30px;font-size:11px;background:#eee5ff;color:#5b3aa4;padding:5px 9px;margin-top:9px;display:inline-block}.arrow{font-size:23px;color:#794bbd}.note{background:#fff5d9;border:1px solid #f0d693;border-radius:14px;padding:13px;color:#765d2f;font-size:12px;margin-top:22px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{padding:21px}.card{padding:14px}}
+</style></head>
+<body><header><a href="../">← Speaking Home</a><strong>SMARTCOM · SPEAKING PART 3</strong></header>
+<main><section class="hero"><small>2025–2026 TOPIC BANK · PRACTICE</small><h1>🗣️ Speaking Part 3 · Discussion Topics</h1><p>Thảo luận chuyên sâu về nguyên nhân, so sánh, tác động và giải pháp. Có ghi âm và gợi ý mở rộng ý.</p></section>
+<section class="filters"><input id="search" type="search" aria-label="Tìm kiếm chủ đề" placeholder="🔍 Tìm chủ đề, từ khóa..."><select id="year" aria-label="Lọc theo năm"><option value="all">Tất cả năm</option><option value="2026">Năm 2026</option><option value="2025">Năm 2025</option></select><span class="count" id="count"></span></section>
+<section id="grid" class="grid"><p>Đang tải ngân hàng câu hỏi…</p></section>
+<p class="note">📌 Đây là câu hỏi luyện tập do Smartcom biên soạn dựa trên nhóm chủ đề được thí sinh và các trang luyện thi ghi nhận trong năm 2025–2026. Không phải đề chính thức do IELTS công bố, cũng không bảo đảm sẽ xuất hiện trong kỳ thi tới.</p></main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);let topics=[];
+function esc(v){return String(v||"").replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]))}
+function render(){
+ const q=$('search').value.trim().toLowerCase(),year=$('year').value;
+ const shown=topics.filter(t=>(year==='all'||t.year===year)&&(!q||(t.title+' '+t.description+' '+t.relatedTheme).toLowerCase().includes(q)));
+ $('count').textContent=shown.length+' / '+topics.length+' chủ đề';
+ $('grid').innerHTML=shown.length?shown.map(t=>'<a class="card" href="../practice.html?part=3&topic='+encodeURIComponent(t.id)+'"><span class="number">'+esc(t.id)+'</span><span class="content"><b>'+esc(t.title)+'</b><span>'+esc(t.description)+'</span><span class="tag">'+esc(t.year)+' · Discussion</span></span><span class="arrow">→</span></a>').join(''):'<p>Không tìm thấy chủ đề phù hợp.</p>';
+}
+async function load(){try{const r=await fetch('./topics/bank-2025-2026.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const data=await r.json();topics=Array.isArray(data.topics)?data.topics:[];render()}catch(e){$('grid').textContent='Không tải được danh sách: '+e.message;}}
+$('search').addEventListener('input',render);$('year').addEventListener('change',render);load();
+})();
+</script></body></html>
