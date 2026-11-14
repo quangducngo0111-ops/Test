@@ -273,4 +273,5 @@ function score(){let total=0;const done=new Set();for(const q of questions){if(q
 $('submit').onclick=()=>{const count=questions.filter(x=>state.answers[x.n]&&String(state.answers[x.n]).trim()).length;if(count===0){alert('Bạn chưa điền câu trả lời nào.');return}if(count<40&&!confirm(`Bạn mới trả lời ${count}/40 câu. Vẫn hoàn thành và chấm bài?`))return;state.submitted=true;state.submittedAt=new Date().toISOString();save();render();window.scrollTo({top:0,behavior:'smooth'})};
 try{const st=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');if(st?.name)$('student').textContent=st.name}catch(e){}render();
 })();
-</script></body></html>
+</script><script src="../../../../Practice/shared/smartcom-ui.js?v=20261114-01"></script>
+</body></html>
