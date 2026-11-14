@@ -35,7 +35,7 @@ kbd{background:#343958;padding:3px 6px;border-radius:5px;color:#fff}
 #modalActions{display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:850px){.layout{grid-template-columns:1fr}aside{display:grid;grid-template-columns:1fr 1fr;gap:8px}aside h2,aside #status,aside .small,aside #inventory{grid-column:1/-1}#touch{display:flex}}
 @media(max-width:430px){aside{display:block}#options{grid-template-columns:1fr}.pad{grid-template-columns:repeat(3,43px)}}
-</style></head>
+</style><style id="original-game-audio-controls">.music-toggle{border:1px solid #b7a2e5;border-radius:12px;background:#311d61;color:white;padding:8px 12px;font:inherit;font-size:13px;cursor:pointer}.music-toggle[aria-pressed="false"]{opacity:.65}</style></head>
 <body><header><a href="../">← Vocabulary</a><h1>🏰 Dungeon of Words · Action RPG</h1><span>Lexiconia</span></header>
 <div class="layout">
 <div id="game" aria-label="Dungeon of Words action game"></div>
@@ -196,5 +196,21 @@ if(phaserReady){
 }else{document.getElementById("game").textContent="Không tải được Phaser. Vui lòng kiểm tra kết nối internet."}
 $("help").onclick=chooseClass;
 hud();chooseClass();
+})();
+</script><script src="../audio/original-game-music.js?v=20261114-v1"></script>
+<script>
+(function(){
+ const music=window.OriginalGameMusic;
+ if(!music)return;
+ const button=document.createElement("button");
+ button.type="button";button.className="music-toggle";
+ function render(){button.textContent=music.isEnabled()?"🎵 Nhạc: Bật":"🔇 Nhạc: Tắt";button.setAttribute("aria-pressed",String(music.isEnabled()));}
+ render();
+ button.addEventListener("click",()=>{music.setEnabled(!music.isEnabled());if(music.isEnabled())music.start("dungeon");render()});
+ const host=document.querySelector("header")||document.querySelector("aside")||document.body;
+ host.appendChild(button);
+ document.addEventListener("pointerdown",function init(e){
+  if(e.target.closest("button, [data-move]")&&!e.target.closest(".music-toggle"))music.start("dungeon");
+ },{once:true,capture:true});
 })();
 </script></body></html>
