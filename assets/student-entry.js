@@ -74,7 +74,7 @@ window[startName]=validStart;
 // A stored homepage profile means the student is already identified on the same
 // website; skip the redundant gate and enter the exercise directly.
 const existing=getProfile();
-if(existing){
+if(existing && new URLSearchParams(location.search).get('fromPortal')==='1'){
  nameInput.value=existing.name;
  classInput.value=existing.className;
  // Allow the original page setup scripts to finish before starting.
