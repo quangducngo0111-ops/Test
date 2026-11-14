@@ -6,7 +6,7 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src); // .../Test/ from .../Test/Practice/shared/
-const asset=new URL('./smartcom-ui.css?v=20261114-05',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261114-06',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 const pathname=location.pathname;
@@ -84,11 +84,30 @@ toggle.title='Truy cập nhanh';
 toggle.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg>';
 capsule.append(tools,toggle);
 shell.append(capsule);
+const floatingLabel=document.createElement('div');
+floatingLabel.className='sc-floating-label';
+floatingLabel.setAttribute('aria-hidden','true');
+shell.append(floatingLabel);
+function showLabel(link){
+ const r=link.getBoundingClientRect();
+ floatingLabel.textContent=link.getAttribute('aria-label')||'';
+ floatingLabel.style.top=(r.top+r.height/2)+'px';
+ floatingLabel.style.right=Math.max(78,window.innerWidth-r.left+13)+'px';
+ floatingLabel.classList.add('visible');
+}
+function hideLabel(){floatingLabel.classList.remove('visible')}
+tools.querySelectorAll('.sc-capsule-link').forEach(link=>{
+ link.addEventListener('mouseenter',()=>showLabel(link));
+ link.addEventListener('mouseleave',hideLabel);
+ link.addEventListener('focus',()=>showLabel(link));
+ link.addEventListener('blur',hideLabel);
+});
+tools.addEventListener('scroll',hideLabel,{passive:true});
 function setOpen(value){
  shell.classList.toggle('sc-open',value);
  toggle.setAttribute('aria-expanded',String(value));
  toggle.setAttribute('aria-label',value?'Đóng menu truy cập nhanh':'Mở menu truy cập nhanh');
- if(!value)tools.scrollTop=0;
+ if(!value){tools.scrollTop=0;hideLabel()}
 }
 toggle.addEventListener('click',()=>setOpen(!shell.classList.contains('sc-open')));
 document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))setOpen(false)});
