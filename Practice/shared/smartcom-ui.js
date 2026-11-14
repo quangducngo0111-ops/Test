@@ -1,0 +1,56 @@
+/* Smartcom shared UI: friendly hub visuals + hover/focus/click quick jump.
+   Uses script URL as base, so routes work at any GitHub Pages project path. */
+(function(){
+'use strict';
+if(document.getElementById('sc-quick-shell'))return;
+const current=document.currentScript;
+if(!current)return;
+const root=new URL('../../',current.src); // .../Test/ from .../Test/Practice/shared/
+const asset=new URL('./smartcom-ui.css?v=20261114-01',current.src);
+const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
+const url=path=>new URL(path,root).href;
+const pathname=location.pathname;
+const hubPaths=[
+ /\\/Practice\\/?$/i,/\\/Practice\\/Speaking\\/?$/i,/\\/Practice\\/Speaking\\/Part[123]\\/?$/i,
+ /\\/Practice\\/Listening\\/?$/i,/\\/Practice\\/Listening\\/(FullTest|Part[1234])\\/?$/i,
+ /\\/Practice\\/Reading\\/ReadingPractice3Passages\\/?$/i,
+ /\\/Practice\\/(Grammar|WritingTask1|WritingTask2)\\/?$/i,
+ /\\/Practice\\/Vocabulary\\/?$/i
+];
+if(pathname===root.pathname.replace(/\\/?$/,'/')||hubPaths.some(p=>p.test(pathname)))document.body.classList.add('sc-hub-refresh');
+const groups=[
+ {heading:'Thi thử IELTS',links:[
+  ['📖','Reading Test','Read01/'],['🎧','Listening Test','Lis01/'],
+  ['🎙️','Speaking Mock','Practice/Speaking/mock-test/'],['✍️','Writing','Practice/WritingTask2/']
+ ]},
+ {heading:'Kho luyện tập',links:[
+  ['💬','Speaking','Practice/Speaking/'],['🌍','English Abroad','Practice/Speaking/english-abroad/'],
+  ['🧠','Vocabulary','Practice/Vocabulary/'],['📗','Grammar','Practice/Grammar/'],
+  ['📚','Reading Practice','Practice/Reading/ReadingPractice3Passages/'],
+  ['🎧','Listening Practice','Practice/Listening/'],
+  ['📈','Writing Task 1','Practice/WritingTask1/'],['📝','Writing Task 2','Practice/WritingTask2/']
+ ]},
+ {heading:'Điều hướng',links:[['🏠','Trang chủ',''],['🧭','Kho luyện tập','Practice/']]}
+];
+const shell=document.createElement('nav');shell.id='sc-quick-shell';shell.setAttribute('aria-label','Truy cập nhanh các phần học Smartcom');
+shell.innerHTML='<div class="sc-quick-panel" id="sc-quick-panel"><div class="sc-panel-top"><div><b>⚡ Truy cập nhanh</b><span>Chuyển phần học mà không cần quay về trang chủ</span></div><button class="sc-quick-close" type="button" aria-label="Đóng menu">✕</button></div></div><button type="button" class="sc-quick-trigger" aria-expanded="false" aria-controls="sc-quick-panel" title="Rê chuột hoặc nhấn để mở các phần học"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg><span>Truy cập nhanh</span></button>';
+const panel=shell.querySelector('.sc-quick-panel'),trigger=shell.querySelector('.sc-quick-trigger');
+for(const group of groups){
+ const h=document.createElement('div');h.className='sc-section-label';h.textContent=group.heading;panel.append(h);
+ const wrap=document.createElement('div');wrap.className='sc-link-list';panel.append(wrap);
+ for(const [icon,label,path] of group.links){
+  const a=document.createElement('a');a.className='sc-link'+(label==='Reading Test'||label==='English Abroad'?' sc-feature':'');
+  a.href=url(path);a.innerHTML='<span class="sc-icon" aria-hidden="true"></span><span></span>';
+  a.querySelector('.sc-icon').textContent=icon;a.lastElementChild.textContent=label;wrap.append(a);
+ }
+}
+const note=document.createElement('p');note.className='sc-panel-note';note.textContent='Đang làm bài thi? Hãy lưu hoặc nộp bài trước khi rời trang.';panel.append(note);
+function open(value){shell.classList.toggle('sc-open',value);trigger.setAttribute('aria-expanded',String(value))}
+trigger.addEventListener('click',()=>open(!shell.classList.contains('sc-open')));
+trigger.addEventListener('mouseenter',()=>open(true));
+shell.addEventListener('mouseleave',()=>open(false));
+shell.querySelector('.sc-quick-close').addEventListener('click',()=>{open(false);trigger.focus()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')open(false)});
+document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))open(false)});
+document.body.append(shell);
+})();
