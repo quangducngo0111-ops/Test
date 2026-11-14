@@ -11,13 +11,13 @@ const link=document.createElement('link');link.rel='stylesheet';link.href=asset.
 const url=path=>new URL(path,root).href;
 const pathname=location.pathname;
 const hubPaths=[
- /\\/Practice\\/?$/i,/\\/Practice\\/Speaking\\/?$/i,/\\/Practice\\/Speaking\\/Part[123]\\/?$/i,
- /\\/Practice\\/Listening\\/?$/i,/\\/Practice\\/Listening\\/(FullTest|Part[1234])\\/?$/i,
- /\\/Practice\\/Reading\\/ReadingPractice3Passages\\/?$/i,
- /\\/Practice\\/(Grammar|WritingTask1|WritingTask2)\\/?$/i,
- /\\/Practice\\/Vocabulary\\/?$/i
+ '/Practice/','/Practice/Speaking/','/Practice/Speaking/Part1/','/Practice/Speaking/Part2/',
+ '/Practice/Speaking/Part3/','/Practice/Listening/','/Practice/Listening/FullTest/',
+ '/Practice/Listening/Part1/','/Practice/Listening/Part2/','/Practice/Listening/Part3/',
+ '/Practice/Listening/Part4/','/Practice/Reading/ReadingPractice3Passages/',
+ '/Practice/Grammar/','/Practice/WritingTask1/','/Practice/WritingTask2/','/Practice/Vocabulary/'
 ];
-if(pathname===root.pathname.replace(/\\/?$/,'/')||hubPaths.some(p=>p.test(pathname)))document.body.classList.add('sc-hub-refresh');
+if(pathname===root.pathname||hubPaths.some(p=>pathname.endsWith(p)||pathname.endsWith(p.slice(0,-1))))document.body.classList.add('sc-hub-refresh');
 const groups=[
  {heading:'Thi thử IELTS',links:[
   ['📖','Reading Test','Read01/'],['🎧','Listening Test','Lis01/'],
