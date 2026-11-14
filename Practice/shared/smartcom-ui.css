@@ -84,3 +84,31 @@ body.sc-hub-refresh button:not(#sc-quick-shell button),body.sc-hub-refresh a:not
   #sc-quick-shell .sc-quick-trigger svg{width:26px!important;height:26px!important}
   #sc-quick-shell .sc-quick-panel{border-radius:26px!important;padding:11px!important}
 }
+
+/* v4: large, consistent section cards for Practice hubs and nested topic directories */
+body.sc-hub-refresh .grid,body.sc-hub-refresh .cards{gap:18px!important}
+body.sc-hub-refresh .grid>.card,body.sc-hub-refresh .cards>.tile,body.sc-hub-refresh .grid>.tile,body.sc-hub-refresh .grid>.topic-card,body.sc-hub-refresh .grid>.category-card{
+  min-height:175px;position:relative;padding:22px!important;
+  border:2px solid #fff!important;border-radius:24px!important;
+  background:#fffefa;box-shadow:0 8px 0 #b5a1dd3a,0 18px 30px #49318c17!important;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+}
+body.sc-hub-refresh .grid>.card:hover,body.sc-hub-refresh .cards>.tile:hover,body.sc-hub-refresh .grid>.tile:hover{
+ transform:translateY(-4px);border-color:#cbb6ff!important;
+ box-shadow:0 12px 0 #b5a1dd3a,0 24px 35px #49318c1e!important;
+}
+body.sc-hub-refresh .grid>.card b,body.sc-hub-refresh .grid>.card h2,body.sc-hub-refresh .cards>.tile h3{
+ color:#3b177f;font-weight:900;font-size:clamp(17px,1.5vw,21px)
+}
+body.sc-hub-refresh .grid>.card .icon,body.sc-hub-refresh .grid>.card .ico,body.sc-hub-refresh .grid>.card .item-icon,body.sc-hub-refresh .grid>.card .number{
+ border-radius:18px!important;width:62px;min-width:62px;height:62px;
+ background:#f0e7ff;display:grid;place-items:center;font-size:28px;
+}
+body.sc-hub-refresh .grid>.card p,body.sc-hub-refresh .grid>.card small,body.sc-hub-refresh .cards>.tile p{
+ color:#7b718f;line-height:1.6;
+}
+body.sc-hub-refresh .hero:not(#homeHero){border-radius:28px!important;border:3px solid white!important;box-shadow:0 11px 0 #b9a8dd37,0 22px 36px #4a31871b!important}
+body.sc-hub-refresh .section-head h2,body.sc-hub-refresh .section h2{font-size:24px;color:#3b177f}
+@media(max-width:700px){
+ body.sc-hub-refresh .grid>.card,body.sc-hub-refresh .cards>.tile{min-height:150px;padding:17px!important}
+}
