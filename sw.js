@@ -1,11 +1,11 @@
 /* IELTS Test Portal PWA: navigation is network-first to avoid stale exams.
    Only the entry shell and icons are cached. Exam assets/questions/audio remain network requests. */
-const VERSION='ielts-shell-v1-20261114';
+const VERSION='ielts-shell-v2-20261114';
 const SCOPE=self.registration.scope;
 const HOME=new URL('./',SCOPE).href;
 const SHELL=[HOME,new URL('manifest.webmanifest',SCOPE).href,
-  new URL('assets/pwa/icon-192.svg',SCOPE).href,
-  new URL('assets/pwa/icon-512.svg',SCOPE).href];
+  new URL('assets/pwa/icon-192.png',SCOPE).href,
+  new URL('assets/pwa/icon-512.png',SCOPE).href];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(VERSION).then(async cache=>{
     await Promise.allSettled(SHELL.map(url=>cache.add(new Request(url,{cache:'reload'}))));
