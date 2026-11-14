@@ -1932,7 +1932,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
         <div class="skill-footer">
 
           <div class="skill-count" id="countSpeaking">
-            10 ĐỀ
+            28 ĐỀ
           </div>
 
           
@@ -2371,15 +2371,12 @@ let catalog={
 
   writing:
     [...FALLBACK_WRITING],
-  speaking:[
-    {title:'🏆 Speaking Mock Test · 2025–2026',path:'./Practice/Speaking/mock-test/',meta:['28 bộ luyện','Part 1–2–3','Ghi âm & transcript'],desc:'Bộ đề 2025–2026 · thi thử đủ ba phần với đồng hồ và giọng đọc.'},
-    ...Array.from({length:10},(_,i)=>({
-      title:'Speaking Test '+String(i+1).padStart(2,'0'),
-      path:'./Practice/Vocabulary/speaking-mock-test/?set='+(i+1),
-      meta:['3 parts','11–14 phút','Cue card · Audio'],
-      desc:'IELTS Speaking full test · Part 1, Part 2 và Part 3.'
-    }))
-  ]
+  speaking: Array.from({length:28},(_,i)=>({
+    title:'Speaking Test '+String(i+1).padStart(2,'0'),
+    path:'./Practice/Speaking/mock-test/?set='+(i+1),
+    meta:['Part 1–2–3','Đọc câu hỏi','Ghi âm tự động'],
+    desc:'Mô phỏng IELTS Speaking với thời gian chuẩn bị và ghi âm.'
+  }))
 };
 
 
@@ -3097,7 +3094,7 @@ function updateCounts(){
     `${catalog.reading.length} ĐỀ`;
 
 
-  $('countSpeaking').textContent='10 ĐỀ + GAME MỚI';
+  $('countSpeaking').textContent=`${catalog.speaking.length} ĐỀ`;
 
   $('countWriting').textContent=
     `${catalog.writing.length} ĐỀ`;
@@ -3110,7 +3107,7 @@ function updateCounts(){
 
 
 function skillInfo(skill){
-  if(skill==='speaking')return {title:'Speaking Tests · 2025–2026',desc:'28 bộ Speaking Mock Test mới và 10 đề Speaking Test hiện có. Game giao tiếp nằm trong Kho luyện tập → Speaking.',icon:'🎙️',label:'Speaking'};
+  if(skill==='speaking')return {title:'Speaking Tests',desc:'Chọn một đề thi Speaking gồm Part 1, Part 2 và Part 3. Giám khảo đọc câu hỏi và hệ thống ghi âm tự động.',icon:'🎙️',label:'Speaking'};
 
   if(
     skill==='reading'
