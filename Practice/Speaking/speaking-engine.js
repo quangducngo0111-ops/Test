@@ -653,16 +653,23 @@
 
   async function init() {
     try {
-      const response = await fetch(
-        `./Part${part}/topics/${topicId}.json`,
-        { cache: 'no-store' }
-      );
-
-      if (!response.ok) {
-        throw new Error('HTTP ' + response.status);
+      const directUrl = `./Part${part}/topics/${topicId}.json`;
+      let response = await fetch(directUrl, { cache: 'no-store' });
+      if (response.ok) {
+        topic = await response.json();
+      } else {
+        // 2025–2026 packs preserve the legacy one-file-per-topic URLs.
+        const bankResponse = await fetch(
+          `./Part${part}/topics/bank-2025-2026.json`,
+          { cache: 'no-store' }
+        );
+        if (!bankResponse.ok) {
+          throw new Error('Không tải được bộ câu hỏi (HTTP ' + bankResponse.status + ')');
+        }
+        const bank = await bankResponse.json();
+        topic = (bank.topics || []).find(item => String(item.id) === topicId);
+        if (!topic) throw new Error('Không tìm thấy chủ đề ' + topicId);
       }
-
-      topic = await response.json();
 
       if (
         String(topic.id) !== topicId ||
