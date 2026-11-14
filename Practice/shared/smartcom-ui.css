@@ -1,0 +1,29 @@
+/* Smartcom UI 2026 · shared design layer. Scope changes to navigation and hub/landing pages. */
+:root{--sc-brand:#3b0e90;--sc-accent:#ff9c00;--sc-light:#f8f4ff}
+#sc-quick-shell,#sc-quick-shell *{box-sizing:border-box}
+#sc-quick-shell{position:fixed;right:max(15px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:2147483000;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#291a51;pointer-events:none}
+#sc-quick-shell .sc-quick-trigger{pointer-events:auto;display:flex;align-items:center;gap:10px;border:2px solid #fff;border-radius:100px;background:linear-gradient(120deg,#5520bd,#3b0e90);box-shadow:0 7px 0 #27106d,0 14px 35px #28105d55;color:white;padding:13px 17px;font-weight:850;cursor:pointer;min-height:54px;float:right;white-space:nowrap;transition:transform .2s}
+#sc-quick-shell .sc-quick-trigger:hover{transform:translateY(-3px)}
+#sc-quick-shell .sc-quick-trigger svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
+#sc-quick-shell .sc-quick-panel{pointer-events:auto;display:block;clear:both;position:absolute;right:0;bottom:calc(100% + 12px);width:min(360px,calc(100vw - 28px));max-height:min(72vh,670px);overflow:auto;overscroll-behavior:contain;padding:12px;background:#fffefd;border:2px solid #f1e8ff;border-radius:22px;box-shadow:0 15px 60px #25124f42;opacity:0;visibility:hidden;transform:translateY(10px) scale(.98);transform-origin:bottom right;transition:opacity .16s,transform .16s,visibility .16s}
+#sc-quick-shell.sc-open .sc-quick-panel,#sc-quick-shell:hover .sc-quick-panel,#sc-quick-shell:focus-within .sc-quick-panel{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+#sc-quick-shell .sc-panel-top{background:linear-gradient(115deg,#4b17a9,#8656ec);color:#fff;padding:15px 16px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+#sc-quick-shell .sc-panel-top b{font-size:15px}
+#sc-quick-shell .sc-panel-top span{display:block;opacity:.83;font-size:11px;margin-top:3px}
+#sc-quick-shell .sc-quick-close{border:1px solid #ffffff63;background:#ffffff25;color:#fff;border-radius:10px;padding:7px 10px;cursor:pointer}
+#sc-quick-shell .sc-section-label{color:#9a7cba;font-size:10px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin:14px 7px 8px}
+#sc-quick-shell .sc-link-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#sc-quick-shell a.sc-link{background:#f7f2ff;border:1px solid #e5d8fa;display:flex;align-items:center;gap:8px;border-radius:12px;min-height:50px;padding:10px;color:#432185;text-decoration:none;font-size:12px;font-weight:800;line-height:1.25;transition:transform .14s,background .14s}
+#sc-quick-shell a.sc-link:hover,#sc-quick-shell a.sc-link:focus-visible{background:#f0e5ff;transform:translateY(-2px);outline:2px solid #b99cec}
+#sc-quick-shell .sc-link .sc-icon{font-size:20px;flex:none}
+#sc-quick-shell .sc-link.sc-feature{background:#fff3d8;border-color:#ffe0a2;color:#7b4a19}
+#sc-quick-shell .sc-panel-note{font-size:10px;color:#93869e;margin:13px 6px 2px}
+#sc-quick-shell .sc-only-screenreader{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+/* Maintain IELTS test-mode geometry: only the floating shortcut changes there. */
+body.sc-hub-refresh{background:radial-gradient(circle at 4% 1%,#e4d5ff,transparent 37%),radial-gradient(circle at 98% 23%,#dbf3ff,transparent 38%),linear-gradient(135deg,#fff8ee,#f5f3ff 55%,#eaf8ff)!important}
+body.sc-hub-refresh .hero,body.sc-hub-refresh .hero-card,body.sc-hub-refresh .welcome,body.sc-hub-refresh .banner{border-radius:24px;box-shadow:0 12px 0 #b2a0dd26,0 23px 40px #43307617}
+body.sc-hub-refresh .card,body.sc-hub-refresh .topic-card,body.sc-hub-refresh .set-card,body.sc-hub-refresh .category-card,body.sc-hub-refresh .test-card,body.sc-hub-refresh .skill-card{border-radius:19px;transition:transform .19s ease,box-shadow .19s ease}
+@media(hover:hover){body.sc-hub-refresh .card:hover,body.sc-hub-refresh .topic-card:hover,body.sc-hub-refresh .set-card:hover,body.sc-hub-refresh .category-card:hover,body.sc-hub-refresh .test-card:hover,body.sc-hub-refresh .skill-card:hover{transform:translateY(-3px);box-shadow:0 12px 24px #4b339e25}}
+body.sc-hub-refresh button:focus-visible,body.sc-hub-refresh a:focus-visible{outline:3px solid #ffaf32;outline-offset:3px}
+@media(max-width:650px){#sc-quick-shell{right:10px;bottom:12px}#sc-quick-shell .sc-quick-trigger{padding:12px 14px;font-size:12px;min-height:49px}#sc-quick-shell .sc-quick-panel{max-height:76dvh}}
+@media(prefers-reduced-motion:reduce){#sc-quick-shell *,body.sc-hub-refresh .card{transition:none!important}}
