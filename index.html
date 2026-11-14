@@ -1506,6 +1506,12 @@ button.skill-card:hover{
 .test-back{border:1px solid #ddd7f2;background:#fff;color:#3b0e90;border-radius:12px;padding:11px 16px;font-weight:850}
 #testSection{margin-top:0;min-height:65vh}
 </style>
+<style>
+.install-pwa-btn{border:1px solid rgba(59,14,144,.25);background:#3b0e90;color:#fff;
+border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:nowrap}
+@media(max-width:580px){.install-pwa-btn{font-size:11px;padding:9px}.topbar-inner{gap:7px}
+.student-mini #miniInfo{display:none}}
+</style>
 </head>
 
 
@@ -1519,7 +1525,7 @@ button.skill-card:hover{
     <div class="brand">
 
       <div class="brand-mark">
-        S
+        I
       </div>
 
       <div>
@@ -1536,6 +1542,8 @@ button.skill-card:hover{
 
     </div>
 
+
+    <button type="button" id="installAppBtn" class="install-pwa-btn hidden" aria-label="Cài IELTS Test lên điện thoại">⬇ Cài ứng dụng</button>
 
     <div
       class="student-mini hidden"
@@ -3609,6 +3617,38 @@ if ('serviceWorker' in navigator && (location.protocol==='https:' || location.ho
       .catch(error=>console.warn('PWA install unavailable:',error));
   });
 }
+</script>
+<script>
+/* Show install affordance only on supported mobile devices. */
+(()=>{
+  const button=document.getElementById('installAppBtn');
+  if(!button)return;
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  if(standalone)return;
+  let pendingInstall=null;
+  const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||
+    (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const mobile=/Android|iPad|iPhone|iPod/i.test(navigator.userAgent)||ios;
+  if(ios)button.classList.remove('hidden');
+  window.addEventListener('beforeinstallprompt',event=>{
+    event.preventDefault();
+    pendingInstall=event;
+    button.classList.remove('hidden');
+  });
+  if(mobile&&!ios){button.classList.remove('hidden')}
+  button.addEventListener('click',async()=>{
+    if(pendingInstall){
+      const event=pendingInstall;pendingInstall=null;
+      event.prompt();
+      try{await event.userChoice}catch(error){console.warn('Install prompt dismissed',error)}
+      return;
+    }
+    alert(ios
+      ? 'Trên iPhone: mở trang bằng Safari, chạm nút Chia sẻ (hình vuông có mũi tên lên), chọn “Thêm vào Màn hình chính”, rồi nhấn Thêm.'
+      : 'Trên Android: mở trang bằng Chrome, chạm dấu ⋮ và chọn “Cài đặt ứng dụng” hoặc “Thêm vào màn hình chính”.');
+  });
+  window.addEventListener('appinstalled',()=>button.classList.add('hidden'));
+})();
 </script>
 </body>
 </html>
