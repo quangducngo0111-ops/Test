@@ -134,6 +134,17 @@ function incomingHandoff(){
     const a=new URL(r.target,location.origin),b=new URL(location.href);
     if(samePath(a.pathname)===samePath(b.pathname) && a.search===b.search){savedStudent(r.student);return true;}
   }
+  // Students entering from the Portal already have a confirmed profile.
+  // Direct standalone Grammar links keep the name/class gate.
+  if(new URLSearchParams(location.search).get('fromPortal')==='1'){
+    try{
+      const stored=JSON.parse(localStorage.getItem(USER_KEY)||'null');
+      if(stored?.name?.trim() && validGrammarClass(stored.className)){
+        savedStudent({name:stored.name,className:validGrammarClass(stored.className)});
+        return true;
+      }
+    }catch(e){}
+  }
   return false;
 }
 function showStudent(){
@@ -149,7 +160,7 @@ function studentSubmit(e){
  savedStudent({name,className:fixedClass});document.getElementById('nameModal').hidden=true;renderRoute();
 }
 function escHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function routeHref(topic,week){return topic?('index.html?topic='+String(topic).padStart(2,'0')+(week?'&week='+String(week).padStart(2,'0'):'')):'index.html'}
+function routeHref(topic,week){const q=new URLSearchParams();if(topic)q.set('topic',String(topic).padStart(2,'0'));if(week)q.set('week',String(week).padStart(2,'0'));if(new URLSearchParams(location.search).get('fromPortal')==='1')q.set('fromPortal','1');return 'index.html'+(q.size?'?'+q.toString():'')}
 function goTo(href){
  const u=new URL(href,location.href);
  if(u.origin!==location.origin || !u.pathname.endsWith('/Grammar/index.html')){location.href=u.href;return;}
