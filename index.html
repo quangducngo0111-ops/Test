@@ -7,7 +7,14 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
-<title>IELTS Practice Portal</title>
+<link rel="manifest" href="./manifest.webmanifest?v=20261114">
+<meta name="theme-color" content="#3b0e90">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="IELTS Test">
+<link rel="apple-touch-icon" href="./assets/pwa/icon-192.svg">
+<meta name="application-name" content="IELTS Test Portal">
+<title>IELTS Test Portal</title>
 
 <style>
 
@@ -3593,5 +3600,15 @@ init();
 
 </script>
 
+<script>
+/* PWA install: keep all exam pages network-first, never stale-cache questions. */
+if ('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')) {
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'})
+      .then(reg=>reg.update())
+      .catch(error=>console.warn('PWA install unavailable:',error));
+  });
+}
+</script>
 </body>
 </html>
