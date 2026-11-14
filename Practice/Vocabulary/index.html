@@ -9870,7 +9870,6 @@ button:disabled{
     <a
       class="back"
       href="../index.html"
-      onclick="goVocabularyHome();return false;"
     >
       ← Luyện tập
     </a>
@@ -13001,16 +13000,12 @@ function showHome(sync=true){
 
 
 function goVocabularyHome(){
-  // Kho luyện tập đã hiển thị Vocabulary theo 8 nhóm ở thanh kỹ năng.
-  // Quay về tab này, không quay lại màn hình Vocabulary Arcade trùng lặp.
-  try{
-    localStorage.setItem("IELTS_PRACTICE_ACTIVE_TAB_V1","vocabulary");
-  }catch(error){}
-  window.location.assign(new URL("../index.html",window.location.href).href);
+  // Navigation within Vocabulary must not redirect to the Practice catalogue.
+  showHome(true);
 }
 
-// Đảm bảo các nút onclick trong HTML luôn gọi được hàm này.
-window.showHome = goVocabularyHome;
+// The header link points back to Practice; internal controls return to Vocabulary.
+window.showHome = showHome;
 window.goVocabularyHome = goVocabularyHome;
 
 
@@ -20060,7 +20055,8 @@ function routeFromUrl(){
   }
 
 
-  goVocabularyHome();
+  // Opening the Vocabulary root (no parameters) shows its own home screen.
+  showHome(false);
 
 }
 
