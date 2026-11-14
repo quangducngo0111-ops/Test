@@ -6,7 +6,7 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src); // .../Test/ from .../Test/Practice/shared/
-const asset=new URL('./smartcom-ui.css?v=20261114-02',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261114-03',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 const pathname=location.pathname;
@@ -33,7 +33,7 @@ const groups=[
  {heading:'Điều hướng',links:[['🏠','Trang chủ',''],['🧭','Kho luyện tập','Practice/']]}
 ];
 const shell=document.createElement('nav');shell.id='sc-quick-shell';shell.setAttribute('aria-label','Truy cập nhanh các phần học Smartcom');
-shell.innerHTML='<div class="sc-quick-panel" id="sc-quick-panel"><div class="sc-panel-top"><div><b>⚡ Truy cập nhanh</b><span>Chuyển phần học mà không cần quay về trang chủ</span></div><button class="sc-quick-close" type="button" aria-label="Đóng menu">✕</button></div></div><button type="button" class="sc-quick-trigger" aria-expanded="false" aria-controls="sc-quick-panel" title="Rê chuột hoặc nhấn để mở các phần học"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg><span>Truy cập nhanh</span></button>';
+shell.innerHTML='<div class="sc-quick-panel" id="sc-quick-panel"><div class="sc-panel-top"><div><b>⚡ Truy cập nhanh</b><span>Chuyển phần học mà không cần quay về trang chủ</span></div><button class="sc-quick-close" type="button" aria-label="Đóng menu">✕</button></div></div><button type="button" class="sc-quick-trigger" aria-expanded="false" aria-controls="sc-quick-panel" title="Nhấn để mở truy cập nhanh" aria-label="Mở truy cập nhanh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg></button>';
 const panel=shell.querySelector('.sc-quick-panel'),trigger=shell.querySelector('.sc-quick-trigger');
 for(const group of groups){
  const h=document.createElement('div');h.className='sc-section-label';h.textContent=group.heading;panel.append(h);
@@ -47,8 +47,6 @@ for(const group of groups){
 const note=document.createElement('p');note.className='sc-panel-note';note.textContent='Đang làm bài thi? Hãy lưu hoặc nộp bài trước khi rời trang.';panel.append(note);
 function open(value){shell.classList.toggle('sc-open',value);trigger.setAttribute('aria-expanded',String(value))}
 trigger.addEventListener('click',()=>open(!shell.classList.contains('sc-open')));
-trigger.addEventListener('mouseenter',()=>open(true));
-shell.addEventListener('mouseleave',()=>open(false));
 shell.querySelector('.sc-quick-close').addEventListener('click',()=>{open(false);trigger.focus()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')open(false)});
 document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))open(false)});
