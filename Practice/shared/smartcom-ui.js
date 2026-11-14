@@ -20,7 +20,7 @@ const hubPaths=[
 if(pathname===root.pathname||hubPaths.some(p=>pathname.endsWith(p)||pathname.endsWith(p.slice(0,-1))))document.body.classList.add('sc-hub-refresh');
 const groups=[
  {heading:'Thi thử IELTS',links:[
-  ['📖','Reading Test','Read01/'],['🎧','Listening Test','Lis01/'],
+  ['📖','Reading Test','Read01/'],['🎧','Listening Test','Lis01/C21T4/'],
   ['🎙️','Speaking Mock','Practice/Speaking/mock-test/'],['✍️','Writing','Practice/WritingTask2/']
  ]},
  {heading:'Kho luyện tập',links:[
