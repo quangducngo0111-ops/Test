@@ -27,7 +27,7 @@ if(pathname===root.pathname||nestedHub||hubPaths.some(p=>pathname.endsWith(p)||p
 const groups=[
  {heading:'Thi thử IELTS',links:[
   ['📖','Reading Test','Read01/'],['🎧','Listening Test','Lis01/C21T4/'],
-  ['🎙️','Speaking Mock','Practice/Speaking/mock-test/'],['✍️','Writing','Practice/WritingTask2/']
+  ['🎙️','Speaking Tests','?skill=speaking'],['✍️','Writing','Practice/WritingTask2/']
  ]},
  {heading:'Kho luyện tập',links:[
   ['💬','Speaking','Practice/Speaking/'],
