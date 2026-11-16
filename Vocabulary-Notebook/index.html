@@ -81,7 +81,7 @@ function drawRound(){
   const grid=document.createElement('div');grid.className='choices';box.append(grid);
   options.forEach(x=>btn(grid,x.meaning||x.word,()=>{
    if(x.word===item.word)score++;
-   grid.querySelectorAll('button').forEach(b=>{b.disabled=true;if(b.textContent===(item.meaning||item.word))b.classList.add('correct');else if(b===event?.target)b.classList.add('wrong')});
+   grid.querySelectorAll('button').forEach(b=>{b.disabled=true;if(b.textContent===(item.meaning||item.word))b.classList.add('correct');else if(b.textContent===(x.meaning||x.word))b.classList.add('wrong')});
    btn(box,'Câu tiếp →',()=>{gameIndex++;drawRound()});
   }));
  }
