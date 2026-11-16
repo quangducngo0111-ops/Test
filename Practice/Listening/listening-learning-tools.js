@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const $=id=>document.getElementById(id),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const keys=['questionsRoot','transcriptText'];const isNew=Boolean($('questionsRoot'));
 const lesson=location.pathname.replace(/\/$/,'')||'listening';
 const annotationsKey='SMARTCOM_LISTENING_ANNOTATIONS_V2:'+lesson;
