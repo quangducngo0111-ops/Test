@@ -214,6 +214,58 @@ document.addEventListener('touchend',e=>{
  const touch=e.changedTouches?.[0];
  handleSelection({target:e.target,clientX:touch?.clientX||innerWidth/2,clientY:touch?.clientY||innerHeight/2},false);
 });
+
+/* Mark words and known expressions in reading passages; the longest known phrase wins. */
+const markStyle=document.createElement('style');
+markStyle.textContent='.sc-lexeme{display:inline;border-radius:6px;padding:1px 2px;margin:0 -2px;cursor:help;box-decoration-break:clone;-webkit-box-decoration-break:clone;transition:background-color .14s ease,box-shadow .14s ease}.sc-lexeme:hover,.sc-lexeme:focus-visible{background:rgba(113,70,199,.13);box-shadow:inset 0 0 0 1px rgba(113,70,199,.25);outline:none}.sc-lexeme[data-sc-phrase]{border-radius:7px}.sc-lexeme:focus-visible{box-shadow:0 0 0 2px #9b80de}';
+document.head.append(markStyle);
+const phrasePattern=new RegExp('(?<![A-Za-z])(?:'+phraseList.map(p=>p.replace(/\s+/g,'\\s+')).join('|')+')(?![A-Za-z])','gi');
+function markReadingTerms(container){
+ if(!container||container.dataset.scLexemes==='1')return;
+ container.dataset.scLexemes='1';
+ const walker=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
+ const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+ nodes.forEach(node=>{
+  if(!node.parentElement||node.parentElement.closest('a,button,script,style,.sc-lexeme'))return;
+  const source=node.nodeValue;if(!source||!/[a-z]/i.test(source))return;
+  const phraseMatches=[];
+  phrasePattern.lastIndex=0;let hit;
+  while((hit=phrasePattern.exec(source)))phraseMatches.push({start:hit.index,end:phrasePattern.lastIndex,term:hit[0]});
+  const fragment=document.createDocumentFragment();
+  const createTerm=(value,phrase)=>{
+   const el=document.createElement('span');el.className='sc-lexeme';el.textContent=value;el.dataset.scTerm=norm(value);
+   if(phrase)el.dataset.scPhrase='1';el.tabIndex=0;el.title='Nhấp đúp để tra nghĩa';
+   return el;
+  };
+  const splitWords=segment=>{
+   const re=/[A-Za-z]+(?:['’\-][A-Za-z]+)*/g;let last=0,m;
+   while((m=re.exec(segment))){
+    if(m.index>last)fragment.append(document.createTextNode(segment.slice(last,m.index)));
+    fragment.append(createTerm(m[0],false));last=re.lastIndex;
+   }
+   if(last<segment.length)fragment.append(document.createTextNode(segment.slice(last)));
+  };
+  let cursor=0;phraseMatches.forEach(match=>{
+   if(match.start<cursor)return;
+   splitWords(source.slice(cursor,match.start));fragment.append(createTerm(source.slice(match.start,match.end),true));cursor=match.end;
+  });splitWords(source.slice(cursor));node.replaceWith(fragment);
+ });
+}
+window.scMarkReadingTerms=markReadingTerms;
+document.addEventListener('dblclick',e=>{
+ const span=e.target.closest?.('.sc-lexeme');if(!span||isExam())return;
+ e.preventDefault();e.stopImmediatePropagation();
+ const rect=span.getBoundingClientRect();
+ showTerm(span.dataset.scTerm,null,{clientX:rect.left,clientY:rect.bottom});
+ if(!word)return;
+ lookup.click();
+},true);
+document.addEventListener('keydown',e=>{
+ if(e.key!=='Enter')return;const span=e.target.closest?.('.sc-lexeme');if(!span||isExam())return;
+ e.preventDefault();const rect=span.getBoundingClientRect();
+ showTerm(span.dataset.scTerm,null,{clientX:rect.left,clientY:rect.bottom});lookup.click();
+});
+
 document.addEventListener('pointerdown',e=>{if(!menu.contains(e.target)&&!modal.contains(e.target))close()});
 window.addEventListener('scroll',()=>{if(!menu.hidden||!modal.hidden)close()},{passive:true});
 const observer=new MutationObserver(()=>{button.hidden=isExam()||location.pathname.includes('/Vocabulary-Notebook/');if(isExam())close()});
