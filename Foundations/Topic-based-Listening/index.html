@@ -62,6 +62,26 @@ textarea{width:100%;min-height:115px;resize:vertical;padding:14px;border-radius:
 .video-subtitle{position:absolute;left:4%;right:4%;bottom:14px;pointer-events:none;color:#fff;background:#101529db;padding:10px 15px;border-radius:12px;text-align:center;font-size:clamp(12px,1.5vw,18px)}
 #videoCredit{font-size:12px;color:#625875;line-height:1.6}
 #videoCredit a{color:#532cb2;text-decoration:underline}
+
+.lesson-video{max-width:none!important}
+.lesson-video canvas{display:block;width:100%;aspect-ratio:16/9;max-height:none}
+.video-caption{margin:8px 0 12px;padding:10px;background:#21194a;color:#fff;border-radius:10px;text-align:center;font-size:13px}
+.audio-player-controls{display:grid;gap:10px;margin:18px 0;padding:18px;border-radius:17px;background:#f6f1ff;border:1px solid #dfd1f6}
+.audio-topline,.seek-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.audio-topline button,.seek-controls button{padding:10px 14px;border:1px solid #d7c6f1;border-radius:12px;background:#fff;color:#391782;font-weight:800;cursor:pointer}
+.audio-topline button.primary{background:#6131c5;color:#fff}
+#audioStatus{color:#4f3d83;font-size:13px}
+#seek{flex:1;min-width:160px;accent-color:#6231cc;cursor:pointer}
+#seekLabel{font-size:13px;font-weight:800;color:#4b2989}
+.speed-control{font-size:13px;color:#493475;font-weight:800}
+.word-feedback{margin-top:12px}
+.word-feedback>p{font-size:13px}
+.word-diff{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.word-diff span{display:inline-block;padding:7px 11px;border-radius:9px;border:1px solid;font-size:13px;font-weight:700}
+.diff-correct{color:#136b40;background:#def9e9;border-color:#b5e9c9!important}
+.diff-missing{color:#b2233e;background:#ffe5e9;border-color:#f3bdc7!important}
+.diff-extra{color:#9e520c;background:#fff2d4;border-color:#f8d99f!important}
+.diff-incorrect{color:#8a32a8;background:#f2e4ff;border-color:#d9b4e7!important}
 </style></head>
 <body><header><a class="back" href="../">← Foundations</a><span class="brand">🎧 Topic-based Listening</span><a href="../../Vocabulary-Notebook/" class="back">📒 Sổ tay</a></header>
 <main><section class="hero"><div class="eyebrow">LISTENING FOUNDATIONS</div><h1>Topic-based Listening</h1><p>Chọn chủ đề mình yêu thích, sau đó chọn một trong 30 bài nghe ngắn để luyện nghe và viết chính tả.</p></section>
@@ -77,20 +97,21 @@ textarea{width:100%;min-height:115px;resize:vertical;padding:14px;border-radius:
   <div class="exercise-head"><div><span class="tag" id="lessonTopic"></span><h2 id="lessonTitle">Bài nghe</h2></div><span class="pill" id="lessonMeta"></span></div>
   <p class="section-note">Nghe hết bài để hiểu ý chính, sau đó bấm “Nghe câu” và chép lại từng câu. Nhấp đúp vào từ bất kỳ trong phần đáp án (ngoài Mock Test) để tra từ hoặc lưu sổ tay.</p>
   <div id="videoPanel" class="lesson-video">
- <div class="video-heading"><strong>🎬 Video theo nội dung bài nghe</strong><span id="videoStatus">Đang tìm video phù hợp...</span></div>
- <div class="video-stage"><video id="lessonVideo" muted playsinline loop preload="metadata" aria-label="Video minh họa, phát không tiếng"></video>
- <div class="video-fallback" id="videoFallback" hidden><span id="fallbackIcon">🎧</span><strong id="fallbackTitle"></strong><p>Chưa tìm được video có thông tin giấy phép rõ ràng và khớp nội dung bài nghe.</p></div>
- <div id="videoSubtitle" class="video-subtitle">Nhấn Nghe toàn bài để xem phụ đề theo lời đọc.</div></div>
- <p id="videoCredit">Video tra cứu từ Wikimedia Commons có hiển thị giấy phép và ghi nguồn tác giả.</p>
- <p class="section-note">Video là hình minh họa có liên quan; lời đọc và phụ đề theo chính nội dung Dictation. Đây không phải video thuyết minh được đồng bộ cảnh quay từng câu.</p>
+ <div class="video-heading"><strong>🎬 Video hoạt hình minh họa theo bài nghe</strong><span class="video-status">Nội dung tự dựng · Có ở tất cả 270 bài</span></div>
+ <div class="video-stage"><canvas id="sceneCanvas" width="960" height="540" aria-label="Video minh họa chuyển động theo chủ đề và lời đọc tiếng Anh"></canvas></div>
+ <div class="video-caption" id="sceneCaption">Nhấn Nghe toàn bài để bắt đầu.</div>
+ <p class="section-note">Video chuyển động được tạo riêng từ chủ đề, tiêu đề và transcript bài học. Đây là đồ họa minh họa, không phải footage quay thực tế. Không sử dụng video có bản quyền từ bên thứ ba.</p></div>
+ <div class="audio-player-controls">
+  <div class="audio-topline"><button type="button" id="playAll" class="primary">▶ Nghe toàn bài</button><button type="button" id="stopAudio">■ Dừng</button><button type="button" id="listenSentence">🔊 Nghe câu hiện tại</button><span id="audioStatus" role="status">Sẵn sàng nghe</span></div>
+  <div class="seek-controls"><button type="button" id="audioBack" aria-label="Tua lùi một câu">⏮ Câu trước</button><input type="range" id="seek" min="0" max="1" step="1" value="0" aria-label="Tua tới câu trong audio"><button type="button" id="audioForward" aria-label="Tua tiến một câu">Câu sau ⏭</button><span id="seekLabel">Câu 1 / 1</span></div>
+  <label class="speed-control">Tốc độ nghe <select class="speed-select" id="speed"><option value=".65">0.65×</option><option value=".75">0.75×</option><option value=".9" selected>0.9×</option><option value="1">1.0×</option><option value="1.15">1.15×</option><option value="1.3">1.3×</option><option value="1.5">1.5×</option></select></label>
+  <p class="section-note">Dùng phím/tương tác trên thanh tua để chuyển câu trước hoặc câu sau. Âm thanh được tạo bằng giọng đọc của trình duyệt; chưa hỗ trợ tua theo từng giây như tệp MP3.</p>
  </div>
-  <div class="exercise-buttons"><button type="button" id="playAll" class="primary">▶ Nghe toàn bài</button><button type="button" id="listenSentence">🔊 Nghe câu này</button><button type="button" id="stopAudio">■ Dừng nghe</button>
-  <label>Tốc độ <select class="speed-select" id="speed"><option value=".76">Chậm</option><option value=".9" selected>Bình thường</option><option value="1.05">Nhanh</option></select></label></div>
-  <div class="progress-track"><span id="bar" style="width:0"></span></div>
+ <div class="progress-track"><span id="bar" style="width:0"></span></div>
   <div class="exercise-head"><strong id="counter">Câu 1</strong><span id="correctCounter" class="pill">0 câu chính xác</span></div>
   <div class="dictation"><div><p><strong>Write what you hear</strong></p><textarea id="typed" spellcheck="false" placeholder="Type the English sentence here..." aria-label="Nhập câu dictation"></textarea>
   <div class="exercise-buttons"><button id="check" type="button" class="primary">Kiểm tra câu</button><button id="reveal" type="button">Xem đáp án</button><button id="previous" type="button">← Câu trước</button><button id="next" type="button">Câu tiếp →</button></div>
-  <div id="grade" aria-live="polite">Nghe câu và viết chính tả vào ô bên trên.</div></div>
+  <div id="grade" aria-live="polite">Nghe câu và viết chính tả vào ô bên trên.</div><div id="wordFeedback" class="word-feedback" aria-live="polite"></div></div>
   <div><p><strong>Transcript</strong></p><div id="answer">Đáp án sẽ hiện sau khi bấm “Xem đáp án”.</div>
   <div class="exercise-buttons"><button id="revealAll" type="button">Hiện toàn bộ transcript</button></div>
   <p class="section-note">Đáp án chỉ dùng để tự kiểm tra; có thể nhấp đúp tra và lưu từ vào Vocabulary Notebook.</p></div></div>
@@ -98,184 +119,9 @@ textarea{width:100%;min-height:115px;resize:vertical;padding:14px;border-radius:
  </div>
 </section>
 </main>
-<script src="./lessons.js?v=20261116-01"></script>
-<script>
-(()=>{
-'use strict';
-const $=id=>document.getElementById(id);
-const topics=window.SMARTCOM_TOPIC_LISTENING||[];
-const params=new URLSearchParams(location.search);
-const sectionIds=['topicsView','lessonsView','exerciseView'];
-let topicIndex=-1,lessonIndex=-1,sentenceIndex=0,correct=new Set(),transcriptShown=false,utterance=null;
-const tokenize=s=>String(s).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9'\s]/g,'').replace(/\s+/g,' ').trim();
-const split=text=>text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map(v=>v.trim()).filter(Boolean)||[text];
-const key=()=>{try{const v=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');return 'SC_TOPIC_DICTATION_V2_'+(v?.name&&v.className?(v.name+'|'+v.className).toLowerCase():'guest')}catch{return 'SC_TOPIC_DICTATION_V2_guest'}};
-function progress(){try{return JSON.parse(localStorage.getItem(key())||'{}')}catch{return {}}}
-function saveProgress(){try{const p=progress();p[topics[topicIndex].id+'-'+String(lessonIndex+1).padStart(2,'0')]={correct:correct.size,total:currentSentences().length,completed:true,date:new Date().toISOString()};localStorage.setItem(key(),JSON.stringify(p))}catch(e){console.warn('Không lưu được tiến độ:',e)}}
-function isComplete(t,lesson){return Boolean(progress()[t.id+'-'+lesson.id]?.completed)}
-function navigate(section,changeUrl=true){
- sectionIds.forEach(id=>$(id).hidden=id!==section);
- if(changeUrl){
-  const q=new URLSearchParams(location.search);
-  if(section==='topicsView'){q.delete('topic');q.delete('lesson')}
-  if(section==='lessonsView'){q.set('topic',topics[topicIndex].id);q.delete('lesson')}
-  if(section==='exerciseView'){q.set('topic',topics[topicIndex].id);q.set('lesson',String(lessonIndex+1).padStart(2,'0'))}
-  history.replaceState(null,'',location.pathname+(q.size?'?'+q:''));
- }
- window.scrollTo({top:0,behavior:'instant'});
-}
-function stop(){speakingSequence++;if('speechSynthesis' in window)speechSynthesis.cancel();utterance=null}
-function renderTopics(){
- $('topics').replaceChildren();
- topics.forEach((topic,i)=>{
-  const card=document.createElement('button');card.className='topic-card';card.type='button';
-  const done=topic.lessons.filter(l=>isComplete(topic,l)).length;
-  card.innerHTML='<span class="art"></span><strong></strong><p></p><span class="tag"></span>';
-  card.querySelector('.art').textContent=topic.icon;
-  card.querySelector('strong').textContent=topic.name;
-  card.querySelector('p').textContent=topic.description;
-  card.querySelector('.tag').textContent=done+' / 30 hoàn thành · 30 bài';
-  card.onclick=()=>openTopic(i);$('topics').append(card);
- });
-}
-function openTopic(i){
- stop();topicIndex=i;lessonIndex=-1;const t=topics[i];
- $('topicTitle').textContent=t.icon+' '+t.name;$('topicDesc').textContent=t.description;
- $('topicCrumb').textContent=t.name;renderLessons();navigate('lessonsView');
-}
-function renderLessons(){
- const t=topics[topicIndex];$('lessons').replaceChildren();
- t.lessons.forEach((l,i)=>{
-  const card=document.createElement('button');card.type='button';card.className='lesson-card';
-  const n=document.createElement('span');n.className='number';n.textContent='LISTENING '+l.id;
-  const title=document.createElement('strong');title.textContent=l.title;
-  const meta=document.createElement('span');meta.className='meta';
-  meta.textContent=Math.round(l.text.trim().split(/\s+/).length/.9/2.1)+'s · '+(isComplete(t,l)?'✓ Đã hoàn thành':'Chưa hoàn thành');
-  if(isComplete(t,l))meta.classList.add('completed');
-  card.append(n,title,meta);card.onclick=()=>openLesson(i);$('lessons').append(card);
- });
-}
-function current(){return topics[topicIndex].lessons[lessonIndex]}
-function currentSentences(){return split(current().text)}
-function showAnswer(){
- const all=currentSentences();$('answer').textContent=transcriptShown?current().text:'Đáp án: '+all[sentenceIndex];
-}
-function refreshSentence(){
- $('typed').value='';$('grade').textContent='Nghe câu và viết lại chính xác.';$('grade').className='';
- transcriptShown=false;$('answer').textContent='Đáp án sẽ hiện sau khi bấm “Xem đáp án”.';
- const n=currentSentences().length;
- $('counter').textContent='Câu '+(sentenceIndex+1)+' / '+n;
- $('correctCounter').textContent=correct.size+' / '+n+' câu chính xác';
- $('bar').style.width=Math.round(correct.size/n*100)+'%';
- $('previous').disabled=sentenceIndex===0;
- $('next').disabled=sentenceIndex===n-1;
-}
-function openLesson(i){
- stop();lessonIndex=i;sentenceIndex=0;correct=new Set();transcriptShown=false;
- const t=topics[topicIndex],l=t.lessons[i];
- $('lessonCrumb').textContent=t.name+' · '+l.id;
- $('lessonTopic').textContent=t.icon+' '+t.name+' · Bài '+l.id;
- $('lessonTitle').textContent=l.title;
- $('lessonMeta').textContent=l.text.trim().split(/\s+/).length+' từ · '+currentSentences().length+' câu';
- loadLessonVideo(t,l);
- refreshSentence();navigate('exerciseView');
-}
-function speak(text){
- if(!('speechSynthesis' in window)){alert('Trình duyệt này không hỗ trợ phát giọng đọc tiếng Anh.');return}
- stop();utterance=new SpeechSynthesisUtterance(text);
- utterance.lang='en-GB';utterance.rate=Number($('speed').value);utterance.pitch=1;
- const voices=speechSynthesis.getVoices();utterance.voice=voices.find(v=>v.lang.toLowerCase()==='en-gb')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'))||null;
- speechSynthesis.speak(utterance);
-}
-
-let activeVideoLoad=0, speakingSequence=0;
-const licenseOK=x=>/^(CC0|CC BY|CC BY-SA|Public domain|PD-)/i.test(x||'')&&!/(NC|ND|NonCommercial|NoDerivatives)/i.test(x||'');
-const validWords=title=>title.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>3&&!['this','that','about','with','from','your','their','story','what','when','where'].includes(w));
-async function loadLessonVideo(topic,lesson){
- const request=++activeVideoLoad,video=$('lessonVideo'),fallback=$('videoFallback');
- video.pause();video.removeAttribute('src');video.classList.remove('available');video.load();
- fallback.hidden=true;
- $('videoStatus').textContent='Đang tìm video mở theo nội dung bài...';
- $('videoSubtitle').textContent='Nhấn Nghe toàn bài để nghe lời đọc và xem phụ đề.';
- const words=validWords(lesson.title);
- if(!words.length)return showNoVideo(topic,lesson);
- const query=new URL('https://commons.wikimedia.org/w/api.php');
- const options={action:'query',generator:'search',gsrsearch:'filetype:video '+words.slice(0,2).join(' '),
-  gsrnamespace:6,gsrlimit:15,prop:'imageinfo',iiprop:'url|mime|size|extmetadata',
-  iiextmetadatafilter:'LicenseShortName|LicenseUrl|Artist',format:'json',origin:'*'};
- Object.entries(options).forEach(pair=>query.searchParams.set(pair[0],pair[1]));
- let pages=[];
- try{const response=await fetch(query.href);if(!response.ok)throw Error('Commons API error');
-  pages=Object.values((await response.json()).query?.pages||{})}catch(error){if(request===activeVideoLoad)showNoVideo(topic,lesson);return}
- if(request!==activeVideoLoad)return;
- const clips=pages.map(p=>{
-  const info=p.imageinfo?.[0],meta=info?.extmetadata||{},license=meta.LicenseShortName?.value||'';
-  if(!info||!info.mime?.startsWith('video/')||info.size>85000000||!licenseOK(license))return null;
-  const filename=(p.title||'').toLowerCase();
-  const score=words.filter(w=>filename.includes(w)).length;
-  if(score<1)return null;
-  const authorHTML=meta.Artist?.value||'';
-  const holder=new DOMParser().parseFromString(authorHTML,'text/html');
-  const author=holder.body.textContent.trim().slice(0,150)||'Xem tác giả trong trang gốc';
-  return {score,url:info.url,title:p.title,license,author,page:info.descriptionurl,licenseUrl:meta.LicenseUrl?.value||''};
- }).filter(Boolean).sort((a,b)=>b.score-a.score);
- const selected=clips[0];
- if(!selected){showNoVideo(topic,lesson);return}
- video.src=selected.url;video.classList.add('available');
- video.oncanplay=()=>{if(request===activeVideoLoad)video.play().catch(()=>{})};
- video.onerror=()=>{if(request===activeVideoLoad)showNoVideo(topic,lesson)};
- fallback.hidden=true;$('videoStatus').textContent=selected.license;
- const credit=$('videoCredit');credit.replaceChildren();
- const link=document.createElement('a');link.href=selected.page||'https://commons.wikimedia.org/';
- link.target='_blank';link.rel='noopener';link.textContent=selected.title;
- credit.append('Video: ',link,' · '+selected.author+' · '+selected.license+' · Video câm; phần đọc là audio riêng.');
- if(selected.licenseUrl){const lic=document.createElement('a');lic.href=selected.licenseUrl;lic.target='_blank';lic.rel='noopener';lic.textContent=' Xem giấy phép';credit.append(lic)}
-}
-function showNoVideo(topic,lesson){
- const video=$('lessonVideo');video.pause();video.classList.remove('available');
- $('videoFallback').hidden=false;$('fallbackIcon').textContent=topic.icon;
- $('fallbackTitle').textContent=lesson.title;
- $('videoStatus').textContent='Chưa có video phù hợp đã kiểm chứng';
- $('videoCredit').textContent='Chưa tìm được video khớp nội dung với giấy phép phù hợp. Vẫn có thể nghe audio và luyện dictation.';
-}
-function playFullLesson(){
- if(!('speechSynthesis' in window)){alert('Trình duyệt chưa hỗ trợ phát audio tiếng Anh');return}
- stop();const run=++speakingSequence,lines=currentSentences();let i=0;
- function readNext(){
-  if(run!==speakingSequence||i>=lines.length)return;
-  const line=lines[i++];$('videoSubtitle').textContent=line;
-  const u=new SpeechSynthesisUtterance(line);u.lang='en-GB';u.rate=Number($('speed').value);utterance=u;
-  const voices=speechSynthesis.getVoices();u.voice=voices.find(v=>v.lang.toLowerCase()==='en-gb')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'))||null;
-  u.onend=readNext;u.onerror=()=>{$('videoSubtitle').textContent='Không phát được audio, vui lòng thử lại'};
-  speechSynthesis.speak(u);
- }
- readNext();
-}
-
-$('playAll').onclick=playFullLesson;
-$('listenSentence').onclick=()=>speak(currentSentences()[sentenceIndex]);
-$('stopAudio').onclick=stop;
-$('check').onclick=()=>{
- const guess=tokenize($('typed').value),actual=tokenize(currentSentences()[sentenceIndex]);
- const good=guess===actual;
- $('grade').className=good?'good':'bad';
- $('grade').textContent=good?'✓ Chính xác!':'Chưa khớp hoàn toàn. Nghe lại câu rồi thử tiếp nhé.';
- if(good){correct.add(sentenceIndex);$('correctCounter').textContent=correct.size+' / '+currentSentences().length+' câu chính xác';$('bar').style.width=Math.round(correct.size/currentSentences().length*100)+'%'}
-};
-$('reveal').onclick=()=>{transcriptShown=false;showAnswer()};
-$('revealAll').onclick=()=>{transcriptShown=true;showAnswer()};
-$('previous').onclick=()=>{stop();if(sentenceIndex>0){sentenceIndex--;refreshSentence()}};
-$('next').onclick=()=>{stop();if(sentenceIndex<currentSentences().length-1){sentenceIndex++;refreshSentence()}};
-$('complete').onclick=()=>{saveProgress();$('grade').className='good';$('grade').textContent='✓ Đã lưu tiến độ bài học trên trình duyệt. Bạn có thể chọn bài kế tiếp.'};
-$('nextLesson').onclick=()=>{if(lessonIndex<topics[topicIndex].lessons.length-1){saveProgress();openLesson(lessonIndex+1)}else{saveProgress();renderLessons();navigate('lessonsView')}};
-$('backTopics').onclick=()=>{stop();renderTopics();navigate('topicsView')};
-$('backLessons').onclick=()=>{stop();renderLessons();navigate('lessonsView')};
-window.addEventListener('pagehide',stop);
-if(!topics.length){$('topics').textContent='Không tải được danh sách bài nghe. Hãy tải lại trang.';return}
-renderTopics();
-const initialTopic=topics.findIndex(t=>t.id===params.get('topic'));
-if(initialTopic>=0){openTopic(initialTopic);const lesson=Number(params.get('lesson'));if(Number.isInteger(lesson)&&lesson>=1&&lesson<=30)openLesson(lesson-1)}else navigate('topicsView',false);
-})();
-</script>
-<script src="../../Practice/shared/smartcom-ui.js?v=20261116-topic-v2"></script>
+<script src="./lessons.js?v=20261116-02"></script>
+<script src="./dictation-grader.js?v=20261116-02"></script>
+<script src="./lesson-scene.js?v=20261116-02"></script>
+<script src="./topic-engine.js?v=20261116-02"></script>
+<script src="../../Practice/shared/smartcom-ui.js?v=20261116-topic-v4"></script>
 </body></html>
