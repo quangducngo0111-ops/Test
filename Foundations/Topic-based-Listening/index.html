@@ -78,7 +78,7 @@ textarea{width:100%;min-height:115px;resize:vertical;padding:14px;border-radius:
   <p class="section-note">Nghe hết bài để hiểu ý chính, sau đó bấm “Nghe câu” và chép lại từng câu. Nhấp đúp vào từ bất kỳ trong phần đáp án (ngoài Mock Test) để tra từ hoặc lưu sổ tay.</p>
   <div id="videoPanel" class="lesson-video">
  <div class="video-heading"><strong>🎬 Video theo nội dung bài nghe</strong><span id="videoStatus">Đang tìm video phù hợp...</span></div>
- <div class="video-stage"><video id="lessonVideo" muted playsinline loop preload="metadata" controls></video>
+ <div class="video-stage"><video id="lessonVideo" muted playsinline loop preload="metadata" aria-label="Video minh họa, phát không tiếng"></video>
  <div class="video-fallback" id="videoFallback" hidden><span id="fallbackIcon">🎧</span><strong id="fallbackTitle"></strong><p>Chưa tìm được video có thông tin giấy phép rõ ràng và khớp nội dung bài nghe.</p></div>
  <div id="videoSubtitle" class="video-subtitle">Nhấn Nghe toàn bài để xem phụ đề theo lời đọc.</div></div>
  <p id="videoCredit">Video tra cứu từ Wikimedia Commons có hiển thị giấy phép và ghi nguồn tác giả.</p>
@@ -215,8 +215,8 @@ async function loadLessonVideo(topic,lesson){
   const score=words.filter(w=>filename.includes(w)).length;
   if(score<1)return null;
   const authorHTML=meta.Artist?.value||'';
-  const holder=document.createElement('div');holder.innerHTML=authorHTML;
-  const author=holder.textContent.trim().slice(0,150)||'Xem tác giả trong trang gốc';
+  const holder=new DOMParser().parseFromString(authorHTML,'text/html');
+  const author=holder.body.textContent.trim().slice(0,150)||'Xem tác giả trong trang gốc';
   return {score,url:info.url,title:p.title,license,author,page:info.descriptionurl,licenseUrl:meta.LicenseUrl?.value||''};
  }).filter(Boolean).sort((a,b)=>b.score-a.score);
  const selected=clips[0];
