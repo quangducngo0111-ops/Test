@@ -212,7 +212,12 @@ document.body.append(shell);
 if(!document.querySelector('script[data-sc-word-tools]')){
  const vocabScript=document.createElement('script');
  vocabScript.dataset.scWordTools='1';
- vocabScript.src=url('Practice/shared/word-tools.js?v=20261116-phrase01');
+ vocabScript.src=url('Practice/shared/word-tools.js?v=20261116-lexeme02');
  document.body.append(vocabScript);
+}
+if(!document.querySelector('script[data-sc-vocab-reminders]')){
+ const reminderScript=document.createElement('script');reminderScript.dataset.scVocabReminders='1';
+ reminderScript.src=url('Practice/shared/vocab-reminders.js?v=20261116-reminders01');
+ document.body.append(reminderScript);
 }
 })();
