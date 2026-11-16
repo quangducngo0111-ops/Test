@@ -177,20 +177,20 @@ document.body.append(shell);
  const style=document.createElement('style');
  style.textContent='.card .arrow,.card .chevron,.card .arrow-icon,.portal-category .arrow-icon{display:none!important}';
  document.head.append(style);
- const glyphs=/[\\s\\u00a0]*[→←↗➜➔⟶➝➞➟⇢⇠][\\s\\u00a0]*/g;
+ const glyphs=/[\s\u00a0]*[→←↗➜➔⟶➝➞➟⇢⇠][\s\u00a0]*/g;
  function scrub(scope){
   const nodes=[];
   if(scope.matches?.('a,button,[role="button"],.go,.portal-action'))nodes.push(scope);
   if(scope.querySelectorAll)nodes.push(...scope.querySelectorAll('a,button,[role="button"],.go,.portal-action'));
   for(const parent of nodes){
-   if(parent.matches?.('.arrow,.chevron,.arrow-icon') && /^[\\s→←↗➜➔⟶➝➞➟⇢⇠]*$/.test(parent.textContent||'')){parent.remove();continue}
+   if(parent.matches?.('.arrow,.chevron,.arrow-icon') && /^[\s→←↗➜➔⟶➝➞➟⇢⇠]*$/.test(parent.textContent||'')){parent.remove();continue}
    const walker=document.createTreeWalker(parent,NodeFilter.SHOW_TEXT);
    const texts=[];let n;
    while((n=walker.nextNode()))if(!n.parentElement?.closest('script,style,textarea,code,pre'))texts.push(n);
    for(const t of texts){
     const value=t.nodeValue;
     if(/[→←↗➜➔⟶➝➞➟⇢⇠]/.test(value)){
-      const cleaned=value.replace(glyphs,' ').replace(/\\s{2,}/g,' ');
+      const cleaned=value.replace(glyphs,' ').replace(/\s{2,}/g,' ');
       if(cleaned!==value)t.nodeValue=cleaned;
     }
    }
