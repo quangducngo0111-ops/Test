@@ -128,8 +128,11 @@ async function findFreePhoto(article){
 function appendCredit(container,item,media){
  container.replaceChildren();
  if(!media)return;
+ // Pexels License permits free website use without public attribution.
+ if(/Pexels License/i.test(media.license||''))return;
+ // Wikimedia Commons Creative Commons photos may require attribution.
  const a=document.createElement('a');a.href=media.page||'https://commons.wikimedia.org/';a.target='_blank';a.rel='noopener noreferrer';a.textContent=media.credit;
- container.append('Ảnh: ',a,' · '+media.license+' · Ảnh minh họa.');
+ container.append('Ảnh: ',a,' · '+media.license);
 }
 async function loadCardPhoto(article,card){
  const fallback=makeVisualPlaceholder(article);
@@ -228,7 +231,7 @@ function openArticle(i){
   img.onerror=()=>{img.hidden=true;heroPlaceholder.hidden=false};
   img.src=media.image;
   appendCredit(caption,item,media);
-  if(media.isTopicFallback){caption.append(' · Ảnh chủ đề, không mô tả chính xác từng nội dung.')}
+  if(media.isTopicFallback&&!/Pexels License/i.test(media.license||'')){caption.append(' · Ảnh chủ đề.')} 
  });
  $('readStatus').textContent=records()[item.id]?'✓ Bạn đã hoàn thành bài này.':'';
  topicId=articleTopic(item);
