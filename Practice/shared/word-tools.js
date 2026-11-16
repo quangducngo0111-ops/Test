@@ -78,21 +78,27 @@ lookup.onclick=async()=>{
 add.onclick=async()=>{
  const requested=word;
  if(!entry){try{const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word));if(response.ok)entry=(await response.json())?.[0]||null}catch(e){}}
+ if(requested===word&&entry&&!vietnamese){
+  try{const definition=entry.meanings?.[0]?.definitions?.[0]?.definition||word;
+   const resp=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(definition.slice(0,240))+'&langpair=en%7Cvi');
+   if(resp.ok){const d=await resp.json();vietnamese=d?.responseData?.translatedText||'';if(vietnamese.toLowerCase()===definition.toLowerCase())vietnamese=''}
+  }catch(e){}
+ }
  if(requested===word)saveWord();
 };
 document.addEventListener('dblclick',e=>{
  if(isExam()||e.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
  const selected=norm(window.getSelection()?.toString());
- if(!/^[a-z][a-z'-]{1,38}$/i.test(selected))return;
+ if(!/^[a-z][a-z'-]{0,38}$/i.test(selected))return;
  word=selected;entry=null;
  menu.style.left=Math.min(innerWidth-230,Math.max(9,e.clientX))+'px';
  menu.style.top=Math.min(innerHeight-60,Math.max(9,e.clientY+6))+'px';
  menu.hidden=false;
 });
 document.addEventListener('pointerdown',e=>{if(!menu.contains(e.target))menu.hidden=true});
-const observer=new MutationObserver(()=>{button.hidden=isExam();if(isExam())close()});
+const observer=new MutationObserver(()=>{button.hidden=isExam()||location.pathname.includes('/Vocabulary-Notebook/');if(isExam())close()});
 observer.observe(document.body,{attributes:true,attributeFilter:['class'],subtree:false});
 const testSection=document.getElementById('testSection');if(testSection)observer.observe(testSection,{attributes:true,attributeFilter:['class']});
-window.addEventListener('popstate',()=>{button.hidden=isExam();close()});
-button.hidden=isExam();
+window.addEventListener('popstate',()=>{button.hidden=isExam()||location.pathname.includes('/Vocabulary-Notebook/');close()});
+button.hidden=isExam()||location.pathname.includes('/Vocabulary-Notebook/');
 })();
