@@ -28,13 +28,21 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 .source-box a{color:#5125aa;text-decoration:underline}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.actions button{background:#5d31c5;border:0;color:#fff;border-radius:12px;padding:12px 18px;font-weight:800}
 .progress-note{color:#178452;font-size:14px}
+.topic-card{cursor:pointer;align-items:flex-start}.topic-card .emoji{font-size:35px}.topic-card .pill{margin-top:auto}
+.topic-card .topic-desc{font-size:13px;line-height:1.5;color:#726987}
+.topic-card[aria-disabled="true"]{opacity:.6;cursor:default}
+.topic-card[aria-disabled="true"]:hover{transform:none;border-color:#e5d8f0}
 @media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.cards{grid-template-columns:1fr}header{height:auto}.brand{font-size:15px}}
 </style></head><body>
 <header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
 <main>
  <section class="hero"><small>SMARTCOM · FOUNDATIONS</small><h1>Reading Library</h1><p>Đọc bài tiếng Anh trực tiếp trên Smartcom, nhấp đúp một từ để tra nghĩa, nghe phát âm và lưu vào sổ tay từ vựng.</p></section>
- <section id="library" data-view><div class="heading"><h2>Thư viện bài đọc</h2><span id="number">6 bài học thuật</span></div>
- <p class="hint">Các bài dưới đây được biên soạn tiếng Anh dựa trên tài liệu do USGS xuất bản thuộc phạm vi công cộng tại Mỹ. Văn bản bài học nằm ngay trên Smartcom; không nhúng trang ngoài hoặc sử dụng ảnh từ bên thứ ba.</p>
+ <section id="library" data-view><div class="heading"><h2>Chọn chủ đề đọc</h2><span id="number">9 chủ đề</span></div>
+ <p class="hint">9 chủ đề giống Topic-based Listening. Chọn chủ đề trước, sau đó chọn bài đọc. Các bài là bản tiếng Anh Smartcom biên soạn từ thông tin chính thống, không phải bản sao nguyên văn bài báo.</p>
+ <div class="cards" id="topics"></div></section>
+ <section id="topicLibrary" data-view hidden><div class="read-nav"><button id="backTopics" type="button">Tất cả chủ đề</button><span id="activeTopicName"></span></div>
+ <div class="heading"><h2 id="topicHeading">Bài đọc</h2><span class="hint" id="topicCounter"></span></div>
+ <p class="hint">Chọn bài để đọc ngay trên Smartcom. Học sinh có thể nhấp đúp tra từ và lưu vào sổ tay.</p>
  <div class="cards" id="cards"></div></section>
  <section id="reader" data-view hidden>
  <div class="read-nav"><button id="back" type="button">Trở lại Reading Library</button><span class="hint">Bấm đúp vào từ tiếng Anh bất kỳ để mở từ điển</span></div>
@@ -51,7 +59,19 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 <script>
 (()=>{
 'use strict';const $=id=>document.getElementById(id),data=window.SMARTCOM_READING_ARTICLES||[];
-let index=0;
+let index=0,topicId=null;
+const TOPICS=[
+{id:'animals',title:'Animals',icon:'🐬',desc:'Động vật, hệ sinh thái và bảo tồn'},
+{id:'health',title:'Health',icon:'🩺',desc:'Sức khỏe, giấc ngủ và thói quen sống'},
+{id:'fashion',title:'Fashion',icon:'👕',desc:'Thời trang, chất liệu và môi trường'},
+{id:'science',title:'Science',icon:'🔬',desc:'Khoa học, công nghệ và khám phá'},
+{id:'food',title:'Food',icon:'🥗',desc:'Ẩm thực, thực phẩm và an toàn'},
+{id:'travel',title:'Travel',icon:'🧳',desc:'Du lịch và kỹ năng đi lại'},
+{id:'space',title:'Space & Universe',icon:'🪐',desc:'Vũ trụ, thiên văn học và hành tinh'},
+{id:'plants',title:'Plants & Nature',icon:'🌿',desc:'Thực vật, hoa và môi trường tự nhiên'},
+{id:'sports',title:'Sports',icon:'⚽',desc:'Thể thao, vận động và học đường'}
+];
+function articleTopic(x){return x.topic||'science'}
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const scope=()=>{try{const p=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');return p?.name&&p.className?(p.name+'|'+p.className).toLowerCase():'guest'}catch{return'guest'}};
 const recordKey=()=> 'SC_READING_LIBRARY_V1_'+scope();
@@ -59,15 +79,44 @@ const records=()=>{try{return JSON.parse(localStorage.getItem(recordKey())||'{}'
 function drawCards(){
  $('cards').replaceChildren();const saved=records();
  data.forEach((article,i)=>{
+  if(articleTopic(article)!==topicId)return;
   const button=document.createElement('button');button.className='article-card';button.type='button';
   const icon=document.createElement('span');icon.className='emoji';icon.textContent=article.icon;
   const cat=document.createElement('span');cat.className='cat';cat.textContent=article.category+' · '+article.level;
   const title=document.createElement('strong');title.textContent=article.title;
-  const meta=document.createElement('span');meta.textContent=article.paragraphs.join(' ').split(/\s+/).length+' từ · Nguồn USGS';
+  const meta=document.createElement('span');meta.textContent=article.paragraphs.join(' ').split(/\s+/).length+' từ · '+article.source;
   const pill=document.createElement('span');pill.className='pill';pill.textContent=saved[article.id]?'✓ Đã đọc':'Đọc bài';
   button.append(icon,cat,title,meta,pill);button.onclick=()=>openArticle(i);$('cards').append(button);
  });
- $('number').textContent=data.length+' bài';
+ $('topicCounter').textContent=data.filter(a=>articleTopic(a)===topicId).length+' bài hiện có';
+}
+function renderTopics(){
+ const list=$('topics');list.replaceChildren();
+ TOPICS.forEach(t=>{
+  const count=data.filter(a=>articleTopic(a)===t.id).length;
+  const card=document.createElement('button');card.type='button';card.className='article-card topic-card';
+  const icon=document.createElement('span');icon.className='emoji';icon.textContent=t.icon;
+  const title=document.createElement('strong');title.textContent=t.title;
+  const desc=document.createElement('span');desc.className='topic-desc';desc.textContent=t.desc;
+  const number=document.createElement('span');number.className='pill';number.textContent=count+' bài đọc';
+  card.append(icon,title,desc,number);
+  card.onclick=()=>openTopic(t.id);
+  list.append(card);
+ });
+ $('number').textContent=TOPICS.length+' chủ đề · '+data.length+' bài đọc';
+}
+function openTopic(id,writeUrl=true){
+ const t=TOPICS.find(v=>v.id===id);if(!t)return;
+ topicId=id;$('topicHeading').textContent=t.icon+' '+t.title;$('activeTopicName').textContent=t.title;
+ $('library').hidden=true;$('reader').hidden=true;$('topicLibrary').hidden=false;
+ drawCards();
+ if(writeUrl){const url=new URL(location.href);url.searchParams.set('topic',id);url.searchParams.delete('article');history.replaceState(null,'',url);}
+ scrollTo(0,0);
+}
+function showTopics(){
+ $('library').hidden=false;$('topicLibrary').hidden=true;$('reader').hidden=true;
+ const url=new URL(location.href);url.searchParams.delete('topic');url.searchParams.delete('article');history.replaceState(null,'',url);
+ renderTopics();scrollTo(0,0);
 }
 function openArticle(i){
  index=i;const item=data[i];
@@ -78,21 +127,25 @@ function openArticle(i){
  $('articleText').replaceChildren();item.paragraphs.forEach(paragraph=>{const p=document.createElement('p');p.textContent=paragraph;$('articleText').append(p)});
  $('sourceBox').replaceChildren();
  const title=document.createElement('strong');title.textContent='Nguồn tham khảo: '+item.sourceTitle;
- const link=document.createElement('a');link.textContent='Xem tài liệu gốc tại USGS';link.href=item.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';
- const note=document.createElement('p');note.textContent='Bản đọc trên Smartcom là văn bản biên soạn dựa trên thông tin của USGS, không phải bản sao nguyên văn. Nội dung USGS do cơ quan này sản xuất thuộc phạm vi công cộng tại Mỹ; hình ảnh và tài liệu bên thứ ba cần kiểm tra riêng.';
+ const link=document.createElement('a');link.textContent='Xem tài liệu tham khảo tại '+item.source;link.href=item.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';
+ const note=document.createElement('p');note.textContent='Bản đọc là nội dung tiếng Anh biên soạn của Smartcom dựa trên nguồn tham khảo được nêu, không phải bản sao nguyên văn. Không sao chép hình ảnh hoặc tài liệu bên thứ ba.';
  $('sourceBox').append(title,document.createElement('br'),link,note);
  $('readStatus').textContent=records()[item.id]?'✓ Bạn đã hoàn thành bài này.':'';
- $('library').hidden=true;$('reader').hidden=false;
+ topicId=articleTopic(item);
+ $('library').hidden=true;$('topicLibrary').hidden=true;$('reader').hidden=false;
  const url=new URL(location.href);url.searchParams.set('article',item.id);history.replaceState(null,'',url);
  scrollTo({top:0,behavior:'instant'});
 }
 function showLibrary(){
- $('reader').hidden=true;$('library').hidden=false;const url=new URL(location.href);url.searchParams.delete('article');history.replaceState(null,'',url);drawCards();scrollTo(0,0);
+ $('reader').hidden=true;openTopic(articleTopic(data[index]));
 }
 $('back').onclick=showLibrary;
+$('backTopics').onclick=showTopics;
 $('markRead').onclick=()=>{const r=records();r[data[index].id]=new Date().toISOString();try{localStorage.setItem(recordKey(),JSON.stringify(r));$('readStatus').textContent='✓ Đã lưu trạng thái đã đọc trên thiết bị.'}catch(e){$('readStatus').textContent='Không thể lưu trạng thái trên trình duyệt.'}};
-$('nextArticle').onclick=()=>openArticle((index+1)%data.length);
-drawCards();const selected=new URLSearchParams(location.search).get('article');const i=data.findIndex(x=>x.id===selected);if(i>=0)openArticle(i);
+$('nextArticle').onclick=()=>{const matches=data.map((a,i)=>({a,i})).filter(x=>articleTopic(x.a)===topicId).map(x=>x.i);const pos=matches.indexOf(index);openArticle(matches[(pos+1)%matches.length])};
+renderTopics();const initial=new URLSearchParams(location.search);const selected=initial.get('article');
+const i=data.findIndex(x=>x.id===selected);
+if(i>=0)openArticle(i);else if(TOPICS.some(x=>x.id===initial.get('topic')))openTopic(initial.get('topic'),false);
 })();
 </script>
 <script src="../../Practice/shared/smartcom-ui.js?v=20261116-reading02"></script>
