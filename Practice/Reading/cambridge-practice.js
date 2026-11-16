@@ -363,7 +363,7 @@ if(stored)$('source').innerHTML=stored;
 restoreQuestionMarks();
 
 const scHint=document.createElement('span');scHint.textContent='?';scHint.hidden=true;
-scHint.style.cssText='position:fixed;pointer-events:none;z-index:100009;background:#f0eaff;color:#4e219a;border:1px solid #c8b7ed;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;font:800 12px system-ui';
+scHint.style.cssText='position:fixed;pointer-events:none;z-index:100009;background:#f0eaff;color:#4e219a;border:1px solid #c8b7ed;width:18px;height:18px;border-radius:50%;line-height:18px;text-align:center;font:800 12px system-ui';
 document.body.append(scHint);
 document.addEventListener('pointermove',e=>{
  if(e.pointerType==='touch'||e.buttons||!e.target.closest?.('#source,#questionsSource')||e.target.closest?.('input,button,select,textarea,.note-anchor,mark.user-highlight')){scHint.hidden=true;return}
