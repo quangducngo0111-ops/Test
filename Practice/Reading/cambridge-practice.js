@@ -380,6 +380,12 @@ scDict.style.cssText='position:fixed;z-index:100010;background:white;color:#351b
 scDict.innerHTML='<div style="display:flex;justify-content:space-between;gap:10px"><strong data-sc-word></strong><button data-sc-close type="button">×</button></div><div data-sc-meaning style="margin:10px 0"></div><button type="button" data-sc-save style="padding:9px 12px;border:0;border-radius:9px;background:#6737c8;color:#fff">＋ Lưu vào sổ tay</button>';
 document.body.append(scDict);
 scDict.querySelector('[data-sc-close]').onclick=()=>scDict.hidden=true;
+function showSavedNotice(message){
+ let el=document.getElementById('sc-practice-saved-toast');
+ if(!el){el=document.createElement('div');el.id='sc-practice-saved-toast';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.style.cssText='position:fixed;right:18px;bottom:20px;z-index:2147483600;max-width:min(350px,calc(100vw - 36px));background:#30146d;color:white;border-radius:14px;padding:13px 17px;box-shadow:0 12px 30px #26114c40;font:700 14px/1.5 system-ui;pointer-events:none';document.body.append(el)}
+ el.textContent=message;el.hidden=false;clearTimeout(showSavedNotice.timer);showSavedNotice.timer=setTimeout(()=>el.hidden=true,3400);
+}
+
 let scLastTerm='',scMeaning='',scReq=0;
 const scMeaningMap={'such as':'chẳng hạn như; ví dụ như','take part in':'tham gia vào','take place':'diễn ra; xảy ra','takes place':'diễn ra','took place':'đã diễn ra','look after':'chăm sóc','according to':'theo; dựa theo','as well as':'cũng như'};
 const scPhrases=Object.keys(scMeaningMap).sort((a,b)=>b.length-a.length);
@@ -426,7 +432,7 @@ scDict.querySelector('[data-sc-save]').onclick=()=>{
   const i=list.findIndex(item=>item.word===scLastTerm);
   const item={word:scLastTerm,meaning:scMeaning||'',phonetic:'',partOfSpeech:scLastTerm.includes(' ')?'phrase':'',example:'',savedAt:new Date().toISOString()};
   if(i>=0)list[i]={...list[i],...item,meaning:item.meaning||list[i].meaning};else list.unshift(item);
-  localStorage.setItem(store,JSON.stringify(list));scDict.querySelector('[data-sc-meaning]').textContent='✓ Đã lưu vào sổ tay';
+  localStorage.setItem(store,JSON.stringify(list));const notice=i<0?'✓ Đã thêm “'+scLastTerm+'” vào sổ tay.':'✓ “'+scLastTerm+'” đã có trong sổ tay; đã cập nhật.';scDict.querySelector('[data-sc-meaning]').textContent=notice;showSavedNotice(notice);
  }catch(err){scDict.querySelector('[data-sc-meaning]').textContent='Không thể lưu từ trên trình duyệt này.'}
 };
 document.addEventListener('pointerdown',e=>{if(!scDict.hidden&&!scDict.contains(e.target)&&!e.target.closest('#source'))scDict.hidden=true},true);
