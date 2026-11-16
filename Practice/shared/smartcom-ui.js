@@ -15,7 +15,7 @@ const hubPaths=[
  '/Practice/Speaking/Part3/','/Practice/Listening/','/Practice/Listening/FullTest/',
  '/Practice/Listening/Part1/','/Practice/Listening/Part2/','/Practice/Listening/Part3/',
  '/Practice/Listening/Part4/','/Practice/Reading/ReadingPractice3Passages/',
- '/Practice/Grammar/','/Practice/WritingTask1/','/Practice/WritingTask2/','/Practice/Vocabulary/'
+ '/Practice/Grammar/','/Practice/Writing/','/Practice/WritingTask1/','/Practice/WritingTask2/','/Practice/Vocabulary/'
 ];
 const nestedHub=(
  /\/Practice\/Reading\/(?:ReadingPassage[123]|TrueFalseNotGiven|NoteCompletion|TableCompletion|ShortAnswerQuestions|Matching%20Headings)\/?$/i.test(pathname)||
@@ -32,14 +32,14 @@ const groups=[
  {heading:'Skill Practice',links:[
   ['🎧','Listening Practice','Practice/Listening/'],
   ['📖','Reading Practice','Practice/Reading/'],
-  ['📈','Writing Task 1','Practice/WritingTask1/'],['✍️','Writing Task 2','Practice/WritingTask2/'],
+  ['✍️','Writing Practice','Practice/Writing/'],
   ['💬','Speaking Practice','Practice/Speaking/']
  ]},
  {heading:'Foundations',links:[
   ['🧩','Foundations','Foundations/'],
   ['🎙️','Pre-IELTS Listening','Practice/Listening/Intensive%20Listening/'],
-  ['🌍','Topic-based Listening','Foundations/#topicListening'],
-  ['📰','Reading Library','Foundations/#readingLibrary'],
+  ['🌍','Topic-based Listening','Foundations/Topic-based-Listening/'],
+  ['📰','Reading Library','Foundations/Reading-Library/'],
   ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
   ['📒','Vocabulary Notebook','Vocabulary-Notebook/']
  ]},
