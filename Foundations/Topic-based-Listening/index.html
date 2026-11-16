@@ -17,37 +17,183 @@ textarea{width:100%;min-height:115px;resize:vertical;padding:14px;border-radius:
 .feedback{background:#edf9f2;border-radius:12px;padding:12px;margin-top:9px}
 .source-note{color:#746b8c;font-size:12px}
 @media(max-width:850px){.grid,.dictation{grid-template-columns:1fr}}
-</style><style>.video-panel{background:#fff;border:1px solid #e8dff3;border-radius:19px;padding:18px;margin:15px 0}.video-panel[hidden]{display:none!important}.video-panel video{display:block;width:100%;max-height:370px;background:#0d1628;border-radius:15px;object-fit:contain}.video-panel .credit{font-size:12px;color:#736b85}.video-panel a{color:#5b25aa;text-decoration:underline}</style></head><body><header><a class="back" href="../">← Foundations</a><span class="brand">Topic-based Listening</span><a href="../../Vocabulary-Notebook/" class="back">📒 Sổ tay</a></header><main><section class="hero"><div class="eyebrow">LISTENING FOUNDATIONS</div><h1>Topic-based Listening</h1><p>Các bài nghe ngắn tự biên soạn theo chủ đề, có video minh họa và Dictation từng câu.</p></section><section id="topicListening" class="lesson"><h2>Topic-based Listening · Dictation</h2><div class="panel"><div class="video-panel" id="videoPanel"><strong>🎬 Video minh họa · Animals · Dolphins</strong><p class="source-note">Video minh họa chủ đề; phần đọc câu tiếng Anh là bài nghe tự biên soạn và phát riêng. Video này không thay thế giọng đọc Dictation.</p><video id="topicVideo" controls playsinline preload="metadata"><source src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Dolphins-by-Anacapa-Island-CA.webm" type="video/webm"></video><p class="credit" id="videoCredit">Nguồn: Nicolai Edgar Andersen · Wikimedia Commons. <a href="https://commons.wikimedia.org/wiki/File:Dolphins-by-Anacapa-Island-CA.webm" target="_blank" rel="noopener">Xem tệp gốc và giấy phép</a>.</p></div>
- <p>Đoạn nghe được biên soạn riêng cho Smartcom, không sử dụng audio hoặc transcript của các chương trình có bản quyền. Giọng đọc sử dụng tính năng chuyển văn bản thành giọng nói của trình duyệt; tốc độ và độ tự nhiên phụ thuộc thiết bị.</p>
- <div class="toolbar"><label>Chủ đề <select id="topic"></select></label><button id="play" class="primary">▶ Nghe cả bài</button><button id="repeat">🔊 Nghe lại câu</button><button id="next">Câu kế tiếp →</button></div>
- <div class="dictation"><div><p><strong id="sentenceNo">Câu 1</strong> · Nghe rồi nhập chính xác câu tiếng Anh.</p><textarea id="typed" placeholder="Type what you hear..." spellcheck="false"></textarea><div class="toolbar"><button id="check" class="primary">Kiểm tra dictation</button><button id="reveal">Xem đáp án</button></div><div class="feedback" id="feedback" aria-live="polite"></div></div><div><p><strong>Transcript</strong> (chỉ hiện khi bấm Xem đáp án)</p><div id="listeningText">Nhấn Nghe lại câu để bắt đầu.</div></div></div>
- </div></section>
-</main><script>
-const ORIGINAL_STORIES=[
- {topic:'Animals',text:"Every morning, a small group of dolphins travels along the coast. They swim close together and communicate through whistles and clicks. Young dolphins learn important skills by watching the adults. When one dolphin finds food, others may follow it. Researchers are interested in how these intelligent animals cooperate. They observe the group from a safe distance and record changes in its behavior. Although dolphins spend most of their lives in water, they must come to the surface to breathe air. Their daily routine depends on the weather, the availability of fish, and the safety of the environment. Protecting clean oceans can help these animals survive."},
- {topic:'Health',text:"Many students spend long hours sitting at a desk. Small changes can make their daily routine healthier. For example, standing up between lessons may help them feel less tired. A short walk after lunch offers fresh air and a break from screens. Drinking enough water is another simple habit. Healthy food also matters, but there is no single perfect meal for everyone. Students can choose a variety of vegetables, fruit, and other foods that they enjoy. Getting regular sleep helps them concentrate in class the next day. Building a healthy lifestyle is usually easier when the changes are realistic and repeated over time."},
- {topic:'Fashion',text:"Fashion is one way people express their personality. Some people prefer bright colors, while others choose simple clothes that are comfortable and practical. A favorite jacket may remind someone of a special trip or family celebration. Today, many shoppers also think about how long their clothes will last. They might repair a small tear instead of buying a replacement immediately. Second-hand shops offer another option for people who want to explore different styles. Fashion changes quickly, but personal taste often develops slowly. Choosing clothes with care can help people feel confident without following every new trend."},
- {topic:'Science',text:"A science museum can turn an ordinary afternoon into an exciting learning experience. Visitors may see a model of the solar system or try an experiment with light. In one room, a simple machine demonstrates how wheels make it easier to move heavy objects. In another, a screen shows how storms form above the ocean. The best exhibits encourage visitors to ask questions rather than memorize facts. Some answers are surprising, and others lead to new questions. Science is not only about complicated equipment. It begins with curiosity, careful observation, and a willingness to test an idea."},
- {topic:'Food',text:"A local market is often full of interesting sounds and smells. Early in the morning, sellers arrange fresh vegetables, fruit, and bread on their tables. Customers compare prices and ask where the products come from. Some families buy ingredients for a traditional meal, while others try something new. Cooking at home can help students understand how different flavors work together. A simple dish may require only a few ingredients, but timing and preparation still matter. Sharing food is also a social experience. People often remember the conversations around a meal as clearly as the food itself."},
- {topic:'Travel',text:"Before visiting a new city, it is helpful to learn a little about the local transport system. Travelers can look at maps, check ticket options, and plan a flexible route. Walking through a neighborhood may reveal small parks, interesting buildings, or quiet cafés that are easy to miss from a bus. However, visitors should respect local rules and be considerate of residents. It is also useful to keep important information available when a phone battery runs low. A successful trip does not always require an expensive hotel or a busy schedule. Sometimes the most memorable moments happen unexpectedly."}
-];
-const $=id=>document.getElementById(id);let current=0,sentence=0;
-const sentences=story=>story.text.match(/[^.!?]+[.!?]+|[^.!?]+$/g).map(x=>x.trim()).filter(Boolean);
-$('topic').innerHTML=ORIGINAL_STORIES.map((s,i)=>'<option value="'+i+'">'+s.topic+'</option>').join('');
-function refresh(){sentence=0;$('typed').value='';$('feedback').textContent='';$('listeningText').textContent='Chỉ hiển thị transcript khi bạn yêu cầu.';updateNum()}
-function updateNum(){$('sentenceNo').textContent='Câu '+(sentence+1)+' / '+sentences(ORIGINAL_STORIES[current]).length}
-function speak(t){if(!window.speechSynthesis){$('feedback').textContent='Thiết bị chưa hỗ trợ giọng đọc.';return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.86;const voices=speechSynthesis.getVoices();u.voice=voices.find(x=>x.lang.toLowerCase()==='en-gb')||null;speechSynthesis.speak(u)}
-$('topic').onchange=()=>{current=Number($('topic').value);refresh()};
-$('play').onclick=()=>speak(ORIGINAL_STORIES[current].text);
-$('repeat').onclick=()=>speak(sentences(ORIGINAL_STORIES[current])[sentence]);
-$('next').onclick=()=>{sentence=(sentence+1)%sentences(ORIGINAL_STORIES[current]).length;refreshSentence()};
-function refreshSentence(){$('typed').value='';$('feedback').textContent='';$('listeningText').textContent='Đáp án đang ẩn.';updateNum()}
-$('reveal').onclick=()=>$('listeningText').textContent=sentences(ORIGINAL_STORIES[current])[sentence];
-$('check').onclick=()=>{const clean=s=>s.toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ').trim();const correct=clean(sentences(ORIGINAL_STORIES[current])[sentence]),input=clean($('typed').value);$('feedback').textContent=input===correct?'✅ Chính xác!':'Chưa hoàn toàn chính xác. Bạn hãy nghe lại rồi thử lần nữa.'};
-const topicVideo=document.getElementById('topicVideo');
-const videoCredit=document.getElementById('videoCredit');
-const originalTopicChange=$('topic').onchange;
-function updateVideo(){const animal=current===0;document.getElementById('videoPanel').hidden=!animal;if(!animal)topicVideo.pause();}
-$('topic').onchange=()=>{originalTopicChange();updateVideo()};
-updateVideo();refresh();
-</script><script src="../../Practice/shared/smartcom-ui.js?v=20261116-topic-page"></script></body></html>
+</style>
+<style>
+[hidden]{display:none!important}
+.topic-layout{margin-top:25px}
+.section-note{color:#756e89;font-size:13px;line-height:1.6}
+.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0 30px}
+.topic-card{text-align:left;border:2px solid #e8e1f5;border-radius:23px;padding:24px;background:#fff;cursor:pointer;display:flex;flex-direction:column;gap:11px;min-height:205px;transition:transform .2s,border-color .2s}
+.topic-card:hover,.lesson-card:hover{border-color:#9367e8;transform:translateY(-3px)}
+.topic-card .art{display:grid;place-items:center;background:#f2edff;border-radius:17px;width:60px;height:60px;font-size:32px}
+.topic-card strong{font-size:21px;color:#35187d}.topic-card p{margin:0;color:#6b6381;font-size:13px;line-height:1.65}
+.topic-card .tag{margin-top:auto}
+.lesson-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:18px}
+.lesson-card{border:2px solid #e7e0f5;background:#fff;border-radius:17px;padding:17px;text-align:left;min-height:147px;display:flex;flex-direction:column;gap:11px;cursor:pointer;transition:.2s}
+.lesson-card .number{font-size:11px;font-weight:900;letter-spacing:.08em;color:#7851c5}.lesson-card strong{color:#321671;font-size:16px}
+.lesson-card .meta{margin-top:auto;font-size:12px;color:#766c8e}.lesson-card .completed{color:#168650;font-weight:850}
+.breadcrumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 22px}
+.breadcrumb button{border:1px solid #e2d7f1;border-radius:11px;padding:10px 14px;background:#fff;color:#552aa2;font-weight:800;cursor:pointer}
+.breadcrumb .sep{color:#ad9bc9}
+.lesson-hero{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lesson-hero h2{margin:0}.exercise{margin:18px 0 40px}
+.exercise-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.exercise-buttons{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:16px 0}
+.exercise-buttons button,.exercise-head button{border:1px solid #dacef0;background:#fff;color:#4f239f;font-size:14px;font-weight:800;padding:11px 14px;border-radius:12px;cursor:pointer}
+.exercise-buttons button.primary{color:white;background:#6434ce;border-color:#6434ce}
+#answer{background:#f4efff;border-radius:15px;padding:16px;line-height:1.8;white-space:pre-wrap}
+#grade{padding:14px;border-radius:12px;background:#f4f0ff;color:#493279;min-height:20px;margin:12px 0}
+#grade.good{background:#e4f8eb;color:#116c42}#grade.bad{background:#fff1dc;color:#80531e}
+#typed{font:15px/1.75 system-ui;width:100%;min-height:118px}
+.progress-track{background:#eee9f8;border-radius:20px;height:10px;overflow:hidden;margin:14px 0}.progress-track>span{display:block;height:100%;background:linear-gradient(90deg,#7c48d8,#4fafdd);transition:width .2s}
+.speed-select{border:1px solid #d9ccee;border-radius:10px;padding:10px;background:white;color:#381570}
+#videoPanel{margin-top:15px;max-width:650px}#videoPanel video{width:100%;max-height:300px}
+@media(max-width:840px){.topic-grid,.lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:570px){.topic-grid,.lesson-grid{grid-template-columns:1fr}.topic-card{min-height:165px}}
+</style></head>
+<body><header><a class="back" href="../">← Foundations</a><span class="brand">🎧 Topic-based Listening</span><a href="../../Vocabulary-Notebook/" class="back">📒 Sổ tay</a></header>
+<main><section class="hero"><div class="eyebrow">LISTENING FOUNDATIONS</div><h1>Topic-based Listening</h1><p>Chọn chủ đề mình yêu thích, sau đó chọn một trong 30 bài nghe ngắn để luyện nghe và viết chính tả.</p></section>
+<section class="topic-layout" id="topicsView"><h2>Chọn chủ đề học</h2><p class="section-note">Mỗi chủ đề gồm 30 bài · khoảng 1–2 phút nghe mỗi bài (tùy tốc độ phát) · ghi chú kết quả trên thiết bị.</p><div class="topic-grid" id="topics"></div></section>
+<section id="lessonsView" hidden>
+ <div class="breadcrumb"><button type="button" id="backTopics">← Tất cả chủ đề</button><span class="sep">/</span><strong id="topicCrumb"></strong></div>
+ <div class="lesson-hero"><div><h2 id="topicTitle"></h2><p class="section-note" id="topicDesc"></p></div><span class="tag">30 BÀI NGHE</span></div>
+ <div class="lesson-grid" id="lessons"></div>
+</section>
+<section id="exerciseView" hidden>
+ <div class="breadcrumb"><button type="button" id="backLessons">← Danh sách bài</button><span class="sep">/</span><strong id="lessonCrumb"></strong></div>
+ <div class="panel exercise">
+  <div class="exercise-head"><div><span class="tag" id="lessonTopic"></span><h2 id="lessonTitle">Bài nghe</h2></div><span class="pill" id="lessonMeta"></span></div>
+  <p class="section-note">Nghe hết bài để hiểu ý chính, sau đó bấm “Nghe câu” và chép lại từng câu. Nhấp đúp vào từ bất kỳ trong phần đáp án (ngoài Mock Test) để tra từ hoặc lưu sổ tay.</p>
+  <div id="videoPanel" hidden><strong>Video hình ảnh bổ trợ: Dolphins</strong><p class="section-note">Minh họa riêng; audio đọc dictation là nội dung độc lập do website phát. <a href="https://commons.wikimedia.org/wiki/File:Dolphins-by-Anacapa-Island-CA.webm" target="_blank" rel="noopener" style="color:#5634bd;text-decoration:underline">Nguồn video và giấy phép</a>.</p><video controls preload="none" playsinline><source src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Dolphins-by-Anacapa-Island-CA.webm" type="video/webm"></video></div>
+  <div class="exercise-buttons"><button type="button" id="playAll" class="primary">▶ Nghe toàn bài</button><button type="button" id="listenSentence">🔊 Nghe câu này</button><button type="button" id="stopAudio">■ Dừng nghe</button>
+  <label>Tốc độ <select class="speed-select" id="speed"><option value=".76">Chậm</option><option value=".9" selected>Bình thường</option><option value="1.05">Nhanh</option></select></label></div>
+  <div class="progress-track"><span id="bar" style="width:0"></span></div>
+  <div class="exercise-head"><strong id="counter">Câu 1</strong><span id="correctCounter" class="pill">0 câu chính xác</span></div>
+  <div class="dictation"><div><p><strong>Write what you hear</strong></p><textarea id="typed" spellcheck="false" placeholder="Type the English sentence here..." aria-label="Nhập câu dictation"></textarea>
+  <div class="exercise-buttons"><button id="check" type="button" class="primary">Kiểm tra câu</button><button id="reveal" type="button">Xem đáp án</button><button id="previous" type="button">← Câu trước</button><button id="next" type="button">Câu tiếp →</button></div>
+  <div id="grade" aria-live="polite">Nghe câu và viết chính tả vào ô bên trên.</div></div>
+  <div><p><strong>Transcript</strong></p><div id="answer">Đáp án sẽ hiện sau khi bấm “Xem đáp án”.</div>
+  <div class="exercise-buttons"><button id="revealAll" type="button">Hiện toàn bộ transcript</button></div>
+  <p class="section-note">Đáp án chỉ dùng để tự kiểm tra; có thể nhấp đúp tra và lưu từ vào Vocabulary Notebook.</p></div></div>
+  <div class="exercise-buttons"><button id="complete" type="button" class="primary">✓ Hoàn thành bài nghe</button><button id="nextLesson" type="button">Bài tiếp theo →</button></div>
+ </div>
+</section>
+</main>
+<script src="./lessons.js?v=20261116-01"></script>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const topics=window.SMARTCOM_TOPIC_LISTENING||[];
+const params=new URLSearchParams(location.search);
+const sectionIds=['topicsView','lessonsView','exerciseView'];
+let topicIndex=-1,lessonIndex=-1,sentenceIndex=0,correct=new Set(),transcriptShown=false,utterance=null;
+const tokenize=s=>String(s).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9'\s]/g,'').replace(/\s+/g,' ').trim();
+const split=text=>text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map(v=>v.trim()).filter(Boolean)||[text];
+const key=()=>{try{const v=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');return 'SC_TOPIC_DICTATION_V2_'+(v?.name&&v.className?(v.name+'|'+v.className).toLowerCase():'guest')}catch{return 'SC_TOPIC_DICTATION_V2_guest'}};
+function progress(){try{return JSON.parse(localStorage.getItem(key())||'{}')}catch{return {}}}
+function saveProgress(){try{const p=progress();p[topics[topicIndex].id+'-'+String(lessonIndex+1).padStart(2,'0')]={correct:correct.size,total:currentSentences().length,completed:true,date:new Date().toISOString()};localStorage.setItem(key(),JSON.stringify(p))}catch(e){console.warn('Không lưu được tiến độ:',e)}}
+function isComplete(t,lesson){return Boolean(progress()[t.id+'-'+lesson.id]?.completed)}
+function navigate(section,changeUrl=true){
+ sectionIds.forEach(id=>$(id).hidden=id!==section);
+ if(changeUrl){
+  const q=new URLSearchParams(location.search);
+  if(section==='topicsView'){q.delete('topic');q.delete('lesson')}
+  if(section==='lessonsView'){q.set('topic',topics[topicIndex].id);q.delete('lesson')}
+  if(section==='exerciseView'){q.set('topic',topics[topicIndex].id);q.set('lesson',String(lessonIndex+1).padStart(2,'0'))}
+  history.replaceState(null,'',location.pathname+(q.size?'?'+q:''));
+ }
+ window.scrollTo({top:0,behavior:'instant'});
+}
+function stop(){if('speechSynthesis' in window)speechSynthesis.cancel();utterance=null}
+function renderTopics(){
+ $('topics').replaceChildren();
+ topics.forEach((topic,i)=>{
+  const card=document.createElement('button');card.className='topic-card';card.type='button';
+  const done=topic.lessons.filter(l=>isComplete(topic,l)).length;
+  card.innerHTML='<span class="art"></span><strong></strong><p></p><span class="tag"></span>';
+  card.querySelector('.art').textContent=topic.icon;
+  card.querySelector('strong').textContent=topic.name;
+  card.querySelector('p').textContent=topic.description;
+  card.querySelector('.tag').textContent=done+' / 30 hoàn thành · 30 bài';
+  card.onclick=()=>openTopic(i);$('topics').append(card);
+ });
+}
+function openTopic(i){
+ stop();topicIndex=i;lessonIndex=-1;const t=topics[i];
+ $('topicTitle').textContent=t.icon+' '+t.name;$('topicDesc').textContent=t.description;
+ $('topicCrumb').textContent=t.name;renderLessons();navigate('lessonsView');
+}
+function renderLessons(){
+ const t=topics[topicIndex];$('lessons').replaceChildren();
+ t.lessons.forEach((l,i)=>{
+  const card=document.createElement('button');card.type='button';card.className='lesson-card';
+  const n=document.createElement('span');n.className='number';n.textContent='LISTENING '+l.id;
+  const title=document.createElement('strong');title.textContent=l.title;
+  const meta=document.createElement('span');meta.className='meta';
+  meta.textContent=Math.round(l.text.trim().split(/\s+/).length/.9/2.1)+'s · '+(isComplete(t,l)?'✓ Đã hoàn thành':'Chưa hoàn thành');
+  if(isComplete(t,l))meta.classList.add('completed');
+  card.append(n,title,meta);card.onclick=()=>openLesson(i);$('lessons').append(card);
+ });
+}
+function current(){return topics[topicIndex].lessons[lessonIndex]}
+function currentSentences(){return split(current().text)}
+function showAnswer(){
+ const all=currentSentences();$('answer').textContent=transcriptShown?current().text:'Đáp án: '+all[sentenceIndex];
+}
+function refreshSentence(){
+ $('typed').value='';$('grade').textContent='Nghe câu và viết lại chính xác.';$('grade').className='';
+ transcriptShown=false;$('answer').textContent='Đáp án sẽ hiện sau khi bấm “Xem đáp án”.';
+ const n=currentSentences().length;
+ $('counter').textContent='Câu '+(sentenceIndex+1)+' / '+n;
+ $('correctCounter').textContent=correct.size+' / '+n+' câu chính xác';
+ $('bar').style.width=Math.round(correct.size/n*100)+'%';
+ $('previous').disabled=sentenceIndex===0;
+ $('next').disabled=sentenceIndex===n-1;
+}
+function openLesson(i){
+ stop();lessonIndex=i;sentenceIndex=0;correct=new Set();transcriptShown=false;
+ const t=topics[topicIndex],l=t.lessons[i];
+ $('lessonCrumb').textContent=t.name+' · '+l.id;
+ $('lessonTopic').textContent=t.icon+' '+t.name+' · Bài '+l.id;
+ $('lessonTitle').textContent=l.title;
+ $('lessonMeta').textContent=l.text.trim().split(/\s+/).length+' từ · '+currentSentences().length+' câu';
+ const video=t.id==='animals'&&i===0;
+ $('videoPanel').hidden=!video;
+ if(!video)$('videoPanel').querySelector('video').pause();
+ refreshSentence();navigate('exerciseView');
+}
+function speak(text){
+ if(!('speechSynthesis' in window)){alert('Trình duyệt này không hỗ trợ phát giọng đọc tiếng Anh.');return}
+ stop();utterance=new SpeechSynthesisUtterance(text);
+ utterance.lang='en-GB';utterance.rate=Number($('speed').value);utterance.pitch=1;
+ const voices=speechSynthesis.getVoices();utterance.voice=voices.find(v=>v.lang.toLowerCase()==='en-gb')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'))||null;
+ speechSynthesis.speak(utterance);
+}
+$('playAll').onclick=()=>speak(current().text);
+$('listenSentence').onclick=()=>speak(currentSentences()[sentenceIndex]);
+$('stopAudio').onclick=stop;
+$('check').onclick=()=>{
+ const guess=tokenize($('typed').value),actual=tokenize(currentSentences()[sentenceIndex]);
+ const good=guess===actual;
+ $('grade').className=good?'good':'bad';
+ $('grade').textContent=good?'✓ Chính xác!':'Chưa khớp hoàn toàn. Nghe lại câu rồi thử tiếp nhé.';
+ if(good){correct.add(sentenceIndex);$('correctCounter').textContent=correct.size+' / '+currentSentences().length+' câu chính xác';$('bar').style.width=Math.round(correct.size/currentSentences().length*100)+'%'}
+};
+$('reveal').onclick=()=>{transcriptShown=false;showAnswer()};
+$('revealAll').onclick=()=>{transcriptShown=true;showAnswer()};
+$('previous').onclick=()=>{stop();if(sentenceIndex>0){sentenceIndex--;refreshSentence()}};
+$('next').onclick=()=>{stop();if(sentenceIndex<currentSentences().length-1){sentenceIndex++;refreshSentence()}};
+$('complete').onclick=()=>{saveProgress();$('grade').className='good';$('grade').textContent='✓ Đã lưu tiến độ bài học trên trình duyệt. Bạn có thể chọn bài kế tiếp.'};
+$('nextLesson').onclick=()=>{if(lessonIndex<topics[topicIndex].lessons.length-1){saveProgress();openLesson(lessonIndex+1)}else{saveProgress();renderLessons();navigate('lessonsView')}};
+$('backTopics').onclick=()=>{stop();renderTopics();navigate('topicsView')};
+$('backLessons').onclick=()=>{stop();renderLessons();navigate('lessonsView')};
+window.addEventListener('pagehide',stop);
+if(!topics.length){$('topics').textContent='Không tải được danh sách bài nghe. Hãy tải lại trang.';return}
+renderTopics();
+const initialTopic=topics.findIndex(t=>t.id===params.get('topic'));
+if(initialTopic>=0){openTopic(initialTopic);const lesson=Number(params.get('lesson'));if(Number.isInteger(lesson)&&lesson>=1&&lesson<=30)openLesson(lesson-1)}else navigate('topicsView',false);
+})();
+</script>
+<script src="../../Practice/shared/smartcom-ui.js?v=20261116-topic-v2"></script>
+</body></html>
