@@ -256,7 +256,7 @@ function knownPhraseAt(range){
  return null;
 }
 function handleSelection(event,expand){
- if(isExam()||event.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
+ if(isExam()||location.pathname.includes('/Practice/Listening/')||event.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
  const range=selectedRange(),sel=window.getSelection();
  if(!range||!sel)return;
  const selected=norm(sel.toString());
