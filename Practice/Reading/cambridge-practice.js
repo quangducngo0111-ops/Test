@@ -402,7 +402,7 @@ function scSelectedTerm(){
 $('source').addEventListener('dblclick',e=>{
  if(e.target.closest('mark.user-highlight,.note-anchor'))return;
  const term=scSelectedTerm();if(!term)return;
- e.stopImmediatePropagation();scLastTerm=term;scMeaning=scMeaningMap[term]||'';
+ e.stopImmediatePropagation();selectionMenu.hidden=true;scLastTerm=term;scMeaning=scMeaningMap[term]||'';
  const rect=window.getSelection().getRangeAt(0).getBoundingClientRect();
  scDict.style.left=Math.max(10,Math.min(innerWidth-340,rect.left))+'px';
  scDict.style.top=Math.max(10,Math.min(innerHeight-170,rect.bottom+10))+'px';
