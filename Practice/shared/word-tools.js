@@ -9,7 +9,40 @@ const profile=()=>{try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_ST
 const key=()=>{const p=profile();return 'SC_VOCAB_NOTEBOOK_V1_'+(p?.name&&p?.className?(p.name+'|'+p.className).toLowerCase():'guest')};
 const load=()=>{try{const v=JSON.parse(localStorage.getItem(key())||'[]');return Array.isArray(v)?v:[]}catch(e){return []}};
 const save=list=>{try{localStorage.setItem(key(),JSON.stringify(list));return true}catch(e){return false}};
-const norm=w=>String(w||'').trim().toLowerCase().replace(/^[^a-z]+|[^a-z]+$/gi,'').trim();
+const norm=w=>String(w||'').normalize('NFKC').toLowerCase().replace(/[‘’]/g,"'").trim().replace(/^[^a-z]+|[^a-z]+$/gi,'').replace(/\s+/g,' ').trim();
+const validTerm=w=>/^[a-z][a-z' -]{0,99}$/i.test(w)&&w.split(' ').length<=8;
+const PHRASES={
+ "such as":["chẳng hạn như; ví dụ như","Used to introduce an example.","Sea animals such as dolphins communicate using sound."],
+ "for example":["ví dụ như","Used when giving an example.","Some animals, for example owls, hunt at night."],
+ "for instance":["ví dụ như","Used to introduce an example.","Some birds, for instance penguins, cannot fly."],
+ "as well as":["cũng như; bên cạnh đó","In addition to.","The zoo cares for birds as well as mammals."],
+ "rather than":["thay vì","Used to contrast two alternatives.","They walked rather than drove."],
+ "in addition to":["ngoài; bên cạnh","As well as.","In addition to fruit, the animal eats insects."],
+ "due to":["do; bởi vì","Because of.","The event was delayed due to rain."],
+ "according to":["theo; dựa theo","As stated by a source.","According to researchers, bees can recognise colours."],
+ "in spite of":["bất chấp; mặc dù","Despite.","In spite of the rain, they continued."],
+ "in terms of":["xét về; về mặt","Considering a specific aspect.","The species differ in terms of size."],
+ "as a result":["kết quả là","Consequently.","The river dried up. As a result, fish disappeared."],
+ "on the other hand":["mặt khác","Introduces a contrasting point.","The trip was long. On the other hand, it was affordable."],
+ "take part in":["tham gia vào","To participate.","Students take part in the workshop."],
+ "look after":["chăm sóc","To take care of.","The adults look after their young."],
+ "look up":["tra cứu","To search for information.","Look up the phrase in a dictionary."],
+ "find out":["tìm ra; phát hiện","To discover.","Scientists want to find out why birds migrate."],
+ "give up":["từ bỏ","To stop trying.","Do not give up after one mistake."],
+ "carry out":["tiến hành; thực hiện","To perform a task.","Scientists carry out experiments."],
+ "put off":["trì hoãn","To postpone.","They put off the meeting."],
+ "set up":["thiết lập; thành lập","To establish.","The school set up a reading group."],
+ "come across":["tình cờ gặp; bắt gặp","To encounter unexpectedly.","I came across a rare insect."],
+ "run out of":["hết; cạn kiệt","To have none left.","The hikers ran out of water."],
+ "keep up with":["theo kịp","To stay at the same pace.","It is hard to keep up with research."],
+ "break down":["hỏng; phân rã; chia nhỏ","To stop working, separate into parts, or become upset.","The vehicle broke down."],
+ "piece of cake":["dễ như ăn bánh","Something very easy.","The task was a piece of cake."],
+ "once in a blue moon":["rất hiếm khi","Very rarely.","We see them once in a blue moon."],
+ "under the weather":["không khỏe trong người","Feeling slightly ill.","She feels under the weather."],
+ "a blessing in disguise":["trong cái rủi có cái may","Something that appears bad but proves good.","The delay was a blessing in disguise."]
+};
+const phraseList=Object.keys(PHRASES).sort((a,b)=>b.length-a.length);
+
 const speak=word=>{if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const v=new SpeechSynthesisUtterance(word);v.lang='en-GB';v.rate=.85;window.speechSynthesis.speak(v)};
 const css=document.createElement('style');
 css.textContent=[
@@ -45,6 +78,7 @@ menu.append(lookup,add);document.body.append(menu);
 const shade=document.createElement('div');shade.id='sc-dict-shade';shade.hidden=true;document.body.append(shade);
 const modal=document.createElement('section');modal.id='sc-dict-modal';modal.hidden=true;document.body.append(modal);
 let word='',entry=null,vietnamese='',requestId=0,anchor={x:20,y:20};
+const currentPhrase=()=>PHRASES[word]||null;
 const dictionaryCache=new Map();
 function position(panel){
  const rect=panel.getBoundingClientRect(),width=rect.width||350,height=rect.height||200;
