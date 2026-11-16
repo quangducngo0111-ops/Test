@@ -23,6 +23,14 @@ style.textContent=`
 .reading-dict-meaning{margin-top:8px;font-weight:650}
 .reading-dict-note{font-size:12px;color:#777b85;margin-top:8px}
 .reading-dict a{color:#4722a8}
+.reading-dict-save{margin-top:10px;padding:9px 12px;border-radius:9px;background:#6737c8;color:white;border:0;font-weight:750;cursor:pointer}
+.reading-help-question{position:fixed;pointer-events:none;z-index:9999;display:flex;width:17px;height:17px;align-items:center;justify-content:center;border-radius:50%;background:#ece5ff;color:#5421a7;border:1px solid #c7b5ee;font:800 12px system-ui;box-shadow:0 2px 8px #24134a25}
+.reading-help-question[hidden]{display:none}
+.reading-highlight-colors{display:flex;align-items:center;gap:5px;padding:2px 5px}
+.reading-highlight-colors button{height:23px;width:23px;min-width:23px;padding:0;border-radius:8px;border:2px solid rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px #43296c25;cursor:pointer}
+.reading-highlight-colors button[aria-pressed="true"]{outline:2px solid #fff;outline-offset:1px;transform:scale(1.06)}
+#passageRoot mark.user-highlight,#questionsRoot mark.user-highlight{background:var(--sc-highlight-color,#fff29a)!important}
+
 .reading-ux-guide [role=button]{cursor:pointer}
 #questionsRoot .inline-review{margin:11px 0 16px;padding:13px;border-radius:12px;border:1px solid #d7c9f4;border-left:4px solid #7140cf;background:#faf8ff;box-shadow:none}
 #questionsRoot .passage-evidence,#questionsRoot .inline-review [onclick*="focusEvidence"]{cursor:pointer}
@@ -36,7 +44,7 @@ panel.className='reading-dict';
 panel.hidden=true;
 panel.setAttribute('role','dialog');
 panel.setAttribute('aria-label','Tra nghĩa từ tiếng Anh');
-panel.innerHTML='<div class="reading-dict-top"><span class="reading-dict-word"></span><button class="reading-dict-close" type="button" aria-label="Đóng">×</button></div><div class="reading-dict-meaning"></div><div class="reading-dict-note"></div>';
+panel.innerHTML='<div class="reading-dict-top"><span class="reading-dict-word"></span><button class="reading-dict-close" type="button" aria-label="Đóng">×</button></div><div class="reading-dict-meaning"></div><div class="reading-dict-note"></div><button class="reading-dict-save" type="button">＋ Lưu vào sổ tay</button>';
 document.body.appendChild(panel);
 panel.querySelector('button').addEventListener('click',()=>{panel.hidden=true});
 document.addEventListener('pointerdown',e=>{if(!panel.hidden&&!panel.contains(e.target)&&!e.target.closest('#passageRoot'))panel.hidden=true;},true);
@@ -121,48 +129,100 @@ document.addEventListener('touchstart',e=>{
 },{passive:true});
 
 let sequence=0;
-const getWordFromSelection=()=>{
- const selection=window.getSelection();
- if(!selection||selection.isCollapsed)return '';
- return selection.toString().trim().replace(/^[^a-zA-Z]+|[^a-zA-Z'-]+$/g,'');
+let lastDictionary={word:'',meaning:''};
+const knownMeanings={
+ 'such as':'chẳng hạn như; ví dụ như','take place':'diễn ra; xảy ra','takes place':'diễn ra','took place':'đã diễn ra','taking place':'đang diễn ra',
+ 'take part in':'tham gia vào','look after':'chăm sóc','look up':'tra cứu','as well as':'cũng như','according to':'theo; dựa theo',
+ 'in order to':'để; nhằm','due to':'do; bởi vì','as a result':'kết quả là','for example':'ví dụ như',
+ 'come up with':'nghĩ ra; đề xuất','pay attention to':'chú ý đến','carry out':'tiến hành','find out':'tìm ra','run out of':'cạn kiệt'
 };
-document.addEventListener('dblclick',event=>{
- if(!event.target.closest('#passageRoot'))return;
- if(event.target.closest('input,textarea,button,a,[contenteditable]'))return;
- const word=getWordFromSelection();
- if(!/^[a-zA-Z][a-zA-Z'-]{0,39}$/.test(word))return;
- const rect=window.getSelection()?.getRangeAt(0)?.getBoundingClientRect();
- if(!rect)return;
+const expressions=Object.keys(knownMeanings).sort((a,b)=>b.length-a.length);
+const selectedTerm=()=>{
+ const selection=window.getSelection();
+ if(!selection||selection.isCollapsed||!selection.rangeCount)return '';
+ let selected=selection.toString().trim().replace(/^[^a-zA-Z]+|[^a-zA-Z'-]+$/g,'').toLowerCase();
+ if(!/^[a-z][a-z' -]{0,100}$/.test(selected))return '';
+ if(!selected.includes(' ')){
+  const range=selection.getRangeAt(0);
+  if(range.startContainer===range.endContainer&&range.startContainer.nodeType===Node.TEXT_NODE){
+   const source=range.startContainer.textContent.toLowerCase();
+   for(const phrase of expressions){
+    let i=source.indexOf(phrase);
+    while(i>=0){
+     const right=i+phrase.length;
+     if(i<=range.startOffset&&right>=range.endOffset&&(i===0||!/[\w]/.test(source[i-1]))&&(right===source.length||!/[\w]/.test(source[right])))return phrase;
+     i=source.indexOf(phrase,i+1);
+    }
+   }
+  }
+ }
+ return selected;
+};
+function openWord(term,rect){
+ const word=String(term||'').trim().toLowerCase();if(!word||word.length>100)return;
  document.querySelectorAll('#selectionMenu.show').forEach(x=>x.classList.remove('show'));
- const width=330;
- panel.style.left=Math.max(12,Math.min(window.innerWidth-width-12,rect.left))+'px';
- panel.style.top=Math.max(12,Math.min(window.innerHeight-200,rect.bottom+12))+'px';
+ panel.style.left=Math.max(12,Math.min(innerWidth-345,rect.left))+'px';
+ panel.style.top=Math.max(12,Math.min(innerHeight-220,rect.bottom+12))+'px';
  panel.hidden=false;
+ lastDictionary={word,meaning:knownMeanings[word]||''};
  panel.querySelector('.reading-dict-word').textContent=word;
- panel.querySelector('.reading-dict-meaning').textContent='Đang tra nghĩa tiếng Việt...';
- panel.querySelector('.reading-dict-note').textContent='Dịch tự động, nên đối chiếu với ngữ cảnh bài đọc.';
+ panel.querySelector('.reading-dict-meaning').textContent=knownMeanings[word]?'🇻🇳 '+knownMeanings[word]:'Đang tra nghĩa tiếng Việt...';
+ panel.querySelector('.reading-dict-note').textContent='Nghĩa tham khảo; hãy đối chiếu với ngữ cảnh bài đọc.';
  const current=++sequence;
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),8000);
- const url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(word)+'&langpair=en%7Cvi';
- fetch(url,{signal:controller.signal}).then(r=>{if(!r.ok)throw Error('Failed');return r.json();}).then(data=>{
+ if(knownMeanings[word])return;
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),8000);
+ fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(word)+'&langpair=en%7Cvi',{signal:controller.signal})
+ .then(r=>{if(!r.ok)throw Error('Failed');return r.json()})
+ .then(data=>{
   if(current!==sequence||panel.hidden)return;
-  const translation=String(data?.responseData?.translatedText||'').trim();
-  if(!translation||/MYMEMORY WARNING|INVALID LANGUAGE/i.test(translation))throw Error('Empty');
-  panel.querySelector('.reading-dict-meaning').textContent='🇻🇳 '+translation;
+  const translated=String(data?.responseData?.translatedText||'').trim();
+  if(!translated||/MYMEMORY WARNING|INVALID LANGUAGE/i.test(translated))throw Error('Empty');
+  lastDictionary.meaning=translated;
+  panel.querySelector('.reading-dict-meaning').textContent='🇻🇳 '+translated;
  }).catch(()=>{
   if(current!==sequence||panel.hidden)return;
   panel.querySelector('.reading-dict-meaning').textContent='Chưa tải được nghĩa lúc này.';
-  const note=panel.querySelector('.reading-dict-note');
-  note.textContent='';
-  const link=document.createElement('a');
-  link.textContent='Mở bản dịch tiếng Việt';
-  link.target='_blank';
-  link.rel='noopener noreferrer';
-  link.href='https://translate.google.com/?sl=en&tl=vi&text='+encodeURIComponent(word)+'&op=translate';
-  note.appendChild(link);
+  const note=panel.querySelector('.reading-dict-note');note.replaceChildren();
+  const link=document.createElement('a');link.textContent='Mở bản dịch tiếng Việt';
+  link.target='_blank';link.rel='noopener noreferrer';
+  link.href='https://translate.google.com/?sl=en&tl=vi&text='+encodeURIComponent(word)+'&op=translate';note.append(link);
  }).finally(()=>clearTimeout(timeout));
+}
+panel.querySelector('.reading-dict-save').addEventListener('click',()=>{
+ if(!lastDictionary.word)return;
+ let profile=null;
+ try{profile=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){}
+ const scope=profile?.name&&profile?.className?(profile.name+'|'+profile.className).toLowerCase():'guest';
+ const key='SC_VOCAB_NOTEBOOK_V1_'+scope;
+ try{
+  const items=JSON.parse(localStorage.getItem(key)||'[]');
+  if(!Array.isArray(items))throw Error('Invalid notebook');
+  const previous=items.findIndex(x=>x.word===lastDictionary.word);
+  const entry={word:lastDictionary.word,meaning:lastDictionary.meaning||'',phonetic:'',partOfSpeech:lastDictionary.word.includes(' ')?'phrase':'',example:'',savedAt:new Date().toISOString()};
+  if(previous<0)items.unshift(entry);else items[previous]={...items[previous],...entry,meaning:entry.meaning||items[previous].meaning};
+  localStorage.setItem(key,JSON.stringify(items));
+  panel.querySelector('.reading-dict-note').textContent='✓ Đã lưu vào sổ tay từ vựng.';
+ }catch(e){panel.querySelector('.reading-dict-note').textContent='Không lưu được trên trình duyệt này.'}
+});
+document.addEventListener('dblclick',event=>{
+ if(!event.target.closest?.('#passageRoot,#questionsRoot'))return;
+ if(event.target.closest('input,textarea,button,a,[contenteditable],.note-anchor,mark.user-highlight'))return;
+ const word=selectedTerm();if(!word)return;
+ const rect=window.getSelection()?.rangeCount?window.getSelection().getRangeAt(0).getBoundingClientRect():null;
+ if(!rect)return;
+ event.stopImmediatePropagation();openWord(word,rect);
 },true);
+const hoverHint=document.createElement('div');hoverHint.className='reading-help-question';hoverHint.textContent='?';hoverHint.hidden=true;document.body.append(hoverHint);
+document.addEventListener('pointermove',e=>{
+ if(e.pointerType==='touch'||e.buttons||!e.target.closest?.('#passageRoot,#questionsRoot')||e.target.closest?.('input,textarea,button,select,a,mark.user-highlight,.note-anchor')){hoverHint.hidden=true;return}
+ const selection=window.getSelection();if(selection&&!selection.isCollapsed){hoverHint.hidden=true;return}
+ const range=document.caretRangeFromPoint?.(e.clientX,e.clientY);
+ if(!range||range.startContainer.nodeType!==Node.TEXT_NODE||!e.target.contains(range.startContainer)){hoverHint.hidden=true;return}
+ const text=range.startContainer.textContent||'',pos=range.startOffset;
+ if(!/[A-Za-z]/.test(text[pos]||text[pos-1]||'')){hoverHint.hidden=true;return}
+ hoverHint.hidden=false;hoverHint.style.left=Math.min(innerWidth-25,e.clientX+12)+'px';hoverHint.style.top=Math.max(8,e.clientY-24)+'px';
+},{passive:true});
+document.addEventListener('pointerleave',()=>{hoverHint.hidden=true});
 
 function answerNumbers(){
  const ids=[...document.querySelectorAll('#questionsRoot [id]')].map(el=>{
