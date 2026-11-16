@@ -221,7 +221,7 @@ markStyle.textContent='.sc-lexeme{display:inline;border-radius:6px;padding:1px 2
 document.head.append(markStyle);
 const phrasePattern=new RegExp('(?<![A-Za-z])(?:'+phraseList.map(p=>p.replace(/\s+/g,'\\s+')).join('|')+')(?![A-Za-z])','gi');
 function markReadingTerms(container){
- if(!container||container.dataset.scLexemes==='1')return;
+ if(!container||(container.dataset.scLexemes==='1'&&container.querySelector('.sc-lexeme')))return;
  container.dataset.scLexemes='1';
  const walker=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
