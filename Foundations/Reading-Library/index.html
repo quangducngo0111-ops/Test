@@ -42,6 +42,10 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 .article-hero-photo figcaption{font-size:12px;color:#736c81;margin-top:9px;line-height:1.5}
 .article-hero-photo a{color:#4d2798;text-decoration:underline}
 .article-hero-photo[hidden]{display:none!important}
+.article-image-placeholder{width:100%;height:165px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:linear-gradient(115deg,#eae0ff,#dbeafa);color:#50369b;font-size:13px;font-weight:700}
+.article-image-placeholder .placeholder-icon{font-size:62px;line-height:1.1}
+.article-hero-photo .article-image-placeholder{height:320px;border-radius:18px}
+.article-image-placeholder[hidden],.article-hero-photo img[hidden],.article-card .article-thumb[hidden]{display:none!important}
 </style></head><body>
 <header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
 <main>
@@ -72,11 +76,26 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 let index=0,topicId=null;
 
 const photoCache=new Map();
+const imageFallbacks={
+ animals:{url:'https://images.pexels.com/photos/145939/pexels-photo-145939.jpeg?auto=compress&cs=tinysrgb&w=1100',alt:'Ảnh động vật hoang dã minh họa chủ đề Animals',page:'https://www.pexels.com/photo/brown-lion-145939/',credit:'Pexels',license:'Pexels License'},
+ health:{url:'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1100',alt:'Ảnh thực phẩm và lối sống lành mạnh minh họa chủ đề Health',page:'https://www.pexels.com/photo/assorted-salads-on-bowls-1640777/',credit:'Pexels',license:'Pexels License'}
+};
+function fallbackVisual(article){
+ const base=imageFallbacks[article.topic];
+ return base?{image:base.url,page:base.page,credit:base.credit,license:base.license,isTopicFallback:true}:null;
+}
+function makeVisualPlaceholder(article){
+ const pane=document.createElement('div');pane.className='article-image-placeholder';
+ const icon=document.createElement('span');icon.className='placeholder-icon';icon.textContent=article.icon||'📖';
+ const sub=document.createElement('span');sub.textContent=article.subCategory||article.category||'Reading';
+ pane.append(icon,sub);return pane;
+}
+
 const allowedCommonsLicense=license=>/^(CC0|CC BY(?:-SA)?|Public domain|PD-|PDM)/i.test(license||'')&&!/(NC|ND|NonCommercial|NoDerivatives)/i.test(license||'');
 const parseText=html=>new DOMParser().parseFromString(html||'','text/html').body.textContent.trim().replace(/\s+/g,' ').slice(0,130);
 async function findFreePhoto(article){
  if(article.image)return {image:article.image,page:article.imageSourceUrl,credit:article.imageCredit||'Pexels',license:article.imageLicense||'Pexels License'};
- if(!article.photoSearch)return null;
+ if(!article.photoSearch)return fallbackVisual(article);
  if(photoCache.has(article.id))return photoCache.get(article.id);
  const query=article.photoSearch;
  const url=new URL('https://commons.wikimedia.org/w/api.php');
@@ -102,8 +121,9 @@ async function findFreePhoto(article){
    found=choices[0]||null;
   }
  }catch(e){}finally{clearTimeout(timer)}
- if(found)photoCache.set(article.id,found);
- return found;
+ const result=found||fallbackVisual(article);
+ if(result)photoCache.set(article.id,result);
+ return result;
 }
 function appendCredit(container,item,media){
  container.replaceChildren();
@@ -112,16 +132,18 @@ function appendCredit(container,item,media){
  container.append('Ảnh: ',a,' · '+media.license+' · Ảnh minh họa.');
 }
 async function loadCardPhoto(article,card){
- if(!article.photoSearch&&!article.image)return;
+ const fallback=makeVisualPlaceholder(article);
+ fallback.classList.add('article-thumb');
+ card.classList.add('has-photo');
+ card.prepend(fallback);
  const media=await findFreePhoto(article);
  if(!media||!card.isConnected)return;
- let image=card.querySelector('.article-thumb');
- if(image){if(image.getAttribute('src')!==media.image)image.src=media.image;return}
- image=document.createElement('img');image.className='article-thumb';image.loading='lazy';image.alt='Ảnh thật minh họa '+article.photoSearch;
- image.onerror=()=>{image.remove();card.classList.remove('has-photo')};
+ const image=document.createElement('img');image.className='article-thumb';image.loading='lazy';
+ image.alt=media.isTopicFallback?'Ảnh minh họa chung cho chủ đề '+(article.topic||'Reading'):'Ảnh minh họa '+(article.photoSearch||article.title);
+ image.onerror=()=>{image.remove();fallback.hidden=false};
+ image.onload=()=>{if(card.isConnected){fallback.hidden=true}};
  image.src=media.image;
- card.classList.add('has-photo');
- card.prepend(image);
+ card.insertBefore(image,fallback);
 }
 
 const TOPICS=[
@@ -150,11 +172,9 @@ function drawCards(){
   const title=document.createElement('strong');title.textContent=article.title;
   const meta=document.createElement('span');meta.textContent=article.paragraphs.join(' ').split(/\s+/).length+' từ';
   const pill=document.createElement('span');pill.className='pill';pill.textContent=saved[article.id]?'✓ Đã đọc':'Đọc bài';
-  if(article.image||article.photoSearch){
-    const body=document.createElement('div');body.className='article-card-body';
-    body.append(icon,cat,title,meta,pill);button.append(body);
-    if(article.image||article.photoSearch)loadCardPhoto(article,button);
-  }else button.append(icon,cat,title,meta,pill);
+  const body=document.createElement('div');body.className='article-card-body';
+  body.append(cat,title,meta,pill);button.append(body);
+  loadCardPhoto(article,button);
   button.onclick=()=>openArticle(i);$('cards').append(button);
  });
  $('topicCounter').textContent=data.filter(a=>articleTopic(a)===topicId).length+' bài hiện có';
@@ -195,12 +215,20 @@ function openArticle(i){
  $('articleSource').hidden=true;
  $('articleText').replaceChildren();item.paragraphs.forEach(paragraph=>{const p=document.createElement('p');p.textContent=paragraph;$('articleText').append(p)});
  const photo=$('articlePhoto'),img=$('articleImage'),caption=$('articlePhotoCredit');
- photo.hidden=true;img.removeAttribute('src');
+ photo.hidden=false;img.removeAttribute('src');
+ const heroPlaceholder=makeVisualPlaceholder(item);
+ const existing=photo.querySelector('.article-image-placeholder');
+ if(existing)existing.remove();
+ photo.insertBefore(heroPlaceholder,img);
+ img.hidden=true;caption.replaceChildren();
  findFreePhoto(item).then(media=>{
   if(!media||data[index]?.id!==item.id)return;
-  photo.hidden=false;img.src=media.image;img.alt='Ảnh động vật thật: '+(item.photoSearch||item.title);
-  img.onerror=()=>photo.hidden=true;
+  img.alt=media.isTopicFallback?'Ảnh minh họa chung chủ đề '+item.topic:'Ảnh minh họa '+(item.photoSearch||item.title);
+  img.onload=()=>{if(data[index]?.id===item.id){img.hidden=false;heroPlaceholder.hidden=true}};
+  img.onerror=()=>{img.hidden=true;heroPlaceholder.hidden=false};
+  img.src=media.image;
   appendCredit(caption,item,media);
+  if(media.isTopicFallback){caption.append(' · Ảnh chủ đề, không mô tả chính xác từng nội dung.')}
  });
  $('readStatus').textContent=records()[item.id]?'✓ Bạn đã hoàn thành bài này.':'';
  topicId=articleTopic(item);
