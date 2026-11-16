@@ -60,12 +60,12 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
  <div class="article-stats"><span id="articleLevel"></span><span id="articleWords"></span><span id="articleSource"></span></div>
  <figure id="articlePhoto" class="article-hero-photo" hidden><img id="articleImage" alt="" loading="lazy"><figcaption id="articlePhotoCredit"></figcaption></figure>
  <div id="articleText" lang="en"></div>
- <div class="source-box" id="sourceBox"></div>
+ 
  <div class="actions"><button type="button" id="markRead">✓ Đánh dấu đã đọc</button><button type="button" id="nextArticle">Đọc bài tiếp theo</button></div>
  <p class="progress-note" id="readStatus" aria-live="polite"></p></article>
  </section>
 </main>
-<script src="./articles.js?v=20261116-animals30"></script>
+<script src="./articles.js?v=20261116-health30"></script>
 <script>
 (()=>{
 'use strict';const $=id=>document.getElementById(id),data=window.SMARTCOM_READING_ARTICLES||[];
@@ -136,7 +136,7 @@ const TOPICS=[
 {id:'sports',title:'Sports',icon:'⚽',desc:'Thể thao, vận động và học đường'}
 ];
 function articleTopic(x){return x.topic||'science'}
-const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
 const scope=()=>{try{const p=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');return p?.name&&p.className?(p.name+'|'+p.className).toLowerCase():'guest'}catch{return'guest'}};
 const recordKey=()=> 'SC_READING_LIBRARY_V1_'+scope();
 const records=()=>{try{return JSON.parse(localStorage.getItem(recordKey())||'{}')}catch{return{}}};
@@ -192,7 +192,7 @@ function openArticle(i){
  $('articleCategory').textContent=item.category.toUpperCase();
  $('articleTitle').textContent=item.title;$('articleLevel').textContent='Level '+item.level;
  $('articleWords').textContent=item.paragraphs.join(' ').split(/\s+/).length+' words';
- $('articleSource').textContent=item.source||'';$('articleSource').hidden=!item.source;
+ $('articleSource').hidden=true;
  $('articleText').replaceChildren();item.paragraphs.forEach(paragraph=>{const p=document.createElement('p');p.textContent=paragraph;$('articleText').append(p)});
  const photo=$('articlePhoto'),img=$('articleImage'),caption=$('articlePhotoCredit');
  photo.hidden=true;img.removeAttribute('src');
@@ -202,14 +202,6 @@ function openArticle(i){
   img.onerror=()=>photo.hidden=true;
   appendCredit(caption,item,media);
  });
- const sourceBox=$('sourceBox');sourceBox.replaceChildren();
- sourceBox.hidden=!item.sourceUrl;
- if(item.sourceUrl){
-  const label=document.createElement('strong');label.textContent='Nguồn tham khảo: '+(item.source||'NOAA');
-  const link=document.createElement('a');link.textContent='Xem bài báo gốc';link.href=item.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';
-  const note=document.createElement('p');note.textContent='Bài đọc được biên tập bằng tiếng Anh dựa trên nguồn này, không sao chép nguyên văn.';
-  sourceBox.append(label,document.createElement('br'),link,note);
- }
  $('readStatus').textContent=records()[item.id]?'✓ Bạn đã hoàn thành bài này.':'';
  topicId=articleTopic(item);
  $('library').hidden=true;$('topicLibrary').hidden=true;$('reader').hidden=false;
