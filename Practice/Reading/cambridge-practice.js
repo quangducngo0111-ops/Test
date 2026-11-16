@@ -12,7 +12,7 @@ $('back').href='../';
 $('pageLabel').textContent='Reading Passage '+D.passage+' — Bài '+D.folder;
 $('subtitle').textContent=D.title+' · Questions '+beginning+'–'+ending;
 $('title').textContent=D.title;
-$('guide').innerHTML='<b>▤ Reading Practice · Hướng dẫn:</b> Đồng hồ <b>đếm xuôi</b> · Bôi đen văn bản để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Nhấp đúp một từ trong bài đọc</b> để tra nghĩa tiếng Việt · Sau khi nộp bài, xem đáp án và giải thích ngay dưới từng câu.';
+$('guide').innerHTML='<b>▤ Reading Practice · Hướng dẫn:</b> Đồng hồ <b>đếm xuôi</b> · Bôi đen văn bản để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Rê chuột thấy dấu ?; nhấp đúp từ/cụm từ</b> để tra nghĩa hoặc lưu sổ tay · Sau khi nộp bài, xem đáp án và giải thích ngay dưới từng câu.';
 /* Exact structural classes of the existing The History of Glass template. */
 const head=document.querySelector('body > header');
 head.className='top';
@@ -259,10 +259,24 @@ $('submit').addEventListener('click',async()=>{if(submitted)return;if(!confirm('
  const endpoint=D.resultEndpoint||'';if(endpoint){try{await fetch(endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Reading',practiceType:'Reading Passage '+D.passage,practiceId:D.folder,score:String(score),total:String(ending-beginning+1),durationSeconds:String(elapsed),details:JSON.stringify({source:D.id,answers,answerKey:D.answers}),submittedAt:new Date().toISOString()})})}catch(e){console.warn('Could not submit practice result',e)}}});
 $('answerList').addEventListener('click',e=>{const n=e.target.closest('[data-focus]')?.dataset.focus;if(n)focusEvidence(Number(n))});
 const selectionMenu=$('selectionMenu');
+
+const scHighlightColors=[['Vàng','#fff29a'],['Xanh lá','#bbefcb'],['Xanh dương','#b9dbff'],['Hồng','#ffc5dc'],['Tím','#d9c8ff'],['Cam','#ffd4a0']];
+let scChosenColor='#fff29a';
+const scColorStrip=document.createElement('div');scColorStrip.style.cssText='display:flex;align-items:center;gap:5px;padding:2px 5px';
+scColorStrip.setAttribute('aria-label','6 màu highlight');
+for(const [label,color] of scHighlightColors){
+ const chip=document.createElement('button');chip.type='button';
+ chip.title='Màu '+label;chip.setAttribute('aria-label','Highlight '+label);chip.setAttribute('aria-pressed',String(color===scChosenColor));
+ chip.style.cssText='width:22px;height:22px;min-width:22px;border-radius:7px;border:2px solid white;padding:0;background:'+color;
+ chip.onclick=()=>{scChosenColor=color;for(const button of scColorStrip.querySelectorAll('button')){const active=button===chip;button.setAttribute('aria-pressed',String(active));button.style.outline=active?'2px solid #7550ba':'none'}};
+ scColorStrip.append(chip);
+}
+
+selectionMenu.append(scColorStrip);
 const passageMarkupKey=D.id==='cam11-test2-p3'?'_passageMarkup_neuro_paragraphs_v3':'_passageMarkup_v2';
 let markTarget=null;
 const markKey=key+'_questionMarks_v4';
-function resetMenu(){selectionMenu.hidden=true;markTarget=null;for(const button of selectionMenu.querySelectorAll('[data-action]')){button.hidden=false;button.textContent=button.dataset.action==='note'?'📝 Take note':'🖍 Highlight';}}
+function resetMenu(){selectionMenu.hidden=true;markTarget=null;scColorStrip.hidden=false;for(const button of selectionMenu.querySelectorAll('[data-action]')){button.hidden=false;button.textContent=button.dataset.action==='note'?'📝 Take note':'🖍 Highlight';}}
 function getRoot(node){
  const el=node?.nodeType===1?node:node?.parentElement;
  if(!el||el.closest('input,select,textarea,button,.review,.neuro-inline-gap,.selectionMenu'))return null;
@@ -311,6 +325,7 @@ function addAnnotation(action){
  try{
   const el=document.createElement(action==='note'?'span':'mark');
   el.className=action==='note'?'note-anchor':'user-highlight';
+  if(action==='highlight'){el.dataset.scHighlightColor=scChosenColor;el.style.setProperty('background-color',scChosenColor,'important')}
   if(action==='note'){el.dataset.note=note.trim();el.title=note.trim();}
   el.append(range.extractContents());range.insertNode(el);
   persist(root);window.getSelection()?.removeAllRanges();selectedRange=null;selectedZone=null;
@@ -335,7 +350,7 @@ document.addEventListener('click',event=>{
  const target=event.target.closest('mark.user-highlight,span.note-anchor');
  if(!target||window.getSelection()?.toString().trim())return;
  if(!getRoot(target))return;
- markTarget=target;selectedRange=null;selectedZone=null;
+ markTarget=target;selectedRange=null;selectedZone=null;scColorStrip.hidden=true;
  const b1=selectionMenu.querySelector('[data-action="highlight"]'),b2=selectionMenu.querySelector('[data-action="note"]');
  b1.hidden=target.classList.contains('note-anchor');b2.hidden=!b1.hidden;
  b1.textContent='✕ Xóa Highlight';b2.textContent='✕ Xóa Note';
@@ -346,10 +361,75 @@ document.addEventListener('click',event=>{
 const stored=localStorage.getItem(key+passageMarkupKey);
 if(stored)$('source').innerHTML=stored;
 restoreQuestionMarks();
-$('source').addEventListener('dblclick',()=>{
- const word=window.getSelection()?.toString()?.trim();
- if(!word||!/^[a-zA-Z-]{2,30}$/.test(word))return;
- if(confirm('Tra nghĩa tiếng Việt của "'+word+'"?'))window.open('https://translate.google.com/?sl=en&tl=vi&text='+encodeURIComponent(word)+'&op=translate','_blank','noopener');
+
+const scHint=document.createElement('span');scHint.textContent='?';scHint.hidden=true;
+scHint.style.cssText='position:fixed;pointer-events:none;z-index:100009;background:#f0eaff;color:#4e219a;border:1px solid #c8b7ed;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;font:800 12px system-ui';
+document.body.append(scHint);
+document.addEventListener('pointermove',e=>{
+ if(e.pointerType==='touch'||e.buttons||!e.target.closest?.('#source,#questionsSource')||e.target.closest?.('input,button,select,textarea,.note-anchor,mark.user-highlight')){scHint.hidden=true;return}
+ if(window.getSelection()?.toString().trim()){scHint.hidden=true;return}
+ const range=document.caretRangeFromPoint?.(e.clientX,e.clientY);
+ if(!range||range.startContainer.nodeType!==Node.TEXT_NODE||!e.target.contains(range.startContainer)){scHint.hidden=true;return}
+ const text=range.startContainer.textContent||'',p=range.startOffset;
+ if(!/[a-z]/i.test(text[p]||text[p-1]||'')){scHint.hidden=true;return}
+ scHint.hidden=false;scHint.style.left=Math.min(innerWidth-24,e.clientX+12)+'px';scHint.style.top=Math.max(5,e.clientY-23)+'px';
+},{passive:true});
+const scDict=document.createElement('div');
+scDict.hidden=true;
+scDict.style.cssText='position:fixed;z-index:100010;background:white;color:#351b70;border:1px solid #ded2fa;border-radius:15px;padding:14px;box-shadow:0 12px 32px #21123e44;width:min(330px,calc(100vw - 24px));font:14px/1.5 system-ui';
+scDict.innerHTML='<div style="display:flex;justify-content:space-between;gap:10px"><strong data-sc-word></strong><button data-sc-close type="button">×</button></div><div data-sc-meaning style="margin:10px 0"></div><button type="button" data-sc-save style="padding:9px 12px;border:0;border-radius:9px;background:#6737c8;color:#fff">＋ Lưu vào sổ tay</button>';
+document.body.append(scDict);
+scDict.querySelector('[data-sc-close]').onclick=()=>scDict.hidden=true;
+let scLastTerm='',scMeaning='',scReq=0;
+const scMeaningMap={'such as':'chẳng hạn như; ví dụ như','take part in':'tham gia vào','take place':'diễn ra; xảy ra','takes place':'diễn ra','took place':'đã diễn ra','look after':'chăm sóc','according to':'theo; dựa theo','as well as':'cũng như'};
+const scPhrases=Object.keys(scMeaningMap).sort((a,b)=>b.length-a.length);
+function scSelectedTerm(){
+ const selection=window.getSelection();if(!selection?.rangeCount||selection.isCollapsed)return '';
+ const range=selection.getRangeAt(0);
+ const raw=selection.toString().trim().toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g,'');
+ if(!/^[a-z][a-z' -]{0,95}$/.test(raw))return '';
+ if(raw.includes(' ')||range.startContainer!==range.endContainer||range.startContainer.nodeType!==Node.TEXT_NODE)return raw;
+ const source=range.startContainer.textContent.toLowerCase();
+ for(const phrase of scPhrases){
+  let i=source.indexOf(phrase);while(i>=0){
+   const end=i+phrase.length;
+   if(i<=range.startOffset&&end>=range.endOffset&&(i===0||!/[\w]/.test(source[i-1]))&&(end===source.length||!/[\w]/.test(source[end])))return phrase;
+   i=source.indexOf(phrase,i+1);
+  }
+ }
+ return raw;
+}
+$('source').addEventListener('dblclick',e=>{
+ if(e.target.closest('mark.user-highlight,.note-anchor'))return;
+ const term=scSelectedTerm();if(!term)return;
+ e.stopImmediatePropagation();scLastTerm=term;scMeaning=scMeaningMap[term]||'';
+ const rect=window.getSelection().getRangeAt(0).getBoundingClientRect();
+ scDict.style.left=Math.max(10,Math.min(innerWidth-340,rect.left))+'px';
+ scDict.style.top=Math.max(10,Math.min(innerHeight-170,rect.bottom+10))+'px';
+ scDict.hidden=false;scDict.querySelector('[data-sc-word]').textContent=term;
+ scDict.querySelector('[data-sc-meaning]').textContent=scMeaning?'🇻🇳 '+scMeaning:'Đang tra nghĩa...';
+ const id=++scReq;
+ if(scMeaning)return;
+ fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(term)+'&langpair=en%7Cvi').then(r=>r.json()).then(d=>{
+  if(id!==scReq||scDict.hidden)return;
+  scMeaning=String(d?.responseData?.translatedText||'').trim();
+  scDict.querySelector('[data-sc-meaning]').textContent=scMeaning?'🇻🇳 '+scMeaning:'Chưa tìm được nghĩa.';
+ }).catch(()=>{if(id===scReq)scDict.querySelector('[data-sc-meaning]').textContent='Không tải được nghĩa lúc này.'});
 });
+scDict.querySelector('[data-sc-save]').onclick=()=>{
+ if(!scLastTerm)return;
+ let p=null;try{p=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){}
+ const scope=p?.name&&p?.className?(p.name+'|'+p.className).toLowerCase():'guest',store='SC_VOCAB_NOTEBOOK_V1_'+scope;
+ try{
+  const list=JSON.parse(localStorage.getItem(store)||'[]');
+  if(!Array.isArray(list))throw Error('invalid notebook');
+  const i=list.findIndex(item=>item.word===scLastTerm);
+  const item={word:scLastTerm,meaning:scMeaning||'',phonetic:'',partOfSpeech:scLastTerm.includes(' ')?'phrase':'',example:'',savedAt:new Date().toISOString()};
+  if(i>=0)list[i]={...list[i],...item,meaning:item.meaning||list[i].meaning};else list.unshift(item);
+  localStorage.setItem(store,JSON.stringify(list));scDict.querySelector('[data-sc-meaning]').textContent='✓ Đã lưu vào sổ tay';
+ }catch(err){scDict.querySelector('[data-sc-meaning]').textContent='Không thể lưu từ trên trình duyệt này.'}
+};
+document.addEventListener('pointerdown',e=>{if(!scDict.hidden&&!scDict.contains(e.target)&&!e.target.closest('#source'))scDict.hidden=true},true);
+
 updateNav();
 })();
