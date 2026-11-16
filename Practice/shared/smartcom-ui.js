@@ -25,19 +25,26 @@ const nestedHub=(
 );
 if(pathname===root.pathname||nestedHub||hubPaths.some(p=>pathname.endsWith(p)||pathname.endsWith(p.slice(0,-1))))document.body.classList.add('sc-hub-refresh');
 const groups=[
- {heading:'Thi thử IELTS',links:[
-  ['📖','Reading Test','Read01/'],['🎧','Listening Test','Lis01/C21T4/'],
-  ['🎙️','Speaking Tests','?skill=speaking'],['✍️','Writing','Practice/WritingTask2/']
+ {heading:'Mock Tests',links:[
+  ['🎧','Listening Test','?skill=listening'],['📖','Reading Test','?skill=reading'],
+  ['✍️','Writing Test','?skill=writing'],['🎙️','Speaking Test','?skill=speaking']
  ]},
- {heading:'Kho luyện tập',links:[
-  ['💬','Speaking','Practice/Speaking/'],
-  ['🧠','Vocabulary','Practice/Vocabulary/'],['📗','Grammar','Practice/Grammar/'],
-  ['📚','Reading Practice','Practice/Reading/ReadingPractice3Passages/'],
+ {heading:'Skill Practice',links:[
   ['🎧','Listening Practice','Practice/Listening/'],
-  ['📈','Writing Task 1','Practice/WritingTask1/'],['📝','Writing Task 2','Practice/WritingTask2/']
+  ['📖','Reading Practice','Practice/Reading/'],
+  ['📈','Writing Task 1','Practice/WritingTask1/'],['✍️','Writing Task 2','Practice/WritingTask2/'],
+  ['💬','Speaking Practice','Practice/Speaking/']
  ]},
- {heading:'Điều hướng',links:[['🏠','Trang chủ',''],['🧭','Kho luyện tập','Practice/']]}
-];
+ {heading:'Foundations',links:[
+  ['🧩','Foundations','Foundations/'],
+  ['🎙️','Pre-IELTS Listening','Practice/Listening/Intensive%20Listening/'],
+  ['🌍','Topic-based Listening','Foundations/#topicListening'],
+  ['📰','Reading Library','Foundations/#readingLibrary'],
+  ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
+  ['📒','Vocabulary Notebook','Vocabulary-Notebook/']
+ ]},
+ {heading:'Điều hướng',links:[['🏠','Trang chủ',''],['🎯','Skill Practice','Practice/']]}
+]
 
 /* One continuous capsule: the original round lightning button expands upward. */
 const shell=document.createElement('nav');
@@ -53,7 +60,7 @@ tools.setAttribute('aria-label','Các lối tắt');
 for(const group of groups){
  const heading=document.createElement('div');
  heading.className='sc-capsule-divider';
- heading.textContent=group.heading==='Thi thử IELTS'?'TEST':group.heading==='Kho luyện tập'?'HỌC':'KHÁC';
+ heading.textContent=group.heading==='Mock Tests'?'TEST':group.heading==='Skill Practice'?'PRACTICE':group.heading==='Foundations'?'FOUNDATIONS':'NAV';
  heading.setAttribute('aria-hidden','true');
  tools.append(heading);
  for(const [icon,label,path] of group.links){
