@@ -124,7 +124,7 @@ function navigate(section,changeUrl=true){
  }
  window.scrollTo({top:0,behavior:'instant'});
 }
-function stop(){if('speechSynthesis' in window)speechSynthesis.cancel();utterance=null}
+function stop(){speakingSequence++;if('speechSynthesis' in window)speechSynthesis.cancel();utterance=null}
 function renderTopics(){
  $('topics').replaceChildren();
  topics.forEach((topic,i)=>{
@@ -187,7 +187,72 @@ function speak(text){
  const voices=speechSynthesis.getVoices();utterance.voice=voices.find(v=>v.lang.toLowerCase()==='en-gb')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'))||null;
  speechSynthesis.speak(utterance);
 }
-$('playAll').onclick=()=>speak(current().text);
+
+let activeVideoLoad=0, speakingSequence=0;
+const licenseOK=x=>/^(CC0|CC BY|CC BY-SA|Public domain|PD-)/i.test(x||'')&&!/(NC|ND|NonCommercial|NoDerivatives)/i.test(x||'');
+const validWords=title=>title.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>3&&!['this','that','about','with','from','your','their','story','what','when','where'].includes(w));
+async function loadLessonVideo(topic,lesson){
+ const request=++activeVideoLoad,video=$('lessonVideo'),fallback=$('videoFallback');
+ video.pause();video.removeAttribute('src');video.classList.remove('available');video.load();
+ fallback.hidden=true;
+ $('videoStatus').textContent='Đang tìm video mở theo nội dung bài...';
+ $('videoSubtitle').textContent='Nhấn Nghe toàn bài để nghe lời đọc và xem phụ đề.';
+ const words=validWords(lesson.title);
+ if(!words.length)return showNoVideo(topic,lesson);
+ const query=new URL('https://commons.wikimedia.org/w/api.php');
+ const options={action:'query',generator:'search',gsrsearch:'filetype:video '+words.slice(0,2).join(' '),
+  gsrnamespace:6,gsrlimit:15,prop:'imageinfo',iiprop:'url|mime|size|extmetadata',
+  iiextmetadatafilter:'LicenseShortName|LicenseUrl|Artist',format:'json',origin:'*'};
+ Object.entries(options).forEach(pair=>query.searchParams.set(pair[0],pair[1]));
+ let pages=[];
+ try{const response=await fetch(query.href);if(!response.ok)throw Error('Commons API error');
+  pages=Object.values((await response.json()).query?.pages||{})}catch(error){if(request===activeVideoLoad)showNoVideo(topic,lesson);return}
+ if(request!==activeVideoLoad)return;
+ const clips=pages.map(p=>{
+  const info=p.imageinfo?.[0],meta=info?.extmetadata||{},license=meta.LicenseShortName?.value||'';
+  if(!info||!info.mime?.startsWith('video/')||info.size>85000000||!licenseOK(license))return null;
+  const filename=(p.title||'').toLowerCase();
+  const score=words.filter(w=>filename.includes(w)).length;
+  if(score<1)return null;
+  const authorHTML=meta.Artist?.value||'';
+  const holder=document.createElement('div');holder.innerHTML=authorHTML;
+  const author=holder.textContent.trim().slice(0,150)||'Xem tác giả trong trang gốc';
+  return {score,url:info.url,title:p.title,license,author,page:info.descriptionurl,licenseUrl:meta.LicenseUrl?.value||''};
+ }).filter(Boolean).sort((a,b)=>b.score-a.score);
+ const selected=clips[0];
+ if(!selected){showNoVideo(topic,lesson);return}
+ video.src=selected.url;video.classList.add('available');
+ video.oncanplay=()=>{if(request===activeVideoLoad)video.play().catch(()=>{})};
+ video.onerror=()=>{if(request===activeVideoLoad)showNoVideo(topic,lesson)};
+ fallback.hidden=true;$('videoStatus').textContent=selected.license;
+ const credit=$('videoCredit');credit.replaceChildren();
+ const link=document.createElement('a');link.href=selected.page||'https://commons.wikimedia.org/';
+ link.target='_blank';link.rel='noopener';link.textContent=selected.title;
+ credit.append('Video: ',link,' · '+selected.author+' · '+selected.license+' · Video câm; phần đọc là audio riêng.');
+ if(selected.licenseUrl){const lic=document.createElement('a');lic.href=selected.licenseUrl;lic.target='_blank';lic.rel='noopener';lic.textContent=' Xem giấy phép';credit.append(lic)}
+}
+function showNoVideo(topic,lesson){
+ const video=$('lessonVideo');video.pause();video.classList.remove('available');
+ $('videoFallback').hidden=false;$('fallbackIcon').textContent=topic.icon;
+ $('fallbackTitle').textContent=lesson.title;
+ $('videoStatus').textContent='Chưa có video phù hợp đã kiểm chứng';
+ $('videoCredit').textContent='Chưa tìm được video khớp nội dung với giấy phép phù hợp. Vẫn có thể nghe audio và luyện dictation.';
+}
+function playFullLesson(){
+ if(!('speechSynthesis' in window)){alert('Trình duyệt chưa hỗ trợ phát audio tiếng Anh');return}
+ stop();const run=++speakingSequence,lines=currentSentences();let i=0;
+ function readNext(){
+  if(run!==speakingSequence||i>=lines.length)return;
+  const line=lines[i++];$('videoSubtitle').textContent=line;
+  const u=new SpeechSynthesisUtterance(line);u.lang='en-GB';u.rate=Number($('speed').value);utterance=u;
+  const voices=speechSynthesis.getVoices();u.voice=voices.find(v=>v.lang.toLowerCase()==='en-gb')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'))||null;
+  u.onend=readNext;u.onerror=()=>{$('videoSubtitle').textContent='Không phát được audio, vui lòng thử lại'};
+  speechSynthesis.speak(u);
+ }
+ readNext();
+}
+
+$('playAll').onclick=playFullLesson;
 $('listenSentence').onclick=()=>speak(currentSentences()[sentenceIndex]);
 $('stopAudio').onclick=stop;
 $('check').onclick=()=>{
