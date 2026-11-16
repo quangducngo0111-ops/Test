@@ -252,6 +252,15 @@ function markReadingTerms(container){
  });
 }
 window.scMarkReadingTerms=markReadingTerms;
+const readingBody=document.getElementById('articleText');
+if(readingBody){
+ markReadingTerms(readingBody);
+ const readingObserver=new MutationObserver(()=>{
+  if(readingBody.dataset.scLexemes==='1'&&readingBody.querySelector('.sc-lexeme'))return;
+  markReadingTerms(readingBody);
+ });
+ readingObserver.observe(readingBody,{childList:true});
+}
 document.addEventListener('dblclick',e=>{
  const span=e.target.closest?.('.sc-lexeme');if(!span||isExam())return;
  e.preventDefault();e.stopImmediatePropagation();
