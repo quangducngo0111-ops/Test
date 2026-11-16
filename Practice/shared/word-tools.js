@@ -95,8 +95,8 @@ function addText(parent,type,value,cls){const el=document.createElement(type);if
 function saveWord(){
  if(!word)return;
  const list=load();
- const meaning=entry?.meanings?.[0]?.definitions?.[0]?.definition||'';
- const item={word,meaning:vietnamese||meaning,phonetic:entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'',partOfSpeech:entry?.meanings?.[0]?.partOfSpeech||'',example:entry?.meanings?.[0]?.definitions?.find(x=>x.example)?.example||'',savedAt:new Date().toISOString()};
+ const meaning=currentPhrase()?.[1]||entry?.meanings?.[0]?.definitions?.[0]?.definition||'';
+ const item={word,meaning:vietnamese||currentPhrase()?.[0]||meaning,phonetic:entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'',partOfSpeech:currentPhrase()?'phrase':entry?.meanings?.[0]?.partOfSpeech||'',example:currentPhrase()?.[2]||entry?.meanings?.[0]?.definitions?.find(x=>x.example)?.example||'',savedAt:new Date().toISOString()};
  const i=list.findIndex(x=>x.word===word);
  if(i<0)list.unshift(item);else list[i]={...list[i],...Object.fromEntries(Object.entries(item).filter(([k,v])=>k==='savedAt'||v))};
  if(save(list)){menu.hidden=true;if(modal.hidden){modal.replaceChildren();addText(modal,'h2','✓ Đã lưu '+word);modal.append(buttonEl('Mở sổ tay',()=>location.href=new URL('Vocabulary-Notebook/',root).href));displayPanel()}else{const p=addText(modal,'p','✓ Đã lưu vào sổ tay');position(modal)}}else alert('Không thể lưu từ trên trình duyệt này.');
@@ -104,20 +104,21 @@ function saveWord(){
 function render(){
  modal.replaceChildren();
  const head=document.createElement('div');head.className='dict-head';addText(head,'h2',word);head.append(buttonEl('×',close));modal.append(head);
- addText(modal,'p',entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'IPA chưa có sẵn');
- if(vietnamese)addText(modal,'p','🇻🇳 Nghĩa tiếng Việt (tham khảo): '+vietnamese);
+ if(!word.includes(' ')||entry?.phonetic)addText(modal,'p',entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'IPA chưa có sẵn');
+ if(vietnamese||currentPhrase())addText(modal,'p','🇻🇳 Nghĩa tiếng Việt: '+(currentPhrase()?.[0]||vietnamese));
  const actions=document.createElement('div');actions.className='actions';
  const sounds=(entry?.phonetics||[]).filter(x=>x.audio).slice(0,2);
  sounds.forEach((p,i)=>actions.append(buttonEl('🔊 Phát âm '+(i+1),()=>{const a=new Audio(p.audio.startsWith('//')?'https:'+p.audio:p.audio);a.play().catch(()=>speak(word))})));
  if(!sounds.length)actions.append(buttonEl('🔊 Phát âm',()=>speak(word)));
  actions.append(buttonEl('＋ Lưu vào sổ tay',saveWord));modal.append(actions);
- if(!entry){addText(modal,'p','Chưa tìm thấy nghĩa hoặc nguồn từ điển đang không khả dụng.');}
+ if(currentPhrase()){const section=document.createElement('div');section.className='sense';addText(section,'b','Phrase / Idiom');addText(section,'p',currentPhrase()[1]);addText(section,'small','Example: '+currentPhrase()[2]);modal.append(section)}
+ if(!entry&&!currentPhrase()){addText(modal,'p',vietnamese?'Nghĩa dịch tham khảo; chưa có định nghĩa từ điển cho cụm từ này.':'Chưa tìm được định nghĩa. Có thể lưu vào sổ tay và bổ sung nghĩa sau.');}
  for(const m of (entry?.meanings||[]).slice(0,6)){
   const section=document.createElement('div');section.className='sense';addText(section,'b',m.partOfSpeech||'Meaning');
   (m.definitions||[]).slice(0,4).forEach(d=>{addText(section,'p','• '+d.definition);if(d.example)addText(section,'small','Example: '+d.example)});
   modal.append(section);
  }
- addText(modal,'small','Nguồn Free Dictionary API / Wiktionary.');position(modal);
+ addText(modal,'small',currentPhrase()?'Nghĩa và ví dụ được biên tập cho bài học.':'Nguồn Free Dictionary API / bản dịch tham khảo.');position(modal);
 }
 lookup.onclick=async()=>{
  menu.hidden=true;const requested=word,id=++requestId;
