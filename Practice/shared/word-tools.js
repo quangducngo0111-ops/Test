@@ -120,37 +120,45 @@ function render(){
  }
  addText(modal,'small',currentPhrase()?'Nghĩa và ví dụ được biên tập cho bài học.':'Nguồn Free Dictionary API / bản dịch tham khảo.');position(modal);
 }
-lookup.onclick=async()=>{
- menu.hidden=true;const requested=word,id=++requestId;
- modal.textContent='Đang tra “'+word+'”…';displayPanel();
- entry=dictionaryCache.get(word)||null;vietnamese='';
- if(entry){render();return}
+async function translatePhrase(text){
  try{
-  const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(requested),{cache:'force-cache'});
-  if(response.ok){const data=await response.json();entry=data?.[0]||null;if(entry)dictionaryCache.set(requested,entry)}
+  const response=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(text.slice(0,220))+'&langpair=en%7Cvi');
+  if(response.ok){const json=await response.json();const translated=json?.responseData?.translatedText||'';return translated.toLowerCase()===text.toLowerCase()?'':translated}
  }catch(e){}
- if(id!==requestId||requested!==word||modal.hidden)return;
- render();
- if(entry){
-  const first=entry.meanings?.[0]?.definitions?.[0]?.definition||requested;
+ return '';
+}
+async function fetchMeaning(term,id){
+ entry=dictionaryCache.get(term)||null;vietnamese=currentPhrase()?.[0]||'';
+ if(!entry){
   try{
-   const resp=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(first.slice(0,240))+'&langpair=en%7Cvi');
-   if(resp.ok){const d=await resp.json();const v=d?.responseData?.translatedText||'';if(v.toLowerCase()!==first.toLowerCase())vietnamese=v}
+   const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(term),{cache:'force-cache'});
+   if(response.ok){entry=(await response.json())?.[0]||null;if(entry)dictionaryCache.set(term,entry)}
   }catch(e){}
-  if(id===requestId&&requested===word&&!modal.hidden)render();
  }
+ if(id!==requestId||term!==word)return false;
+ if(!vietnamese){
+  const toTranslate=term.includes(' ')?term:entry?.meanings?.[0]?.definitions?.[0]?.definition||term;
+  vietnamese=await translatePhrase(toTranslate);
+ }
+ return id===requestId&&term===word;
+}
+lookup.onclick=async()=>{
+ menu.hidden=true;
+ const requested=word,id=++requestId;
+ modal.textContent='Đang tra “'+requested+'”…';displayPanel();
+ if(currentPhrase()){vietnamese=currentPhrase()[0];entry=null;render();return}
+ const ok=await fetchMeaning(requested,id);
+ if(ok&&!modal.hidden)render();
 };
 add.onclick=async()=>{
- const requested=word;
- if(!entry){try{const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word));if(response.ok)entry=(await response.json())?.[0]||null}catch(e){}}
- if(requested===word&&entry&&!vietnamese){
-  try{const definition=entry.meanings?.[0]?.definitions?.[0]?.definition||word;
-   const resp=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(definition.slice(0,240))+'&langpair=en%7Cvi');
-   if(resp.ok){const d=await resp.json();vietnamese=d?.responseData?.translatedText||'';if(vietnamese.toLowerCase()===definition.toLowerCase())vietnamese=''}
-  }catch(e){}
- }
- if(requested===word)saveWord();
+ const requested=word,id=++requestId;
+ menu.hidden=true;
+ if(currentPhrase()){vietnamese=currentPhrase()[0];entry=null;saveWord();return}
+ modal.textContent='Đang lưu “'+requested+'”…';displayPanel();
+ const ok=await fetchMeaning(requested,id);
+ if(ok)saveWord();
 };
+
 document.addEventListener('dblclick',e=>{
  if(isExam()||e.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
  const selected=norm(window.getSelection()?.toString());
