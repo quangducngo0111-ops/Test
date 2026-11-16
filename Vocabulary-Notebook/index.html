@@ -1,0 +1,109 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Vocabulary Notebook · Smartcom</title><style>
+:root{font-family:Inter,system-ui,Arial,sans-serif;color:#2f2455;background:#f7f6fd}*{box-sizing:border-box}body{margin:0}
+header{background:#fff;border-bottom:1px solid #e5dbf0;padding:17px max(16px,calc((100vw - 1080px)/2));display:flex;justify-content:space-between;gap:12px;align-items:center}
+a{color:#4b2795;text-decoration:none;font-weight:850}
+main{max-width:1080px;margin:auto;padding:25px 16px 70px}.hero{background:linear-gradient(112deg,#411493,#7845d6);color:#fff;border-radius:24px;padding:30px}
+.hero h1{margin:5px 0;font-size:clamp(28px,4vw,41px)}.hero p{margin:5px 0;color:#ece3ff}
+.panel{background:#fff;border:1px solid #e3d9ed;border-radius:20px;padding:21px;margin-top:20px;box-shadow:0 10px 24px #2d17580d}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,select,input{font:inherit}button{border:1px solid #d4c5e8;border-radius:12px;padding:10px 14px;background:#f0eafd;color:#5423ae;font-weight:850;cursor:pointer}
+button.primary{background:#6431cc;color:#fff;border-color:#6431cc}button:disabled{opacity:.48;cursor:not-allowed}
+input[type=search]{padding:11px;border:1px solid #dbd1e8;border-radius:12px;min-width:200px}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:17px}
+.word{border:1px solid #e2dbec;background:#fcfbff;border-radius:15px;padding:13px;display:flex;align-items:flex-start;gap:12px}
+.word label{display:flex;gap:10px;align-items:start;flex:1;cursor:pointer}
+.word input{accent-color:#6834c7;margin-top:6px}.word strong{font-size:17px;color:#3c1686;display:block}.word small{color:#796b8e}.word p{margin:5px 0;color:#575070;font-size:13px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.dim{font-size:12px;color:#7d7090}.game{border:1px solid #e1d5f3;background:#f8f4ff;border-radius:17px;padding:23px;margin-top:12px}
+.game h3{font-size:25px;color:#3d1591}.game .choices{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.game .choices button{text-align:left;background:#fff;min-height:56px}
+.game .choices button:disabled{opacity:1}.game .choices button.correct{background:#dff8e8;border-color:#39a56d}.game .choices button.wrong{background:#ffe4ea;border-color:#c84c66}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}.match button{background:white;min-height:56px;text-align:left}.match button.selected{background:#e0d0ff;border-color:#6933c7}.match button.matched{background:#dff6e9;border-color:#3c9e6c}
+[hidden]{display:none!important}@media(max-width:750px){.list,.game .choices{grid-template-columns:1fr}}
+</style></head><body>
+<header><a href="../">← Trang chủ</a><strong>📒 My Vocabulary Notebook</strong><a href="../Foundations/">Foundations</a></header>
+<main><section class="hero"><h1>Sổ tay từ vựng</h1><p>Nhấp đúp vào từ ở các trang học → Thêm vào sổ tay → chọn từ → chơi game để ghi nhớ.</p></section>
+<section class="panel"><div class="toolbar"><div><h2>Những từ đã lưu</h2><p class="dim" id="scope">Dữ liệu lưu trong trình duyệt theo tên và lớp của học sinh.</p></div><span id="count">0 từ</span></div>
+<div class="toolbar"><div class="tools"><input type="search" id="search" placeholder="Tìm từ trong sổ tay"><button id="all">Chọn tất cả</button><button id="none">Bỏ chọn</button></div><span id="selectedCount">0 từ đã chọn</span></div>
+<div class="list" id="words"></div><p class="dim" id="empty"></p></section>
+<section class="panel"><div class="toolbar"><div><h2>Học qua game</h2><p class="dim">Chọn ít nhất một từ rồi chọn trò chơi.</p></div><span id="gameCount">0 từ</span></div>
+<div class="row"><button data-mode="cards" class="primary">🃏 Flashcards</button><button data-mode="quiz">🧠 Meaning Quiz</button><button data-mode="match">🧩 Matching Game</button></div>
+<div id="game" class="game" hidden></div>
+</section></main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const profile=()=>{try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){return null}};
+const key=()=>{const p=profile();return 'SC_VOCAB_NOTEBOOK_V1_'+(p?.name&&p?.className?(p.name+'|'+p.className).toLowerCase():'guest')};
+const load=()=>{try{const x=JSON.parse(localStorage.getItem(key())||'[]');return Array.isArray(x)?x:[]}catch(e){return []}};
+const save=v=>localStorage.setItem(key(),JSON.stringify(v));
+const norm=x=>String(x||'').trim().toLowerCase();
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let words=load(),chosen=new Set(),gameWords=[],gameIndex=0,score=0,turned=false,matchPick=null,matches=0;
+const speech=w=>{if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(w);u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)};
+const shuffled=items=>[...items].sort(()=>Math.random()-.5);
+const p=profile();if(p?.name)$('scope').textContent='Hồ sơ: '+p.name+' · '+p.className+' · Lưu trên thiết bị này (không đồng bộ tài khoản).';
+function render(){
+ const term=norm($('search').value),list=words.filter(x=>norm(x.word).includes(term));
+ $('words').innerHTML=list.map(x=>'<div class="word"><label><input type="checkbox" data-word="'+esc(x.word)+'" '+(chosen.has(x.word)?'checked':'')+'><span><strong>'+esc(x.word)+'</strong><small>'+esc(x.phonetic||'')+' '+esc(x.partOfSpeech||'')+'</small><p>'+esc(x.meaning||'Chưa có nghĩa; hãy tra lại từ ở trang học.')+'</p></span></label><div class="tools"><button type="button" data-hear="'+esc(x.word)+'">🔊</button><button type="button" data-delete="'+esc(x.word)+'">×</button></div></div>').join('');
+ $('empty').textContent=words.length?'':'Chưa có từ vựng nào. Hãy nhấp đúp vào từ tiếng Anh ở một trang bài học và chọn “Thêm vào sổ tay”.';
+ $('count').textContent=words.length+' từ';$('selectedCount').textContent=chosen.size+' từ đã chọn';$('gameCount').textContent=chosen.size+' từ';
+ document.querySelectorAll('[data-word]').forEach(x=>x.onchange=()=>{x.checked?chosen.add(x.dataset.word):chosen.delete(x.dataset.word);render()});
+ document.querySelectorAll('[data-hear]').forEach(x=>x.onclick=()=>speech(x.dataset.hear));
+ document.querySelectorAll('[data-delete]').forEach(x=>x.onclick=()=>{if(confirm('Xóa từ "'+x.dataset.delete+'" khỏi sổ tay?')){words=words.filter(w=>w.word!==x.dataset.delete);chosen.delete(x.dataset.delete);save(words);render()}});
+}
+$('search').oninput=render;
+$('all').onclick=()=>{words.forEach(x=>chosen.add(x.word));render()};
+$('none').onclick=()=>{chosen.clear();render()};
+function text(parent,tag,value){const el=document.createElement(tag);el.textContent=value;parent.append(el);return el}
+function btn(parent,label,click){const el=document.createElement('button');el.textContent=label;el.onclick=click;parent.append(el);return el}
+function finishGame(){const box=$('game');box.replaceChildren();text(box,'h3','Hoàn thành! 🎉');text(box,'p','Bạn đã trả lời đúng '+score+' lượt.');btn(box,'Chơi lại',()=>runGame(currentMode))}
+let currentMode='cards';
+function runGame(mode){
+ gameWords=shuffled(words.filter(x=>chosen.has(x.word)&&x.word));if(!gameWords.length){alert('Vui lòng chọn ít nhất một từ trước khi bắt đầu.');return}
+ currentMode=mode;gameIndex=0;score=0;turned=false;$('game').hidden=false;
+ if(mode==='match'&&gameWords.length<2){alert('Matching Game cần chọn ít nhất 2 từ.');return}
+ if(mode==='quiz'&&gameWords.length<2){alert('Meaning Quiz cần chọn ít nhất 2 từ.');return}
+ mode==='match'?drawMatch():drawRound();
+ $('game').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function drawRound(){
+ if(gameIndex>=gameWords.length){finishGame();return}
+ const box=$('game');box.replaceChildren();const item=gameWords[gameIndex];text(box,'p','Từ '+(gameIndex+1)+' / '+gameWords.length);
+ if(currentMode==='cards'){
+  text(box,'h3',turned?(item.meaning||'Chưa có nghĩa'):item.word);
+  if(turned)text(box,'p',item.word+' · '+(item.phonetic||''));
+  btn(box,'🔊 Nghe từ',()=>speech(item.word));
+  btn(box,turned?'Từ tiếp theo →':'Lật thẻ xem nghĩa',()=>{if(turned){gameIndex++;turned=false}else{turned=true;score++}drawRound()});
+ }else{
+  text(box,'h3',item.word);
+  const available=shuffled(gameWords.filter(x=>x.word!==item.word)).slice(0,3);
+  const options=shuffled([item,...available]);
+  const grid=document.createElement('div');grid.className='choices';box.append(grid);
+  options.forEach(x=>btn(grid,x.meaning||x.word,()=>{
+   if(x.word===item.word)score++;
+   grid.querySelectorAll('button').forEach(b=>{b.disabled=true;if(b.textContent===(item.meaning||item.word))b.classList.add('correct');else if(b===event?.target)b.classList.add('wrong')});
+   btn(box,'Câu tiếp →',()=>{gameIndex++;drawRound()});
+  }));
+ }
+}
+function drawMatch(){
+ const pool=gameWords.slice(0,Math.min(6,gameWords.length));
+ const box=$('game');box.replaceChildren();text(box,'h3','Matching Game');text(box,'p','Ghép từ tiếng Anh và nghĩa tương ứng.');
+ matches=0;matchPick=null;const grid=document.createElement('div');grid.className='match';box.append(grid);
+ const left=document.createElement('div'),right=document.createElement('div');grid.append(left,right);
+ const meanings=shuffled(pool);
+ const select=(button,item,side)=>{
+  if(button.classList.contains('matched'))return;
+  if(!matchPick){button.classList.add('selected');matchPick={button,item,side};return}
+  if(matchPick.side===side){matchPick.button.classList.remove('selected');button.classList.add('selected');matchPick={button,item,side};return}
+  const prev=matchPick;matchPick=null;prev.button.classList.remove('selected');
+  if(prev.item.word===item.word){button.classList.add('matched');prev.button.classList.add('matched');button.disabled=true;prev.button.disabled=true;matches++;score++;if(matches===pool.length)btn(box,'Hoàn thành →',finishGame)}
+  else{text(box,'p','Chưa đúng, hãy thử lại.')};
+ };
+ pool.forEach(x=>{const b=btn(left,x.word,()=>select(b,x,'word'));b.style.display='block';b.style.width='100%';b.style.marginBottom='8px'});
+ meanings.forEach(x=>{const b=btn(right,x.meaning||x.word,()=>select(b,x,'meaning'));b.style.display='block';b.style.width='100%';b.style.marginBottom='8px'});
+}
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>runGame(b.dataset.mode));render();
+</script>
+<script src="../Practice/shared/smartcom-ui.js?v=20261116-notebook"></script>
+</body></html>
