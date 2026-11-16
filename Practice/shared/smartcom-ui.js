@@ -170,6 +170,44 @@ document.body.append(shell);
     if(start && !document.querySelector('.sc-student-identified'))start.parentNode.insertBefore(message,start);
   }
 })();
+/* Hide non-functional arrow ornaments across all Smartcom navigation surfaces.
+   Preserve meaningful controls: their text and click handlers remain intact.
+   Runs again for dynamically generated exercise cards. */
+(function removeDecorativeArrows(){
+ const style=document.createElement('style');
+ style.textContent='.card .arrow,.card .chevron,.card .arrow-icon,.portal-category .arrow-icon{display:none!important}';
+ document.head.append(style);
+ const glyphs=/[\\s\\u00a0]*[→←↗➜➔⟶➝➞➟⇢⇠][\\s\\u00a0]*/g;
+ function scrub(scope){
+  const nodes=[];
+  if(scope.matches?.('a,button,[role="button"],.go,.portal-action'))nodes.push(scope);
+  if(scope.querySelectorAll)nodes.push(...scope.querySelectorAll('a,button,[role="button"],.go,.portal-action'));
+  for(const parent of nodes){
+   if(parent.matches?.('.arrow,.chevron,.arrow-icon') && /^[\\s→←↗➜➔⟶➝➞➟⇢⇠]*$/.test(parent.textContent||'')){parent.remove();continue}
+   const walker=document.createTreeWalker(parent,NodeFilter.SHOW_TEXT);
+   const texts=[];let n;
+   while((n=walker.nextNode()))if(!n.parentElement?.closest('script,style,textarea,code,pre'))texts.push(n);
+   for(const t of texts){
+    const value=t.nodeValue;
+    if(/[→←↗➜➔⟶➝➞➟⇢⇠]/.test(value)){
+      const cleaned=value.replace(glyphs,' ').replace(/\\s{2,}/g,' ');
+      if(cleaned!==value)t.nodeValue=cleaned;
+    }
+   }
+  }
+ }
+ scrub(document.body);
+ const observer=new MutationObserver(records=>{
+  const toScan=new Set();
+  for(const record of records){
+   if(record.type==='characterData'){const node=record.target.parentElement;if(node?.closest('a,button,[role="button"],.go,.portal-action'))toScan.add(node.closest('a,button,[role="button"],.go,.portal-action'))}
+   else for(const node of record.addedNodes)if(node.nodeType===1)toScan.add(node);
+  }
+  for(const node of toScan)scrub(node);
+ });
+ observer.observe(document.body,{childList:true,subtree:true,characterData:true});
+})();
+
 // Load vocabulary selection/dictionary on learning pages and the main portal.
 if(!document.querySelector('script[data-sc-word-tools]')){
  const vocabScript=document.createElement('script');
