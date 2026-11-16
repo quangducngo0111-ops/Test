@@ -1,5 +1,5 @@
 <!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Vocabulary Notebook · Smartcom</title><style>
+<title>My Vocabulary Notebook · Smartcom</title><meta name="theme-color" content="#3b0e90"><link rel="manifest" href="./manifest.webmanifest"><style>
 :root{font-family:Inter,system-ui,Arial,sans-serif;color:#2f2455;background:#f7f6fd}*{box-sizing:border-box}body{margin:0}
 header{background:#fff;border-bottom:1px solid #e5dbf0;padding:17px max(16px,calc((100vw - 1080px)/2));display:flex;justify-content:space-between;gap:12px;align-items:center}
 a{color:#4b2795;text-decoration:none;font-weight:850}
@@ -42,6 +42,7 @@ input[type=search]{padding:11px;border:1px solid #dbd1e8;border-radius:12px;min-
 <button type="button" id="stopReminder">Dừng nhắc</button>
 </div></div>
 <div class="reminder-status" id="reminderStatus" role="status" aria-live="polite">Chưa có lịch nhắc từ hôm nay.</div>
+<div class="reminder-actions" style="margin-top:12px"><button type="button" id="installNotebook" hidden>Cài Sổ tay trên thiết bị</button><span class="dim" id="installHelp">Trên iPhone/iPad: Share → Add to Home Screen. Trên máy tính: tìm biểu tượng cài ứng dụng trong thanh địa chỉ nếu trình duyệt hỗ trợ.</span></div>
 <p class="dim">Thông báo hoạt động khi website đang mở trên trình duyệt hoặc ứng dụng web. Để nhận thông báo khi đã đóng hoàn toàn ứng dụng, cần bổ sung dịch vụ Web Push máy chủ. Hãy cho phép thông báo khi trình duyệt hỏi.</p>
 </section>
 <section class="panel"><div class="toolbar"><div><h2>Học qua game</h2><p class="dim">Chọn ít nhất một từ rồi chọn trò chơi.</p></div><span id="gameCount">0 từ</span></div>
@@ -156,6 +157,21 @@ $('stopReminder').onclick=()=>{
  const service=window.scVocabReminders,plan=service?.get?.();if(!plan)return;
  plan.enabled=false;plan.completedAt=null;service.put(plan);reminderUI();
 };
+
+let installPrompt=null;
+window.addEventListener('beforeinstallprompt',event=>{
+ event.preventDefault();installPrompt=event;$('installNotebook').hidden=false;
+});
+$('installNotebook').onclick=async()=>{
+ if(!installPrompt)return;
+ installPrompt.prompt();await installPrompt.userChoice;
+ installPrompt=null;$('installNotebook').hidden=true;
+};
+window.addEventListener('appinstalled',()=>{$('installNotebook').hidden=true;$('installHelp').textContent='Sổ tay đã được cài trên thiết bị này.'});
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+
 window.addEventListener('sc-vocab-reminder-updated',reminderUI);
 window.addEventListener('storage',reminderUI);
 
