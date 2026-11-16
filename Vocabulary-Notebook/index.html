@@ -19,14 +19,14 @@ input[type=search]{padding:11px;border:1px solid #dbd1e8;border-radius:12px;min-
 .game .choices button:disabled{opacity:1}.game .choices button.correct{background:#dff8e8;border-color:#39a56d}.game .choices button.wrong{background:#ffe4ea;border-color:#c84c66}
 .match{display:grid;grid-template-columns:1fr 1fr;gap:10px}.match button{background:white;min-height:56px;text-align:left}.match button.selected{background:#e0d0ff;border-color:#6933c7}.match button.matched{background:#dff6e9;border-color:#3c9e6c}
 [hidden]{display:none!important}@media(max-width:750px){.list,.game .choices{grid-template-columns:1fr}}
-</style></head><body>
+.game-catalog{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}.game-catalog button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:148px;padding:14px;background:linear-gradient(155deg,#fff,#f4edff);border:1px solid #ded0f3;border-radius:16px;text-align:center}.game-catalog button strong{font-size:13px;color:#371475}.game-catalog button small{font-size:10px;color:#746589}@media(max-width:850px){.game-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}</style></head><body>
 <header><a href="../">← Trang chủ</a><strong>📒 My Vocabulary Notebook</strong><a href="../Foundations/">Foundations</a></header>
 <main><section class="hero"><h1>Sổ tay từ vựng</h1><p>Nhấp đúp vào từ ở các trang học → Thêm vào sổ tay → chọn từ → chơi game để ghi nhớ.</p></section>
 <section class="panel"><div class="toolbar"><div><h2>Những từ đã lưu</h2><p class="dim" id="scope">Dữ liệu lưu trong trình duyệt theo tên và lớp của học sinh.</p></div><span id="count">0 từ</span></div>
 <div class="toolbar"><div class="tools"><input type="search" id="search" placeholder="Tìm từ trong sổ tay"><button id="all">Chọn tất cả</button><button id="none">Bỏ chọn</button></div><span id="selectedCount">0 từ đã chọn</span></div>
 <div class="list" id="words"></div><p class="dim" id="empty"></p></section>
 <section class="panel"><div class="toolbar"><div><h2>Học qua game</h2><p class="dim">Chọn ít nhất một từ rồi chọn trò chơi.</p></div><span id="gameCount">0 từ</span></div>
-<div class="row"><button data-mode="cards" class="primary">🃏 Flashcards</button><button data-mode="quiz">🧠 Meaning Quiz</button><button data-mode="match">🧩 Matching Game</button></div>
+<div class="game-catalog" id="originalGames"><button type="button" data-launch-original-game="Lexicon Guardians"><span style="font-size:30px">🏰</span><strong>Lexicon Guardians</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Lexi Atelier"><span style="font-size:30px">🎨</span><strong>Lexi Atelier</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Penalty Words"><span style="font-size:30px">⚽</span><strong>Penalty Words</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Dungeon of Words"><span style="font-size:30px">🗝️</span><strong>Dungeon of Words</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Whack a Word"><span style="font-size:30px">🐭</span><strong>Whack a Word</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Word Catcher"><span style="font-size:30px">🍎</span><strong>Word Catcher</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Vocab Racer 3D"><span style="font-size:30px">🏎️</span><strong>Vocab Racer 3D</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Alien Escape"><span style="font-size:30px">👽</span><strong>Alien Escape</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Flappy Kākāpō"><span style="font-size:30px">🦜</span><strong>Flappy Kākāpō</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Balloon Pop"><span style="font-size:30px">🎈</span><strong>Balloon Pop</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Shark Escape"><span style="font-size:30px">🦈</span><strong>Shark Escape</strong><small>Chơi với các từ đã chọn →</small></button><button type="button" data-launch-original-game="Monkey Code Lock"><span style="font-size:30px">🐒</span><strong>Monkey Code Lock</strong><small>Chơi với các từ đã chọn →</small></button></div><p class="dim">Dùng trực tiếp 12 trò chơi đang có trong Vocabulary. Một số game cần ít nhất 3–4 từ để tạo các lựa chọn hợp lệ.</p>
 <div id="game" class="game" hidden></div>
 </section></main>
 <script>
@@ -103,7 +103,15 @@ function drawMatch(){
  pool.forEach(x=>{const b=btn(left,x.word,()=>select(b,x,'word'));b.style.display='block';b.style.width='100%';b.style.marginBottom='8px'});
  meanings.forEach(x=>{const b=btn(right,x.meaning||x.word,()=>select(b,x,'meaning'));b.style.display='block';b.style.width='100%';b.style.marginBottom='8px'});
 }
-document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>runGame(b.dataset.mode));render();
+document.querySelectorAll('[data-launch-original-game]').forEach(b=>b.onclick=()=>{
+  const selected=words.filter(x=>chosen.has(x.word)&&x.word&&x.meaning);
+  if(selected.length<4){alert('Vui lòng chọn ít nhất 4 từ có nghĩa để các trò chơi tạo đủ câu hỏi và đáp án.');return}
+  try{
+    sessionStorage.setItem('SC_NOTEBOOK_GAME_WORDS',JSON.stringify(selected));
+    sessionStorage.setItem('SC_NOTEBOOK_GAME_AUTOSTART',b.dataset.launchOriginalGame);
+    location.href='../Practice/Vocabulary/?notebook=1';
+  }catch(err){alert('Không chuyển được bộ từ sang Vocabulary: '+err.message)}
+});render();
 </script>
 <script src="../Practice/shared/smartcom-ui.js?v=20261116-notebook"></script>
 </body></html>
