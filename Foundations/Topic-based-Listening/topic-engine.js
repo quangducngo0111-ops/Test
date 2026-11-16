@@ -13,7 +13,7 @@ const subject=()=>data[topic];
 const getScope=()=>{try{const x=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');return x?.name&&x.className?(x.name+'|'+x.className).toLowerCase():'guest'}catch{return 'guest'}};
 const storageKey=()=> 'SC_TOPIC_DICTATION_V3_'+getScope();
 const completed=()=>{try{return JSON.parse(localStorage.getItem(storageKey())||'{}')}catch{return {}}};
-function saveProgress(){try{const all=completed();all[subject().id+'-'+item().id]={correct:correct.size,total:sentences().length,completed:true,date:new Date().toISOString()};localStorage.setItem(storageKey(),JSON.stringify(all))}catch(e){}}
+function saveProgress(){try{const all=completed();all[subject().id+'-'+item().id]={correct:correct.size,total:sentences().length,completed:correct.size===sentences().length,date:new Date().toISOString()};localStorage.setItem(storageKey(),JSON.stringify(all))}catch(e){}}
 function done(t,l){return Boolean(completed()[t.id+'-'+l.id]?.completed)}
 const scene=window.SmartcomLessonScene.create($('sceneCanvas'),$('sceneCaption'));
 const player={cursor:0,mode:'idle',paused:false,serial:0,speech:null,rate:.9};
@@ -168,7 +168,7 @@ $('reveal').onclick=()=>$('answer').textContent=sentences()[sentence];
 $('revealAll').onclick=()=>$('answer').textContent=item().text;
 $('previous').onclick=()=>{stopAudio();if(sentence>0){sentence--;clearAnswer()}};
 $('next').onclick=()=>{stopAudio();if(sentence<sentences().length-1){sentence++;clearAnswer()}};
-$('complete').onclick=()=>{saveProgress();$('grade').className='good';$('grade').textContent='✓ Đã lưu kết quả. Chính xác '+correct.size+'/'+sentences().length+' câu.'};
+$('complete').onclick=()=>{saveProgress();$('grade').className='good';$('grade').textContent=correct.size===sentences().length?'✓ Hoàn thành bài nghe, tất cả câu đều chính xác.':'Đã lưu kết quả: '+correct.size+'/'+sentences().length+' câu chính xác. Hãy sửa các câu còn sai để hoàn thành bài.'};
 $('nextLesson').onclick=()=>{saveProgress();if(lesson<subject().lessons.length-1)openLesson(lesson+1);else{renderLessons();display('lessonsView')}};
 $('backTopics').onclick=()=>{stopAudio();scene.stop();renderTopics();display('topicsView')};
 $('backLessons').onclick=()=>{stopAudio();scene.stop();renderLessons();display('lessonsView')};
