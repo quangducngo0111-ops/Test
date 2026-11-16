@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const keys=['questionsRoot','transcriptText'];const isNew=Boolean($('questionsRoot'));
+const keys=['questionsRoot','transcriptText','questions','transcript','transcriptRoot','transcript3','transcript4'];const hasNativeTools=Boolean($('selectionMenu')||$('textTools')||document.querySelector('.annot-bar'));const isNew=Boolean($('questionsRoot')||$('questions'))&&!hasNativeTools;
 const lesson=location.pathname.replace(/\/$/,'')||'listening';
 const annotationsKey='SMARTCOM_LISTENING_ANNOTATIONS_V2:'+lesson;
 const profile=(()=>{try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'{}')}catch{return {}}})();
