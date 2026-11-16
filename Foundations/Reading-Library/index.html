@@ -47,7 +47,7 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 <main>
  <section class="hero"><small>SMARTCOM · FOUNDATIONS</small><h1>Reading Library</h1><p>Đọc bài tiếng Anh trực tiếp trên Smartcom, nhấp đúp một từ để tra nghĩa, nghe phát âm và lưu vào sổ tay từ vựng.</p></section>
  <section id="library" data-view><div class="heading"><h2>Chọn chủ đề đọc</h2><span id="number">9 chủ đề</span></div>
- <p class="hint">Chọn chủ đề trước, sau đó chọn bài để đọc trực tiếp. Bài đọc tiếng Anh do Smartcom biên soạn hoặc phát triển từ nguồn tham khảo; ảnh thật sử dụng theo giấy phép của nguồn ảnh và có ghi công.</p>
+ <p class="hint">Chọn chủ đề trước, sau đó chọn bài để đọc trực tiếp. Các bài đọc tiếng Anh theo phong cách báo chí khoa học phổ thông, có ảnh minh họa kèm nguồn và giấy phép khi sử dụng.</p>
  <div class="cards" id="topics"></div></section>
  <section id="topicLibrary" data-view hidden><div class="read-nav"><button id="backTopics" type="button">Tất cả chủ đề</button><span id="activeTopicName"></span></div>
  <div class="heading"><h2 id="topicHeading">Bài đọc</h2><span class="hint" id="topicCounter"></span></div>
@@ -65,11 +65,65 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
  <p class="progress-note" id="readStatus" aria-live="polite"></p></article>
  </section>
 </main>
-<script src="./articles.js?v=20261116-animals11"></script>
+<script src="./articles.js?v=20261116-animals30"></script>
 <script>
 (()=>{
 'use strict';const $=id=>document.getElementById(id),data=window.SMARTCOM_READING_ARTICLES||[];
 let index=0,topicId=null;
+
+const photoCache=new Map();
+const allowedCommonsLicense=license=>/^(CC0|CC BY(?:-SA)?|Public domain|PD-|PDM)/i.test(license||'')&&!/(NC|ND|NonCommercial|NoDerivatives)/i.test(license||'');
+const parseText=html=>new DOMParser().parseFromString(html||'','text/html').body.textContent.trim().replace(/\s+/g,' ').slice(0,130);
+async function findFreePhoto(article){
+ if(article.image)return {image:article.image,page:article.imageSourceUrl,credit:article.imageCredit||'Pexels',license:article.imageLicense||'Pexels License'};
+ if(!article.photoSearch)return null;
+ if(photoCache.has(article.id))return photoCache.get(article.id);
+ const query=article.photoSearch;
+ const url=new URL('https://commons.wikimedia.org/w/api.php');
+ const args={action:'query',generator:'search',gsrnamespace:'6',gsrlimit:'18',gsrsearch:'filetype:bitmap '+query,
+  prop:'imageinfo',iiprop:'url|mime|size|extmetadata',iiurlwidth:'1100',
+  iiextmetadatafilter:'LicenseShortName|Artist|LicenseUrl',format:'json',origin:'*'};
+ Object.entries(args).forEach(([key,value])=>url.searchParams.set(key,value));
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
+ let found=null;
+ try{
+  const response=await fetch(url.href,{signal:controller.signal});
+  if(response.ok){
+   const pages=Object.values((await response.json()).query?.pages||{});
+   const required=query.toLowerCase().split(/\s+/).filter(w=>w.length>3);
+   const choices=pages.map(p=>{
+    const info=p.imageinfo?.[0],metadata=info?.extmetadata||{},license=metadata.LicenseShortName?.value||'';
+    if(!info||!/^image\/(?:jpeg|png|webp)$/i.test(info.mime||'')||!allowedCommonsLicense(license))return null;
+    const title=(p.title||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ');
+    const score=required.filter(w=>title.includes(w)).length;
+    if(score<required.length)return null;
+    return{score,image:info.thumburl||info.url,page:info.descriptionurl||'https://commons.wikimedia.org/',credit:parseText(metadata.Artist?.value)||'Wikimedia Commons contributor',license};
+   }).filter(Boolean).sort((a,b)=>b.score-a.score);
+   found=choices[0]||null;
+  }
+ }catch(e){}finally{clearTimeout(timer)}
+ if(found)photoCache.set(article.id,found);
+ return found;
+}
+function appendCredit(container,item,media){
+ container.replaceChildren();
+ if(!media)return;
+ const a=document.createElement('a');a.href=media.page||'https://commons.wikimedia.org/';a.target='_blank';a.rel='noopener noreferrer';a.textContent=media.credit;
+ container.append('Ảnh: ',a,' · '+media.license+' · Ảnh minh họa.');
+}
+async function loadCardPhoto(article,card){
+ if(!article.photoSearch&&!article.image)return;
+ const media=await findFreePhoto(article);
+ if(!media||!card.isConnected)return;
+ let image=card.querySelector('.article-thumb');
+ if(image){if(image.getAttribute('src')!==media.image)image.src=media.image;return}
+ image=document.createElement('img');image.className='article-thumb';image.loading='lazy';image.alt='Ảnh thật minh họa '+article.photoSearch;
+ image.onerror=()=>{image.remove();card.classList.remove('has-photo')};
+ image.src=media.image;
+ card.classList.add('has-photo');
+ card.prepend(image);
+}
+
 const TOPICS=[
 {id:'animals',title:'Animals',icon:'🐬',desc:'Động vật, hệ sinh thái và bảo tồn'},
 {id:'health',title:'Health',icon:'🩺',desc:'Sức khỏe, giấc ngủ và thói quen sống'},
@@ -94,14 +148,12 @@ function drawCards(){
   const icon=document.createElement('span');icon.className='emoji';icon.textContent=article.icon;
   const cat=document.createElement('span');cat.className='cat';cat.textContent=article.category+' · '+article.level;
   const title=document.createElement('strong');title.textContent=article.title;
-  const meta=document.createElement('span');meta.textContent=article.paragraphs.join(' ').split(/\s+/).length+' từ · '+article.source;
+  const meta=document.createElement('span');meta.textContent=article.paragraphs.join(' ').split(/\s+/).length+' từ';
   const pill=document.createElement('span');pill.className='pill';pill.textContent=saved[article.id]?'✓ Đã đọc':'Đọc bài';
-  if(article.image){
-    button.classList.add('has-photo');
-    const img=document.createElement('img');img.className='article-thumb';img.loading='lazy';img.alt='Ảnh minh họa: '+article.title;img.src=article.image;
-    img.onerror=()=>img.remove();
+  if(article.image||article.photoSearch){
     const body=document.createElement('div');body.className='article-card-body';
-    body.append(cat,title,meta,pill);button.append(img,body);
+    body.append(icon,cat,title,meta,pill);button.append(body);
+    if(article.image||article.photoSearch)loadCardPhoto(article,button);
   }else button.append(icon,cat,title,meta,pill);
   button.onclick=()=>openArticle(i);$('cards').append(button);
  });
@@ -140,25 +192,24 @@ function openArticle(i){
  $('articleCategory').textContent=item.category.toUpperCase();
  $('articleTitle').textContent=item.title;$('articleLevel').textContent='Level '+item.level;
  $('articleWords').textContent=item.paragraphs.join(' ').split(/\s+/).length+' words';
- $('articleSource').textContent=item.source;
+ $('articleSource').textContent=item.source||'';$('articleSource').hidden=!item.source;
  $('articleText').replaceChildren();item.paragraphs.forEach(paragraph=>{const p=document.createElement('p');p.textContent=paragraph;$('articleText').append(p)});
  const photo=$('articlePhoto'),img=$('articleImage'),caption=$('articlePhotoCredit');
- if(item.image){
-   photo.hidden=false;img.src=item.image;img.alt='Ảnh động vật thật minh họa bài đọc '+item.title;
-   img.onerror=()=>{photo.hidden=true};caption.replaceChildren();
-   const credit=document.createElement('a');credit.href=item.imageSourceUrl||'https://www.pexels.com/';credit.target='_blank';credit.rel='noopener noreferrer';credit.textContent=item.imageCredit||'Pexels photographer';
-   caption.append('Ảnh: ',credit,' · Pexels License · Ảnh chỉ mang tính minh họa.');
- }else{img.removeAttribute('src');photo.hidden=true}
-
- $('sourceBox').replaceChildren();
- const title=document.createElement('strong');title.textContent=item.sourceUrl?'Nguồn tham khảo: '+item.sourceTitle:'Bài đọc tiếng Anh do Smartcom biên soạn';
- const note=document.createElement('p');note.textContent=item.sourceUrl
- ?'Bài được viết lại bằng tiếng Anh từ thông tin tham khảo, không phải bản sao nguyên văn.'
- :'Đây là bài đọc gốc do Smartcom biên soạn cho mục đích luyện đọc và mở rộng từ vựng, không sao chép bài báo bên ngoài.';
- $('sourceBox').append(title);
- if(item.sourceUrl){const link=document.createElement('a');link.textContent='Xem nguồn tham khảo';link.href=item.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';$('sourceBox').append(document.createElement('br'),link)}
- $('sourceBox').append(note);
- if(item.imageSourceUrl){const photoLink=document.createElement('a');photoLink.href=item.imageSourceUrl;photoLink.target='_blank';photoLink.rel='noopener noreferrer';photoLink.textContent='Ảnh: '+item.imageCredit+' · '+(item.imageLicense||'Pexels License');$('sourceBox').append(photoLink)}
+ photo.hidden=true;img.removeAttribute('src');
+ findFreePhoto(item).then(media=>{
+  if(!media||data[index]?.id!==item.id)return;
+  photo.hidden=false;img.src=media.image;img.alt='Ảnh động vật thật: '+(item.photoSearch||item.title);
+  img.onerror=()=>photo.hidden=true;
+  appendCredit(caption,item,media);
+ });
+ const sourceBox=$('sourceBox');sourceBox.replaceChildren();
+ sourceBox.hidden=!item.sourceUrl;
+ if(item.sourceUrl){
+  const label=document.createElement('strong');label.textContent='Nguồn tham khảo: '+(item.source||'NOAA');
+  const link=document.createElement('a');link.textContent='Xem bài báo gốc';link.href=item.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';
+  const note=document.createElement('p');note.textContent='Bài đọc được biên tập bằng tiếng Anh dựa trên nguồn này, không sao chép nguyên văn.';
+  sourceBox.append(label,document.createElement('br'),link,note);
+ }
  $('readStatus').textContent=records()[item.id]?'✓ Bạn đã hoàn thành bài này.':'';
  topicId=articleTopic(item);
  $('library').hidden=true;$('topicLibrary').hidden=true;$('reader').hidden=false;
