@@ -278,7 +278,7 @@ main{
     gap:5px;
   }
 }
-</style>
+ .chart-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 15px}.chart-filters .filter{border:1px solid #dcd5ed;background:#fff;color:#3b0e90;border-radius:9px;padding:9px 13px;font:800 12px Inter,system-ui;cursor:pointer}.chart-filters .filter.active{background:#3b0e90;color:white} </style>
 </head>
 
 <body>
@@ -343,7 +343,7 @@ main{
   </div>
 
 
-  <section class="grid" id="grid">
+  <div class="chart-filters" role="group" aria-label="Lọc loại biểu đồ"><button type="button" class="filter active" data-filter="All">Tất cả</button><button type="button" class="filter" data-filter="Line Graph">Line Graph</button><button type="button" class="filter" data-filter="Pie Chart">Pie Chart</button></div><section class="grid" id="grid">
 
     <div class="loading">
       Đang tải danh sách bài...
@@ -374,14 +374,9 @@ const ROOT=
 
 const EXERCISE_INFO={
 
-  1:{
-    title:
-    'Dynamic Datasets 01',
-
-    description:
-    'International conferences in three cities · Line graph'
-  }
-
+  1:{title:'International conferences in three cities',description:'Line Graph · Dynamic',chartType:'Line Graph'},
+  2:{title:'Music sales by method (2011–2018)',description:'Line Graph · Dynamic',chartType:'Line Graph'},
+  3:{title:'Main sources of energy in the USA (1980 & 1990)',description:'Pie Chart · Dynamic · Tỷ trọng năng lượng qua 2 năm',chartType:'Pie Chart'}
 };
 
 
@@ -546,7 +541,11 @@ async function loadExercises(){
    RENDER
 ========================================================= */
 
+let selectedChartType='All',allExercises=[];
+document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{selectedChartType=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderExercises(allExercises)}));
 function renderExercises(items){
+  allExercises=items;
+  items=items.filter(item=>selectedChartType==='All'||(EXERCISE_INFO[item.number]?.chartType||'Other')===selectedChartType);
 
   count.textContent=
   `${items.length} bài`;
