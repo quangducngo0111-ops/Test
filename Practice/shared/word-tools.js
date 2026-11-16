@@ -13,7 +13,14 @@ const norm=w=>String(w||'').trim().toLowerCase().replace(/^[^a-z]+|[^a-z]+$/gi,'
 const speak=word=>{if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const v=new SpeechSynthesisUtterance(word);v.lang='en-GB';v.rate=.85;window.speechSynthesis.speak(v)};
 const css=document.createElement('style');
 css.textContent=[
-'#sc-note-button{position:fixed;bottom:16px;left:16px;z-index:2147480000;border:1px solid #d9caee;background:#fff;color:#4b239b;border-radius:16px;padding:12px 14px;box-shadow:0 7px 25px #2410512b;font:800 13px system-ui;cursor:pointer}',
+'#sc-note-button{position:fixed;bottom:22px;left:22px;z-index:2147480000;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:8px 16px 8px 10px;border:1px solid #e2d9f1;background:rgba(255,255,255,.96);color:#3b0e90;border-radius:999px;box-shadow:0 5px 19px rgba(48,24,100,.12);font:700 13px/1.25 Inter,system-ui,sans-serif;letter-spacing:0;cursor:pointer;transition:transform .17s ease,box-shadow .17s ease,background .17s ease;backdrop-filter:blur(12px)}',
+'#sc-note-button:hover{transform:translateY(-2px);background:#f8f5ff;box-shadow:0 8px 22px rgba(48,24,100,.16)}',
+'#sc-note-button:active{transform:translateY(0)}',
+'#sc-note-button:focus-visible{outline:3px solid #9e83ea;outline-offset:3px}',
+'#sc-note-button .sc-note-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:#f1ebff;flex:none}',
+'#sc-note-button .sc-note-icon svg{width:19px;height:19px;stroke:#5d33bc;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}',
+'#sc-note-button .sc-note-label{white-space:nowrap}',
+'@media(max-width:600px){#sc-note-button{bottom:15px;left:13px;min-height:44px;padding:6px 12px 6px 7px;font-size:12px}#sc-note-button .sc-note-icon{width:30px;height:30px}}',
 '#sc-word-menu{display:flex;gap:8px;position:fixed;z-index:2147483001;padding:10px;border-radius:15px;background:#fff;box-shadow:0 13px 35px #1a0e4466;border:1px solid #e1d5f1}',
 '#sc-word-menu[hidden],#sc-dict-modal[hidden],#sc-dict-shade[hidden]{display:none!important}',
 '#sc-word-menu button,#sc-dict-modal button{border:1px solid #d6c7ed;background:#f3edff;color:#4c239a;padding:9px 12px;border-radius:10px;font:800 13px system-ui;cursor:pointer}',
@@ -24,7 +31,12 @@ css.textContent=[
 '#sc-dict-modal .actions{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}'
 ].join('');
 document.head.append(css);
-const button=document.createElement('button');button.id='sc-note-button';button.type='button';button.textContent='📒 Sổ tay từ vựng';
+const button=document.createElement('button');button.id='sc-note-button';button.type='button';
+button.setAttribute('aria-label','Mở sổ tay từ vựng');button.title='Sổ tay từ vựng';
+const noteIcon=document.createElement('span');noteIcon.className='sc-note-icon';noteIcon.setAttribute('aria-hidden','true');
+noteIcon.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.75h11.5a2 2 0 0 1 2 2V20H7.5A3.5 3.5 0 0 1 4 16.5V6a2.25 2.25 0 0 1 2-2.25Z"/><path d="M7.5 20A3.5 3.5 0 0 1 4 16.5c0-1.9 1.6-3.25 3.5-3.25h12"/><path d="M9 8h6M9 11h4"/></svg>';
+const noteLabel=document.createElement('span');noteLabel.className='sc-note-label';noteLabel.textContent='Sổ tay';
+button.append(noteIcon,noteLabel);
 button.onclick=()=>location.href=new URL('Vocabulary-Notebook/',root).href;document.body.append(button);
 const menu=document.createElement('div');menu.id='sc-word-menu';menu.hidden=true;
 const lookup=document.createElement('button');lookup.textContent='🔎 Tra từ';
