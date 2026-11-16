@@ -51,7 +51,7 @@ document.addEventListener('pointerdown',e=>{if(!panel.hidden&&!panel.contains(e.
 document.addEventListener('keydown',e=>{if(e.key==='Escape')panel.hidden=true});
 const guide=document.createElement('div');
 guide.className='reading-ux-guide';
-guide.innerHTML='<strong>📖 Reading Practice · Hướng dẫn:</strong> Đồng hồ <b>đếm xuôi</b> · Bôi đen để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Nhấp đúp một từ trong bài đọc</b> để xem nghĩa tiếng Việt · Sau khi nộp, xem đáp án và giải thích <b>ngay dưới từng câu</b>; nhấp trích dẫn để tô vàng câu trong bài đọc bên trái.';
+guide.innerHTML='<strong>📖 Reading Practice · Hướng dẫn:</strong> Đồng hồ <b>đếm xuôi</b> · Bôi đen để <b>highlight 6 màu</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Rê chuột thấy dấu ? · nhấp đúp từ/cụm từ</b> để tra nghĩa và lưu vào sổ tay · Sau khi nộp, xem đáp án và giải thích <b>ngay dưới từng câu</b>; nhấp trích dẫn để tô vàng câu trong bài đọc bên trái.';
 const anchor=document.querySelector('.page,.workspace,main');
 if(anchor)anchor.insertBefore(guide,anchor.firstChild);
 else document.body.prepend(guide);
@@ -223,6 +223,53 @@ document.addEventListener('pointermove',e=>{
  hoverHint.hidden=false;hoverHint.style.left=Math.min(innerWidth-25,e.clientX+12)+'px';hoverHint.style.top=Math.max(8,e.clientY-24)+'px';
 },{passive:true});
 document.addEventListener('pointerleave',()=>{hoverHint.hidden=true});
+
+
+/* Six independently persisted highlight colours; keep original highlight and notes handlers. */
+const highlightPalette=[
+ ['Vàng','#fff29a'],['Xanh lá','#baf2ce'],['Xanh dương','#bbdcff'],
+ ['Hồng','#ffc9db'],['Tím','#dfccff'],['Cam','#ffd5a4']
+];
+let selectedHighlightColor='#fff29a';
+const highlightMenu=document.getElementById('selectionMenu');
+const highlightButton=document.getElementById('menuHighlight');
+if(highlightMenu&&highlightButton){
+ const palette=document.createElement('div');palette.className='reading-highlight-colors';
+ palette.setAttribute('role','group');palette.setAttribute('aria-label','Chọn màu highlight');
+ for(const [label,color] of highlightPalette){
+  const b=document.createElement('button');b.type='button';b.style.background=color;
+  b.title='Highlight màu '+label;b.setAttribute('aria-label','Màu '+label);
+  b.setAttribute('aria-pressed',String(color===selectedHighlightColor));
+  b.addEventListener('click',e=>{
+   e.preventDefault();e.stopPropagation();selectedHighlightColor=color;
+   for(const chip of palette.querySelectorAll('button'))chip.setAttribute('aria-pressed',String(chip===b));
+  });palette.append(b);
+ }
+ highlightButton.insertAdjacentElement('afterend',palette);
+ const isDeletion=()=>highlightButton.classList.contains('danger');
+ const updatePalette=()=>{palette.hidden=isDeletion()||highlightButton.style.display==='none'};
+ const watcher=new MutationObserver(updatePalette);
+ watcher.observe(highlightButton,{attributes:true,attributeFilter:['class','style']});
+ updatePalette();
+ let knownHighlights=new Set([...document.querySelectorAll('#passageRoot mark.user-highlight,#questionsRoot mark.user-highlight')]);
+ const applyNewColors=()=>{
+  const current=new Set(document.querySelectorAll('#passageRoot mark.user-highlight,#questionsRoot mark.user-highlight'));
+  let changedPassage=false,changedQuestions=false;
+  for(const el of current){
+   if(knownHighlights.has(el)||el.dataset.scHighlightColor)continue;
+   el.dataset.scHighlightColor=selectedHighlightColor;
+   el.style.setProperty('--sc-highlight-color',selectedHighlightColor);
+   if(el.closest('#passageRoot'))changedPassage=true;
+   if(el.closest('#questionsRoot'))changedQuestions=true;
+  }
+  knownHighlights=current;
+  if(changedPassage&&typeof window.saveMarkup==='function')try{window.saveMarkup('passage')}catch(e){}
+  if(changedQuestions&&typeof window.saveMarkup==='function')try{window.saveMarkup('questions')}catch(e){}
+ };
+ const roots=['passageRoot','questionsRoot'].map(id=>document.getElementById(id)).filter(Boolean);
+ for(const root of roots)new MutationObserver(applyNewColors).observe(root,{childList:true,subtree:true});
+ highlightButton.addEventListener('click',()=>queueMicrotask(applyNewColors));
+}
 
 function answerNumbers(){
  const ids=[...document.querySelectorAll('#questionsRoot [id]')].map(el=>{
