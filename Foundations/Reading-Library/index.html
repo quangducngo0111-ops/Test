@@ -33,12 +33,21 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 .topic-card[aria-disabled="true"]{opacity:.6;cursor:default}
 .topic-card[aria-disabled="true"]:hover{transform:none;border-color:#e5d8f0}
 @media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.cards{grid-template-columns:1fr}header{height:auto}.brand{font-size:15px}}
+
+.article-card.has-photo{padding:0;overflow:hidden;gap:0}
+.article-card .article-thumb{width:100%;height:165px;object-fit:cover;display:block;background:#f1ebfa}
+.article-card .article-card-body{display:flex;flex-direction:column;gap:10px;padding:17px;flex:1}
+.article-hero-photo{margin:12px 0 28px}
+.article-hero-photo img{display:block;width:100%;height:auto;max-height:450px;object-fit:cover;border-radius:19px;background:#f1ebfa}
+.article-hero-photo figcaption{font-size:12px;color:#736c81;margin-top:9px;line-height:1.5}
+.article-hero-photo a{color:#4d2798;text-decoration:underline}
+.article-hero-photo[hidden]{display:none!important}
 </style></head><body>
 <header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
 <main>
  <section class="hero"><small>SMARTCOM · FOUNDATIONS</small><h1>Reading Library</h1><p>Đọc bài tiếng Anh trực tiếp trên Smartcom, nhấp đúp một từ để tra nghĩa, nghe phát âm và lưu vào sổ tay từ vựng.</p></section>
  <section id="library" data-view><div class="heading"><h2>Chọn chủ đề đọc</h2><span id="number">9 chủ đề</span></div>
- <p class="hint">9 chủ đề giống Topic-based Listening. Chọn chủ đề trước, sau đó chọn bài đọc. Các bài là bản tiếng Anh Smartcom biên soạn từ thông tin chính thống, không phải bản sao nguyên văn bài báo.</p>
+ <p class="hint">Chọn chủ đề trước, sau đó chọn bài để đọc trực tiếp. Bài đọc tiếng Anh do Smartcom biên soạn hoặc phát triển từ nguồn tham khảo; ảnh thật sử dụng theo giấy phép của nguồn ảnh và có ghi công.</p>
  <div class="cards" id="topics"></div></section>
  <section id="topicLibrary" data-view hidden><div class="read-nav"><button id="backTopics" type="button">Tất cả chủ đề</button><span id="activeTopicName"></span></div>
  <div class="heading"><h2 id="topicHeading">Bài đọc</h2><span class="hint" id="topicCounter"></span></div>
@@ -49,6 +58,7 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
  <article>
  <div class="article-label" id="articleCategory"></div><h1 id="articleTitle"></h1>
  <div class="article-stats"><span id="articleLevel"></span><span id="articleWords"></span><span id="articleSource"></span></div>
+ <figure id="articlePhoto" class="article-hero-photo" hidden><img id="articleImage" alt="" loading="lazy"><figcaption id="articlePhotoCredit"></figcaption></figure>
  <div id="articleText" lang="en"></div>
  <div class="source-box" id="sourceBox"></div>
  <div class="actions"><button type="button" id="markRead">✓ Đánh dấu đã đọc</button><button type="button" id="nextArticle">Đọc bài tiếp theo</button></div>
@@ -86,7 +96,14 @@ function drawCards(){
   const title=document.createElement('strong');title.textContent=article.title;
   const meta=document.createElement('span');meta.textContent=article.paragraphs.join(' ').split(/\s+/).length+' từ · '+article.source;
   const pill=document.createElement('span');pill.className='pill';pill.textContent=saved[article.id]?'✓ Đã đọc':'Đọc bài';
-  button.append(icon,cat,title,meta,pill);button.onclick=()=>openArticle(i);$('cards').append(button);
+  if(article.image){
+    button.classList.add('has-photo');
+    const img=document.createElement('img');img.className='article-thumb';img.loading='lazy';img.alt='Ảnh minh họa: '+article.title;img.src=article.image;
+    img.onerror=()=>img.remove();
+    const body=document.createElement('div');body.className='article-card-body';
+    body.append(cat,title,meta,pill);button.append(img,body);
+  }else button.append(icon,cat,title,meta,pill);
+  button.onclick=()=>openArticle(i);$('cards').append(button);
  });
  $('topicCounter').textContent=data.filter(a=>articleTopic(a)===topicId).length+' bài hiện có';
 }
@@ -125,11 +142,23 @@ function openArticle(i){
  $('articleWords').textContent=item.paragraphs.join(' ').split(/\s+/).length+' words';
  $('articleSource').textContent=item.source;
  $('articleText').replaceChildren();item.paragraphs.forEach(paragraph=>{const p=document.createElement('p');p.textContent=paragraph;$('articleText').append(p)});
+ const photo=$('articlePhoto'),img=$('articleImage'),caption=$('articlePhotoCredit');
+ if(item.image){
+   photo.hidden=false;img.src=item.image;img.alt='Ảnh động vật thật minh họa bài đọc '+item.title;
+   img.onerror=()=>{photo.hidden=true};caption.replaceChildren();
+   const credit=document.createElement('a');credit.href=item.imageSourceUrl||'https://www.pexels.com/';credit.target='_blank';credit.rel='noopener noreferrer';credit.textContent=item.imageCredit||'Pexels photographer';
+   caption.append('Ảnh: ',credit,' · Pexels License · Ảnh chỉ mang tính minh họa.');
+ }else{img.removeAttribute('src');photo.hidden=true}
+
  $('sourceBox').replaceChildren();
- const title=document.createElement('strong');title.textContent='Nguồn tham khảo: '+item.sourceTitle;
- const link=document.createElement('a');link.textContent='Xem tài liệu tham khảo tại '+item.source;link.href=item.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';
- const note=document.createElement('p');note.textContent='Bản đọc là nội dung tiếng Anh biên soạn của Smartcom dựa trên nguồn tham khảo được nêu, không phải bản sao nguyên văn. Không sao chép hình ảnh hoặc tài liệu bên thứ ba.';
- $('sourceBox').append(title,document.createElement('br'),link,note);
+ const title=document.createElement('strong');title.textContent=item.sourceUrl?'Nguồn tham khảo: '+item.sourceTitle:'Bài đọc tiếng Anh do Smartcom biên soạn';
+ const note=document.createElement('p');note.textContent=item.sourceUrl
+ ?'Bài được viết lại bằng tiếng Anh từ thông tin tham khảo, không phải bản sao nguyên văn.'
+ :'Đây là bài đọc gốc do Smartcom biên soạn cho mục đích luyện đọc và mở rộng từ vựng, không sao chép bài báo bên ngoài.';
+ $('sourceBox').append(title);
+ if(item.sourceUrl){const link=document.createElement('a');link.textContent='Xem nguồn tham khảo';link.href=item.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';$('sourceBox').append(document.createElement('br'),link)}
+ $('sourceBox').append(note);
+ if(item.imageSourceUrl){const photoLink=document.createElement('a');photoLink.href=item.imageSourceUrl;photoLink.target='_blank';photoLink.rel='noopener noreferrer';photoLink.textContent='Ảnh: '+item.imageCredit+' · '+(item.imageLicense||'Pexels License');$('sourceBox').append(photoLink)}
  $('readStatus').textContent=records()[item.id]?'✓ Bạn đã hoàn thành bài này.':'';
  topicId=articleTopic(item);
  $('library').hidden=true;$('topicLibrary').hidden=true;$('reader').hidden=false;
