@@ -212,7 +212,7 @@ document.body.append(shell);
 if(!document.querySelector('script[data-sc-word-tools]')){
  const vocabScript=document.createElement('script');
  vocabScript.dataset.scWordTools='1';
- vocabScript.src=url('Practice/shared/word-tools.js?v=20261116-01');
+ vocabScript.src=url('Practice/shared/word-tools.js?v=20261116-phrase01');
  document.body.append(vocabScript);
 }
 })();
