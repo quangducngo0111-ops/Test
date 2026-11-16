@@ -32,7 +32,7 @@ const add=document.createElement('button');add.textContent='📒 Thêm vào sổ
 menu.append(lookup,add);document.body.append(menu);
 const shade=document.createElement('div');shade.id='sc-dict-shade';shade.hidden=true;document.body.append(shade);
 const modal=document.createElement('section');modal.id='sc-dict-modal';modal.hidden=true;document.body.append(modal);
-let word='',entry=null;
+let word='',entry=null,vietnamese='';
 function close(){menu.hidden=true;modal.hidden=true;shade.hidden=true}
 shade.onclick=close;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
@@ -42,15 +42,16 @@ function saveWord(){
  if(!word)return;
  const list=load();
  const meaning=entry?.meanings?.[0]?.definitions?.[0]?.definition||'';
- const item={word,meaning,phonetic:entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'',partOfSpeech:entry?.meanings?.[0]?.partOfSpeech||'',example:entry?.meanings?.[0]?.definitions?.find(x=>x.example)?.example||'',savedAt:new Date().toISOString()};
+ const item={word,meaning:vietnamese||meaning,phonetic:entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'',partOfSpeech:entry?.meanings?.[0]?.partOfSpeech||'',example:entry?.meanings?.[0]?.definitions?.find(x=>x.example)?.example||'',savedAt:new Date().toISOString()};
  const i=list.findIndex(x=>x.word===word);
- if(i<0)list.unshift(item);else list[i]={...list[i],...item};
+ if(i<0)list.unshift(item);else list[i]={...list[i],...Object.fromEntries(Object.entries(item).filter(([k,v])=>k==='savedAt'||v))};
  if(save(list)){menu.hidden=true;if(modal.hidden){modal.replaceChildren();addText(modal,'h2','✓ Đã lưu '+word);modal.append(buttonEl('Mở sổ tay',()=>location.href=new URL('Vocabulary-Notebook/',root).href));modal.hidden=false;shade.hidden=false}else{const p=addText(modal,'p','✓ Đã lưu vào sổ tay')}}else alert('Không thể lưu từ trên trình duyệt này.');
 }
 function render(){
  modal.replaceChildren();
  const head=document.createElement('div');head.className='dict-head';addText(head,'h2',word);head.append(buttonEl('×',close));modal.append(head);
  addText(modal,'p',entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'IPA chưa có sẵn');
+ if(vietnamese)addText(modal,'p','🇻🇳 Nghĩa tiếng Việt (tham khảo): '+vietnamese);
  const actions=document.createElement('div');actions.className='actions';
  const sounds=(entry?.phonetics||[]).filter(x=>x.audio).slice(0,2);
  sounds.forEach((p,i)=>actions.append(buttonEl('🔊 Phát âm '+(i+1),()=>{const a=new Audio(p.audio.startsWith('//')?'https:'+p.audio:p.audio);a.play().catch(()=>speak(word))})));
@@ -66,11 +67,19 @@ function render(){
 }
 lookup.onclick=async()=>{
  menu.hidden=true;shade.hidden=false;modal.hidden=false;modal.textContent='Đang tra từ '+word+'…';
- const requested=word;entry=null;
+ const requested=word;entry=null;vietnamese='';
  try{const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word),{cache:'force-cache'});if(response.ok){const data=await response.json();entry=data?.[0]||null}}catch(e){}
+ if(entry){try{const first=entry.meanings?.[0]?.definitions?.[0]?.definition||word;
+ const resp=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(first.slice(0,240))+'&langpair=en%7Cvi');
+ if(resp.ok){const d=await resp.json();vietnamese=d?.responseData?.translatedText||'';if(vietnamese.toLowerCase()===first.toLowerCase())vietnamese=''}
+ }catch(e){vietnamese=''}}
  if(requested===word)render();
 };
-add.onclick=saveWord;
+add.onclick=async()=>{
+ const requested=word;
+ if(!entry){try{const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(word));if(response.ok)entry=(await response.json())?.[0]||null}catch(e){}}
+ if(requested===word)saveWord();
+};
 document.addEventListener('dblclick',e=>{
  if(isExam()||e.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
  const selected=norm(window.getSelection()?.toString());
@@ -83,6 +92,7 @@ document.addEventListener('dblclick',e=>{
 document.addEventListener('pointerdown',e=>{if(!menu.contains(e.target))menu.hidden=true});
 const observer=new MutationObserver(()=>{button.hidden=isExam();if(isExam())close()});
 observer.observe(document.body,{attributes:true,attributeFilter:['class'],subtree:false});
+const testSection=document.getElementById('testSection');if(testSection)observer.observe(testSection,{attributes:true,attributeFilter:['class']});
 window.addEventListener('popstate',()=>{button.hidden=isExam();close()});
 button.hidden=isExam();
 })();
