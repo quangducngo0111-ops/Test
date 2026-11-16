@@ -69,21 +69,15 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
  <p class="progress-note" id="readStatus" aria-live="polite"></p></article>
  </section>
 </main>
-<script src="./articles.js?v=20261116-health30"></script>
+<script src="./articles.js?v=20261116-distinct02"></script>
 <script>
 (()=>{
 'use strict';const $=id=>document.getElementById(id),data=window.SMARTCOM_READING_ARTICLES||[];
 let index=0,topicId=null;
 
 const photoCache=new Map();
-const imageFallbacks={
- animals:{url:'https://images.pexels.com/photos/5958657/pexels-photo-5958657.jpeg?auto=compress&cs=tinysrgb&w=1100',alt:'Ảnh động vật hoang dã minh họa chủ đề Animals',page:'https://www.pexels.com/photo/brown-lion-in-close-up-photography-5958657/',credit:'Magda Ehlers',license:'Pexels License'},
- health:{url:'https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg?auto=compress&cs=tinysrgb&w=1100',alt:'Ảnh thực phẩm và lối sống lành mạnh minh họa chủ đề Health',page:'https://www.pexels.com/photo/photo-of-vegetable-salad-in-bowls-1640770/',credit:'Ella Olsson',license:'Pexels License'}
-};
-function fallbackVisual(article){
- const base=imageFallbacks[article.topic];
- return base?{image:base.url,page:base.page,credit:base.credit,license:base.license,isTopicFallback:true}:null;
-}
+// Never substitute one generic photo across unrelated articles.
+function fallbackVisual(article){return null}
 function makeVisualPlaceholder(article){
  const pane=document.createElement('div');pane.className='article-image-placeholder';
  const icon=document.createElement('span');icon.className='placeholder-icon';icon.textContent=article.icon||'📖';
@@ -95,11 +89,11 @@ const allowedCommonsLicense=license=>/^(CC0|CC BY(?:-SA)?|Public domain|PD-|PDM)
 const parseText=html=>new DOMParser().parseFromString(html||'','text/html').body.textContent.trim().replace(/\s+/g,' ').slice(0,130);
 async function findFreePhoto(article){
  if(article.image)return {image:article.image,page:article.imageSourceUrl,credit:article.imageCredit||'Pexels',license:article.imageLicense||'Pexels License'};
- if(!article.photoSearch)return fallbackVisual(article);
+ if(!article.photoSearch)return null;
  if(photoCache.has(article.id))return photoCache.get(article.id);
  const query=article.photoSearch;
  const url=new URL('https://commons.wikimedia.org/w/api.php');
- const args={action:'query',generator:'search',gsrnamespace:'6',gsrlimit:'18',gsrsearch:'filetype:bitmap '+query,
+ const args={action:'query',generator:'search',gsrnamespace:'6',gsrlimit:'30',gsrsearch:'filetype:bitmap '+query,
   prop:'imageinfo',iiprop:'url|mime|size|extmetadata',iiurlwidth:'1100',
   iiextmetadatafilter:'LicenseShortName|Artist|LicenseUrl',format:'json',origin:'*'};
  Object.entries(args).forEach(([key,value])=>url.searchParams.set(key,value));
@@ -115,13 +109,13 @@ async function findFreePhoto(article){
     if(!info||!/^image\/(?:jpeg|png|webp)$/i.test(info.mime||'')||!allowedCommonsLicense(license))return null;
     const title=(p.title||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ');
     const score=required.filter(w=>title.includes(w)).length;
-    if(score<required.length)return null;
+    if(score<Math.min(1,required.length))return null;
     return{score,image:info.thumburl||info.url,page:info.descriptionurl||'https://commons.wikimedia.org/',credit:parseText(metadata.Artist?.value)||'Wikimedia Commons contributor',license};
    }).filter(Boolean).sort((a,b)=>b.score-a.score);
    found=choices[0]||null;
   }
  }catch(e){}finally{clearTimeout(timer)}
- const result=found||fallbackVisual(article);
+ const result=found;
  if(result)photoCache.set(article.id,result);
  return result;
 }
