@@ -159,14 +159,60 @@ add.onclick=async()=>{
  if(ok)saveWord();
 };
 
-document.addEventListener('dblclick',e=>{
- if(isExam()||e.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
- const selected=norm(window.getSelection()?.toString());
- if(!/^[a-z][a-z'-]{0,38}$/i.test(selected))return;
- requestId++;word=selected;entry=null;vietnamese='';modal.hidden=true;
- const range=window.getSelection()?.rangeCount?window.getSelection().getRangeAt(0).getBoundingClientRect():null;
- anchor={x:range?.left??e.clientX,y:range?.bottom??e.clientY};
+function showTerm(term,range,event){
+ const normalized=norm(term);
+ if(isExam()||!validTerm(normalized))return;
+ requestId++;word=normalized;entry=null;vietnamese='';modal.hidden=true;
+ const rect=range?.getBoundingClientRect?.();
+ anchor={x:rect?.left??event.clientX??20,y:rect?.bottom??event.clientY??20};
  menu.hidden=false;position(menu);
+}
+function selectedRange(){
+ const sel=window.getSelection();return sel?.rangeCount?sel.getRangeAt(0):null;
+}
+function knownPhraseAt(range){
+ if(!range||range.startContainer!==range.endContainer||range.startContainer.nodeType!==Node.TEXT_NODE)return null;
+ const node=range.startContainer,text=node.textContent||'';
+ for(const phrase of phraseList){
+  const lower=text.toLowerCase();
+  let from=0;
+  while((from=lower.indexOf(phrase,from))!==-1){
+   const finish=from+phrase.length;
+   const before=from===0||!/[a-z]/.test(lower[from-1]);
+   const after=finish===lower.length||!/[a-z]/.test(lower[finish]);
+   if(before&&after&&from<=range.startOffset&&finish>=range.endOffset)
+    return {phrase,start:from,end:finish};
+   from++;
+  }
+ }
+ return null;
+}
+function handleSelection(event,expand){
+ if(isExam()||event.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
+ const range=selectedRange(),sel=window.getSelection();
+ if(!range||!sel)return;
+ const selected=norm(sel.toString());
+ if(!selected)return;
+ if(expand&&!selected.includes(' ')){
+  const match=knownPhraseAt(range);
+  if(match){
+   const next=range.cloneRange();
+   next.setStart(range.startContainer,match.start);
+   next.setEnd(range.endContainer,match.end);
+   sel.removeAllRanges();sel.addRange(next);
+   showTerm(match.phrase,next,event);return;
+  }
+ }
+ if(selected.includes(' ')||expand)showTerm(selected,range,event);
+}
+document.addEventListener('dblclick',e=>handleSelection(e,true));
+document.addEventListener('mouseup',e=>{
+ if(window.getSelection()?.toString().trim().includes(' '))handleSelection(e,false);
+});
+document.addEventListener('touchend',e=>{
+ if(!window.getSelection()?.toString().trim().includes(' '))return;
+ const touch=e.changedTouches?.[0];
+ handleSelection({target:e.target,clientX:touch?.clientX||innerWidth/2,clientY:touch?.clientY||innerHeight/2},false);
 });
 document.addEventListener('pointerdown',e=>{if(!menu.contains(e.target)&&!modal.contains(e.target))close()});
 window.addEventListener('scroll',()=>{if(!menu.hidden||!modal.hidden)close()},{passive:true});
