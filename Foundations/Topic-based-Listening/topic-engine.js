@@ -56,7 +56,7 @@ function playFrom(index,one=false){
  const read=()=>{
   if(serial!==player.serial||player.mode==='idle')return;
   const arr=sentences();
-  if(player.cursor>=arr.length){stopAudio();textStatus('✓ Đã nghe hết bài.');return}
+  if(player.cursor>=arr.length){player.cursor=0;stopAudio();textStatus('✓ Đã nghe hết bài. Bấm ▶ để nghe lại.');return}
   const text=arr[player.cursor];
   scene.setSentence(text,player.cursor);$('sceneCaption').textContent=text;
   textStatus('🔊 Đang đọc câu '+(player.cursor+1));
