@@ -16,6 +16,26 @@ window.SmartcomLessonScene={
    plants:{a:'#16472b',b:'#5bab65',icon:'🌿',shape:'leaves'},
    sports:{a:'#17346b',b:'#5a8bd8',icon:'⚽',shape:'rings'}
   };
+  const symbols={
+    dolphin:'🐬',elephant:'🐘',penguin:'🐧',bee:'🐝',turtle:'🐢',owl:'🦉',butterfly:'🦋',ant:'🐜',fish:'🐠',dog:'🐶',frog:'🐸',whale:'🐋',bear:'🐻‍❄️',giraffe:'🦒',bat:'🦇',panda:'🐼',spider:'🕷️',octopus:'🐙',bird:'🐦',shark:'🦈',monkey:'🐒',salmon:'🐟',camel:'🐪',snail:'🐌',wolf:'🐺',flamingo:'🦩',
+    sleep:'😴',water:'💧',walking:'🚶',run:'🏃',running:'🏃',food:'🍽️',lunch:'🍱',breakfast:'🥣',exercise:'🏋️',gym:'🏋️',dentist:'🦷',stress:'🧘',yoga:'🧘',
+    jeans:'👖',coat:'🧥',shoes:'👟',dress:'👗',shirt:'👕',fashion:'👠',tailor:'🪡',clothes:'👗',fabric:'🧵',hat:'🎩',photography:'📷',
+    ice:'🧊',magnet:'🧲',rainbow:'🌈',battery:'🔋',plane:'✈️',crystal:'💎',skeleton:'🦴',electric:'⚡',microscope:'🔬',weather:'🌦️',fossil:'🦕',robot:'🤖',solar:'☀️',bridge:'🌉',moon:'🌙',
+    market:'🛒',salad:'🥗',bread:'🍞',rice:'🍚',spice:'🌶️',fruit:'🍎',cake:'🎂',tea:'🍵',noodles:'🍜',coffee:'☕',vegetable:'🥕',soup:'🍲',
+    train:'🚆',station:'🚉',museum:'🏛️',suitcase:'🧳',bicycle:'🚲',hotel:'🏨',airport:'✈️',town:'🏘️',beach:'🏖️',hike:'🥾',mountain:'⛰️',photograph:'📷',ticket:'🎫',ferry:'⛴️',park:'🌳',journey:'🧭',
+    planet:'🪐',mars:'🔴',meteor:'☄️',saturn:'🪐',star:'⭐',galaxy:'🌌',jupiter:'🪐',rocket:'🚀',station:'🛰️',comet:'☄️',sun:'☀️',venus:'🪐',eclipse:'🌘',asteroid:'☄️',astronaut:'👨‍🚀',satellite:'🛰️',space:'🪐',
+    seed:'🌱',tree:'🌳',plants:'🌿',flower:'🌷',rain:'🌧️',leaf:'🍃',tomato:'🍅',root:'🌱',forest:'🌲',moss:'🌿',bamboo:'🎋',orchid:'🌸',cactus:'🌵',pond:'🪷',soil:'🪴',sunflower:'🌻',garden:'🪴',mangrove:'🌳',fern:'🌿',
+    football:'⚽',swim:'🏊',basketball:'🏀',race:'🏁',badminton:'🏸',tennis:'🎾',cycling:'🚴',volleyball:'🏐',marathon:'🏃',golf:'⛳',skate:'⛸️',rowing:'🚣',skiing:'⛷️',chess:'♟️',referee:'🟨'
+   };
+  function iconForLesson(l,style){
+    const words=l.title.toLowerCase().split(/[^a-z]+/).filter(Boolean);
+    for(const w of words)if(symbols[w])return symbols[w];
+    for(const w of words){
+     const stem=w.replace(/(?:ing|es|s)$/,'');
+     if(symbols[stem])return symbols[stem];
+    }
+    return style.icon;
+  }
   function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
   function resize(){
    const dpr=Math.min(window.devicePixelRatio||1,2),width=Math.max(320,canvas.clientWidth||850),height=width*9/16;
@@ -60,7 +80,7 @@ window.SmartcomLessonScene={
    ctx.font='bold 15px system-ui';ctx.fillStyle='#fff';ctx.fillText('SMARTCOM · FOUNDATIONS',57,58);
    ctx.textAlign='center';
    ctx.shadowColor='rgba(0,0,0,.16)';ctx.shadowBlur=35;
-   ctx.font='100px system-ui';ctx.fillText(style.icon,480+Math.sin(t)*7,195+Math.sin(t*.7)*5);
+   ctx.font='100px system-ui';ctx.fillText(iconForLesson(lesson,style),480+Math.sin(t)*7,195+Math.sin(t*.7)*5);
    ctx.shadowBlur=0;
    ctx.font='bold 31px system-ui';ctx.fillStyle='white';
    const words=lesson.title.split(' '),rows=[],max=35;let row='';
