@@ -128,6 +128,12 @@ document.addEventListener('touchstart',e=>{
   if(note)showNote(note);else hideNote();
 },{passive:true});
 
+function showSavedNotice(message){
+ let el=document.getElementById('sc-practice-saved-toast');
+ if(!el){el=document.createElement('div');el.id='sc-practice-saved-toast';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.style.cssText='position:fixed;right:18px;bottom:20px;z-index:2147483600;max-width:min(350px,calc(100vw - 36px));background:#30146d;color:white;border-radius:14px;padding:13px 17px;box-shadow:0 12px 30px #26114c40;font:700 14px/1.5 system-ui;pointer-events:none';document.body.append(el)}
+ el.textContent=message;el.hidden=false;clearTimeout(showSavedNotice.timer);showSavedNotice.timer=setTimeout(()=>el.hidden=true,3400);
+}
+
 let sequence=0;
 let lastDictionary={word:'',meaning:''};
 const knownMeanings={
@@ -201,7 +207,7 @@ panel.querySelector('.reading-dict-save').addEventListener('click',()=>{
   const entry={word:lastDictionary.word,meaning:lastDictionary.meaning||'',phonetic:'',partOfSpeech:lastDictionary.word.includes(' ')?'phrase':'',example:'',savedAt:new Date().toISOString()};
   if(previous<0)items.unshift(entry);else items[previous]={...items[previous],...entry,meaning:entry.meaning||items[previous].meaning};
   localStorage.setItem(key,JSON.stringify(items));
-  panel.querySelector('.reading-dict-note').textContent='✓ Đã lưu vào sổ tay từ vựng.';
+  const notice=previous<0?'✓ Đã thêm “'+lastDictionary.word+'” vào sổ tay.':'✓ Từ “'+lastDictionary.word+'” đã có trong sổ tay; đã cập nhật.';panel.querySelector('.reading-dict-note').textContent=notice;showSavedNotice(notice);
  }catch(e){panel.querySelector('.reading-dict-note').textContent='Không lưu được trên trình duyệt này.'}
 });
 document.addEventListener('dblclick',event=>{
