@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),e=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number=Number(document.body.dataset.part),folder=document.body.dataset.folder;
-const FIRST=(number-1)*10+1, LAST=number*10, names={1:'Thorndyke’s Builders',2:'Manham Port',3:'Work Placement',4:'Nanotechnology: Technology on a Small Scale'};
+const FIRST=(number-1)*10+1, LAST=number*10, names={3:'Thor Heyerdahl',4:'The Future of Management'};
 let D={},answers={},done=false,student={},started=Date.now(),seconds=0,clock,segmentEnd=null,hasAudio=false;
 const store='SMARTCOM_C10T2_P'+number+'_'+folder,normalize=s=>String(s||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 function field(n,placeholder='Điền từ'){return '<input class="cam-gap" id="q'+n+'" data-answer="'+n+'" autocomplete="off" spellcheck="false" placeholder="'+placeholder+'" aria-label="Câu '+n+'" value="'+e(answers[n]||'')+'">'}
@@ -41,17 +41,17 @@ function renderQuestions(){
  let html='';
  if(number===3){
   html+=choicePair(21,'Which TWO hobbies was Thor Heyerdahl very interested in as a youth?',[['A','camping'],['B','climbing'],['C','collecting'],['D','hunting'],['E','reading']]);
-  html+=choicePair(23,'Which TWO reasons did Heyerdahl have for going to live on an island?',[['A','to examine ancient carvings'],['B','to experience an isolated place'],['C','to formulate a new theory'],['D','to learn survival skills'],['E','to study the impact of an extreme environment']]);
+  html+=choicePair(23,'Which do the speakers say are the TWO reasons why Heyerdahl went to live on an island?',[['A','to examine ancient carvings'],['B','to experience an isolated place'],['C','to formulate a new theory'],['D','to learn survival skills'],['E','to study the impact of an extreme environment']]);
   html+=group(25,30,'Choose the correct letter, A, B or C.','THE LATER LIFE OF THOR HEYERDAHL',questionBlock([25,26,27,28,29,30],D.questionsText.split(/Questions 25-30/)[1]));
  }else{
   const sections=[
    ['Business markets',[[31,'greater ........ among companies'],[32,'increase in power of large ........ companies'],[33,'rising ........ in certain countries']]],
    ['External influences on businesses',[[34,'more discussion with ........ before making business decisions'],[35,'environmental concerns which may lead to more ........']]],
-   ['Business structures',[[36,'more teams formed to work on a particular ........'],[37,'hours that are ........, or the chance to work remotely']]],
+   ['Business structures',[[36,'more teams will be formed to work on a particular ........'],[37,'hours that are ........, or the chance to work remotely']]],
    ['Management styles',[[38,'increasing need for managers to provide good ........'],[39,'changes influenced by ........ taking senior roles']]],
-   ['Changes in the economy',[[40,'service sector remains important; intellectual property grows in value; more and more ........ workers']]]
+   ['Changes in the economy',[[40,'service sector continues to be important<br>increasing value of intellectual property<br>more and more ........ workers']]]
   ];
-  html+=group(31,40,'Complete the notes below. Write ONE WORD ONLY for each answer.','THE FUTURE OF MANAGEMENT','<div class="cam-note">'+sections.map(([title,items])=>'<h4>'+e(title)+'</h4><ul style="padding-left:19px">'+items.map(([n,txt])=>'<li id="row'+n+'" style="padding:7px 0">'+e(txt).replace(/[.…·_]{2,}/g,field(n))+'</li>').join('')+'</ul>').join('')+'</div>');
+  html+=group(31,40,'Complete the notes below. Write ONE WORD ONLY for each answer.','THE FUTURE OF MANAGEMENT','<div class="cam-note">'+sections.map(([title,items])=>'<h4>'+e(title)+'</h4><ul style="padding-left:19px">'+items.map(([n,txt])=>'<li id="row'+n+'" style="padding:7px 0">'+e(txt).replace(/&lt;br&gt;/g,'<br>').replace(/[.…·_]{2,}/g,field(n))+'</li>').join('')+'</ul>').join('')+'</div>');
  }
  $('questionsRoot').innerHTML=html;
  $('nav').innerHTML=Array.from({length:10},(_,i)=>{const n=FIRST+i;return '<button id="nav'+n+'" type="button" data-nav="'+n+'">'+n+'</button>'}).join('')+'<button class="nav-submit" id="footerSubmit">Nộp bài</button>';
@@ -113,7 +113,7 @@ function seek(n){
 }
 function transcriptMarkup(){
  const lines=D.transcript.split(/\n+/).filter(Boolean);
- $('transcriptText').innerHTML=lines.map((t,i)=>'<p class="cue-line" id="transcriptLine'+i+'">'+e(t)+'</p>').join('');
+ $('transcriptText').innerHTML=lines.map((t,i)=>{const tags=[...t.matchAll(/\(Q(\d+)(?:&Q(\d+))?\)/g)].flatMap(m=>[m[1],m[2]].filter(Boolean));return '<p class="cue-line" id="transcriptLine'+i+'"'+(tags.length?' data-transcript="'+tags[0]+'" title="Nhấn để nghe đoạn chứa đáp án"':'')+'>'+e(t)+'</p>'}).join('');
 }
 function review(){
  let score=0,out='';
