@@ -16916,11 +16916,15 @@ function startRacer(){
     nếu sau này thêm nút "Back to Vocabulary".
   */
   try{
-    localStorage.setItem(
-      "VOCAB_RACER_RETURN_URL",
-      window.location.href
-    );
-  }catch(error){}
+    localStorage.setItem("VOCAB_RACER_RETURN_URL",window.location.href);
+    const payload={
+      title:selectedSkill==='notebook'?'My Vocabulary Notebook':'Vocabulary · '+selectedSkill,
+      skill:selectedSkill,set:selectedSet,direction:$("directionSelect")?.value||"vi-en",
+      source:"student-selection",words:currentCollection.map(w=>({word:w.word,meaning:w.meaning,example:w.example||'',collocation:w.collocation||''})),
+      statsStorageKey:statsKey(),learnedStorageKey:learnedStorageKey(),learnedPrefix:learnedPrefix()
+    };
+    localStorage.setItem("VOCAB_RACER_ACTIVE_SET_V3",JSON.stringify(payload));
+  }catch(error){console.warn('Racer payload unavailable',error)}
 
   /*
     Cache-bust để GitHub Pages không giữ bản racer cũ.
@@ -20130,6 +20134,54 @@ async function init(){
 
   // Hiện giao diện ngay sau khi dữ liệu chính sẵn sàng.
   routeFromUrl();
+  // Notebook launch: reuse all original Vocabulary games with selected student words.
+  if(new URLSearchParams(location.search).get('notebook')==='1'){
+    try{
+      const selected=JSON.parse(sessionStorage.getItem('SC_NOTEBOOK_GAME_WORDS')||'[]');
+      const valid=Array.isArray(selected)?selected.filter(item=>item?.word&&item?.meaning).slice(0,150):[];
+      if(valid.length){
+        selectedSkill='notebook';
+        selectedSet='personal-'+valid.map(w=>w.word).join('|').split('').reduce((h,c)=>((h*31+c.charCodeAt(0))>>>0),0).toString(36);
+        currentCollection=uniqueVocabularyWords(valid.map((item,i)=>({
+          id:'notebook-'+i+'-'+String(item.word).toLowerCase(),
+          word:String(item.word).trim(),meaning:String(item.meaning).trim(),
+          example:String(item.example||''),phonetic:String(item.phonetic||''),
+          collocation:String(item.collocation||''),skills:['notebook'],set:selectedSet
+        })));
+        vocabularyStage='games';
+        showGameList();
+        $('collectionTitle').textContent='📒 My Vocabulary Notebook · '+valid.length+' từ đã chọn';
+        // User has chosen the game in the Notebook; invoke its original launcher.
+        const autoName=sessionStorage.getItem('SC_NOTEBOOK_GAME_AUTOSTART');
+        sessionStorage.removeItem('SC_NOTEBOOK_GAME_AUTOSTART');
+        const gameHandlers={
+         'Lexicon Guardians':'startLexiconGuardians','Lexi Atelier':'startLexiAtelier',
+         'Penalty Words':'startPenaltyWords','Dungeon of Words':'startDungeonOfWords',
+         'Whack a Word':'startWhack','Word Catcher':'startCatcher',
+         'Vocab Racer 3D':'startRacer','Alien Escape':'startMatch',
+         'Flappy Kākāpō':'startFlappy','Balloon Pop':'startBalloon',
+         'Shark Escape':'startShark','Monkey Code Lock':'startMonkey'
+        };
+        if(autoName&&gameHandlers[autoName]){
+          // Use a visible entry button so the learner explicitly starts audio/gameplay.
+          const banner=document.createElement('div');
+          banner.style.cssText='padding:14px;border:1px solid #decaf6;border-radius:13px;background:#f8f1ff;margin:15px 0';
+          banner.textContent='Bạn đã chọn game: '+autoName+' · ';
+          const play=document.createElement('button');play.type='button';play.textContent='▶ Bắt đầu game đã chọn';
+          play.style.cssText='background:#3b0e90;color:#fff;padding:12px 17px;border:0;border-radius:11px;cursor:pointer';
+          play.addEventListener('click',()=>{
+            if(typeof window[gameHandlers[autoName]]==='function')window[gameHandlers[autoName]]();
+            else alert('Game này chưa tải xong. Hãy chọn từ danh sách bên dưới.');
+          });
+          banner.append(play);$('collectionScreen').prepend(banner);
+        }
+        $('collectionSubtitle').textContent='Chọn một game từ kho Vocabulary để luyện chính các từ vừa chọn.';
+        $('collectionBack').onclick=()=>location.href='../../Vocabulary-Notebook/';
+        $('changeVocabLevel').onclick=()=>location.href='../../Vocabulary-Notebook/';
+        $('vocabFlow').classList.add('hidden');
+      }
+    }catch(error){console.error('Cannot open notebook game collection',error)}
+  }
   // Speaking module may load before the async base vocabulary finishes.
   // Ensure direct links still show the CEFR picker, not the game grid.
   window.refreshSpeakingVocabularyStage?.();
