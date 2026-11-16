@@ -150,6 +150,16 @@ shade.onclick=close;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
 function buttonEl(text,onClick){const b=document.createElement('button');b.textContent=text;b.onclick=onClick;return b}
 function addText(parent,type,value,cls){const el=document.createElement(type);if(cls)el.className=cls;el.textContent=value;parent.append(el);return el}
+
+let toastTimer=0;
+function vocabSavedToast(message,ok=true){
+ let toast=document.getElementById('sc-vocab-saved-toast');
+ if(!toast){toast=document.createElement('div');toast.id='sc-vocab-saved-toast';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');toast.style.cssText='position:fixed;right:18px;bottom:20px;z-index:2147483600;max-width:min(350px,calc(100vw - 36px));border-radius:13px;padding:13px 17px;background:#30146d;color:#fff;font:700 14px/1.5 system-ui;box-shadow:0 12px 30px #26114c40;pointer-events:none';document.body.append(toast)}
+ toast.style.background=ok?'#30146d':'#9e2637';toast.textContent=message;toast.hidden=false;
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>{toast.hidden=true},3300);
+}
+window.scVocabSavedToast=vocabSavedToast;
+
 function saveWord(){
  if(!word)return;
  const list=load();
@@ -157,7 +167,7 @@ function saveWord(){
  const item={word,meaning:vietnamese||currentPhrase()?.[0]||meaning,phonetic:entry?.phonetic||entry?.phonetics?.find(x=>x.text)?.text||'',partOfSpeech:currentPhrase()?'phrase':entry?.meanings?.[0]?.partOfSpeech||'',example:currentPhrase()?.[2]||entry?.meanings?.[0]?.definitions?.find(x=>x.example)?.example||'',savedAt:new Date().toISOString()};
  const i=list.findIndex(x=>x.word===word);
  if(i<0)list.unshift(item);else list[i]={...list[i],...Object.fromEntries(Object.entries(item).filter(([k,v])=>k==='savedAt'||v))};
- if(save(list)){menu.hidden=true;if(modal.hidden){modal.replaceChildren();addText(modal,'h2','✓ Đã lưu '+word);modal.append(buttonEl('Mở sổ tay',()=>location.href=new URL('Vocabulary-Notebook/',root).href));displayPanel()}else{const p=addText(modal,'p','✓ Đã lưu vào sổ tay');position(modal)}}else alert('Không thể lưu từ trên trình duyệt này.');
+ if(save(list)){menu.hidden=true;vocabSavedToast(i<0?'✓ Đã thêm “'+word+'” vào sổ tay.':'✓ “'+word+'” đã có trong sổ tay; đã cập nhật.');if(modal.hidden){modal.replaceChildren();addText(modal,'h2',i<0?'✓ Đã thêm vào sổ tay':'✓ Đã cập nhật từ đã lưu');modal.append(buttonEl('Mở sổ tay',()=>location.href=new URL('Vocabulary-Notebook/',root).href));displayPanel()}else{addText(modal,'p',i<0?'✓ Đã thêm vào sổ tay':'✓ Đã cập nhật từ trong sổ tay');position(modal)}}else vocabSavedToast('Không thể lưu từ trên trình duyệt này.',false);
 }
 function render(){
  modal.replaceChildren();
