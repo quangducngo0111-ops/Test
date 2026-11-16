@@ -50,6 +50,18 @@ textarea{width:100%;min-height:115px;resize:vertical;padding:14px;border-radius:
 #videoPanel{margin-top:15px;max-width:650px}#videoPanel video{width:100%;max-height:300px}
 @media(max-width:840px){.topic-grid,.lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:570px){.topic-grid,.lesson-grid{grid-template-columns:1fr}.topic-card{min-height:165px}}
+
+.lesson-video{padding:17px;border:1px solid #e4d9f2;border-radius:19px;background:#faf8ff;margin:16px 0}
+.video-heading{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;font-size:14px}
+#videoStatus{font-size:12px;color:#715990}
+.video-stage{position:relative;aspect-ratio:16/9;background:#12152b;border-radius:16px;overflow:hidden}
+#lessonVideo{display:none;width:100%;height:100%;object-fit:cover}
+#lessonVideo.available{display:block}
+.video-fallback{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:white;gap:10px;text-align:center;padding:30px}
+.video-fallback span{font-size:70px}.video-fallback p{color:#d4c9e5}
+.video-subtitle{position:absolute;left:4%;right:4%;bottom:14px;pointer-events:none;color:#fff;background:#101529db;padding:10px 15px;border-radius:12px;text-align:center;font-size:clamp(12px,1.5vw,18px)}
+#videoCredit{font-size:12px;color:#625875;line-height:1.6}
+#videoCredit a{color:#532cb2;text-decoration:underline}
 </style></head>
 <body><header><a class="back" href="../">← Foundations</a><span class="brand">🎧 Topic-based Listening</span><a href="../../Vocabulary-Notebook/" class="back">📒 Sổ tay</a></header>
 <main><section class="hero"><div class="eyebrow">LISTENING FOUNDATIONS</div><h1>Topic-based Listening</h1><p>Chọn chủ đề mình yêu thích, sau đó chọn một trong 30 bài nghe ngắn để luyện nghe và viết chính tả.</p></section>
@@ -64,7 +76,14 @@ textarea{width:100%;min-height:115px;resize:vertical;padding:14px;border-radius:
  <div class="panel exercise">
   <div class="exercise-head"><div><span class="tag" id="lessonTopic"></span><h2 id="lessonTitle">Bài nghe</h2></div><span class="pill" id="lessonMeta"></span></div>
   <p class="section-note">Nghe hết bài để hiểu ý chính, sau đó bấm “Nghe câu” và chép lại từng câu. Nhấp đúp vào từ bất kỳ trong phần đáp án (ngoài Mock Test) để tra từ hoặc lưu sổ tay.</p>
-  <div id="videoPanel" hidden><strong>Video hình ảnh bổ trợ: Dolphins</strong><p class="section-note">Minh họa riêng; audio đọc dictation là nội dung độc lập do website phát. <a href="https://commons.wikimedia.org/wiki/File:Dolphins-by-Anacapa-Island-CA.webm" target="_blank" rel="noopener" style="color:#5634bd;text-decoration:underline">Nguồn video và giấy phép</a>.</p><video controls preload="none" playsinline><source src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Dolphins-by-Anacapa-Island-CA.webm" type="video/webm"></video></div>
+  <div id="videoPanel" class="lesson-video">
+ <div class="video-heading"><strong>🎬 Video theo nội dung bài nghe</strong><span id="videoStatus">Đang tìm video phù hợp...</span></div>
+ <div class="video-stage"><video id="lessonVideo" muted playsinline loop preload="metadata" controls></video>
+ <div class="video-fallback" id="videoFallback" hidden><span id="fallbackIcon">🎧</span><strong id="fallbackTitle"></strong><p>Chưa tìm được video có thông tin giấy phép rõ ràng và khớp nội dung bài nghe.</p></div>
+ <div id="videoSubtitle" class="video-subtitle">Nhấn Nghe toàn bài để xem phụ đề theo lời đọc.</div></div>
+ <p id="videoCredit">Video tra cứu từ Wikimedia Commons có hiển thị giấy phép và ghi nguồn tác giả.</p>
+ <p class="section-note">Video là hình minh họa có liên quan; lời đọc và phụ đề theo chính nội dung Dictation. Đây không phải video thuyết minh được đồng bộ cảnh quay từng câu.</p>
+ </div>
   <div class="exercise-buttons"><button type="button" id="playAll" class="primary">▶ Nghe toàn bài</button><button type="button" id="listenSentence">🔊 Nghe câu này</button><button type="button" id="stopAudio">■ Dừng nghe</button>
   <label>Tốc độ <select class="speed-select" id="speed"><option value=".76">Chậm</option><option value=".9" selected>Bình thường</option><option value="1.05">Nhanh</option></select></label></div>
   <div class="progress-track"><span id="bar" style="width:0"></span></div>
@@ -158,9 +177,7 @@ function openLesson(i){
  $('lessonTopic').textContent=t.icon+' '+t.name+' · Bài '+l.id;
  $('lessonTitle').textContent=l.title;
  $('lessonMeta').textContent=l.text.trim().split(/\s+/).length+' từ · '+currentSentences().length+' câu';
- const video=t.id==='animals'&&i===0;
- $('videoPanel').hidden=!video;
- if(!video)$('videoPanel').querySelector('video').pause();
+ loadLessonVideo(t,l);
  refreshSentence();navigate('exerciseView');
 }
 function speak(text){
