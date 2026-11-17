@@ -96,7 +96,7 @@ function relevant(n){
 function seek(n){
  const span=D.evidence?.[n];
  if(!span||!Number.isFinite(span.start)){$('audioStatus').textContent='Chưa có timestamp chính xác cho câu này; hãy nghe bằng thanh audio.';return}
- if(!hasAudio){$('audioStatus').textContent='Audio chưa có trên máy chủ; vui lòng tải lại sau.';return}
+ if(!hasAudio){$('audioStatus').textContent='Audio chưa được tải lên máy chủ.';return}
  const player=$('player');
  player.currentTime=Math.max(0,span.start-1.5);
  segmentEnd=Math.min(player.duration||D.durationSeconds,(span.end||span.start+12)+1.5);
