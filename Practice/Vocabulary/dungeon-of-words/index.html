@@ -31,7 +31,22 @@ kbd{background:#343958;padding:3px 6px;border-radius:5px;color:#fff}
 #options{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:18px 0}
 #options button{background:#e9e7fa;color:#22223c;min-height:52px}
 #options button:hover{background:#ffe1a1}
-#prompt{font-size:17px}#feedback{min-height:24px;color:#f6d584}
+#prompt{font-size:18px;line-height:1.6;color:#F2F8FF!important;font-weight:650;margin:15px 0 18px}#feedback{min-height:26px;color:#ffe6a8!important;font-weight:750}
+#modal{background:rgba(4,12,28,.76)!important;backdrop-filter:blur(5px)}
+#modal .dialog{background:linear-gradient(145deg,#203D5C,#182D49)!important;border:2px solid #67BCE8!important;box-shadow:0 24px 90px #010817bf!important;color:#F0F7FF!important}
+#modal .dialog h2{color:#FFDF97!important;font-size:25px}
+#options button{background:#EFF8FF!important;color:#143654!important;border:2px solid #B5DDF7!important;border-radius:13px;font-weight:800;line-height:1.45;transition:.15s}
+#options button:hover:not(:disabled){background:#D6F1FF!important;border-color:#53B6EC!important;transform:translateY(-2px)}
+#modalActions button{background:#69C5EE!important;color:#0D2D48!important;border:1px solid #B7EBFF}
+#modal[hidden]{display:none!important}
+#game{border:2px solid #60AACA!important;border-radius:18px;box-shadow:0 14px 38px #0006;background:#122942!important}
+.game-help{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0;padding:10px;background:#182D48;border-radius:11px}
+.game-help kbd{background:#2D6289;color:#fff;border:1px solid #4F9CC8}
+#chargeSpell{width:100%;background:linear-gradient(100deg,#187AAB,#48B8E8);color:#fff;margin-top:10px;border:1px solid #8DDCFB}
+#castStatus{color:#9DE7FF;font-size:12px;margin:8px 0;min-height:16px}
+#touch{display:flex;align-items:center}
+@media(max-width:850px){#touch{position:sticky;bottom:8px;z-index:12;background:#172D48e8;padding:8px;border-radius:16px}}
+
 #modalActions{display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:850px){.layout{grid-template-columns:1fr}aside{display:grid;grid-template-columns:1fr 1fr;gap:8px}aside h2,aside #status,aside .small,aside #inventory{grid-column:1/-1}#touch{display:flex}}
 @media(max-width:430px){aside{display:block}#options{grid-template-columns:1fr}.pad{grid-template-columns:repeat(3,43px)}}
@@ -47,8 +62,8 @@ kbd{background:#343958;padding:3px 6px;border-radius:5px;color:#fff}
 <div class="stat"><span>🪙 Gold</span><span id="gold">0</span></div>
 <div class="stat"><span>⭐ Level / EXP</span><span id="level">1 / 0</span></div>
 <h3>🎒 Trang bị</h3><div id="inventory"></div>
-<p id="status">Chọn lớp nhân vật để bắt đầu.</p>
-<p class="small"><kbd>WASD</kbd> / phím mũi tên: di chuyển<br><kbd>Space</kbd>: đánh thường<br><kbd>Q</kbd>: dùng phép từ vựng<br><kbd>E</kbd>: tương tác với rương/cổng<br>Chạm nút điều khiển trên điện thoại.</p>
+<p id="status">Chọn lớp nhân vật để bắt đầu.</p><button type="button" id="chargeSpell">📘 Học từ · Nạp mana</button><p id="castStatus">SPACE: tấn công · Q: dùng kỹ năng · E: mở rương</p>
+<p class="small"><kbd>WASD</kbd> / phím mũi tên: di chuyển<br><kbd>Space</kbd>: đánh thường<br><kbd>Q</kbd>: dùng phép từ vựng<br><kbd>E</kbd>: tương tác với rương/cổng<br>Học từ để nạp mana; câu hỏi không tự bật khi đánh quái. Chạm nút điều khiển trên điện thoại.</p>
 <button id="help">Hướng dẫn / đổi lớp</button>
 </aside>
 <div id="touch"><div class="pad"><button data-move="up">↑</button><button data-move="left">←</button><button data-move="down">↓</button><button data-move="right">→</button></div><div class="actions"><button id="touchAttack">⚔️</button><button id="touchSpell">🔮 Q</button><button id="touchUse">🗝️ E</button></div></div>
@@ -64,29 +79,31 @@ words=[...new Map(words.map(w=>[w.word.toLowerCase(),w])).values()];
 if(words.length<4)words=samples.map(([word,meaning])=>({word,meaning}));
 const heroes=[{name:"Kael · Warrior",hp:120,speed:182,damage:26,range:75,skill:"Lá chắn",tint:0xe96a67},{name:"Lyra · Mage",hp:90,speed:190,damage:22,range:230,skill:"Fireball",tint:0xa693f5},{name:"Finn · Ranger",hp:100,speed:215,damage:20,range:250,skill:"Tên phép",tint:0x7fd9b2},{name:"Zuri · Alchemist",hp:105,speed:185,damage:24,range:180,skill:"Hồi phục",tint:0xf2be72}];
 let saved={};try{saved=JSON.parse(localStorage.getItem("DUNGEON_WORDS_RPG_V2")||"{}")||{}}catch(e){}
-let profile={classId:Math.max(0,Math.min(3,Number(saved.classId)||0)),floor:Math.max(1,Math.min(10,Number(saved.floor)||1)),gems:Number(saved.gems)||0,gold:Number(saved.gold)||0,level:Math.max(1,Number(saved.level)||1),exp:Number(saved.exp)||0,gear:Array.isArray(saved.gear)?saved.gear:["🏮 Đèn lồng"],missed:[],hp:100,mana:1,locked:true,scene:null};
+let profile={classId:Math.max(0,Math.min(3,Number(saved.classId)||0)),floor:Math.max(1,Math.min(10,Number(saved.floor)||1)),gems:Number(saved.gems)||0,gold:Number(saved.gold)||0,level:Math.max(1,Number(saved.level)||1),exp:Number(saved.exp)||0,gear:Array.isArray(saved.gear)?saved.gear:["🏮 Đèn lồng"],missed:[],hp:100,mana:2,locked:true,scene:null};
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>[...a].sort(()=>Math.random()-.5);
 function persist(){try{localStorage.setItem("DUNGEON_WORDS_RPG_V2",JSON.stringify({classId:profile.classId,floor:profile.floor,gems:profile.gems,gold:profile.gold,level:profile.level,exp:profile.exp,gear:profile.gear}))}catch(e){}}
 function hud(){const hero=heroes[profile.classId];$("heroName").textContent=hero.name;$("floor").textContent="Tầng "+profile.floor+"/10";$("hp").textContent=Math.max(0,Math.ceil(profile.hp))+" / "+hero.hp;$("hpbar").style.width=Math.min(100,100*profile.hp/hero.hp)+"%";$("mana").textContent=profile.mana+"/3";$("gems").textContent=profile.gems;$("gold").textContent=profile.gold;$("level").textContent=profile.level+" / "+profile.exp;$("inventory").replaceChildren(...profile.gear.slice(-9).map(v=>{const e=document.createElement("span");e.className="chip";e.textContent=v;return e}))}
 function note(t){$("status").textContent=t}
-function openModal(title,prompt,choices=[]){profile.locked=true;$("modal").hidden=false;$("modalTitle").textContent=title;$("prompt").textContent=prompt;$("options").replaceChildren();$("feedback").textContent="";$("modalActions").replaceChildren();for(const option of choices){const b=document.createElement("button");b.textContent=option.label;b.onclick=option.fn;$("options").append(b)}}
-function closeModal(){profile.locked=false;$("modal").hidden=true;hud()}
+function openModal(title,prompt,choices=[]){if(profile.locked&&$("modal").hidden===false)return;profile.locked=true;$("modal").hidden=false;$("modalTitle").textContent=title;$("prompt").textContent=prompt;$("options").replaceChildren();$("feedback").textContent="";$("modalActions").replaceChildren();for(const option of choices){const b=document.createElement("button");b.textContent=option.label;b.onclick=option.fn;$("options").append(b)}}
+function closeModal(){profile.locked=false;$("modal").hidden=true;hud();profile.scene?.syncCombatHud()}
 function action(label,fn){const b=document.createElement("button");b.textContent=label;b.onclick=fn;$("modalActions").append(b)}
 function reward(gems=0,gold=0,exp=0){profile.gems+=gems;profile.gold+=gold;profile.exp+=exp;while(profile.exp>=profile.level*30){profile.exp-=profile.level*30;profile.level++;profile.hp=Math.min(heroes[profile.classId].hp,profile.hp+20);note("⭐ Lên cấp "+profile.level+"!")}persist();hud()}
-function quiz(title,onAnswer){const w=profile.missed.length&&Math.random()<.35?pick(profile.missed):pick(words),distractors=shuffle(words.filter(x=>x.word!==w.word&&x.meaning!==w.meaning)).slice(0,3);
+function quiz(title,onAnswer){if(profile.locked)return;const w=profile.missed.length&&Math.random()<.35?pick(profile.missed):pick(words),distractors=shuffle(words.filter(x=>x.word!==w.word&&x.meaning!==w.meaning)).slice(0,3);
 openModal(title,"Chọn đúng nghĩa của “"+w.word+"” để kích hoạt sức mạnh.",shuffle([w,...distractors]).map(x=>({label:x.meaning,fn:()=>{const ok=x.word===w.word;$("options").querySelectorAll("button").forEach(b=>b.disabled=true);$("feedback").textContent=ok?"✅ Chính xác! Khiên bị phá.":"❌ Đáp án đúng: "+w.meaning;if(ok){profile.mana=Math.min(3,profile.mana+1);reward(3,0,6)}else profile.missed.push(w);$("modalActions").replaceChildren();action("Tiếp tục →",()=>{closeModal();onAnswer(ok)})}})))}
-function chooseClass(){const opts=heroes.map((h,i)=>({label:h.name+" · "+h.skill,fn:()=>{profile.classId=i;profile.hp=h.hp;profile.mana=1;profile.floor=1;persist();closeModal();profile.scene?.restartFloor()}}));openModal("🏕️ Chọn nhân vật","Điều khiển nhân vật, đánh quái và dùng kiến thức từ vựng để phá khiên. Tiến độ gems và trang bị sẽ được giữ lại.",opts)}
-function gameOver(){openModal("💀 Bạn đã gục ngã","Đá quý và trang bị vẫn được giữ. Chơi lại từ tầng 1.",[]);action("Hồi sinh",()=>{profile.floor=1;profile.hp=heroes[profile.classId].hp;profile.mana=1;closeModal();profile.scene?.restartFloor()})}
+function chooseClass(){const opts=heroes.map((h,i)=>({label:h.name+" · "+h.skill,fn:()=>{profile.classId=i;profile.hp=h.hp;profile.mana=2;profile.floor=1;persist();closeModal();profile.scene?.restartFloor()}}));openModal("🏕️ Chọn nhân vật","Điều khiển nhân vật, đánh quái và dùng kiến thức từ vựng để phá khiên. Tiến độ gems và trang bị sẽ được giữ lại.",opts)}
+function gameOver(){openModal("💀 Bạn đã gục ngã","Đá quý và trang bị vẫn được giữ. Chơi lại từ tầng 1.",[]);action("Hồi sinh",()=>{profile.floor=1;profile.hp=heroes[profile.classId].hp;profile.mana=2;closeModal();profile.scene?.restartFloor()})}
 function createTexture(scene,key,drawer,w=48,h=48){if(scene.textures.exists(key))return;const g=scene.make.graphics({x:0,y:0},false);drawer(g);g.generateTexture(key,w,h);g.destroy()}
 class DungeonScene extends Phaser.Scene{
- constructor(){super("Dungeon");this.enemies=[];this.drops=[];this.treasure=[];this.projectiles=[];this.lastAttack=0;this.lastHurt=0;this.move={up:false,down:false,left:false,right:false}}
+ constructor(){super("Dungeon");this.enemies=[];this.drops=[];this.treasure=[];this.projectiles=[];this.lastAttack=0;this.lastHurt=0;this.lastSpell=0;this.move={up:false,down:false,left:false,right:false}}
  create(){
   profile.scene=this;this.cameras.main.setBackgroundColor("#141524");
   this.cursors=this.input.keyboard.createCursorKeys();this.keys=this.input.keyboard.addKeys("W,A,S,D,SPACE,Q,E");
   this.input.keyboard.on("keydown-SPACE",()=>this.attack());
   this.input.keyboard.on("keydown-Q",()=>this.spell());
   this.input.keyboard.on("keydown-E",()=>this.use());
+   this.input.keyboard.on("keydown-R",()=>this.study());
+   this.input.keyboard.addCapture(["SPACE","UP","DOWN","LEFT","RIGHT"]);
   createTexture(this,"hero",g=>{g.fillStyle(0x243044).fillEllipse(24,42,29,9);g.fillStyle(0xffd3a2).fillCircle(24,13,9);g.fillStyle(0x735138).fillRect(15,3,18,6);g.fillStyle(0x59b7ee).fillRoundedRect(12,22,24,20,5);g.fillStyle(0x253764).fillRect(12,38,8,7).fillRect(28,38,8,7)});
   createTexture(this,"enemy",g=>{g.fillStyle(0x55255c).fillEllipse(24,35,38,23);g.fillStyle(0x9e4aae).fillCircle(24,22,17);g.fillStyle(0xffffff).fillCircle(17,20,5).fillCircle(30,20,5);g.fillStyle(0x2c173b).fillCircle(17,20,2).fillCircle(30,20,2);g.fillStyle(0xf2e2aa).fillTriangle(20,30,27,30,23,37)});
   createTexture(this,"boss",g=>{g.fillStyle(0x8f364e).fillEllipse(36,48,64,45);g.fillStyle(0xd85d68).fillCircle(36,28,27);g.fillStyle(0xffd2a0).fillTriangle(10,12,15,0,24,13).fillTriangle(49,13,59,0,64,16);g.fillStyle(0xffffff).fillCircle(25,25,7).fillCircle(47,25,7);g.fillStyle(0x221b33).fillCircle(25,25,3).fillCircle(47,25,3)},72,72);
@@ -95,7 +112,9 @@ class DungeonScene extends Phaser.Scene{
   createTexture(this,"bullet",g=>{g.fillStyle(0xf6d27a).fillCircle(9,9,8)},18,18);
   this.player=this.physics.add.sprite(100,300,"hero").setCircle(18,6,9).setCollideWorldBounds(true).setDepth(8);
   this.player.setTint(heroes[profile.classId].tint);
-  this.message=this.add.text(400,22,"",{fontSize:"19px",fontFamily:"system-ui",color:"#f7e5bb",stroke:"#17182e",strokeThickness:4}).setOrigin(.5).setDepth(30);
+  this.message=this.add.text(400,24,"",{fontSize:"19px",fontFamily:"system-ui",color:"#F2F9FF",stroke:"#12304D",strokeThickness:5,fontStyle:"bold"}).setOrigin(.5).setDepth(30);
+   this.fx=this.add.graphics().setDepth(18);this.facing={x:1,y:0};
+   this.shotText=this.add.text(400,555,"SPACE · ĐÁNH     Q · KỸ NĂNG     R · HỌC TỪ     E · MỞ RƯƠNG",{fontSize:"13px",color:"#BDEAFF",backgroundColor:"#0A2437dd",padding:{x:14,y:8},fontStyle:"bold"}).setOrigin(.5).setDepth(25);
   this.restartFloor();
  }
  restartFloor(){
@@ -104,10 +123,14 @@ class DungeonScene extends Phaser.Scene{
   this.enemies=[];this.drops=[];this.treasure=[];this.projectiles=[];
   this.children.list.filter(x=>x.getData?.("floorDecor")).forEach(x=>x.destroy());
   const add=(x,y,w,h,color,alpha=1)=>this.add.rectangle(x,y,w,h,color,alpha).setData("floorDecor",true);
-  for(let y=24;y<575;y+=48)for(let x=24;x<800;x+=48)add(x,y,46,46,(Math.floor(x/48)+Math.floor(y/48))%2?0x25283b:0x292e40);
-  for(let x=0;x<800;x+=48){add(x+24,12,48,24,0x676079);add(x+24,588,48,24,0x676079)}
+   add(400,300,740,542,0x15334A,.95);
+   for(let i=0;i<16;i++){const x=56+i*47;add(x,300,2,522,0x2E5770,.32)}
+   for(let i=0;i<12;i++){const y=45+i*47;add(400,y,730,2,0x2E5770,.32)}
+  for(let y=48;y<555;y+=48)for(let x=48;x<760;x+=48)if((x+y)%144===0)add(x,y,38,38,0x31546C,.17);
+   for(const [x,y] of [[160,90],[400,90],[650,90],[160,510],[400,510],[650,510]]){add(x,y,14,14,0xFFCC6E,.9);add(x,y,24,24,0xF7A954,.13)}
+  for(let x=0;x<800;x+=48){add(x+24,12,48,24,0x3F6B83);add(x+24,588,48,24,0x676079)}
   for(let y=36;y<570;y+=48){add(12,y,24,48,0x676079);add(788,y,24,48,0x676079)}
-  this.exit=add(740,300,52,96,0x725c35);this.exit.setStrokeStyle(3,0xf3d28e);this.exitText=this.add.text(740,300,"🔒\nCỔNG",{fontSize:"18px",color:"#fff4bb",align:"center"}).setOrigin(.5).setData("floorDecor",true);
+  this.exit=add(740,300,52,96,0x795C3B);this.exit.setStrokeStyle(3,0xf3d28e);this.exitText=this.add.text(740,300,"🔒\nCỔNG",{fontSize:"18px",color:"#fff4bb",align:"center"}).setOrigin(.5).setData("floorDecor",true);
   this.player.setPosition(90,300).setTint(heroes[profile.classId].tint);
   this.bossDown=false;this.lastAttack=0;this.lastHurt=0;this.message.setText("TẦNG "+profile.floor+" · Diệt quái, mở rương, hạ boss!");
   const count=Math.min(3+profile.floor,9);
@@ -120,16 +143,18 @@ class DungeonScene extends Phaser.Scene{
   const sprite=this.physics.add.sprite(x,y,boss?"boss":"enemy").setCollideWorldBounds(true).setDepth(7).setImmovable(false);
   sprite.body.setSize(boss?55:32,boss?56:33);
   const hp=(boss?145:55)+profile.floor*(boss?28:10);
-  this.enemies.push({sprite,boss,hp,max:hp,shield:boss?2:1,nextHit:0,lastShieldPrompt:0});
+  this.enemies.push({sprite,boss,hp,max:hp,shield:boss?1:0,nextHit:0,lastShieldPrompt:0});
  }
  spawnChest(x,y){const sprite=this.add.image(x,y,"chest").setDepth(6);this.treasure.push({sprite,opened:false})}
  pickup(x,y,kind){const sprite=this.add.image(x,y,"gem").setDepth(6);this.drops.push({sprite,kind})}
  update(time,delta){
   if(profile.locked){this.player.setVelocity(0);this.enemies.forEach(e=>e.sprite.setVelocity(0));return}
+   this.fx.clear();
   const k=this.keys,c=this.cursors,m=this.move;
   let vx=Number(k.D.isDown||c.right.isDown||m.right)-Number(k.A.isDown||c.left.isDown||m.left);
   let vy=Number(k.S.isDown||c.down.isDown||m.down)-Number(k.W.isDown||c.up.isDown||m.up);
   const hero=heroes[profile.classId],mag=Math.hypot(vx,vy)||1;this.player.setVelocity(vx/mag*hero.speed,vy/mag*hero.speed);
+   if((k.SPACE.isDown||c.space?.isDown)&&time-this.lastAttack>420)this.attack();
   if(vx||vy){this.facing={x:vx/mag,y:vy/mag};this.player.setFlipX(vx<0)}
   for(const e of this.enemies){
    if(e.hp<=0)continue;
@@ -147,39 +172,82 @@ class DungeonScene extends Phaser.Scene{
   }
  }
  damage(n){if(profile.locked)return;profile.hp=Math.max(0,profile.hp-n);this.lastHurt=this.time.now;this.player.setTintFill(0xff6262);this.time.delayedCall(160,()=>this.player?.setTint(heroes[profile.classId].tint));hud();if(profile.hp<=0){this.enemies.forEach(e=>e.sprite.setVelocity(0));gameOver()}}
+ syncCombatHud(){
+   $("castStatus").textContent="SPACE: đánh thường · Q: "+heroes[profile.classId].skill+" (1 mana) · R: học từ · Mana "+profile.mana+"/3";
+ }
+ flash(x,y,color=0xFFDA7E,radius=60){
+   const ring=this.add.circle(x,y,12,color,.16).setStrokeStyle(3,color,.85).setDepth(17);
+   this.tweens.add({targets:ring,scale:radius/12,alpha:0,duration:270,onComplete:()=>ring.destroy()});
+ }
+ floatText(x,y,text,color="#FFE4A6"){
+   const label=this.add.text(x,y,text,{fontFamily:"system-ui",fontSize:"18px",fontStyle:"900",color,stroke:"#0B2136",strokeThickness:4}).setDepth(30).setOrigin(.5);
+   this.tweens.add({targets:label,y:y-42,alpha:0,duration:650,onComplete:()=>label.destroy()});
+ }
+ study(){
+   if(profile.locked)return;
+   quiz("📘 Nạp năng lượng từ vựng",ok=>{
+     if(ok){this.flash(this.player.x,this.player.y,0x66E5CC,78);this.floatText(this.player.x,this.player.y-30,"+1 MANA","#7AF6D9");note("Chính xác! +1 mana, +3 gems và EXP.")}
+     else{note("Ôn lại từ vừa sai rồi thử nạp mana lần nữa.")}
+     this.syncCombatHud();hud();
+   });
+ }
  attack(){
-  if(profile.locked||this.time.now-this.lastAttack<460)return;this.lastAttack=this.time.now;
-  const h=heroes[profile.classId],f=this.facing||{x:1,y:0};this.player.setAngle(12);this.time.delayedCall(130,()=>this.player?.setAngle(0));
-  const reach=h.range,targets=this.enemies.filter(e=>e.hp>0&&Phaser.Math.Distance.Between(this.player.x,this.player.y,e.sprite.x,e.sprite.y)<reach);
-  const e=targets.sort((a,b)=>Phaser.Math.Distance.Between(this.player.x,this.player.y,a.sprite.x,a.sprite.y)-Phaser.Math.Distance.Between(this.player.x,this.player.y,b.sprite.x,b.sprite.y))[0];
-  if(!e){note("⚔️ Không có quái trong tầm tấn công.");return}
-  if(reach>100){const bullet=this.physics.add.image(this.player.x,this.player.y,"bullet").setDepth(9);this.physics.moveToObject(bullet,e.sprite,420);this.projectiles.push({sprite:bullet,life:900,damage:h.damage+profile.level*3})}
-  else this.hit(e,h.damage+profile.level*3);
+   if(profile.locked||this.time.now-this.lastAttack<420)return;
+   this.lastAttack=this.time.now;
+   const h=heroes[profile.classId],f=this.facing||{x:1,y:0};
+   this.player.setAngle(f.x<0?-10:10);this.time.delayedCall(130,()=>this.player?.setAngle(0));
+   const target=this.enemies.filter(e=>e.hp>0&&e.sprite.active).sort((a,b)=>Phaser.Math.Distance.Between(this.player.x,this.player.y,a.sprite.x,a.sprite.y)-Phaser.Math.Distance.Between(this.player.x,this.player.y,b.sprite.x,b.sprite.y))[0];
+   const distance=target?Phaser.Math.Distance.Between(this.player.x,this.player.y,target.sprite.x,target.sprite.y):Infinity;
+   this.flash(this.player.x+f.x*32,this.player.y+f.y*32,0xFFDA7E,42);
+   if(distance>h.range+15){note("Tiến lại gần quái để đánh. Phím Q dùng kỹ năng, R nạp mana.");return}
+   if(h.range>100){
+     const bullet=this.physics.add.image(this.player.x,this.player.y,"bullet").setDepth(20);
+     bullet.setTint(profile.classId===1?0x9BDBFF:0x8FE8C6);
+     this.physics.moveToObject(bullet,target.sprite,540);
+     this.projectiles.push({sprite:bullet,life:1100,damage:h.damage+profile.level*3});
+   }else this.hit(target,h.damage+profile.level*3);
  }
  hit(e,damage){
-  if(e.shield>0){const now=this.time.now;if(now-e.lastShieldPrompt<650)return;e.lastShieldPrompt=now;
-   note("🛡️ Quái có Khiên Chữ! Trả lời đúng để phá khiên.");
-   quiz(e.boss?"🐉 BOSS · Phá Khiên Chữ":"🛡️ Word Shield",ok=>{if(ok){e.shield--;note("✨ Phá khiên thành công! "+(e.shield?"Còn "+e.shield+" lớp khiên.":"Hãy tấn công!"));if(e.shield===0)e.sprite.clearTint()}else{this.damage(6);note("Sai từ vựng: -6 HP")}});return
-  }
-  e.hp-=damage;e.sprite.setTintFill(0xffffff);this.time.delayedCall(100,()=>{if(e.hp>0)e.sprite.clearTint()});
-  this.add.text(e.sprite.x,e.sprite.y-34,"-"+damage,{fontSize:"16px",color:"#ffe3a1"}).setDepth(20).setOrigin(.5).setData("floorDecor",true);
-  if(e.hp<=0){const x=e.sprite.x,y=e.sprite.y;e.sprite.destroy();reward(e.boss?20:3,e.boss?30:5,e.boss?30:9);this.pickup(x,y,Math.random()<.6?"gem":"gold");if(e.boss){this.bossDown=true;this.exit.setFillStyle(0x2c906e);this.exitText.setText("🔓\nCỔNG");note("🐉 Boss bị hạ! Tới cổng bên phải và bấm E.")}else note("⚔️ Quái bị tiêu diệt!")}
+   if(!e||!e.sprite.active||e.hp<=0)return;
+   const absorbed=e.shield>0;
+   const dealt=absorbed?Math.max(7,Math.round(damage*.45)):damage;
+   e.hp-=dealt;
+   this.flash(e.sprite.x,e.sprite.y,absorbed?0x7FC9F5:0xFFDC84,absorbed?64:45);
+   this.floatText(e.sprite.x,e.sprite.y-30,"-"+dealt,absorbed?"#91DEFF":"#FFE8A6");
+   e.sprite.setTintFill(0xFFFFFF);
+   this.time.delayedCall(100,()=>{if(e.hp>0&&e.sprite.active)e.sprite.setTint(e.boss?0xE88589:0xFFFFFF)});
+   if(absorbed)note("Boss có giáp! Đòn thường vẫn gây sát thương. Dùng Q để phá giáp nhanh hơn.");
+   if(e.hp<=0){
+     const x=e.sprite.x,y=e.sprite.y;e.sprite.destroy();
+     reward(e.boss?20:3,e.boss?30:5,e.boss?30:9);
+     this.pickup(x,y,Math.random()<.6?"gem":"gold");
+     if(e.boss){this.bossDown=true;this.exit.setFillStyle(0x228C7C);this.exitText.setText("🔓\nCỔNG");note("Boss đã bị hạ! Đến cổng bên phải và nhấn E.")}
+     else note("Quái bị tiêu diệt! Nhặt phần thưởng và tiếp tục khám phá.");
+   }
  }
  spell(){
-  if(profile.locked)return;
-  quiz("🔮 Kích hoạt "+heroes[profile.classId].skill,ok=>{
-   if(!ok){note("Phép thất bại. Hãy ôn lại từ vừa sai.");return}
-   const cls=profile.classId;
-   if(cls===3){profile.hp=Math.min(heroes[cls].hp,profile.hp+35);hud();note("🧪 Hồi 35 HP");return}
-   if(cls===0){profile.hp=Math.min(heroes[cls].hp,profile.hp+18);hud()}
-   const target=this.enemies.filter(e=>e.hp>0).sort((a,b)=>Phaser.Math.Distance.Between(this.player.x,this.player.y,a.sprite.x,a.sprite.y)-Phaser.Math.Distance.Between(this.player.x,this.player.y,b.sprite.x,b.sprite.y))[0];
-   if(target){target.shield=0;target.sprite.clearTint();this.hit(target,cls===1?65:48);note("✨ Phép trúng mục tiêu, phá khiên và gây sát thương!")}
-  })
+   if(profile.locked)return;
+   if(this.time.now-this.lastSpell<750)return;
+   if(profile.mana<1){note("Cần 1 mana để dùng kỹ năng. Nhấn R hoặc Học từ · Nạp mana.");this.floatText(this.player.x,this.player.y-38,"THIẾU MANA","#FFB7A5");return}
+   this.lastSpell=this.time.now;profile.mana--;hud();
+   const cls=profile.classId,h=heroes[cls];
+   const targets=this.enemies.filter(e=>e.hp>0&&e.sprite.active).sort((a,b)=>Phaser.Math.Distance.Between(this.player.x,this.player.y,a.sprite.x,a.sprite.y)-Phaser.Math.Distance.Between(this.player.x,this.player.y,b.sprite.x,b.sprite.y));
+   const target=targets[0];
+   this.flash(this.player.x,this.player.y,cls===1?0x8EB8FF:cls===3?0x7EFFB8:0xFFE38D,88);
+   if(cls===3){profile.hp=Math.min(h.hp,profile.hp+35);this.floatText(this.player.x,this.player.y-32,"+35 HP","#8AFFCB");note("Thuật giả kim: hồi phục 35 HP.");}
+   else if(cls===0){profile.hp=Math.min(h.hp,profile.hp+18);this.floatText(this.player.x,this.player.y-32,"+18 HP","#8AFFCB");note("Chiến binh: kích hoạt lá chắn và hồi phục.")}
+   if(target&&Phaser.Math.Distance.Between(this.player.x,this.player.y,target.sprite.x,target.sprite.y)<330){
+     target.shield=0;
+     this.flash(target.sprite.x,target.sprite.y,0xA8E9FF,98);
+     this.hit(target,cls===1?75:cls===2?65:48);
+     note(h.skill+" đã trúng mục tiêu! Dùng Space để tiếp tục.");
+   }else if(cls!==3){note(h.skill+" đã kích hoạt! Tiến gần quái để tấn công hiệu quả hơn.")}
+   this.syncCombatHud();hud();
  }
  use(){
   if(profile.locked)return;
   const chest=this.treasure.find(t=>!t.opened&&Phaser.Math.Distance.Between(this.player.x,this.player.y,t.sprite.x,t.sprite.y)<75);
-  if(chest){quiz("🎁 Mở rương cổ",ok=>{if(ok){chest.opened=true;chest.sprite.setTint(0x777777);const prize=pick(["⚔️ Kiếm Từ","🛡️ Giáp Ngữ Pháp","💍 Nhẫn Tinh Tú","📘 Sách Tri Thức"]);profile.gear.push(prize);reward(12,18,14);note("🎁 Nhận "+prize+" và phần thưởng!")}else note("Rương chưa mở. Bấm E để thử lại.")});return}
+  if(chest){chest.opened=true;chest.sprite.setTint(0x8899AA);const prize=pick(["⚔️ Kiếm Từ","🛡️ Giáp Ngữ Pháp","💍 Nhẫn Tinh Tú","📘 Sách Tri Thức"]);profile.gear.push(prize);reward(12,18,14);this.flash(chest.sprite.x,chest.sprite.y,0xFFD883,90);this.floatText(chest.sprite.x,chest.sprite.y-25,"+VẬT PHẨM");note("Mở rương thành công! Nhận "+prize+" và phần thưởng.");return}
   if(this.bossDown&&Phaser.Math.Distance.Between(this.player.x,this.player.y,740,300)<95){
     if(profile.floor===10){openModal("👑 THƯ VIỆN VĨNH CỬU","Bạn đã chiến thắng toàn bộ 10 tầng! Gems: "+profile.gems,[]);action("Chơi lại",()=>{profile.floor=1;profile.hp=heroes[profile.classId].hp;profile.mana=1;persist();closeModal();this.restartFloor()})}
     else{profile.floor++;profile.hp=Math.min(heroes[profile.classId].hp,profile.hp+45);profile.mana=1;reward(20,20,30);persist();this.restartFloor()}
@@ -190,12 +258,12 @@ class DungeonScene extends Phaser.Scene{
 }
 const phaserReady=typeof Phaser!=="undefined";
 if(phaserReady){
- const game=new Phaser.Game({type:Phaser.AUTO,parent:"game",width:800,height:600,backgroundColor:"#141524",render:{pixelArt:false,antialias:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},physics:{default:"arcade",arcade:{debug:false}},scene:[DungeonScene]});
+ const game=new Phaser.Game({type:Phaser.AUTO,parent:"game",width:800,height:600,backgroundColor:"#15334A",render:{pixelArt:false,antialias:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},physics:{default:"arcade",arcade:{debug:false}},scene:[DungeonScene]});
  for(const b of document.querySelectorAll("[data-move]")){const dir=b.dataset.move;const set=flag=>{if(profile.scene)profile.scene.move[dir]=flag};b.addEventListener("pointerdown",e=>{e.preventDefault();b.setPointerCapture(e.pointerId);set(true)});for(const ev of ["pointerup","pointercancel","lostpointercapture"])b.addEventListener(ev,()=>set(false))}
  $("touchAttack").onclick=()=>profile.scene?.attack();$("touchSpell").onclick=()=>profile.scene?.spell();$("touchUse").onclick=()=>profile.scene?.use();
 }else{document.getElementById("game").textContent="Không tải được Phaser. Vui lòng kiểm tra kết nối internet."}
 $("help").onclick=chooseClass;
-hud();chooseClass();
+$("chargeSpell").onclick=()=>profile.scene?.study();hud();chooseClass();
 })();
 </script><script src="../audio/original-game-music.js?v=20261114-v1"></script>
 <script>
