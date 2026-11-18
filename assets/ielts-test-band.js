@@ -17,7 +17,7 @@ document.head.append(css);
 function render(){
  const scoreEl=document.getElementById('rscore')||document.getElementById('resultScore')||document.getElementById('scoreBig');
  if(!scoreEl)return;
- const container=document.getElementById('overlay')||document.getElementById('result')||scoreEl.closest('.result');
+ const container=scoreEl.id==='scoreBig' ? (document.getElementById('result')||scoreEl.closest('.result')) : (document.getElementById('overlay')||scoreEl.closest('.result'));
  if(!container)return;
  const isVisible=container.id==='overlay'?!container.classList.contains('hidden'):
    (container.classList.contains('show')||container.classList.contains('visible')||container.style.display==='block');
@@ -38,7 +38,7 @@ function render(){
 }
 function init(){
  const scoreEl=document.getElementById('rscore')||document.getElementById('resultScore')||document.getElementById('scoreBig');
- const container=document.getElementById('overlay')||document.getElementById('result')||scoreEl?.closest('.result');
+ const container=scoreEl?.id==='scoreBig' ? (document.getElementById('result')||scoreEl?.closest('.result')) : (document.getElementById('overlay')||scoreEl?.closest('.result'));
  if(!scoreEl||!container)return;
  const observer=new MutationObserver(render);
  observer.observe(container,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','style']});
