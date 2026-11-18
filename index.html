@@ -1910,11 +1910,11 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
   <span class="portal-card-body">
    <span class="portal-copy">
     <h3>Tiến độ học tập</h3>
-    <p id="portalProgressSummary">Tổng quan: 12/25 bài</p>
+    <p id="portalProgressSummary">Tổng quan: —/25 bài</p>
     <span class="portal-progress-track" aria-label="Tiến độ hoàn thành bài Test"><span class="portal-progress-fill" id="portalProgressFill"></span></span>
    </span>
    <img class="portal-illustration" src="./assets/portal-progress-3d.svg" loading="lazy" alt="" aria-hidden="true">
-   <span class="portal-band-circle" id="portalBandCircle" aria-label="Band IELTS dự báo">Band <b id="portalBandNumber">7.5</b></span>
+   <span class="portal-band-circle" id="portalBandCircle" aria-label="Band IELTS dự báo">Band <b id="portalBandNumber">—</b></span>
    <span class="portal-action">Xem chi tiết tiến độ →</span>
   </span>
  </button>
@@ -3486,9 +3486,9 @@ if ('serviceWorker' in navigator && (location.protocol==='https:' || location.ho
   const records=Array.isArray(attempts)?attempts.filter(x=>x&&x.owner===owner&&x.kind==='Test'&&x.status==='completed'):[];
   const unique=new Set(records.map(x=>x.exerciseId||x.path).filter(Boolean));
   const count=Math.min(25,unique.size);
-  summary.textContent='Tổng quan: '+count+'/25 bài';
+  summary.textContent='Tổng quan: '+(records.length?String(count):'—')+'/25 bài';
   fill.style.width=(count/25*100).toFixed(1)+'%';
-  fill.parentElement.setAttribute('aria-label',count+' trên 25 bài Test đã ghi nhận trên thiết bị');
+  fill.parentElement.setAttribute('aria-label',records.length?count+' trên 25 bài Test đã ghi nhận trên thiết bị':'Chưa có dữ liệu bài Test lưu trên thiết bị');
   const approved=records.filter(x=>x.skill&&Number.isFinite(Number(x.band))&&Number(x.band)>=1&&Number(x.band)<=9&&x.bandVerified===true);
   const bySkill=new Map();
   for(const item of approved.sort((a,b)=>Date.parse(a.submittedAt||a.savedAt)-Date.parse(b.submittedAt||b.savedAt)))bySkill.set(String(item.skill).toLowerCase(),Number(item.band));
