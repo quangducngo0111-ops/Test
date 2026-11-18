@@ -7,7 +7,7 @@ $('learner').textContent=student.name?(student.name+' · '+(student.className||'
 $('formType').textContent='BÀI '+String(C.n).padStart(2,'0')+' · '+F.title.toUpperCase();$('pageTitle').textContent=C.title;$('topic').textContent=C.topic;$('prompt').textContent=C.prompt;
 const storage='SMARTCOM_WT2_GUIDED_V2_'+type+'_'+C.n+'_'+(student.name||'guest')+'_'+(student.className||'');
 let state={step:0,text:{},checked:{}};try{state={...state,...JSON.parse(localStorage.getItem(storage)||'{}')}}catch{}
-const save=()=>localStorage.setItem(storage,JSON.stringify(state));
+const save=()=>{localStorage.setItem(storage,JSON.stringify(state));try{const writing=Object.values(state.text||{}).filter(Boolean).join('\n\n');if(writing.trim()&&window.SmartcomHistory){window.SmartcomHistory.draft({attemptId:'draft-'+location.pathname,kind:'Practice',skill:'Writing',title:document.title,exerciseId:location.pathname,path:location.pathname,text:state.text?.essay||writing,wordCount:(writing.match(/\b[\w'-]+\b/g)||[]).length,step:state.step})}}catch{}};
 const stepNames=['Phân tích đề','Nhận diện dạng bài','Lập ý Body 1','Logic Chain Body 1','Viết Body 1','Lập ý Body 2','Logic Chain Body 2','Viết Body 2','Mở bài & Kết bài','Viết bài hoàn chỉnh'];
 const field=(key,label,hint='',rows=5)=>'<div class="group"><label for="'+key+'">'+esc(label)+'</label>'+(hint?'<p class="help">'+esc(hint)+'</p>':'')+'<textarea id="'+key+'" data-field="'+key+'" rows="'+rows+'" placeholder="Viết câu trả lời của bạn tại đây...">'+esc(state.text[key]||'')+'</textarea></div>';
 const sample=(title,body)=>'<details class="sample"><summary>'+esc(title)+' · Xem sau khi tự làm</summary><p>'+esc(body)+'</p></details>';
