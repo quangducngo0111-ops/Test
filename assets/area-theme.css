@@ -94,3 +94,52 @@ html body.sc-area-progress{--purple:#527EAD;--purple2:#91B8DB;--sc-brand:#527EAD
 html body.sc-area-progress .overall{background:linear-gradient(110deg,#37628F,#527EAD 60%,#90B9D9)!important;border-color:#91BADB!important;color:#fff!important}
 html body.sc-area-progress .sc-progress-nav button[aria-selected=true]{background:#527EAD!important;color:#fff!important;border-color:#527EAD!important}
 html body.sc-area-progress .topbar{background:linear-gradient(105deg,#37628F,#527EAD,#84B2D7)!important;color:#fff!important}
+
+/* Visual rhythm shared by all branded learning areas. Sections keep their unique color. */
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress){
+ --sc-ui-ink:#183C61;--sc-ui-muted:#59758E;
+ font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+:is(.card,.panel,.lesson-card,.article-card,.cam-pane,.cam-group,.cam-audio,.sc-progress-card,.practice-card,.question-card){
+ border-radius:20px!important;
+ box-shadow:0 10px 26px rgba(30,71,107,.065)!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+:is(h1,h2,h3):not(.game-title){letter-spacing:-.025em}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+:is(.card,.panel,.lesson-card,.article-card,.cam-pane,.cam-group) :is(p,.small,.desc){
+ line-height:1.68;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+:is(.tag,.pill,.chip,.badge):not(.error):not(.success){
+ border-radius:999px!important;font-weight:750!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+:is(button,a,.tile,.card,.panel):focus-visible{
+ outline:3px solid #8C6FCF!important;outline-offset:3px!important;
+}
+body.sc-area-test :is(.result,.overlay .result,.cam-review){
+ background:#FFF!important;border:1px solid #CFE6E8!important;
+ box-shadow:0 14px 36px #12596A18!important;
+}
+body.sc-area-test :is(.test-card,.card,.cam-pane,.cam-group,.cam-audio){
+ background:#FFF!important;
+}
+body.sc-area-practice :is(.card,.cam-pane,.cam-group,.cam-audio,.tile,.lesson-card){
+ background:#FFF!important;
+}
+body.sc-area-foundations :is(.card,.panel,.article-card){
+ background:#FFF!important;
+}
+body.sc-area-progress :is(.sc-progress-card,.skill-card,.recent-card){
+ background:#FFF!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress) :where(.back,.back-link,.return){
+ border-radius:12px!important;
+}
+@media(prefers-reduced-motion:no-preference){
+ body:is(.sc-area-practice,.sc-area-foundations) :is(.card,.tile,.lesson-card,.article-card):hover{
+  transform:translateY(-3px);box-shadow:0 14px 30px rgba(30,80,120,.12)!important;
+ }
+}
