@@ -53,7 +53,7 @@ input[type=search]{padding:11px;border:1px solid #dbd1e8;border-radius:12px;min-
 </div>
 
 <div class="reminder-grid">
-<div><h2>Nhắc từ vựng hôm nay</h2><p class="dim">Chọn tối đa 10 từ ở phía trên. Hệ thống sẽ nhắc từng từ kèm nghĩa theo khoảng thời gian bạn chọn.</p></div>
+<div><h2>Nhắc từ vựng hôm nay</h2><p class="dim">Chọn bộ từ đã lưu hoặc tích chọn tối đa 10 từ ở phía trên. Hệ thống sẽ nhắc từng từ kèm nghĩa theo khoảng thời gian bạn chọn.</p></div>
 <div class="reminder-actions">
 <label for="reminderEvery">Nhắc mỗi</label>
 <select id="reminderEvery"><option value="1">1 phút</option><option value="5" selected>5 phút</option><option value="10">10 phút</option><option value="15">15 phút</option><option value="30">30 phút</option><option value="60">60 phút</option></select>
@@ -256,7 +256,7 @@ document.querySelectorAll('[data-launch-original-game]').forEach(b=>b.onclick=()
     sessionStorage.setItem('SC_NOTEBOOK_GAME_AUTOSTART',b.dataset.launchOriginalGame);
     location.href='../Practice/Vocabulary/?notebook=1';
   }catch(err){alert('Không chuyển được bộ từ sang Vocabulary: '+err.message)}
-});render();
+});render();renderDecks();
 </script>
 <script src="../Practice/shared/smartcom-ui.js?v=20261118-premium02"></script>
 </body></html>
