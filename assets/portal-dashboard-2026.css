@@ -1,0 +1,104 @@
+/* IELTS Practice Portal dashboard 2026 — Four unified, illustrated navigation cards.
+   Scoped to portal home so tests and questions remain functional. */
+:root{--portal-teal:#187F92;--portal-blue:#237CC9;--portal-green:#248966;--portal-indigo:#36569A;--portal-purple:#7851BB;}
+body:has(#homeSkills){background:radial-gradient(ellipse at 8% 5%,#ECFAFF 0%,transparent 48%),radial-gradient(ellipse at 93% 18%,#F0F0FD 0%,transparent 46%),linear-gradient(150deg,#F9FCFF,#EAF2FA)!important}
+#homeHeading{margin:34px 0 20px}
+#homeHeading h2{color:#193A62!important;font-weight:900;letter-spacing:-.035em}
+#homeHeading p{color:#62798E!important}
+#homeSkills.portal-main-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:24px!important;margin-bottom:32px!important}
+#homeSkills .portal-category{
+ --portal-color:#187F92;--portal-header:#187F92;--portal-surface:#F3FBFB;
+ position:relative;display:flex!important;flex-direction:column;gap:0!important;
+ min-height:346px!important;padding:0!important;overflow:hidden!important;
+ text-align:left;font:inherit;cursor:pointer;isolation:isolate;
+ border:1px solid #D8E6EF!important;border-radius:26px!important;
+ background:var(--portal-surface)!important;
+ box-shadow:0 12px 30px rgba(32,64,105,.10),0 2px 5px rgba(32,64,105,.035)!important;
+ transition:transform .23s ease,box-shadow .23s ease,border-color .23s ease!important;
+}
+#homeSkills .portal-category.mock{--portal-color:#187F92;--portal-header:#168398;--portal-surface:#E8F7F7;border-color:#ACDCE1!important}
+#homeSkills .portal-category.practice{--portal-color:#237CC9;--portal-header:#227FC8;--portal-surface:#EBF5FF;border-color:#B5D7EF!important}
+#homeSkills .portal-category.foundation{--portal-color:#248966;--portal-header:#238C6B;--portal-surface:#EBF8F0;border-color:#B4DDCA!important}
+#homeSkills .portal-category.progress{--portal-color:#36569A;--portal-header:#395D9E;--portal-surface:#EEF2FC;border-color:#BAC9E8!important}
+#homeSkills .portal-category:is(:hover,:focus-visible){transform:translateY(-5px)!important;border-color:var(--portal-color)!important;box-shadow:0 19px 36px rgba(33,81,120,.16)!important}
+#homeSkills .portal-category:focus-visible{outline:3px solid #8D6ADB!important;outline-offset:3px}
+#homeSkills .portal-card-header{
+ position:relative;z-index:2;flex:none;display:flex;align-items:center;
+ height:56px;padding:0 25px;
+ color:#FFF!important;background:var(--portal-header)!important;
+ font-size:12px;font-weight:900;letter-spacing:.115em;
+}
+#homeSkills .portal-category .portal-en{color:#FFF!important;font-size:12px!important;letter-spacing:.115em!important}
+#homeSkills .portal-card-body{
+ position:relative;display:flex;flex:1;flex-direction:column;
+ min-height:290px;padding:28px 25px 25px;
+ background:linear-gradient(130deg,#FFFFFF 0%,var(--portal-surface) 100%)!important;
+}
+#homeSkills .portal-card-body:after{
+ content:"";position:absolute;width:300px;height:300px;right:-93px;top:0;
+ border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.78),transparent 68%);
+ pointer-events:none;z-index:0;
+}
+#homeSkills .portal-copy{position:relative;z-index:2;max-width:64%;display:flex;flex-direction:column;align-items:flex-start;gap:11px}
+#homeSkills .portal-category h3{margin:0!important;font-size:clamp(23px,2.0vw,29px)!important;line-height:1.22;color:#183C61!important;font-weight:900!important;letter-spacing:-.035em}
+#homeSkills .portal-category p{font-size:13.5px!important;color:#4D6981!important;line-height:1.65!important;font-weight:550;margin:0!important}
+#homeSkills .portal-skill-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+#homeSkills .portal-skill-tags span{display:inline-flex;align-items:center;padding:5px 9px;min-height:27px;border:1px solid #CDDDEA;border-radius:8px;background:#FFFb;color:var(--portal-color);font-size:11px;font-weight:850}
+#homeSkills .portal-illustration{
+ display:block;position:absolute;z-index:1;right:5px;top:20px;
+ width:min(48%,285px);height:auto;max-height:228px;
+ object-fit:contain;filter:drop-shadow(0 9px 8px rgba(40,79,112,.09));
+ pointer-events:none;transition:transform .28s ease;
+}
+#homeSkills .portal-category:hover .portal-illustration{transform:translateY(-5px) scale(1.025)}
+#homeSkills .portal-action{
+ position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;
+ align-self:flex-start;margin-top:auto!important;padding:12px 17px;
+ min-height:46px;border-radius:12px;
+ background:var(--portal-color)!important;color:#FFF!important;
+ box-shadow:0 5px 13px color-mix(in srgb,var(--portal-color) 20%,transparent);
+ font-size:13px!important;font-weight:850!important;line-height:1.25;text-align:center;
+}
+#homeSkills .portal-category .portal-action{color:#FFF!important}
+#homeSkills .portal-category:hover .portal-action{filter:brightness(1.08)}
+#homeSkills .portal-metric-row{display:flex;align-items:center;gap:13px;margin-top:5px}
+#homeSkills .portal-progress-track{width:155px;max-width:100%;height:9px;border-radius:20px;background:#CFDBED;overflow:hidden}
+#homeSkills .portal-progress-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,#497ACC,#7C9AE6);border-radius:20px;transition:width .5s}
+#homeSkills .portal-band-circle{position:absolute;z-index:2;right:38px;bottom:70px;display:flex;align-items:center;justify-content:center;flex-direction:column;width:104px;height:104px;border-radius:50%;background:linear-gradient(140deg,#FFF,#E6EDFF);border:8px solid #91A6DD;box-shadow:0 10px 23px rgba(50,85,150,.17);color:#36569A;font-size:13px;font-weight:850;text-align:center}
+#homeSkills .portal-band-circle b{font-size:23px;letter-spacing:-.04em;line-height:1.2}
+#homeSkills .portal-category.progress .portal-illustration{width:37%;max-height:176px;right:7px;top:10px;opacity:.94}
+#homeSkills .portal-category.progress .portal-copy{max-width:70%}
+#homeSkills .portal-category.progress .portal-card-body{padding-bottom:25px}
+#homeSkills .portal-category.progress .portal-band-circle{right:33px;bottom:70px}
+#dashboardView>.footer{text-align:center!important;font-size:13px!important;letter-spacing:.04em;color:#58718A!important;padding:12px 0 32px}
+/* Purple floating tools from reference: keep existing real actions, redesign the controls. */
+body:has(#homeSkills) #sc-quick-shell.sc-capsule .sc-capsule-toggle{
+ background:linear-gradient(145deg,#9D78DF,#704BB5)!important;
+ border:3px solid #FFF!important;color:#FFF!important;box-shadow:0 6px 0 #5A3B99,0 13px 30px #7253BB45!important;
+}
+body:has(#homeSkills) :is(.sc-vocab-notebook-trigger,.sc-notebook-toggle,#sc-vocab-floating,#sc-vocab-btn){
+ background:linear-gradient(145deg,#9D78DF,#704BB5)!important;color:#fff!important;border-color:#fff!important;
+}
+@media(max-width:1040px){
+ #homeSkills .portal-category{min-height:320px!important}
+ #homeSkills .portal-copy{max-width:68%}
+ #homeSkills .portal-illustration{right:-10px;width:47%}
+}
+@media(max-width:750px){
+ #homeSkills.portal-main-grid{grid-template-columns:1fr!important;gap:16px!important}
+ #homeSkills .portal-category{min-height:300px!important}
+ #homeSkills .portal-illustration{right:8px;width:42%}
+ #homeSkills .portal-card-body{min-height:246px}
+}
+@media(max-width:430px){
+ #homeSkills .portal-card-header{height:48px;padding:0 19px}
+ #homeSkills .portal-card-body{padding:22px 19px;min-height:252px}
+ #homeSkills .portal-copy{max-width:70%}
+ #homeSkills .portal-illustration{width:43%;top:45px;right:-8px}
+ #homeSkills .portal-category h3{font-size:22px!important}
+ #homeSkills .portal-category p{font-size:12px!important}
+ #homeSkills .portal-skill-tags span{font-size:10px;padding:4px 7px}
+ #homeSkills .portal-band-circle{right:20px!important;width:83px;height:83px;bottom:78px!important;font-size:11px}
+ #homeSkills .portal-band-circle b{font-size:19px}
+}
+@media(prefers-reduced-motion:reduce){#homeSkills .portal-category,#homeSkills .portal-illustration{transition:none!important}}
