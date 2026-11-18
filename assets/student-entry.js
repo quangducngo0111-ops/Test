@@ -4,6 +4,7 @@
  */
 (function(){
 'use strict';
+if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('area-theme-loader.js?v=20261118-scoped01',document.currentScript.src).href;document.head.append(t);}
 if(!document.querySelector('script[data-sc-outline-icons]')){const iconScript=document.createElement('script');iconScript.dataset.scOutlineIcons='1';iconScript.src=new URL('smartcom-outline-icons.js?v=20261118-icons01',document.currentScript.src).href;document.head.append(iconScript);}
 const CLASSES=['XD25A02.1','XD25A02.2','XD26A03.1','SS26.1','SS25A01.1','SS25IE2','OP.AD.07','OP.ESS.11'];
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
