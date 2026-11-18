@@ -1572,7 +1572,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
 .portal-category:is(:hover,:focus-visible){transform:translateY(-4px);border-color:var(--portal-color)!important;box-shadow:0 18px 35px rgba(18,81,124,.16)!important}
 .portal-category:focus-visible{outline:3px solid var(--portal-color)!important;outline-offset:3px}
 @media(max-width:700px){.portal-category{min-height:230px!important}.portal-main-grid{gap:15px!important}}
-</style></head>
+</style><link rel="stylesheet" href="./assets/portal-dashboard-2026.css?v=20261118-redesign01"></head>
 
 
 <body>
@@ -1868,11 +1868,56 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
     </div>
 
 
-    <section class="portal-main-grid" id="homeSkills">
-  <button class="portal-category mock" type="button" id="mockTestsDoor"><span class="portal-ico">📝</span><span class="portal-en">MOCK TESTS</span><h3>Thi thử IELTS</h3><p>Listening · Reading · Writing · Speaking</p><span class="portal-action">Chọn kỹ năng thi thử →</span></button>
-  <button class="portal-category practice" type="button" id="practiceDoor"><span class="portal-ico">🎯</span><span class="portal-en">SKILL PRACTICE</span><h3>Luyện tập kỹ năng</h3><p>Listening · Reading · Writing Task 1 & 2 · Speaking</p><span class="portal-action">Khám phá bài luyện →</span></button>
-  <button class="portal-category foundation" type="button" id="foundationsDoor"><span class="portal-ico">🧩</span><span class="portal-en">FOUNDATIONS</span><h3>Kiến thức nền tảng</h3><p>Pre-IELTS Listening · Topic Listening · Reading · Grammar · Vocabulary</p><span class="portal-action">Xây dựng nền tảng →</span></button>
-  <button class="portal-category progress" type="button" id="progressDoor"><span class="portal-ico">📊</span><span class="portal-en">MY LEARNING PROGRESS</span><h3>Tiến độ học tập</h3><p>Tổng quan · Lịch sử làm bài · Điểm 4 kỹ năng · IELTS Overall</p><span class="portal-action">Xem tiến độ của em →</span></button>
+    <section class="portal-main-grid" id="homeSkills" aria-label="Các khu vực của IELTS Practice Portal">
+ <button class="portal-category mock" type="button" id="mockTestsDoor">
+  <span class="portal-card-header"><span class="portal-en">MOCK TESTS</span></span>
+  <span class="portal-card-body">
+   <span class="portal-copy">
+    <h3>Thi thử IELTS</h3>
+    <p>Listening · Reading · Writing · Speaking</p>
+    
+   </span>
+   <img class="portal-illustration" src="./assets/portal-mock-3d.svg" loading="lazy" alt="" aria-hidden="true">
+   <span class="portal-action">Bắt đầu bài thi →</span>
+  </span>
+ </button>
+ <button class="portal-category practice" type="button" id="practiceDoor">
+  <span class="portal-card-header"><span class="portal-en">SKILL PRACTICE</span></span>
+  <span class="portal-card-body">
+   <span class="portal-copy">
+    <h3>Luyện tập kỹ năng</h3>
+    <p>Listening · Reading · Writing Task 1 & 2 · Speaking</p>
+    <span class="portal-skill-tags"><span>Listening</span><span>Reading</span><span>Writing</span><span>Speaking</span></span>
+   </span>
+   <img class="portal-illustration" src="./assets/portal-practice-3d.svg" loading="lazy" alt="" aria-hidden="true">
+   <span class="portal-action">Khám phá bài luyện →</span>
+  </span>
+ </button>
+ <button class="portal-category foundation" type="button" id="foundationsDoor">
+  <span class="portal-card-header"><span class="portal-en">FOUNDATIONS</span></span>
+  <span class="portal-card-body">
+   <span class="portal-copy">
+    <h3>Kiến thức nền tảng</h3>
+    <p>Pre-IELTS Listening · Topic Listening · Reading · Grammar · Vocabulary</p>
+    <span class="portal-skill-tags"><span>Listening</span><span>Reading</span><span>Grammar</span><span>Vocabulary</span></span>
+   </span>
+   <img class="portal-illustration" src="./assets/portal-foundations-3d.svg" loading="lazy" alt="" aria-hidden="true">
+   <span class="portal-action">Xây dựng nền tảng →</span>
+  </span>
+ </button>
+ <button class="portal-category progress" type="button" id="progressDoor">
+  <span class="portal-card-header"><span class="portal-en">MY LEARNING PROGRESS</span></span>
+  <span class="portal-card-body">
+   <span class="portal-copy">
+    <h3>Tiến độ học tập</h3>
+    <p id="portalProgressSummary">Tổng quan: 12/25 bài</p>
+    <span class="portal-progress-track" aria-label="Tiến độ hoàn thành bài Test"><span class="portal-progress-fill" id="portalProgressFill"></span></span>
+   </span>
+   <img class="portal-illustration" src="./assets/portal-progress-3d.svg" loading="lazy" alt="" aria-hidden="true">
+   <span class="portal-band-circle" id="portalBandCircle" aria-label="Band IELTS dự báo">Band <b id="portalBandNumber">7.5</b></span>
+   <span class="portal-action">Xem chi tiết tiến độ →</span>
+  </span>
+ </button>
 </section>
 <section class="portal-mock-picker hidden" id="mockPicker" aria-label="Chọn kỹ năng thi thử">
  <div class="portal-mock-heading"><h3>Chọn kỹ năng Mock Test</h3><button type="button" id="closeMockPicker">Đóng ×</button></div>
@@ -3427,5 +3472,34 @@ if ('serviceWorker' in navigator && (location.protocol==='https:' || location.ho
 })();
 </script>
 <script src="Practice/shared/smartcom-ui.js?v=20261118-area01"></script>
-</body>
+<script>
+/* Home card shows genuine locally known TEST activity only; no fictional IELTS band. */
+(function(){
+ function refreshPortalProgress(){
+  const summary=document.getElementById('portalProgressSummary');
+  const fill=document.getElementById('portalProgressFill');
+  const band=document.getElementById('portalBandNumber');
+  if(!summary||!fill||!band)return;
+  let person=null,attempts=[];
+  try{person=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');attempts=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]')}catch(e){}
+  const owner=[person?.studentId||'',person?.name||'',person?.className||''].join('|').trim().toLowerCase();
+  const records=Array.isArray(attempts)?attempts.filter(x=>x&&x.owner===owner&&x.kind==='Test'&&x.status==='completed'):[];
+  const unique=new Set(records.map(x=>x.exerciseId||x.path).filter(Boolean));
+  const count=Math.min(25,unique.size);
+  summary.textContent='Tổng quan: '+count+'/25 bài';
+  fill.style.width=(count/25*100).toFixed(1)+'%';
+  fill.parentElement.setAttribute('aria-label',count+' trên 25 bài Test đã ghi nhận trên thiết bị');
+  const approved=records.filter(x=>x.skill&&Number.isFinite(Number(x.band))&&Number(x.band)>=1&&Number(x.band)<=9&&x.bandVerified===true);
+  const bySkill=new Map();
+  for(const item of approved.sort((a,b)=>Date.parse(a.submittedAt||a.savedAt)-Date.parse(b.submittedAt||b.savedAt)))bySkill.set(String(item.skill).toLowerCase(),Number(item.band));
+  if(['reading','listening','writing','speaking'].every(skill=>bySkill.has(skill))){
+   const avg=['reading','listening','writing','speaking'].reduce((sum,skill)=>sum+bySkill.get(skill),0)/4;
+   band.textContent=(Math.round(avg*2)/2).toFixed(1);
+  }else band.textContent='—';
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refreshPortalProgress);
+ else refreshPortalProgress();
+ window.addEventListener('sc:attempt-saved',refreshPortalProgress);
+})();
+</script></body>
 </html>
