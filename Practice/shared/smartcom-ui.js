@@ -221,6 +221,20 @@ document.body.append(shell);
  observer.observe(document.body,{childList:true,subtree:true,characterData:true});
 })();
 
+// Shared writing assistant for every Writing Task 1 / Task 2 lesson.
+if(/\/Practice\/WritingTask[12]\//.test(location.pathname)){
+ if(!document.querySelector('script[data-sc-writing-assistant]')){
+  const waCss=document.createElement('link');
+  waCss.rel='stylesheet';
+  waCss.href=url('Practice/shared/writing-assistant.css?v=20261118-01');
+  document.head.append(waCss);
+  const waScript=document.createElement('script');
+  waScript.dataset.scWritingAssistant='1';
+  waScript.src=url('Practice/shared/writing-assistant.js?v=20261118-01');
+  document.body.append(waScript);
+ }
+}
+
 // Load vocabulary selection/dictionary on learning pages and the main portal.
 if(!document.querySelector('script[data-sc-word-tools]')){
  const vocabScript=document.createElement('script');
