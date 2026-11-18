@@ -57,8 +57,10 @@ const action=document.createElement('button');action.type='button';action.classN
 toolbar.append(count,action);
 const disclosure=document.createElement('small');disclosure.className='sc-wa-disclosure';disclosure.textContent='Khi bấm kiểm tra, nội dung được gửi đến LanguageTool để gợi ý sửa. Không tự động gửi khi đang gõ.';
 const feedback=document.createElement('div');feedback.className='sc-wa-feedback';feedback.hidden=true;target._scWritingFeedback=feedback;
+const existingCount=target.id==='writing'?document.getElementById('wordCount'):target.id==='essay'?document.getElementById('wordcount'):null;
+if(existingCount)existingCount.hidden=true;
 target.insertAdjacentElement('afterend',toolbar);toolbar.insertAdjacentElement('afterend',disclosure);disclosure.insertAdjacentElement('afterend',feedback);
-const update=()=>{const n=wordCount(target.value);count.textContent='Số từ: '+n+(target.id==='fullEssay'||target.id==='essay'||target.id==='writing'&&/Hoàn thiện/i.test(document.body.textContent.slice(0,300))?'':'');count.dataset.words=String(n)};
+const update=()=>{const n=wordCount(target.value);count.textContent='Số từ: '+n;count.dataset.words=String(n)};
 target.addEventListener('input',()=>{update();if(!feedback.hidden){feedback.hidden=true;feedback.textContent=''}});
 action.addEventListener('click',()=>proofread(target,action));update();
 }
