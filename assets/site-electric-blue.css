@@ -1,0 +1,60 @@
+/* Smartcom Electric Blue system · site-wide design tokens · 2026-11-18.
+   Navy + electric blue with mint and warm amber accents. No purple palette. */
+:root{
+ --sc-brand:#1479E6;--sc-brand-strong:#0756AD;--sc-electric:#3DA5FF;
+ --sc-accent:#17BFA4;--sc-warm:#FFB547;--sc-ink:#14395F;
+ --sc-deep:#103A70;--sc-muted:#52718E;--sc-ice:#F3F9FF;
+ --sc-soft:#E6F3FF;--sc-line:#D5E7F7;
+ --purple:#1479E6;--purple2:#3DA5FF;--violet:#2376D6;
+ --p:#103A70;--a:#1479E6;--blue:#1479E6;
+ --bg:#F3F9FF;--line:#D5E7F7;--ink:#14395F;
+ --sc-light:#E6F3FF;--sc-practice:#1479E6;--practice:#1479E6;
+ --primary:#1479E6;--primary-dark:#0756AD;
+ --accent:#17BFA4;--accent-color:#17BFA4;
+ accent-color:#1479E6;
+}
+html{scrollbar-color:#B8DDF9 #F4F9FF}
+body{color:var(--sc-ink);background:#F4F9FF}
+:where(body:not(.sc-no-global-theme)) {--purple:#1479E6;--purple2:#3DA5FF;--violet:#2376D6;--p:#103A70;--a:#1479E6;--bg:#F3F9FF;--line:#D5E7F7;--ink:#14395F}
+:where(body,main,.page,.wrap,.workspace,.layout){scrollbar-color:#B7DDF8 #F5FAFF}
+/* Page surfaces */
+body:not(.sc-no-global-theme){background:radial-gradient(circle at 0% 4%,#E7F3FF 0,transparent 35%),radial-gradient(circle at 99% 0%,#D9F0FF 0,transparent 31%),linear-gradient(160deg,#F8FCFF,#EEF7FF)!important}
+:where(.hero,.hero-card,.banner,.intro-banner,.page-hero,.welcome-banner):not(.sc-preserve-colors){background:linear-gradient(115deg,#F9FDFF 0%,#EAF5FF 63%,#DDF0FF 100%)!important;border-color:#D4E9FB!important;box-shadow:0 10px 28px #19599C12!important;color:#103A70!important}
+:where(.hero,.hero-card,.banner,.intro-banner,.page-hero,.welcome-banner) :where(h1,h2,h3,strong,p,span):not(.tag):not(.badge){color:#103A70!important}
+:where(.card,.panel,.question,.practice,.task,.tile,.exercise-card,.lesson-card,.chart-item,.form-card,.sheet,.box,.cam-pane,.cam-group,.cam-audio,.cam-note,.cam-guide):not(.sc-preserve-colors){border-color:#D7E8F7!important;box-shadow:0 7px 25px #205D9910}
+:where(.card,.panel,.question,.practice,.task,.tile,.exercise-card,.lesson-card,.chart-item):hover{border-color:#C3DEF6}
+:where(h1,h2,h3,h4,.card strong,.card b,.panel h2,.question h3,.section-title,.side-title,.step-head h2,.task h2,.practice h2){color:#103A70!important}
+/* Navigation dark areas */
+:where(.top,.topbar,.main-header,.app-header,.site-header,.exam-header,.test-header,header.top,header.dark):not(.sc-preserve-colors){background:linear-gradient(105deg,#103A70,#0D64BD,#238BEA)!important;color:white!important}
+:where(.top,.topbar,.main-header,.app-header,.site-header,.exam-header,.test-header,header.top,header.dark) :where(a,span,strong,h1,h2,button):not(.btn):not(.pill){color:#fff!important}
+/* Links, controls, chips */
+a:not(.btn):not(.primary-link){text-decoration-color:#65ADEB}
+:where(.tag,.eyebrow,.pill,.badge,.label,.count,.section-label):not(.sc-preserve-colors){background:#E2F2FF!important;color:#0A5DAC!important;border-color:#C8E4FF!important}
+:where(.btn,.button,.primary,.primary-link,.submit,.nav-submit,.cam-submit,.go,.start-btn,.action-primary):not(.secondary):not(.ghost):not(.outline):not([disabled]){border-color:#1175D9!important}
+:where(button.primary,button.submit,.btn:not(.secondary):not(.ghost):not(.outline),.primary-link,.nav-submit,.cam-submit,.action-primary){background:linear-gradient(110deg,#0867C5,#329BFA)!important;color:white!important}
+:where(button.secondary,.btn.secondary,.btn.ghost,.btn.outline,.filter,.softbtn,.tab,.chip){border-color:#BBDDF8!important;background:#EAF5FF!important;color:#0B5CA8!important}
+:where(button.active,.tab.active,.filter.active,.selected,.is-active)[aria-pressed="true"],:where(.filter.active,.step-nav button.active,.tab.active){background:#1479E6!important;color:#fff!important;border-color:#1479E6!important}
+:where(input,textarea,select){accent-color:#1479E6}
+:where(input,textarea,select):focus-visible,:where(button,a):focus-visible{outline:3px solid #65B8FF!important;outline-offset:2px}
+:where(.progress-track span,.progress-fill,.progress>div,.progress i,.progress-bar-fill){background:linear-gradient(90deg,#1479E6,#52B8FF)!important}
+:where(.hint,.note,.callout,.info,.feedback):not(.error):not(.warning):not(.success):not(.sc-preserve-colors){border-color:#C9E5FB;background:#EFF8FF;color:#215B8A}
+:where(.success,.correct,.good){--sc-state:#0E9F81}
+:where(.error,.incorrect,.bad){--sc-state:#C54858}
+/* Main skill icon tokens */
+:where(.card,.skill-card,.skill) .symbol{color:#0B6BCA}
+:where(.skill-listening,.listening-card){--skill-color:#24A2EE;--tint:#E0F5FF}
+:where(.skill-reading,.reading-card){--skill-color:#1676D2;--tint:#DDEEFF}
+:where(.skill-writing,.writing-card){--skill-color:#F3A837;--tint:#FFF2D9}
+:where(.skill-speaking,.speaking-card){--skill-color:#12BCA2;--tint:#E0F9F1}
+/* Persistent quick access UI */
+#sc-quick-shell .sc-quick-trigger,
+#sc-quick-shell .sc-capsule-button,
+#sc-quick-shell .sc-capsule-toggle{background:linear-gradient(120deg,#0A63BF,#329BFA)!important;color:#fff!important;border-color:#D7EEFF!important;box-shadow:0 6px 0 #07529C,0 12px 26px #0B63B745!important}
+#sc-quick-shell .sc-quick-panel,#sc-quick-shell .sc-capsule-panel{border-color:#C9E5FB!important;box-shadow:0 16px 52px #17578630!important}
+#sc-quick-shell :where(.sc-quick-item,.sc-quick-link,.sc-quick-heading){color:#103A70!important}
+#sc-quick-shell .sc-quick-panel a:hover{background:#E9F5FF!important}
+/* Legacy purple SVG paths, including hand-drawn progress illustrations and charts. */
+svg [fill="#3b0e90" i],svg [fill="#32117c" i],svg [fill="#281260" i],svg [fill="#6544d5" i],svg [fill="#7155f5" i],svg [fill="#9377de" i]{fill:#0E71D3!important}
+svg [fill="#a78bfa" i],svg [fill="#9176de" i],svg [fill="#9b7adf" i]{fill:#48B6F0!important}
+svg [stroke="#3b0e90" i],svg [stroke="#281260" i],svg [stroke="#6544d5" i]{stroke:#0D68BD!important}
+::selection{background:#BDE5FF;color:#123C64}
