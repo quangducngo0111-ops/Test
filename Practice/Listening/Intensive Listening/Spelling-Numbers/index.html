@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#248E74">
+<title>Spelling & Numbers · Pre-IELTS Listening</title>
+<style>
+:root{font:15px/1.6 Inter,system-ui,"Segoe UI",Arial,sans-serif;color:#1B4156;background:#F3FAF8;--brand:#17876F;--line:#CEE7E3;--ink:#18445A;--soft:#E7F6F1}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 85% 0%,#E1F2FD,transparent 45%),#F3FAF8;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #419ED5;outline-offset:3px}
+a{text-decoration:none;color:inherit}
+.top{background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px max(18px,calc((100vw - 1160px)/2))}
+.back{color:#176C6C;font-weight:800;border:1px solid var(--line);border-radius:12px;padding:8px 13px;background:#F3FAF8}
+.top strong{font-size:15px;color:var(--ink)}
+main{width:min(1100px,calc(100% - 32px));margin:27px auto 80px}
+.hero{background:linear-gradient(115deg,#FFFFFF 5%,#E8F8F3 70%,#DAEFFF);border:1px solid #C8E5DF;border-radius:24px;padding:29px 32px;box-shadow:0 11px 28px #176F5B10}
+.eyebrow{font-size:12px;letter-spacing:.12em;font-weight:900;color:#15836B}
+h1{font-size:clamp(27px,4vw,38px);line-height:1.2;margin:8px 0;color:#184B65;letter-spacing:-.03em}
+.hero p{margin:0;color:#526F7D;max-width:760px}
+.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0}
+.mode{display:flex;gap:13px;align-items:center;text-align:left;border:2px solid #D6E8EA;border-radius:18px;padding:19px;background:#fff;box-shadow:0 6px 17px #23536E0D;color:#1A4C61}
+.mode svg{width:36px;height:36px;flex:none;color:#17876F;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mode b{display:block;font-size:16px}.mode small{display:block;color:#657C8C;margin-top:3px;font-size:12px}
+.mode.active{border-color:#2A9D89;background:linear-gradient(135deg,#ECFCF5,#E7F6FE);box-shadow:0 9px 23px #228E7920}
+.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 9px 28px #1B617211}
+.row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.section-label{font-size:12px;letter-spacing:.11em;font-weight:900;color:#198773}
+h2{color:#1A4C61;font-size:24px;margin:4px 0 5px;letter-spacing:-.03em}
+.lead{color:#658093;margin:0 0 18px}
+.counter{padding:8px 12px;border-radius:999px;background:#E8F6F2;color:#187765;font-size:13px;font-weight:850}
+.player{background:linear-gradient(110deg,#E8F8F6,#EBF5FF);border:1px solid #C8E6E5;border-radius:18px;padding:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.play{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(110deg,#168876,#36A6B2);color:#fff;border:0;border-radius:12px;padding:12px 18px;font-weight:900}
+.play svg{width:18px;height:18px;fill:currentColor}
+.secondary{background:white;color:#176E80;border:1px solid #BCD9E4;border-radius:12px;padding:11px 14px;font-weight:800}
+select{border:1px solid #BCD9E4;background:#fff;color:#245A70;border-radius:11px;padding:11px;max-width:175px}
+.audio-status{flex-basis:100%;color:#547482;font-size:12px;min-height:17px}
+.entry{margin-top:20px}
+label.answer-label{display:block;margin-bottom:8px;font-weight:850;color:#24516A}
+input#answer{width:100%;max-width:590px;padding:15px 17px;border:2px solid #B7D6DF;border-radius:13px;color:#164A64;font-size:20px;letter-spacing:.08em;font-weight:750;text-transform:uppercase}
+input#answer:focus{border-color:#238BB0}
+.instructions{font-size:12px;color:#658396;margin:8px 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:20px}
+.primary{background:#197C98;border:1px solid #197C98;color:#fff;border-radius:12px;padding:12px 19px;font-weight:850}
+.primary:disabled{opacity:.5;cursor:default}
+.feedback{margin-top:17px;border-radius:14px;padding:15px 18px;border:1px solid transparent;background:#F5FAFC;color:#254D66;min-height:0}
+.feedback[hidden]{display:none}
+.feedback.correct{background:#E9F8EF;border-color:#B7E7C7;color:#185C3C}
+.feedback.incorrect{background:#FFF5ED;border-color:#F4D1B0;color:#885324}
+.feedback strong{display:block;font-size:16px}
+.feedback p{margin:5px 0 0}
+.stats{margin-top:17px;font-size:13px;color:#50758A}
+.progress{width:100%;height:8px;background:#E5EFF2;border-radius:99px;overflow:hidden;margin:9px 0}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#31AC90,#65BEE0);transition:width .25s}
+.note{margin-top:20px;font-size:13px;color:#5B798C}
+.note b{color:#175F77}
+@media(max-width:750px){.modes{grid-template-columns:1fr}.mode{min-height:78px}.panel{padding:20px}.hero{padding:22px}.top strong{font-size:12px}.player>*{flex:1}.audio-status{flex:none;width:100%}}
+</style>
+</head>
+<body>
+<header class="top"><a class="back" href="../">← Pre-IELTS Listening</a><strong>Spelling &amp; Numbers</strong><span aria-hidden="true"></span></header>
+<main>
+<section class="hero"><div class="eyebrow">PRE-IELTS · LISTENING FOUNDATIONS</div><h1>Nghe đánh vần &amp; con số</h1><p>Luyện bắt chính xác tên riêng được đánh vần từng chữ cái, số điện thoại và postcode Anh gồm cả chữ lẫn số — những thông tin thường gặp ở IELTS Listening Part 1.</p></section>
+<nav class="modes" aria-label="Chọn dạng bài">
+<button type="button" class="mode active" data-mode="names" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M5 4h14M12 4v16m-5-5h10"/><path d="M3 20h18"/></svg><span><b>Spelling Names</b><small>Nghe chữ cái · Viết lại tên</small></span></button>
+<button type="button" class="mode" data-mode="phones" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M10 6h4m-3 11h2"/></svg><span><b>Phone Numbers</b><small>Nghe chữ số · Ghi số điện thoại</small></span></button>
+<button type="button" class="mode" data-mode="postcodes" aria-pressed="false"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h4"/></svg><span><b>Postcodes</b><small>Nghe mã bưu chính · Chữ &amp; số</small></span></button>
+</nav>
+<section class="panel" aria-labelledby="lessonTitle">
+<div class="row"><div><div class="section-label" id="modeLabel">SPELLING PRACTICE</div><h2 id="lessonTitle">Nghe đánh vần tên</h2></div><span class="counter" id="counter">Câu 1/10</span></div>
+<p class="lead" id="task">Nghe từng chữ cái và viết tên bạn nghe được.</p>
+<div class="player">
+<button class="play" type="button" id="play"><svg viewBox="0 0 24 24"><path d="m7 4 13 8-13 8Z"/></svg> Nghe câu hỏi</button>
+<button class="secondary" type="button" id="replay">↻ Nghe lại</button>
+<label for="speed">Tốc độ</label><select id="speed" aria-label="Tốc độ giọng đọc"><option value="0.72">Chậm</option><option value="0.9" selected>Bình thường</option><option value="1">Nhanh hơn</option></select>
+<div class="audio-status" id="audioStatus" role="status" aria-live="polite">Nhấn “Nghe câu hỏi” để bắt đầu.</div>
+</div>
+<form id="answerForm" class="entry">
+<label class="answer-label" for="answer" id="answerLabel">Tên được đánh vần là gì?</label>
+<input id="answer" autocomplete="off" autocapitalize="characters" spellcheck="false" required placeholder="Nhập tên bạn nghe được">
+<p class="instructions" id="instructions">Không phân biệt chữ hoa/thường hoặc khoảng trắng. Có thể nghe lại trước khi chấm.</p>
+<div class="actions"><button class="primary" id="check" type="submit">Kiểm tra đáp án</button><button type="button" class="secondary" id="next">Câu tiếp theo →</button><button type="button" class="secondary" id="newSet">Làm bộ câu mới</button></div>
+</form>
+<div id="feedback" class="feedback" hidden role="status" aria-live="polite"></div>
+<div class="stats"><span id="score">Đúng 0 / 0 câu đã kiểm tra</span><div class="progress" role="progressbar" aria-label="Tiến độ bộ câu" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="progressBar"><span id="progressFill"></span></div></div>
+</section>
+<p class="note"><b>Lưu ý:</b> Audio dùng giọng đọc tiếng Anh có sẵn trên thiết bị (ưu tiên en-GB). Trình duyệt cần hỗ trợ Speech Synthesis và có giọng đọc tiếng Anh. Kết quả đây là bài <b>Practice</b>, không tính vào IELTS Test Band.</p>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const sets={
+ names:['EMILY','JOHNSON','CATHERINE','GRAHAM','SOPHIE','THOMPSON','REBECCA','MICHAEL','WILLIAMS','CHARLOTTE','DANIEL','HARRISON','PATRICIA','ANDERSON','JESSICA','SAMANTHA','BENJAMIN','ELIZABETH','JONATHAN','JENNIFER'],
+ phones:['01632 960123','01632 960245','01632 960378','01632 960491','01632 960562','01632 960684','01632 960795','01632 960816','01632 960927','01632 960038','01632 960147','01632 960259','01632 960361','01632 960472','01632 960583','01632 960694','01632 960705','01632 960827'],
+ postcodes:['SW1A 1AA','EC2R 8AH','M1 1AE','B33 8TH','CR2 6XH','DN55 1PT','W1A 0AX','LS1 4DY','EH1 1YZ','G1 2FF','OX1 2JD','CB2 1TN','BS1 5TR','NE1 4ST','SE1 7PB','N1 9GU','E14 5AB','NW1 6XE']
+};
+const meta={
+ names:['SPELLING PRACTICE','Nghe đánh vần tên','Nghe từng chữ cái và viết lại tên riêng được đánh vần.','Tên được đánh vần là gì?','Nhập tên bạn nghe được'],
+ phones:['NUMBER PRACTICE','Nghe số điện thoại','Nghe dãy số bằng tiếng Anh và ghi lại chính xác các chữ số.','Số điện thoại là gì?','Ví dụ: 01632 960123'],
+ postcodes:['POSTCODE PRACTICE','Nghe postcode','Nghe mã bưu chính Anh gồm chữ cái và chữ số.','Postcode được đọc là gì?','Ví dụ: SW1A 1AA']
+};
+const key='SC_PRE_IELTS_SPELLING_V1';
+let mode='names',queue=[],position=0,checked=false,correct=0,attempted=0,session=0,playing=false;
+const shuffle=arr=>{const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const getAnswer=()=>queue[position]||'';
+const normal=value=>String(value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+const tokens=value=>normal(value).split('');
+function store(){
+ try{const all=JSON.parse(localStorage.getItem(key)||'{}');all[mode]={completed:attempted,correct,date:new Date().toISOString()};localStorage.setItem(key,JSON.stringify(all))}catch{}
+}
+function stop(){session++;if('speechSynthesis'in window)window.speechSynthesis.cancel();playing=false;$('play').disabled=false;$('replay').disabled=false}
+function setStatus(s){$('audioStatus').textContent=s}
+function englishVoice(){
+ const voices=window.speechSynthesis.getVoices();
+ return voices.find(v=>v.lang?.toLowerCase()==='en-gb'&&v.localService)||voices.find(v=>v.lang?.toLowerCase()==='en-gb')||voices.find(v=>v.lang?.toLowerCase().startsWith('en'))||null;
+}
+function buildSpeech(){
+ const ans=getAnswer(),letters=tokens(ans),rate=Number($('speed').value);
+ // Each character is spoken independently so letters/numbers are not read as whole words.
+ const utterances=letters.map(char=>({text:char==='0'?'zero':char,rate:rate*(mode==='names'?0.9:1)}));
+ return {utterances,rate};
+}
+async function speak(){
+ if(!('speechSynthesis'in window)||!('SpeechSynthesisUtterance'in window)){setStatus('Thiết bị chưa hỗ trợ giọng đọc. Hãy thử Chrome hoặc Edge.');return}
+ stop();const run=++session,voice=englishVoice(),{utterances}=buildSpeech();
+ playing=true;$('play').disabled=true;$('replay').disabled=true;
+ setStatus('Đang phát âm '+(mode==='names'?'từng chữ cái':mode==='phones'?'từng chữ số':'chữ cái và số')+'…');
+ let index=0;
+ const step=()=>{
+  if(session!==run)return;
+  if(index>=utterances.length){playing=false;$('play').disabled=false;$('replay').disabled=false;setStatus('Đã đọc xong. Bạn có thể nghe lại trước khi trả lời.');return}
+  const item=utterances[index++],utt=new SpeechSynthesisUtterance(item.text);
+  utt.lang='en-GB';utt.rate=item.rate;utt.pitch=1;utt.volume=1;
+  if(voice)utt.voice=voice;
+  utt.onend=()=>{if(session===run)setTimeout(step,mode==='names'?230:125)};
+  utt.onerror=e=>{if(session!==run)return;if(e.error==='interrupted'||e.error==='canceled')return;setStatus('Không phát được audio. Kiểm tra giọng đọc tiếng Anh của thiết bị.');playing=false;$('play').disabled=false;$('replay').disabled=false};
+  window.speechSynthesis.speak(utt);
+ };
+ // Speech synthesis is triggered directly from a click to satisfy browser autoplay policies.
+ step();
+}
+function render(){
+ stop();checked=false;
+ const m=meta[mode];$('modeLabel').textContent=m[0];$('lessonTitle').textContent=m[1];$('task').textContent=m[2];
+ $('answerLabel').textContent=m[3];$('answer').placeholder=m[4];$('answer').value='';$('answer').disabled=false;
+ $('check').disabled=false;$('next').textContent=position===queue.length-1?'Xem kết quả →':'Câu tiếp theo →';
+ $('feedback').hidden=true;$('feedback').className='feedback';$('feedback').replaceChildren();
+ $('counter').textContent='Câu '+(position+1)+'/'+queue.length;
+ $('score').textContent='Đúng '+correct+' / '+attempted+' câu đã kiểm tra';
+ $('progressFill').style.width=(attempted/queue.length*100)+'%';$('progressBar').setAttribute('aria-valuenow',String(attempted));
+ setStatus('Nhấn “Nghe câu hỏi” để bắt đầu.');
+}
+function newRound(type=mode){
+ mode=type;queue=shuffle(sets[mode]).slice(0,10);position=0;attempted=0;correct=0;
+ document.querySelectorAll('[data-mode]').forEach(b=>{const on=b.dataset.mode===mode;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});
+ render();
+}
+$('play').onclick=speak;$('replay').onclick=speak;
+$('answerForm').onsubmit=e=>{
+ e.preventDefault();if(checked)return;
+ const typed=$('answer').value.trim();if(!typed){$('answer').focus();return}
+ const expected=getAnswer(),ok=normal(typed)===normal(expected);
+ checked=true;attempted++;if(ok)correct++;
+ $('answer').disabled=true;$('check').disabled=true;
+ $('feedback').hidden=false;$('feedback').className='feedback '+(ok?'correct':'incorrect');
+ const h=document.createElement('strong');h.textContent=ok?'Chính xác!':'Chưa chính xác';
+ const p=document.createElement('p');p.textContent='Đáp án: '+expected+(ok?'':' · Bạn nhập: '+typed);
+ $('feedback').append(h,p);
+ $('score').textContent='Đúng '+correct+' / '+attempted+' câu đã kiểm tra';
+ $('progressFill').style.width=(attempted/queue.length*100)+'%';$('progressBar').setAttribute('aria-valuenow',String(attempted));
+ store();
+};
+$('next').onclick=()=>{
+ if(!checked){$('feedback').hidden=false;$('feedback').className='feedback incorrect';$('feedback').textContent='Hãy nhập và kiểm tra đáp án trước khi chuyển câu.';return}
+ if(position===queue.length-1){
+  stop();$('feedback').hidden=false;$('feedback').className='feedback correct';
+  $('feedback').replaceChildren();const h=document.createElement('strong');h.textContent='Hoàn thành bộ 10 câu!';
+  const p=document.createElement('p');p.textContent='Bạn làm đúng '+correct+'/10 câu. Nhấn “Làm bộ câu mới” để luyện tiếp.';
+  $('feedback').append(h,p);return;
+ }
+ position++;render();
+};
+$('newSet').onclick=()=>newRound();
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>newRound(b.dataset.mode));
+window.addEventListener('pagehide',stop);
+newRound();
+})();
+</script>
+<script src="../../../shared/smartcom-ui.js?v=20261118-premium02"></script>
+</body>
+</html>
