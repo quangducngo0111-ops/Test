@@ -22,6 +22,13 @@ if(location.pathname.includes('/Practice/')){
 const asset=new URL('./smartcom-ui.css?v=20261114-07',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
+if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
+ const historyScript=document.createElement('script');
+ historyScript.dataset.scAttemptHistory='1';
+ historyScript.src=url('Practice/shared/attempt-history.js?v=20261118-01');
+ document.head.append(historyScript);
+}
+
 const pathname=location.pathname;
 const hubPaths=[
  '/Practice/','/Practice/Speaking/','/Practice/Speaking/Part1/','/Practice/Speaking/Part2/',
