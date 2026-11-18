@@ -61,3 +61,29 @@ svg [fill="#3b0e90" i],svg [fill="#32117c" i],svg [fill="#281260" i],svg [fill="
 svg [fill="#a78bfa" i],svg [fill="#9176de" i],svg [fill="#9b7adf" i]{fill:#48B6F0!important}
 svg [stroke="#3b0e90" i],svg [stroke="#281260" i],svg [stroke="#6544d5" i]{stroke:#0D68BD!important}
 ::selection{background:#BDE5FF;color:#123C64}
+
+/* 2026-11-18 premium global finishing layer for legacy learning folders.
+   Existing task and game logic stays untouched. */
+body:not(.sc-no-global-theme){
+ font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+body:not(.sc-no-global-theme) :where(.card,.tile,.panel,.lesson-card,.cam-pane,.cam-group,.cam-audio,.exercise-card,.article-card,.question-card){
+ border-radius:18px;
+}
+body:not(.sc-no-global-theme) :where(.card,.tile,.panel,.lesson-card,.cam-pane,.cam-group,.cam-audio,.exercise-card,.article-card,.question-card):not(.sc-preserve-colors){
+ box-shadow:0 9px 25px rgba(28,75,114,.065);
+}
+body:not(.sc-no-global-theme) :where(button,a,input,select,textarea):focus-visible{
+ outline:3px solid #8C70D3!important;outline-offset:3px!important;
+}
+body:not(.sc-no-global-theme) :where(.card,.tile,.panel,.lesson-card,.article-card) :where(h2,h3,h4){
+ letter-spacing:-.025em;
+}
+/* Purple floating shortcuts are intentional reference accents, not learning-area colors. */
+#sc-quick-shell.sc-capsule .sc-capsule-frame{
+ background:linear-gradient(145deg,#A681E5,#8662D1 48%,#6846A8)!important;
+ border:3px solid #FFF!important;box-shadow:0 6px 0 #5B3B98,0 15px 31px #5C429942!important;
+}
+#sc-note-button{
+ border:3px solid #FFF!important;
+}
