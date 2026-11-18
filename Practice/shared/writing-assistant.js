@@ -54,14 +54,18 @@ target.dataset.scWaAttached='1';target.setAttribute('spellcheck','true');target.
 const toolbar=document.createElement('div');toolbar.className='sc-wa-toolbar';
 const count=document.createElement('span');count.className='sc-wa-count';count.setAttribute('aria-live','off');
 const action=document.createElement('button');action.type='button';action.className='sc-wa-check';action.textContent='Kiểm tra chính tả & ngữ pháp';
-toolbar.append(count,action);
+const complete=document.createElement('button');complete.type='button';complete.className='sc-wa-check';complete.textContent='Lưu bài vào lịch sử';toolbar.append(count,action,complete);
 const disclosure=document.createElement('small');disclosure.className='sc-wa-disclosure';disclosure.textContent='Khi bấm kiểm tra, nội dung được gửi đến LanguageTool để gợi ý sửa. Không tự động gửi khi đang gõ.';
 const feedback=document.createElement('div');feedback.className='sc-wa-feedback';feedback.hidden=true;target._scWritingFeedback=feedback;
 const existingCount=target.id==='writing'?document.getElementById('wordCount'):target.id==='essay'?document.getElementById('wordcount'):null;
 if(existingCount)existingCount.hidden=true;
 target.insertAdjacentElement('afterend',toolbar);toolbar.insertAdjacentElement('afterend',disclosure);disclosure.insertAdjacentElement('afterend',feedback);
 const update=()=>{const n=wordCount(target.value);count.textContent='Số từ: '+n;count.dataset.words=String(n)};
-target.addEventListener('input',()=>{update();if(!feedback.hidden){feedback.hidden=true;feedback.textContent=''}});
+let draftTimer;
+const record=(finished=false)=>{const h=window.SmartcomHistory;if(!h||!target.value.trim())return;const payload={attemptId:finished?undefined:'draft-'+location.pathname+'-'+(target.id||'writing'),kind:'Practice',skill:'Writing',title:document.title,exerciseId:location.pathname,path:location.pathname,text:target.value,wordCount:wordCount(target.value),field:target.id||'writing'};finished?h.submit(payload):h.draft(payload)};
+target.addEventListener('input',()=>{update();clearTimeout(draftTimer);draftTimer=setTimeout(()=>record(false),900);if(!feedback.hidden){feedback.hidden=true;feedback.textContent=''}});
+complete.addEventListener('click',()=>{if(!target.value.trim()){alert('Hãy viết bài trước khi lưu vào lịch sử.');return}record(true);complete.textContent='✓ Đã lưu vào lịch sử';setTimeout(()=>complete.textContent='Lưu bài vào lịch sử',2400)});
+
 action.addEventListener('click',()=>proofread(target,action));update();
 }
 function scan(root=document){if(root.nodeType!==1&&root.nodeType!==9)return;if(root.matches?.('textarea'))setup(root);root.querySelectorAll?.('textarea').forEach(setup);root.querySelectorAll?.('#review').forEach(b=>{if(b.dataset.scWaReplaced)return;b.dataset.scWaReplaced='1';b.textContent='Kiểm tra chính tả & ngữ pháp';b.addEventListener('click',e=>{const box=document.getElementById('writing');if(!box)return;e.preventDefault();e.stopImmediatePropagation();proofread(box,b)},true)})}
