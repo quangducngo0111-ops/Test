@@ -778,7 +778,7 @@ tbody tr:hover{
 }
 
 </style>
-<link data-sc-site-theme="1" rel="stylesheet" href="../assets/site-electric-blue.css?v=20261118-blue02"></head>
+<link data-sc-site-theme="1" rel="stylesheet" href="../assets/site-electric-blue.css?v=20261118-blue02"><link rel="stylesheet" href="./learning-progress.css?v=20261118-02"></head>
 
 <body>
 
@@ -1668,6 +1668,7 @@ async function loadStats(){
     renderAll(
       data
     );
+    window.ScProgress?.setServerData(data);
 
 
     loading.classList.add(
@@ -1697,7 +1698,9 @@ async function loadStats(){
     errorBox.classList.remove(
       'hidden'
     );
-
+    content.classList.remove('hidden');
+    if(!window.ScProgress)console.warn('History extension unavailable');
+    else window.ScProgress.setServerData({summary:{},history:[]});
   }
 
 }
@@ -2403,5 +2406,5 @@ loadStats();
 
 </script>
 
-</body>
+<script src="../Practice/shared/attempt-history.js?v=20261118-01"></script><script src="./learning-progress.js?v=20261118-02"></script></body>
 </html>
