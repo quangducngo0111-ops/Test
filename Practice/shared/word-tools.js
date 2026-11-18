@@ -122,10 +122,15 @@ css.textContent=[
 '#sc-dict-modal .actions{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}'
 ].join('');
 document.head.append(css);
+/* Compact purple notebook-and-pen button, aligned with the IELTS portal design. */
+const scNotebookStyle=document.createElement('style');
+scNotebookStyle.textContent='#sc-note-button{width:62px!important;height:62px!important;min-width:62px!important;min-height:62px!important;padding:0!important;gap:0!important;background:linear-gradient(145deg,#A783EA,#724BB8)!important;color:#FFF!important;border:3px solid #FFF!important;border-radius:50%!important;box-shadow:0 6px 0 #60419B,0 12px 25px #664A9B45!important;display:grid!important;place-items:center!important}#sc-note-button .sc-note-icon{background:transparent!important;width:38px!important;height:38px!important}#sc-note-button .sc-note-icon svg{width:29px!important;height:29px!important;stroke:#FFF!important;stroke-width:1.9!important}#sc-note-button .sc-note-label{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}#sc-note-button:hover{transform:translateY(-3px)!important;box-shadow:0 9px 0 #60419B,0 17px 27px #664A9B55!important}';
+document.head.append(scNotebookStyle);
+
 const button=document.createElement('button');button.id='sc-note-button';button.type='button';
 button.setAttribute('aria-label','Mở sổ tay từ vựng');button.title='Sổ tay từ vựng';
 const noteIcon=document.createElement('span');noteIcon.className='sc-note-icon';noteIcon.setAttribute('aria-hidden','true');
-noteIcon.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.75h11.5a2 2 0 0 1 2 2V20H7.5A3.5 3.5 0 0 1 4 16.5V6a2.25 2.25 0 0 1 2-2.25Z"/><path d="M7.5 20A3.5 3.5 0 0 1 4 16.5c0-1.9 1.6-3.25 3.5-3.25h12"/><path d="M9 8h6M9 11h4"/></svg>';
+noteIcon.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 4h10.5a2 2 0 0 1 2 2v13H7a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M4.5 17a2.5 2.5 0 0 1 2.5-2.5h10"/><path d="M8 8h6M8 11h4"/><path d="m14 19 5.6-5.6 2 2L16 21l-3 .8Z"/></svg>';
 const noteLabel=document.createElement('span');noteLabel.className='sc-note-label';noteLabel.textContent='Sổ tay';
 button.append(noteIcon,noteLabel);
 button.onclick=()=>location.href=new URL('Vocabulary-Notebook/',root).href;document.body.append(button);
