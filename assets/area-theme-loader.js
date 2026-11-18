@@ -10,7 +10,7 @@ if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply
 const base=new URL('./',document.currentScript?.src||location.href);
 if(!document.querySelector('link[data-sc-area-theme]')){
  const link=document.createElement('link');link.rel='stylesheet';link.dataset.scAreaTheme=area;
- link.href=new URL('area-theme.css?v=20261118-scoped01',base).href;
+ link.href=new URL('area-theme.css?v=20261118-premium02',base).href;
  document.head.append(link);
 }
 })();
