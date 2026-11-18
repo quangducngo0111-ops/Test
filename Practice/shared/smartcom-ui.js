@@ -6,6 +6,19 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src); // .../Test/ from .../Test/Practice/shared/
+// Electric Blue is the default theme for the Practice area.
+// Resolve relative to this script so GitHub Pages subpaths also work.
+if(location.pathname.includes('/Practice/')){
+ document.body.classList.add('sc-electric-blue');
+ if(!document.querySelector('link[data-sc-electric-theme]')){
+  const theme=document.createElement('link');
+  theme.rel='stylesheet';
+  theme.dataset.scElectricTheme='1';
+  theme.href=new URL('../Listening/electric-blue-theme.css?v=20261118-01',current.src).href;
+  document.head.append(theme);
+ }
+}
+
 const asset=new URL('./smartcom-ui.css?v=20261114-07',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
