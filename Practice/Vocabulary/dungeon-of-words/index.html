@@ -85,8 +85,8 @@ const shuffle=a=>[...a].sort(()=>Math.random()-.5);
 function persist(){try{localStorage.setItem("DUNGEON_WORDS_RPG_V2",JSON.stringify({classId:profile.classId,floor:profile.floor,gems:profile.gems,gold:profile.gold,level:profile.level,exp:profile.exp,gear:profile.gear}))}catch(e){}}
 function hud(){const hero=heroes[profile.classId];$("heroName").textContent=hero.name;$("floor").textContent="Tầng "+profile.floor+"/10";$("hp").textContent=Math.max(0,Math.ceil(profile.hp))+" / "+hero.hp;$("hpbar").style.width=Math.min(100,100*profile.hp/hero.hp)+"%";$("mana").textContent=profile.mana+"/3";$("gems").textContent=profile.gems;$("gold").textContent=profile.gold;$("level").textContent=profile.level+" / "+profile.exp;$("inventory").replaceChildren(...profile.gear.slice(-9).map(v=>{const e=document.createElement("span");e.className="chip";e.textContent=v;return e}))}
 function note(t){$("status").textContent=t}
-function openModal(title,prompt,choices=[]){if(profile.locked&&$("modal").hidden===false)return;profile.locked=true;$("modal").hidden=false;$("modalTitle").textContent=title;$("prompt").textContent=prompt;$("options").replaceChildren();$("feedback").textContent="";$("modalActions").replaceChildren();for(const option of choices){const b=document.createElement("button");b.textContent=option.label;b.onclick=option.fn;$("options").append(b)}}
-function closeModal(){profile.locked=false;$("modal").hidden=true;hud();profile.scene?.syncCombatHud()}
+function openModal(title,prompt,choices=[]){if($("modal").dataset.active==="1")return;$("modal").dataset.active="1";profile.locked=true;$("modal").hidden=false;$("modalTitle").textContent=title;$("prompt").textContent=prompt;$("options").replaceChildren();$("feedback").textContent="";$("modalActions").replaceChildren();for(const option of choices){const b=document.createElement("button");b.textContent=option.label;b.onclick=option.fn;$("options").append(b)}}
+function closeModal(){profile.locked=false;$("modal").hidden=true;$("modal").dataset.active="0";hud();profile.scene?.syncCombatHud()}
 function action(label,fn){const b=document.createElement("button");b.textContent=label;b.onclick=fn;$("modalActions").append(b)}
 function reward(gems=0,gold=0,exp=0){profile.gems+=gems;profile.gold+=gold;profile.exp+=exp;while(profile.exp>=profile.level*30){profile.exp-=profile.level*30;profile.level++;profile.hp=Math.min(heroes[profile.classId].hp,profile.hp+20);note("⭐ Lên cấp "+profile.level+"!")}persist();hud()}
 function quiz(title,onAnswer){if(profile.locked)return;const w=profile.missed.length&&Math.random()<.35?pick(profile.missed):pick(words),distractors=shuffle(words.filter(x=>x.word!==w.word&&x.meaning!==w.meaning)).slice(0,3);
@@ -154,7 +154,7 @@ class DungeonScene extends Phaser.Scene{
   let vx=Number(k.D.isDown||c.right.isDown||m.right)-Number(k.A.isDown||c.left.isDown||m.left);
   let vy=Number(k.S.isDown||c.down.isDown||m.down)-Number(k.W.isDown||c.up.isDown||m.up);
   const hero=heroes[profile.classId],mag=Math.hypot(vx,vy)||1;this.player.setVelocity(vx/mag*hero.speed,vy/mag*hero.speed);
-   if((k.SPACE.isDown||c.space?.isDown)&&time-this.lastAttack>420)this.attack();
+   if(k.SPACE.isDown&&time-this.lastAttack>420)this.attack();
   if(vx||vy){this.facing={x:vx/mag,y:vy/mag};this.player.setFlipX(vx<0)}
   for(const e of this.enemies){
    if(e.hp<=0)continue;
