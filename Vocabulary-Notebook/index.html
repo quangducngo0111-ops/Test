@@ -26,13 +26,32 @@ input[type=search]{padding:11px;border:1px solid #dbd1e8;border-radius:12px;min-
 .reminder-status{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:#f6f1ff;color:#4b3480;font-size:13px;line-height:1.6}
 .reminder-status strong{color:#30126f}
 @media(max-width:750px){.reminder-grid{grid-template-columns:1fr}}
-</style><link data-sc-site-theme="1" rel="stylesheet" href="../assets/site-electric-blue.css?v=20261118-blue02"></head><body>
+</style><link data-sc-site-theme="1" rel="stylesheet" href="../assets/site-electric-blue.css?v=20261118-blue02"><style id="sc-deck-selector-style">
+.deck-manager{border:1px solid #C7E0ED;background:linear-gradient(145deg,#F7FCFF,#EEF7FC);border-radius:17px;padding:16px;margin-bottom:18px}
+.deck-manager-head,.deck-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.deck-manager-head{justify-content:space-between;margin-bottom:13px}
+.deck-manager-head strong{font-size:17px;color:#185A86}
+.deck-manager-head p{margin:5px 0 0}.deck-count{border-radius:30px;background:#DBF0FC;color:#15639A;padding:5px 11px;font-size:12px;font-weight:800}
+.deck-row{margin:10px 0}.deck-row label{font-weight:750;color:#275B7B;font-size:13px}
+.deck-row select,.deck-row input{border:1px solid #BEDBEB;border-radius:11px;min-height:43px;padding:10px 12px;background:#FFF;color:#173F5D}
+.deck-row select{flex:1;min-width:175px}.deck-row input{flex:1;min-width:200px}
+.deck-row button{background:#E5F3FB;color:#17649D;border-color:#BFDAEB}
+.deck-row button:hover{background:#D5EAFA}.deck-row .danger-outline{background:#FFF6F6;color:#B14754;border-color:#F1CAD1}
+#deckStatus{margin:8px 0 0;min-height:19px}
+@media(max-width:550px){.deck-row select,.deck-row input{flex-basis:100%;min-width:0}.deck-row button{flex:1}}
+</style></head><body>
 <header><a href="../">← Trang chủ</a><strong>📒 My Vocabulary Notebook</strong><a href="../Foundations/">Foundations</a></header>
 <main><section class="hero"><h1>Sổ tay từ vựng</h1><p>Nhấp đúp vào từ ở các trang học → Thêm vào sổ tay → chọn từ → chơi game để ghi nhớ.</p></section>
 <section class="panel"><div class="toolbar"><div><h2>Những từ đã lưu</h2><p class="dim" id="scope">Dữ liệu lưu trong trình duyệt theo tên và lớp của học sinh.</p></div><span id="count">0 từ</span></div>
 <div class="toolbar"><div class="tools"><input type="search" id="search" placeholder="Tìm từ trong sổ tay"><button id="all">Chọn tất cả</button><button id="none">Bỏ chọn</button></div><span id="selectedCount">0 từ đã chọn</span></div>
 <div class="list" id="words"></div><p class="dim" id="empty"></p></section>
-<section class="panel" id="vocabReminder">
+<section class="panel" id="vocabReminder"><div class="deck-manager" id="reminderDeckManager">
+ <div class="deck-manager-head"><div><strong>Chọn bộ từ để nhắc</strong><p class="dim">Lưu nhóm từ để dùng lại; hoặc tiếp tục nhắc các từ tích chọn ở trên.</p></div><span id="deckCount" class="deck-count">0 bộ</span></div>
+ <div class="deck-row"><label for="reminderDeck">Bộ từ đã lưu</label><select id="reminderDeck" aria-label="Chọn bộ từ vựng"><option value="">Từ đang tích chọn</option></select><button type="button" id="loadReminderDeck">Chọn bộ</button></div>
+ <div class="deck-row"><input id="deckName" maxlength="60" placeholder="Đặt tên bộ từ, ví dụ: Environment" aria-label="Tên bộ từ mới"><button type="button" id="saveReminderDeck">Lưu bộ từ đang chọn</button><button type="button" id="deleteReminderDeck" class="danger-outline">Xóa bộ</button></div>
+ <p class="dim" id="deckStatus" role="status" aria-live="polite">Chọn tối đa 10 từ để tạo bộ dùng cho lịch nhắc.</p>
+</div>
+
 <div class="reminder-grid">
 <div><h2>Nhắc từ vựng hôm nay</h2><p class="dim">Chọn tối đa 10 từ ở phía trên. Hệ thống sẽ nhắc từng từ kèm nghĩa theo khoảng thời gian bạn chọn.</p></div>
 <div class="reminder-actions">
@@ -59,6 +78,56 @@ const save=v=>localStorage.setItem(key(),JSON.stringify(v));
 const norm=x=>String(x||'').trim().toLowerCase();
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let words=load(),chosen=new Set(),gameWords=[],gameIndex=0,score=0,turned=false,matchPick=null,matches=0;
+const deckKey=()=>key().replace('SC_VOCAB_NOTEBOOK_V1_','SC_VOCAB_DECKS_V1_');
+const loadDecks=()=>{try{const x=JSON.parse(localStorage.getItem(deckKey())||'[]');return Array.isArray(x)?x.filter(d=>d&&typeof d.id==='string'&&Array.isArray(d.words)):[]}catch{return []}};
+const saveDecks=items=>{try{localStorage.setItem(deckKey(),JSON.stringify(items));return true}catch{return false}};
+let activeDeckId='';
+const deckLabel=msg=>{$('deckStatus').textContent=msg};
+function renderDecks(){
+ const decks=loadDecks(),select=$('reminderDeck'),current=select.value||activeDeckId;
+ select.replaceChildren(new Option('Từ đang tích chọn',''));
+ decks.forEach(d=>select.add(new Option(d.name+' ('+d.words.length+' từ)',d.id)));
+ if(decks.some(d=>d.id===current))select.value=current;
+ activeDeckId=select.value;
+ $('deckCount').textContent=decks.length+' bộ';
+ $('deleteReminderDeck').disabled=!activeDeckId;
+ $('loadReminderDeck').disabled=!activeDeckId;
+ reminderUI();
+}
+$('saveReminderDeck').onclick=()=>{
+ const name=$('deckName').value.trim(),selected=words.filter(w=>chosen.has(w.word)&&w.word);
+ if(!name){deckLabel('Hãy nhập tên bộ từ.');$('deckName').focus();return}
+ if(selected.length<1||selected.length>10){deckLabel('Hãy tích chọn từ 1 đến 10 từ để tạo bộ.');return}
+ const decks=loadDecks();
+ const duplicate=decks.some(d=>d.name.toLocaleLowerCase('vi')===name.toLocaleLowerCase('vi'));
+ if(duplicate){deckLabel('Tên bộ từ đã tồn tại. Hãy nhập tên khác.');return}
+ const id='deck-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+ decks.push({id,name,words:selected.map(w=>w.word),createdAt:new Date().toISOString()});
+ if(!saveDecks(decks)){deckLabel('Không thể lưu bộ từ trên thiết bị.');return}
+ activeDeckId=id;renderDecks();$('reminderDeck').value=id;$('deckName').value='';
+ deckLabel('Đã lưu bộ “'+name+'” với '+selected.length+' từ.');
+};
+$('reminderDeck').onchange=()=>{
+ activeDeckId=$('reminderDeck').value;
+ $('deleteReminderDeck').disabled=!activeDeckId;
+ $('loadReminderDeck').disabled=!activeDeckId;
+ reminderUI();
+};
+$('loadReminderDeck').onclick=()=>{
+ const d=loadDecks().find(x=>x.id===$('reminderDeck').value);
+ if(!d)return;
+ const available=new Set(words.map(w=>w.word));
+ chosen=new Set(d.words.filter(w=>available.has(w)));
+ activeDeckId=d.id;
+ render();renderDecks();$('reminderDeck').value=d.id;
+ deckLabel('Đã chọn '+chosen.size+' từ từ bộ “'+d.name+'”. Hãy nhấn “Bắt đầu nhắc từ”.');
+};
+$('deleteReminderDeck').onclick=()=>{
+ const d=loadDecks().find(x=>x.id===$('reminderDeck').value);
+ if(!d||!confirm('Xóa bộ từ “'+d.name+'”? Các từ trong sổ tay vẫn được giữ.'))return;
+ if(!saveDecks(loadDecks().filter(x=>x.id!==d.id))){deckLabel('Không thể xóa bộ từ.');return}
+ activeDeckId='';renderDecks();deckLabel('Đã xóa bộ “'+d.name+'”. Các từ đã lưu không bị xóa.');
+};
 const speech=w=>{if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(w);u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)};
 const shuffled=items=>[...items].sort(()=>Math.random()-.5);
 const p=profile();if(p?.name)$('scope').textContent='Hồ sơ: '+p.name+' · '+p.className+' · Lưu trên thiết bị này (không đồng bộ tài khoản).';
@@ -129,17 +198,21 @@ function reminderUI(){
  const plan=window.scVocabReminders?.get?.();
  const status=$('reminderStatus'),start=$('startReminder'),stop=$('stopReminder');
  if(!status)return;
- start.disabled=chosen.size===0||chosen.size>10;
+ const selectedDeck=loadDecks().find(d=>d.id===$('reminderDeck').value);
+  const available=selectedDeck?selectedDeck.words.filter(id=>words.some(w=>w.word===id)).length:chosen.size;
+  start.disabled=available===0||available>10;
  stop.disabled=!plan?.enabled;
  if(!plan){status.textContent='Chưa có lịch nhắc từ hôm nay. Hãy chọn tối đa 10 từ ở trên.';return}
  const total=plan.words?.length||0;
  if(plan.enabled){
   const next=new Date(plan.nextAt);
-  status.textContent='Đang nhắc '+total+' từ · mỗi '+plan.intervalMinutes+' phút · lần tiếp theo khoảng '+next.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+'.';
+  status.textContent='Đang nhắc '+total+' từ'+(plan.deckName?' · bộ '+plan.deckName:'')+' · mỗi '+plan.intervalMinutes+' phút · lần tiếp theo khoảng '+next.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+'.';
  }else{status.textContent=plan.completedAt?'Đã nhắc xong '+total+' từ trong lượt học này. Bạn có thể chọn và bắt đầu lượt mới.':'Lịch nhắc đã dừng.'}
 }
 $('startReminder').onclick=async()=>{
- const selected=words.filter(w=>chosen.has(w.word)&&w.word).slice(0,11);
+ const selectedDeck=loadDecks().find(d=>d.id===$('reminderDeck').value);
+  const activeWordIds=selectedDeck?new Set(selectedDeck.words):chosen;
+  const selected=words.filter(w=>activeWordIds.has(w.word)&&w.word).slice(0,11);
  if(selected.length<1||selected.length>10){alert('Vui lòng chọn từ 1 đến 10 từ cần học hôm nay.');return}
  const interval=Number($('reminderEvery').value)||5;
  // Notification permission must be requested on a direct user gesture.
@@ -149,7 +222,7 @@ $('startReminder').onclick=async()=>{
  if(!window.scVocabReminders){alert('Chức năng nhắc từ chưa tải xong. Hãy tải lại trang và thử lại.');return}
  const items=selected.map(w=>({word:w.word,meaning:w.meaning||'Chưa có nghĩa'}));
  const now=Date.now();
- const ok=window.scVocabReminders.put({enabled:true,words:items,index:0,intervalMinutes:interval,startedAt:now,nextAt:now+interval*60000});
+ const ok=window.scVocabReminders.put({enabled:true,words:items,deckId:selectedDeck?.id||null,deckName:selectedDeck?.name||null,index:0,intervalMinutes:interval,startedAt:now,nextAt:now+interval*60000});
  if(!ok){alert('Trình duyệt không cho phép lưu lịch nhắc.');return}
  reminderUI();
 };
