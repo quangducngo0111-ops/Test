@@ -3,7 +3,7 @@
    This file never grades Practice, Writing or Speaking. */
 (()=>{'use strict';
 if(window.SmartcomTestBands)return;
-if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('area-theme-loader.js?v=20261118-scoped01',document.currentScript.src).href;document.head.append(t);}
+if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('area-theme-loader.js?v=20261118-premium02',document.currentScript.src).href;document.head.append(t);}
 const bandTables={
  reading:[[39,9],[37,8.5],[35,8],[33,7.5],[30,7],[27,6.5],[23,6],[19,5.5],[15,5],[13,4.5],[10,4],[8,3.5],[6,3],[4,2.5],[3,2],[1,1.5],[0,0]],
  listening:[[39,9],[37,8.5],[35,8],[32,7.5],[30,7],[26,6.5],[23,6],[18,5.5],[16,5],[13,4.5],[11,4],[8,3.5],[6,3],[4,2.5],[3,2],[1,1.5],[0,0]]
