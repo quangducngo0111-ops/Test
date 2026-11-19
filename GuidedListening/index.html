@@ -449,7 +449,9 @@ function checkFullTranscript(){
 function gapSeek(n){const a=document.getElementById('gapAudio');if(a)a.currentTime=Math.max(0,a.currentTime+n)}
 function gapToggle(){const a=document.getElementById('gapAudio');if(a){if(a.paused)a.play().catch(()=>{});else a.pause()}}
 function gapSpeed(v){const a=document.getElementById('gapAudio');if(a)a.playbackRate=Number(v)||1}
-function gapAudioFile(el){const f=el.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);const a=document.getElementById('gapAudio');if(a){a.src=realAudio;a.load()}}
+function gapAudioMissing(){const n=document.getElementById('gapAudioStatus');if(n)n.textContent='Chưa có audio trên GitHub. Có thể chọn MP3 từ thiết bị bên dưới.'}
+function gapAudioReady(){const n=document.getElementById('gapAudioStatus');if(n)n.textContent=''}
+function gapAudioFile(el){const f=el.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);const a=document.getElementById('gapAudio');if(a){a.src=realAudio;a.load()}gapAudioReady()}
 function fullGapHTML(){
  const task=fullGapExercise();
  const upload='';
@@ -460,7 +462,7 @@ function fullGapHTML(){
   if(blank)words=escapeHtml(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+escapeHtml(turn.text.slice(blank.start+blank.word.length));
   return '<div class="gap-line" ondblclick="chooseSelectedTranscriptWord()"><b class="gap-role">'+escapeHtml(turn.speaker)+'</b><div>'+words+'</div></div>';
  }).join('');
- return '<h2>01. Listening Gap-fill</h2>'+upload+'<span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><b>🎧 Audio luyện tập</b><audio id="gapAudio" controls preload="metadata" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><input type="file" accept="audio/*" onchange="gapAudioFile(this)"><div class="gap-actions"><button onclick="gapSeek(-10)">−10s</button><button onclick="gapToggle()">Phát / Dừng</button><button onclick="gapSeek(10)">+10s</button><select aria-label="Tốc độ" onchange="gapSpeed(this.value)"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></div><button onclick="checkFullTranscript()">Kiểm tra</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
+ return '<h2>01. Listening Gap-fill</h2>'+upload+'<span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><b>🎧 Audio luyện tập</b><audio id="gapAudio" controls preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><span id="gapAudioStatus" class="small muted" role="status"></span><input type="file" accept="audio/*" aria-label="Chọn tệp MP3 nếu chưa có audio trong bài" onchange="gapAudioFile(this)"><div class="gap-actions"><button onclick="gapSeek(-10)">−10s</button><button onclick="gapToggle()">Phát / Dừng</button><button onclick="gapSeek(10)">+10s</button><select aria-label="Tốc độ" onchange="gapSpeed(this.value)"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></div><button onclick="checkFullTranscript()">Kiểm tra</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
 }
 function stageHTML(l){
 if(stage===0)return selectionStageHTML(l);
