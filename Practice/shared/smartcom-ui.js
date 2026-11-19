@@ -111,8 +111,9 @@ toggle.setAttribute('aria-controls','sc-quick-panel');
 toggle.setAttribute('aria-expanded','false');
 toggle.title='Truy cập nhanh';
 toggle.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg>';
-capsule.append(tools,toggle);
-shell.append(capsule);
+// Keep menu outside the glass backdrop-filter container: fixed coordinates stay viewport-based.
+capsule.append(toggle);
+shell.append(capsule,tools);
 const floatingLabel=document.createElement('div');
 floatingLabel.className='sc-floating-label';
 floatingLabel.setAttribute('aria-hidden','true');
