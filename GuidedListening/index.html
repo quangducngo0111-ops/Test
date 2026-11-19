@@ -259,6 +259,7 @@ function chooseVocab(word,meaning){
  const name=String(word||'').trim().replace(/\s+/g,' ').slice(0,60);
  const def=String(meaning||'').trim().slice(0,160);
  if(!name||!def)return false;
+ if((store.selectedVocab||[]).some(v=>v.word.toLowerCase()!==name.toLowerCase()&&v.meaning.toLowerCase()===def.toLowerCase()))return false;
  if(!Array.isArray(store.selectedVocab))store.selectedVocab=[];
  const original=store.selectedVocab.find(v=>v.word.toLowerCase()===name.toLowerCase());
  if(original){original.meaning=def}else store.selectedVocab.push({word:name,meaning:def});
@@ -278,7 +279,7 @@ function toggleSuggestedVocab(i){
 }
 function addManualVocab(){
  if(chooseVocab($('manualWord')?.value,$('manualMeaning')?.value))render();
- else $('manualMeaning')?.focus();
+ else {const node=$('manualVocabStatus');if(node)node.textContent='Cần từ, nghĩa và mỗi nghĩa chỉ dùng một lần.'; $('manualMeaning')?.focus()}
 }
 function chooseSelectedTranscriptWord(){
  const selected=String(window.getSelection?.()?.toString()||'').trim().replace(/\s+/g,' ');
@@ -307,7 +308,7 @@ function selectionStageHTML(l){
  const chosen=picked.map((v,i)=>'<span class="chosen-word">'+escapeHtml(v[0])+'<button type="button" onclick="removeChosenVocab('+i+')" aria-label="Bỏ từ '+escapeHtml(v[0])+'">Bỏ</button></span>').join('');
  return '<h2>02. Chọn từ cần học</h2><p class="muted">Chỉ chọn những từ em còn chưa chắc nghĩa. Có thể chọn trực tiếp từ transcript ở bước trước.</p>'+
  '<div class="selected-count">'+picked.length+' từ đã chọn</div><div class="chosen-words">'+chosen+'</div>'+
- '<div class="selection-grid">'+glossary+'</div><div class="manual-vocab"><input id="manualWord" placeholder="Từ/cụm từ khác" aria-label="Từ tiếng Anh"><input id="manualMeaning" placeholder="Nghĩa tiếng Việt" aria-label="Nghĩa tiếng Việt"><button type="button" onclick="addManualVocab()">Thêm từ</button></div>';
+ '<div class="selection-grid">'+glossary+'</div><div class="manual-vocab"><input id="manualWord" placeholder="Từ/cụm từ khác" aria-label="Từ tiếng Anh"><input id="manualMeaning" placeholder="Nghĩa tiếng Việt" aria-label="Nghĩa tiếng Việt"><button type="button" onclick="addManualVocab()">Thêm từ</button><span class="small" id="manualVocabStatus" role="status"></span></div>';
 }
 function shuffledMeanings(l){
  const list=activeVocab(l).map(v=>v[1]);
@@ -445,7 +446,7 @@ if(stage===0)return selectionStageHTML(l);
 if(stage===1)return '<h2>03. Học từ vựng đã chọn</h2><p class="muted">Đọc nghĩa, ngữ cảnh và bấm nút loa để nghe phát âm. Đây là nhóm từ nền tảng giúp hiểu chủ đề; các đáp án cần điền trong bài nghe vẫn được giữ kín.</p><div class="study-progress">'+activeVocab(l).length+' từ và cụm từ · '+(l.id==='01'?'Sinh vật xâm lấn, tác động và kiểm soát':'Động lực, định hướng mục tiêu và phong cách lãnh đạo')+'</div><div class="study-grid">'+activeVocab(l).map((v,i)=>'<article class="study-card"><span class="study-number">'+String(i+1).padStart(2,'0')+'</span><div class="study-text"><strong>'+escapeHtml(v[0])+'</strong><span>'+escapeHtml(v[1])+'</span><small class="study-example">'+escapeHtml(vocabExample(v[0]))+'</small></div><button type="button" class="study-sound" aria-label="Phát âm '+escapeHtml(v[0])+'" onclick="speakVocab('+i+')">🔊</button></article>').join('')+'</div>';
 if(stage===2)return '<h2>04. Vocabulary Match Challenge</h2><p class="muted">Kéo hoặc chạm thẻ nghĩa để ghép với từ. Có thể kéo lại hoặc bấm “Bỏ ghép” để sửa.</p><div class="match-status" id="matchStatus" aria-live="polite"></div><div class="match-bank-title">Ngân hàng thẻ nghĩa <span id="matchBankCount"></span></div><div class="match-bank" id="matchBank" ondragover="allowVocabDrop(event)" ondrop="returnVocabToBank(event)" aria-label="Ngân hàng thẻ nghĩa: kéo thẻ đã ghép vào đây để trả lại">'+vocabBank(l).map(v=>'<button type="button" draggable="true" class="match-token" data-meaning="'+escapeHtml(v)+'" ondragstart="dragVocab(event)" onclick="selectVocabToken(this)">'+escapeHtml(v)+'</button>').join('')+'</div><div class="match-targets">'+activeVocab(l).map((v,i)=>'<div class="tile match-card"><div class="match-word"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><strong>'+escapeHtml(v[0])+'</strong></div><div class="match-placement"><button class="match-slot'+(item('match',i)?' has-value':'')+'" type="button" draggable="'+(item('match',i)?'true':'false')+'" data-match-index="'+i+'" ondragstart="dragAssignedVocab(event,'+i+')" ondragover="allowVocabDrop(event)" ondrop="dropVocab(event,'+i+')" onclick="useVocabSlot('+i+')" aria-label="'+(item('match',i)?'Kéo để chuyển, hoặc chạm để bỏ ghép: ':'Ghép nghĩa cho ')+escapeHtml(v[0])+'">'+(item('match',i)?escapeHtml(item('match',i)):'Thả hoặc chạm thẻ nghĩa vào đây')+'</button>'+(item('match',i)?'<button type="button" class="match-remove" aria-label="Bỏ ghép nghĩa cho '+escapeHtml(v[0])+'" title="Đưa thẻ về ngân hàng" onclick="removeVocabAssignment('+i+')">Bỏ ghép</button>':'')+'</div></div>').join('')+'</div><p class="muted small">Các thẻ đã ghép sẽ biến mất khỏi ngân hàng. Đáp án chỉ được chấm khi bấm “Tiếp tục”; không hiện gợi ý đáp án đúng.</p>';
 
-if(stage===3)return '<h2>05. Vocabulary Check</h2><p class="muted">Đạt ít nhất 4/5 để tiếp tục.</p>'+quizItems(l).map((q,i)=>inputCard((i+1)+'. '+q[0],'quiz',i,q[1])).join('');
+if(stage===3)return '<h2>05. Vocabulary Check</h2><p class="muted">Đạt ít nhất 80% để tiếp tục.</p>'+quizItems(l).map((q,i)=>inputCard((i+1)+'. '+q[0],'quiz',i,q[1])).join('');
 if(stage===4)return '<h2>06. Keyword Recognition</h2><p class="muted">Dự đoán loại từ cần điền. Không dự đoán đáp án cụ thể.</p>'+l.keywords.map((q,i)=>inputCard((i+1)+'. '+escapeHtml(q[0])+' ______','keyword',i,q[1])).join('');
 if(stage===5)return '<h2>07. Paraphrase Matching</h2><p class="muted">Ghép cách diễn đạt trong đề bài (bên trái) với cách nói thực tế trong transcript (ô chọn). Các cụm được đối chiếu theo nội dung bài nghe và không tiết lộ từ cần điền.</p><div class="vocab-grid">'+l.para.map((p,i)=>'<div class="tile vocab-row"><div class="vocab-top"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><label class="vocab-word" for="paraChoice'+i+'">'+escapeHtml(p[0])+'</label></div><select class="vocab-select" id="paraChoice'+i+'" onchange="put(\'para\','+i+',this.value)"><option value="">Chọn cụm tương đương...</option>'+shuffledParaphraseChoices(l).map(meaning=>'<option value="'+escapeHtml(meaning)+'" '+(item('para',i)===meaning?'selected':'')+'>'+escapeHtml(meaning)+'</option>').join('')+'</select></div>').join('')+'</div>';
 if(stage===-1)return fullGapHTML();
