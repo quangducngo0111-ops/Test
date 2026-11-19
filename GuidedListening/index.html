@@ -153,11 +153,43 @@
 .gl-audio-submit:hover,.gl-audio-play:hover{filter:brightness(1.07)}
 .gap-player .gap-vocab{margin-top:6px}
 @media(max-width:760px){.gap-player{position:static}.gl-audio-controls{gap:8px}}
+
+/* One-time focused onboarding, with an accessible replay control. */
+.gap-guide-overlay[hidden]{display:none!important}
+.gap-guide-overlay{position:fixed;inset:0;z-index:2147482000;background:rgba(14,19,37,.68);display:grid;place-items:center;padding:20px}
+.gap-guide-dialog{width:min(530px,100%);max-height:calc(100dvh - 40px);overflow:auto;background:#fff;border-radius:22px;padding:27px 30px;box-shadow:0 25px 85px rgba(16,12,44,.32);color:#1c2945}
+.gap-guide-eyebrow{font-size:11px;letter-spacing:.09em;color:#634ac5;font-weight:850}
+.gap-guide-dialog h2{font-size:25px;line-height:1.25;margin:10px 0 14px;color:#19284a}
+.gap-guide-dialog p{font-size:14px;line-height:1.65;margin:0 0 12px}
+.gap-guide-dialog ol{padding-left:22px;margin:13px 0 17px;font-size:14px;line-height:1.65}
+.gap-guide-dialog li{padding:3px 0}
+.gap-guide-dialog .gap-guide-tip{font-size:13px;color:#5b6680;padding:12px 13px;background:#f5f3fc;border-radius:11px}
+.gap-guide-start{display:block;width:100%;margin-top:19px;min-height:49px;border:0!important;border-radius:12px!important;background:#634ac5!important;color:white!important;font-weight:850!important;font-size:15px!important}
+.gap-guide-start:hover{background:#553bb5!important}
+.gap-guide-replay{font-size:12px!important;padding:5px 10px!important;color:#5840a5!important;background:#f4f0ff!important;border:1px solid #dbd0f7!important}
+.gap-guide-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.gap-guide-heading h2{margin:0}
+body.gap-guide-open{overflow:hidden}
+@media(max-width:520px){.gap-guide-dialog{padding:23px 20px;border-radius:18px}.gap-guide-dialog h2{font-size:22px}}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
 <p class="foot">Hướng dẫn: Hoàn thành từng bước và nhấn “Tiếp tục” để chuyển sang phần tiếp theo. Ở bước Real Test, nghe bài và điền đáp án; sau khi nộp, em có thể xem kết quả và nghe lại từng câu trong phần Review.</p>
-</main><script>
+</main>
+<div id="gapGuideOverlay" class="gap-guide-overlay" hidden>
+ <section class="gap-guide-dialog" role="dialog" aria-modal="true" aria-labelledby="gapGuideTitle" aria-describedby="gapGuideDescription">
+  <div class="gap-guide-eyebrow">BƯỚC 01 · KHỞI ĐỘNG</div>
+  <h2 id="gapGuideTitle">Làm quen với bài nghe</h2>
+  <p id="gapGuideDescription">Nghe audio và điền các từ còn thiếu vào transcript. Em cần trả lời đúng <strong>100%</strong> để mở bước chọn từ vựng.</p>
+  <ol>
+   <li>Nghe và điền từ vào từng ô trống.</li>
+   <li>Bấm <strong>“Nộp bài”</strong> để kiểm tra. Ô xanh là đúng, ô đỏ cần sửa. Em có thể nghe lại và làm tiếp.</li>
+   <li>Khi đạt 100%, chọn những từ chưa biết trong transcript để học và chơi game.</li>
+  </ol>
+  <p class="gap-guide-tip">Rê chuột để làm nổi từ đang xem, nhấp đúp để tra nghĩa, hoặc nhấp một lần/kéo sang danh sách bên phải để chọn từ học.</p>
+  <button id="gapGuideStart" class="gap-guide-start" type="button" onclick="closeGapGuide()">Đã hiểu – Bắt đầu làm bài</button>
+ </section>
+</div><script>
 const lessons=[
 {id:'01',title:'Invasive Species',audio:'part4.mp3',
 vocab:[['invasive','xâm lấn'],['native','bản địa'],['introduce','đưa vào môi trường mới'],['harmful','gây hại'],['threaten','đe dọa'],['survive','sống sót'],['spread','lan rộng'],['breed','sinh sản'],['destroy','phá hủy'],['monitor','theo dõi'],['species','loài sinh vật'],['habitat','môi trường sống'],['pest','sinh vật gây hại'],['cargo','hàng hóa vận chuyển'],['plantation','đồn điền'],['impact','tác động'],['native plants','thực vật bản địa'],['pest control','kiểm soát sinh vật gây hại']],
@@ -618,7 +650,7 @@ function fullGapHTML(){
   if(blank)words=interactiveGapText(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+interactiveGapText(turn.text.slice(blank.start+blank.word.length));
   return '<div class="gap-line"><b class="gap-role">'+escapeHtml(turn.speaker)+'</b><div>'+words+'</div></div>';
  }).join('');
- return '<h2>01. Listening Gap-fill</h2>'+upload+'<div class="gap-instructions"><b>Bước khởi động · Đạt 100% để mở khóa.</b> Nghe audio, điền tất cả ô trống và bấm “Kiểm tra”. Nếu còn sai, nghe lại và sửa những ô được đánh dấu. Khi đúng 100%, chuyển sang chọn từ mới ngay trong transcript để học. Rê chuột để làm nổi từ đang xem, nhấp đúp để tra nghĩa; nhấp một lần hoặc kéo từ sang bên phải để chọn học.</div><span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><div class="gl-audio-head"><span class="gl-audio-icon" aria-hidden="true">🎧</span><div><strong>Audio luyện tập</strong><span>Nghe lại, tua và đổi tốc độ</span></div></div><audio id="gapAudio" preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" onloadedmetadata="syncGuidedAudio()" ontimeupdate="syncGuidedAudio()" onplay="syncGuidedAudio()" onpause="syncGuidedAudio()" onended="syncGuidedAudio()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><div class="gl-audio-controls"><button type="button" class="gl-audio-btn" onclick="gapSeek(-10)" aria-label="Tua lùi 10 giây">↶ 10s</button><button type="button" class="gl-audio-play" id="gapPlayPause" onclick="gapToggle()" aria-label="Phát audio">▶ Phát</button><button type="button" class="gl-audio-btn" onclick="gapSeek(10)" aria-label="Tua tới 10 giây">10s ↷</button></div><input id="gapAudioSeek" class="gl-audio-seek" aria-label="Thanh tiến trình audio" type="range" min="0" max="100" step="0.1" value="0" oninput="gapSeekPercent(this.value)"><div class="gl-audio-meta"><span id="gapAudioTime">0:00 / 0:00</span><label>Tốc độ <select id="gapAudioSpeed" aria-label="Tốc độ phát" onchange="gapSpeed(this.value)"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label></div><div class="gl-audio-volume"><label for="gapVolume">Âm lượng</label><input type="range" id="gapVolume" aria-label="Âm lượng" min="0" max="1" step="0.05" value="1" oninput="gapSetVolume(this.value)"></div><span id="gapAudioStatus" class="small muted" role="status"></span><button type="button" class="gl-audio-submit" onclick="checkFullTranscript()">Nộp bài</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong><div id="gapSidebar">'+gapSidebarHTML()+'</div></aside></div>';
+ return '<div class="gap-guide-heading"><h2>01. Listening Gap-fill</h2><button type="button" class="gap-guide-replay" onclick="showGapGuide(true)">ⓘ Hướng dẫn</button></div>'+upload+'<span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><div class="gl-audio-head"><span class="gl-audio-icon" aria-hidden="true">🎧</span><div><strong>Audio luyện tập</strong><span>Nghe lại, tua và đổi tốc độ</span></div></div><audio id="gapAudio" preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" onloadedmetadata="syncGuidedAudio()" ontimeupdate="syncGuidedAudio()" onplay="syncGuidedAudio()" onpause="syncGuidedAudio()" onended="syncGuidedAudio()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><div class="gl-audio-controls"><button type="button" class="gl-audio-btn" onclick="gapSeek(-10)" aria-label="Tua lùi 10 giây">↶ 10s</button><button type="button" class="gl-audio-play" id="gapPlayPause" onclick="gapToggle()" aria-label="Phát audio">▶ Phát</button><button type="button" class="gl-audio-btn" onclick="gapSeek(10)" aria-label="Tua tới 10 giây">10s ↷</button></div><input id="gapAudioSeek" class="gl-audio-seek" aria-label="Thanh tiến trình audio" type="range" min="0" max="100" step="0.1" value="0" oninput="gapSeekPercent(this.value)"><div class="gl-audio-meta"><span id="gapAudioTime">0:00 / 0:00</span><label>Tốc độ <select id="gapAudioSpeed" aria-label="Tốc độ phát" onchange="gapSpeed(this.value)"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label></div><div class="gl-audio-volume"><label for="gapVolume">Âm lượng</label><input type="range" id="gapVolume" aria-label="Âm lượng" min="0" max="1" step="0.05" value="1" oninput="gapSetVolume(this.value)"></div><span id="gapAudioStatus" class="small muted" role="status"></span><button type="button" class="gl-audio-submit" onclick="checkFullTranscript()">Nộp bài</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong><div id="gapSidebar">'+gapSidebarHTML()+'</div></aside></div>';
 }
 function stageHTML(l){
 if(stage===0)return selectionStageHTML(l);
@@ -689,6 +721,20 @@ function change(dir){
  save();render();window.scrollTo({top:0,behavior:'smooth'});
 }
 function restart(){if(!confirm('Xóa câu trả lời hiện tại để luyện lại?'))return;sessionStorage.removeItem(key());stage=-1;getStore();render()}
+function gapGuideKey(){return 'SC_GUIDED_GAP_GUIDE_SEEN_V1_'+lessons[lid].id}
+function showGapGuide(force=false){
+ if(stage!==-1&&!force)return;
+ if(!force){try{if(localStorage.getItem(gapGuideKey())==='1')return}catch(e){}}
+ const overlay=$('gapGuideOverlay');if(!overlay)return;
+ overlay.hidden=false;document.body.classList.add('gap-guide-open');
+ $('gapGuideStart')?.focus();
+}
+function closeGapGuide(){
+ const overlay=$('gapGuideOverlay');if(!overlay)return;
+ overlay.hidden=true;document.body.classList.remove('gap-guide-open');
+ try{localStorage.setItem(gapGuideKey(),'1')}catch(e){}
+ document.querySelector('.gap-guide-replay')?.focus();
+}
 function render(){
  clearPracticeFeedback();
  const l=lessons[lid];$('lessonName').textContent='Bài '+l.id+' · '+l.title;
@@ -706,6 +752,7 @@ function render(){
  $('next').disabled=stage===-1&&!gapPerfect;
  $('next').title=stage===-1&&!gapPerfect?'Hoàn thành đúng 100% Gap-fill để mở bước tiếp theo':'';
  if(stage===-1)$('next').textContent=gapPerfect?'Chọn từ cần học →':'Đạt 100% để tiếp tục';
+ if(stage===-1)showGapGuide();
 }
 function goto(i){
  if(!Number.isInteger(i)||i< -1||i>7||i>(store.maxUnlocked??-1))return;
