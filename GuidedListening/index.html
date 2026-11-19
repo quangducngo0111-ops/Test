@@ -197,6 +197,16 @@ function textCard(label,group,i){
  return '<div class="tile real-question"><div class="question">'+(label.includes('[[BLANK]]')?label.replace('[[BLANK]]',entry):label+' '+entry)+'</div></div>';
 }
 // Stable pseudo-shuffle: different ordering per lesson, never original question order.
+function shuffledParaphraseChoices(lesson){
+ const options=lesson.para.map(pair=>pair[1]);
+ let seed=(Number(lesson.id)*2654435761+options.length*97)>>>0;
+ for(let i=options.length-1;i>0;i--){
+  seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+  const j=seed%i;
+  [options[i],options[j]]=[options[j],options[i]];
+ }
+ return options;
+}
 function shuffledMeanings(l){
  const list=l.vocab.map(v=>v[1]);
  let seed=Number(l.id)*7919+9277;
@@ -257,7 +267,7 @@ if(stage===0)return '<h2>02. Vocabulary Match Challenge</h2><p class="muted">Ké
 
 if(stage===1)return '<h2>02. Vocabulary Check</h2><p class="muted">Đạt ít nhất 4/5 để tiếp tục.</p>'+l.quiz.map((q,i)=>inputCard((i+1)+'. '+q[0],'quiz',i,q[1])).join('');
 if(stage===2)return '<h2>03. Keyword Recognition</h2><p class="muted">Dự đoán loại từ cần điền. Không dự đoán đáp án cụ thể.</p>'+l.keywords.map((q,i)=>inputCard((i+1)+'. '+escapeHtml(q[0])+' ______','keyword',i,q[1])).join('');
-if(stage===3)return '<h2>04. Paraphrase Matching</h2><p class="muted">Ghép cách diễn đạt trong đề bài (bên trái) với cách nói thực tế trong transcript (ô chọn). Các cụm được đối chiếu theo nội dung bài nghe và không tiết lộ từ cần điền.</p><div class="vocab-grid">'+l.para.map((p,i)=>'<div class="tile vocab-row"><div class="vocab-top"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><label class="vocab-word" for="paraChoice'+i+'">'+escapeHtml(p[0])+'</label></div><select class="vocab-select" id="paraChoice'+i+'" onchange="put(\'para\','+i+',this.value)"><option value="">Chọn cụm tương đương...</option>'+l.para.map(x=>'<option '+(item('para',i)===x[1]?'selected':'')+'>'+escapeHtml(x[1])+'</option>').join('')+'</select></div>').join('')+'</div>';
+if(stage===3)return '<h2>04. Paraphrase Matching</h2><p class="muted">Ghép cách diễn đạt trong đề bài (bên trái) với cách nói thực tế trong transcript (ô chọn). Các cụm được đối chiếu theo nội dung bài nghe và không tiết lộ từ cần điền.</p><div class="vocab-grid">'+l.para.map((p,i)=>'<div class="tile vocab-row"><div class="vocab-top"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><label class="vocab-word" for="paraChoice'+i+'">'+escapeHtml(p[0])+'</label></div><select class="vocab-select" id="paraChoice'+i+'" onchange="put(\'para\','+i+',this.value)"><option value="">Chọn cụm tương đương...</option>'+shuffledParaphraseChoices(l).map(meaning=>'<option value="'+escapeHtml(meaning)+'" '+(item('para',i)===meaning?'selected':'')+'>'+escapeHtml(meaning)+'</option>').join('')+'</select></div>').join('')+'</div>';
 if(stage===4)return '<h2>05. Listening Gap-fill</h2><p class="muted">Audio luyện tập được đọc bằng giọng tổng hợp, không lấy từ transcript đề thi. Nghe rồi điền từ.</p>'+l.practice.map((p,i)=>'<div class="tile"><button onclick="speakPractice('+i+')">▶ Nghe câu '+(i+1)+'</button><div class="question">'+escapeHtml(p[0])+'</div><input type="text" value="'+escapeHtml(item('practice',i))+'" oninput="put(\'practice\','+i+',this.value)" placeholder="Write ONE WORD"></div>').join('');
 if(stage===5)return '<h2>06. Real Listening Test</h2><p class="note">SECTION 4 — Questions 31–40. Write ONE WORD ONLY for each answer. Đáp án sẽ chỉ hiện sau khi nộp.</p><p><b>Audio: '+escapeHtml(l.audio)+'</b></p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'" onerror="audioError(this)"></audio><div id="audioNotice" class="muted small">Audio tự động phát từ thư mục GuidedListening khi file MP3 đã có trên GitHub. Nếu chưa tải được, chọn tệp từ máy: <input type="file" accept="audio/*" onchange="loadAudio(this)"></div>'+l.questions.map((q,i)=>textCard('<span class="muted">'+(i+31)+'. </span>'+escapeHtml(q),'real',i)).join('')+(submitted?'<p class="ok">Đã nộp bài. Chuyển sang Review để xem kết quả.</p>':'');
 let score=l.answer.filter((arr,i)=>arr.includes(safe(item('real',i)))).length;
