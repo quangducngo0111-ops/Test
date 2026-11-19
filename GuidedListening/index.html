@@ -62,7 +62,7 @@ const lessons=[
 vocab:[['invasive','xâm lấn'],['native','bản địa'],['introduce','đưa vào môi trường mới'],['harmful','gây hại'],['threaten','đe dọa'],['survive','sống sót'],['spread','lan rộng'],['breed','sinh sản'],['destroy','phá hủy'],['monitor','theo dõi']],
 quiz:[['Which word means bản địa?',['monitor','native','invasive'],'native'],['Which word means sinh sản?',['breed','threaten','spread'],'breed'],['Which word means gây hại?',['survive','harmful','native'],'harmful'],['Which word means theo dõi?',['introduce','monitor','destroy'],'monitor'],['Which word means phá hủy?',['spread','destroy','breed'],'destroy']],
 keywords:[['introduces a new ...',['noun','verb','adjective'],'noun'],['threatens an entire ...',['noun','verb','adjective'],'noun'],['Asking the public to ...',['noun','verb','adjective'],'verb'],['Setting up a national ...',['noun','verb','adjective'],'noun']],
-para:[["introduces a new","may bring a"],["threatens an entire","putting its survival at risk"],["returning from their","come back from"],["intentionally","deliberately"],["damaging","destroying"],["prevent ... from reaching","block out"],["kills","deadly to"],["understand","learning about"],["setting up","create"],["track","keep track of"]],
+para:[["introduces a new","may bring a"],["threatens an entire","putting its survival at risk"],["returning","come back"],["intentionally","deliberately"],["damaging","destroying"],["prevent ... from reaching","block out"],["kills","deadly to"],["understand","learning about"],["setting up","create"],["track","keep track of"]],
 practice:[['Some animals can ____ quickly when conditions are suitable.','breed'],['People should not ____ unfamiliar plants before identifying them.','destroy'],['Researchers ____ changes in wildlife populations.','monitor']],
 questions:["Introduces a new [[BLANK]]","Threatens an entire [[BLANK]]","Accidentally, e.g. via people returning from their [[BLANK]], or on cargo ships","Intentionally, e.g. for pest control, or as [[BLANK]]","Toads were introduced to Australia to eat an insect damaging the [[BLANK]] plantations","Rhododendron plants prevent [[BLANK]] from reaching native plants","Grey squirrels spread a [[BLANK]] that kills native red squirrels","Monitoring helps us understand the [[BLANK]] of invasive species and their impact","Setting up a national [[BLANK]] makes invasive species easier to track","Asking the public to [[BLANK]] and report harmful species helps monitoring"],
 answer:[['disease'],['ecosystem'],['holiday'],['pets'],['sugar'],['light'],['virus'],['behaviour','behavior'],['database'],['photograph']],
@@ -71,7 +71,7 @@ evidence:['they may bring a disease with them','putting its survival at risk in 
 vocab:[['regulatory','liên quan đến điều chỉnh'],['motivation','động lực'],['emphasise','nhấn mạnh'],['avoid','tránh'],['punishment','sự trừng phạt'],['tendency','xu hướng'],['context','bối cảnh'],['obligation','nghĩa vụ'],['cautiously','một cách thận trọng'],['consequence','hậu quả']],
 quiz:[['Which word means động lực?',['motivation','context','punishment'],'motivation'],['Which word means tránh?',['avoid','emphasise','tendency'],'avoid'],['Which word means nghĩa vụ?',['consequence','obligation','context'],'obligation'],['Which word means thận trọng?',['cautiously','regulatory','motivation'],'cautiously'],['Which word means nhấn mạnh?',['punishment','avoid','emphasise'],'emphasise']],
 keywords:[["Promotion goals focus on ...",["noun","verb","adjective"],"noun"],["comes from one’s ...",["noun","verb","adjective"],"noun"],["The ... Factor",["noun","verb","adjective"],"adjective"],["Leadership behaviour and ... affects people’s focus",["noun","verb","adjective"],"noun"],["good for jobs requiring ...",["noun","verb","adjective"],"noun"]],
-para:[["focus on","emphasise"],["comes from","is connected to"],["when with","spending time with"],["ideal version of themselves","ideal self"],["leadership behaviour","the way leaders behave"],["pay special attention to","focus on"],["passionately communicate","speech is passionate and conveys"],["make expectations clear","tell followers exactly what is expected"],["emphasise the results of a mistake","emphasise the consequences of making a mistake"],["jobs requiring","jobs where ... is needed"]],
+para:[["focus on","emphasise"],["comes from","is connected to"],["when with","spending time with"],["ideal version of themselves","ideal self"],["leadership behaviour","the way leaders behave"],["pay special attention to","focus on"],["passionately communicate","speech is passionate and conveys"],["make expectations clear","tell followers exactly what is expected"],["emphasise the results of a mistake","emphasise the consequences of making a mistake"],["jobs requiring","is needed"]],
 practice:[['People often try to ____ uncomfortable situations.','avoid'],['A good explanation can ____ the most important details.','emphasise'],['Workers should consider the ____ of their actions.','consequences']],
 questions:["Promotion goals focus on [[BLANK]]","The Chronic Factor comes from one’s [[BLANK]]","The [[BLANK]] Factor depends on context","We are more likely to focus on promotion goals when with a [[BLANK]]","People think about their ideal self, their [[BLANK]] and their gains","Leadership behaviour and [[BLANK]] affect people’s focus","Transformational leaders pay special attention to the [[BLANK]] of their followers","Transformational leaders passionately communicate a clear [[BLANK]]","Transactional leaders create [[BLANK]] to make expectations clear","Promotion Focus is good for jobs requiring [[BLANK]]"],
 answer:[['achievement','achievements'],['personality','character'],['situational'],['friend'],['aspirations','ambitions'],['style'],['development'],['vision'],['structures'],['innovation','innovations']],
@@ -98,7 +98,19 @@ const $=id=>document.getElementById(id);
 const key=()=> 'sc_guided_lesson_'+lessons[lid].id;
 const safe=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
 const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function getStore(){try{store=JSON.parse(sessionStorage.getItem(key())||'{}')}catch(e){store={}}submitted=!!store.submitted}
+function getStore(){
+ try{store=JSON.parse(sessionStorage.getItem(key())||'{}')}catch(e){store={}}
+ // Old synonym sets have different answers at the same indexes. Reset only
+ // the affected preparation steps, keeping test submissions and notes intact.
+ if(store.contentVersion!=='20261119-audit02'){
+  delete store.para;
+  if(lessons[lid].id==='01'){delete store.match;delete store.quiz}
+  if(lessons[lid].id==='02')delete store.keyword;
+  store.contentVersion='20261119-audit02';
+  try{sessionStorage.setItem(key(),JSON.stringify(store))}catch(e){}
+ }
+ submitted=!!store.submitted;
+}
 function save(){sessionStorage.setItem(key(),JSON.stringify(store))}
 function markPracticeAnswers(){
  const lesson=lessons[lid];
