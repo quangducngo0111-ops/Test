@@ -21,7 +21,7 @@ if(location.pathname.includes('/Practice/')){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261118-premium02',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261119-assistive01',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -60,7 +60,7 @@ const groups=[
  {heading:'Foundations',links:[
   ['🧩','Foundations','Foundations/'],
   ['🎙️','Pre-IELTS Listening','Practice/Listening/Intensive%20Listening/'],
-  ['🌍','Topic-based Listening','Foundations/Topic-based-Listening/'],
+  ['🌍','Topic-based Dictation','Foundations/Topic-based-Listening/'],
   ['📰','Reading Library','Foundations/Reading-Library/'],
   ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
   ['📒','Sổ tay từ vựng','Vocabulary-Notebook/'],['⏰','Nhắc từ vựng','Vocabulary-Notebook/#vocabReminder']
@@ -318,7 +318,7 @@ if(/\/Practice\/WritingTask[12]\//.test(location.pathname)){
 if(!document.querySelector('script[data-sc-word-tools]')){
  const vocabScript=document.createElement('script');
  vocabScript.dataset.scWordTools='1';
- vocabScript.src=url('Practice/shared/word-tools.js?v=20261118-premium02');
+ vocabScript.src=url('Practice/shared/word-tools.js?v=20261119-assistive01');
  document.body.append(vocabScript);
 }
 if(!document.querySelector('script[data-sc-vocab-reminders]')){
