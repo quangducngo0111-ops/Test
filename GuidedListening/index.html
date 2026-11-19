@@ -7,9 +7,15 @@
 .vocab-word{font-size:19px;font-weight:800;color:#1b2746;line-height:1.35;overflow-wrap:anywhere}
 .vocab-select{display:block;width:100%;max-width:520px;min-height:48px;border:1px solid #d8dfec;border-radius:13px;padding:10px 14px;font:inherit;background:#fff}
 @media(max-width:720px){.vocab-row{grid-template-columns:minmax(0,1fr);gap:10px;padding:16px}.vocab-word{font-size:18px}.vocab-select{max-width:100%}}
+
+/* Practice-style inline feedback instead of browser alerts. */
+.practice-feedback{margin:14px 0;padding:15px 18px;border:1px solid #f0c3c3;border-left:4px solid #d94b55;border-radius:13px;background:#fff5f5;color:#89313b;font-size:14px;line-height:1.55;box-shadow:0 4px 15px #622c2c0b}
+.practice-feedback strong{display:block;font-size:15px;margin-bottom:3px}.practice-feedback[hidden]{display:none!important}
+.tile.practice-incorrect{border-color:#e8a0a9!important;background:#fffafa!important}
+.tile.practice-incorrect .vocab-select{border-color:#d94b55!important}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
-<div class="steps" id="steps"></div><section class="panel" id="content"></section><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
+<div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
 <p class="foot">Hướng dẫn: Hoàn thành từng bước và nhấn “Tiếp tục” để chuyển sang phần tiếp theo. Ở bước Real Test, nghe bài và điền đáp án; sau khi nộp, em có thể xem kết quả và nghe lại từng câu trong phần Review.</p>
 </main><script>
 const lessons=[
@@ -55,7 +61,20 @@ const safe=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
 const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function getStore(){try{store=JSON.parse(sessionStorage.getItem(key())||'{}')}catch(e){store={}}submitted=!!store.submitted}
 function save(){sessionStorage.setItem(key(),JSON.stringify(store))}
-function put(section,i,value){if(!store[section])store[section]={};store[section][i]=value;save()}
+function showPracticeFeedback(message,wrongIndexes){
+ const notice=$('practiceFeedback');if(!notice)return;
+ notice.replaceChildren();
+ const title=document.createElement('strong');title.textContent='Chưa hoàn thành bước này';
+ const body=document.createElement('span');body.textContent=message;
+ notice.append(title,body);notice.hidden=false;
+ document.querySelectorAll('#content .tile').forEach((tile,i)=>tile.classList.toggle('practice-incorrect',Array.isArray(wrongIndexes)&&wrongIndexes.includes(i)));
+ notice.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function clearPracticeFeedback(){
+ const notice=$('practiceFeedback');if(notice){notice.hidden=true;notice.replaceChildren()}
+ document.querySelectorAll('#content .practice-incorrect').forEach(el=>el.classList.remove('practice-incorrect'));
+}
+function put(section,i,value){if(!store[section])store[section]={};store[section][i]=value;save();clearPracticeFeedback()}
 function item(section,i){return store[section]?.[i]||''}
 function inputCard(label,group,i,opts){return '<div class="tile"><div class="question">'+label+'</div><div class="options">'+opts.map(o=>'<label><input type="radio" name="'+group+i+'" value="'+escapeHtml(o)+'" '+(item(group,i)===o?'checked':'')+' onchange="put(\''+group+'\','+i+',this.value)"> '+escapeHtml(o)+'</label>').join('')+'</div></div>'}
 function textCard(label,group,i){return '<div class="tile"><div class="question">'+label+'</div><input type="text" autocomplete="off" value="'+escapeHtml(item(group,i))+'" oninput="put(\''+group+'\','+i+',this.value)" placeholder="Write ONE WORD"></div>'}
@@ -70,15 +89,15 @@ return '<h2>07. Personalized Review</h2><p class="muted">Nghe lại từng đáp
 function speakPractice(i){if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ đọc câu.');return}let txt=lessons[lid].practice[i][0].replace('____',lessons[lid].practice[i][1]);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)}
 function audioError(node){const msg=document.getElementById('audioNotice');if(msg)msg.insertAdjacentHTML('afterbegin','<span class="bad">Chưa tìm thấy MP3 trên GitHub. Hãy chọn file bên dưới. </span>')}
 function loadAudio(node){let f=node.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);$('audio').src=realAudio;$('audio').load();}
-function change(dir){if(dir<0){stage=Math.max(0,stage-1);render();return}let l=lessons[lid];if(stage===0){if(l.vocab.some((v,i)=>!item('match',i))){alert('Hãy nối đủ các từ.');return}let wrong=l.vocab.filter((v,i)=>item('match',i)!==v[1]).length;if(wrong){alert('Có '+wrong+' cặp chưa đúng. Hãy thử lại.');return}}
-if(stage===1){if(l.quiz.some((q,i)=>!item('quiz',i))){alert('Hãy hoàn thành 5 câu.');return}let sc=l.quiz.filter((q,i)=>item('quiz',i)===q[2]).length;if(sc<4){alert('Em được '+sc+'/5. Hãy làm lại các câu chưa chắc nhé.');return}}
-if(stage===2){if(l.keywords.some((q,i)=>!item('keyword',i))){alert('Hãy trả lời hết các câu.');return}let w=l.keywords.filter((q,i)=>item('keyword',i)!==q[2]).length;if(w){alert('Có '+w+' loại từ chưa đúng. Hãy kiểm tra lại.');return}}
-if(stage===3){if(l.para.some((p,i)=>!item('para',i))){alert('Hãy làm đủ các cặp.');return}let w=l.para.filter((p,i)=>item('para',i)!==p[1]).length;if(w){alert('Có '+w+' cặp chưa đúng. Hãy thử lại.');return}}
-if(stage===4){if(l.practice.some((p,i)=>safe(item('practice',i))!==p[1])){alert('Hãy nghe lại và hoàn thành đúng các câu luyện tập.');return}}
+function change(dir){clearPracticeFeedback();if(dir<0){stage=Math.max(0,stage-1);render();return}let l=lessons[lid];if(stage===0){if(l.vocab.some((v,i)=>!item('match',i))){showPracticeFeedback('Hãy chọn nghĩa cho tất cả các từ trước khi tiếp tục.');return}let wrong=l.vocab.filter((v,i)=>item('match',i)!==v[1]).length;if(wrong){showPracticeFeedback('Có '+wrong+' cặp từ chưa đúng. Hãy kiểm tra các câu được đánh dấu và thử lại.',l.vocab.map((v,i)=>item('match',i)!==v[1]?i:-1).filter(i=>i>=0));return}}
+if(stage===1){if(l.quiz.some((q,i)=>!item('quiz',i))){showPracticeFeedback('Hãy trả lời đầy đủ 5 câu hỏi trước khi tiếp tục.');return}let sc=l.quiz.filter((q,i)=>item('quiz',i)===q[2]).length;if(sc<4){showPracticeFeedback('Em trả lời đúng '+sc+'/5 câu. Cần ít nhất 4 câu đúng để tiếp tục. Hãy kiểm tra lại nhé.');return}}
+if(stage===2){if(l.keywords.some((q,i)=>!item('keyword',i))){showPracticeFeedback('Hãy hoàn thành tất cả câu hỏi trước khi tiếp tục.');return}let w=l.keywords.filter((q,i)=>item('keyword',i)!==q[2]).length;if(w){showPracticeFeedback('Có '+w+' câu chưa đúng. Hãy kiểm tra lại loại từ đã chọn.');return}}
+if(stage===3){if(l.para.some((p,i)=>!item('para',i))){showPracticeFeedback('Hãy ghép đủ tất cả các cặp trước khi tiếp tục.');return}let w=l.para.filter((p,i)=>item('para',i)!==p[1]).length;if(w){showPracticeFeedback('Có '+w+' cặp chưa đúng. Hãy kiểm tra lại và thử lần nữa.');return}}
+if(stage===4){if(l.practice.some((p,i)=>safe(item('practice',i))!==p[1])){showPracticeFeedback('Một số câu chưa chính xác. Hãy nghe lại và kiểm tra đáp án trước khi tiếp tục.');return}}
 if(stage===5&&!submitted){if(!confirm('Nộp bài? Sau bước này, đáp án và transcript sẽ được mở khóa.'))return;submitted=true;store.submitted=true;store.submittedAt=new Date().toISOString();let score=l.answer.filter((a,i)=>a.includes(safe(item('real',i)))).length;try{let h=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]');h.push({skill:'listening',section:'guided',title:'Guided Listening '+l.id+' – '+l.title,score,total:10,correct:score,wrong:10-score,savedAt:store.submittedAt});localStorage.setItem('SC_ATTEMPT_HISTORY_V1',JSON.stringify(h))}catch(e){}save()}
 stage=Math.min(6,stage+1);render();window.scrollTo({top:0,behavior:'smooth'})}
 function restart(){if(!confirm('Xóa câu trả lời hiện tại để luyện lại?'))return;sessionStorage.removeItem(key());stage=0;getStore();render()}
-function render(){let l=lessons[lid];$('lessonName').textContent='Bài '+l.id+' · '+l.title;$('steps').innerHTML=stepNames.map((s,i)=>'<button class="'+(stage===i?'active':'')+' '+(i>stage&&!submitted?'disabled':'')+' onclick="goto('+i+')">'+(i+1)+'. '+s+'</button>').join('');$('content').innerHTML=stageHTML(l);$('prev').style.visibility=stage===0?'hidden':'visible';$('next').textContent=stage===5?'Nộp bài →':stage===6?'Đã hoàn thành':'Tiếp tục →';$('next').style.display=stage===6?'none':'inline-block'}
+function render(){clearPracticeFeedback();let l=lessons[lid];$('lessonName').textContent='Bài '+l.id+' · '+l.title;$('steps').innerHTML=stepNames.map((s,i)=>'<button class="'+(stage===i?'active':'')+' '+(i>stage&&!submitted?'disabled':'')+' onclick="goto('+i+')">'+(i+1)+'. '+s+'</button>').join('');$('content').innerHTML=stageHTML(l);$('prev').style.visibility=stage===0?'hidden':'visible';$('next').textContent=stage===5?'Nộp bài →':stage===6?'Đã hoàn thành':'Tiếp tục →';$('next').style.display=stage===6?'none':'inline-block'}
 function goto(i){if(i<stage||(submitted&&i===6)){stage=i;render()}}
 // Show an accurate answer-cue guide while the uploaded MP3 is selected by the learner.
 window.GuidedListeningAnswerCues=answerCues;
