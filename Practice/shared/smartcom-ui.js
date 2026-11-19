@@ -48,16 +48,16 @@ const nestedHub=(
 if(pathname===root.pathname||nestedHub||hubPaths.some(p=>pathname.endsWith(p)||pathname.endsWith(p.slice(0,-1))))document.body.classList.add('sc-hub-refresh');
 // Universal exit for individual exercises: one reliable escape even on fullscreen tasks.
 const relativePage=decodeURIComponent(location.pathname.slice(root.pathname.length));
-const exercisePage=/^(?:Wri\\d+|Rea\\d+|Lis\\d+|Spe\\d+)\\/index\\.html$/i.test(relativePage)||
- /^(?:Wri\\d+|Rea\\d+|Lis\\d+|Spe\\d+)\\/?$/i.test(relativePage)||
- /^(?:Practice|Foundations)\\/.+\\/index\\.html$/i.test(relativePage);
+const exercisePage=/^(?:Wri\d+|Rea\d+|Lis\d+|Spe\d+)\/(?:index\.html)?$/i.test(relativePage) ||
+ /^(?:Practice|Foundations)\/.+\/index\.html$/i.test(relativePage);
 function safeBackTarget(){
- if(/^Wri\\d+\\//i.test(relativePage))return url('?skill=writing');
- if(/^Rea\\d+\\//i.test(relativePage))return url('?skill=reading');
- if(/^Lis\\d+\\//i.test(relativePage))return url('?skill=listening');
- if(/^Spe\\d+\\//i.test(relativePage))return url('?skill=speaking');
- const segments=relativePage.replace(/\\/index\\.html$/i,'').replace(/\\/$/,'').split('/');
- segments.pop();return url(segments.length?segments.join('/')+'/':'');
+ if(/^Wri\d+\//i.test(relativePage))return url('?skill=writing');
+ if(/^Rea\d+\//i.test(relativePage))return url('?skill=reading');
+ if(/^Lis\d+\//i.test(relativePage))return url('?skill=listening');
+ if(/^Spe\d+\//i.test(relativePage))return url('?skill=speaking');
+ const segments=relativePage.replace(/\/index\.html$/i,'').replace(/\/$/,'').split('/');
+ segments.pop();
+ return url(segments.length?segments.join('/')+'/':'');
 }
 const backDestination=safeBackTarget();
 if(exercisePage && !document.querySelector('.sc-universal-back')){
