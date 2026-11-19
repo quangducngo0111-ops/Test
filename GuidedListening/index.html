@@ -110,6 +110,7 @@
 .manual-vocab input,.word-popup input{flex:1 1 160px;max-width:none}
 .word-popup[hidden]{display:none!important}
 @media(max-width:690px){.selection-grid{grid-template-columns:1fr}}
+.pending-list{display:grid;gap:9px;margin:10px 0}.pending-item{display:flex;align-items:center;gap:8px;border:1px solid #dce5f2;border-radius:10px;padding:9px;background:#fff}.pending-item b{min-width:90px;overflow-wrap:anywhere}.pending-item input{flex:1;min-width:0;max-width:none}.pending-item button{font-size:12px;white-space:nowrap}@media(max-width:700px){.pending-item{flex-wrap:wrap}.pending-item input{flex-basis:100%}}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -284,20 +285,27 @@ function addManualVocab(){
 function chooseSelectedTranscriptWord(){
  const selected=String(window.getSelection?.()?.toString()||'').trim().replace(/\s+/g,' ');
  if(!selected||selected.length>65||!/^[A-Za-z][A-Za-z' -]*$/.test(selected))return;
- const l=lessons[lid];
- const found=l.vocab.find(v=>v[0].toLowerCase()===selected.toLowerCase());
- const popup=$('selectedWordPopup');
- if(!popup)return;
- $('pickedWord').value=selected;
- $('pickedMeaning').value=found?.[1]||'';
- popup.hidden=false;
+ const found=lessons[lid].vocab.find(v=>v[0].toLowerCase()===selected.toLowerCase());
+ if(!Array.isArray(store.pendingWords))store.pendingWords=[];
+ if(!store.pendingWords.some(v=>v.word.toLowerCase()===selected.toLowerCase())&&!activeVocab(lessons[lid]).some(v=>v[0].toLowerCase()===selected.toLowerCase())){
+  store.pendingWords.push({word:selected,meaning:found?.[1]||''});save();
+ }
+ const note=$('gapAddedWord');if(note)note.textContent='Đã đánh dấu: '+selected;
+ // Don't intercept the existing global double-click dictionary.
 }
-function saveTranscriptWord(){
- if(chooseVocab($('pickedWord').value,$('pickedMeaning').value)){
-  $('selectedWordPopup').hidden=true;
-  const message=$('gapAddedWord');
-  if(message)message.textContent='Đã thêm vào từ cần học ('+activeVocab(lessons[lid]).length+')';
- }else $('pickedMeaning').focus();
+function updatePendingMeaning(i,value){
+ if(!store.pendingWords?.[i])return;
+ store.pendingWords[i].meaning=value;save();
+}
+function savePendingWord(i){
+ const word=store.pendingWords?.[i];if(!word)return;
+ if(!chooseVocab(word.word,word.meaning)){
+  const status=$('pendingVocabStatus');if(status)status.textContent='Hãy nhập nghĩa tiếng Việt khác với các nghĩa đã chọn.';return;
+ }
+ store.pendingWords.splice(i,1);save();render();
+}
+function removePendingWord(i){
+ store.pendingWords?.splice(i,1);save();render();
 }
 function selectionStageHTML(l){
  const picked=activeVocab(l);
@@ -306,8 +314,9 @@ function selectionStageHTML(l){
   return '<label class="selection-option"><input type="checkbox" '+(checked?'checked':'')+' onchange="toggleSuggestedVocab('+i+')"><span><b>'+escapeHtml(v[0])+'</b><small>'+escapeHtml(v[1])+'</small></span></label>';
  }).join('');
  const chosen=picked.map((v,i)=>'<span class="chosen-word">'+escapeHtml(v[0])+'<button type="button" onclick="removeChosenVocab('+i+')" aria-label="Bỏ từ '+escapeHtml(v[0])+'">Bỏ</button></span>').join('');
+ const pending=(store.pendingWords||[]).map((p,i)=>'<div class="pending-item"><b>'+escapeHtml(p.word)+'</b><input aria-label="Nghĩa của '+escapeHtml(p.word)+'" placeholder="Nghĩa tiếng Việt" value="'+escapeHtml(p.meaning||'')+'" oninput="updatePendingMeaning('+i+',this.value)"><button type="button" onclick="savePendingWord('+i+')">Chọn học</button><button type="button" onclick="removePendingWord('+i+')">Bỏ</button></div>').join('');
  return '<h2>02. Chọn từ cần học</h2><p class="muted">Chỉ chọn những từ em còn chưa chắc nghĩa. Có thể chọn trực tiếp từ transcript ở bước trước.</p>'+
- '<div class="selected-count">'+picked.length+' từ đã chọn</div><div class="chosen-words">'+chosen+'</div>'+
+ '<div class="pending-list">'+pending+'</div><span id="pendingVocabStatus" class="small" role="status"></span><div class="selected-count">'+picked.length+' từ đã chọn</div><div class="chosen-words">'+chosen+'</div>'+
  '<div class="selection-grid">'+glossary+'</div><div class="manual-vocab"><input id="manualWord" placeholder="Từ/cụm từ khác" aria-label="Từ tiếng Anh"><input id="manualMeaning" placeholder="Nghĩa tiếng Việt" aria-label="Nghĩa tiếng Việt"><button type="button" onclick="addManualVocab()">Thêm từ</button><span class="small" id="manualVocabStatus" role="status"></span></div>';
 }
 function shuffledMeanings(l){
@@ -439,7 +448,7 @@ function fullGapHTML(){
   if(blank)words=escapeHtml(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+escapeHtml(turn.text.slice(blank.start+blank.word.length));
   return '<div class="gap-line" ondblclick="chooseSelectedTranscriptWord()"><b class="gap-role">'+escapeHtml(turn.speaker)+'</b><div>'+words+'</div></div>';
  }).join('');
- return '<h2>01. Listening Gap-fill</h2>'+upload+'<div id="selectedWordPopup" class="word-popup" hidden><input id="pickedWord" aria-label="Từ đã chọn"><input id="pickedMeaning" aria-label="Nghĩa của từ" placeholder="Nghĩa tiếng Việt"><button type="button" onclick="saveTranscriptWord()">Lưu từ</button><button type="button" onclick="document.getElementById(\'selectedWordPopup\').hidden=true">Đóng</button></div><span id="gapAddedWord" class="muted small"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><b>🎧 Audio luyện tập</b><audio id="gapAudio" controls preload="metadata" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><input type="file" accept="audio/*" onchange="gapAudioFile(this)"><div class="gap-actions"><button onclick="gapSeek(-10)">−10s</button><button onclick="gapToggle()">Phát / Dừng</button><button onclick="gapSeek(10)">+10s</button><select aria-label="Tốc độ" onchange="gapSpeed(this.value)"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></div><button onclick="checkFullTranscript()">Kiểm tra</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
+ return '<h2>01. Listening Gap-fill</h2>'+upload+'<span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><b>🎧 Audio luyện tập</b><audio id="gapAudio" controls preload="metadata" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><input type="file" accept="audio/*" onchange="gapAudioFile(this)"><div class="gap-actions"><button onclick="gapSeek(-10)">−10s</button><button onclick="gapToggle()">Phát / Dừng</button><button onclick="gapSeek(10)">+10s</button><select aria-label="Tốc độ" onchange="gapSpeed(this.value)"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></div><button onclick="checkFullTranscript()">Kiểm tra</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
 }
 function stageHTML(l){
 if(stage===0)return selectionStageHTML(l);
