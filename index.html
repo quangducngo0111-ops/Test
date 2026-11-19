@@ -2200,7 +2200,7 @@ const FALLBACK_WRITING=[
   {
 
     title:
-      'Writing Practice 01',
+      'Writing Test 01',
 
     path:
       './Wri01/',
@@ -2211,7 +2211,7 @@ const FALLBACK_WRITING=[
     ],
 
     desc:
-      'IELTS Writing practice.'
+      'IELTS Academic Writing full test · 60 phút.'
 
   }
 
@@ -2227,7 +2227,7 @@ let catalog={
     [...FALLBACK_READING],
 
   writing:
-    [...FALLBACK_WRITING],
+    [...FALLBACK_WRITING,...Array.from({length:50},(_,i)=>({title:'Writing Test '+String(i+2).padStart(2,'0'),path:'./WritingTests/?test='+(i+2),meta:['Task 1 + Task 2','60 phút','Word count'],desc:'IELTS Academic Writing · đề biên soạn mới, biểu đồ không watermark.'}))],
   speaking: Array.from({length:28},(_,i)=>({
     title:'Speaking Test '+String(i+1).padStart(2,'0'),
     path:'./Practice/Speaking/mock-test/?set='+(i+1),
@@ -2821,7 +2821,7 @@ function buildTestCatalog(tree){
         return{
 
           title:
-            `Writing Practice ${String(number).padStart(2,'0')}`,
+            `Writing Test ${String(number).padStart(2,'0')}`,
 
           path:
             './'
@@ -2836,12 +2836,12 @@ function buildTestCatalog(tree){
             '/',
 
           meta:[
-            'Writing',
-            'Practice'
+            'Task 1 + Task 2',
+            '60 phút'
           ],
 
           desc:
-            'IELTS Writing practice.'
+            'IELTS Academic Writing full test.'
 
         };
 
@@ -2868,9 +2868,7 @@ function buildTestCatalog(tree){
   if(writing.length){
 
     catalog.writing=
-      uniqueByPath(
-        writing
-      );
+      uniqueByPath([...writing,...Array.from({length:50},(_,i)=>({title:'Writing Test '+String(i+2).padStart(2,'0'),path:'./WritingTests/?test='+(i+2),meta:['Task 1 + Task 2','60 phút','Word count'],desc:'IELTS Academic Writing · đề biên soạn mới, biểu đồ không watermark.'}))]);
 
   }
 
@@ -2992,10 +2990,10 @@ function skillInfo(skill){
     return{
 
       title:
-        'Writing Practice',
+        'Writing Tests',
 
       desc:
-        'Chọn bài Writing muốn bắt đầu.',
+        'Chọn bộ đề Academic Writing gồm Task 1 và Task 2 · 60 phút.',
 
       icon:
         '✍️',
