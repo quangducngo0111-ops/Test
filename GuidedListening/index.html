@@ -111,6 +111,22 @@
 .word-popup[hidden]{display:none!important}
 @media(max-width:690px){.selection-grid{grid-template-columns:1fr}}
 .pending-list{display:grid;gap:9px;margin:10px 0}.pending-item{display:flex;align-items:center;gap:8px;border:1px solid #dce5f2;border-radius:10px;padding:9px;background:#fff}.pending-item b{min-width:90px;overflow-wrap:anywhere}.pending-item input{flex:1;min-width:0;max-width:none}.pending-item button{font-size:12px;white-space:nowrap}@media(max-width:700px){.pending-item{flex-wrap:wrap}.pending-item input{flex-basis:100%}}
+
+.gap-lexeme{display:inline-block;position:relative;border:1px solid transparent;border-radius:6px;padding:0 2px;margin:1px 0;cursor:help;user-select:text}
+.gap-lexeme:hover,.gap-lexeme:focus-visible{background:#f1eafb;border-color:#c5b4eb;outline:none}
+.gap-lexeme:hover::after,.gap-lexeme:focus-visible::after{content:"?";position:absolute;right:-8px;top:-10px;background:#6d4bb1;color:#fff;width:15px;height:15px;line-height:15px;font-size:10px;font-weight:900;border-radius:50%;text-align:center;pointer-events:none;z-index:3}
+.gap-lexeme.picked{background:#e8e2f5;border-color:#c6b7e6}
+.gap-instructions{padding:10px 13px;border:1px solid #e3e8f9;border-radius:12px;background:#f4f6ff;color:#43567f;font-size:13px;margin:10px 0 16px}
+.gap-vocab{border-top:1px solid #e5e9f1;padding-top:12px;display:grid;gap:9px}
+.gap-drop-zone{border:1px dashed #ac9ad2;border-radius:12px;padding:10px;background:#faf9ff;min-height:70px}
+.gap-drop-zone.drag-over{background:#ece5ff;border-color:#7853c9}
+.gap-vocab-item{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:8px 0;padding:7px;background:white;border:1px solid #e2e7f0;border-radius:9px}
+.gap-vocab-item b{flex:1;font-size:12px;overflow-wrap:anywhere}
+.gap-vocab-item input{width:100%!important;max-width:none!important;min-height:34px!important;font-size:12px!important}
+.gap-vocab-item button{font-size:12px;padding:5px 8px}
+.gap-vocab-chips{display:flex;gap:5px;flex-wrap:wrap}
+.gap-vocab-chips span{font-size:12px;font-weight:700;padding:4px 8px;border-radius:8px;color:#236447;background:#e7f5eb}
+@media(min-width:980px){.gap-wrap{grid-template-columns:minmax(0,1fr) 280px}}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -449,20 +465,61 @@ function checkFullTranscript(){
 function gapSeek(n){const a=document.getElementById('gapAudio');if(a)a.currentTime=Math.max(0,a.currentTime+n)}
 function gapToggle(){const a=document.getElementById('gapAudio');if(a){if(a.paused)a.play().catch(()=>{});else a.pause()}}
 function gapSpeed(v){const a=document.getElementById('gapAudio');if(a)a.playbackRate=Number(v)||1}
-function gapAudioMissing(){const n=document.getElementById('gapAudioStatus');if(n)n.textContent='Chưa có audio trên GitHub. Có thể chọn MP3 từ thiết bị bên dưới.'}
+function gapAudioMissing(){const n=document.getElementById('gapAudioStatus');if(n)n.textContent='Không tải được audio. Hãy tải lại trang.'}
 function gapAudioReady(){const n=document.getElementById('gapAudioStatus');if(n)n.textContent=''}
 function gapAudioFile(el){const f=el.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);const a=document.getElementById('gapAudio');if(a){a.src=realAudio;a.load()}gapAudioReady()}
+
+function interactiveGapText(text){
+ return text.split(/(\\b[A-Za-z][A-Za-z'-]*\\b)/g).map(p=>{
+  if(!/^[A-Za-z][A-Za-z'-]*$/.test(p))return escapeHtml(p);
+  const picked=(store.pendingWords||[]).some(x=>x.word.toLowerCase()===p.toLowerCase())||activeVocab(lessons[lid]).some(x=>x[0].toLowerCase()===p.toLowerCase());
+  return '<span class="gap-lexeme'+(picked?' picked':'')+'" tabindex="0" draggable="true" data-word="'+escapeHtml(p)+'" title="Nhấp đúp để tra từ; chạm để chọn học" onclick="selectGapLexeme(this.dataset.word)" onkeydown="gapWordKey(event,this)" ondragstart="gapWordDrag(event,this)">'+escapeHtml(p)+'</span>';
+ }).join('');
+}
+function gapWordKey(e,el){if(e.key==='Enter')selectGapLexeme(el.dataset.word)}
+function gapWordDrag(e,el){e.dataTransfer.setData('text/plain',el.dataset.word)}
+function selectGapLexeme(word){
+ const w=String(word||'').trim();if(!w||!/^[A-Za-z][A-Za-z'-]*$/.test(w))return;
+ if(!Array.isArray(store.pendingWords))store.pendingWords=[];
+ const found=lessons[lid].vocab.find(x=>x[0].toLowerCase()===w.toLowerCase());
+ if(!store.pendingWords.some(x=>x.word.toLowerCase()===w.toLowerCase())&&!activeVocab(lessons[lid]).some(x=>x[0].toLowerCase()===w.toLowerCase())){
+  store.pendingWords.push({word:w,meaning:found?.[1]||''});save();
+ }
+ refreshGapSidebar();
+}
+function gapDropOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over')}
+function gapDropLeave(e){e.currentTarget.classList.remove('drag-over')}
+function dropGapLexeme(e){e.preventDefault();e.currentTarget.classList.remove('drag-over');selectGapLexeme(e.dataTransfer.getData('text/plain'))}
+function saveGapCandidate(i){
+ const x=store.pendingWords?.[i];if(!x)return;
+ if(!chooseVocab(x.word,x.meaning)){const p=$('gapVocabMessage');if(p)p.textContent='Hãy nhập nghĩa tiếng Việt chưa bị trùng.';return}
+ store.pendingWords.splice(i,1);save();refreshGapSidebar();
+}
+function discardGapCandidate(i){store.pendingWords?.splice(i,1);save();refreshGapSidebar()}
+function gapSidebarHTML(){
+ const pending=store.pendingWords||[],selected=activeVocab(lessons[lid]);
+ return '<div class="gap-vocab"><b>Danh sách từ cần học</b><div class="gap-drop-zone" ondragover="gapDropOver(event)" ondragleave="gapDropLeave(event)" ondrop="dropGapLexeme(event)"><span class="small muted">'+(pending.length?pending.length+' từ chờ lưu':'Kéo từ vào đây')+'</span>'+
+ pending.map((p,i)=>'<div class="gap-vocab-item"><b>'+escapeHtml(p.word)+'</b><input aria-label="Nghĩa từ '+escapeHtml(p.word)+'" placeholder="Nghĩa tiếng Việt" value="'+escapeHtml(p.meaning||'')+'" oninput="updatePendingMeaning('+i+',this.value)"><button type="button" onclick="saveGapCandidate('+i+')">Lưu</button><button type="button" onclick="discardGapCandidate('+i+')">Bỏ</button></div>').join('')+'</div><div class="small muted" id="gapVocabMessage" role="status"></div><div class="gap-vocab-chips">'+selected.map(x=>'<span>'+escapeHtml(x[0])+'</span>').join('')+'</div></div>';
+}
+function refreshGapSidebar(){
+ const holder=$('gapSidebar');if(holder)holder.innerHTML=gapSidebarHTML();
+ document.querySelectorAll('.gap-lexeme').forEach(el=>{
+  const w=el.dataset.word.toLowerCase();
+  el.classList.toggle('picked',(store.pendingWords||[]).some(x=>x.word.toLowerCase()===w)||activeVocab(lessons[lid]).some(x=>x[0].toLowerCase()===w));
+ });
+ const m=$('gapAddedWord');if(m)m.textContent=activeVocab(lessons[lid]).length+' từ đã lưu để học';
+}
 function fullGapHTML(){
  const task=fullGapExercise();
  const upload='';
  if(!task)return '<h2>01. Listening Gap-fill</h2>'+upload+'<p class="muted">Cần transcript đầy đủ để luyện toàn bài. Nếu chưa có tệp SRT/TXT, em vẫn có thể chuyển sang chọn từ cần học.</p>';
  const rows=task.source.turns.map((turn,line)=>{
   const blank=task.lookup.get(line);
-  let words=escapeHtml(turn.text);
-  if(blank)words=escapeHtml(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+escapeHtml(turn.text.slice(blank.start+blank.word.length));
+  let words=interactiveGapText(turn.text);
+  if(blank)words=interactiveGapText(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+interactiveGapText(turn.text.slice(blank.start+blank.word.length));
   return '<div class="gap-line" ondblclick="chooseSelectedTranscriptWord()"><b class="gap-role">'+escapeHtml(turn.speaker)+'</b><div>'+words+'</div></div>';
  }).join('');
- return '<h2>01. Listening Gap-fill</h2>'+upload+'<span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><b>🎧 Audio luyện tập</b><audio id="gapAudio" controls preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><span id="gapAudioStatus" class="small muted" role="status"></span><input type="file" accept="audio/*" aria-label="Chọn tệp MP3 nếu chưa có audio trong bài" onchange="gapAudioFile(this)"><div class="gap-actions"><button onclick="gapSeek(-10)">−10s</button><button onclick="gapToggle()">Phát / Dừng</button><button onclick="gapSeek(10)">+10s</button><select aria-label="Tốc độ" onchange="gapSpeed(this.value)"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></div><button onclick="checkFullTranscript()">Kiểm tra</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
+ return '<h2>01. Listening Gap-fill</h2>'+upload+'<div class="gap-instructions"><b>Nghe và điền từ còn thiếu.</b> Rê chuột để thấy dấu ?, nhấp đúp để tra từ; chạm hoặc kéo từ sang danh sách bên phải để học sau.</div><span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><b>🎧 Audio luyện tập</b><audio id="gapAudio" controls preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><span id="gapAudioStatus" class="small muted" role="status"></span><div class="gap-actions"><button onclick="gapSeek(-10)">−10s</button><button onclick="gapToggle()">Phát / Dừng</button><button onclick="gapSeek(10)">+10s</button><select aria-label="Tốc độ" onchange="gapSpeed(this.value)"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></div><button onclick="checkFullTranscript()">Kiểm tra</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong><div id="gapSidebar">'+gapSidebarHTML()+'</div></aside></div>';
 }
 function stageHTML(l){
 if(stage===0)return selectionStageHTML(l);
@@ -473,11 +530,11 @@ if(stage===3)return '<h2>05. Vocabulary Check</h2><p class="muted">Đạt ít nh
 if(stage===4)return '<h2>06. Keyword Recognition</h2><p class="muted">Dự đoán loại từ cần điền. Không dự đoán đáp án cụ thể.</p>'+l.keywords.map((q,i)=>inputCard((i+1)+'. '+escapeHtml(q[0])+' ______','keyword',i,q[1])).join('');
 if(stage===5)return '<h2>07. Paraphrase Matching</h2><p class="muted">Ghép cách diễn đạt trong đề bài (bên trái) với cách nói thực tế trong transcript (ô chọn). Các cụm được đối chiếu theo nội dung bài nghe và không tiết lộ từ cần điền.</p><div class="vocab-grid">'+l.para.map((p,i)=>'<div class="tile vocab-row"><div class="vocab-top"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><label class="vocab-word" for="paraChoice'+i+'">'+escapeHtml(p[0])+'</label></div><select class="vocab-select" id="paraChoice'+i+'" onchange="put(\'para\','+i+',this.value)"><option value="">Chọn cụm tương đương...</option>'+shuffledParaphraseChoices(l).map(meaning=>'<option value="'+escapeHtml(meaning)+'" '+(item('para',i)===meaning?'selected':'')+'>'+escapeHtml(meaning)+'</option>').join('')+'</select></div>').join('')+'</div>';
 if(stage===-1)return fullGapHTML();
-if(stage===6)return '<h2>08. Real Listening Test</h2><p class="note">SECTION 4 — Questions 31–40. Write ONE WORD ONLY for each answer. Đáp án sẽ chỉ hiện sau khi nộp.</p><p><b>Audio: '+escapeHtml(l.audio)+'</b></p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'" onerror="audioError(this)"></audio><div id="audioNotice" class="muted small">Audio tự động phát từ thư mục GuidedListening khi file MP3 đã có trên GitHub. Nếu chưa tải được, chọn tệp từ máy: <input type="file" accept="audio/*" onchange="loadAudio(this)"></div>'+l.questions.map((q,i)=>textCard('<span class="muted">'+(i+31)+'. </span>'+escapeHtml(q),'real',i)).join('')+(submitted?'<p class="ok">Đã nộp bài. Chuyển sang Review để xem kết quả.</p>':'');
+if(stage===6)return '<h2>08. Real Listening Test</h2><p class="note">SECTION 4 — Questions 31–40. Write ONE WORD ONLY for each answer. Đáp án sẽ chỉ hiện sau khi nộp.</p><p><b>Audio: '+escapeHtml(l.audio)+'</b></p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'" onerror="audioError(this)"></audio><div id="audioNotice" class="muted small">Audio bài nghe đã được liên kết trực tiếp.</div>'+l.questions.map((q,i)=>textCard('<span class="muted">'+(i+31)+'. </span>'+escapeHtml(q),'real',i)).join('')+(submitted?'<p class="ok">Đã nộp bài. Chuyển sang Review để xem kết quả.</p>':'');
 let score=l.answer.filter((arr,i)=>arr.includes(safe(item('real',i)))).length;
-return '<h2>09. Personalized Review</h2><p class="muted">Nghe lại từng đáp án theo mốc thời gian SRT gốc. Nếu audio chưa có trên GitHub, hãy chọn file MP3 tương ứng bên dưới.</p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'"></audio><input type="file" accept="audio/*" onchange="loadAudio(this)" aria-label="Chọn MP3 bài nghe"><div class="summary">'+score+'/10 câu đúng</div><p>'+ (10-score)+' câu sai. Đáp án và chứng cứ transcript chỉ hiện sau khi nộp bài.</p>'+l.answer.map((a,i)=>{let ok=a.includes(safe(item('real',i)));return '<div class="tile"><b class="'+(ok?'ok':'bad')+'">Q'+(i+31)+' · '+(ok?'Đúng':'Sai')+'</b><p>Đã điền: '+escapeHtml(item('real',i)||'—')+'</p><p>Đáp án: <b>'+escapeHtml(a.join(' / '))+'</b></p><p class="muted small">Transcript: '+escapeHtml(l.evidence[i])+'</p><p class="muted small">Mốc SRT: '+cueTime(answerCues[l.id][i][0])+'–'+cueTime(answerCues[l.id][i][1])+'</p><button type="button" onclick="playAnswerCue('+i+')">▶ Nghe đoạn Q'+(i+31)+'</button></div>'}).join('')+'<button onclick="restart()">Làm lại bài</button>'}
+return '<h2>09. Personalized Review</h2><p class="muted">Nghe lại từng đáp án theo mốc thời gian của bài.</p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'"></audio><div class="summary">'+score+'/10 câu đúng</div><p>'+ (10-score)+' câu sai. Đáp án và chứng cứ transcript chỉ hiện sau khi nộp bài.</p>'+l.answer.map((a,i)=>{let ok=a.includes(safe(item('real',i)));return '<div class="tile"><b class="'+(ok?'ok':'bad')+'">Q'+(i+31)+' · '+(ok?'Đúng':'Sai')+'</b><p>Đã điền: '+escapeHtml(item('real',i)||'—')+'</p><p>Đáp án: <b>'+escapeHtml(a.join(' / '))+'</b></p><p class="muted small">Transcript: '+escapeHtml(l.evidence[i])+'</p><p class="muted small">Mốc SRT: '+cueTime(answerCues[l.id][i][0])+'–'+cueTime(answerCues[l.id][i][1])+'</p><button type="button" onclick="playAnswerCue('+i+')">▶ Nghe đoạn Q'+(i+31)+'</button></div>'}).join('')+'<button onclick="restart()">Làm lại bài</button>'}
 function speakPractice(i){if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ đọc câu.');return}let txt=lessons[lid].practice[i][0].replace('____',lessons[lid].practice[i][1]);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)}
-function audioError(node){const msg=document.getElementById('audioNotice');if(msg)msg.insertAdjacentHTML('afterbegin','<span class="bad">Chưa tìm thấy MP3 trên GitHub. Hãy chọn file bên dưới. </span>')}
+function audioError(node){const msg=document.getElementById('audioNotice');if(msg)msg.insertAdjacentHTML('afterbegin','<span class="bad">Không tải được audio. Hãy tải lại trang. </span>')}
 function loadAudio(node){let f=node.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);$('audio').src=realAudio;$('audio').load();}
 function change(dir){
  clearPracticeFeedback();
