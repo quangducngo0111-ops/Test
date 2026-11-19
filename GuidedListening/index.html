@@ -26,6 +26,21 @@ questions:['Promotion goals focus on','The Chronic Factor comes from one’s','T
 answer:[['achievement','achievements'],['personality','character'],['situational'],['friend'],['aspirations','ambitions'],['style'],['development'],['vision'],['structures'],['innovation','innovations']],
 evidence:['emphasise achievement','connected to a person’s personality','a situational factor','spending time with a friend','their aspirations and gains','their style of leading','focus on their development','conveys a definitive vision','developing clear structures','a lot of innovation is needed']}
 ];
+// Exact answer-cue timestamps extracted from the user-supplied SRT files (Q31-Q40).
+const answerCues={
+ '01':[[121.523,130.015],[147.290,158.440],[171.447,177.624],[205.007,206.600],[236.049,247.600],[346.005,356.040],[383.865,393.080],[410.076,419.000],[430.945,438.720],[453.400,461.040]],
+ '02':[[124.783,130.846],[160.523,178.940],[179.655,192.260],[193.242,202.340],[227.567,238.080],[281.466,296.880],[306.082,313.440],[319.973,325.480],[339.497,352.000],[395.931,405.400]]
+};
+function cueTime(seconds){const m=Math.floor(seconds/60);return String(m).padStart(2,'0')+':'+String(Math.floor(seconds%60)).padStart(2,'0')}
+function playAnswerCue(i){
+ const t=answerCues[lessons[lid].id]?.[i];if(!t)return;
+ const player=document.getElementById('audio');
+ if(!player){alert('Mở bước Real Test để nghe audio của bài trước.');return}
+ const start=Math.max(0,t[0]-.6),end=t[1]+.7;
+ player.currentTime=start;player.play().catch(()=>alert('Hãy chọn đúng file MP3 gốc của bài trong phần Real Test.'));
+ const stop=()=>{if(player.currentTime>=end){player.pause();player.removeEventListener('timeupdate',stop)}};
+ player.addEventListener('timeupdate',stop);
+}
 const stepNames=['Vocabulary Game','Vocabulary Check','Keywords','Paraphrase Matching','Listening Gap-fill','Real Test','Review'];
 let lid=0,stage=0,store={},submitted=false,realAudio=null;
 const $=id=>document.getElementById(id);
@@ -47,7 +62,7 @@ if(stage===3)return '<h2>04. Paraphrase Matching</h2><p class="muted">Ghép các
 if(stage===4)return '<h2>05. Listening Gap-fill</h2><p class="muted">Audio luyện tập được đọc bằng giọng tổng hợp, không lấy từ transcript đề thi. Nghe rồi điền từ.</p>'+l.practice.map((p,i)=>'<div class="tile"><button onclick="speakPractice('+i+')">▶ Nghe câu '+(i+1)+'</button><div class="question">'+escapeHtml(p[0])+'</div><input type="text" value="'+escapeHtml(item('practice',i))+'" oninput="put(\'practice\','+i+',this.value)" placeholder="Write ONE WORD"></div>').join('');
 if(stage===5)return '<h2>06. Real Listening Test</h2><p class="note">SECTION 4 — Questions 31–40. Write ONE WORD ONLY for each answer. Đáp án sẽ chỉ hiện sau khi nộp.</p><p><b>Audio: '+escapeHtml(l.audio)+'</b></p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'" onerror="audioError(this)"></audio><div id="audioNotice" class="muted small">Audio tự động phát từ thư mục GuidedListening khi file MP3 đã có trên GitHub. Nếu chưa tải được, chọn tệp từ máy: <input type="file" accept="audio/*" onchange="loadAudio(this)"></div>'+l.questions.map((q,i)=>textCard('<span class="muted">'+(i+31)+'. </span>'+escapeHtml(q)+' ______','real',i)).join('')+(submitted?'<p class="ok">Đã nộp bài. Chuyển sang Review để xem kết quả.</p>':'');
 let score=l.answer.filter((arr,i)=>arr.includes(safe(item('real',i)))).length;
-return '<h2>07. Personalized Review</h2><div class="summary">'+score+'/10 câu đúng</div><p>'+ (10-score)+' câu sai. Đáp án và chứng cứ transcript chỉ hiện sau khi nộp bài.</p>'+l.answer.map((a,i)=>{let ok=a.includes(safe(item('real',i)));return '<div class="tile"><b class="'+(ok?'ok':'bad')+'">Q'+(i+31)+' · '+(ok?'Đúng':'Sai')+'</b><p>Đã điền: '+escapeHtml(item('real',i)||'—')+'</p><p>Đáp án: <b>'+escapeHtml(a.join(' / '))+'</b></p><p class="muted small">Transcript: '+escapeHtml(l.evidence[i])+'</p></div>'}).join('')+'<button onclick="restart()">Làm lại bài</button>'}
+return '<h2>07. Personalized Review</h2><div class="summary">'+score+'/10 câu đúng</div><p>'+ (10-score)+' câu sai. Đáp án và chứng cứ transcript chỉ hiện sau khi nộp bài.</p>'+l.answer.map((a,i)=>{let ok=a.includes(safe(item('real',i)));return '<div class="tile"><b class="'+(ok?'ok':'bad')+'">Q'+(i+31)+' · '+(ok?'Đúng':'Sai')+'</b><p>Đã điền: '+escapeHtml(item('real',i)||'—')+'</p><p>Đáp án: <b>'+escapeHtml(a.join(' / '))+'</b></p><p class="muted small">Transcript: '+escapeHtml(l.evidence[i])+'</p><p class="muted small">Mốc SRT: '+cueTime(answerCues[l.id][i][0])+'–'+cueTime(answerCues[l.id][i][1])+'</p></div>'}).join('')+'<button onclick="restart()">Làm lại bài</button>'}
 function speakPractice(i){if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ đọc câu.');return}let txt=lessons[lid].practice[i][0].replace('____',lessons[lid].practice[i][1]);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)}
 function audioError(node){const msg=document.getElementById('audioNotice');if(msg)msg.insertAdjacentHTML('afterbegin','<span class="bad">Chưa tìm thấy MP3 trên GitHub. Hãy chọn file bên dưới. </span>')}
 function loadAudio(node){let f=node.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);$('audio').src=realAudio;$('audio').load();}
@@ -61,6 +76,8 @@ stage=Math.min(6,stage+1);render();window.scrollTo({top:0,behavior:'smooth'})}
 function restart(){if(!confirm('Xóa câu trả lời hiện tại để luyện lại?'))return;sessionStorage.removeItem(key());stage=0;getStore();render()}
 function render(){let l=lessons[lid];$('lessons').innerHTML=buttons();$('lessonName').textContent='Bài '+l.id+' · '+l.title;$('steps').innerHTML=stepNames.map((s,i)=>'<button class="'+(stage===i?'active':'')+' '+(i>stage&&!submitted?'disabled':'')+' onclick="goto('+i+')">'+(i+1)+'. '+s+'</button>').join('');$('content').innerHTML=stageHTML(l);$('prev').style.visibility=stage===0?'hidden':'visible';$('next').textContent=stage===5?'Nộp bài →':stage===6?'Đã hoàn thành':'Tiếp tục →';$('next').style.display=stage===6?'none':'inline-block'}
 function goto(i){if(i<stage||(submitted&&i===6)){stage=i;render()}}
+// Show an accurate answer-cue guide while the uploaded MP3 is selected by the learner.
+window.GuidedListeningAnswerCues=answerCues;
 const requestedLesson=new URLSearchParams(location.search).get('lesson');
 const selectedLesson=lessons.findIndex(lesson=>lesson.id===requestedLesson);
 if(selectedLesson>=0)lid=selectedLesson;
