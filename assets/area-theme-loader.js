@@ -3,7 +3,7 @@
 if(window.__scAreaThemeLoaded)return;window.__scAreaThemeLoaded=true;
 const parts=decodeURIComponent(location.pathname).split('/').filter(Boolean);
 const folder=parts.find(p=>/^Read\d+$/i.test(p)||/^Lis\d+$/i.test(p)||/^Wri\d+$/i.test(p));
-const area=folder?'test':parts.includes('Practice')?'practice':parts.includes('Foundations')||parts.includes('Vocabulary-Notebook')?'foundations':parts.includes('Progress')?'progress':'home';
+const area=(folder||parts.includes('WritingTests'))?'test':parts.includes('Practice')?'practice':parts.includes('Foundations')||parts.includes('Vocabulary-Notebook')?'foundations':parts.includes('Progress')?'progress':'home';
 document.documentElement.dataset.scArea=area;
 const apply=()=>{document.body?.classList.add('sc-area-'+area);};
 if(document.body)apply();else document.addEventListener('DOMContentLoaded',apply,{once:true});
