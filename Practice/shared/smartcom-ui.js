@@ -6,11 +6,13 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src);
-if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('assets/area-theme-loader.js?v=20261118-premium02',root).href;document.head.append(t);}
+if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('assets/area-theme-loader.js?v=20261119-portal-category03',root).href;document.head.append(t);}
 if(!document.querySelector('script[data-sc-outline-icons]')){const iconScript=document.createElement('script');iconScript.dataset.scOutlineIcons='1';iconScript.src=new URL('assets/smartcom-outline-icons.js?v=20261118-icons01',root).href;document.head.append(iconScript);} // .../Test/ from .../Test/Practice/shared/
 // Electric Blue is the default theme for the Practice area.
 // Resolve relative to this script so GitHub Pages subpaths also work.
-if(location.pathname.includes('/Practice/')){
+const routeParts=decodeURIComponent(location.pathname).split('/').filter(Boolean);
+const isFoundationRoute=routeParts.some(p=>/^(Foundations|Vocabulary-Notebook|GuidedListening|Grammar|Vocabulary|Intensive Listening|Topic-based-Listening|Pre-IELTS)$/i.test(p));
+if(routeParts.includes('Practice')&&!isFoundationRoute){
  document.body.classList.add('sc-electric-blue');
  if(!document.querySelector('link[data-sc-electric-theme]')){
   const theme=document.createElement('link');
