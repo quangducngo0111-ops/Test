@@ -1,3 +1,6 @@
+
+/* Load the common draggable AssistiveTouch in every standalone lesson using this toolkit. */
+(()=>{if(window.__scQuickLoaderQueued||document.querySelector('script[data-sc-quick-bootstrap]'))return;const current=document.currentScript;if(!current)return;const script=document.createElement('script');script.dataset.scQuickBootstrap='1';script.src=new URL('../../assets/quick-access-loader.js?v=20261119-05',current.src).href;(document.body||document.head).append(script);})();
 /* Smartcom Writing Assistant: live word count and on-demand proofreading.
    External proofreading requests are made only after a learner clicks Check. */
 (()=>{'use strict';
