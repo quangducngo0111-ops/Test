@@ -38,11 +38,13 @@ textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,159,.12
 .pending{padding:18px;background:#eef4f8;border-radius:10px;text-align:center;color:var(--navy);font-weight:800}.error{color:var(--bad);background:#fff1ef;padding:10px;border-radius:8px}
 .small{font-size:12px;color:var(--muted)}.close-btn{width:100%;margin-top:14px;border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;padding:11px;font-weight:900}
 @media(max-width:800px){.layout{grid-template-columns:1fr;height:auto}.left{border-right:0;border-bottom:1px solid var(--line);max-height:none}.right{min-height:600px}.bottom-bar{position:sticky}.layout{padding-bottom:0}.form-grid,.score-grid{grid-template-columns:1fr}}
+
+.brand{display:flex;align-items:center;gap:13px}.exam-back{display:inline-flex;align-items:center;padding:8px 12px;color:#fff;text-decoration:none;border:1px solid #ffffff75;border-radius:10px;background:#ffffff20;font-size:13px;font-weight:800;white-space:nowrap}.exam-back:hover{background:#ffffff35}@media(max-width:650px){.brand{gap:7px;font-size:12px}.exam-back{font-size:11px;padding:7px}}
 </style>
 </head>
 <body>
 <header class="topbar">
-  <div class="brand">IELTS WRITING TEST 01</div>
+  <div class="brand"><a class="exam-back" href="../?skill=writing" title="Quay lại danh sách đề Writing">← Quay lại</a><span>IELTS WRITING TEST 01</span></div>
   <div class="top-right"><span id="studentInfo"></span><div id="timer" class="timer">60:00</div></div>
 </header>
 
@@ -765,5 +767,5 @@ $('task1Essay').addEventListener('input',()=>{updateCount();saveDraft()});$('tas
 $('submitBtn').onclick=()=>submitExam(false);$('startBtn').onclick=startExam;$('closeResult').onclick=()=>$('resultOverlay').classList.add('hidden');
 const ps=getPortalStudent(); if(ps.name&&ps.className){$('studentName').value=ps.name;$('studentClass').value=ps.className;if(ps.fromPortal)setTimeout(startExam,80)}
 </script>
-<script src="../assets/area-theme-loader.js?v=20261118-premium02"></script></body>
+<script src="../assets/area-theme-loader.js?v=20261118-premium02"></script><script src="../Practice/shared/smartcom-ui.js?v=20261119-everywhere04"></script></body>
 </html>
