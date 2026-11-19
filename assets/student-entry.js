@@ -9,7 +9,7 @@
 'use strict';
 if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('area-theme-loader.js?v=20261118-premium02',document.currentScript.src).href;document.head.append(t);}
 if(!document.querySelector('script[data-sc-outline-icons]')){const iconScript=document.createElement('script');iconScript.dataset.scOutlineIcons='1';iconScript.src=new URL('smartcom-outline-icons.js?v=20261118-icons01',document.currentScript.src).href;document.head.append(iconScript);}
-const CLASSES=['XD25A02.1','XD25A02.2','XD26A03.1','SS26.1','SS25A01.1','SS25IE2','OP.AD.07','OP.ESS.11'];
+const CLASSES=['XD25A02.1','XD25A02.2','XD26A03.1','SS26.1','SS25A01.1','SS25IE2','OP.AD.07','OP.ESS.11','TEST'];
 const STUDENT_KEY='IELTS_PRACTICE_STUDENT';
 const nameInput=document.getElementById('studentName');
 const classInput=document.getElementById('studentClass');
@@ -76,10 +76,11 @@ const validStart=function(){
  try{nativeStart.apply(this,arguments);}catch(e){started=false;throw e}
 };
 window[startName]=validStart;
-// A stored homepage profile means the student is already identified on the same
-// website; skip the redundant gate and enter the exercise directly.
+// A valid saved Portal profile is sufficient regardless of how the learner
+// navigated here (direct link, hub card, reload or fromPortal query).
+// The Portal remains the source of truth for identity.
 const existing=getProfile();
-if(existing && new URLSearchParams(location.search).get('fromPortal')==='1'){
+if(existing){
  nameInput.value=existing.name;
  classInput.value=existing.className;
  // Allow the original page setup scripts to finish before starting.
