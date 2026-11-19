@@ -13,6 +13,21 @@
 .practice-feedback strong{display:block;font-size:15px;margin-bottom:3px}.practice-feedback[hidden]{display:none!important}
 .tile.practice-incorrect{border-color:#e8a0a9!important;background:#fffafa!important}
 .tile.practice-incorrect .vocab-select{border-color:#d94b55!important}
+
+/* Compact multiple-choice rows: prompt at left, three options use the right side. */
+#content .choice-row{display:grid;grid-template-columns:minmax(200px,38%) minmax(0,1fr);align-items:center;gap:16px;padding:15px 18px}
+#content .choice-row .question{margin:0;font-size:15px;line-height:1.45}
+#content .choice-row .options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0}
+#content .choice-row .options label{display:flex;align-items:center;gap:7px;min-width:0;min-height:44px;padding:9px 11px;font-size:14px;line-height:1.35}
+#content .choice-row .options input{margin:0;flex-shrink:0}
+#content .tile.practice-correct{border-color:#8bcfa7!important;background:#f4fcf7!important}
+#content .tile.practice-incorrect{border-color:#eda0a6!important;background:#fff7f7!important}
+#content .choice-row .options label.answer-correct{border-color:#59b984!important;background:#def5e7!important;color:#12643c!important;font-weight:750}
+#content .choice-row .options label.answer-wrong{border-color:#e78491!important;background:#ffe6e8!important;color:#9a2436!important;font-weight:750}
+#content .choice-row .options label.answer-correct input{accent-color:#19814d}
+#content .choice-row .options label.answer-wrong input{accent-color:#c93f4f}
+@media(max-width:900px){#content .choice-row{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){#content .choice-row .options{grid-template-columns:1fr;gap:7px}#content .choice-row{padding:13px}}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -61,22 +76,51 @@ const safe=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
 const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function getStore(){try{store=JSON.parse(sessionStorage.getItem(key())||'{}')}catch(e){store={}}submitted=!!store.submitted}
 function save(){sessionStorage.setItem(key(),JSON.stringify(store))}
+function markPracticeAnswers(){
+ const lesson=lessons[lid];
+ const group=stage===0?'match':stage===1?'quiz':stage===2?'keyword':stage===3?'para':null;
+ if(!group)return;
+ const items=stage===0?lesson.vocab:stage===1?lesson.quiz:stage===2?lesson.keywords:lesson.para;
+ document.querySelectorAll('#content .tile').forEach((tile,i)=>{
+  const entry=items[i];if(!entry)return;
+  const correct=stage===1||stage===2?entry[2]:entry[1];
+  const selected=item(group,i);
+  tile.classList.toggle('practice-correct',!!selected&&selected===correct);
+  tile.classList.toggle('practice-incorrect',!selected||selected!==correct);
+  tile.querySelectorAll('.options label').forEach(label=>{
+   const option=label.querySelector('input');
+   label.classList.toggle('answer-correct',option?.value===correct);
+   label.classList.toggle('answer-wrong',!!selected&&option?.value===selected&&selected!==correct);
+  });
+ });
+}
 function showPracticeFeedback(message,wrongIndexes){
  const notice=$('practiceFeedback');if(!notice)return;
  notice.replaceChildren();
  const title=document.createElement('strong');title.textContent='Chưa hoàn thành bước này';
  const body=document.createElement('span');body.textContent=message;
  notice.append(title,body);notice.hidden=false;
- document.querySelectorAll('#content .tile').forEach((tile,i)=>tile.classList.toggle('practice-incorrect',Array.isArray(wrongIndexes)&&wrongIndexes.includes(i)));
+ markPracticeAnswers();
+ if(Array.isArray(wrongIndexes)&&stage===4)
+  document.querySelectorAll('#content .tile').forEach((tile,i)=>tile.classList.toggle('practice-incorrect',wrongIndexes.includes(i)));
  notice.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function clearPracticeFeedback(){
  const notice=$('practiceFeedback');if(notice){notice.hidden=true;notice.replaceChildren()}
- document.querySelectorAll('#content .practice-incorrect').forEach(el=>el.classList.remove('practice-incorrect'));
+ document.querySelectorAll('#content .practice-correct,#content .practice-incorrect').forEach(el=>el.classList.remove('practice-correct','practice-incorrect'));
+ document.querySelectorAll('#content .answer-correct,#content .answer-wrong').forEach(el=>el.classList.remove('answer-correct','answer-wrong'));
 }
-function put(section,i,value){if(!store[section])store[section]={};store[section][i]=value;save();clearPracticeFeedback()}
+function put(section,i,value){
+ if(!store[section])store[section]={};store[section][i]=value;save();
+ const notice=$('practiceFeedback');
+ if(notice&&!notice.hidden&&['match','quiz','keyword','para'].includes(section)){
+  markPracticeAnswers();
+  return;
+ }
+ clearPracticeFeedback();
+}
 function item(section,i){return store[section]?.[i]||''}
-function inputCard(label,group,i,opts){return '<div class="tile"><div class="question">'+label+'</div><div class="options">'+opts.map(o=>'<label><input type="radio" name="'+group+i+'" value="'+escapeHtml(o)+'" '+(item(group,i)===o?'checked':'')+' onchange="put(\''+group+'\','+i+',this.value)"> '+escapeHtml(o)+'</label>').join('')+'</div></div>'}
+function inputCard(label,group,i,opts){return '<div class="tile choice-row"><div class="question">'+label+'</div><div class="options">'+opts.map(o=>'<label><input type="radio" name="'+group+i+'" value="'+escapeHtml(o)+'" '+(item(group,i)===o?'checked':'')+' onchange="put(\''+group+'\','+i+',this.value)"> '+escapeHtml(o)+'</label>').join('')+'</div></div>'}
 function textCard(label,group,i){return '<div class="tile"><div class="question">'+label+'</div><input type="text" autocomplete="off" value="'+escapeHtml(item(group,i))+'" oninput="put(\''+group+'\','+i+',this.value)" placeholder="Write ONE WORD"></div>'}
 function stageHTML(l){if(stage===0)return '<h2>01. Vocabulary Game</h2><p class="muted">Chọn nghĩa tiếng Việt đúng cho từng từ tiếng Anh. Hoàn thành tất cả các từ rồi nhấn “Tiếp tục”.</p>'+l.vocab.map((v,i)=>'<div class="tile vocab-row"><div class="vocab-word">'+escapeHtml(v[0])+'</div><div><select class="vocab-select" aria-label="Choose meaning" onchange="put(\'match\','+i+',this.value)"><option value="">Chọn nghĩa...</option>'+l.vocab.map(x=>'<option '+(item('match',i)===x[1]?'selected':'')+'>'+escapeHtml(x[1])+'</option>').join('')+'</select></div></div>').join('');
 if(stage===1)return '<h2>02. Vocabulary Check</h2><p class="muted">Đạt ít nhất 4/5 để tiếp tục.</p>'+l.quiz.map((q,i)=>inputCard((i+1)+'. '+q[0],'quiz',i,q[1])).join('');
