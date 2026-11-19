@@ -470,11 +470,18 @@ function gapAudioReady(){const n=document.getElementById('gapAudioStatus');if(n)
 function gapAudioFile(el){const f=el.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);const a=document.getElementById('gapAudio');if(a){a.src=realAudio;a.load()}gapAudioReady()}
 
 function interactiveGapText(text){
- return text.split(/(\\b[A-Za-z][A-Za-z'-]*\\b)/g).map(p=>{
+ return text.split(/(\b[A-Za-z][A-Za-z'-]*\b)/g).map(p=>{
   if(!/^[A-Za-z][A-Za-z'-]*$/.test(p))return escapeHtml(p);
   const picked=(store.pendingWords||[]).some(x=>x.word.toLowerCase()===p.toLowerCase())||activeVocab(lessons[lid]).some(x=>x[0].toLowerCase()===p.toLowerCase());
-  return '<span class="gap-lexeme'+(picked?' picked':'')+'" tabindex="0" draggable="true" data-word="'+escapeHtml(p)+'" title="Nhấp đúp để tra từ; chạm để chọn học" onclick="selectGapLexeme(this.dataset.word)" onkeydown="gapWordKey(event,this)" ondragstart="gapWordDrag(event,this)">'+escapeHtml(p)+'</span>';
+  return '<span class="gap-lexeme'+(picked?' picked':'')+'" tabindex="0" draggable="true" data-word="'+escapeHtml(p)+'" title="Nhấp đúp để tra từ; chạm để chọn học" onclick="selectGapLexeme(this.dataset.word)" ondblclick="gapSelectForDictionary(event,this)" onkeydown="gapWordKey(event,this)" ondragstart="gapWordDrag(event,this)">'+escapeHtml(p)+'</span>';
  }).join('');
+}
+function gapSelectForDictionary(event,el){
+ // Populate a real browser text selection before the existing shared dictionary's
+ // document-level double-click listener receives this same event.
+ const selection=window.getSelection?.();if(!selection)return;
+ const range=document.createRange();range.selectNodeContents(el);
+ selection.removeAllRanges();selection.addRange(range);
 }
 function gapWordKey(e,el){if(e.key==='Enter')selectGapLexeme(el.dataset.word)}
 function gapWordDrag(e,el){e.dataTransfer.setData('text/plain',el.dataset.word)}
