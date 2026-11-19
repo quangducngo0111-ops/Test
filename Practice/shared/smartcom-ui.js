@@ -63,7 +63,7 @@ const groups=[
   ['🌍','Topic-based Listening','Foundations/Topic-based-Listening/'],
   ['📰','Reading Library','Foundations/Reading-Library/'],
   ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
-  ['📒','Vocabulary Notebook','Vocabulary-Notebook/']
+  ['📒','Sổ tay từ vựng','Vocabulary-Notebook/'],['⏰','Nhắc từ vựng','Vocabulary-Notebook/#vocabReminder']
  ]},
  {heading:'Điều hướng',links:[['🏠','Trang chủ',''],['🎯','Skill Practice','Practice/']]}
 ]
@@ -133,12 +133,82 @@ tools.querySelectorAll('.sc-capsule-link').forEach(link=>{
 });
 tools.addEventListener('scroll',hideLabel,{passive:true});
 function setOpen(value){
+ if(value)positionPanel();
  shell.classList.toggle('sc-open',value);
  toggle.setAttribute('aria-expanded',String(value));
  toggle.setAttribute('aria-label',value?'Đóng menu truy cập nhanh':'Mở menu truy cập nhanh');
  if(!value){tools.scrollTop=0;hideLabel()}
 }
-toggle.addEventListener('click',()=>setOpen(!shell.classList.contains('sc-open')));
+/* AssistiveTouch drag: movable, edge-snapping, persists normalized vertical position.
+   A short tap opens the menu; dragging never accidentally opens it. */
+const touchPositionKey='SC_ASSISTIVE_TOUCH_V1';
+let launcherPosition={side:'right',y:.78};
+try{const stored=JSON.parse(localStorage.getItem(touchPositionKey)||'null');if(stored&&(stored.side==='left'||stored.side==='right')&&Number.isFinite(stored.y))launcherPosition={side:stored.side,y:Math.min(.94,Math.max(.06,stored.y))}}catch{}
+const launcherSize=()=>toggle.getBoundingClientRect().width||60;
+function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
+function setLauncher(side,y){
+ const size=launcherSize(),margin=12;
+ const top=clamp(y*(window.innerHeight-size),margin,Math.max(margin,window.innerHeight-size-margin));
+ shell.style.setProperty('left',side==='left'?margin+'px':'auto','important');
+ shell.style.setProperty('right',side==='right'?margin+'px':'auto','important');
+ shell.style.setProperty('top',top+'px','important');
+ shell.style.setProperty('bottom','auto','important');
+ shell.classList.toggle('sc-side-left',side==='left');
+ shell.classList.toggle('sc-side-right',side!=='left');
+ positionPanel();
+}
+function positionPanel(){
+ const rect=toggle.getBoundingClientRect();
+ const w=Math.min(340,window.innerWidth-28),h=Math.min(530,Math.round(window.innerHeight*.74));
+ const x=shell.classList.contains('sc-side-left')?clamp(rect.right+12,10,window.innerWidth-w-10):clamp(rect.left-w-12,10,window.innerWidth-w-10);
+ const y=clamp(rect.top+rect.height/2-h/2,10,Math.max(10,window.innerHeight-h-10));
+ shell.style.setProperty('--sc-panel-x',x+'px');
+ shell.style.setProperty('--sc-panel-y',y+'px');
+ shell.style.setProperty('--sc-panel-width',w+'px');
+ shell.style.setProperty('--sc-panel-max-height',h+'px');
+}
+let drag=null,suppressClick=false;
+toggle.style.touchAction='none';
+toggle.addEventListener('pointerdown',e=>{
+ if(e.button!==0||shell.classList.contains('sc-open'))return;
+ drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};
+ try{toggle.setPointerCapture(e.pointerId)}catch{}
+});
+toggle.addEventListener('pointermove',e=>{
+ if(!drag||drag.id!==e.pointerId)return;
+ if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>7)drag.moved=true;
+ if(!drag.moved)return;
+ e.preventDefault();
+ const size=launcherSize();
+ const left=clamp(e.clientX-size/2,10,window.innerWidth-size-10);
+ const top=clamp(e.clientY-size/2,10,window.innerHeight-size-10);
+ shell.style.setProperty('left',left+'px','important');
+ shell.style.setProperty('right','auto','important');
+ shell.style.setProperty('top',top+'px','important');
+ shell.style.setProperty('bottom','auto','important');
+ shell.classList.add('sc-dragging');
+});
+function endDrag(e){
+ if(!drag||drag.id!==e.pointerId)return;
+ if(drag.moved){
+  suppressClick=true;
+  const side=e.clientX<window.innerWidth/2?'left':'right';
+  launcherPosition={side,y:clamp((e.clientY-launcherSize()/2)/Math.max(1,window.innerHeight-launcherSize()),0,1)};
+  setLauncher(side,launcherPosition.y);
+  try{localStorage.setItem(touchPositionKey,JSON.stringify(launcherPosition))}catch{}
+ }
+ shell.classList.remove('sc-dragging');
+ drag=null;
+}
+toggle.addEventListener('pointerup',endDrag);
+toggle.addEventListener('pointercancel',endDrag);
+toggle.addEventListener('click',e=>{
+ if(suppressClick){suppressClick=false;e.preventDefault();e.stopImmediatePropagation();return}
+ setOpen(!shell.classList.contains('sc-open'));
+},true);
+window.addEventListener('resize',()=>setLauncher(launcherPosition.side,launcherPosition.y),{passive:true});
+requestAnimationFrame(()=>setLauncher(launcherPosition.side,launcherPosition.y));
+
 document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))setOpen(false)});
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&shell.classList.contains('sc-open')){setOpen(false);toggle.focus()}
