@@ -46,6 +46,26 @@ const nestedHub=(
  /\/Practice\/Grammar\/Topic\d\d\/?$/i.test(pathname)
 );
 if(pathname===root.pathname||nestedHub||hubPaths.some(p=>pathname.endsWith(p)||pathname.endsWith(p.slice(0,-1))))document.body.classList.add('sc-hub-refresh');
+// Universal exit for individual exercises: one reliable escape even on fullscreen tasks.
+const relativePage=decodeURIComponent(location.pathname.slice(root.pathname.length));
+const exercisePage=/^(?:Wri\\d+|Rea\\d+|Lis\\d+|Spe\\d+)\\/index\\.html$/i.test(relativePage)||
+ /^(?:Wri\\d+|Rea\\d+|Lis\\d+|Spe\\d+)\\/?$/i.test(relativePage)||
+ /^(?:Practice|Foundations)\\/.+\\/index\\.html$/i.test(relativePage);
+function safeBackTarget(){
+ if(/^Wri\\d+\\//i.test(relativePage))return url('?skill=writing');
+ if(/^Rea\\d+\\//i.test(relativePage))return url('?skill=reading');
+ if(/^Lis\\d+\\//i.test(relativePage))return url('?skill=listening');
+ if(/^Spe\\d+\\//i.test(relativePage))return url('?skill=speaking');
+ const segments=relativePage.replace(/\\/index\\.html$/i,'').replace(/\\/$/,'').split('/');
+ segments.pop();return url(segments.length?segments.join('/')+'/':'');
+}
+const backDestination=safeBackTarget();
+if(exercisePage && !document.querySelector('.sc-universal-back')){
+ const back=document.createElement('a');back.className='sc-universal-back';
+ back.href=backDestination;back.textContent='Quay lại';back.title='Thoát bài và quay lại danh sách';
+ back.setAttribute('aria-label','Quay lại danh sách bài học');
+ document.body.append(back);
+}
 const groups=[
  {heading:'Mock Tests',links:[
   ['🎧','Listening Test','?skill=listening'],['📖','Reading Test','?skill=reading'],
@@ -65,7 +85,7 @@ const groups=[
   ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
   ['📒','Sổ tay từ vựng','Vocabulary-Notebook/'],['⏰','Nhắc từ vựng','Vocabulary-Notebook/#vocabReminder']
  ]},
- {heading:'Điều hướng',links:[['🏠','Trang chủ',''],['🎯','Skill Practice','Practice/']]}
+ {heading:'Điều hướng',links:[['↩️','Quay lại',backDestination],['🏠','Trang chủ',''],['🎯','Skill Practice','Practice/']]}
 ]
 
 /* One continuous capsule: the original round lightning button expands upward. */
@@ -229,8 +249,9 @@ document.body.append(shell);
        typeof candidate.className==='string' && candidate.className.trim())
       profile={name:candidate.name.trim(),className:candidate.className.trim()};
   }catch(e){}
-  const root=new URL('../../',document.currentScript.src);
-  const fromPortal=!!profile && (params.get('fromPortal')==='1' || location.pathname===root.pathname || location.pathname===root.pathname+'index.html');
+  // currentScript is null in nested callbacks; reuse the captured script URL.
+  const portalRoot=root;
+  const fromPortal=!!profile && (params.get('fromPortal')==='1' || location.pathname===portalRoot.pathname || location.pathname===portalRoot.pathname+'index.html');
   if(!fromPortal)return;
   // Propagate the portal flow through all same-project internal links,
   // including the quick-navigation menu and dynamically inserted cards.
@@ -240,7 +261,7 @@ document.body.append(shell);
        event.ctrlKey || event.metaKey || event.shiftKey || event.altKey ||
        (anchor.target && anchor.target!=='_self') || anchor.hasAttribute('download'))return;
     const destination=new URL(anchor.href,location.href);
-    if(destination.origin!==location.origin || !destination.pathname.startsWith(root.pathname))return;
+    if(destination.origin!==location.origin || !destination.pathname.startsWith(portalRoot.pathname))return;
     destination.searchParams.set('fromPortal','1');
     anchor.href=destination.href;
   },true);
