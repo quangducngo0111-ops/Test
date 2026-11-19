@@ -238,7 +238,11 @@ function showTerm(term,range,event){
  requestId++;word=normalized;entry=null;vietnamese='';modal.hidden=true;
  const rect=range?.getBoundingClientRect?.();
  anchor={x:rect?.left??event.clientX??20,y:rect?.bottom??event.clientY??20};
- menu.hidden=false;position(menu);
+ menu.hidden=false;
+ // Guided Listening matches the Reading Library direct dictionary-card interaction.
+ // Other pages retain the existing quick action menu.
+ if(/\/GuidedListening\/?/i.test(location.pathname))lookup.click();
+ else position(menu);
 }
 function selectedRange(){
  const sel=window.getSelection();return sel?.rangeCount?sel.getRangeAt(0):null;
