@@ -6,6 +6,18 @@
 <meta name="practice-description" content="Note Completion + TRUE/FALSE/NOT GIVEN">
 <meta name="practice-questions" content="13">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<!-- Hide the start gate before first paint when Portal identity is already saved. -->
+<style>html.sc-identified-student #start{display:none!important}</style>
+<script>
+(function(){
+ try{
+  const p=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
+  const valid=['XD25A02.1','XD25A02.2','XD26A03.1','SS26.1','SS25A01.1','SS25IE2','OP.AD.07','OP.ESS.11','TEST'];
+  if(p&&String(p.name||'').trim()&&valid.some(c=>c.toLowerCase()===String(p.className||'').trim().toLowerCase()))
+   document.documentElement.classList.add('sc-identified-student');
+ }catch(e){}
+})();
+</script>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Reading Passage 1 — 01 | The History of Glass</title>
 
@@ -3537,6 +3549,6 @@ prefill();
 </script>
 
 <script src="../../reading-standard.js?v=20261116-save-confirmation"></script>
-<script src="../../../../assets/student-entry.js?v=20261109-v1"></script>
+<script src="../../../../assets/student-entry.js?v=20261119-profile-fix01"></script>
 </body>
 </html>
