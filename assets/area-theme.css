@@ -143,3 +143,82 @@ body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress) 
   transform:translateY(-3px);box-shadow:0 14px 30px rgba(30,80,120,.12)!important;
  }
 }
+
+
+/* ---------------------------------------------------------
+   Portal parent -> child colour contract (19 Nov 2026).
+   One category accent per route, including deeply nested lessons.
+   Keep correctness red/green and other semantic feedback untouched.
+   --------------------------------------------------------- */
+body.sc-area-test{
+ --sc-area-key:#167D8E;--sc-area-deep:#146576;--sc-area-soft:#E5F6F5;
+ --sc-area-border:#95D3D4;--gl-accent:#167D8E;--gl-accent-soft:#E5F6F5;
+}
+body.sc-area-practice{
+ --sc-area-key:#176FAF;--sc-area-deep:#125F99;--sc-area-soft:#E8F4FD;
+ --sc-area-border:#A6CEEB;--gl-accent:#176FAF;--gl-accent-soft:#E8F4FD;
+}
+body.sc-area-foundations{
+ --sc-area-key:#168267;--sc-area-deep:#136A55;--sc-area-soft:#E7F6EF;
+ --sc-area-border:#A3DBC3;--gl-accent:#168267;--gl-accent-soft:#E7F6EF;
+ --accent:#168267;--primary:#168267;--violet:#168267;
+ --sc-blue:#168267;--sc-listening-accent:#168267;
+}
+body.sc-area-progress{
+ --sc-area-key:#345F99;--sc-area-deep:#2D5185;--sc-area-soft:#E9F1FC;
+ --sc-area-border:#B2C9E6;--gl-accent:#345F99;--gl-accent-soft:#E9F1FC;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(button.primary,.btn.primary,.primary-link,.submit,.nav-submit,.cam-submit,.cam-audio-main,
+ .launch,.start-btn,.start-button,#startBtn,#submitBtn,#submitButton,
+ .gl-audio-play,.gl-audio-submit,.gap-guide-start):not(:disabled){
+ background:var(--sc-area-key)!important;
+ border-color:var(--sc-area-key)!important;
+ color:#fff!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(.tabs button.active,.steps button.active,.lessonbar button.active,
+ .tab.active,.filter.active,.segmented button.active,.nav-tabs .active,
+ .audio-btn.primary,.audio-play-primary):not(.correct):not(.incorrect){
+ background:var(--sc-area-key)!important;
+ border-color:var(--sc-area-key)!important;color:#fff!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(.tag,.pill,.eyebrow,.count,.page-badge,.study-progress,
+ .gl-audio-icon,.audio-icon):not(.success):not(.error){
+ background:var(--sc-area-soft)!important;
+ border-color:var(--sc-area-border)!important;
+ color:var(--sc-area-deep)!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(a.back,.back-link,.gap-guide-replay,.step-guide-replay,.step-available,
+ .selection-option:has(input:checked),.match-token.selected):not(.correct):not(.incorrect){
+ border-color:var(--sc-area-border)!important;
+ color:var(--sc-area-deep)!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(.gl-audio-seek,.gl-audio-volume input,.seek,.volume,input[type=range],
+ input[type=radio],input[type=checkbox]):not(:disabled){
+ accent-color:var(--sc-area-key)!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(.progress i,.progress-track span,.portal-progress-fill,.progress-bar-fill):not(.correct):not(.incorrect){
+ background:var(--sc-area-key)!important;
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(button.primary,.submit,.nav-submit,.launch,.gl-audio-play,.gl-audio-submit):hover:not(:disabled){
+ filter:brightness(1.07);
+}
+body:is(.sc-area-test,.sc-area-practice,.sc-area-foundations,.sc-area-progress)
+ :is(button,a,input,select):focus-visible{
+ outline-color:var(--sc-area-key)!important;
+}
+body.sc-area-foundations :is(.gl-audio-play,.gl-audio-submit,.gap-guide-start){
+ --gl-accent:#168267!important;
+}
+body.sc-area-foundations :is(.gap-guide-eyebrow,.gl-audio-head strong,.study-word,.match-word,.vocab-word){
+ color:var(--sc-area-deep)!important;
+}
+/* Leave red errors and green correct answers semantic, even inside blue/teal sections. */
+body :is(.practice-correct,.answer-correct,.gap-word.correct,.gap-lexeme.correct){--sc-feedback-ok:#18834e}
+body :is(.practice-incorrect,.answer-wrong,.gap-word.incorrect,.gap-lexeme.incorrect){--sc-feedback-bad:#c34154}
