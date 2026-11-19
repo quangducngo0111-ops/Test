@@ -1,3 +1,5 @@
+/* Universal quick access, including standalone exercise pages. */
+(()=>{if(window.__scQuickLoaderQueued||document.getElementById('sc-quick-shell')||document.querySelector('script[data-sc-quick-bootstrap]'))return;const current=document.currentScript;if(!current)return;const loader=document.createElement('script');loader.dataset.scQuickBootstrap='1';loader.src=new URL('../../assets/quick-access-loader.js?v=20261119-05',current.src).href;(document.body||document.head).append(loader)})();
 /* Cambridge Reading Practice: generic rendering engine. Original passage, prompts and answer key from user-provided PDF. */
 (()=>{'use strict';const dataNode=document.getElementById('exercise-data');if(!dataNode)return;
 const D=JSON.parse(dataNode.textContent),key='CAM_PRACTICE_'+D.id;
