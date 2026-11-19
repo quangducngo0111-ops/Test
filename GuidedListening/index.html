@@ -65,7 +65,12 @@
 #content .match-targets .match-card{min-width:0;margin:0;padding:16px;border-radius:16px}
 #content .match-word{display:flex;gap:10px;align-items:center;margin-bottom:12px;font-size:17px}
 #content .match-slot{display:block;width:100%;min-height:50px;text-align:left;border:2px dashed #cad6eb;background:#f7f9ff;border-radius:11px;padding:10px 13px;font-size:14px;color:#6a7892;white-space:normal}
-#content .match-slot.has-value{border:1px solid #a3bde9;background:#eaf1ff;color:#1c467e;font-weight:750}
+#content .match-slot.has-value{border:1px solid #a3bde9;background:#eaf1ff;color:#1c467e;font-weight:750;cursor:grab}
+#content .match-slot.has-value:active{cursor:grabbing}
+#content .match-placement{display:flex;align-items:stretch;gap:7px}
+#content .match-placement .match-slot{flex:1;min-width:0}
+#content .match-remove{flex:0 0 42px;border:1px solid #e1b4bd;background:#fff4f5;color:#ae334b;border-radius:11px;padding:0;font-size:24px;line-height:1}
+#content .match-remove:hover,#content .match-remove:focus-visible{background:#ffe2e7;border-color:#cb6879}
 #content .match-bank-title{font-weight:850;color:#233655;font-size:17px;margin:16px 0 10px}
 #content .match-bank{display:flex;gap:9px;flex-wrap:wrap;padding:13px;background:#f3f6ff;border:1px solid #dae4f5;border-radius:16px;min-height:75px;max-height:185px;overflow-y:auto;position:sticky;top:60px;z-index:4;box-shadow:0 8px 20px #203d7514}
 #content .match-token{border:1px solid #9db8e2;border-radius:11px;background:#fff;padding:11px 14px;color:#24466b;cursor:grab;max-width:100%;white-space:normal;touch-action:manipulation}
@@ -206,7 +211,19 @@ function speakVocab(i){
 }
 function dragVocab(event){dragMeaning=event.currentTarget.dataset.meaning;event.dataTransfer.setData('text/plain',dragMeaning);event.dataTransfer.effectAllowed='move'}
 function allowVocabDrop(event){event.preventDefault();event.dataTransfer.dropEffect='move'}
-function dropVocab(event,i){event.preventDefault();const word=event.dataTransfer.getData('text/plain')||dragMeaning;dragMeaning='';assignVocab(i,word)}
+function dropVocab(event,i){event.preventDefault();event.stopPropagation();const word=event.dataTransfer.getData('text/plain')||dragMeaning;dragMeaning='';assignVocab(i,word)}
+function dragAssignedVocab(event,i){
+ const meaning=item('match',i);if(!meaning){event.preventDefault();return}
+ dragMeaning=meaning;event.dataTransfer.setData('text/plain',meaning);event.dataTransfer.effectAllowed='move';
+}
+function returnVocabToBank(event){
+ event.preventDefault();
+ const meaning=event.dataTransfer.getData('text/plain')||dragMeaning;
+ dragMeaning='';if(!meaning||!store.match)return;
+ for(const i of Object.keys(store.match))if(store.match[i]===meaning)delete store.match[i];
+ activeMeaning='';save();refreshVocabGame();
+}
+function removeVocabAssignment(i){if(!store.match||!store.match[i])return;delete store.match[i];activeMeaning='';save();refreshVocabGame()}
 function selectVocabToken(el){activeMeaning=el.dataset.meaning;document.querySelectorAll('.match-token').forEach(x=>x.classList.toggle('selected',x===el));}
 function useVocabSlot(i){if(activeMeaning){assignVocab(i,activeMeaning);activeMeaning=''}else if(item('match',i)){delete store.match[i];save();refreshVocabGame()}}
 function assignVocab(i,meaning){
@@ -226,7 +243,7 @@ function refreshVocabGame(){
 }
 function stageHTML(l){
 if(stage===-1)return '<h2>01. Học từ vựng trước khi luyện</h2><p class="muted">Đọc nghĩa, ngữ cảnh và bấm nút loa để nghe phát âm. Đây là nhóm từ nền tảng giúp hiểu chủ đề; các đáp án cần điền trong bài nghe vẫn được giữ kín.</p><div class="study-progress">'+l.vocab.length+' từ và cụm từ · '+(l.id==='01'?'Sinh vật xâm lấn, tác động và kiểm soát':'Động lực, định hướng mục tiêu và phong cách lãnh đạo')+'</div><div class="study-grid">'+l.vocab.map((v,i)=>'<article class="study-card"><span class="study-number">'+String(i+1).padStart(2,'0')+'</span><div class="study-text"><strong>'+escapeHtml(v[0])+'</strong><span>'+escapeHtml(v[1])+'</span><small class="study-example">'+escapeHtml(vocabExample(v[0]))+'</small></div><button type="button" class="study-sound" aria-label="Phát âm '+escapeHtml(v[0])+'" onclick="speakVocab('+i+')">🔊</button></article>').join('')+'</div>';
-if(stage===0)return '<h2>02. Vocabulary Match Challenge</h2><p class="muted">Kéo thẻ nghĩa ở ngân hàng bên dưới vào từ tiếng Anh tương ứng. Trên điện thoại, chạm thẻ nghĩa rồi chạm vào ô từ. Có thể bấm vào thẻ đã ghép để trả về ngân hàng.</p><div class="match-status" id="matchStatus" aria-live="polite"></div><div class="match-bank-title">Ngân hàng thẻ nghĩa <span id="matchBankCount"></span></div><div class="match-bank" id="matchBank">'+vocabBank(l).map(v=>'<button type="button" draggable="true" class="match-token" data-meaning="'+escapeHtml(v)+'" ondragstart="dragVocab(event)" onclick="selectVocabToken(this)">'+escapeHtml(v)+'</button>').join('')+'</div><div class="match-targets">'+l.vocab.map((v,i)=>'<div class="tile match-card"><div class="match-word"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><strong>'+escapeHtml(v[0])+'</strong></div><button class="match-slot'+(item('match',i)?' has-value':'')+'" type="button" data-match-index="'+i+'" ondragover="allowVocabDrop(event)" ondrop="dropVocab(event,'+i+')" onclick="useVocabSlot('+i+')" aria-label="Ghép nghĩa cho '+escapeHtml(v[0])+'">'+(item('match',i)?escapeHtml(item('match',i)):'Thả hoặc chạm thẻ nghĩa vào đây')+'</button></div>').join('')+'</div><p class="muted small">Các thẻ đã ghép sẽ biến mất khỏi ngân hàng. Đáp án chỉ được chấm khi bấm “Tiếp tục”; không hiện gợi ý đáp án đúng.</p>';
+if(stage===0)return '<h2>02. Vocabulary Match Challenge</h2><p class="muted">Kéo hoặc chạm thẻ nghĩa để ghép với từ. Thẻ đã ghép có thể kéo sang ô khác, kéo về ngân hàng hoặc bấm × để bỏ ghép.</p><div class="match-status" id="matchStatus" aria-live="polite"></div><div class="match-bank-title">Ngân hàng thẻ nghĩa <span id="matchBankCount"></span></div><div class="match-bank" id="matchBank" ondragover="allowVocabDrop(event)" ondrop="returnVocabToBank(event)" aria-label="Ngân hàng thẻ nghĩa: kéo thẻ đã ghép vào đây để trả lại">'+vocabBank(l).map(v=>'<button type="button" draggable="true" class="match-token" data-meaning="'+escapeHtml(v)+'" ondragstart="dragVocab(event)" onclick="selectVocabToken(this)">'+escapeHtml(v)+'</button>').join('')+'</div><div class="match-targets">'+l.vocab.map((v,i)=>'<div class="tile match-card"><div class="match-word"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><strong>'+escapeHtml(v[0])+'</strong></div><div class="match-placement"><button class="match-slot'+(item('match',i)?' has-value':'')+'" type="button" draggable="'+(item('match',i)?'true':'false')+'" data-match-index="'+i+'" ondragstart="dragAssignedVocab(event,'+i+')" ondragover="allowVocabDrop(event)" ondrop="dropVocab(event,'+i+')" onclick="useVocabSlot('+i+')" aria-label="'+(item('match',i)?'Kéo để chuyển, hoặc chạm để bỏ ghép: ':'Ghép nghĩa cho ')+escapeHtml(v[0])+'">'+(item('match',i)?escapeHtml(item('match',i)):'Thả hoặc chạm thẻ nghĩa vào đây')+'</button>'+(item('match',i)?'<button type="button" class="match-remove" aria-label="Bỏ ghép nghĩa cho '+escapeHtml(v[0])+'" title="Bỏ ghép" onclick="removeVocabAssignment('+i+')">×</button>':'')+'</div></div>').join('')+'</div><p class="muted small">Các thẻ đã ghép sẽ biến mất khỏi ngân hàng. Đáp án chỉ được chấm khi bấm “Tiếp tục”; không hiện gợi ý đáp án đúng.</p>';
 
 if(stage===1)return '<h2>02. Vocabulary Check</h2><p class="muted">Đạt ít nhất 4/5 để tiếp tục.</p>'+l.quiz.map((q,i)=>inputCard((i+1)+'. '+q[0],'quiz',i,q[1])).join('');
 if(stage===2)return '<h2>03. Keyword Recognition</h2><p class="muted">Dự đoán loại từ cần điền. Không dự đoán đáp án cụ thể.</p>'+l.keywords.map((q,i)=>inputCard((i+1)+'. '+escapeHtml(q[0])+' ______','keyword',i,q[1])).join('');
