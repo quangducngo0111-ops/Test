@@ -1,4 +1,12 @@
 (()=>{"use strict";
+// Every individual Pre-IELTS Listening lesson must retain the shared AssistiveTouch.
+const sharedLessonScript=document.currentScript;
+if(sharedLessonScript && !document.querySelector('script[data-sc-quick-access],script[src*="smartcom-ui.js"]')){
+ const floatingNav=document.createElement('script');
+ floatingNav.dataset.scQuickAccess='1';
+ floatingNav.src=new URL('../../../shared/smartcom-ui.js?v=20261119-listening-restore06',sharedLessonScript.src).href;
+ document.body.append(floatingNav);
+}
 const L=window.INTENSIVE_LESSON;if(!L)return;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
