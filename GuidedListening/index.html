@@ -28,6 +28,25 @@
 #content .choice-row .options label.answer-wrong input{accent-color:#c93f4f}
 @media(max-width:900px){#content .choice-row{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){#content .choice-row .options{grid-template-columns:1fr;gap:7px}#content .choice-row{padding:13px}}
+
+/* Feedback highlights the whole question, not individual answer choices. */
+#content .choice-row .options label.answer-correct,
+#content .choice-row .options label.answer-wrong{background:#fff!important;border-color:var(--line)!important;color:inherit!important;font-weight:normal!important}
+#content .choice-row .options label:has(input:checked){background:#edf3ff!important;border-color:#72a3f4!important;color:inherit!important;font-weight:500!important}
+#content .tile.practice-correct{border-color:#70c798!important;background:#f0faf4!important}
+#content .tile.practice-incorrect{border-color:#f09aa7!important;background:#fff2f3!important}
+#content .tile.practice-unanswered{border-color:#e5bf78!important;background:#fffbf0!important}
+/* Vocabulary cards take both sides of the page; one compact card per word. */
+#content .vocab-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+#content .vocab-grid .vocab-row{display:flex;flex-direction:column;align-items:stretch;gap:13px;min-width:0;margin:0;padding:18px 20px;border-radius:17px}
+#content .vocab-top{display:flex;align-items:center;gap:11px;min-height:30px}
+#content .vocab-index{display:inline-grid;place-items:center;flex:none;width:32px;height:32px;border-radius:9px;background:#eef2fc;color:#5b6d94;font-size:12px;font-weight:800}
+#content .vocab-word{font-size:18px;font-weight:800;line-height:1.3;color:#1c2a49}
+#content .vocab-grid .vocab-select{width:100%;max-width:none;min-width:0;min-height:47px;border-radius:12px;background:#fff;font-size:14px}
+#content .vocab-grid .practice-correct .vocab-index{background:#d9f3e4;color:#28734a}
+#content .vocab-grid .practice-incorrect .vocab-index{background:#ffe0e4;color:#ab3646}
+#content .vocab-grid .practice-incorrect .vocab-select{border-color:#f09aa7!important}
+@media(max-width:680px){#content .vocab-grid{grid-template-columns:minmax(0,1fr);gap:10px}#content .vocab-grid .vocab-row{padding:14px 15px}}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -80,18 +99,16 @@ function markPracticeAnswers(){
  const lesson=lessons[lid];
  const group=stage===0?'match':stage===1?'quiz':stage===2?'keyword':stage===3?'para':null;
  if(!group)return;
- const items=stage===0?lesson.vocab:stage===1?lesson.quiz:stage===2?lesson.keywords:lesson.para;
+ const entries=stage===0?lesson.vocab:stage===1?lesson.quiz:stage===2?lesson.keywords:lesson.para;
  document.querySelectorAll('#content .tile').forEach((tile,i)=>{
-  const entry=items[i];if(!entry)return;
-  const correct=stage===1||stage===2?entry[2]:entry[1];
+  const entry=entries[i];if(!entry)return;
+  const expected=stage===1||stage===2?entry[2]:entry[1];
   const selected=item(group,i);
-  tile.classList.toggle('practice-correct',!!selected&&selected===correct);
-  tile.classList.toggle('practice-incorrect',!selected||selected!==correct);
-  tile.querySelectorAll('.options label').forEach(label=>{
-   const option=label.querySelector('input');
-   label.classList.toggle('answer-correct',option?.value===correct);
-   label.classList.toggle('answer-wrong',!!selected&&option?.value===selected&&selected!==correct);
-  });
+  tile.classList.toggle('practice-correct',!!selected&&selected===expected);
+  tile.classList.toggle('practice-incorrect',!!selected&&selected!==expected);
+  tile.classList.toggle('practice-unanswered',!selected);
+  // Never reveal the correct option; show feedback on the overall card only.
+  tile.querySelectorAll('.options label').forEach(label=>label.classList.remove('answer-correct','answer-wrong'));
  });
 }
 function showPracticeFeedback(message,wrongIndexes){
@@ -107,7 +124,7 @@ function showPracticeFeedback(message,wrongIndexes){
 }
 function clearPracticeFeedback(){
  const notice=$('practiceFeedback');if(notice){notice.hidden=true;notice.replaceChildren()}
- document.querySelectorAll('#content .practice-correct,#content .practice-incorrect').forEach(el=>el.classList.remove('practice-correct','practice-incorrect'));
+ document.querySelectorAll('#content .practice-correct,#content .practice-incorrect,#content .practice-unanswered').forEach(el=>el.classList.remove('practice-correct','practice-incorrect','practice-unanswered'));
  document.querySelectorAll('#content .answer-correct,#content .answer-wrong').forEach(el=>el.classList.remove('answer-correct','answer-wrong'));
 }
 function put(section,i,value){
@@ -122,7 +139,7 @@ function put(section,i,value){
 function item(section,i){return store[section]?.[i]||''}
 function inputCard(label,group,i,opts){return '<div class="tile choice-row"><div class="question">'+label+'</div><div class="options">'+opts.map(o=>'<label><input type="radio" name="'+group+i+'" value="'+escapeHtml(o)+'" '+(item(group,i)===o?'checked':'')+' onchange="put(\''+group+'\','+i+',this.value)"> '+escapeHtml(o)+'</label>').join('')+'</div></div>'}
 function textCard(label,group,i){return '<div class="tile"><div class="question">'+label+'</div><input type="text" autocomplete="off" value="'+escapeHtml(item(group,i))+'" oninput="put(\''+group+'\','+i+',this.value)" placeholder="Write ONE WORD"></div>'}
-function stageHTML(l){if(stage===0)return '<h2>01. Vocabulary Game</h2><p class="muted">Chọn nghĩa tiếng Việt đúng cho từng từ tiếng Anh. Hoàn thành tất cả các từ rồi nhấn “Tiếp tục”.</p>'+l.vocab.map((v,i)=>'<div class="tile vocab-row"><div class="vocab-word">'+escapeHtml(v[0])+'</div><div><select class="vocab-select" aria-label="Choose meaning" onchange="put(\'match\','+i+',this.value)"><option value="">Chọn nghĩa...</option>'+l.vocab.map(x=>'<option '+(item('match',i)===x[1]?'selected':'')+'>'+escapeHtml(x[1])+'</option>').join('')+'</select></div></div>').join('');
+function stageHTML(l){if(stage===0)return '<h2>01. Vocabulary Game</h2><p class="muted">Chọn nghĩa tiếng Việt phù hợp với mỗi từ tiếng Anh. Hoàn thành tất cả các từ rồi nhấn “Tiếp tục”.</p><div class="vocab-grid">'+l.vocab.map((v,i)=>'<div class="tile vocab-row"><div class="vocab-top"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><label class="vocab-word" for="vocabChoice'+i+'">'+escapeHtml(v[0])+'</label></div><select id="vocabChoice'+i+'" class="vocab-select" aria-label="Chọn nghĩa của '+escapeHtml(v[0])+'" onchange="put(\\'match\\','+i+',this.value)"><option value="">Chọn nghĩa tiếng Việt...</option>'+l.vocab.map(x=>'<option value="'+escapeHtml(x[1])+'" '+(item('match',i)===x[1]?'selected':'')+'>'+escapeHtml(x[1])+'</option>').join('')+'</select></div>').join('')+'</div>';
 if(stage===1)return '<h2>02. Vocabulary Check</h2><p class="muted">Đạt ít nhất 4/5 để tiếp tục.</p>'+l.quiz.map((q,i)=>inputCard((i+1)+'. '+q[0],'quiz',i,q[1])).join('');
 if(stage===2)return '<h2>03. Keyword Recognition</h2><p class="muted">Dự đoán loại từ cần điền. Không dự đoán đáp án cụ thể.</p>'+l.keywords.map((q,i)=>inputCard((i+1)+'. '+escapeHtml(q[0])+' ______','keyword',i,q[1])).join('');
 if(stage===3)return '<h2>04. Paraphrase Matching</h2><p class="muted">Ghép các cụm tương đương, không sử dụng nguyên câu chứa đáp án.</p>'+l.para.map((p,i)=>'<div class="tile"><b>'+escapeHtml(p[0])+'</b><select onchange="put(\'para\','+i+',this.value)"><option value="">Chọn cụm tương đương...</option>'+l.para.map(x=>'<option '+(item('para',i)===x[1]?'selected':'')+'>'+escapeHtml(x[1])+'</option>').join('')+'</select></div>').join('');
