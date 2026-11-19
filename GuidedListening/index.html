@@ -84,6 +84,19 @@
 .steps button.step-available:hover{border-color:#94a9df;background:#f3f6ff}
 .steps button.step-locked,.steps button:disabled{opacity:.46;cursor:not-allowed;background:#f2f3f7;color:#8c97aa;border-color:#e2e5ed}
 .steps button.active{opacity:1;cursor:default}
+
+.gap-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:15px;align-items:start}
+.gap-lines{padding:8px 18px;border:1px solid #e1e7f0;border-radius:16px}
+.gap-line{display:grid;grid-template-columns:68px minmax(0,1fr);gap:10px;padding:13px 0;border-bottom:1px solid #e4e9f2;line-height:2.1}
+.gap-line:last-child{border:0}.gap-role{font-size:10px;color:#6c4bb8;font-weight:800}
+.gap-word{width:132px!important;max-width:100%!important;display:inline-block!important;margin:0 4px;vertical-align:middle;min-height:38px!important;border-color:#9277db!important}
+.gap-word.correct{background:#ebfaf0!important;border-color:#52ae77!important}
+.gap-word.incorrect{background:#fff2f4!important;border-color:#d66974!important}
+.gap-player{position:sticky;top:65px;background:#fff;border:1px solid #e1e7f0;border-radius:15px;padding:13px;display:grid;gap:9px}
+.gap-player audio{margin:0}.gap-player input{max-width:100%}
+.gap-actions{display:flex;gap:5px;flex-wrap:wrap}.gap-actions button{font-size:12px;padding:7px}
+.gap-upload{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}
+@media(max-width:760px){.gap-wrap{grid-template-columns:1fr}.gap-player{grid-row:1;position:static}.gap-line{grid-template-columns:56px minmax(0,1fr)}}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -261,6 +274,83 @@ function refreshVocabGame(){
  // Do not reveal correctness during placement.
  window.scrollTo({top:y,behavior:'instant'});
 }
+
+function fullTranscriptKey(){return 'sc-guided-transcript-'+lessons[lid].id}
+function transcriptData(){try{return JSON.parse(sessionStorage.getItem(fullTranscriptKey())||'null')}catch(e){return null}}
+function parseSRT(text){
+ const raw=String(text||'').replaceAll('\r','').trim();
+ let segments=raw.split('\n\n').filter(Boolean);
+ const parsed=[];
+ for(const part of segments){
+  const lines=part.split('\n').map(x=>x.trim()).filter(Boolean);
+  const time=lines.findIndex(x=>x.includes('-->'));
+  let content=(time<0?lines:lines.slice(time+1)).join(' ').replace(/<[^>]*>/g,'').trim();
+  if(content)parsed.push({speaker:'LECTURER',text:content});
+ }
+ if(parsed.length<=1){
+  return raw.split(/(?<=[.!?])\s+(?=[A-Z])/).map(text=>({speaker:'LECTURER',text:text.trim()})).filter(x=>x.text);
+ }
+ return parsed.filter((x,i)=>i===0||x.text!==parsed[i-1].text);
+}
+async function importFullTranscript(el){
+ const f=el.files?.[0];if(!f)return;
+ if(f.size>250000){alert('Chọn transcript dưới 250 KB.');return}
+ const turns=parseSRT(await f.text());
+ if(turns.length<10){alert('Transcript cần bao gồm đầy đủ nội dung bài nghe.');return}
+ try{sessionStorage.setItem(fullTranscriptKey(),JSON.stringify({name:f.name,turns}))}
+ catch(e){alert('Không thể lưu transcript trên trình duyệt.');return}
+ store.gapTranscriptAnswers={};save();render();
+}
+function fullGapExercise(){
+ const source=transcriptData();if(!source)return null;
+ const stop=new Set(lessons[lid].answer.flat().map(x=>x.toLowerCase()));
+ const blanks=[],lookup=new Map();
+ source.turns.forEach((turn,line)=>{
+  if(blanks.length>=35)return;
+  const words=[...turn.text.matchAll(/\b[a-zA-Z][a-zA-Z'-]{4,}\b/g)].filter(m=>!stop.has(m[0].toLowerCase())&&!/^(which|there|these|those|would|could|their|where|today|people|about|after|before|because|should|through|really|other)$/i.test(m[0]));
+  if(words.length&&line%Math.max(1,Math.floor(source.turns.length/30))===0){
+   const selected=words[(line+3)%words.length];
+   lookup.set(line,{index:blanks.length,start:selected.index,word:selected[0]});
+   blanks.push(selected[0]);
+  }
+ });
+ return {source,blanks,lookup};
+}
+function gapInput(i,value){if(!store.gapTranscriptAnswers)store.gapTranscriptAnswers={};store.gapTranscriptAnswers[i]=value;save();const el=document.querySelector('[data-full-gap="'+i+'"]');el?.classList.remove('correct','incorrect')}
+function fullGapResult(){
+ const task=fullGapExercise();if(!task)return null;
+ const responses=store.gapTranscriptAnswers||{};
+ const normalize=x=>String(x||'').trim().toLowerCase().replaceAll('’',"'");
+ return {total:task.blanks.length,correct:task.blanks.filter((word,i)=>normalize(word)===normalize(responses[i])).length};
+}
+function checkFullTranscript(){
+ const task=fullGapExercise();if(!task||!task.blanks.length)return;
+ const responses=store.gapTranscriptAnswers||{};
+ task.blanks.forEach((word,i)=>{
+  const node=document.querySelector('[data-full-gap="'+i+'"]');
+  if(!node)return;
+  const correct=String(responses[i]||'').trim().toLowerCase()===word.toLowerCase();
+  node.classList.toggle('correct',correct);node.classList.toggle('incorrect',!correct);
+ });
+ const result=fullGapResult(),score=Math.round(100*result.correct/result.total);
+ const el=document.getElementById('gapFullResult');if(el)el.textContent=result.correct+'/'+result.total+' · '+score+'%';
+}
+function gapSeek(n){const a=document.getElementById('gapAudio');if(a)a.currentTime=Math.max(0,a.currentTime+n)}
+function gapToggle(){const a=document.getElementById('gapAudio');if(a){if(a.paused)a.play().catch(()=>{});else a.pause()}}
+function gapSpeed(v){const a=document.getElementById('gapAudio');if(a)a.playbackRate=Number(v)||1}
+function gapAudioFile(el){const f=el.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);const a=document.getElementById('gapAudio');if(a){a.src=realAudio;a.load()}}
+function fullGapHTML(){
+ const task=fullGapExercise();
+ const upload='<div class="gap-upload"><label><b>Transcript SRT/TXT</b> <input type="file" accept=".srt,.txt,text/plain" onchange="importFullTranscript(this)"></label>'+(task?'<span class="muted small">'+escapeHtml(task.source.name)+'</span>':'')+'</div>';
+ if(!task)return '<h2>06. Listening Gap-fill</h2>'+upload+'<p class="muted">Chưa có transcript đầy đủ trong kho bài học. Tải bản transcript đúng với audio để luyện trên toàn bộ lời thoại.</p>';
+ const rows=task.source.turns.map((turn,line)=>{
+  const blank=task.lookup.get(line);
+  let words=escapeHtml(turn.text);
+  if(blank)words=escapeHtml(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+escapeHtml(turn.text.slice(blank.start+blank.word.length));
+  return '<div class="gap-line"><b class="gap-role">'+escapeHtml(turn.speaker)+'</b><div>'+words+'</div></div>';
+ }).join('');
+ return '<h2>06. Listening Gap-fill</h2>'+upload+'<div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><b>🎧 Audio luyện tập</b><audio id="gapAudio" controls preload="metadata" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><input type="file" accept="audio/*" onchange="gapAudioFile(this)"><div class="gap-actions"><button onclick="gapSeek(-10)">−10s</button><button onclick="gapToggle()">Phát / Dừng</button><button onclick="gapSeek(10)">+10s</button><select aria-label="Tốc độ" onchange="gapSpeed(this.value)"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></div><button onclick="checkFullTranscript()">Kiểm tra</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
+}
 function stageHTML(l){
 if(stage===-1)return '<h2>01. Học từ vựng trước khi luyện</h2><p class="muted">Đọc nghĩa, ngữ cảnh và bấm nút loa để nghe phát âm. Đây là nhóm từ nền tảng giúp hiểu chủ đề; các đáp án cần điền trong bài nghe vẫn được giữ kín.</p><div class="study-progress">'+l.vocab.length+' từ và cụm từ · '+(l.id==='01'?'Sinh vật xâm lấn, tác động và kiểm soát':'Động lực, định hướng mục tiêu và phong cách lãnh đạo')+'</div><div class="study-grid">'+l.vocab.map((v,i)=>'<article class="study-card"><span class="study-number">'+String(i+1).padStart(2,'0')+'</span><div class="study-text"><strong>'+escapeHtml(v[0])+'</strong><span>'+escapeHtml(v[1])+'</span><small class="study-example">'+escapeHtml(vocabExample(v[0]))+'</small></div><button type="button" class="study-sound" aria-label="Phát âm '+escapeHtml(v[0])+'" onclick="speakVocab('+i+')">🔊</button></article>').join('')+'</div>';
 if(stage===0)return '<h2>02. Vocabulary Match Challenge</h2><p class="muted">Kéo hoặc chạm thẻ nghĩa để ghép với từ. Thẻ đã ghép có thể kéo sang ô khác, kéo về ngân hàng hoặc bấm × để bỏ ghép.</p><div class="match-status" id="matchStatus" aria-live="polite"></div><div class="match-bank-title">Ngân hàng thẻ nghĩa <span id="matchBankCount"></span></div><div class="match-bank" id="matchBank" ondragover="allowVocabDrop(event)" ondrop="returnVocabToBank(event)" aria-label="Ngân hàng thẻ nghĩa: kéo thẻ đã ghép vào đây để trả lại">'+vocabBank(l).map(v=>'<button type="button" draggable="true" class="match-token" data-meaning="'+escapeHtml(v)+'" ondragstart="dragVocab(event)" onclick="selectVocabToken(this)">'+escapeHtml(v)+'</button>').join('')+'</div><div class="match-targets">'+l.vocab.map((v,i)=>'<div class="tile match-card"><div class="match-word"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><strong>'+escapeHtml(v[0])+'</strong></div><div class="match-placement"><button class="match-slot'+(item('match',i)?' has-value':'')+'" type="button" draggable="'+(item('match',i)?'true':'false')+'" data-match-index="'+i+'" ondragstart="dragAssignedVocab(event,'+i+')" ondragover="allowVocabDrop(event)" ondrop="dropVocab(event,'+i+')" onclick="useVocabSlot('+i+')" aria-label="'+(item('match',i)?'Kéo để chuyển, hoặc chạm để bỏ ghép: ':'Ghép nghĩa cho ')+escapeHtml(v[0])+'">'+(item('match',i)?escapeHtml(item('match',i)):'Thả hoặc chạm thẻ nghĩa vào đây')+'</button>'+(item('match',i)?'<button type="button" class="match-remove" aria-label="Bỏ ghép nghĩa cho '+escapeHtml(v[0])+'" title="Đưa thẻ về ngân hàng" onclick="removeVocabAssignment('+i+')">Bỏ ghép</button>':'')+'</div></div>').join('')+'</div><p class="muted small">Các thẻ đã ghép sẽ biến mất khỏi ngân hàng. Đáp án chỉ được chấm khi bấm “Tiếp tục”; không hiện gợi ý đáp án đúng.</p>';
@@ -268,7 +358,7 @@ if(stage===0)return '<h2>02. Vocabulary Match Challenge</h2><p class="muted">Ké
 if(stage===1)return '<h2>02. Vocabulary Check</h2><p class="muted">Đạt ít nhất 4/5 để tiếp tục.</p>'+l.quiz.map((q,i)=>inputCard((i+1)+'. '+q[0],'quiz',i,q[1])).join('');
 if(stage===2)return '<h2>03. Keyword Recognition</h2><p class="muted">Dự đoán loại từ cần điền. Không dự đoán đáp án cụ thể.</p>'+l.keywords.map((q,i)=>inputCard((i+1)+'. '+escapeHtml(q[0])+' ______','keyword',i,q[1])).join('');
 if(stage===3)return '<h2>04. Paraphrase Matching</h2><p class="muted">Ghép cách diễn đạt trong đề bài (bên trái) với cách nói thực tế trong transcript (ô chọn). Các cụm được đối chiếu theo nội dung bài nghe và không tiết lộ từ cần điền.</p><div class="vocab-grid">'+l.para.map((p,i)=>'<div class="tile vocab-row"><div class="vocab-top"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><label class="vocab-word" for="paraChoice'+i+'">'+escapeHtml(p[0])+'</label></div><select class="vocab-select" id="paraChoice'+i+'" onchange="put(\'para\','+i+',this.value)"><option value="">Chọn cụm tương đương...</option>'+shuffledParaphraseChoices(l).map(meaning=>'<option value="'+escapeHtml(meaning)+'" '+(item('para',i)===meaning?'selected':'')+'>'+escapeHtml(meaning)+'</option>').join('')+'</select></div>').join('')+'</div>';
-if(stage===4)return '<h2>05. Listening Gap-fill</h2><p class="muted">Audio luyện tập được đọc bằng giọng tổng hợp, không lấy từ transcript đề thi. Nghe rồi điền từ.</p>'+l.practice.map((p,i)=>'<div class="tile"><button onclick="speakPractice('+i+')">▶ Nghe câu '+(i+1)+'</button><div class="question">'+escapeHtml(p[0])+'</div><input type="text" value="'+escapeHtml(item('practice',i))+'" oninput="put(\'practice\','+i+',this.value)" placeholder="Write ONE WORD"></div>').join('');
+if(stage===4)return fullGapHTML();
 if(stage===5)return '<h2>06. Real Listening Test</h2><p class="note">SECTION 4 — Questions 31–40. Write ONE WORD ONLY for each answer. Đáp án sẽ chỉ hiện sau khi nộp.</p><p><b>Audio: '+escapeHtml(l.audio)+'</b></p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'" onerror="audioError(this)"></audio><div id="audioNotice" class="muted small">Audio tự động phát từ thư mục GuidedListening khi file MP3 đã có trên GitHub. Nếu chưa tải được, chọn tệp từ máy: <input type="file" accept="audio/*" onchange="loadAudio(this)"></div>'+l.questions.map((q,i)=>textCard('<span class="muted">'+(i+31)+'. </span>'+escapeHtml(q),'real',i)).join('')+(submitted?'<p class="ok">Đã nộp bài. Chuyển sang Review để xem kết quả.</p>':'');
 let score=l.answer.filter((arr,i)=>arr.includes(safe(item('real',i)))).length;
 return '<h2>07. Personalized Review</h2><p class="muted">Nghe lại từng đáp án theo mốc thời gian SRT gốc. Nếu audio chưa có trên GitHub, hãy chọn file MP3 tương ứng bên dưới.</p><audio controls preload="metadata" id="audio" src="'+(realAudio||('./'+encodeURIComponent(l.audio)))+'"></audio><input type="file" accept="audio/*" onchange="loadAudio(this)" aria-label="Chọn MP3 bài nghe"><div class="summary">'+score+'/10 câu đúng</div><p>'+ (10-score)+' câu sai. Đáp án và chứng cứ transcript chỉ hiện sau khi nộp bài.</p>'+l.answer.map((a,i)=>{let ok=a.includes(safe(item('real',i)));return '<div class="tile"><b class="'+(ok?'ok':'bad')+'">Q'+(i+31)+' · '+(ok?'Đúng':'Sai')+'</b><p>Đã điền: '+escapeHtml(item('real',i)||'—')+'</p><p>Đáp án: <b>'+escapeHtml(a.join(' / '))+'</b></p><p class="muted small">Transcript: '+escapeHtml(l.evidence[i])+'</p><p class="muted small">Mốc SRT: '+cueTime(answerCues[l.id][i][0])+'–'+cueTime(answerCues[l.id][i][1])+'</p><button type="button" onclick="playAnswerCue('+i+')">▶ Nghe đoạn Q'+(i+31)+'</button></div>'}).join('')+'<button onclick="restart()">Làm lại bài</button>'}
@@ -286,7 +376,7 @@ function change(dir){
 if(stage===1){if(l.quiz.some((q,i)=>!item('quiz',i))){showPracticeFeedback('Hãy trả lời đầy đủ 5 câu hỏi trước khi tiếp tục.');return}let sc=l.quiz.filter((q,i)=>item('quiz',i)===q[2]).length;if(sc<4){showPracticeFeedback('Em trả lời đúng '+sc+'/5 câu. Cần ít nhất 4 câu đúng để tiếp tục. Hãy kiểm tra lại nhé.');return}}
 if(stage===2){if(l.keywords.some((q,i)=>!item('keyword',i))){showPracticeFeedback('Hãy hoàn thành tất cả câu hỏi trước khi tiếp tục.');return}let w=l.keywords.filter((q,i)=>item('keyword',i)!==q[2]).length;if(w){showPracticeFeedback('Có '+w+' câu chưa đúng. Hãy kiểm tra lại loại từ đã chọn.');return}}
 if(stage===3){if(l.para.some((p,i)=>!item('para',i))){showPracticeFeedback('Hãy ghép đủ tất cả các cặp trước khi tiếp tục.');return}let w=l.para.filter((p,i)=>item('para',i)!==p[1]).length;if(w){showPracticeFeedback('Có '+w+' cặp chưa đúng. Hãy kiểm tra lại và thử lần nữa.');return}}
-if(stage===4){if(l.practice.some((p,i)=>safe(item('practice',i))!==p[1])){showPracticeFeedback('Một số câu chưa chính xác. Hãy nghe lại và kiểm tra đáp án trước khi tiếp tục.');return}}
+if(stage===4){const result=fullGapResult();if(!result){showPracticeFeedback('Cần tải transcript đầy đủ để thực hiện Gap-fill.');return}if(!result.total||result.correct/result.total<0.8){checkFullTranscript();showPracticeFeedback('Cần trả lời đúng ít nhất 80% số chỗ trống để tiếp tục.');return}}
 if(stage===5&&!submitted){if(!confirm('Nộp bài? Sau bước này, đáp án và transcript sẽ được mở khóa.'))return;submitted=true;store.submitted=true;store.submittedAt=new Date().toISOString();let score=l.answer.filter((a,i)=>a.includes(safe(item('real',i)))).length;try{let h=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]');h.push({skill:'listening',section:'guided',title:'Guided Listening '+l.id+' – '+l.title,score,total:10,correct:score,wrong:10-score,savedAt:store.submittedAt});localStorage.setItem('SC_ATTEMPT_HISTORY_V1',JSON.stringify(h))}catch(e){}save()}
 stage=Math.min(6,stage+1);
 store.maxUnlocked=Math.max(store.maxUnlocked,stage);
