@@ -1,6 +1,12 @@
 
 /* Load the common draggable AssistiveTouch in every standalone lesson using this toolkit. */
 (()=>{if(window.__scQuickLoaderQueued||document.querySelector('script[data-sc-quick-bootstrap]'))return;const current=document.currentScript;if(!current)return;const script=document.createElement('script');script.dataset.scQuickBootstrap='1';script.src=new URL('quick-access-loader.js?v=20261119-05',current.src).href;(document.body||document.head).append(script);})();
+/* Capture and queue submissions even on standalone Reading/Listening URLs. */
+(()=>{const current=document.currentScript;if(!current||window.SmartcomHistory||document.querySelector('script[data-sc-result-ledger]'))return;
+ const tag=document.createElement('script');tag.dataset.scResultLedger='1';
+ tag.src=new URL('../Practice/shared/attempt-history.js?v=20261120-unified02',current.src).href;
+ (document.head||document.documentElement).append(tag);
+})();
 /* Shared portal student identity gate for standalone Reading pages.
  * The homepage owns IELTS_PRACTICE_STUDENT. No query-string names and no
  * external identity/API calls. Protects data consistency, not authentication.
