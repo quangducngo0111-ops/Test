@@ -189,6 +189,7 @@ body.gap-guide-open{overflow:hidden}
 #vocabManualPanel[hidden]{display:none!important}#vocabManualPanel{display:grid;gap:7px}
 #vocabManualPanel input{width:100%;min-width:0;max-width:none}
 .selection-transcript .gap-player{align-self:start}
+.guided-exam-card{padding:17px!important}.guided-q-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}.guided-q-heading strong{color:#17664f}.guided-q-heading span{font-size:11px;color:#66768f}.guided-exam-options{display:grid;gap:8px;margin-top:12px}.guided-exam-options label{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #dbe9e1;border-radius:10px;cursor:pointer}.guided-exam-options input{accent-color:#168267}.guided-exam-options label:has(input:checked){border-color:#6fc29c;background:#effaf3}.guided-match-select{margin:10px 0 0;width:100%;max-width:100%;min-height:44px;border-radius:10px}.guided-exam-card .real-answer-input{max-width:260px;min-height:42px;border-radius:11px}
 </style></head><body><header><a id="guidedBack" href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill" id="guidedAreaPill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -231,7 +232,9 @@ const answerCues={
 };
 function cueTime(seconds){const m=Math.floor(seconds/60);return String(m).padStart(2,'0')+':'+String(Math.floor(seconds%60)).padStart(2,'0')}
 function playAnswerCue(i){
- const t=answerCues[lessons[lid].id]?.[i];if(!t)return;
+ const l=lessons[lid],question=guidedExamQuestions(l)[i];
+ const t=question?.cue?.start!=null?[question.cue.start,question.cue.end]:answerCues[l.id]?.[i];
+ if(!t)return;
  const player=document.getElementById('audio');
  if(!player){alert('Mở bước Real Test để nghe audio của bài trước.');return}
  const start=Math.max(0,t[0]-.6),end=t[1]+.7;
@@ -724,9 +727,75 @@ if(stage===3)return '<h2>05. Vocabulary Check</h2><p class="muted">Đạt ít nh
 if(stage===4)return '<h2>06. Keyword Recognition</h2><p class="muted">Dự đoán loại từ cần điền. Không dự đoán đáp án cụ thể.</p>'+l.keywords.map((q,i)=>inputCard((i+1)+'. '+escapeHtml(q[0])+' ______','keyword',i,q[1])).join('');
 if(stage===5)return '<h2>07. Paraphrase Matching</h2><p class="muted">Ghép cách diễn đạt trong đề bài (bên trái) với cách nói thực tế trong transcript (ô chọn). Các cụm được đối chiếu theo nội dung bài nghe và không tiết lộ từ cần điền.</p><div class="vocab-grid">'+l.para.map((p,i)=>'<div class="tile vocab-row"><div class="vocab-top"><span class="vocab-index">'+String(i+1).padStart(2,'0')+'</span><label class="vocab-word" for="paraChoice'+i+'">'+escapeHtml(p[0])+'</label></div><select class="vocab-select" id="paraChoice'+i+'" onchange="put(\'para\','+i+',this.value)"><option value="">Chọn cụm tương đương...</option>'+shuffledParaphraseChoices(l).map(meaning=>'<option value="'+escapeHtml(meaning)+'" '+(item('para',i)===meaning?'selected':'')+'>'+escapeHtml(meaning)+'</option>').join('')+'</select></div>').join('')+'</div>';
 if(stage===-1)return fullGapHTML();
-if(stage===6)return '<h2>08. Real Listening Test</h2><p class="note">SECTION 4 — Questions 31–40. Write ONE WORD ONLY for each answer. Đáp án sẽ chỉ hiện sau khi nộp.</p><p><b>Audio: '+escapeHtml(l.audio)+'</b></p><audio controls preload="metadata" id="audio" src="'+(realAudio||((getGuidedAudioSrc(l))))+'" onerror="audioError(this)"></audio><div id="audioNotice" class="muted small">Audio bài nghe đã được liên kết trực tiếp.</div>'+l.questions.map((q,i)=>textCard('<span class="muted">'+(i+31)+'. </span>'+escapeHtml(q),'real',i)).join('')+(submitted?'<p class="ok">Đã nộp bài. Chuyển sang Review để xem kết quả.</p>':'');
-let score=l.answer.filter((arr,i)=>arr.includes(safe(item('real',i)))).length;
-return '<h2>09. Personalized Review</h2><p class="muted">Nghe lại từng đáp án theo mốc thời gian của bài.</p><audio controls preload="metadata" id="audio" src="'+(realAudio||getGuidedAudioSrc(l))+'"></audio><div class="summary">'+score+'/10 câu đúng</div><p>'+ (10-score)+' câu sai. Đáp án và chứng cứ transcript chỉ hiện sau khi nộp bài.</p>'+l.answer.map((a,i)=>{let ok=a.includes(safe(item('real',i)));return '<div class="tile"><b class="'+(ok?'ok':'bad')+'">Q'+(i+31)+' · '+(ok?'Đúng':'Sai')+'</b><p>Đã điền: '+escapeHtml(item('real',i)||'—')+'</p><p>Đáp án: <b>'+escapeHtml(a.join(' / '))+'</b></p><p class="muted small">Transcript: '+escapeHtml(l.evidence[i])+'</p><p class="muted small">Mốc SRT: '+cueTime(answerCues[l.id][i][0])+'–'+cueTime(answerCues[l.id][i][1])+'</p><button type="button" onclick="playAnswerCue('+i+')">▶ Nghe đoạn Q'+(i+31)+'</button></div>'}).join('')+'<button onclick="restart()">Làm lại bài</button>'}
+if(stage===6)return renderGuidedRealTest(l);
+return renderGuidedReview(l);
+}
+function guidedExamQuestions(l){
+ if(Array.isArray(l.exam)&&l.exam.length)return l.exam;
+ return l.questions.map((q,i)=>({n:i+31,type:'blank',text:q,answers:l.answer[i],evidence:l.evidence[i],cue:{start:answerCues[l.id]?.[i]?.[0]||0,end:answerCues[l.id]?.[i]?.[1]||0}}));
+}
+function guidedExamCount(l){return guidedExamQuestions(l).reduce((n,q)=>n+(q.type==='two'?2:1),0)}
+function guidedExamAnswer(q,i){
+ const entry=String(item('real',i)||'').trim();
+ if(q.type==='two')return entry.split(',').filter(x=>q.answers.includes(x)).length;
+ return q.answers.some(x=>safe(x)===safe(entry))?1:0;
+}
+function guidedExamScore(l){return guidedExamQuestions(l).reduce((n,q,i)=>n+guidedExamAnswer(q,i),0)}
+function guidedPutReal(i,value){put('real',Number(i),value)}
+function guidedUpdateTwo(i,value,checked){
+ let choices=String(item('real',i)||'').split(',').filter(Boolean);
+ if(checked){if(!choices.includes(value)&&choices.length<2)choices.push(value)}
+ else choices=choices.filter(x=>x!==value);
+ put('real',i,choices.join(','));
+ document.querySelectorAll('[data-two="'+i+'"]').forEach(x=>{
+  x.checked=choices.includes(x.value);
+  x.disabled=!!submitted||(!x.checked&&choices.length>=2);
+ });
+}
+function guidedQuestionHTML(q,i){
+ const value=String(item('real',i)||'');
+ const disabled=submitted?' disabled':'';
+ const title='<div class="guided-q-heading"><strong>Question '+q.n+(q.type==='two'?'–'+(q.n+1):'')+'</strong><span>'+escapeHtml(q.type==='match'?'Matching':q.type==='two'?'Choose TWO':q.type==='mc'?'Choose A, B or C':'ONE WORD ONLY')+'</span></div>';
+ let field='';
+ if(q.type==='blank'){
+  const input='<input class="real-answer-input" type="text" autocomplete="off" data-index="'+i+'" value="'+escapeHtml(value)+'" placeholder="Điền đáp án" '+disabled+' oninput="guidedPutReal(this.dataset.index,this.value)">';
+  const prompt=escapeHtml(q.text);
+  field='<div class="question">'+(prompt.includes('[[BLANK]]')?prompt.replace('[[BLANK]]',input):prompt.includes('_____')?prompt.replace('_____',input):prompt+' '+input)+'</div>';
+ }else if(q.type==='mc'||q.type==='two'){
+  const choices=q.type==='two'?value.split(','):null;
+  field='<div class="question">'+escapeHtml(q.text)+'</div><div class="guided-exam-options">'+(q.options||[]).map((option,j)=>{
+   const letter=String.fromCharCode(65+j),checked=q.type==='two'?choices.includes(letter):value===letter;
+   const attr=q.type==='two'?'onchange="guidedUpdateTwo('+i+',this.value,this.checked)" data-two="'+i+'"':'onchange="guidedPutReal('+i+',this.value)"';
+   return '<label><input type="'+(q.type==='two'?'checkbox':'radio')+'" name="real'+i+'" value="'+letter+'" '+(checked?'checked':'')+' '+attr+disabled+'><span>'+letter+'. '+escapeHtml(option)+'</span></label>';
+  }).join('')+'</div>';
+ }else if(q.type==='match'){
+  field='<div class="question">'+escapeHtml(q.text)+'</div><select class="guided-match-select" '+disabled+' onchange="guidedPutReal('+i+',this.value)"><option value="">Chọn đáp án A–G</option>'+(lessons[lid].matchOptions||[]).map((op,j)=>{const letter=String.fromCharCode(65+j);return '<option value="'+letter+'" '+(value===letter?'selected':'')+'>'+letter+'. '+escapeHtml(op)+'</option>'}).join('')+'</select>';
+ }
+ return '<div class="tile guided-exam-card">'+title+field+'</div>';
+}
+function renderGuidedRealTest(l){
+ const qs=guidedExamQuestions(l);
+ const prefix=l.part?'SECTION '+l.part+' · Questions '+qs[0].n+'–'+(qs.at(-1).n+(qs.at(-1).type==='two'?1:0)):'SECTION 4 · Questions 31–40';
+ return '<h2>08. Real Listening Test</h2><p class="muted">'+prefix+' · Đáp án chỉ hiện sau khi nộp bài.</p>'+
+ '<audio controls preload="metadata" id="audio" src="'+escapeHtml(realAudio||getGuidedAudioSrc(l))+'" onerror="audioError(this)"></audio><div id="audioNotice" class="muted small"></div>'+
+ qs.map((q,i)=>guidedQuestionHTML(q,i)).join('')+(submitted?'<p class="ok">Đã nộp bài · '+guidedExamScore(l)+'/'+guidedExamCount(l)+' câu đúng. Chọn Review để xem chi tiết.</p>':'');
+}
+function renderGuidedReview(l){
+ const qs=guidedExamQuestions(l),score=guidedExamScore(l),total=guidedExamCount(l);
+ return '<h2>09. Personalized Review</h2><p class="muted">Xem đáp án và nghe lại đoạn tương ứng.</p>'+
+ '<audio controls preload="metadata" id="audio" src="'+escapeHtml(realAudio||getGuidedAudioSrc(l))+'"></audio>'+
+ '<div class="summary">'+score+'/'+total+' câu đúng</div>'+
+ qs.map((q,i)=>{
+  const count=guidedExamAnswer(q,i),needed=q.type==='two'?2:1,correct=count===needed;
+  const start=q.cue?.start,stop=q.cue?.end;
+  const cue=Number.isFinite(start)?'<p class="muted small">Mốc SRT: '+cueTime(start)+'–'+cueTime(stop||start)+'</p>':'';
+  return '<div class="tile"><b class="'+(correct?'ok':'bad')+'">Q'+q.n+' · '+(correct?'Đúng':'Chưa đúng')+'</b>'+
+   '<p>Em đã chọn: '+escapeHtml(item('real',i)||'—')+'</p><p>Đáp án: <b>'+escapeHtml(q.answers.join(' / '))+'</b></p>'+
+   '<p class="muted small">Transcript: '+escapeHtml(q.evidence||'')+'</p>'+cue+
+   (q.explanation?'<p class="muted small">'+escapeHtml(q.explanation)+'</p>':'')+
+   '<button type="button" onclick="playAnswerCue('+i+')">▶ Nghe đoạn Q'+q.n+'</button></div>';
+ }).join('')+'<button onclick="restart()">Làm lại bài</button>';
+}
 function speakPractice(i){if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ đọc câu.');return}let txt=lessons[lid].practice[i][0].replace('____',lessons[lid].practice[i][1]);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)}
 function audioError(node){const msg=document.getElementById('audioNotice');if(msg)msg.insertAdjacentHTML('afterbegin','<span class="bad">Không tải được audio. Hãy tải lại trang. </span>')}
 function loadAudio(node){let f=node.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);$('audio').src=realAudio;$('audio').load();}
@@ -777,8 +846,8 @@ function change(dir){
  if(stage===6&&!submitted){
   if(!confirm('Nộp bài? Sau bước này, đáp án và transcript sẽ được mở khóa.'))return;
   submitted=true;store.submitted=true;store.submittedAt=new Date().toISOString();
-  let score=l.answer.filter((a,i)=>a.includes(safe(item('real',i)))).length;
-  try{let h=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]');h.push({skill:'listening',section:'guided',title:'Guided Listening '+l.id+' – '+l.title,score,total:10,correct:score,wrong:10-score,savedAt:store.submittedAt});localStorage.setItem('SC_ATTEMPT_HISTORY_V1',JSON.stringify(h))}catch(e){}
+  let score=guidedExamScore(l);
+  try{let h=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]');h.push({skill:'listening',section:'guided',title:'Guided Listening '+l.id+' – '+l.title,score,total:guidedExamCount(l),correct:score,wrong:guidedExamCount(l)-score,savedAt:store.submittedAt});localStorage.setItem('SC_ATTEMPT_HISTORY_V1',JSON.stringify(h))}catch(e){}
  }
  stage=Math.min(7,stage+1);store.maxUnlocked=Math.max(store.maxUnlocked,stage);
  save();render();window.scrollTo({top:0,behavior:'smooth'});
