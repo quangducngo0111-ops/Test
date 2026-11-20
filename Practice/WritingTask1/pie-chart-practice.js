@@ -128,8 +128,8 @@ function stepBody(){
  const stage=s===2?'overview':s===3?'body':null;
  if(stage&&!state.stageReady?.[stage])return '<div class="pie-study-layout"><div class="pie-writing-area">'+stageQuiz(stage)+'</div>'+noteHTML()+'</div>';
  const part=parts[s-1],hints={intro:'Paraphrase nội dung, chủ thể và đơn vị (%). Không đưa số liệu chi tiết vào Introduction.',overview:'Tóm tắt 2 đặc điểm nổi bật nhất. Không liệt kê tất cả tỷ lệ.',body1:'Chọn nhóm thông tin đầu tiên và mô tả số liệu quan trọng, so sánh có chọn lọc.',body2:'Mô tả nhóm còn lại, đối chiếu với Body 1, lưu ý trường hợp tương đồng hoặc ngoại lệ.'};
- return '<h2>Viết '+esc(section(s))+'</h2><div class="pie-study-layout"><div class="pie-writing-area"><div class="question">'+esc(hints[part])+'</div>'+
- '<div class="field"><label for="writing">'+esc(section(s))+'</label><textarea id="writing" rows="12" placeholder="Write in English...">'+esc(state.drafts[part]||'')+'</textarea></div>'+
+ return '<div class="pie-study-layout"><div class="pie-writing-area"><div class="question">'+esc(hints[part])+'</div>'+
+ '<div class="field"><label for="writing">Bài viết của em</label><textarea id="writing" rows="12" placeholder="Write in English...">'+esc(state.drafts[part]||'')+'</textarea></div>'+
  '<div class="meta" id="wordCount">'+words(state.drafts[part]||'')+' từ</div><div class="buttons"><button class="btn secondary" id="review" type="button">Kiểm tra cơ bản</button>'+(part==='overview'?'<button class="btn secondary" id="modelToggle" type="button">Xem ví dụ Overview</button>':'')+'<button class="btn" type="button" data-writing-next="'+s+'">'+(s===1?'Phân tích Overview →':s===2?'Phân nhóm Body →':s===3?'Viết Body 2 →':'Hoàn thiện bài →')+'</button></div><div class="feedback" id="feedback" hidden></div>'+
  (part==='overview'?'<div class="model" id="model" hidden><b>Gợi ý Overview (tham khảo)</b><p>'+esc(data.overview)+'</p></div>':'')+'</div>'+noteHTML()+'</div>';
 }
