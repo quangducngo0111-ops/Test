@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261120-iphone-morph02',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261120-morph-smooth04',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
