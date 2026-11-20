@@ -329,6 +329,15 @@ function markReadingTerms(container){
  });
 }
 window.scMarkReadingTerms=markReadingTerms;
+if(/\/Practice\/Listening\/FullTest\//i.test(location.pathname)){
+ for(const id of ['questions','transcript']){
+  const root=document.getElementById(id);
+  if(!root)continue;
+  const update=()=>{if(!root.querySelector('.sc-lexeme'))markReadingTerms(root)};
+  update();
+  new MutationObserver(update).observe(root,{childList:true});
+ }
+}
 const readingBody=document.getElementById('articleText');
 if(readingBody){
  markReadingTerms(readingBody);
