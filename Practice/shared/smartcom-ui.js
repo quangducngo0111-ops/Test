@@ -29,7 +29,7 @@ const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
  const historyScript=document.createElement('script');
  historyScript.dataset.scAttemptHistory='1';
- historyScript.src=url('Practice/shared/attempt-history.js?v=20261118-01');
+ historyScript.src=url('Practice/shared/attempt-history.js?v=20261120-unified02');
  document.head.append(historyScript);
 }
 
