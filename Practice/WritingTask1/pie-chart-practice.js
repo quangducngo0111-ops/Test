@@ -177,6 +177,9 @@ function localWritingIssues(t){
   issues.push({from,to,original:match[0],replacement:after,message,kind,priority,source:'local'});
  }
  const rules=[
+  {re:/\b(the\s+)?(two|three|four|five)\s+pie\s+chart\s+illustrates\b/gi,fix:m=>m[0].replace(/chart\s+illustrates$/i,'charts illustrate'),msg:'Sau số đếm cần charts (số nhiều), và chủ ngữ số nhiều đi với illustrate.'},
+  {re:/\bmeans\s+of\s+transportation\s+of\s+inhabitant\b/gi,fix:()=>'modes of transport used by residents',msg:'Sửa số nhiều inhabitants/residents và dùng cấu trúc tự nhiên hơn “modes of transport used by residents”.'},
+
   {re:/\b(the\s+)?(two|three|four|five|six|seven|eight|nine|ten)\s+(pie|bar)\s+chart\b/gi,fix:m=>m[0]+'s',msg:'Danh từ đếm được đứng sau số đếm lớn hơn một phải dùng dạng số nhiều.'},
   {re:/\b(an?|the)\s+(inhabitant|resident|citizen)\s+in\s+(two|three|four)\s+cities\b/gi,fix:m=>m[0].replace(/\b(inhabitant|resident|citizen)\b/i,x=>x+'s'),msg:'Nhắc đến cư dân của nhiều thành phố cần sử dụng danh từ số nhiều.'},
   {re:/\bof\s+inhabitant\b/gi,fix:m=>'of inhabitants',msg:'Inhabitant là danh từ đếm được; ở đây cần dùng inhabitants hoặc residents.'},
@@ -249,6 +252,7 @@ async function review(){
  const input=$('writing'),t=input?.value.trim()||'',el=$('feedback'),button=$('review');
  if(!el)return;
  const request=++writingReviewRequest;
+ const originalValue=input?.value||'';
  if(!t){showWritingReview([{from:-1,to:-1,original:'',replacement:'',kind:'Nội dung',message:'Hãy viết nội dung trước khi kiểm tra.',priority:1}], 'Chưa có bài viết');return}
  if(button){button.disabled=true;button.textContent='Đang kiểm tra…'}
  const local=localWritingIssues(input.value);
@@ -257,7 +261,7 @@ async function review(){
  try{
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),8000);
   try{
-   const params=new URLSearchParams({text:input.value,language:'en-GB',enabledOnly:'false'});
+   const params=new URLSearchParams({text:input.value,language:'en-GB'});
    const response=await fetch('https://api.languagetool.org/v2/check',{method:'POST',body:params,signal:controller.signal});
    if(!response.ok)throw Error('HTTP '+response.status);
    remote=languageToolIssues(await response.json(),input.value);
@@ -267,7 +271,7 @@ async function review(){
  if(request!==writingReviewRequest)return;
  if(button){button.disabled=false;button.textContent='Kiểm tra lại chính tả & ngữ pháp'}
  // The text may have changed during the asynchronous request.
- if(input.value!==t && input.value.trim()!==t){showWritingReview(localWritingIssues(input.value),'Bài đã thay đổi; bấm kiểm tra lại để cập nhật');return}
+ if(input.value!==originalValue){showWritingReview(localWritingIssues(input.value),'Bài đã thay đổi; bấm kiểm tra lại để cập nhật');return}
  showWritingReview(mergeWritingIssues(local,remote),status);
 }
 function move(i){if(i<0||i>=6)return;if(i>0&&completedAnalysis().length!==analysisQuestions().length&&!parts.some(p=>String(state.drafts[p]||'').trim())){state.step=0;render();return;}state.step=i;save();render();const top=$('stepNav').getBoundingClientRect().top+scrollY-90;scrollTo({top,behavior:'smooth'})}
