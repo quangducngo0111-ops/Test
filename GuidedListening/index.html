@@ -175,7 +175,20 @@ body.gap-guide-open{overflow:hidden}
 .step-guide-toolbar{display:flex;justify-content:flex-end;margin:-7px 0 8px}
 .step-guide-replay{background:#f4f0ff!important;border:1px solid #dbd0f7!important;color:#5840a5!important;border-radius:9px!important;font-size:12px!important;font-weight:750!important;padding:6px 11px!important}
 .step-guide-replay:hover{background:#ebe3ff!important}
-.selection-transcript{margin:16px 0 20px}.selection-transcript h3{margin:0 0 10px;font-size:17px}.selection-word-panel{top:65px}.selection-transcript .gap-lines{max-height:570px;overflow:auto}.selection-transcript .gap-vocab{border-top:0;padding-top:0}
+.selection-transcript{margin:16px 0 20px}.selection-transcript h3{margin:0 0 10px;font-size:17px}.selection-word-panel{top:65px}.selection-transcript .gap-lines{max-height:680px;overflow:auto}.selection-transcript .gap-vocab{border-top:0;padding-top:0}
+
+.vocab-step-intro{display:grid;gap:4px;border:1px solid #b7dfcb;background:#f3faf6;padding:12px 15px;border-radius:12px;margin:12px 0 16px;color:#285946;font-size:13px}
+.vocab-step-intro strong{font-size:15px}.vocab-step-total{font-weight:800;color:#168267}
+.vocab-pick-sidebar{display:grid;gap:11px}.vocab-pick-sidebar h3{margin:0;font-size:17px;color:#155c46}
+.vocab-pick-sidebar p{margin:0}.vocab-saved-count{font-weight:850;color:#168267}
+.vocab-empty{display:block;font-size:12px;color:#637890;line-height:1.6;padding:8px}
+.vocab-saved-list{display:grid;gap:7px;max-height:340px;overflow-y:auto}
+.vocab-saved-row{display:grid;grid-template-columns:1fr auto;gap:4px;align-items:center;border:1px solid #d8e9dd;border-radius:9px;padding:7px;background:#f7fcf9;font-size:12px}
+.vocab-saved-row b{color:#205a44}.vocab-saved-row span{grid-column:1;color:#70808a}.vocab-saved-row button{grid-column:2;grid-row:1/span 2;padding:5px 8px;font-size:11px}
+.vocab-manual-toggle{font-size:12px!important;padding:7px 9px!important}
+#vocabManualPanel[hidden]{display:none!important}#vocabManualPanel{display:grid;gap:7px}
+#vocabManualPanel input{width:100%;min-width:0;max-width:none}
+.selection-transcript .gap-player{align-self:start}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -361,7 +374,7 @@ function chooseVocab(word,meaning){
 }
 function removeChosenVocab(i){
  if(!Array.isArray(store.selectedVocab))return;
- store.selectedVocab.splice(i,1);delete store.match;delete store.quiz;save();render();
+ store.selectedVocab.splice(i,1);delete store.match;delete store.quiz;save();if(stage===0)refreshGapSidebar();else render();
 }
 function toggleSuggestedVocab(i){
  const lesson=lessons[lid],word=lesson.vocab[i];if(!word)return;
@@ -371,7 +384,7 @@ function toggleSuggestedVocab(i){
  delete store.match;delete store.quiz;save();render();
 }
 function addManualVocab(){
- if(chooseVocab($('manualWord')?.value,$('manualMeaning')?.value))render();
+ if(chooseVocab($('manualWord')?.value,$('manualMeaning')?.value)){if(stage===0)refreshGapSidebar();else render();}
  else {const node=$('manualVocabStatus');if(node)node.textContent='Cần từ, nghĩa và mỗi nghĩa chỉ dùng một lần.'; $('manualMeaning')?.focus()}
 }
 function chooseSelectedTranscriptWord(){
@@ -405,20 +418,10 @@ function selectionTranscriptHTML(){
  return '<div class="selection-transcript"><h3>Chọn từ ngay trong transcript đã hoàn thành</h3><div class="gap-wrap"><div class="gap-lines">'+lines+'</div><aside class="gap-player selection-word-panel"><div id="gapSidebar">'+gapSidebarHTML()+'</div></aside></div></div>';
 }
 function selectionStageHTML(l){
- const picked=activeVocab(l);
- const transcript=String(GUIDED_TRANSCRIPTS[l.id]||'').toLowerCase();
- const glossary=l.vocab.map((v,i)=>({v,i})).filter(({v})=>{
-  const word=v[0].toLowerCase();
-  return transcript.includes(word);
- }).map(({v,i})=>{
-  const checked=picked.some(p=>p[0].toLowerCase()===v[0].toLowerCase());
-  return '<label class="selection-option"><input type="checkbox" '+(checked?'checked':'')+' onchange="toggleSuggestedVocab('+i+')"><span><b>'+escapeHtml(v[0])+'</b><small>'+escapeHtml(v[1])+'</small></span></label>';
- }).join('');
- const chosen=picked.map((v,i)=>'<span class="chosen-word">'+escapeHtml(v[0])+'<button type="button" onclick="removeChosenVocab('+i+')" aria-label="Bỏ từ '+escapeHtml(v[0])+'">Bỏ</button></span>').join('');
- const pending=(store.pendingWords||[]).map((p,i)=>'<div class="pending-item"><b>'+escapeHtml(p.word)+'</b><input aria-label="Nghĩa của '+escapeHtml(p.word)+'" placeholder="Nghĩa tiếng Việt" value="'+escapeHtml(p.meaning||'')+'" oninput="updatePendingMeaning('+i+',this.value)"><button type="button" onclick="savePendingWord('+i+')">Chọn học</button><button type="button" onclick="removePendingWord('+i+')">Bỏ</button></div>').join('');
- return '<h2>02. Chọn từ cần học</h2><p class="muted">Nhấp vào từ chưa biết trong transcript bên dưới hoặc kéo sang danh sách bên phải để học. Nhấp đúp để tra từ; chỉ từ em lưu mới được đưa vào bài học và game.</p>'+
- selectionTranscriptHTML()+'<div class="pending-list">'+pending+'</div><span id="pendingVocabStatus" class="small" role="status"></span><div class="selected-count">'+picked.length+' từ đã chọn</div><div class="chosen-words">'+chosen+'</div>'+
- '<div class="selection-grid">'+glossary+'</div><div class="manual-vocab"><input id="manualWord" placeholder="Từ/cụm từ khác" aria-label="Từ tiếng Anh"><input id="manualMeaning" placeholder="Nghĩa tiếng Việt" aria-label="Nghĩa tiếng Việt"><button type="button" onclick="addManualVocab()">Thêm từ</button><span class="small" id="manualVocabStatus" role="status"></span></div>';
+ const count=activeVocab(l).length;
+ return '<h2>02. Chọn từ cần học</h2>'+
+ '<div class="vocab-step-intro"><strong>Chọn đúng những từ em chưa biết</strong><span>Đọc lại transcript bên dưới. Nhấp một lần vào từ muốn học, nhập nghĩa nếu cần rồi bấm “Lưu”. Nhấp đúp để tra từ.</span><span class="vocab-step-total">'+count+' từ đã lưu · Cần ít nhất 3 từ để tiếp tục</span></div>'+
+ selectionTranscriptHTML();
 }
 function shuffledMeanings(l){
  const list=activeVocab(l).map(v=>v[1]);
@@ -675,16 +678,23 @@ function saveGapCandidate(i){
 function discardGapCandidate(i){store.pendingWords?.splice(i,1);save();refreshGapSidebar()}
 function gapSidebarHTML(){
  const pending=store.pendingWords||[],selected=activeVocab(lessons[lid]);
- return '<div class="gap-vocab"><b>Danh sách từ cần học</b><div class="gap-drop-zone" ondragover="gapDropOver(event)" ondragleave="gapDropLeave(event)" ondrop="dropGapLexeme(event)"><span class="small muted">'+(pending.length?pending.length+' từ chờ lưu':'Kéo từ vào đây')+'</span>'+
- pending.map((p,i)=>'<div class="gap-vocab-item"><b>'+escapeHtml(p.word)+'</b><input aria-label="Nghĩa từ '+escapeHtml(p.word)+'" placeholder="Nghĩa tiếng Việt" value="'+escapeHtml(p.meaning||'')+'" oninput="updatePendingMeaning('+i+',this.value)"><button type="button" onclick="saveGapCandidate('+i+')">Lưu</button><button type="button" onclick="discardGapCandidate('+i+')">Bỏ</button></div>').join('')+'</div><div class="small muted" id="gapVocabMessage" role="status"></div><div class="gap-vocab-chips">'+selected.map(x=>'<span>'+escapeHtml(x[0])+'</span>').join('')+'</div></div>';
+ return '<div class="vocab-pick-sidebar"><h3>Danh sách từ cần học</h3><p class="small muted">Chỉ lưu từ em chưa biết. Kéo từ vào đây hoặc nhấp vào từ trong bài.</p>'+
+ '<div class="vocab-saved-count">'+selected.length+' từ đã lưu</div>'+
+ '<div class="gap-drop-zone" ondragover="gapDropOver(event)" ondragleave="gapDropLeave(event)" ondrop="dropGapLexeme(event)">'+
+ (pending.length?pending.map((p,i)=>'<div class="gap-vocab-item"><b>'+escapeHtml(p.word)+'</b><input aria-label="Nghĩa từ '+escapeHtml(p.word)+'" placeholder="Nhập nghĩa tiếng Việt" value="'+escapeHtml(p.meaning||'')+'" oninput="updatePendingMeaning('+i+',this.value)"><button type="button" onclick="saveGapCandidate('+i+')">Lưu từ</button><button type="button" onclick="discardGapCandidate('+i+')">Bỏ</button></div>').join(''):'<span class="vocab-empty">Kéo từ hoặc nhấp vào từ trong transcript để thêm vào đây.</span>')+
+ '</div><div class="small muted" id="gapVocabMessage" role="status"></div>'+
+ (selected.length?'<div class="vocab-saved-list">'+selected.map((v,i)=>'<div class="vocab-saved-row"><b>'+escapeHtml(v[0])+'</b><span>'+escapeHtml(v[1])+'</span><button type="button" onclick="removeChosenVocab('+i+')" aria-label="Bỏ từ '+escapeHtml(v[0])+'">Bỏ</button></div>').join('')+'</div>':'')+
+ '<button type="button" class="vocab-manual-toggle" onclick="toggleManualWord()">+ Thêm từ/cụm từ khác</button>'+
+ '<div id="vocabManualPanel" hidden><input id="manualWord" placeholder="Từ tiếng Anh"><input id="manualMeaning" placeholder="Nghĩa tiếng Việt"><button type="button" onclick="addManualVocab()">Lưu từ</button><span id="manualVocabStatus" role="status"></span></div></div>';
 }
+function toggleManualWord(){const p=$('vocabManualPanel');if(p){p.hidden=!p.hidden;if(!p.hidden)$('manualWord')?.focus()}}
 function refreshGapSidebar(){
  const holder=$('gapSidebar');if(holder)holder.innerHTML=gapSidebarHTML();
  document.querySelectorAll('.gap-lexeme').forEach(el=>{
   const w=el.dataset.word.toLowerCase();
   el.classList.toggle('picked',(store.pendingWords||[]).some(x=>x.word.toLowerCase()===w)||activeVocab(lessons[lid]).some(x=>x[0].toLowerCase()===w));
  });
- const m=$('gapAddedWord');if(m)m.textContent=activeVocab(lessons[lid]).length+' từ đã lưu để học';
+ const total=document.querySelector('.vocab-step-total');if(total)total.textContent=activeVocab(lessons[lid]).length+' từ đã lưu · Cần ít nhất 3 từ để tiếp tục';
 }
 function fullGapHTML(){
  const task=fullGapExercise();
