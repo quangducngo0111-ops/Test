@@ -20317,7 +20317,7 @@ async function init(){
   if(typeof originalRenderSets!=="function") return;
   window.renderSets=function(){
     const result=originalRenderSets.apply(this,arguments);
-    if(selectedSkill!=="writing-task-1" || staticFolderOpen) return result;
+    if(selectedSkill!=="writing-task-1" || staticFolderOpen || dynamicFolderOpen) return result;
     const grid=document.getElementById("setGrid");
     if(!grid) return result;
     [...grid.querySelectorAll(".set-card")].forEach(card=>{
