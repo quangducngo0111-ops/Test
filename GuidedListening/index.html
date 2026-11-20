@@ -845,7 +845,7 @@ function audioError(node){const msg=document.getElementById('audioNotice');if(ms
 function loadAudio(node){let f=node.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);$('audio').src=realAudio;$('audio').load();}
 const GUIDED_RESULT_ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
 async function reportGuidedResult(lesson,score){
- if(!lesson.part||store.reportedAt)return;
+ if(store.reportedAt)return;
  let student={};try{student=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'{}')}catch(e){}
  if(!student.name||!student.className)return;
  const all=guidedExamQuestions(lesson),total=guidedExamCount(lesson);
@@ -859,7 +859,7 @@ async function reportGuidedResult(lesson,score){
    return;
  }
  // Legacy fallback when the shared history script has not loaded yet.
- const body=new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Listening',practiceType:'Guided IELTS Listening · Part '+lesson.part,practiceId:lesson.id,score:String(score),total:String(total),durationSeconds:String(payload.durationSeconds),details,attemptId:'guided-'+lesson.id+'-'+String(store.submittedAt||Date.now())});
+ const body=new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Listening',practiceType:'Guided IELTS Listening · Part '+(lesson.part||4),practiceId:lesson.id,score:String(score),total:String(total),durationSeconds:String(payload.durationSeconds),details,attemptId:'guided-'+lesson.id+'-'+String(store.submittedAt||Date.now())});
  try{
   await fetch(GUIDED_RESULT_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});
   store.reportedAt=new Date().toISOString();save();
