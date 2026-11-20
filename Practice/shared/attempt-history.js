@@ -1,36 +1,185 @@
-/* Student attempt history, local resilient store. Server Test history remains in Progress. */
+/* Unified resilient IELTS attempt recording.
+ * Local completion is distinct from server acknowledgment.
+ * The current cross-origin Apps Script uses no-cors: requests are unverifiable
+ * unless the endpoint explicitly supports a readable acknowledgement.
+ */
 (()=>{'use strict';
-if(window.SmartcomHistory)return;
+if(window.SmartcomHistory?.version>=2)return;
 const STORAGE='SC_ATTEMPT_HISTORY_V1';
-function profile(){try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch{return null}}
+const QUEUE='SC_RESULT_OUTBOX_V2';
+const ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+const nativeFetch=window.fetch?.bind(window);
+function profile(){
+ try{
+  const p=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
+  if(p?.name&&p?.className)return p;
+ }catch(e){}
+ return null;
+}
 function identity(p){return [p?.studentId||'',p?.name||'',p?.className||''].join('|').trim().toLowerCase()}
-function all(){try{const a=JSON.parse(localStorage.getItem(STORAGE)||'[]');return Array.isArray(a)?a:[]}catch{return []}}
+function read(key){
+ try{const a=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(a)?a:[]}
+ catch(e){return []}
+}
+function write(key,value){
+ try{localStorage.setItem(key,JSON.stringify(value));return true}
+ catch(e){console.error('Cannot persist attempt',e);return false}
+}
+function all(){return read(STORAGE)}
 function list(){const id=identity(profile());return id?all().filter(x=>x.owner===id).sort((a,b)=>Date.parse(b.submittedAt||b.savedAt)-Date.parse(a.submittedAt||a.savedAt)):[]}
-function save(payload){const p=profile();if(!p?.name||!p?.className)return null;const a=all();const record={...payload,owner:identity(p),name:p.name,className:p.className,skill:payload.skill||'Unknown',kind:payload.kind==='Test'?'Test':'Practice',savedAt:new Date().toISOString(),attemptId:payload.attemptId||('a-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8))};const at=a.findIndex(x=>x.owner===record.owner&&(x.attemptId===record.attemptId||(x.status==='completed'&&record.status==='completed'&&x.path===record.path&&x.kind===record.kind&&x.skill===record.skill&&String(x.score)===String(record.score)&&Math.abs(Date.parse(x.submittedAt||x.savedAt)-Date.parse(record.submittedAt||record.savedAt))<6000)));if(at>=0)a[at]={...a[at],...record};else a.push(record);try{localStorage.setItem(STORAGE,JSON.stringify(a.slice(-3000)));window.dispatchEvent(new CustomEvent('sc:attempt-saved',{detail:record}));return record}catch(e){console.warn('History storage full',e);return null}}
+function newId(){return 'sc-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,11)}
+function save(payload){
+ const p=profile();
+ if(!p?.name||!p?.className){
+  window.dispatchEvent(new CustomEvent('sc:attempt-needs-profile',{detail:payload}));
+  return null;
+ }
+ const entries=all();
+ const record={
+  ...payload,owner:identity(p),name:p.name,className:p.className,
+  skill:payload.skill||'Unknown',kind:payload.kind==='Test'?'Test':'Practice',
+  attemptId:payload.attemptId||newId(),savedAt:new Date().toISOString()
+ };
+ const at=entries.findIndex(x=>x.owner===record.owner&&x.attemptId===record.attemptId);
+ if(at>=0)entries[at]={...entries[at],...record};else entries.push(record);
+ if(!write(STORAGE,entries.slice(-3000)))return null;
+ window.dispatchEvent(new CustomEvent('sc:attempt-saved',{detail:record}));
+ return record;
+}
 function submit(payload){return save({...payload,status:'completed',submittedAt:payload.submittedAt||new Date().toISOString()})}
 function draft(payload){return save({...payload,status:'draft'})}
-window.SmartcomHistory={save,submit,draft,list,all,profile};
-// Capture existing successful submission attempts without changing request payload.
-// This preserves Practice submissions made by legacy Reading / Listening pages.
-const originalFetch=window.fetch?.bind(window);
-if(originalFetch&&location.pathname!='/Progress/'){
- window.fetch=function(input,options){
-  const opts=options||{};
-  if(String(opts.method||'GET').toUpperCase()==='POST'&&typeof opts.body==='string'){
+function formBody(record){
+ const detail={title:record.title||document.title,source:record.path||location.pathname,
+  answers:record.answers||null,attemptId:record.attemptId,
+  ...(record.details&&typeof record.details==='object'?record.details:{})};
+ return new URLSearchParams({
+  mode:record.kind==='Test'?'TEST':'PRACTICE',
+  name:record.name,className:record.className,skill:record.skill,
+  practiceType:record.title||record.skill,practiceId:String(record.exerciseId||record.path||location.pathname),
+  score:record.score==null?'':String(record.score),
+  total:record.total==null?'':String(record.total),
+  attemptId:record.attemptId,
+  durationSeconds:String(record.durationSeconds||0),
+  submittedAt:record.submittedAt||new Date().toISOString(),
+  details:JSON.stringify(detail)
+ }).toString();
+}
+function outbox(){return read(QUEUE)}
+function queue(record,endpoint=ENDPOINT,body){
+ if(!record)return false;
+ const rows=outbox(),item={
+  attemptId:record.attemptId,owner:record.owner,endpoint,
+  body:body||formBody(record),queuedAt:new Date().toISOString(),
+  attempts:0,nextTry:0
+ };
+ const existing=rows.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
+ if(existing>=0)return true;
+ if(!write(QUEUE,[...rows,item].slice(-2000)))return false;
+ window.dispatchEvent(new CustomEvent('sc:result-queued',{detail:item}));
+ return true;
+}
+function updateStatus(id,owner,patch){
+ const rows=all(),index=rows.findIndex(x=>x.attemptId===id&&x.owner===owner);
+ if(index<0)return;
+ rows[index]={...rows[index],...patch};
+ write(STORAGE,rows);
+ window.dispatchEvent(new CustomEvent('sc:result-status',{detail:rows[index]}));
+}
+let flushing=false;
+async function flush(){
+ if(flushing||!nativeFetch||!navigator.onLine)return;
+ flushing=true;
+ try{
+  const rows=outbox();
+  for(const item of rows){
+   if(item.nextTry>Date.now())continue;
+   // Without server-side CORS, an opaque response confirms only that the browser issued the request.
+   let transmitted=false,verified=false;
    try{
-    const args=new URLSearchParams(opts.body),mode=String(args.get('mode')||'').toUpperCase();
-    const learner=profile();
-    const samePerson=learner&&learner.name===args.get('name')&&learner.className===args.get('className');
-    if(samePerson&&(mode==='PRACTICE'||mode==='TEST')&&args.get('skill')){
-     let detail={};try{detail=JSON.parse(args.get('details')||'{}')}catch{}
-     const payload={kind:mode==='TEST'?'Test':'Practice',skill:args.get('skill'),title:detail.title||args.get('practiceType')||args.get('testId')||document.title,exerciseId:args.get('practiceId')||args.get('testId')||location.pathname,path:location.pathname,score:args.get('score')!==null?Number(args.get('score')):null,total:args.get('total')!==null?Number(args.get('total')):null,band:args.get('band')||null,durationSeconds:Number(args.get('durationSeconds')||0),answers:detail.answers||null,submittedAt:args.get('submittedAt')||new Date().toISOString(),syncStatus:'unverified'};
-     submit(payload);
-    }
-   }catch(e){console.warn('History request capture failed',e)}
+    const response=await nativeFetch(item.endpoint,{
+     method:'POST',mode:'no-cors',
+     headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+     body:item.body,keepalive:item.body.length<60000
+    });
+    transmitted=true;
+    verified=response.type!=='opaque'&&response.ok&&response.status>=200&&response.status<300;
+   }catch(e){console.warn('Result delivery postponed',e)}
+   const current=outbox(),idx=current.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
+   if(idx<0)continue;
+   if(transmitted){
+    // Keep an audit trail locally. Do not claim that a no-cors request reached Sheets.
+    current.splice(idx,1);
+    write(QUEUE,current);
+    updateStatus(item.attemptId,item.owner,{
+     syncStatus:verified?'acknowledged':'sent-unverified',
+     lastSentAt:new Date().toISOString()
+    });
+   }else{
+    const attempts=(current[idx].attempts||0)+1;
+    current[idx].attempts=attempts;
+    current[idx].nextTry=Date.now()+Math.min(300000,5000*Math.pow(2,Math.min(attempts,6)));
+    write(QUEUE,current);
+    updateStatus(item.attemptId,item.owner,{syncStatus:'queued'});
+   }
   }
-  return originalFetch(input,options);
+ }finally{flushing=false}
+}
+function report(payload){
+ const saved=submit({...payload,syncStatus:'queued'});
+ if(saved&&queue(saved))flush();
+ return saved;
+}
+function recordLegacyPost(body,endpoint){
+ let p;try{p=new URLSearchParams(body)}catch(e){return null}
+ const mode=String(p.get('mode')||'').toUpperCase();
+ if(!['TEST','PRACTICE'].includes(mode)||!p.get('skill'))return null;
+ const user=profile();
+ if(!user||user.name.trim()!==String(p.get('name')||'').trim()||user.className.trim().toLowerCase()!==String(p.get('className')||'').trim().toLowerCase())return null;
+ let details={};try{details=JSON.parse(p.get('details')||'{}')}catch(e){}
+ const record=submit({
+  attemptId:p.get('attemptId')||newId(),kind:mode==='TEST'?'Test':'Practice',
+  skill:p.get('skill'),title:details.title||p.get('practiceType')||p.get('testId')||document.title,
+  exerciseId:p.get('practiceId')||p.get('testId')||location.pathname,
+  path:location.pathname,score:p.get('score')!==null?Number(p.get('score')):null,
+  total:p.get('total')!==null?Number(p.get('total')):null,
+  band:p.get('band')||null,durationSeconds:Number(p.get('durationSeconds')||0),
+  answers:details.answers||null,details,
+  submittedAt:p.get('submittedAt')||new Date().toISOString(),
+  syncStatus:'queued'
+ });
+ if(record)queue(record,endpoint,body+(p.has('attemptId')?'':'&attemptId='+encodeURIComponent(record.attemptId)));
+ return record;
+}
+if(nativeFetch){
+ window.fetch=function(input,options){
+  const opts=options||{},url=typeof input==='string'?input:input?.url||'';
+  if(String(opts.method||'GET').toUpperCase()==='POST'
+     &&typeof opts.body==='string'
+     &&url.startsWith('https://script.google.com/macros/s/')){
+   const record=recordLegacyPost(opts.body,url);
+   return nativeFetch(input,options).then(response=>{
+    if(record){
+     const queueRows=outbox().filter(x=>!(x.attemptId===record.attemptId&&x.owner===record.owner));
+     write(QUEUE,queueRows);
+     updateStatus(record.attemptId,record.owner,{
+      syncStatus:response.type==='opaque'?'sent-unverified':(response.ok?'acknowledged':'queued'),
+      lastSentAt:new Date().toISOString()
+     });
+    }
+    return response;
+   },error=>{
+    if(record)updateStatus(record.attemptId,record.owner,{syncStatus:'queued'});
+    throw error;
+   });
+  }
+  return nativeFetch(input,options);
  };
 }
-
-window.addEventListener('sc:attempt-completed',e=>{if(e.detail)submit(e.detail)});
+window.SmartcomHistory={version:2,save,submit,draft,list,all,profile,report,flush,outbox};
+window.addEventListener('sc:attempt-completed',event=>{if(event.detail)report(event.detail)});
+window.addEventListener('online',flush);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)flush()});
+window.addEventListener('load',flush,{once:true});
+// A modest retry cadence when the page stays open; older records survive reloads.
+setInterval(flush,60000);
 })();
