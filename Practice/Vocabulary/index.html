@@ -5785,11 +5785,65 @@ for (const [num, group] of Object.entries(sets)) window.VOCABULARY_SET_INFO.read
   }
 ];
   // Retain original handout categories; present the 60 terms as 10 independent sets.
-  const dynamicGroups=[{"label":"Xu hướng tăng","count":6,"set":"dynamic-datasets-01"},{"label":"Xu hướng giảm","count":5,"set":"dynamic-datasets-02"},{"label":"Xu hướng ổn định","count":6,"set":"dynamic-datasets-03"},{"label":"Xu hướng dao động","count":3,"set":"dynamic-datasets-04"},{"label":"Điểm cao nhất","count":4,"set":"dynamic-datasets-05"},{"label":"Điểm thấp nhất","count":3,"set":"dynamic-datasets-06"},{"label":"So sánh xu hướng","count":6,"set":"dynamic-datasets-07"},{"label":"Mức độ thay đổi","count":16,"set":"dynamic-datasets-08"},{"label":"Cụm thời gian","count":5,"set":"dynamic-datasets-09"},{"label":"Cấu trúc số liệu","count":6,"set":"dynamic-datasets-10"}];
+  const dynamicGroups=[{"label":"Xu hướng tăng","count":10,"set":"dynamic-datasets-01"},{"label":"Xu hướng giảm","count":9,"set":"dynamic-datasets-02"},{"label":"Xu hướng ổn định","count":6,"set":"dynamic-datasets-03"},{"label":"Xu hướng dao động","count":3,"set":"dynamic-datasets-04"},{"label":"Điểm cao nhất","count":4,"set":"dynamic-datasets-05"},{"label":"Điểm thấp nhất","count":3,"set":"dynamic-datasets-06"},{"label":"So sánh xu hướng","count":6,"set":"dynamic-datasets-07"},{"label":"Mức độ thay đổi","count":16,"set":"dynamic-datasets-08"},{"label":"Cụm thời gian","count":5,"set":"dynamic-datasets-09"},{"label":"Cấu trúc số liệu","count":6,"set":"dynamic-datasets-10"}];
   const categorySet=Object.fromEntries(dynamicGroups.map(group=>[group.label,group.set]));
   for(const item of items){
     const groupedSet=categorySet[item.category];
     if(groupedSet){item.set=groupedSet;item.topics=[groupedSet,item.category]}
+  }
+  // New phrases from the updated Dynamic vocabulary handout.
+  const addedTrendPhrases=[
+  {
+    "word": "show an upward trend",
+    "meaning": "thể hiện xu hướng tăng",
+    "example": "The figure showed an upward trend.",
+    "category": "Xu hướng tăng"
+  },
+  {
+    "word": "experience an increase",
+    "meaning": "ghi nhận / trải qua sự gia tăng",
+    "example": "The population experienced an increase.",
+    "category": "Xu hướng tăng"
+  },
+  {
+    "word": "witness a rise",
+    "meaning": "chứng kiến sự gia tăng",
+    "example": "The number of tourists witnessed a rise.",
+    "category": "Xu hướng tăng"
+  },
+  {
+    "word": "record growth",
+    "meaning": "ghi nhận mức tăng trưởng",
+    "example": "The company recorded growth in sales.",
+    "category": "Xu hướng tăng"
+  },
+  {
+    "word": "experience a decrease",
+    "meaning": "ghi nhận / trải qua sự sụt giảm",
+    "example": "The population experienced a decrease.",
+    "category": "Xu hướng giảm"
+  },
+  {
+    "word": "see a decline",
+    "meaning": "chứng kiến sự suy giảm",
+    "example": "The figure saw a decline of 10%.",
+    "category": "Xu hướng giảm"
+  },
+  {
+    "word": "witness a fall",
+    "meaning": "chứng kiến sự sụt giảm",
+    "example": "The number of visitors witnessed a fall.",
+    "category": "Xu hướng giảm"
+  },
+  {
+    "word": "record a drop",
+    "meaning": "ghi nhận mức sụt giảm",
+    "example": "Sales recorded a drop of 20%.",
+    "category": "Xu hướng giảm"
+  }
+];
+  for(const phrase of addedTrendPhrases){
+    items.push({word:phrase.word,meaning:phrase.meaning,skills:["writing-task-1"],set:categorySet[phrase.category],topics:[categorySet[phrase.category],phrase.category],example:phrase.example,collocation:phrase.word,category:phrase.category});
   }
   const existing = Array.isArray(window.VOCABULARY_DATA) ? window.VOCABULARY_DATA : [];
   // Keep any richer existing record and move legacy Dynamic entries to their category sets.
@@ -5811,7 +5865,7 @@ for (const [num, group] of Object.entries(sets)) window.VOCABULARY_SET_INFO.read
     };
   }
   // Legacy deep links still have a readable description.
-  window.VOCABULARY_SET_INFO["writing-task-1"]["dynamic-datasets"]={label:"Dynamic Datasets · Toàn bộ",titles:["60 từ"]};
+  window.VOCABULARY_SET_INFO["writing-task-1"]["dynamic-datasets"]={label:"Dynamic Datasets · Toàn bộ",titles:["68 từ"]};
 })();
 </script>
 
@@ -13403,7 +13457,7 @@ function renderSets(){
   if(selectedSkill === "writing-task-1" && !staticFolderOpen && !dynamicFolderOpen){
     const types=[
       {icon:"📊",title:"Static",desc:"11 nhóm từ vựng · Biểu đồ tĩnh",action:"openStaticVocabularyFolder()"},
-      {icon:"📈",title:"Dynamic Datasets",desc:"60 từ · 10 nhóm xu hướng và số liệu",action:"openDynamicVocabularyFolder()"},
+      {icon:"📈",title:"Dynamic Datasets",desc:"68 từ · 10 nhóm xu hướng và số liệu",action:"openDynamicVocabularyFolder()"},
       {icon:"🗺️",title:"Maps",desc:"81 từ · Mô tả thay đổi bản đồ",action:"openSet('maps')"}
     ];
     $("setGrid").innerHTML=types.map(item=>`<button type="button" class="set-card wt1-folder-card" onclick="${item.action}"><span class="wt1-folder-icon" aria-hidden="true">${item.icon}</span><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.desc)}</p><span class="wt1-folder-action">Khám phá →</span></button>`).join("");
