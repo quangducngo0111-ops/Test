@@ -4,7 +4,7 @@
  * unless the endpoint explicitly supports a readable acknowledgement.
  */
 (()=>{'use strict';
-if(window.SmartcomHistory?.version>=2)return;
+if(window.SmartcomHistory?.version>=3)return;
 const STORAGE='SC_ATTEMPT_HISTORY_V1';
 const QUEUE='SC_RESULT_OUTBOX_V2';
 const ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
@@ -110,8 +110,14 @@ async function flush(){
    const current=outbox(),idx=current.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
    if(idx<0)continue;
    if(transmitted){
-    // Keep an audit trail locally. Do not claim that a no-cors request reached Sheets.
-    current.splice(idx,1);
+    // no-cors is opaque: keep the original payload for deliberate resend.
+    // The backend must deduplicate on attemptId to make retries safe.
+    const attempts=(current[idx].attempts||0)+1;
+    if(verified)current.splice(idx,1);
+    else{
+     current[idx].attempts=attempts;
+     current[idx].nextTry=Date.now()+Math.min(6*3600000,15*60000*Math.pow(2,Math.min(attempts-1,5)));
+    }
     write(QUEUE,current);
     updateStatus(item.attemptId,item.owner,{
      syncStatus:verified?'acknowledged':'sent-unverified',
@@ -162,10 +168,19 @@ if(nativeFetch){
    const record=recordLegacyPost(opts.body,url);
    return nativeFetch(input,options).then(response=>{
     if(record){
-     const queueRows=outbox().filter(x=>!(x.attemptId===record.attemptId&&x.owner===record.owner));
-     write(QUEUE,queueRows);
+     const verified=response.type!=='opaque'&&response.ok;
+     const current=outbox();
+     const idx=current.findIndex(x=>x.attemptId===record.attemptId&&x.owner===record.owner);
+     if(idx>=0){
+      if(verified)current.splice(idx,1);
+      else{
+       current[idx].attempts=(current[idx].attempts||0)+1;
+       current[idx].nextTry=Date.now()+15*60000;
+      }
+      write(QUEUE,current);
+     }
      updateStatus(record.attemptId,record.owner,{
-      syncStatus:response.type==='opaque'?'sent-unverified':(response.ok?'acknowledged':'queued'),
+      syncStatus:verified?'acknowledged':'sent-unverified',
       lastSentAt:new Date().toISOString()
      });
     }
@@ -202,7 +217,7 @@ function showReceipt(record){
  box.textContent=(record.score!=null?'Kết quả: '+record.score+'/'+(record.total??'?')+'. ':'')+
   message+' Mã lượt làm: '+record.attemptId;
 }
-window.SmartcomHistory={version:2,save,submit,draft,list,all,profile,report,flush,outbox};
+window.SmartcomHistory={version:3,save,submit,draft,list,all,profile,report,flush,outbox};
 window.addEventListener('sc:attempt-completed',event=>{if(event.detail)report(event.detail)});
 window.addEventListener('sc:attempt-saved',event=>showReceipt(event.detail));
 window.addEventListener('sc:result-status',event=>showReceipt(event.detail));
