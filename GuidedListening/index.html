@@ -530,7 +530,7 @@ async function importFullTranscript(el){
  catch(e){alert('Không thể lưu transcript trên trình duyệt.');return}
  store.gapTranscriptAnswers={};save();render();
 }
-const GUIDED_GAP_REVISION='common-words-no-proper-nouns-v4';
+const GUIDED_GAP_REVISION='common-words-no-capitals-v5';
 const GUIDED_GAP_TARGET=52;
 function gapWordKeyValue(word){
  const w=String(word).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z']/g,'');
@@ -567,11 +567,9 @@ function guidedGapEligible(m,turn){
  // Single words only, avoid scientific hyphenations, unfamiliar long terminology,
  // and capitalized names even if they occur at the beginning of a sentence.
  if(/[-'’]/.test(raw)||raw.length>11)return false;
- if(/[A-Z]/.test(raw)){
-  const prefix=turn.text.slice(0,m.index).trimEnd();
-  const sentenceStart=m.index===0||/[.!?]\s*$/.test(prefix);
-  if(!sentenceStart||!GUIDED_GAP_PREFER.has(word))return false;
- }
+ // Conservative by design: leave every originally capitalized token visible.
+ // This also protects names that happen to start a sentence (e.g. World Tours).
+ if(/[A-Z]/.test(raw))return false;
  return true;
 }
 function fullGapExercise(){
