@@ -338,6 +338,14 @@ if(/\/Practice\/WritingTask[12]\//.test(location.pathname)){
  }
 }
 
+// Attach the shared proofreading control to all Writing Task 1/2 exercise pages.
+if(/\/WritingTask[12]\//i.test(location.pathname)||/\/Vocabulary\/writing-task-2\//i.test(location.pathname)){
+ if(!document.querySelector('script[data-sc-proofreader]')){
+  const proof=document.createElement('script');proof.dataset.scProofreader='1';
+  proof.src=url('Practice/shared/writing-proofreader.js?v=20261120-unified01');
+  document.body.append(proof);
+ }
+}
 // Load vocabulary selection/dictionary on learning pages and the main portal.
 if(!document.querySelector('script[data-sc-word-tools]')){
  const vocabScript=document.createElement('script');
