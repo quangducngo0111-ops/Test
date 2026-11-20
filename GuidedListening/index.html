@@ -251,6 +251,7 @@ const safe=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
 const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function getStore(){
  try{store=JSON.parse(sessionStorage.getItem(key())||'{}')}catch(e){store={}}
+ if(!store.startedAt)store.startedAt=Date.now();
  // Old synonym sets have different answers at the same indexes. Reset only
  // the affected preparation steps, keeping test submissions and notes intact.
  if(store.contentVersion!=='20261119-vocab-game03'){
@@ -799,6 +800,19 @@ function renderGuidedReview(l){
 function speakPractice(i){if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ đọc câu.');return}let txt=lessons[lid].practice[i][0].replace('____',lessons[lid].practice[i][1]);speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)}
 function audioError(node){const msg=document.getElementById('audioNotice');if(msg)msg.insertAdjacentHTML('afterbegin','<span class="bad">Không tải được audio. Hãy tải lại trang. </span>')}
 function loadAudio(node){let f=node.files?.[0];if(!f)return;if(realAudio)URL.revokeObjectURL(realAudio);realAudio=URL.createObjectURL(f);$('audio').src=realAudio;$('audio').load();}
+const GUIDED_RESULT_ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
+async function reportGuidedResult(lesson,score){
+ if(!lesson.part||store.reportedAt)return;
+ let student={};try{student=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'{}')}catch(e){}
+ if(!student.name||!student.className)return;
+ const all=guidedExamQuestions(lesson),total=guidedExamCount(lesson);
+ const details=JSON.stringify({title:lesson.title,part:lesson.part,exercise:'Guided IELTS Listening',flow:'Gap-fill → Chọn từ → Học từ → Kéo thả → Vocabulary Check → Keywords → Paraphrase → Real Test → Review',gapScore:fullGapResult(),answers:all.map((q,i)=>({question:q.n,answer:item('real',i),correct:guidedExamAnswer(q,i),key:q.answers}))});
+ const body=new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Listening',practiceType:'Intensive Listening · Part '+lesson.part,practiceId:lesson.id.split('-')[1],score:String(score),total:String(total),durationSeconds:String(Math.round((Date.now()-(store.startedAt||Date.now()))/1000)),details});
+ try{
+  await fetch(GUIDED_RESULT_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});
+  store.reportedAt=new Date().toISOString();save();
+ }catch(e){console.warn('Chưa gửi được kết quả Guided Listening',e)}
+}
 function change(dir){
  clearPracticeFeedback();
  if(dir<0){stage=Math.max(-1,stage-1);render();return}
@@ -849,7 +863,8 @@ function change(dir){
   let score=guidedExamScore(l);
   try{let h=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]');h.push({skill:'listening',section:'guided',title:'Guided Listening '+l.id+' – '+l.title,score,total:guidedExamCount(l),correct:score,wrong:guidedExamCount(l)-score,savedAt:store.submittedAt});localStorage.setItem('SC_ATTEMPT_HISTORY_V1',JSON.stringify(h))}catch(e){}
  }
- stage=Math.min(7,stage+1);store.maxUnlocked=Math.max(store.maxUnlocked,stage);
+   reportGuidedResult(l,score);
+stage=Math.min(7,stage+1);store.maxUnlocked=Math.max(store.maxUnlocked,stage);
  save();render();window.scrollTo({top:0,behavior:'smooth'});
 }
 function restart(){if(!confirm('Xóa câu trả lời hiện tại để luyện lại?'))return;sessionStorage.removeItem(key());stage=-1;getStore();render()}
