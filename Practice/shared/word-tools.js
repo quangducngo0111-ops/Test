@@ -3,7 +3,7 @@
 if(window.__scWordTools)return;window.__scWordTools=true;
 const script=document.currentScript,root=new URL('../../',script.src);
 const byId=id=>document.getElementById(id);
-const isExam=()=>/(?:^|\/)(?:Lis\d+|Read\d+|Wri\d+)(?:\/|$)|\/mock-test\/|\/speaking-mock-test\/|\/FullTest\//i.test(location.pathname)
+const isExam=()=>/(?:^|\/)(?:Lis\d+|Read\d+|Wri\d+)(?:\/|$)|\/mock-test\/|\/speaking-mock-test\//i.test(location.pathname)
   ||!!document.querySelector('#testSection:not(.hidden)');
 const profile=()=>{try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){return null}};
 const key=()=>{const p=profile();return 'SC_VOCAB_NOTEBOOK_V1_'+(p?.name&&p?.className?(p.name+'|'+p.className).toLowerCase():'guest')};
@@ -241,7 +241,7 @@ function showTerm(term,range,event){
  menu.hidden=false;
  // Guided Listening matches the Reading Library direct dictionary-card interaction.
  // Other pages retain the existing quick action menu.
- if(/\/GuidedListening\/?/i.test(location.pathname))lookup.click();
+ if(/\/GuidedListening\/?|\/Practice\/Listening\/FullTest\//i.test(location.pathname))lookup.click();
  else position(menu);
 }
 function selectedRange(){
@@ -265,7 +265,7 @@ function knownPhraseAt(range){
  return null;
 }
 function handleSelection(event,expand){
- if(isExam()||location.pathname.includes('/Practice/Listening/')||event.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
+ if(isExam()||(location.pathname.includes('/Practice/Listening/')&&!location.pathname.includes('/Practice/Listening/FullTest/'))||event.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
  const range=selectedRange(),sel=window.getSelection();
  if(!range||!sel)return;
  const selected=norm(sel.toString());
