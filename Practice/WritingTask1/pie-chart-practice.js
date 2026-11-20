@@ -12,7 +12,7 @@ function renderTask(){$('taskTitle').textContent=data.title;$('prompt').textCont
 function currentText(){return state.drafts[parts[state.step-1]]||''}
 function updateText(){const ta=$('writing');if(!ta)return;const part=state.step===5?'full':parts[state.step-1];state.drafts[part]=ta.value;save();$('wordCount').textContent=words(ta.value)+' từ'}
 
-const PIE_ANALYSIS_VERSION=3;
+const PIE_ANALYSIS_VERSION=4;
 function headline(group){
  const ranked=group.values.map((v,i)=>({name:data.labels[i],value:v})).sort((a,b)=>b.value-a.value);
  return {top:ranked[0],bottom:ranked[ranked.length-1],second:ranked[1],ordered:ranked};
@@ -54,7 +54,7 @@ function analysisQuestions(){
  if(G.length>2){
   for(let g=1;g<G.length-1;g++){
    const mid=headline(G[g]),name=G[g].name,idx=data.labels.indexOf(mid.top.name);
-   q.splice(q.length-2,0,
+   q.splice(6+(g-1)*2,0,
     mk('Phân tích '+name,'Trong '+name+', phương tiện nào chiếm tỷ trọng lớn nhất?',[
      mid.second.name+' — '+mid.second.value+'%',mid.top.name+' — '+mid.top.value+'%',mid.bottom.name+' — '+mid.bottom.value+'%'
     ],1,'Tỷ trọng lớn nhất tại '+name+': '+mid.top.name+' ('+mid.top.value+'%).','So sánh các tỷ lệ của '+name+' trước khi chọn.'),
