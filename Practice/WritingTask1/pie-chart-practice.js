@@ -13,6 +13,7 @@ function currentText(){return state.drafts[parts[state.step-1]]||''}
 function updateText(){const ta=$('writing');if(!ta)return;const part=state.step===5?'full':parts[state.step-1];state.drafts[part]=ta.value;save();$('wordCount').textContent=words(ta.value)+' từ'}
 
 const PIE_ANALYSIS_VERSION=5;
+const PIE_OVERVIEW_VERSION=2;
 function headline(group){
  const ranked=group.values.map((v,i)=>({name:data.labels[i],value:v})).sort((a,b)=>b.value-a.value);
  return {top:ranked[0],bottom:ranked[ranked.length-1],second:ranked[1],ordered:ranked};
@@ -39,14 +40,54 @@ function analysisQuestions(){
 function stageQuestions(stage){
  const G=data.groups, mk=(title,question,options,answer,note,reason)=>({title,question,options,answer,note,reason});
  if(stage==='overview'){
-  const questions=G.map(g=>{const h=headline(g);return mk('Tỷ trọng lớn nhất ở '+g.name,'Trong '+g.name+', hạng mục nào chiếm tỷ trọng lớn nhất?',[
-   h.second.name+' ('+h.second.value+'%)',h.top.name+' ('+h.top.value+'%)',h.bottom.name+' ('+h.bottom.value+'%)'
-  ],1,g.name+': '+h.top.name+' dẫn đầu ('+h.top.value+'%).','Quan sát từng biểu đồ và tìm tỷ trọng lớn nhất.')});
-  const leaders=G.map(g=>{const h=headline(g);return g.name+': '+h.top.name+' ('+h.top.value+'%)'}).join(' · ');
-  questions.push(mk('Đặc điểm nổi bật','Nhận xét nào mô tả đúng các đặc điểm nổi bật?',[
-   'Mọi biểu đồ đều có tỷ lệ bằng nhau','Các tỷ trọng sẽ tăng trong tương lai',leaders
-  ],2,'Đặc điểm nổi bật: '+leaders+'.','Đối chiếu City A, B, C trước khi viết Overview.'));
-  return questions;
+  // Overview idea 1: the single greatest percentage in the entire dataset.
+  const all=G.flatMap(g=>g.values.map((value,i)=>({city:g.name,name:data.labels[i],value}))).sort((a,b)=>b.value-a.value);
+  const greatest=all[0],runner=all.find(x=>x.value<greatest.value)||all[1]||greatest;
+  const smallest=all[all.length-1];
+  const firstQuestion=mk('Ý 1 · Tỷ trọng cao nhất toàn bài',
+   'Trong tất cả các biểu đồ, hạng mục nào có tỷ trọng lớn nhất?',[
+    runner.city+': '+runner.name+' ('+runner.value+'%)',
+    greatest.city+': '+greatest.name+' ('+greatest.value+'%)',
+    smallest.city+': '+smallest.name+' ('+smallest.value+'%)'
+   ],1,'Ý 1 — '+greatest.name+' tại '+greatest.city+' có tỷ trọng lớn nhất toàn bài ('+greatest.value+'%).',
+   'Đối chiếu tất cả hạng mục ở mọi biểu đồ để tìm con số cao nhất, không chỉ nhóm dẫn đầu ở từng thành phố.');
+  // Overview idea 2: prefer a recurring, meaningful pattern over another list of maxima.
+  const consistentlyLowest=data.labels.map((label,i)=>({
+   label,index:i,values:G.map(g=>g.values[i]),
+   strict:G.every(g=>g.values[i]===Math.min(...g.values)&&g.values.filter(v=>v===g.values[i]).length===1)
+  })).filter(x=>x.strict);
+  const consistentlyHighest=data.labels.map((label,i)=>({
+   label,index:i,values:G.map(g=>g.values[i]),
+   strict:G.every(g=>g.values[i]===Math.max(...g.values)&&g.values.filter(v=>v===g.values[i]).length===1)
+  })).filter(x=>x.strict);
+  let correct,alternatives,note,reason;
+  if(consistentlyLowest.length){
+   const low=consistentlyLowest[0];
+   correct=low.label+' luôn chiếm tỷ trọng thấp nhất ở '+G.map(g=>g.name).join(', ')+'.';
+   alternatives=[
+    low.label+' có tỷ trọng lớn nhất trong mọi biểu đồ.',
+    'Tất cả hạng mục đều có tỷ trọng bằng nhau ở mọi biểu đồ.'
+   ];
+   note='Ý 2 — '+low.label+' luôn đứng cuối tại cả '+G.length+' nhóm ('+G.map((g,i)=>g.name+': '+low.values[i]+'%').join('; ')+').';
+   reason='So sánh cùng một hạng mục với các hạng mục khác bên trong từng biểu đồ; đây là đặc điểm lặp lại đáng nêu ở Overview.';
+  }else if(consistentlyHighest.length){
+   const high=consistentlyHighest[0];
+   correct=high.label+' đứng đầu ở tất cả '+G.length+' biểu đồ.';
+   alternatives=['Tất cả hạng mục có cùng tỷ lệ.','Không có hạng mục nào đứng đầu ở nhiều biểu đồ.'];
+   note='Ý 2 — '+high.label+' đứng đầu tại mọi nhóm ('+G.map((g,i)=>g.name+': '+high.values[i]+'%').join('; ')+').';
+   reason='Đây là một đặc điểm nhất quán qua các biểu đồ.';
+  }else{
+   const disparities=data.labels.map((name,i)=>({name,values:G.map(g=>g.values[i]),gap:Math.max(...G.map(g=>g.values[i]))-Math.min(...G.map(g=>g.values[i]))})).sort((a,b)=>b.gap-a.gap);
+   const focus=disparities[0];
+   correct=focus.name+' có chênh lệch tỷ trọng lớn nhất giữa các nhóm ('+focus.gap+' điểm phần trăm).';
+   alternatives=['Tất cả hạng mục đều giống nhau giữa các nhóm.','Không có sự khác biệt đáng kể nào giữa các biểu đồ.'];
+   note='Ý 2 — '+focus.name+' có khoảng cách lớn nhất giữa các nhóm: '+G.map((g,i)=>g.name+' '+focus.values[i]+'%').join('; ')+'.';
+   reason='Khi không có đặc điểm đứng đầu/đứng cuối nhất quán, có thể chọn chênh lệch nổi bật giữa các nhóm.';
+  }
+  const secondQuestion=mk('Ý 2 · Đặc điểm nổi bật khác',
+   'Ngoài tỷ trọng lớn nhất toàn bài, đặc điểm nào đáng chú ý nhất để đưa vào Overview?',
+   [alternatives[0],alternatives[1],correct],2,note,reason);
+  return [firstQuestion,secondQuestion];
  }
  const first=G[0],rest=G.slice(1),highlights=G.map(g=>{const h=headline(g);return g.name+': '+h.top.name+' '+h.top.value+'%, '+h.bottom.name+' '+h.bottom.value+'%'}).join(' · ');
  return [
@@ -70,7 +111,7 @@ function stageQuiz(k){
  const qs=stageQuestions(k),a=stageAnswers(k);state.stageCursor ||= {};
  const at=Math.min(qs.length,Math.max(0,Number(state.stageCursor[k])||0));
  const title=k==='overview'?'Phân tích trước khi viết Overview':'Phân nhóm trước khi viết Body';
- let html='<h2>'+title+'</h2><p class="meta">'+(k==='overview'?'Xác định tỷ trọng lớn nhất ở từng biểu đồ và đặc điểm nổi bật.':'Xác định các nhóm dành cho Body 1, Body 2 và số liệu cần dùng.')+'</p><div class="pie-analysis-progress"><span>Đã hoàn thành '+stageCount(k)+'/'+qs.length+' ý</span><div><i style="width:'+(stageCount(k)/qs.length*100)+'%"></i></div></div>';
+ let html='<h2>'+title+'</h2><p class="meta">'+(k==='overview'?'Tìm một tỷ trọng cao nhất toàn bài (ý 1) và một đặc điểm nhất quán hoặc tương phản nổi bật (ý 2).':'Xác định các nhóm dành cho Body 1, Body 2 và số liệu cần dùng.')+'</p><div class="pie-analysis-progress"><span>Đã hoàn thành '+stageCount(k)+'/'+qs.length+' ý</span><div><i style="width:'+(stageCount(k)/qs.length*100)+'%"></i></div></div>';
  if(at===qs.length&&stageComplete(k))return html+'<div class="pie-success"><strong>✓ Hoàn thành phần chuẩn bị</strong><p>Thông tin đã được lưu trong ghi chú.</p><div class="pie-analysis-actions"><button class="btn secondary" type="button" data-stage-restart="'+k+'">Xem lại</button><button class="btn" type="button" data-stage-finish="'+k+'">Bắt đầu viết '+(k==='overview'?'Overview':'Body 1')+' →</button></div></div>';
  const i=Math.min(at,qs.length-1),q=qs[i],v=a[i],correct=v!==undefined&&Number(v)===q.answer;
  return html+'<div class="pie-analysis-card"><span class="pie-q-label">Câu '+(i+1)+'/'+qs.length+' · '+esc(q.title)+'</span><h3>'+esc(q.question)+'</h3><div class="pie-mcq">'+q.options.map((opt,j)=>'<button type="button" data-stage-choice="'+j+'" data-stage="'+k+'" class="pie-option'+(v!==undefined&&Number(v)===j?' chosen '+(correct?'correct':'incorrect'):'')+'" '+(correct?'disabled':'')+'><span>'+String.fromCharCode(65+j)+'</span>'+esc(opt)+'</button>').join('')+'</div>'+(v!==undefined?'<div class="pie-explain '+(correct?'good':'retry')+'"><strong>'+(correct?'✓ Chính xác':'Chưa đúng')+'</strong><p>'+esc(q.reason)+(correct?' — '+esc(q.note):'')+'</p></div>':'')+'<div class="pie-analysis-actions"><button type="button" class="btn secondary" data-stage-back="'+k+'" '+(i===0?'disabled':'')+'>← Câu trước</button>'+(correct?'<button type="button" class="btn" data-stage-next="'+k+'">'+(i===qs.length-1?'Hoàn tất':'Câu tiếp theo →')+'</button>':'')+'</div></div>';
@@ -79,6 +120,13 @@ function ensureAnalysis(){
  if(state.analysisVersion!==PIE_ANALYSIS_VERSION){
   state.analysisVersion=PIE_ANALYSIS_VERSION;
   state.analysisAnswers={};state.analysisCursor=0;state.stageAnswers={};state.stageCursor={};state.stageReady={};
+ }
+ if(state.overviewVersion!==PIE_OVERVIEW_VERSION){
+  // Change only the Overview quiz; preserve previous analysis, Body answers and drafts.
+  state.overviewVersion=PIE_OVERVIEW_VERSION;
+  state.stageAnswers ||= {};state.stageAnswers.overview={};
+  state.stageCursor ||= {};state.stageCursor.overview=0;
+  state.stageReady ||= {};state.stageReady.overview=false;
  }
  state.analysisAnswers=state.analysisAnswers||{};
  const qs=analysisQuestions();
