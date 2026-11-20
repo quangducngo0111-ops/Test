@@ -862,9 +862,9 @@ function change(dir){
   submitted=true;store.submitted=true;store.submittedAt=new Date().toISOString();
   let score=guidedExamScore(l);
   try{let h=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]');h.push({skill:'listening',section:'guided',title:'Guided Listening '+l.id+' – '+l.title,score,total:guidedExamCount(l),correct:score,wrong:guidedExamCount(l)-score,savedAt:store.submittedAt});localStorage.setItem('SC_ATTEMPT_HISTORY_V1',JSON.stringify(h))}catch(e){}
+  reportGuidedResult(l,score);
  }
-   reportGuidedResult(l,score);
-stage=Math.min(7,stage+1);store.maxUnlocked=Math.max(store.maxUnlocked,stage);
+ stage=Math.min(7,stage+1);store.maxUnlocked=Math.max(store.maxUnlocked,stage);
  save();render();window.scrollTo({top:0,behavior:'smooth'});
 }
 function restart(){if(!confirm('Xóa câu trả lời hiện tại để luyện lại?'))return;sessionStorage.removeItem(key());stage=-1;getStore();render()}
