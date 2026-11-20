@@ -69,11 +69,22 @@ document.querySelectorAll('textarea').forEach(area=>{
 if(area.dataset.scProofAttached)return;
 if(area.readOnly||area.disabled||area.closest('[hidden]'))return;
 if(area.id==='analysisNotes'||area.id==='studentName'||area.closest('.pie-note'))return;
-if(area.id==='writing'&&document.body.dataset.pieSlug)return; // Pie already has the enhanced native review.
+if(area.id==='writing'&&document.body.dataset.pieSlug)return; // Pie has enhanced native review.
 area.dataset.scProofAttached='1';
+const result=document.createElement('div');result.className='sc-proof-result';result.hidden=true;
+const nearbyReview=area.id==='writing'?document.getElementById('review'):null;
+if(nearbyReview){
+ // Reuse the existing button instead of creating another one.
+ // Capture before the legacy inline handler, preserving the writing draft and controls.
+ nearbyReview.addEventListener('click',event=>{
+  event.preventDefault();event.stopImmediatePropagation();
+  check(area,nearbyReview,result);
+ },true);
+ area.insertAdjacentElement('afterend',result);
+ return;
+}
 const wrap=document.createElement('div');wrap.className='sc-proof-controls';
 const button=document.createElement('button');button.type='button';button.className='sc-proof-btn';button.textContent='Kiểm tra chính tả & ngữ pháp';
-const result=document.createElement('div');result.className='sc-proof-result';result.hidden=true;
 wrap.append(button);area.insertAdjacentElement('afterend',wrap);wrap.insertAdjacentElement('afterend',result);
 button.onclick=()=>check(area,button,result);
 });
