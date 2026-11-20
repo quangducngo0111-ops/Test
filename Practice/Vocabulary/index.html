@@ -11218,7 +11218,7 @@ button:disabled{
 </div>
 
 
-<script src="./data/static-charts.js?v=20261120-static-grouped02"></script>
+<script src="./data/static-charts.js?v=20261120-static-nested03"></script>
 <script>
 
 /* =========================================================
@@ -13063,6 +13063,16 @@ function openTopics(sync=true){
 ========================================================= */
 
 let selectedEssayType = "";
+let staticFolderOpen = false;
+function openStaticVocabularyFolder(sync=true){
+  staticFolderOpen = true;
+  $("setsTitle").textContent = "📊 Static · 11 nhóm từ vựng";
+  $("setsBack").textContent = "← Writing Task 1";
+  $("setsBack").onclick = ()=>openSkill("writing-task-1");
+  renderSets();
+  if(sync) setRoute({skill:"writing-task-1",folder:"static"});
+}
+
 
 function openSkill(skill, sync=true){
 
@@ -13080,6 +13090,7 @@ function openSkill(skill, sync=true){
 
   selectedSkill =
   skill;
+  staticFolderOpen = false;
 
   if(skill === "writing-task-2") selectedEssayType = "";
 
@@ -13338,8 +13349,14 @@ function renderSets(){
   {};
 
 
+  const visibleSets = selectedSkill === "writing-task-1"
+    ? sets.filter(([set])=>staticFolderOpen ? set.startsWith("static-charts-") : !set.startsWith("static-charts-"))
+    : sets;
+  const staticFolderCard = selectedSkill === "writing-task-1" && !staticFolderOpen
+    ? `<button type="button" class="set-card" onclick="openStaticVocabularyFolder()" aria-label="Mở 11 nhóm từ vựng Static"><div class="set-number">📁</div><h3>Static</h3><p>11 nhóm từ vựng · Biểu đồ tĩnh</p><div style="margin-top:12px;font-weight:800;color:#355fa4">Mở thư mục →</div></button>`
+    : "";
   $("setGrid").innerHTML =
-  sets
+  staticFolderCard + visibleSets
   .map(
     ([set,setWords]) => {
 
@@ -13348,7 +13365,9 @@ function renderSets(){
       ||
       {};
 
-      const setBadge = selectedSkill === "writing-task-2"
+      const setBadge = selectedSkill === "writing-task-1" && staticFolderOpen
+        ? set.slice(-2)
+        : selectedSkill === "writing-task-2"
         ? (String(info.label || "").match(/Topic\s*\d+/i)?.[0] || "Bộ từ vựng")
         : set;
 
@@ -19991,7 +20010,7 @@ function routeFromUrl(){
 
   const set =
   params.get("set")==="static-charts"
-  ? "static-charts-01"
+  ? ""
   : (params.get("set") || "");
 
   const essay = params.get("essay") || "";
@@ -20018,6 +20037,10 @@ function routeFromUrl(){
         openEssayVocabLesson(essay,Number(set.split("-").at(-1)),false);
       }
       return;
+    }
+
+    if(skill === "writing-task-1" && (params.get("folder") === "static" || set.startsWith("static-charts-"))){
+      openStaticVocabularyFolder(false);
     }
 
     if(set){
