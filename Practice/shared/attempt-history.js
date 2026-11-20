@@ -4,8 +4,10 @@
  * unless the endpoint explicitly supports a readable acknowledgement.
  */
 (()=>{'use strict';
-if(window.SmartcomHistory?.version>=3)return;
+if(window.SmartcomHistory?.version>=4)return;
 const STORAGE='SC_ATTEMPT_HISTORY_V1';
+// V4: an opaque response is NOT proof that Apps Script saved the row.
+// Retain the original body for recovery but never silently resend it (duplicate risk).
 const QUEUE='SC_RESULT_OUTBOX_V2';
 const ENDPOINT='https://script.google.com/macros/s/AKfycbwfwWjJ7Q3VTJEF5ldKGnFKYoziQdntAzRjq1Yqy6HSmbZSc69ijSdOvMCC_Zogbpcm/exec';
 const nativeFetch=window.fetch?.bind(window);
@@ -95,7 +97,13 @@ async function flush(){
  try{
   const rows=outbox();
   for(const item of rows){
-   if(item.nextTry>Date.now())continue;
+   if(item.sentUnverified||item.nextTry>Date.now())continue;
+   const old=all().find(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
+   if((item.attempts||0)>0&&old?.syncStatus==='sent-unverified'){
+    const pending=outbox(),index=pending.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
+    if(index>=0){pending[index].sentUnverified=true;write(QUEUE,pending)}
+    continue;
+   }
    // Without server-side CORS, an opaque response confirms only that the browser issued the request.
    let transmitted=false,verified=false;
    try{
@@ -116,7 +124,8 @@ async function flush(){
     if(verified)current.splice(idx,1);
     else{
      current[idx].attempts=attempts;
-     current[idx].nextTry=Date.now()+Math.min(6*3600000,15*60000*Math.pow(2,Math.min(attempts-1,5)));
+     current[idx].sentUnverified=true;
+     current[idx].nextTry=0;
     }
     write(QUEUE,current);
     updateStatus(item.attemptId,item.owner,{
@@ -175,7 +184,8 @@ if(nativeFetch){
       if(verified)current.splice(idx,1);
       else{
        current[idx].attempts=(current[idx].attempts||0)+1;
-       current[idx].nextTry=Date.now()+15*60000;
+       current[idx].sentUnverified=true;
+       current[idx].nextTry=0;
       }
       write(QUEUE,current);
      }
@@ -217,7 +227,7 @@ function showReceipt(record){
  box.textContent=(record.score!=null?'Kết quả: '+record.score+'/'+(record.total??'?')+'. ':'')+
   message+' Mã lượt làm: '+record.attemptId;
 }
-window.SmartcomHistory={version:3,save,submit,draft,list,all,profile,report,flush,outbox};
+window.SmartcomHistory={version:4,save,submit,draft,list,all,profile,report,flush,outbox};
 window.addEventListener('sc:attempt-completed',event=>{if(event.detail)report(event.detail)});
 window.addEventListener('sc:attempt-saved',event=>showReceipt(event.detail));
 window.addEventListener('sc:result-status',event=>showReceipt(event.detail));
