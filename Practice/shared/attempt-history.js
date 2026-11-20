@@ -211,6 +211,19 @@ function showReceipt(record){
   panel=document.createElement('aside');panel.id='sc-result-receipt';
   panel.setAttribute('role','status');
   panel.style.cssText='position:fixed;right:12px;bottom:84px;z-index:2147482600;max-width:min(360px,calc(100vw - 24px));background:#fff;border:1px solid #bfd4e9;box-shadow:0 7px 23px #1c34522c;border-radius:12px;padding:12px 35px 12px 14px;font:12px/1.5 system-ui,Arial;color:#22436b';
+  // Recovery control: never deletes an attempt, lets a learner share exact saved data.
+  const recover=document.createElement('button');
+  recover.type='button';
+  recover.textContent='Sao chép bản ghi';
+  recover.style.cssText='margin-top:8px;border:1px solid #b4c9df;background:#f3f8ff;border-radius:7px;padding:5px 9px;font-size:11px;color:#17406d;cursor:pointer';
+  recover.onclick=()=>{
+   const current=window.SmartcomHistory?.list()?.find(x=>x.attemptId===panel.dataset.attemptId);
+   if(!current)return;
+   const packet=JSON.stringify({schema:'smartcom-attempt-recovery-v1',record:current,queued:window.SmartcomHistory?.outbox()?.find(x=>x.attemptId===current.attemptId)||null},null,2);
+   if(navigator.clipboard?.writeText)navigator.clipboard.writeText(packet).then(()=>{recover.textContent='Đã sao chép ✓'},()=>window.prompt('Sao chép bản ghi sau:',packet));
+   else window.prompt('Sao chép bản ghi sau:',packet);
+  };
+  panel.append(recover);
   const close=document.createElement('button');
   close.type='button';close.textContent='×';close.setAttribute('aria-label','Đóng trạng thái kết quả');
   close.style.cssText='position:absolute;top:5px;right:8px;border:0;background:none;font-size:19px;cursor:pointer;color:#334';
@@ -223,6 +236,7 @@ function showReceipt(record){
   :record.syncStatus==='sent-unverified'
   ?'Đã gửi yêu cầu lên hệ thống, nhưng chưa xác minh được kết quả đã vào bảng điểm.'
   :'Đã lưu tại thiết bị; đang chờ gửi kết quả khi có kết nối.';
+ panel.dataset.attemptId=record.attemptId;
  const box=panel.querySelector('.sc-receipt-text');
  box.textContent=(record.score!=null?'Kết quả: '+record.score+'/'+(record.total??'?')+'. ':'')+
   message+' Mã lượt làm: '+record.attemptId;
