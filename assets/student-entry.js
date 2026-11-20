@@ -4,7 +4,7 @@
 /* Capture and queue submissions even on standalone Reading/Listening URLs. */
 (()=>{const current=document.currentScript;if(!current||window.SmartcomHistory||document.querySelector('script[data-sc-result-ledger]'))return;
  const tag=document.createElement('script');tag.dataset.scResultLedger='1';
- tag.src=new URL('../Practice/shared/attempt-history.js?v=20261120-unified03',current.src).href;
+ tag.src=new URL('../Practice/shared/attempt-history.js?v=20261120-unified04',current.src).href;
  (document.head||document.documentElement).append(tag);
 })();
 /* Shared portal student identity gate for standalone Reading pages.
