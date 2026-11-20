@@ -13501,7 +13501,7 @@ function renderSets(){
           </div>
 
           <h3>
-            ${escapeHTML(selectedSkill === "writing-task-1" && staticFolderOpen ? String(info.label || "").replace(/^\\d{2}\\s*·\\s*/, "") : (info.label || `Bộ ${set}`))}
+            ${escapeHTML(selectedSkill === "writing-task-1" && staticFolderOpen ? String(info.label || "").replace(/^\d{2}\s*·\s*/, "") : (info.label || `Bộ ${set}`))}
           </h3>
 
           <p>
@@ -20286,17 +20286,10 @@ async function init(){
     if(!document.getElementById("processHubCard")){
       const card=document.createElement("button");
       card.id="processHubCard";
-      card.className="set-card";
+      card.className="set-card wt1-folder-card";
       card.type="button";
       card.onclick=()=>window.location.assign("./process/index.html");
-      card.innerHTML=`
-        <div class="set-number">PR</div>
-        <h3>Process</h3>
-        <p>6 bộ từ</p>
-        <div style="margin-top:10px;color:#626d82;font-size:12px;line-height:1.5;font-weight:700">
-          <div>Manufacturing · Life cycles · Recycling</div>
-          <div>3 giai đoạn: Game → Kiểm tra → Luyện viết câu</div>
-        </div>`;
+      card.innerHTML=`<span class="wt1-folder-icon" aria-hidden="true">⚙️</span><h3>Process</h3><p>6 bộ từ · Quy trình và vòng đời</p><span class="wt1-folder-action">Khám phá →</span>`;
       grid.appendChild(card);
     }
     return result;
