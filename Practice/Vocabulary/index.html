@@ -20772,7 +20772,43 @@ function launchVocabularyStandaloneGame(path,key){
 function startPenaltyWords(){launchVocabularyStandaloneGame("./penalty-words/","PENALTY_WORDS_WORDS")}
 function startDungeonOfWords(){launchVocabularyStandaloneGame("./dungeon-of-words/","DUNGEON_WORDS_WORDS")}
 </script>
-<script src="../shared/attempt-history.js?v=20261120-unified04"></script>
+<script src="../shared/attempt-history.js?v=20261120-static-recovery05"></script>
+<script>
+// Restore Static vocabulary test scores saved before server reporting existed.
+// Only the last stored result per set is recoverable from legacy browser storage.
+(function(){
+ function recoverStaticHistory(){
+  const history=window.SmartcomHistory;
+  if(!history?.report)return;
+  let learner;try{learner=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch(e){}
+  if(!learner?.name||!learner?.className)return;
+  const scope=encodeURIComponent((learner.name+'|'+learner.className).toLowerCase());
+  const storageKey='VOCABULARY_TESTED_V1_'+scope;
+  let records;try{records=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch(e){return}
+  if(!records||typeof records!=='object')return;
+  const previous=new Set(history.list().map(x=>x.attemptId));
+  for(const [key,result] of Object.entries(records)){
+   const [skill,set]=key.split('::');
+   if(skill!=='writing-task-1'||!/^static-charts-\d{2}$/.test(set))continue;
+   const score=Number(result?.score),total=Number(result?.total);
+   const timestamp=Date.parse(result?.lastAt||'');
+   if(!Number.isFinite(score)||!Number.isFinite(total)||total<=0||!Number.isFinite(timestamp))continue;
+   const id='static-legacy-'+set+'-'+timestamp.toString(36);
+   if(previous.has(id))continue;
+   const saved=history.report({attemptId:id,kind:'Practice',skill:'Vocabulary',
+    title:set+' · Kiểm tra từ vựng Static (khôi phục)',
+    exerciseId:'vocabulary:writing-task-1:'+set,path:location.pathname,
+    score,total,submittedAt:new Date(timestamp).toISOString(),
+    details:{restoredFromLocal:true,numberOfAttempts:result.attempts||1,
+      note:'Restored last locally saved Static vocabulary test; earlier attempts are not available.'}
+   });
+   if(saved)previous.add(id);
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',recoverStaticHistory,{once:true});
+ else recoverStaticHistory();
+})();
+</script>
 <script src="../../Practice/shared/smartcom-ui.js?v=20261120-results02"></script>
 </body>
 </html>
