@@ -239,6 +239,17 @@ function localWritingIssues(t){
   issues.push({from,to,original:match[0],replacement:after,message,kind,priority,source:'local'});
  }
  const rules=[
+
+  // Target common Task 1 agreement errors with an explicit singular head noun.
+  {re:/\b(the\s+(?:proportion|percentage|share|figure|rate|number|amount)\s+of\b[^.!?;,]{0,95}?)\s+(were|are|have)\b/gi,
+   fix:m=>m[1]+' '+({were:'was',are:'is',have:'has'})[m[2].toLowerCase()],
+   msg:'Chủ ngữ chính là proportion/percentage/share/figure/rate/number/amount (số ít), nên động từ phải ở dạng số ít. Danh từ số nhiều nằm sau “of” không quyết định động từ.'},
+  {re:/\b(the\s+(?:figures|percentages|proportions|shares|rates|numbers)\b[^.!?;,]{0,70}?)\s+(was|is)\b/gi,
+   fix:m=>m[1]+' '+(m[2].toLowerCase()==='was'?'were':'are'),
+   msg:'Chủ ngữ chính ở dạng số nhiều, nên dùng were/are.'},
+  {re:/\b(\d+(?:\.\d+)?\s*%[,]?\s+which)\s+were\b/gi,
+   fix:m=>m[1]+' was',
+   msg:'Khi “which” bổ nghĩa cho một tỷ lệ đơn lẻ vừa nêu, dùng “which was”, không phải “which were”. Nếu “which” đang chỉ nhiều đối tượng, cần viết lại cho rõ.'},
   {re:/\b(the\s+)?(two|three|four|five)\s+pie\s+chart\s+illustrates\b/gi,fix:m=>m[0].replace(/chart\s+illustrates$/i,'charts illustrate'),msg:'Sau số đếm cần charts (số nhiều), và chủ ngữ số nhiều đi với illustrate.'},
   {re:/\bmeans\s+of\s+transportation\s+of\s+inhabitant\b/gi,fix:()=>'modes of transport used by residents',msg:'Sửa số nhiều inhabitants/residents và dùng cấu trúc tự nhiên hơn “modes of transport used by residents”.'},
 
