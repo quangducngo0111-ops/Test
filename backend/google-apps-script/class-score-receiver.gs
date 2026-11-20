@@ -23,7 +23,8 @@ const ALLOWED_CLASSES = Object.freeze([
   'SS25A01.1',
   'SS25IE2',
   'OP.AD.07',
-  'OP.ESS.11'
+  'OP.ESS.11',
+  'TEST'
 ]);
 const HEADERS = Object.freeze([
   'Server Timestamp',
@@ -105,8 +106,8 @@ function doPost(e){
       const ids=sheet.getRange(2,17,sheet.getLastRow()-1,1).getDisplayValues().flat();
       if(ids.includes(attemptId))return textResponse_('DUPLICATE');
     }
-    const score=numericOrBlank_(p.score??p.total);
-    const maxScore=numericOrBlank_(p.maxScore??p.maximum??p.totalQuestions);
+    const score=numericOrBlank_(p.score);
+    const maxScore=numericOrBlank_(p.maxScore??p.maximum??p.totalQuestions??p.total);
     const percentage=numericOrBlank_(p.percent??p.percentage);
     const computedPercent=percentage!==''?percentage:
       (score!==''&&maxScore>0?Math.round(score/maxScore*10000)/100:'');
@@ -114,8 +115,8 @@ function doPost(e){
       new Date(),
       cleanCell_(name),
       className,
-      cleanCell_(p.activity||p.examType||''),
-      cleanCell_(p.testId||p.test||''),
+      cleanCell_(p.activity||p.practiceType||p.mode||p.examType||''),
+      cleanCell_(p.testId||p.practiceId||p.test||''),
       score,
       maxScore,
       computedPercent,
