@@ -175,6 +175,7 @@ body.gap-guide-open{overflow:hidden}
 .step-guide-toolbar{display:flex;justify-content:flex-end;margin:-7px 0 8px}
 .step-guide-replay{background:#f4f0ff!important;border:1px solid #dbd0f7!important;color:#5840a5!important;border-radius:9px!important;font-size:12px!important;font-weight:750!important;padding:6px 11px!important}
 .step-guide-replay:hover{background:#ebe3ff!important}
+.selection-transcript{margin:16px 0 20px}.selection-transcript h3{margin:0 0 10px;font-size:17px}.selection-word-panel{top:65px}.selection-transcript .gap-lines{max-height:570px;overflow:auto}.selection-transcript .gap-vocab{border-top:0;padding-top:0}
 </style></head><body><header><a href="../Practice/Listening/Intensive%20Listening/Part4/">← Part 4</a>　 /　 Guided Listening</header><main>
 <section class="hero"><span class="pill">PRE-IELTS · LISTENING SECTION 4</span><h1>Guided Listening</h1><div class="muted">Luyện từ vựng và nhận diện từ khóa trước khi nghe bài thật. Hoàn thành từng bước để mở phần tiếp theo.</div><div id="lessonName" class="muted" style="margin-top:16px;font-weight:750;color:#28466b"></div></section>
 <div class="steps" id="steps"></div><section class="panel" id="content"></section><div id="practiceFeedback" class="practice-feedback" role="alert" aria-live="polite" hidden></div><div class="actions"><button id="prev" onclick="change(-1)">← Quay lại</button><button class="primary" id="next" onclick="change(1)">Tiếp tục →</button></div>
@@ -391,6 +392,11 @@ function savePendingWord(i){
 function removePendingWord(i){
  store.pendingWords?.splice(i,1);save();render();
 }
+function selectionTranscriptHTML(){
+ const data=transcriptData();if(!data)return '';
+ const lines=data.turns.map(t=>'<div class="gap-line"><b class="gap-role">'+escapeHtml(t.speaker)+'</b><div>'+interactiveGapText(t.text)+'</div></div>').join('');
+ return '<div class="selection-transcript"><h3>Chọn từ ngay trong transcript đã hoàn thành</h3><div class="gap-wrap"><div class="gap-lines">'+lines+'</div><aside class="gap-player selection-word-panel"><div id="gapSidebar">'+gapSidebarHTML()+'</div></aside></div></div>';
+}
 function selectionStageHTML(l){
  const picked=activeVocab(l);
  const transcript=String(GUIDED_TRANSCRIPTS[l.id]||'').toLowerCase();
@@ -403,8 +409,8 @@ function selectionStageHTML(l){
  }).join('');
  const chosen=picked.map((v,i)=>'<span class="chosen-word">'+escapeHtml(v[0])+'<button type="button" onclick="removeChosenVocab('+i+')" aria-label="Bỏ từ '+escapeHtml(v[0])+'">Bỏ</button></span>').join('');
  const pending=(store.pendingWords||[]).map((p,i)=>'<div class="pending-item"><b>'+escapeHtml(p.word)+'</b><input aria-label="Nghĩa của '+escapeHtml(p.word)+'" placeholder="Nghĩa tiếng Việt" value="'+escapeHtml(p.meaning||'')+'" oninput="updatePendingMeaning('+i+',this.value)"><button type="button" onclick="savePendingWord('+i+')">Chọn học</button><button type="button" onclick="removePendingWord('+i+')">Bỏ</button></div>').join('');
- return '<h2>02. Chọn từ cần học</h2><p class="muted">Chọn những từ em chưa biết hoặc chưa chắc nghĩa trong transcript vừa luyện. Những từ em đã chạm hoặc kéo thả ở bước trước nằm ở đầu danh sách; chỉ các từ em chọn mới được đưa vào bài học và game.</p>'+
- '<div class="pending-list">'+pending+'</div><span id="pendingVocabStatus" class="small" role="status"></span><div class="selected-count">'+picked.length+' từ đã chọn</div><div class="chosen-words">'+chosen+'</div>'+
+ return '<h2>02. Chọn từ cần học</h2><p class="muted">Nhấp vào từ chưa biết trong transcript bên dưới hoặc kéo sang danh sách bên phải để học. Nhấp đúp để tra từ; chỉ từ em lưu mới được đưa vào bài học và game.</p>'+
+ selectionTranscriptHTML()+'<div class="pending-list">'+pending+'</div><span id="pendingVocabStatus" class="small" role="status"></span><div class="selected-count">'+picked.length+' từ đã chọn</div><div class="chosen-words">'+chosen+'</div>'+
  '<div class="selection-grid">'+glossary+'</div><div class="manual-vocab"><input id="manualWord" placeholder="Từ/cụm từ khác" aria-label="Từ tiếng Anh"><input id="manualMeaning" placeholder="Nghĩa tiếng Việt" aria-label="Nghĩa tiếng Việt"><button type="button" onclick="addManualVocab()">Thêm từ</button><span class="small" id="manualVocabStatus" role="status"></span></div>';
 }
 function shuffledMeanings(l){
@@ -588,8 +594,9 @@ function gapAudioFile(el){const f=el.files?.[0];if(!f)return;if(realAudio)URL.re
 function interactiveGapText(text){
  return text.split(/(\b[A-Za-z][A-Za-z'-]*\b)/g).map(p=>{
   if(!/^[A-Za-z][A-Za-z'-]*$/.test(p))return escapeHtml(p);
-  const picked=(store.pendingWords||[]).some(x=>x.word.toLowerCase()===p.toLowerCase())||activeVocab(lessons[lid]).some(x=>x[0].toLowerCase()===p.toLowerCase());
-  return '<span class="gap-lexeme'+(picked?' picked':'')+'" tabindex="0" draggable="true" data-word="'+escapeHtml(p)+'" title="Nhấp đúp để tra nghĩa; nhấp một lần để chọn học" onclick="gapWordClick(event,this)" ondblclick="gapSelectForDictionary(event,this)" onkeydown="gapWordKey(event,this)" ondragstart="gapWordDrag(event,this)">'+escapeHtml(p)+'</span>';
+  const canPick=stage===0;
+  const picked=canPick&&((store.pendingWords||[]).some(x=>x.word.toLowerCase()===p.toLowerCase())||activeVocab(lessons[lid]).some(x=>x[0].toLowerCase()===p.toLowerCase()));
+  return '<span class="gap-lexeme'+(picked?' picked':'')+'" tabindex="0" draggable="'+canPick+'" data-word="'+escapeHtml(p)+'" title="'+(canPick?'Nhấp một lần để chọn học; nhấp đúp để tra từ':'Nhấp đúp để tra từ')+'" '+(canPick?'onclick="gapWordClick(event,this)" onkeydown="gapWordKey(event,this)" ondragstart="gapWordDrag(event,this)"':'')+' ondblclick="gapSelectForDictionary(event,this)">'+escapeHtml(p)+'</span>';
  }).join('');
 }
 let gapSingleClickTimer=null;
@@ -608,8 +615,9 @@ function gapSelectForDictionary(event,el){
  selection.removeAllRanges();selection.addRange(range);
 }
 function gapWordKey(e,el){if(e.key==='Enter')selectGapLexeme(el.dataset.word)}
-function gapWordDrag(e,el){e.dataTransfer.setData('text/plain',el.dataset.word)}
+function gapWordDrag(e,el){if(stage!==0){e.preventDefault();return}e.dataTransfer.setData('text/plain',el.dataset.word)}
 function selectGapLexeme(word){
+ if(stage!==0)return;
  const w=String(word||'').trim();if(!w||!/^[A-Za-z][A-Za-z'-]*$/.test(w))return;
  if(!Array.isArray(store.pendingWords))store.pendingWords=[];
  const found=lessons[lid].vocab.find(x=>x[0].toLowerCase()===w.toLowerCase());
@@ -620,7 +628,7 @@ function selectGapLexeme(word){
 }
 function gapDropOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over')}
 function gapDropLeave(e){e.currentTarget.classList.remove('drag-over')}
-function dropGapLexeme(e){e.preventDefault();e.currentTarget.classList.remove('drag-over');selectGapLexeme(e.dataTransfer.getData('text/plain'))}
+function dropGapLexeme(e){e.preventDefault();e.currentTarget.classList.remove('drag-over');if(stage===0)selectGapLexeme(e.dataTransfer.getData('text/plain'))}
 function saveGapCandidate(i){
  const x=store.pendingWords?.[i];if(!x)return;
  if(!chooseVocab(x.word,x.meaning)){const p=$('gapVocabMessage');if(p)p.textContent='Hãy nhập nghĩa tiếng Việt chưa bị trùng.';return}
@@ -650,7 +658,7 @@ function fullGapHTML(){
   if(blank)words=interactiveGapText(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+interactiveGapText(turn.text.slice(blank.start+blank.word.length));
   return '<div class="gap-line"><b class="gap-role">'+escapeHtml(turn.speaker)+'</b><div>'+words+'</div></div>';
  }).join('');
- return '<h2>01. Listening Gap-fill</h2>'+upload+'<span id="gapAddedWord" class="muted small" role="status"></span><div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><div class="gl-audio-head"><span class="gl-audio-icon" aria-hidden="true">🎧</span><div><strong>Audio luyện tập</strong><span>Nghe lại, tua và đổi tốc độ</span></div></div><audio id="gapAudio" preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" onloadedmetadata="syncGuidedAudio()" ontimeupdate="syncGuidedAudio()" onplay="syncGuidedAudio()" onpause="syncGuidedAudio()" onended="syncGuidedAudio()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><div class="gl-audio-controls"><button type="button" class="gl-audio-btn" onclick="gapSeek(-10)" aria-label="Tua lùi 10 giây">↶ 10s</button><button type="button" class="gl-audio-play" id="gapPlayPause" onclick="gapToggle()" aria-label="Phát audio">▶ Phát</button><button type="button" class="gl-audio-btn" onclick="gapSeek(10)" aria-label="Tua tới 10 giây">10s ↷</button></div><input id="gapAudioSeek" class="gl-audio-seek" aria-label="Thanh tiến trình audio" type="range" min="0" max="100" step="0.1" value="0" oninput="gapSeekPercent(this.value)"><div class="gl-audio-meta"><span id="gapAudioTime">0:00 / 0:00</span><label>Tốc độ <select id="gapAudioSpeed" aria-label="Tốc độ phát" onchange="gapSpeed(this.value)"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label></div><div class="gl-audio-volume"><label for="gapVolume">Âm lượng</label><input type="range" id="gapVolume" aria-label="Âm lượng" min="0" max="1" step="0.05" value="1" oninput="gapSetVolume(this.value)"></div><span id="gapAudioStatus" class="small muted" role="status"></span><button type="button" class="gl-audio-submit" onclick="checkFullTranscript()">Nộp bài</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong><div id="gapSidebar">'+gapSidebarHTML()+'</div></aside></div>';
+ return '<h2>01. Listening Gap-fill</h2>'+upload+'<div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><div class="gl-audio-head"><span class="gl-audio-icon" aria-hidden="true">🎧</span><div><strong>Audio luyện tập</strong><span>Nghe lại, tua và đổi tốc độ</span></div></div><audio id="gapAudio" preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" onloadedmetadata="syncGuidedAudio()" ontimeupdate="syncGuidedAudio()" onplay="syncGuidedAudio()" onpause="syncGuidedAudio()" onended="syncGuidedAudio()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><div class="gl-audio-controls"><button type="button" class="gl-audio-btn" onclick="gapSeek(-10)" aria-label="Tua lùi 10 giây">↶ 10s</button><button type="button" class="gl-audio-play" id="gapPlayPause" onclick="gapToggle()" aria-label="Phát audio">▶ Phát</button><button type="button" class="gl-audio-btn" onclick="gapSeek(10)" aria-label="Tua tới 10 giây">10s ↷</button></div><input id="gapAudioSeek" class="gl-audio-seek" aria-label="Thanh tiến trình audio" type="range" min="0" max="100" step="0.1" value="0" oninput="gapSeekPercent(this.value)"><div class="gl-audio-meta"><span id="gapAudioTime">0:00 / 0:00</span><label>Tốc độ <select id="gapAudioSpeed" aria-label="Tốc độ phát" onchange="gapSpeed(this.value)"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label></div><div class="gl-audio-volume"><label for="gapVolume">Âm lượng</label><input type="range" id="gapVolume" aria-label="Âm lượng" min="0" max="1" step="0.05" value="1" oninput="gapSetVolume(this.value)"></div><span id="gapAudioStatus" class="small muted" role="status"></span><button type="button" class="gl-audio-submit" onclick="checkFullTranscript()">Nộp bài</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
 }
 function stageHTML(l){
 if(stage===0)return selectionStageHTML(l);
@@ -723,8 +731,8 @@ function change(dir){
 function restart(){if(!confirm('Xóa câu trả lời hiện tại để luyện lại?'))return;sessionStorage.removeItem(key());stage=-1;getStore();render()}
 
 const guidedStepGuide=[
- {title:'Khởi động với Gap-fill',description:'Nghe toàn bộ audio và hoàn thành những từ còn thiếu trong transcript.',tasks:['Điền lần lượt tất cả 35 ô trống.','Bấm “Nộp bài” để kiểm tra; ô đỏ cần nghe và sửa lại.','Đạt đúng 100% để mở bước chọn từ mới.'],tip:'Nhấp đúp một từ để tra nghĩa; nhấp một lần hoặc kéo từ sang bên phải nếu muốn lưu học sau.'},
- {title:'Tự chọn từ cần học',description:'Chỉ chọn từ hoặc cụm từ em chưa biết trong transcript vừa luyện.',tasks:['Xem lại các từ đã đánh dấu trong Gap-fill.','Chọn từ gợi ý hoặc nhập từ và nghĩa của riêng em.','Chọn ít nhất 3 từ để tiếp tục.'],tip:'Không cần học lại những từ em đã biết. Các từ em chọn sẽ tạo thành bộ từ cá nhân.'},
+ {title:'Khởi động với Gap-fill',description:'Nghe toàn bộ audio và hoàn thành những từ còn thiếu trong transcript.',tasks:['Điền lần lượt tất cả 35 ô trống.','Bấm “Nộp bài” để kiểm tra; ô đỏ cần nghe và sửa lại.','Đạt đúng 100% để mở bước chọn từ mới.'],tip:'Ở bước khởi động, nhấp đúp để tra nghĩa. Việc chọn và lưu từ vựng sẽ thực hiện ở bước 2.'},
+ {title:'Tự chọn từ cần học',description:'Chỉ chọn từ hoặc cụm từ em chưa biết trong transcript vừa luyện.',tasks:['Đọc lại transcript vừa hoàn thành; nhấp vào từ cần học hoặc kéo sang danh sách bên phải.','Tra nghĩa bằng cách nhấp đúp, sau đó lưu từ muốn học.','Chọn ít nhất 3 từ để tiếp tục.'],tip:'Không cần học lại những từ em đã biết. Các từ em chọn sẽ tạo thành bộ từ cá nhân.'},
  {title:'Học bộ từ của em',description:'Ôn đúng những từ em đã tự chọn ở bước trước.',tasks:['Đọc từ tiếng Anh và nghĩa tiếng Việt.','Xem ví dụ theo ngữ cảnh nếu có; bấm biểu tượng loa để nghe phát âm.','Sau khi đã sẵn sàng, bấm “Tiếp tục” để chơi game.'],tip:'Em có thể quay lại bước chọn từ nếu cần điều chỉnh danh sách.'},
  {title:'Ghép thẻ từ vựng',description:'Ghép từng từ tiếng Anh với đúng nghĩa tiếng Việt.',tasks:['Kéo thẻ nghĩa vào từ tương ứng; trên điện thoại có thể chạm chọn.','Kéo thẻ đã ghép sang ô khác, về ngân hàng hoặc bấm “Bỏ ghép” để sửa.','Ghép đúng toàn bộ các cặp để tiếp tục.'],tip:'Khi kiểm tra, ô xanh là đúng, ô đỏ cần sửa. Hệ thống không hiện đáp án thay em.'},
  {title:'Vocabulary Check',description:'Kiểm tra xem em đã nhớ nghĩa của các từ vừa học chưa.',tasks:['Đọc từng câu hỏi và chọn một phương án.','Hoàn thành mọi câu rồi bấm “Tiếp tục”.','Đạt ít nhất 80% số câu đúng để mở bước tiếp.'],tip:'Nếu chưa đạt, xem lại các câu sai và thử lại.'},
