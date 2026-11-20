@@ -233,12 +233,13 @@ $('seekAudio').oninput=e=>{if(Number.isFinite(player.duration))player.currentTim
 $('speedAudio').onchange=e=>{player.playbackRate=Number(e.target.value);localStorage.setItem('IELTS_LISTENING_AUDIO_SPEED',e.target.value)};
 $('volumeAudio').oninput=e=>{player.volume=Number(e.target.value);localStorage.setItem('IELTS_LISTENING_AUDIO_VOLUME',e.target.value)};
 updatePlayer();
-const qs=questions.filter(x=>x.s===s);let out=s===1?sheetOne():s===3?sheetThree():s===4?sheetFour():'',rendered=new Set();let group='';
-if(s===2)out+=matchingSheetTwo();
+const qs=questions.filter(x=>x.s===s);let out=s===1?sheetOne():s===4?sheetFour():'',rendered=new Set();let group='';
 for(const q of qs){
+ if(s===2&&q.n===17)out+=matchingSheetTwo();
+ if(s===3&&q.n===24)out+=sheetThree();
  if((s===1||s===3||s===4)&&q.t==='blank')continue;
  if(s===2&&q.t==='match')continue;
- if(q.g!==group){group=q.g;out+=`<h3 style="color:#21164b;margin:26px 0 8px">${esc(group)}</h3>`;if(s===3&&q.n===24)out+='<p class="hint">Study of local library · Write ONE WORD ONLY for Questions 24–30.</p>'}
+ if(q.g!==group){group=q.g;out+=`<h3 style="color:#21164b;margin:26px 0 8px">${esc(group)}</h3>`;}
  if(q.t==='pair'){
   if(rendered.has(q.pair))continue;rendered.add(q.pair);
   const nums=questions.filter(x=>x.pair===q.pair).map(x=>x.n);
