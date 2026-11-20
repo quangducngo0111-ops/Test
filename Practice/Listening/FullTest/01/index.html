@@ -331,8 +331,12 @@ function injectReview(){
  if(details){details.classList.remove('hide');details.open=true}
 }
 function score(){let total=0;const done=new Set();for(const q of questions){if(q.t==='pair'){if(done.has(q.pair))continue;done.add(q.pair);const ns=q.pair.split('-').map(Number);const given=ns.map(n=>state.answers[n]);const matched=q.ans.filter(x=>given.includes(x)).length;total+=matched;}else if(hasCorrect(q,state.answers[q.n]))total++}return total}
-$('submit').onclick=()=>{const count=questions.filter(x=>state.answers[x.n]&&String(state.answers[x.n]).trim()).length;if(count===0){alert('Bạn chưa điền câu trả lời nào.');return}if(count<40&&!confirm(`Bạn mới trả lời ${count}/40 câu. Vẫn hoàn thành và chấm bài?`))return;state.submitted=true;state.submittedAt=new Date().toISOString();save();render();window.scrollTo({top:0,behavior:'smooth'})};
+$('submit').onclick=()=>{const count=questions.filter(x=>state.answers[x.n]&&String(state.answers[x.n]).trim()).length;if(count===0){alert('Bạn chưa điền câu trả lời nào.');return}if(count<40&&!confirm(`Bạn mới trả lời ${count}/40 câu. Vẫn hoàn thành và chấm bài?`))return;state.submitted=true;state.submittedAt=new Date().toISOString();save();
+const payload={kind:'Test',skill:'Listening',title:document.title,exerciseId:'Listening Full Test 01',path:location.pathname,score:score(),total:40,answers:state.answers,submittedAt:state.submittedAt};
+if(window.SmartcomHistory?.report)window.SmartcomHistory.report(payload);
+else window.dispatchEvent(new CustomEvent('sc:attempt-completed',{detail:payload}));
+render();window.scrollTo({top:0,behavior:'smooth'})};
 try{const st=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');if(st?.name)$('student').textContent=st.name}catch(e){}render();
 })();
-</script><script src="../../../../Practice/shared/smartcom-ui.js?v=20261120-listening-lookup04"></script>
+</script><script src="../../../../Practice/shared/smartcom-ui.js?v=20261120-results03"></script>
 <script src="../../listening-learning-tools.js?v=20261116-v6"></script></body></html>
