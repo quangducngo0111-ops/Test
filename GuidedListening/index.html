@@ -513,37 +513,49 @@ async function importFullTranscript(el){
  catch(e){alert('Không thể lưu transcript trên trình duyệt.');return}
  store.gapTranscriptAnswers={};save();render();
 }
-const GUIDED_GAP_REVISION='spread-unique-throughout-v2';
-const GUIDED_GAP_TARGET=46;
+const GUIDED_GAP_REVISION='balanced-unique-extended-v3';
+const GUIDED_GAP_TARGET=56;
 function gapWordKeyValue(word){
  const w=String(word).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z']/g,'');
  return w.endsWith('ies')?w.slice(0,-3)+'y':w.endsWith('es')&&w.length>6?w.slice(0,-2):w.endsWith('s')&&!w.endsWith('ss')&&w.length>5?w.slice(0,-1):w;
 }
 function fullGapExercise(){
  const source=transcriptData();if(!source||!source.turns?.length)return null;
- const ignored=new Set(('there these those which would could their where today people about after before because should through really other every whose what when more much this that have been will were then them they from into with both your good also many some first second third well just very only once under over right around across again being doing going thing things actually currently people local same time years later place places number country species').split(' '));
+ const ignored=new Set(('there these those which would could their where today people about after before because should through really other every whose what when more much this that have been will were then them they from into with both your good also many some first second third well just very only once under over right around across again being doing going thing things actually currently local same time years later place places number country species').split(' '));
  const forbidden=new Set((lessons[lid].answer||[]).flat().map(gapWordKeyValue));
- const used=new Set();
- const lookup=new Map(),blanks=[];
- const turns=source.turns, total=turns.length;
- // Evenly sample the ENTIRE audio, including the final sentences, rather than
- // stopping after the first 35 eligible lines.
- const count=Math.min(GUIDED_GAP_TARGET,total);
- const targets=Array.from({length:count},(_,j)=>count===1?0:Math.round(j*(total-1)/(count-1)));
- for(let j=0;j<targets.length;j++){
-  let line=targets[j],turn=turns[line];
+ const used=new Set(),blanks=[],lookup=new Map();
+ const turns=source.turns,total=turns.length;
+ // All lines get coverage first; longer lines get a second unique word.
+ const candidates=turns.map((turn,line)=>{
   const words=[...turn.text.matchAll(/\b[A-Za-z][A-Za-z'-]{4,}\b/g)]
-   .filter(m=>!ignored.has(m[0].toLowerCase())&&!forbidden.has(gapWordKeyValue(m[0]))&&!used.has(gapWordKeyValue(m[0])))
-   .filter(m=>!/\d/.test(m[0])&&!(m.index>0&&/[’']/u.test(turn.text[m.index-1])));
-  if(!words.length)continue;
-  const scored=words.map(m=>{
-   const w=m[0].toLowerCase(),vocab=lessons[lid].vocab.some(v=>v[0].toLowerCase()===w);
-   return {m,score:(vocab?6:0)+Math.min(w.length,12)*.38 +(m.index/Math.max(1,turn.text.length))*1.1-(w.endsWith('ly')?0.8:0)};
+   .filter(m=>!ignored.has(m[0].toLowerCase())&&!forbidden.has(gapWordKeyValue(m[0])))
+   .filter(m=>!(m.index>0&&/[’']/u.test(turn.text[m.index-1])));
+  return words.map(m=>{
+   const word=m[0].toLowerCase(),vocab=lessons[lid].vocab.some(v=>v[0].toLowerCase()===word);
+   return {m,score:(vocab?5:0)+Math.min(word.length,13)*.34+(m.index/Math.max(1,turn.text.length))};
   }).sort((a,b)=>b.score-a.score||a.m.index-b.m.index);
-  const selected=scored[0].m;
-  const k=gapWordKeyValue(selected[0]);used.add(k);
-  lookup.set(line,{index:blanks.length,start:selected.index,word:selected[0]});
-  blanks.push(selected[0]);
+ });
+ const choice=Array.from({length:total},()=>[]);
+ const target=Math.min(GUIDED_GAP_TARGET,candidates.reduce((n,x)=>n+Math.min(2,x.length),0));
+ for(let pass=0;pass<2;pass++){
+  for(let line=0;line<total;line++){
+   if(choice.flat().length>=target)break;
+   const words=candidates[line],turn=turns[line];
+   // Second blank only for a long enough sentence, not in very short lines.
+   if(pass===1&&turn.text.length<105)continue;
+   const selected=words.find(({m})=>{
+    const k=gapWordKeyValue(m[0]);
+    return !used.has(k)&&choice[line].every(prev=>Math.abs(prev.m.index-m.index)>19);
+   });
+   if(selected){used.add(gapWordKeyValue(selected.m[0]));choice[line].push(selected)}
+  }
+ }
+ for(let line=0;line<total;line++){
+  const hits=choice[line].sort((a,b)=>a.m.index-b.m.index);
+  if(hits.length){
+   lookup.set(line,hits.map(hit=>({index:blanks.length+hits.indexOf(hit),start:hit.m.index,word:hit.m[0]})));
+   hits.forEach(hit=>blanks.push(hit.m[0]));
+  }
  }
  return {source,blanks,lookup};
 }
@@ -679,9 +691,13 @@ function fullGapHTML(){
  const upload='';
  if(!task)return '<h2>01. Listening Gap-fill</h2><p class="muted">Không thể tải transcript của bài này. Vui lòng kiểm tra lại dữ liệu bài học.</p>';
  const rows=task.source.turns.map((turn,line)=>{
-  const blank=task.lookup.get(line);
-  let words=interactiveGapText(turn.text);
-  if(blank)words=interactiveGapText(turn.text.slice(0,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">'+interactiveGapText(turn.text.slice(blank.start+blank.word.length));
+  const gaps=task.lookup.get(line)||[];
+  let words='',cursor=0;
+  for(const blank of gaps){
+   words+=interactiveGapText(turn.text.slice(cursor,blank.start))+'<input class="gap-word" data-full-gap="'+blank.index+'" aria-label="Từ số '+(blank.index+1)+'" placeholder="Điền từ" value="'+escapeHtml(store.gapTranscriptAnswers?.[blank.index]||'')+'" oninput="gapInput('+blank.index+',this.value)">';
+   cursor=blank.start+blank.word.length;
+  }
+  words+=interactiveGapText(turn.text.slice(cursor));
   return '<div class="gap-line"><b class="gap-role">'+escapeHtml(turn.speaker)+'</b><div>'+words+'</div></div>';
  }).join('');
  return '<h2>01. Listening Gap-fill</h2>'+upload+'<div class="gap-wrap"><div class="gap-lines">'+rows+'</div><aside class="gap-player"><div class="gl-audio-head"><span class="gl-audio-icon" aria-hidden="true">🎧</span><div><strong>Audio luyện tập</strong><span>Nghe lại, tua và đổi tốc độ</span></div></div><audio id="gapAudio" preload="metadata" onerror="gapAudioMissing()" oncanplay="gapAudioReady()" onloadedmetadata="syncGuidedAudio()" ontimeupdate="syncGuidedAudio()" onplay="syncGuidedAudio()" onpause="syncGuidedAudio()" onended="syncGuidedAudio()" src="'+(realAudio||'./'+encodeURIComponent(lessons[lid].audio))+'"></audio><div class="gl-audio-controls"><button type="button" class="gl-audio-btn" onclick="gapSeek(-10)" aria-label="Tua lùi 10 giây">↶ 10s</button><button type="button" class="gl-audio-play" id="gapPlayPause" onclick="gapToggle()" aria-label="Phát audio">▶ Phát</button><button type="button" class="gl-audio-btn" onclick="gapSeek(10)" aria-label="Tua tới 10 giây">10s ↷</button></div><input id="gapAudioSeek" class="gl-audio-seek" aria-label="Thanh tiến trình audio" type="range" min="0" max="100" step="0.1" value="0" oninput="gapSeekPercent(this.value)"><div class="gl-audio-meta"><span id="gapAudioTime">0:00 / 0:00</span><label>Tốc độ <select id="gapAudioSpeed" aria-label="Tốc độ phát" onchange="gapSpeed(this.value)"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label></div><div class="gl-audio-volume"><label for="gapVolume">Âm lượng</label><input type="range" id="gapVolume" aria-label="Âm lượng" min="0" max="1" step="0.05" value="1" oninput="gapSetVolume(this.value)"></div><span id="gapAudioStatus" class="small muted" role="status"></span><button type="button" class="gl-audio-submit" onclick="checkFullTranscript()">Nộp bài</button><strong id="gapFullResult">'+task.blanks.length+' chỗ trống</strong></aside></div>';
