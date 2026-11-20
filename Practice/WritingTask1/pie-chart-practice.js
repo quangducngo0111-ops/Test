@@ -165,7 +165,111 @@ function render(){
  document.body.classList.remove('pie-booting');
  if($('download'))$('download').onclick=()=>{const blob=new Blob([data.title+'\n'+state.name+' | '+state.className+'\n\n'+(state.drafts.full||'')],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='IELTS_Writing_Task1_'+slug+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
 }
-function review(){const t=$('writing')?.value.trim()||'',found=[];if(!t)found.push('Chưa có nội dung để kiểm tra.');if(state.step===5&&words(t)<150)found.push('Task 1 thường yêu cầu tối thiểu 150 từ.');if(state.step!==1&&!/\d/.test(t)&&state.step!==2)found.push('Nên có số liệu phù hợp để hỗ trợ các nhận xét chính.');if(/\b(increased|decreased|rose|fell|declined)\b/i.test(t)&&data.dataType==='Static')found.push('Đây là biểu đồ Static; tránh mô tả thay đổi theo thời gian khi dữ liệu không thể hiện điều đó.');const el=$('feedback');el.hidden=false;el.textContent=found.length?found.join(' '):'Chưa thấy lỗi theo các quy tắc kiểm tra cơ bản. Đây không phải chấm band IELTS tự động.'}
+
+// On-demand grammar review: local rules work offline; LanguageTool offers broader suggestions.
+// The student's text is sent to LanguageTool only after clicking the review button.
+function localWritingIssues(t){
+ const issues=[],seen=new Set();
+ function add(match,before,after,message,kind='Ngữ pháp',priority=2){
+  if(!match)return;
+  const from=match.index,to=from+match[0].length,key=from+':'+to+':'+after;
+  if(seen.has(key))return;seen.add(key);
+  issues.push({from,to,original:match[0],replacement:after,message,kind,priority,source:'local'});
+ }
+ const rules=[
+  {re:/\b(the\s+)?(two|three|four|five|six|seven|eight|nine|ten)\s+(pie|bar)\s+chart\b/gi,fix:m=>m[0]+'s',msg:'Danh từ đếm được đứng sau số đếm lớn hơn một phải dùng dạng số nhiều.'},
+  {re:/\b(an?|the)\s+(inhabitant|resident|citizen)\s+in\s+(two|three|four)\s+cities\b/gi,fix:m=>m[0].replace(/\b(inhabitant|resident|citizen)\b/i,x=>x+'s'),msg:'Nhắc đến cư dân của nhiều thành phố cần sử dụng danh từ số nhiều.'},
+  {re:/\bof\s+inhabitant\b/gi,fix:m=>'of inhabitants',msg:'Inhabitant là danh từ đếm được; ở đây cần dùng inhabitants hoặc residents.'},
+  {re:/\b(city\s+[a-z])\b/gi,fix:m=>m[0].replace(/[a-z]$/i,c=>c.toUpperCase()),msg:'Tên thành phố được ký hiệu bằng chữ cái viết hoa.',kind:'Viết hoa'},
+  {re:/\b(the\s+)?pie\s+charts\s+illustrates\b/gi,fix:m=>m[0].replace(/illustrates$/i,'illustrate'),msg:'Chủ ngữ số nhiều charts đi với illustrate, không phải illustrates.'},
+  {re:/\b(the\s+)?pie\s+chart\s+illustrate\b/gi,fix:m=>m[0].replace(/illustrate$/i,'illustrates'),msg:'Chủ ngữ số ít chart đi với illustrates.'},
+  {re:/\b(the\s+)?(three|four|five)\s+pie\s+charts\s+illustrates\b/gi,fix:m=>m[0].replace(/illustrates$/i,'illustrate'),msg:'Chủ ngữ số nhiều yêu cầu động từ illustrate.'},
+  {re:/\b(informations|equipments|advices)\b/gi,fix:m=>({informations:'information',equipments:'equipment',advices:'advice'})[m[0].toLowerCase()],msg:'Đây là danh từ không đếm được trong cách dùng thông thường.'},
+  {re:/\b(the\s+)?percentage\s+of\s+([A-Za-z\s]+?)\s+were\b/gi,fix:m=>m[0].replace(/\bwere$/i,'was'),msg:'Percentage là danh từ số ít khi đóng vai trò chủ ngữ.'}
+ ];
+ for(const rule of rules){for(const m of t.matchAll(rule.re)){const replacement=rule.fix(m);if(replacement!==m[0])add(m,m[0],replacement,rule.msg,rule.kind||'Ngữ pháp')}}
+ if(state.step===1){
+  const m=/\b(the\s+)?(pie\s+charts?|charts?)\s+(?:illustrate|illustrates|show|shows)\b/i.exec(t);
+  if(!m && t.trim())issues.push({from:-1,to:-1,original:'',replacement:'',message:'Introduction nên giới thiệu biểu đồ và nội dung so sánh, tránh chỉ mô tả số liệu.',kind:'Task Achievement',priority:1,source:'local'});
+  if(/\bmeans of transportation of\b/i.test(t)){
+   const m=/means of transportation of/i.exec(t);
+   add(m,m[0],'modes of transport used by','Cách diễn đạt tự nhiên hơn: “modes of transport used by residents”.','Diễn đạt',1);
+  }
+  if(/\b(different|various)\s+means\s+of\s+transportation\b/i.test(t)){
+   // Only a style suggestion, not a hard grammar error.
+   const m=/\b(different|various)\s+means\s+of\s+transportation\b/i.exec(t);
+   add(m,m[0],'different modes of transport','Trong IELTS Task 1, “modes of transport” thường gọn và phù hợp hơn.','Diễn đạt',1);
+  }
+ }
+ if(state.step===5&&words(t)<150)issues.push({from:-1,to:-1,original:'',replacement:'',message:'Bài Task 1 hoàn chỉnh thường cần tối thiểu 150 từ.',kind:'Độ dài',priority:1,source:'local'});
+ if(state.step!==1&&state.step!==2&&state.step!==0&&!/\d/.test(t)&&t.trim())issues.push({from:-1,to:-1,original:'',replacement:'',message:'Body nên dùng số liệu cụ thể để hỗ trợ nhận xét.',kind:'Task Achievement',priority:1,source:'local'});
+ if(data.dataType==='Static'&&/\b(increased|decreased|rose|fell|declined)\b/i.test(t))issues.push({from:-1,to:-1,original:'',replacement:'',message:'Đây là dữ liệu Static; không nên mô tả thay đổi theo thời gian nếu đề không có mốc thời gian.',kind:'Task Achievement',priority:2,source:'local'});
+ return issues;
+}
+function languageToolIssues(raw,t){
+ return (raw.matches||[]).filter(m=>Number.isFinite(m.offset)&&m.offset>=0&&m.offset+m.length<=t.length).map(m=>({
+  from:m.offset,to:m.offset+m.length,original:t.slice(m.offset,m.offset+m.length),
+  replacement:m.replacements?.[0]?.value||'',message:m.message||'Kiểm tra lại cách diễn đạt.',
+  kind:m.rule?.issueType==='misspelling'?'Chính tả':m.rule?.category?.name||'Ngữ pháp',
+  priority:3,source:'languagetool'
+ }));
+}
+function mergeWritingIssues(local,remote){
+ const issues=[...remote,...local].sort((a,b)=>b.priority-a.priority||a.from-b.from),seen=new Set(),out=[];
+ for(const issue of issues){
+  const key=issue.from+':'+issue.to+':'+issue.replacement.toLowerCase();
+  if(seen.has(key))continue;
+  if(issue.from>=0&&out.some(x=>x.from>=0&&x.from<issue.to&&issue.from<x.to))continue;
+  seen.add(key);out.push(issue);
+ }
+ return out.sort((a,b)=>a.from-b.from);
+}
+function showWritingReview(issues,remoteStatus){
+ const el=$('feedback');if(!el)return;
+ el.hidden=false;
+ let html='<div class="writing-review"><div class="writing-review-head"><strong>'+issues.length+' điểm cần xem lại</strong><small>'+esc(remoteStatus)+'</small></div>';
+ if(!issues.length)html+='<p>Chưa phát hiện lỗi theo các quy tắc có thể kiểm tra. Điều này không có nghĩa bài viết hoàn toàn chính xác hoặc đạt một band IELTS cụ thể.</p>';
+ else html+='<div class="writing-review-list">'+issues.map((issue,i)=>
+  '<div class="writing-review-item"><div class="writing-review-label">'+esc(issue.kind)+'</div>'+
+  (issue.original?'<div class="writing-review-original">Trong bài: <del>'+esc(issue.original)+'</del></div>':'')+
+  '<p>'+esc(issue.message)+'</p>'+
+  (issue.replacement?'<div class="writing-review-suggest">Gợi ý: <strong>'+esc(issue.replacement)+'</strong></div><button class="btn secondary writing-apply" type="button" data-apply-issue="'+i+'">Áp dụng sửa này</button>':'')+
+  '</div>').join('')+'</div>';
+ html+='</div>';el.innerHTML=html;
+ el.querySelectorAll('[data-apply-issue]').forEach(b=>b.onclick=()=>{
+  const issue=issues[Number(b.dataset.applyIssue)],input=$('writing');if(!input||!issue||issue.from<0)return;
+  const text=input.value;
+  if(text.slice(issue.from,issue.to)!==issue.original){review();return;}
+  input.value=text.slice(0,issue.from)+issue.replacement+text.slice(issue.to);
+  updateText();review();
+ });
+}
+let writingReviewRequest=0;
+async function review(){
+ const input=$('writing'),t=input?.value.trim()||'',el=$('feedback'),button=$('review');
+ if(!el)return;
+ const request=++writingReviewRequest;
+ if(!t){showWritingReview([{from:-1,to:-1,original:'',replacement:'',kind:'Nội dung',message:'Hãy viết nội dung trước khi kiểm tra.',priority:1}], 'Chưa có bài viết');return}
+ if(button){button.disabled=true;button.textContent='Đang kiểm tra…'}
+ const local=localWritingIssues(input.value);
+ showWritingReview(local,'Đang kiểm tra thêm lỗi ngữ pháp và chính tả…');
+ let remote=[],status='Kiểm tra bằng quy tắc nội bộ';
+ try{
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),8000);
+  try{
+   const params=new URLSearchParams({text:input.value,language:'en-GB',enabledOnly:'false'});
+   const response=await fetch('https://api.languagetool.org/v2/check',{method:'POST',body:params,signal:controller.signal});
+   if(!response.ok)throw Error('HTTP '+response.status);
+   remote=languageToolIssues(await response.json(),input.value);
+   status='Đã đối chiếu thêm bằng LanguageTool · Gợi ý cần được xem xét';
+  }finally{clearTimeout(timeout)}
+ }catch(e){status='Dịch vụ kiểm tra mở rộng không khả dụng; đang hiển thị kiểm tra nội bộ';}
+ if(request!==writingReviewRequest)return;
+ if(button){button.disabled=false;button.textContent='Kiểm tra lại chính tả & ngữ pháp'}
+ // The text may have changed during the asynchronous request.
+ if(input.value!==t && input.value.trim()!==t){showWritingReview(localWritingIssues(input.value),'Bài đã thay đổi; bấm kiểm tra lại để cập nhật');return}
+ showWritingReview(mergeWritingIssues(local,remote),status);
+}
 function move(i){if(i<0||i>=6)return;if(i>0&&completedAnalysis().length!==analysisQuestions().length&&!parts.some(p=>String(state.drafts[p]||'').trim())){state.step=0;render();return;}state.step=i;save();render();const top=$('stepNav').getBoundingClientRect().top+scrollY-90;scrollTo({top,behavior:'smooth'})}
 async function init(){try{const r=await fetch('../../pie-chart-data.json?v=20261116-01',{cache:'no-store'});if(!r.ok)throw Error('Không tải được dữ liệu đề');data=(await r.json())[slug];if(!data)throw Error('Không tìm thấy bài');document.title=data.title+' — Writing Task 1';$('title').textContent=data.title;$('type').textContent='PIE CHART · '+data.dataType.toUpperCase();renderTask();showProvenance();student=getStudent();store='SC_WT1_PIE_V1_'+slug+'_'+((student?.name||'guest')+'|'+(student?.className||'')).toLowerCase();try{state=JSON.parse(localStorage.getItem(store)||'null')}catch{}state=state||{started:false,name:'',className:'',step:0,checked:{},notes:'',drafts:{}};state.drafts=state.drafts||{};state.checked=state.checked||{};ensureAnalysis();if(!Number.isInteger(state.step)||state.step<0||state.step>=steps.length)state.step=0;if(!state.started&&student?.name?.trim()&&student?.className?.trim()){state.started=true;state.name=student.name.trim();state.className=student.className.trim();save();}$('start').onclick=()=>{const name=$('studentName').value.trim(),cls=$('studentClass').value.trim();if(!name){$('startError').textContent='Vui lòng nhập họ tên.';return}state.name=name;state.className=cls;state.started=true;save();render()};render()}catch(e){document.body.classList.remove('pie-booting');$('loadError').textContent='Không tải được bài: '+e.message}}
 init();
