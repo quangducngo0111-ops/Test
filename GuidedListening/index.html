@@ -211,7 +211,7 @@ body.gap-guide-open{overflow:hidden}
   <p id="gapGuideTip" class="gap-guide-tip"></p>
   <button id="gapGuideStart" class="gap-guide-start" type="button" onclick="closeGapGuide()">Đã hiểu – Bắt đầu làm bài</button>
  </section>
-</div><script src="./additional-lessons.js?v=20261120-ninestep02"></script><script>
+</div><script src="../Practice/shared/attempt-history.js?v=20261120-unified05"></script><script src="./additional-lessons.js?v=20261120-ninestep02"></script><script>
 const lessons=[
 {id:'01',title:'Invasive Species',audio:'part4.mp3',
 vocab:[['invasive','xâm lấn'],['native','bản địa'],['introduce','đưa vào môi trường mới'],['harmful','gây hại'],['threaten','đe dọa'],['survive','sống sót'],['spread','lan rộng'],['breed','sinh sản'],['destroy','phá hủy'],['monitor','theo dõi'],['species','loài sinh vật'],['habitat','môi trường sống'],['pest','sinh vật gây hại'],['cargo','hàng hóa vận chuyển'],['plantation','đồn điền'],['impact','tác động'],['native plants','thực vật bản địa'],['pest control','kiểm soát sinh vật gây hại']],
@@ -850,7 +850,7 @@ async function reportGuidedResult(lesson,score){
  if(!student.name||!student.className)return;
  const all=guidedExamQuestions(lesson),total=guidedExamCount(lesson);
  const details=JSON.stringify({title:lesson.title,part:lesson.part,exercise:'Guided IELTS Listening',flow:'Gap-fill → Chọn từ → Học từ → Kéo thả → Vocabulary Check → Keywords → Paraphrase → Real Test → Review',gapScore:fullGapResult(),answers:all.map((q,i)=>({question:q.n,answer:item('real',i),correct:guidedExamAnswer(q,i),key:q.answers}))});
- const payload={kind:'Practice',skill:'Listening',title:'Guided Listening '+lesson.id+' – '+lesson.title,exerciseId:lesson.id,path:location.pathname,score,total,
+ const payload={attemptId:'guided-'+lesson.id+'-'+String(store.submittedAt||Date.now()),kind:'Practice',skill:'Listening',title:'Guided Listening '+lesson.id+' – '+lesson.title,exerciseId:lesson.id,path:location.pathname,score,total,
    durationSeconds:Math.max(0,Math.round((Date.now()-(store.startedAt||Date.now()))/1000)),
    submittedAt:store.submittedAt||new Date().toISOString(),details:JSON.parse(details)};
  if(window.SmartcomHistory?.report){
