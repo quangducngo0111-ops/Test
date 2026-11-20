@@ -6841,6 +6841,18 @@ button:disabled{
   line-height:1.5;
 }
 
+/* Writing Task 1: cohesive four-category navigation, compact and accessible. */
+#setsScreen.wt1-hub .set-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+#setsScreen.wt1-hub .wt1-folder-card{min-height:210px;padding:22px;border:1px solid #dce5f0;border-radius:20px;box-shadow:0 5px 18px rgba(32,46,84,.055);background:#fff;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+#setsScreen.wt1-hub .wt1-folder-card:hover{border-color:#98b6dc;box-shadow:0 11px 26px rgba(32,65,125,.10);transform:translateY(-3px)}
+#setsScreen.wt1-hub .wt1-folder-card:focus-visible{outline:3px solid #ff9c00;outline-offset:3px}
+.wt1-folder-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;color:#244e89;background:#eaf3ff;font-size:23px;line-height:1}
+.wt1-folder-card h3{font-size:18px;margin:18px 0 6px;color:#1f3358}
+.wt1-folder-card p{font-size:13px;color:#64738b;line-height:1.5}
+.wt1-folder-card .wt1-folder-action{margin-top:auto;padding-top:20px;font-weight:800;color:#245b9f;font-size:13px}
+#setsScreen.wt1-hub .set-number{background:#eaf3ff;color:#245b9f}
+@media(max-width:1100px){#setsScreen.wt1-hub .set-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){#setsScreen.wt1-hub .set-grid{grid-template-columns:1fr}#setsScreen.wt1-hub .wt1-folder-card{min-height:165px}}
 /* Topic vocabulary: consistent compact cards with clear hierarchy */
 .topic-set-card{
   min-height:174px;
@@ -13067,6 +13079,7 @@ let selectedEssayType = "";
 let staticFolderOpen = false;
 function openStaticVocabularyFolder(sync=true){
   staticFolderOpen = true;
+  $("setsScreen").classList.remove("wt1-hub");
   $("setsTitle").textContent = "📊 Static · 11 nhóm từ vựng";
   $("setsBack").textContent = "← Writing Task 1";
   $("setsBack").onclick = ()=>openSkill("writing-task-1");
@@ -13092,6 +13105,7 @@ function openSkill(skill, sync=true){
   selectedSkill =
   skill;
   staticFolderOpen = false;
+  $("setsScreen").classList.toggle("wt1-hub",skill === "writing-task-1");
 
   if(skill === "writing-task-2") selectedEssayType = "";
 
@@ -13350,14 +13364,21 @@ function renderSets(){
   {};
 
 
+  // A clean top-level hub; technical set codes belong inside lessons only.
+  if(selectedSkill === "writing-task-1" && !staticFolderOpen){
+    const types=[
+      {icon:"📊",title:"Static",desc:"11 nhóm từ vựng · Biểu đồ tĩnh",action:"openStaticVocabularyFolder()"},
+      {icon:"📈",title:"Dynamic Datasets",desc:"60 từ · Xu hướng và biến động",action:"openSet('dynamic-datasets')"},
+      {icon:"🗺️",title:"Maps",desc:"81 từ · Mô tả thay đổi bản đồ",action:"openSet('maps')"}
+    ];
+    $("setGrid").innerHTML=types.map(item=>`<button type="button" class="set-card wt1-folder-card" onclick="${item.action}"><span class="wt1-folder-icon" aria-hidden="true">${item.icon}</span><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.desc)}</p><span class="wt1-folder-action">Khám phá →</span></button>`).join("");
+    return;
+  }
   const visibleSets = selectedSkill === "writing-task-1"
-    ? sets.filter(([set])=>staticFolderOpen ? set.startsWith("static-charts-") : !set.startsWith("static-charts-"))
+    ? sets.filter(([set])=>set.startsWith("static-charts-"))
     : sets;
-  const staticFolderCard = selectedSkill === "writing-task-1" && !staticFolderOpen
-    ? `<button type="button" class="set-card" onclick="openStaticVocabularyFolder()" aria-label="Mở 11 nhóm từ vựng Static"><div class="set-number">📁</div><h3>Static</h3><p>11 nhóm từ vựng · Biểu đồ tĩnh</p><div style="margin-top:12px;font-weight:800;color:#355fa4">Mở thư mục →</div></button>`
-    : "";
   $("setGrid").innerHTML =
-  staticFolderCard + visibleSets
+  visibleSets
   .map(
     ([set,setWords]) => {
 
@@ -13480,7 +13501,7 @@ function renderSets(){
           </div>
 
           <h3>
-            ${escapeHTML(info.label || `Bộ ${set}`)}
+            ${escapeHTML(selectedSkill === "writing-task-1" && staticFolderOpen ? String(info.label || "").replace(/^\\d{2}\\s*·\\s*/, "") : (info.label || `Bộ ${set}`))}
           </h3>
 
           <p>
@@ -20255,7 +20276,7 @@ async function init(){
   if(typeof originalRenderSets!=="function") return;
   window.renderSets=function(){
     const result=originalRenderSets.apply(this,arguments);
-    if(selectedSkill!=="writing-task-1") return result;
+    if(selectedSkill!=="writing-task-1" || staticFolderOpen) return result;
     const grid=document.getElementById("setGrid");
     if(!grid) return result;
     [...grid.querySelectorAll(".set-card")].forEach(card=>{
