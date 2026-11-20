@@ -12693,7 +12693,8 @@ function setRoute(params={}, replace=false){
       "view",
       "skill",
       "essay",
-      "set"
+      "set",
+      "folder"
     ]
     .forEach(
       key =>
@@ -13404,7 +13405,7 @@ function renderSets(){
             </div>
 
             <div class="reading-set-label">
-              ${escapeHTML(info.label || `Bộ ${set}`)}
+              ${escapeHTML(selectedSkill === "writing-task-1" && staticFolderOpen ? String(info.label || "").replace(/^\d{2}\s*·\s*/, "") : (info.label || `Bộ ${set}`))}
             </div>
 
             ${articleTitle
@@ -13486,7 +13487,7 @@ function renderSets(){
             ${setWords.length} từ
           </p>
 
-          ${titlesHtml}
+          ${selectedSkill === "writing-task-1" && staticFolderOpen ? "" : titlesHtml}
 
         </button>
       `;
@@ -13588,6 +13589,7 @@ function openSet(set, sync=true){
   if(sync){
     setRoute({
       skill:selectedSkill,
+      ...(selectedSkill === "writing-task-1" && String(selectedSet).startsWith("static-charts-") ? {folder:"static"} : {}),
       set:selectedSet
     });
   }
@@ -13668,6 +13670,9 @@ function showGameList(){
   ()=>{
     if(selectedSkill === "writing-task-2" && selectedEssayType){
       openEssayVocabType(selectedEssayType);
+    }else if(selectedSkill === "writing-task-1" && String(selectedSet).startsWith("static-charts-")){
+      openSkill(selectedSkill,false);
+      openStaticVocabularyFolder();
     }else{
       openSkill(selectedSkill);
     }
