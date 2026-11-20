@@ -15550,8 +15550,10 @@ function finishVocabularyTest(){
     details:{selectedSkill,selectedSet,retryWrongOnly:!!vocabTestWrongOnly,percent,
       responses:roundResponses.map(r=>({word:r.question?.word?.word,answer:r.answer,correct:r.correct}))}
   };
-  if(window.SmartcomHistory?.report)window.SmartcomHistory.report(attemptData);
-  else window.dispatchEvent(new CustomEvent("sc:attempt-completed",{detail:attemptData}));
+  if(window.SmartcomHistory?.report){
+    const saved=window.SmartcomHistory.report(attemptData);
+    if(!saved)alert("Đã lưu điểm Vocabulary trên thiết bị nhưng CHƯA gửi được lên bảng giáo viên. Em cần đăng nhập với họ tên và lớp trên IELTS Practice Portal rồi kiểm tra lại.");
+  }else window.dispatchEvent(new CustomEvent("sc:attempt-completed",{detail:attemptData}));
   const passed=percent>=VOCAB_TEST_PASS_PERCENT;
   $("vocabTestResultIcon").textContent=passed?"🎓":"🎯";
   $("vocabTestResultTitle").textContent=passed
@@ -20794,7 +20796,7 @@ function startDungeonOfWords(){launchVocabularyStandaloneGame("./dungeon-of-word
    const timestamp=Date.parse(result?.lastAt||'');
    if(!Number.isFinite(score)||!Number.isFinite(total)||total<=0||!Number.isFinite(timestamp))continue;
    const id='static-legacy-'+set+'-'+timestamp.toString(36);
-   if(previous.has(id))continue;
+   if(previous.has(id)||history.list().some(x=>x.exerciseId==='vocabulary:writing-task-1:'+set&&x.status==='completed'&&Date.parse(x.submittedAt||'')>=timestamp))continue;
    const saved=history.report({attemptId:id,kind:'Practice',skill:'Vocabulary',
     title:set+' · Kiểm tra từ vựng Static (khôi phục)',
     exerciseId:'vocabulary:writing-task-1:'+set,path:location.pathname,
