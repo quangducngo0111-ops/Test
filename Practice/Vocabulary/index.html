@@ -19654,6 +19654,18 @@ function endGame(
     customTitle
   );
 
+  // Every completed vocabulary game reports its attempts and score too.
+  const payload={
+    kind:"Practice",skill:"Vocabulary",
+    title:"Game "+(GAME_NAMES[currentGame]||currentGame)+" · "+selectedSet,
+    exerciseId:"vocab-game:"+selectedSkill+":"+selectedSet+":"+currentGame,
+    path:location.pathname,score:correct,total:attempts,
+    details:{game:currentGame,gamePoints:score,accuracy:accuracy(),bestCombo,
+      completedSet:resultCompletedSet,learnedCount:learnedCount(),collectionSize:currentCollection.length}
+  };
+  if(window.SmartcomHistory?.report)window.SmartcomHistory.report(payload);
+  else window.dispatchEvent(new CustomEvent("sc:attempt-completed",{detail:payload}));
+
 }
 
 
