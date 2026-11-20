@@ -850,7 +850,16 @@ async function reportGuidedResult(lesson,score){
  if(!student.name||!student.className)return;
  const all=guidedExamQuestions(lesson),total=guidedExamCount(lesson);
  const details=JSON.stringify({title:lesson.title,part:lesson.part,exercise:'Guided IELTS Listening',flow:'Gap-fill → Chọn từ → Học từ → Kéo thả → Vocabulary Check → Keywords → Paraphrase → Real Test → Review',gapScore:fullGapResult(),answers:all.map((q,i)=>({question:q.n,answer:item('real',i),correct:guidedExamAnswer(q,i),key:q.answers}))});
- const body=new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Listening',practiceType:'Intensive Listening · Part '+lesson.part,practiceId:lesson.id.split('-')[1],score:String(score),total:String(total),durationSeconds:String(Math.round((Date.now()-(store.startedAt||Date.now()))/1000)),details});
+ const payload={kind:'Practice',skill:'Listening',title:'Guided Listening '+lesson.id+' – '+lesson.title,exerciseId:lesson.id,path:location.pathname,score,total,
+   durationSeconds:Math.max(0,Math.round((Date.now()-(store.startedAt||Date.now()))/1000)),
+   submittedAt:store.submittedAt||new Date().toISOString(),details:JSON.parse(details)};
+ if(window.SmartcomHistory?.report){
+   const record=window.SmartcomHistory.report(payload);
+   if(record){store.reportedAt=new Date().toISOString();save()}
+   return;
+ }
+ // Legacy fallback when the shared history script has not loaded yet.
+ const body=new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Listening',practiceType:'Guided IELTS Listening · Part '+lesson.part,practiceId:lesson.id,score:String(score),total:String(total),durationSeconds:String(payload.durationSeconds),details,attemptId:'guided-'+lesson.id+'-'+String(store.submittedAt||Date.now())});
  try{
   await fetch(GUIDED_RESULT_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});
   store.reportedAt=new Date().toISOString();save();
@@ -904,7 +913,7 @@ function change(dir){
   if(!confirm('Nộp bài? Sau bước này, đáp án và transcript sẽ được mở khóa.'))return;
   submitted=true;store.submitted=true;store.submittedAt=new Date().toISOString();
   let score=guidedExamScore(l);
-  try{let h=JSON.parse(localStorage.getItem('SC_ATTEMPT_HISTORY_V1')||'[]');h.push({skill:'listening',section:'guided',title:'Guided Listening '+l.id+' – '+l.title,score,total:guidedExamCount(l),correct:score,wrong:guidedExamCount(l)-score,savedAt:store.submittedAt});localStorage.setItem('SC_ATTEMPT_HISTORY_V1',JSON.stringify(h))}catch(e){}
+  // Unified attempt history records the result and handles offline delivery.
   reportGuidedResult(l,score);
  }
  stage=Math.min(7,stage+1);store.maxUnlocked=Math.max(store.maxUnlocked,stage);
@@ -988,4 +997,4 @@ const requestedLesson=new URLSearchParams(location.search).get('lesson');
 const selectedLesson=lessons.findIndex(lesson=>lesson.id===requestedLesson);
 if(selectedLesson>=0)lid=selectedLesson;
 getStore();render();
-</script><script src="../Practice/shared/smartcom-ui.js?v=20261119-parent-palette03"></script></body></html>
+</script><script src="../Practice/shared/smartcom-ui.js?v=20261120-results03"></script></body></html>
