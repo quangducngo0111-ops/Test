@@ -247,7 +247,11 @@ window.addEventListener('sc:attempt-saved',event=>showReceipt(event.detail));
 window.addEventListener('sc:result-status',event=>showReceipt(event.detail));
 window.addEventListener('online',flush);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)flush()});
-window.addEventListener('load',flush,{once:true});
+window.addEventListener('load',()=>{
+ flush();
+ const pending=list().find(x=>x.status==='completed'&&x.syncStatus!=='acknowledged');
+ if(pending)showReceipt(pending);
+},{once:true});
 // A modest retry cadence when the page stays open; older records survive reloads.
 setInterval(flush,60000);
 })();
