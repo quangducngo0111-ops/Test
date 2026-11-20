@@ -15539,6 +15539,19 @@ function finishVocabularyTest(){
   const wrongWords=Array.from(wrongMap.values());
   const record=saveCurrentVocabularyTestResult(correct,total,wrongWords);
   const percent=total?Math.round(correct/total*100):0;
+  // Report completed vocabulary tests to the same outcome ledger as Reading/Listening.
+  // Keep individual answer details for teacher review and offline retry.
+  const attemptData={
+    kind:"Practice",skill:"Vocabulary",
+    title:(window.VOCABULARY_SET_INFO?.[selectedSkill]?.[selectedSet]?.label||selectedSet)+" · Kiểm tra từ vựng",
+    exerciseId:"vocabulary:"+selectedSkill+":"+selectedSet,
+    path:location.pathname,score:correct,total,
+    durationSeconds:Math.max(0,Math.round((Date.now()-(vocabTestStartedAt||Date.now()))/1000)),
+    details:{selectedSkill,selectedSet,retryWrongOnly:!!vocabTestWrongOnly,percent,
+      responses:roundResponses.map(r=>({word:r.question?.word?.word,answer:r.answer,correct:r.correct}))}
+  };
+  if(window.SmartcomHistory?.report)window.SmartcomHistory.report(attemptData);
+  else window.dispatchEvent(new CustomEvent("sc:attempt-completed",{detail:attemptData}));
   const passed=percent>=VOCAB_TEST_PASS_PERCENT;
   $("vocabTestResultIcon").textContent=passed?"🎓":"🎯";
   $("vocabTestResultTitle").textContent=passed
@@ -20747,6 +20760,7 @@ function launchVocabularyStandaloneGame(path,key){
 function startPenaltyWords(){launchVocabularyStandaloneGame("./penalty-words/","PENALTY_WORDS_WORDS")}
 function startDungeonOfWords(){launchVocabularyStandaloneGame("./dungeon-of-words/","DUNGEON_WORDS_WORDS")}
 </script>
-<script src="../../Practice/shared/smartcom-ui.js?v=20261119-parent-palette03"></script>
+<script src="../shared/attempt-history.js?v=20261120-unified02"></script>
+<script src="../../Practice/shared/smartcom-ui.js?v=20261120-results02"></script>
 </body>
 </html>
