@@ -97,8 +97,7 @@ function noteHTML(){
  const notes=analysisNotes(),count=analysisQuestions().length+stageQuestions('overview').length+stageQuestions('body').length;
  return '<aside class="pie-note" aria-label="Ghi chú phân tích đề"><header><span>✎ GHI CHÚ PHÂN TÍCH</span><small>'+notes.length+'/'+count+' ý</small></header><div class="pie-note-body">'+
  (notes.length?notes.map(([label,value])=>'<div class="pie-note-line"><strong>'+esc(label)+'</strong><span>'+esc(value)+'</span></div>').join(''):'<p class="meta">Trả lời các câu hỏi phân tích. Ý đúng sẽ tự được lưu vào tờ ghi chú này.</p>')+
- (state.notes?.trim()?'<div class="pie-note-line"><strong>Ghi chú thêm của em</strong><span>'+esc(state.notes)+'</span></div>':'')+
- '</div></aside>';
+ '</div><div class="pie-note-extra"><label for="analysisNotes">Ghi chú bổ sung (không bắt buộc)</label><textarea id="analysisNotes" rows="4" placeholder="Ghi lại nhận xét khác mà em phát hiện...">'+esc(state.notes||'')+'</textarea></div></aside>';
 }
 function analysisStep(){
  ensureAnalysis();
@@ -114,7 +113,7 @@ function analysisStep(){
   (entry!==undefined?'<div class="pie-explain '+(correct?'good':'retry')+'"><strong>'+(correct?'✓ Chính xác':'Chưa đúng, hãy xem lại biểu đồ')+'</strong><p>'+(correct?esc(q.reason)+' — <b>'+esc(q.note)+'</b>':esc(q.reason))+'</p></div>':'')+
   '<div class="pie-analysis-actions"><button class="btn secondary" type="button" id="previousQuestion" '+(pos===0?'disabled':'')+'>← Câu trước</button>'+(correct?'<button class="btn" type="button" id="nextQuestion">'+(pos===qs.length-1?'Hoàn tất phân tích':'Câu tiếp theo →')+'</button>':'')+'</div></div>';
  }
- box+='<div class="field"><label for="analysisNotes">Ghi chú bổ sung (không bắt buộc)</label><textarea id="analysisNotes" rows="3" placeholder="Ghi lại nhận xét khác mà em phát hiện...">'+esc(state.notes||'')+'</textarea></div>';
+
  return '<div class="pie-study-layout"><div class="pie-writing-area">'+box+'</div>'+noteHTML()+'</div>';
 }
 function stepBody(){
@@ -143,7 +142,7 @@ function render(){
  $('stepNav').innerHTML=steps.map((x,i)=>'<button type="button" data-step="'+i+'" '+(i>0&&completedAnalysis().length!==analysisQuestions().length&&!parts.some(p=>String(state.drafts[p]||'').trim())?'disabled title="Hoàn thành phân tích trước khi viết"':'')+' class="'+(s===i?'active':'')+' '+(i<s?'done':'')+'">'+(i+1)+'. '+x+'</button>').join('');
  $('progress').style.width=(s+1)/steps.length*100+'%';$('stepTitle').textContent=section(s);$('stepRoot').innerHTML=stepBody();
  $('stepNav').querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>move(Number(b.dataset.step)));
- if($('analysisNotes'))$('analysisNotes').oninput=e=>{state.notes=e.target.value;save();const note=document.querySelector('.pie-note');if(note)note.outerHTML=noteHTML()};
+ if($('analysisNotes'))$('analysisNotes').oninput=e=>{state.notes=e.target.value;save()};
  document.querySelectorAll('[data-pie-option]').forEach(b=>b.onclick=()=>{
   const index=state.analysisCursor,answer=Number(b.dataset.pieOption);
   state.analysisAnswers[index]=answer;save();render();
