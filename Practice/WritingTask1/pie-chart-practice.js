@@ -12,7 +12,7 @@ function renderTask(){$('taskTitle').textContent=data.title;$('prompt').textCont
 function currentText(){return state.drafts[parts[state.step-1]]||''}
 function updateText(){const ta=$('writing');if(!ta)return;const part=state.step===5?'full':parts[state.step-1];state.drafts[part]=ta.value;save();$('wordCount').textContent=words(ta.value)+' từ'}
 
-const PIE_ANALYSIS_VERSION=2;
+const PIE_ANALYSIS_VERSION=3;
 function headline(group){
  const ranked=group.values.map((v,i)=>({name:data.labels[i],value:v})).sort((a,b)=>b.value-a.value);
  return {top:ranked[0],bottom:ranked[ranked.length-1],second:ranked[1],ordered:ranked};
@@ -50,6 +50,24 @@ function analysisQuestions(){
  'Mọi nhóm đều có tỷ lệ hoàn toàn giống nhau'
  ],1,'Overview: '+first.top.name+' dẫn đầu tại '+G[0].name+'; '+last.top.name+' chiếm tỷ trọng cao nhất tại '+G[G.length-1].name+'.','Overview chỉ nêu đặc điểm lớn nhất, tránh đưa toàn bộ số liệu và tránh suy diễn.'),
  ];
+// Include middle groups (e.g. City B) in both the quiz and automatic notes.
+ if(G.length>2){
+  for(let g=1;g<G.length-1;g++){
+   const mid=headline(G[g]),name=G[g].name,idx=data.labels.indexOf(mid.top.name);
+   q.splice(q.length-2,0,
+    mk('Phân tích '+name,'Trong '+name+', phương tiện nào chiếm tỷ trọng lớn nhất?',[
+     mid.second.name+' — '+mid.second.value+'%',mid.top.name+' — '+mid.top.value+'%',mid.bottom.name+' — '+mid.bottom.value+'%'
+    ],1,'Tỷ trọng lớn nhất tại '+name+': '+mid.top.name+' ('+mid.top.value+'%).','So sánh các tỷ lệ của '+name+' trước khi chọn.'),
+    mk('Đối chiếu '+name,'Tỷ trọng '+mid.top.name+' ở cả ba thành phố được mô tả đúng như thế nào?',[
+     'Cả ba thành phố đều có tỷ trọng giống nhau',
+     mid.top.name+' là hạng mục lớn nhất ở cả ba thành phố',
+     G.map(x=>x.name+': '+x.values[idx]+'%').join(' · ')
+    ],2,'So sánh '+mid.top.name+': '+G.map(x=>x.name+' '+x.values[idx]+'%').join('; ')+'.','Đối chiếu cùng một phương tiện giữa tất cả thành phố.')
+   );
+  }
+ }
+ q.forEach((item,index)=>item.title=String(index+1).padStart(2,'0')+' · '+item.title.replace(/^\d+\s*·\s*/, ''));
+ 
  if(!isStatic && G.length>1){
  const index=G[0].values.indexOf(first.top.value),a=G[0].values[index],b=G[G.length-1].values[index];
  q.push(mk('10 · So sánh thời gian','Tỷ trọng của '+first.top.name+' thay đổi thế nào từ '+G[0].name+' đến '+G[G.length-1].name+'?',[
@@ -91,7 +109,7 @@ function analysisStep(){
  let box='<h2>01. Phân tích đề từng bước</h2><p class="meta">Quan sát biểu đồ bên trái, chọn đáp án phù hợp. Mỗi kết luận đúng được ghi lại để dùng khi viết Introduction, Overview và Body.</p>'+
  '<div class="pie-analysis-progress"><span>Đã phân tích '+completedAnalysis().length+'/'+qs.length+' ý</span><div><i style="width:'+(completedAnalysis().length/qs.length*100)+'%"></i></div></div>';
  if(pos===qs.length){
-  box+='<div class="pie-success"><strong>✓ Đã hoàn thành phân tích</strong><p>Các ý chính đã được đưa vào tờ note, có thể xem lại khi viết. Em vẫn có thể sửa câu trả lời ở bất kỳ bước nào.</p><button class="btn secondary" type="button" id="restartAnalysis">Xem lại câu hỏi</button></div>';
+  box+='<div class="pie-success"><strong>✓ Đã hoàn thành phân tích</strong><p>Các ý chính đã được đưa vào tờ note, có thể xem lại khi viết. Em vẫn có thể sửa câu trả lời ở bất kỳ bước nào.</p><div class="pie-analysis-actions"><button class="btn secondary" type="button" id="restartAnalysis">Xem lại câu hỏi</button><button class="btn" type="button" id="startIntroduction">Tiếp tục: Viết Introduction →</button></div></div>';
  }else{
   const q=qs[pos],entry=state.analysisAnswers[pos],correct=Number(entry)===q.answer;
   box+='<div class="pie-analysis-card"><span class="pie-q-label">'+esc(q.title)+' · Câu '+(pos+1)+'/'+qs.length+'</span><h3>'+esc(q.question)+'</h3>'+
@@ -134,6 +152,7 @@ function render(){
  if($('previousQuestion'))$('previousQuestion').onclick=()=>{state.analysisCursor=Math.max(0,state.analysisCursor-1);save();render()};
  if($('nextQuestion'))$('nextQuestion').onclick=()=>{state.analysisCursor=Math.min(analysisQuestions().length,state.analysisCursor+1);save();render()};
  if($('restartAnalysis'))$('restartAnalysis').onclick=()=>{state.analysisCursor=0;save();render()};
+ if($('startIntroduction'))$('startIntroduction').onclick=()=>move(1);
  if($('writing'))$('writing').oninput=updateText;
  if($('modelToggle'))$('modelToggle').onclick=()=>{$('model').hidden=!$('model').hidden};
  if($('review'))$('review').onclick=review;
