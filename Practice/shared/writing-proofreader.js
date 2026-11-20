@@ -11,6 +11,16 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 function inspect(text){
 const findings=[],push=(m,fix,message,kind='Ngữ pháp')=>{if(m&&fix!==m[0])findings.push({start:m.index,end:m.index+m[0].length,original:m[0],fix,message,kind,origin:'local'})};
 const rules=[
+
+ [/\b(the\s+(?:proportion|percentage|share|figure|rate|number|amount)\s+of\b[^.!?;,]{0,95}?)\s+(were|are|have)\b/gi,
+  m=>m[1]+' '+({were:'was',are:'is',have:'has'})[m[2].toLowerCase()],
+  'The proportion/percentage/share/figure/rate/number/amount là chủ ngữ số ít, kể cả khi danh từ sau “of” ở số nhiều.'],
+ [/\b(the\s+(?:figures|percentages|proportions|shares|rates|numbers)\b[^.!?;,]{0,70}?)\s+(was|is)\b/gi,
+  m=>m[1]+' '+(m[2].toLowerCase()==='was'?'were':'are'),
+  'Chủ ngữ chính ở số nhiều nên dùng were/are.'],
+ [/\b(\d+(?:\.\d+)?\s*%[,]?\s+which)\s+were\b/gi,
+  m=>m[1]+' was',
+  'Nếu which đề cập đến một tỷ lệ đơn lẻ vừa nêu, động từ phải là was. Nếu tham chiếu nhiều đối tượng, cần làm rõ chủ ngữ.'],
  [/(\b(?:two|three|four|five|six)\s+(?:pie|bar|line)\s+)chart\b/gi,m=>m[1]+'charts','Danh từ đứng sau số đếm cần ở dạng số nhiều.'],
  [/\b(pie|bar|line)\s+charts\s+illustrates\b/gi,m=>m[1]+' charts illustrate','Chủ ngữ số nhiều charts đi với illustrate.'],
  [/\b(chart)\s+illustrate\b/gi,m=>'chart illustrates','Chủ ngữ số ít chart đi với illustrates.'],
