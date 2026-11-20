@@ -2,6 +2,21 @@
 const $=id=>document.getElementById(id),slug=document.body.dataset.pieSlug,steps=['Phân tích','Introduction','Overview','Body 1','Body 2','Hoàn thiện'],parts=['intro','overview','body1','body2'],colors=['#3b0e90','#9377de','#f39b32','#408ec4','#75b9a2'];let data,student,store,state;
 const words=t=>(t.trim().match(/\b[\w’'-]+\b/g)||[]).length;
 function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]))}
+const WRITING_CLASSES=['XD25A02.1','XD25A02.2','XD26A03.1','SS26.1','SS25A01.1','SS25IE2','OP.AD.07','OP.ESS.11','TEST'];
+function canonicalWritingClass(value){return WRITING_CLASSES.find(x=>x.toLowerCase()===String(value||'').trim().toLowerCase())||''}
+function setupWritingClassSelect(){
+ const input=$('studentClass');if(!input||input.tagName==='SELECT')return;
+ const select=document.createElement('select');select.id='studentClass';select.name=input.name||'studentClass';select.required=true;
+ select.className=input.className;select.style.width='100%';
+ select.append(new Option('— Chọn lớp —',''));
+ WRITING_CLASSES.forEach(code=>select.append(new Option(code,code)));
+ select.value=canonicalWritingClass(input.value);
+ input.replaceWith(select);
+}
+function saveWritingStudent(name,className){
+ const profile={name,className};
+ try{localStorage.setItem('IELTS_PRACTICE_STUDENT',JSON.stringify(profile));for(const storage of [localStorage,sessionStorage]){storage.setItem('IELTS_STUDENT_NAME',name);storage.setItem('IELTS_STUDENT_CLASS',className)}}catch(e){}
+}
 function getStudent(){try{return JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null')}catch{return null}}
 function save(){try{localStorage.setItem(store,JSON.stringify(state))}catch{};try{const text=Object.values(state.drafts||{}).filter(Boolean).join('\n\n');if(text.trim()&&window.SmartcomHistory){window.SmartcomHistory.draft({attemptId:'draft-'+location.pathname,kind:'Practice',skill:'Writing',title:data?.title||document.title,exerciseId:location.pathname,path:location.pathname,text:state.drafts?.full||text,wordCount:(text.match(/\b[\w'-]+\b/g)||[]).length,step:state.step})}}catch{}}
 function section(i){return steps[i]}
@@ -322,6 +337,6 @@ async function review(){
  showWritingReview(mergeWritingIssues(local,remote),status);
 }
 function move(i){if(i<0||i>=6)return;if(i>0&&completedAnalysis().length!==analysisQuestions().length&&!parts.some(p=>String(state.drafts[p]||'').trim())){state.step=0;render();return;}state.step=i;save();render();const top=$('stepNav').getBoundingClientRect().top+scrollY-90;scrollTo({top,behavior:'smooth'})}
-async function init(){try{const r=await fetch('../../pie-chart-data.json?v=20261116-01',{cache:'no-store'});if(!r.ok)throw Error('Không tải được dữ liệu đề');data=(await r.json())[slug];if(!data)throw Error('Không tìm thấy bài');document.title=data.title+' — Writing Task 1';$('title').textContent=data.title;$('type').textContent='PIE CHART · '+data.dataType.toUpperCase();renderTask();showProvenance();student=getStudent();store='SC_WT1_PIE_V1_'+slug+'_'+((student?.name||'guest')+'|'+(student?.className||'')).toLowerCase();try{state=JSON.parse(localStorage.getItem(store)||'null')}catch{}state=state||{started:false,name:'',className:'',step:0,checked:{},notes:'',drafts:{}};state.drafts=state.drafts||{};state.checked=state.checked||{};ensureAnalysis();if(!Number.isInteger(state.step)||state.step<0||state.step>=steps.length)state.step=0;if(!state.started&&student?.name?.trim()&&student?.className?.trim()){state.started=true;state.name=student.name.trim();state.className=student.className.trim();save();}$('start').onclick=()=>{const name=$('studentName').value.trim(),cls=$('studentClass').value.trim();if(!name){$('startError').textContent='Vui lòng nhập họ tên.';return}state.name=name;state.className=cls;state.started=true;save();render()};render()}catch(e){document.body.classList.remove('pie-booting');$('loadError').textContent='Không tải được bài: '+e.message}}
+async function init(){try{setupWritingClassSelect();const r=await fetch('../../pie-chart-data.json?v=20261116-01',{cache:'no-store'});if(!r.ok)throw Error('Không tải được dữ liệu đề');data=(await r.json())[slug];if(!data)throw Error('Không tìm thấy bài');document.title=data.title+' — Writing Task 1';$('title').textContent=data.title;$('type').textContent='PIE CHART · '+data.dataType.toUpperCase();renderTask();showProvenance();student=getStudent();store='SC_WT1_PIE_V1_'+slug+'_'+((student?.name||'guest')+'|'+(student?.className||'')).toLowerCase();try{state=JSON.parse(localStorage.getItem(store)||'null')}catch{}state=state||{started:false,name:'',className:'',step:0,checked:{},notes:'',drafts:{}};state.drafts=state.drafts||{};state.checked=state.checked||{};ensureAnalysis();if(!Number.isInteger(state.step)||state.step<0||state.step>=steps.length)state.step=0;if(!state.started&&student?.name?.trim()&&canonicalWritingClass(student.className)){state.started=true;state.name=student.name.trim();state.className=student.className.trim();save();}$('start').onclick=()=>{const name=$('studentName').value.trim(),cls=$('studentClass').value.trim();if(!name){$('startError').textContent='Vui lòng nhập họ tên.';return}const chosen=canonicalWritingClass(cls);if(!chosen){$('startError').textContent='Vui lòng chọn lớp trong danh sách có sẵn.';return}state.name=name;state.className=chosen;state.started=true;saveWritingStudent(name,chosen);store='SC_WT1_PIE_V1_'+slug+'_'+(name+'|'+chosen).toLowerCase();save();render()};render()}catch(e){document.body.classList.remove('pie-booting');$('loadError').textContent='Không tải được bài: '+e.message}}
 init();
 })();
