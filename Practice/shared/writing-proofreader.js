@@ -50,7 +50,7 @@ host.textContent='Đã áp dụng thay đổi. Bấm kiểm tra lại để cậ
 async function check(textarea,button,host){
 const initial=textarea.value;
 if(!initial.trim()){draw(host,textarea,[], 'Hãy viết nội dung trước khi kiểm tra');return}
-const local=inspect(initial);draw(host,textarea,local,'Đang kiểm tra mở rộng…');button.disabled=true;button.textContent='Đang kiểm tra…';
+const originalLabel=button.textContent;const local=inspect(initial);draw(host,textarea,local,'Đang kiểm tra mở rộng…');button.disabled=true;button.textContent='Đang kiểm tra…';
 let issues=local,status='Kiểm tra nội bộ (ngoại tuyến)';
 try{
 const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
@@ -60,7 +60,7 @@ if(!response.ok)throw Error('HTTP '+response.status);
 issues=merge(local,remoteIssues(await response.json(),initial));status='Đã kiểm tra mở rộng với LanguageTool';}
 finally{clearTimeout(timer)}
 }catch(e){status='Không kết nối được dịch vụ mở rộng; sử dụng kiểm tra nội bộ';}
-button.disabled=false;button.textContent='Kiểm tra chính tả & ngữ pháp';
+button.disabled=false;button.textContent=originalLabel;
 if(textarea.value!==initial){host.textContent='Nội dung đã thay đổi trong lúc kiểm tra. Hãy kiểm tra lại.';return}
 draw(host,textarea,issues,status);
 }
