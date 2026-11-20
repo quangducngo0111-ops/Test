@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261119-assistive01',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261120-iphone-morph02',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -125,6 +125,18 @@ for(const group of groups){
   tools.append(link);
  }
 }
+const backdrop=document.createElement('div');
+backdrop.className='sc-quick-backdrop';
+backdrop.setAttribute('aria-hidden','true');
+shell.append(backdrop);
+const modalHeader=document.createElement('div');
+modalHeader.className='sc-modal-heading';
+modalHeader.innerHTML='<strong>Truy cập nhanh</strong><span>Chọn phần học để chuyển đến</span>';
+const modalClose=document.createElement('button');
+modalClose.type='button';modalClose.className='sc-modal-close';
+modalClose.setAttribute('aria-label','Đóng truy cập nhanh');modalClose.textContent='✕';
+modalHeader.append(modalClose);
+tools.prepend(modalHeader);
 const toggle=document.createElement('button');
 toggle.type='button';
 toggle.className='sc-capsule-trigger';
@@ -182,9 +194,11 @@ function setLauncher(side,y){
 }
 function positionPanel(){
  const rect=toggle.getBoundingClientRect();
- const w=Math.min(340,window.innerWidth-28),h=Math.min(530,Math.round(window.innerHeight*.74));
- const x=shell.classList.contains('sc-side-left')?clamp(rect.right+12,10,window.innerWidth-w-10):clamp(rect.left-w-12,10,window.innerWidth-w-10);
- const y=clamp(rect.top+rect.height/2-h/2,10,Math.max(10,window.innerHeight-h-10));
+ const w=Math.min(480,window.innerWidth-28),h=Math.min(590,Math.round(window.innerHeight*.80));
+ const x=Math.round((window.innerWidth-w)/2);
+ const y=Math.round((window.innerHeight-h)/2);
+ shell.style.setProperty('--sc-origin-x',Math.round(rect.left+rect.width/2-x)+'px');
+ shell.style.setProperty('--sc-origin-y',Math.round(rect.top+rect.height/2-y)+'px');
  shell.style.setProperty('--sc-panel-x',x+'px');
  shell.style.setProperty('--sc-panel-y',y+'px');
  shell.style.setProperty('--sc-panel-width',w+'px');
@@ -232,6 +246,8 @@ toggle.addEventListener('click',e=>{
 window.addEventListener('resize',()=>setLauncher(launcherPosition.side,launcherPosition.y),{passive:true});
 requestAnimationFrame(()=>setLauncher(launcherPosition.side,launcherPosition.y));
 
+backdrop.addEventListener('click',()=>setOpen(false));
+modalClose.addEventListener('click',()=>{setOpen(false);toggle.focus()});
 document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))setOpen(false)});
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&shell.classList.contains('sc-open')){setOpen(false);toggle.focus()}
