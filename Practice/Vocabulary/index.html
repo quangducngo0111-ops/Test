@@ -5784,16 +5784,34 @@ for (const [num, group] of Object.entries(sets)) window.VOCABULARY_SET_INFO.read
     "category": "Cấu trúc số liệu"
   }
 ];
+  // Retain original handout categories; present the 60 terms as 10 independent sets.
+  const dynamicGroups=[{"label":"Xu hướng tăng","count":6,"set":"dynamic-datasets-01"},{"label":"Xu hướng giảm","count":5,"set":"dynamic-datasets-02"},{"label":"Xu hướng ổn định","count":6,"set":"dynamic-datasets-03"},{"label":"Xu hướng dao động","count":3,"set":"dynamic-datasets-04"},{"label":"Điểm cao nhất","count":4,"set":"dynamic-datasets-05"},{"label":"Điểm thấp nhất","count":3,"set":"dynamic-datasets-06"},{"label":"So sánh xu hướng","count":6,"set":"dynamic-datasets-07"},{"label":"Mức độ thay đổi","count":16,"set":"dynamic-datasets-08"},{"label":"Cụm thời gian","count":5,"set":"dynamic-datasets-09"},{"label":"Cấu trúc số liệu","count":6,"set":"dynamic-datasets-10"}];
+  const categorySet=Object.fromEntries(dynamicGroups.map(group=>[group.label,group.set]));
+  for(const item of items){
+    const groupedSet=categorySet[item.category];
+    if(groupedSet){item.set=groupedSet;item.topics=[groupedSet,item.category]}
+  }
   const existing = Array.isArray(window.VOCABULARY_DATA) ? window.VOCABULARY_DATA : [];
-  const seen = new Set(existing.filter(x=>x.skills?.includes("writing-task-1") && x.set === "dynamic-datasets").map(x=>String(x.word).toLowerCase()));
-  for(const word of items) if(!seen.has(String(word.word).toLowerCase())) existing.push(word);
+  // Keep any richer existing record and move legacy Dynamic entries to their category sets.
+  for(const item of existing){
+    if(item.skills?.includes("writing-task-1") && (item.set==="dynamic-datasets" || String(item.set).startsWith("dynamic-datasets-"))){
+      const groupedSet=categorySet[item.category];
+      if(groupedSet){item.set=groupedSet;item.topics=[groupedSet,item.category]}
+    }
+  }
+  const seen = new Set(existing.filter(x=>x.skills?.includes("writing-task-1") && String(x.set||"").startsWith("dynamic-datasets-")).map(x=>String(x.word).toLowerCase()));
+  for(const word of items){const key=String(word.word).toLowerCase();if(!seen.has(key)){existing.push(word);seen.add(key)}}
   window.VOCABULARY_DATA = existing;
   window.VOCABULARY_SET_INFO ||= {};
   window.VOCABULARY_SET_INFO["writing-task-1"] ||= {};
-  window.VOCABULARY_SET_INFO["writing-task-1"]["dynamic-datasets"]={
-    label:"Dynamic Datasets · Bộ 02",
-    titles:["Xu hướng tăng · giảm · ổn định · dao động", "Đỉnh/đáy · so sánh · mức độ thay đổi", "Giai đoạn 3: Luyện viết câu theo biểu đồ"]
-  };
+  for(const [index,group] of dynamicGroups.entries()){
+    window.VOCABULARY_SET_INFO["writing-task-1"][group.set]={
+      label:String(index+1).padStart(2,"0")+" · "+group.label,
+      titles:[group.count+" từ vựng"]
+    };
+  }
+  // Legacy deep links still have a readable description.
+  window.VOCABULARY_SET_INFO["writing-task-1"]["dynamic-datasets"]={label:"Dynamic Datasets · Toàn bộ",titles:["60 từ"]};
 })();
 </script>
 
@@ -13077,6 +13095,7 @@ function openTopics(sync=true){
 
 let selectedEssayType = "";
 let staticFolderOpen = false;
+let dynamicFolderOpen = false;
 function openStaticVocabularyFolder(sync=true){
   staticFolderOpen = true;
   $("setsScreen").classList.remove("wt1-hub");
@@ -13087,6 +13106,21 @@ function openStaticVocabularyFolder(sync=true){
   if(sync) setRoute({skill:"writing-task-1",folder:"static"});
 }
 
+
+function openDynamicVocabularyFolder(sync=true){
+  selectedSkill="writing-task-1";
+  selectedSet="";
+  staticFolderOpen=false;
+  dynamicFolderOpen=true;
+  stopGame();
+  hideScreens();
+  $("setsScreen").classList.remove("hidden","wt1-hub");
+  $("setsTitle").textContent="📈 Dynamic Datasets · 10 nhóm từ vựng";
+  $("setsBack").textContent="← Writing Task 1";
+  $("setsBack").onclick=()=>openSkill("writing-task-1");
+  renderSets();
+  if(sync)setRoute({skill:"writing-task-1",folder:"dynamic"});
+}
 
 function openSkill(skill, sync=true){
 
@@ -13105,6 +13139,7 @@ function openSkill(skill, sync=true){
   selectedSkill =
   skill;
   staticFolderOpen = false;
+  dynamicFolderOpen = false;
   $("setsScreen").classList.toggle("wt1-hub",skill === "writing-task-1");
 
   if(skill === "writing-task-2") selectedEssayType = "";
@@ -13365,17 +13400,17 @@ function renderSets(){
 
 
   // A clean top-level hub; technical set codes belong inside lessons only.
-  if(selectedSkill === "writing-task-1" && !staticFolderOpen){
+  if(selectedSkill === "writing-task-1" && !staticFolderOpen && !dynamicFolderOpen){
     const types=[
       {icon:"📊",title:"Static",desc:"11 nhóm từ vựng · Biểu đồ tĩnh",action:"openStaticVocabularyFolder()"},
-      {icon:"📈",title:"Dynamic Datasets",desc:"60 từ · Xu hướng và biến động",action:"openSet('dynamic-datasets')"},
+      {icon:"📈",title:"Dynamic Datasets",desc:"60 từ · 10 nhóm xu hướng và số liệu",action:"openDynamicVocabularyFolder()"},
       {icon:"🗺️",title:"Maps",desc:"81 từ · Mô tả thay đổi bản đồ",action:"openSet('maps')"}
     ];
     $("setGrid").innerHTML=types.map(item=>`<button type="button" class="set-card wt1-folder-card" onclick="${item.action}"><span class="wt1-folder-icon" aria-hidden="true">${item.icon}</span><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.desc)}</p><span class="wt1-folder-action">Khám phá →</span></button>`).join("");
     return;
   }
   const visibleSets = selectedSkill === "writing-task-1"
-    ? sets.filter(([set])=>set.startsWith("static-charts-"))
+    ? sets.filter(([set])=>staticFolderOpen ? set.startsWith("static-charts-") : dynamicFolderOpen ? /^dynamic-datasets-\d{2}$/.test(set) : false)
     : sets;
   $("setGrid").innerHTML =
   visibleSets
@@ -13387,7 +13422,7 @@ function renderSets(){
       ||
       {};
 
-      const setBadge = selectedSkill === "writing-task-1" && staticFolderOpen
+      const setBadge = selectedSkill === "writing-task-1" && (staticFolderOpen || dynamicFolderOpen)
         ? set.slice(-2)
         : selectedSkill === "writing-task-2"
         ? (String(info.label || "").match(/Topic\s*\d+/i)?.[0] || "Bộ từ vựng")
@@ -13426,7 +13461,7 @@ function renderSets(){
             </div>
 
             <div class="reading-set-label">
-              ${escapeHTML(selectedSkill === "writing-task-1" && staticFolderOpen ? String(info.label || "").replace(/^\d{2}\s*·\s*/, "") : (info.label || `Bộ ${set}`))}
+              ${escapeHTML(selectedSkill === "writing-task-1" && (staticFolderOpen || dynamicFolderOpen) ? String(info.label || "").replace(/^\d{2}\s*·\s*/, "") : (info.label || `Bộ ${set}`))}
             </div>
 
             ${articleTitle
@@ -13501,14 +13536,14 @@ function renderSets(){
           </div>
 
           <h3>
-            ${escapeHTML(selectedSkill === "writing-task-1" && staticFolderOpen ? String(info.label || "").replace(/^\d{2}\s*·\s*/, "") : (info.label || `Bộ ${set}`))}
+            ${escapeHTML(selectedSkill === "writing-task-1" && (staticFolderOpen || dynamicFolderOpen) ? String(info.label || "").replace(/^\d{2}\s*·\s*/, "") : (info.label || `Bộ ${set}`))}
           </h3>
 
           <p>
             ${setWords.length} từ
           </p>
 
-          ${selectedSkill === "writing-task-1" && staticFolderOpen ? "" : titlesHtml}
+          ${selectedSkill === "writing-task-1" && (staticFolderOpen || dynamicFolderOpen) ? "" : titlesHtml}
 
         </button>
       `;
@@ -13611,6 +13646,7 @@ function openSet(set, sync=true){
     setRoute({
       skill:selectedSkill,
       ...(selectedSkill === "writing-task-1" && String(selectedSet).startsWith("static-charts-") ? {folder:"static"} : {}),
+       ...(selectedSkill === "writing-task-1" && /^dynamic-datasets-\d{2}$/.test(String(selectedSet)) ? {folder:"dynamic"} : {}),
       set:selectedSet
     });
   }
@@ -13694,6 +13730,9 @@ function showGameList(){
     }else if(selectedSkill === "writing-task-1" && String(selectedSet).startsWith("static-charts-")){
       openSkill(selectedSkill,false);
       openStaticVocabularyFolder();
+    }else if(selectedSkill === "writing-task-1" && /^dynamic-datasets-\d{2}$/.test(String(selectedSet))){
+      openSkill(selectedSkill,false);
+      openDynamicVocabularyFolder();
     }else{
       openSkill(selectedSkill);
     }
@@ -20035,7 +20074,7 @@ function routeFromUrl(){
 
 
   const set =
-  params.get("set")==="static-charts"
+  ["static-charts","dynamic-datasets"].includes(params.get("set"))
   ? ""
   : (params.get("set") || "");
 
@@ -20067,6 +20106,8 @@ function routeFromUrl(){
 
     if(skill === "writing-task-1" && (params.get("folder") === "static" || set.startsWith("static-charts-"))){
       openStaticVocabularyFolder(false);
+    }else if(skill === "writing-task-1" && (params.get("folder") === "dynamic" || /^dynamic-datasets-\d{2}$/.test(set) || set==="dynamic-datasets")){
+      openDynamicVocabularyFolder(false);
     }
 
     if(set){
