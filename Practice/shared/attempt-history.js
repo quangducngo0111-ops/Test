@@ -175,8 +175,34 @@ if(nativeFetch){
   return nativeFetch(input,options);
  };
 }
+// Visible receipt: distinguishes saved-on-device from verified-on-server.
+function showReceipt(record){
+ if(!record||record.status!=='completed'||!document.body)return;
+ let panel=document.getElementById('sc-result-receipt');
+ if(!panel){
+  panel=document.createElement('aside');panel.id='sc-result-receipt';
+  panel.setAttribute('role','status');
+  panel.style.cssText='position:fixed;right:12px;bottom:84px;z-index:2147482600;max-width:min(360px,calc(100vw - 24px));background:#fff;border:1px solid #bfd4e9;box-shadow:0 7px 23px #1c34522c;border-radius:12px;padding:12px 35px 12px 14px;font:12px/1.5 system-ui,Arial;color:#22436b';
+  const close=document.createElement('button');
+  close.type='button';close.textContent='×';close.setAttribute('aria-label','Đóng trạng thái kết quả');
+  close.style.cssText='position:absolute;top:5px;right:8px;border:0;background:none;font-size:19px;cursor:pointer;color:#334';
+  close.onclick=()=>panel.remove();panel.append(close);
+  const content=document.createElement('div');content.className='sc-receipt-text';panel.append(content);
+  document.body.append(panel);
+ }
+ const message=record.syncStatus==='acknowledged'
+  ?'Máy chủ đã xác nhận nhận kết quả.'
+  :record.syncStatus==='sent-unverified'
+  ?'Đã gửi yêu cầu lên hệ thống, nhưng chưa xác minh được kết quả đã vào bảng điểm.'
+  :'Đã lưu tại thiết bị; đang chờ gửi kết quả khi có kết nối.';
+ const box=panel.querySelector('.sc-receipt-text');
+ box.textContent=(record.score!=null?'Kết quả: '+record.score+'/'+(record.total??'?')+'. ':'')+
+  message+' Mã lượt làm: '+record.attemptId;
+}
 window.SmartcomHistory={version:2,save,submit,draft,list,all,profile,report,flush,outbox};
 window.addEventListener('sc:attempt-completed',event=>{if(event.detail)report(event.detail)});
+window.addEventListener('sc:attempt-saved',event=>showReceipt(event.detail));
+window.addEventListener('sc:result-status',event=>showReceipt(event.detail));
 window.addEventListener('online',flush);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)flush()});
 window.addEventListener('load',flush,{once:true});
