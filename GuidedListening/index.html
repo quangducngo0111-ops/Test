@@ -530,11 +530,49 @@ async function importFullTranscript(el){
  catch(e){alert('Không thể lưu transcript trên trình duyệt.');return}
  store.gapTranscriptAnswers={};save();render();
 }
-const GUIDED_GAP_REVISION='balanced-unique-extended-v3';
-const GUIDED_GAP_TARGET=56;
+const GUIDED_GAP_REVISION='common-words-no-proper-nouns-v4';
+const GUIDED_GAP_TARGET=52;
 function gapWordKeyValue(word){
  const w=String(word).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z']/g,'');
  return w.endsWith('ies')?w.slice(0,-3)+'y':w.endsWith('es')&&w.length>6?w.slice(0,-2):w.endsWith('s')&&!w.endsWith('ss')&&w.length>5?w.slice(0,-1):w;
+}
+const GUIDED_GAP_EXCLUSIONS=new Set((
+ 'rhododendron rhododendrons queensland hawaii rhinella marina british britain united kingdom australia australian japanese '+
+ 'west england north america london paxton burnham barford offord charlesworth summer pool '+
+ 'squirrels squirrel toads toad beetles beetle grey-backed knotweed '+
+ 'ecologists outcompeted plantations non-native invasions three-thousand '+
+ 'self-regulatory transformational transactional chronic ought '+
+ 'industriousness behaviour consequences definitive '+
+ 'recognition biological ornamental'
+ ).split(/\s+/));
+const GUIDED_GAP_PREFER=new Set((
+ 'introduce introduced harmful threat survive spread breed destroy monitor grow environment '+
+ 'native control damage food disease plants animals quick rapidly important different activity '+
+ 'accidental deliberate deliberately intentionally problem problems source sources '+
+ 'safe protect prevent change changes learn learning discover explain '+
+ 'possible impossible example impact count contain contain use used purpose '+
+ 'species follow followed followings release released reproduce survival '+
+ 'government local world country learn share information public '+
+ 'society develop developed development future responsible help '+
+ 'leader leaders follower followers influence goals promotion prevention achievement '+
+ 'punishment personality context focus motivation motivations '+
+ 'concentrate happy inspired encourage rewards expected avoid '+
+ 'decisions decisions solutions innovate innovation '+
+ 'campaign company study research identify report photograph'
+ ).split(/\s+/));
+function guidedGapEligible(m,turn){
+ const raw=m[0],word=raw.toLowerCase(),key=gapWordKeyValue(word);
+ // Do not remove place/person/organisation names, scientific names, or rare taxonomy.
+ if(GUIDED_GAP_EXCLUSIONS.has(word)||GUIDED_GAP_EXCLUSIONS.has(key))return false;
+ // Single words only, avoid scientific hyphenations, unfamiliar long terminology,
+ // and capitalized names even if they occur at the beginning of a sentence.
+ if(/[-'’]/.test(raw)||raw.length>11)return false;
+ if(/[A-Z]/.test(raw)){
+  const prefix=turn.text.slice(0,m.index).trimEnd();
+  const sentenceStart=m.index===0||/[.!?]\s*$/.test(prefix);
+  if(!sentenceStart||!GUIDED_GAP_PREFER.has(word))return false;
+ }
+ return true;
 }
 function fullGapExercise(){
  const source=transcriptData();if(!source||!source.turns?.length)return null;
@@ -545,11 +583,11 @@ function fullGapExercise(){
  // All lines get coverage first; longer lines get a second unique word.
  const candidates=turns.map((turn,line)=>{
   const words=[...turn.text.matchAll(/\b[A-Za-z][A-Za-z'-]{4,}\b/g)]
-   .filter(m=>!ignored.has(m[0].toLowerCase())&&!forbidden.has(gapWordKeyValue(m[0])))
+   .filter(m=>!ignored.has(m[0].toLowerCase())&&!forbidden.has(gapWordKeyValue(m[0]))&&guidedGapEligible(m,turn))
    .filter(m=>!(m.index>0&&/[’']/u.test(turn.text[m.index-1])));
   return words.map(m=>{
    const word=m[0].toLowerCase(),vocab=lessons[lid].vocab.some(v=>v[0].toLowerCase()===word);
-   return {m,score:(vocab?5:0)+Math.min(word.length,13)*.34+(m.index/Math.max(1,turn.text.length))};
+   return {m,score:(GUIDED_GAP_PREFER.has(word)?8:0)+(vocab?1:0)+Math.min(word.length,9)*.12+(m.index/Math.max(1,turn.text.length))};
   }).sort((a,b)=>b.score-a.score||a.m.index-b.m.index);
  });
  const choice=Array.from({length:total},()=>[]);
