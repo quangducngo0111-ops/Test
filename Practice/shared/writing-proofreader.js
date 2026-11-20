@@ -73,6 +73,16 @@ if(area.id==='writing'&&document.body.dataset.pieSlug)return; // Pie has enhance
 area.dataset.scProofAttached='1';
 const result=document.createElement('div');result.className='sc-proof-result';result.hidden=true;
 const nearbyReview=area.id==='writing'?document.getElementById('review'):null;
+const exerciseCheck=document.getElementById('checkWrite')||document.getElementById('checkBtn');
+if(exerciseCheck && !nearbyReview){
+ // Dynamic and Process have their own grading; append advice to that workflow, no second check button.
+ area.insertAdjacentElement('afterend',result);
+ exerciseCheck.addEventListener('click',()=>{
+  if(!area.isConnected||!area.offsetParent||!area.value.trim())return;
+  check(area,exerciseCheck,result);
+ });
+ return;
+}
 if(nearbyReview){
  // Reuse the existing button instead of creating another one.
  // Capture before the legacy inline handler, preserving the writing draft and controls.
