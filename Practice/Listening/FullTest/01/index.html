@@ -293,7 +293,7 @@ function jumpToEvidenceAudio(number){
   if(!Number.isFinite(audio.duration)||audio.duration<=0)return;
   audio.currentTime=Math.max(0,Math.min(audio.duration-1,audio.duration*fraction-10));
   audio.play().catch(()=>alert('Không phát được âm thanh. Kiểm tra file audio trên GitHub.'));
-  document.getElementById('audioHost')?.scrollIntoView({behavior:'smooth',block:'center'});
+  if(!state.submitted)document.getElementById('audioHost')?.scrollIntoView({behavior:'smooth',block:'center'});
  };
  if(audio.readyState>=1)play();else audio.addEventListener('loadedmetadata',play,{once:true});
 }
