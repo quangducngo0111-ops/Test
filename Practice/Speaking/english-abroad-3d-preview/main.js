@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {applyCharacterAsset} from './asset-mode.js?v=20261121-assetmode1';
+import {applyCharacterAsset,installStreetAsset} from './asset-mode.js?v=20261121-assetmode2';
 import {setupCafeDialogue} from './dialogue.js?v=20261121-face-dialogue3';
 import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-art-round2';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
@@ -147,6 +147,10 @@ function street(){
  }
 }
 street();
+// CC0 Quaternius environment details, independent of the playable collision layout.
+installStreetAsset(THREE,outdoors,'Sign_Stop.glb',[-15.2,.05,4.5],2.45,Math.PI/2);
+installStreetAsset(THREE,outdoors,'Streetlight_Single.glb',[14.8,.05,-1.5],3.9,Math.PI);
+installStreetAsset(THREE,outdoors,'TrafficLight.glb',[2.9,.05,4.4],3.1,Math.PI/2);
 const cafe=new THREE.Group();interior.add(cafe);
 function buildCafe(){
  const floor=mat('#e7c5a0'),walls=mat('#fff1dc'),cream=mat('#f4ddc3');
