@@ -96,3 +96,10 @@ body{background:radial-gradient(circle at 3% 3%,#D3E9F0 0,transparent 30%),linea
 @media(max-width:1350px){.realm-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:1030px){.realm-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.realm-selector{padding:14px 12px}.realm-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.realm-option-scene{min-height:69px}.realm-option-art{font-size:33px}.realm-selector-heading{align-items:flex-start}.realm-counter{font-size:11px;padding:9px 10px}.game-intro{padding:19px 12px}}
+
+/* Map thumbnails preview the actual route layout, rather than a generic emoji. */
+.realm-option-scene{min-height:97px}
+.realm-option-scene svg{width:100%;height:100%;display:block;position:absolute;inset:0;object-fit:cover}
+.realm-option-art{position:absolute;right:7px;bottom:6px;z-index:2;font-size:22px;background:#FFFFFFB8;border:1px solid #FFFFFFCC;backdrop-filter:blur(5px);width:34px;height:34px;display:grid;place-items:center;border-radius:10px}
+.realm-option-scene::before,.realm-option-scene::after{content:none!important}
+@media(max-width:650px){.realm-option-scene{min-height:80px}.realm-option-art{width:30px;height:30px;font-size:20px}}
