@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-stack-levels06',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-five-groups07',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -95,7 +95,11 @@ const groups=[
  {heading:'Skill Practice',links:[
   ['🎧','Listening Practice','Practice/Listening/'],
   ['📖','Reading Practice','Practice/Reading/'],
-  ['✍️','Writing Practice','Practice/Writing/'],
+  ['✍️','Writing Practice','Practice/Writing/',[
+   ['📖','Tổng quan Writing','Practice/Writing/'],
+   ['✍️','Writing Task 1','Practice/WritingTask1/'],
+   ['📝','Writing Task 2','Practice/WritingTask2/']
+  ]],
   ['💬','Speaking Practice','Practice/Speaking/']
  ]},
  {heading:'Foundations',links:[
@@ -105,6 +109,9 @@ const groups=[
   ['📰','Reading Library','Foundations/Reading-Library/'],
   ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
   ['📒','Sổ tay từ vựng','Vocabulary-Notebook/'],['⏰','Nhắc từ vựng','Vocabulary-Notebook/#vocabReminder']
+ ]},
+ {heading:'Progress',links:[
+  ['📊','Tiến độ học tập','Progress/'],['📋','Lịch sử làm bài','Progress/#historyBody']
  ]},
  {heading:'Trang chủ',home:true,links:[]}
 ]
@@ -120,9 +127,9 @@ const tools=document.createElement('div');
 tools.className='sc-capsule-list';
 tools.id='sc-quick-panel';
 tools.setAttribute('aria-label','Các lối tắt');
-const categoryTitles={'Mock Tests':'TEST','Skill Practice':'PRACTICE','Foundations':'FOUNDATIONS','Trang chủ':'TRANG CHỦ'};
-const categoryIcons={'Mock Tests':'🎯','Skill Practice':'📖','Foundations':'🧩','Trang chủ':'🏠'};
-const categoryClasses={'Mock Tests':'sc-quick-test','Skill Practice':'sc-quick-practice','Foundations':'sc-quick-foundations','Trang chủ':'sc-quick-nav'};
+const categoryTitles={'Mock Tests':'TEST','Skill Practice':'PRACTICE','Foundations':'FOUNDATIONS','Progress':'PROGRESS','Trang chủ':'TRANG CHỦ'};
+const categoryIcons={'Mock Tests':'🎯','Skill Practice':'📖','Foundations':'🧩','Progress':'📊','Trang chủ':'🏠'};
+const categoryClasses={'Mock Tests':'sc-quick-test','Skill Practice':'sc-quick-practice','Foundations':'sc-quick-foundations','Progress':'sc-quick-nav','Trang chủ':'sc-quick-nav'};
 function quickSvg(icon){
  const svg=quickIconPaths[icon]||quickIconPaths['🎯'];
  return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg>';
@@ -186,7 +193,7 @@ backButton.addEventListener('click',()=>{
  if(quickStack.length===0)categoryGrid.querySelector('button')?.focus();
 });
 function selectQuickGroup(group){
- const items=group.links.map(([icon,label,path])=>({icon,label,path}));
+ const items=group.links.map(([icon,label,path,nested])=>({icon,label,path,children:nested?.map(([icon,label,path])=>({icon,label,path}))}));
  quickStack.length=0;
  quickStack.push({title:categoryTitles[group.heading],heading:group.heading,items});
  renderQuickLevel();
