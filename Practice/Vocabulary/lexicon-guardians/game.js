@@ -380,14 +380,14 @@ log("🌟 Qua đợt "+S.wave+"! Nhận Mực Phép. Nâng cấp tháp hoặc b�
 }
 }
 function saveResult(win){
-try{const arr=JSON.parse(localStorage.getItem(recordKey)||"[]");arr.unshift({time:new Date().toISOString(),win,score:S.score,wave:S.wave,accuracy:S.attempts?Math.round(100*S.correct/S.attempts):0,wrong:[...new Set(S.misses.map(a=>a.word.word))]});localStorage.setItem(recordKey,JSON.stringify(arr.slice(0,30)))}catch{}
+try{const arr=JSON.parse(localStorage.getItem(recordKey)||"[]");arr.unshift({time:new Date().toISOString(),win,mapId:realm().id,mapName:realm().name,difficulty,score:S.score,wave:S.wave,accuracy:S.attempts?Math.round(100*S.correct/S.attempts):0,wrong:[...new Set(S.misses.map(a=>a.word.word))]});localStorage.setItem(recordKey,JSON.stringify(arr.slice(0,30)))}catch{}
 }
 function finish(win){
 S.phase="done";S.finished=true;saveResult(win);sound(win?880:190,.32);
 $("modal").hidden=false;S.challengeLock=true;modalActive=true;
 $("modalKicker").textContent=win?"KINGDOM SAVED":"THE KINGDOM NEEDS YOU";
 $("modalTitle").textContent=win?"🏆 Lexica đã được cứu!":"🏰 Cổ Thành thất thủ";
-$("modalDesc").textContent="Hoàn thành "+S.wave+"/5 đợt · "+S.score.toLocaleString("vi-VN")+" điểm · Chính xác "+(S.attempts?Math.round(100*S.correct/S.attempts):0)+"%.";
+$("modalDesc").textContent=realm().icon+" "+realm().name+" · Hoàn thành "+S.wave+"/5 đợt · "+S.score.toLocaleString("vi-VN")+" điểm · Chính xác "+(S.attempts?Math.round(100*S.correct/S.attempts):0)+"%.";
 $("modalQuestion").innerHTML='<div class="prompt">Mỗi lần chơi lại là một lần ghi nhớ từ vựng tốt hơn. Hãy thử chiến thuật mới!</div>';
 $("modalFeedback").innerHTML="";$("skipBtn").hidden=true;$("closeModal").hidden=true;$("answerBtn").disabled=false;$("answerBtn").textContent="↻ Chơi lại";
 $("answerBtn").onclick=()=>{modalClose();restart()};
