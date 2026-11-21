@@ -15,13 +15,13 @@ if(unifiedStudent){
  }catch(_){unifiedStudent.textContent='Chưa chọn học sinh'}
 }
 
-if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('assets/area-theme-loader.js?v=20261119-portal-category03',root).href;document.head.append(t);}
+if(!/\/Practice\/WritingTask2\//i.test(location.pathname) && !document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('assets/area-theme-loader.js?v=20261119-portal-category03',root).href;document.head.append(t);}
 if(!document.querySelector('script[data-sc-outline-icons]')){const iconScript=document.createElement('script');iconScript.dataset.scOutlineIcons='1';iconScript.src=new URL('assets/smartcom-outline-icons.js?v=20261118-icons01',root).href;document.head.append(iconScript);} // .../Test/ from .../Test/Practice/shared/
 // Electric Blue is the default theme for the Practice area.
 // Resolve relative to this script so GitHub Pages subpaths also work.
 const routeParts=decodeURIComponent(location.pathname).split('/').filter(Boolean);
 const isFoundationRoute=routeParts.some(p=>/^(Foundations|Vocabulary-Notebook|GuidedListening|Grammar|Vocabulary|Intensive Listening|Topic-based-Listening|Pre-IELTS)$/i.test(p));
-if(routeParts.includes('Practice')&&!isFoundationRoute){
+if(routeParts.includes('Practice')&&!isFoundationRoute&&!/\/Practice\/WritingTask2\//i.test(location.pathname)){
  document.body.classList.add('sc-electric-blue');
  if(!document.querySelector('link[data-sc-electric-theme]')){
   const theme=document.createElement('link');
