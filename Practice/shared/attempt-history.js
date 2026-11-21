@@ -4,7 +4,7 @@
  * unless the endpoint explicitly supports a readable acknowledgement.
  */
 (()=>{'use strict';
-if(window.SmartcomHistory?.version>=4)return;
+if(window.SmartcomHistory?.version>=5)return;
 const STORAGE='SC_ATTEMPT_HISTORY_V1';
 // V4: an opaque response is NOT proof that Apps Script saved the row.
 // Retain the original body for recovery but never silently resend it (duplicate risk).
@@ -69,6 +69,30 @@ function formBody(record){
   details:JSON.stringify(detail)
  }).toString();
 }
+// Read-only server receipt check via JSONP; Google Apps Script does not supply CORS headers.
+function receiptStatus(endpoint,attemptId){
+ return new Promise(resolve=>{
+  if(!endpoint||!attemptId){resolve(null);return}
+  const callback='scAck_'+Math.random().toString(36).slice(2,13);
+  const u=new URL(endpoint);
+  u.searchParams.set('action','status');
+  u.searchParams.set('attemptId',attemptId);
+  u.searchParams.set('callback',callback);
+  const script=document.createElement('script');
+  let done=false;
+  const clear=()=>{delete window[callback];script.remove();clearTimeout(timer)};
+  const finish=v=>{if(done)return;done=true;clear();resolve(v)};
+  const timer=setTimeout(()=>finish(null),4500);
+  window[callback]=data=>{
+   if(data?.ok===true&&data.attemptId===attemptId&&typeof data.recorded==='boolean')
+    finish(data.recorded);
+   else finish(null);
+  };
+  script.onerror=()=>finish(null);
+  script.src=u.href;
+  document.head.append(script);
+ });
+}
 function outbox(){return read(QUEUE)}
 function queue(record,endpoint=ENDPOINT,body){
  if(!record)return false;
@@ -97,12 +121,18 @@ async function flush(){
  try{
   const rows=outbox();
   for(const item of rows){
-   if(item.sentUnverified||item.nextTry>Date.now())continue;
-   const old=all().find(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
-   if((item.attempts||0)>0&&old?.syncStatus==='sent-unverified'){
-    const pending=outbox(),index=pending.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
-    if(index>=0){pending[index].sentUnverified=true;write(QUEUE,pending)}
-    continue;
+   if(item.nextTry>Date.now())continue;
+   if(item.sentUnverified){
+    const status=await receiptStatus(item.endpoint,item.attemptId);
+    if(status===true){
+     write(QUEUE,outbox().filter(x=>x.attemptId!==item.attemptId||x.owner!==item.owner));
+     updateStatus(item.attemptId,item.owner,{syncStatus:'acknowledged',lastVerifiedAt:new Date().toISOString()});
+     continue;
+    }
+    if(status===null)continue; // Unknown backend: never blindly duplicate an opaque request.
+    // Receiver explicitly reports missing. Its attemptId index makes retry idempotent.
+    const pending=outbox(),idx=pending.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
+    if(idx>=0){pending[idx].sentUnverified=false;write(QUEUE,pending)}
    }
    // Without server-side CORS, an opaque response confirms only that the browser issued the request.
    let transmitted=false,verified=false;
@@ -118,8 +148,8 @@ async function flush(){
    const current=outbox(),idx=current.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
    if(idx<0)continue;
    if(transmitted){
-    // no-cors is opaque: keep the original payload for deliberate resend.
-    // The backend must deduplicate on attemptId to make retries safe.
+    // An opaque POST is not an acknowledgement: explicitly verify the Sheet receiver.
+    if(!verified)verified=(await receiptStatus(item.endpoint,item.attemptId))===true;
     const attempts=(current[idx].attempts||0)+1;
     if(verified)current.splice(idx,1);
     else{
@@ -241,7 +271,7 @@ function showReceipt(record){
  box.textContent=(record.score!=null?'Kết quả: '+record.score+'/'+(record.total??'?')+'. ':'')+
   message+' Mã lượt làm: '+record.attemptId;
 }
-window.SmartcomHistory={version:4,save,submit,draft,list,all,profile,report,flush,outbox};
+window.SmartcomHistory={version:5,save,submit,draft,list,all,profile,report,flush,outbox,receiptStatus};
 window.addEventListener('sc:attempt-completed',event=>{if(event.detail)report(event.detail)});
 window.addEventListener('sc:attempt-saved',event=>showReceipt(event.detail));
 window.addEventListener('sc:result-status',event=>showReceipt(event.detail));
