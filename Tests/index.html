@@ -1607,6 +1607,13 @@ body.sc-test-route .test-card{border-color:#B3DADD!important}
 @media(max-width:600px){body.sc-test-route .portal-mock-picker{margin:14px 10px!important;padding:15px!important}body.sc-test-route .portal-skill-picks{gap:8px!important}body.sc-test-route .portal-skill-picks button{min-height:88px!important;font-size:14px!important}}
 </style>
 <style id="sc-tests-dedicated-layout">
+html,body.sc-tests-dedicated{scroll-behavior:auto!important}
+body.sc-tests-dedicated #homeHero,
+body.sc-tests-dedicated #homeHeading,
+body.sc-tests-dedicated #homeSkills{display:none!important;visibility:hidden!important}
+body.sc-tests-dedicated #dashboardView{max-width:1190px!important;margin:0 auto!important;width:100%!important}
+body.sc-tests-dedicated #mockPicker,body.sc-tests-dedicated #testSection{position:relative!important;top:auto!important;margin-left:auto!important;margin-right:auto!important}
+
 /* Dedicated TEST page: never render the home portal underneath the test catalog. */
 body.sc-tests-dedicated #homeHero,
 body.sc-tests-dedicated #homeHeading,
@@ -1914,57 +1921,7 @@ body.sc-tests-dedicated .portal-mock-heading h3{color:#126776!important}
     </div>
 
 
-    <section class="portal-main-grid" id="homeSkills" aria-label="Các khu vực của IELTS Practice Portal">
- <button class="portal-category mock" type="button" id="mockTestsDoor">
-  <span class="portal-card-header"><span class="portal-en">MOCK TESTS</span></span>
-  <span class="portal-card-body">
-   <span class="portal-copy">
-    <h3>Thi thử IELTS</h3>
-    <p>Listening · Reading · Writing · Speaking</p>
-    
-   </span>
-   <img class="portal-illustration" src="./assets/portal-mock-3d.svg" loading="lazy" alt="" aria-hidden="true">
-   <span class="portal-action">Bắt đầu bài thi →</span>
-  </span>
- </button>
- <button class="portal-category practice" type="button" id="practiceDoor">
-  <span class="portal-card-header"><span class="portal-en">SKILL PRACTICE</span></span>
-  <span class="portal-card-body">
-   <span class="portal-copy">
-    <h3>Luyện tập kỹ năng</h3>
-    <p>Listening · Reading · Writing Task 1 & 2 · Speaking</p>
-    <span class="portal-skill-tags"><span>Listening</span><span>Reading</span><span>Writing</span><span>Speaking</span></span>
-   </span>
-   <img class="portal-illustration" src="./assets/portal-practice-3d.svg" loading="lazy" alt="" aria-hidden="true">
-   <span class="portal-action">Khám phá bài luyện →</span>
-  </span>
- </button>
- <button class="portal-category foundation" type="button" id="foundationsDoor">
-  <span class="portal-card-header"><span class="portal-en">FOUNDATIONS</span></span>
-  <span class="portal-card-body">
-   <span class="portal-copy">
-    <h3>Kiến thức nền tảng</h3>
-    <p>Pre-IELTS Listening · Topic Listening · Reading · Grammar · Vocabulary</p>
-    <span class="portal-skill-tags"><span>Listening</span><span>Reading</span><span>Grammar</span><span>Vocabulary</span></span>
-   </span>
-   <img class="portal-illustration" src="./assets/portal-foundations-3d.svg" loading="lazy" alt="" aria-hidden="true">
-   <span class="portal-action">Xây dựng nền tảng →</span>
-  </span>
- </button>
- <button class="portal-category progress" type="button" id="progressDoor">
-  <span class="portal-card-header"><span class="portal-en">MY LEARNING PROGRESS</span></span>
-  <span class="portal-card-body">
-   <span class="portal-copy">
-    <h3>Tiến độ học tập</h3>
-    <p id="portalProgressSummary">Tổng quan: —/25 bài</p>
-    <span class="portal-progress-track" aria-label="Tiến độ hoàn thành bài Test"><span class="portal-progress-fill" id="portalProgressFill"></span></span>
-   </span>
-   <img class="portal-illustration" src="./assets/portal-progress-3d.svg" loading="lazy" alt="" aria-hidden="true">
-   <span class="portal-band-circle" id="portalBandCircle" aria-label="Band IELTS dự báo">Band <b id="portalBandNumber">—</b></span>
-   <span class="portal-action">Xem chi tiết tiến độ →</span>
-  </span>
- </button>
-</section>
+    <section id="homeSkills" class="hidden" hidden aria-hidden="true"></section>
 <section class="portal-mock-picker hidden" id="mockPicker" aria-label="Chọn kỹ năng thi thử">
  <div class="portal-mock-heading"><button type="button" id="closeMockPicker">← Trang chủ</button><h3>TEST · Chọn kỹ năng</h3></div>
  <div class="portal-skill-picks">
