@@ -668,3 +668,16 @@ body:has(#sc-quick-shell) #sc-note-button{display:none!important}
 @media(max-width:460px){
  #sc-quick-shell.sc-capsule .sc-capsule-list{padding:11px!important}
 }
+
+/* Five main routes: compact two-column grid with centered Home tile. */
+#sc-quick-shell.sc-capsule .sc-quick-categories{
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+#sc-quick-shell.sc-capsule .sc-quick-categories>.sc-quick-category:last-child{
+ grid-column:1/-1!important;justify-self:center!important;
+ width:calc(50% - 4px)!important;
+}
+#sc-quick-shell.sc-capsule .sc-quick-category{min-height:75px!important;padding:7px 5px!important}
+#sc-quick-shell.sc-capsule .sc-quick-category .sc-capsule-icon{height:34px!important;width:34px!important}
+#sc-quick-shell.sc-capsule .sc-quick-category .sc-capsule-icon svg{height:29px!important;width:29px!important}
+#sc-quick-shell.sc-capsule .sc-quick-categories{gap:5px!important}
