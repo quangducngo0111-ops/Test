@@ -154,7 +154,7 @@ function renderRealmGallery(){
  box.querySelectorAll("[data-realm]").forEach(button=>button.addEventListener("click",()=>{
   const i=Number(button.dataset.realm);
   if(i===realmIndex)return;
-  if((S.phase==="battle"||S.towers.length||S.wave>0)&&!confirm("Chuyển bản đồ sẽ bắt đầu ván mới. Tiếp tục?"))return;
+  if((S.phase==="battle"||S.towers.length||S.wave>0||S.seen.size>0)&&!confirm("Chuyển bản đồ sẽ bắt đầu ván mới, tiến độ lượt chơi hiện tại sẽ được đặt lại. Tiếp tục?"))return;
   chooseRealm(i);
   restart();
  }));
