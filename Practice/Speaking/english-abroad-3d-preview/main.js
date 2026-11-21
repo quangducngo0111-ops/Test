@@ -289,6 +289,10 @@ previewCanvas.addEventListener('pointerup',()=>editorDragging=false);
 previewCanvas.addEventListener('pointercancel',()=>editorDragging=false);
 buildPreview();
 let inside=false;
+let gameStarted=false,menuOpen=false,setupActive=true;
+const SAVE_KEY='lifeAbroad3D.save.v1';
+let savedGame=null;
+try { const parsed=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(parsed?.version===1&&Array.isArray(parsed.position)&&parsed.position.length===3)savedGame=parsed; }catch(e){console.warn('Saved game not readable',e)}
 let npcTalking=false;
 const dialogue=setupCafeDialogue({onTalking:value=>{npcTalking=value},onClose:()=>{keys.clear()}});
 
@@ -330,7 +334,9 @@ function interact(){if(dialogue.isOpen())return;
  if(nearAction==='enter')setInside(true);else if(nearAction==='exit')setInside(false);
  else showNotice(inside?'Đến gần Mia ở quầy để trò chuyện.':'Tiến lại gần cửa quán cà phê để tương tác.');}
 window.addEventListener('keydown',e=>{
- if(e.code==='KeyP'&&!e.repeat&&!dialogue.isOpen()&&!editorOpen){togglePhoto();return}
+ if(e.code==='Escape'&&!e.repeat){if(setupActive)return;if(dialogue.isOpen()){dialogue.close();return;}if(editorOpen){setEditor(false);return;}if(photoMode){togglePhoto();return;}setMenu(!menuOpen);return;}
+  if(setupActive||menuOpen)return;
+  if(e.code==='KeyP'&&!e.repeat&&!dialogue.isOpen()&&!editorOpen){togglePhoto();return}
   if(dialogue.isOpen()||editorOpen){if(e.code==='Escape'&&dialogue.isOpen())dialogue.close();return}
  if(e.target?.closest?.('input,textarea,select,button'))return;
  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','KeyE'].includes(e.code))e.preventDefault();
@@ -391,7 +397,7 @@ function animate(){
  const dt=Math.min(.06,clock.getDelta());t+=dt;
  let f=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0)+joystick.y;
  let r=(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0)+joystick.x;
- const magnitude=dialogue.isOpen()||editorOpen||photoMode?0:Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
+ const magnitude=dialogue.isOpen()||editorOpen||photoMode||!gameStarted||menuOpen?0:Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
  if(magnitude>.1){
   forward.set(Math.sin(yaw),0,-Math.cos(yaw));
   right.set(Math.cos(yaw),0,Math.sin(yaw));
@@ -426,7 +432,7 @@ function animate(){
   const baristaDistance=player.group.position.distanceTo(barista.group.position);
   nearAction=baristaDistance<2.95?'talk':player.group.position.z>3.5?'exit':'';
  }else nearAction=Math.abs(player.group.position.x+1.7)<1.5&&Math.abs(player.group.position.z+2.9)<2.5?'enter':'';
- $('interact').hidden=!nearAction||dialogue.isOpen();
+ $('interact').hidden=!nearAction||dialogue.isOpen()||menuOpen||setupActive;
  if(nearAction)$('interact').textContent=nearAction==='enter'?'E · Enter Café':nearAction==='talk'?'E · Talk to Mia':'E · Exit to Street';
  target.copy(player.group.position).add(new THREE.Vector3(0,photoMode&&photoPreset===0?1.55:1.18,0));
  const cameraPos=new THREE.Vector3(Math.sin(yaw)*dist*Math.cos(pitch),dist*Math.sin(pitch)+1.2,Math.cos(yaw)*dist*Math.cos(pitch));
@@ -441,5 +447,83 @@ function animate(){
  renderer.render(scene,camera);
  fpsFrames++;fpsTime+=dt;if(fpsTime>1){$('fps').textContent=Math.round(fpsFrames/fpsTime)+' FPS';fpsFrames=0;fpsTime=0}
 }
+
+function saveGame(silent=false){
+ if(!gameStarted)return false;
+ const data={version:1,savedAt:new Date().toISOString(),inside,
+  position:player.group.position.toArray(),rotation:player.group.rotation.y,
+  camera:{yaw,pitch,dist},avatar:{...avatarSettings},timeMode};
+ try{
+  localStorage.setItem(SAVE_KEY,JSON.stringify(data));
+  savedGame=data;
+  $('setupContinue').hidden=false;
+  if(!silent){$('saveStatus').textContent='✅ Đã lưu vị trí và nhân vật trên thiết bị này.';showNotice('✅ Đã lưu game!')}
+  return true;
+ }catch(err){
+  console.error('Save unavailable',err);
+  if(!silent){$('saveStatus').textContent='Không lưu được: kiểm tra quyền lưu trữ.';showNotice('⚠️ Không lưu được game')}
+  return false;
+ }
+}
+function restoreGame(data){
+ if(!data||!Array.isArray(data.position)||data.position.length!==3)return false;
+ const [x,y,z]=data.position;
+ if(![x,y,z].every(Number.isFinite))return false;
+ setInside(Boolean(data.inside));
+ if(data.inside){player.group.position.set(THREE.MathUtils.clamp(x,-6.8,6.8),0,THREE.MathUtils.clamp(z,-7.1,5.4));}
+ else{player.group.position.set(THREE.MathUtils.clamp(x,-15.8,16.8),0,THREE.MathUtils.clamp(z,-12.8,10.8));}
+ player.group.rotation.y=Number.isFinite(data.rotation)?data.rotation:0;
+ if(data.camera){
+  yaw=Number.isFinite(data.camera.yaw)?data.camera.y:-.18;
+  pitch=Number.isFinite(data.camera.pitch)?THREE.MathUtils.clamp(data.camera.pitch,.05,.85):.46;
+  dist=Number.isFinite(data.camera.dist)?THREE.MathUtils.clamp(data.camera.dist,4,14):8.8;
+ }
+ if(['day','night','dusk'].includes(data.timeMode)){$('timeChoice').value=data.timeMode;updateLighting(data.timeMode)}
+ return true;
+}
+function setMenu(open){
+ if(!gameStarted)return;
+ menuOpen=Boolean(open);
+ $('gameMenu').hidden=!menuOpen;
+ document.body.classList.toggle('menu-open',menuOpen);
+ keys.clear();
+ joystick.x=joystick.y=0;stick.style.transform='translate(0,0)';
+ if(menuOpen&&photoMode)togglePhoto();
+ if(menuOpen)saveGame(true);
+}
+function showSetup(){
+ setupActive=true;gameStarted=false;setMenu(false);
+ document.body.classList.add('character-setup');
+ $('gameSetup').hidden=false;
+ $('setupEditorMount').appendChild(editor);
+ editorOpen=true;editor.hidden=false;buildPreview();
+ $('setupContinue').hidden=!savedGame;
+}
+function finishSetup(continuePrevious=false){
+ const data=continuePrevious?savedGame:null;
+ setupActive=false;gameStarted=true;editorOpen=false;editor.hidden=true;
+ $('gameSetup').hidden=true;document.body.classList.remove('character-setup');
+ document.body.appendChild(editor);
+ $('avatarOpen').setAttribute('aria-expanded','false');
+ if(data)restoreGame(data);
+ else{setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
+ keys.clear();camera.position.copy(player.group.position).add(new THREE.Vector3(0,5.6,9));
+ saveGame(true);
+ showNotice(data?'▶ Đã tiếp tục game đã lưu':'🌟 Welcome to London!');
+}
+$('setupStart').onclick=()=>finishSetup(false);
+$('setupContinue').onclick=()=>finishSetup(true);
+$('setupBack').onclick=()=>{window.location.href='../'};
+$('navBack').onclick=()=>setMenu(true);
+$('navMenu').onclick=()=>setMenu(true);
+$('navSave').onclick=()=>saveGame();
+$('menuResume').onclick=()=>setMenu(false);
+$('menuSave').onclick=()=>saveGame();
+$('menuCharacter').onclick=()=>{setMenu(false);showSetup()};
+$('menuLeave').onclick=()=>{saveGame(true);window.location.href='../'};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame(true)});
+window.addEventListener('pagehide',()=>saveGame(true));
+showSetup();
+
 setQuality('auto');updateLighting('day');
 $('loading').hidden=true;animate();
