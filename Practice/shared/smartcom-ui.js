@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-five-groups07',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-level2-tiles08',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -168,7 +168,7 @@ function renderQuickLevel(){
    const entry=document.createElement(item.children?'button':'a');
    if(item.children){entry.type='button';entry.setAttribute('aria-expanded','false');}
    else entry.href=url(item.path);
-   entry.className='sc-capsule-link '+(categoryClasses[quickStack[0]?.heading]||'sc-quick-nav');
+   entry.className='sc-capsule-link sc-quick-tile '+(categoryClasses[quickStack[0]?.heading]||'sc-quick-nav');
    entry.title=item.label;
    entry.setAttribute('aria-label',item.label);
    const symbol=document.createElement('span');
