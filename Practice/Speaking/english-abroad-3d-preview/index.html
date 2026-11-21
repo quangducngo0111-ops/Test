@@ -16,7 +16,8 @@ header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:cent
 .brand b{display:block;font-size:15px;color:#43217d}.brand small{font-size:11px;color:#9276af;font-weight:800}
 .preview-tag{background:#352369e6;border:1px solid #b5a0e8;color:#fff;padding:11px 15px;border-radius:13px;box-shadow:0 8px 25px #2b195b26;font-weight:900}
 .panel{position:fixed;z-index:5;background:#fffef6ee;border:1px solid #ffffffea;border-radius:20px;padding:15px;box-shadow:0 13px 33px #29354e2a;backdrop-filter:blur(14px)}
-#settings{top:92px;right:18px;width:225px}#settings h2{margin:0 0 9px;color:#452180;font-size:16px}
+#settings{top:80px;right:18px;width:225px;max-height:calc(100vh - 95px);overflow-y:auto}
+body:not(.graphics-open) #settings{display:none!important}#settings h2{margin:0 0 9px;color:#452180;font-size:16px}
 .control{display:flex;align-items:center;justify-content:space-between;gap:7px;margin:8px 0}.control label{font-size:12px}.control select{max-width:125px;border:1px solid #e0d7f4;background:#f8f4ff;border-radius:9px;padding:7px;color:#381c79}
 .toggle{background:#472890;color:white;border:0;padding:8px 12px;border-radius:10px;font-size:12px}
 #mission{left:18px;bottom:18px;max-width:330px}
@@ -33,7 +34,7 @@ header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:cent
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
 <style id="character-editor-styles">
-#avatarOpen{position:fixed;z-index:7;right:18px;top:330px;background:#f7e9ff;color:#48257d;padding:12px 15px;border-radius:13px;border:2px solid #ceb0e6;box-shadow:0 10px 28px #3525602b;font-weight:900}
+#avatarOpen{display:none!important;position:fixed;z-index:7;right:18px;top:330px;background:#f7e9ff;color:#48257d;padding:12px 15px;border-radius:13px;border:2px solid #ceb0e6;box-shadow:0 10px 28px #3525602b;font-weight:900}
 #avatarOpen:hover{background:#efd9ff}
 #avatarEditor[hidden]{display:none!important}
 #avatarEditor{position:fixed;z-index:14;right:18px;top:16px;width:320px;max-height:calc(100vh - 32px);overflow-y:auto;background:#fffdfa;border:1px solid #e7d7f0;border-radius:22px;box-shadow:0 25px 65px #1d254b63;padding:16px}
@@ -95,7 +96,7 @@ body.dialogue-active #legend,body.dialogue-active #interact,body.dialogue-active
 #gameSetup{display:none}
 body.character-setup #gameSetup{display:grid}
 body.character-setup #avatarEditor{display:block!important;position:relative;top:auto;right:auto;bottom:auto;width:min(390px,calc(100vw - 36px));max-height:min(76vh,680px);z-index:25;box-shadow:none;margin:0 auto;padding:12px 0;background:transparent;border:0;overflow:auto}
-body.character-setup #avatarOpen,body.character-setup #avatarClose,body.character-setup #gearButton{display:none!important}
+body.character-setup #avatarClose,body.character-setup #gearButton{display:none!important}
 body.character-setup #gameSetup{display:flex;flex-direction:column;justify-content:center;overflow:auto}
 body.character-setup #gameSetup .setupCard{width:min(480px,96vw);max-height:97vh;overflow:auto}
 body.character-setup #avatarEditor h2{font-size:18px}
@@ -115,7 +116,7 @@ body.menu-open #interact,body.menu-open #pad,body.menu-open #actionMobile{displa
 .cityPanel h2{font-size:clamp(24px,3vw,34px);color:#3b0e90;margin:10px 0}
 .cityPanel p{color:#685a80;font-size:14px;line-height:1.55}
 .stepMark{letter-spacing:2px;color:#8858cb;font-size:11px;font-weight:900}
-.cityCards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:23px 0 14px}
+.cityCards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:23px 0 14px}
 .cityCard{display:flex;flex-direction:column;align-items:center;gap:6px;border:3px solid #e2d6f5;background:linear-gradient(155deg,#f5faff,#fbf4ff);border-radius:22px;padding:24px 8px;min-height:205px;color:#371b76;box-shadow:0 6px 0 #c9b8e554;transition:transform .15s,border-color .15s}
 .cityCard:hover{transform:translateY(-4px)}
 .cityCard.chosen{border-color:#ff9c00;background:linear-gradient(155deg,#e9f9ff,#fff4d8);box-shadow:0 6px 0 #d5a95780}
@@ -133,8 +134,8 @@ body.city-setup #gearButton,body.city-setup #avatarEditor{display:none!important
 <div id="loading"><div><div class="spinner"></div>Đang tải thế giới 3D…<p style="font-size:13px;opacity:.7">Phase 0 · Stable Character Mode</p></div></div>
 <div id="viewport" aria-label="Khung cảnh 3D"></div>
 <button id="gearButton" type="button" aria-label="Mở menu cài đặt" title="Cài đặt · Esc">⚙</button>
-<div id="gameMenu" hidden role="dialog" aria-modal="true" aria-label="Tạm dừng game"><div class="menuCard"><h2>⏸️ Tạm dừng</h2><p>Tiến độ được lưu trên trình duyệt đang sử dụng.</p><div id="saveStatus" role="status"></div><div class="menuActions"><button class="primary" id="menuResume">▶ Tiếp tục chơi</button><button id="menuSave">💾 Lưu tiến độ</button><button id="menuCharacter">🧍 Đổi nhân vật / thành phố</button><button id="menuLeave">← Về trang Speaking</button></div></div></div>
-<div id="gameSetup" role="dialog" aria-modal="true" aria-label="Chọn nhân vật trước khi chơi"><div class="setupCard"><div class="stepMark">BƯỚC 1 / 2 · CREATE YOUR AVATAR</div><h2>✨ Chọn nhân vật</h2><p>Tạo người bạn đồng hành trước khi khám phá thế giới và luyện nói tiếng Anh!</p><div id="setupEditorMount"></div><div class="setupActions"><button id="setupStart" class="primary" type="button">Tiếp theo: Chọn thành phố →</button><button id="setupContinue" type="button" hidden>▶ Chơi tiếp bản đã lưu</button><button id="setupBack" type="button">← Về trang Speaking</button></div></div></div>
+<div id="gameMenu" hidden role="dialog" aria-modal="true" aria-label="Tạm dừng game"><div class="menuCard"><h2>⏸️ Tạm dừng</h2><p>Tiến độ được lưu trên trình duyệt đang sử dụng.</p><div id="saveStatus" role="status"></div><div class="menuActions"><button class="primary" id="menuResume">▶ Tiếp tục chơi</button><button id="menuSave">💾 Lưu tiến độ</button><button id="menuCity">🌍 Đổi thành phố</button><button id="menuGraphics">🎨 Cài đặt đồ họa</button><button id="menuLeave">← Về trang Speaking</button></div></div></div>
+<div id="gameSetup" role="dialog" aria-modal="true" aria-label="Chọn nhân vật trước khi chơi"><div class="setupCard"><div class="stepMark">BƯỚC 1 / 2 · CREATE YOUR AVATAR</div><h2>✨ Chọn nhân vật</h2><p>Đây chính là nhân vật em điều khiển trong game. Chọn ngoại hình, kiểu tóc, kính và trang phục trước khi lên đường!</p><div id="setupEditorMount"></div><div class="setupActions"><button id="setupStart" class="primary" type="button">Tiếp theo: Chọn thành phố →</button><button id="setupContinue" type="button" hidden>▶ Chơi tiếp bản đã lưu</button><button id="setupBack" type="button">← Về trang Speaking</button></div></div></div>
 
 <div id="citySetup" hidden role="dialog" aria-modal="true" aria-label="Chọn thành phố">
  <div class="cityPanel">
@@ -143,17 +144,17 @@ body.city-setup #gearButton,body.city-setup #avatarEditor{display:none!important
   <p>Chọn thành phố để bắt đầu hành trình giao tiếp tiếng Anh của riêng em.</p>
   <div id="cityCards" class="cityCards">
    <button type="button" class="cityCard chosen" data-city="london" aria-pressed="true"><span class="cityEmoji">🇬🇧</span><strong>London</strong><small>United Kingdom</small><span class="cityHint">Phố cổ, xe buýt đỏ, quán café</span></button>
-   <button type="button" class="cityCard" data-city="tokyo" aria-pressed="false"><span class="cityEmoji">🇯🇵</span><strong>Tokyo</strong><small>Japan</small><span class="cityHint">Cổng torii, phố mua sắm</span></button>
-   <button type="button" class="cityCard" data-city="newyork" aria-pressed="false"><span class="cityEmoji">🇺🇸</span><strong>New York</strong><small>United States</small><span class="cityHint">Taxi vàng, phố Manhattan</span></button>
+   <button type="button" class="cityCard" data-city="sydney" aria-pressed="false"><span class="cityEmoji">🇦🇺</span><strong>Sydney</strong><small>Australia</small><span class="cityHint">Harbour Walk, café bên cảng</span></button>
+   <button type="button" class="cityCard" data-city="newyork" aria-pressed="false"><span class="cityEmoji">🇺🇸</span><strong>New York</strong><small>United States</small><span class="cityHint">Taxi vàng, phố Manhattan</span></button><button type="button" class="cityCard" data-city="toronto" aria-pressed="false"><span class="cityEmoji">🇨🇦</span><strong>Toronto</strong><small>Canada</small><span class="cityHint">Streetcar, Queen Street</span></button>
   </div>
-  <p class="cityDisclaimer">Bản thử nghiệm: 3 thành phố dùng chung bố cục đường phố, với màu sắc và điểm nhấn riêng. Nhiệm vụ café hiện dùng chung.</p>
+  <p class="cityDisclaimer">Bản thử nghiệm: 4 thành phố nói tiếng Anh hiện dùng chung bố cục đường phố, với các công trình nhận diện riêng. Hội thoại café hiện dùng chung.</p>
   <div class="cityActions"><button id="cityBack" type="button">← Chỉnh nhân vật</button><button id="cityStart" class="primary" type="button">🚀 Khám phá London</button></div>
   <button id="cityReturn" class="quiet" type="button">Về trang Speaking</button>
  </div>
 </div>
 <header><div class="brand"><span class="logo">✦</span><span><b>WORLDSPEAK 3D</b><small>Explore · Speak · Connect</small></span></div><span class="preview-tag">EXPLORE THE WORLD</span></header>
 <div id="location">📍 London · Neighbourhood Street</div>
-<div id="settings" class="panel"><h2>🎨 Asset Mode</h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button>
+<div id="settings" class="panel"><h2>🎨 Đồ họa <button id="settingsClose" type="button" aria-label="Đóng cài đặt" style="float:right;background:transparent;border:0;font-size:20px;line-height:1;color:#3b0e90">×</button></h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button>
 <button id="photoToggle" class="toggle">📷 Photo Mode (P)</button>
 <div id="debugControls"><label><input id="debugShadow" type="checkbox" checked> Shadows</label><label><input id="debugPost" type="checkbox" checked> Color grade</label><label><input id="debugWire" type="checkbox"> Wireframe</label></div>
 </div>
@@ -161,14 +162,14 @@ body.city-setup #gearButton,body.city-setup #avatarEditor{display:none!important
 #photoPanel[hidden]{display:none!important}
 #photoPanel{position:fixed;z-index:9;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:#fffdf8f2;border-radius:15px;padding:10px 14px;box-shadow:0 8px 24px #1e244d55}
 #photoPanel select{padding:7px;border-radius:9px;border:1px solid #c8b7dd}
-body.photo-mode header,body.photo-mode #location,body.photo-mode #settings,body.photo-mode #mission,body.photo-mode #legend,body.photo-mode #interact,body.photo-mode #avatarOpen,body.photo-mode #pad,body.photo-mode #actionMobile{display:none!important}
+body.photo-mode header,body.photo-mode #location,body.photo-mode #settings,body.photo-mode #mission,body.photo-mode #legend,body.photo-mode #interact,body.photo-mode #pad,body.photo-mode #actionMobile{display:none!important}
 #photoToggle{margin-top:8px}
 #debugControls{margin-top:8px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:5px}
 #debugControls label{display:flex;gap:4px;align-items:center}
 </style>
 <div id="photoPanel" hidden><strong>📷 Photo Mode</strong><select id="photoView" aria-label="Góc máy ảnh"><option value="0">Character close-up</option><option value="1">Street view</option><option value="2">Three-quarter view</option><option value="3">Wide view</option></select><button id="photoExit" class="toggle">Thoát (P)</button></div>
 <div id="mission" class="panel"><h2>☕ Visit the café</h2><p>Đi bộ đến quán cà phê có mái hiên màu cam, nhấn <b>E</b> để vào. Đây là cảnh đồ họa thử nghiệm, chưa có chấm điểm hay hội thoại AI.</p></div>
-<button type="button" id="avatarOpen" aria-controls="avatarEditor" aria-expanded="false">✨ Tạo nhân vật</button>
+
 <aside id="avatarEditor" hidden role="dialog" aria-modal="false" aria-labelledby="avatarEditorTitle">
  <div class="editor-title"><h2 id="avatarEditorTitle">✨ Character Studio</h2><button type="button" id="avatarClose" aria-label="Đóng">×</button></div>
  <canvas id="avatarCanvas" width="280" height="335" aria-label="Mô hình nhân vật có thể xoay"></canvas>
@@ -180,9 +181,10 @@ body.photo-mode header,body.photo-mode #location,body.photo-mode #settings,body.
   <label>Gương mặt<select id="avatarFace"></select></label>
   <label>Màu da<select id="avatarSkin"></select></label>
   <label>Trang phục<select id="avatarOutfit"></select></label>
+  <label>Kiểu kính<select id="avatarGlasses"></select></label>
  </div>
  <label class="talk-test"><input type="checkbox" id="avatarExpression"> Thử biểu cảm nói chuyện</label>
- <p class="hint">Kéo nhân vật để xoay. Model 3D Quaternius thay đổi theo trang phục; kiểu tóc, gương mặt và màu da chỉ áp dụng cho nhân vật dự phòng. Nếu mạng không tải được GLB, game tự dùng nhân vật dự phòng.</p>
+ <p class="hint">Kéo để xoay avatar. Kiểu tóc, kính, màu da và trang phục được áp dụng cho chính nhân vật em điều khiển trong game.</p>
 </aside>
 <div id="legend">WASD / phím mũi tên: Đi lại · Shift: Chạy · Kéo chuột: Xoay camera · E: Tương tác</div>
 <button id="interact" hidden>Nhấn E · Enter Café</button><section id="dialoguePanel" hidden role="dialog" aria-label="Trò chuyện tiếng Anh với barista">
@@ -197,5 +199,5 @@ body.photo-mode header,body.photo-mode #location,body.photo-mode #settings,body.
 </section>
 <div id="notice" role="status"></div>
 <div id="pad"><div id="stick"></div></div><button id="actionMobile" type="button">E · Vào</button>
-<script type="module" src="./main.js?v=20261121-cityflow7"></script>
+<script type="module" src="./main.js?v=20261121-avatar-city8"></script>
 </body></html>
