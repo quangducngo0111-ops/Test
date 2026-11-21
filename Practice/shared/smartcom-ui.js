@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261120-morph-smooth04',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-category-colour01',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -68,6 +68,24 @@ if(exercisePage && !document.querySelector('.sc-universal-back')){
  back.setAttribute('aria-label','Quay lại danh sách bài học');
  document.body.append(back);
 }
+// One coherent coloured icon set; group hues match the four large portal folders.
+const quickIconPaths={
+ '🎧':'<path d="M3 14v-3a9 9 0 0 1 18 0v3"/><rect x="2" y="13" width="4" height="8" rx="2"/><rect x="18" y="13" width="4" height="8" rx="2"/>',
+ '📖':'<path d="M12 7v14M3 18V4c4-1 7 0 9 3 2-3 5-4 9-3v14c-4-1-7 0-9 3-2-3-5-4-9-3Z"/>',
+ '✍️':'<path d="m4 20 4.7-1L20 7.5a2 2 0 0 0-3-3L5.7 16 4 20Zm10.5-12.5 3 3"/>',
+ '🎙️':'<rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5m-4 0h8"/>',
+ '💬':'<path d="M20 11a8 8 0 0 1-8 8H5l-2 2v-7a8 8 0 1 1 17-3Z"/><path d="M8 11h8"/>',
+ '🧩':'<path d="M8 3h3a2 2 0 0 0 4 0h3v5a2 2 0 1 1 0 4v8h-6a2 2 0 1 0-4 0H3v-7a2 2 0 1 0 0-4V3h5Z"/>',
+ '🌍':'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-6 5-6 13 0 18m0-18c6 5 6 13 0 18"/>',
+ '📰':'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h5v5H7zM15 8h3M15 12h3M7 16h11"/>',
+ '📗':'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 3v18"/>',
+ '🧠':'<path d="M12 5a4 4 0 0 0-7 2 4 4 0 0 0-1 7 4 4 0 0 0 5 6h3V5Zm0 0a4 4 0 0 1 7 2 4 4 0 0 1 1 7 4 4 0 0 1-5 6h-3V5Z"/>',
+ '📒':'<rect x="5" y="3" width="15" height="18" rx="2"/><path d="M9 3v18M4 7h3M4 12h3M4 17h3"/>',
+ '⏰':'<circle cx="12" cy="13" r="8"/><path d="M12 8v5l3 2M5 2 2 5m17-3 3 3"/>',
+ '↩️':'<path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/>',
+ '🏠':'<path d="m3 11 9-8 9 8v10H3V11Z"/><path d="M9 21v-7h6v7"/>',
+ '🎯':'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'
+};
 const groups=[
  {heading:'Mock Tests',links:[
   ['🎧','Listening Test','?skill=listening'],['📖','Reading Test','?skill=reading'],
@@ -110,13 +128,14 @@ for(const group of groups){
  for(const [icon,label,path] of group.links){
   const link=document.createElement('a');
   link.href=url(path);
-  link.className='sc-capsule-link';
+  link.className='sc-capsule-link '+(group.heading==='Mock Tests'?'sc-quick-test':group.heading==='Skill Practice'?'sc-quick-practice':group.heading==='Foundations'?'sc-quick-foundations':'sc-quick-nav');
   link.title=label;
   link.setAttribute('aria-label',label);
   const emoji=document.createElement('span');
   emoji.className='sc-capsule-icon';
   emoji.setAttribute('aria-hidden','true');
-  emoji.textContent=icon;
+  if(quickIconPaths[icon])emoji.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+quickIconPaths[icon]+'</svg>';
+  else emoji.textContent=icon;
   const tooltip=document.createElement('span');
   tooltip.className='sc-capsule-tooltip';
   tooltip.textContent=label;
