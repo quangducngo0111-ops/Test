@@ -104,13 +104,6 @@ const phraseList=Object.keys(PHRASES).sort((a,b)=>b.length-a.length);
 const speak=word=>{if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const v=new SpeechSynthesisUtterance(word);v.lang='en-GB';v.rate=.85;window.speechSynthesis.speak(v)};
 const css=document.createElement('style');
 css.textContent=[
-'#sc-note-button{position:fixed;bottom:22px;left:22px;z-index:2147480000;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:8px 16px 8px 10px;border:1px solid #e2d9f1;background:rgba(255,255,255,.96);color:#3b0e90;border-radius:999px;box-shadow:0 5px 19px rgba(48,24,100,.12);font:700 13px/1.25 Inter,system-ui,sans-serif;letter-spacing:0;cursor:pointer;transition:transform .17s ease,box-shadow .17s ease,background .17s ease;backdrop-filter:blur(12px)}',
-'#sc-note-button:hover{transform:translateY(-2px);background:#f8f5ff;box-shadow:0 8px 22px rgba(48,24,100,.16)}',
-'#sc-note-button:active{transform:translateY(0)}',
-'#sc-note-button:focus-visible{outline:3px solid #9e83ea;outline-offset:3px}',
-'#sc-note-button .sc-note-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:#f1ebff;flex:none}',
-'#sc-note-button .sc-note-icon svg{width:19px;height:19px;stroke:#5d33bc;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}',
-'#sc-note-button .sc-note-label{white-space:nowrap}',
 '@media(max-width:600px){#sc-note-button{bottom:15px;left:13px;min-height:44px;padding:6px 12px 6px 7px;font-size:12px}#sc-note-button .sc-note-icon{width:30px;height:30px}}',
 '#sc-word-menu{display:flex;gap:8px;position:fixed;z-index:2147483001;padding:10px;border-radius:15px;background:#fff;box-shadow:0 13px 35px #1a0e4466;border:1px solid #e1d5f1}',
 '#sc-word-menu[hidden],#sc-dict-modal[hidden],#sc-dict-shade[hidden]{display:none!important}',
