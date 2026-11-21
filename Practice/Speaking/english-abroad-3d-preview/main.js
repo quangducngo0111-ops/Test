@@ -318,15 +318,15 @@ function showNotice(message){
 function setInside(value){
  inside=value;outdoors.visible=!value;interior.visible=value;
  if(value){cafe.add(player.group);player.group.position.set(0,0,3.5);player.group.rotation.set(0,0,0);
- $('location').textContent='☕ London · Bluebird Café';
+ $('location').textContent='☕ '+CITIES[currentCity].name+' · '+CITIES[currentCity].cafe;
  $('mission').querySelector('h2').textContent='☕ Inside the café';
  $('mission').querySelector('p').textContent='Đi tới barista Mia ở quầy và nhấn E để luyện gọi đồ uống bằng tiếng Anh. Có micro hoặc nhập chữ.';
- showNotice('Welcome to the Bluebird Café!');
+ showNotice('Welcome to '+CITIES[currentCity].cafe+'!');
  }else{outdoors.add(player.group);player.group.position.set(-1.8,0,-2.2);
- $('location').textContent='📍 London · Neighbourhood Street';
- $('mission').querySelector('h2').textContent='☕ Visit the café';
- $('mission').querySelector('p').textContent='Đi bộ đến quán cà phê có mái hiên màu cam, nhấn E để vào. Đây là cảnh đồ họa thử nghiệm, chưa có chấm điểm hay hội thoại AI.';
- showNotice('Back to the London street');
+ $('location').textContent='📍 '+CITIES[currentCity].name+' · '+CITIES[currentCity].country;
+ $('mission').querySelector('h2').textContent='☕ '+CITIES[currentCity].cafe;
+ $('mission').querySelector('p').textContent='Khám phá '+CITIES[currentCity].name+' và đi đến quán cà phê có mái hiên màu cam. Nhấn E để vào và luyện giao tiếp.';
+ showNotice('Back to '+CITIES[currentCity].name+' street');
  }
  nearAction='';$('interact').hidden=true;
 }
@@ -362,8 +362,8 @@ function handleStick(e){const r=pad.getBoundingClientRect(),dx=e.clientX-r.left-
  joystick.x=dx*scale/lim;joystick.y=-dy*scale/lim;stick.style.transform='translate('+dx*scale+'px,'+dy*scale+'px)';}
 function updateLighting(v){
  timeMode=v;const night=v==='night',dusk=v==='dusk';
- scene.background=new THREE.Color(night?'#1c315a':dusk?'#f4ab97':'#b3dcf6');
- scene.fog.color.set(night?'#2a3d68':dusk?'#e1b6a5':'#b3dcf6');
+ scene.background=new THREE.Color(night?'#1c315a':dusk?'#f4ab97':CITIES[currentCity]?.sky||'#b3dcf6');
+ scene.fog.color.set(night?'#2a3d68':dusk?'#e1b6a5':CITIES[currentCity]?.sky||'#b3dcf6');
  hemi.intensity=night?.65:dusk?1.15:1.5;
  sun.intensity=night?.18:dusk?1.9:3.0;
  sun.color.set(night?'#8ea7ef':dusk?'#ffb98c':'#fff1d6');
@@ -519,6 +519,10 @@ function decorateCity(city){
  while(cityDecor.children.length){const child=cityDecor.children[0];cityDecor.remove(child);child.traverse(node=>{if(node.isMesh){node.geometry?.dispose();const mats=Array.isArray(node.material)?node.material:[node.material];mats.forEach(m=>m?.dispose?.())}});}
  const accent=mat(city.accent);
  sign(city.streetName,0,5.05,-4.99,5.2,.7,city.accent,'#fff9e8',cityDecor);
+ if(currentCity!=='london'){
+  sign(city.cafe.toUpperCase(),-1.7,3.71,-5.05,4.3,.72,'#fff5e0','#502e84',cityDecor);
+  sign(city.name.toUpperCase()+' CORNER',4.7,3.45,-5.05,4.4,.72,'#d7eafa','#4c4687',cityDecor);
+ }
  if(currentCity==='london'){
   box(.91,2.25,.88,accent,-10.4,1.16,-1.09,cityDecor);
   box(.76,.28,.77,mat('#ad303e'),-10.4,2.39,-1.09,cityDecor);
@@ -545,7 +549,7 @@ function decorateCity(city){
 function applyCity(id){
  currentCity=CITIES[id]?id:'london';selectedCity=currentCity;
  const city=CITIES[currentCity];
- scene.background.set(city.sky);scene.fog.color.set(city.sky);
+ scene.background.set(timeMode==='day'?city.sky:timeMode==='night'?'#1c315a':'#f4ab97');scene.fog.color.set(timeMode==='day'?city.sky:timeMode==='night'?'#2a3d68':'#e1b6a5');
  materials.road.color.set(city.road);materials.street.color.set(city.pavement);
  materials.grass.color.set(city.grass);materials.tree.color.set(city.tree);
  if(themedBus)themedBus.visible=currentCity==='london';
