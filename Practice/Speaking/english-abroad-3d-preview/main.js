@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {setupCafeDialogue} from './dialogue.js?v=20261121-face-dialogue3';
-import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-face-dialogue3';
+import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-art-round2';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
 // Palette: Smartcom violet #3b0e90, orange #ff9c00, sky blue #65bee4.
 // Lighting: ACES filmic, sRGB, 2.2 hemispheric fill + warm directional sun, soft shadow.
@@ -192,9 +192,14 @@ player.group.position.set(-1.8,0,5.4);
 const npcs=[
  {...character({skin:SKIN_COLORS[3],shirt:'#ffac70',pants:'#57567e',hair:HAIR_COLORS[0],style:'messy',face:3,age:'adult'}),pos:[-6.0,0,-1.9]},
  {...character({skin:SKIN_COLORS[1],shirt:'#7cc4aa',pants:'#6380b7',hair:HAIR_COLORS[2],style:'wavy-bob',face:1,age:'child'}),pos:[2.3,0,-1.8]},
- {...character({skin:SKIN_COLORS[0],shirt:'#c0a3d9',pants:'#5e6084',hair:HAIR_COLORS[5],style:'bun',face:2,age:'senior'}),pos:[7.4,0,4.8]}
+ {...character({skin:SKIN_COLORS[0],shirt:'#c0a3d9',pants:'#5e6084',hair:HAIR_COLORS[5],style:'bun',face:2,age:'senior'}),pos:[7.4,0,4.8]},
+ {...character({skin:SKIN_COLORS[2],shirt:'#eda387',pants:'#566a94',hair:HAIR_COLORS[1],style:'soft-short',face:0,age:'adult'}),pos:[-11,0,4.8]},
+ {...character({skin:SKIN_COLORS[4],shirt:'#72a8d9',pants:'#687c8c',hair:HAIR_COLORS[3],style:'side-part',face:2,age:'adult'}),pos:[-1,0,4.8]},
+ {...character({skin:SKIN_COLORS[1],shirt:'#a88ccf',pants:'#657d73',hair:HAIR_COLORS[4],style:'long',face:1,age:'teen'}),pos:[11,0,-1.8]},
+ {...character({skin:SKIN_COLORS[0],shirt:'#e8bd76',pants:'#8d7970',hair:HAIR_COLORS[0],style:'wavy-bob',face:0,age:'child'}),pos:[-9,0,-1.8]},
+ {...character({skin:SKIN_COLORS[3],shirt:'#87b59c',pants:'#5c728e',hair:HAIR_COLORS[2],style:'curly',face:3,age:'senior'}),pos:[13,0,4.8]}
 ];
-for(const n of npcs){outdoors.add(n.group);n.group.position.set(...n.pos)}
+for(const [i,n] of npcs.entries()){outdoors.add(n.group);n.group.position.set(...n.pos);n.patrol={x:n.pos[0],range:1.2+(i%3)*.7,speed:.28+(i%4)*.08}}
 // Interior barista; scripted dialogue is intentionally deferred to Phase 3.
 const barista=character({skin:SKIN_COLORS[2],shirt:'#5eac95',pants:'#564a65',hair:HAIR_COLORS[0],style:'ponytail',face:1,age:'adult'});
 cafe.add(barista.group);barista.group.position.set(3.4,0,-4.0);
@@ -395,7 +400,10 @@ function animate(){
   player.group.rotation.y+=diff*Math.min(1,dt*10);
  }
  player.anim(t,velocity/3,false);
- for(let i=0;i<npcs.length;i++)npcs[i].anim(t+i*2,0,i===0&&Math.sin(t*.9)>.1);
+ for(let i=0;i<npcs.length;i++){const n=npcs[i],p=n.patrol;
+   if(!inside&&!photoMode){n.group.position.x=p.x+Math.sin(t*p.speed+i)*p.range;n.group.rotation.y=Math.cos(t*p.speed+i)>0?Math.PI/2:-Math.PI/2}
+   n.anim(t+i*2,inside||photoMode?0:p.speed*2,i===0&&Math.sin(t*.9)>.1);
+  }
  barista.anim(t+1,0,inside&&(npcTalking||dialogue.isOpen()&&Math.sin(t*1.1)>.05));
  if(dialogue.isOpen()){
   const dx=player.group.position.x-barista.group.position.x,dz=player.group.position.z-barista.group.position.z;
