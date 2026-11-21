@@ -1,4 +1,19 @@
-(()=>{'use strict';
+(()=>{
+'use strict';
+/* Keep the original lightweight exercise screen in the same blue palette as Guided Writing.
+   The full template has its own stylesheet, so this is only for the fallback page. */
+document.body.classList.add('sc-writing-task2');
+if(!document.querySelector('[data-sc-writing-task2-palette]')){
+ const scriptBase=document.currentScript?.src;
+ if(scriptBase){
+  const theme=document.createElement('link');
+  theme.rel='stylesheet';
+  theme.dataset.scWritingTask2Palette='1';
+  theme.href=new URL('task2-palette.css?v=20261121-practice-blue20',scriptBase).href;
+  document.head.append(theme);
+ }
+}
+
 const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const C=JSON.parse($('lesson-data').textContent),type=C.type;
 const forms={discussion:{title:'Discussion Essay',views:['Quan điểm thứ nhất','Quan điểm thứ hai'],question:'Discuss both views and give your own opinion.',idea:'Hai Body phân tích hai quan điểm đối lập. Trong mở bài và kết bài cần thể hiện quan điểm của bạn.'},advantages:{title:'Advantages & Disadvantages',views:['Lợi ích (Advantages)','Hạn chế (Disadvantages)'],question:'Discuss the advantages and disadvantages.',idea:'Body 1 phân tích lợi ích; Body 2 phân tích hạn chế. Nếu đề hỏi outweigh, cần nêu rõ bên nào mạnh hơn.'},problem:{title:'Problem & Solution',views:['Vấn đề / nguyên nhân','Giải pháp'],question:'What are the problems and what solutions can you suggest?',idea:'Body 1 làm rõ vấn đề hoặc nguyên nhân; Body 2 đề xuất giải pháp trực tiếp xử lý vấn đề đó.'},twopart:{title:'Two-part Questions',views:['Trả lời câu hỏi 1','Trả lời câu hỏi 2'],question:'Answer both questions.',idea:'Hai Body lần lượt trả lời chính xác hai câu hỏi. Tránh chỉ trả lời câu thứ nhất hoặc nêu ý chung.'}};
