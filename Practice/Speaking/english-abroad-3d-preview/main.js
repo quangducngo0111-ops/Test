@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {applyCharacterAsset,installStreetAsset} from './asset-mode.js?v=20261121-visiblefix4';
 import {setupCafeDialogue} from './dialogue.js?v=20261121-saveflow6';
-import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-art-round2';
+import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-avatar-city8';
 // WORLDSPEAK 3D — character -> destination -> exploration.
 // Palette: Smartcom violet #3b0e90, orange #ff9c00, sky blue #65bee4.
 // Lighting: ACES filmic, sRGB, 2.2 hemispheric fill + warm directional sun, soft shadow.
@@ -578,7 +578,9 @@ function selectCity(id){
  });
  $('cityStart').textContent='🚀 Khám phá '+CITIES[id].name;
 }
-function showCitySelection(){
+let changingCityOnly=false;
+function showCitySelection(changeOnly=false){
+ changingCityOnly=changeOnly;
  setupActive=false;citySetupActive=true;gameStarted=false;
  document.body.classList.remove('character-setup');
  $('gameSetup').hidden=true;
@@ -590,10 +592,12 @@ function showCitySelection(){
  keys.clear();
 }
 document.querySelectorAll('[data-city]').forEach(card=>card.addEventListener('click',()=>selectCity(card.dataset.city)));
-$('cityBack').onclick=()=>{citySetupActive=false;document.body.classList.remove('city-setup');$('citySetup').hidden=true;showSetup()};
+$('cityBack').onclick=()=>{if(changingCityOnly){citySetupActive=false;gameStarted=true;document.body.classList.remove('city-setup');$('citySetup').hidden=true;setMenu(false);}else{citySetupActive=false;document.body.classList.remove('city-setup');$('citySetup').hidden=true;showSetup()}};
 $('cityStart').onclick=()=>finishSetup(false);
 
 function finishSetup(continuePrevious=false){
+ const changeOnly=changingCityOnly;
+ changingCityOnly=false;
  const data=continuePrevious?savedGame:null;
  setupActive=false;citySetupActive=false;gameStarted=true;editorOpen=false;editor.hidden=true;
  $('citySetup').hidden=true;document.body.classList.remove('city-setup');
@@ -601,10 +605,10 @@ function finishSetup(continuePrevious=false){
  document.body.appendChild(editor);
  // Character editor is closed during gameplay.
  if(data)restoreGame(data);
- else{dialogue.restoreProgress(0);applyCity(selectedCity);setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
+ else{if(!changeOnly)dialogue.restoreProgress(0);applyCity(selectedCity);setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
  keys.clear();camera.position.copy(player.group.position).add(new THREE.Vector3(0,5.6,9));
  saveGame(true);
- showNotice(data?'▶ Đã tiếp tục game đã lưu':'🌟 Welcome to '+CITIES[currentCity].name+'!');
+ showNotice(data?'▶ Đã tiếp tục game đã lưu':changeOnly?'🌍 Đã chuyển đến '+CITIES[currentCity].name:'🌟 Welcome to '+CITIES[currentCity].name+'!');
 }
 $('setupStart').onclick=()=>showCitySelection();
 $('setupContinue').onclick=()=>finishSetup(true);
@@ -613,7 +617,12 @@ $('cityReturn').onclick=()=>{window.location.href='../'};
 $('gearButton').onclick=()=>setMenu(!menuOpen);
 $('menuResume').onclick=()=>setMenu(false);
 $('menuSave').onclick=()=>saveGame();
-$('menuCity').onclick=()=>{saveGame(true);setMenu(false);showCitySelection()};
+$('menuCity').onclick=()=>{saveGame(true);setMenu(false);showCitySelection(true)};
+$('menuGraphics').onclick=()=>{
+ setMenu(false);
+ document.body.classList.toggle('graphics-open');
+};
+$('settingsClose').onclick=()=>document.body.classList.remove('graphics-open');
 $('menuLeave').onclick=()=>{saveGame(true);window.location.href='../'};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame(true)});
 window.addEventListener('pagehide',()=>saveGame(true));
