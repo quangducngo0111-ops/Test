@@ -1617,58 +1617,18 @@ body.sc-test-route .test-chip,body.sc-test-route .launch{background:#167D8E!impo
 body.sc-test-route .test-card{border-color:#B3DADD!important}
 @media(max-width:600px){body.sc-test-route .portal-mock-picker{margin:14px 10px!important;padding:15px!important}body.sc-test-route .portal-skill-picks{gap:8px!important}body.sc-test-route .portal-skill-picks button{min-height:88px!important;font-size:14px!important}}
 </style>
+<link data-sc-unified-style rel="stylesheet" href="Practice/shared/smartcom-ui.css?v=20261121-unified-head18">
 </head>
 
 
 <body class="sc-hub-refresh">
 
 
-<header class="topbar">
-
-  <div class="topbar-inner">
-
-    <div class="brand">
-
-      <div class="brand-mark">
-        I
-      </div>
-
-      <div>
-
-        <strong>
-          IELTS PRACTICE
-        </strong>
-
-        <small>
-          Test · Practice · Progress
-        </small>
-
-      </div>
-
-    </div>
-
-
-    <button type="button" id="installAppBtn" class="install-pwa-btn hidden" aria-label="Cài IELTS Test lên điện thoại">⬇ Cài ứng dụng</button>
-
-    <div
-      class="student-mini hidden"
-      id="studentMini"
-    >
-
-      <span id="miniInfo"></span>
-
-      <button
-        id="changeStudentTop"
-        type="button"
-      >
-        Đổi học sinh
-      </button>
-
-    </div>
-
-  </div>
-
-</header>
+<header class="sc-unified-header"><div class="sc-unified-inner">
+<div class="sc-unified-brand"><span class="sc-unified-brand-mark" aria-hidden="true">I</span><span class="sc-unified-brand-copy"><strong>IELTS PRACTICE</strong><small>Test · Practice · Progress</small></span></div>
+<button type="button" id="installAppBtn" class="sc-unified-install hidden" aria-label="Cài IELTS Test lên điện thoại">⬇ Cài ứng dụng</button>
+<div class="sc-unified-user student-mini hidden" id="studentMini"><span id="miniInfo" class="sc-unified-user-name"></span><button id="changeStudentTop" class="sc-unified-change" type="button">Đổi học sinh</button></div>
+</div></header>
 
 
 <main>
@@ -3465,17 +3425,12 @@ async function init(){
   renderTests();
 
 
-  currentStudent
-
-  ?
-
-  showDashboard()
-
-  :
-
-  showLogin(
-    false
-  );
+  if(new URLSearchParams(location.search).get('changeStudent')==='1'){
+    showLogin(true);
+    history.replaceState({},'',location.pathname);
+  }else{
+    currentStudent ? showDashboard() : showLogin(false);
+  }
 
 
   await discoverAll();
@@ -3529,7 +3484,7 @@ if ('serviceWorker' in navigator && (location.protocol==='https:' || location.ho
   window.addEventListener('appinstalled',()=>button.classList.add('hidden'));
 })();
 </script>
-<script src="Practice/shared/smartcom-ui.js?v=20261121-separate-tests17"></script>
+<script src="Practice/shared/smartcom-ui.js?v=20261121-unified-head18"></script>
 <script>
 /* Home card shows genuine locally known TEST activity only; no fictional IELTS band. */
 (function(){
