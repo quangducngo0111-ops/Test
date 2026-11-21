@@ -75,3 +75,25 @@ export function applyCharacterAsset(THREE,character,opts={},index=0,onReady=()=>
  };
  return character;
 }
+
+/** Decorative environment models; never affect movement, scene collision or dialogue. */
+export function installStreetAsset(THREE,parent,file,position,height=3,rotation=0){
+ let disposed=false;
+ const target=new THREE.Group();
+ target.position.set(...position);
+ parent.add(target);
+ load('street_pack/'+file).then(gltf=>{
+  if(disposed||!active)return;
+  const object=gltf.scene.clone(true);
+  const bounds=new THREE.Box3().setFromObject(object);
+  const size=new THREE.Vector3();bounds.getSize(size);
+  if(size.y<.001)return;
+  const scale=height/size.y;
+  object.scale.setScalar(scale);
+  object.position.set(-(bounds.min.x+bounds.max.x)*.5*scale,-bounds.min.y*scale,-(bounds.min.z+bounds.max.z)*.5*scale);
+  object.rotation.y=rotation;
+  object.traverse(node=>{if(node.isMesh){node.castShadow=true;node.receiveShadow=true}});
+  target.add(object);
+ }).catch(err=>console.warn('Optional street asset fallback:',file,err));
+ return ()=>{disposed=true;parent.remove(target)};
+}
