@@ -9,15 +9,15 @@ import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS}
 const $=id=>document.getElementById(id);
 const scene=new THREE.Scene();
 scene.background=new THREE.Color('#b3dcf6');
-scene.fog=new THREE.Fog('#b3dcf6',28,86);
-const camera=new THREE.PerspectiveCamera(53,innerWidth/innerHeight,.12,130);
+scene.fog=new THREE.Fog('#b3dcf6',43,105);
+const camera=new THREE.PerspectiveCamera(43,innerWidth/innerHeight,.12,130);
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
 renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.17;renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 $('viewport').appendChild(renderer.domElement);
-const hemi=new THREE.HemisphereLight('#d6eeff','#8f9b85',2.3);scene.add(hemi);
-const sun=new THREE.DirectionalLight('#ffebce',2.6);
+const hemi=new THREE.HemisphereLight('#cde9ff','#889b8b',1.5);scene.add(hemi);
+const sun=new THREE.DirectionalLight('#fff1d6',3.0);
 sun.position.set(-12,22,15);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
 sun.shadow.camera.left=-22;sun.shadow.camera.right=22;sun.shadow.camera.top=23;sun.shadow.camera.bottom=-23;
 sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-.00035;scene.add(sun,sun.target);
@@ -134,6 +134,12 @@ function street(){
  box(.15,2.6,.13,materials.dark,-13.6,1.35,4.3,outdoors);
  sign('BUS STOP',-13.6,2.6,4.43,1.5,.4,'#f4e8a4','#3b3982',outdoors);
  bus(12,7.4);
+  const curb=mat('#e6c9ab'),tile=mat('#dbc9b6'),drain=mat('#57687b'),yellow=mat('#f9e7bd');
+  for(const z of [-1.52,3.96]){box(34,.16,.18,curb,0,.19,z,outdoors);for(let x=-15;x<=15;x+=1.5)box(.025,.012,2.7,tile,x,.235,z<0?-3.1:5.5,outdoors)}
+  for(const x of [-11,-3,7,13]){box(.65,.014,.36,drain,x,.102,3.70,outdoors);for(let i=-2;i<=2;i++)box(.035,.018,.29,yellow,x+i*.11,.115,3.70,outdoors)}
+  for(const x of [-9,5,11])cyl(.34,.34,.013,drain,x,.095,1.65,outdoors,14);
+  for(const x of [-10.7,-6.3,1.8,9.3]){box(.64,.55,.55,mat('#c57f64'),x,.44,-1.02,outdoors);ball(.34,materials.tree,x,.82,-1.02,outdoors,10,8);ball(.12,mat('#ff9c90'),x+.12,1,-1.02,outdoors,8,6)}
+  for(let i=0;i<18;i++){const x=-41+i*4.8,h=4+(i*7%9);box(3.9,h,3,mat(['#b0c6db','#a5b6d1','#c4b5d1','#91b4bb'][i%4]),x,h/2,-28-(i%4)*3,outdoors)}
  for(let i=0;i<8;i++){
   const x=-12+i*3.4;const flower=mat(i%2?'#ffb35a':'#c692db');
   for(let j=0;j<4;j++){cyl(.015,.015,.31,materials.tree,x+.12*j,.36,-1.12,outdoors,5);ball(.12,flower,x+.12*j,.56,-1.12,outdoors,6,5);}
@@ -274,8 +280,18 @@ const dialogue=setupCafeDialogue({onTalking:value=>{npcTalking=value},onClose:()
 
 const keys=new Set();
 const joystick={x:0,y:0,active:false};
-let yaw=-.18,pitch=.32,dist=6.3;
+let yaw=-.18,pitch=.46,dist=8.8;
 let timeMode='day',qualityMode='auto',nearAction='';
+let photoMode=false,photoPreset=0;
+const photoViews=[{yaw:0,pitch:.30,dist:4.2},{yaw:-.18,pitch:.46,dist:9.8},{yaw:.64,pitch:.48,dist:8.6},{yaw:-.28,pitch:.40,dist:13}];
+const debugVisual={shadows:true,post:true,wireframe:false};
+function updatePhotoUI(){document.body.classList.toggle('photo-mode',photoMode);$('photoPanel').hidden=!photoMode;if(photoMode){const v=photoViews[photoPreset];yaw=v.yaw;pitch=v.pitch;dist=v.dist;$('photoView').value=String(photoPreset)}}
+function togglePhoto(){photoMode=!photoMode;updatePhotoUI()}
+$('photoToggle').onclick=togglePhoto;$('photoExit').onclick=togglePhoto;
+$('photoView').onchange=e=>{photoPreset=Number(e.target.value);updatePhotoUI()};
+$('debugShadow').onchange=e=>{debugVisual.shadows=e.target.checked;setQuality(qualityMode)};
+$('debugWire').onchange=e=>{debugVisual.wireframe=e.target.checked;scene.traverse(o=>{if(o.isMesh){const mats=Array.isArray(o.material)?o.material:[o.material];mats.forEach(m=>{if(m&&'wireframe' in m)m.wireframe=debugVisual.wireframe})}})};
+$('debugPost').onchange=e=>{debugVisual.post=e.target.checked;renderer.toneMapping=debugVisual.post?THREE.ACESFilmicToneMapping:THREE.NoToneMapping};
 function showNotice(message){
  const node=$('notice');node.textContent=message;node.style.display='block';
  clearTimeout(showNotice.timer);showNotice.timer=setTimeout(()=>node.style.display='none',2500);
@@ -300,7 +316,8 @@ function interact(){if(dialogue.isOpen())return;
  if(nearAction==='enter')setInside(true);else if(nearAction==='exit')setInside(false);
  else showNotice(inside?'Đến gần Mia ở quầy để trò chuyện.':'Tiến lại gần cửa quán cà phê để tương tác.');}
 window.addEventListener('keydown',e=>{
- if(dialogue.isOpen()||editorOpen){if(e.code==='Escape'&&dialogue.isOpen())dialogue.close();return}
+ if(e.code==='KeyP'&&!e.repeat&&!dialogue.isOpen()&&!editorOpen){togglePhoto();return}
+  if(dialogue.isOpen()||editorOpen){if(e.code==='Escape'&&dialogue.isOpen())dialogue.close();return}
  if(e.target?.closest?.('input,textarea,select,button'))return;
  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','KeyE'].includes(e.code))e.preventDefault();
  keys.add(e.code);if(e.code==='KeyE'&&!e.repeat)interact();
@@ -311,11 +328,11 @@ renderer.domElement.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse
 const orbit={active:false,x:0,y:0};
 window.addEventListener('pointerup',()=>orbit.active=false);
 renderer.domElement.addEventListener('pointermove',e=>{
- if(e.buttons||orbit.active){const dx=e.movementX||e.clientX-orbit.x,dy=e.movementY||e.clientY-orbit.y;
+ if(!photoMode&&(e.buttons||orbit.active)){const dx=e.movementX||e.clientX-orbit.x,dy=e.movementY||e.clientY-orbit.y;
  yaw-=dx*.004;pitch=THREE.MathUtils.clamp(pitch+dy*.0035,-.05,.95);orbit.x=e.clientX;orbit.y=e.clientY;
  }
 });
-renderer.domElement.addEventListener('wheel',e=>{dist=THREE.MathUtils.clamp(dist+e.deltaY*.007,3.5,10)}, {passive:true});
+renderer.domElement.addEventListener('wheel',e=>{dist=THREE.MathUtils.clamp(dist+e.deltaY*.007,3.5,14)}, {passive:true});
 const pad=$('pad'),stick=$('stick');
 pad.addEventListener('pointerdown',e=>{joystick.active=true;pad.setPointerCapture(e.pointerId);handleStick(e)});
 pad.addEventListener('pointermove',e=>{if(joystick.active)handleStick(e)});
@@ -326,24 +343,24 @@ function updateLighting(v){
  timeMode=v;const night=v==='night',dusk=v==='dusk';
  scene.background=new THREE.Color(night?'#1c315a':dusk?'#f4ab97':'#b3dcf6');
  scene.fog.color.set(night?'#2a3d68':dusk?'#e1b6a5':'#b3dcf6');
- hemi.intensity=night?.65:dusk?1.7:2.3;
- sun.intensity=night?.18:dusk?1.6:2.6;
- sun.color.set(night?'#8ea7ef':dusk?'#ffb98c':'#ffebce');
+ hemi.intensity=night?.65:dusk?1.15:1.5;
+ sun.intensity=night?.18:dusk?1.9:3.0;
+ sun.color.set(night?'#8ea7ef':dusk?'#ffb98c':'#fff1d6');
  sun.position.set(dusk?14:-12,night?4:dusk?8:22,15);
  for(const obj of lamplights){if(obj.isLight)obj.intensity=night?1.8:dusk?.7:0;else obj.emissiveIntensity=night?1.45:dusk?.45:0}
  for(const material of windowGlow)material.emissiveIntensity=night?1.4:dusk?.55:0;
- renderer.toneMappingExposure=night?.9:dusk?1.05:1.17;
+ renderer.toneMappingExposure=night?.9:dusk?1.02:1.12;
 }
 $('timeChoice').onchange=e=>updateLighting(e.target.value);
 function setQuality(q){
  qualityMode=q==='auto'?(matchMedia('(max-width:700px)').matches?'low':'medium'):q;
  renderer.setPixelRatio(Math.min(devicePixelRatio,qualityMode==='low'?1:qualityMode==='medium'?1.5:2));
- renderer.shadowMap.enabled=qualityMode!=='low';sun.castShadow=qualityMode!=='low';
+ renderer.shadowMap.enabled=debugVisual.shadows&&qualityMode!=='low';sun.castShadow=renderer.shadowMap.enabled;
  sun.shadow.mapSize.set(qualityMode==='high'?2048:1024,qualityMode==='high'?2048:1024);
  renderer.shadowMap.needsUpdate=true;resize();
 }
 $('quality').onchange=e=>setQuality(e.target.value);
-$('resetCamera').onclick=()=>{yaw=-.18;pitch=.32;dist=6.3};
+$('resetCamera').onclick=()=>{yaw=-.18;pitch=.46;dist=8.8};
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false)}
 window.addEventListener('resize',resize);
 function canWalk(x,z){
@@ -360,7 +377,7 @@ function animate(){
  const dt=Math.min(.06,clock.getDelta());t+=dt;
  let f=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0)+joystick.y;
  let r=(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0)+joystick.x;
- const magnitude=dialogue.isOpen()||editorOpen?0:Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
+ const magnitude=dialogue.isOpen()||editorOpen||photoMode?0:Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
  if(magnitude>.1){
   forward.set(Math.sin(yaw),0,-Math.cos(yaw));
   right.set(Math.cos(yaw),0,Math.sin(yaw));
@@ -394,7 +411,7 @@ function animate(){
  }else nearAction=Math.abs(player.group.position.x+1.7)<1.5&&Math.abs(player.group.position.z+2.9)<2.5?'enter':'';
  $('interact').hidden=!nearAction||dialogue.isOpen();
  if(nearAction)$('interact').textContent=nearAction==='enter'?'E · Enter Café':nearAction==='talk'?'E · Talk to Mia':'E · Exit to Street';
- target.copy(player.group.position).add(new THREE.Vector3(0,1.35,0));
+ target.copy(player.group.position).add(new THREE.Vector3(0,photoMode&&photoPreset===0?1.55:1.18,0));
  const cameraPos=new THREE.Vector3(Math.sin(yaw)*dist*Math.cos(pitch),dist*Math.sin(pitch)+1.2,Math.cos(yaw)*dist*Math.cos(pitch));
  cameraPos.add(target);
  if(dialogue.isOpen()&&inside){
