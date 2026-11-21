@@ -162,6 +162,7 @@ function renderRealmGallery(){
 function chooseRealm(index){
  realmIndex=Math.max(0,Math.min(REALMS.length-1,index));
  const r=realm();
+ try{localStorage.setItem("LEXICON_GUARDIANS_SELECTED_REALM",r.id)}catch(_){ }
  paths=r.route.map(point=>[...point]);buildPath();pads=choosePads();
  const types=["shade","worm","bat","spider","golem","boss"];
  types.forEach((key,i)=>{E_TYPES[key].name=r.monsters[i];E_TYPES[key].color=r.colors[i]});
@@ -759,5 +760,5 @@ if(!S.paused){if(!S.challengeLock)update(dt*S.speed);for(const f of S.fx){f.x+=f
 S.fx=S.fx.filter(f=>f.life>0);S.floating=S.floating.filter(f=>f.life>0);
 render();if(!S.lastHUD||now-S.lastHUD>=200){updateHUD();S.lastHUD=now}requestAnimationFrame(loop);
 }
-chooseRealm(0);restart();log("📖 Chọn bản đồ, lật 8 thẻ từ vựng rồi dựng phòng tuyến để bắt đầu.");openTutorial();requestAnimationFrame(loop);
+let initialRealm=0;try{const saved=localStorage.getItem("LEXICON_GUARDIANS_SELECTED_REALM");const index=REALMS.findIndex(r=>r.id===saved);if(index>=0)initialRealm=index}catch(_){}chooseRealm(initialRealm);restart();log("📖 Chọn bản đồ, lật 8 thẻ từ vựng rồi dựng phòng tuyến để bắt đầu.");openTutorial();requestAnimationFrame(loop);
 })();
