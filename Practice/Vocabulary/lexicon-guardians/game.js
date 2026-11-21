@@ -622,20 +622,23 @@ function drawTower(t,x,y){
  const top=-49-(lvl-1)*5;
  ctx.save();ctx.shadowBlur=17+t.glow*16;ctx.shadowColor=bright;
  if(t.type==="quill"){
-   polygon([[-10,-33],[-15,top-12],[2,top-44],[9,top-13],[15,-33]],bright);
-   polygon([[-8,-37],[0,top-25],[5,-38]],light);
-   line([[1,-31],[5,top-36]],"#fff4dc",3);
-   ellipse(3,top-41,5,8,"#f6f0cc");
+   // Twin-barrel lightning ballista, no academic quill imagery.
+   polygon([[-20,-33],[-21,top-13],[-7,top-27],[6,top-27],[23,top-13],[20,-33]],bright);
+   polygon([[-24,top-20],[0,top-47],[24,top-20]],base);
+   for(const dx of [-12,12]){ctx.fillStyle=light;rounded(dx-4,top-45,8,26,3);ctx.fill()}
+   polygon([[0,top-58],[-11,top-34],[1,top-40],[9,top-20],[15,top-50],[4,top-42]],"#FFF4B0");
+   strokeCircle(0,top-24,18+Math.sin(tm*4)*2,light,2);
  }else if(t.type==="spell"){
    polygon([[0,top-38],[22,top-11],[12,top+14],[-14,top+14],[-22,top-11]],bright);
    polygon([[0,top-38],[22,top-11],[0,top+12]],"#7866d2");
    polygon([[0,top-38],[-14,top+14],[0,top+12]],light);
    strokeCircle(0,top-10,29+lvl*2,"#d3baff",2);
  }else if(t.type==="echo"){
-   ellipse(0,top-8,20,22,"#8a6a50");ellipse(0,top-11,14,17,bright);
-   ellipse(0,top-13,5,7,light);
-   ctx.strokeStyle=light;ctx.lineWidth=3;
-   for(let i=0;i<2;i++){ctx.beginPath();ctx.arc(0,top-13,25+i*12,-1,1);ctx.stroke()}
+   // Artillery cannon with metallic barrel and glowing energy core.
+   polygon([[-24,top+9],[-24,top-24],[20,top-24],[20,top+9]],base);
+   polygon([[-27,top-20],[26,top-27],[34,top-11],[27,top+5],[-27,top+2]],bright);
+   ellipse(26,top-11,11,15,base);ellipse(27,top-11,5,8,light);
+   for(let i=0;i<2;i++)strokeCircle(29,top-10,19+i*11,"#BDECFB77",2);
  }else if(t.type==="ice"){
    for(let i=0;i<6;i++){const a=i*Math.PI/3;line([[0,top-8],[Math.cos(a)*24,top-8+Math.sin(a)*24]],bright,7);ellipse(Math.cos(a)*24,top-8+Math.sin(a)*24,5,5,light)}
    polygon([[0,top-30],[13,top-8],[0,top+14],[-13,top-8]],light);
@@ -644,9 +647,13 @@ function drawTower(t,x,y){
    polygon([[-9,-32],[5,top-24],[12,-33]],light);
    ellipse(1,-31,9,5,"#fff5d2");
  }else{
-   ellipse(0,-29,26,10,base);ellipse(0,-31,23,9,bright);
-   ellipse(0,-32,16,6,"#bc88d2");ellipse(0,-34,10,4,light);
-   for(let i=0;i<3;i++){const a=tm*1.5+i*Math.PI*2/3;ellipse(Math.cos(a)*18,-48+Math.sin(a)*5,3,5,"#f7dc86")}
+   // Energy reactor, not an ink well.
+   polygon([[-24,top+16],[-20,top-12],[0,top-38],[20,top-12],[24,top+16]],base);
+   polygon([[0,top-40],[-17,top-13],[0,top+7],[17,top-13]],bright);
+   polygon([[0,top-33],[-9,top-13],[0,top+2],[10,top-13]],light);
+   strokeCircle(0,top-13,26,"#FFE9AD",2);
+   for(let i=0;i<3;i++){const a=tm*1.2+i*Math.PI*2/3;ellipse(Math.cos(a)*25,top-13+Math.sin(a)*17,3,4,"#FFE9AD")}
+
  }
  ctx.restore();
  if(lvl>=2){strokeCircle(0,-31,26+lvl*3,bright,2);for(let i=0;i<lvl-1;i++)ellipse(-8+i*16,-4,4,4,"#fff2ae")}
