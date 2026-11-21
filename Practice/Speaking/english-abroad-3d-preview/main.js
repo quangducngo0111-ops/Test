@@ -188,9 +188,11 @@ function buildCafe(){
 }
 buildCafe();
 // Polished shared character rig: rounded geometry, expressive faces and layered hair.
+// Use the dependable procedural rig until GLB scale and visibility are validated.
+const USE_GAMEPLAY_GLTF_AVATARS=false;
 const character=(options={})=>{
  const avatar=createCharacter(THREE,options);
- applyCharacterAsset(THREE,avatar,options,options._assetIndex??0);
+ if(USE_GAMEPLAY_GLTF_AVATARS)applyCharacterAsset(THREE,avatar,options,options._assetIndex??0);
  return avatar;
 };
 const avatarSettings={age:'teen',face:0,style:'side-part',hair:HAIR_COLORS[1],skin:SKIN_COLORS[2],outfit:0};
@@ -602,9 +604,7 @@ $('setupStart').onclick=()=>showCitySelection();
 $('setupContinue').onclick=()=>finishSetup(true);
 $('setupBack').onclick=()=>{window.location.href='../'};
 $('cityReturn').onclick=()=>{window.location.href='../'};
-$('navBack').onclick=()=>setMenu(true);
-$('navMenu').onclick=()=>setMenu(true);
-$('navSave').onclick=()=>saveGame();
+$('gearButton').onclick=()=>setMenu(!menuOpen);
 $('menuResume').onclick=()=>setMenu(false);
 $('menuSave').onclick=()=>saveGame();
 $('menuCharacter').onclick=()=>{saveGame(true);setMenu(false);showSetup()};
