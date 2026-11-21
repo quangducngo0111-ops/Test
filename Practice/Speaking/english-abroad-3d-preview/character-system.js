@@ -168,7 +168,6 @@ export function createCharacter(T,opts={}){
   smoothSphere(T,knee,pant,0,-.19,0,.15,.28,.16,17);
   smoothSphere(T,knee,shoes,0,-.44,.15,.17,.13,.29,18);
   joints[side<0?'hipL':'hipR']=hip;
-  joints[side<0?'hipR':'hipL'] ||= hip;
   joints[side<0?'kneeL':'kneeR']=knee;
  }
  if(o.age==='senior'){torso.rotation.x=.07;}
