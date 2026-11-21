@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-category-colour01',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-compact-glass02',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -119,38 +119,75 @@ const tools=document.createElement('div');
 tools.className='sc-capsule-list';
 tools.id='sc-quick-panel';
 tools.setAttribute('aria-label','Các lối tắt');
-for(const group of groups){
- const heading=document.createElement('div');
- heading.className='sc-capsule-divider';
- heading.textContent=group.heading==='Mock Tests'?'TEST':group.heading==='Skill Practice'?'PRACTICE':group.heading==='Foundations'?'FOUNDATIONS':'NAV';
- heading.setAttribute('aria-hidden','true');
- tools.append(heading);
- for(const [icon,label,path] of group.links){
-  const link=document.createElement('a');
-  link.href=url(path);
-  link.className='sc-capsule-link '+(group.heading==='Mock Tests'?'sc-quick-test':group.heading==='Skill Practice'?'sc-quick-practice':group.heading==='Foundations'?'sc-quick-foundations':'sc-quick-nav');
-  link.title=label;
-  link.setAttribute('aria-label',label);
-  const emoji=document.createElement('span');
-  emoji.className='sc-capsule-icon';
-  emoji.setAttribute('aria-hidden','true');
-  if(quickIconPaths[icon])emoji.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+quickIconPaths[icon]+'</svg>';
-  else emoji.textContent=icon;
-  const tooltip=document.createElement('span');
-  tooltip.className='sc-capsule-tooltip';
-  tooltip.textContent=label;
-  tooltip.setAttribute('aria-hidden','true');
-  link.append(emoji,tooltip);
-  tools.append(link);
- }
+const categoryTitles={'Mock Tests':'TEST','Skill Practice':'PRACTICE','Foundations':'FOUNDATIONS','Điều hướng':'NAV'};
+const categoryIcons={'Mock Tests':'🎯','Skill Practice':'📖','Foundations':'🧩','Điều hướng':'🏠'};
+const categoryClasses={'Mock Tests':'sc-quick-test','Skill Practice':'sc-quick-practice','Foundations':'sc-quick-foundations','Điều hướng':'sc-quick-nav'};
+function quickSvg(icon){
+ const svg=quickIconPaths[icon]||quickIconPaths['🎯'];
+ return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg>';
 }
+const categoryGrid=document.createElement('div');
+categoryGrid.className='sc-quick-categories';
+const childSection=document.createElement('section');
+childSection.className='sc-quick-children';
+childSection.hidden=true;
+const childTitle=document.createElement('div');
+childTitle.className='sc-quick-children-title';
+const childGrid=document.createElement('div');
+childGrid.className='sc-quick-children-grid';
+childSection.append(childTitle,childGrid);
+let selectedGroup=null;
+function selectQuickGroup(group){
+ selectedGroup=group;
+ categoryGrid.querySelectorAll('button').forEach(btn=>{
+  const selected=btn.dataset.group===group.heading;
+  btn.classList.toggle('is-selected',selected);
+  btn.setAttribute('aria-expanded',String(selected));
+ });
+ childTitle.textContent=categoryTitles[group.heading];
+ childGrid.replaceChildren();
+ for(const [icon,label,path] of group.links){
+  const a=document.createElement('a');
+  a.className='sc-capsule-link '+categoryClasses[group.heading];
+  a.href=url(path);
+  a.title=label;
+  a.setAttribute('aria-label',label);
+  const symbol=document.createElement('span');
+  symbol.className='sc-capsule-icon';symbol.setAttribute('aria-hidden','true');
+  symbol.innerHTML=quickSvg(icon);
+  const name=document.createElement('span');
+  name.className='sc-capsule-tooltip';name.textContent=label;
+  a.append(symbol,name);childGrid.append(a);
+ }
+ childSection.hidden=false;
+ positionPanel();
+}
+for(const group of groups){
+ const button=document.createElement('button');
+ button.type='button';button.className='sc-quick-category '+categoryClasses[group.heading];
+ button.dataset.group=group.heading;
+ button.setAttribute('aria-expanded','false');
+ button.setAttribute('aria-controls','sc-quick-children');
+ const symbol=document.createElement('span');
+ symbol.className='sc-capsule-icon';symbol.setAttribute('aria-hidden','true');
+ symbol.innerHTML=quickSvg(categoryIcons[group.heading]);
+ const name=document.createElement('span');
+ name.className='sc-quick-category-name';name.textContent=categoryTitles[group.heading];
+ button.append(symbol,name);
+ button.addEventListener('mouseenter',e=>{if(e.pointerType!=='touch')selectQuickGroup(group)});
+ button.addEventListener('focus',()=>selectQuickGroup(group));
+ button.addEventListener('click',()=>{if(selectedGroup===group&&!childSection.hidden){childSection.hidden=true;selectedGroup=null;button.classList.remove('is-selected');button.setAttribute('aria-expanded','false');positionPanel()}else selectQuickGroup(group)});
+ categoryGrid.append(button);
+}
+childSection.id='sc-quick-children';
+tools.append(categoryGrid,childSection);
 const backdrop=document.createElement('div');
 backdrop.className='sc-quick-backdrop';
 backdrop.setAttribute('aria-hidden','true');
 shell.append(backdrop);
 const modalHeader=document.createElement('div');
 modalHeader.className='sc-modal-heading';
-modalHeader.innerHTML='<strong>Truy cập nhanh</strong><span>Chọn phần học để chuyển đến</span>';
+modalHeader.innerHTML='<strong>Truy cập nhanh</strong><span>Chọn nhóm để mở các mục bên trong</span>';
 const modalClose=document.createElement('button');
 modalClose.type='button';modalClose.className='sc-modal-close';
 modalClose.setAttribute('aria-label','Đóng truy cập nhanh');modalClose.textContent='✕';
@@ -191,7 +228,7 @@ function setOpen(value){
  shell.classList.toggle('sc-open',value);
  toggle.setAttribute('aria-expanded',String(value));
  toggle.setAttribute('aria-label',value?'Đóng menu truy cập nhanh':'Mở menu truy cập nhanh');
- if(!value){tools.scrollTop=0;hideLabel()}
+ if(!value){tools.scrollTop=0;hideLabel();childSection.hidden=true;selectedGroup=null;categoryGrid.querySelectorAll('button').forEach(b=>{b.classList.remove('is-selected');b.setAttribute('aria-expanded','false')})}
 }
 /* AssistiveTouch drag: movable, edge-snapping, persists normalized vertical position.
    A short tap opens the menu; dragging never accidentally opens it. */
@@ -213,7 +250,7 @@ function setLauncher(side,y){
 }
 function positionPanel(){
  const rect=toggle.getBoundingClientRect();
- const w=Math.min(480,window.innerWidth-28),h=Math.min(590,Math.round(window.innerHeight*.80));
+ const w=Math.min(350,window.innerWidth-28),h=Math.min(465,Math.round(window.innerHeight*.78));
  const x=Math.round((window.innerWidth-w)/2);
  const y=Math.round((window.innerHeight-h)/2);
  shell.style.setProperty('--sc-origin-x',Math.round(rect.left+rect.width/2-x)+'px');
