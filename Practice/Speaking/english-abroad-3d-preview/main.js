@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {setupCafeDialogue} from './dialogue.js?v=20261121-cafe-chat2';
 import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-character-polish1';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
 // Palette: Smartcom violet #3b0e90, orange #ff9c00, sky blue #65bee4.
@@ -262,6 +263,9 @@ previewCanvas.addEventListener('pointerup',()=>editorDragging=false);
 previewCanvas.addEventListener('pointercancel',()=>editorDragging=false);
 buildPreview();
 let inside=false;
+let npcTalking=false;
+const dialogue=setupCafeDialogue({onTalking:value=>{npcTalking=value},onClose:()=>{keys.clear()}});
+
 const keys=new Set();
 const joystick={x:0,y:0,active:false};
 let yaw=-.18,pitch=.32,dist=6.3;
@@ -275,7 +279,7 @@ function setInside(value){
  if(value){cafe.add(player.group);player.group.position.set(0,0,3.5);player.group.rotation.set(0,0,0);
  $('location').textContent='☕ London · Bluebird Café';
  $('mission').querySelector('h2').textContent='☕ Inside the café';
- $('mission').querySelector('p').textContent='Đây là cảnh thử đồ họa nội thất. NPC hội thoại bằng micro sẽ được xây ở Phase 3. Đi đến cửa để ra phố.';
+ $('mission').querySelector('p').textContent='Đi tới barista Mia ở quầy và nhấn E để luyện gọi đồ uống bằng tiếng Anh. Có micro hoặc nhập chữ.';
  showNotice('Welcome to the Bluebird Café!');
  }else{outdoors.add(player.group);player.group.position.set(-1.8,0,-2.2);
  $('location').textContent='📍 London · Neighbourhood Street';
@@ -285,9 +289,13 @@ function setInside(value){
  }
  nearAction='';$('interact').hidden=true;
 }
-function interact(){if(nearAction==='enter')setInside(true);else if(nearAction==='exit')setInside(false);
- else showNotice('Tiến lại gần cửa quán cà phê để tương tác.')}
+function interact(){if(dialogue.isOpen())return;
+ if(nearAction==='talk'){dialogue.start();keys.clear();return}
+ if(nearAction==='enter')setInside(true);else if(nearAction==='exit')setInside(false);
+ else showNotice(inside?'Đến gần Mia ở quầy để trò chuyện.':'Tiến lại gần cửa quán cà phê để tương tác.');}
 window.addEventListener('keydown',e=>{
+ if(dialogue.isOpen()||editorOpen){if(e.code==='Escape'&&dialogue.isOpen())dialogue.close();return}
+ if(e.target?.closest?.('input,textarea,select,button'))return;
  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','KeyE'].includes(e.code))e.preventDefault();
  keys.add(e.code);if(e.code==='KeyE'&&!e.repeat)interact();
 });
@@ -346,7 +354,7 @@ function animate(){
  const dt=Math.min(.06,clock.getDelta());t+=dt;
  let f=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0)+joystick.y;
  let r=(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0)+joystick.x;
- const magnitude=Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
+ const magnitude=dialogue.isOpen()||editorOpen?0:Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
  if(magnitude>.1){
   forward.set(Math.sin(yaw),0,-Math.cos(yaw));
   right.set(Math.cos(yaw),0,Math.sin(yaw));
@@ -365,18 +373,28 @@ function animate(){
  }
  player.anim(t,velocity/3,false);
  for(let i=0;i<npcs.length;i++)npcs[i].anim(t+i*2,0,i===0&&Math.sin(t*.9)>.1);
- barista.anim(t+1,0,inside&&Math.sin(t*1.1)>.05);
+ barista.anim(t+1,0,inside&&(npcTalking||dialogue.isOpen()&&Math.sin(t*1.1)>.05));
+ if(dialogue.isOpen()){
+  const dx=player.group.position.x-barista.group.position.x,dz=player.group.position.z-barista.group.position.z;
+  barista.group.rotation.y=Math.atan2(dx,dz);
+ }
  if(editorOpen&&previewCharacter){
   previewCharacter.anim(t,0,$('avatarExpression').checked);
   editorRenderer.render(editorScene,editorCam);
  }
- if(inside)nearAction=player.group.position.z>3.5?'exit':'';
- else nearAction=Math.abs(player.group.position.x+1.7)<1.5&&Math.abs(player.group.position.z+2.9)<2.5?'enter':'';
- $('interact').hidden=!nearAction;
- if(nearAction)$('interact').textContent=nearAction==='enter'?'E · Enter Café':'E · Exit to Street';
+ if(inside){
+  const baristaDistance=player.group.position.distanceTo(barista.group.position);
+  nearAction=baristaDistance<2.95?'talk':player.group.position.z>3.5?'exit':'';
+ }else nearAction=Math.abs(player.group.position.x+1.7)<1.5&&Math.abs(player.group.position.z+2.9)<2.5?'enter':'';
+ $('interact').hidden=!nearAction||dialogue.isOpen();
+ if(nearAction)$('interact').textContent=nearAction==='enter'?'E · Enter Café':nearAction==='talk'?'E · Talk to Mia':'E · Exit to Street';
  target.copy(player.group.position).add(new THREE.Vector3(0,1.35,0));
  const cameraPos=new THREE.Vector3(Math.sin(yaw)*dist*Math.cos(pitch),dist*Math.sin(pitch)+1.2,Math.cos(yaw)*dist*Math.cos(pitch));
  cameraPos.add(target);
+ if(dialogue.isOpen()&&inside){
+  target.set((player.group.position.x+barista.group.position.x)/2,1.45,(player.group.position.z+barista.group.position.z)/2);
+  cameraPos.set(target.x+2.6,2.65,target.z+3.25);
+ }
  if(inside){cameraPos.x=THREE.MathUtils.clamp(cameraPos.x,-6.65,6.65);cameraPos.z=THREE.MathUtils.clamp(cameraPos.z,-6.8,5.6)}
  camera.position.lerp(cameraPos,1-Math.exp(-7*dt));camera.lookAt(target);
  sun.target.position.copy(player.group.position);sun.position.copy(player.group.position).add(new THREE.Vector3(timeMode==='dusk'?14:-12,timeMode==='night'?4:22,15));
