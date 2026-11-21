@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {setupCafeDialogue} from './dialogue.js?v=20261121-cafe-chat2';
-import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-character-polish1';
+import {setupCafeDialogue} from './dialogue.js?v=20261121-face-dialogue3';
+import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-face-dialogue3';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
 // Palette: Smartcom violet #3b0e90, orange #ff9c00, sky blue #65bee4.
 // Lighting: ACES filmic, sRGB, 2.2 hemispheric fill + warm directional sun, soft shadow.
