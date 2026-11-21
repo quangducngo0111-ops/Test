@@ -32,6 +32,28 @@ header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:cent
 @media(max-width:750px){header{left:10px;top:8px}.brand{padding:8px 10px}.brand small{display:none}.brand b{font-size:11px}.preview-tag{font-size:10px;padding:9px}#settings{right:9px;top:74px;width:178px;padding:11px}#settings h2{font-size:13px}.control{font-size:11px}#location{top:81px;left:10px;max-width:43vw}#mission{bottom:13px;left:10px;max-width:45vw;padding:10px}#mission h2{font-size:13px}#mission p{font-size:10px}#legend{display:none}#pad,#actionMobile{display:block}#interact{bottom:145px;font-size:11px}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+<style id="character-editor-styles">
+#avatarOpen{position:fixed;z-index:7;right:18px;top:330px;background:#f7e9ff;color:#48257d;padding:12px 15px;border-radius:13px;border:2px solid #ceb0e6;box-shadow:0 10px 28px #3525602b;font-weight:900}
+#avatarOpen:hover{background:#efd9ff}
+#avatarEditor[hidden]{display:none!important}
+#avatarEditor{position:fixed;z-index:14;right:18px;top:16px;width:320px;max-height:calc(100vh - 32px);overflow-y:auto;background:#fffdfa;border:1px solid #e7d7f0;border-radius:22px;box-shadow:0 25px 65px #1d254b63;padding:16px}
+#avatarEditor .editor-title{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:9px}
+#avatarEditor h2{margin:0;color:#412178;font-size:21px}
+#avatarClose{border:0;border-radius:9px;background:#eee3f6;color:#3b2575;padding:7px 11px;font-size:19px}
+#avatarCanvas{width:100%;height:240px!important;display:block;border-radius:15px;background:#e9e2f4;touch-action:pan-y}
+#avatarEditor .rotate-row{display:flex;gap:7px;justify-content:center;padding:9px 0 13px}
+#avatarEditor .rotate-row button{border:1px solid #d9caf0;border-radius:10px;background:#f5effc;color:#4a2b87;font-size:13px;padding:7px 12px}
+#avatarEditor .avatar-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#avatarEditor label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:#6a5a7d}
+#avatarEditor select{width:100%;min-width:0;border:1px solid #d9cdea;border-radius:9px;background:#fbf7ff;color:#3d315d;padding:8px 5px;font-size:12px}
+#avatarEditor .talk-test{margin-top:10px;display:flex;flex-direction:row;align-items:center;font-size:12px;color:#4d3b69}
+#avatarEditor .hint{margin:10px 0 0;font-size:11px;color:#877999;line-height:1.5}
+@media(max-width:750px){
+ #avatarOpen{top:auto;bottom:128px;right:15px;padding:8px 10px;font-size:11px}
+ #avatarEditor{top:8px;bottom:8px;right:8px;width:min(320px,calc(100vw - 16px));max-height:none}
+ #avatarCanvas{height:185px!important}
+}
+</style>
 </head><body>
 <div id="loading"><div><div class="spinner"></div>Đang dựng thành phố 3D…<p style="font-size:13px;opacity:.7">Phase 0 · Visual Test</p></div></div>
 <div id="viewport" aria-label="Khung cảnh 3D"></div>
@@ -39,8 +61,24 @@ header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:cent
 <div id="location">📍 London · Neighbourhood Street</div>
 <div id="settings" class="panel"><h2>🎨 Visual Test</h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button></div>
 <div id="mission" class="panel"><h2>☕ Visit the café</h2><p>Đi bộ đến quán cà phê có mái hiên màu cam, nhấn <b>E</b> để vào. Đây là cảnh đồ họa thử nghiệm, chưa có chấm điểm hay hội thoại AI.</p></div>
+<button type="button" id="avatarOpen" aria-controls="avatarEditor" aria-expanded="false">✨ Tạo nhân vật</button>
+<aside id="avatarEditor" hidden role="dialog" aria-modal="false" aria-labelledby="avatarEditorTitle">
+ <div class="editor-title"><h2 id="avatarEditorTitle">✨ Character Studio</h2><button type="button" id="avatarClose" aria-label="Đóng">×</button></div>
+ <canvas id="avatarCanvas" width="280" height="335" aria-label="Mô hình nhân vật có thể xoay"></canvas>
+ <div class="rotate-row"><button type="button" id="avatarRotateLeft">↶ Xoay trái</button><button type="button" id="avatarRotateRight">Xoay phải ↷</button></div>
+ <div class="avatar-fields">
+  <label>Độ tuổi<select id="avatarAge"></select></label>
+  <label>Kiểu tóc<select id="avatarHair"></select></label>
+  <label>Màu tóc<select id="avatarHairColor"></select></label>
+  <label>Gương mặt<select id="avatarFace"></select></label>
+  <label>Màu da<select id="avatarSkin"></select></label>
+  <label>Trang phục<select id="avatarOutfit"></select></label>
+ </div>
+ <label class="talk-test"><input type="checkbox" id="avatarExpression"> Thử biểu cảm nói chuyện</label>
+ <p class="hint">Kéo nhân vật để xoay. Mọi thay đổi cập nhật trực tiếp vào nhân vật đang chơi và được lưu trên thiết bị.</p>
+</aside>
 <div id="legend">WASD / phím mũi tên: Đi lại · Shift: Chạy · Kéo chuột: Xoay camera · E: Tương tác</div>
 <button id="interact" hidden>Nhấn E · Enter Café</button><div id="notice" role="status"></div>
 <div id="pad"><div id="stick"></div></div><button id="actionMobile" type="button">E · Vào</button>
-<script type="module" src="./main.js?v=20261121-phase0a"></script>
+<script type="module" src="./main.js?v=20261121-character-polish1"></script>
 </body></html>
