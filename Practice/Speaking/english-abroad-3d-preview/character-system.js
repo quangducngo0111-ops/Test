@@ -21,56 +21,104 @@ function coneLock(T,parent,mat,from,to,r=.12){
  m.position.copy(a.add(b).multiplyScalar(.5));m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());
  m.castShadow=true;parent.add(m);return m;
 }
-function skinFaceTexture(T,style=0,skin='#e9b58f'){
- const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;
- const t=canvas.getContext('2d');const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;
- const expressions=['smile','neutral','speaking'];let current='';let lastBlink=false;
+function skinFaceTexture(T,style=0){
+ const canvas=document.createElement('canvas');canvas.width=768;canvas.height=768;
+ const c=canvas.getContext('2d');const texture=new T.CanvasTexture(canvas);
+ texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=4;
+ let lastExpression='',lastBlink=false;
  function draw(expression='smile',blink=false){
-  if(current===expression&&lastBlink===blink)return;
-  current=expression;lastBlink=blink;t.clearRect(0,0,512,512);
-  const c=style%4;
-  // Soft, transparent cheek glow instead of thick, dotted face features.
-  for(const x of [130,382]){
-   const grad=t.createRadialGradient(x,304,6,x,304,70);
-   grad.addColorStop(0,'rgba(219,95,108,.25)');grad.addColorStop(1,'rgba(219,95,108,0)');
-   t.fillStyle=grad;t.beginPath();t.arc(x,304,72,0,Math.PI*2);t.fill();
+  if(expression===lastExpression&&blink===lastBlink)return;
+  lastExpression=expression;lastBlink=blink;
+  c.clearRect(0,0,768,768);
+  const v=((Number(style)||0)%4+4)%4;
+  // Face palette, balanced proportions and translucent blush. Art is on a curved face surface.
+  for(const x of [192,576]){
+   const bloom=c.createRadialGradient(x,457,8,x,457,105);
+   bloom.addColorStop(0,'rgba(220,105,124,.29)');
+   bloom.addColorStop(.65,'rgba(236,120,134,.10)');
+   bloom.addColorStop(1,'rgba(234,128,139,0)');
+   c.fillStyle=bloom;c.beginPath();c.arc(x,457,106,0,Math.PI*2);c.fill();
   }
-  const eyeY=232,eyeGap=c===1?102:c===2?99:105;
+  const eyeY=326;
+  const eyeWidth=[50,55,46,51][v],eyeHeight=[45,52,42,43][v];
   for(const side of [-1,1]){
-   const x=256+side*eyeGap;
-   // Smooth brow arches, changing character with face style.
-   t.beginPath();t.lineCap='round';t.lineWidth=10;t.strokeStyle='rgba(70,46,49,.86)';
-   t.moveTo(x-34,169+(c===2?5:0));
-   t.quadraticCurveTo(x,145+(c===3?12:0),x+33,168+(c===3?7:0));t.stroke();
+   const x=384+side*[151,155,149,152][v];
+   // Delicate, slightly arched brows rather than dark thick strokes.
+   c.lineCap='round';c.strokeStyle='rgba(73,48,53,.75)';
+   c.lineWidth=11;c.beginPath();
+   c.moveTo(x-49,235+(v===2?5:0));
+   c.quadraticCurveTo(x,207+(v===3?18:0),x+47,234+(v===3?9:0));c.stroke();
    if(blink){
-    t.lineWidth=10;t.strokeStyle='#493d49';t.beginPath();t.moveTo(x-27,eyeY+8);
-    t.quadraticCurveTo(x,eyeY+19,x+27,eyeY+8);t.stroke();
-   }else{
-    t.fillStyle='#fffaf4';t.beginPath();t.ellipse(x,eyeY,29,c===1?36:32,0,0,Math.PI*2);t.fill();
-    t.fillStyle=c===3?'#446a76':'#604a5d';t.beginPath();t.ellipse(x+side*3,eyeY+4,15,23,0,0,Math.PI*2);t.fill();
-    t.fillStyle='#2a2939';t.beginPath();t.ellipse(x+side*3,eyeY+5,9,16,0,0,Math.PI*2);t.fill();
-    t.fillStyle='#fff';t.beginPath();t.arc(x-3,eyeY-5,6,0,Math.PI*2);t.fill();
-    t.beginPath();t.arc(x+8,eyeY+11,2.3,0,Math.PI*2);t.fill();
-    t.strokeStyle='#4c3e4c';t.lineWidth=7;t.beginPath();t.moveTo(x-28,eyeY-12);
-    t.quadraticCurveTo(x,eyeY-38,x+28,eyeY-13);t.stroke();
+    c.strokeStyle='#59444a';c.lineWidth=10;c.beginPath();
+    c.moveTo(x-eyeWidth,eyeY+7);
+    c.quadraticCurveTo(x,eyeY+25,x+eyeWidth,eyeY+7);c.stroke();
+    continue;
    }
+   // Soft almond eye contour, no cartoon dots or hard white circles.
+   c.fillStyle='#614a4c';c.beginPath();
+   c.moveTo(x-eyeWidth-7,eyeY+1);
+   c.bezierCurveTo(x-eyeWidth*.6,eyeY-eyeHeight-12,x+eyeWidth*.5,eyeY-eyeHeight-13,x+eyeWidth+7,eyeY-1);
+   c.bezierCurveTo(x+eyeWidth*.7,eyeY+eyeHeight*.62,x-eyeWidth*.65,eyeY+eyeHeight*.62,x-eyeWidth-7,eyeY+1);
+   c.fill();
+   c.fillStyle='#fff9f4';c.beginPath();
+   c.moveTo(x-eyeWidth+1,eyeY);
+   c.bezierCurveTo(x-eyeWidth*.55,eyeY-eyeHeight-3,x+eyeWidth*.55,eyeY-eyeHeight-3,x+eyeWidth-1,eyeY-1);
+   c.bezierCurveTo(x+eyeWidth*.57,eyeY+eyeHeight*.48,x-eyeWidth*.55,eyeY+eyeHeight*.48,x-eyeWidth+1,eyeY);
+   c.fill();
+   const irisX=x+side*(v===1?4:2);
+   const iris=c.createRadialGradient(irisX,eyeY+4,4,irisX,eyeY+4,32);
+   iris.addColorStop(0,'#302a39');iris.addColorStop(.55,v===3?'#577980':'#654858');
+   iris.addColorStop(1,'#a27871');
+   c.fillStyle=iris;c.beginPath();c.ellipse(irisX,eyeY+3,28,32,0,0,Math.PI*2);c.fill();
+   c.fillStyle='#292532';c.beginPath();c.ellipse(irisX,eyeY+3,15,23,0,0,Math.PI*2);c.fill();
+   c.fillStyle='#fff';c.beginPath();c.arc(irisX-10,eyeY-10,10,0,Math.PI*2);c.fill();
+   c.globalAlpha=.7;c.beginPath();c.arc(irisX+11,eyeY+13,4.5,0,Math.PI*2);c.fill();c.globalAlpha=1;
+   c.lineWidth=7;c.strokeStyle='#57444a';c.beginPath();
+   c.moveTo(x-eyeWidth-4,eyeY-5);
+   c.quadraticCurveTo(x,eyeY-eyeHeight-20,x+eyeWidth+4,eyeY-5);c.stroke();
+   if(v===1||v===3){for(let i=0;i<2;i++){
+    const lx=x+side*(eyeWidth+1+i*10);c.lineWidth=5;c.beginPath();
+    c.moveTo(lx,eyeY-11-i*4);c.lineTo(lx+side*8,eyeY-21-i*3);c.stroke();
+   }}
   }
-  t.strokeStyle='rgba(177,112,97,.55)';t.lineWidth=4;t.beginPath();t.moveTo(248,282);
-  t.quadraticCurveTo(253,293,262,284);t.stroke();
-  t.lineCap='round';t.strokeStyle='#a75566';t.lineWidth=9;
+  // Light nose bridge and small sculpted nostril shadow.
+  c.lineWidth=4;c.strokeStyle='rgba(158,89,82,.28)';c.beginPath();
+  c.moveTo(379,413);c.quadraticCurveTo(371,439,390,445);c.stroke();
+  c.strokeStyle='rgba(126,62,72,.32)';c.beginPath();c.moveTo(376,460);
+  c.quadraticCurveTo(384,464,392,460);c.stroke();
+  // Mouth is expressive but small and polished.
+  c.lineCap='round';
   if(expression==='speaking'){
-   t.fillStyle='#8d4559';t.beginPath();t.ellipse(256,359,24,32,0,0,Math.PI*2);t.fill();
-   t.fillStyle='#e9a5a0';t.beginPath();t.ellipse(256,376,14,8,0,0,Math.PI*2);t.fill();
+   c.fillStyle='#87485b';c.beginPath();c.ellipse(384,546,30,35,0,0,Math.PI*2);c.fill();
+   c.fillStyle='#eaa4a7';c.beginPath();c.ellipse(384,563,20,9,0,0,Math.PI*2);c.fill();
+   c.strokeStyle='#ba6d78';c.lineWidth=7;c.beginPath();c.ellipse(384,546,29,34,0,Math.PI,0);c.stroke();
   }else if(expression==='neutral'){
-   t.beginPath();t.moveTo(223,361);t.quadraticCurveTo(256,372,289,361);t.stroke();
+   c.strokeStyle='#a6636d';c.lineWidth=8;c.beginPath();
+   c.moveTo(346,542);c.quadraticCurveTo(384,551,422,542);c.stroke();
   }else{
-   t.beginPath();t.moveTo(209,345);t.quadraticCurveTo(256,405,303,345);t.stroke();
-   t.fillStyle='rgba(255,244,229,.9)';t.beginPath();t.moveTo(224,353);t.quadraticCurveTo(256,380,288,353);t.quadraticCurveTo(256,365,224,353);t.fill();
+   c.strokeStyle='#a95b67';c.lineWidth=9;c.beginPath();
+   c.moveTo(325,522);c.bezierCurveTo(352,566,413,566,442,522);c.stroke();
+   c.fillStyle='#fff3e9';c.beginPath();c.moveTo(346,537);
+   c.quadraticCurveTo(384,558,420,536);c.quadraticCurveTo(386,549,346,537);c.fill();
+   c.fillStyle='rgba(186,97,107,.55)';c.beginPath();
+   c.ellipse(384,562,24,5,0,0,Math.PI*2);c.fill();
   }
   texture.needsUpdate=true;
  }
- draw('smile',false);
- return {texture,draw,dispose(){texture.dispose()}};
+ draw();
+ return {texture,draw,dispose:()=>texture.dispose()};
+}
+function curvedFaceGeometry(T){
+ // Curved high-resolution patch follows the front hemisphere so features don't look pasted on.
+ const g=new T.PlaneGeometry(.745,.745,24,18);
+ const p=g.attributes.position;
+ for(let i=0;i<p.count;i++){
+  const x=p.getX(i),y=p.getY(i);
+  const nx=x/.435,ny=y/.48;
+  const surface=.428*Math.sqrt(Math.max(.10,1-.55*nx*nx-.46*ny*ny));
+  p.setZ(i,surface+.014);
+ }
+ p.needsUpdate=true;g.computeVertexNormals();return g;
 }
 function createHair(T,head,style,color,faceTop=.43){
  const hair=material(T,color,.92),light=material(T,new T.Color(color).lerp(new T.Color('#fff1d2'),.13));
@@ -142,9 +190,9 @@ export function createCharacter(T,opts={}){
  head.scale.setScalar(headScale);
  smoothSphere(T,head,skin,0,0,-.025,.435,.48,.415,24);
  // Face Canvas occupies the frontal face, positioned just ahead of cheeks.
- const face=skinFaceTexture(T,typeof o.face==='number'?o.face:FACE_STYLES.indexOf(o.face),o.skin);
- const facePanel=new T.Mesh(new T.PlaneGeometry(.73,.66),new T.MeshBasicMaterial({map:face.texture,transparent:true,depthWrite:false,side:T.DoubleSide}));
- facePanel.position.set(0,-.005,.397);head.add(facePanel);
+ const face=skinFaceTexture(T,typeof o.face==='number'?o.face:FACE_STYLES.indexOf(o.face));
+ const facePanel=new T.Mesh(curvedFaceGeometry(T),new T.MeshBasicMaterial({map:face.texture,transparent:true,depthWrite:false,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1}));
+ facePanel.position.set(0,-.03,0);head.add(facePanel);
  // Nose ridge, ear lobes and round cheeks (subtle geometry, not dot eyes).
  for(const side of [-1,1]){
   smoothSphere(T,head,skin,side*.413,-.03,-.015,.105,.15,.105,13);
