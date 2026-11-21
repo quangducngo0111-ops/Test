@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-character-polish1';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
 // Palette: Smartcom violet #3b0e90, orange #ff9c00, sky blue #65bee4.
 // Lighting: ACES filmic, sRGB, 2.2 hemispheric fill + warm directional sun, soft shadow.
@@ -174,52 +175,92 @@ function buildCafe(){
  }
 }
 buildCafe();
-// Procedural character rig reused for adult, child and senior.
-function character(options={}){
- const o={skin:'#e4ad8b',shirt:'#6d90cb',pants:'#4b638b',hair:'#62453f',age:'adult',...options};
- const group=new THREE.Group();const rig=new THREE.Group();group.add(rig);
- const headScale=o.age==='child'?1.22:o.age==='senior'?.97:1;
- const scale=o.age==='child'?.74:o.age==='senior'?.94:1;
- rig.scale.setScalar(scale);
- const torso=new THREE.Group();torso.position.y=1.48;rig.add(torso);
- const shirt=mat(o.shirt),skin=mat(o.skin),pants=mat(o.pants),hair=mat(o.hair),shoe=mat('#443f52');
- const waist=box(.7,.9,.43,shirt,0,0,0,torso);
- const neck=cyl(.115,.13,.2,skin,0,.53,0,torso);
- const head=new THREE.Group();head.position.set(0,.93,0);head.scale.setScalar(headScale);torso.add(head);
- const face=ball(.38,skin,0,0,0,head,12,9);
- ball(.39,hair,0,.22,-.055,head,11,7);
- for(const ix of [-.15,.15]){ball(.045,mat('#292d41'),ix,.025,.355,head,7,5)}
- const smile=mesh(new THREE.TorusGeometry(.1,.016,6,13,Math.PI),mat('#a45d65'),0,-.13,.357,head);smile.rotation.z=Math.PI;
- const limbs={};
- for(const side of [-1,1]){
-  const arm=new THREE.Group();arm.position.set(side*.49,.28,0);torso.add(arm);
-  cyl(.105,.125,.65,shirt,0,-.29,0,arm);ball(.11,skin,0,-.69,0,arm);
-  limbs[side<0?'armL':'armR']=arm;
-  const leg=new THREE.Group();leg.position.set(side*.22,.94,0);rig.add(leg);
-  cyl(.145,.135,.75,pants,0,-.37,0,leg);
-  box(.27,.16,.43,shoe,0,-.76,.12,leg);
-  limbs[side<0?'legL':'legR']=leg;
- }
- if(o.age==='senior'){torso.rotation.x=.08;ball(.15,mat('#b4bbc4'),.23,.18,.03,head)}
- const shadow=new THREE.Mesh(new THREE.CircleGeometry(.52,20),new THREE.MeshBasicMaterial({color:'#192e43',transparent:true,opacity:.2,depthWrite:false}));
- shadow.rotation.x=-Math.PI/2;shadow.position.y=.03;group.add(shadow);
- const anim=(t,speed=0)=>{const cycle=Math.sin(t*(speed>.1?8:1.5));limbs.armL.rotation.x=cycle*(speed>.1?.6:.03);limbs.armR.rotation.x=-cycle*(speed>.1?.6:.03);
- limbs.legL.rotation.x=-cycle*(speed>.1?.66:0);limbs.legR.rotation.x=cycle*(speed>.1?.66:0);torso.position.y=1.48+(speed>.1?Math.abs(cycle)*.035:Math.sin(t*1.8)*.009);
- head.rotation.y=Math.sin(t*.8)*.035;};
- return {group,anim,rig};
-}
-const player=character({skin:'#d7a37d',shirt:'#9e68d3',pants:'#536eaa',hair:'#563b3b',age:'teen'});
+// Polished shared character rig: rounded geometry, expressive faces and layered hair.
+const character=(options={})=>createCharacter(THREE,options);
+const avatarSettings={age:'teen',face:0,style:'side-part',hair:HAIR_COLORS[1],skin:SKIN_COLORS[2],outfit:0};
+const avatarOpts=()=>({...avatarSettings,...OUTFITS[avatarSettings.outfit]});
+let player=character(avatarOpts());
 outdoors.add(player.group);
 player.group.position.set(-1.8,0,5.4);
 const npcs=[
- {...character({skin:'#b97859',shirt:'#ffac70',pants:'#57567e',hair:'#473535',age:'adult'}),pos:[-6.0,0,-1.9]},
- {...character({skin:'#e8b88e',shirt:'#7cc4aa',pants:'#6380b7',hair:'#ab8161',age:'child'}),pos:[2.3,0,-1.8]},
- {...character({skin:'#e3b49a',shirt:'#c0a3d9',pants:'#5e6084',hair:'#aeb7c0',age:'senior'}),pos:[7.4,0,4.8]}
+ {...character({skin:SKIN_COLORS[3],shirt:'#ffac70',pants:'#57567e',hair:HAIR_COLORS[0],style:'messy',face:3,age:'adult'}),pos:[-6.0,0,-1.9]},
+ {...character({skin:SKIN_COLORS[1],shirt:'#7cc4aa',pants:'#6380b7',hair:HAIR_COLORS[2],style:'wavy-bob',face:1,age:'child'}),pos:[2.3,0,-1.8]},
+ {...character({skin:SKIN_COLORS[0],shirt:'#c0a3d9',pants:'#5e6084',hair:HAIR_COLORS[5],style:'bun',face:2,age:'senior'}),pos:[7.4,0,4.8]}
 ];
 for(const n of npcs){outdoors.add(n.group);n.group.position.set(...n.pos)}
 // Interior barista; scripted dialogue is intentionally deferred to Phase 3.
-const barista=character({skin:'#c5947b',shirt:'#5eac95',pants:'#564a65',hair:'#392f35',age:'adult'});
+const barista=character({skin:SKIN_COLORS[2],shirt:'#5eac95',pants:'#564a65',hair:HAIR_COLORS[0],style:'ponytail',face:1,age:'adult'});
 cafe.add(barista.group);barista.group.position.set(3.4,0,-4.0);
+
+/* Live character editor and isolated 3D turntable preview. The game world is not rebuilt. */
+const editor=$('avatarEditor');
+const previewCanvas=$('avatarCanvas');
+const editorScene=new THREE.Scene();editorScene.background=new THREE.Color('#e9e2f4');
+const editorCam=new THREE.PerspectiveCamera(38,1,.1,30);editorCam.position.set(0,2.0,5.0);editorCam.lookAt(0,1.18,0);
+const editorLight=new THREE.HemisphereLight('#ffffff','#c5b5ae',2.7);editorScene.add(editorLight);
+const editorKey=new THREE.DirectionalLight('#fff1e3',2.3);editorKey.position.set(-3,7,6);editorScene.add(editorKey);
+const editorRim=new THREE.DirectionalLight('#c3dfff',1.4);editorRim.position.set(4,3,-3);editorScene.add(editorRim);
+const editorRenderer=new THREE.WebGLRenderer({canvas:previewCanvas,antialias:true,alpha:false,powerPreference:'low-power'});
+editorRenderer.outputColorSpace=THREE.SRGBColorSpace;editorRenderer.toneMapping=THREE.ACESFilmicToneMapping;editorRenderer.toneMappingExposure=1.12;
+editorRenderer.setSize(280,335,false);editorRenderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+let previewCharacter=null,editorYaw=.30,editorDragging=false,editorLastX=0,editorOpen=false;
+function buildPreview(){
+ if(previewCharacter){editorScene.remove(previewCharacter.group);previewCharacter.dispose()}
+ previewCharacter=character(avatarOpts());
+ editorScene.add(previewCharacter.group);previewCharacter.group.rotation.y=editorYaw;
+ editorRenderer.render(editorScene,editorCam);
+}
+function replacePlayer(){
+ const old=player,oldParent=old.group.parent,pos=old.group.position.clone(),rot=old.group.rotation.y;
+ if(oldParent)oldParent.remove(old.group);
+ player=character(avatarOpts());(oldParent||outdoors).add(player.group);
+ player.group.position.copy(pos);player.group.rotation.y=rot;
+ old.dispose();buildPreview();
+ try{localStorage.setItem('lifeAbroadAvatar',JSON.stringify(avatarSettings))}catch(_){}
+}
+function fillSelect(id,values){
+ const node=$(id);node.replaceChildren();
+ for(const [value,label] of values){const opt=document.createElement('option');opt.value=value;opt.textContent=label;node.append(opt)}
+}
+fillSelect('avatarAge',[['child','Child'],['teen','Teen'],['adult','Adult'],['senior','Senior']]);
+fillSelect('avatarHair',HAIR_STYLES.map((x,i)=>[x,['Short neat','Side part','Wavy bob','Ponytail','Bun','Curly','Messy short','Long layers'][i]]));
+fillSelect('avatarHairColor',HAIR_COLORS.map((x,i)=>[x,['Jet black','Dark brown','Chestnut','Caramel','Ash blonde','Silver'][i]]));
+fillSelect('avatarFace',FACE_STYLES.map((x,i)=>[String(i),['Friendly','Bright','Gentle','Confident'][i]]));
+fillSelect('avatarSkin',SKIN_COLORS.map((x,i)=>[x,['Light','Warm','Golden','Tan','Deep'][i]]));
+fillSelect('avatarOutfit',OUTFITS.map((x,i)=>[String(i),x.name]));
+try{
+ const data=JSON.parse(localStorage.getItem('lifeAbroadAvatar')||'null');
+ if(data&&typeof data==='object'){
+  for(const key of Object.keys(avatarSettings))if(data[key]!==undefined)avatarSettings[key]=data[key];
+  if(!HAIR_STYLES.includes(avatarSettings.style))avatarSettings.style='side-part';
+  if(!HAIR_COLORS.includes(avatarSettings.hair))avatarSettings.hair=HAIR_COLORS[1];
+  if(!SKIN_COLORS.includes(avatarSettings.skin))avatarSettings.skin=SKIN_COLORS[2];
+  avatarSettings.face=Math.max(0,Math.min(3,Number(avatarSettings.face)||0));
+  avatarSettings.outfit=Math.max(0,Math.min(3,Number(avatarSettings.outfit)||0));
+  replacePlayer();
+ }
+}catch(_){}
+const avatarControls={avatarAge:'age',avatarHair:'style',avatarHairColor:'hair',avatarFace:'face',avatarSkin:'skin',avatarOutfit:'outfit'};
+for(const [id,key] of Object.entries(avatarControls)){
+ const node=$(id);node.value=String(avatarSettings[key]);
+ node.addEventListener('change',()=>{
+  avatarSettings[key]=(key==='face'||key==='outfit')?Number(node.value):node.value;
+  replacePlayer();
+ });
+}
+function setEditor(open){
+ editorOpen=open;editor.hidden=!open;$('avatarOpen').setAttribute('aria-expanded',String(open));
+ if(open)buildPreview();
+}
+$('avatarOpen').onclick=()=>setEditor(!editorOpen);
+$('avatarClose').onclick=()=>setEditor(false);
+$('avatarRotateLeft').onclick=()=>{editorYaw+=Math.PI/4;if(previewCharacter)previewCharacter.group.rotation.y=editorYaw};
+$('avatarRotateRight').onclick=()=>{editorYaw-=Math.PI/4;if(previewCharacter)previewCharacter.group.rotation.y=editorYaw};
+previewCanvas.addEventListener('pointerdown',e=>{editorDragging=true;editorLastX=e.clientX;previewCanvas.setPointerCapture(e.pointerId)});
+previewCanvas.addEventListener('pointermove',e=>{if(editorDragging){editorYaw+=(e.clientX-editorLastX)*.012;editorLastX=e.clientX;if(previewCharacter)previewCharacter.group.rotation.y=editorYaw}});
+previewCanvas.addEventListener('pointerup',()=>editorDragging=false);
+previewCanvas.addEventListener('pointercancel',()=>editorDragging=false);
+buildPreview();
 let inside=false;
 const keys=new Set();
 const joystick={x:0,y:0,active:false};
@@ -322,9 +363,13 @@ function animate(){
   let diff=((heading-player.group.rotation.y+Math.PI*3)%(Math.PI*2))-Math.PI;
   player.group.rotation.y+=diff*Math.min(1,dt*10);
  }
- player.anim(t,velocity/3);
- for(let i=0;i<npcs.length;i++)npcs[i].anim(t+i*2,0);
- barista.anim(t+1,0);
+ player.anim(t,velocity/3,false);
+ for(let i=0;i<npcs.length;i++)npcs[i].anim(t+i*2,0,i===0&&Math.sin(t*.9)>.1);
+ barista.anim(t+1,0,inside&&Math.sin(t*1.1)>.05);
+ if(editorOpen&&previewCharacter){
+  previewCharacter.anim(t,0,$('avatarExpression').checked);
+  editorRenderer.render(editorScene,editorCam);
+ }
  if(inside)nearAction=player.group.position.z>3.5?'exit':'';
  else nearAction=Math.abs(player.group.position.x+1.7)<1.5&&Math.abs(player.group.position.z+2.9)<2.5?'enter':'';
  $('interact').hidden=!nearAction;
