@@ -3,6 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Main English Abroad entry now launches the playable 3D version. Preserve the 2D classic at ?classic=1. -->
+<script>
+(function(){
+ const params=new URLSearchParams(window.location.search);
+ if(params.get('classic')==='1')return;
+ const target=new URL('../english-abroad-3d-preview/',window.location.href);
+ for(const [key,value] of params){if(key!=='classic')target.searchParams.append(key,value)}
+ target.searchParams.set('build','assetmode-20261121-3');
+ if(window.location.hash)target.hash=window.location.hash;
+ window.location.replace(target.href);
+})();
+</script>
 <meta name="theme-color" content="#39218a">
 <title>English Abroad 2.0 · Smartcom Speaking World</title>
 <style>
