@@ -1575,6 +1575,36 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
 </style><link rel="stylesheet" href="./assets/portal-dashboard-2026.css?v=20261121-no-legacy-colours09"><link data-sc-quick-theme="1" rel="stylesheet" href="Practice/shared/smartcom-ui.css?v=20261121-remove-arrows10">
 <style id="sc-legacy-guard">#sc-note-button,.sc-vocab-notebook-trigger,.sc-notebook-toggle,#sc-vocab-floating,#sc-vocab-btn{display:none!important;visibility:hidden!important}#sc-quick-shell .sc-capsule-tooltip::after{content:none!important;display:none!important}</style>
 <script data-sc-outline-icons="1" defer src="assets/smartcom-outline-icons.js?v=20261121-prepaint11"></script>
+<style id="sc-test-route-theme">
+/* Test is its own navigation view, using the same teal palette as the main TEST folder. */
+body.sc-test-route{--sc-test:#167D8E;--sc-test-dark:#125D6B;--sc-test-soft:#D0F0EF;background:#F1FCFC!important}
+body.sc-test-route .portal-mock-picker{
+ display:block!important;max-width:1050px!important;margin:22px auto 42px!important;
+ padding:28px!important;background:linear-gradient(135deg,#F1FCFC,#D0F0EF)!important;
+ border:2px solid #78C4C8!important;border-radius:24px!important;
+ box-shadow:0 14px 30px rgba(20,109,117,.1)!important;
+}
+body.sc-test-route .portal-mock-picker.hidden{display:none!important}
+body.sc-test-route .portal-mock-heading{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:20px!important;flex-wrap:wrap!important}
+body.sc-test-route .portal-mock-heading h3,body.sc-test-route .test-head h2{color:#125D6B!important}
+body.sc-test-route .portal-mock-heading button,body.sc-test-route #backToSkills{
+ background:#fff!important;color:#125D6B!important;
+ border:1px solid #80C6CA!important;border-radius:12px!important;
+ padding:10px 15px!important;font-weight:800!important;cursor:pointer!important;
+}
+body.sc-test-route .portal-skill-picks{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+body.sc-test-route .portal-skill-picks button{
+ min-height:118px!important;padding:22px 10px!important;
+ background:#fff!important;color:#167D8E!important;
+ border:1.5px solid #89CDD0!important;border-radius:18px!important;
+ font-size:18px!important;font-weight:850!important;box-shadow:0 7px 16px #196A7710!important;
+}
+body.sc-test-route .portal-skill-picks button:hover{background:#DDF5F2!important;border-color:#167D8E!important}
+body.sc-test-route .test-shell{background:linear-gradient(145deg,#F1FCFC,#E6F7F5)!important;border:1px solid #A0D6D9!important}
+body.sc-test-route .test-chip,body.sc-test-route .launch{background:#167D8E!important;border-color:#167D8E!important;color:#fff!important}
+body.sc-test-route .test-card{border-color:#B3DADD!important}
+@media(max-width:600px){body.sc-test-route .portal-mock-picker{margin:14px 10px!important;padding:15px!important}body.sc-test-route .portal-skill-picks{gap:8px!important}body.sc-test-route .portal-skill-picks button{min-height:88px!important;font-size:14px!important}}
+</style>
 </head>
 
 
@@ -1923,7 +1953,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
  </button>
 </section>
 <section class="portal-mock-picker hidden" id="mockPicker" aria-label="Chọn kỹ năng thi thử">
- <div class="portal-mock-heading"><h3>Chọn kỹ năng Mock Test</h3><button type="button" id="closeMockPicker">Đóng ×</button></div>
+ <div class="portal-mock-heading"><button type="button" id="closeMockPicker">← Trang chủ</button><h3>TEST · Chọn kỹ năng</h3></div>
  <div class="portal-skill-picks">
   <button type="button" data-skill="listening">🎧 Listening</button>
   <button type="button" data-skill="reading">📖 Reading</button>
@@ -1937,7 +1967,7 @@ border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;white-space:n
       class="test-shell hidden"
       id="testSection"
     >
-      <div class="test-route-head"><button type="button" id="backToSkills" class="test-back">← Quay lại trang chủ</button><span>IELTS TEST PORTAL</span></div>
+      <div class="test-route-head"><button type="button" id="backToSkills" class="test-back">← Quay lại TEST</button><span>IELTS TEST PORTAL</span></div>
 
       <div class="test-head">
 
@@ -2531,6 +2561,7 @@ function showDashboard(){
   setSkill('listening',false);
   const requestedSkill=new URLSearchParams(location.search).get('skill');
   if(['listening','reading','speaking','writing'].includes(requestedSkill))showTestCatalog(requestedSkill,false);
+  else if(new URLSearchParams(location.search).get('tests')==='1')showMockSelection(false);
   else showPortalHome(false);
 
 }
@@ -3163,9 +3194,18 @@ function renderTests(){
 }
 
 
+function showMockSelection(updateUrl=true){
+ if(!currentStudent){showLogin(false);return}
+ ['homeHero','homeHeading','homeSkills','testSection'].forEach(id=>$(id)?.classList.add('hidden'));
+ $('mockPicker').classList.remove('hidden');
+ document.body.classList.add('sc-test-route');
+ if(updateUrl)history.pushState({tests:true},'',location.pathname+'?tests=1');
+ window.scrollTo({top:0,behavior:'instant'});
+}
 function showTestCatalog(skill,updateUrl=true){
   if(!currentStudent){showLogin(false);return}
   currentSkill=skill;
+  document.body.classList.add('sc-test-route');
   renderTests();
   ['homeHero','homeHeading','homeSkills','mockPicker'].forEach(id=>$(id)?.classList.add('hidden'));
   $('testSection').classList.remove('hidden');
@@ -3173,7 +3213,9 @@ function showTestCatalog(skill,updateUrl=true){
   window.scrollTo({top:0,behavior:'instant'});
 }
 function showPortalHome(updateUrl=true){
+  document.body.classList.remove('sc-test-route');
   ['homeHero','homeHeading','homeSkills'].forEach(id=>$(id)?.classList.remove('hidden'));
+  $('mockPicker').classList.add('hidden');
   $('testSection').classList.add('hidden');
   if(updateUrl)history.pushState({},'',location.pathname);
   window.scrollTo({top:0,behavior:'instant'});
@@ -3186,9 +3228,10 @@ function setSkill(skill,scroll=true){
 window.addEventListener('popstate',()=>{
   const skill=new URLSearchParams(location.search).get('skill');
   if(['reading','listening','writing','speaking'].includes(skill))showTestCatalog(skill,false);
+  else if(new URLSearchParams(location.search).get('tests')==='1')showMockSelection(false);
   else showPortalHome(false);
 });
-$('backToSkills').addEventListener('click',()=>showPortalHome());
+$('backToSkills').addEventListener('click',()=>showMockSelection());
 
 
 function launchTest(path){
@@ -3316,11 +3359,8 @@ if(speakingMockDoor){
   speakingMockDoor.addEventListener('click',()=>showTestCatalog('speaking'));
 }
 
-$('mockTestsDoor')?.addEventListener('click',()=>{
- $('mockPicker').classList.remove('hidden');
- $('mockPicker').scrollIntoView({behavior:'smooth',block:'nearest'});
-});
-$('closeMockPicker')?.addEventListener('click',()=>$('mockPicker').classList.add('hidden'));
+$('mockTestsDoor')?.addEventListener('click',()=>showMockSelection());
+$('closeMockPicker')?.addEventListener('click',()=>showPortalHome());
 document.querySelectorAll('#mockPicker [data-skill]').forEach(button=>button.addEventListener('click',()=>showTestCatalog(button.dataset.skill)));
 $('foundationsDoor')?.addEventListener('click',()=>{
  saveStudent(currentStudent);
@@ -3473,7 +3513,7 @@ if ('serviceWorker' in navigator && (location.protocol==='https:' || location.ho
   window.addEventListener('appinstalled',()=>button.classList.add('hidden'));
 })();
 </script>
-<script src="Practice/shared/smartcom-ui.js?v=20261121-study-tools14"></script>
+<script src="Practice/shared/smartcom-ui.js?v=20261121-test-nav15"></script>
 <script>
 /* Home card shows genuine locally known TEST activity only; no fictional IELTS band. */
 (function(){
