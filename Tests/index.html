@@ -1625,6 +1625,64 @@ body.sc-tests-dedicated #testSection.hidden,body.sc-tests-dedicated #mockPicker.
 body.sc-tests-dedicated #testSection{margin-top:24px!important}
 body.sc-tests-dedicated .portal-mock-heading h3{color:#126776!important}
 </style>
+
+<style id="sc-test-practice-matched">
+body.sc-tests-dedicated #mockPicker.portal-mock-picker{
+ width:100%!important;max-width:1160px!important;margin:16px auto 42px!important;
+ padding:0!important;border:0!important;background:transparent!important;
+ box-shadow:none!important;border-radius:0!important
+}
+body.sc-tests-dedicated .sc-test-section-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:0 0 20px}
+body.sc-tests-dedicated .sc-test-section-head h2{margin:0;color:#147A88;font-size:clamp(22px,2.5vw,27px);letter-spacing:-.5px}
+body.sc-tests-dedicated .sc-test-section-head p{margin:5px 0 0;font-size:13px;color:#718994}
+body.sc-tests-dedicated .sc-test-count{padding:9px 14px;background:#DDF5F2;color:#116D7C;font:800 12px system-ui;border-radius:22px;white-space:nowrap}
+body.sc-tests-dedicated #mockPicker .portal-skill-picks.sc-test-skill-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important;max-width:1080px;margin:0 auto!important}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-card{
+ appearance:none!important;text-align:left!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ gap:13px!important;position:relative;min-height:245px!important;
+ background:#fff!important;border:3px solid #fff!important;border-radius:25px!important;
+ padding:25px 28px!important;color:#174C59!important;
+ box-shadow:0 8px 0 rgba(48,153,155,.14),0 17px 30px rgba(17,112,121,.1)!important;
+ transition:transform .18s,box-shadow .18s,border-color .18s!important;
+ cursor:pointer!important
+}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-card:hover,
+body.sc-tests-dedicated #mockPicker .sc-test-skill-card:focus-visible{
+ background:#fff!important;transform:translateY(-4px)!important;
+ border-color:#A5DFDE!important;
+ box-shadow:0 12px 0 rgba(48,153,155,.14),0 23px 35px rgba(17,112,121,.17)!important;
+ outline:none!important
+}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-symbol{
+ display:grid;place-items:center;width:76px;height:76px;flex:none;
+ border-radius:23px;background:linear-gradient(145deg,#fff,var(--tint));
+ box-shadow:0 6px 16px rgba(22,89,96,.12),inset 0 1px 0 #fff;
+ color:var(--icon);transition:transform .2s
+}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-symbol svg{display:block;width:53px;height:53px;overflow:visible}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-card:hover .sc-test-skill-symbol{transform:translateY(-3px) rotate(-3deg)}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-card strong{
+ display:block;color:#126C7A;font-size:22px!important;font-weight:850!important;letter-spacing:-.6px;line-height:1.2
+}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-description{font:400 13px/1.55 system-ui;color:#667E8B!important;max-width:370px}
+body.sc-tests-dedicated #mockPicker .sc-test-skill-go{
+ align-self:flex-end;margin-top:auto;padding:8px 15px;background:#E0F5F2;
+ color:#116D7C;border-radius:20px;font:800 12px/1.2 system-ui
+}
+body.sc-tests-dedicated #mockPicker .sc-test-home-link{
+ margin:26px 0 0!important;padding:10px 15px!important;
+ border:1px solid #A0D8DC!important;border-radius:12px!important;
+ color:#126C7A!important;background:#fff!important;font-weight:800!important;cursor:pointer
+}
+@media(max-width:650px){
+ body.sc-tests-dedicated #mockPicker .portal-skill-picks.sc-test-skill-grid{grid-template-columns:1fr!important;gap:15px!important}
+ body.sc-tests-dedicated #mockPicker .sc-test-skill-card{min-height:190px!important;padding:19px!important}
+ body.sc-tests-dedicated #mockPicker .sc-test-skill-symbol{width:65px;height:65px}
+ body.sc-tests-dedicated #mockPicker .sc-test-skill-symbol svg{width:46px;height:46px}
+ body.sc-tests-dedicated .sc-test-section-head{align-items:flex-start}
+ body.sc-tests-dedicated .sc-test-count{font-size:10px;padding:6px 9px}
+}
+</style>
 </head>
 
 
@@ -1923,17 +1981,20 @@ body.sc-tests-dedicated .portal-mock-heading h3{color:#126776!important}
 
     <section id="homeSkills" class="hidden" hidden aria-hidden="true"></section>
 <section class="portal-mock-picker hidden" id="mockPicker" aria-label="Chọn kỹ năng thi thử">
- <div class="portal-mock-heading"><button type="button" id="closeMockPicker">← Trang chủ</button><h3>TEST · Chọn kỹ năng</h3></div>
- <div class="portal-skill-picks">
-  <button type="button" data-skill="listening">🎧 Listening</button>
-  <button type="button" data-skill="reading">📖 Reading</button>
-  <button type="button" data-skill="writing">✍️ Writing</button>
-  <button type="button" data-skill="speaking">🎙️ Speaking</button>
+ <div class="sc-test-section-head">
+  <div><h2>✧ Khám phá kho đề thi IELTS</h2><p>4 kỹ năng · Listening, Reading, Writing và Speaking</p></div>
+  <span class="sc-test-count">04 KỸ NĂNG</span>
  </div>
+ <div class="portal-skill-picks sc-test-skill-grid">
+<button type="button" class="sc-test-skill-card" data-skill="listening" style="--tint:#DAF3F3;--icon:#126F7D"><span class="sc-test-skill-symbol"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M13 32a19 19 0 0 1 38 0" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><rect x="10" y="29" width="11" height="19" rx="5.5" fill="url(#li-grad)" stroke="currentColor" stroke-width="2.6"/><rect x="43" y="29" width="11" height="19" rx="5.5" fill="url(#li-grad)" stroke="currentColor" stroke-width="2.6"/><path d="M49 48c0 6-6 8-13 8h-3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="27" y="52" width="9" height="5" rx="2.5" fill="currentColor"/><path d="M26 25v14m6-19v24m6-17v10" stroke="#22B5D5" stroke-width="2.6" stroke-linecap="round"/><defs><linearGradient id="li-grad" x1="10" y1="29" x2="55" y2="50" gradientUnits="userSpaceOnUse"><stop stop-color="#F5FCFF"/><stop offset="1" stop-color="#8DDCEF"/></linearGradient></defs></svg></span><strong>Listening Test</strong><span class="sc-test-skill-description">Luyện đề IELTS Listening gồm 4 phần, 40 câu hỏi và giới hạn thời gian.</span><span class="sc-test-skill-go">Vào làm đề</span></button>
+<button type="button" class="sc-test-skill-card" data-skill="reading" style="--tint:#E0F5F1;--icon:#187666"><span class="sc-test-skill-symbol"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 17c-6-6-15-7-24-5v37c10-2 18 0 24 5 6-5 14-7 24-5V12c-9-2-18-1-24 5Z" fill="url(#re-grad)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M32 17v37M16 23c4-.5 8 0 11 2m-11 7c4-.5 8 0 11 2m10-9c3-2 7-2.5 11-2m-11 11c3-2 7-2.5 11-2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M37 9h9v12l-4.5-3-4.5 3V9Z" fill="#8974F4"/><defs><linearGradient id="re-grad" x1="9" y1="12" x2="55" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#F5F2FF"/><stop offset="1" stop-color="#B7A7FC"/></linearGradient></defs></svg></span><strong>Reading Test</strong><span class="sc-test-skill-description">Luyện đề IELTS Reading với 3 passages, 40 câu hỏi và 60 phút.</span><span class="sc-test-skill-go">Vào làm đề</span></button>
+<button type="button" class="sc-test-skill-card" data-skill="writing" style="--tint:#DDF2F5;--icon:#16748B"><span class="sc-test-skill-symbol"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M13 10h29l9 9v35H13a5 5 0 0 1-5-5V15a5 5 0 0 1 5-5Z" fill="url(#wr-grad)" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M42 10v10h9M17 28h16M17 36h11M17 44h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="m39 44 14-17 5 4-14 17-8 3 3-7Z" fill="#FFB74A" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="m49 31 5 4M39 44l5 4" stroke="currentColor" stroke-width="2.3"/><defs><linearGradient id="wr-grad" x1="10" y1="10" x2="53" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#FFFDF1"/><stop offset="1" stop-color="#DBF7E8"/></linearGradient></defs></svg></span><strong>Writing Test</strong><span class="sc-test-skill-description">Làm đề IELTS Writing Task 1 và Task 2, luyện viết theo yêu cầu bài thi.</span><span class="sc-test-skill-go">Vào làm đề</span></button>
+<button type="button" class="sc-test-skill-card" data-skill="speaking" style="--tint:#D9EFE9;--icon:#166E6B"><span class="sc-test-skill-symbol"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><rect x="22" y="8" width="20" height="33" rx="10" fill="url(#sp-grad)" stroke="currentColor" stroke-width="3"/><path d="M16 29v3a16 16 0 0 0 32 0v-3M32 48v9m-9 0h18M28 18h8m-8 7h8m-8 7h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M10 19c-3 4-3 10 0 14M54 19c3 4 3 10 0 14" stroke="#9773F0" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="sp-grad" x1="22" y1="8" x2="43" y2="43" gradientUnits="userSpaceOnUse"><stop stop-color="#FAF5FF"/><stop offset="1" stop-color="#CBA7FF"/></linearGradient></defs></svg></span><strong>Speaking Test</strong><span class="sc-test-skill-description">Luyện đề Speaking Part 1, Part 2 và Part 3 với tính năng ghi âm.</span><span class="sc-test-skill-go">Vào làm đề</span></button>
+ </div>
+ <button type="button" id="closeMockPicker" class="sc-test-home-link">← Trang chủ</button>
 </section>
 
-
-    <section
+<section
       class="test-shell hidden"
       id="testSection"
     >
