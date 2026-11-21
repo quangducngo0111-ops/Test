@@ -19,11 +19,12 @@ const lines=[
  {text:"Thank you! Your drink will be ready shortly. Have a lovely day!",hint:"Cảm ơn! Đồ uống sẽ sớm sẵn sàng.",suggestions:["Thank you!","Have a nice day!","Cheers!"]}
 ];
 function findWords(text){const t=text.toLowerCase();return cafeWords.filter(w=>t.includes(w.word.toLowerCase()))}
-export function setupCafeDialogue({onTalking=()=>{},onClose=()=>{}}={}){
+export function setupCafeDialogue({onTalking=()=>{},onClose=()=>{},onProgress=()=>{}}={}){
  const root=$('dialoguePanel'),message=$('npcSpeech'),input=$('studentReply'),tips=$('dialogueHints'),choices=$('dialogueSuggestions');
  const status=$('dialogueStatus'),words=$('dialogueWords'),mic=$('dialogueMic'),submit=$('dialogueSend');
  const VoiceRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
  let open=false,turn=0,speaking=false,recognizing=false,rec=null,wordsSeen=new Set(),history=[];
+ let checkpoint=0;
  const announce=t=>{status.textContent=t;};
  const safe=str=>String(str||'').slice(0,500);
  const renderWords=(line)=>{
@@ -58,10 +59,10 @@ export function setupCafeDialogue({onTalking=()=>{},onClose=()=>{}}={}){
   renderWords(line.text);announce('NPC: Mia · Barista');speak(line.text);
  }
  function start(){
-  open=true;turn=0;history=[];wordsSeen=new Set();
+  open=true;turn=Math.min(lines.length-1,checkpoint);history=[];wordsSeen=new Set();
   root.hidden=false;document.body.classList.add('dialogue-active');
   input.value='';$('dialoguePrivacy').hidden=localStorage.getItem('lifeAbroadMicNotice')==='1';
-  showLine(lines[0]);input.focus();
+  showLine(lines[turn]);input.focus();
  }
  function close(){
   open=false;root.hidden=true;document.body.classList.remove('dialogue-active');
@@ -76,6 +77,7 @@ export function setupCafeDialogue({onTalking=()=>{},onClose=()=>{}}={}){
   history.push({role:'student',text});
   renderWords(text);input.value='';
   turn++;
+  checkpoint=Math.min(turn,lines.length-1);onProgress();
   if(turn>=lines.length){
    message.textContent='Great chatting with you! You can explore more or start another conversation anytime.';
    tips.textContent='Cuộc trò chuyện đã hoàn thành. Không có điểm số hay đánh giá.';
@@ -114,9 +116,11 @@ export function setupCafeDialogue({onTalking=()=>{},onClose=()=>{}}={}){
  $('dialogueReplay').onclick=()=>speak(message.textContent);
  $('dialogueSlow').onclick=()=>speak(message.textContent,true);
  $('dialogueHelp').onclick=()=>{tips.hidden=false;announce('Gợi ý tiếng Việt đã hiển thị.')};
- $('dialogueSkip').onclick=()=>{turn=Math.min(lines.length-1,turn+1);showLine(lines[turn]);};
+ $('dialogueSkip').onclick=()=>{turn=Math.min(lines.length-1,turn+1);checkpoint=turn;onProgress();showLine(lines[turn]);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();reply()}});
  $('dialoguePrivacyConfirm').onclick=()=>{$('dialoguePrivacy').hidden=true;try{localStorage.setItem('lifeAbroadMicNotice','1')}catch(_){};listen(true)};
  $('dialoguePrivacyCancel').onclick=()=>{$('dialoguePrivacy').hidden=true};
- return {start,close,isOpen:()=>open,isTalking:()=>speaking,history:()=>history.slice()};
+ return {start,close,isOpen:()=>open,isTalking:()=>speaking,history:()=>history.slice(),
+  getProgress:()=>checkpoint,
+  restoreProgress:value=>{checkpoint=Number.isFinite(value)?Math.max(0,Math.min(lines.length-1,Math.floor(value))):0;}};
 }
