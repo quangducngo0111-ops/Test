@@ -533,13 +533,17 @@ function decorateCity(city){
   box(.64,1.34,.055,mat('#a6d9e5'),-10.4,1.25,-.62,cityDecor);
   sign('PHONE',-10.4,2.05,-.58,.71,.19,'#f8ebc9','#80353a',cityDecor);
  }else if(currentCity==='sydney'){
-  for(const x of [-10.9,-8.2])box(.23,3.2,.26,accent,x,1.65,4.55,cityDecor);
-  box(3.7,.25,.38,accent,-9.55,3.25,4.55,cityDecor);
-  box(3,.17,.31,mat('#992d49'),-9.55,2.71,4.55,cityDecor);
-  for(const x of [-4.9,7.0]){
-   cyl(.06,.07,2.4,mat('#6f667d'),x,1.24,4.25,cityDecor,8);
-   ball(.32,mat('#f9e6bf',{emissive:'#edbd84',emissiveIntensity:.35}),x,2.53,4.25,cityDecor,10,8);
-  }
+  // Coastal promenade and harbour lighting (not a Japanese torii).
+  for(let x=-12;x<=12;x+=2.4)box(.10,.93,.12,mat('#eff7f5'),x,.60,7.95,cityDecor);
+  box(26,.10,.12,mat('#eff7f5'),0,1.03,7.95,cityDecor);
+  for(const x of [-9,9]){cyl(.10,.14,2.6,mat('#4d9f9c'),x,1.3,4.35,cityDecor,10);ball(.29,mat('#ffedc4'),x,2.65,4.35,cityDecor,12,9);}
+  sign('HARBOUR WALK',9,2.3,-1.1,2.6,.42,'#fbf0ce','#286b8d',cityDecor);
+ }else if(currentCity==='toronto'){
+  // Red streetcar-stop shelter and neighbourhood planting.
+  for(const x of [-11.4,-8.6])box(.16,2.35,.16,mat('#4e6573'),x,1.2,7.8,cityDecor);
+  box(3,.16,1.65,mat('#b93f47'),-10,2.47,7.8,cityDecor);
+  sign('STREETCAR STOP',-10,2.1,8.65,2.6,.36,'#eff2f4','#b63e49',cityDecor);
+  for(const x of [-6,7]){cyl(.35,.48,.55,mat('#bd765e'),x,.30,7.4,cityDecor,10);ball(.42,mat('#54966f'),x,.84,7.4,cityDecor,10,7);}
  }else{
   const taxi=new THREE.Group();taxi.position.set(10.4,0,7.0);cityDecor.add(taxi);
   box(1.66,.55,3.1,accent,0,.58,0,taxi);
