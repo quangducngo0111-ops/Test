@@ -54,6 +54,30 @@ header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:cent
  #avatarCanvas{height:185px!important}
 }
 </style>
+<style id="dialogue-styles">
+#dialoguePanel[hidden],#dialoguePrivacy[hidden]{display:none!important}
+#dialoguePanel{position:fixed;z-index:30;left:50%;bottom:14px;transform:translateX(-50%);width:min(820px,calc(100vw - 24px));background:#fffdf9f7;backdrop-filter:blur(18px);border:2px solid #e6d4f4;border-radius:24px;padding:18px;box-shadow:0 25px 80px #25224c77;max-height:85vh;overflow:auto}
+.dialogue-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dialogue-head strong{display:block;font-size:18px;color:#43247f}.dialogue-head small{font-size:11px;color:#8876a1}
+#dialogueClose{background:#efe8f6;border:0;color:#553c7b;border-radius:9px;width:34px;height:34px;font-size:19px}
+#npcSpeech{font-size:18px;font-weight:900;line-height:1.45;color:#362b5a;background:#f5eafa;border-radius:16px;padding:16px;margin:10px 0}
+#dialogueHints{font-size:12px;color:#786786;margin:7px 0 12px}
+#dialogueSuggestions{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.dialogue-suggestion,.dialogue-vocab{background:#ecf8ff;border:1px solid #bddbec;color:#286589;border-radius:19px;padding:7px 10px;font-size:12px;font-weight:800}
+.dialogue-suggestion:hover{background:#dceeff}
+#dialogueWords{display:flex;gap:7px;flex-wrap:wrap;min-height:24px}
+.dialogue-reply{display:flex;gap:8px;margin-top:12px}
+#studentReply{flex:1;min-width:0;border:1px solid #c5b4dd;border-radius:12px;background:#fff;padding:12px;color:#332b53}
+#dialogueSend,#dialogueMic{border:0;border-radius:12px;padding:10px 17px;background:#3b0e90;color:#fff;font-weight:900}
+#dialogueMic{background:#f19b3d}
+.dialogue-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.dialogue-actions button{background:#f6f1fa;border:1px solid #e0d6ed;border-radius:9px;padding:7px 10px;font-size:11px;color:#614982}
+#dialogueStatus{font-size:11px;color:#94749d;margin-top:9px}
+#dialoguePrivacy{background:#fff5dc;border:1px solid #edcb83;border-radius:12px;padding:12px;font-size:12px;line-height:1.5;margin-top:10px}
+#dialoguePrivacy button{border:0;border-radius:8px;background:#3b0e90;color:#fff;padding:7px 11px;margin-right:8px}
+body.dialogue-active #legend,body.dialogue-active #interact,body.dialogue-active #mission{display:none!important}
+@media(max-width:750px){#dialoguePanel{bottom:6px;padding:12px;max-height:90vh}#npcSpeech{font-size:15px;padding:11px}.dialogue-reply{flex-wrap:wrap}#studentReply{flex-basis:100%}#dialogueMic,#dialogueSend{flex:1}}
+</style>
 </head><body>
 <div id="loading"><div><div class="spinner"></div>Đang dựng thành phố 3D…<p style="font-size:13px;opacity:.7">Phase 0 · Visual Test</p></div></div>
 <div id="viewport" aria-label="Khung cảnh 3D"></div>
@@ -78,7 +102,17 @@ header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:cent
  <p class="hint">Kéo nhân vật để xoay. Mọi thay đổi cập nhật trực tiếp vào nhân vật đang chơi và được lưu trên thiết bị.</p>
 </aside>
 <div id="legend">WASD / phím mũi tên: Đi lại · Shift: Chạy · Kéo chuột: Xoay camera · E: Tương tác</div>
-<button id="interact" hidden>Nhấn E · Enter Café</button><div id="notice" role="status"></div>
+<button id="interact" hidden>Nhấn E · Enter Café</button><section id="dialoguePanel" hidden role="dialog" aria-label="Trò chuyện tiếng Anh với barista">
+ <div class="dialogue-head"><div><strong>☕ Mia · Café Barista</strong><small>English Speaking · No tests or scores</small></div><button id="dialogueClose" type="button" aria-label="Đóng hội thoại">×</button></div>
+ <div id="npcSpeech" aria-live="polite"></div><div id="dialogueHints"></div>
+ <div id="dialogueSuggestions" aria-label="Câu gợi ý"></div>
+ <div id="dialogueWords" aria-label="Từ vựng vừa gặp"></div>
+ <div id="dialoguePrivacy" hidden><strong>🎙 Quyền riêng tư / Privacy</strong><p>Chế độ micro dùng tính năng nhận dạng giọng nói của trình duyệt. Tùy trình duyệt, lời nói có thể được xử lý bởi dịch vụ nhận dạng bên ngoài. Game không chủ động lưu hoặc tải lên âm thanh. Bạn có thể dùng nhập chữ thay thế.</p><button type="button" id="dialoguePrivacyConfirm">Đồng ý dùng micro</button><button type="button" id="dialoguePrivacyCancel">Dùng bàn phím</button></div>
+ <div class="dialogue-reply"><input id="studentReply" type="text" maxlength="300" placeholder="Say or type your answer in English..." aria-label="Trả lời tiếng Anh"><button type="button" id="dialogueMic">🎙 Nói</button><button type="button" id="dialogueSend">Gửi ↗</button></div>
+ <div class="dialogue-actions"><button type="button" id="dialogueReplay">🔊 Nghe lại</button><button type="button" id="dialogueSlow">🐢 Nói chậm</button><button type="button" id="dialogueHelp">🇻🇳 Gợi ý</button><button type="button" id="dialogueSkip">Bỏ qua →</button></div>
+ <div id="dialogueStatus" role="status"></div>
+</section>
+<div id="notice" role="status"></div>
 <div id="pad"><div id="stick"></div></div><button id="actionMobile" type="button">E · Vào</button>
-<script type="module" src="./main.js?v=20261121-character-polish1"></script>
+<script type="module" src="./main.js?v=20261121-cafe-chat2"></script>
 </body></html>
