@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Life Abroad 3D · Asset Mode Preview</title>
+<title>WorldSpeak 3D · Explore. Speak. Connect.</title>
 <meta name="theme-color" content="#3b0e90">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
@@ -105,13 +105,51 @@ body.character-setup header,body.character-setup #mission,body.character-setup #
 body.menu-open #interact,body.menu-open #pad,body.menu-open #actionMobile{display:none!important}
 @media(max-width:750px){#gameNav{top:8px;left:9px}#gameNav button{padding:8px 10px;font-size:12px}#gameSetup .setupCard{padding:16px!important}}
 </style>
+
+<style id="city-selection-style">
+#citySetup[hidden]{display:none!important}
+#citySetup{position:fixed;inset:0;z-index:26;background:#17152ed6;backdrop-filter:blur(10px);padding:20px;display:grid;place-items:center;overflow:auto}
+.cityPanel{width:min(920px,98vw);max-height:95vh;overflow:auto;border-radius:28px;background:#fffdf7;padding:clamp(18px,3vw,32px);box-shadow:0 22px 85px #15113f55;text-align:center}
+.cityPanel h2{font-size:clamp(24px,3vw,34px);color:#3b0e90;margin:10px 0}
+.cityPanel p{color:#685a80;font-size:14px;line-height:1.55}
+.stepMark{letter-spacing:2px;color:#8858cb;font-size:11px;font-weight:900}
+.cityCards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:23px 0 14px}
+.cityCard{display:flex;flex-direction:column;align-items:center;gap:6px;border:3px solid #e2d6f5;background:linear-gradient(155deg,#f5faff,#fbf4ff);border-radius:22px;padding:24px 8px;min-height:205px;color:#371b76;box-shadow:0 6px 0 #c9b8e554;transition:transform .15s,border-color .15s}
+.cityCard:hover{transform:translateY(-4px)}
+.cityCard.chosen{border-color:#ff9c00;background:linear-gradient(155deg,#e9f9ff,#fff4d8);box-shadow:0 6px 0 #d5a95780}
+.cityEmoji{font-size:57px;line-height:1.1}.cityCard strong{font-size:22px}.cityCard small{font-size:12px;color:#77678c}
+.cityHint{font-size:11px;color:#80658c}
+.cityDisclaimer{font-size:11px!important;color:#867995!important}
+.cityActions{display:flex;justify-content:center;gap:12px;margin-top:18px}
+.cityActions button{border-radius:14px;border:1px solid #d6c7ea;padding:13px 24px;font-weight:900;color:#3b0e90;background:#f3edff}
+.cityActions .primary{background:linear-gradient(100deg,#7449df,#3b0e90);border:0;color:white}
+.cityPanel .quiet{background:transparent;border:0;text-decoration:underline;color:#6a5888;padding:12px}
+body.city-setup #gameNav,body.city-setup #avatarEditor{display:none!important}
+@media(max-width:650px){.cityCards{grid-template-columns:1fr;gap:9px}.cityCard{min-height:0;display:grid;grid-template-columns:50px 1fr;text-align:left;padding:12px;gap:3px 10px}.cityEmoji{grid-row:span 3;font-size:39px}.cityCard strong{font-size:18px}.cityHint{font-size:10px}.cityActions{flex-direction:column}}
+</style>
 </head><body>
 <div id="loading"><div><div class="spinner"></div>Đang tải thế giới 3D…<p style="font-size:13px;opacity:.7">Phase 0 · 3D Asset Mode</p></div></div>
 <div id="viewport" aria-label="Khung cảnh 3D"></div>
 <div id="gameNav"><button id="navBack" type="button">← Quay lại</button><button id="navSave" type="button">💾 Lưu game</button><button id="navMenu" type="button">☰ Menu · Esc</button></div>
-<div id="gameMenu" hidden role="dialog" aria-modal="true" aria-label="Tạm dừng game"><div class="menuCard"><h2>⏸️ Tạm dừng</h2><p>Tiến độ được lưu trên trình duyệt đang sử dụng.</p><div id="saveStatus" role="status"></div><div class="menuActions"><button class="primary" id="menuResume">▶ Tiếp tục chơi</button><button id="menuSave">💾 Lưu tiến độ</button><button id="menuCharacter">✨ Đổi nhân vật</button><button id="menuLeave">← Về trang Speaking</button></div></div></div>
-<div id="gameSetup" role="dialog" aria-modal="true" aria-label="Chọn nhân vật trước khi chơi"><div class="setupCard"><h2>✨ Chọn nhân vật</h2><p>Chọn nhân vật của em trước khi bắt đầu khám phá London!</p><div id="setupEditorMount"></div><div class="setupActions"><button id="setupStart" class="primary" type="button">🚀 Bắt đầu chơi</button><button id="setupContinue" type="button" hidden>▶ Chơi tiếp bản đã lưu</button><button id="setupBack" type="button">← Về trang Speaking</button></div></div></div>
-<header><div class="brand"><span class="logo">✦</span><span><b>LIFE ABROAD 3D</b><small>English Speaking World</small></span></div><span class="preview-tag">PHASE 0 · ASSET MODE</span></header>
+<div id="gameMenu" hidden role="dialog" aria-modal="true" aria-label="Tạm dừng game"><div class="menuCard"><h2>⏸️ Tạm dừng</h2><p>Tiến độ được lưu trên trình duyệt đang sử dụng.</p><div id="saveStatus" role="status"></div><div class="menuActions"><button class="primary" id="menuResume">▶ Tiếp tục chơi</button><button id="menuSave">💾 Lưu tiến độ</button><button id="menuCharacter">✨ Đổi nhân vật / Thành phố</button><button id="menuLeave">← Về trang Speaking</button></div></div></div>
+<div id="gameSetup" role="dialog" aria-modal="true" aria-label="Chọn nhân vật trước khi chơi"><div class="setupCard"><div class="stepMark">BƯỚC 1 / 2 · CREATE YOUR AVATAR</div><h2>✨ Chọn nhân vật</h2><p>Tạo người bạn đồng hành trước khi khám phá thế giới và luyện nói tiếng Anh!</p><div id="setupEditorMount"></div><div class="setupActions"><button id="setupStart" class="primary" type="button">Tiếp theo: Chọn thành phố →</button><button id="setupContinue" type="button" hidden>▶ Chơi tiếp bản đã lưu</button><button id="setupBack" type="button">← Về trang Speaking</button></div></div></div>
+
+<div id="citySetup" hidden role="dialog" aria-modal="true" aria-label="Chọn thành phố">
+ <div class="cityPanel">
+  <div class="stepMark">BƯỚC 2 / 2 · CHOOSE YOUR DESTINATION</div>
+  <h2>🌍 Em muốn khám phá đâu trước?</h2>
+  <p>Chọn thành phố để bắt đầu hành trình giao tiếp tiếng Anh của riêng em.</p>
+  <div id="cityCards" class="cityCards">
+   <button type="button" class="cityCard chosen" data-city="london" aria-pressed="true"><span class="cityEmoji">🇬🇧</span><strong>London</strong><small>United Kingdom</small><span class="cityHint">Phố cổ, xe buýt đỏ, quán café</span></button>
+   <button type="button" class="cityCard" data-city="tokyo" aria-pressed="false"><span class="cityEmoji">🇯🇵</span><strong>Tokyo</strong><small>Japan</small><span class="cityHint">Cổng torii, phố mua sắm</span></button>
+   <button type="button" class="cityCard" data-city="newyork" aria-pressed="false"><span class="cityEmoji">🇺🇸</span><strong>New York</strong><small>United States</small><span class="cityHint">Taxi vàng, phố Manhattan</span></button>
+  </div>
+  <p class="cityDisclaimer">Bản thử nghiệm: 3 thành phố dùng chung bố cục đường phố, với màu sắc và điểm nhấn riêng. Nhiệm vụ café hiện dùng chung.</p>
+  <div class="cityActions"><button id="cityBack" type="button">← Chỉnh nhân vật</button><button id="cityStart" class="primary" type="button">🚀 Khám phá London</button></div>
+  <button id="cityReturn" class="quiet" type="button">Về trang Speaking</button>
+ </div>
+</div>
+<header><div class="brand"><span class="logo">✦</span><span><b>WORLDSPEAK 3D</b><small>Explore · Speak · Connect</small></span></div><span class="preview-tag">EXPLORE THE WORLD</span></header>
 <div id="location">📍 London · Neighbourhood Street</div>
 <div id="settings" class="panel"><h2>🎨 Asset Mode</h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button>
 <button id="photoToggle" class="toggle">📷 Photo Mode (P)</button>
@@ -157,5 +195,5 @@ body.photo-mode header,body.photo-mode #location,body.photo-mode #settings,body.
 </section>
 <div id="notice" role="status"></div>
 <div id="pad"><div id="stick"></div></div><button id="actionMobile" type="button">E · Vào</button>
-<script type="module" src="./main.js?v=20261121-saveflow6"></script>
+<script type="module" src="./main.js?v=20261121-cityflow7"></script>
 </body></html>
