@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-click-only-opacity03',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-level-replace04',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -135,7 +135,28 @@ const childTitle=document.createElement('div');
 childTitle.className='sc-quick-children-title';
 const childGrid=document.createElement('div');
 childGrid.className='sc-quick-children-grid';
-childSection.append(childTitle,childGrid);
+const childHeader=document.createElement('div');
+childHeader.className='sc-quick-children-header';
+const backButton=document.createElement('button');
+backButton.type='button';
+backButton.className='sc-quick-back-button';
+backButton.textContent='← Back';
+backButton.setAttribute('aria-label','Quay lại menu chính');
+childHeader.append(backButton,childTitle);
+childSection.append(childHeader,childGrid);
+function resetQuickLevel(){
+ selectedGroup=null;
+ childSection.hidden=true;
+ tools.classList.remove('sc-show-children');
+ categoryGrid.hidden=false;
+ categoryGrid.querySelectorAll('button').forEach(btn=>{
+  btn.classList.remove('is-selected');
+  btn.setAttribute('aria-expanded','false');
+ });
+ tools.scrollTop=0;
+ positionPanel();
+}
+backButton.addEventListener('click',()=>{resetQuickLevel();categoryGrid.querySelector('button')?.focus()});
 let selectedGroup=null;
 function selectQuickGroup(group){
  selectedGroup=group;
@@ -159,7 +180,10 @@ function selectQuickGroup(group){
   name.className='sc-capsule-tooltip';name.textContent=label;
   a.append(symbol,name);childGrid.append(a);
  }
+ categoryGrid.hidden=true;
  childSection.hidden=false;
+ tools.classList.add('sc-show-children');
+ tools.scrollTop=0;
  positionPanel();
 }
 for(const group of groups){
@@ -174,7 +198,7 @@ for(const group of groups){
  const name=document.createElement('span');
  name.className='sc-quick-category-name';name.textContent=categoryTitles[group.heading];
  button.append(symbol,name);
- button.addEventListener('click',()=>{if(selectedGroup===group&&!childSection.hidden){childSection.hidden=true;selectedGroup=null;button.classList.remove('is-selected');button.setAttribute('aria-expanded','false');positionPanel()}else selectQuickGroup(group)});
+ button.addEventListener('click',()=>selectQuickGroup(group));
  categoryGrid.append(button);
 }
 childSection.id='sc-quick-children';
@@ -185,12 +209,11 @@ backdrop.setAttribute('aria-hidden','true');
 shell.append(backdrop);
 const modalHeader=document.createElement('div');
 modalHeader.className='sc-modal-heading';
-modalHeader.innerHTML='<strong>Truy cập nhanh</strong><span>Chạm hoặc click vào nhóm để xem mục con</span>';
+modalHeader.innerHTML='';
 const modalClose=document.createElement('button');
 modalClose.type='button';modalClose.className='sc-modal-close';
 modalClose.setAttribute('aria-label','Đóng truy cập nhanh');modalClose.textContent='✕';
-modalHeader.append(modalClose);
-tools.prepend(modalHeader);
+tools.append(modalClose);
 const toggle=document.createElement('button');
 toggle.type='button';
 toggle.className='sc-capsule-trigger';
@@ -226,7 +249,7 @@ function setOpen(value){
  shell.classList.toggle('sc-open',value);
  toggle.setAttribute('aria-expanded',String(value));
  toggle.setAttribute('aria-label',value?'Đóng menu truy cập nhanh':'Mở menu truy cập nhanh');
- if(!value){tools.scrollTop=0;hideLabel();childSection.hidden=true;selectedGroup=null;categoryGrid.querySelectorAll('button').forEach(b=>{b.classList.remove('is-selected');b.setAttribute('aria-expanded','false')})}
+ if(!value){hideLabel();resetQuickLevel()}
 }
 /* AssistiveTouch drag: movable, edge-snapping, persists normalized vertical position.
    A short tap opens the menu; dragging never accidentally opens it. */
