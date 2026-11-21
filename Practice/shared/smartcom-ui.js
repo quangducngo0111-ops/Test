@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-no-legacy-flash09',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-remove-arrows10',current.src);
 if(!document.querySelector('link[data-sc-quick-theme]')){const link=document.createElement('link');link.rel='stylesheet';link.dataset.scQuickTheme='1';link.href=asset.href;document.head.append(link);}
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
