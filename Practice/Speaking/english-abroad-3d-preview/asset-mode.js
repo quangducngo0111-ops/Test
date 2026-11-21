@@ -25,7 +25,7 @@ function load(path){
 }
 export function outfitAsset(index=0){return VARIANTS[((index%VARIANTS.length)+VARIANTS.length)%VARIANTS.length]}
 export function applyCharacterAsset(THREE,character,opts={},index=0,onReady=()=>{}){
- let cancelled=false,model=null,mixer=null,actions={};
+ let cancelled=false,model=null,mixer=null,actions={},baseY=0;
  const originalAnim=character.anim;
  const originalDispose=character.dispose;
  const path=outfitAsset(index);
@@ -40,6 +40,7 @@ export function applyCharacterAsset(THREE,character,opts={},index=0,onReady=()=>
   const scale=desiredHeight/dimensions.y;
   model.scale.setScalar(scale);
   model.position.set(-(bounds.min.x+bounds.max.x)*.5*scale,-bounds.min.y*scale,-(bounds.min.z+bounds.max.z)*.5*scale);
+  baseY=model.position.y;
   model.traverse(node=>{if(node.isMesh){node.castShadow=true;node.receiveShadow=true;}});
   character.group.add(model);
   character.rig.visible=false;
@@ -61,7 +62,8 @@ export function applyCharacterAsset(THREE,character,opts={},index=0,onReady=()=>
    const dt=lastTime===null?0:Math.min(.08,Math.max(0,time-lastTime));
    lastTime=time;
    if(mixer)mixer.update(dt);
-   // Non-animated assets are still shown, without deforming the purchased silhouettes.
+   if(!mixer){model.position.y=baseY+(speed>.22?Math.abs(Math.sin(time*8))*.035:0);model.rotation.z=speed>.22?Math.sin(time*8)*.012:0;}
+   // Gentle non-skeletal motion for models lacking embedded clips.
   };
   onReady();
  }).catch(err=>{console.warn('Life Abroad asset unavailable; safe procedural fallback:',path,err);});
