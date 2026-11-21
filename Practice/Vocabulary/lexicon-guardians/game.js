@@ -672,6 +672,47 @@ else if(e.type==="golem"){polygon([[-23,-19],[20,-27],[35,-1],[20,28],[-22,22],[
 else if(e.type==="boss"){ellipse(0,-5,37,35,"#9e6bba");polygon([[-27,-28],[-23,-54],[-8,-38],[0,-58],[13,-36],[24,-57],[31,-28]],"#f3c77f");ellipse(0,-6,27,24,color)}
 else ellipse(0,0,22,23,color);
 if(e.type!=="golem"){ellipse(-8,-4,5,6,"#fff2d5");ellipse(8,-4,5,6,"#fff2d5");ellipse(-7,-3,2.5,3,"#373058");ellipse(9,-3,2.5,3,"#373058")}
+/* Realm-specific costumes and body armour: enemies differ across all ten regions. */
+const biome=realm().id;
+if(biome==="forest"){
+ line([[-18,12],[-28,2],[-24,-14]],"#61CC8B",3);
+ line([[18,12],[28,1],[24,-15]],"#61CC8B",3);
+ for(let j=-1;j<=1;j++)ellipse(j*11,-25-5*Math.abs(j),5,8,"#87D69C");
+}else if(biome==="volcano"){
+ for(const sign of [-1,1])polygon([[sign*9,-20],[sign*24,-38],[sign*27,-10]],"#F8895C");
+ polygon([[-12,-24],[0,-44],[13,-24]],"#FFCC75");
+ ellipse(0,20,12,3,"#FF654B");
+}else if(biome==="desert"){
+ polygon([[-23,-18],[0,-36],[23,-18]],"#EDD19A");
+ polygon([[-20,-18],[0,-27],[20,-18]],"#D5A36F");
+ strokeCircle(0,9,20,"#F7DBA166",2);
+}else if(biome==="plains"){
+ line([[-27,14],[-35,0],[-26,-19]],"#E7F9CF",4);
+ line([[27,14],[35,0],[26,-19]],"#E7F9CF",4);
+ ellipse(0,-27,12,5,"#E6EF9A");
+}else if(biome==="moon"){
+ ctx.save();ctx.globalAlpha=.68;ellipse(0,-3,27,27,"#D5E7F155");ctx.restore();
+ strokeCircle(0,-3,29,"#E8F5FF",4);
+ ellipse(0,2,19,9,"#486493A0");
+ for(let j=-1;j<=1;j++)ellipse(j*9,-27,2,2,"#A5D8F3");
+}else if(biome==="glacier"){
+ for(let j=-1;j<=1;j++)polygon([[j*13-7,-19],[j*13,-40-Math.abs(j)*6],[j*13+8,-19]],"#E5FBFF");
+ strokeCircle(0,1,24,"#D0F8FF66",2);
+}else if(biome==="swamp"){
+ for(let j=0;j<4;j++)ellipse(Math.cos(j*1.57)*28,Math.sin(j*1.57)*23,4,5,"#BFF78CAA");
+ polygon([[-13,-21],[0,-33],[14,-21]],"#D48B9E");
+}else if(biome==="islands"){
+ polygon([[-21,-18],[-18,-29],[15,-29],[23,-19]],"#D84F6B");
+ line([[-20,-13],[7,-11]],"#2A3C53",5);
+ ellipse(6,-12,8,7,"#21283B");strokeCircle(6,-12,8,"#F3DBAF",1.5);
+}else if(biome==="cyber"){
+ polygon([[-23,-19],[-17,-31],[17,-31],[23,-19]],"#1B385F");
+ polygon([[-20,-11],[20,-11],[15,-2],[-16,-2]],"#41F0EE");
+ line([[0,-29],[0,-44]],"#4FE4EC",3);ellipse(0,-48,5,5,"#FCA7EE");
+}else if(biome==="crystal"){
+ for(const j of [-1,0,1])polygon([[j*15-8,-20],[j*15,-48+(j===0?-9:0)],[j*15+8,-20]],j===0?"#F9D1FF":"#C9B4FA");
+ polygon([[-18,13],[0,3],[18,13],[0,26]],"#E5A8F2AA");
+}
 if(e.boss){ctx.fillStyle="#f6d690";ctx.font="22px serif";ctx.textAlign="center";ctx.fillText("♛",0,-39)}
 ctx.fillStyle="#3a3458";rounded(-23,-38,46,6,3);ctx.fill();ctx.fillStyle="#9af3bf";rounded(-22,-37,44*clamp(e.hp/e.maxHp,0,1),4,2);ctx.fill();
 ctx.restore();
