@@ -182,6 +182,63 @@ let hoverPad=-1;
 let tutorialOpen=true;
 const hoverTip=$("padHoverTip");
 const tutorial=$("lexTutorial");
+let wizardStage="guide";
+const WIZARD_STAGES=["guide","difficulty","map","study","play"];
+function mountWizard(){
+ const map=document.querySelector(".realm-selector");
+ const study=document.querySelector(".grimoire-panel");
+ const difficulties=$("difficultyPicker");
+ if(map)$("wizardMapMount").append(map);
+ if(study)$("wizardStudyMount").append(study);
+ if(difficulties)$("wizardDifficultyMount").append(difficulties);
+ $("wizardGuideNext").onclick=()=>showWizardStage("difficulty");
+ $("wizardDifficultyNext").onclick=()=>showWizardStage("map");
+ $("wizardMapNext").onclick=()=>showWizardStage("study");
+ $("wizardStartBattle").onclick=()=>{
+  if(S.seen.size<Math.min(8,S.studySet.length))return;
+  showWizardStage("play");
+ };
+ document.querySelectorAll("[data-wizard-back]").forEach(button=>{
+  button.onclick=()=>showWizardStage(button.dataset.wizardBack);
+ });
+ $("wizardEditSetup").onclick=()=>{
+  if((S.phase==="battle"||S.wave>0||S.towers.length)&&!confirm("Đổi bản đồ sẽ đặt lại trận đấu hiện tại. Tiếp tục?"))return;
+  restart();showWizardStage("map");
+ };
+ showWizardStage("guide");
+}
+function updateWizardStudyButton(){
+ const btn=$("wizardStartBattle");if(!btn)return;
+ const required=Math.min(8,S.studySet.length),ready=S.seen.size>=required;
+ btn.disabled=!ready;
+ btn.textContent=ready?"⚔ Vào chiến trường →":"🔒 Học thêm "+(required-S.seen.size)+" từ để vào trận";
+}
+function showWizardStage(stage){
+ if(!WIZARD_STAGES.includes(stage))return;
+ wizardStage=stage;
+ const inBattle=stage==="play";
+ $("lexWizard").hidden=inBattle;
+ $("lexBattleScreen").hidden=!inBattle;
+ for(const k of ["guide","difficulty","map","study"]){
+  const section=$("lex"+k[0].toUpperCase()+k.slice(1));
+  section.hidden=k!==stage;
+ }
+ document.querySelectorAll("[data-track]").forEach(el=>{
+  const step=WIZARD_STAGES.indexOf(el.dataset.track);
+  el.classList.toggle("active",el.dataset.track===stage);
+  el.classList.toggle("complete",step<WIZARD_STAGES.indexOf(stage));
+  el.setAttribute("aria-current",el.dataset.track===stage?"step":"false");
+ });
+ if(stage==="study")updateWizardStudyButton();
+ if(stage==="play"){
+  if(S.phase==="study"&&S.seen.size>=Math.min(8,S.studySet.length))S.phase="build";
+  updateHUD();
+  log("🏰 Chọn bệ trống, xây tháp và chuẩn bị cho đợt quái đầu tiên.");
+ }
+ if(stage!=="play"){clearPadHover();menuPad=null;renderArsenal();renderSelected()}
+ window.scrollTo({top:0,behavior:"instant"});
+}
+
 function padAtPoint(x,y){let index=-1,best=Infinity;pads.forEach((pad,i)=>{const d=Math.hypot(x-pad.x,y-pad.y);if(d<best){best=d;index=i}});return best<=53?index:-1}
 function canvasCoords(event){const r=canvas.getBoundingClientRect();return {x:(event.clientX-r.left)*canvas.width/r.width,y:(event.clientY-r.top)*canvas.height/r.height}}
 function setPadHover(event){if(tutorialOpen||S.challengeLock){clearPadHover();return}const pos=canvasCoords(event),i=padAtPoint(pos.x,pos.y);hoverPad=i;canvas.classList.toggle("pad-interactive",i>=0);if(i<0){hoverTip.hidden=true;return}const pad=pads[i],tower=S.towers.find(t=>t.pad===i);hoverTip.textContent=S.phase==="study"?"📖 Lật 8 thẻ để mở khóa":tower?"✦ Bấm để nâng cấp / bán tháp":pad.type==="locked"?"🔒 Bấm để giải mã bệ":"✦ Bấm để xây tháp";hoverTip.hidden=false;hoverTip.style.left=(pad.x/canvas.width*100)+"%";hoverTip.style.top=(pad.y/canvas.height*100)+"%";}
@@ -229,7 +286,7 @@ $("wordExample").textContent=revealed?(w.example||w.collocation||"Use this word 
 }
 function flipCard(){
 S.seen.add(S.studyIndex);showWord();sound(740,.12);updateHUD();
-if(S.phase==="study"&&S.seen.size>=Math.min(8,S.studySet.length)){S.phase="build";announce("SÁCH PHÉP ĐÃ THỨC TỈNH");log("✨ Bấm vào bệ trống trên bản đồ, rồi chọn loại tháp để xây.");updateHUD()}
+if(S.phase==="study"&&S.seen.size>=Math.min(8,S.studySet.length)){S.phase="build";announce("SÁCH PHÉP ĐÃ THỨC TỈNH");log("✨ Sẵn sàng vào trận. Hãy xây tháp ở các bệ trống.");updateHUD()}updateWizardStudyButton()
 }
 $("flipCardBtn").onclick=flipCard;
 $("prevWord").onclick=()=>{S.studyIndex=(S.studyIndex-1+S.studySet.length)%S.studySet.length;showWord()};
@@ -419,13 +476,13 @@ $("modalTitle").textContent=win?"🏆 Lexica đã được cứu!":"🏰 Cổ Th
 $("modalDesc").textContent=realm().icon+" "+realm().name+" · Hoàn thành "+S.wave+"/5 đợt · "+S.score.toLocaleString("vi-VN")+" điểm · Chính xác "+(S.attempts?Math.round(100*S.correct/S.attempts):0)+"%.";
 $("modalQuestion").innerHTML='<div class="prompt">Mỗi lần chơi lại là một lần ghi nhớ từ vựng tốt hơn. Hãy thử chiến thuật mới!</div>';
 $("modalFeedback").innerHTML="";$("skipBtn").hidden=true;$("closeModal").hidden=true;$("answerBtn").disabled=false;$("answerBtn").textContent="↻ Chơi lại";
-$("answerBtn").onclick=()=>{modalClose();restart()};
+$("answerBtn").onclick=()=>{modalClose();restart();showWizardStage("guide")};
 }
 function restart(){
 Object.assign(S,{phase:"study",paused:false,speed:1,wave:0,health:mode().hp,ink:mode().ink,score:0,combo:0,correct:0,attempts:0,studyIndex:0,studySet:shuffle(words).slice(0,10),seen:new Set(),selectedType:"quill",selectedPad:null,towers:[],enemies:[],bullets:[],fx:[],floating:[],misses:[],spawned:0,targetSpawn:0,spawnClock:0,reviewQueue:[],finished:false,challengeLock:false});
 if(pads[11])pads[11].type="locked";menuPad=null;showWord();renderArsenal();renderSelected();showMode();log("Lật 8 thẻ Sách Phép, rồi xây tháp chuẩn bị cho 5 đợt quái.");updateHUD();
 }
-$("restartBtn").onclick=()=>{if(S.phase==="battle"&&!confirm("Bắt đầu lại sẽ xóa tiến độ ván chơi hiện tại. Tiếp tục?"))return;restart();openTutorial()};
+$("restartBtn").onclick=()=>{if(S.phase==="battle"&&!confirm("Bắt đầu lại sẽ xóa tiến độ ván chơi hiện tại. Tiếp tục?"))return;restart();showWizardStage("guide")};
 function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
 function line(points,color,width){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke()}
 function ellipse(x,y,rx,ry,color){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill()}
@@ -760,5 +817,5 @@ if(!S.paused){if(!S.challengeLock)update(dt*S.speed);for(const f of S.fx){f.x+=f
 S.fx=S.fx.filter(f=>f.life>0);S.floating=S.floating.filter(f=>f.life>0);
 render();if(!S.lastHUD||now-S.lastHUD>=200){updateHUD();S.lastHUD=now}requestAnimationFrame(loop);
 }
-let initialRealm=0;try{const saved=localStorage.getItem("LEXICON_GUARDIANS_SELECTED_REALM");const index=REALMS.findIndex(r=>r.id===saved);if(index>=0)initialRealm=index}catch(_){}chooseRealm(initialRealm);restart();log("📖 Chọn bản đồ, lật 8 thẻ từ vựng rồi dựng phòng tuyến để bắt đầu.");openTutorial();requestAnimationFrame(loop);
+let initialRealm=0;try{const saved=localStorage.getItem("LEXICON_GUARDIANS_SELECTED_REALM");const index=REALMS.findIndex(r=>r.id===saved);if(index>=0)initialRealm=index}catch(_){}chooseRealm(initialRealm);restart();log("📖 Chọn bản đồ, lật 8 thẻ từ vựng rồi dựng phòng tuyến để bắt đầu.");tutorialOpen=false;tutorial.hidden=true;mountWizard();requestAnimationFrame(loop);
 })();
