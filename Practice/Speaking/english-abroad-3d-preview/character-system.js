@@ -125,14 +125,14 @@ function createHair(T,head,style,color,faceTop=.43){
  const back=new T.Group();head.add(back);
  const id=HAIR_STYLES.indexOf(style);
  // Rounded scalp and hairline; leave face mostly uncovered.
- smoothSphere(T,back,hair,0,.22,-.08,.47,.39,.43,24);
- smoothSphere(T,back,hair,0,.36,.035,.44,.25,.39,24);
+ smoothSphere(T,back,hair,0,.22,-.08,.47,.36,.43,32);
+ smoothSphere(T,back,light,0,.36,.035,.41,.16,.37,32);
  const bangs=(type)=>{
   const variants=type===0?[[-.27,.37,-.01,.24],[-.09,.4,.03,.22],[.12,.39,.03,.19],[.3,.36,-.02,.18]]
    :type===1?[[-.27,.35,.025,.24],[-.08,.4,.06,.21],[.16,.39,.04,.17]]
    :[[-.28,.38,.04,.22],[-.08,.4,.055,.24],[.15,.37,.035,.21],[.3,.32,-.01,.18]];
   for(const [x,y,z,l] of variants){
-   const lock=smoothSphere(T,back,x<0?hair:light,x,y,z,.16,l,.13);
+   const lock=coneLock(T,back,x<0?hair:light,[x-.035,y+.12,z],[x+.02,y-l*.70,z+.10],.12);
    lock.rotation.z=x<0?.18:-.2;
   }
  };
@@ -141,9 +141,9 @@ function createHair(T,head,style,color,faceTop=.43){
   for(const side of [-1,1])smoothSphere(T,back,hair,side*.39,.05,-.01,.17,.26,.30);
   if(id===6)for(let i=0;i<6;i++){
    const x=-.32+i*.13;
-   smoothSphere(T,back,i%2?hair:light,x,.47+Math.sin(i*1.7)*.04,-.02,.14,.14,.16);
+   coneLock(T,back,i%2?hair:light,[x,.49,-.02],[x+.05,.31,.17],.105);
   }
-  if(id===1){const lock=smoothSphere(T,back,light,.31,.16,.24,.16,.28,.13);lock.rotation.z=.36;}
+  if(id===1){const lock=coneLock(T,back,light,[.27,.36,.10],[.33,.04,.24],.15);lock.rotation.z=.36;}
  }else if(id===2||id===7){
   bangs(2);
   smoothSphere(T,back,hair,0,-.12,-.18,.48,.43,.35);
@@ -154,7 +154,7 @@ function createHair(T,head,style,color,faceTop=.43){
  }else if(id===3){
   bangs(1);
   smoothSphere(T,back,hair,0,.02,-.38,.45,.43,.26);
-  smoothSphere(T,back,light,0,.06,-.58,.26,.23,.3);
+  smoothSphere(T,back,light,0,-.08,-.54,.23,.34,.22,24);
   for(let k=0;k<4;k++)smoothSphere(T,back,k%2?hair:light,Math.sin(k)*.12,-.10-k*.15,-.59,.18,.2,.17);
  }else if(id===4){
   bangs(0);
@@ -178,8 +178,8 @@ export function createCharacter(T,opts={}){
  const shirtLight=material(T,new T.Color(o.shirt).lerp(new T.Color('#ffffff'),.13));
  const torso=new T.Group();torso.position.set(0,1.48,0);rig.add(torso);
  // Soft anatomical silhouette: shoulders, chest, waist, hip; no rectangular block torsos.
- smoothSphere(T,torso,shirt,0,.07,0,.44,.57,.28,20);
- smoothSphere(T,torso,shirtLight,0,.30,.085,.39,.31,.245,20);
+ smoothSphere(T,torso,shirt,0,.08,0,.405,.51,.255,24);
+ smoothSphere(T,torso,shirtLight,0,.33,.045,.365,.20,.232,24);
  smoothSphere(T,rig,pant,0,.94,0,.41,.25,.27,18);
  smoothSphere(T,torso,skin,0,.58,0,.115,.15,.12,14);
  // Thin shirt collar and sleeve hems add definition without heavy models.
@@ -196,25 +196,27 @@ export function createCharacter(T,opts={}){
  // Nose ridge, ear lobes and round cheeks (subtle geometry, not dot eyes).
  for(const side of [-1,1]){
   smoothSphere(T,head,skin,side*.413,-.03,-.015,.105,.15,.105,13);
-  smoothSphere(T,head,skin,side*.255,-.16,.295,.14,.11,.10,13);
+  /* blush painted onto canvas face */;
  }
- smoothSphere(T,head,skin,0,-.12,.385,.067,.09,.052,12);
+ /* nose painted onto canvas face */;
  createHair(T,head,o.style,o.hair);
  const joints={};let leftFoot,rightFoot;
  for(const side of [-1,1]){
   const shoulder=new T.Group();shoulder.position.set(side*.42,.34,0);torso.add(shoulder);
-  const upper=smoothSphere(T,shoulder,shirt,side*.055,-.16,0,.18,.31,.2,17);
-  smoothSphere(T,shoulder,shade,side*.065,-.40,0,.165,.08,.17,14);
+  const upper=smoothSphere(T,shoulder,shirt,side*.035,-.18,0,.145,.29,.15,20);
+  smoothSphere(T,shoulder,shade,side*.045,-.41,0,.145,.065,.15,18);
   const elbow=new T.Group();elbow.position.set(side*.065,-.44,0);shoulder.add(elbow);
   smoothSphere(T,elbow,skin,0,-.15,0,.125,.29,.13,15);
-  smoothSphere(T,elbow,skin,0,-.42,.01,.14,.14,.11,15);
+  smoothSphere(T,elbow,skin,0,-.39,.015,.125,.165,.095,18);
+   smoothSphere(T,elbow,skin,-side*.115,-.345,.085,.058,.095,.065,14);
   joints[side<0?'shoulderL':'shoulderR']=shoulder;
   joints[side<0?'elbowL':'elbowR']=elbow;
   const hip=new T.Group();hip.position.set(side*.20,.88,0);rig.add(hip);
   smoothSphere(T,hip,pant,0,-.23,0,.185,.36,.20,18);
   const knee=new T.Group();knee.position.y=-.48;hip.add(knee);
   smoothSphere(T,knee,pant,0,-.19,0,.15,.28,.16,17);
-  smoothSphere(T,knee,shoes,0,-.44,.15,.17,.13,.29,18);
+  smoothSphere(T,knee,shoes,0,-.44,.17,.175,.145,.295,20);
+   smoothSphere(T,knee,material(T,'#f3e9dc'),0,-.535,.17,.178,.038,.29,18);
   joints[side<0?'hipL':'hipR']=hip;
   joints[side<0?'kneeL':'kneeR']=knee;
  }
