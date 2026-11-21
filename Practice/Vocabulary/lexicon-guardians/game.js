@@ -407,46 +407,167 @@ ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ctx.rotate(Math.sin(S.time*
 for(const [ox,oy,r] of [[-14,-45,22],[12,-52,24],[0,-65,25]]){ellipse(ox+3,oy+5,r+3,r*.82,"#2e826e");ellipse(ox,oy,r,r*.8,"#40987a");ellipse(ox-5,oy-6,r*.52,r*.39,"#77bf8b")}
 ctx.restore()
 }
+
+/* Ten hand-art-directed canvas environments: scenery is decorative; battle
+   paths/pads and vocabulary challenge calculations use the same game logic. */
+function polyMountain(cx,cy,width,height,base,shine){
+ polygon([[cx-width*.64,cy],[cx,cy-height],[cx+width*.66,cy]],base);
+ polygon([[cx,cy-height],[cx+width*.2,cy-height*.27],[cx,cy]],shine);
+}
+function feature(x,y,kind,scale=1){
+ ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+ const r=realm();
+ if(kind==="forest"){
+  ellipse(0,13,31,9,"#183F3A40");polygon([[-5,12],[7,12],[5,-35],[-5,-35]],"#6C524A");
+  for(const [dx,dy,rad] of [[-15,-39,21],[16,-44,22],[0,-59,25]]){
+   ellipse(dx+3,dy+4,rad+3,rad*.8,"#286C61");
+   ellipse(dx,dy,rad,rad*.86,"#459C7B");ellipse(dx-6,dy-6,rad*.5,rad*.35,"#87D4A1");
+  }
+ }else if(kind==="volcano"){
+  polyMountain(0,16,140,100,"#563945","#83616A");
+  polygon([[-14,-75],[8,-75],[18,-46],[-22,-42]],"#FF7E46");
+  for(let i=0;i<3;i++)ellipse(Math.sin(S.time*.6+i)*14-6,-92-i*24,18+i*8,12,"#FFE2AC3A");
+  line([[-15,-48],[-10,-5],[0,15]],"#FF9D4E",7);
+ }else if(kind==="desert"){
+  polygon([[-57,19],[0,-50],[58,19]],"#C99152");
+  polygon([[0,-50],[58,19],[0,19]],"#EAC48A");
+  polygon([[-29,18],[0,-20],[29,18]],"#B87D51");
+ }else if(kind==="plains"){
+  polygon([[-9,28],[-8,-48],[8,-48],[10,28]],"#E1D7B5");
+  polygon([[-18,-45],[0,-60],[18,-45]],"#C88761");
+  for(let j=0;j<4;j++){const q=S.time*.16+j*Math.PI/2;line([[0,-42],[Math.cos(q)*34,-42+Math.sin(q)*34]],"#FFF2D5",8)}
+  ellipse(0,27,20,6,"#4F9F8260");
+ }else if(kind==="moon"){
+  ellipse(0,7,55,18,"#27345299");ellipse(0,2,48,15,"#8E9AB3");
+  ellipse(-13,-1,17,7,"#596D92");ellipse(13,9,11,4,"#566B93");
+  ellipse(8,-11,14,4,"#DBE5F0");
+ }else if(kind==="glacier"){
+  polygon([[-33,25],[3,-81],[29,25]],"#B3E3F3");
+  polygon([[3,-81],[29,25],[4,23]],"#77BFD5");
+  polygon([[-15,20],[-3,-45],[4,20]],"#EDFDFD");
+ }else if(kind==="swamp"){
+  ellipse(0,23,46,14,"#204E5380");
+  polygon([[-5,18],[8,18],[5,-39],[-3,-39]],"#584D56");
+  ellipse(1,-42,28,14,"#BD5D8C");ellipse(1,-52,23,14,"#EB9EBB");
+  for(let j=-1;j<=1;j++)ellipse(j*13,-47,3,5,"#FFF7B7");
+ }else if(kind==="islands"){
+  ellipse(0,14,57,17,"#438EA4");ellipse(0,4,41,14,"#F5D49E");
+  polygon([[0,8],[7,9],[15,-62],[6,-64]],"#9E714C");
+  for(let i=-2;i<=2;i++)ellipse(i*14,-64+Math.abs(i)*8,19,6,"#3CA596");
+ }else if(kind==="cyber"){
+  for(let i=-2;i<=2;i++){const h=50+(i*i*13)%57;ctx.fillStyle=i%2?"#344B81":"#425EA1";rounded(i*22-10,-h,19,h+18,3);ctx.fill()}
+  for(let i=-2;i<=2;i++)for(let j=0;j<3;j++)ellipse(i*22-2,-18-j*17,3,3,"#55EDE9");
+  line([[-54,19],[54,19]],"#49ECDD",3);
+ }else if(kind==="crystal"){
+  for(let i=-2;i<=2;i++){let w=14+Math.abs(i%2)*6,h=68-Math.abs(i)*16;
+   polygon([[i*24-w,20],[i*24,-h],[i*24+w,20]],i%2?"#D9A8F5":"#9A9FEC");
+   polygon([[i*24,-h],[i*24+w,20],[i*24,20]],"#FFFFFF60");
+  }
+ }
+ ctx.restore();
+}
 function drawBackdrop(){
-const sky=ctx.createLinearGradient(0,0,0,660);sky.addColorStop(0,"#a3c6d9");sky.addColorStop(.37,"#c8e5d1");sky.addColorStop(1,"#8ab7a6");ctx.fillStyle=sky;ctx.fillRect(0,0,1120,660);
-const t=S.time;
-for(let i=0;i<6;i++){const x=(i*260+Math.sin(t*.07+i)*22)%1300-50,y=42+i%3*31;ellipse(x,y,78,16,"#ffffff52");ellipse(x+37,y-12,46,23,"#ffffff66")}
-ctx.fillStyle="#8fc2b9";polygon([[0,140],[155,65],[300,145],[405,94],[600,160],[710,86],[910,165],[1060,82],[1120,132],[1120,360],[0,340]],"#91bdb8");
-polygon([[0,207],[105,168],[260,230],[423,139],[620,250],[744,175],[940,242],[1120,169],[1120,365],[0,353]],"#80ada9");
-ellipse(1010,94,70,70,"#ffecb180");ellipse(1010,94,50,50,"#ffe9b5a8");
+ const r=realm();
+ const grad=ctx.createLinearGradient(0,0,0,660);
+ grad.addColorStop(0,r.sky[0]);grad.addColorStop(1,r.sky[1]);
+ ctx.fillStyle=grad;ctx.fillRect(0,0,1120,660);
+ if(["moon","cyber","crystal"].includes(r.id)){
+  for(let i=0;i<80;i++){
+   const x=(i*173+43)%1120,y=(i*109+17)%440;
+   ellipse(x,y,i%9===0?2.5:1.1,i%9===0?2.5:1.1,i%5===0?r.accent+"B0":"#FFFFFF80");
+  }
+ }else{
+  for(let i=0;i<7;i++){
+   const x=(i*218+Math.sin(S.time*.075+i)*18)%1320-70,y=38+i%3*33;
+   ellipse(x,y,84,17,"#FFFFFF40");ellipse(x+44,y-10,55,20,"#FFFFFF27");
+  }
+ }
+ if(r.id==="moon"){ellipse(966,115,104,104,"#D8DFF0");ellipse(941,103,18,10,"#A9B5CE");ellipse(997,144,30,18,"#B3C0D9")}
+ else if(r.id==="cyber"){ellipse(956,111,72,72,"#E37BED40");strokeCircle(956,111,57,"#EF9FEC",3)}
+ else if(r.id==="volcano"){ellipse(995,104,76,76,"#FFB36C78");ellipse(995,104,51,51,"#FFE4AC77")}
+ else if(r.id==="desert"){ellipse(968,112,85,85,"#FFE6A299");ellipse(968,112,60,60,"#FFEFC6")}
+ else if(r.id==="crystal"){ellipse(952,109,74,74,"#FFE0F5AA")}
+ else {ellipse(997,105,73,73,"#FFF1C48A");ellipse(997,105,49,49,"#FFF5C8B7")}
+ const mountain=["moon","cyber","volcano","glacier","crystal"].includes(r.id);
+ for(let i=0;i<7;i++){
+  const x=i*200-90,w=280+i%3*40,h=(mountain?110:70)+i%3*26;
+  polyMountain(x,240,w,h,r.ground[1]+"88",r.ground[0]+"88");
+ }
 }
 function drawIsland(){
-const y=35+Math.sin(S.time*.48)*2;
-polygon([[14,127+y],[132,100+y],[390,128+y],[630,91+y],[956,113+y],[1098,170+y],[1078,586+y],[880,616+y],[650,600+y],[432,630+y],[182,602+y],[25,555+y]],"#5c7d89");
-polygon([[14,99+y],[132,72+y],[390,100+y],[630,62+y],[956,85+y],[1098,143+y],[1078,558+y],[880,589+y],[650,571+y],[432,600+y],[182,574+y],[25,528+y]],"#8fc49c");
-polygon([[19,106+y],[136,78+y],[387,107+y],[632,69+y],[954,92+y],[1091,149+y],[1071,551+y],[878,581+y],[650,565+y],[431,590+y],[184,565+y],[32,522+y]],"#9ed2a0");
-const dirt=ctx.createLinearGradient(0,90,0,600);dirt.addColorStop(0,"#b6df9f");dirt.addColorStop(1,"#91c6a0");ctx.fillStyle=dirt;polygon([[35,125],[143,99],[391,129],[621,99],[940,117],[1068,167],[1050,536],[871,560],[640,542],[438,565],[193,541],[55,507]],dirt);
-for(let i=0;i<24;i++){const x=48+(i*171)%1030,y=120+(i*129)%420;ellipse(x,y,25+i%3*5,8,"#65b89744")}
+ const r=realm(),y=Math.sin(S.time*.25)*1.1;
+ const top=[[17,153+y],[135,99+y],[370,130+y],[575,107+y],[855,102+y],[1098,157+y],[1087,552+y],[912,585+y],[660,559+y],[452,603+y],[177,568+y],[31,538+y]];
+ const low=top.map(([x,v])=>[x,v+30]);
+ polygon(low,r.ground[1]);polygon(top,r.ground[0]);
+ const grad=ctx.createLinearGradient(0,112,0,640);
+ grad.addColorStop(0,r.ground[0]+"F0");grad.addColorStop(1,r.ground[1]+"F7");
+ polygon([[31,167],[142,120],[372,151],[583,124],[859,129],[1072,176],[1056,533],[901,557],[665,532],[451,579],[194,538],[48,512]],grad);
+ for(let i=0;i<28;i++){
+  let x=57+(i*173)%1020,y=149+(i*107)%400;
+  ellipse(x,y,18+i%4*7,6,r.id==="moon"?"#2C40632B":r.id==="cyber"?"#182B5666":"#295E5A1A");
+ }
 }
 function drawWater(){
-const t=S.time;ctx.save();ctx.globalAlpha=.87;
-polygon([[0,523],[120,501],[220,522],[320,545],[400,581],[436,660],[0,660]],"#5daeb9");
-for(let i=0;i<13;i++){const x=(i*47+Math.sin(t*.8+i)*8)%420,y=556+i%4*29;line([[x,y],[x+23,y-2]],"#c8f5e7aa",2)}
-ctx.restore();
+ const r=realm();
+ if(r.id==="islands"){
+  polygon([[0,470],[178,441],[343,511],[503,548],[611,660],[0,660]],"#3BABC2");
+  polygon([[880,79],[1080,70],[1120,146],[1120,450],[1040,412],[939,308]],"#6DD1D4AA");
+ }else if(r.id==="volcano"){
+  polygon([[0,491],[152,508],[332,570],[450,660],[0,660]],"#63243A");
+  for(let i=0;i<7;i++)line([[i*59,545+i%3*18],[i*59+60,551+i%3*18]],i%2?"#FFC06A":"#FF764C",9);
+ }else if(r.id==="swamp"){
+  polygon([[0,501],[140,477],[259,538],[371,561],[456,660],[0,660]],"#416F70");
+ }else if(r.id==="glacier"){
+  polygon([[0,525],[176,496],[367,569],[445,660],[0,660]],"#74CDE0");
+ }else if(r.id==="moon"){
+  polygon([[0,540],[140,522],[315,568],[410,660],[0,660]],"#657490");
+ }else if(r.id==="cyber"){
+  polygon([[0,520],[217,507],[370,583],[420,660],[0,660]],"#111E3B");
+  for(let i=0;i<11;i++)line([[i*47,546+i%4*23],[i*47+30,546+i%4*23]],"#48E5EE66",2);
+ }else if(r.id==="desert"){
+  polygon([[0,550],[170,514],[335,565],[460,660],[0,660]],"#F3D28F");
+ }else{
+  polygon([[0,526],[120,503],[226,527],[350,553],[435,660],[0,660]],r.id==="crystal"?"#797AC2":r.id==="plains"?"#6ABEB0":"#63B0BB");
+ }
+ for(let i=0;i<12;i++){
+  const x=(i*49+Math.sin(S.time*.65+i)*7)%430,y=565+i%4*23;
+  line([[x,y],[x+22,y-2]],r.id==="volcano"?"#FFB47F77":"#D8FAE766",2);
+ }
 }
 function drawPath(){
-const shifted=paths.map(([x,y])=>[x,y]);
-line(shifted,"#52788b",76);line(shifted,"#f6d8a2",66);line(shifted,"#d4a980",57);line(shifted,"#e8c499",47);
-ctx.setLineDash([4,17]);line(shifted,"#fff2c18a",3);ctx.setLineDash([]);
-for(let d=30;d<totalLength;d+=32){const a=coordAt(d),b=coordAt(d+8);ellipse(a.x,a.y,2,2,"#bf9877aa");ctx.fillStyle="#ffefca4d";ctx.beginPath();ctx.arc(b.x,b.y,1.3,0,7);ctx.fill()}
+ const r=realm();
+ line(paths,r.road[0],82);line(paths,r.road[1],69);line(paths,r.road[2],54);
+ ctx.setLineDash([5,16]);line(paths,r.id==="cyber"?"#5BFCF6A0":"#FFF7DDB0",3);ctx.setLineDash([]);
+ for(let d=29;d<totalLength;d+=33){const q=coordAt(d);ellipse(q.x,q.y,2.1,2.1,r.road[0]+"87")}
 }
 function drawStructures(){
-const st=S.time;
-for(const [x,y,s] of [[48,194,.8],[68,455,.85],[295,490,.65],[322,142,.63],[498,198,.55],[690,91,.7],[915,543,.7],[1010,220,.6],[985,450,.8],[73,302,.58],[729,580,.5]] )tree(x,y,s,x*.1);
-for(let i=0;i<37;i++){const x=35+(i*197)%1050,y=108+(i*127)%478;if(i%4===0){ctx.fillStyle="#f6d893";ellipse(x,y,3,2,"#f2cf90");ellipse(x+9,y+3,2,2,"#e4b7c2")}}
-for(const [x,y] of [[508,436],[788,243]]){
-ctx.save();ctx.translate(x,y);ctx.fillStyle="#886c75";rounded(-37,-26,74,14,3);ctx.fill();ctx.fillStyle="#f6dfaf";rounded(-34,-31,68,9,2);ctx.fill();line([[-32,-28],[-32,-42],[-20,-42]],"#9e6e56",4);line([[32,-28],[32,-42],[20,-42]],"#9e6e56",4);ctx.restore()
-}
-// Ink wells and glowing crystals
-const x=514,y=536;
-ellipse(x,y+10,38,16,"#71578d");ellipse(x,y+4,31,12,"#c2a8e7");
-ellipse(x,y,25,8,"#6747b0");ctx.fillStyle="#f1d17a";ctx.font="20px serif";ctx.fillText("✦",x-9,y+4);
-for(const [cx,cy] of [[350,76],[740,154],[920,505]]){polygon([[cx,cy-19],[cx+12,cy-3],[cx+3,cy+17],[cx-11,cy+7]],"#c1a0f5");polygon([[cx,cy-19],[cx+2,cy+17],[cx-11,cy+7]],"#8e76d5")}
+ const id=realm().id;
+ const spots=[[70,218,.62],[98,484,.64],[325,531,.56],[336,131,.59],[480,110,.42],[711,116,.59],[907,538,.62],[1022,226,.56],[960,466,.57],[63,339,.48],[736,574,.46]];
+ if(id==="forest"||id==="plains"||id==="swamp"){
+  for(const [x,y,n] of spots){
+   if(distanceToRoute(x,y)<48)continue;
+   if(id==="forest")feature(x,y,"forest",n);
+   else feature(x,y,id,n);
+  }
+ }else{
+  for(let i=0;i<11;i++){
+   let x=65+(i*251)%1025,y=135+(i*173)%435;
+   if(distanceToRoute(x,y)<83)continue;
+   feature(x,y,id,.44+(i%3)*.14);
+  }
+ }
+ const r=realm();
+ for(let i=0;i<38;i++){
+  const x=45+(i*197)%1040,y=115+(i*127)%465;
+  if(distanceToRoute(x,y)<51)continue;
+  if(id==="volcano")ellipse(x,y,3+i%3,2+i%3,i%3?"#FFB25A":"#E94F4C");
+  else if(id==="moon")strokeCircle(x,y,3+i%3,"#C3CAE999",1);
+  else if(id==="cyber")ellipse(x,y,3,3,"#5AFFE0");
+  else if(id==="glacier")polygon([[x,y-8],[x+5,y],[x,y+7],[x-5,y]],"#F0FCFFB0");
+  else if(id==="desert")ellipse(x,y,9,2,"#FFF0C277");
+  else if(id==="crystal")polygon([[x,y-9],[x+6,y],[x,y+8],[x-5,y]],"#E6BAF7");
+  else ellipse(x,y,3,2,i%2?r.accent:"#FFE5B8");
+ }
 }
 function drawCastle(){
 const x=1056,y=356;ellipse(x,y+28,72,26,"#4d5a7f80");
