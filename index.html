@@ -2560,8 +2560,12 @@ function showDashboard(){
 
   setSkill('listening',false);
   const requestedSkill=new URLSearchParams(location.search).get('skill');
-  if(['listening','reading','speaking','writing'].includes(requestedSkill))showTestCatalog(requestedSkill,false);
-  else if(new URLSearchParams(location.search).get('tests')==='1')showMockSelection(false);
+  if(['listening','reading','speaking','writing'].includes(requestedSkill)){
+   location.replace(new URL('Tests/?skill='+encodeURIComponent(requestedSkill),location.href).href);return;
+  }
+  else if(new URLSearchParams(location.search).get('tests')==='1'){
+   location.replace(new URL('Tests/',location.href).href);return;
+  }
   else showPortalHome(false);
 
 }
@@ -3223,7 +3227,7 @@ function showPortalHome(updateUrl=true){
 function setSkill(skill,scroll=true){
   currentSkill=skill;
   renderTests();
-  if(scroll)showTestCatalog(skill);
+  if(scroll)location.href=new URL('Tests/?skill='+encodeURIComponent(skill),location.href).href;
 }
 window.addEventListener('popstate',()=>{
   const skill=new URLSearchParams(location.search).get('skill');
@@ -3356,10 +3360,10 @@ document
 
 const speakingMockDoor=$('speakingMockDoor');
 if(speakingMockDoor){
-  speakingMockDoor.addEventListener('click',()=>showTestCatalog('speaking'));
+  speakingMockDoor.addEventListener('click',()=>{location.href=new URL('Tests/?skill=speaking',location.href).href});
 }
 
-$('mockTestsDoor')?.addEventListener('click',()=>showMockSelection());
+$('mockTestsDoor')?.addEventListener('click',()=>{location.href=new URL('Tests/',location.href).href});
 $('closeMockPicker')?.addEventListener('click',()=>showPortalHome());
 document.querySelectorAll('#mockPicker [data-skill]').forEach(button=>button.addEventListener('click',()=>showTestCatalog(button.dataset.skill)));
 $('foundationsDoor')?.addEventListener('click',()=>{
