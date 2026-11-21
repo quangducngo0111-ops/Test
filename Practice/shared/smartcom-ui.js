@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-progress-home05',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-stack-levels06',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -106,7 +106,7 @@ const groups=[
   ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
   ['📒','Sổ tay từ vựng','Vocabulary-Notebook/'],['⏰','Nhắc từ vựng','Vocabulary-Notebook/#vocabReminder']
  ]},
- {heading:'Tiến độ học tập',links:[['📊','Tiến độ học tập','Progress/'],['🏠','Trang chủ','']]}
+ {heading:'Trang chủ',home:true,links:[]}
 ]
 
 /* One continuous capsule: the original round lightning button expands upward. */
@@ -120,9 +120,9 @@ const tools=document.createElement('div');
 tools.className='sc-capsule-list';
 tools.id='sc-quick-panel';
 tools.setAttribute('aria-label','Các lối tắt');
-const categoryTitles={'Mock Tests':'TEST','Skill Practice':'PRACTICE','Foundations':'FOUNDATIONS','Tiến độ học tập':'TIẾN ĐỘ HỌC TẬP'};
-const categoryIcons={'Mock Tests':'🎯','Skill Practice':'📖','Foundations':'🧩','Tiến độ học tập':'📊'};
-const categoryClasses={'Mock Tests':'sc-quick-test','Skill Practice':'sc-quick-practice','Foundations':'sc-quick-foundations','Tiến độ học tập':'sc-quick-nav'};
+const categoryTitles={'Mock Tests':'TEST','Skill Practice':'PRACTICE','Foundations':'FOUNDATIONS','Trang chủ':'TRANG CHỦ'};
+const categoryIcons={'Mock Tests':'🎯','Skill Practice':'📖','Foundations':'🧩','Trang chủ':'🏠'};
+const categoryClasses={'Mock Tests':'sc-quick-test','Skill Practice':'sc-quick-practice','Foundations':'sc-quick-foundations','Trang chủ':'sc-quick-nav'};
 function quickSvg(icon){
  const svg=quickIconPaths[icon]||quickIconPaths['🎯'];
  return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg>';
@@ -132,6 +132,7 @@ categoryGrid.className='sc-quick-categories';
 const childSection=document.createElement('section');
 childSection.className='sc-quick-children';
 childSection.hidden=true;
+childSection.id='sc-quick-children';
 const childTitle=document.createElement('div');
 childTitle.className='sc-quick-children-title';
 const childGrid=document.createElement('div');
@@ -142,67 +143,72 @@ const backButton=document.createElement('button');
 backButton.type='button';
 backButton.className='sc-quick-back-button';
 backButton.textContent='← Back';
-backButton.setAttribute('aria-label','Quay lại menu chính');
+backButton.setAttribute('aria-label','Quay về menu cấp trước');
 childHeader.append(backButton,childTitle);
 childSection.append(childHeader,childGrid);
-function resetQuickLevel(){
- selectedGroup=null;
- childSection.hidden=true;
- tools.classList.remove('sc-show-children');
- categoryGrid.hidden=false;
- categoryGrid.querySelectorAll('button').forEach(btn=>{
-  btn.classList.remove('is-selected');
-  btn.setAttribute('aria-expanded','false');
- });
+// A stack preserves all parent levels: level 3 backs to level 2, level 2 to level 1.
+const quickStack=[];
+function renderQuickLevel(){
+ const current=quickStack[quickStack.length-1];
+ categoryGrid.hidden=!!current;
+ childSection.hidden=!current;
+ tools.classList.toggle('sc-show-children',!!current);
+ categoryGrid.querySelectorAll('button').forEach(btn=>btn.setAttribute('aria-expanded',String(!!current&&btn.dataset.group===quickStack[0]?.heading)));
+ if(current){
+  childTitle.textContent=current.title;
+  childGrid.replaceChildren();
+  for(const item of current.items){
+   const entry=document.createElement(item.children?'button':'a');
+   if(item.children){entry.type='button';entry.setAttribute('aria-expanded','false');}
+   else entry.href=url(item.path);
+   entry.className='sc-capsule-link '+(categoryClasses[quickStack[0]?.heading]||'sc-quick-nav');
+   entry.title=item.label;
+   entry.setAttribute('aria-label',item.label);
+   const symbol=document.createElement('span');
+   symbol.className='sc-capsule-icon';
+   symbol.setAttribute('aria-hidden','true');
+   symbol.innerHTML=quickSvg(item.icon);
+   const name=document.createElement('span');
+   name.className='sc-capsule-tooltip';
+   name.textContent=item.label;
+   entry.append(symbol,name);
+   if(item.children)entry.addEventListener('click',()=>{quickStack.push({title:item.label,items:item.children,heading:current.heading});renderQuickLevel()});
+   childGrid.append(entry);
+  }
+ }
  tools.scrollTop=0;
  positionPanel();
 }
-backButton.addEventListener('click',()=>{resetQuickLevel();categoryGrid.querySelector('button')?.focus()});
-let selectedGroup=null;
+function resetQuickLevel(){quickStack.length=0;renderQuickLevel()}
+backButton.addEventListener('click',()=>{
+ if(quickStack.length)quickStack.pop();
+ renderQuickLevel();
+ if(quickStack.length===0)categoryGrid.querySelector('button')?.focus();
+});
 function selectQuickGroup(group){
- selectedGroup=group;
- categoryGrid.querySelectorAll('button').forEach(btn=>{
-  const selected=btn.dataset.group===group.heading;
-  btn.classList.toggle('is-selected',selected);
-  btn.setAttribute('aria-expanded',String(selected));
- });
- childTitle.textContent=categoryTitles[group.heading];
- childGrid.replaceChildren();
- for(const [icon,label,path] of group.links){
-  const a=document.createElement('a');
-  a.className='sc-capsule-link '+categoryClasses[group.heading];
-  a.href=url(path);
-  a.title=label;
-  a.setAttribute('aria-label',label);
-  const symbol=document.createElement('span');
-  symbol.className='sc-capsule-icon';symbol.setAttribute('aria-hidden','true');
-  symbol.innerHTML=quickSvg(icon);
-  const name=document.createElement('span');
-  name.className='sc-capsule-tooltip';name.textContent=label;
-  a.append(symbol,name);childGrid.append(a);
- }
- categoryGrid.hidden=true;
- childSection.hidden=false;
- tools.classList.add('sc-show-children');
- tools.scrollTop=0;
- positionPanel();
+ const items=group.links.map(([icon,label,path])=>({icon,label,path}));
+ quickStack.length=0;
+ quickStack.push({title:categoryTitles[group.heading],heading:group.heading,items});
+ renderQuickLevel();
 }
 for(const group of groups){
  const button=document.createElement('button');
- button.type='button';button.className='sc-quick-category '+categoryClasses[group.heading];
+ button.type='button';
+ button.className='sc-quick-category '+categoryClasses[group.heading];
  button.dataset.group=group.heading;
  button.setAttribute('aria-expanded','false');
  button.setAttribute('aria-controls','sc-quick-children');
  const symbol=document.createElement('span');
- symbol.className='sc-capsule-icon';symbol.setAttribute('aria-hidden','true');
+ symbol.className='sc-capsule-icon';
+ symbol.setAttribute('aria-hidden','true');
  symbol.innerHTML=quickSvg(categoryIcons[group.heading]);
  const name=document.createElement('span');
- name.className='sc-quick-category-name';name.textContent=categoryTitles[group.heading];
+ name.className='sc-quick-category-name';
+ name.textContent=categoryTitles[group.heading];
  button.append(symbol,name);
- button.addEventListener('click',()=>selectQuickGroup(group));
+ button.addEventListener('click',()=>{if(group.home)location.href=url('');else selectQuickGroup(group)});
  categoryGrid.append(button);
 }
-childSection.id='sc-quick-children';
 tools.append(categoryGrid,childSection);
 const backdrop=document.createElement('div');
 backdrop.className='sc-quick-backdrop';
