@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {applyCharacterAsset} from './asset-mode.js?v=20261121-assetmode1';
 import {setupCafeDialogue} from './dialogue.js?v=20261121-face-dialogue3';
 import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-art-round2';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
@@ -183,25 +184,29 @@ function buildCafe(){
 }
 buildCafe();
 // Polished shared character rig: rounded geometry, expressive faces and layered hair.
-const character=(options={})=>createCharacter(THREE,options);
+const character=(options={})=>{
+ const avatar=createCharacter(THREE,options);
+ applyCharacterAsset(THREE,avatar,options,options._assetIndex??0);
+ return avatar;
+};
 const avatarSettings={age:'teen',face:0,style:'side-part',hair:HAIR_COLORS[1],skin:SKIN_COLORS[2],outfit:0};
-const avatarOpts=()=>({...avatarSettings,...OUTFITS[avatarSettings.outfit]});
+const avatarOpts=()=>({...avatarSettings,...OUTFITS[avatarSettings.outfit],_assetIndex:avatarSettings.outfit});
 let player=character(avatarOpts());
 outdoors.add(player.group);
 player.group.position.set(-1.8,0,5.4);
 const npcs=[
- {...character({skin:SKIN_COLORS[3],shirt:'#ffac70',pants:'#57567e',hair:HAIR_COLORS[0],style:'messy',face:3,age:'adult'}),pos:[-6.0,0,-1.9]},
- {...character({skin:SKIN_COLORS[1],shirt:'#7cc4aa',pants:'#6380b7',hair:HAIR_COLORS[2],style:'wavy-bob',face:1,age:'child'}),pos:[2.3,0,-1.8]},
- {...character({skin:SKIN_COLORS[0],shirt:'#c0a3d9',pants:'#5e6084',hair:HAIR_COLORS[5],style:'bun',face:2,age:'senior'}),pos:[7.4,0,4.8]},
- {...character({skin:SKIN_COLORS[2],shirt:'#eda387',pants:'#566a94',hair:HAIR_COLORS[1],style:'soft-short',face:0,age:'adult'}),pos:[-11,0,4.8]},
- {...character({skin:SKIN_COLORS[4],shirt:'#72a8d9',pants:'#687c8c',hair:HAIR_COLORS[3],style:'side-part',face:2,age:'adult'}),pos:[-1,0,4.8]},
- {...character({skin:SKIN_COLORS[1],shirt:'#a88ccf',pants:'#657d73',hair:HAIR_COLORS[4],style:'long',face:1,age:'teen'}),pos:[11,0,-1.8]},
- {...character({skin:SKIN_COLORS[0],shirt:'#e8bd76',pants:'#8d7970',hair:HAIR_COLORS[0],style:'wavy-bob',face:0,age:'child'}),pos:[-9,0,-1.8]},
- {...character({skin:SKIN_COLORS[3],shirt:'#87b59c',pants:'#5c728e',hair:HAIR_COLORS[2],style:'curly',face:3,age:'senior'}),pos:[13,0,4.8]}
+ {...character({skin:SKIN_COLORS[3],shirt:'#ffac70',pants:'#57567e',hair:HAIR_COLORS[0],_assetIndex:1,style:'messy',face:3,age:'adult'}),pos:[-6.0,0,-1.9]},
+ {...character({skin:SKIN_COLORS[1],shirt:'#7cc4aa',pants:'#6380b7',hair:HAIR_COLORS[2],_assetIndex:2,style:'wavy-bob',face:1,age:'child'}),pos:[2.3,0,-1.8]},
+ {...character({skin:SKIN_COLORS[0],shirt:'#c0a3d9',pants:'#5e6084',hair:HAIR_COLORS[5],_assetIndex:3,style:'bun',face:2,age:'senior'}),pos:[7.4,0,4.8]},
+ {...character({skin:SKIN_COLORS[2],shirt:'#eda387',pants:'#566a94',hair:HAIR_COLORS[1],_assetIndex:4,style:'soft-short',face:0,age:'adult'}),pos:[-11,0,4.8]},
+ {...character({skin:SKIN_COLORS[4],shirt:'#72a8d9',pants:'#687c8c',hair:HAIR_COLORS[3],_assetIndex:5,style:'side-part',face:2,age:'adult'}),pos:[-1,0,4.8]},
+ {...character({skin:SKIN_COLORS[1],shirt:'#a88ccf',pants:'#657d73',hair:HAIR_COLORS[4],_assetIndex:6,style:'long',face:1,age:'teen'}),pos:[11,0,-1.8]},
+ {...character({skin:SKIN_COLORS[0],shirt:'#e8bd76',pants:'#8d7970',hair:HAIR_COLORS[0],_assetIndex:7,style:'wavy-bob',face:0,age:'child'}),pos:[-9,0,-1.8]},
+ {...character({skin:SKIN_COLORS[3],shirt:'#87b59c',pants:'#5c728e',hair:HAIR_COLORS[2],_assetIndex:8,style:'curly',face:3,age:'senior'}),pos:[13,0,4.8]}
 ];
 for(const [i,n] of npcs.entries()){outdoors.add(n.group);n.group.position.set(...n.pos);n.patrol={x:n.pos[0],range:1.2+(i%3)*.7,speed:.28+(i%4)*.08}}
 // Interior barista; scripted dialogue is intentionally deferred to Phase 3.
-const barista=character({skin:SKIN_COLORS[2],shirt:'#5eac95',pants:'#564a65',hair:HAIR_COLORS[0],style:'ponytail',face:1,age:'adult'});
+const barista=character({_assetIndex:5,skin:SKIN_COLORS[2],shirt:'#5eac95',pants:'#564a65',hair:HAIR_COLORS[0],style:'ponytail',face:1,age:'adult'});
 cafe.add(barista.group);barista.group.position.set(3.4,0,-4.0);
 const talkBadge=new THREE.Sprite(new THREE.SpriteMaterial({
  map:signTexture('MIA · TALK [E]','#fff8e9','#48227c',512,130),
