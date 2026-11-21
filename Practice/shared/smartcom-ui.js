@@ -23,8 +23,8 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-level2-tiles08',current.src);
-const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
+const asset=new URL('./smartcom-ui.css?v=20261121-no-legacy-flash09',current.src);
+if(!document.querySelector('link[data-sc-quick-theme]')){const link=document.createElement('link');link.rel='stylesheet';link.dataset.scQuickTheme='1';link.href=asset.href;document.head.append(link);}
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
  const historyScript=document.createElement('script');
@@ -452,7 +452,7 @@ if(/\/WritingTask[12]\//i.test(location.pathname)||/\/Vocabulary\/writing-task-2
 if(!document.querySelector('script[data-sc-word-tools]')){
  const vocabScript=document.createElement('script');
  vocabScript.dataset.scWordTools='1';
- vocabScript.src=url('Practice/shared/word-tools.js?v=20261120-listening-lookup04');
+ vocabScript.src=url('Practice/shared/word-tools.js?v=20261121-no-legacy-notebook09');
  document.body.append(vocabScript);
 }
 if(!document.querySelector('script[data-sc-vocab-reminders]')){
