@@ -32,7 +32,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute&&!/\/Practice\/WritingTas
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-test-teal16',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-center-nav22',current.src);
 if(!document.querySelector('link[data-sc-quick-theme]')){const link=document.createElement('link');link.rel='stylesheet';link.dataset.scQuickTheme='1';link.href=asset.href;document.head.append(link);}
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -95,7 +95,7 @@ const backDestination=safeBackTarget();
   link.href=href;link.title=label;link.setAttribute('aria-label',label);
   link.innerHTML=svg;return link;
  };
- const backSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 5-7 7 7 7"/><path d="M3 12h11a7 7 0 0 1 0 14" transform="translate(0,-7)"/></svg>';
+ const backSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5 3 12l7 7"/><path d="M3 12h11c4 0 7-2 7-6"/></svg>';
  const homeSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m3 10 9-7 9 7v11H3z"/><path d="M9 21v-8h6v8"/></svg>';
  const controls=document.createElement('div');controls.className='sc-lesson-nav-controls';
  controls.append(makeLink(parent,'Quay lại cấp trước',backSvg),makeLink(url(''),'Trang chủ',homeSvg));
