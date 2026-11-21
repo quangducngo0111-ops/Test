@@ -522,6 +522,28 @@ const themedBus=outdoors.children.find(child=>child.isGroup&&child.position.x===
 function decorateCity(city){
  while(cityDecor.children.length){const child=cityDecor.children[0];cityDecor.remove(child);child.traverse(node=>{if(node.isMesh){node.geometry?.dispose();const mats=Array.isArray(node.material)?node.material:[node.material];mats.forEach(m=>m?.dispose?.())}});}
  const accent=mat(city.accent);
+ // Light landmark silhouettes beyond the storefronts: readable at a distance.
+ const landmark=new THREE.Group();cityDecor.add(landmark);
+ const distant=mat(currentCity==='sydney'?'#80aec7':currentCity==='toronto'?'#809cae':currentCity==='newyork'?'#7893b1':'#9b91ba');
+ if(currentCity==='newyork'){
+  for(const [x,h,w] of [[-11,11,2.2],[-6.2,14,2.6],[8.4,12,2.7],[12,16,2.0]]){
+   box(w,h,2,distant,x,h/2,-13,landmark);
+   box(w+.2,.22,2.2,materials.roof,x,h+.12,-13,landmark);
+  }
+ }else if(currentCity==='toronto'){
+  cyl(.23,.29,13,distant,10.8,6.5,-13,landmark,12);
+  cyl(1.05,.75,.5,mat('#b95659'),10.8,11.45,-13,landmark,12);
+  cyl(.05,.05,2.8,materials.dark,10.8,14.0,-13,landmark,8);
+ }else if(currentCity==='sydney'){
+  for(const [x,h] of [[-11,6],[-8.2,8],[-5.6,5.6]]){
+   const sail=mesh(new THREE.ConeGeometry(1.35,h,3),mat('#f9f5ed'),x,h/2,-13,landmark);
+   sail.rotation.z=.13;
+  }
+ }else{
+  box(1.8,10.5,2,distant,10.8,5.25,-12.8,landmark);
+  box(2.3,1.35,2.3,mat('#d9c29e'),10.8,10.2,-12.8,landmark);
+  sign('CLOCK',10.8,10.2,-11.54,1.4,.45,'#f8e9c9','#4a5771',landmark);
+ }
  sign(city.streetName,0,5.05,-4.99,5.2,.7,city.accent,'#fff9e8',cityDecor);
  if(currentCity!=='london'){
   sign(city.cafe.toUpperCase(),-1.7,3.71,-5.05,4.3,.72,'#fff5e0','#502e84',cityDecor);
