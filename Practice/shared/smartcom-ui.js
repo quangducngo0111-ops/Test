@@ -53,12 +53,12 @@ const relativePage=decodeURIComponent(location.pathname.slice(root.pathname.leng
 const exercisePage=/^(?:Wri\d+|Rea\d+|Lis\d+|Spe\d+)\/(?:index\.html)?$/i.test(relativePage) ||
  /^(?:Practice|Foundations)\/.+\/index\.html$/i.test(relativePage);
 function safeBackTarget(){
- if(/^Practice\/Speaking\/mock-test\//i.test(relativePage))return url('?skill=speaking');
+ if(/^Practice\/Speaking\/mock-test\//i.test(relativePage))return url('Tests/?skill=speaking');
  if(/^Practice\/Speaking\/english-abroad\//i.test(relativePage))return url('Foundations/Speaking/');
- if(/^Wri\d+\//i.test(relativePage))return url('?skill=writing');
- if(/^Rea\d+\//i.test(relativePage))return url('?skill=reading');
- if(/^Lis\d+\//i.test(relativePage))return url('?skill=listening');
- if(/^Spe\d+\//i.test(relativePage))return url('?skill=speaking');
+ if(/^Wri\d+\//i.test(relativePage))return url('Tests/?skill=writing');
+ if(/^Rea\d+\//i.test(relativePage))return url('Tests/?skill=reading');
+ if(/^Lis\d+\//i.test(relativePage))return url('Tests/?skill=listening');
+ if(/^Spe\d+\//i.test(relativePage))return url('Tests/?skill=speaking');
  const segments=relativePage.replace(/\/index\.html$/i,'').replace(/\/$/,'').split('/');
  segments.pop();
  return url(segments.length?segments.join('/')+'/':'');
@@ -91,8 +91,8 @@ const quickIconPaths={
 };
 const groups=[
  {heading:'Mock Tests',links:[
-  ['🎧','Listening Test','?skill=listening'],['📖','Reading Test','?skill=reading'],
-  ['✍️','Writing Test','?skill=writing'],['🎙️','Speaking Test','?skill=speaking']
+  ['🎧','Listening Test','Tests/?skill=listening'],['📖','Reading Test','Tests/?skill=reading'],
+  ['✍️','Writing Test','Tests/?skill=writing'],['🎙️','Speaking Test','Tests/?skill=speaking']
  ]},
  {heading:'Skill Practice',links:[
   ['🎧','Listening Practice','Practice/Listening/'],
