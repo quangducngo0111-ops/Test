@@ -73,6 +73,48 @@ function safeBackTarget(){
  return url(segments.length?segments.join('/')+'/':'');
 }
 const backDestination=safeBackTarget();
+/* Consistent nested-page navigation: immediate parent and homepage, centered on a sticky bar.
+   Keep legacy header nodes in the DOM for existing page event handlers, but visually replace their presentation. */
+(function mountLessonNavigation(){
+ const route=relativePage.replace(/\\/g,'/');
+ const isHome=!route||route==='index.html';
+ if(isHome)return;
+ const oldHeader=document.body.querySelector('header');
+ if(!oldHeader||oldHeader.classList.contains('sc-lesson-navigation-ready'))return;
+ const strip=document.createElement('div');
+ strip.className='sc-lesson-toolbar';
+ strip.setAttribute('role','navigation');
+ strip.setAttribute('aria-label','Điều hướng bài học');
+ let parent=backDestination;
+ if(/^Tests\\/?(?:index\\.html)?$/i.test(route) && new URLSearchParams(location.search).has('skill'))parent=url('Tests/');
+ if(/^Tests\\/?(?:index\\.html)?$/i.test(route) && !new URLSearchParams(location.search).has('skill'))parent=url('');
+ const currentHref=location.href.split('#')[0];
+ if(parent===currentHref||parent===currentHref.split('?')[0])parent=url('');
+ const makeLink=(href,label,svg)=>{
+  const link=document.createElement('a');link.className='sc-lesson-nav-button';
+  link.href=href;link.title=label;link.setAttribute('aria-label',label);
+  link.innerHTML=svg;return link;
+ };
+ const backSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 5-7 7 7 7"/><path d="M3 12h11a7 7 0 0 1 0 14" transform="translate(0,-7)"/></svg>';
+ const homeSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m3 10 9-7 9 7v11H3z"/><path d="M9 21v-8h6v8"/></svg>';
+ const controls=document.createElement('div');controls.className='sc-lesson-nav-controls';
+ controls.append(makeLink(parent,'Quay lại cấp trước',backSvg),makeLink(url(''),'Trang chủ',homeSvg));
+ const left=document.createElement('span');left.className='sc-lesson-nav-spacer';
+ const user=document.createElement('div');user.className='sc-lesson-nav-user';
+ try{
+  const p=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
+  if(p?.name&&p?.className){
+    const name=document.createElement('span');name.className='sc-lesson-nav-student';
+    name.textContent=p.name+' · '+p.className;user.append(name);
+    const change=document.createElement('a');change.className='sc-lesson-nav-change';
+    change.href=url('?changeStudent=1');change.textContent='Đổi học sinh';user.append(change);
+  }
+ }catch(_){}
+ strip.append(left,controls,user);
+ oldHeader.classList.add('sc-lesson-navigation-ready');
+ oldHeader.append(strip);
+})();
+
 if(exercisePage && !document.querySelector('.sc-universal-back')){
  const back=document.createElement('a');back.className='sc-universal-back';
  back.href=backDestination;back.textContent='Quay lại';back.title='Thoát bài và quay lại danh sách';
