@@ -92,11 +92,15 @@ export function setupCafeDialogue({onTalking=()=>{},onClose=()=>{}}={}){
   if(turn===4&&/takeaway|takeout/.test(lower))next.text="I'll get a takeaway cup for you. "+lines[turn].text;
   history.push({role:'npc',text:next.text});showLine(next);
  }
- function listen(){
+ function listen(approved=false){
   if(!open)return;
   if(!VoiceRecognition){announce('Trình duyệt không hỗ trợ nhận giọng nói. Bạn có thể gõ câu trả lời.');return}
   if(recognizing){rec.stop();return}
-  $('dialoguePrivacy').hidden=true;try{localStorage.setItem('lifeAbroadMicNotice','1')}catch(_){}
+  if(!approved && localStorage.getItem('lifeAbroadMicNotice')!=='1'){
+   $('dialoguePrivacy').hidden=false;
+   announce('Đọc thông báo quyền riêng tư rồi chọn dùng micro hoặc bàn phím.');return;
+  }
+  $('dialoguePrivacy').hidden=true;
   rec=new VoiceRecognition();rec.lang='en-GB';rec.continuous=false;rec.interimResults=true;rec.maxAlternatives=1;
   rec.onstart=()=>{recognizing=true;mic.textContent='■ Dừng nghe';announce('🎙 Đang nghe... Hãy nói tiếng Anh.')};
   rec.onresult=e=>{let transcript='';for(let i=e.resultIndex;i<e.results.length;i++)transcript+=e.results[i][0].transcript+' ';input.value=transcript.trim();};
@@ -112,7 +116,7 @@ export function setupCafeDialogue({onTalking=()=>{},onClose=()=>{}}={}){
  $('dialogueHelp').onclick=()=>{tips.hidden=false;announce('Gợi ý tiếng Việt đã hiển thị.')};
  $('dialogueSkip').onclick=()=>{turn=Math.min(lines.length-1,turn+1);showLine(lines[turn]);};
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();reply()}});
- $('dialoguePrivacyConfirm').onclick=()=>{$('dialoguePrivacy').hidden=true;try{localStorage.setItem('lifeAbroadMicNotice','1')}catch(_){};listen()};
+ $('dialoguePrivacyConfirm').onclick=()=>{$('dialoguePrivacy').hidden=true;try{localStorage.setItem('lifeAbroadMicNotice','1')}catch(_){};listen(true)};
  $('dialoguePrivacyCancel').onclick=()=>{$('dialoguePrivacy').hidden=true};
  return {start,close,isOpen:()=>open,isTalking:()=>speaking,history:()=>history.slice()};
 }
