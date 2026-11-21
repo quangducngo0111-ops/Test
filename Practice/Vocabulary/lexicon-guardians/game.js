@@ -35,30 +35,82 @@ words=words.slice(0,50);
 const shuffle=a=>{const out=[...a];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out};
 words=shuffle(words);
 const TOWERS={
-quill:{name:"Tháp Bút Lông",short:"Bút Lông",price:50,damage:12,range:155,rate:.52,kind:"meaning",symbol:"✒",color:"#6bdbd2",desc:"Bắn mực nhanh · hiểu đúng nghĩa",special:"ink"},
-spell:{name:"Tháp Chính Tả",short:"Chính Tả",price:75,damage:23,range:125,rate:.9,kind:"spell",symbol:"✧",color:"#b0a0fc",desc:"Tia pha lê xuyên giáp · chính tả",special:"pierce"},
-echo:{name:"Tháp Âm Vang",short:"Âm Vang",price:100,damage:25,range:215,rate:1.28,kind:"pronounce",symbol:"♫",color:"#9de4ff",desc:"Tầm xa · đẩy lùi khi nghe đúng",special:"push"},
-ice:{name:"Tháp Băng Nghĩa",short:"Băng Nghĩa",price:120,damage:10,range:185,rate:1.1,kind:"synonym",symbol:"❄",color:"#92e9e4",desc:"Làm chậm và đóng băng quái",special:"freeze"},
-fire:{name:"Tháp Lửa Trái Nghĩa",short:"Lửa Trái Nghĩa",price:150,damage:39,range:145,rate:1.25,kind:"antonym",symbol:"♨",color:"#ffc06b",desc:"Sát thương cao · gây bỏng",special:"burn"},
-well:{name:"Giếng Mực",short:"Giếng Mực",price:90,damage:0,range:0,rate:99,kind:"meaning",symbol:"◈",color:"#ffdf86",desc:"+35 Mực Phép mỗi đợt · chỉ ô giếng",special:"economy"}
+ quill:{name:"Nỏ Lôi Điện",short:"Nỏ Sét",price:50,damage:12,range:155,rate:.52,kind:"meaning",symbol:"⚡",color:"#6be1f0",desc:"Nỏ ma thuật bắn tia điện liên tục",special:"ink"},
+ spell:{name:"Trụ Tinh Thể",short:"Tinh Thể",price:75,damage:23,range:125,rate:.9,kind:"spell",symbol:"💎",color:"#b9a0ff",desc:"Tinh thể xuyên giáp bằng năng lượng",special:"pierce"},
+ echo:{name:"Pháo Thiên Lôi",short:"Thiên Lôi",price:100,damage:25,range:215,rate:1.28,kind:"pronounce",symbol:"🌀",color:"#92d7ff",desc:"Pháo tầm xa đẩy lùi kẻ địch",special:"push"},
+ ice:{name:"Tháp Bão Tuyết",short:"Bão Tuyết",price:120,damage:10,range:185,rate:1.1,kind:"synonym",symbol:"❄",color:"#97efff",desc:"Đóng băng và làm chậm quái vật",special:"freeze"},
+ fire:{name:"Pháo Dung Nham",short:"Dung Nham",price:150,damage:39,range:145,rate:1.25,kind:"antonym",symbol:"🔥",color:"#ffad67",desc:"Pháo lửa gây sát thương thiêu đốt",special:"burn"},
+ well:{name:"Lõi Năng Lượng",short:"Lõi Năng Lượng",price:90,damage:0,range:0,rate:99,kind:"meaning",symbol:"◈",color:"#ffe18d",desc:"+35 năng lượng mỗi đợt · chỉ ô lõi",special:"economy"}
 };
 const E_TYPES={
-shade:{name:"Bóng Mờ",hp:45,speed:67,damage:7,reward:8,color:"#8d72bb"},
-worm:{name:"Sâu Chữ",hp:95,speed:34,damage:12,reward:13,color:"#78b98b"},
-bat:{name:"Dơi Nhầm Lẫn",hp:58,speed:92,damage:9,reward:11,color:"#7390bc"},
-spider:{name:"Nhện Ngữ Pháp",hp:135,speed:45,damage:15,reward:18,color:"#9c7cb1"},
-golem:{name:"Golem Đá Sách",hp:310,speed:24,damage:23,reward:32,color:"#b69b87"},
-boss:{name:"Vua Quên Lãng",hp:1100,speed:20,damage:40,reward:180,color:"#d5a1d9"}
+ shade:{name:"Tinh Linh Bóng Tối",hp:45,speed:67,damage:7,reward:8,color:"#8d72bb"},
+ worm:{name:"Thú Hang",hp:95,speed:34,damage:12,reward:13,color:"#78b98b"},
+ bat:{name:"Dơi Săn Đêm",hp:58,speed:92,damage:9,reward:11,color:"#7390bc"},
+ spider:{name:"Nhện Khổng Lồ",hp:135,speed:45,damage:15,reward:18,color:"#9c7cb1"},
+ golem:{name:"Vệ Binh Đá",hp:310,speed:24,damage:23,reward:32,color:"#b69b87"},
+ boss:{name:"Chúa Tể Hắc Ám",hp:1100,speed:20,damage:40,reward:180,color:"#d5a1d9"}
 };
-const paths=[[-60,368],[174,368],[174,195],[388,195],[388,435],[617,435],[617,243],[862,243],[862,365],[1170,365]];
-const pads=[
-{x:92,y:210,type:"stone"},{x:110,y:482,type:"hill"},{x:260,y:293,type:"stone"},
-{x:275,y:90,type:"hill"},{x:449,y:92,type:"stone"},{x:507,y:329,type:"water"},
-{x:504,y:536,type:"well"},{x:709,y:524,type:"stone"},{x:738,y:124,type:"hill"},
-{x:947,y:136,type:"stone"},{x:944,y:491,type:"water"},{x:800,y:445,type:"locked"}
+const REALMS=[
+ {id:"forest",icon:"🌲",name:"Rừng Cổ Đại",en:"ANCIENT FOREST",tag:"Cây cổ thụ · sinh vật hoang dã",sky:["#81B9BD","#D5F0D4"],ground:["#92CCA2","#5A9B87"],road:["#284F5A","#D5AA79","#F4D7A2"],accent:"#5BE2AD",monsters:["Linh Hồn Rừng","Rễ Quỷ","Dơi Rêu","Nhện Rừng","Người Cây","Thần Rừng Sa Ngã"],colors:["#9C73C5","#64A985","#618EA0","#879958","#6F9379","#D4A1CC"],route:[[-60,368],[180,368],[180,183],[393,183],[393,446],[620,446],[620,243],[850,243],[850,382],[1180,382]]},
+ {id:"volcano",icon:"🌋",name:"Núi Lửa Tử Thần",en:"MOLTEN CALDERA",tag:"Dung nham · đá lửa · tro bụi",sky:["#401C36","#EB7559"],ground:["#6B3B42","#352B40"],road:["#2A2034","#93564C","#CE9473"],accent:"#FF8C5F",monsters:["Quỷ Tro","Sâu Dung Nham","Dơi Lửa","Bọ Than","Golem Nham Thạch","Rồng Núi Lửa"],colors:["#E86E6D","#E59A51","#F1C174","#B95A59","#9D635B","#FF654F"],route:[[-60,375],[175,375],[175,180],[407,180],[407,489],[657,489],[657,254],[885,254],[885,391],[1180,391]]},
+ {id:"desert",icon:"🏜️",name:"Sa Mạc Hoàng Kim",en:"GOLDEN DUNES",tag:"Cồn cát · tàn tích · bão cát",sky:["#EFAF78","#F8DDAB"],ground:["#E7BB70","#CB8D5B"],road:["#A56842","#F6D399","#FFE6B8"],accent:"#FDE19E",monsters:["Hồn Cát","Bọ Cạp Cát","Dơi Sa Mạc","Nhện Kim Tự Tháp","Vệ Binh Pharaon","Vua Bão Cát"],colors:["#B781B6","#E9B85B","#CE9375","#B78D57","#D9B783","#F5C760"],route:[[-60,255],[246,255],[246,456],[530,456],[530,184],[796,184],[796,407],[1180,407]]},
+ {id:"plains",icon:"🌾",name:"Đồng Bằng Gió",en:"SKYWARD PLAINS",tag:"Đồi cỏ · hoa dại · cối xay gió",sky:["#86C7E3","#E6F8DC"],ground:["#A9D99A","#73BA85"],road:["#658B71","#D7B786","#FFE0B1"],accent:"#8DE4B4",monsters:["Linh Hồn Gió","Sói Đồng Cỏ","Dơi Gió","Nhện Hoa","Cự Nhân Đồi","Long Thần Bầu Trời"],colors:["#83B5D2","#A4B878","#7DB6BA","#8DAA65","#B6A68E","#A9CBE9"],route:[[-60,355],[240,355],[240,505],[470,505],[470,235],[755,235],[755,421],[1180,421]]},
+ {id:"moon",icon:"🌙",name:"Mặt Trăng Xa Xôi",en:"LUNAR OUTPOST",tag:"Miệng hố · thiên thạch · bầu trời sao",sky:["#111B3E","#374978"],ground:["#7986A4","#505F80"],road:["#3C4C72","#8A94AC","#BFC5DA"],accent:"#B3A8FF",monsters:["Bóng Phi Hành Gia","Giun Thiên Thạch","Dơi Vũ Trụ","Nhện Sao","Robot Mặt Trăng","Kẻ Nuốt Tinh Tú"],colors:["#9E8AD8","#A8B3C6","#7D97D9","#7B8FAC","#A6ACD2","#DFB5F8"],route:[[-60,281],[175,281],[175,472],[431,472],[431,181],[688,181],[688,447],[929,447],[929,308],[1180,308]]},
+ {id:"glacier",icon:"❄️",name:"Băng Nguyên Vĩnh Cửu",en:"FROZEN KINGDOM",tag:"Sông băng · tuyết phủ · đỉnh băng",sky:["#72ABD2","#E4F8FF"],ground:["#B5E3F0","#7FB5D5"],road:["#5D8EB0","#AECFE2","#EBFBFF"],accent:"#A8F5FF",monsters:["Hồn Băng","Sâu Tuyết","Dơi Sương","Nhện Băng","Golem Băng","Nữ Hoàng Bão Tuyết"],colors:["#98D3E9","#86B5CE","#C0E8FB","#8FC4D9","#92B6D4","#E5F8FF"],route:[[-60,389],[163,389],[163,175],[399,175],[399,453],[663,453],[663,187],[911,187],[911,369],[1180,369]]},
+ {id:"swamp",icon:"🐸",name:"Đầm Lầy Độc",en:"VENOMOUS MARSH",tag:"Nấm phát sáng · sương độc · cây khô",sky:["#385D61","#90BDA4"],ground:["#6A9B7F","#355C58"],road:["#355451","#789C81","#C0D0A1"],accent:"#B8F184",monsters:["Ma Trơi","Sâu Độc","Dơi Đầm Lầy","Nhện Nọc Độc","Golem Rêu","Quái Vương Đầm Lầy"],colors:["#89EBBD","#A1D76F","#61BC9E","#A0A76B","#759F71","#B5F3A0"],route:[[-60,235],[197,235],[197,462],[465,462],[465,216],[725,216],[725,499],[964,499],[964,326],[1180,326]]},
+ {id:"islands",icon:"🏝️",name:"Quần Đảo Hải Tặc",en:"PIRATE ARCHIPELAGO",tag:"Biển sâu · đảo nổi · san hô",sky:["#71CDE1","#C5F3E9"],ground:["#C7D99E","#78BDAE"],road:["#4D8491","#D6BA91","#F9E1B2"],accent:"#70E8ED",monsters:["Ma Thủy Thủ","Cua Biển","Dơi Biển","Nhện San Hô","Golem Vỏ Sò","Kraken Đại Dương"],colors:["#74AAB8","#E29477","#8A9ABF","#E5B39F","#83B8B9","#A38BD2"],route:[[-60,343],[199,343],[199,183],[492,183],[492,453],[760,453],[760,234],[973,234],[973,364],[1180,364]]},
+ {id:"cyber",icon:"🌃",name:"Thành Phố Neon",en:"NEON CITADEL",tag:"Đường điện tử · robot · công nghệ tương lai",sky:["#101734","#3D3274"],ground:["#293459","#182444"],road:["#19223B","#3D5B80","#8AA9CF"],accent:"#56F7F0",monsters:["Bóng Kỹ Thuật Số","Robot Bò","Drone Chiến Đấu","Spider Bot","Mech Hộ Vệ","AI Hủy Diệt"],colors:["#6F82EE","#5FB3E4","#A488EC","#59D4E3","#7586BE","#E47CF0"],route:[[-60,368],[228,368],[228,206],[469,206],[469,470],[716,470],[716,203],[947,203],[947,361],[1180,361]]},
+ {id:"crystal",icon:"💎",name:"Thung Lũng Pha Lê",en:"CRYSTAL SANCTUARY",tag:"Tinh thể cổ · đá quý · ma thuật",sky:["#7B83C6","#D5B9EA"],ground:["#A4A0D4","#7778BD"],road:["#6B648E","#C3A6CA","#F2D8E5"],accent:"#F4ACFF",monsters:["Linh Hồn Pha Lê","Thú Amethyst","Dơi Tinh Thể","Nhện Ruby","Golem Thạch Anh","Rồng Tinh Thạch"],colors:["#D6A4F1","#C4A0ED","#8D9CE6","#EF9EBE","#A9A9E8","#F7B4F4"],route:[[-60,288],[230,288],[230,490],[510,490],[510,181],[769,181],[769,406],[996,406],[996,323],[1180,323]]}
 ];
-const polyline=[];let totalLength=0;for(let i=0;i<paths.length-1;i++){const a=paths[i],b=paths[i+1],len=Math.hypot(b[0]-a[0],b[1]-a[1]);polyline.push({a,b,len,from:totalLength});totalLength+=len}
-function coordAt(d){d=clamp(d,0,totalLength);for(const p of polyline){if(d<=p.from+p.len){const t=(d-p.from)/p.len;return{x:p.a[0]*(1-t)+p.b[0]*t,y:p.a[1]*(1-t)+p.b[1]*t}}}return{x:1170,y:365}}
+let realmIndex=0;
+const realm=()=>REALMS[realmIndex];
+let paths=REALMS[0].route.map(v=>[...v]);
+let pads=[];
+let polyline=[],totalLength=0;
+function buildPath(){
+ polyline=[];totalLength=0;
+ for(let i=0;i<paths.length-1;i++){
+  const a=paths[i],b=paths[i+1],len=Math.hypot(b[0]-a[0],b[1]-a[1]);
+  polyline.push({a,b,len,from:totalLength});totalLength+=len;
+ }
+}
+function coordAt(d){
+ d=clamp(d,0,totalLength);
+ for(const p of polyline){
+  if(d<=p.from+p.len){const t=(d-p.from)/p.len;return {x:p.a[0]*(1-t)+p.b[0]*t,y:p.a[1]*(1-t)+p.b[1]*t}}
+ }
+ const end=paths[paths.length-1];return {x:end[0],y:end[1]};
+}
+function distanceToRoute(x,y){
+ let dist=Infinity;
+ for(const seg of polyline){
+  const [ax,ay]=seg.a,[bx,by]=seg.b;
+  const dx=bx-ax,dy=by-ay;
+  const t=clamp(((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy),0,1);
+  dist=Math.min(dist,Math.hypot(x-(ax+t*dx),y-(ay+t*dy)));
+ }
+ return dist;
+}
+function choosePads(){
+ const candidates=[];
+ for(let row=0;row<9;row++)for(let col=0;col<13;col++){
+  const x=83+col*79+(row%2)*14,y=94+row*57;
+  if(distanceToRoute(x,y)>94&&x<1050&&y<595){
+   const key=(row*43+col*73+realmIndex*37)%117;
+   candidates.push({x,y,rank:key});
+  }
+ }
+ candidates.sort((a,b)=>a.rank-b.rank);
+ const out=[];
+ for(const p of candidates){
+  if(out.every(q=>Math.hypot(q.x-p.x,q.y-p.y)>111))out.push(p);
+  if(out.length===12)break;
+ }
+ if(out.length<12)for(const p of candidates){if(out.some(q=>q===p))continue;if(out.every(q=>Math.hypot(q.x-p.x,q.y-p.y)>75))out.push(p);if(out.length===12)break}
+ // Keep 12 strategic platforms: pad 6 provides income and pad 11 unlocks later.
+ return out.slice(0,12).map((p,i)=>({x:p.x,y:p.y,type:i===6?"well":i===11?"locked":i%5===1?"hill":i%5===3?"water":"stone"}));
+}
+buildPath();pads=choosePads();
 const S={phase:"study",paused:false,speed:1,wave:0,maxWave:5,health:100,ink:220,score:0,combo:0,correct:0,attempts:0,studyIndex:0,studySet:words.slice(0,10),seen:new Set(),selectedType:"quill",selectedPad:null,towers:[],enemies:[],bullets:[],fx:[],floating:[],misses:[],nextEnemyId:1,spawned:0,targetSpawn:0,spawnClock:0,reviewQueue:[],last:0,time:0,challengeLock:false,sound:true,finished:false,progressWave:0};
 const recordKey="LEXICON_GUARDIANS_V3_RESULTS";
 const DIFFICULTIES={
