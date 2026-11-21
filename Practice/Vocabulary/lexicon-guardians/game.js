@@ -631,14 +631,14 @@ function drawStructures(){
  const spots=[[70,218,.62],[98,484,.64],[325,531,.56],[336,131,.59],[480,110,.42],[711,116,.59],[907,538,.62],[1022,226,.56],[960,466,.57],[63,339,.48],[736,574,.46]];
  if(id==="forest"||id==="plains"||id==="swamp"){
   for(const [x,y,n] of spots){
-   if(distanceToRoute(x,y)<48)continue;
+   if(distanceToRoute(x,y)<85||pads.some(p=>Math.hypot(x-p.x,y-p.y)<115))continue;
    if(id==="forest")feature(x,y,"forest",n);
    else feature(x,y,id,n);
   }
  }else{
   for(let i=0;i<11;i++){
    let x=65+(i*251)%1025,y=135+(i*173)%435;
-   if(distanceToRoute(x,y)<83)continue;
+   if(distanceToRoute(x,y)<92||pads.some(p=>Math.hypot(x-p.x,y-p.y)<122))continue;
    feature(x,y,id,.44+(i%3)*.14);
   }
  }
@@ -682,18 +682,28 @@ function drawCastle(){
  ctx.restore();
 }
 function drawPad(p,i){
-const tower=S.towers.find(t=>t.pad===i);
-const isActive=S.selectedPad===i,isHovered=hoverPad===i;ctx.save();ctx.translate(p.x,p.y);
-if(isHovered){const pulse=10+5*Math.sin(S.time*4);ctx.save();ctx.shadowBlur=20+pulse;ctx.shadowColor="#fff2a1";ellipse(0,0,52,30,"#ffe8a066");strokeCircle(0,0,45+pulse*.13,"#ffe69d",3);ctx.restore()}
-const color={stone:realm().accent,hill:"#FFE0A2",water:"#9DE6FC",well:"#FFD28D",locked:"#71899B"}[p.type];
-ellipse(0,12,43,16,"#112F4866");ellipse(0,5,38,16,realm().road[0]);
-ellipse(0,0,34,13,color);
-strokeCircle(0,0,28,isHovered?"#FFFBD1":isActive?"#FFF5BA":"#FFFFFFAA",isHovered?5:isActive?4:2);
-if(isHovered){ctx.save();ctx.shadowColor="#fff3ae";ctx.shadowBlur=17;strokeCircle(0,0,37,"#fff2a8",3);ctx.restore()}
-if(tower){drawTower(tower,0,-4)}
-else if(p.type==="locked"){ctx.fillStyle="#6b6592";ctx.font="26px serif";ctx.textAlign="center";ctx.fillText("🔒",0,6)}
-else{ctx.fillStyle=isActive?"#fff":"#23425A";ctx.font="28px serif";ctx.textAlign="center";ctx.fillText("✦",0,8)}
-ctx.restore();
+ const tower=S.towers.find(t=>t.pad===i),active=S.selectedPad===i,hovered=hoverPad===i;
+ ctx.save();ctx.translate(p.x,p.y);
+ // Grounded hexagonal platforms, instead of hovering circular saucers.
+ ellipse(0,24,36,11,"#142D4760");
+ const stone=p.type==="locked"?"#667987":p.type==="hill"?"#D9B37D":p.type==="water"?"#6EAFC2":p.type==="well"?"#D8A66E":"#718D9C";
+ polygon([[-35,6],[-25,-8],[24,-8],[35,6],[35,20],[24,30],[-24,30],[-35,20]],"#3B5A6C");
+ polygon([[-35,6],[-25,-8],[24,-8],[35,6],[24,19],[-24,19]],stone);
+ polygon([[-25,-8],[24,-8],[15,-17],[-16,-17]],"#DAE6E8");
+ polygon([[-23,7],[-16,-2],[17,-2],[24,7],[15,13],[-15,13]],p.type==="locked"?"#718593":p.type==="well"?"#FFE2A1":"#D7E7E9");
+ if(hovered||active){
+  ctx.save();ctx.shadowBlur=14;ctx.shadowColor="#8AF3FF";
+  ctx.strokeStyle=hovered?"#E7FFFF":"#85E7EE";ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(-35,6);ctx.lineTo(-25,-8);ctx.lineTo(24,-8);ctx.lineTo(35,6);ctx.lineTo(24,19);ctx.lineTo(-24,19);ctx.closePath();ctx.stroke();ctx.restore();
+ }
+ if(tower){drawTower(tower,0,-15)}
+ else if(p.type==="locked"){
+  ctx.font="24px system-ui";ctx.textAlign="center";ctx.fillText("🔒",0,5);ctx.textAlign="left";
+ }else{
+  ctx.save();ctx.shadowColor=realm().accent;ctx.shadowBlur=hovered?15:6;
+  ctx.fillStyle=p.type==="well"?"#DB8A37":"#315A75";ctx.font="900 26px Nunito, sans-serif";ctx.textAlign="center";ctx.fillText(p.type==="well"?"✧":"+",0,11);ctx.restore();
+ }
+ ctx.restore();
 }
 function drawTower(t,x,y){
  const def=TOWERS[t.type],lvl=t.level,tm=S.time;ctx.save();ctx.translate(x,y);if(t.faded)ctx.globalAlpha=.64;
