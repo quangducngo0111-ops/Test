@@ -15,6 +15,18 @@
 <link rel="apple-touch-icon" href="./assets/pwa/icon-192.png">
 <meta name="application-name" content="IELTS Test Portal">
 <title>IELTS Test Portal</title>
+<script id="sc-legacy-test-link-redirect">
+/* Route all previously shared TEST URLs to the dedicated TEST site before rendering. */
+(function(){
+ const params=new URLSearchParams(location.search);
+ const skill=params.get('skill');
+ if(params.get('tests')==='1'||['listening','reading','writing','speaking'].includes(skill)){
+  const target=new URL('Tests/',location.href);
+  if(skill&&['listening','reading','writing','speaking'].includes(skill))target.searchParams.set('skill',skill);
+  location.replace(target.href);
+ }
+})();
+</script>
 
 <style>
 
