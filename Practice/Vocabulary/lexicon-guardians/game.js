@@ -631,14 +631,14 @@ function drawStructures(){
  const spots=[[70,218,.62],[98,484,.64],[325,531,.56],[336,131,.59],[480,110,.42],[711,116,.59],[907,538,.62],[1022,226,.56],[960,466,.57],[63,339,.48],[736,574,.46]];
  if(id==="forest"||id==="plains"||id==="swamp"){
   for(const [x,y,n] of spots){
-   if(distanceToRoute(x,y)<85||pads.some(p=>Math.hypot(x-p.x,y-p.y)<115))continue;
+   if(distanceToRoute(x,y)<85||pads.some(p=>Math.hypot(x-p.x,y-p.y)<160))continue;
    if(id==="forest")feature(x,y,"forest",n);
    else feature(x,y,id,n);
   }
  }else{
   for(let i=0;i<11;i++){
    let x=65+(i*251)%1025,y=135+(i*173)%435;
-   if(distanceToRoute(x,y)<92||pads.some(p=>Math.hypot(x-p.x,y-p.y)<122))continue;
+   if(distanceToRoute(x,y)<92||pads.some(p=>Math.hypot(x-p.x,y-p.y)<160))continue;
    feature(x,y,id,.44+(i%3)*.14);
   }
  }
