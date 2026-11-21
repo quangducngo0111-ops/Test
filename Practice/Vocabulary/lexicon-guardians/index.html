@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#142940">
 <meta name="description" content="Lexicon Guardians — game chiến thuật phòng thủ học từ vựng tiếng Anh">
 <title>Lexicon Guardians — Vệ Binh Từ Vựng</title>
-<link rel="stylesheet" href="./style.css?v=20261121-ten-realms01">
+<link rel="stylesheet" href="./style.css?v=20261121-wizard-flow02">
 </head>
 <body>
 <div class="app">
@@ -16,9 +16,48 @@
   <div class="top-actions"><span class="realm-tag" id="realmTag">🌲 Rừng Cổ Đại</span><button id="soundBtn" class="iconbtn" title="Bật/tắt hiệu ứng âm thanh">🔊</button><button id="helpBtn" class="iconbtn" title="Hướng dẫn">?</button></div>
 </header>
 <main>
+<section id="lexWizard" class="lex-wizard" aria-label="Chuẩn bị chơi Lexicon Guardians">
+ <div class="lex-wizard-top">
+  <div><span class="eyebrow">LEXICON GUARDIANS · NEW ADVENTURE</span><h1 id="lexWizardTitle">Bắt đầu hành trình</h1><p id="lexWizardSubtitle">Từng bước chuẩn bị trước khi bước vào trận đấu.</p></div>
+  <div class="lex-wizard-track" id="lexWizardTrack" aria-label="Tiến độ chuẩn bị">
+    <span data-track="guide">01 Hướng dẫn</span><span data-track="difficulty">02 Độ khó</span><span data-track="map">03 Bản đồ</span><span data-track="study">04 Học từ</span><span data-track="play">05 Chiến đấu</span>
+  </div>
+ </div>
+ <section class="lex-wizard-panel" id="lexGuide" data-stage="guide">
+   <span class="eyebrow">BƯỚC 01 / 05 · HƯỚNG DẪN</span>
+   <h2>Chuẩn bị phòng thủ Lexica</h2>
+   <p class="lex-wizard-lead">Mỗi từ vựng giúp kích hoạt sức mạnh cho tháp. Tìm hiểu luật chơi trước khi chọn chiến trường.</p>
+   <div class="lex-guide-grid">
+    <div><b>📖 Học từ</b><p>Lật đủ 8 thẻ, học nghĩa, câu ví dụ và phát âm.</p></div>
+    <div><b>🏰 Xây tháp</b><p>Chạm bệ xây dựng và trả lời câu hỏi từ vựng để dựng tháp.</p></div>
+    <div><b>⚔️ Chống quái</b><p>Đặt tháp chiến thuật, đánh bại 5 đợt quái và dùng chiêu hỗ trợ.</p></div>
+    <div><b>✨ Nâng cấp</b><p>Chạm tháp để nâng cấp, sửa chữa hoặc bán khi cần.</p></div>
+   </div>
+   <div class="lex-wizard-actions"><button type="button" class="btn primary" id="wizardGuideNext">Đã hiểu · Chọn độ khó →</button></div>
+ </section>
+ <section class="lex-wizard-panel" id="lexDifficulty" data-stage="difficulty" hidden>
+   <span class="eyebrow">BƯỚC 02 / 05 · ĐỘ KHÓ</span>
+   <h2>Chọn thử thách</h2><p class="lex-wizard-lead">Độ khó thay đổi số quái, tốc độ, máu và lượng năng lượng khởi đầu.</p>
+   <div id="wizardDifficultyMount"></div>
+   <div class="lex-wizard-actions"><button class="btn secondary" type="button" data-wizard-back="guide">← Hướng dẫn</button><button type="button" class="btn primary" id="wizardDifficultyNext">Tiếp tục · Chọn bản đồ →</button></div>
+ </section>
+ <section class="lex-wizard-panel" id="lexMap" data-stage="map" hidden>
+   <span class="eyebrow">BƯỚC 03 / 05 · BẢN ĐỒ</span>
+   <h2>Chọn chiến trường</h2><p class="lex-wizard-lead">10 thế giới, 10 đường đi, các loại quái vật khác nhau. Chạm một bản đồ để chọn.</p>
+   <div id="wizardMapMount"></div>
+   <div class="lex-wizard-actions"><button class="btn secondary" type="button" data-wizard-back="difficulty">← Độ khó</button><button type="button" class="btn primary" id="wizardMapNext">Tiếp tục · Học từ →</button></div>
+ </section>
+ <section class="lex-wizard-panel" id="lexStudy" data-stage="study" hidden>
+   <span class="eyebrow">BƯỚC 04 / 05 · TỪ VỰNG</span>
+   <h2>Học từ trước trận đấu</h2><p class="lex-wizard-lead">Lật ít nhất 8 thẻ để mở khóa. Bản đồ chiến đấu chưa xuất hiện ở bước này.</p>
+   <div id="wizardStudyMount"></div>
+   <div class="lex-wizard-actions"><button class="btn secondary" type="button" data-wizard-back="map">← Bản đồ</button><button type="button" class="btn primary" id="wizardStartBattle" disabled>🔒 Lật đủ 8 thẻ để vào trận</button></div>
+ </section>
+</section>
+<div id="lexBattleScreen" hidden>
 <section class="game-intro">
   <div><span class="eyebrow" id="chapterLabel">WORLD 01 · ANCIENT FOREST</span><h1>Chinh phục <span>10 thế giới huyền thoại</span></h1><p>Chọn chiến trường, dựng phòng tuyến và ngăn những đạo quân quái vật. Trả lời thử thách từ vựng để kích hoạt sức mạnh của tháp!</p></div>
-  <div class="realm-badges"><span>🏹 TOWER DEFENSE</span><span>📚 A2–C1</span><span>✨ 5 WAVES</span><span id="difficultyBadge">🌿 DỄ</span></div>
+  <div class="realm-badges"><span>🏹 TOWER DEFENSE</span><span>📚 A2–C1</span><span>✨ 5 WAVES</span><span id="difficultyBadge">🌿 DỄ</span><button type="button" id="wizardEditSetup" class="btn secondary">⚙ Đổi bản đồ</button></div>
 </section>
 <section class="realm-selector" aria-labelledby="realmPickerTitle">
  <div class="realm-selector-heading"><div><span class="eyebrow">CHOOSE YOUR REALM</span><h2 id="realmPickerTitle">10 chiến trường · 10 thế giới</h2><p>Mỗi bản đồ có đường đi, cảnh quan và chủng quái vật riêng.</p></div><span class="realm-counter" id="realmCounter">01 / 10</span></div>
@@ -58,7 +97,8 @@
   <section class="panel review-panel"><div class="panel-title"><h2>👾 Từ cần đánh bại</h2><span id="missedCount">0</span></div><div id="missedList" class="review-chips">Chưa có từ cần ôn</div><p class="hint">Từ sai sẽ trở lại qua những quái mạnh ở đợt sau.</p></section>
  </aside>
 </div>
-<section class="below"><div><strong>✦ Học để mạnh hơn · Mạnh lên để bảo vệ Lexica ✦</strong><p>Bản v3: Click bệ để xây, click tháp để nâng cấp, 3 độ khó và 6 kiểu tháp ma pháp.</p></div><button id="restartBtn" class="btn secondary">↺ Bắt đầu lại</button></section>
+<section class="below"><div><strong>✦ Học để mạnh hơn · Mạnh lên để bảo vệ Lexica ✦</strong><p>10 bản đồ · 6 tháp fantasy · 5 đợt chiến đấu. Chọn một vị trí xây tháp để bắt đầu.</p></div><button id="restartBtn" class="btn secondary">↺ Bắt đầu lại</button></section>
+</div><!-- lexBattleScreen -->
 </main>
 <footer>LEXICON GUARDIANS · Bản chơi thử học từ vựng · Tiến độ lưu cục bộ trên thiết bị</footer>
 </div>
@@ -66,7 +106,7 @@
  <div class="lex-tutorial-card">
   <span class="lex-tutorial-eyebrow">✦ HƯỚNG DẪN TRƯỚC KHI CHƠI</span>
   <h2 id="lexTutorialTitle">Chinh phục 10 chiến trường Lexica</h2>
-  <p>Chọn một trong 10 bản đồ bên ngoài, lựa chọn độ khó rồi hoàn thành 4 bước để bảo vệ thành.</p><div class="difficulty-picker" id="difficultyPicker" role="group" aria-label="Chọn độ khó"><button type="button" data-difficulty="easy" class="active"><b>🌿 Dễ</b><small>Thêm mực · quái yếu hơn</small></button><button type="button" data-difficulty="hard"><b>⚔️ Khó</b><small>Chiến thuật cân bằng</small></button><button type="button" data-difficulty="hell"><b>🔥 Địa ngục</b><small>Quái đông, trâu và nhanh</small></button></div>
+  <p>Chọn độ khó và bản đồ, học đủ 8 từ, sau đó bắt đầu xây tháp chiến đấu.</p><div class="difficulty-picker" id="difficultyPicker" role="group" aria-label="Chọn độ khó"><button type="button" data-difficulty="easy" class="active"><b>🌿 Dễ</b><small>Nhiều năng lượng · quái yếu hơn</small></button><button type="button" data-difficulty="hard"><b>⚔️ Khó</b><small>Chiến thuật cân bằng</small></button><button type="button" data-difficulty="hell"><b>🔥 Địa ngục</b><small>Quái đông, trâu và nhanh</small></button></div>
   <ol class="lex-tutorial-steps">
    <li><b>📖 Học phép</b><span>Lật ít nhất <strong>8 thẻ từ vựng</strong> trong Sách Phép.</span></li>
    <li><b>🏰 Xây tháp</b><span><strong>Bấm trực tiếp vào bệ đất trống</strong>, sau đó chọn tháp trong menu vừa mở. Trả lời thử thách từ vựng để xây.</span></li>
@@ -86,5 +126,5 @@
   </div>
  </div>
 </div>
-<script src="./game.js?v=20261121-ten-realms01" defer></script>
+<script src="./game.js?v=20261121-wizard-flow02" defer></script>
 </body></html>
