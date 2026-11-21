@@ -195,7 +195,7 @@ const character=(options={})=>{
  if(USE_GAMEPLAY_GLTF_AVATARS)applyCharacterAsset(THREE,avatar,options,options._assetIndex??0);
  return avatar;
 };
-const avatarSettings={age:'teen',face:0,style:'side-part',hair:HAIR_COLORS[1],skin:SKIN_COLORS[2],outfit:0};
+const avatarSettings={age:'teen',face:0,style:'side-part',hair:HAIR_COLORS[1],skin:SKIN_COLORS[2],outfit:0,glasses:'none'};
 const avatarOpts=()=>({...avatarSettings,...OUTFITS[avatarSettings.outfit],_assetIndex:avatarSettings.outfit});
 let player=character(avatarOpts());
 outdoors.add(player.group);
@@ -252,11 +252,12 @@ function fillSelect(id,values){
  for(const [value,label] of values){const opt=document.createElement('option');opt.value=value;opt.textContent=label;node.append(opt)}
 }
 fillSelect('avatarAge',[['child','Child'],['teen','Teen'],['adult','Adult'],['senior','Senior']]);
-fillSelect('avatarHair',HAIR_STYLES.map((x,i)=>[x,['Short neat','Side part','Wavy bob','Ponytail','Bun','Curly','Messy short','Long layers'][i]]));
-fillSelect('avatarHairColor',HAIR_COLORS.map((x,i)=>[x,['Jet black','Dark brown','Chestnut','Caramel','Ash blonde','Silver'][i]]));
+fillSelect('avatarHair',HAIR_STYLES.map((x,i)=>[x,['Short neat','Side part','Wavy bob','Ponytail','Bun','Curly textured','Messy short','Long layers','Buzz cut','Taper fade','Straight fringe','Slicked back','Braids','Shoulder-length'][i]]));
+fillSelect('avatarHairColor',HAIR_COLORS.map((x,i)=>[x,['Black','Soft black','Dark brown','Chestnut','Caramel','Honey blonde','Auburn','Silver'][i]]));
 fillSelect('avatarFace',FACE_STYLES.map((x,i)=>[String(i),['Friendly','Bright','Gentle','Confident'][i]]));
 fillSelect('avatarSkin',SKIN_COLORS.map((x,i)=>[x,['Light','Warm','Golden','Tan','Deep'][i]]));
 fillSelect('avatarOutfit',OUTFITS.map((x,i)=>[String(i),x.name]));
+fillSelect('avatarGlasses',[['none','Không đeo'],['round','Kính tròn'],['square','Kính vuông'],['gold','Gọng vàng'],['clear','Gọng trong']]);
 try{
  const data=JSON.parse(localStorage.getItem('lifeAbroadAvatar')||'null');
  if(data&&typeof data==='object'){
@@ -265,11 +266,11 @@ try{
   if(!HAIR_COLORS.includes(avatarSettings.hair))avatarSettings.hair=HAIR_COLORS[1];
   if(!SKIN_COLORS.includes(avatarSettings.skin))avatarSettings.skin=SKIN_COLORS[2];
   avatarSettings.face=Math.max(0,Math.min(3,Number(avatarSettings.face)||0));
-  avatarSettings.outfit=Math.max(0,Math.min(3,Number(avatarSettings.outfit)||0));
+  avatarSettings.outfit=Math.max(0,Math.min(OUTFITS.length-1,Number(avatarSettings.outfit)||0));
   replacePlayer();
  }
 }catch(_){}
-const avatarControls={avatarAge:'age',avatarHair:'style',avatarHairColor:'hair',avatarFace:'face',avatarSkin:'skin',avatarOutfit:'outfit'};
+const avatarControls={avatarAge:'age',avatarHair:'style',avatarHairColor:'hair',avatarFace:'face',avatarSkin:'skin',avatarOutfit:'outfit',avatarGlasses:'glasses'};
 for(const [id,key] of Object.entries(avatarControls)){
  const node=$(id);node.value=String(avatarSettings[key]);
  node.addEventListener('change',()=>{
@@ -278,10 +279,10 @@ for(const [id,key] of Object.entries(avatarControls)){
  });
 }
 function setEditor(open){
- editorOpen=open;editor.hidden=!open;$('avatarOpen').setAttribute('aria-expanded',String(open));
+ editorOpen=open;editor.hidden=!open;
  if(open)buildPreview();
 }
-$('avatarOpen').onclick=()=>setEditor(!editorOpen);
+// The avatar editor is only shown during initial setup.
 $('avatarClose').onclick=()=>setEditor(false);
 $('avatarRotateLeft').onclick=()=>{editorYaw+=Math.PI/4;if(previewCharacter)previewCharacter.group.rotation.y=editorYaw};
 $('avatarRotateRight').onclick=()=>{editorYaw-=Math.PI/4;if(previewCharacter)previewCharacter.group.rotation.y=editorYaw};
@@ -512,8 +513,9 @@ function showSetup(){
 
 const CITIES={
  london:{name:'London',country:'United Kingdom',sky:'#b3dcf6',road:'#6f7890',pavement:'#f4dcbe',grass:'#8dca9b',tree:'#4ba88d',accent:'#d94f60',streetName:'LONDON HIGH STREET',cafe:'Bluebird Café'},
- tokyo:{name:'Tokyo',country:'Japan',sky:'#c6dff5',road:'#686f8d',pavement:'#e9dfd0',grass:'#8dcfa6',tree:'#5bb58f',accent:'#d24e6a',streetName:'TOKYO SHOPPING STREET',cafe:'Sakura Café'},
- newyork:{name:'New York',country:'United States',sky:'#9bd5f4',road:'#626f89',pavement:'#ddd9d2',grass:'#80bd94',tree:'#4c9c78',accent:'#f5b43d',streetName:'NEW YORK · MAIN STREET',cafe:'Corner Café'}
+ sydney:{name:'Sydney',country:'Australia',sky:'#8fd3f5',road:'#637c94',pavement:'#ead8b7',grass:'#8acbb0',tree:'#319b7e',accent:'#37a7b0',streetName:'SYDNEY HARBOUR WALK',cafe:'Harbour Café'},
+ newyork:{name:'New York',country:'United States',sky:'#9bd5f4',road:'#626f89',pavement:'#ddd9d2',grass:'#80bd94',tree:'#4c9c78',accent:'#f5b43d',streetName:'NEW YORK · MAIN STREET',cafe:'Corner Café'},
+ toronto:{name:'Toronto',country:'Canada',sky:'#a7d5ed',road:'#61778b',pavement:'#e2d7ce',grass:'#89ba95',tree:'#4a927d',accent:'#d95055',streetName:'TORONTO QUEEN STREET',cafe:'Maple Café'}
 };
 const cityDecor=new THREE.Group();outdoors.add(cityDecor);
 const themedBus=outdoors.children.find(child=>child.isGroup&&child.position.x===12&&child.position.z===7.4);
@@ -530,7 +532,7 @@ function decorateCity(city){
   box(.76,.28,.77,mat('#ad303e'),-10.4,2.39,-1.09,cityDecor);
   box(.64,1.34,.055,mat('#a6d9e5'),-10.4,1.25,-.62,cityDecor);
   sign('PHONE',-10.4,2.05,-.58,.71,.19,'#f8ebc9','#80353a',cityDecor);
- }else if(currentCity==='tokyo'){
+ }else if(currentCity==='sydney'){
   for(const x of [-10.9,-8.2])box(.23,3.2,.26,accent,x,1.65,4.55,cityDecor);
   box(3.7,.25,.38,accent,-9.55,3.25,4.55,cityDecor);
   box(3,.17,.31,mat('#992d49'),-9.55,2.71,4.55,cityDecor);
@@ -593,7 +595,7 @@ function finishSetup(continuePrevious=false){
  $('citySetup').hidden=true;document.body.classList.remove('city-setup');
  $('gameSetup').hidden=true;document.body.classList.remove('character-setup');
  document.body.appendChild(editor);
- $('avatarOpen').setAttribute('aria-expanded','false');
+ // Character editor is closed during gameplay.
  if(data)restoreGame(data);
  else{dialogue.restoreProgress(0);applyCity(selectedCity);setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
  keys.clear();camera.position.copy(player.group.position).add(new THREE.Vector3(0,5.6,9));
@@ -607,7 +609,7 @@ $('cityReturn').onclick=()=>{window.location.href='../'};
 $('gearButton').onclick=()=>setMenu(!menuOpen);
 $('menuResume').onclick=()=>setMenu(false);
 $('menuSave').onclick=()=>saveGame();
-$('menuCharacter').onclick=()=>{saveGame(true);setMenu(false);showSetup()};
+$('menuCity').onclick=()=>{saveGame(true);setMenu(false);showCitySelection()};
 $('menuLeave').onclick=()=>{saveGame(true);window.location.href='../'};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame(true)});
 window.addEventListener('pagehide',()=>saveGame(true));
