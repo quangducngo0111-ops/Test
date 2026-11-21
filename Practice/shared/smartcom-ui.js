@@ -6,6 +6,15 @@ if(document.getElementById('sc-quick-shell'))return;
 const current=document.currentScript;
 if(!current)return;
 const root=new URL('../../',current.src);
+/* The primary-area header reads the same signed-in student as the home portal. */
+const unifiedStudent=document.querySelector('[data-sc-shared-student]');
+if(unifiedStudent){
+ try{
+  const p=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
+  unifiedStudent.textContent=p?.name&&p?.className?p.name+' · '+p.className:'Chưa chọn học sinh';
+ }catch(_){unifiedStudent.textContent='Chưa chọn học sinh'}
+}
+
 if(!document.querySelector('script[data-sc-area-loader]')){const t=document.createElement('script');t.dataset.scAreaLoader='1';t.src=new URL('assets/area-theme-loader.js?v=20261119-portal-category03',root).href;document.head.append(t);}
 if(!document.querySelector('script[data-sc-outline-icons]')){const iconScript=document.createElement('script');iconScript.dataset.scOutlineIcons='1';iconScript.src=new URL('assets/smartcom-outline-icons.js?v=20261118-icons01',root).href;document.head.append(iconScript);} // .../Test/ from .../Test/Practice/shared/
 // Electric Blue is the default theme for the Practice area.
