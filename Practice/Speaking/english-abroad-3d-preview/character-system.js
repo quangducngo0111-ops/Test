@@ -1,13 +1,17 @@
 // Procedural polished characters for Life Abroad 3D.
 // The meshes are intentionally self-contained and lightweight: no external avatars or model downloads.
-export const HAIR_STYLES=['soft-short','side-part','wavy-bob','ponytail','bun','curly','messy','long'];
-export const HAIR_COLORS=['#342b35','#594039','#885b43','#b17c4e','#c8b4a6','#7a7b87'];
+export const HAIR_STYLES=['soft-short','side-part','wavy-bob','ponytail','bun','curly','messy','long','buzz','taper','fringe','slick-back','braids','shoulder-length'];
+export const HAIR_COLORS=['#211f27','#342b35','#594039','#885b43','#b17c4e','#d5b67f','#b85c40','#7a7b87'];
 export const SKIN_COLORS=['#f6d2b4','#e9b58f','#d99d79','#b87859','#84543f'];
 export const OUTFITS=[
  {name:'Smartcom Purple',shirt:'#8866c7',pants:'#57749b',shoes:'#494c64'},
  {name:'Sky Blue',shirt:'#74b7d8',pants:'#566a94',shoes:'#3c485e'},
  {name:'Sage Green',shirt:'#64aa92',pants:'#c4a47e',shoes:'#655046'},
- {name:'Coral',shirt:'#ef9a89',pants:'#7185aa',shoes:'#5e5867'}
+ {name:'Coral',shirt:'#ef9a89',pants:'#7185aa',shoes:'#5e5867'},
+ {name:'Cream jacket',shirt:'#e5c9a7',pants:'#55738c',shoes:'#554a51'},
+ {name:'Denim blue',shirt:'#467aab',pants:'#384c70',shoes:'#eee0cc'},
+ {name:'Rose pink',shirt:'#d99cbb',pants:'#8976a1',shoes:'#67566a'},
+ {name:'Forest green',shirt:'#427f70',pants:'#d0b291',shoes:'#504950'}
 ];
 export const FACE_STYLES=['friendly','bright','gentle','confident'];
 function material(T,color,roughness=.83){return new T.MeshStandardMaterial({color,roughness,metalness:.01});}
@@ -120,57 +124,34 @@ function curvedFaceGeometry(T){
  }
  p.needsUpdate=true;g.computeVertexNormals();return g;
 }
-function createHair(T,head,style,color,faceTop=.43){
- const hair=material(T,color,.92),light=material(T,new T.Color(color).lerp(new T.Color('#fff1d2'),.13));
- const back=new T.Group();head.add(back);
- const id=HAIR_STYLES.indexOf(style);
- // Rounded scalp and hairline; leave face mostly uncovered.
- smoothSphere(T,back,hair,0,.22,-.08,.47,.36,.43,32);
- smoothSphere(T,back,light,0,.36,.035,.41,.16,.37,32);
- const bangs=(type)=>{
-  const variants=type===0?[[-.27,.37,-.01,.24],[-.09,.4,.03,.22],[.12,.39,.03,.19],[.3,.36,-.02,.18]]
-   :type===1?[[-.27,.35,.025,.24],[-.08,.4,.06,.21],[.16,.39,.04,.17]]
-   :[[-.28,.38,.04,.22],[-.08,.4,.055,.24],[.15,.37,.035,.21],[.3,.32,-.01,.18]];
-  for(const [x,y,z,l] of variants){
-   const lock=coneLock(T,back,x<0?hair:light,[x-.035,y+.12,z],[x+.02,y-l*.70,z+.10],.12);
-   lock.rotation.z=x<0?.18:-.2;
-  }
- };
- if(id===0||id===1||id===6){
-  bangs(id===1?1:0);
-  for(const side of [-1,1])smoothSphere(T,back,hair,side*.39,.05,-.01,.17,.26,.30);
-  if(id===6)for(let i=0;i<6;i++){
-   const x=-.32+i*.13;
-   coneLock(T,back,i%2?hair:light,[x,.49,-.02],[x+.05,.31,.17],.105);
-  }
-  if(id===1){const lock=coneLock(T,back,light,[.27,.36,.10],[.33,.04,.24],.15);lock.rotation.z=.36;}
- }else if(id===2||id===7){
-  bangs(2);
-  smoothSphere(T,back,hair,0,-.12,-.18,.48,.43,.35);
-  for(const side of [-1,1]){
-   smoothSphere(T,back,hair,side*.43,-.20,-.08,.19,id===7?.52:.34,.28);
-   smoothSphere(T,back,light,side*.43,-.14,.21,.11,.30,.09);
-  }
- }else if(id===3){
-  bangs(1);
-  smoothSphere(T,back,hair,0,.02,-.38,.45,.43,.26);
-  smoothSphere(T,back,light,0,-.08,-.54,.23,.34,.22,24);
-  for(let k=0;k<4;k++)smoothSphere(T,back,k%2?hair:light,Math.sin(k)*.12,-.10-k*.15,-.59,.18,.2,.17);
- }else if(id===4){
-  bangs(0);
-  smoothSphere(T,back,hair,0,.22,-.4,.48,.32,.27);
-  smoothSphere(T,back,hair,0,.30,-.61,.29,.28,.25);
- }else if(id===5){
-  for(let i=0;i<24;i++){const angle=i*2.39996,u=(i+.5)/24;
-   const y=.19+(1-u)*.43,rad=Math.sqrt(u)*.44;
-   smoothSphere(T,back,i%4?hair:light,Math.cos(angle)*rad,y,Math.sin(angle)*rad-.10,.16,.17,.17,10);
-  }
-  for(const side of [-1,1])for(let j=0;j<3;j++)smoothSphere(T,back,hair,side*.39,-.16+j*.15,-.06,.15,.16,.18,10);
- }
- return back;
+function createHair(T,head,style,color){
+ const shell=material(T,color,.91),shine=material(T,new T.Color(color).lerp(new T.Color('#fff0dc'),.10));
+ const g=new T.Group();head.add(g);
+ const cap=(x,y,z,w,h,d,m=shell)=>smoothSphere(T,g,m,x,y,z,w,h,d,32);
+ const lock=(a,b,r=.10,m=shell)=>coneLock(T,g,m,a,b,r);
+ const short=['soft-short','side-part','messy','buzz','taper','fringe','slick-back'].includes(style);
+ cap(0,.21,-.1,.467,short?.30:.36,.43);
+ cap(0,.39,-.12,.415,.11,.35,shine);
+ const bangs=(long=false,side=false)=>[-.28,-.11,.07,.24].forEach((x,i)=>lock([x,.39,.16],[x+(side?.09:.02),long?.14:.27,.33],long?.105:.085,i===1?shine:shell));
+ if(style==='buzz')return g;
+ if(style==='slick-back'){for(let i=0;i<5;i++){let x=-.29+i*.145;lock([x,.38,.24],[x,.48,-.18],.09,i===2?shine:shell);}}
+ else if(style==='fringe'){bangs(true);for(const side of [-1,1])cap(side*.39,0,-.09,.12,.27,.27);}
+ else if(style==='taper'||style==='side-part'){bangs(false,true);for(const side of [-1,1])cap(side*.38,.015,-.085,.115,.24,.26);}
+ else if(style==='soft-short'||style==='messy'){
+  bangs();for(const side of [-1,1])cap(side*.39,.015,-.07,.12,.25,.26);
+  if(style==='messy')for(let i=0;i<4;i++)lock([-.27+i*.18,.48,-.04],[-.23+i*.18,.32,.22],.085,i===1?shine:shell);
+ }else if(['wavy-bob','long','shoulder-length'].includes(style)){
+  bangs(false,true);const len=style==='long'?.58:style==='shoulder-length'?.45:.30;
+  cap(0,-.10,-.22,.46,.36+len*.32,.32);
+  for(const side of [-1,1]){const hair=cap(side*.40,-.13-len*.3,-.06,.15,.26+len*.4,.245);hair.rotation.z=-side*.07;lock([side*.34,.17,.18],[side*.40,-.15-len*.35,.21],.08,shine);}
+ }else if(style==='ponytail'){bangs(false,true);cap(0,.02,-.34,.43,.35,.27);cap(0,-.16,-.54,.20,.27,.21);lock([0,-.22,-.56],[0,-.67,-.54],.14);}
+ else if(style==='bun'){bangs();cap(0,.18,-.39,.46,.3,.27);cap(0,.32,-.58,.25,.25,.23);}
+ else if(style==='braids'){bangs(false,true);cap(0,.02,-.32,.43,.34,.28);for(const side of [-1,1])for(let i=0;i<4;i++)lock([side*.35,-.06-i*.16,-.17],[side*.36,-.22-i*.16,-.17],.13-i*.008,i%2?shine:shell);}
+ else if(style==='curly'){cap(0,.27,-.08,.49,.34,.46);for(let i=0;i<8;i++){const a=i*2.4;lock([Math.sin(a)*.32,.51,Math.cos(a)*.23-.08],[Math.sin(a)*.38,.36,Math.cos(a)*.3],.08,i%3?shell:shine);}for(const side of [-1,1])cap(side*.39,-.08,-.11,.12,.25,.25);}
+ return g;
 }
 export function createCharacter(T,opts={}){
- const o={age:'adult',face:0,style:'soft-short',hair:'#594039',skin:'#e9b58f',shirt:'#8866c7',pants:'#57749b',shoes:'#494c64',...opts};
+ const o={age:'adult',face:0,glasses:'none',style:'soft-short',hair:'#594039',skin:'#e9b58f',shirt:'#8866c7',pants:'#57749b',shoes:'#494c64',...opts};
  const group=new T.Group(),rig=new T.Group();group.add(rig);
  const scale=o.age==='child'?.77:o.age==='senior'?.94:o.age==='teen'?.93:1;
  rig.scale.setScalar(scale);
@@ -200,6 +181,18 @@ export function createCharacter(T,opts={}){
  }
  /* nose painted onto canvas face */;
  createHair(T,head,o.style,o.hair);
+ if(o.glasses&&o.glasses!=='none'){
+  const frame=material(T,o.glasses==='gold'?'#c6a06d':o.glasses==='clear'?'#dedde4':'#302d39',.42);
+  const round=o.glasses==='round'||o.glasses==='gold';
+  for(const side of [-1,1]){
+   const lens=new T.Mesh(new T.TorusGeometry(round?.12:.14,.013,8,32),frame);
+   lens.position.set(side*.18,.005,.44);lens.scale.y=round?1:.78;head.add(lens);
+   const arm=new T.Mesh(new T.BoxGeometry(.15,.015,.02),frame);
+   arm.position.set(side*.36,.025,.34);arm.rotation.y=side*.3;head.add(arm);
+  }
+  const bridge=new T.Mesh(new T.BoxGeometry(.10,.018,.02),frame);
+  bridge.position.set(0,.025,.445);head.add(bridge);
+ }
  const joints={};let leftFoot,rightFoot;
  for(const side of [-1,1]){
   const shoulder=new T.Group();shoulder.position.set(side*.42,.34,0);torso.add(shoulder);
