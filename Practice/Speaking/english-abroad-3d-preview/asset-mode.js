@@ -42,8 +42,13 @@ export function applyCharacterAsset(THREE,character,opts={},index=0,onReady=()=>
   model.position.set(-(bounds.min.x+bounds.max.x)*.5*scale,-bounds.min.y*scale,-(bounds.min.z+bounds.max.z)*.5*scale);
   baseY=model.position.y;
   model.traverse(node=>{if(node.isMesh){node.castShadow=true;node.receiveShadow=true;}});
+  // Keep the original rig visible until the GLB passes visibility checks.
+  // GLB files with empty/hidden geometry must never make a player vanish.
+  let renderable=0;
+  model.traverse(node=>{if(node.isMesh && node.geometry?.attributes?.position?.count>0){node.visible=true;renderable++;}});
+  if(renderable===0)throw new Error('GLB has no renderable meshes');
   character.group.add(model);
-  character.rig.visible=false;
+  character.rig.visible=true;
   if(gltf.animations.length){
    mixer=new THREE.AnimationMixer(model);
    for(const clip of gltf.animations)actions[clip.name.toLowerCase()]=mixer.clipAction(clip);
@@ -65,12 +70,19 @@ export function applyCharacterAsset(THREE,character,opts={},index=0,onReady=()=>
    if(!mixer){model.position.y=baseY+(speed>.22?Math.abs(Math.sin(time*8))*.035:0);model.rotation.z=speed>.22?Math.sin(time*8)*.012:0;}
    // Gentle non-skeletal motion for models lacking embedded clips.
   };
+  // Keep a guaranteed visible fallback until the GLB actually renders at least once.
+  // The first onBeforeRender is proof that WebGL submitted a mesh for this asset.
+  let confirmed=false;
+  model.traverse(node=>{if(!node.isMesh)return;const previous=node.onBeforeRender;
+    node.onBeforeRender=(...args)=>{if(previous)previous.apply(node,args);if(!confirmed&&!cancelled){confirmed=true;character.rig.visible=false;}};
+  });
   onReady();
- }).catch(err=>{console.warn('Life Abroad asset unavailable; safe procedural fallback:',path,err);});
+ }).catch(err=>{if(!cancelled){character.rig.visible=true;character.anim=originalAnim;}console.warn('Life Abroad asset unavailable; safe procedural fallback:',path,err);});
  character.dispose=()=>{
   cancelled=true;
   if(mixer)mixer.stopAllAction();
   if(model)character.group.remove(model);
+  character.rig.visible=true;
   originalDispose();
  };
  return character;
