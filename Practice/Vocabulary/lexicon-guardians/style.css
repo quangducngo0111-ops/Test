@@ -103,3 +103,41 @@ body{background:radial-gradient(circle at 3% 3%,#D3E9F0 0,transparent 30%),linea
 .realm-option-art{position:absolute;right:7px;bottom:6px;z-index:2;font-size:22px;background:#FFFFFFB8;border:1px solid #FFFFFFCC;backdrop-filter:blur(5px);width:34px;height:34px;display:grid;place-items:center;border-radius:10px}
 .realm-option-scene::before,.realm-option-scene::after{content:none!important}
 @media(max-width:650px){.realm-option-scene{min-height:80px}.realm-option-art{width:30px;height:30px;font-size:20px}}
+
+/* Clean, sequential gameplay onboarding */
+#lexWizard[hidden],#lexBattleScreen[hidden],.lex-wizard-panel[hidden]{display:none!important}
+.lex-wizard{width:min(1120px,100%);margin:32px auto 60px;min-height:calc(100vh - 180px)}
+.lex-wizard-top{background:linear-gradient(115deg,#153E5F,#286F8B);color:#fff;border:1px solid #609CAC;border-radius:25px;padding:25px 29px;margin-bottom:18px;box-shadow:0 15px 32px #123E5C22}
+.lex-wizard-top h1{font:800 clamp(27px,3.7vw,38px)/1.12 'Baloo 2',system-ui;margin:5px 0 7px;color:#fff}
+.lex-wizard-top p{margin:0;color:#D4ECF4;font-size:13px}
+.lex-wizard-top .eyebrow{color:#8CF1DE}
+.lex-wizard-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:23px}
+.lex-wizard-track span{background:#FFFFFF13;color:#D1E6F0;border:1px solid #FFFFFF2A;padding:10px 8px;border-radius:12px;text-align:center;font:850 11px/1.35 Nunito,system-ui}
+.lex-wizard-track span.active{background:#E7FAFC;color:#145E7B;border-color:#C8F8F1}
+.lex-wizard-track span.complete{color:#A7EBDD;background:#1A7F8780;border-color:#69CEC2}
+.lex-wizard-panel{border:1px solid #C3E2EE;border-radius:24px;background:linear-gradient(145deg,#fff,#F2FAFE);padding:clamp(22px,3vw,36px);box-shadow:0 12px 30px #13547C13}
+.lex-wizard-panel .eyebrow{color:#188C9B}
+.lex-wizard-panel h2{font:800 clamp(25px,3vw,33px)/1.2 'Baloo 2',system-ui;color:#194B71;margin:9px 0}
+.lex-wizard-lead{font-size:14px;line-height:1.65;color:#607C90;max-width:760px;margin:0 0 24px}
+.lex-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lex-guide-grid>div{background:#F2FAFF;border:1px solid #CFE4EE;border-radius:17px;padding:22px 20px;min-height:115px}
+.lex-guide-grid b{font:800 18px 'Baloo 2',system-ui;color:#215A7F}
+.lex-guide-grid p{margin:9px 0 0;font-size:13px;line-height:1.6;color:#647F90}
+.lex-wizard-actions{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin-top:27px}
+.lex-wizard-actions .btn{min-height:45px;padding:12px 20px}
+.lex-wizard-actions .btn.primary{background:linear-gradient(100deg,#138E96,#1C719C);border-color:#148A9C;color:#fff}
+.lex-wizard-panel .difficulty-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0}
+.lex-wizard-panel .difficulty-picker button{min-height:145px;padding:25px 15px;border:2px solid #D7E9F0;border-radius:17px;background:#fff}
+.lex-wizard-panel .difficulty-picker button b{font:800 23px 'Baloo 2',system-ui;color:#23577D}
+.lex-wizard-panel .difficulty-picker button small{font-size:13px;color:#73879A}
+.lex-wizard-panel .difficulty-picker button.active{border-color:#16959D;background:#EAF9F6;box-shadow:0 0 0 3px #46BDB926}
+#lexMap .realm-selector{margin:0;border:0;padding:0;background:transparent;box-shadow:none}
+#lexMap .realm-selector-heading{display:none}
+#lexStudy .grimoire-panel{max-width:680px;margin:0 auto;padding:24px;border:1px solid #BEDFEA;background:#fff}
+#lexStudy .grimoire-panel .featured-card{max-width:none}
+#lexBattleScreen .game-intro{padding-top:18px}
+#lexBattleScreen .game-intro h1{font-size:26px}
+#lexBattleScreen .layout{grid-template-columns:minmax(0,1fr) 320px}
+#lexBattleScreen .rightbar{align-self:start}
+@media(max-width:920px){#lexBattleScreen .layout{grid-template-columns:minmax(0,1fr)}.lex-wizard-track{gap:5px}.lex-wizard-track span{font-size:10px}}
+@media(max-width:650px){.lex-wizard{margin:16px auto 40px}.lex-wizard-top{padding:19px 14px}.lex-wizard-panel{padding:18px 13px}.lex-guide-grid{grid-template-columns:1fr;gap:9px}.lex-guide-grid>div{padding:14px}.lex-wizard-track{display:flex;overflow-x:auto;scrollbar-width:thin}.lex-wizard-track span{min-width:95px}.lex-wizard-panel .difficulty-picker{grid-template-columns:1fr;gap:10px}.lex-wizard-panel .difficulty-picker button{min-height:80px;padding:17px}.lex-wizard-actions .btn{flex:1 1 100%}}
