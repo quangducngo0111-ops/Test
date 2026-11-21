@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-study-tools14',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-test-nav15',current.src);
 if(!document.querySelector('link[data-sc-quick-theme]')){const link=document.createElement('link');link.rel='stylesheet';link.dataset.scQuickTheme='1';link.href=asset.href;document.head.append(link);}
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -53,6 +53,8 @@ const relativePage=decodeURIComponent(location.pathname.slice(root.pathname.leng
 const exercisePage=/^(?:Wri\d+|Rea\d+|Lis\d+|Spe\d+)\/(?:index\.html)?$/i.test(relativePage) ||
  /^(?:Practice|Foundations)\/.+\/index\.html$/i.test(relativePage);
 function safeBackTarget(){
+ if(/^Practice\/Speaking\/mock-test\//i.test(relativePage))return url('?skill=speaking');
+ if(/^Practice\/Speaking\/english-abroad\//i.test(relativePage))return url('Foundations/Speaking/');
  if(/^Wri\d+\//i.test(relativePage))return url('?skill=writing');
  if(/^Rea\d+\//i.test(relativePage))return url('?skill=reading');
  if(/^Lis\d+\//i.test(relativePage))return url('?skill=listening');
@@ -107,7 +109,10 @@ const groups=[
   ['🎙️','Pre-IELTS Listening','Practice/Listening/Intensive%20Listening/'],
   ['🌍','Topic-based Dictation','Foundations/Topic-based-Listening/'],
   ['📰','Reading Library','Foundations/Reading-Library/'],
-  ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/']
+  ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
+  ['💬','Speaking','Foundations/Speaking/',[
+   ['🌍','English Abroad','Practice/Speaking/english-abroad/']
+  ]]
  ]},
  {heading:'Study Tools',links:[
   ['📒','Sổ tay từ vựng','Vocabulary-Notebook/'],
