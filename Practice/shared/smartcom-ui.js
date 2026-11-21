@@ -86,8 +86,8 @@ const backDestination=safeBackTarget();
  strip.setAttribute('role','navigation');
  strip.setAttribute('aria-label','Điều hướng bài học');
  let parent=backDestination;
- if(/^Tests\\/?(?:index\\.html)?$/i.test(route) && new URLSearchParams(location.search).has('skill'))parent=url('Tests/');
- if(/^Tests\\/?(?:index\\.html)?$/i.test(route) && !new URLSearchParams(location.search).has('skill'))parent=url('');
+ if(/^Tests\/?(?:index\.html)?$/i.test(route) && new URLSearchParams(location.search).has('skill'))parent=url('Tests/');
+ if(/^Tests\/?(?:index\.html)?$/i.test(route) && !new URLSearchParams(location.search).has('skill'))parent=url('');
  const currentHref=location.href.split('#')[0];
  if(parent===currentHref||parent===currentHref.split('?')[0])parent=url('');
  const makeLink=(href,label,svg)=>{
