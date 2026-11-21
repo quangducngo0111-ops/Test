@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {applyCharacterAsset,installStreetAsset} from './asset-mode.js?v=20261121-visiblefix4';
 import {setupCafeDialogue} from './dialogue.js?v=20261121-saveflow6';
 import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-art-round2';
-// LIFE ABROAD 3D — Phase 0 Art Gate.
+// WORLDSPEAK 3D — character -> destination -> exploration.
 // Palette: Smartcom violet #3b0e90, orange #ff9c00, sky blue #65bee4.
 // Lighting: ACES filmic, sRGB, 2.2 hemispheric fill + warm directional sun, soft shadow.
 // Materials: warm pastel MeshStandard flat-shaded, rounded/tapered procedural silhouettes.
@@ -289,7 +289,8 @@ previewCanvas.addEventListener('pointerup',()=>editorDragging=false);
 previewCanvas.addEventListener('pointercancel',()=>editorDragging=false);
 buildPreview();
 let inside=false;
-let gameStarted=false,menuOpen=false,setupActive=true;
+let gameStarted=false,menuOpen=false,setupActive=true,citySetupActive=false;
+let selectedCity='london',currentCity='london';
 const SAVE_KEY='lifeAbroad3D.save.v1';
 let savedGame=null;
 try { const parsed=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(parsed?.version===1&&Array.isArray(parsed.position)&&parsed.position.length===3)savedGame=parsed; }catch(e){console.warn('Saved game not readable',e)}
@@ -334,8 +335,8 @@ function interact(){if(dialogue.isOpen())return;
  if(nearAction==='enter')setInside(true);else if(nearAction==='exit')setInside(false);
  else showNotice(inside?'Đến gần Mia ở quầy để trò chuyện.':'Tiến lại gần cửa quán cà phê để tương tác.');}
 window.addEventListener('keydown',e=>{
- if(e.code==='Escape'&&!e.repeat){if(setupActive)return;if(dialogue.isOpen()){dialogue.close();return;}if(editorOpen){setEditor(false);return;}if(photoMode){togglePhoto();return;}setMenu(!menuOpen);return;}
-  if(setupActive||menuOpen)return;
+ if(e.code==='Escape'&&!e.repeat){if(setupActive||citySetupActive)return;if(dialogue.isOpen()){dialogue.close();return;}if(editorOpen){setEditor(false);return;}if(photoMode){togglePhoto();return;}setMenu(!menuOpen);return;}
+  if(setupActive||citySetupActive||menuOpen)return;
   if(e.code==='KeyP'&&!e.repeat&&!dialogue.isOpen()&&!editorOpen){togglePhoto();return}
   if(dialogue.isOpen()||editorOpen){if(e.code==='Escape'&&dialogue.isOpen())dialogue.close();return}
  if(e.target?.closest?.('input,textarea,select,button'))return;
@@ -397,7 +398,7 @@ function animate(){
  const dt=Math.min(.06,clock.getDelta());t+=dt;
  let f=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0)+joystick.y;
  let r=(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0)+joystick.x;
- const magnitude=dialogue.isOpen()||editorOpen||photoMode||!gameStarted||menuOpen?0:Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
+ const magnitude=dialogue.isOpen()||editorOpen||photoMode||!gameStarted||menuOpen||citySetupActive?0:Math.min(1,Math.hypot(f,r));desired.set(0,0,0);
  if(magnitude>.1){
   forward.set(Math.sin(yaw),0,-Math.cos(yaw));
   right.set(Math.cos(yaw),0,Math.sin(yaw));
@@ -432,7 +433,7 @@ function animate(){
   const baristaDistance=player.group.position.distanceTo(barista.group.position);
   nearAction=baristaDistance<2.95?'talk':player.group.position.z>3.5?'exit':'';
  }else nearAction=Math.abs(player.group.position.x+1.7)<1.5&&Math.abs(player.group.position.z+2.9)<2.5?'enter':'';
- $('interact').hidden=!nearAction||dialogue.isOpen()||menuOpen||setupActive;
+ $('interact').hidden=!nearAction||dialogue.isOpen()||menuOpen||setupActive||citySetupActive;
  if(nearAction)$('interact').textContent=nearAction==='enter'?'E · Enter Café':nearAction==='talk'?'E · Talk to Mia':'E · Exit to Street';
  target.copy(player.group.position).add(new THREE.Vector3(0,photoMode&&photoPreset===0?1.55:1.18,0));
  const cameraPos=new THREE.Vector3(Math.sin(yaw)*dist*Math.cos(pitch),dist*Math.sin(pitch)+1.2,Math.cos(yaw)*dist*Math.cos(pitch));
@@ -451,7 +452,7 @@ function animate(){
 function saveGame(silent=false){
  if(!gameStarted)return false;
  const data={version:1,savedAt:new Date().toISOString(),inside,
-  position:player.group.position.toArray(),rotation:player.group.rotation.y,
+  city:currentCity,position:player.group.position.toArray(),rotation:player.group.rotation.y,
   camera:{yaw,pitch,dist},avatar:{...avatarSettings},timeMode,conversationTurn:dialogue.getProgress()};
  try{
   localStorage.setItem(SAVE_KEY,JSON.stringify(data));
@@ -475,6 +476,7 @@ function restoreGame(data){
   for(const [id,key] of Object.entries(avatarControls))$(id).value=String(avatarSettings[key]);
  }
  dialogue.restoreProgress(data.conversationTurn);
+ applyCity(CITIES[data.city]?data.city:'london');
  setInside(Boolean(data.inside));
  if(data.inside){player.group.position.set(THREE.MathUtils.clamp(x,-6.8,6.8),0,THREE.MathUtils.clamp(z,-7.1,5.4));}
  else{player.group.position.set(THREE.MathUtils.clamp(x,-15.8,16.8),0,THREE.MathUtils.clamp(z,-12.8,10.8));}
@@ -498,34 +500,110 @@ function setMenu(open){
  if(menuOpen)saveGame(true);
 }
 function showSetup(){
- setMenu(false);setupActive=true;gameStarted=false;
+ setMenu(false);citySetupActive=false;document.body.classList.remove('city-setup');$('citySetup').hidden=true;setupActive=true;gameStarted=false;
  document.body.classList.add('character-setup');
  $('gameSetup').hidden=false;
  $('setupEditorMount').appendChild(editor);
  editorOpen=true;editor.hidden=false;buildPreview();
  $('setupContinue').hidden=!savedGame;
 }
+
+const CITIES={
+ london:{name:'London',country:'United Kingdom',sky:'#b3dcf6',road:'#6f7890',pavement:'#f4dcbe',grass:'#8dca9b',tree:'#4ba88d',accent:'#d94f60',streetName:'LONDON HIGH STREET',cafe:'Bluebird Café'},
+ tokyo:{name:'Tokyo',country:'Japan',sky:'#c6dff5',road:'#686f8d',pavement:'#e9dfd0',grass:'#8dcfa6',tree:'#5bb58f',accent:'#d24e6a',streetName:'TOKYO SHOPPING STREET',cafe:'Sakura Café'},
+ newyork:{name:'New York',country:'United States',sky:'#9bd5f4',road:'#626f89',pavement:'#ddd9d2',grass:'#80bd94',tree:'#4c9c78',accent:'#f5b43d',streetName:'NEW YORK · MAIN STREET',cafe:'Corner Café'}
+};
+const cityDecor=new THREE.Group();outdoors.add(cityDecor);
+const themedBus=outdoors.children.find(child=>child.isGroup&&child.position.x===12&&child.position.z===7.4);
+function decorateCity(city){
+ while(cityDecor.children.length){const child=cityDecor.children[0];cityDecor.remove(child);child.traverse(node=>{if(node.isMesh){node.geometry?.dispose();const mats=Array.isArray(node.material)?node.material:[node.material];mats.forEach(m=>m?.dispose?.())}});}
+ const accent=mat(city.accent);
+ sign(city.streetName,0,5.05,-4.99,5.2,.7,city.accent,'#fff9e8',cityDecor);
+ if(currentCity==='london'){
+  box(.91,2.25,.88,accent,-10.4,1.16,-1.09,cityDecor);
+  box(.76,.28,.77,mat('#ad303e'),-10.4,2.39,-1.09,cityDecor);
+  box(.64,1.34,.055,mat('#a6d9e5'),-10.4,1.25,-.62,cityDecor);
+  sign('PHONE',-10.4,2.05,-.58,.71,.19,'#f8ebc9','#80353a',cityDecor);
+ }else if(currentCity==='tokyo'){
+  for(const x of [-10.9,-8.2])box(.23,3.2,.26,accent,x,1.65,4.55,cityDecor);
+  box(3.7,.25,.38,accent,-9.55,3.25,4.55,cityDecor);
+  box(3,.17,.31,mat('#992d49'),-9.55,2.71,4.55,cityDecor);
+  for(const x of [-4.9,7.0]){
+   cyl(.06,.07,2.4,mat('#6f667d'),x,1.24,4.25,cityDecor,8);
+   ball(.32,mat('#f9e6bf',{emissive:'#edbd84',emissiveIntensity:.35}),x,2.53,4.25,cityDecor,10,8);
+  }
+ }else{
+  const taxi=new THREE.Group();taxi.position.set(10.4,0,7.0);cityDecor.add(taxi);
+  box(1.66,.55,3.1,accent,0,.58,0,taxi);
+  box(1.35,.65,1.45,accent,0,1.13,-.23,taxi);
+  const wheelMaterial=mat('#26324c');
+  for(const x of [-.72,.72])for(const z of [-1.0,1.0]){const wheel=cyl(.31,.31,.13,wheelMaterial,x,.35,z,taxi,12);wheel.rotation.z=Math.PI/2}
+  box(.63,.18,.6,mat('#fbefb9'),0,1.57,-.2,taxi);
+  sign('TAXI',0,1.6,.2,.6,.15,'#fbeaa6','#222b49',taxi);
+ }
+}
+function applyCity(id){
+ currentCity=CITIES[id]?id:'london';selectedCity=currentCity;
+ const city=CITIES[currentCity];
+ scene.background.set(city.sky);scene.fog.color.set(city.sky);
+ materials.road.color.set(city.road);materials.street.color.set(city.pavement);
+ materials.grass.color.set(city.grass);materials.tree.color.set(city.tree);
+ if(themedBus)themedBus.visible=currentCity==='london';
+ decorateCity(city);
+ $('location').textContent='📍 '+city.name+' · '+city.country;
+ if(!inside){
+  $('mission').querySelector('h2').textContent='☕ '+city.cafe;
+  $('mission').querySelector('p').textContent='Khám phá '+city.name+', tìm quán cà phê để luyện nói tiếng Anh cùng Mia. Nhấn E để tương tác.';
+ }
+}
+function selectCity(id){
+ if(!CITIES[id])return;
+ selectedCity=id;
+ document.querySelectorAll('[data-city]').forEach(card=>{
+  const chosen=card.dataset.city===id;
+  card.classList.toggle('chosen',chosen);
+  card.setAttribute('aria-pressed',String(chosen));
+ });
+ $('cityStart').textContent='🚀 Khám phá '+CITIES[id].name;
+}
+function showCitySelection(){
+ setupActive=false;citySetupActive=true;gameStarted=false;
+ document.body.classList.remove('character-setup');
+ $('gameSetup').hidden=true;
+ editorOpen=false;editor.hidden=true;
+ document.body.appendChild(editor);
+ $('citySetup').hidden=false;
+ document.body.classList.add('city-setup');
+ selectCity(selectedCity);
+ keys.clear();
+}
+document.querySelectorAll('[data-city]').forEach(card=>card.addEventListener('click',()=>selectCity(card.dataset.city)));
+$('cityBack').onclick=()=>{citySetupActive=false;document.body.classList.remove('city-setup');$('citySetup').hidden=true;showSetup()};
+$('cityStart').onclick=()=>finishSetup(false);
+
 function finishSetup(continuePrevious=false){
  const data=continuePrevious?savedGame:null;
- setupActive=false;gameStarted=true;editorOpen=false;editor.hidden=true;
+ setupActive=false;citySetupActive=false;gameStarted=true;editorOpen=false;editor.hidden=true;
+ $('citySetup').hidden=true;document.body.classList.remove('city-setup');
  $('gameSetup').hidden=true;document.body.classList.remove('character-setup');
  document.body.appendChild(editor);
  $('avatarOpen').setAttribute('aria-expanded','false');
  if(data)restoreGame(data);
- else{dialogue.restoreProgress(0);setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
+ else{dialogue.restoreProgress(0);applyCity(selectedCity);setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
  keys.clear();camera.position.copy(player.group.position).add(new THREE.Vector3(0,5.6,9));
  saveGame(true);
- showNotice(data?'▶ Đã tiếp tục game đã lưu':'🌟 Welcome to London!');
+ showNotice(data?'▶ Đã tiếp tục game đã lưu':'🌟 Welcome to '+CITIES[currentCity].name+'!');
 }
-$('setupStart').onclick=()=>finishSetup(false);
+$('setupStart').onclick=()=>showCitySelection();
 $('setupContinue').onclick=()=>finishSetup(true);
 $('setupBack').onclick=()=>{window.location.href='../'};
+$('cityReturn').onclick=()=>{window.location.href='../'};
 $('navBack').onclick=()=>setMenu(true);
 $('navMenu').onclick=()=>setMenu(true);
 $('navSave').onclick=()=>saveGame();
 $('menuResume').onclick=()=>setMenu(false);
 $('menuSave').onclick=()=>saveGame();
-$('menuCharacter').onclick=()=>{setMenu(false);showSetup()};
+$('menuCharacter').onclick=()=>{saveGame(true);setMenu(false);showSetup()};
 $('menuLeave').onclick=()=>{saveGame(true);window.location.href='../'};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame(true)});
 window.addEventListener('pagehide',()=>saveGame(true));
