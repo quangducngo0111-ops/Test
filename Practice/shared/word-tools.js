@@ -104,7 +104,6 @@ const phraseList=Object.keys(PHRASES).sort((a,b)=>b.length-a.length);
 const speak=word=>{if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const v=new SpeechSynthesisUtterance(word);v.lang='en-GB';v.rate=.85;window.speechSynthesis.speak(v)};
 const css=document.createElement('style');
 css.textContent=[
-'@media(max-width:600px){#sc-note-button{bottom:15px;left:13px;min-height:44px;padding:6px 12px 6px 7px;font-size:12px}#sc-note-button .sc-note-icon{width:30px;height:30px}}',
 '#sc-word-menu{display:flex;gap:8px;position:fixed;z-index:2147483001;padding:10px;border-radius:15px;background:#fff;box-shadow:0 13px 35px #1a0e4466;border:1px solid #e1d5f1}',
 '#sc-word-menu[hidden],#sc-dict-modal[hidden],#sc-dict-shade[hidden]{display:none!important}',
 '#sc-word-menu button,#sc-dict-modal button{border:1px solid #d6c7ed;background:#f3edff;color:#4c239a;padding:9px 12px;border-radius:10px;font:800 13px system-ui;cursor:pointer}',
