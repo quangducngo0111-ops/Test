@@ -844,3 +844,70 @@ header.sc-unified-header .sc-unified-install{display:none!important}
  header.sc-unified-header .sc-unified-change{padding:7px 9px!important;min-height:32px!important;font-size:11px!important}
  header.sc-unified-header .sc-unified-user-name{max-width:55vw!important}
 }
+
+/* Consistent navigation bar for any nested exercise/folder page.
+   Replaces only visible legacy header, never removing its DOM or JS event listeners. */
+html body header.sc-lesson-navigation-ready{
+ display:block!important;position:sticky!important;top:0!important;
+ width:100%!important;max-width:none!important;margin:0!important;
+ min-height:61px!important;padding:0!important;z-index:950!important;
+ border:0!important;border-bottom:2px solid #78BDE8!important;
+ border-radius:0!important;
+ background:linear-gradient(100deg,#256998,#398FC8)!important;
+ box-shadow:0 2px 8px rgba(23,73,111,.11)!important;
+ color:#fff!important;
+}
+html body header.sc-lesson-navigation-ready > :not(.sc-lesson-toolbar){display:none!important}
+html body header.sc-lesson-navigation-ready .sc-lesson-toolbar{
+ width:100%!important;max-width:1480px!important;
+ min-height:59px!important;margin:0 auto!important;padding:6px 18px!important;
+ display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+ align-items:center!important;gap:12px!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+}
+html body header.sc-lesson-navigation-ready .sc-lesson-nav-controls{
+ display:flex!important;align-items:center!important;justify-content:center!important;gap:12px!important;
+ grid-column:2!important;justify-self:center!important;
+}
+html body header.sc-lesson-navigation-ready a.sc-lesson-nav-button{
+ width:45px!important;height:43px!important;display:grid!important;place-items:center!important;
+ color:#175F93!important;background:#fff!important;border:1px solid #D0E8FA!important;
+ border-radius:12px!important;box-shadow:0 2px 6px rgba(0,40,75,.09)!important;
+ text-decoration:none!important;cursor:pointer!important;padding:9px!important;
+}
+html body header.sc-lesson-navigation-ready a.sc-lesson-nav-button svg{
+ display:block!important;width:23px!important;height:23px!important;stroke:currentColor!important;
+ fill:none!important;flex:none!important;
+}
+html body header.sc-lesson-navigation-ready a.sc-lesson-nav-button:hover{
+ color:#0D4E7A!important;background:#DDF1FF!important
+}
+html body header.sc-lesson-navigation-ready .sc-lesson-nav-user{
+ display:flex!important;grid-column:3!important;justify-self:end!important;
+ align-items:center!important;gap:12px!important;min-width:0!important;
+ font:800 12px/1.4 system-ui,sans-serif!important;color:#fff!important;
+}
+html body header.sc-lesson-navigation-ready .sc-lesson-nav-student{
+ color:#fff!important;max-width:250px!important;overflow:hidden!important;
+ text-overflow:ellipsis!important;white-space:nowrap!important;
+}
+html body header.sc-lesson-navigation-ready a.sc-lesson-nav-change{
+ padding:9px 12px!important;border-radius:11px!important;
+ border:1px solid #B8DBF6!important;color:#17628F!important;
+ background:#E1F2FF!important;text-decoration:none!important;
+ font:800 12px/1.3 system-ui,sans-serif!important;white-space:nowrap!important;
+}
+html body header.sc-lesson-navigation-ready a.sc-lesson-nav-change:hover{background:#CBEBFF!important}
+@media(max-width:680px){
+ html body header.sc-lesson-navigation-ready .sc-lesson-toolbar{
+  padding:6px 10px!important;gap:5px!important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+ }
+ html body header.sc-lesson-navigation-ready .sc-lesson-nav-controls{gap:8px!important}
+ html body header.sc-lesson-navigation-ready a.sc-lesson-nav-button{
+  width:40px!important;height:40px!important;padding:8px!important
+ }
+ html body header.sc-lesson-navigation-ready .sc-lesson-nav-user{gap:5px!important}
+ html body header.sc-lesson-navigation-ready .sc-lesson-nav-student{display:none!important}
+ html body header.sc-lesson-navigation-ready a.sc-lesson-nav-change{font-size:10px!important;padding:7px 8px!important}
+}
