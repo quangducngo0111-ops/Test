@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {applyCharacterAsset,installStreetAsset} from './asset-mode.js?v=20261121-visiblefix4';
-import {setupCafeDialogue} from './dialogue.js?v=20261121-face-dialogue3';
+import {setupCafeDialogue} from './dialogue.js?v=20261121-saveflow6';
 import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-art-round2';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
 // Palette: Smartcom violet #3b0e90, orange #ff9c00, sky blue #65bee4.
@@ -294,7 +294,7 @@ const SAVE_KEY='lifeAbroad3D.save.v1';
 let savedGame=null;
 try { const parsed=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');if(parsed?.version===1&&Array.isArray(parsed.position)&&parsed.position.length===3)savedGame=parsed; }catch(e){console.warn('Saved game not readable',e)}
 let npcTalking=false;
-const dialogue=setupCafeDialogue({onTalking:value=>{npcTalking=value},onClose:()=>{keys.clear()}});
+const dialogue=setupCafeDialogue({onTalking:value=>{npcTalking=value},onClose:()=>{keys.clear()},onProgress:()=>saveGame(true)});
 
 const keys=new Set();
 const joystick={x:0,y:0,active:false};
@@ -452,7 +452,7 @@ function saveGame(silent=false){
  if(!gameStarted)return false;
  const data={version:1,savedAt:new Date().toISOString(),inside,
   position:player.group.position.toArray(),rotation:player.group.rotation.y,
-  camera:{yaw,pitch,dist},avatar:{...avatarSettings},timeMode};
+  camera:{yaw,pitch,dist},avatar:{...avatarSettings},timeMode,conversationTurn:dialogue.getProgress()};
  try{
   localStorage.setItem(SAVE_KEY,JSON.stringify(data));
   savedGame=data;
@@ -469,6 +469,12 @@ function restoreGame(data){
  if(!data||!Array.isArray(data.position)||data.position.length!==3)return false;
  const [x,y,z]=data.position;
  if(![x,y,z].every(Number.isFinite))return false;
+ if(data.avatar&&typeof data.avatar==='object'){
+  for(const key of Object.keys(avatarSettings))if(data.avatar[key]!==undefined)avatarSettings[key]=data.avatar[key];
+  replacePlayer();
+  for(const [id,key] of Object.entries(avatarControls))$(id).value=String(avatarSettings[key]);
+ }
+ dialogue.restoreProgress(data.conversationTurn);
  setInside(Boolean(data.inside));
  if(data.inside){player.group.position.set(THREE.MathUtils.clamp(x,-6.8,6.8),0,THREE.MathUtils.clamp(z,-7.1,5.4));}
  else{player.group.position.set(THREE.MathUtils.clamp(x,-15.8,16.8),0,THREE.MathUtils.clamp(z,-12.8,10.8));}
@@ -492,7 +498,7 @@ function setMenu(open){
  if(menuOpen)saveGame(true);
 }
 function showSetup(){
- setupActive=true;gameStarted=false;setMenu(false);
+ setMenu(false);setupActive=true;gameStarted=false;
  document.body.classList.add('character-setup');
  $('gameSetup').hidden=false;
  $('setupEditorMount').appendChild(editor);
@@ -506,7 +512,7 @@ function finishSetup(continuePrevious=false){
  document.body.appendChild(editor);
  $('avatarOpen').setAttribute('aria-expanded','false');
  if(data)restoreGame(data);
- else{setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
+ else{dialogue.restoreProgress(0);setInside(false);player.group.position.set(-1.8,0,5.4);player.group.rotation.y=0;yaw=-.18;pitch=.46;dist=8.8;}
  keys.clear();camera.position.copy(player.group.position).add(new THREE.Vector3(0,5.6,9));
  saveGame(true);
  showNotice(data?'▶ Đã tiếp tục game đã lưu':'🌟 Welcome to London!');
