@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-compact-glass02',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-click-only-opacity03',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -174,8 +174,6 @@ for(const group of groups){
  const name=document.createElement('span');
  name.className='sc-quick-category-name';name.textContent=categoryTitles[group.heading];
  button.append(symbol,name);
- button.addEventListener('mouseenter',e=>{if(e.pointerType!=='touch')selectQuickGroup(group)});
- button.addEventListener('focus',()=>selectQuickGroup(group));
  button.addEventListener('click',()=>{if(selectedGroup===group&&!childSection.hidden){childSection.hidden=true;selectedGroup=null;button.classList.remove('is-selected');button.setAttribute('aria-expanded','false');positionPanel()}else selectQuickGroup(group)});
  categoryGrid.append(button);
 }
@@ -187,7 +185,7 @@ backdrop.setAttribute('aria-hidden','true');
 shell.append(backdrop);
 const modalHeader=document.createElement('div');
 modalHeader.className='sc-modal-heading';
-modalHeader.innerHTML='<strong>Truy cập nhanh</strong><span>Chọn nhóm để mở các mục bên trong</span>';
+modalHeader.innerHTML='<strong>Truy cập nhanh</strong><span>Chạm hoặc click vào nhóm để xem mục con</span>';
 const modalClose=document.createElement('button');
 modalClose.type='button';modalClose.className='sc-modal-close';
 modalClose.setAttribute('aria-label','Đóng truy cập nhanh');modalClose.textContent='✕';
