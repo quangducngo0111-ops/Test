@@ -119,6 +119,33 @@ const DIFFICULTIES={
  hell:{name:"🔥 Địa ngục",ink:170,hp:80,enemyHp:1.8,enemySpeed:1.28,enemyCount:1.42,enemyDamage:1.65,bonus:.75}
 };
 let difficulty="easy",menuPad=null;
+/* Realm gallery: all ten maps can be played, each with a distinct route. */
+function renderRealmGallery(){
+ const box=$("realmGrid");if(!box)return;
+ box.innerHTML=REALMS.map((r,i)=>'<button type="button" class="realm-option '+(i===realmIndex?'active':'')+'" data-realm="'+i+'" aria-pressed="'+(i===realmIndex)+'" style="--realm-accent:'+r.accent+';--realm-sky:'+r.sky[0]+';--realm-ground:'+r.ground[0]+'"><span class="realm-option-scene"><span class="realm-option-art">'+r.icon+'</span><span class="realm-option-number">'+String(i+1).padStart(2,"0")+'</span></span><span class="realm-option-name">'+r.name+'</span><small>'+r.tag+'</small></button>').join("");
+ box.querySelectorAll("[data-realm]").forEach(button=>button.addEventListener("click",()=>{
+  const i=Number(button.dataset.realm);
+  if(i===realmIndex)return;
+  if((S.phase==="battle"||S.towers.length||S.wave>0)&&!confirm("Chuyển bản đồ sẽ bắt đầu ván mới. Tiếp tục?"))return;
+  chooseRealm(i);
+  restart();
+ }));
+}
+function chooseRealm(index){
+ realmIndex=Math.max(0,Math.min(REALMS.length-1,index));
+ const r=realm();
+ paths=r.route.map(point=>[...point]);buildPath();pads=choosePads();
+ const types=["shade","worm","bat","spider","golem","boss"];
+ types.forEach((key,i)=>{E_TYPES[key].name=r.monsters[i];E_TYPES[key].color=r.colors[i]});
+ $("realmTag").textContent=r.icon+" "+r.name;
+ $("chapterLabel").textContent="WORLD "+String(realmIndex+1).padStart(2,"0")+" · "+r.en;
+ $("arenaBiome").textContent=r.en;
+ $("arenaMapTitle").textContent=r.icon+" "+r.name;
+ $("realmCounter").textContent=String(realmIndex+1).padStart(2,"0")+" / 10";
+ renderRealmGallery();
+ log("🌍 "+r.name+" — "+r.tag+". Ôn từ để chuẩn bị phòng thủ.");
+}
+
 const mode=()=>DIFFICULTIES[difficulty];
 function showMode(){document.querySelectorAll("[data-difficulty]").forEach(b=>{b.classList.toggle("active",b.dataset.difficulty===difficulty);b.setAttribute("aria-pressed",String(b.dataset.difficulty===difficulty))});$("difficultyBadge").textContent=mode().name}
 document.querySelectorAll("[data-difficulty]").forEach(b=>b.onclick=()=>{if(S.phase==="battle")return;difficulty=b.dataset.difficulty;restart();showMode()});
@@ -298,7 +325,7 @@ let type=last?"boss":S.wave===1?pick(["shade","worm"]):S.wave===2?pick(["shade",
 let word=null;
 if(S.reviewQueue.length&&S.spawned%5===3){word=S.reviewQueue.shift();type="golem"}
 const def=E_TYPES[type],scale=(1+(S.wave-1)*.16)*mode().enemyHp,full=Math.round(def.hp*scale);
-S.enemies.push({id,type,boss:last||!!word,word,distance:0,x:-60,y:368,hp:full,maxHp:full,speed:def.speed*(last?.70:1)*mode().enemySpeed,slow:0,freeze:0,burn:0,hit:0,stun:0,seed:rnd(0,6),escaped:false});
+S.enemies.push({id,type,boss:last||!!word,word,distance:0,x:paths[0][0],y:paths[0][1],hp:full,maxHp:full,speed:def.speed*(last?.70:1)*mode().enemySpeed,slow:0,freeze:0,burn:0,hit:0,stun:0,seed:rnd(0,6),escaped:false});
 S.spawned++;
 }
 function defeat(enemy){
@@ -315,7 +342,7 @@ e.hit=Math.max(0,e.hit-dt*4);e.freeze=Math.max(0,e.freeze-dt);e.slow=Math.max(0,
 const speed=e.stun>0?0:e.freeze>0?0:e.slow>0?e.speed*.46:e.speed;
 e.distance+=speed*dt;const p=coordAt(e.distance);e.x=p.x;e.y=p.y;
 if(e.burn>0){e.hp-=11*dt;e.burn=Math.max(0,e.burn-dt)}
-if(e.distance>=totalLength){e.escaped=true;e.hp=0;S.health-=E_TYPES[e.type].damage*(e.boss?1.3:1)*mode().enemyDamage;addFX(1050,365,"#fdaf89",22);log("💔 Quái lọt vào thành! Hãy thay đổi chiến thuật tháp.")}
+if(e.distance>=totalLength){e.escaped=true;e.hp=0;S.health-=E_TYPES[e.type].damage*(e.boss?1.3:1)*mode().enemyDamage;addFX(paths[paths.length-1][0]-80,paths[paths.length-1][1],"#fdaf89",22);log("💔 Quái lọt vào thành! Hãy thay đổi chiến thuật tháp.")}
 }
 for(const tower of S.towers){
 const def=TOWERS[tower.type];if(def.damage===0)continue;tower.cooldown-=dt;tower.glow=Math.max(0,tower.glow-dt*2);
@@ -367,7 +394,7 @@ $("answerBtn").onclick=()=>{modalClose();restart()};
 }
 function restart(){
 Object.assign(S,{phase:"study",paused:false,speed:1,wave:0,health:mode().hp,ink:mode().ink,score:0,combo:0,correct:0,attempts:0,studyIndex:0,studySet:shuffle(words).slice(0,10),seen:new Set(),selectedType:"quill",selectedPad:null,towers:[],enemies:[],bullets:[],fx:[],floating:[],misses:[],spawned:0,targetSpawn:0,spawnClock:0,reviewQueue:[],finished:false,challengeLock:false});
-pads[11].type="locked";menuPad=null;showWord();renderArsenal();renderSelected();showMode();log("Lật 8 thẻ Sách Phép, rồi xây tháp chuẩn bị cho 5 đợt quái.");updateHUD();
+if(pads[11])pads[11].type="locked";menuPad=null;showWord();renderArsenal();renderSelected();showMode();log("Lật 8 thẻ Sách Phép, rồi xây tháp chuẩn bị cho 5 đợt quái.");updateHUD();
 }
 $("restartBtn").onclick=()=>{if(S.phase==="battle"&&!confirm("Bắt đầu lại sẽ xóa tiến độ ván chơi hiện tại. Tiếp tục?"))return;restart();openTutorial()};
 function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
@@ -516,5 +543,5 @@ if(!S.paused){if(!S.challengeLock)update(dt*S.speed);for(const f of S.fx){f.x+=f
 S.fx=S.fx.filter(f=>f.life>0);S.floating=S.floating.filter(f=>f.life>0);
 render();if(!S.lastHUD||now-S.lastHUD>=200){updateHUD();S.lastHUD=now}requestAnimationFrame(loop);
 }
-restart();log("📖 Lật 8 thẻ Sách Phép để bắt đầu. Mỗi từ đúng sẽ tạo nên sức mạnh cho Lexica.");openTutorial();requestAnimationFrame(loop);
+chooseRealm(0);restart();log("📖 Chọn bản đồ, lật 8 thẻ từ vựng rồi dựng phòng tuyến để bắt đầu.");openTutorial();requestAnimationFrame(loop);
 })();
