@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Life Abroad 3D · Phase 0 Visual Test</title>
+<meta name="theme-color" content="#3b0e90">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{--purple:#3b0e90;--orange:#ff9c00;--sky:#65bee4;--ink:#30244d}*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;font:700 14px Nunito,system-ui;color:var(--ink);background:#c2dcf0}
+button,select{font:inherit;cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+#viewport{position:fixed;inset:0}#viewport canvas{display:block;width:100%;height:100%}
+#loading{position:fixed;inset:0;background:linear-gradient(135deg,#29175c,#6947a5);color:#fff;display:grid;place-items:center;z-index:20;font-size:22px;text-align:center}
+#loading[hidden]{display:none}.spinner{width:42px;height:42px;border:5px solid #ffffff66;border-top-color:#ffc36c;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 18px}@keyframes spin{to{transform:rotate(360deg)}}
+header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:center;gap:12px;pointer-events:none}
+.brand{display:flex;align-items:center;gap:11px;padding:11px 17px;border-radius:19px;background:#fffef6ec;box-shadow:0 9px 27px #28355f23;backdrop-filter:blur(12px)}
+.logo{display:grid;place-items:center;width:40px;height:40px;color:#fff;background:linear-gradient(145deg,#3b0e90,#a56be5);border-radius:13px;font-size:20px}
+.brand b{display:block;font-size:15px;color:#43217d}.brand small{font-size:11px;color:#9276af;font-weight:800}
+.preview-tag{background:#352369e6;border:1px solid #b5a0e8;color:#fff;padding:11px 15px;border-radius:13px;box-shadow:0 8px 25px #2b195b26;font-weight:900}
+.panel{position:fixed;z-index:5;background:#fffef6ee;border:1px solid #ffffffea;border-radius:20px;padding:15px;box-shadow:0 13px 33px #29354e2a;backdrop-filter:blur(14px)}
+#settings{top:92px;right:18px;width:225px}#settings h2{margin:0 0 9px;color:#452180;font-size:16px}
+.control{display:flex;align-items:center;justify-content:space-between;gap:7px;margin:8px 0}.control label{font-size:12px}.control select{max-width:125px;border:1px solid #e0d7f4;background:#f8f4ff;border-radius:9px;padding:7px;color:#381c79}
+.toggle{background:#472890;color:white;border:0;padding:8px 12px;border-radius:10px;font-size:12px}
+#mission{left:18px;bottom:18px;max-width:330px}
+#mission h2{margin:0 0 5px;color:#49298a;font-size:19px}#mission p{margin:0;color:#706183;font-size:12px;line-height:1.55}
+#location{position:fixed;top:100px;left:18px;background:#fff9e9e9;color:#544487;z-index:4;border-radius:13px;padding:9px 13px;font-size:12px}
+#interact{position:fixed;z-index:6;left:50%;bottom:105px;transform:translateX(-50%);padding:12px 20px;background:#3b0e90;color:#fff;border:2px solid #ffbc54;border-radius:15px;font-size:14px;box-shadow:0 12px 22px #311e6750}
+#interact[hidden]{display:none}
+#legend{position:fixed;bottom:18px;right:18px;background:#fff9e9ed;border-radius:14px;padding:11px 15px;font-size:12px;color:#55416b;box-shadow:0 5px 18px #20233f30;z-index:4;max-width:250px}
+#notice{position:fixed;z-index:7;top:18px;left:50%;transform:translateX(-50%);background:#3b0e90;color:white;border-radius:12px;padding:10px 18px;display:none;max-width:75vw;text-align:center}
+#pad{display:none;position:fixed;z-index:6;bottom:23px;left:20px;width:116px;height:116px;background:#ffffff64;border:2px solid #ffffffad;border-radius:50%;touch-action:none}
+#stick{position:absolute;width:50px;height:50px;background:#7654b4b8;border-radius:50%;left:31px;top:31px}
+#actionMobile{display:none;position:fixed;z-index:6;bottom:39px;right:22px;width:76px;height:76px;border-radius:50%;background:#3b0e90;color:#fff;border:3px solid #ffbb62;font-size:14px}
+@media(max-width:750px){header{left:10px;top:8px}.brand{padding:8px 10px}.brand small{display:none}.brand b{font-size:11px}.preview-tag{font-size:10px;padding:9px}#settings{right:9px;top:74px;width:178px;padding:11px}#settings h2{font-size:13px}.control{font-size:11px}#location{top:81px;left:10px;max-width:43vw}#mission{bottom:13px;left:10px;max-width:45vw;padding:10px}#mission h2{font-size:13px}#mission p{font-size:10px}#legend{display:none}#pad,#actionMobile{display:block}#interact{bottom:145px;font-size:11px}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+</head><body>
+<div id="loading"><div><div class="spinner"></div>Đang dựng thành phố 3D…<p style="font-size:13px;opacity:.7">Phase 0 · Visual Test</p></div></div>
+<div id="viewport" aria-label="Khung cảnh 3D"></div>
+<header><div class="brand"><span class="logo">✦</span><span><b>LIFE ABROAD 3D</b><small>English Speaking World</small></span></div><span class="preview-tag">PHASE 0 · ART TEST</span></header>
+<div id="location">📍 London · Neighbourhood Street</div>
+<div id="settings" class="panel"><h2>🎨 Visual Test</h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button></div>
+<div id="mission" class="panel"><h2>☕ Visit the café</h2><p>Đi bộ đến quán cà phê có mái hiên màu cam, nhấn <b>E</b> để vào. Đây là cảnh đồ họa thử nghiệm, chưa có chấm điểm hay hội thoại AI.</p></div>
+<div id="legend">WASD / phím mũi tên: Đi lại · Shift: Chạy · Kéo chuột: Xoay camera · E: Tương tác</div>
+<button id="interact" hidden>Nhấn E · Enter Café</button><div id="notice" role="status"></div>
+<div id="pad"><div id="stick"></div></div><button id="actionMobile" type="button">E · Vào</button>
+<script type="module" src="./main.js?v=20261121-phase0a"></script>
+</body></html>
