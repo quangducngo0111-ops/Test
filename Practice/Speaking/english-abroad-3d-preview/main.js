@@ -192,6 +192,12 @@ for(const n of npcs){outdoors.add(n.group);n.group.position.set(...n.pos)}
 // Interior barista; scripted dialogue is intentionally deferred to Phase 3.
 const barista=character({skin:SKIN_COLORS[2],shirt:'#5eac95',pants:'#564a65',hair:HAIR_COLORS[0],style:'ponytail',face:1,age:'adult'});
 cafe.add(barista.group);barista.group.position.set(3.4,0,-4.0);
+const talkBadge=new THREE.Sprite(new THREE.SpriteMaterial({
+ map:signTexture('MIA · TALK [E]','#fff8e9','#48227c',512,130),
+ transparent:true,depthTest:false
+}));
+talkBadge.position.set(0,2.65,0);talkBadge.scale.set(2.15,.54,1);barista.group.add(talkBadge);
+
 
 /* Live character editor and isolated 3D turntable preview. The game world is not rebuilt. */
 const editor=$('avatarEditor');
