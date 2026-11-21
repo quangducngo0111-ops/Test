@@ -78,9 +78,39 @@ header{position:fixed;left:18px;top:16px;z-index:5;display:flex;align-items:cent
 body.dialogue-active #legend,body.dialogue-active #interact,body.dialogue-active #mission{display:none!important}
 @media(max-width:750px){#dialoguePanel{bottom:6px;padding:12px;max-height:90vh}#npcSpeech{font-size:15px;padding:11px}.dialogue-reply{flex-wrap:wrap}#studentReply{flex-basis:100%}#dialogueMic,#dialogueSend{flex:1}}
 </style>
+
+<style id="game-navigation-styles">
+#gameNav{position:fixed;top:13px;left:14px;z-index:12;display:flex;gap:8px}
+#gameNav button{border:1px solid #e9dcff;background:#fffdf7f5;color:#3b0e90;border-radius:13px;padding:11px 15px;box-shadow:0 5px 20px #251b4a24;font-weight:900}
+#gameMenu[hidden],#gameSetup[hidden]{display:none!important}
+#gameMenu,#gameSetup{position:fixed;inset:0;z-index:23;background:#17152eaf;backdrop-filter:blur(9px);display:grid;place-items:center;padding:16px}
+#gameMenu .menuCard,#gameSetup .setupCard{width:min(440px,96vw);background:#fffdf8;border:2px solid white;border-radius:25px;box-shadow:0 24px 80px #100f305e;padding:25px;text-align:center}
+#gameMenu h2,#gameSetup h2{font-size:25px;color:#3b0e90;margin:4px 0 8px}
+#gameMenu p,#gameSetup p{font-size:13px;color:#625579;line-height:1.5}
+.menuActions{display:grid;gap:10px;margin-top:18px}
+.menuActions button,.setupActions button{padding:13px 16px;border-radius:13px;border:1px solid #cfb7f5;background:#f6f0ff;color:#3b0e90;font-weight:900}
+.menuActions .primary,.setupActions .primary{background:linear-gradient(100deg,#6e40cf,#3b0e90);color:white;border:0}
+#gameSetup{display:none}
+body.character-setup #gameSetup{display:grid}
+body.character-setup #avatarEditor{display:block!important;position:relative;top:auto;right:auto;bottom:auto;width:min(390px,calc(100vw - 36px));max-height:min(76vh,680px);z-index:25;box-shadow:none;margin:0 auto;padding:12px 0;background:transparent;border:0;overflow:auto}
+body.character-setup #avatarOpen,body.character-setup #avatarClose,body.character-setup #gameNav{display:none!important}
+body.character-setup #gameSetup{display:flex;flex-direction:column;justify-content:center;overflow:auto}
+body.character-setup #gameSetup .setupCard{width:min(480px,96vw);max-height:97vh;overflow:auto}
+body.character-setup #avatarEditor h2{font-size:18px}
+body.character-setup #avatarCanvas{height:205px!important}
+body.character-setup #avatarEditor .hint{font-size:10px}
+.setupActions{display:grid;gap:9px;margin-top:12px}
+#saveStatus{font-size:12px;color:#6a5683;min-height:18px}
+body.character-setup header,body.character-setup #mission,body.character-setup #settings,body.character-setup #location,body.character-setup #interact,body.character-setup #legend,body.character-setup #pad,body.character-setup #actionMobile{display:none!important}
+body.menu-open #interact,body.menu-open #pad,body.menu-open #actionMobile{display:none!important}
+@media(max-width:750px){#gameNav{top:8px;left:9px}#gameNav button{padding:8px 10px;font-size:12px}#gameSetup .setupCard{padding:16px!important}}
+</style>
 </head><body>
 <div id="loading"><div><div class="spinner"></div>Đang tải thế giới 3D…<p style="font-size:13px;opacity:.7">Phase 0 · 3D Asset Mode</p></div></div>
 <div id="viewport" aria-label="Khung cảnh 3D"></div>
+<div id="gameNav"><button id="navBack" type="button">← Quay lại</button><button id="navSave" type="button">💾 Lưu game</button><button id="navMenu" type="button">☰ Menu · Esc</button></div>
+<div id="gameMenu" hidden role="dialog" aria-modal="true" aria-label="Tạm dừng game"><div class="menuCard"><h2>⏸️ Tạm dừng</h2><p>Tiến độ được lưu trên trình duyệt đang sử dụng.</p><div id="saveStatus" role="status"></div><div class="menuActions"><button class="primary" id="menuResume">▶ Tiếp tục chơi</button><button id="menuSave">💾 Lưu tiến độ</button><button id="menuCharacter">✨ Đổi nhân vật</button><button id="menuLeave">← Về trang Speaking</button></div></div></div>
+<div id="gameSetup" role="dialog" aria-modal="true" aria-label="Chọn nhân vật trước khi chơi"><div class="setupCard"><h2>✨ Chọn nhân vật</h2><p>Chọn nhân vật của em trước khi bắt đầu khám phá London!</p><div id="setupEditorMount"></div><div class="setupActions"><button id="setupStart" class="primary" type="button">🚀 Bắt đầu chơi</button><button id="setupContinue" type="button" hidden>▶ Chơi tiếp bản đã lưu</button><button id="setupBack" type="button">← Về trang Speaking</button></div></div></div>
 <header><div class="brand"><span class="logo">✦</span><span><b>LIFE ABROAD 3D</b><small>English Speaking World</small></span></div><span class="preview-tag">PHASE 0 · ASSET MODE</span></header>
 <div id="location">📍 London · Neighbourhood Street</div>
 <div id="settings" class="panel"><h2>🎨 Asset Mode</h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button>
@@ -127,5 +157,5 @@ body.photo-mode header,body.photo-mode #location,body.photo-mode #settings,body.
 </section>
 <div id="notice" role="status"></div>
 <div id="pad"><div id="stick"></div></div><button id="actionMobile" type="button">E · Vào</button>
-<script type="module" src="./main.js?v=20261121-visiblefix4"></script>
+<script type="module" src="./main.js?v=20261121-navigation5"></script>
 </body></html>
