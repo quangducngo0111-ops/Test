@@ -22,7 +22,13 @@ function getSheet_(ss, name, headers) {
 function doPost(e) {
   const p=e?.parameter||{};
   const mode=String(p.mode||'').trim().toUpperCase();
-  const id=String(p.attemptId||'').trim();
+  // Older exercises may not send attemptId: derive a stable best-effort key.
+  // New exercises must provide their own unique attemptId.
+  const supplied=String(p.attemptId||'').trim();
+  const fallback=[p.mode,p.name,p.className,p.practiceId||p.testId,p.submittedAt||'',p.score,p.total,p.durationSeconds,p.details].join('|');
+  const digest=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,fallback,Utilities.Charset.UTF_8);
+  const legacyId='legacy-'+digest.map(b=>('0'+(b&255).toString(16)).slice(-2)).join('').slice(0,40);
+  const id=supplied||legacyId;
   if(!RESULT_TABS[mode])return json_({ok:false,error:'INVALID_MODE'});
   if(!id||id.length>160)return json_({ok:false,error:'MISSING_ATTEMPT_ID'});
   if(!String(p.name||'').trim()||!String(p.className||'').trim())return json_({ok:false,error:'MISSING_STUDENT'});
