@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-level-replace04',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-progress-home05',current.src);
 const link=document.createElement('link');link.rel='stylesheet';link.href=asset.href;document.head.append(link);
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -84,6 +84,7 @@ const quickIconPaths={
  '⏰':'<circle cx="12" cy="13" r="8"/><path d="M12 8v5l3 2M5 2 2 5m17-3 3 3"/>',
  '↩️':'<path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/>',
  '🏠':'<path d="m3 11 9-8 9 8v10H3V11Z"/><path d="M9 21v-7h6v7"/>',
+ '📊':'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 17v-5m5 5V8m5 9v-7"/>',
  '🎯':'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'
 };
 const groups=[
@@ -105,7 +106,7 @@ const groups=[
   ['📗','Grammar','Practice/Grammar/'],['🧠','Vocabulary','Practice/Vocabulary/'],
   ['📒','Sổ tay từ vựng','Vocabulary-Notebook/'],['⏰','Nhắc từ vựng','Vocabulary-Notebook/#vocabReminder']
  ]},
- {heading:'Điều hướng',links:[['↩️','Quay lại',backDestination],['🏠','Trang chủ',''],['🎯','Skill Practice','Practice/']]}
+ {heading:'Tiến độ học tập',links:[['📊','Tiến độ học tập','Progress/'],['🏠','Trang chủ','']]}
 ]
 
 /* One continuous capsule: the original round lightning button expands upward. */
@@ -119,9 +120,9 @@ const tools=document.createElement('div');
 tools.className='sc-capsule-list';
 tools.id='sc-quick-panel';
 tools.setAttribute('aria-label','Các lối tắt');
-const categoryTitles={'Mock Tests':'TEST','Skill Practice':'PRACTICE','Foundations':'FOUNDATIONS','Điều hướng':'NAV'};
-const categoryIcons={'Mock Tests':'🎯','Skill Practice':'📖','Foundations':'🧩','Điều hướng':'🏠'};
-const categoryClasses={'Mock Tests':'sc-quick-test','Skill Practice':'sc-quick-practice','Foundations':'sc-quick-foundations','Điều hướng':'sc-quick-nav'};
+const categoryTitles={'Mock Tests':'TEST','Skill Practice':'PRACTICE','Foundations':'FOUNDATIONS','Tiến độ học tập':'TIẾN ĐỘ HỌC TẬP'};
+const categoryIcons={'Mock Tests':'🎯','Skill Practice':'📖','Foundations':'🧩','Tiến độ học tập':'📊'};
+const categoryClasses={'Mock Tests':'sc-quick-test','Skill Practice':'sc-quick-practice','Foundations':'sc-quick-foundations','Tiến độ học tập':'sc-quick-nav'};
 function quickSvg(icon){
  const svg=quickIconPaths[icon]||quickIconPaths['🎯'];
  return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+svg+'</svg>';
@@ -210,10 +211,6 @@ shell.append(backdrop);
 const modalHeader=document.createElement('div');
 modalHeader.className='sc-modal-heading';
 modalHeader.innerHTML='';
-const modalClose=document.createElement('button');
-modalClose.type='button';modalClose.className='sc-modal-close';
-modalClose.setAttribute('aria-label','Đóng truy cập nhanh');modalClose.textContent='✕';
-tools.append(modalClose);
 const toggle=document.createElement('button');
 toggle.type='button';
 toggle.className='sc-capsule-trigger';
@@ -324,7 +321,6 @@ window.addEventListener('resize',()=>setLauncher(launcherPosition.side,launcherP
 requestAnimationFrame(()=>setLauncher(launcherPosition.side,launcherPosition.y));
 
 backdrop.addEventListener('click',()=>setOpen(false));
-modalClose.addEventListener('click',()=>{setOpen(false);toggle.focus()});
 document.addEventListener('pointerdown',e=>{if(!shell.contains(e.target))setOpen(false)});
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'&&shell.classList.contains('sc-open')){setOpen(false);toggle.focus()}
