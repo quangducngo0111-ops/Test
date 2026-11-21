@@ -120,9 +120,37 @@ const DIFFICULTIES={
 };
 let difficulty="easy",menuPad=null;
 /* Realm gallery: all ten maps can be played, each with a distinct route. */
+function realmPreview(r){
+ const path=r.route.map(([x,y])=>((x+60)/1240*200).toFixed(1)+","+((y-32)/596*100).toFixed(1)).join(" ");
+ const sky=r.sky[0],ground=r.ground[0],road=r.road[2],outline=r.road[0];
+ const stars=["moon","cyber","crystal"].includes(r.id);
+ const decor=stars
+  ? '<circle cx="166" cy="22" r="15" fill="#FFFFFF66"/><circle cx="42" cy="17" r="2" fill="#FFFFFF"/><circle cx="132" cy="13" r="2" fill="#FFFFFF"/>'
+  : '<ellipse cx="164" cy="16" rx="22" ry="9" fill="#FFFFFF77"/><ellipse cx="40" cy="19" rx="31" ry="8" fill="#FFFFFF55"/>';
+ const landscape=r.id==="volcano"
+  ? '<path d="M118 56 149 10 182 56Z" fill="#503341"/><path d="M142 22 149 10 156 22Z" fill="#FF9254"/>'
+  :r.id==="desert"
+  ? '<path d="M119 52 153 17 188 52Z" fill="#D39A56"/><path d="M153 17 188 52 153 52Z" fill="#F6D494"/>'
+  :r.id==="moon"
+  ? '<circle cx="151" cy="38" r="22" fill="#AEB9CF"/><circle cx="141" cy="32" r="6" fill="#7F93B4"/>'
+  :r.id==="glacier"
+  ? '<path d="M116 56 141 8 161 53 171 23 191 56Z" fill="#DFF7FE"/>'
+  :r.id==="cyber"
+  ? '<path d="M123 55V21h14v34h6V9h17v46h8V24h19v31Z" fill="#354C8C"/><path d="M129 28h6m18-9h5m0 10h5m13 4h6" stroke="#60F8EA" stroke-width="2"/>'
+  :r.id==="crystal"
+  ? '<path d="m118 55 11-40 13 40 12-51 17 51 12-32 9 32" fill="#D1B5F4"/>'
+  :r.id==="islands"
+  ? '<path d="M122 54q22-23 63 0Z" fill="#F5D39A"/><path d="M151 45V20m0 0q25-12 30 5m-30-5q-29-9-35 5" stroke="#438D83" stroke-width="5" fill="none"/>'
+  :r.id==="swamp"
+  ? '<path d="M137 56V23m-11 5q10-18 22 0m-21 2q-22-10-28 3" stroke="#2E6A65" stroke-width="7" fill="none"/>'
+  :r.id==="plains"
+  ? '<path d="M153 55V18m-19 19 38-38m-38 0 38 38" stroke="#E3F2D2" stroke-width="6"/>'
+  :'<path d="M155 55V20m-27 14q20-52 53 0" stroke="#317D6D" stroke-width="11" fill="none"/>';
+ return '<svg viewBox="0 0 200 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="100" fill="'+sky+'"/>'+decor+'<path d="M0 39 43 24 97 36 145 24 200 41V100H0Z" fill="'+ground+'"/>'+landscape+'<polyline points="'+path+'" fill="none" stroke="'+outline+'" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/><polyline points="'+path+'" fill="none" stroke="'+road+'" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="194" cy="'+((r.route[r.route.length-1][1]-32)/596*100).toFixed(1)+'" r="5" fill="'+r.accent+'"/></svg>';
+}
 function renderRealmGallery(){
  const box=$("realmGrid");if(!box)return;
- box.innerHTML=REALMS.map((r,i)=>'<button type="button" class="realm-option '+(i===realmIndex?'active':'')+'" data-realm="'+i+'" aria-pressed="'+(i===realmIndex)+'" style="--realm-accent:'+r.accent+';--realm-sky:'+r.sky[0]+';--realm-ground:'+r.ground[0]+'"><span class="realm-option-scene"><span class="realm-option-art">'+r.icon+'</span><span class="realm-option-number">'+String(i+1).padStart(2,"0")+'</span></span><span class="realm-option-name">'+r.name+'</span><small>'+r.tag+'</small></button>').join("");
+ box.innerHTML=REALMS.map((r,i)=>'<button type="button" class="realm-option '+(i===realmIndex?'active':'')+'" data-realm="'+i+'" aria-pressed="'+(i===realmIndex)+'" style="--realm-accent:'+r.accent+';--realm-sky:'+r.sky[0]+';--realm-ground:'+r.ground[0]+'"><span class="realm-option-scene">'+realmPreview(r)+'<span class="realm-option-art">'+r.icon+'</span><span class="realm-option-number">'+String(i+1).padStart(2,"0")+'</span></span><span class="realm-option-name">'+r.name+'</span><small>'+r.tag+'</small></button>').join("");
  box.querySelectorAll("[data-realm]").forEach(button=>button.addEventListener("click",()=>{
   const i=Number(button.dataset.realm);
   if(i===realmIndex)return;
