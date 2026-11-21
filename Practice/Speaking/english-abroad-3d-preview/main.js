@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {applyCharacterAsset,installStreetAsset} from './asset-mode.js?v=20261121-assetmode2';
+import {applyCharacterAsset,installStreetAsset} from './asset-mode.js?v=20261121-visiblefix4';
 import {setupCafeDialogue} from './dialogue.js?v=20261121-face-dialogue3';
 import {createCharacter,HAIR_STYLES,HAIR_COLORS,SKIN_COLORS,FACE_STYLES,OUTFITS} from './character-system.js?v=20261121-art-round2';
 // LIFE ABROAD 3D — Phase 0 Art Gate.
