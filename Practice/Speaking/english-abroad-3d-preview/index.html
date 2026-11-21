@@ -83,7 +83,20 @@ body.dialogue-active #legend,body.dialogue-active #interact,body.dialogue-active
 <div id="viewport" aria-label="Khung cảnh 3D"></div>
 <header><div class="brand"><span class="logo">✦</span><span><b>LIFE ABROAD 3D</b><small>English Speaking World</small></span></div><span class="preview-tag">PHASE 0 · ART TEST</span></header>
 <div id="location">📍 London · Neighbourhood Street</div>
-<div id="settings" class="panel"><h2>🎨 Visual Test</h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button></div>
+<div id="settings" class="panel"><h2>🎨 Visual Test</h2><div class="control"><label for="timeChoice">Ánh sáng</label><select id="timeChoice"><option value="day">☀️ Ban ngày</option><option value="dusk">🌇 Hoàng hôn</option><option value="night">🌙 Ban đêm</option></select></div><div class="control"><label for="quality">Đồ họa</label><select id="quality"><option value="auto">Tự động</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div><div class="control"><label>Hiệu suất</label><strong id="fps">— FPS</strong></div><button id="resetCamera" class="toggle">↺ Đặt lại góc nhìn</button>
+<button id="photoToggle" class="toggle">📷 Photo Mode (P)</button>
+<div id="debugControls"><label><input id="debugShadow" type="checkbox" checked> Shadows</label><label><input id="debugPost" type="checkbox" checked> Color grade</label><label><input id="debugWire" type="checkbox"> Wireframe</label></div>
+</div>
+<style>
+#photoPanel[hidden]{display:none!important}
+#photoPanel{position:fixed;z-index:9;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:#fffdf8f2;border-radius:15px;padding:10px 14px;box-shadow:0 8px 24px #1e244d55}
+#photoPanel select{padding:7px;border-radius:9px;border:1px solid #c8b7dd}
+body.photo-mode header,body.photo-mode #location,body.photo-mode #settings,body.photo-mode #mission,body.photo-mode #legend,body.photo-mode #interact,body.photo-mode #avatarOpen,body.photo-mode #pad,body.photo-mode #actionMobile{display:none!important}
+#photoToggle{margin-top:8px}
+#debugControls{margin-top:8px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:5px}
+#debugControls label{display:flex;gap:4px;align-items:center}
+</style>
+<div id="photoPanel" hidden><strong>📷 Photo Mode</strong><select id="photoView" aria-label="Góc máy ảnh"><option value="0">Character close-up</option><option value="1">Street view</option><option value="2">Three-quarter view</option><option value="3">Wide view</option></select><button id="photoExit" class="toggle">Thoát (P)</button></div>
 <div id="mission" class="panel"><h2>☕ Visit the café</h2><p>Đi bộ đến quán cà phê có mái hiên màu cam, nhấn <b>E</b> để vào. Đây là cảnh đồ họa thử nghiệm, chưa có chấm điểm hay hội thoại AI.</p></div>
 <button type="button" id="avatarOpen" aria-controls="avatarEditor" aria-expanded="false">✨ Tạo nhân vật</button>
 <aside id="avatarEditor" hidden role="dialog" aria-modal="false" aria-labelledby="avatarEditorTitle">
@@ -114,5 +127,5 @@ body.dialogue-active #legend,body.dialogue-active #interact,body.dialogue-active
 </section>
 <div id="notice" role="status"></div>
 <div id="pad"><div id="stick"></div></div><button id="actionMobile" type="button">E · Vào</button>
-<script type="module" src="./main.js?v=20261121-face-dialogue3"></script>
+<script type="module" src="./main.js?v=20261121-art-round2"></script>
 </body></html>
