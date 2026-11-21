@@ -3,26 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#201b45">
+<meta name="theme-color" content="#142940">
 <meta name="description" content="Lexicon Guardians — game chiến thuật phòng thủ học từ vựng tiếng Anh">
 <title>Lexicon Guardians — Vệ Binh Từ Vựng</title>
-<link rel="stylesheet" href="./style.css?v=20261113-context-difficulty-v4">
+<link rel="stylesheet" href="./style.css?v=20261121-ten-realms01">
 </head>
 <body>
 <div class="app">
 <header class="top">
   <a class="back" href="../">← Vocabulary Practice</a>
   <div class="brand"><span class="brand-sigil">✦</span><div><strong>LEXICON <em>GUARDIANS</em></strong><small>VỆ BINH TỪ VỰNG • VƯƠNG QUỐC LEXICA</small></div></div>
-  <div class="top-actions"><span class="realm-tag">🌿 Rừng Ngôn Từ</span><button id="soundBtn" class="iconbtn" title="Bật/tắt hiệu ứng âm thanh">🔊</button><button id="helpBtn" class="iconbtn" title="Hướng dẫn">?</button></div>
+  <div class="top-actions"><span class="realm-tag" id="realmTag">🌲 Rừng Cổ Đại</span><button id="soundBtn" class="iconbtn" title="Bật/tắt hiệu ứng âm thanh">🔊</button><button id="helpBtn" class="iconbtn" title="Hướng dẫn">?</button></div>
 </header>
 <main>
 <section class="game-intro">
-  <div><span class="eyebrow">CHAPTER 01 · THE FORGOTTEN FOREST</span><h1>Thức tỉnh phép thuật <span>ngôn từ</span></h1><p>Quái Quên Lãng đang tiến tới Cổ Thành. Mỗi từ bạn ghi nhớ sẽ biến thành sức mạnh phòng thủ!</p></div>
+  <div><span class="eyebrow" id="chapterLabel">WORLD 01 · ANCIENT FOREST</span><h1>Chinh phục <span>10 thế giới huyền thoại</span></h1><p>Chọn chiến trường, dựng phòng tuyến và ngăn những đạo quân quái vật. Trả lời thử thách từ vựng để kích hoạt sức mạnh của tháp!</p></div>
   <div class="realm-badges"><span>🏹 TOWER DEFENSE</span><span>📚 A2–C1</span><span>✨ 5 WAVES</span><span id="difficultyBadge">🌿 DỄ</span></div>
+</section>
+<section class="realm-selector" aria-labelledby="realmPickerTitle">
+ <div class="realm-selector-heading"><div><span class="eyebrow">CHOOSE YOUR REALM</span><h2 id="realmPickerTitle">10 chiến trường · 10 thế giới</h2><p>Mỗi bản đồ có đường đi, cảnh quan và chủng quái vật riêng.</p></div><span class="realm-counter" id="realmCounter">01 / 10</span></div>
+ <div class="realm-grid" id="realmGrid" role="group" aria-label="Chọn bản đồ chiến đấu"></div>
 </section>
 <section class="hud">
  <div class="hud-health"><div class="hud-title"><span>❤️ SỨC MẠNH THÀNH TRÌ</span><b id="hpText">100 / 100</b></div><div class="meter"><i id="hpFill"></i></div></div>
- <div class="hud-stat"><span class="stat-icon">🖋️</span><div><small>MỰC PHÉP</small><strong id="inkText">200</strong></div></div>
+ <div class="hud-stat"><span class="stat-icon">⚡</span><div><small>NĂNG LƯỢNG</small><strong id="inkText">200</strong></div></div>
  <div class="hud-stat"><span class="stat-icon">🌊</span><div><small>ĐỢT QUÁI</small><strong id="waveText">0 / 5</strong></div></div>
  <div class="hud-stat"><span class="stat-icon">⭐</span><div><small>ĐIỂM</small><strong id="scoreText">0</strong></div></div>
  <div class="hud-stat"><span class="stat-icon">🔥</span><div><small>COMBO</small><strong id="comboText">×1</strong></div></div>
@@ -30,10 +34,10 @@
 </section>
 <div class="layout">
  <section class="arena-shell">
-  <div class="arena-head"><div><span class="eyebrow">THE LIVING KINGDOM</span><h2>🌳 Rừng Lexica</h2></div><div class="arena-controls"><span class="battle-state" id="phaseText">Đang nghiên cứu phép thuật</span><button id="pauseBtn" class="iconbtn" title="Tạm dừng" disabled>Ⅱ</button><button id="speedBtn" class="iconbtn" title="Tốc độ">1×</button></div></div>
-  <div class="canvas-shell"><canvas id="board" width="1120" height="660" aria-label="Bản đồ phòng thủ. Di chuột hoặc chạm vào bệ tròn có viền sáng, rồi bấm để xây hoặc nâng cấp tháp."></canvas><div class="pad-hover-tip" id="padHoverTip" hidden role="status">✦ Bấm để chọn bệ</div><div id="floatingNotice" class="floating-notice">Lật thẻ trong Sách Phép để bắt đầu cuộc phiêu lưu</div><div id="waveNotice" class="wave-notice" aria-live="polite" hidden></div></div>
+  <div class="arena-head"><div><span class="eyebrow" id="arenaBiome">ANCIENT FOREST</span><h2 id="arenaMapTitle">🌲 Rừng Cổ Đại</h2></div><div class="arena-controls"><span class="battle-state" id="phaseText">Đang nghiên cứu phép thuật</span><button id="pauseBtn" class="iconbtn" title="Tạm dừng" disabled>Ⅱ</button><button id="speedBtn" class="iconbtn" title="Tốc độ">1×</button></div></div>
+  <div class="canvas-shell"><canvas id="board" width="1120" height="660" aria-label="Bản đồ phòng thủ. Di chuột hoặc chạm vào bệ tròn có viền sáng, rồi bấm để xây hoặc nâng cấp tháp."></canvas><div class="pad-hover-tip" id="padHoverTip" hidden role="status">✦ Bấm để chọn bệ</div><div id="floatingNotice" class="floating-notice">Chọn bản đồ, lật thẻ từ và xây phòng tuyến để bắt đầu!</div><div id="waveNotice" class="wave-notice" aria-live="polite" hidden></div></div>
   <div class="arena-bottom">
-   <div class="legend"><span><i class="legend-dot normal"></i> Bệ thường</span><span><i class="legend-dot hill"></i> Đồi cao</span><span><i class="legend-dot water"></i> Bến nước</span><span><i class="legend-dot well"></i> Giếng Mực</span></div>
+   <div class="legend"><span><i class="legend-dot normal"></i> Bệ phòng thủ</span><span><i class="legend-dot hill"></i> Vị trí cao</span><span><i class="legend-dot water"></i> Bệ nguyên tố</span><span><i class="legend-dot well"></i> Lõi năng lượng</span></div>
    <div class="arena-buttons"><button id="criticalBtn" class="btn critical" disabled>⚡ Phép chí mạng <small>SPACE</small></button><button id="waveBtn" class="btn primary" disabled>▶ Bắt đầu đợt 1</button></div>
   </div>
   <div class="battle-log"><span>📜 NHẬT KÝ CHIẾN ĐẤU</span><p id="battleLog">Chạm vào Sách Phép bên phải, ghi nhớ ít nhất 8 từ để thức tỉnh vương quốc.</p></div>
@@ -61,8 +65,8 @@
 <div class="lex-tutorial" id="lexTutorial" role="dialog" aria-modal="true" aria-labelledby="lexTutorialTitle">
  <div class="lex-tutorial-card">
   <span class="lex-tutorial-eyebrow">✦ HƯỚNG DẪN TRƯỚC KHI CHƠI</span>
-  <h2 id="lexTutorialTitle">Bảo vệ vương quốc Lexica</h2>
-  <p>Chọn độ khó, sau đó hoàn thành 4 bước để bảo vệ thành.</p><div class="difficulty-picker" id="difficultyPicker" role="group" aria-label="Chọn độ khó"><button type="button" data-difficulty="easy" class="active"><b>🌿 Dễ</b><small>Thêm mực · quái yếu hơn</small></button><button type="button" data-difficulty="hard"><b>⚔️ Khó</b><small>Chiến thuật cân bằng</small></button><button type="button" data-difficulty="hell"><b>🔥 Địa ngục</b><small>Quái đông, trâu và nhanh</small></button></div>
+  <h2 id="lexTutorialTitle">Chinh phục 10 chiến trường Lexica</h2>
+  <p>Chọn một trong 10 bản đồ bên ngoài, lựa chọn độ khó rồi hoàn thành 4 bước để bảo vệ thành.</p><div class="difficulty-picker" id="difficultyPicker" role="group" aria-label="Chọn độ khó"><button type="button" data-difficulty="easy" class="active"><b>🌿 Dễ</b><small>Thêm mực · quái yếu hơn</small></button><button type="button" data-difficulty="hard"><b>⚔️ Khó</b><small>Chiến thuật cân bằng</small></button><button type="button" data-difficulty="hell"><b>🔥 Địa ngục</b><small>Quái đông, trâu và nhanh</small></button></div>
   <ol class="lex-tutorial-steps">
    <li><b>📖 Học phép</b><span>Lật ít nhất <strong>8 thẻ từ vựng</strong> trong Sách Phép.</span></li>
    <li><b>🏰 Xây tháp</b><span><strong>Bấm trực tiếp vào bệ đất trống</strong>, sau đó chọn tháp trong menu vừa mở. Trả lời thử thách từ vựng để xây.</span></li>
@@ -82,5 +86,5 @@
   </div>
  </div>
 </div>
-<script src="./game.js?v=20261113-context-difficulty-v4" defer></script>
+<script src="./game.js?v=20261121-ten-realms01" defer></script>
 </body></html>
