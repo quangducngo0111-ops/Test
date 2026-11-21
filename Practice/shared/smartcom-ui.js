@@ -23,7 +23,7 @@ if(routeParts.includes('Practice')&&!isFoundationRoute){
  }
 }
 
-const asset=new URL('./smartcom-ui.css?v=20261121-test-nav15',current.src);
+const asset=new URL('./smartcom-ui.css?v=20261121-test-teal16',current.src);
 if(!document.querySelector('link[data-sc-quick-theme]')){const link=document.createElement('link');link.rel='stylesheet';link.dataset.scQuickTheme='1';link.href=asset.href;document.head.append(link);}
 const url=path=>new URL(path,root).href;
 if(!window.SmartcomHistory&&!document.querySelector('script[data-sc-attempt-history]')){
@@ -168,6 +168,7 @@ function renderQuickLevel(){
  categoryGrid.hidden=!!current;
  childSection.hidden=!current;
  tools.classList.toggle('sc-show-children',!!current);
+ shell.classList.toggle('sc-level-test',!!current&&quickStack[0]?.heading==='Mock Tests');
  categoryGrid.querySelectorAll('button').forEach(btn=>btn.setAttribute('aria-expanded',String(!!current&&btn.dataset.group===quickStack[0]?.heading)));
  if(current){
   childTitle.textContent=current.title;
