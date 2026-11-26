@@ -1472,3 +1472,82 @@ html,body{min-height:100%;height:auto}
 .source .note-anchor:hover::before,.questionSource .note-anchor:hover::before{content:"";position:absolute;bottom:100%;left:12px;border-width:6px;border-style:solid;border-color:#281260 transparent transparent transparent;z-index:999;pointer-events:none}
 .selectionMenu [hidden]{display:none!important}
 .selectionMenu{z-index:1000!important}
+
+
+/* Shared Cambridge submission review — same information hierarchy and visual
+   treatment as The History of Glass; works in all Cambridge Passage 1/2/3. */
+.questions .review:has(.reading-unified-review),.silk-reading .review:has(.reading-unified-review){
+ display:block;margin:10px 0 2px;padding:0;border:0;background:transparent
+}
+.questions .review[hidden]{display:none!important}
+.questions .review .reading-unified-review{
+ display:block;background:#faf8ff;border:1px solid #ded3f7;
+ border-left:4px solid #7240db;border-radius:13px;
+ margin:0!important;padding:15px!important;
+ box-shadow:0 3px 10px rgba(50,24,120,.04);font-size:12px;
+}
+.reading-unified-review .review-title{
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+ margin-bottom:12px!important;color:#24135d;font-size:14px;
+}
+.reading-unified-review .reading-review-status{
+ padding:5px 10px;border-radius:7px;font-size:11px;line-height:1.3;white-space:nowrap
+}
+.reading-unified-review .reading-good{background:#eaf9ef;color:#157345}
+.reading-unified-review .reading-bad{background:#fff0ef;color:#bb3946}
+.reading-unified-review .review-row{
+ display:grid!important;grid-template-columns:minmax(92px,115px) minmax(0,1fr)!important;
+ gap:10px!important;margin:8px 0!important;line-height:1.6!important
+}
+.reading-unified-review .review-row>span{min-width:0;overflow-wrap:anywhere}
+.reading-unified-review .review-label{color:#69738b;font-size:11px;font-weight:850}
+.reading-unified-review .review-user{color:#a92744;font-weight:750}
+.reading-unified-review .review-correct{color:#148251;font-weight:850}
+.reading-unified-review .compare-box{
+ margin:14px 0 0;padding:14px;border:1px solid #d9d2f6;
+ border-radius:12px;background:#f8f6ff
+}
+.reading-unified-review .compare-heading{font-weight:850;color:#271259;margin:0 0 13px}
+.reading-unified-review .compare-item{margin:10px 0}
+.reading-unified-review .compare-label{
+ color:#6c738b;font-size:10px;font-weight:850;
+ letter-spacing:.035em;text-transform:uppercase;margin:0 0 5px
+}
+.reading-unified-review .passage-evidence{
+ display:block;position:relative;padding:12px 32px 18px 13px;
+ border:1px solid #d7e0fc;border-left:3px solid #6580e6;border-radius:8px;
+ background:#ecf2ff;color:#34477b;font:italic 12px/1.7 system-ui,sans-serif;
+ cursor:pointer;white-space:normal;overflow-wrap:anywhere
+}
+.reading-unified-review .passage-evidence:hover{background:#e4ecff}
+.reading-unified-review .passage-evidence:focus-visible{outline:3px solid #8054e4;outline-offset:2px}
+.reading-unified-review .passage-evidence .evidence-help{
+ margin-top:7px;color:#7e899b;font:500 10px/1.4 system-ui,sans-serif
+}
+.reading-unified-review .passage-evidence.reading-no-evidence{
+ color:#766e88;background:#f5f2f9;border-left-color:#c8c1db;
+ cursor:default;font-style:normal
+}
+.reading-unified-review .passage-evidence.reading-no-evidence:after{content:none}
+.reading-unified-review .passage-evidence.reading-no-evidence:hover{background:#f5f2f9}
+.reading-unified-review .compare-analysis{
+ color:#37415d;background:#fff;border:1px solid #e5e1ef;
+ border-radius:8px;padding:11px 12px;line-height:1.65
+}
+.reading-unified-review .conclusion{
+ padding:10px 12px;margin-top:10px;border:1px solid #c1e6d1;
+ background:#effbf3;color:#137246;border-radius:8px;font-weight:850
+}
+/* Evidence navigation is non-destructive: never replace annotated text nodes. */
+.passageSource .passage-paragraph.evidence-focus{
+ background:rgba(255,219,70,.27)!important;
+ border-radius:7px!important;outline:3px solid #ffc64c!important;
+ outline-offset:4px!important;box-shadow:0 0 0 7px #fff1aa50!important;
+ transition:background .2s ease;scroll-margin-block:90px
+}
+@media(max-width:620px){
+ .reading-unified-review .review-row{grid-template-columns:1fr!important;gap:2px!important}
+ .questions .review .reading-unified-review{padding:11px!important}
+ .reading-unified-review .compare-box{padding:10px}
+ .reading-unified-review .review-title{align-items:flex-start}
+}
