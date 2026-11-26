@@ -116,7 +116,7 @@
   }else{
    const wordScript=document.createElement('script');
    wordScript.dataset.scWordTools='1';
-   wordScript.src='../../../shared/word-tools.js?v=20261121-no-legacy-notebook09';
+   wordScript.src='../../../shared/word-tools.js?v=20261126-silk-dictionary-click01';
    wordScript.addEventListener('load',installSharedDictionary,{once:true});
    document.body.append(wordScript);
   }
