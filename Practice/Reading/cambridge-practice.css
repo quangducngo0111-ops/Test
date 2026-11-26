@@ -1559,3 +1559,56 @@ html,body{min-height:100%;height:auto}
   max-width:100%;font-size:12px!important;line-height:1.7!important;
   overflow-wrap:break-word;white-space:normal!important;
 }
+
+
+/* Stable Cambridge lesson startup: never paint empty questions or a 00:00
+   placeholder while data and the question renderer are loading. */
+@keyframes sc-reading-boot-reveal {
+  from {opacity:0}
+  to {opacity:1}
+}
+body.sc-reading-booting:not(.sc-reading-ready) {
+  overflow:hidden;
+  background:#f3f6fd;
+}
+body.sc-reading-booting:not(.sc-reading-ready) > header,
+body.sc-reading-booting:not(.sc-reading-ready) > main,
+body.sc-reading-booting:not(.sc-reading-ready) > footer {
+  visibility:hidden!important;
+}
+body.sc-reading-booting:not(.sc-reading-ready)::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:1500;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 40%, #fbf9ff 0%, #f2f6fc 68%, #eaf0fc 100%);
+  animation:sc-reading-boot-reveal .18s .15s both;
+}
+body.sc-reading-booting:not(.sc-reading-ready)::after {
+  content:"SMARTCOM  ·  READING PRACTICE\aĐang chuẩn bị bài đọc…";
+  white-space:pre-line;
+  position:fixed;
+  left:50%;
+  top:50%;
+  z-index:1501;
+  transform:translate(-50%,-50%);
+  width:min(400px,calc(100% - 40px));
+  padding:32px 22px;
+  border:1px solid #e7dcff;
+  border-radius:18px;
+  background:#fff;
+  color:#3b0e90;
+  box-shadow:0 20px 65px rgba(34,22,78,.08);
+  text-align:center;
+  font:700 15px/2.1 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  letter-spacing:.015em;
+  pointer-events:none;
+  animation:sc-reading-boot-reveal .18s .15s both;
+}
+@media (prefers-reduced-motion:reduce) {
+  body.sc-reading-booting:not(.sc-reading-ready)::before,
+  body.sc-reading-booting:not(.sc-reading-ready)::after {
+    animation:none;
+  }
+}
