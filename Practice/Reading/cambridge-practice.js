@@ -258,7 +258,7 @@ $('nav').addEventListener('click',e=>{const n=e.target.closest('[data-n]')?.data
 function fmt(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
 function getProfile(){
  const normalize=(name,cls)=>({
-  name:String(name||'').trim().replace(/\\s+/g,' '),
+  name:String(name||'').trim().replace(/\s+/g,' '),
   className:canonicalStudentClass(cls)
  });
  // The homepage is the source of truth. Reuse its saved learner before asking
