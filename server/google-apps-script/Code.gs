@@ -3,6 +3,11 @@
  * Deploy as Web app: Execute as Me; access Anyone. Use the /exec URL in the portal.
  * IMPORTANT: Keep existing sheet columns intact; append only.
  */
+// Verified destination spreadsheet: "Theo dõi BTVN".
+// Explicit ID works for both standalone and spreadsheet-bound Apps Script projects.
+const RESULT_SPREADSHEET_ID = '1pBSYFuiN6FNVrce1nMTUQa2INLyTrqrx4r7XWs_rVAA';
+const RESULT_RECEIVER_VERSION = '2026-11-26-v2';
+function workbook_() {return SpreadsheetApp.openById(RESULT_SPREADSHEET_ID)}
 const RESULT_TABS = {PRACTICE:'PRACTICE_RESULTS',TEST:'TEST_RESULTS'};
 const PRACTICE_HEADER = ['Timestamp','Họ tên','Lớp','Skill','Dạng bài','Practice ID','Điểm','Tổng','% Đúng','Thời gian','Chi tiết'];
 const TEST_HEADER = ['Timestamp','Họ tên','Lớp','Điểm','Tổng','% Đúng','Thời gian','Chi tiết','Kiểm tra điểm'];
@@ -34,7 +39,7 @@ function doPost(e) {
   if(!String(p.name||'').trim()||!String(p.className||'').trim())return json_({ok:false,error:'MISSING_STUDENT'});
   const score=String(p.score??''),total=String(p.total??'');
   const details=String(p.details||'{}').slice(0,48000);
-  const ss=SpreadsheetApp.getActiveSpreadsheet();
+  const ss=workbook_();
   const lock=LockService.getDocumentLock()||LockService.getScriptLock();
   if(!lock.tryLock(20000))return json_({ok:false,error:'BUSY'});
   try {
@@ -69,10 +74,17 @@ function doPost(e) {
 }
 function doGet(e) {
   const p=e?.parameter||{};
-  if(p.action!=='status')return json_({ok:true,service:'Smartcom IELTS result receiver'});
+  if(p.action==='health') {
+    try{
+      const book=workbook_();
+      return json_({ok:true,service:'Smartcom IELTS result receiver',
+        version:RESULT_RECEIVER_VERSION,ready:!!book.getSheetByName('PRACTICE_RESULTS')},p.callback);
+    }catch(error){console.error(error);return json_({ok:false,error:'SHEET_UNAVAILABLE'},p.callback)}
+  }
+  if(p.action!=='status')return json_({ok:true,service:'Smartcom IELTS result receiver',version:RESULT_RECEIVER_VERSION},p.callback);
   const id=String(p.attemptId||'').trim();
   if(!id)return json_({ok:false,error:'MISSING_ATTEMPT_ID'},p.callback);
-  const ss=SpreadsheetApp.getActiveSpreadsheet();
+  const ss=workbook_();
   const index=ss.getSheetByName(INDEX_TAB);
   if(!index)return json_({ok:true,recorded:false,attemptId:id},p.callback);
   const cell=index.createTextFinder(id).matchEntireCell(true).findNext();
