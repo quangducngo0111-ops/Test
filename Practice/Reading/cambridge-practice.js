@@ -276,30 +276,114 @@ function begin(){
 $('startButton').addEventListener('click',begin);const profile=getProfile();$('studentName').value=profile.name||'';$('studentClass').value=profile.className||'';if(profile.name&&profile.className)begin();
 function accepted(n){const text=String(D.answers[n]||'').replace(/^\d+\.\s*/,'').trim();const variants=new Set([text,text.replace(/[()]/g,''),text.replace(/\([^)]*\)/g,'').trim()]);const split=text.split(/\s*\/\s*/);if(split.length>1){split.forEach(v=>variants.add(v.trim()));if(split.length===2&&split[0].includes(' ')&&!split[1].includes(' '))variants.add(split[0].replace(/\S+$/,split[1]));}return [...variants].map(v=>v.trim()).filter(Boolean)}
 function isCorrect(n,answer){const choices=accepted(n);return choices.some(x=>norm(x)===norm(answer)||norm(x.replace(/[()]/g,''))===norm(answer))}
-function findEvidence(answer){const source=$('source').textContent.toLowerCase();const candidates=accepted(answer);for(const item of candidates){let term=item.replace(/\(.+?\)/g,'').trim().toLowerCase();if(term.length<4)continue;let pos=source.indexOf(term);if(pos>=0)return {pos,len:term.length}}return null}
-function focusEvidence(n){
- const hit=findEvidence(n);if(!hit)return;
- const source=$('source'),walker=document.createTreeWalker(source,NodeFilter.SHOW_TEXT);
- let node,offset=0;
- while((node=walker.nextNode())){
-  const length=node.textContent.length;
-  if(hit.pos<offset+length){
-   const pos=hit.pos-offset,range=document.createRange();
-   range.setStart(node,Math.max(0,pos));range.setEnd(node,Math.min(length,pos+hit.len));
-   const mark=document.createElement('mark');mark.className='evidence-focus';
-   try{range.surroundContents(mark)}catch(err){node.parentElement?.scrollIntoView({behavior:'smooth',block:'center'});return;}
-   mark.scrollIntoView({behavior:'smooth',block:'center'});
-   setTimeout(()=>{if(mark.isConnected)mark.replaceWith(...mark.childNodes)},6000);
-   return;
-  }
-  offset+=length;
- }
+/* Shared review presentation follows the History of Glass review layout.
+ * The Cambridge source data contains answer keys but not expert explanations.
+ * Only link evidence that is verified within the visible passage text. */
+const reviewSource= new URL('./cambridge-review-evidence.json?v=20261126-verified01',document.currentScript.src);
+let reviewedCitations={};
+const reviewReady=fetch(reviewSource).then(r=>r.ok?r.json():{items:{}}).then(j=>{
+ reviewedCitations=j?.items?.[D.id]||{};
+ if(submitted)renderAllReviews();
+}).catch(()=>{reviewedCitations={};});
+const reviewTargets=new Map();
+const plain=s=>String(s||'').replace(/\s+/g,' ').trim();
+function findQuoteParagraph(quote){
+ if(!quote)return null;
+ const needle=plain(quote).toLocaleLowerCase();
+ return [...$('source').querySelectorAll('.passage-paragraph')].find(p=>plain(p.textContent).toLocaleLowerCase().includes(needle))||null;
 }
-$('submit').addEventListener('click',async()=>{if(submitted)return;if(!confirm('Nộp bài và xem đáp án?'))return;submitted=true;clearInterval(tick);localStorage.setItem(key+'_seconds',String(elapsed));
- let score=0;for(let n=beginning;n<=ending;n++){const result=isCorrect(n,answers[n]||'');if(result)score++;let review=$('review'+n);review.hidden=false;review.innerHTML='<div class="'+(result?'good':'bad')+'">'+(result?'✓ Chính xác':'✕ Chưa chính xác')+'</div><div>Đáp án: <strong>'+esc(D.answers[n]||'Đang đối chiếu')+'</strong></div><div class="evidenceHint">'+(findEvidence(n)?'<button type="button" data-focus="'+n+'">Tìm từ khóa trong Passage</button>':'Đối chiếu thông tin trong đoạn đọc bên trái')+'</div>';$('row'+n)?.querySelectorAll('input,select').forEach(el=>el.disabled=true);$('nav'+n).classList.add(result?'correct':'wrong')}
- $('result').hidden=false;$('result').textContent='Kết quả: '+score+'/'+(ending-beginning+1)+' · Thời gian '+fmt(elapsed);$('submit').disabled=true;
- const endpoint=D.resultEndpoint||'';if(endpoint){try{await fetch(endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Reading',practiceType:'Reading Passage '+D.passage,practiceId:D.folder,score:String(score),total:String(ending-beginning+1),durationSeconds:String(elapsed),details:JSON.stringify({source:D.id,answers,answerKey:D.answers}),submittedAt:new Date().toISOString()})})}catch(e){console.warn('Could not submit practice result',e)}}});
-$('answerList').addEventListener('click',e=>{const n=e.target.closest('[data-focus]')?.dataset.focus;if(n)focusEvidence(Number(n))});
+function fallbackQuote(n){
+ const choices=accepted(n).map(x=>x.replace(/\([^)]*\)/g,'').trim())
+  .filter(x=>x.length>=3&&!/^(TRUE|FALSE|NOT GIVEN|YES|NO|[A-H]|[ivx]+)$/i.test(x));
+ if(choices.length!==1)return null;
+ const term=choices[0];
+ const matches=[...$('source').querySelectorAll('.passage-paragraph')].filter(p=>{
+  const hay=plain(p.textContent).toLocaleLowerCase(),needle=term.toLocaleLowerCase();
+  const index=hay.indexOf(needle);
+  return index>=0 && (index===0||!/[\p{L}]/u.test(hay[index-1])) &&
+   (index+needle.length===hay.length||!/[\p{L}]/u.test(hay[index+needle.length]));
+ });
+ if(matches.length!==1)return null; // Never use the first of several ambiguous occurrences.
+ const passage=plain(matches[0].textContent);
+ const location=passage.toLocaleLowerCase().indexOf(term.toLocaleLowerCase());
+ const from=Math.max(0,passage.lastIndexOf('.',location-1)+1);
+ const ending=passage.indexOf('.',location+term.length);
+ let quote=passage.slice(from,ending<0?undefined:ending+1).trim();
+ if(quote.length>250){
+  const start=Math.max(0,location-95),finish=Math.min(passage.length,location+term.length+105);
+  quote=passage.slice(start,finish).trim();
+ }
+ return findQuoteParagraph(quote)?{
+  quote,
+  analysis:'Đáp án '+String(D.answers[n])+' xuất hiện trong đoạn trích. Cần đối chiếu nghĩa của từ, ngữ cảnh và yêu cầu số từ trong câu hỏi.',
+  origin:'answer-match'
+ }:null;
+}
+function citationFor(n){
+ const citation=reviewedCitations[n];
+ if(citation&&findQuoteParagraph(citation.quote))return {quote:citation.quote,analysis:citation.analysis||'',origin:'reviewed'};
+ return fallbackQuote(n);
+}
+function renderReviewCard(n){
+ const target=$('review'+n);if(!target)return;
+ const user=String(answers[n]||'').trim()||'Chưa trả lời';
+ const correct=isCorrect(n,answers[n]||'');
+ const answer=String(D.answers[n]||'');
+ const citation=citationFor(n);
+ if(citation)reviewTargets.set(n,citation.quote);else reviewTargets.delete(n);
+ const question=questionPrompt(rawQuestions,n)||$('row'+n)?.querySelector('.qcopy')?.textContent||'Xem nội dung câu hỏi phía trên.';
+ const excerpt=citation?
+  '<div role="button" tabindex="0" class="passage-evidence" data-focus="'+n+'">“'+esc(citation.quote)+'”<div class="evidence-help">Nhấn để xem vị trí trong bài đọc</div></div>':
+  '<div class="passage-evidence reading-no-evidence">Chưa có trích dẫn được xác minh cho câu hỏi này.</div>';
+ const explanation=citation?.analysis?esc(citation.analysis):
+  'Đáp án theo bộ đề: '+esc(answer)+'. Chưa có phân tích và trích dẫn được xác minh cho câu này; không suy đoán bằng chứng chỉ từ đáp án.';
+ target.hidden=false;
+ target.innerHTML='<div class="inline-review reading-unified-review">'+
+  '<div class="review-title">Câu '+n+' <span class="reading-review-status '+(correct?'reading-good':'reading-bad')+'">'+(correct?'✓ Chính xác':'✕ Chưa chính xác')+'</span></div>'+
+  '<div class="review-row"><span class="review-label">Câu hỏi</span><span>'+esc(question)+'</span></div>'+
+  '<div class="review-row"><span class="review-label">Đáp án em chọn</span><span class="review-user">'+esc(user)+'</span></div>'+
+  '<div class="review-row"><span class="review-label">Đáp án đúng</span><span class="review-correct">'+esc(answer)+'</span></div>'+
+  '<div class="compare-box"><div class="compare-heading">🔎 Đối chiếu với bài đọc</div>'+
+  '<div class="compare-item"><div class="compare-label">Passage</div>'+excerpt+'</div>'+
+  '<div class="compare-item"><div class="compare-label">Phân tích</div><div class="compare-analysis">'+explanation+'</div></div>'+
+  '<div class="conclusion">Đáp án: '+esc(answer)+'</div></div></div>';
+}
+function renderAllReviews(){for(let n=beginning;n<=ending;n++)renderReviewCard(n)}
+function focusEvidence(n){
+ const quote=reviewTargets.get(n),node=findQuoteParagraph(quote);
+ if(!node)return;
+ $('source').querySelectorAll('.passage-paragraph.evidence-focus').forEach(p=>p.classList.remove('evidence-focus'));
+ node.classList.add('evidence-focus');
+ node.scrollIntoView({block:'center',behavior:'smooth'});
+}
+$('submit').addEventListener('click',async()=>{
+ if(submitted)return;
+ if(!confirm('Nộp bài và xem đáp án?'))return;
+ submitted=true;clearInterval(tick);localStorage.setItem(key+'_seconds',String(elapsed));
+ let score=0;
+ for(let n=beginning;n<=ending;n++){
+  const good=isCorrect(n,answers[n]||'');if(good)score++;
+  $('row'+n)?.querySelectorAll('input,select').forEach(el=>el.disabled=true);
+  $('nav'+n).classList.add(good?'correct':'wrong');
+ }
+ renderAllReviews();
+ $('result').hidden=false;
+ $('result').textContent='Kết quả: '+score+'/'+(ending-beginning+1)+' · Thời gian '+fmt(elapsed);
+ $('submit').disabled=true;
+ const endpoint=D.resultEndpoint||'';
+ if(endpoint){
+  try{await fetch(endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:new URLSearchParams({mode:'PRACTICE',name:student.name,className:student.className,skill:'Reading',practiceType:'Reading Passage '+D.passage,practiceId:D.folder,score:String(score),total:String(ending-beginning+1),durationSeconds:String(elapsed),details:JSON.stringify({source:D.id,answers,answerKey:D.answers}),submittedAt:new Date().toISOString()})})}
+  catch(e){console.warn('Could not submit practice result',e)}
+ }
+});
+$('answerList').addEventListener('click',e=>{
+ const n=e.target.closest('[data-focus]')?.dataset.focus;if(n)focusEvidence(Number(n));
+});
+$('answerList').addEventListener('keydown',e=>{
+ if(e.key!=='Enter'&&e.key!==' ')return;
+ const n=e.target.closest('[data-focus]')?.dataset.focus;
+ if(n){e.preventDefault();focusEvidence(Number(n))}
+});
 const selectionMenu=$('selectionMenu');
 
 const scHighlightColors=[['Vàng','#fff29a'],['Xanh lá','#bbefcb'],['Xanh dương','#b9dbff'],['Hồng','#ffc5dc'],['Tím','#d9c8ff'],['Cam','#ffd4a0']];
