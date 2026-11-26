@@ -93,6 +93,43 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 
 /* Screenshot-matched: illustration to the left, article to the right. */
 @media(min-width:761px){#reader.dolphin-reader .dolphin-reading-split{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)}#reader.dolphin-reader #dolphinAnimationSlot{grid-column:1;grid-row:1;top:18px}#reader.dolphin-reader #articleText{grid-column:2;grid-row:1}.dolphin-scene-visual{aspect-ratio:16/9}}
+
+/* Cinematic dolphin stage, scoped to this one article only. */
+#reader.dolphin-reader article{max-width:1300px}
+#reader.dolphin-reader .dolphin-reading-split{position:relative;display:block;isolation:isolate;width:100%;aspect-ratio:16/9;min-height:540px;overflow:hidden;border-radius:24px;background:#082c42;box-shadow:0 18px 42px #031c3538}
+#reader.dolphin-reader #dolphinAnimationSlot{display:block;position:absolute;inset:0;top:0;min-width:0;width:100%;height:100%;grid-column:auto;grid-row:auto;z-index:0}
+#reader.dolphin-reader .dolphin-scene-card{display:block;position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0;background:#092f48;box-shadow:none}
+#reader.dolphin-reader .dolphin-scene-visual{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;overflow:hidden}
+#reader.dolphin-reader .dolphin-scene-visual img,#reader.dolphin-reader .dolphin-scene-visual video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:auto;animation:none;transform:none;transition:opacity .35s ease}
+#reader.dolphin-reader .dolphin-scene-visual video[hidden],#reader.dolphin-reader .dolphin-scene-visual img[hidden]{display:none!important}
+#reader.dolphin-reader .dolphin-scene-fallback{position:absolute;left:16px;right:auto;top:auto;bottom:14px;width:min(45%,360px);min-height:54px;padding:12px;border-radius:12px;background:#001c2ca6;color:white;font-size:13px;z-index:2}
+#reader.dolphin-reader #articleText{position:absolute;z-index:2;right:0;top:0;bottom:0;left:auto;width:clamp(340px,40%,490px);height:100%;box-sizing:border-box;padding:145px 21px 92px;margin:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#8cbdcb transparent;background:#04131e9e;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);border-left:1px solid #ffffff29;font:17px/1.8 Georgia,serif;color:#f3f9fd;text-shadow:0 1px 2px #0003}
+#reader.dolphin-reader #articleText p{margin:0 0 15px;padding:13px 14px;border:1px solid transparent;border-left:3px solid transparent;border-radius:12px;line-height:1.83;color:#f5f9fd;background:#ffffff0c;cursor:pointer;transition:background .2s,border-color .2s}
+#reader.dolphin-reader #articleText p:hover{background:#ffffff1b}
+#reader.dolphin-reader #articleText p.dolphin-reading-active{background:#20c5dc2e;border-left-color:#35d9eb;border-top-color:#35d9eb24;border-right-color:#35d9eb24;border-bottom-color:#35d9eb24}
+#reader.dolphin-reader #articleText p:focus-visible{outline:3px solid #ff9c00;outline-offset:2px}
+#reader.dolphin-reader .dolphin-scene-copy{position:absolute;z-index:3;right:0;top:0;width:clamp(340px,40%,490px);box-sizing:border-box;min-height:138px;padding:22px 24px 13px;background:linear-gradient(180deg,#03121ee0,#03121ec2 78%,#03121e26);color:white;pointer-events:none}
+#reader.dolphin-reader .dolphin-scene-copy strong{color:white;font:800 21px/1.35 system-ui,sans-serif}
+#reader.dolphin-reader .dolphin-scene-copy p{display:block;color:#e8f8ff;font:14px/1.45 system-ui,sans-serif;margin:6px 0}
+#reader.dolphin-reader .dolphin-scene-copy span{color:#8fe2ef;font:700 11px/1.5 system-ui,sans-serif}
+#reader.dolphin-reader .dolphin-scene-navigation{display:flex;position:absolute;z-index:4;right:0;bottom:0;width:clamp(340px,40%,490px);box-sizing:border-box;gap:9px;padding:13px 18px;background:linear-gradient(0deg,#03121eeb,#03121eb8)}
+#reader.dolphin-reader .dolphin-scene-navigation button{min-height:43px;border:1px solid #ffffff3d;border-radius:11px;background:#ffffff1f;color:white;font:800 13px system-ui,sans-serif}
+#reader.dolphin-reader .dolphin-scene-navigation button:focus-visible{outline:3px solid #ff9c00}
+#reader.dolphin-reader .dolphin-scene-navigation button:hover:not(:disabled){background:#ffffff38}
+@media(max-width:760px){
+ #reader.dolphin-reader .dolphin-reading-split{display:block;min-height:650px;aspect-ratio:auto}
+ #reader.dolphin-reader #dolphinAnimationSlot{position:absolute;inset:0;width:100%;height:100%;top:0}
+ #reader.dolphin-reader .dolphin-scene-visual{aspect-ratio:auto}
+ #reader.dolphin-reader #articleText{left:0;right:0;top:auto;bottom:0;width:100%;height:49%;padding:86px 14px 76px;background:#04131eb3;border-left:0;border-top:1px solid #ffffff30}
+ #reader.dolphin-reader .dolphin-scene-copy{width:100%;top:auto;bottom:calc(49% - 80px);min-height:80px;padding:11px 16px;background:linear-gradient(180deg,#04131ee6,#04131ebf)}
+ #reader.dolphin-reader .dolphin-scene-copy strong{font-size:15px}
+ #reader.dolphin-reader .dolphin-scene-copy p{display:block;font-size:12px;margin:3px 0}
+ #reader.dolphin-reader .dolphin-scene-copy span{display:none}
+ #reader.dolphin-reader .dolphin-scene-navigation{display:flex;width:100%;bottom:0;padding:12px 14px}
+ #reader.dolphin-reader #articleText p{padding:11px 12px;font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){#reader.dolphin-reader .dolphin-scene-visual video{transition:none}}
+
 </style><link data-sc-site-theme="1" rel="stylesheet" href="../../assets/site-electric-blue.css?v=20261118-blue02"></head><body>
 <header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
 <main>
@@ -111,16 +148,16 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
  <div class="article-stats"><span id="articleLevel"></span><span id="articleWords"></span><span id="articleSource"></span></div>
  <figure id="articlePhoto" class="article-hero-photo" hidden><img id="articleImage" alt="" loading="lazy"><figcaption id="articlePhotoCredit"></figcaption></figure>
  <div class="dolphin-reading-split" id="dolphinReadingSplit">
-  <div id="articleText" lang="en"></div>
-  <aside id="dolphinAnimationSlot" hidden></aside>
- </div>
+   <aside id="dolphinAnimationSlot" hidden></aside>
+   <div id="articleText" lang="en"></div>
+  </div>
  
  <div class="actions"><button type="button" id="markRead">✓ Đánh dấu đã đọc</button><button type="button" id="nextArticle">Đọc bài tiếp theo</button></div>
  <p class="progress-note" id="readStatus" aria-live="polite"></p></article>
  </section>
 </main>
 <script src="./articles.js?v=20261116-sports30"></script>
-<script src="./dolphin-animation.js?v=20261126-scene03"></script>
+<script src="./dolphin-animation.js?v=20261126-overlay01"></script>
 
 <script>
 (()=>{
