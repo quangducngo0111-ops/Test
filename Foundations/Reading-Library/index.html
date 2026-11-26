@@ -46,6 +46,7 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 .article-image-placeholder .placeholder-icon{font-size:62px;line-height:1.1}
 .article-hero-photo .article-image-placeholder{height:320px;border-radius:18px}
 .article-image-placeholder[hidden],.article-hero-photo img[hidden],.article-card .article-thumb[hidden]{display:none!important}
+.dolphin-animation{margin:12px 0 28px;border:1px solid #b7e7e9;border-radius:18px;overflow:hidden;background:#06365a;box-shadow:0 12px 32px #062f4c1a}.dolphin-animation canvas{width:100%;height:auto;aspect-ratio:16/9;display:block;image-rendering:pixelated}.dolphin-animation-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 14px;background:#eef9fc;color:#17506e;font:700 12px/1.5 system-ui,sans-serif}.dolphin-animation-controls button{border:1px solid #a9dfe7;background:white;color:#153d69;padding:8px 12px;border-radius:9px;font:700 12px system-ui;cursor:pointer}.dolphin-animation-controls button:focus-visible{outline:3px solid #ff9c00;outline-offset:2px}@media(max-width:480px){.dolphin-animation-controls{flex-wrap:wrap}}
 </style><link data-sc-site-theme="1" rel="stylesheet" href="../../assets/site-electric-blue.css?v=20261118-blue02"></head><body>
 <header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
 <main>
@@ -63,13 +64,15 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
  <div class="article-label" id="articleCategory"></div><h1 id="articleTitle"></h1>
  <div class="article-stats"><span id="articleLevel"></span><span id="articleWords"></span><span id="articleSource"></span></div>
  <figure id="articlePhoto" class="article-hero-photo" hidden><img id="articleImage" alt="" loading="lazy"><figcaption id="articlePhotoCredit"></figcaption></figure>
- <div id="articleText" lang="en"></div>
+ <div id="dolphinAnimationSlot" hidden></div>
+  <div id="articleText" lang="en"></div>
  
  <div class="actions"><button type="button" id="markRead">✓ Đánh dấu đã đọc</button><button type="button" id="nextArticle">Đọc bài tiếp theo</button></div>
  <p class="progress-note" id="readStatus" aria-live="polite"></p></article>
  </section>
 </main>
 <script src="./articles.js?v=20261116-sports30"></script>
+<script src="./dolphin-animation.js?v=20261126-pixel01"></script>
 
 <script>
 (()=>{
@@ -212,8 +215,19 @@ function openArticle(i){
  $('articleTitle').textContent=item.title;$('articleLevel').textContent='Level '+item.level;
  $('articleWords').textContent=item.paragraphs.join(' ').split(/\s+/).length+' words';
  $('articleSource').hidden=true;
+ const dolphinSlot=$('dolphinAnimationSlot');
+ window.SmartcomDolphinAnimation?.dispose(dolphinSlot);
+ dolphinSlot.hidden=item.id!=='animal-dolphin-language';
+ if(!dolphinSlot.hidden)window.SmartcomDolphinAnimation?.mount(dolphinSlot);
  $('articleText').replaceChildren();item.paragraphs.forEach(paragraph=>{const p=document.createElement('p');p.textContent=paragraph;$('articleText').append(p)});
  const photo=$('articlePhoto'),img=$('articleImage'),caption=$('articlePhotoCredit');
+ if(item.id==='animal-dolphin-language'){
+  photo.hidden=true;img.removeAttribute('src');caption.replaceChildren();
+  $('readStatus').textContent=records()[item.id]?'✓ Bạn đã hoàn thành bài này.':'';
+  topicId=articleTopic(item);$('library').hidden=true;$('topicLibrary').hidden=true;$('reader').hidden=false;
+  const url=new URL(location.href);url.searchParams.set('article',item.id);history.replaceState(null,'',url);
+  scrollTo({top:0,behavior:'instant'});return;
+ }
  photo.hidden=false;img.removeAttribute('src');
  const heroPlaceholder=makeVisualPlaceholder(item);
  const existing=photo.querySelector('.article-image-placeholder');
