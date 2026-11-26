@@ -110,6 +110,18 @@ const backDestination=safeBackTarget();
     change.href=url('?changeStudent=1');change.textContent='Đổi học sinh';user.append(change);
   }
  }catch(_){}
+ // Keep the original Reading Practice timer visible inside the new toolbar.
+ // Move the real #timer node, so the existing exercise interval still updates it.
+ if(/^Practice\/Reading\//i.test(route)){
+  const timer=oldHeader.querySelector('#timer');
+  if(timer){
+   timer.classList.add('sc-lesson-nav-timer');
+   timer.setAttribute('role','timer');
+   timer.setAttribute('aria-label','Thời gian làm bài');
+   timer.title='Thời gian làm bài';
+   user.prepend(timer);
+  }
+ }
  strip.append(left,controls,user);
  oldHeader.classList.add('sc-lesson-navigation-ready');
  oldHeader.append(strip);
