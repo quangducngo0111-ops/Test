@@ -211,19 +211,22 @@ if(nativeFetch){
   const supported=typeof body==='string'||body instanceof URLSearchParams;
   if(String(opts.method||'GET').toUpperCase()==='POST'
       &&supported&&url.startsWith('https://script.google.com/macros/s/')){
-   const captured=recordLegacyPost(body.toString(),url);
+   // Centralize all Reading Practice result submissions on one receiver.
+   // Individual lessons may still carry older hardcoded endpoints.
+   const receiverUrl=/\/Practice\/Reading\//i.test(location.pathname)?ENDPOINT:url;
+   const captured=recordLegacyPost(body.toString(),receiverUrl);
    if(!captured)return nativeFetch(input,options);
    const {record,encoded}=captured;
    const forwarded={...opts,body:body instanceof URLSearchParams?new URLSearchParams(encoded):encoded};
-   return nativeFetch(input,forwarded).then(async response=>{
+   return nativeFetch(receiverUrl,forwarded).then(async response=>{
     if(record){
      // no-cors/opaque is NOT confirmation. The server must positively
      // acknowledge this exact attempt ID via the read-only status endpoint.
      let verified=false;
      if(response.type!=='opaque'&&response.ok&&response.status>=200&&response.status<300){
-      verified=(await receiptStatus(url,record.attemptId))===true;
+      verified=(await receiptStatus(receiverUrl,record.attemptId))===true;
      }else{
-      verified=(await receiptStatus(url,record.attemptId))===true;
+      verified=(await receiptStatus(receiverUrl,record.attemptId))===true;
      }
      const current=outbox();
      const idx=current.findIndex(x=>x.attemptId===record.attemptId&&x.owner===record.owner);
