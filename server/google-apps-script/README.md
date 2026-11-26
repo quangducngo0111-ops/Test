@@ -1,16 +1,35 @@
-# Smartcom IELTS → Google Sheets (server deployment)
+# Smartcom IELTS → Google Sheets receiver (deployment checklist)
 
-This folder contains the **server code**, not a functioning deployment. Editing GitHub alone will **not** change the current Google Apps Script web app.
+> **Important:** Editing `Code.gs` on GitHub does **not** modify a deployed Apps Script Web App. The developer must redeploy the running receiver.
 
-1. Open the destination spreadsheet: https://docs.google.com/spreadsheets/d/1pBSYFuiN6FNVrce1nMTUQa2INLyTrqrx4r7XWs_rVAA/edit
-2. Choose **Extensions → Apps Script** using an account with edit rights. Back up the current Apps Script before replacing any handlers (other workflows may depend on them).
-3. Add a new Apps Script project (prefer a new bound project for this receiver), paste `Code.gs` and save.
-4. **Deploy → New deployment → Web app**. Execute as **Me** and allow access to **Anyone** (only if school policy permits); copy the `/exec` URL. If an organization blocks public endpoints, use an authenticated proxy instead.
-5. Update the `ENDPOINT` constant in `Practice/shared/attempt-history.js` to this URL. Existing pages with their own Apps Script URLs must be migrated separately; enumerate and verify them.
-6. Test with a synthetic TEST/PRACTICE row, check `_SC_ATTEMPT_INDEX` and the appropriate RESULTS sheet, and verify duplicate submission does not add another row. Remove synthetic test rows afterward.
-7. Add a readable verification by polling `GET /exec?action=status&attemptId=...&callback=scAck_...`. Do not treat an opaque POST response as successful sync.
+## Verified destination
 
-Fields: `mode, name, className, skill, practiceType, practiceId, score, total, percent, attemptId, durationSeconds, details`.
-The hidden `_SC_ATTEMPT_INDEX` (optional to hide after deployment) ensures idempotency by `attemptId`.
+- Google Sheet: **Theo dõi BTVN**
+- Destination: https://docs.google.com/spreadsheets/d/1pBSYFuiN6FNVrce1nMTUQa2INLyTrqrx4r7XWs_rVAA/edit
+- Scores appear in **PRACTICE_RESULTS** and **TEST_RESULTS**.
+- `_SC_ATTEMPT_INDEX` is created by this receiver after the first successfully accepted POST; it is used for idempotent `attemptId` checks.
 
-**Warning:** This endpoint accepts writes from the public internet when deployed as Anyone. For production, add gateway authentication, abuse limits and monitoring. A secret embedded in frontend JavaScript is not a secret.
+The repository also contains `backend/google-apps-script/class-score-receiver.gs`, which writes to per-class tabs and has **no JSONP status endpoint**. Do not accidentally deploy that file in place of the result receiver unless you intentionally want the different destination/schema.
+
+## Safe deployment
+
+1. In Google Apps Script, **back up any existing project** and its deployment configuration. If it handles other workflows, **create a separate project** (using `script.google.com`) rather than overwriting the existing `doPost`.
+2. Copy the complete contents of `server/google-apps-script/Code.gs`. It specifies the destination spreadsheet ID explicitly and can work as either a standalone project or a bound script under an account with access to the destination Sheet.
+3. Save, authorize access to Google Sheets, then choose **Deploy → New deployment → Web app** (or **Manage deployments → Edit → New version** when updating the same Web App).
+4. Choose **Execute as: Me**. Set **Who has access: Anyone** only when institution policy permits. A public endpoint must be protected against abuse for production use; client-side secrets do not provide protection.
+5. Open the deployed `/exec?action=health` URL. The updated receiver should return an `ok:true`, `ready:true`, and `version:2026-11-26-v2` JSON object. A missing version indicates an old deployment.
+6. Copy the **actual newly deployed /exec URL** to the `ENDPOINT` constant in `Practice/shared/attempt-history.js`. The shared recorder now routes **Reading Practice** requests to that one endpoint even if older lessons still contain a hardcoded URL. Other test flows with direct URLs must be migrated separately.
+7. Perform **one synthetic practice submission**. Verify a new row in `PRACTICE_RESULTS` and its `attemptId` in `_SC_ATTEMPT_INDEX`. Check `/exec?action=status&attemptId=<the same ID>` returns `recorded:true`. Delete only your synthetic test records afterward.
+
+### Frontend data safety
+
+- Every new graded Reading submission now accepts either a string or a `URLSearchParams` request body, records locally, and sends the **same attemptId** on the first POST and any safe retry.
+- Do **not** infer success from `fetch(..., {mode:'no-cors'})`. Only an explicit server acknowledgement for that attempt ID confirms a recorded Sheet row.
+- Previously submitted browser-local records might be present under `SC_ATTEMPT_HISTORY_V1` and `SC_RESULT_OUTBOX_V2`. **Do not automatically resend old unknown-status attempts**, because older clients may have sent the first request without the later-generated attempt ID, and retrying could duplicate a score.
+- **Reading Library** is ungraded reading and currently stores reading progress locally. It is not supposed to write an exam score to `PRACTICE_RESULTS`.
+
+## Receiver field contract
+
+`mode, name, className, skill, practiceType, practiceId, score, total, percent, attemptId, durationSeconds, details, submittedAt`
+
+The status endpoint supports JSONP with a `scAck_` callback because the public Apps Script service does not provide normal CORS headers. The endpoint responds with `recorded:true` only after the indexed row was written.
