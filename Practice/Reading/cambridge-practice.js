@@ -385,7 +385,24 @@ selectionMenu.addEventListener('click',event=>{
  }
  addAnnotation(action);
 });
-document.addEventListener('mouseup',event=>{if(!selectionMenu.contains(event.target))setTimeout(capture,0)});
+// On Silk a click/double-click is reserved for dictionary lookup. Only a
+// deliberate text-drag should launch Highlight / Take note.
+let silkSelectionStart=null;
+document.addEventListener('mousedown',event=>{
+ if(D.id!=='cam11-test3-p1')return;
+ if(event.button===0&&event.target.closest?.('#source,#questionsSource')&&!event.target.closest?.('input,select,textarea,button')){
+  silkSelectionStart={x:event.clientX,y:event.clientY};
+ }else silkSelectionStart=null;
+},true);
+document.addEventListener('mouseup',event=>{
+ if(selectionMenu.contains(event.target))return;
+ if(D.id==='cam11-test3-p1'){
+  const drag=!!silkSelectionStart&&Math.hypot(event.clientX-silkSelectionStart.x,event.clientY-silkSelectionStart.y)>5;
+  silkSelectionStart=null;
+  if(!drag||event.detail>1){resetMenu();return;}
+ }
+ setTimeout(capture,0);
+});
 document.addEventListener('touchend',event=>{if(!selectionMenu.contains(event.target))setTimeout(capture,120)});
 document.addEventListener('mousedown',event=>{if(!selectionMenu.contains(event.target)&&!event.target.closest('.user-highlight,.note-anchor'))resetMenu()});
 document.addEventListener('click',event=>{
