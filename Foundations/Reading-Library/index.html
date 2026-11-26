@@ -130,8 +130,25 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 }
 @media(prefers-reduced-motion:reduce){#reader.dolphin-reader .dolphin-scene-visual video{transition:none}}
 
-</style><link data-sc-site-theme="1" rel="stylesheet" href="../../assets/site-electric-blue.css?v=20261118-blue02"></head><body>
-<header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
+
+/* Reading Library study features: same selection colours and notes as Practice. */
+#articleText{ text-align:justify; text-align-last:left; }
+#articleText mark.user-highlight{border-radius:3px;color:inherit;background:var(--sc-highlight-color,#fff29a);box-decoration-break:clone}
+#articleText span.note-anchor{background:rgba(130,92,217,.15);border-bottom:2px dotted #8057c1;cursor:help}
+#sc-library-mark-menu[hidden]{display:none!important}
+#sc-library-mark-menu{position:fixed;z-index:2147482900;display:flex;align-items:center;gap:6px;padding:7px;
+background:#231348;border-radius:13px;box-shadow:0 12px 30px #17103650;max-width:calc(100vw - 16px);flex-wrap:wrap}
+#sc-library-mark-menu>button{padding:8px 10px;border:0;border-radius:9px;background:#fff;color:#342068;font-size:12px;font-weight:850;white-space:nowrap;cursor:pointer}
+#sc-library-mark-menu .sc-library-colors{display:flex;align-items:center;gap:5px;padding:2px}
+#sc-library-mark-menu .sc-library-colors button{width:23px;height:23px;flex:none;border:2px solid #ffffffaf;border-radius:7px;cursor:pointer}
+#sc-library-mark-menu .sc-library-colors button[aria-pressed=true]{outline:2px solid #fff;outline-offset:1px}
+.sc-library-elapsed{font:900 16px/1.2 ui-monospace,Consolas,monospace;letter-spacing:.03em;font-variant-numeric:tabular-nums;
+background:#ebf6ff;color:#155e92;border:1px solid #c8e1f6;border-radius:10px;padding:9px 12px}
+.sc-library-elapsed[hidden],header.sc-lesson-navigation-ready #timer[hidden]{display:none!important}
+@media(max-width:600px){#sc-library-mark-menu{gap:4px}#sc-library-mark-menu>button{font-size:11px;padding:7px}}
+
+</style><link data-sc-site-theme="1" rel="stylesheet" href="../../assets/site-electric-blue.css?v=20261118-blue02"></head><body class="sc-reading-library">
+<header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><span id="timer" class="timer sc-library-elapsed" aria-label="Thời gian đọc" role="timer" title="Thời gian đọc" hidden>00:00</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
 <main>
  <section class="hero"><small>SMARTCOM · FOUNDATIONS</small><h1>Reading Library</h1><p>Đọc bài tiếng Anh trực tiếp trên Smartcom, nhấp đúp một từ để tra nghĩa, nghe phát âm và lưu vào sổ tay từ vựng.</p></section>
  <section id="library" data-view><div class="heading"><h2>Chọn chủ đề đọc</h2><span id="number">9 chủ đề</span></div>
@@ -158,6 +175,7 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 </main>
 <script src="./articles.js?v=20261116-sports30"></script>
 <script src="./dolphin-animation.js?v=20261126-overlay01"></script>
+<script src="./reading-library-tools.js?v=20261126-library-all02"></script>
 
 <script>
 (()=>{
@@ -281,6 +299,7 @@ function renderTopics(){
  $('number').textContent=TOPICS.length+' chủ đề · '+data.length+' bài đọc';
 }
 function openTopic(id,writeUrl=true){
+ window.SmartcomReadingLibraryTools?.pause();
  const t=TOPICS.find(v=>v.id===id);if(!t)return;
  topicId=id;$('topicHeading').textContent=t.icon+' '+t.title;$('activeTopicName').textContent=t.title;
  $('library').hidden=true;$('reader').hidden=true;$('topicLibrary').hidden=false;
@@ -289,6 +308,7 @@ function openTopic(id,writeUrl=true){
  scrollTo(0,0);
 }
 function showTopics(){
+ window.SmartcomReadingLibraryTools?.pause();
  $('library').hidden=false;$('topicLibrary').hidden=true;$('reader').hidden=true;
  const url=new URL(location.href);url.searchParams.delete('topic');url.searchParams.delete('article');history.replaceState(null,'',url);
  renderTopics();scrollTo(0,0);
@@ -306,6 +326,7 @@ function openArticle(i){
  $('reader').classList.toggle('dolphin-reader',!dolphinSlot.hidden);
  $('articleText').replaceChildren();item.paragraphs.forEach(paragraph=>{const p=document.createElement('p');p.textContent=paragraph;$('articleText').append(p)});
  if(!dolphinSlot.hidden)window.SmartcomDolphinAnimation?.mount(dolphinSlot,$('articleText').querySelectorAll('p'));
+ window.SmartcomReadingLibraryTools?.mount(item.id);
  const photo=$('articlePhoto'),img=$('articleImage'),caption=$('articlePhotoCredit');
  if(item.id==='animal-dolphin-language'){
   photo.hidden=true;img.removeAttribute('src');caption.replaceChildren();
@@ -347,5 +368,5 @@ const i=data.findIndex(x=>x.id===selected);
 if(i>=0)openArticle(i);else if(TOPICS.some(x=>x.id===initial.get('topic')))openTopic(initial.get('topic'),false);
 })();
 </script>
-<script src="../../Practice/shared/smartcom-ui.js?v=20261119-parent-palette03"></script>
+<script src="../../Practice/shared/smartcom-ui.js?v=20261126-library-study02"></script>
 </body></html>
