@@ -246,6 +246,8 @@ function knownPhraseAt(range){
  return null;
 }
 function handleSelection(event,expand){
+ // Silk reserves drag-selected text for the separate Reading Practice annotation menu.
+ if(document.body.classList.contains('silk-reading'))return;
  if(isExam()||(location.pathname.includes('/Practice/Listening/')&&!location.pathname.includes('/Practice/Listening/FullTest/'))||event.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
  const range=selectedRange(),sel=window.getSelection();
  if(!range||!sel)return;
