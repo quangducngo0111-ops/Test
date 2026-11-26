@@ -343,7 +343,8 @@ document.addEventListener('click',e=>{
  if(word)lookup.click();
 },true);
 document.addEventListener('dblclick',e=>{
- const span=e.target.closest?.('.sc-lexeme');if(!span||isExam()||document.body.classList.contains('silk-reading'))return;
+ // Double-click remains a supported lookup gesture; Silk prevents its mouseup from opening annotations.
+ const span=e.target.closest?.('.sc-lexeme');if(!span||isExam())return;
  e.preventDefault();e.stopImmediatePropagation();
  const rect=span.getBoundingClientRect();
  showTerm(span.dataset.scTerm,null,{clientX:rect.left,clientY:rect.bottom});
