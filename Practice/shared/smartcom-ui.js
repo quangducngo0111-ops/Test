@@ -112,7 +112,7 @@ const backDestination=safeBackTarget();
  }catch(_){}
  // Keep the original Reading Practice timer visible inside the new toolbar.
  // Move the real #timer node, so the existing exercise interval still updates it.
- if(/^Practice\/Reading\//i.test(route)){
+ if(/^Practice\/Reading\//i.test(route)||/^Foundations\/Reading-Library(?:\/|$)/i.test(route)){
   const timer=oldHeader.querySelector('#timer');
   if(timer){
    timer.classList.add('sc-lesson-nav-timer');
