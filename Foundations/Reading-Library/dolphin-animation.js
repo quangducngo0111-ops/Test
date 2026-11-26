@@ -17,8 +17,9 @@
   host.setAttribute('aria-label','Animated pixel illustrations for the dolphin article');
   const card=document.createElement('section');card.className='dolphin-scene-card';
   const visual=document.createElement('div');visual.className='dolphin-scene-visual';
+  const video=document.createElement('video');video.muted=true;video.loop=true;video.autoplay=true;video.playsInline=true;video.preload='metadata';video.setAttribute('aria-label','Animated underwater dolphin scene');
   const img=document.createElement('img');img.alt='A pod of dolphins in detailed pixel art';img.decoding='async';img.draggable=false;
-  visual.append(img);
+  visual.append(video,img);
   const fallback=document.createElement('div');fallback.className='dolphin-scene-fallback';fallback.hidden=true;
   fallback.textContent='Ảnh pixel đang được bổ sung vào thư viện.';
   visual.append(fallback);
@@ -38,11 +39,14 @@
    current=i;
    const scene=scenes[i];
    heading.textContent=scene.title;sub.textContent=scene.detail;caption.textContent=scene.caption;
-   img.style.opacity='0';fallback.hidden=true;img.hidden=false;
+   img.style.opacity='0';fallback.hidden=true;img.hidden=false;video.hidden=true;video.pause();
    img.alt='Pixel art scene: '+scene.detail;
    img.onload=()=>{if(current===i){img.hidden=false;fallback.hidden=true;img.style.opacity='1'}};
    img.onerror=()=>{if(current===i){img.hidden=true;fallback.hidden=false}};
    img.src='./dolphin-scenes/'+scene.file;
+   video.onerror=()=>{if(current===i){video.hidden=true;img.hidden=false}};
+   video.onloadeddata=()=>{if(current===i){video.hidden=false;img.hidden=true;video.play().catch(()=>{video.hidden=true;img.hidden=false})}};
+   video.src='./dolphin-scenes/scene-'+(i+1)+'.mp4';video.load();
    prev.disabled=i===0;next.disabled=i===scenes.length-1;
    all.forEach((p,index)=>{p.classList.toggle(CSS,index===i);p.setAttribute('aria-current',index===i?'true':'false')});
    if(scroll)all[i]?.scrollIntoView({behavior:'smooth',block:'center'});
@@ -71,7 +75,7 @@
   };
   window.addEventListener('scroll',onScroll,{passive:true});
   window.addEventListener('resize',onScroll,{passive:true});
-  host._disposeDolphin=()=>{window.removeEventListener('scroll',onScroll);window.removeEventListener('resize',onScroll);handlers.forEach(fn=>fn());img.onload=null;img.onerror=null;host.replaceChildren();delete host.dataset.dolphinMounted;};
+  host._disposeDolphin=()=>{window.removeEventListener('scroll',onScroll);window.removeEventListener('resize',onScroll);handlers.forEach(fn=>fn());video.pause();video.removeAttribute('src');video.load();img.onload=null;img.onerror=null;host.replaceChildren();delete host.dataset.dolphinMounted;};
   go(0);
  }
  function dispose(host){if(!host)return;host._disposeDolphin?.();host.replaceChildren()}
