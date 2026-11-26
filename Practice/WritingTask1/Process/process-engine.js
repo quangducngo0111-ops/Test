@@ -2,12 +2,12 @@
 'use strict';
 
 /* =========================================================
-   IELTS WRITING TASK 1 · PROCESS ENGINE V21.1
+   IELTS WRITING TASK 1 · PROCESS ENGINE V22.0
    3-LAYER SMART GRADING (offline / rule + semantic-lite)
    ========================================================= */
 
-console.log('✅ PROCESS ENGINE V21.1 · SMART 3-LAYER');
-window.PROCESS_ENGINE_VERSION='V21.1';
+console.log('✅ PROCESS ENGINE V22.0 · SMART 3-LAYER');
+window.PROCESS_ENGINE_VERSION='V22.0';
 
 /* =========================================================
    TASK CONFIG
@@ -214,7 +214,7 @@ function languageIssues(text,opts={}){return uniq([...grammarIssues(text,opts),.
    FACT + PRECISION LAYER
    ========================================================= */
 
-function factualIssues(text){const s=String(text||''),out=[];if(['01','02','03','06'].includes(ID)&&/\b(?:cyclical|cyclic)\b/i.test(s))out.push('Đây là linear process, không phải cyclical process.');if(['04','05'].includes(ID)&&/\blinear(?:\s+process|\s+sequence)?\b/i.test(s))out.push('Đây là life cycle/cyclical process, không phải linear process.');if(ID==='03'&&/\b(?:cool|cooled|cooling)\b[^.!?]{0,50}\b(?:two|2)\s+hours?\b/i.test(s))out.push('Sơ đồ chỉ cho biết hỗn hợp được để trong 2 giờ; nên viết “left to stand for two hours”.');return uniq(out);}
+function factualIssues(text){const s=String(text||''),out=[];if(['01','02','03','06'].includes(ID)&&/\b(?:cyclical|cyclic)\b/i.test(s))out.push('Đây là linear process, không phải cyclical process.');if(['04','05'].includes(ID)&&/\blinear(?:\s+process|\s+sequence)?\b/i.test(s))out.push('Đây là life cycle/cyclical process, không phải linear process.');if(ID==='03'&&/\b(?:cool|cooled|cooling)\b[^.!?]{0,50}\b(?:two|2)\s+hours?\b/i.test(s))out.push('Sơ đồ chỉ cho biết hỗn hợp được để trong 2 giờ; nên viết “left to stand for two hours”.');if(Number(ID)>=7){const k=kind();if(k==='linear'&&/\b(?:cyclical|cyclic)\b/i.test(s))out.push('Sơ đồ này mô tả quy trình tuyến tính, không phải chu trình tuần hoàn.');if((k==='cyclical'||k==='life')&&/\blinear\s+(?:process|sequence)\b/i.test(s))out.push('Sơ đồ này thuộc dạng tuần hoàn hoặc vòng đời, không phải linear process.');}return uniq(out);}
 function precisionIssues(text){const s=String(text||''),out=[];if(ID==='01'&&/\b(?:metal\s+grid|grid)\b[^.!?]{0,80}\bto\s+(?:remove|filter\s+out|eliminate)\s+(?:larger\s+)?(?:particles?|impurities?|debris)\b/i.test(s))out.push('Sơ đồ không ghi rõ metal grid dùng để loại bỏ particles/impurities. Để bám sát hình hơn, chỉ cần viết clay is passed/screened through a metal grid.');return out;}
 
 /* =========================================================
