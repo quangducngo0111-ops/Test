@@ -257,12 +257,27 @@ $('answerList').addEventListener('change',e=>{if(e.target.matches('[data-n]')){a
 $('nav').addEventListener('click',e=>{const n=e.target.closest('[data-n]')?.dataset.n;if(n){$('row'+n)?.scrollIntoView({behavior:'smooth',block:'center'});($('q'+n)?.type==='hidden'?$('row'+n)?.querySelector('input[type=radio]'):$('q'+n))?.focus({preventScroll:true})}});
 function fmt(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
 function getProfile(){
+ const normalize=(name,cls)=>({
+  name:String(name||'').trim().replace(/\\s+/g,' '),
+  className:canonicalStudentClass(cls)
+ });
+ // The homepage is the source of truth. Reuse its saved learner before asking
+ // for input, including lessons opened from a card or a bookmark.
  try{
   const saved=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
-  if(String(saved?.name||'').trim()&&canonicalStudentClass(saved?.className))return {name:String(saved.name).trim(),className:canonicalStudentClass(saved.className)};
+  const student=normalize(saved?.name,saved?.className);
+  if(student.name&&student.className)return student;
  }catch(e){}
+ // Older versions of the homepage also saved the individual fields.
+ for(const store of [localStorage,sessionStorage]){
+  try{
+   const student=normalize(store.getItem('IELTS_STUDENT_NAME'),store.getItem('IELTS_STUDENT_CLASS'));
+   if(student.name&&student.className)return student;
+  }catch(e){}
+ }
+ // Keep compatibility with the homepage's existing ?fromPortal=1 links.
  const params=new URLSearchParams(location.search);
- return {name:params.get('name')||'',className:canonicalStudentClass(params.get('class')||params.get('className')||'')};
+ return normalize(params.get('name'),params.get('class')||params.get('className'));
 }
 function begin(){
  student={name:$('studentName').value.trim().replace(/\s+/g,' '),className:canonicalStudentClass($('studentClass').value)};
@@ -273,7 +288,12 @@ function begin(){
  $('startError').textContent='';
  $('studentClass').value=student.className;
  localStorage.setItem('IELTS_PRACTICE_STUDENT',JSON.stringify(student));$('startOverlay').hidden=true;$('studentInfo').textContent=student.name+' · '+student.className;started=true;elapsed=Number(localStorage.getItem(key+'_seconds')||0);$('timer').textContent=fmt(elapsed);tick=setInterval(()=>{if(submitted)return;elapsed++;$('timer').textContent=fmt(elapsed);if(elapsed%5===0)localStorage.setItem(key+'_seconds',String(elapsed))},1000)}
-$('startButton').addEventListener('click',begin);const profile=getProfile();$('studentName').value=profile.name||'';$('studentClass').value=profile.className||'';if(profile.name&&profile.className)begin();
+$('startButton').addEventListener('click',begin);
+const profile=getProfile();
+$('studentName').value=profile.name||'';
+$('studentClass').value=profile.className||'';
+if(profile.name&&profile.className)begin();
+else $('startOverlay').hidden=false; // Show the identity form only when needed.
 function accepted(n){const text=String(D.answers[n]||'').replace(/^\d+\.\s*/,'').trim();const variants=new Set([text,text.replace(/[()]/g,''),text.replace(/\([^)]*\)/g,'').trim()]);const split=text.split(/\s*\/\s*/);if(split.length>1){split.forEach(v=>variants.add(v.trim()));if(split.length===2&&split[0].includes(' ')&&!split[1].includes(' '))variants.add(split[0].replace(/\S+$/,split[1]));}return [...variants].map(v=>v.trim()).filter(Boolean)}
 function isCorrect(n,answer){const choices=accepted(n);return choices.some(x=>norm(x)===norm(answer)||norm(x.replace(/[()]/g,''))===norm(answer))}
 /* Shared review presentation follows the History of Glass review layout.
