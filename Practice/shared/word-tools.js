@@ -328,8 +328,20 @@ if(readingBody){
  });
  readingObserver.observe(readingBody,{childList:true});
 }
+// The Silk Reading exercise uses a single click for dictionary lookup.
+// Selecting text with a drag is reserved for the Practice annotation toolbar.
+document.addEventListener('click',e=>{
+ if(!document.body.classList.contains('silk-reading')||isExam()||e.detail>1)return;
+ const span=e.target.closest?.('#source .sc-lexeme');
+ if(!span||e.target.closest?.('mark.user-highlight,.note-anchor'))return;
+ if(window.getSelection()?.toString().trim())return;
+ const rect=span.getBoundingClientRect();
+ e.preventDefault();
+ showTerm(span.dataset.scTerm,null,{clientX:rect.left,clientY:rect.bottom});
+ if(word)lookup.click();
+},true);
 document.addEventListener('dblclick',e=>{
- const span=e.target.closest?.('.sc-lexeme');if(!span||isExam())return;
+ const span=e.target.closest?.('.sc-lexeme');if(!span||isExam()||document.body.classList.contains('silk-reading'))return;
  e.preventDefault();e.stopImmediatePropagation();
  const rect=span.getBoundingClientRect();
  showTerm(span.dataset.scTerm,null,{clientX:rect.left,clientY:rect.bottom});
