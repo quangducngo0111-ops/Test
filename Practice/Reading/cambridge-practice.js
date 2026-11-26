@@ -279,7 +279,7 @@ function isCorrect(n,answer){const choices=accepted(n);return choices.some(x=>no
 /* Shared review presentation follows the History of Glass review layout.
  * The Cambridge source data contains answer keys but not expert explanations.
  * Only link evidence that is verified within the visible passage text. */
-const reviewSource= new URL('./cambridge-review-evidence.json?v=20261126-verified01',document.currentScript.src);
+const reviewSource= new URL('./cambridge-review-evidence.json?v=20261126-shortquote02',document.currentScript.src);
 let reviewedCitations={};
 const reviewReady=fetch(reviewSource).then(r=>r.ok?r.json():{items:{}}).then(j=>{
  reviewedCitations=j?.items?.[D.id]||{};
@@ -296,28 +296,49 @@ function fallbackQuote(n){
  const choices=accepted(n).map(x=>x.replace(/\([^)]*\)/g,'').trim())
   .filter(x=>x.length>=3&&!/^(TRUE|FALSE|NOT GIVEN|YES|NO|[A-H]|[ivx]+)$/i.test(x));
  if(choices.length!==1)return null;
- const term=choices[0];
- const matches=[...$('source').querySelectorAll('.passage-paragraph')].filter(p=>{
-  const hay=plain(p.textContent).toLocaleLowerCase(),needle=term.toLocaleLowerCase();
-  const index=hay.indexOf(needle);
-  return index>=0 && (index===0||!/[\p{L}]/u.test(hay[index-1])) &&
-   (index+needle.length===hay.length||!/[\p{L}]/u.test(hay[index+needle.length]));
- });
- if(matches.length!==1)return null; // Never use the first of several ambiguous occurrences.
- const passage=plain(matches[0].textContent);
- const location=passage.toLocaleLowerCase().indexOf(term.toLocaleLowerCase());
- const from=Math.max(0,passage.lastIndexOf('.',location-1)+1);
- const ending=passage.indexOf('.',location+term.length);
- let quote=passage.slice(from,ending<0?undefined:ending+1).trim();
- if(quote.length>250){
-  const start=Math.max(0,location-95),finish=Math.min(passage.length,location+term.length+105);
-  quote=passage.slice(start,finish).trim();
+ const term=choices[0],needle=term.toLocaleLowerCase();
+ // Only cite an unambiguous occurrence; don't treat repeated words as proof.
+ const hits=[];
+ for(const p of $('source').querySelectorAll('.passage-paragraph')){
+  const passage=plain(p.textContent),hay=passage.toLocaleLowerCase();
+  let at=0;
+  while((at=hay.indexOf(needle,at))>=0){
+   const end=at+needle.length;
+   if((at===0||!/[\p{L}]/u.test(hay[at-1]))&&(end===hay.length||!/[\p{L}]/u.test(hay[end])))
+    hits.push({passage,at,end});
+   at=end;
+  }
  }
- return findQuoteParagraph(quote)?{
+ if(hits.length!==1)return null;
+ const {passage,at,end}=hits[0];
+ // Find the ONE sentence around the answer, not the entire paragraph.
+ const boundary=/[.!?]\s+(?=["'“‘]?[A-Z0-9])/g;
+ let start=0,finish=passage.length,match;
+ while((match=boundary.exec(passage))){
+  if(match.index<at)start=match.index+match[0].length;
+  else if(match.index>=end){finish=match.index+1;break}
+ }
+ const quote=passage.slice(start,finish).trim();
+ return quote&&findQuoteParagraph(quote)?{
   quote,
-  analysis:'Đáp án '+String(D.answers[n])+' xuất hiện trong đoạn trích. Cần đối chiếu nghĩa của từ, ngữ cảnh và yêu cầu số từ trong câu hỏi.',
+  analysis:'Từ “'+String(D.answers[n])+'” xuất hiện trong câu trích dẫn. Cần đối chiếu với yêu cầu câu hỏi và giới hạn số từ.',
   origin:'answer-match'
  }:null;
+}
+// Show at most one short sentence/clause near the answer. Keep an exact
+// underlying excerpt for navigation, so ellipses don't break source matching.
+function shortCitation(quote,answer){
+ const raw=plain(quote);
+ const limit=190;
+ if(raw.length<=limit)return {text:raw,anchor:raw};
+ let focus=raw.toLocaleLowerCase().indexOf(String(answer||'').trim().toLocaleLowerCase());
+ if(focus<0)focus=Math.floor(raw.length/2);
+ let start=Math.max(0,focus-82),end=Math.min(raw.length,start+limit);
+ if(end===raw.length)start=Math.max(0,end-limit);
+ if(start>0){const gap=raw.indexOf(' ',start);if(gap>0&&gap<start+15)start=gap+1}
+ if(end<raw.length){const gap=raw.lastIndexOf(' ',end);if(gap>end-15)end=gap}
+ const excerpt=raw.slice(start,end).trim();
+ return {text:(start>0?'… ':'')+excerpt+(end<raw.length?' …':''),anchor:excerpt};
 }
 function citationFor(n){
  const citation=reviewedCitations[n];
@@ -330,10 +351,11 @@ function renderReviewCard(n){
  const correct=isCorrect(n,answers[n]||'');
  const answer=String(D.answers[n]||'');
  const citation=citationFor(n);
- if(citation)reviewTargets.set(n,citation.quote);else reviewTargets.delete(n);
+ const snippet=citation?shortCitation(citation.quote,answer):null;
+ if(snippet)reviewTargets.set(n,snippet.anchor);else reviewTargets.delete(n);
  const question=questionPrompt(rawQuestions,n)||$('row'+n)?.querySelector('.qcopy')?.textContent||'Xem nội dung câu hỏi phía trên.';
  const excerpt=citation?
-  '<div role="button" tabindex="0" class="passage-evidence" data-focus="'+n+'">“'+esc(citation.quote)+'”<div class="evidence-help">Nhấn để xem vị trí trong bài đọc</div></div>':
+  '<div role="button" tabindex="0" class="passage-evidence" data-focus="'+n+'">“'+esc(snippet.text)+'”<div class="evidence-help">Nhấn để xem đúng câu trong bài đọc</div></div>':
   '<div class="passage-evidence reading-no-evidence">Chưa có trích dẫn được xác minh cho câu hỏi này.</div>';
  const explanation=citation?.analysis?esc(citation.analysis):
   'Đáp án theo bộ đề: '+esc(answer)+'. Chưa có phân tích và trích dẫn được xác minh cho câu này; không suy đoán bằng chứng chỉ từ đáp án.';
@@ -352,9 +374,38 @@ function renderAllReviews(){for(let n=beginning;n<=ending;n++)renderReviewCard(n
 function focusEvidence(n){
  const quote=reviewTargets.get(n),node=findQuoteParagraph(quote);
  if(!node)return;
- $('source').querySelectorAll('.passage-paragraph.evidence-focus').forEach(p=>p.classList.remove('evidence-focus'));
- node.classList.add('evidence-focus');
- node.scrollIntoView({block:'center',behavior:'smooth'});
+ const textNodes=[],map=[];
+ let normalized='',lastSpace=false;
+ const walker=document.createTreeWalker(node,NodeFilter.SHOW_TEXT);
+ let t;
+ while((t=walker.nextNode())){
+  textNodes.push(t);
+  for(let i=0;i<t.textContent.length;i++){
+   const c=t.textContent[i],space=/\s/.test(c);
+   if(space&&lastSpace)continue;
+   normalized+=space?' ':c;
+   map.push({node:t,offset:i});
+   lastSpace=space;
+  }
+ }
+ const offset=normalized.toLocaleLowerCase().indexOf(plain(quote).toLocaleLowerCase());
+ if(offset<0)return;
+ const first=map[offset],last=map[offset+plain(quote).length-1];
+ if(!first||!last)return;
+ const range=document.createRange();
+ range.setStart(first.node,first.offset);
+ range.setEnd(last.node,last.offset+1);
+ const rootPane=$('source').closest('.pane')||$('source').parentElement;
+ const rect=range.getBoundingClientRect(),viewport=rootPane.getBoundingClientRect();
+ rootPane.scrollTo({top:rootPane.scrollTop+rect.top-viewport.top-rootPane.clientHeight*.40,behavior:'smooth'});
+ // Non-destructive: use native CSS highlights, preserving saved annotations.
+ if(window.CSS?.highlights&&typeof Highlight==='function'){
+  CSS.highlights.delete('sc-reading-evidence');
+  CSS.highlights.set('sc-reading-evidence',new Highlight(range));
+ }else{
+  const selection=window.getSelection();
+  selection.removeAllRanges();selection.addRange(range);
+ }
 }
 $('submit').addEventListener('click',async()=>{
  if(submitted)return;
