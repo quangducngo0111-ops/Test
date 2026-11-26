@@ -233,9 +233,24 @@ if(nativeFetch){
   return nativeFetch(input,options);
  };
 }
+// Closing the recovery notification is an explicit user preference for
+// the current attempt. Keep its saved data intact, but do not revive the UI
+// on sync events or navigation to another lesson.
+const hiddenReceipts=new Set();
+const receiptHiddenKey=id=>'SC_RECEIPT_HIDDEN_'+String(id||'');
+function isReceiptHidden(id){
+ if(!id)return false;
+ if(hiddenReceipts.has(String(id)))return true;
+ try{return sessionStorage.getItem(receiptHiddenKey(id))==='1'}catch{return false}
+}
+function hideReceipt(id){
+ if(!id)return;
+ hiddenReceipts.add(String(id));
+ try{sessionStorage.setItem(receiptHiddenKey(id),'1')}catch{}
+}
 // Visible receipt: distinguishes saved-on-device from verified-on-server.
 function showReceipt(record){
- if(!record||record.status!=='completed'||!document.body)return;
+ if(!record||record.status!=='completed'||!document.body||isReceiptHidden(record.attemptId))return;
  let panel=document.getElementById('sc-result-receipt');
  if(!panel){
   panel=document.createElement('aside');panel.id='sc-result-receipt';
@@ -257,7 +272,7 @@ function showReceipt(record){
   const close=document.createElement('button');
   close.type='button';close.textContent='×';close.setAttribute('aria-label','Đóng trạng thái kết quả');
   close.style.cssText='position:absolute;top:5px;right:8px;border:0;background:none;font-size:19px;cursor:pointer;color:#334';
-  close.onclick=()=>panel.remove();panel.append(close);
+  close.onclick=()=>{hideReceipt(panel.dataset.attemptId);panel.remove()};panel.append(close);
   const content=document.createElement('div');content.className='sc-receipt-text';panel.append(content);
   document.body.append(panel);
  }
@@ -278,9 +293,9 @@ window.addEventListener('sc:result-status',event=>showReceipt(event.detail));
 window.addEventListener('online',flush);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)flush()});
 window.addEventListener('load',()=>{
+ // Background sync remains active, but the receipt is no longer reopened
+ // solely because the learner visited another page.
  flush();
- const pending=list().find(x=>x.status==='completed'&&x.syncStatus!=='acknowledged');
- if(pending)showReceipt(pending);
 },{once:true});
 // A modest retry cadence when the page stays open; older records survive reloads.
 setInterval(flush,60000);
