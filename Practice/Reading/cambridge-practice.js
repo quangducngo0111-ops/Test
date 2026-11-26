@@ -1,7 +1,7 @@
 /* Shared results ledger for standalone practice exercises. */
 (()=>{const source=document.currentScript;if(!source||window.SmartcomHistory||document.querySelector('script[data-sc-result-ledger]'))return;
  const tag=document.createElement('script');tag.dataset.scResultLedger='1';
- tag.src=new URL('../shared/attempt-history.js?v=20261126-dismiss-receipt02',source.src).href;
+ tag.src=new URL('../shared/attempt-history.js?v=20261126-urlparams-receiver03',source.src).href;
  document.head.appendChild(tag);
 })();
 /* Universal quick access, including standalone exercise pages. */
