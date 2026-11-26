@@ -404,10 +404,13 @@ const stored=localStorage.getItem(key+passageMarkupKey);
 if(stored)$('source').innerHTML=stored;
 restoreQuestionMarks();
 
+// Silk uses the shared Reading Library word hint; avoid a second purple '?' cursor.
+const showLegacyWordHint=D.id!=='cam11-test3-p1';
 const scHint=document.createElement('span');scHint.textContent='?';scHint.hidden=true;
 scHint.style.cssText='position:fixed;pointer-events:none;z-index:100009;background:#f0eaff;color:#4e219a;border:1px solid #c8b7ed;width:18px;height:18px;border-radius:50%;line-height:18px;text-align:center;font:800 12px system-ui';
-document.body.append(scHint);
+if(showLegacyWordHint)document.body.append(scHint);
 document.addEventListener('pointermove',e=>{
+ if(!showLegacyWordHint)return;
  if(e.pointerType==='touch'||e.buttons||!e.target.closest?.('#source,#questionsSource')||e.target.closest?.('input,button,select,textarea,.note-anchor,mark.user-highlight')){scHint.hidden=true;return}
  if(window.getSelection()?.toString().trim()){scHint.hidden=true;return}
  const range=document.caretRangeFromPoint?.(e.clientX,e.clientY);
