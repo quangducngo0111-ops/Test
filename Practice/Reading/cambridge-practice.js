@@ -1,11 +1,11 @@
 /* Shared results ledger for standalone practice exercises. */
 (()=>{const source=document.currentScript;if(!source||window.SmartcomHistory||document.querySelector('script[data-sc-result-ledger]'))return;
  const tag=document.createElement('script');tag.dataset.scResultLedger='1';
- tag.src=new URL('../shared/attempt-history.js?v=20261120-unified04',source.src).href;
+ tag.src=new URL('../shared/attempt-history.js?v=20261126-dismiss-receipt02',source.src).href;
  document.head.appendChild(tag);
 })();
 /* Universal quick access, including standalone exercise pages. */
-(()=>{if(window.__scQuickLoaderQueued||document.getElementById('sc-quick-shell')||document.querySelector('script[data-sc-quick-bootstrap]'))return;const current=document.currentScript;if(!current)return;const loader=document.createElement('script');loader.dataset.scQuickBootstrap='1';loader.src=new URL('../../assets/quick-access-loader.js?v=20261126-reading-timer02',current.src).href;(document.body||document.head).append(loader)})();
+(()=>{if(window.__scQuickLoaderQueued||document.getElementById('sc-quick-shell')||document.querySelector('script[data-sc-quick-bootstrap]'))return;const current=document.currentScript;if(!current)return;const loader=document.createElement('script');loader.dataset.scQuickBootstrap='1';loader.src=new URL('../../assets/quick-access-loader.js?v=20261126-dismiss-receipt02',current.src).href;(document.body||document.head).append(loader)})();
 /* Cambridge Reading Practice: generic rendering engine. Original passage, prompts and answer key from user-provided PDF. */
 (()=>{'use strict';const dataNode=document.getElementById('exercise-data');if(!dataNode)return;
 const D=JSON.parse(dataNode.textContent),key='CAM_PRACTICE_'+D.id;
