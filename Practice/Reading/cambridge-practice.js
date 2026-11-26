@@ -9,7 +9,27 @@
 /* Cambridge Reading Practice: generic rendering engine. Original passage, prompts and answer key from user-provided PDF. */
 (()=>{'use strict';const dataNode=document.getElementById('exercise-data');if(!dataNode)return;
 const D=JSON.parse(dataNode.textContent),key='CAM_PRACTICE_'+D.id;
-const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+const $=id=>document.getElementById(id);
+const VALID_STUDENT_CLASSES=Object.freeze(['XD25A02.1','XD25A02.2','XD26A03.1','SS26.1','SS25A01.1','SS25IE2','OP.AD.07','OP.ESS.11','TEST']);
+const canonicalStudentClass=value=>VALID_STUDENT_CLASSES.find(c=>c.toLowerCase()===String(value||'').trim().toLowerCase())||'';
+function ensureStudentClassDropdown(){
+ const field=$('studentClass');if(!field)return;
+ const previous=canonicalStudentClass(field.value);
+ const dropdown=field.tagName==='SELECT'?field:document.createElement('select');
+ if(dropdown!==field){
+  dropdown.id=field.id;dropdown.name=field.name||'className';
+  dropdown.className=field.className;field.replaceWith(dropdown);
+ }
+ dropdown.required=true;dropdown.setAttribute('aria-label','Chọn lớp học');
+ dropdown.replaceChildren();
+ const promptOption=document.createElement('option');promptOption.value='';promptOption.textContent='Chọn lớp học';dropdown.append(promptOption);
+ VALID_STUDENT_CLASSES.forEach(className=>{
+  const option=document.createElement('option');option.value=className;option.textContent=className;dropdown.append(option);
+ });
+ dropdown.value=previous;
+}
+ensureStudentClassDropdown();
+const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
 const norm=s=>String(s||'').normalize('NFKC').toLowerCase().replace(/[‘’]/g,"'").replace(/[^a-z0-9]+/g,' ').trim();
 let student={name:'',className:''},elapsed=0,started=false,submitted=false,tick=null,answers={},selectedRange=null,selectedZone=null;
 const beginning=D.passage===1?1:D.passage===2?14:27,ending=D.passage===3?40:D.passage===2?26:13;
@@ -236,8 +256,22 @@ $('answerList').addEventListener('input',e=>{if(!e.target.matches('[data-n]'))re
 $('answerList').addEventListener('change',e=>{if(e.target.matches('[data-n]')){answers[e.target.dataset.n]=e.target.value;localStorage.setItem(key+'_answers',JSON.stringify(answers));updateNav()}});
 $('nav').addEventListener('click',e=>{const n=e.target.closest('[data-n]')?.dataset.n;if(n){$('row'+n)?.scrollIntoView({behavior:'smooth',block:'center'});($('q'+n)?.type==='hidden'?$('row'+n)?.querySelector('input[type=radio]'):$('q'+n))?.focus({preventScroll:true})}});
 function fmt(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
-function getProfile(){try{const s=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');if(s?.name&&s?.className)return s}catch(e){}const params=new URLSearchParams(location.search);return {name:params.get('name')||'',className:params.get('class')||params.get('className')||''}}
-function begin(){student={name:$('studentName').value.trim(),className:$('studentClass').value.trim()};if(!student.name||!student.className){$('startError').textContent='Vui lòng nhập tên và lớp.';return}
+function getProfile(){
+ try{
+  const saved=JSON.parse(localStorage.getItem('IELTS_PRACTICE_STUDENT')||'null');
+  if(String(saved?.name||'').trim()&&canonicalStudentClass(saved?.className))return {name:String(saved.name).trim(),className:canonicalStudentClass(saved.className)};
+ }catch(e){}
+ const params=new URLSearchParams(location.search);
+ return {name:params.get('name')||'',className:canonicalStudentClass(params.get('class')||params.get('className')||'')};
+}
+function begin(){
+ student={name:$('studentName').value.trim().replace(/\s+/g,' '),className:canonicalStudentClass($('studentClass').value)};
+ if(!student.name||!student.className){
+  $('startError').textContent='Vui lòng nhập họ tên và chọn lớp trong danh sách.';
+  $('studentClass').focus();return;
+ }
+ $('startError').textContent='';
+ $('studentClass').value=student.className;
  localStorage.setItem('IELTS_PRACTICE_STUDENT',JSON.stringify(student));$('startOverlay').hidden=true;$('studentInfo').textContent=student.name+' · '+student.className;started=true;elapsed=Number(localStorage.getItem(key+'_seconds')||0);$('timer').textContent=fmt(elapsed);tick=setInterval(()=>{if(submitted)return;elapsed++;$('timer').textContent=fmt(elapsed);if(elapsed%5===0)localStorage.setItem(key+'_seconds',String(elapsed))},1000)}
 $('startButton').addEventListener('click',begin);const profile=getProfile();$('studentName').value=profile.name||'';$('studentClass').value=profile.className||'';if(profile.name&&profile.className)begin();
 function accepted(n){const text=String(D.answers[n]||'').replace(/^\d+\.\s*/,'').trim();const variants=new Set([text,text.replace(/[()]/g,''),text.replace(/\([^)]*\)/g,'').trim()]);const split=text.split(/\s*\/\s*/);if(split.length>1){split.forEach(v=>variants.add(v.trim()));if(split.length===2&&split[0].includes(' ')&&!split[1].includes(' '))variants.add(split[0].replace(/\S+$/,split[1]));}return [...variants].map(v=>v.trim()).filter(Boolean)}
