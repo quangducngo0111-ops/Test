@@ -1,6 +1,6 @@
 
 /* Load the common draggable AssistiveTouch in every standalone lesson using this toolkit. */
-(()=>{if(window.__scQuickLoaderQueued||document.querySelector('script[data-sc-quick-bootstrap]'))return;const current=document.currentScript;if(!current)return;const script=document.createElement('script');script.dataset.scQuickBootstrap='1';script.src=new URL('quick-access-loader.js?v=20261119-05',current.src).href;(document.body||document.head).append(script);})();
+(()=>{if(window.__scQuickLoaderQueued||document.querySelector('script[data-sc-quick-bootstrap]'))return;const current=document.currentScript;if(!current)return;const script=document.createElement('script');script.dataset.scQuickBootstrap='1';script.src=new URL('quick-access-loader.js?v=20261126-reading-timer02',current.src).href;(document.body||document.head).append(script);})();
 /* Capture and queue submissions even on standalone Reading/Listening URLs. */
 (()=>{const current=document.currentScript;if(!current||window.SmartcomHistory||document.querySelector('script[data-sc-result-ledger]'))return;
  const tag=document.createElement('script');tag.dataset.scResultLedger='1';
