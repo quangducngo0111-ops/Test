@@ -4,7 +4,7 @@
  * unless the endpoint explicitly supports a readable acknowledgement.
  */
 (()=>{'use strict';
-if(window.SmartcomHistory?.version>=5)return;
+if(window.SmartcomHistory?.version>=6)return;
 const STORAGE='SC_ATTEMPT_HISTORY_V1';
 // V4: an opaque response is NOT proof that Apps Script saved the row.
 // Retain the original body for recovery but never silently resend it (duplicate risk).
@@ -94,11 +94,11 @@ function receiptStatus(endpoint,attemptId){
  });
 }
 function outbox(){return read(QUEUE)}
-function queue(record,endpoint=ENDPOINT,body){
+function queue(record,endpoint=ENDPOINT,body,safeRetry=true){
  if(!record)return false;
  const rows=outbox(),item={
   attemptId:record.attemptId,owner:record.owner,endpoint,
-  body:body||formBody(record),queuedAt:new Date().toISOString(),
+  body:body||formBody(record),safeRetry:!!safeRetry,queuedAt:new Date().toISOString(),
   attempts:0,nextTry:0
  };
  const existing=rows.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
@@ -130,6 +130,7 @@ async function flush(){
      continue;
     }
     if(status===null)continue; // Unknown backend: never blindly duplicate an opaque request.
+     if(!item.safeRetry)continue; // Legacy submissions may have been sent without this ID.
     // Receiver explicitly reports missing. Its attemptId index makes retry idempotent.
     const pending=outbox(),idx=pending.findIndex(x=>x.attemptId===item.attemptId&&x.owner===item.owner);
     if(idx>=0){pending[idx].sentUnverified=false;write(QUEUE,pending)}
@@ -177,15 +178,19 @@ function report(payload){
  if(saved&&queue(saved))flush();
  return saved;
 }
-function recordLegacyPost(body,endpoint){
- let p;try{p=new URLSearchParams(body)}catch(e){return null}
+function recordLegacyPost(rawBody,endpoint){
+ let p;try{p=new URLSearchParams(rawBody)}catch(e){return null}
  const mode=String(p.get('mode')||'').toUpperCase();
  if(!['TEST','PRACTICE'].includes(mode)||!p.get('skill'))return null;
  const user=profile();
  if(!user||user.name.trim()!==String(p.get('name')||'').trim()||user.className.trim().toLowerCase()!==String(p.get('className')||'').trim().toLowerCase())return null;
  let details={};try{details=JSON.parse(p.get('details')||'{}')}catch(e){}
+ // One stable ID must accompany the FIRST network request and every retry.
+ // The server uses this ID for deduplication and for its status endpoint.
+ const attemptId=p.get('attemptId')||newId();
+ p.set('attemptId',attemptId);
  const record=submit({
-  attemptId:p.get('attemptId')||newId(),kind:mode==='TEST'?'Test':'Practice',
+  attemptId,kind:mode==='TEST'?'Test':'Practice',
   skill:p.get('skill'),title:details.title||p.get('practiceType')||p.get('testId')||document.title,
   exerciseId:p.get('practiceId')||p.get('testId')||location.pathname,
   path:location.pathname,score:p.get('score')!==null?Number(p.get('score')):null,
@@ -195,19 +200,31 @@ function recordLegacyPost(body,endpoint){
   submittedAt:p.get('submittedAt')||new Date().toISOString(),
   syncStatus:'queued'
  });
- if(record)queue(record,endpoint,body+(p.has('attemptId')?'':'&attemptId='+encodeURIComponent(record.attemptId)));
- return record;
+ const encoded=p.toString();
+ if(record)queue(record,endpoint,encoded,true);
+ return {record,encoded};
 }
 if(nativeFetch){
  window.fetch=function(input,options){
   const opts=options||{},url=typeof input==='string'?input:input?.url||'';
+  const body=opts.body;
+  const supported=typeof body==='string'||body instanceof URLSearchParams;
   if(String(opts.method||'GET').toUpperCase()==='POST'
-     &&typeof opts.body==='string'
-     &&url.startsWith('https://script.google.com/macros/s/')){
-   const record=recordLegacyPost(opts.body,url);
-   return nativeFetch(input,options).then(response=>{
+      &&supported&&url.startsWith('https://script.google.com/macros/s/')){
+   const captured=recordLegacyPost(body.toString(),url);
+   if(!captured)return nativeFetch(input,options);
+   const {record,encoded}=captured;
+   const forwarded={...opts,body:body instanceof URLSearchParams?new URLSearchParams(encoded):encoded};
+   return nativeFetch(input,forwarded).then(async response=>{
     if(record){
-     const verified=response.type!=='opaque'&&response.ok;
+     // no-cors/opaque is NOT confirmation. The server must positively
+     // acknowledge this exact attempt ID via the read-only status endpoint.
+     let verified=false;
+     if(response.type!=='opaque'&&response.ok&&response.status>=200&&response.status<300){
+      verified=(await receiptStatus(url,record.attemptId))===true;
+     }else{
+      verified=(await receiptStatus(url,record.attemptId))===true;
+     }
      const current=outbox();
      const idx=current.findIndex(x=>x.attemptId===record.attemptId&&x.owner===record.owner);
      if(idx>=0){
@@ -286,7 +303,7 @@ function showReceipt(record){
  box.textContent=(record.score!=null?'Kết quả: '+record.score+'/'+(record.total??'?')+'. ':'')+
   message+' Mã lượt làm: '+record.attemptId;
 }
-window.SmartcomHistory={version:5,save,submit,draft,list,all,profile,report,flush,outbox,receiptStatus};
+window.SmartcomHistory={version:6,save,submit,draft,list,all,profile,report,flush,outbox,receiptStatus};
 window.addEventListener('sc:attempt-completed',event=>{if(event.detail)report(event.detail)});
 window.addEventListener('sc:attempt-saved',event=>showReceipt(event.detail));
 window.addEventListener('sc:result-status',event=>showReceipt(event.detail));
