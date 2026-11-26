@@ -71,6 +71,25 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
 .dolphin-scene-navigation button{flex:1;cursor:pointer;padding:10px 6px;border-radius:10px;border:1px solid #b1d8e5;background:white;color:#23597c;font-weight:800}
 .dolphin-scene-navigation button:disabled{opacity:.35;cursor:not-allowed}
 @media(max-width:760px){#reader.dolphin-reader .dolphin-reading-split{display:flex;flex-direction:column-reverse;gap:16px}#reader.dolphin-reader #dolphinAnimationSlot{position:sticky;top:0;z-index:5;width:100%}.dolphin-scene-visual{aspect-ratio:16/8}.dolphin-scene-copy{padding:9px 12px 5px}.dolphin-scene-copy p,.dolphin-scene-navigation{display:none}.dolphin-scene-copy strong{font-size:13px}#reader.dolphin-reader #articleText p{padding:10px 12px}}
+
+/* Motion layered on the approved hand-illustrated pixel background */
+.dolphin-scene-visual{isolation:isolate}
+.dolphin-scene-visual img{animation:dolphin-drift 8s ease-in-out infinite alternate;transform-origin:50% 50%}
+.dolphin-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.dolphin-wave{position:absolute;left:56%;top:20%;width:6%;aspect-ratio:1;border-right:4px solid #a5fff5;border-radius:50%;filter:drop-shadow(0 0 7px #13f9e8);opacity:0;transform:scale(.3);animation:dolphin-pulse 3s ease-out infinite}
+.dolphin-wave.w2{animation-delay:1s}.dolphin-wave.w3{animation-delay:2s}
+.dolphin-ship{display:none;position:absolute;top:0;right:17%;font-size:33px;filter:drop-shadow(0 4px 5px #143b53)}
+.dolphin-noise{display:none;position:absolute;top:15%;right:19%;height:35%;width:2px;background:repeating-linear-gradient(180deg,#e2feff 0 5px,transparent 5px 12px);transform:skew(22deg);box-shadow:15px 10px #d5ffff,30px 30px #9ee8ef;opacity:.7;animation:dolphin-disturb 1.4s ease-in-out infinite alternate}
+.dolphin-noise.n2{right:34%;animation-delay:.5s}
+.dolphin-scene-visual[data-scene="1"] .dolphin-wave,.dolphin-scene-visual[data-scene="3"] .dolphin-wave{display:none}
+.dolphin-scene-visual[data-scene="3"] img{filter:brightness(.75) saturate(1.14) hue-rotate(6deg)}
+.dolphin-scene-visual[data-scene="4"] img{filter:brightness(.82) saturate(.9)}
+.dolphin-scene-visual[data-scene="4"] .dolphin-wave{display:none}
+.dolphin-scene-visual[data-scene="4"] .dolphin-ship,.dolphin-scene-visual[data-scene="4"] .dolphin-noise{display:block}
+@keyframes dolphin-drift{from{transform:scale(1.07) translate(-1%,.5%)}to{transform:scale(1.14) translate(1%,-.8%)}}
+@keyframes dolphin-pulse{0%{opacity:0;transform:scale(.3)}20%{opacity:.9}100%{opacity:0;transform:scale(6)}}
+@keyframes dolphin-disturb{from{opacity:.2;transform:translateY(-4px) skew(25deg)}to{opacity:.9;transform:translateY(10px) skew(-10deg)}}
+@media(prefers-reduced-motion:reduce){.dolphin-scene-visual img,.dolphin-wave,.dolphin-noise{animation:none!important}}
 </style><link data-sc-site-theme="1" rel="stylesheet" href="../../assets/site-electric-blue.css?v=20261118-blue02"></head><body>
 <header><a class="return" href="../">Foundations</a><span class="brand">📖 Reading Library</span><a class="return" href="../../Vocabulary-Notebook/">📒 Sổ tay</a></header>
 <main>
@@ -98,7 +117,7 @@ article h1{font-size:clamp(30px,4.5vw,46px);color:#2b116a;line-height:1.15;margi
  </section>
 </main>
 <script src="./articles.js?v=20261116-sports30"></script>
-<script src="./dolphin-animation.js?v=20261126-scene02"></script>
+<script src="./dolphin-animation.js?v=20261126-scene03"></script>
 
 <script>
 (()=>{
