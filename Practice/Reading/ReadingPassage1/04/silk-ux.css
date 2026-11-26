@@ -136,3 +136,118 @@ body.silk-reading .sc-lexeme:hover{background:#e8defeaa;cursor:help}
  body.silk-reading .silk-judgement .question-row{grid-template-columns:28px minmax(0,1fr);gap:8px!important}
  body.silk-reading .question-card.silk-judgement select.choice-dropdown{grid-column:2;width:156px!important;justify-self:start}
 }
+
+/* 2026-11-26: one unified answer field — number and text share a single border.
+   Override the generic Cambridge input focus border and inset box shadow. */
+body.silk-reading .silk-note-line .silk-answer-wrap{
+  box-sizing:border-box!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  padding:3px 8px 3px 4px!important;
+  border:1px solid #cbbbe9!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  vertical-align:middle!important;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+body.silk-reading .silk-note-line .silk-answer-wrap:focus-within{
+  border-color:#7250c7!important;
+  box-shadow:0 0 0 3px rgba(110,74,204,.14)!important;
+}
+body.silk-reading .silk-note-line .silk-answer-wrap input.inline-answer,
+body.silk-reading .silk-note-line .silk-answer-wrap input.inline-answer:hover,
+body.silk-reading .silk-note-line .silk-answer-wrap input.inline-answer:focus,
+body.silk-reading .silk-note-line .silk-answer-wrap input.inline-answer:focus-visible{
+  box-sizing:border-box!important;
+  display:inline-block!important;
+  width:clamp(86px,9vw,125px)!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:30px!important;
+  margin:0!important;
+  padding:3px 4px!important;
+  border:0!important;
+  border-bottom:0!important;
+  border-radius:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  text-align:left!important;
+  color:#2d2356!important;
+  font-size:13px!important;
+  font-weight:650!important;
+  vertical-align:middle!important;
+}
+
+/* The progress indicator is a complete, aligned card, not a cut-off strip. */
+body.silk-reading .hero{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(310px,370px);
+  align-items:center!important;
+  column-gap:28px!important;
+  padding:15px 18px!important;
+  border-radius:18px!important;
+}
+body.silk-reading .hero > div:first-child{min-width:0}
+body.silk-reading .hero .progressWrap{
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:370px!important;
+  justify-self:end!important;
+  align-self:center!important;
+  margin:0!important;
+  padding:13px 15px!important;
+  border:1px solid #d3e4f6!important;
+  border-radius:13px!important;
+  background:rgba(255,255,255,.9)!important;
+  box-shadow:0 3px 13px rgba(24,71,116,.07)!important;
+}
+body.silk-reading .hero .progressLabel{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-width:0!important;
+  margin:0 0 9px!important;
+  font-size:12px!important;
+  line-height:1.35!important;
+  color:#54708d!important;
+}
+body.silk-reading .hero .progressLabel span:first-child{
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+body.silk-reading .hero .progressLabel #progress{
+  font-weight:850!important;
+  color:#1c5d91!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+body.silk-reading .hero .progressTrack{
+  display:block!important;
+  width:100%!important;
+  height:9px!important;
+  margin:0!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+  background:#e2edf8!important;
+}
+body.silk-reading .hero .progressTrack #progressFill{
+  display:block!important;
+  height:100%!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,#326acb,#1685ce)!important;
+}
+@media(max-width:780px){
+  body.silk-reading .hero{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+  body.silk-reading .hero .progressWrap{justify-self:stretch!important;max-width:none!important}
+}
+@media(max-width:610px){
+  body.silk-reading .silk-note-line .silk-answer-wrap input.inline-answer,
+  body.silk-reading .silk-note-line .silk-answer-wrap input.inline-answer:focus{
+    width:90px!important;
+  }
+}
