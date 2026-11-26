@@ -21,7 +21,7 @@ const FALLBACK_TASKS={
   '01':{title:'Manufacturing Bricks',icon:'🧱',image:'bricks.png',prompt:'The diagram shows the process by which bricks are manufactured for the building industry.',type:'Linear',stages:7},
   '02':{title:'Manufacturing Instant Noodles',icon:'🍜',image:'instant-noodles.png',prompt:'The diagram shows how instant noodles are manufactured.',type:'Linear',stages:8},
   '03':{title:'Manufacturing Tomato Ketchup',icon:'🍅',image:'tomato-ketchup.png',prompt:'The diagram shows the process used to produce tomato ketchup.',type:'Linear',stages:15},
-  '04':{title:'Frog Life Cycle',icon:'🐸',image:'frog-life-cycle.png?v=20261126-premium4',prompt:'The diagram shows the life cycle of a frog.',type:'Life Cycle',stages:11},
+  '04':{title:'Frog Life Cycle',icon:'🐸',image:'frog-life-cycle-premium.webp?v=20261126-frogart5',prompt:'The diagram shows the life cycle of a frog.',type:'Life Cycle',stages:11},
   '05':{title:'Bee Life Cycle',icon:'🐝',image:'bee-life-cycle-premium.webp?v=20261126-premium4',prompt:'The diagram shows the life cycle of a bee.',type:'Life Cycle',stages:7},
   '06':{title:'Recycling Plastic Bottles',icon:'♻️',image:'plastic-bottles.png',prompt:'The diagram shows how plastic bottles are recycled.',type:'Linear',stages:9}
 };
