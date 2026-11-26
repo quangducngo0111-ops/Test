@@ -655,4 +655,7 @@ scDict.querySelector('[data-sc-save]').onclick=()=>{
 document.addEventListener('pointerdown',e=>{if(!scDict.hidden&&!scDict.contains(e.target)&&!e.target.closest('#source'))scDict.hidden=true},true);
 
 updateNav();
+// Reveal the page only after the renderer and interactions are initialized.
+// The identity prompt (if needed) was already made visible by getProfile().
+document.body.classList.add('sc-reading-ready');
 })();
