@@ -130,7 +130,7 @@ function navDone(i){return i===0?isDone(0):i===1?vocabReady():isDone(i-1);}
    STATE
    ========================================================= */
 
-let state={current:0,vocabUiV1:false,vocab:{selected:[],locked:false},completed:[],attempts:{},templateOpen:{1:true,2:true,3:true,4:true},drafts:{analysis:{type:'',stages:'',first:'',last:'',features:'',body1:'',body2:''},intro:'',overview:'',body1:'',body2:'',full:''},scores:{}};
+let state={current:0,vocabUiV1:true,vocab:{selected:[],locked:false},completed:[],attempts:{},templateOpen:{1:true,2:true,3:true,4:true},drafts:{analysis:{type:'',stages:'',first:'',last:'',features:'',body1:'',body2:''},intro:'',overview:'',body1:'',body2:'',full:''},scores:{}};
 
 function loadState(){try{let raw=localStorage.getItem(STORAGE_KEY),fromLegacy=false;if(!raw){for(const k of LEGACY_KEYS){raw=localStorage.getItem(k);if(raw){fromLegacy=true;break;}}}const s=JSON.parse(raw||'null');if(!s)return;state={...state,...s,scores:fromLegacy?{}:(s.scores||{}),templateOpen:{...state.templateOpen,...(s.templateOpen||{})},drafts:{...state.drafts,...(s.drafts||{}),analysis:{...state.drafts.analysis,...(s.drafts?.analysis||{})}},vocab:{...state.vocab,...(s.vocab||{})}};if(!s.vocabUiV1){state.current=Number(s.current)>0?1:0;state.vocabUiV1=true;saveState();}else if(fromLegacy)saveState();}catch(e){console.warn('State load failed:',e);}}
 function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){console.warn('State save failed:',e);}}
