@@ -397,6 +397,26 @@ const CSS=`
 .hint-hide{background:none;border:0;padding:9px 0 0;color:#6c6f8b;font-size:11px;text-decoration:underline}
 @media(max-width:650px){.hint-top{align-items:flex-start}.hint-action{white-space:normal;min-width:100px}}
 
+
+/* 3D flashcards: the rotating inner wrapper contains both photo-backed faces. */
+.vocab-flip-perspective{width:min(620px,100%);height:400px;margin:0 auto;perspective:1300px;-webkit-perspective:1300px}
+.vocab-flip-control{width:100%;height:100%;padding:0;border:0;border-radius:20px;background:transparent;display:block;cursor:pointer;position:relative;outline-offset:5px}
+.vocab-flip-inner{display:block;position:relative;width:100%;height:100%;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .72s cubic-bezier(.22,.61,.36,1);-webkit-transition:-webkit-transform .72s cubic-bezier(.22,.61,.36,1)}
+.vocab-flip-control.is-flipped .vocab-flip-inner{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+.vocab-flip-control:focus-visible{outline:3px solid #815bd0}
+.vocab-flip-inner .vocab-face{display:flex;flex-direction:column;position:absolute;inset:0;padding:0;gap:0;align-items:stretch;justify-content:flex-start;border:1px solid #ddd8ef;border-radius:20px;background:#fff;overflow:hidden;box-shadow:0 12px 31px rgba(39,18,96,.11);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.vocab-flip-inner .vocab-face-front{transform:rotateY(0deg);-webkit-transform:rotateY(0deg)}
+.vocab-flip-inner .vocab-face-back{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+.vocab-real-photo{display:block;flex:0 0 232px;height:232px;width:100%;background-color:#f5f8fa;background-size:300% 300%;background-repeat:no-repeat}
+.vocab-real-photo.vocab-illustrated{display:flex;justify-content:center;align-items:center;background:#eef4fd}
+.vocab-real-photo.vocab-illustrated svg{width:100%;height:100%;display:block}
+.vocab-flip-inner .vocab-face-content{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 22px 22px;text-align:center;background:#fff}
+.vocab-flip-inner .vocab-face-back .vocab-face-content{background:#f7f4ff}
+.vocab-flip-inner .vocab-face-content strong{font-size:clamp(21px,2.5vw,27px);line-height:1.3;color:#2e166b}
+.vocab-flip-inner .vocab-face-content small{font-size:12px;color:#777b93}
+@media(max-width:650px){.vocab-flip-perspective{height:330px}.vocab-real-photo{height:183px;flex-basis:183px}.vocab-flip-inner .vocab-face-content strong{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.vocab-flip-inner{transition:none!important;-webkit-transition:none!important}}
+
 `;
 
 /* =========================================================
@@ -550,12 +570,63 @@ function vocabScene(index,term){
  }
  return '<svg class="vocab-scene" role="img" aria-label="Minh họa '+esc(term)+'" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">'+defs+base+art+'</svg>';
 }
+
+/* Every side of a vocabulary card uses the same image. The recycling atlas
+   contains nine 3×3 realistic pictures, ordered exactly like topic 06 terms. */
+function vocabVisual(index,term){
+ if(ID==='06'){
+   const x=(index%3)*50,y=Math.floor(index/3)*50;
+   return '<span class="vocab-real-photo" role="img" aria-label="Ảnh minh họa '+esc(term)+'" style="background-image:url('+ENGINE_ASSET_BASE+'plastic-vocab-realistic-atlas-20261127.jpg);background-position:'+x+'% '+y+'%"></span>';
+ }
+ return '<span class="vocab-real-photo vocab-illustrated" role="img" aria-label="Minh họa '+esc(term)+'">'+vocabScene(index,term)+'</span>';
+}
 function renderVocabulary(){
- const main=document.getElementById('main'),bank=vocabulary(),index=Math.min(bank.length-1,Math.max(0,Number(state.vocab.cardIndex)||0)),pair=bank[index],seen=new Set(state.vocab.seen||[]),allSeen=vocabReady();
- main.innerHTML='<div class="ey"><span class="chip">BƯỚC 1</span><span class="counter">Học từ vựng trước khi phân tích</span></div><h2>Từ vựng cần sử dụng</h2><p class="sub">Bộ từ vựng được chuẩn bị sẵn theo sơ đồ. Học lần lượt từng thẻ và vận dụng các cụm từ phù hợp trong bài viết.</p><div class="guide"><b>Cách học:</b> Xem từ tiếng Anh và hình minh họa, tự đoán nghĩa, sau đó lật thẻ để kiểm tra. Học hết các thẻ sẽ mở bước Phân tích.</div><div class="vocab-single-head"><strong>Thẻ '+(index+1)+' / '+bank.length+'</strong></div><div class="vocab-card-track"><div style="width:'+((index+1)/bank.length*100)+'%"></div></div><div class="vocab-flip-perspective"><button type="button" class="vocab-flip-stage" id="vocabOneCard" aria-label="Lật thẻ từ vựng" aria-pressed="false"><span class="vocab-face vocab-face-front">'+vocabScene(index,pair[0])+'<span class="vocab-face-content"><span class="vocab-overline">ENGLISH · PROCESS</span><strong>'+esc(pair[0])+'</strong><small>Nhấn vào thẻ để lật xem nghĩa</small></span></span><span class="vocab-face vocab-face-back"><span class="vocab-face-backicon" aria-hidden="true">'+termVisual(pair[0])+'</span><span class="vocab-overline">TIẾNG VIỆT</span><strong>'+esc(pair[1])+'</strong><span class="vocab-back-english">'+esc(pair[0])+'</span><small>Nhấn lần nữa để quay về mặt trước</small></span></button></div><div class="vocab-card-actions"><button id="vocabBack" class="vocab-edit" type="button" '+(index===0?'disabled':'')+'>← Thẻ trước</button><span class="vocab-card-helper">Lật thẻ để học nghĩa</span><button id="vocabForward" class="vocab-edit" type="button" '+(index===bank.length-1?'disabled':'')+'>Thẻ tiếp →</button></div><div class="vocab-practice-line"><span>Muốn ôn lại?</span><button type="button" id="vocabQuizToggle" class="vocab-edit">'+(state.vocab.quizVisible?'Ẩn mini game':'Chơi chọn nghĩa (tùy chọn)')+'</button></div><section id="vocabQuiz" class="vocab-quiz" '+(state.vocab.quizVisible?'':'hidden')+'></section><div id="vocabStatus" class="vocab-status" aria-live="polite">'+(allSeen?'Có thể chuyển sang Phân tích sơ đồ.':'Lật lần lượt các thẻ để xem nghĩa rồi tiếp tục.')+'</div><div class="actions"><button class="btn" disabled>← Bước trước</button><button id="vocabRestart" class="btn" type="button">Ôn từ đầu</button><button id="vocabNext" class="btn primary" '+(allSeen?'':'disabled')+'>Bước tiếp →</button></div>';
+ const main=document.getElementById('main'),bank=vocabulary();
+ const index=Math.min(bank.length-1,Math.max(0,Number(state.vocab.cardIndex)||0));
+ const pair=bank[index],allSeen=vocabReady(),visual=vocabVisual(index,pair[0]);
+ main.innerHTML='<div class="ey"><span class="chip">BƯỚC 1</span><span class="counter">Học từ vựng trước khi phân tích</span></div>'+
+ '<h2>Từ vựng cần sử dụng</h2>'+
+ '<p class="sub">Mỗi thẻ có hình minh họa cho từ vựng trong sơ đồ. Lật thẻ để học nghĩa tiếng Việt, rồi chuyển thẻ tiếp theo.</p>'+
+ '<div class="guide"><b>Cách học:</b> Nhìn ảnh và cụm tiếng Anh → tự đoán nghĩa → nhấn thẻ để lật sang mặt sau. Hoàn thành các thẻ để mở phần Phân tích.</div>'+
+ '<div class="vocab-single-head"><strong>Thẻ '+(index+1)+' / '+bank.length+'</strong></div>'+
+ '<div class="vocab-card-track"><div style="width:'+((index+1)/bank.length*100)+'%"></div></div>'+
+ '<div class="vocab-flip-perspective">'+
+   '<button type="button" class="vocab-flip-control" id="vocabOneCard" aria-label="Lật thẻ từ vựng" aria-pressed="false">'+
+     '<span class="vocab-flip-inner">'+
+       '<span class="vocab-face vocab-face-front">'+visual+
+         '<span class="vocab-face-content"><span class="vocab-overline">ENGLISH · PROCESS</span>'+
+         '<strong>'+esc(pair[0])+'</strong><small>Nhấn để lật thẻ xem nghĩa</small></span>'+
+       '</span>'+
+       '<span class="vocab-face vocab-face-back">'+visual+
+         '<span class="vocab-face-content"><span class="vocab-overline">NGHĨA TIẾNG VIỆT</span>'+
+         '<strong>'+esc(pair[1])+'</strong><small>'+esc(pair[0])+' · Nhấn để lật lại</small></span>'+
+       '</span>'+
+     '</span>'+
+   '</button>'+
+ '</div>'+
+ '<div class="vocab-card-actions">'+
+   '<button id="vocabBack" class="vocab-edit" type="button" '+(index===0?'disabled':'')+'>← Thẻ trước</button>'+
+   '<span class="vocab-card-helper">Lật thẻ để xem nghĩa</span>'+
+   '<button id="vocabForward" class="vocab-edit" type="button" '+(index===bank.length-1?'disabled':'')+'>Thẻ tiếp →</button>'+
+ '</div>'+
+ '<div class="vocab-practice-line"><span>Muốn ôn lại?</span><button type="button" id="vocabQuizToggle" class="vocab-edit">'+(state.vocab.quizVisible?'Ẩn mini game':'Chơi chọn nghĩa (tùy chọn)')+'</button></div>'+
+ '<section id="vocabQuiz" class="vocab-quiz" '+(state.vocab.quizVisible?'':'hidden')+'></section>'+
+ '<div id="vocabStatus" class="vocab-status" aria-live="polite">'+(allSeen?'Có thể chuyển sang Phân tích sơ đồ.':'Lật từng thẻ để xem nghĩa rồi chuyển sang thẻ tiếp theo.')+'</div>'+
+ '<div class="actions"><button class="btn" disabled>← Bước trước</button><button id="vocabRestart" class="btn" type="button">Ôn từ đầu</button><button id="vocabNext" class="btn primary" '+(allSeen?'':'disabled')+'>Bước tiếp →</button></div>';
  const card=document.getElementById('vocabOneCard'),status=document.getElementById('vocabStatus'),next=document.getElementById('vocabNext');
- card.onclick=()=>{const flipped=card.classList.toggle('is-flipped');card.setAttribute('aria-pressed',String(flipped));if(flipped){const learned=new Set(state.vocab.seen||[]);learned.add(index);state.vocab.seen=[...learned].sort((a,b)=>a-b);if(learned.size>=bank.length){state.vocab.reviewedAll=true;next.disabled=false;status.textContent='Bạn có thể tiếp tục phân tích sơ đồ.';renderNav();renderProgress();}saveState();}};
- const jump=(j)=>{state.vocab.cardIndex=Math.max(0,Math.min(bank.length-1,j));saveState();renderVocabulary();};
+ card.onclick=()=>{
+   const flipped=card.classList.toggle('is-flipped');card.setAttribute('aria-pressed',String(flipped));
+   if(!flipped)return;
+   const learned=new Set(state.vocab.seen||[]);learned.add(index);
+   state.vocab.seen=[...learned].sort((a,b)=>a-b);
+   if(learned.size>=bank.length){
+     state.vocab.reviewedAll=true;next.disabled=false;
+     status.textContent='Đã xem nghĩa tất cả các thẻ. Có thể tiếp tục Phân tích sơ đồ.';
+     renderNav();renderProgress();
+   }
+   saveState();
+ };
+ const jump=(i)=>{state.vocab.cardIndex=Math.max(0,Math.min(bank.length-1,i));saveState();renderVocabulary();};
  document.getElementById('vocabBack').onclick=()=>jump(index-1);
  document.getElementById('vocabForward').onclick=()=>jump(index+1);
  document.getElementById('vocabRestart').onclick=()=>jump(0);
