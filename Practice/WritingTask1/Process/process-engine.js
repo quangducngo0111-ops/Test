@@ -399,23 +399,23 @@ const CSS=`
 
 
 /* 3D flashcards: the rotating inner wrapper contains both photo-backed faces. */
-.vocab-flip-perspective{width:min(620px,100%);height:400px;margin:0 auto;perspective:1300px;-webkit-perspective:1300px}
-.vocab-flip-control{width:100%;height:100%;padding:0;border:0;border-radius:20px;background:transparent;display:block;cursor:pointer;position:relative;outline-offset:5px}
-.vocab-flip-inner{display:block;position:relative;width:100%;height:100%;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .72s cubic-bezier(.22,.61,.36,1);-webkit-transition:-webkit-transform .72s cubic-bezier(.22,.61,.36,1)}
+.vocab-flip-perspective{width:min(620px,100%);height:470px;margin:0 auto;perspective:1450px;-webkit-perspective:1450px;isolation:isolate}
+.vocab-flip-control{width:100%;height:100%;padding:0;border:0;border-radius:20px;background:transparent;display:block;cursor:pointer;position:relative;outline-offset:5px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.vocab-flip-inner{display:block;position:relative;width:100%;height:100%;transform:rotateY(0deg);-webkit-transform:rotateY(0deg);transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .82s cubic-bezier(.2,.8,.2,1);-webkit-transition:-webkit-transform .82s cubic-bezier(.2,.8,.2,1);will-change:transform}
 .vocab-flip-control.is-flipped .vocab-flip-inner{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
 .vocab-flip-control:focus-visible{outline:3px solid #815bd0}
-.vocab-flip-inner .vocab-face{display:flex;flex-direction:column;position:absolute;inset:0;padding:0;gap:0;align-items:stretch;justify-content:flex-start;border:1px solid #ddd8ef;border-radius:20px;background:#fff;overflow:hidden;box-shadow:0 12px 31px rgba(39,18,96,.11);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.vocab-flip-inner .vocab-face{display:flex;flex-direction:column;position:absolute;inset:0;padding:0;gap:0;align-items:stretch;justify-content:flex-start;border:1px solid #ddd8ef;border-radius:20px;background:#f7f9ff;overflow:hidden;box-shadow:0 12px 31px rgba(39,18,96,.11);backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;pointer-events:none}
 .vocab-flip-inner .vocab-face-front{transform:rotateY(0deg);-webkit-transform:rotateY(0deg)}
 .vocab-flip-inner .vocab-face-back{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
-.vocab-real-photo{display:block;flex:0 0 232px;height:232px;width:100%;background-color:#f5f8fa;background-size:300% 300%;background-repeat:no-repeat}
+.vocab-real-photo{display:block;flex:0 0 310px;height:310px;width:min(460px,100%);margin:0 auto;background-color:#f5f8fa;background-size:300% 300%;background-repeat:no-repeat;border-radius:0 0 12px 12px;filter:contrast(1.1) saturate(1.07);image-rendering:-webkit-optimize-contrast}
 .vocab-real-photo.vocab-illustrated{display:flex;justify-content:center;align-items:center;background:#eef4fd}
 .vocab-real-photo.vocab-illustrated svg{width:100%;height:100%;display:block}
 .vocab-flip-inner .vocab-face-content{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 22px 22px;text-align:center;background:#fff}
 .vocab-flip-inner .vocab-face-back .vocab-face-content{background:#f7f4ff}
 .vocab-flip-inner .vocab-face-content strong{font-size:clamp(21px,2.5vw,27px);line-height:1.3;color:#2e166b}
 .vocab-flip-inner .vocab-face-content small{font-size:12px;color:#777b93}
-@media(max-width:650px){.vocab-flip-perspective{height:330px}.vocab-real-photo{height:183px;flex-basis:183px}.vocab-flip-inner .vocab-face-content strong{font-size:20px}}
-@media(prefers-reduced-motion:reduce){.vocab-flip-inner{transition:none!important;-webkit-transition:none!important}}
+@media(max-width:650px){.vocab-flip-perspective{height:385px}.vocab-real-photo{height:255px;flex-basis:255px;width:min(350px,100%)}.vocab-flip-inner .vocab-face-content strong{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.vocab-flip-inner{transition-duration:.4s;-webkit-transition-duration:.4s}}
 
 `;
 
@@ -615,7 +615,13 @@ function renderVocabulary(){
  '<div class="actions"><button class="btn" disabled>← Bước trước</button><button id="vocabRestart" class="btn" type="button">Ôn từ đầu</button><button id="vocabNext" class="btn primary" '+(allSeen?'':'disabled')+'>Bước tiếp →</button></div>';
  const card=document.getElementById('vocabOneCard'),status=document.getElementById('vocabStatus'),next=document.getElementById('vocabNext');
  card.onclick=()=>{
-   const flipped=card.classList.toggle('is-flipped');card.setAttribute('aria-pressed',String(flipped));
+   const wasFlipped=card.classList.contains('is-flipped'),flipped=!wasFlipped,rotator=card.querySelector('.vocab-flip-inner');
+   const start=wasFlipped?180:0,end=flipped?180:0;
+   rotator?.getAnimations?.().forEach(animation=>animation.cancel());
+   card.classList.toggle('is-flipped',flipped);
+   card.setAttribute('aria-pressed',String(flipped));
+   card.setAttribute('aria-label',flipped?'Mặt sau: '+pair[1]+'. Nhấn để lật lại':'Mặt trước: '+pair[0]+'. Nhấn để xem nghĩa');
+   if(rotator?.animate){rotator.animate([{transform:'rotateY('+start+'deg)'},{transform:'rotateY('+end+'deg)'}],{duration:840,easing:'cubic-bezier(.2,.8,.2,1)'});}
    if(!flipped)return;
    const learned=new Set(state.vocab.seen||[]);learned.add(index);
    state.vocab.seen=[...learned].sort((a,b)=>a-b);
