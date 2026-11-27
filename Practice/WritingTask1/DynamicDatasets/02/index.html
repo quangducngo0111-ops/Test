@@ -56,16 +56,13 @@ function quizHTML(key,questions,values){return questions.map((q,i)=>`<fieldset c
 function bindQuiz(key,questions,container){const values=key==='analysis'?state.analysis:(state.quiz[key]||{});container.querySelectorAll(`input[name^="${key}_"]`).forEach(input=>{input.onchange=()=>{const i=Number(input.name.split('_')[1]);values[i]=Number(input.value);if(key!=='analysis')state.quiz[key]=values;else state.analysis=values;state.passed[key]=false;container.querySelectorAll(`[id^="fb_${key}_"]`).forEach(e=>e.hidden=true);save()}})}
 function markQuiz(key,questions){const values=key==='analysis'?state.analysis:state.quiz[key]||{};let ok=0;questions.forEach((q,i)=>{const correct=Number(values[i])===q[2];ok+=correct?1:0;const box=$(`fb_${key}_${i}`);box.hidden=false;box.innerHTML=correct?'<span class="success">✓ Chính xác</span>':`<span class="error">✗ Cần xem lại.</span> ${h(q[3]||'Đáp án đúng: '+q[1][q[2]])}`});state.passed[key]=ok===questions.length;save();const s=$('quizSummary');if(s){s.hidden=false;s.innerHTML=`<strong>${ok}/${questions.length} câu đúng.</strong> ${state.passed[key]?'Đã hoàn thành, có thể tiếp tục.':'Xem phản hồi từng câu và thử lại.'}`;}updateNav()}
 function renderAnalysis(root){
- root.innerHTML='<p class="question">Quan sát biểu đồ bên trái và trả lời 6 câu hỏi phân tích. Chọn đúng trước khi chuyển sang viết Introduction, Overview và Body.</p>'+
+ root.innerHTML='<p class="question">Quan sát biểu đồ bên trái và chọn đáp án chính xác cho 6 câu hỏi. Phần phân tích giúp xác định đơn vị, thời gian, xu hướng và cách nhóm ý trước khi viết.</p>'+
  quizHTML('analysis',ANALYSIS,state.analysis)+
  '<div class="actions"><button class="btn" type="button" id="markAnalysis">Kiểm tra phân tích</button></div><div class="feedback" id="quizSummary" hidden></div>'+
- '<div class="info">Phân tích theo trình tự: đối tượng và đơn vị → thời gian → xu hướng từng đường → cách nhóm ý Body 1/2. Chỉ dùng số liệu nhìn thấy trên biểu đồ.</div>'+
- '<div class="subhead">Ghi chú biểu đồ của em</div><p class="mini">Ghi lại những điểm nổi bật. Ghi chú này được dùng ở các bước viết tiếp theo.</p>'+
- Object.entries({streaming:'Streaming – mốc đầu, mốc cuối và xu hướng',downloads:'Downloads – đỉnh và thay đổi sau đỉnh',cds:'CDs – mức giảm trong cả giai đoạn',turning:'Điểm giao và thứ hạng đầu/cuối kỳ',bodyPlan:'Cách nhóm ý Body 1 và Body 2'}).map(([k,label])=>'<div class="field"><label for="note_'+k+'">'+label+'</label><textarea id="note_'+k+'" rows="2" placeholder="Tự đọc biểu đồ và ghi lại...">'+h(state.notes[k]||'')+'</textarea></div>').join('');
+ '<div class="info">Sau khi phân tích, chuyển sang Introduction → Overview → Body 1 → Body 2 để luyện viết từng phần.</div>';
  bindQuiz('analysis',ANALYSIS,root);
  $('markAnalysis').onclick=()=>markQuiz('analysis',ANALYSIS);
- for(const k in state.notes){const node=$('note_'+k);if(node)node.oninput=e=>{state.notes[k]=e.target.value;save()}}
- if(state.passed.analysis){const sum=$('quizSummary');sum.hidden=false;sum.textContent='✓ Đã hoàn thành 6/6 câu hỏi phân tích. Có thể tiếp tục luyện viết.'}
+ if(state.passed.analysis){const sum=$('quizSummary');sum.hidden=false;sum.textContent='✓ Đã hoàn thành 6/6 câu hỏi phân tích. Có thể chuyển sang Introduction.'}
 }
 function noteHTML(){
  const key=PARTS[state.step];
