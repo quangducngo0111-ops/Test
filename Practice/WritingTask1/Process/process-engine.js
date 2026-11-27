@@ -325,6 +325,12 @@ const CSS=`
 .vocab-quiz-actions button:disabled{opacity:.5;cursor:default}
 @media(max-width:700px){.vocab-quiz-options{grid-template-columns:1fr}.vocab-choice{min-height:44px}}
 
+
+.inline-hint{padding:11px 12px;margin-top:9px;border:1px solid #e1d9f5;background:#faf8ff;border-radius:10px;color:#40315f}
+.inline-hint-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.inline-hint-head b{font-size:11px;color:#4f3a95}
+.inline-hint-next{font-size:11px;font-weight:750;border:1px solid #dbd1f5;color:#553ca2;background:#fff;border-radius:7px;padding:6px 8px;cursor:pointer}
+.inline-hint p{font-size:12px;line-height:1.65;color:#54556e;margin:7px 0 0}
 .vocab-single-head{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#21164b;margin:17px 0 8px;font-size:13px}
 .vocab-single-head span{color:#798199;font-size:12px;font-weight:700}
 .vocab-card-track{height:5px;background:#eceaf7;border-radius:99px;overflow:hidden;margin-bottom:14px}
@@ -507,10 +513,65 @@ function renderVocabulary(){
    STEP 1 UI
    ========================================================= */
 
-function inlineFeedback(id,a){const el=document.getElementById(id),holder=el?.parentElement?.querySelector('.inline-feedback');if(!holder)return;holder.className='inline-feedback show '+(a.ok?'pass':'fail');holder.innerHTML=`<div class="inline-state">${a.ok?'✓ Đạt':'✕ Chưa đạt'}</div><div>${esc(a.hint)}</div>`;}
-function renderAnalysis(){const d=state.drafts.analysis,main=document.getElementById('main');main.innerHTML=`<div class="ey"><span class="chip">BƯỚC 2</span><span class="counter">Phân tích sau khi học từ vựng</span></div><h2>Phân tích sơ đồ</h2><p class="sub">Dựa vào sơ đồ và bộ từ vừa học để nhận diện các công đoạn. Kết quả sẽ hiển thị ngay dưới từng mục.</p><div class="guide">${guide(0)}</div>${vocabReference()}<div id="hintMount">${hintPanel("analysis")}</div><div class="formgrid"><div class="field"><label>Process thuộc dạng nào?</label><select id="aType"><option value="">— Chọn —</option><option>Linear</option><option>Cyclical</option><option>Life Cycle</option></select><div class="inline-feedback"></div></div><div class="field"><label>Có bao nhiêu main stages?</label><input id="aStages" placeholder="Nhập số giai đoạn em xác định"><div class="inline-feedback"></div></div><div class="field"><label>First stage là gì?</label><small class="vocab-field-hint">Có thể viết một cụm từ ngắn đã học, không cần cả câu.</small><textarea id="aFirst" placeholder="Nhập công đoạn bắt đầu"></textarea><div class="inline-feedback"></div></div><div class="field"><label>Last / return stage là gì?</label><textarea id="aLast" placeholder="Nhập công đoạn cuối / quay lại"></textarea><div class="inline-feedback"></div></div><div class="field" style="grid-column:1/-1"><label>Important features là gì?</label><textarea id="aFeatures" placeholder="Nêu các đặc điểm/công đoạn nổi bật..."></textarea><div class="inline-feedback"></div></div><div class="field"><label>Em chọn Body 1 gồm những stage nào?</label><textarea id="aBody1" placeholder="Nhập nhóm stage em chọn cho Body 1"></textarea><div class="inline-feedback"></div></div><div class="field"><label>Em chọn Body 2 gồm những stage nào?</label><textarea id="aBody2" placeholder="Nhập nhóm stage em chọn cho Body 2"></textarea><div class="inline-feedback"></div></div></div><div class="actions"><button id="analysisPrev" class="btn">← Từ vựng</button><button id="checkBtn" class="btn primary">Kiểm tra Bước 2 ✓</button><button id="nextBtn" class="btn" ${isDone(0)?'':'disabled'}>Bước tiếp →</button></div><div id="feedback" class="feedback"></div>`;
+
+/* Inline help specific to each analysis question. First hint is displayed only
+   when the answer has been checked and did not pass. */
+function analysisHints(id){
+ const bank=vocabulary(),stages=model(),total=Number(task.stages||stages.length),half=Math.ceil(total/2);
+ const first=stages[0]?.label||bank[0][0],last=stages[stages.length-1]?.label||bank[bank.length-1][0],type=expectedType();
+ const firstExample=stages[0]?.ref||first,lastExample=stages[stages.length-1]?.ref||last;
+ const hints={
+  aType:[
+   'Quan sát chiều mũi tên: đi từ đầu đến cuối là linear; lặp thành vòng là cyclical; phát triển của sinh vật là life cycle.',
+   'Sơ đồ này cho thấy '+(type==='life cycle'?'sự phát triển của một sinh vật':type==='cyclical'?'một chu trình có thể quay lại điểm đầu':'các công đoạn thực hiện tuần tự')+'.',
+   'Dạng phù hợp: '+(type==='life cycle'?'Life Cycle':type==='cyclical'?'Cyclical':'Linear')+'.'
+  ],
+  aStages:[
+   'Đếm các công đoạn hoặc thay đổi chính được ghi trên sơ đồ. Đừng đếm từng chi tiết nhỏ trong cùng một bước.',
+   'Hãy đi theo mũi tên từ điểm bắt đầu và đánh dấu mỗi công đoạn chính một lần.',
+   'Bài này có '+total+' giai đoạn chính.'
+  ],
+  aFirst:[
+   'Nhìn nơi mũi tên bắt đầu. Chỉ cần tên công đoạn hoặc cụm từ ngắn, không bắt buộc viết thành câu.',
+   'Công đoạn đầu liên quan đến "'+first+'". Hãy tìm từ tương ứng trong bộ từ vừa học.',
+   'Ví dụ tham khảo: '+firstExample+'. Có thể trả lời bằng cụm từ ngắn.'
+  ],
+  aLast:[
+   'Tìm bước cuối cùng trước khi quy trình kết thúc hoặc quay lại điểm đầu.',
+   'Bước cuối liên quan đến "'+last+'". Cân nhắc dùng đúng cụm từ trong sơ đồ.',
+   'Ví dụ tham khảo: '+lastExample+'.'
+  ],
+  aFeatures:[
+   'Nêu ít nhất 3 công đoạn hoặc chuyển biến đáng chú ý, không cần viết đoạn văn hoàn chỉnh.',
+   'Bạn có thể chọn từ các bước như '+stages.slice(1,4).map(v=>v.label).join(', ')+'.',
+   'Gợi ý: '+stages.slice(1,4).map(v=>v.ref||v.label).join(' ')+' Hãy diễn đạt bằng từ của mình.'
+  ],
+  aBody1:[
+   'Body 1 nên mô tả một nhóm bước liên tiếp. Nhập dạng khoảng, ví dụ 1-4.',
+   'Thử bắt đầu từ stage 1 rồi kết thúc ở gần giữa sơ đồ, để Body 2 có phần còn lại.',
+   'Có thể thử nhập 1-'+half+' và điều chỉnh theo cách chia hợp lý của sơ đồ.'
+  ],
+  aBody2:[
+   'Body 2 phải tiếp nối Body 1 và không trùng số bước. Nhập dạng khoảng, ví dụ 5-9.',
+   'Nếu Body 1 dừng ở bước k, Body 2 nên bắt đầu ở k+1 và đi đến bước cuối.',
+   'Nếu chia Body 1 là 1-'+half+', bạn có thể thử Body 2 là '+(half+1)+'-'+total+'.'
+  ]
+ };
+ return hints[id]||['Quan sát lại sơ đồ và từ vựng đã học.','Kiểm tra câu trả lời theo mũi tên và các nhãn trong hình.','Thử diễn đạt bằng một cụm từ ngắn đúng nội dung sơ đồ.'];
+}
+
+function inlineFeedback(id,a){
+ const el=document.getElementById(id),holder=el?.parentElement?.querySelector('.inline-feedback');
+ if(!holder)return;
+ holder.className='inline-feedback show '+(a.ok?'pass':'fail');
+ if(a.ok){holder.innerHTML='<div class="inline-state">✓ Đạt</div><div>'+esc(a.hint)+'</div>';return;}
+ const levels=state.fieldHintLevels||{},level=Math.min(3,Math.max(1,Number(levels[id]||1))),hints=analysisHints(id);
+ holder.innerHTML='<div class="inline-state">✕ Chưa đạt</div><div>'+esc(a.hint)+'</div><div class="inline-hint"><div class="inline-hint-head"><b>💡 Gợi ý '+level+'/3</b><button type="button" class="inline-hint-next">'+(level<3?'Gợi ý rõ hơn':'Xem lại gợi ý 1')+'</button></div><p>'+esc(hints[level-1])+'</p></div>';
+ holder.querySelector('.inline-hint-next').onclick=()=>{state.fieldHintLevels=state.fieldHintLevels||{};state.fieldHintLevels[id]=level===3?1:level+1;saveState();inlineFeedback(id,a);};
+}
+function renderAnalysis(){const d=state.drafts.analysis,main=document.getElementById('main');main.innerHTML=`<div class="ey"><span class="chip">BƯỚC 2</span><span class="counter">Phân tích sau khi học từ vựng</span></div><h2>Phân tích sơ đồ</h2><p class="sub">Dựa vào sơ đồ và bộ từ vừa học để nhận diện các công đoạn. Kết quả sẽ hiển thị ngay dưới từng mục.</p><div class="guide">${guide(0)}</div>${vocabReference()}<div class="formgrid"><div class="field"><label>Process thuộc dạng nào?</label><select id="aType"><option value="">— Chọn —</option><option>Linear</option><option>Cyclical</option><option>Life Cycle</option></select><div class="inline-feedback"></div></div><div class="field"><label>Có bao nhiêu main stages?</label><input id="aStages" placeholder="Nhập số giai đoạn em xác định"><div class="inline-feedback"></div></div><div class="field"><label>First stage là gì?</label><small class="vocab-field-hint">Có thể viết một cụm từ ngắn đã học, không cần cả câu.</small><textarea id="aFirst" placeholder="Nhập công đoạn bắt đầu"></textarea><div class="inline-feedback"></div></div><div class="field"><label>Last / return stage là gì?</label><textarea id="aLast" placeholder="Nhập công đoạn cuối / quay lại"></textarea><div class="inline-feedback"></div></div><div class="field" style="grid-column:1/-1"><label>Important features là gì?</label><textarea id="aFeatures" placeholder="Nêu các đặc điểm/công đoạn nổi bật..."></textarea><div class="inline-feedback"></div></div><div class="field"><label>Em chọn Body 1 gồm những stage nào?</label><textarea id="aBody1" placeholder="Nhập nhóm stage em chọn cho Body 1"></textarea><div class="inline-feedback"></div></div><div class="field"><label>Em chọn Body 2 gồm những stage nào?</label><textarea id="aBody2" placeholder="Nhập nhóm stage em chọn cho Body 2"></textarea><div class="inline-feedback"></div></div></div><div class="actions"><button id="analysisPrev" class="btn">← Từ vựng</button><button id="checkBtn" class="btn primary">Kiểm tra Bước 2 ✓</button><button id="nextBtn" class="btn" ${isDone(0)?'':'disabled'}>Bước tiếp →</button></div><div id="feedback" class="feedback"></div>`;
   for(const[id,k]of Object.entries({aType:'type',aStages:'stages',aFirst:'first',aLast:'last',aFeatures:'features',aBody1:'body1',aBody2:'body2'}))document.getElementById(id).value=d[k]||'';
-  main.querySelectorAll('input,textarea,select').forEach(el=>{el.addEventListener('input',saveCurrentDraft);el.addEventListener('change',saveCurrentDraft);});document.getElementById('checkBtn').onclick=checkAnalysis;document.getElementById('analysisPrev').onclick=()=>goStep(1);document.getElementById('analysisEditVocab').onclick=()=>goStep(1);document.getElementById('nextBtn').onclick=()=>goStep(2);attachHint('analysis');if(state.scores[0])showAnalysisResult(state.scores[0]);
+  main.querySelectorAll('input,textarea,select').forEach(el=>{el.addEventListener('input',saveCurrentDraft);el.addEventListener('change',saveCurrentDraft);});document.getElementById('checkBtn').onclick=checkAnalysis;document.getElementById('analysisPrev').onclick=()=>goStep(1);document.getElementById('analysisEditVocab').onclick=()=>goStep(1);document.getElementById('nextBtn').onclick=()=>goStep(2);if(state.scores[0])showAnalysisResult(state.scores[0]);
 }
 function checkAnalysis(){saveCurrentDraft();state.attempts[0]=attempts(0)+1;const a=assessAnalysis(),list=[a.type,a.stages,a.first,a.last,a.features,a.body1,a.body2],passed=list.filter(x=>x.ok).length,result={assessments:a,passed,total:Math.round(passed/7*100),completed:passed===7};state.scores[0]=result;if(result.completed)markDone(0);else invalidateFrom(0);saveState();showAnalysisResult(result);renderNav();renderProgress();const next=document.getElementById('nextBtn');if(next)next.disabled=!isDone(0);}
 function showAnalysisResult(result){const a=result.assessments||assessAnalysis(),map={aType:'type',aStages:'stages',aFirst:'first',aLast:'last',aFeatures:'features',aBody1:'body1',aBody2:'body2'};Object.entries(map).forEach(([id,k])=>inlineFeedback(id,a[k]));const f=document.getElementById('feedback');if(!f)return;f.className='feedback show';f.innerHTML=`<div class="scorebar"><div><div class="score">${result.total}/100</div><div class="status ${result.completed?'good':'warn'}">${result.completed?'✓ Hoàn thành Bước 2':'Xem các mục Chưa đạt phía trên'}</div></div><div class="counter">Đạt ${result.passed??Object.values(a).filter(x=>x.ok).length}/7 mục</div></div>`;}
