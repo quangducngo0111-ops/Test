@@ -399,22 +399,22 @@ const CSS=`
 
 
 /* 3D flashcards: the rotating inner wrapper contains both photo-backed faces. */
-.vocab-flip-perspective{width:min(620px,100%);height:470px;margin:0 auto;perspective:1450px;-webkit-perspective:1450px;isolation:isolate}
+.vocab-flip-perspective{width:min(660px,100%);height:330px;margin:0 auto;perspective:1450px;-webkit-perspective:1450px;isolation:isolate}
 .vocab-flip-control{width:100%;height:100%;padding:0;border:0;border-radius:20px;background:transparent;display:block;cursor:pointer;position:relative;outline-offset:5px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .vocab-flip-inner{display:block;position:relative;width:100%;height:100%;transform:rotateY(0deg);-webkit-transform:rotateY(0deg);transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .82s cubic-bezier(.2,.8,.2,1);-webkit-transition:-webkit-transform .82s cubic-bezier(.2,.8,.2,1);will-change:transform}
 .vocab-flip-control.is-flipped .vocab-flip-inner{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
 .vocab-flip-control:focus-visible{outline:3px solid #815bd0}
-.vocab-flip-inner .vocab-face{display:flex;flex-direction:column;position:absolute;inset:0;padding:0;gap:0;align-items:stretch;justify-content:flex-start;border:1px solid #ddd8ef;border-radius:20px;background:#f7f9ff;overflow:hidden;box-shadow:0 12px 31px rgba(39,18,96,.11);backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;pointer-events:none}
+.vocab-flip-inner .vocab-face{display:flex;flex-direction:row;position:absolute;inset:0;padding:14px;gap:10px;align-items:center;justify-content:flex-start;border:1px solid #ddd8ef;border-radius:20px;background:linear-gradient(135deg,#f0f6ff,#fff 65%);overflow:hidden;box-shadow:0 12px 31px rgba(39,18,96,.11);backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;pointer-events:none}
 .vocab-flip-inner .vocab-face-front{transform:rotateY(0deg);-webkit-transform:rotateY(0deg)}
 .vocab-flip-inner .vocab-face-back{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
-.vocab-real-photo{display:block;flex:0 0 310px;height:310px;width:min(460px,100%);margin:0 auto;background-color:#f5f8fa;background-size:300% 300%;background-repeat:no-repeat;border-radius:0 0 12px 12px;filter:contrast(1.1) saturate(1.07);image-rendering:-webkit-optimize-contrast}
+.vocab-real-photo{display:block;flex:0 0 298px;height:298px;width:298px;margin:0;background-color:#f5f8fa;background-size:300% 300%;background-repeat:no-repeat;border-radius:14px;box-shadow:0 5px 14px #25376716;filter:contrast(1.06) saturate(1.04);image-rendering:-webkit-optimize-contrast}
 .vocab-real-photo.vocab-illustrated{display:flex;justify-content:center;align-items:center;background:#eef4fd}
 .vocab-real-photo.vocab-illustrated svg{width:100%;height:100%;display:block}
-.vocab-flip-inner .vocab-face-content{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 22px 22px;text-align:center;background:#fff}
+.vocab-flip-inner .vocab-face-content{display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:18px 12px;text-align:center;background:transparent}
 .vocab-flip-inner .vocab-face-back .vocab-face-content{background:#f7f4ff}
 .vocab-flip-inner .vocab-face-content strong{font-size:clamp(21px,2.5vw,27px);line-height:1.3;color:#2e166b}
 .vocab-flip-inner .vocab-face-content small{font-size:12px;color:#777b93}
-@media(max-width:650px){.vocab-flip-perspective{height:385px}.vocab-real-photo{height:255px;flex-basis:255px;width:min(350px,100%)}.vocab-flip-inner .vocab-face-content strong{font-size:20px}}
+@media(max-width:650px){.vocab-flip-perspective{width:min(430px,100%);height:440px}.vocab-flip-inner .vocab-face{flex-direction:column;padding:10px;gap:4px}.vocab-real-photo{height:265px;flex-basis:265px;width:265px;max-width:100%}.vocab-flip-inner .vocab-face-content{padding:9px 10px 16px}.vocab-flip-inner .vocab-face-content strong{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.vocab-flip-inner{transition-duration:.4s;-webkit-transition-duration:.4s}}
 
 `;
