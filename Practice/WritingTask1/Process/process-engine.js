@@ -130,7 +130,7 @@ function navDone(i){return i===0?isDone(0):i===1?vocabReady():isDone(i-1);}
    STATE
    ========================================================= */
 
-let state={current:1,vocabUiV1:true,vocabUiV2:true,vocab:{selected:[],locked:false},completed:[],attempts:{},templateOpen:{1:true,2:true,3:true,4:true},drafts:{analysis:{type:'',stages:'',first:'',last:'',features:'',body1:'',body2:''},intro:'',overview:'',body1:'',body2:'',full:''},scores:{}};
+let state={current:1,vocabUiV1:true,vocabUiV2:true,hintLevels:{},vocab:{selected:[],locked:false},completed:[],attempts:{},templateOpen:{1:true,2:true,3:true,4:true},drafts:{analysis:{type:'',stages:'',first:'',last:'',features:'',body1:'',body2:''},intro:'',overview:'',body1:'',body2:'',full:''},scores:{}};
 
 function loadState(){try{let raw=localStorage.getItem(STORAGE_KEY),fromLegacy=false;if(!raw){for(const k of LEGACY_KEYS){raw=localStorage.getItem(k);if(raw){fromLegacy=true;break;}}}const s=JSON.parse(raw||'null');if(!s)return;state={...state,...s,scores:fromLegacy?{}:(s.scores||{}),templateOpen:{...state.templateOpen,...(s.templateOpen||{})},drafts:{...state.drafts,...(s.drafts||{}),analysis:{...state.drafts.analysis,...(s.drafts?.analysis||{})}},vocab:{...state.vocab,...(s.vocab||{})}};if(!s.vocabUiV1){state.current=1;state.vocabUiV1=true;}if(!s.vocabUiV2){if(!(state.vocab?.locked&&Number(state.current)>=2))state.current=1;state.vocabUiV2=true;saveState();}else if(fromLegacy)saveState();}catch(e){console.warn('State load failed:',e);}}
 function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){console.warn('State save failed:',e);}}
@@ -300,6 +300,17 @@ const CSS=`
 .vocab-chip.used{border-color:#a7d5bf;background:#f0fbf5;color:#225c43}
 .vocab-reminder p{font-size:11px;line-height:1.6;color:#6b7287;margin:0 0 8px}
 @media(max-width:650px){.vocab-grid{grid-template-columns:1fr}.vocab-item{min-height:68px}}
+.hint-panel{border:1px solid #dcd8f0;background:linear-gradient(125deg,#fcfbff,#f5f9ff);border-radius:13px;padding:13px 15px;margin:14px 0 16px}
+.hint-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hint-top b{color:#31205f;font-size:13px}
+.hint-top small{display:block;margin-top:4px;color:#69768d;font-size:11px;line-height:1.5}
+.hint-action{background:#fff;border:1px solid #b8a9e0;border-radius:9px;color:#44258e;font-weight:850;padding:9px 12px;font-size:12px;white-space:nowrap}
+.hint-answer{margin-top:12px;background:#fff;border:1px solid #e5e2f2;padding:12px;border-radius:9px}
+.hint-level{font-size:10px;color:#6a56ba;font-weight:800;letter-spacing:.035em}
+.hint-answer p{font-size:12px;line-height:1.75;color:#35415b;margin:6px 0 0}
+.hint-hide{background:none;border:0;padding:9px 0 0;color:#6c6f8b;font-size:11px;text-decoration:underline}
+@media(max-width:650px){.hint-top{align-items:flex-start}.hint-action{white-space:normal;min-width:100px}}
+
 `;
 
 /* =========================================================
@@ -333,6 +344,58 @@ function vocabReminder(text){
  const used=entries.filter(v=>v.used).length;
  return '<section class="vocab-reminder" aria-label="Bộ từ vựng đã chốt"><div class="vocab-reminder-head"><b>📘 Bộ từ vựng đã chốt</b><span>'+used+'/'+entries.length+' cụm xuất hiện trong đoạn đang viết</span></div>'+'<div class="vocab-chips">'+entries.map(v=>'<span class="vocab-chip '+(v.used?'used':'')+'" title="'+esc(v.meaning)+'">'+(v.used?'✓ ':'')+esc(v.term)+'</span>').join('')+'</div><p>Có thể paraphrase phù hợp ngữ cảnh; không cần dùng tất cả từ trong từng đoạn. Danh sách này chỉ để tham khảo, không cộng/trừ điểm tự động.</p><button class="vocab-edit" id="editVocab" type="button">Điều chỉnh bộ từ</button></section>';
 }
+
+/* Contextual, progressive help: hints never affect grading or unlock conditions. */
+function hintExamples(kind){
+ const stages=model(),first=stages[0]?.label||vocabulary()[0][0],last=stages.at(-1)?.label||vocabulary().at(-1)[0],n=Number(task.stages||stages.length),split=Math.ceil(n/2);
+ const reference=part=>String(task[part]?.reference||'').trim();
+ if(kind==='vocab')return [
+   'Nhìn vào sơ đồ bên trái rồi tìm các vật liệu, hành động hoặc công đoạn xuất hiện trong hình. Bấm vào từng thẻ để xem nghĩa.',
+   'Bắt đầu từ những từ dễ nhận ra trên hình; sau đó thử trò chơi chọn nghĩa. Trả lời sai vẫn được thử lại và không bị trừ điểm.',
+   'Gợi ý hai cụm đầu: '+vocabulary().slice(0,2).map(v=>v[0]+' = '+v[1]).join('; ')+'. Chọn 6–10 cụm để làm bộ từ của riêng mình.'
+ ];
+ if(kind==='analysis')return [
+   'Dò theo chiều mũi tên. First stage là nơi quy trình bắt đầu, Last stage là nơi quy trình kết thúc hoặc quay lại. Chỉ cần viết cụm từ ngắn.',
+   'First stage liên quan đến “'+first+'”; Last stage liên quan đến “'+last+'”. Nếu viết bằng từ đồng nghĩa phù hợp, hệ thống vẫn có thể nhận diện.',
+   'Gợi ý First stage: '+(stages[0]?.ref||first)+'. Sơ đồ có '+n+' giai đoạn. Có thể thử chia Body 1: 1–'+split+' và Body 2: '+(split+1)+'–'+n+' (điều chỉnh nếu sơ đồ có nhánh).'
+ ];
+ if(kind==='intro')return [
+   'Introduction chỉ cần 1 câu diễn đạt lại đề bài, chưa cần liệt kê tất cả giai đoạn.',
+   'Có thể bắt đầu bằng “The diagram illustrates ...” hoặc “The diagram shows ...”, rồi thay đổi cách diễn đạt của tên quy trình.',
+   'Ví dụ tham khảo: '+(reference('intro')||'The diagram illustrates the process shown in the figure.')+' Hãy tự diễn đạt lại bằng từ của mình.'
+ ];
+ if(kind==='overview')return [
+   'Overview nêu dạng quy trình, điểm bắt đầu – kết thúc và 1–2 đặc điểm nổi bật; không mô tả tỉ mỉ từng máy hoặc từng hình.',
+   'Tìm điểm đầu “'+first+'”, điểm cuối “'+last+'” và xác định đây là linear, cyclical hay life cycle.',
+   'Ví dụ tham khảo để hiểu cách khái quát: '+(reference('overview')||'Overall, the process contains several stages from start to finish.')+'. Hãy rút gọn hoặc viết lại theo quan sát của mình.'
+ ];
+ if(kind==='body1'||kind==='body2'){
+   const firstPart=kind==='body1',part=firstPart?'body1':'body2',plan=bodyPlan(firstPart?3:4);
+   const ranges=plan?plan.label:(firstPart?'stages 1–'+split:'stages '+(split+1)+'–'+n);
+   return [
+     'Hãy mô tả nhóm '+ranges+' theo đúng mũi tên. Mỗi câu chỉ cần nêu sự kiện, vật liệu và thay đổi chính.',
+     'Dùng từ nối như “Initially”, “Then”, “After this”, “Subsequently”. Ưu tiên bị động khi mô tả quy trình sản xuất, ví dụ “is collected” hoặc “is heated” khi phù hợp.',
+     'Đọc ví dụ để tham khảo cách nối câu (không cần chép nguyên): '+(dynamicReference(firstPart?3:4)||reference(part)||'Initially, the first stage takes place. The material then moves to the following stage.')
+   ];
+ }
+ return [
+   'Chia bài hoàn chỉnh thành bốn đoạn: Introduction, Overview, Body 1 và Body 2. Đừng chép nguyên những đoạn đã viết trước đó.',
+   'Dựa vào sơ đồ, kiểm tra xem đã nêu điểm đầu và kết thúc, có Overview và trình bày theo đúng thứ tự công đoạn chưa.',
+   'Khung tự rà soát: “The diagram illustrates ... / Overall, ... / Initially, ... / In the later stages, ...”. Thay phần trống bằng nội dung đúng của sơ đồ.'
+ ];
+}
+function hintPanel(kind){
+ const level=Math.max(0,Math.min(3,Number(state.hintLevels?.[kind]||0)));
+ const hints=hintExamples(kind),content=level?'<div class="hint-answer"><span class="hint-level">Mức '+level+'/3</span><p>'+esc(hints[level-1])+'</p></div>':'';
+ return '<section class="hint-panel" aria-label="Hỗ trợ học tập"><div class="hint-top"><div><b>💡 Nếu chưa làm được</b><small>Nhận gợi ý tăng dần, không ảnh hưởng điểm</small></div><button type="button" class="hint-action" id="hintNext">'+(level===0?'Cần gợi ý?':level<3?'Gợi ý tiếp':'Xem lại gợi ý 1')+'</button></div>'+content+(level>0?'<button type="button" class="hint-hide" id="hintHide">Ẩn gợi ý</button>':'')+'</section>';
+}
+function attachHint(kind){
+ const next=document.getElementById('hintNext'),hide=document.getElementById('hintHide');
+ if(next)next.onclick=()=>{state.hintLevels=state.hintLevels||{};state.hintLevels[kind]=Math.max(1,Math.min(3,(Number(state.hintLevels[kind])||0)+1));if(state.hintLevels[kind]===3&&next.textContent==='Xem lại gợi ý 1')state.hintLevels[kind]=1;saveState();refreshHint(kind);};
+ if(hide)hide.onclick=()=>{state.hintLevels[kind]=0;saveState();refreshHint(kind);};
+}
+function refreshHint(kind){const host=document.getElementById('hintMount');if(host){host.innerHTML=hintPanel(kind);attachHint(kind);}}
+
 function vocabReference(){const bank=vocabulary(),chosen=vocabSelection();return '<section class="vocab-reminder"><div class="vocab-reminder-head"><b>📘 Từ vựng đã học</b><span>Tham khảo khi phân tích sơ đồ</span></div><div class="vocab-chips">'+chosen.map(i=>'<span class="vocab-chip" title="'+esc(bank[i][1])+'">'+esc(bank[i][0])+' · '+esc(bank[i][1])+'</span>').join('')+'</div><button class="vocab-edit" type="button" id="analysisEditVocab">Ôn lại từ vựng</button></section>';}
 function renderVocabulary(){
  const main=document.getElementById('main'),bank=vocabulary(),selected=new Set(vocabSelection());
