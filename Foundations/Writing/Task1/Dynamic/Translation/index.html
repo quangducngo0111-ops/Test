@@ -10,32 +10,69 @@ let current=Math.max(0,Math.min(9,Number(new URLSearchParams(location.search).ge
 const lessonNodes=document.getElementById('lessons'),questionNodes=document.getElementById('questions');
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 function entryKey(g,q){return g+'-'+q} 
-function extractNums(t){return (NORMALIZE(t).match(/\d+(?:\.\d+)?/g)||[]).map(x=>Number(x)).sort((a,b)=>a-b)}
-const concepts=[
-/\b(rose|rise|increased?|grew|growth|climbed|went up|surged|jumped)\b/i,/\b(fell|decreased?|declined?|dropped|reduced?|went down|dipped)\b/i,/\b(steadily|gradually|consistently|continuously)\b/i,/\b(slightly|marginally|modestly|minor|small)\b/i,/\b(sharply|dramatically|significantly|considerably|substantially|rapidly|steeply)\b/i,/\b(fluctuat|varied|variation|oscillat)\w*/i,/\b(stabl|constant|unchanged|steady|levelled|leveled|plateau|remained)\w*/i,/\b(peak|highest|high of|maximum|topped out)\w*/i,/\b(lowest|low of|minimum|bottomed|trough)\w*/i,/\b(whereas|while|however|in contrast|similarly|likewise|but|although|despite)\b/i,/\b(overtook|surpassed|exceeded|higher than|lower than|converged|narrowed|gap)\b/i];
-const supports=[
-['rose','increased','grew','climbed'],['fell','decreased','declined','dropped'],['steadily','gradually','consistently'],['slightly','marginally','modestly'],['sharply','dramatically','significantly','considerably'],['fluctuated','varied','oscillated'],['stable','constant','unchanged','levelled off','leveled off'],['peaked','reached a peak','highest','maximum'],['hit a low','lowest','minimum','reached a low'],['while','whereas','however','in contrast','similarly','likewise','but','despite'],['overtook','surpassed','higher than','converged','narrowed','gap']];
-function matchedConcept(ref,ans,i){return !concepts[i].test(ref)||concepts[i].test(ans)}
-function grade(ref,ans){const a=NORMALIZE(ans),r=NORMALIZE(ref);if(!a)return {score:0,remarks:['Bạn chưa nhập bản dịch. Hãy viết câu rồi chấm lại.'],ok:false};
-const expected=extractNums(ref),actual=extractNums(ans),missing=expected.filter((x,i)=>expected.filter(y=>y===x).length>actual.filter(y=>y===x).length).filter((x,i,ar)=>ar.indexOf(x)===i);const extra=actual.filter(x=>!expected.includes(x));
-const numberScore=expected.length?Math.max(0,1-(missing.length+extra.length)/Math.max(expected.length,1)):1;
-let relevant=0,matched=0;concepts.forEach((re,i)=>{if(re.test(r)){relevant++;if(matchedConcept(r,a,i))matched++}});const trendScore=relevant?matched/relevant:.75;
-const stop=new Set('the a an of in at to from by for and or as on over during between after before into there was were is are both this those that number rate figure figures prices price their its it with per two one had has did'.split(' '));
-const toks=[...new Set(r.replace(/[^a-z ]/g,' ').split(/\s+/).filter(w=>w.length>3&&!stop.has(w)))];
-const lex=toks.length?toks.filter(w=>a.includes(w)||a.includes(w.replace(/s$/,''))).length/toks.length:.6;
-const hasSubject=/\b(the|a|an|there|oil|car|petrol|house|train|sales|emissions|electricity|computer|bicycle|internet|passenger|tourist|unemployment|both|this|these|prices|rates|figures|while|after|at|throughout|by|overall|in)\b/.test(a);
-const sentenceOk=a.split(' ').length>=7&&hasSubject&&/\b(was|were|is|are|rose|rise|rises|increased|grew|fell|declined|dropped|decreased|remained|fluctuated|reached|hit|peaked|stood|saw|experienced|followed|overtook|surpassed|recorded|narrowed|converged|levelled|leveled|stabilised|stabilized|had|went|continued|showed)\b/.test(a);
-const grammarScore=sentenceOk?1:.35;
-const score=Math.round((numberScore*.3+trendScore*.3+lex*.2+grammarScore*.2)*10);
-const remarks=[];if(missing.length)remarks.push('Thiếu hoặc sai số liệu/mốc: '+missing.join(', ')+'. Giữ chính xác đơn vị, điểm đầu và điểm cuối.');if(extra.length)remarks.push('Có số liệu không nằm trong câu gốc: '+extra.join(', ')+'.');if(numberScore===1)remarks.push('✓ Các số liệu và mốc số được nhận diện đầy đủ.');
-if(trendScore<1)remarks.push('Cần kiểm tra hướng và mức độ thay đổi hoặc quan hệ so sánh. Ví dụ: '+supports.filter((_,i)=>concepts[i].test(r)&&!concepts[i].test(a)).map(x=>x.slice(0,3).join(' / ')).join('; ')+'.');else remarks.push('✓ Từ/cụm diễn đạt xu hướng chính được nhận diện.');
-if(lex<.45)remarks.push('Kiểm tra lại chủ thể, danh từ chỉ đại lượng và đơn vị: câu của bạn khác khá nhiều so với mẫu.');else if(lex>=.7)remarks.push('✓ Từ vựng chủ đề tương đối sát câu mẫu.');
-if(!sentenceOk)remarks.push('Xem lại chủ ngữ, động từ chính, chia thì quá khứ và cấu trúc câu hoàn chỉnh.');
-remarks.push('Lưu ý: Động từ tăng/giảm dùng from ... to ...; mức thay đổi dùng by ...; tỷ lệ chênh lệch dùng percentage points, không phải percent.');
-return {score,remarks,ok:true}}
+
+function parseNumber(s){
+ s=String(s).trim().replace(/\s/g,'');
+ if(s.includes('.')&&s.includes(',')){s=s.lastIndexOf('.')>s.lastIndexOf(',')?s.replace(/,/g,''):s.replace(/\./g,'').replace(',','.')}
+ else if(s.includes('.')||s.includes(',')){const sep=s.includes('.')?'.':',';const parts=s.split(sep);s=(parts.length>2||parts.length===2&&parts[1].length===3)?parts.join(''):s.replace(',','.')}
+ return Number(s);
+}
+function extractNums(t){
+ const out=[];const re=/(\d[\d.,]*)(?:\s*(million|billion|thousand))?/gi;let m;
+ while((m=re.exec(t))){const multiplier={million:1e6,billion:1e9,thousand:1e3}[String(m[2]||'').toLowerCase()]||1;const value=parseNumber(m[1])*multiplier;if(Number.isFinite(value))out.push(value)}
+ return out;
+}
+const indicators={
+ rise:/\b(rose|rise|increas\w*|grew|growth|climb\w*|surge\w*|jump\w*|went up)\b/i,
+ fall:/\b(fell|fall|decreas\w*|declin\w*|dropp?\w*|reduc\w*|went down)\b/i,
+ slight:/\b(slight\w*|marginal\w*|modest\w*|minor|small)\b/i,
+ strong:/\b(sharp\w*|significant\w*|dramatic\w*|considerabl\w*|substantial\w*|steep\w*|rapid\w*|noticeabl\w*)\b/i,
+ steady:/\b(steady|steadily|gradual\w*|consistent\w*|continuous\w*)\b/i,
+ fluctuation:/\b(fluctuat\w*|variat\w*|varied|oscillat\w*)\b/i,
+ stable:/\b(stabl\w*|unchanged|constant|remain\w*|levelled off|leveled off|plateau\w*)\b/i,
+ peak:/\b(peak\w*|highest|high of|maximum)\b/i,
+ low:/\b(lowest|low of|minimum|bottomed)\b/i,
+ comparison:/\b(whereas|while|however|contrast|similarly|likewise|but|although|despite|overtook|surpassed|converged|narrowed|gap|opposite)\b/i
+};
+const suggestions={rise:'rose / increased / grew',fall:'fell / declined / decreased',slight:'slightly / marginally',strong:'sharply / significantly',steady:'steadily / gradually',fluctuation:'fluctuated / varied',stable:'remained stable / levelled off',peak:'peaked / reached a high',low:'reached a low / hit the lowest point',comparison:'while / whereas / similarly / in contrast'};
+function grade(ref,ans){
+ const a=NORMALIZE(ans),r=NORMALIZE(ref);
+ if(!a)return {score:null,ok:false,good:[],fix:['Chưa nhập bản dịch.']};
+ const exp=extractNums(ref),found=extractNums(ans),remaining=[...found],missing=[];
+ for(const n of exp){const i=remaining.findIndex(x=>Math.abs(x-n)<0.0000001);if(i<0)missing.push(n);else remaining.splice(i,1)}
+ const good=[],fix=[];
+ if(!missing.length&&!remaining.length)good.push('Số liệu và năm đầy đủ, kể cả khi dùng dấu chấm hoặc dấu phẩy phân tách hàng nghìn.');
+ else{
+  if(missing.length)fix.push('Số liệu hoặc năm còn thiếu/chưa khớp: '+missing.map(n=>n.toLocaleString('en-US')).join(', ')+'.');
+  if(remaining.length)fix.push('Số liệu hoặc năm không nằm trong câu gốc: '+remaining.map(n=>n.toLocaleString('en-US')).join(', ')+'.');
+ }
+ const required=Object.keys(indicators).filter(k=>indicators[k].test(r));
+ const unrecognized=required.filter(k=>!indicators[k].test(a));
+ if(!unrecognized.length)good.push('Diễn đạt hướng và mức độ xu hướng phù hợp với các mẫu được nhận diện.');
+ else fix.push('Cần kiểm tra cách diễn đạt xu hướng/mức độ: '+unrecognized.map(k=>suggestions[k]).join('; ')+'.');
+ const units=[[/\$\s*\d|\bUSD\b|\bdollars?\b/i,/\$\s*\d|\bUSD\b|\bdollars?\b/i,'USD'],[/\bpercentage points?\b/i,/\bpercentage points?\b/i,'điểm phần trăm'],[/\d\s*%/i,/\d\s*%|\bpercent\b/i,'%'],[/\bGWh\b/i,/\bGWh\b/i,'GWh']];
+ const absent=units.filter(([test,accept])=>test.test(ref)&&!accept.test(ans)).map(x=>x[2]);
+ if(absent.length)fix.push('Thiếu đơn vị: '+absent.join(', ')+'.');else good.push('Đơn vị chính được thể hiện.');
+ if(/\bthe house price\b/i.test(ans))fix.push('“The house price” có thể dùng cho một giá nhà cụ thể, nhưng với xu hướng giá nhà nói chung nên viết “house prices”.');
+ if(/\b\d{1,3}(?:\.\d{3})+\b/.test(ans))fix.push('Dùng dấu phẩy ngăn cách hàng nghìn trong tiếng Anh: 200,000 và 220,000, không phải 200.000 và 220.000.');
+ if(/\b(from|between)\s+\d[\d.,]*\s+to\s+\d[\d.,]*\s+usd\b/i.test(ans))fix.push('Nên thể hiện đơn vị cho cả hai giá trị: from $200,000 to $220,000 hoặc from 200,000 USD to 220,000 USD.');
+ const hasVerb=/\b(rose|rise|increased|grew|fell|declined|decreased|dropped|remained|fluctuated|reached|hit|peaked|stood|saw|experienced|followed|overtook|surpassed|recorded|narrowed|converged|levelled|leveled|stabilised|stabilized|was|were|had|went|continued|showed)\b/i.test(ans);
+ if(a.split(/\s+/).length<6||!hasVerb)fix.push('Cần một câu hoàn chỉnh có chủ ngữ và động từ chính phù hợp với mốc thời gian.');
+ const numeric=exp.length?Math.max(0,1-(missing.length+remaining.length)/exp.length):1;
+ const trend=required.length?(required.length-unrecognized.length)/required.length:1;
+ const score=Math.max(0,Math.min(10,Math.round(4*numeric+2.5*trend+1.5*(absent.length?0:1)+2*(hasVerb?1:0)-(/\b\d{1,3}(?:\.\d{3})+\b/.test(ans)?0.5:0)-(/\bthe house price\b/i.test(ans)?0.3:0))));
+ return {score,ok:true,good,fix};
+}
 function renderLessons(){lessonNodes.innerHTML=GROUPS.map((g,i)=>'<button class="lesson '+(i===current?'selected':'')+'" data-lesson="'+i+'"><span class="num">'+(i+1)+'</span><span class="names">'+escapeHTML(g[0])+'<small>'+escapeHTML(g[1])+'</small></span></button>').join('');lessonNodes.querySelectorAll('button').forEach(b=>b.onclick=()=>choose(+b.dataset.lesson))}
 function render(){renderLessons();const g=GROUPS[current];document.getElementById('lessonTitle').textContent='Bài '+(current+1)+' · '+g[0];document.getElementById('lessonSub').textContent=g[1]+' · 5 câu dịch Việt → Anh';let filled=0;questionNodes.innerHTML=g[2].map((pair,i)=>{const k=entryKey(current,i),v=state[k]?.answer||'';if(v.trim())filled++;return '<article class="question"><div class="qtop"><strong>Câu '+(i+1)+'/5</strong><span class="progress" id="mark-'+i+'"></span></div><p class="source">'+escapeHTML(pair[0])+'</p><label for="a-'+i+'">Bản dịch của bạn</label><textarea class="answer" id="a-'+i+'" placeholder="Viết bản dịch tiếng Anh tại đây...">'+escapeHTML(v)+'</textarea><div class="actions"><button class="btn" data-grade="'+i+'">Chấm & chữa câu này</button><button class="btn secondary" data-retry="'+i+'">Làm lại</button></div><div class="feedback" id="f-'+i+'" hidden></div></article>'}).join('');document.getElementById('progress').textContent='Đã viết '+filled+'/5 câu';questionNodes.querySelectorAll('textarea').forEach((el,i)=>{el.oninput=()=>{const k=entryKey(current,i);state[k]={answer:el.value};persist();document.getElementById('mark-'+i).textContent='Chưa chấm';document.getElementById('f-'+i).hidden=true;document.getElementById('progress').textContent='Đã viết '+[...questionNodes.querySelectorAll('textarea')].filter(x=>x.value.trim()).length+'/5 câu';}});questionNodes.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>gradeOne(+b.dataset.grade));questionNodes.querySelectorAll('[data-retry]').forEach(b=>b.onclick=()=>{const i=+b.dataset.retry,k=entryKey(current,i);document.getElementById('a-'+i).value='';delete state[k];persist();document.getElementById('f-'+i).hidden=true;document.getElementById('mark-'+i).textContent='';document.getElementById('progress').textContent='Đã viết '+[...questionNodes.querySelectorAll('textarea')].filter(x=>x.value.trim()).length+'/5 câu';document.getElementById('a-'+i).focus()});document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===9}
-function gradeOne(i){const answer=document.getElementById('a-'+i).value.trim(),model=GROUPS[current][2][i][1],result=grade(model,answer),k=entryKey(current,i),box=document.getElementById('f-'+i);state[k]={answer,score:result.ok?result.score:null};persist();box.hidden=false;box.innerHTML='<h4>'+(result.ok?'Kết quả chấm tham khảo':'Chưa thể chấm')+'</h4>'+(result.ok?'<p><span class="score">'+result.score+'/10</span> · Đánh giá theo quy tắc, không phải điểm IELTS</p>':'')+'<ul>'+result.remarks.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ul><p><strong>Câu dịch tham khảo:</strong></p><p class="model">'+escapeHTML(model)+'</p><p><strong>Cách cải thiện:</strong> So sánh chủ thể → xu hướng → mức độ → số liệu → thời gian. Có thể viết cách khác nếu vẫn chính xác và tự nhiên.</p>';document.getElementById('mark-'+i).textContent=result.ok?result.score+'/10':'Chưa nhập';box.scrollIntoView({behavior:'smooth',block:'nearest'})}
+function gradeOne(i,scroll=true){
+ const answer=document.getElementById('a-'+i).value.trim(),model=GROUPS[current][2][i][1],result=grade(model,answer),k=entryKey(current,i),box=document.getElementById('f-'+i);
+ state[k]={answer,score:result.ok?result.score:null};persist();box.hidden=false;
+ if(!result.ok){box.innerHTML='<h4>Chưa thể chấm</h4><p>Hãy nhập câu dịch trước khi chấm.</p>';document.getElementById('mark-'+i).textContent='Chưa nhập';return;}
+ box.innerHTML='<h4>Nhận xét bản dịch</h4><p><span class="score">'+result.score+'/10</span> · Đánh giá quy tắc, không phải IELTS band</p>'+(result.good.length?'<h4>✅ Điểm đúng</h4><ul>'+result.good.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ul>':'')+'<h4>✍️ Cần cải thiện</h4>'+(result.fix.length?'<ul>'+result.fix.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ul>':'<p>Chưa phát hiện lỗi rõ ràng theo các tiêu chí tự động.</p>')+'<p><strong>Câu dịch tham khảo:</strong></p><p class="model">'+escapeHTML(model)+'</p><p><strong>Lưu ý:</strong> Những câu có cách diễn đạt tương đương vẫn có thể đúng; bộ chấm quy tắc chưa kiểm tra đầy đủ ngữ pháp và ngữ nghĩa.</p>';
+ document.getElementById('mark-'+i).textContent=result.score+'/10';
+ if(scroll)box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
 function choose(i){current=Math.max(0,Math.min(9,i));const u=new URL(location.href);u.searchParams.set('lesson',current+1);history.replaceState({},'',u);render();window.scrollTo({top:0,behavior:'smooth'})}
-document.getElementById('prev').onclick=()=>choose(current-1);document.getElementById('next').onclick=()=>choose(current+1);document.getElementById('gradeAll').onclick=()=>{for(let i=0;i<5;i++)gradeOne(i)};render();
+document.getElementById('prev').onclick=()=>choose(current-1);document.getElementById('next').onclick=()=>choose(current+1);document.getElementById('gradeAll').onclick=()=>{for(let i=0;i<5;i++)gradeOne(i,false)};render();
 </script></body></html>
