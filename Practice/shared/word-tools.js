@@ -247,7 +247,7 @@ function knownPhraseAt(range){
 }
 function handleSelection(event,expand){
  // Silk reserves drag-selected text for the separate Reading Practice annotation menu.
- if(document.body.classList.contains('silk-reading'))return;
+ if(document.body.classList.contains('silk-reading')||document.body.classList.contains('sc-reading-silk-tools'))return;
  if(isExam()||(location.pathname.includes('/Practice/Listening/')&&!location.pathname.includes('/Practice/Listening/FullTest/'))||event.target.closest?.('button,a,input,textarea,select,[contenteditable],[role="button"],#sc-dict-modal,#sc-word-menu'))return;
  const range=selectedRange(),sel=window.getSelection();
  if(!range||!sel)return;
@@ -286,7 +286,7 @@ function markReadingTerms(container){
  const walker=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
  nodes.forEach(node=>{
-  if(!node.parentElement||node.parentElement.closest('a,button,script,style,.sc-lexeme'))return;
+  if(!node.parentElement||node.parentElement.closest('a,button,input,select,option,textarea,label,script,style,.sc-lexeme,.note-anchor,mark.user-highlight,[contenteditable],.review,.inline-review'))return;
   const source=node.nodeValue;if(!source||!/[a-z]/i.test(source))return;
   const phraseMatches=[];
   phrasePattern.lastIndex=0;let hit;
@@ -333,8 +333,8 @@ if(readingBody){
 // The Silk Reading exercise uses a single click for dictionary lookup.
 // Selecting text with a drag is reserved for the Practice annotation toolbar.
 document.addEventListener('click',e=>{
- if(!document.body.classList.contains('silk-reading')||isExam()||e.detail>1)return;
- const span=e.target.closest?.('#source .sc-lexeme');
+ if(!(document.body.classList.contains('silk-reading')||document.body.classList.contains('sc-reading-silk-tools'))||isExam()||e.detail>1)return;
+ const span=e.target.closest?.('#source .sc-lexeme,#passageRoot .sc-lexeme,#questionsSource .sc-lexeme,#questionsRoot .sc-lexeme,#passageHost .sc-lexeme');
  if(!span||e.target.closest?.('mark.user-highlight,.note-anchor'))return;
  if(window.getSelection()?.toString().trim())return;
  const rect=span.getBoundingClientRect();
@@ -344,7 +344,7 @@ document.addEventListener('click',e=>{
 },true);
 document.addEventListener('dblclick',e=>{
  // Double-click remains a supported lookup gesture; Silk prevents its mouseup from opening annotations.
- const span=e.target.closest?.('.sc-lexeme');if(!span||isExam())return;
+ const span=e.target.closest?.('.sc-lexeme');if(!span||isExam()||(document.body.classList.contains('sc-reading-silk-tools')&&!span.closest('#source,#passageRoot,#questionsSource,#questionsRoot,#passageHost')))return;
  e.preventDefault();e.stopImmediatePropagation();
  const rect=span.getBoundingClientRect();
  showTerm(span.dataset.scTerm,null,{clientX:rect.left,clientY:rect.bottom});
@@ -352,7 +352,7 @@ document.addEventListener('dblclick',e=>{
  lookup.click();
 },true);
 document.addEventListener('keydown',e=>{
- if(e.key!=='Enter')return;const span=e.target.closest?.('.sc-lexeme');if(!span||isExam())return;
+ if(e.key!=='Enter')return;const span=e.target.closest?.('.sc-lexeme');if(!span||isExam()||(document.body.classList.contains('sc-reading-silk-tools')&&!span.closest('#source,#passageRoot,#questionsSource,#questionsRoot,#passageHost')))return;
  e.preventDefault();const rect=span.getBoundingClientRect();
  showTerm(span.dataset.scTerm,null,{clientX:rect.left,clientY:rect.bottom});lookup.click();
 });
