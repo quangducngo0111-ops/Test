@@ -14,7 +14,7 @@
 .analysis-guide-grid p{font-size:12.5px;line-height:1.7;margin:7px 0 0}
 .analysis-guide-plan{margin-top:14px;padding:13px 15px;border-left:4px solid #218ACE;background:#EAF6FF;border-radius:9px;font-size:13px;line-height:1.7}
 @media(max-width:650px){.analysis-guide{padding:16px}.analysis-guide-grid{grid-template-columns:1fr}}
-</style></head><body>
+.note-line{padding:10px 0;border-bottom:1px solid #e5e9f2;font-size:12px}.note-line strong{display:block;color:#175e96;font-size:12px;margin-bottom:3px}.note-line div{line-height:1.65}.note-card .btn{margin-top:13px}.subhead{margin-top:20px}.feedback[hidden]{display:none!important}</style></head><body>
 <header class="top"><a href="../">← Dynamic Datasets</a><strong>✍️ Writing Task 1 · Dynamic Datasets 02</strong><span id="userLabel"></span></header>
 <main class="page"><div class="hero"><span class="eyebrow">IELTS Writing Task 1 · Line Graph</span><h1>Music Sales by Method</h1><p>Phân tích dữ liệu, luyện từ vựng và thực hành viết từng đoạn.</p></div>
 <div class="workspace"><aside class="card task"><span class="eyebrow">Đề bài</span><h2>Music Sales by Method</h2><p class="task-prompt">The graph below shows the percentage of total music sales by different methods between 2011 and 2018.</p><img class="chart" id="chart" src="./chart.png" alt="Line graph: music sales by streaming, downloads and CDs, 2011–2018" title="Bấm vào biểu đồ để xem lớn"><p class="muted">Nhấn ảnh để phóng to. Đơn vị là <b>% tổng doanh số</b>, không phải số đĩa hay số lượt tải.</p><p class="muted">Đọc trực tiếp biểu đồ trước khi dùng số liệu; không tự điền các giá trị chưa được xác minh.</p></aside>
@@ -24,7 +24,7 @@
 <script>
 'use strict';
 const $=id=>document.getElementById(id), KEY='DYNAMIC_DATASETS_02_GUIDED_V8';
-const TITLES=['Phân tích biểu đồ','Introduction','Overview','Body 1','Body 2','Bài hoàn chỉnh'];
+const TITLES=['Phân tích biểu đồ','Học & viết Introduction','Học & viết Overview','Học & viết Body 1','Học & viết Body 2','Bài hoàn chỉnh'];
 const PARTS={1:'intro',2:'overview',3:'body1',4:'body2',5:'full'};
 const WORDS={
   intro:[['the line graph / the chart','biểu đồ đường / biểu đồ','Nêu loại biểu đồ trong câu mở đầu.'],['shows / illustrates / compares','thể hiện / minh họa / so sánh','Chú ý chủ ngữ số ít: the chart shows.'],['the percentage of total music sales','tỷ lệ phần trăm tổng doanh số âm nhạc','Không nhầm thành số lượng bán ra.'],['music sales / sales of recorded music','doanh số âm nhạc','Tùy văn cảnh mà chọn diễn đạt tương đương.'],['streaming / downloads / CDs','ba phương thức phân phối âm nhạc','Giữ tên phương thức chính xác.'],['three methods / different formats','ba phương thức / các định dạng khác nhau','Chỉ dùng khi đối tượng được nói rõ.'],['between 2011 and 2018 / from 2011 to 2018','giai đoạn 2011–2018','Hai giới từ phải đi thành cặp hợp lý.'],['proportion / percentage','tỷ lệ phần trăm','The chart gives percentages, not absolute sales.'],['account for','chiếm (một tỷ lệ)','Streaming accounted for a share of sales.'],['sales by method','doanh số theo phương thức','A neutral description of the three methods.'],['over the period','trong giai đoạn','Use with 2011–2018.']],
@@ -66,17 +66,88 @@ function renderAnalysis(root){
 }
 function noteHTML(){
  const key=PARTS[state.step];
- const list={
- intro:{title:'Paraphrase Introduction',rows:[['Đối tượng','total music sales / sales by method'],['Biểu đồ','line graph / chart'],['Đơn vị','percentage / proportion (%)'],['Thời gian','2011–2018'],['Từ vựng','illustrate · compare · account for · streaming · downloads · CDs']]},
- overview:{title:'Ghi chú Overview',rows:[['Mục tiêu','Chỉ nêu xu hướng lớn và tương phản, không đi sâu số liệu'],['Streaming',state.notes.streaming||'Chưa có ghi chú của em'],['Downloads',state.notes.downloads||'Chưa có ghi chú của em'],['CDs',state.notes.cds||'Chưa có ghi chú của em'],['Tương quan',state.notes.turning||'Đối chiếu điểm giao và thứ hạng trên biểu đồ']]},
- body1:{title:'Ghi chú Body 1',rows:[['Đối tượng',state.notes.bodyPlan||'Theo nhóm em đã chọn khi phân tích'],['Downloads',state.notes.downloads||'Chưa ghi chú'],['CDs',state.notes.cds||'Chưa ghi chú'],['Cấu trúc','stood at · fell from … to … · percentage points']]},
- body2:{title:'Ghi chú Body 2',rows:[['Đối tượng','Streaming và đối chiếu các phương thức khác khi phù hợp'],['Streaming',state.notes.streaming||'Chưa ghi chú'],['So sánh / giao điểm',state.notes.turning||'Chưa ghi chú'],['Cấu trúc','rose from … to … · overtook · by the end of the period']]},
- full:{title:'Kiểm tra toàn bài',rows:[['Bố cục','Introduction · Overview · Body 1 · Body 2'],['Đơn vị','% tổng doanh số'],['Giai đoạn','2011–2018'],['Đối tượng','Streaming · Downloads · CDs'],['Yêu cầu','Ít nhất 150 từ; không tự tạo số liệu']]}
- }; const item=list[key]||list.full;
- return `<aside class="note-card"><h3>📝 ${h(item.title)}</h3>${item.rows.map(([k,v])=>`<dl><dt>${h(k)}</dt><dd>${h(v)}</dd></dl>`).join('')}<button type="button" class="btn secondary" id="editNotes">${key==='intro'?'Xem phân tích':'Chỉnh sửa ghi chú'}</button></aside>`;
+ const items={
+  intro:{title:'📘 Ghi chú Introduction',lead:'Chỉ paraphrase đề bài; chưa mô tả xu hướng hoặc nêu số liệu chi tiết.',rows:[
+   ['Biểu đồ','the line graph / the chart'],
+   ['Chủ đề','the percentage of total music sales by method'],
+   ['Ba phương thức','streaming, downloads and CDs purchased'],
+   ['Thời gian','between 2011 and 2018 / from 2011 to 2018'],
+   ['Lưu ý','Biểu đồ thể hiện phần trăm tổng doanh số, không phải số lượt tải']
+  ]},
+  overview:{title:'📈 Ghi chú Overview',lead:'Nhận xét xu hướng chung và điểm tương phản; hạn chế số liệu chi tiết.',rows:[
+   ['Streaming','Tăng liên tục, từ thấp nhất đầu giai đoạn lên cao nhất cuối giai đoạn'],
+   ['CDs purchased','Giảm đều trong suốt giai đoạn'],
+   ['Downloads','Tăng đến đỉnh khoảng năm 2014, rồi giảm'],
+   ['Điểm nổi bật','Streaming vượt các phương thức còn lại về cuối kỳ'],
+   ['Từ vựng','overall; increased; declined; overtook; in contrast']
+  ]},
+  body1:{title:'📝 Ghi chú Body 1 · Downloads & CDs',lead:'Mô tả hai đường đỏ và xanh lá theo thứ tự thời gian; các số chỉ mang tính xấp xỉ từ hình.',rows:[
+   ['Downloads','2011 ≈ 35%; 2014 ≈ 44% (đỉnh); 2018 ≈ 30%'],
+   ['CDs purchased','2011 ≈ 55%; 2014 ≈ 35%; 2018 ≈ 25%'],
+   ['So sánh','Downloads vượt CDs khoảng 2013, rồi giữ tỷ lệ cao hơn tới cuối kỳ'],
+   ['Cấu trúc','rose from … to …; peaked at; fell to; declined steadily'],
+   ['Thì và đơn vị','Quá khứ đơn; tỷ lệ %; ghi about/approximately cho số đọc từ biểu đồ']
+  ]},
+  body2:{title:'📝 Ghi chú Body 2 · Streaming',lead:'Mô tả đường xanh dương và điểm giao với hai phương thức còn lại.',rows:[
+   ['Streaming','2011 ≈ 5%; 2014 ≈ 15%; 2016 ≈ 27%; 2018 ≈ 42%'],
+   ['Xu hướng','Tăng liên tục; nhanh hơn trong nửa sau của giai đoạn'],
+   ['Điểm vượt','Vượt CDs khoảng 2016–2017 và Downloads khoảng 2017'],
+   ['So sánh cuối kỳ','Streaming ≈ 42%, Downloads ≈ 30%, CDs ≈ 25%'],
+   ['Cấu trúc','rose from … to …; overtook; by the end of the period']
+  ]},
+  full:{title:'🗂️ Ghi chú bài hoàn chỉnh',lead:'Đối chiếu nội dung trước khi nộp bản 150 từ trở lên.',rows:[
+   ['Introduction','Loại biểu đồ, phần trăm doanh số theo phương thức, 2011–2018'],
+   ['Overview','Streaming tăng; CDs giảm; Downloads tăng rồi giảm'],
+   ['Body 1','CDs & Downloads, có số liệu và mốc chính'],
+   ['Body 2','Streaming và các điểm vượt lên'],
+   ['Kiểm tra','4 đoạn, khoảng 150 từ trở lên, thì quá khứ đơn, không suy diễn nguyên nhân']
+  ]}
+ };
+ const item=items[key]||items.full;
+ return '<aside class="note-card"><h3>'+h(item.title)+'</h3><p class="mini">'+h(item.lead)+'</p>'+
+ item.rows.map(([label,value])=>'<div class="note-line"><strong>'+h(label)+'</strong><div>'+h(value)+'</div></div>').join('')+
+ '<button type="button" class="btn secondary" id="editNotes">Xem phân tích</button></aside>';
 }
-function renderLearning(root,step){const key=PARTS[step],items=WORDS[key],questions=QUIZZES[key];root.innerHTML=`<p class="mini">Học cách diễn đạt trước khi kiểm tra. Ví dụ dưới đây chỉ minh họa cấu trúc, không cung cấp số liệu của biểu đồ.</p><div class="subhead">Học từ vựng</div><table class="word-table"><thead><tr><th>Từ / cụm từ</th><th>Nghĩa</th><th>Cách dùng</th></tr></thead><tbody>${items.map(x=>`<tr><td><b>${h(x[0])}</b></td><td>${h(x[1])}</td><td>${h(x[2])}</td></tr>`).join('')}</tbody></table><div class="subhead">Kiểm tra trước khi viết</div>${quizHTML(key,questions,state.quiz[key]||{})}<button class="btn" id="checkQuiz">Kiểm tra từ vựng</button><div id="quizSummary"></div><div id="writeUnlock"></div>`;bindQuiz(key,questions,root);$('checkQuiz').onclick=()=>{markQuiz(key,questions);renderWriter()};renderWriter()}
-function renderWriter(){const key=PARTS[state.step];if(!key||key==='full')return;const target=$('writeUnlock');if(!state.passed[key]){target.innerHTML='<p class="mini">Hoàn thành bài kiểm tra để mở phần viết.</p>';return}target.innerHTML=`<div class="subhead">Thực hành viết ${TITLES[state.step]}</div><p class="mini">${state.step===1?'Viết một câu giới thiệu khách quan về biểu đồ.':state.step===2?'Tóm tắt 2 xu hướng nổi bật, không suy diễn nguyên nhân.':state.step===3?'Mô tả nhóm dữ liệu thứ nhất theo kế hoạch đã ghi chú.':'Mô tả nhóm dữ liệu còn lại và so sánh khi phù hợp.'}</p><div class="writing-layout"><div class="writing-area"><textarea id="draft" rows="8" placeholder="Viết bằng tiếng Anh...">${h(state.drafts[key])}</textarea><div class="actions"><button class="btn" id="checkWriting">Kiểm tra đoạn viết</button></div><div id="writingFeedback"></div></div>${noteHTML()}</div>`;$('draft').oninput=e=>{state.drafts[key]=e.target.value;delete state.reviews[key];$('writingFeedback').innerHTML='';save()};$('checkWriting').onclick=()=>reviewWriting(key);$('editNotes').onclick=()=>setStep(0);if(state.reviews[key])drawReview(key)}
+function renderLearning(root,step){
+ const key=PARTS[step],items=WORDS[key],questions=QUIZZES[key],passed=!!state.passed[key];
+ root.innerHTML=
+ '<h3 class="subhead">1. Học từ vựng & cấu trúc</h3>'+
+ '<table class="word-table"><thead><tr><th>Từ / cụm từ</th><th>Nghĩa</th><th>Cách dùng</th></tr></thead><tbody>'+
+ items.map(x=>'<tr><td><b>'+h(x[0])+'</b></td><td>'+h(x[1])+'</td><td>'+h(x[2])+'</td></tr>').join('')+'</tbody></table>'+
+ '<h3 class="subhead">2. Kiểm tra trước khi viết</h3>'+
+ '<p class="mini">Chọn đáp án phù hợp. Đạt '+questions.length+'/'+questions.length+' để mở phần viết. Có thể ôn và làm lại.</p>'+
+ quizHTML(key,questions,state.quiz[key]||{})+
+ '<div class="actions"><button class="btn secondary" id="checkQuiz">Kiểm tra từ vựng</button><span class="mini" id="unlockStatus">'+(passed?'✓ Đã đạt, phần viết được mở khóa':'')+'</span></div>'+
+ '<div class="feedback" id="quizSummary" hidden></div><div id="writeUnlock"></div>';
+ bindQuiz(key,questions,root);
+ $('checkQuiz').onclick=()=>{
+  markQuiz(key,questions);
+  renderWriter();
+  const status=$('unlockStatus');
+  if(status)status.textContent=state.passed[key]?'✓ Đã đạt, phần viết được mở khóa':'';
+ };
+ renderWriter();
+}
+function renderWriter(){
+ const key=PARTS[state.step];if(!key||key==='full')return;
+ const target=$('writeUnlock');
+ if(!state.passed[key]){target.innerHTML='<p class="mini">Đạt tất cả câu kiểm tra từ vựng để mở bước 3 – Thực hành viết.</p>';return}
+ const prompt={
+  intro:'Viết 1 câu Introduction: loại biểu đồ, đối tượng, đơn vị (%) và giai đoạn 2011–2018. Không mô tả xu hướng.',
+  overview:'Viết khoảng 2 câu Overview: nêu xu hướng nổi bật của Streaming, CDs và Downloads; chưa cần số liệu chi tiết.',
+  body1:'Viết đoạn Body 1 về Downloads và CDs purchased. Chọn các mốc 2011, đỉnh năm 2014 và cuối kỳ; diễn đạt số liệu xấp xỉ.',
+  body2:'Viết đoạn Body 2 về Streaming: mức đầu, mức cuối, quá trình tăng và thời điểm vượt các phương thức còn lại.'
+ };
+ target.innerHTML='<h3 class="subhead">3. Thực hành viết '+h(TITLES[state.step])+'</h3>'+
+ '<p class="question">'+h(prompt[key])+'</p>'+
+ '<div class="writing-layout"><div class="writing-area"><textarea id="draft" rows="8" spellcheck="true" placeholder="Nhập đoạn viết tiếng Anh của bạn...">'+h(state.drafts[key]||'')+'</textarea>'+
+ '<div class="actions"><button class="btn" id="checkWriting">Kiểm tra đoạn viết</button></div><div id="writingFeedback"></div></div>'+
+ noteHTML()+'</div>';
+ $('draft').oninput=e=>{state.drafts[key]=e.target.value;delete state.reviews[key];$('writingFeedback').innerHTML='';save()};
+ $('checkWriting').onclick=()=>reviewWriting(key);
+ $('editNotes').onclick=()=>setStep(0);
+ if(state.reviews[key])drawReview(key);
+}
 function base_checkText(t,part){const issues=[],add=(level,title,detail)=>issues.push({level,title,detail});if(!t.trim()){add('bad','Chưa có bài viết','Hãy viết nội dung trước khi kiểm tra.');return issues}
 if(/\b(?:2010|2001|2019|2020|2021|2025)\b/.test(t))add('warn','Kiểm tra thời gian','Đề cho giai đoạn 2011–2018. Kiểm tra xem năm khác có phải lỗi gõ hay không.');
 if(/\b(?:number of sales|millions? of (?:songs?|albums?|people)|total number of CDs)\b/i.test(t))add('warn','Kiểm tra đơn vị','Biểu đồ thể hiện tỷ lệ % tổng doanh số theo phương thức, không phải số lượng tuyệt đối.');
