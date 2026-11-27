@@ -32,6 +32,24 @@ if(routeParts.includes('Practice')&&!isFoundationRoute&&!/\/Practice\/WritingTas
  }
 }
 
+/* Critical navigation layout: installed synchronously before dynamically created SVGs.
+   Prevents full-screen icons if the shared CSS arrives late or fails. */
+if(!document.querySelector('style[data-sc-critical-nav]')){
+ const critical=document.createElement('style');
+ critical.dataset.scCriticalNav='1';
+ critical.textContent=`
+ html body header.sc-lesson-navigation-ready .sc-lesson-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;min-height:56px;padding:6px 14px;gap:8px}
+ html body header.sc-lesson-navigation-ready .sc-lesson-nav-controls{display:flex;align-items:center;justify-content:center;gap:10px}
+ html body header.sc-lesson-navigation-ready a.sc-lesson-nav-button{display:grid;place-items:center;flex:none;width:45px;height:43px;padding:9px;border-radius:12px;background:#fff;color:#175f93}
+ html body header.sc-lesson-navigation-ready a.sc-lesson-nav-button svg{display:block;width:23px;height:23px;max-width:23px;max-height:23px;fill:none;stroke:currentColor;flex:none}
+ #sc-quick-shell.sc-capsule{position:fixed;right:18px;bottom:18px;width:66px;height:66px;z-index:2147483000;pointer-events:auto}
+ #sc-quick-shell.sc-capsule .sc-capsule-frame{position:relative;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;width:66px;height:66px;border-radius:999px;background:#3b0e90;overflow:hidden}
+ #sc-quick-shell.sc-capsule .sc-capsule-trigger{display:grid;place-items:center;flex:none;width:62px;height:62px;max-width:62px;max-height:62px;border:0;border-radius:50%;background:transparent;color:#fff}
+ #sc-quick-shell.sc-capsule .sc-capsule-trigger svg{display:block;width:27px;height:27px;max-width:27px;max-height:27px;fill:none;stroke:currentColor;stroke-width:2.2}
+ #sc-quick-shell.sc-capsule:not(.sc-open) .sc-capsule-list,#sc-quick-shell.sc-capsule:not(.sc-open) .sc-quick-backdrop{display:none}
+ `;
+ document.head.append(critical);
+}
 const asset=new URL('./smartcom-ui.css?v=20261126-reading-timer02',current.src);
 if(!document.querySelector('link[data-sc-quick-theme]')){const link=document.createElement('link');link.rel='stylesheet';link.dataset.scQuickTheme='1';link.href=asset.href;document.head.append(link);}
 const url=path=>new URL(path,root).href;
@@ -95,8 +113,8 @@ const backDestination=safeBackTarget();
   link.href=href;link.title=label;link.setAttribute('aria-label',label);
   link.innerHTML=svg;return link;
  };
- const backSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5 3 12l7 7"/><path d="M3 12h11c4 0 7-2 7-6"/></svg>';
- const homeSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m3 10 9-7 9 7v11H3z"/><path d="M9 21v-8h6v8"/></svg>';
+ const backSvg='<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5 3 12l7 7"/><path d="M3 12h11c4 0 7-2 7-6"/></svg>';
+ const homeSvg='<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m3 10 9-7 9 7v11H3z"/><path d="M9 21v-8h6v8"/></svg>';
  const controls=document.createElement('div');controls.className='sc-lesson-nav-controls';
  controls.append(makeLink(parent,'Quay lại cấp trước',backSvg),makeLink(url(''),'Trang chủ',homeSvg));
  const left=document.createElement('span');left.className='sc-lesson-nav-spacer';
@@ -303,7 +321,7 @@ toggle.setAttribute('aria-label','Mở menu truy cập nhanh');
 toggle.setAttribute('aria-controls','sc-quick-panel');
 toggle.setAttribute('aria-expanded','false');
 toggle.title='Truy cập nhanh';
-toggle.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg>';
+toggle.innerHTML='<svg width="27" height="27" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 13h7l-1 9 10-12h-7l1-8z"/></svg>';
 // Keep menu outside the glass backdrop-filter container: fixed coordinates stay viewport-based.
 capsule.append(toggle);
 shell.append(capsule,tools);
