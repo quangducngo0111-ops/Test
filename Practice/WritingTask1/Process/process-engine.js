@@ -459,8 +459,6 @@ const CSS=`
 .vocab-water-credit a{color:#576e9a;text-decoration:underline}
 @media(max-width:650px){.vocab-water-card.vocab-flip-perspective{height:440px;max-width:100%}.vocab-water-card .vocab-flip-inner .vocab-face{flex-direction:column;justify-content:flex-start;padding:12px;gap:8px}.vocab-water-card .vocab-picture.vocab-water-picture{flex:none;width:min(100%,300px);max-width:100%;height:auto;aspect-ratio:4/3}.vocab-water-card .vocab-face-content{flex:1;min-height:0;padding:8px 12px 10px}}
 
-`;
-
 /* Fix the image inside the vocabulary flashcard: the former max-width:50% caused a half-sized strip. */
 .vocab-flip-inner .vocab-face .vocab-picture{display:block;position:relative;flex:0 0 48%;width:48%;max-width:48%;height:100%;min-width:0;overflow:hidden;border-radius:14px;background:#edf3f8;align-self:stretch}
 .vocab-flip-inner .vocab-face .vocab-picture img.vocab-real-photo-hq{display:block;width:100%;height:100%;max-width:100%;min-width:0;flex:none;object-fit:cover;object-position:center center;border-radius:0;filter:none;box-shadow:none}
@@ -469,6 +467,9 @@ const CSS=`
  .vocab-flip-inner .vocab-face .vocab-picture{flex:0 0 58%;width:100%;max-width:100%;height:auto;min-height:0;align-self:stretch}
  .vocab-flip-inner .vocab-face .vocab-picture img.vocab-real-photo-hq{width:100%;height:100%;max-width:100%;object-fit:cover}
 }
+
+`;
+
 /* =========================================================
    RENDER HELPERS
    ========================================================= */
