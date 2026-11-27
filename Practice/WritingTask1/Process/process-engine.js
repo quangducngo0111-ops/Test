@@ -452,6 +452,7 @@ const CSS=`
 .vocab-water-card .vocab-picture.vocab-water-picture img.vocab-real-photo-hq{display:block;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:center;filter:none;box-shadow:none;border-radius:0;image-rendering:auto}
 .vocab-water-card .vocab-face-content{min-width:0;flex:1;padding:12px 10px;overflow-wrap:anywhere}
 .vocab-water-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#dff1ff,#eef9ff)}
+.vocab-water-card img.vocab-water-photo[hidden]{display:none!important}
 .vocab-water-fallback[hidden]{display:none}
 .vocab-water-fallback svg{width:100%;height:100%;display:block}
 .vocab-water-credit{max-width:660px;margin:9px auto 0;text-align:center;color:#72809a;font-size:10px;line-height:1.6}
@@ -696,7 +697,7 @@ function renderVocabulary(){
      '</span>'+
    '</button>'+
  '</div>'+
- (ID==='09'?'<p class="vocab-water-credit">Ảnh minh họa: <a target="_blank" rel="noopener noreferrer" href="'+esc(waterVocabSourceUrl(index))+'">'+esc(WATER_VOCAB_AUTHORS[index])+' / Wikimedia Commons</a> · <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-sa/4.0/">Giấy phép Creative Commons</a> (ảnh cắt theo khung thẻ)</p>':'')+
+ (ID==='09'?'<p class="vocab-water-credit">Ảnh minh họa: <a target="_blank" rel="noopener noreferrer" href="'+esc(waterVocabSourceUrl(index))+'">'+esc(WATER_VOCAB_AUTHORS[index])+' / Wikimedia Commons</a> · <a target="_blank" rel="noopener noreferrer" href="'+esc(waterVocabSourceUrl(index))+'">Giấy phép của ảnh</a> (cắt theo khung thẻ)</p>':'')+
  '<div class="vocab-card-actions">'+
    '<button id="vocabBack" class="vocab-edit" type="button" '+(index===0?'disabled':'')+'>← Thẻ trước</button>'+
    '<span class="vocab-card-helper">Lật thẻ để xem nghĩa</span>'+
