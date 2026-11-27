@@ -17,7 +17,7 @@
 .note-line{padding:10px 0;border-bottom:1px solid #e5e9f2;font-size:12px}.note-line strong{display:block;color:#175e96;font-size:12px;margin-bottom:3px}.note-line div{line-height:1.65}.note-card .btn{margin-top:13px}.subhead{margin-top:20px}.feedback[hidden]{display:none!important}</style></head><body>
 <header class="top"><a href="../">← Dynamic Datasets</a><strong>✍️ Writing Task 1 · Dynamic Datasets 02</strong><span id="userLabel"></span></header>
 <main class="page"><div class="hero"><span class="eyebrow">IELTS Writing Task 1 · Line Graph</span><h1>Music Sales by Method</h1><p>Phân tích dữ liệu, luyện từ vựng và thực hành viết từng đoạn.</p></div>
-<div class="workspace"><aside class="card task"><span class="eyebrow">Đề bài</span><h2>Music Sales by Method</h2><p class="task-prompt">The graph below shows the percentage of total music sales by different methods between 2011 and 2018.</p><img class="chart" id="chart" src="./chart.png" alt="Line graph: music sales by streaming, downloads and CDs, 2011–2018" title="Bấm vào biểu đồ để xem lớn"><p class="muted">Nhấn ảnh để phóng to. Đơn vị là <b>% tổng doanh số</b>, không phải số đĩa hay số lượt tải.</p><p class="muted">Đọc trực tiếp biểu đồ trước khi dùng số liệu; không tự điền các giá trị chưa được xác minh.</p></aside>
+<div class="workspace"><aside class="card task"><span class="eyebrow">Đề bài</span><h2>Music Sales by Method</h2><p class="task-prompt">The graph below shows the percentage of total music sales by different methods between 2011 and 2018.</p><img class="chart" id="chart" src="./chart.png" alt="Line graph: percentage of total music sales by Streams, Downloads and CDs purchased, 2011–2018" title="Bấm vào biểu đồ để xem lớn"><p class="muted">Nhấn ảnh để phóng to. Đơn vị là <b>% tổng doanh số</b>, không phải số đĩa hay số lượt tải.</p><p class="muted">Đọc trực tiếp biểu đồ trước khi dùng số liệu; không tự điền các giá trị chưa được xác minh.</p></aside>
 <section class="card practice"><div id="welcome"><h2>Bắt đầu bài học 02</h2><p class="muted">Bài làm và kết quả kiểm tra được tự động lưu trên trình duyệt.</p><div class="field"><label>Họ và tên</label><input type="text" id="studentName" placeholder="Nguyễn Văn A"></div><div class="field"><label>Lớp</label><input type="text" id="studentClass" placeholder="11A1"></div><p id="startError" class="error"></p><button class="btn" id="startButton">Bắt đầu học →</button></div>
 <div id="practice" hidden><span class="eyebrow" id="progressText"></span><div class="progress-track"><div id="progress"></div></div><nav id="nav" class="step-nav"></nav><div class="step-head"><span class="eyebrow" id="stepSection"></span><h2 id="stepTitle"></h2></div><div id="stepRoot" aria-live="polite"></div><div class="footer-controls"><button class="btn ghost" id="backButton">← Bước trước</button><button class="btn secondary" id="nextButton">Bước tiếp →</button></div><p class="status" id="saveStatus">Tự động lưu trên thiết bị</p></div></section></div></main>
 <div class="zoom" id="zoom"><button id="closeZoom" aria-label="Đóng">×</button><img src="./chart.png" alt="Music sales graph enlarged"></div>
@@ -27,7 +27,7 @@ const $=id=>document.getElementById(id), KEY='DYNAMIC_DATASETS_02_GUIDED_V8';
 const TITLES=['Phân tích biểu đồ','Học & viết Introduction','Học & viết Overview','Học & viết Body 1','Học & viết Body 2','Bài hoàn chỉnh'];
 const PARTS={1:'intro',2:'overview',3:'body1',4:'body2',5:'full'};
 const WORDS={
-  intro:[['the line graph / the chart','biểu đồ đường / biểu đồ','Nêu loại biểu đồ trong câu mở đầu.'],['shows / illustrates / compares','thể hiện / minh họa / so sánh','Chú ý chủ ngữ số ít: the chart shows.'],['the percentage of total music sales','tỷ lệ phần trăm tổng doanh số âm nhạc','Không nhầm thành số lượng bán ra.'],['music sales / sales of recorded music','doanh số âm nhạc','Tùy văn cảnh mà chọn diễn đạt tương đương.'],['streaming / downloads / CDs','ba phương thức phân phối âm nhạc','Giữ tên phương thức chính xác.'],['three methods / different formats','ba phương thức / các định dạng khác nhau','Chỉ dùng khi đối tượng được nói rõ.'],['between 2011 and 2018 / from 2011 to 2018','giai đoạn 2011–2018','Hai giới từ phải đi thành cặp hợp lý.'],['proportion / percentage','tỷ lệ phần trăm','The chart gives percentages, not absolute sales.'],['account for','chiếm (một tỷ lệ)','Streaming accounted for a share of sales.'],['sales by method','doanh số theo phương thức','A neutral description of the three methods.'],['over the period','trong giai đoạn','Use with 2011–2018.']],
+  intro:[['the line graph / the chart','biểu đồ đường / biểu đồ','Nêu loại biểu đồ trong câu mở đầu.'],['shows / illustrates / compares','thể hiện / minh họa / so sánh','Chú ý chủ ngữ số ít: the chart shows.'],['the percentage of total music sales','tỷ lệ phần trăm tổng doanh số âm nhạc','Không nhầm thành số lượng bán ra.'],['music sales / sales of recorded music','doanh số âm nhạc','Tùy văn cảnh mà chọn diễn đạt tương đương.'],['Streams / Downloads / CDs purchased','ba phương thức trên biểu đồ','Streams là nhãn đường xanh; music streaming là cách diễn đạt về phương thức.'],['three methods / different formats','ba phương thức / các định dạng khác nhau','Chỉ dùng khi đối tượng được nói rõ.'],['between 2011 and 2018 / from 2011 to 2018','giai đoạn 2011–2018','Hai giới từ phải đi thành cặp hợp lý.'],['proportion / percentage','tỷ lệ phần trăm','The chart gives percentages, not absolute sales.'],['account for','chiếm (một tỷ lệ)','Streams accounted for a share of sales; streaming accounted for a share of sales cũng đúng theo ngữ cảnh.'],['sales by method','doanh số theo phương thức','A neutral description of the three methods.'],['over the period','trong giai đoạn','Use with 2011–2018.']],
   overview:[['upward trend','xu hướng tăng','Use only where the graph supports it.'],['downward trend','xu hướng giảm','Use only where the graph supports it.'],['overtake','vượt qua','Only if two lines cross on the graph.'],['remain dominant','tiếp tục chiếm ưu thế','Check start and end before using.']],
   body1:[['stand at','ở mức','Give the corresponding percentage.'],['fall from … to …','giảm từ … xuống …','Both values must be on the chart.'],['decline steadily','giảm đều','Use only with a consistently declining series.'],['percentage points','điểm phần trăm','For a change in percentage values.']],
   body2:[['rise from … to …','tăng từ … lên …','Both percentages need checking.'],['surpass / overtake','vượt qua','Check where lines cross.'],['peak at','đạt đỉnh ở','Do not invent the peak value.'],['by the end of the period','vào cuối giai đoạn','Refers to 2018.']]
@@ -37,10 +37,10 @@ const QUIZZES={
  ['Cách diễn đạt đúng loại dữ liệu của biểu đồ?',['the percentage of total music sales','the number of songs sold','the amount of music listeners'],0,'Biểu đồ đo tỷ trọng (%) tổng doanh số âm nhạc theo các phương thức.'],
  ['Chọn câu mở đầu đúng ngữ pháp.',['The line graph illustrates the percentage of total music sales ...','The line graph illustrate the percentage of total music sales ...','The line graph illustrating the percentage of total music sales ...'],0,'The line graph là chủ ngữ số ít, dùng illustrates.'],
  ['Giai đoạn nào được mô tả?',['between 2011 and 2018','between 2011 to 2018','from 2011 and 2018'],0,'Dùng between ... and ... hoặc from ... to ... .'],
- ['Cách paraphrase phù hợp?',['the proportions of music sales by streaming, downloads and CDs','the number of streams, downloads and CDs','the reasons why consumers bought CDs'],0,'Chú ý đối tượng là tỷ lệ doanh số, không phải số lần sử dụng hay nguyên nhân.']
+ ['Cách paraphrase phù hợp?',['the proportions of total music sales from streams, downloads and CD purchases','the number of streams, downloads and CDs','the reasons why consumers bought CDs'],0,'Chú ý đối tượng là tỷ lệ doanh số, không phải số lần sử dụng hay nguyên nhân.']
  ],
  overview:[
- ['Xu hướng chung của Streaming là gì?',['Tăng rõ rệt và dẫn đầu ở cuối giai đoạn','Giảm đều từ 2011','Không đổi trong cả kỳ'],0,'Streaming tăng từ khoảng 5% lên hơn 40%.'],
+ ['Xu hướng chung của Streams là gì?',['Tăng rõ rệt và dẫn đầu ở cuối giai đoạn','Giảm đều từ 2011','Không đổi trong cả kỳ'],0,'Streams tăng từ khoảng 5% lên hơn 40%.'],
  ['CDs purchased thay đổi ra sao?',['Giảm liên tục','Tăng mạnh','Tăng rồi giảm'],0,'CDs purchased giảm đều qua các năm.'],
  ['Downloads có diễn biến nào nổi bật?',['Tăng tới khoảng 2014 rồi giảm','Tăng liên tục','Giảm đều từ đầu tới cuối'],0,'Downloads đạt đỉnh khoảng năm 2014 trước khi đi xuống.'],
  ['Overview nên ưu tiên gì?',['Các xu hướng chính và thay đổi thứ hạng','Liệt kê toàn bộ tỷ lệ mỗi năm','Giải thích nguyên nhân người dùng đổi thói quen'],0,'Overview cần đặc điểm nổi bật; không suy diễn nguyên nhân.']
@@ -52,16 +52,16 @@ const QUIZZES={
  ['Diễn đạt xu hướng trong quá khứ đúng cách nào?',['CD sales fell steadily over the period.','CD sales fall steadily over the period.','CD sales was fell steadily over the period.'],0,'Số liệu 2011–2018 dùng thì quá khứ đơn.']
  ],
  body2:[
- ['Tỷ trọng Streaming từ 2011 đến 2018 thay đổi ra sao?',['Từ khoảng 5% lên khoảng 42%','Từ khoảng 42% xuống 5%','Giữ nguyên 30%'],0,'Đường xanh dương tăng liên tục từ 5% lên hơn 40%.'],
- ['Streaming vượt CDs purchased vào khoảng khi nào?',['Khoảng 2016–2017','Ngay từ 2011','Sau năm 2018'],0,'Hai đường giao nhau quanh 2016–2017 trên hình.'],
- ['Streaming vượt Downloads vào khoảng khi nào?',['Khoảng năm 2017','Năm 2011','Năm 2014'],0,'Đường xanh dương vượt đường đỏ quanh 2017.'],
- ['Chọn cấu trúc so sánh đúng.',['Streaming overtook downloads in around 2017.','Streaming was more higher than downloads in 2017.','Streaming overtook than downloads in 2017.'],0,'Overtook + tân ngữ, không thêm than.']
+ ['Tỷ trọng Streams từ 2011 đến 2018 thay đổi ra sao?',['Từ khoảng 5% lên khoảng 42%','Từ khoảng 42% xuống 5%','Giữ nguyên 30%'],0,'Đường xanh dương tăng liên tục từ 5% lên hơn 40%.'],
+ ['Streams vượt CDs purchased vào khoảng khi nào?',['Khoảng 2016–2017','Ngay từ 2011','Sau năm 2018'],0,'Hai đường giao nhau quanh 2016–2017 trên hình.'],
+ ['Streams vượt Downloads vào khoảng khi nào?',['Khoảng năm 2017','Năm 2011','Năm 2014'],0,'Đường xanh dương vượt đường đỏ quanh 2017.'],
+ ['Chọn cấu trúc so sánh đúng.',['Streams overtook downloads around 2017.','Streams were more higher than downloads in 2017.','Streams overtook than downloads in 2017.'],0,'Overtook + tân ngữ, không thêm than.']
  ]
 };
 const ANALYSIS=[
  ['Biểu đồ thể hiện đại lượng nào?',['Tỷ lệ phần trăm tổng doanh số âm nhạc theo phương thức','Số lượng bài hát được nghe','Doanh thu tính bằng triệu USD'],0,'Trục tung thể hiện phần trăm tổng doanh số, không phải số lượng hoặc doanh thu tuyệt đối.'],
  ['Biểu đồ mô tả giai đoạn nào?',['2011–2018','2011–2028','2001–2018'],0,'Đọc năm đầu và năm cuối trên trục ngang: 2011 và 2018.'],
- ['Xu hướng nổi bật của Streaming là gì?',['Tăng liên tục và kết thúc ở vị trí cao nhất','Giảm trong toàn giai đoạn','Luôn cao nhất kể từ năm 2011'],0,'Streaming tăng từ khoảng 5% lên hơn 40% và dẫn đầu ở cuối giai đoạn.'],
+ ['Xu hướng nổi bật của Streaming là gì?',['Tăng liên tục và kết thúc ở vị trí cao nhất','Giảm trong toàn giai đoạn','Luôn cao nhất kể từ năm 2011'],0,'Streams tăng từ khoảng 5% lên hơn 40% và dẫn đầu ở cuối giai đoạn.'],
  ['Downloads thay đổi như thế nào?',['Tăng lên đỉnh khoảng năm 2014 rồi giảm','Giảm liên tục từ năm 2011','Luôn ổn định ở mức 35%'],0,'Downloads tăng từ khoảng 35% lên gần 45% năm 2014 trước khi giảm xuống khoảng 30% năm 2018.'],
  ['Xu hướng chung của CDs purchased là gì?',['Giảm đều từ mức cao nhất ban đầu','Tăng đều và kết thúc ở mức cao nhất','Không thay đổi suốt giai đoạn'],0,'CDs giảm từ khoảng 55% xuống khoảng 25% trong giai đoạn 2011–2018.'],
  ['Cách nhóm ý Body nào phù hợp?',['Body 1: CDs và Downloads; Body 2: Streaming và đối chiếu','Body 1: Giải thích nguyên nhân thị trường; Body 2: Dự đoán 2025','Chỉ mô tả Streaming vì tăng nhiều nhất'],0,'Có thể nhóm CDs và Downloads ở Body 1, sau đó trình bày sự gia tăng của Streaming và điểm vượt lên ở Body 2.']
@@ -90,15 +90,15 @@ function noteHTML(){
   intro:{title:'📘 Ghi chú Introduction',lead:'Chỉ paraphrase đề bài; chưa mô tả xu hướng hoặc nêu số liệu chi tiết.',rows:[
    ['Biểu đồ','the line graph / the chart'],
    ['Chủ đề','the percentage of total music sales by method'],
-   ['Ba phương thức','streaming, downloads and CDs purchased'],
+   ['Ba phương thức','Streams, Downloads and CDs purchased (music streaming có thể dùng khi nói về phương thức)'],
    ['Thời gian','between 2011 and 2018 / from 2011 to 2018'],
    ['Lưu ý','Biểu đồ thể hiện phần trăm tổng doanh số, không phải số lượt tải']
   ]},
   overview:{title:'📈 Ghi chú Overview',lead:'Nhận xét xu hướng chung và điểm tương phản; hạn chế số liệu chi tiết.',rows:[
-   ['Streaming','Tăng liên tục, từ thấp nhất đầu giai đoạn lên cao nhất cuối giai đoạn'],
+   ['Streams','Tăng liên tục, từ thấp nhất đầu giai đoạn lên cao nhất cuối giai đoạn'],
    ['CDs purchased','Giảm đều trong suốt giai đoạn'],
    ['Downloads','Tăng đến đỉnh khoảng năm 2014, rồi giảm'],
-   ['Điểm nổi bật','Streaming vượt các phương thức còn lại về cuối kỳ'],
+   ['Điểm nổi bật','Streams vượt các phương thức còn lại về cuối kỳ'],
    ['Từ vựng','overall; increased; declined; overtook; in contrast']
   ]},
   body1:{title:'📝 Ghi chú Body 1 · Downloads & CDs',lead:'Mô tả hai đường đỏ và xanh lá theo thứ tự thời gian; các số chỉ mang tính xấp xỉ từ hình.',rows:[
@@ -108,18 +108,18 @@ function noteHTML(){
    ['Cấu trúc','rose from … to …; peaked at; fell to; declined steadily'],
    ['Thì và đơn vị','Quá khứ đơn; tỷ lệ %; ghi about/approximately cho số đọc từ biểu đồ']
   ]},
-  body2:{title:'📝 Ghi chú Body 2 · Streaming',lead:'Mô tả đường xanh dương và điểm giao với hai phương thức còn lại.',rows:[
-   ['Streaming','2011 ≈ 5%; 2014 ≈ 15%; 2016 ≈ 27%; 2018 ≈ 42%'],
+  body2:{title:'📝 Ghi chú Body 2 · Streams',lead:'Mô tả đường xanh dương và điểm giao với hai phương thức còn lại.',rows:[
+   ['Streams','2011 ≈ 5%; 2014 ≈ 15%; 2016 ≈ 27%; 2018 ≈ 42%'],
    ['Xu hướng','Tăng liên tục; nhanh hơn trong nửa sau của giai đoạn'],
    ['Điểm vượt','Vượt CDs khoảng 2016–2017 và Downloads khoảng 2017'],
-   ['So sánh cuối kỳ','Streaming ≈ 42%, Downloads ≈ 30%, CDs ≈ 25%'],
+   ['So sánh cuối kỳ','Streams ≈ 42%, Downloads ≈ 30%, CDs ≈ 25%'],
    ['Cấu trúc','rose from … to …; overtook; by the end of the period']
   ]},
   full:{title:'🗂️ Ghi chú bài hoàn chỉnh',lead:'Đối chiếu nội dung trước khi nộp bản 150 từ trở lên.',rows:[
    ['Introduction','Loại biểu đồ, phần trăm doanh số theo phương thức, 2011–2018'],
-   ['Overview','Streaming tăng; CDs giảm; Downloads tăng rồi giảm'],
+   ['Overview','Streams tăng; CDs giảm; Downloads tăng rồi giảm'],
    ['Body 1','CDs & Downloads, có số liệu và mốc chính'],
-   ['Body 2','Streaming và các điểm vượt lên'],
+   ['Body 2','Streams và các điểm vượt lên'],
    ['Kiểm tra','4 đoạn, khoảng 150 từ trở lên, thì quá khứ đơn, không suy diễn nguyên nhân']
   ]}
  };
@@ -149,9 +149,9 @@ function renderWriter(){
  const target=$('writeUnlock');
  const prompt={
   intro:'Viết 1 câu Introduction: giới thiệu biểu đồ đường, tỷ lệ % tổng doanh số âm nhạc theo 3 phương thức và giai đoạn 2011–2018. Không nêu xu hướng.',
-  overview:'Viết khoảng 2 câu Overview: Streaming tăng, CDs giảm, Downloads tăng rồi giảm. Nêu thay đổi thứ hạng; không cần nhiều số liệu.',
+  overview:'Viết khoảng 2 câu Overview: Streams tăng, CDs giảm, Downloads tăng rồi giảm. Nêu thay đổi thứ hạng; không cần nhiều số liệu.',
   body1:'Viết Body 1 về Downloads và CDs purchased. Dùng các mốc quan trọng đầu kỳ, đỉnh Downloads khoảng năm 2014 và cuối kỳ. Các giá trị đọc từ hình nên dùng khoảng/xấp xỉ.',
-  body2:'Viết Body 2 về Streaming, nêu mức đầu khoảng 5%, mức cuối khoảng 42%, so sánh các điểm vượt CDs và Downloads.'
+  body2:'Viết Body 2 về Streams, nêu mức đầu khoảng 5%, mức cuối khoảng 42%, so sánh các điểm vượt CDs và Downloads.'
  };
  target.innerHTML='<h3 class="subhead">3. Thực hành viết '+h(TITLES[state.step])+'</h3>'+
  '<p class="question">'+h(prompt[key])+'</p>'+
@@ -171,7 +171,7 @@ if(/\b(?:the graph|the chart)\s+(?:show|illustrate|compare)\b/i.test(t))add('bad
 if(/\b(?:the figures|the methods)\s+(?:shows|was|illustrates)\b/i.test(t))add('bad','Chủ ngữ – động từ','The figures/methods là số nhiều.');
 if(/\b(?:a|an)\s+(?:percentages|methods|figures|sales)\b/i.test(t))add('bad','Mạo từ và số nhiều','Không dùng a/an trước danh từ số nhiều hoặc sales.');
 if(/\b(?:an)\s+(?:sharp|steady|significant|dramatic)\s+(?:rise|fall|increase|decrease)\b/i.test(t))add('bad','Mạo từ a/an','Dùng a sharp/steady/significant/dramatic rise hoặc fall.');
-if(/\b(?:streaming|downloads|cds)\s+(?:account|represent)\s+for\b/i.test(t)&&/\b(?:streaming|cds)\s+account\s+for\b/i.test(t))add('warn','Cấu trúc account for','Với streaming như một phương thức số ít, dùng “streaming accounted for” khi mô tả quá khứ.');
+if(/\b(?:streams|streaming|downloads|cds)\s+(?:account|represent)\s+for\b/i.test(t))add('warn','Cấu trúc account for','Với số liệu 2011–2018, dùng quá khứ đơn: “Streams accounted for …” hoặc “Streaming accounted for …”.');
 if(/\b(?:more higher|more lower|most highest)\b/i.test(t))add('bad','So sánh kép','Dùng higher, lower hoặc highest.');
 if(/\b(?:rised|falled|decreaced|streeming|donwloads|percentange|proprotion)\b/i.test(t))add('bad','Chính tả / dạng động từ','Kiểm tra rose, fell, decreased, streaming, downloads, percentage, proportion.');
 if(/\b(?:rise|fall|increase|decrease)\s+to\s+by\b/i.test(t))add('bad','Giới từ số liệu','Dùng “rose to X” hoặc “rose by X”, không dùng “to by”.');
@@ -179,10 +179,11 @@ if(/\b(?:increased|fell|declined|rose)\s+(?:at)\s+\d/i.test(t))add('warn','Giớ
 if(/\b(?:a lot of|very big)\s+(?:changes|increase|decrease)\b/i.test(t))add('warn','Độ tự nhiên','Có thể cân nhắc substantial/considerable changes, a sharp rise hoặc decline nếu dữ liệu phù hợp.');
 if(/\b(?:because|due to|thanks to)\b/i.test(t))add('warn','Suy luận nguyên nhân','Không giải thích lý do nếu biểu đồ không cung cấp.');
 if(part==='intro'&&!/2011|2018/.test(t))add('warn','Đề cập thời gian','Introduction nên nhắc giai đoạn 2011–2018.');
-if(part==='intro'&&!/(?:streaming|download|cds|methods|ways)/i.test(t))add('warn','Đối tượng','Nêu đối tượng là các phương thức bán nhạc.');
+if(/\bmusic sale\b(?!s)/i.test(t))add('warn','Danh từ sales','Khi nói doanh số nói chung, viết “music sales”, không dùng “music sale”.');
+if(part==='intro'&&!/(?:streams?\b|streaming|download|cds|methods|ways)/i.test(t))add('warn','Đối tượng','Nêu đối tượng là các phương thức bán nhạc.');
 if(part==='overview'&&!/overall|in general|on the whole/i.test(t))add('warn','Overview','Có thể dùng tín hiệu tóm tắt như Overall.');
-if(part==='overview'&&!/(?:streaming|download|cds)/i.test(t))add('warn','Xu hướng','Đề cập các phương thức chính hoặc tương phản nổi bật.');
-if(part==='full'){const paras=t.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);if(paras.length!==4)add('warn','Bố cục',`Nhận thấy ${paras.length} đoạn; nên viết 4 đoạn, ngăn nhau bằng một dòng trống.`);if(wordCount(t)<150)add('warn','Độ dài',`Hiện có ${wordCount(t)} từ; yêu cầu tối thiểu 150 từ.`);for(const s of ['streaming','download','CD'])if(!new RegExp(s,'i').test(t))add('warn','Độ bao phủ',`Chưa nhận diện được ${s} trong bài.`)}
+if(part==='overview'&&!/(?:streams?\b|streaming|download|cds)/i.test(t))add('warn','Xu hướng','Đề cập các phương thức chính hoặc tương phản nổi bật.');
+if(part==='full'){const paras=t.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);if(paras.length!==4)add('warn','Bố cục',`Nhận thấy ${paras.length} đoạn; nên viết 4 đoạn, ngăn nhau bằng một dòng trống.`);if(wordCount(t)<150)add('warn','Độ dài',`Hiện có ${wordCount(t)} từ; yêu cầu tối thiểu 150 từ.`);for(const s of ['streams?\\b|streaming','download','CD'])if(!new RegExp(s,'i').test(t))add('warn','Độ bao phủ',`Chưa nhận diện được ${s} trong bài.`)}
 if(/\b(?:sales|figures|proportions)\s+(?:was|has)\b/i.test(t))add('bad','Hòa hợp số nhiều','Sales/figures/proportions là chủ ngữ số nhiều.');
 if(/[A-Za-z]\s{2,}[A-Za-z]/.test(t))add('warn','Khoảng trắng','Có khoảng trắng thừa.');if(!/[.!?]\s*$/.test(t))add('warn','Dấu kết câu','Thêm dấu kết câu nếu cần.');
 if(!issues.length)add('good','Chưa phát hiện lỗi theo quy tắc','Hãy tự đối chiếu mọi con số và điểm giao với biểu đồ. Bộ chấm không hiểu toàn diện ngữ cảnh.');return issues}
@@ -192,10 +193,10 @@ const CORRECTIONS=[[/\bthe (graph|chart) show\b/gi,'the $1 shows'],[/\bmore high
 function corrected(s){let o=s;CORRECTIONS.forEach(([p,v])=>o=o.replace(p,v));return o.trim()}
 function improved(s){return corrected(s).replace(/\bwent up\b/gi,'rose').replace(/\bwent down\b/gi,'fell').replace(/\ba lot of changes\b/gi,'considerable changes')}
 const MODEL=[
- 'The line graph compares the percentage shares of total music sales accounted for by streaming, downloads and CDs purchased between 2011 and 2018.',
- 'Overall, streaming rose steadily to become the largest sales method by the end of the period, whereas purchases of CDs declined continuously. Downloads initially gained popularity but then fell after reaching a peak in the middle of the period.',
+ 'The line graph compares the proportions of total music sales accounted for by streams, downloads and CD purchases between 2011 and 2018.',
+ 'Overall, the share of sales from streams rose steadily to become the largest by the end of the period, whereas purchases of CDs declined continuously. Downloads initially gained popularity but then fell after reaching a peak in the middle of the period.',
  'In 2011, CDs represented approximately 55% of total sales, compared with about 35% for downloads. The share of CDs then fell steadily to roughly 25% in 2018. By contrast, downloads increased to a peak of around 44% in 2014, overtaking CDs earlier in the period, before gradually declining to approximately 30% by 2018.',
- 'Streaming showed the most substantial overall growth, rising from just 5% in 2011 to roughly 42% in 2018. Its share climbed particularly quickly in the later years, passing the proportion for CDs around 2016–2017 and overtaking downloads around 2017. By the end of the period, streaming had become the leading method.'
+ 'The share of streams showed the most substantial overall growth, rising from just 5% in 2011 to roughly 42% in 2018. Its share climbed particularly quickly in the later years, passing the proportion for CDs around 2016–2017 and overtaking downloads around 2017. By the end of the period, streams had become the leading method.'
 ];
 function renderFull(root){
  const draft=state.drafts.full||'';
@@ -265,7 +266,7 @@ WORDS.intro = [
  ['shows / presents / illustrates / compares','Thể hiện / trình bày / minh họa / so sánh','Chủ ngữ số ít: the chart shows / compares.'],
  ['the percentage of / the proportion of','Tỷ lệ phần trăm / tỷ trọng','Đúng đơn vị của biểu đồ; không dùng the number of.'],
  ['total music sales / music sales','Tổng doanh số âm nhạc / doanh số âm nhạc','Giữ ý nghĩa là doanh số, không chuyển thành số bài hát.'],
- ['streaming / downloads / CDs','Nghe trực tuyến / tải nhạc / đĩa CD','Ba phương thức được so sánh.'],
+ ['Streams / Downloads / CDs purchased','Phát nhạc trực tuyến / tải nhạc / mua CD','Tên ba nhóm trên biểu đồ; streaming là danh từ chỉ phương thức.'],
  ['different methods / different formats','Các phương thức khác nhau / các định dạng khác nhau','Dùng đúng ngữ cảnh phương thức bán nhạc.'],
  ['between 2011 and 2018 / from 2011 to 2018','Giai đoạn 2011–2018','Không kết hợp between ... to ... .'],
  ['over the period','Trong khoảng thời gian','Thích hợp để nói về toàn giai đoạn.']
