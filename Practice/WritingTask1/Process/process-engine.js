@@ -459,6 +459,13 @@ const CSS=`
 .vocab-water-credit a{color:#576e9a;text-decoration:underline}
 @media(max-width:650px){.vocab-water-card.vocab-flip-perspective{height:440px;max-width:100%}.vocab-water-card .vocab-flip-inner .vocab-face{flex-direction:column;justify-content:flex-start;padding:12px;gap:8px}.vocab-water-card .vocab-picture.vocab-water-picture{flex:none;width:min(100%,300px);max-width:100%;height:auto;aspect-ratio:4/3}.vocab-water-card .vocab-face-content{flex:1;min-height:0;padding:8px 12px 10px}}
 
+
+.vocab-bricks-stage-picture .vocab-stage-no-photo{display:none;position:absolute;inset:0;align-items:center;justify-content:center;gap:8px;flex-direction:column;background:linear-gradient(140deg,#eef5fa,#e4edf5);color:#315b79;text-align:center;padding:18px}
+.vocab-bricks-stage-picture.photo-unavailable .vocab-stage-no-photo{display:flex}
+.vocab-bricks-stage-picture .vocab-stage-no-photo span{font-size:60px}
+.vocab-bricks-stage-picture .vocab-stage-no-photo strong{font-size:15px}
+.vocab-bricks-stage-picture .vocab-stage-no-photo small{font-size:11px;color:#68798a}
+.vocab-bricks-stage-picture.photo-unavailable img{display:none!important}
 /* Fix the image inside the vocabulary flashcard: the former max-width:50% caused a half-sized strip. */
 .vocab-flip-inner .vocab-face .vocab-picture{display:block;position:relative;flex:0 0 48%;width:48%;max-width:48%;height:100%;min-width:0;overflow:hidden;border-radius:14px;background:#edf3f8;align-self:stretch}
 .vocab-flip-inner .vocab-face .vocab-picture img.vocab-real-photo-hq{display:block;width:100%;height:100%;max-width:100%;min-width:0;flex:none;object-fit:cover;object-position:center center;border-radius:0;filter:none;box-shadow:none}
@@ -659,13 +666,31 @@ function vocabScene(index,term){
    A failed external image falls back to the original local diagram (never broken). */
 const VOCAB_TOPIC_COVERS={"10":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sunlight_in_forest.jpg?width=960","11":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Green_corn_plants_grow_in_rows_across_a_farm_field_during_daytime.jpg?width=960","12":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Boulders_in_Joshua_Tree_National_Park.JPG?width=960","13":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Monarch_butterfly_on_a_Daisy_flower3.jpg?width=960","14":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Mosquito_on_marigold_flower.JPG?width=960","15":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sea_turtle_swimming.jpg?width=960","16":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Juvenile_Salmon_(51162380538).jpg?width=960","01":"https://static.wixstatic.com/media/3c9d79_077518200e96408a88fc70ba5eb50d4a~mv2.jpg/v1/fill/w_1000%2Ch_1000%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/3c9d79_077518200e96408a88fc70ba5eb50d4a~mv2.jpg","02":"https://image.makewebeasy.net/makeweb/m_1920x0/WlHdXIaam/DefaultData/realistic-photo-ramen-closeup-food-photography_1.webp?v=202405291424","03":"https://shopcdnpro.grainajz.com/category/4956/1666/44d07b1765126975eb0f193fac1446dd/glass%20ketchup%20bottle%20%284%29.webp","07":"https://i.shgcdn.com/27d9b33f-5c07-4450-b2b4-0929e47c3941/-/format/auto/-/preview/3000x3000/-/quality/lighter/","08":"olive-oil-realistic-cover-20261127.webp?v=20261127-simple-v1","09":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Emerald_lake_trinity_alps.jpg?width=960","06":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Plastic_bottles_for_recycling.jpg?width=960","04":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Close-up_of_a_green_frog_sitting_on_reeds_in_a_pond.jpg?width=960","05":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Bumble_bee_on_butterfly_milkweed_(54699280126).jpg?width=960"};
 const VOCAB_STAGE_PHOTOS={"07":["https://www.expoegypt.gov.eg/uploads/2020/08/5f4d435c91250.jpg","https://glassopenbook.com/img/products/eme-batch-dosing-weighting-mixing-1.jpg?v=1678898915","https://shopcdnpro.grainajz.com/category/24551/2249/7973d35509ab1e1c067002f79131ba59/glass%20furnace6.jpg","https://shopcdnpro.grainajz.com/category/24551/2249/7973d35509ab1e1c067002f79131ba59/glass%20furnace6.jpg","https://clyfglass.com/storage/1.webp","https://www.vitropackaging.com/media/1060/home1.jpg?height=600&mode=max&rnd=132108838280000000&width=1920","https://image.made-in-china.com/202f0j00oliuYysJGFcn/Annealing-Furnace-for-Glass-Bottles.webp","https://img.ihned.cz/attachment.php/550/77779550/zrho3BR2cT4Qajbx1dslOpJgyW0G9VSv/IMG_8083.jpg"],"08":["https://static.wixstatic.com/media/bb4843_ec06429d8e69444884943d96e849bc40~mv2.png/v1/fill/w_980%2Ch_980%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/bb4843_ec06429d8e69444884943d96e849bc40~mv2.png",null,"https://www.ozonotec.eu/images/blog/desinfeccion-ozono-almzara-aceitunas.webp","https://www.clementeindustry.com/wp-content/uploads/2024/04/clemente-frangitore-martelli.webp",null,null,"https://img.directindustry.com/ja/images_di/photo-g/34305-17024494.jpg","https://img.directindustry.com/ja/images_di/photo-g/34305-17024494.jpg","https://imagenes.elpais.com/resizer/v2/NWDBABZQYI2JCJ6PD3L3KTBYNY.jpg?auth=825a9fcc24091166820d32f69c5ab2bc5b7a66b716642d59d0c9aabdbd1849cd&width=1200",null]};
+
+/* Manufacturing Bricks: one photo for each of the ten vocabulary terms.
+   Never fall back to the generic bricks cover for these vocabulary cards. */
+const BRICKS_VOCAB_PHOTOS=[
+ ['https://www.sio-2.com/modules/ph_simpleblog/covers/49.jpg','Máy xúc khai thác đất sét đỏ','Khai thác đất sét','🚜'],
+ ['https://images.squarespace-cdn.com/content/v1/5ed6a7c5ee3b3c56771721c3/1596065151580-36RRAS559RXCEC6EFO5C/IMG_7373.JPG?format=1000w','Máy xử lý đất sét qua các con lăn và bộ phận kim loại','Lưới kim loại và con lăn','⚙️'],
+ ['https://img.static-rmg.be/a/view/q75/w/h/5038222/feafba660178220527d77797a510d85d-jpg.jpg','Máy trộn đất sét ẩm tại nhà máy sản xuất gạch','Trộn đất sét, cát và nước','🌀'],
+ ['https://image.made-in-china.com/2f0j00iOnoJGBzSMkI/Automatic-Clay-Brick-Wire-Cut-Machine-with-High-Precise.jpg','Máy cắt dây chia đất sét thành những viên gạch','Cắt gạch bằng dây','✂️'],
+ ['https://1.bp.blogspot.com/-8caEabrajS4/X6AvcbrwgtI/AAAAAAAABJE/nZZisCsUsR4cOPLVF5OkHGwbEyU9vKWcgCLcBGAsYHQ/s588/machine%2Bmoulding%2Bof%2Bbricks.JPG','Máy ép khuôn định hình gạch đất sét','Tạo hình bằng khuôn','🧰'],
+ ['https://img2.tradewheel.com/uploads/images/products/9/7/small-tunnel-dryer-in-clay-brick-factory-gas-burner-red-brick-making-machine-brick-making-machinery1-0499662001623659549.jpg.webp','Lò sấy gạch công nghiệp và hệ thống băng chuyền','Sấy gạch','🌬️'],
+ ['https://871416.s21i.faiusr.com/4/ABUIABAEGAAgspH3ygYonMrg2QMwgAo40AU.png','Gạch được nung ở nhiệt độ cao trong lò nung','Nung gạch','🔥'],
+ ['https://www.fbm.it/public/images/storia/07E_CERIC_1_1978.jpg','Buồng làm nguội gạch với hệ thống quạt công nghiệp','Làm nguội gạch','❄️'],
+ ['https://image.made-in-china.com/2f0j00KqkljEfCARBs/LDPE-Transparent-PE-Shrink-Bag-Shrink-Hood-Film-for-Pallets-with-Bricks.webp','Gạch được xếp trên pallet và bọc màng đóng gói','Đóng gói gạch','📦'],
+ ['https://d27f80p8ydp5dw.cloudfront.net/blogs/img3-bricks-local-suppliers-e1768579008319.webp','Xe tải chở các pallet gạch tới công trường','Giao gạch bằng xe tải','🚚']
+];
 /* Water Cycle: eight distinct, locally hosted 4:3 educational photos. */
 const WATER_VOCAB_FILES=["01-evaporation.webp","02-condensation.webp","03-precipitation.webp","04-surface-runoff.webp","05-infiltration.webp","06-collection.webp","07-transpiration.webp","08-groundwater.webp"];
 function waterVocabPhotoUrl(i){return ENGINE_ASSET_BASE+'vocab-water-hq/'+WATER_VOCAB_FILES[i];}
 function vocabVisual(index,term){
- if(ID==='01'&&index===0){
-  const photo='https://www.sio-2.com/modules/ph_simpleblog/covers/49.jpg';
-  return '<span class="vocab-picture vocab-excavate-clay-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo" src="'+photo+'" alt="Máy xúc đang đào đất sét đỏ tại mỏ khai thác" title="Ảnh minh họa: SIO-2" width="640" height="480" loading="eager" decoding="async" referrerpolicy="no-referrer"><span class="vocab-image-label">Đào đất sét · Excavation</span></span>';
+ if(ID==='01'&&BRICKS_VOCAB_PHOTOS[index]){
+   const [src,description,caption,emoji]=BRICKS_VOCAB_PHOTOS[index];
+   return '<span class="vocab-picture vocab-bricks-stage-picture">'+
+     '<img class="vocab-real-photo vocab-real-photo-hq vocab-photo" src="'+esc(src)+'" alt="'+esc(description)+'" loading="eager" decoding="async" referrerpolicy="no-referrer" width="780" height="580" onerror="this.hidden=true;this.parentNode.classList.add(\'photo-unavailable\')">'+
+     '<span class="vocab-stage-no-photo" aria-hidden="true"><span>'+emoji+'</span><strong>'+esc(caption)+'</strong><small>Ảnh không tải được</small></span>'+
+     '<span class="vocab-image-label">'+esc(caption)+'</span></span>';
  }
 
  if(ID==='09'&&WATER_VOCAB_FILES[index]){
