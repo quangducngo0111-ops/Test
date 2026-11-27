@@ -2,13 +2,26 @@
 
 The full Reading tests and the Reading practice exercises have **separate, deliberate tools**. New Reading pages should use these same files instead of inventing new selection menus.
 
+## Reading Practice tools — chuẩn The Story of Silk (27/11/2026)
+
+Áp dụng cho **ReadingPassage 1/2/3**, **Note Completion**, **True/False/Not Given**, **Table Completion**, **Short Answer Questions** và bài **Reading Practice 3 Passages**. Giữ nguyên UI mẫu `ReadingPassage1/04` (The Story of Silk).
+
+- **Tra từ:** Nhấp trực tiếp vào từ/cụm từ tiếng Anh trong bài đọc; dùng module chung `Practice/shared/word-tools.js` như Silk để tra nghĩa tiếng Việt, phiên âm, phát âm và lưu vào sổ tay từ vựng theo học sinh. Nhấp đúp và Enter cũng được hỗ trợ.
+- **Highlight / Take note:** Chỉ mở menu khi học sinh **kéo chọn đoạn chữ** (tránh xung đột với nhấp tra từ). Dữ liệu highlight/ghi chú vẫn lưu theo cơ chế riêng của từng bộ đề; rê chuột vào đoạn đã ghi chú để xem lại, và thao tác xóa không để lại nhãn ghi chú lỗi.
+- **Không mở hai bộ tra từ cùng lúc:** Bỏ qua popover tra từ cũ khi module chung đã khởi tạo.
+- **Tệp tích hợp:** `Practice/Reading/reading-silk-tools.js`, được tải bởi `cambridge-practice.js` hoặc `reading-standard.js`; bài 3 passages tải trực tiếp. `silk-ux.js` của bài gốc giữ nguyên.
+- **Reading Test:** Không áp dụng tra từ trong thời gian thi thử. Không thay đổi `reading-test-standard.js`, bộ đếm giờ hay kết quả chấm.
+- **Kiểm thử:** Nhấp từ để mở đúng một cửa sổ tra từ, lưu vào notebook rồi tải lại; kéo chọn từ/cụm dài để thêm highlight/Take note; rê chuột xem lại note; tải lại kiểm tra lưu; xóa note và xác nhận vùng đánh dấu được dọn; nhấp từ trên câu hỏi (nếu có) không thay đổi câu trả lời.
+
+---
+
 ## Reading Practice
 
 Load `../../reading-standard.js?v=20261109-v3` at the end of a numbered exercise page under `Practice/Reading/<type>/<number>/`.
 
 - Elapsed (count-up) timer while answering; freeze the display on submission.
 - Existing selection menus for **Highlight** and **Take note**, with persistent local browser markup in the original exercise engine. Hovering over a highlighted note anchor now shows a floating note tooltip, including notes restored from localStorage.
-- Double-click a **single English word in `#passageRoot`** to show a Vietnamese machine translation in a popover. Uses the public MyMemory endpoint, without a paid key. Requires internet, may be rate-limited or unavailable. When the request fails, a translation link appears; never pretend a translation was obtained.
+- Click an **English word or recognised phrase** in the passage to open the same shared dictionary panel as The Story of Silk (Vietnamese meaning, IPA, audio, notebook). Double-click remains supported. Requires internet, may be rate-limited or unavailable. When the request fails, a translation link appears; never pretend a translation was obtained.
 - Review **every answer**, correct or incorrect, immediately under that item after submission. The reusable script calls the exercise's existing `renderReview` or `reviewHTML` function to retain its own answer key, explanation and evidence. For note/table layouts it moves the result below the relevant input/row.
 - Existing evidence links call each exercise's `focusEvidence`. Ensure **every exercise** has clickable evidence; the Short Answer and Table Completion examples also implement evidence focus.
 - Keep result submissions, answer keys, assessment logic, and attempts in the page unchanged.
