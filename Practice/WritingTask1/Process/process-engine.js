@@ -467,6 +467,7 @@ const CSS=`
 .vocab-bricks-stage-picture .vocab-stage-no-photo small{font-size:11px;color:#68798a}
 .vocab-bricks-stage-picture.photo-unavailable img{display:none!important}
 .vocab-flip-inner .vocab-face .vocab-picture.vocab-tomato-stage-picture{background:#fbf2e8}
+.vocab-tomato-stage-picture img.tomato-stage-photo{display:block;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:center;border-radius:0;box-shadow:none;filter:none}
 .vocab-tomato-stage-picture svg.tomato-stage-svg{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
 /* Fix the image inside the vocabulary flashcard: the former max-width:50% caused a half-sized strip. */
 .vocab-flip-inner .vocab-face .vocab-picture{display:block;position:relative;flex:0 0 48%;width:48%;max-width:48%;height:100%;min-width:0;overflow:hidden;border-radius:14px;background:#edf3f8;align-self:stretch}
@@ -686,6 +687,7 @@ const BRICKS_VOCAB_PHOTOS=[
 
 /* Tomato ketchup: ten self-contained 4:3 illustrations, one per vocabulary stage.
    These never fall back to the generic ketchup cover or any external source. */
+const TOMATO_PHOTO_URLS=["https://static-images.vnncdn.net/files/publish/2024/1/29/vn-warned-of-barriers-facing-farm-exports-told-to-improve-quality-8.jpg?s=x9oC9IWxyPuDClhG1B2g1Q&width=0","https://www.filtrade.co/inicio/images/demo/projects/i9.jpg","https://www.lonkiaru.com/dm-content/uploads/jt5dmxi47yfwozq3861nal2u.jpg","https://www.agrolink.com.br/upload/imagens-resizes/98e41889c1db44a3944197d4eecb1a02_1200x800.jpg","https://www.zfhd.co.jp/img/kv_pht0102.jpg","https://www.sgs.com/-/media/sgscorp/images/l-middleeast/gfi-improves-productivity-and-boosts-exports-with-certifications-by-sgs.cdn.en-LB.1.jpg","https://resourcewebsite.singoo.cc/attached/20240625052621_85496.jpg","https://investsaudi.sa/sectors/SectorsDetails/agriculture/blocks/5.webp","https://cdn.visiteliti.com/article/2022-12/29/sCOQziWvBz1iXhASmdkS_1672309908.jpeg","https://static.ssb.ee/images/universal/PALETTIVEDU-TURVALINE-JA-OIGEAEGNE-PALETTIDE-TRANSPORT-KOOS-FTL-LTL-JA-LAADIMIS-NING-MAHALAADIMISTEENUSTEGA_19153722_m_l.jpeg"];
 const TOMATO_STEPS=[
  ['Hái cà chua','🍅','pick'],
  ['Phân loại cà chua','🍅','sort'],
@@ -725,7 +727,7 @@ const WATER_VOCAB_FILES=["01-evaporation.webp","02-condensation.webp","03-precip
 function waterVocabPhotoUrl(i){return ENGINE_ASSET_BASE+'vocab-water-hq/'+WATER_VOCAB_FILES[i];}
 function vocabVisual(index,term){
  if(ID==='03'&&TOMATO_STEPS[index]){
-   return '<span class="vocab-picture vocab-tomato-stage-picture">'+tomatoStageScene(index)+'<span class="vocab-image-label">'+esc(TOMATO_STEPS[index][0])+'</span></span>';
+   return '<span class="vocab-picture vocab-tomato-stage-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo tomato-stage-photo" src="'+esc(TOMATO_PHOTO_URLS[index])+'" alt="'+esc(TOMATO_STEPS[index][0])+'" loading="eager" decoding="async" width="780" height="580" referrerpolicy="no-referrer" onerror="this.outerHTML=this.parentNode.dataset.fallbackSvg"><span class="vocab-image-label">'+esc(TOMATO_STEPS[index][0])+'</span></span>'.replace('<span class="vocab-picture vocab-tomato-stage-picture">','<span class="vocab-picture vocab-tomato-stage-picture" data-fallback-svg="'+esc(tomatoStageScene(index))+'">');
  }
 
  if(ID==='01'&&BRICKS_VOCAB_PHOTOS[index]){
