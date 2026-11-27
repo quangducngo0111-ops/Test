@@ -1,5 +1,6 @@
 /* Standalone Tomato Ketchup visual guard. Fixes old cached engine paths as well. */
 (()=>{'use strict';
+const TOMATO_PHOTO_URLS=["https://static-images.vnncdn.net/files/publish/2024/1/29/vn-warned-of-barriers-facing-farm-exports-told-to-improve-quality-8.jpg?s=x9oC9IWxyPuDClhG1B2g1Q&width=0","https://www.filtrade.co/inicio/images/demo/projects/i9.jpg","https://www.lonkiaru.com/dm-content/uploads/jt5dmxi47yfwozq3861nal2u.jpg","https://www.agrolink.com.br/upload/imagens-resizes/98e41889c1db44a3944197d4eecb1a02_1200x800.jpg","https://www.zfhd.co.jp/img/kv_pht0102.jpg","https://www.sgs.com/-/media/sgscorp/images/l-middleeast/gfi-improves-productivity-and-boosts-exports-with-certifications-by-sgs.cdn.en-LB.1.jpg","https://resourcewebsite.singoo.cc/attached/20240625052621_85496.jpg","https://investsaudi.sa/sectors/SectorsDetails/agriculture/blocks/5.webp","https://cdn.visiteliti.com/article/2022-12/29/sCOQziWvBz1iXhASmdkS_1672309908.jpeg","https://static.ssb.ee/images/universal/PALETTIVEDU-TURVALINE-JA-OIGEAEGNE-PALETTIDE-TRANSPORT-KOOS-FTL-LTL-JA-LAADIMIS-NING-MAHALAADIMISTEENUSTEGA_19153722_m_l.jpeg"];
 const TOMATO_STEPS=[
  ['Hái cà chua','🍅','pick'],
  ['Phân loại cà chua','🍅','sort'],
@@ -38,7 +39,7 @@ function tomatoStageScene(index){
 const style=document.createElement('style');
 style.textContent=`
 #main .vocab-flip-inner .vocab-picture.tomato-stage-patched{display:block;position:relative;flex:0 0 48%;width:48%;max-width:48%;height:100%;min-width:0;align-self:stretch;overflow:hidden;border-radius:14px;background:#fff4e9}
-#main .vocab-picture.tomato-stage-patched svg.tomato-stage-svg{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important}
+#main .vocab-picture.tomato-stage-patched img.tomato-stage-photo{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;object-fit:cover!important;object-position:center!important;border-radius:0!important}
 #main .vocab-picture.tomato-stage-patched .vocab-image-label{position:absolute;bottom:8px;left:9px;background:#fffffff0;padding:5px 8px;border-radius:20px;font-size:10px;font-weight:700;color:#57607c}
 @media(max-width:650px){#main .vocab-flip-inner .vocab-picture.tomato-stage-patched{flex:0 0 58%;width:100%;max-width:100%;height:auto;min-height:0}}
 `;
@@ -57,10 +58,12 @@ function fixCards(){
  const pictures=card.querySelectorAll('.vocab-face .vocab-picture');
  if(!pictures.length)return;
  if(active===idx&&[...pictures].every(p=>p.dataset.tomatoStage===String(idx)))return;
+ const photo=TOMATO_PHOTO_URLS[idx];
  const svg=tomatoStageScene(idx);
  pictures.forEach(p=>{
    p.className='vocab-picture tomato-stage-patched';
-   p.innerHTML=svg+'<span class="vocab-image-label">'+TOMATO_STEPS[idx][0]+'</span>';
+   p.innerHTML='<img class="tomato-stage-photo" src="'+photo+'" alt="'+TOMATO_STEPS[idx][0]+'" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.outerHTML=this.parentNode.dataset.fallbackSvg" width="780" height="580">'+'<span class="vocab-image-label">'+TOMATO_STEPS[idx][0]+'</span>';
+   p.dataset.fallbackSvg=svg;
    p.dataset.tomatoStage=String(idx);
  });
  active=idx;
