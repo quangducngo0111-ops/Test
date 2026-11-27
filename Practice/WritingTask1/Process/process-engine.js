@@ -324,6 +324,32 @@ const CSS=`
 .vocab-quiz-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .vocab-quiz-actions button:disabled{opacity:.5;cursor:default}
 @media(max-width:700px){.vocab-quiz-options{grid-template-columns:1fr}.vocab-choice{min-height:44px}}
+
+.vocab-single-head{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#21164b;margin:17px 0 8px;font-size:13px}
+.vocab-single-head span{color:#798199;font-size:12px;font-weight:700}
+.vocab-card-track{height:5px;background:#eceaf7;border-radius:99px;overflow:hidden;margin-bottom:14px}
+.vocab-card-track div{height:100%;background:linear-gradient(90deg,#6348b9,#3386c6);border-radius:99px}
+.vocab-one-card{display:block;text-align:center;width:min(560px,100%);margin:auto;border:1px solid #d9d6ea;background:#fff;border-radius:19px;overflow:hidden;color:#261b53;box-shadow:0 8px 26px #30256c15;padding:0;transition:transform .16s,box-shadow .16s}
+.vocab-one-card:hover{transform:translateY(-2px);box-shadow:0 12px 29px #30256c21}
+.vocab-one-card:focus-visible{outline:3px solid #7f63dc;outline-offset:3px}
+.vocab-card-art{position:relative;height:186px;overflow:hidden;background:linear-gradient(125deg,#eef6ff,#fbfaff)}
+.vocab-card-art img{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.85)}
+.vocab-card-pictogram{position:absolute;right:18px;top:14px;display:grid;place-items:center;width:70px;height:70px;border-radius:18px;background:#ffffffed;box-shadow:0 6px 20px #00000017;font-size:39px}
+.vocab-art-caption{position:absolute;bottom:10px;left:12px;background:#ffffffed;padding:5px 9px;border-radius:20px;font-size:10px;font-weight:700;color:#525b78}
+.vocab-one-front,.vocab-one-back{min-height:132px;padding:23px 16px 21px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center}
+.vocab-one-front[hidden],.vocab-one-back[hidden]{display:none!important}
+.vocab-one-back{background:#f7f5ff}
+.vocab-overline{font-size:10px;letter-spacing:.12em;color:#77649f;font-weight:850}
+.vocab-one-front strong,.vocab-one-back strong{font-size:clamp(20px,3vw,26px);line-height:1.32;color:#281260}
+.vocab-one-front small,.vocab-one-back small{font-size:12px;color:#7d8295}
+.vocab-card-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:15px auto 0;max-width:560px}
+.vocab-card-actions .vocab-edit:disabled{opacity:.35;cursor:default}
+.vocab-pick-btn{background:#f2eeff;color:#49258b;border:1px solid #c8b9ea;padding:10px 13px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer}
+.vocab-pick-btn.picked{background:#ecfaf3;border-color:#90c9ac;color:#146544}
+.vocab-selected-note{text-align:center;color:#7b8396;font-size:11px;margin:13px 0 16px}
+.vocab-practice-line{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #ededf4;font-size:12px;color:#6b708b}
+.vocab-quiz[hidden]{display:none!important}
+@media(max-width:650px){.vocab-card-art{height:150px}.vocab-card-actions{gap:6px}.vocab-card-actions .vocab-edit,.vocab-pick-btn{font-size:11px;padding:9px 7px}}
 .hint-panel{border:1px solid #dcd8f0;background:linear-gradient(125deg,#fcfbff,#f5f9ff);border-radius:13px;padding:13px 15px;margin:14px 0 16px}
 .hint-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .hint-top b{color:#31205f;font-size:13px}
@@ -434,17 +460,47 @@ function renderVocabQuiz(){
  document.getElementById('quizReveal').onclick=()=>{result.textContent='Đáp án: '+bank[target][0]+' = '+bank[target][1]+'. Hãy đọc lại từ này rồi tiếp tục.';finish();};
  next.onclick=()=>{state.vocab.quizStep=q+1;state.vocab.quizSolved=false;saveState();renderVocabQuiz();};
 }
+
+/* One focused flashcard at a time. Image context comes from the lesson's diagram,
+   and the semantic pictogram changes with each word. No external image links. */
+function termVisual(term){
+ const t=norm(term);
+ const pairs=[
+  [/truck|transport|deliver|store|supermarket|migration|migrat|upstream|downstream|return/, '🚚'],
+  [/sun|evaporat|heat|hot|boil|kiln|molten|melt|fire/, '🔥'],
+  [/cool|rain|precipitat|water|wash|rins|river|ocean|stream|groundwater|infiltrat/, '💧'],
+  [/egg|hatch|incubat|nest|spawn/, '🥚'],
+  [/frog|tadpole|gills|hind leg|front leg/, '🐸'],
+  [/bee|larva|larval|moult|pupa|emergen|adult butterfly|reproduc/, '🦋'],
+  [/salmon|alevin|fry|parr|smolt/, '🐟'],
+  [/turtle|juvenile/, '🐢'],
+  [/sunlight|photosynthe|plant|olive|tomato|grass|biomass|tree|root|seed|leaf|leaves/, '🌱'],
+  [/plastic|bottle|container|packag|label|seal|cup/, '🧴'],
+  [/brick|clay|sand|gravel|rock|sediment|weather|metamorph|magma/, '🪨'],
+  [/motor|roller|metal|grid|compress|crush|mix|silo|mould|mold|filter|press|centrifuge/, '⚙️'],
+  [/flour|dough|noodle|disc|strip/, '🍜'],
+  [/oil|pellet|raw material|organic|carbon|nitrogen|ammonium|nitrate|fossil|emission/, '🧪'],
+  [/inspect|quality|control|sort|checking/, '🔎'],
+  [/factory|manufactur|production|production/, '🏭']
+ ];
+ for(const [re,icon] of pairs)if(re.test(t))return icon;
+ return '🔬';
+}
 function renderVocabulary(){
- const main=document.getElementById('main'),bank=vocabulary(),selected=new Set(vocabSelection());
- const cards=bank.map((pair,i)=>'<div class="vocab-item '+(selected.has(i)?'selected':'')+'"><button class="vocab-flip" data-flip="'+i+'" type="button" aria-expanded="false"><span class="vocab-english">'+esc(pair[0])+'</span><span class="vocab-reveal-tip">Nhấn để lật thẻ và xem nghĩa</span><span class="vocab-meaning">'+esc(pair[1])+'</span></button><label class="vocab-pick"><input type="checkbox" data-vocab="'+i+'" '+(selected.has(i)?'checked':'')+'> Chọn vào bộ từ</label></div>').join('');
- main.innerHTML='<div class="ey"><span class="chip">BƯỚC 1</span><span class="counter">Học trước khi phân tích và viết</span></div><h2>Từ vựng trọng tâm</h2><p class="sub">Lật thẻ để học nghĩa, chơi mini game chọn nghĩa đúng và chốt 6–10 cụm quan trọng cho bài viết.</p><div class="guide"><b>Cách học:</b> 1. Xem từ và tự đoán nghĩa · 2. Lật thẻ để kiểm tra · 3. Chơi chọn nghĩa nhanh · 4. Chọn những từ muốn dùng và chốt bộ từ.</div><div id="hintMount">'+hintPanel('vocab')+'</div><div class="vocab-top"><strong id="vocabCount">'+selected.size+'/'+bank.length+' cụm đã chọn</strong><button id="vocabToggle" class="vocab-edit" type="button">Lật tất cả thẻ</button></div><div id="vocabGrid" class="vocab-grid">'+cards+'</div><section class="vocab-quiz" id="vocabQuiz"></section><div id="vocabStatus" class="vocab-status" aria-live="polite">'+(vocabReady()?'✓ Bộ từ đã được chốt. Em có thể sang Phân tích sơ đồ.':'Chọn ít nhất 6 cụm rồi chốt bộ từ để tiếp tục phân tích sơ đồ.')+'</div><div class="actions"><button class="btn" disabled>← Bước trước</button><button id="vocabLock" class="btn primary">'+(vocabReady()?'✓ Đã chốt bộ từ':'Chốt bộ từ vựng')+'</button><button id="vocabNext" class="btn" '+(vocabReady()?'':'disabled')+'>Bước tiếp →</button></div>';
- const grid=document.getElementById('vocabGrid'),status=document.getElementById('vocabStatus'),lockBtn=document.getElementById('vocabLock'),nextBtn=document.getElementById('vocabNext');
- attachHint('vocab');renderVocabQuiz();
- grid.querySelectorAll('[data-flip]').forEach(button=>button.onclick=()=>{const revealed=button.classList.toggle('revealed');button.setAttribute('aria-expanded',String(revealed));button.querySelector('.vocab-reveal-tip').textContent=revealed?'Nhấn để ẩn nghĩa':'Nhấn để lật thẻ và xem nghĩa';});
- grid.querySelectorAll('[data-vocab]').forEach(cb=>cb.addEventListener('change',()=>{const id=Number(cb.dataset.vocab),now=new Set(vocabSelection());if(cb.checked)now.add(id);else now.delete(id);if(now.size>10){cb.checked=false;status.textContent='Chọn tối đa 10 cụm để bộ từ dễ ghi nhớ.';return;}state.vocab.selected=[...now].sort((a,b)=>a-b);state.vocab.locked=false;saveState();cb.closest('.vocab-item').classList.toggle('selected',cb.checked);document.getElementById('vocabCount').textContent=now.size+'/'+bank.length+' cụm đã chọn';status.textContent=now.size<6?'Cần chọn thêm '+(6-now.size)+' cụm trước khi chốt.':'Đã chọn '+now.size+' cụm. Hãy xem lại nghĩa rồi nhấn “Chốt bộ từ vựng”.';lockBtn.textContent='Chốt bộ từ vựng';nextBtn.disabled=true;renderNav();renderProgress();}));
- document.getElementById('vocabToggle').onclick=()=>{const buttons=[...grid.querySelectorAll('[data-flip]')],shouldReveal=buttons.some(b=>!b.classList.contains('revealed'));for(const button of buttons){button.classList.toggle('revealed',shouldReveal);button.setAttribute('aria-expanded',String(shouldReveal));button.querySelector('.vocab-reveal-tip').textContent=shouldReveal?'Nhấn để ẩn nghĩa':'Nhấn để lật thẻ và xem nghĩa';}document.getElementById('vocabToggle').textContent=shouldReveal?'Úp tất cả thẻ':'Lật tất cả thẻ';};
- lockBtn.onclick=()=>{const n=vocabSelection().length;if(n<6){status.textContent='Hãy chọn ít nhất '+(6-n)+' cụm nữa để chốt. Bạn có thể dùng gợi ý hoặc lật thẻ xem nghĩa.';return;}state.vocab.locked=true;saveState();lockBtn.textContent='✓ Đã chốt bộ từ';nextBtn.disabled=false;status.textContent='✓ Đã chốt '+n+' cụm. Bộ từ sẽ được gợi ý trong Phân tích sơ đồ và xuyên suốt các phần viết.';renderNav();renderProgress();};
- nextBtn.onclick=()=>{if(vocabReady())goStep(0);};
+ const main=document.getElementById('main'),bank=vocabulary(),index=Math.min(bank.length-1,Math.max(0,Number(state.vocab.cardIndex)||0)),pair=bank[index],selected=new Set(vocabSelection()),chosen=selected.has(index);
+ const showQuiz=Boolean(state.vocab.quizVisible);
+ const img=ENGINE_ASSET_BASE+task.image,illustration='<div class="vocab-card-art"><img src="'+esc(img)+'" alt="Hình minh họa sơ đồ '+esc(task.title)+'" loading="lazy"><span class="vocab-card-pictogram" aria-hidden="true">'+termVisual(pair[0])+'</span><span class="vocab-art-caption">Minh họa từ sơ đồ bài học</span></div>';
+ main.innerHTML='<div class="ey"><span class="chip">BƯỚC 1</span><span class="counter">Học trước khi phân tích và viết</span></div><h2>Từ vựng trọng tâm</h2><p class="sub">Học từng thẻ một. Tự đoán nghĩa tiếng Việt, lật thẻ để kiểm tra, rồi lưu những cụm muốn dùng trong bài.</p><div class="guide"><b>Cách học:</b> Nhìn hình và cụm tiếng Anh, thử đoán nghĩa → lật thẻ → chọn “Ghi nhớ từ này” hoặc chuyển sang thẻ tiếp.</div><div class="vocab-single-head"><strong>Thẻ '+(index+1)+' / '+bank.length+'</strong><span>'+selected.size+' / 6 cụm tối thiểu đã chọn</span></div><div class="vocab-card-track"><div style="width:'+((index+1)/bank.length*100).toFixed(2)+'%"></div></div><button type="button" id="vocabOneCard" class="vocab-one-card" aria-label="Lật thẻ để xem nghĩa" aria-pressed="false">'+illustration+'<span class="vocab-one-front"><span class="vocab-overline">ENGLISH · PROCESS</span><strong>'+esc(pair[0])+'</strong><small id="vocabFlipPrompt">Nhấn vào thẻ để xem nghĩa tiếng Việt</small></span><span class="vocab-one-back" hidden><span class="vocab-overline">NGHĨA TIẾNG VIỆT</span><strong>'+esc(pair[1])+'</strong><small>Nhấn để xem lại tiếng Anh</small></span></button><div class="vocab-card-actions"><button class="vocab-edit" id="vocabBack" type="button" '+(index===0?'disabled':'')+'>← Thẻ trước</button><button class="vocab-pick-btn '+(chosen?'picked':'')+'" id="vocabPick" type="button" aria-pressed="'+chosen+'">'+(chosen?'✓ Đã chọn':'＋ Ghi nhớ từ này')+'</button><button class="vocab-edit" id="vocabForward" type="button" '+(index===bank.length-1?'disabled':'')+'>Thẻ tiếp →</button></div><div class="vocab-selected-note" id="vocabSelectedNote">Bạn có thể chọn 6–10 cụm; không cần thuộc hết ngay mới được tiếp tục.</div><div class="vocab-practice-line"><span>Muốn ôn lại nhanh?</span><button type="button" id="vocabQuizToggle" class="vocab-edit">'+(showQuiz?'Ẩn mini game':'Chơi chọn nghĩa (tùy chọn)')+'</button></div><section class="vocab-quiz" id="vocabQuiz" '+(showQuiz?'':'hidden')+'></section><div id="vocabStatus" class="vocab-status" aria-live="polite">'+(vocabReady()?'✓ Đã chốt bộ từ. Có thể tiếp tục phân tích sơ đồ.':'Chọn ít nhất 6 cụm rồi nhấn “Chốt bộ từ vựng”.')+'</div><div class="actions"><button class="btn" disabled>← Bước trước</button><button id="vocabLock" class="btn primary">'+(vocabReady()?'✓ Đã chốt bộ từ':'Chốt bộ từ vựng')+'</button><button id="vocabNext" class="btn" '+(vocabReady()?'':'disabled')+'>Bước tiếp →</button></div>';
+ const card=document.getElementById('vocabOneCard'),front=card.querySelector('.vocab-one-front'),back=card.querySelector('.vocab-one-back'),pick=document.getElementById('vocabPick'),lock=document.getElementById('vocabLock'),next=document.getElementById('vocabNext'),status=document.getElementById('vocabStatus');
+ card.onclick=()=>{const open=back.hidden;back.hidden=!open;front.hidden=open;card.setAttribute('aria-pressed',String(open));};
+ const changeCard=(nextIndex)=>{state.vocab.cardIndex=Math.max(0,Math.min(bank.length-1,nextIndex));saveState();renderVocabulary();};
+ document.getElementById('vocabBack').onclick=()=>changeCard(index-1);
+ document.getElementById('vocabForward').onclick=()=>changeCard(index+1);
+ pick.onclick=()=>{const updated=new Set(vocabSelection());if(updated.has(index))updated.delete(index);else if(updated.size<10)updated.add(index);else{status.textContent='Bạn đã chọn đủ 10 cụm. Bỏ một cụm khác nếu muốn thay đổi.';return;}state.vocab.selected=[...updated].sort((a,b)=>a-b);state.vocab.locked=false;saveState();pick.classList.toggle('picked',updated.has(index));pick.setAttribute('aria-pressed',String(updated.has(index)));pick.textContent=updated.has(index)?'✓ Đã chọn':'＋ Ghi nhớ từ này';document.querySelector('.vocab-single-head span').textContent=updated.size+' / 6 cụm tối thiểu đã chọn';status.textContent=updated.size>=6?'Đã chọn '+updated.size+' cụm. Có thể chốt bộ từ vựng.':'Chọn thêm '+(6-updated.size)+' cụm nữa để chốt.';lock.textContent='Chốt bộ từ vựng';next.disabled=true;renderNav();renderProgress();};
+ document.getElementById('vocabQuizToggle').onclick=()=>{state.vocab.quizVisible=!state.vocab.quizVisible;saveState();renderVocabulary();};
+ if(showQuiz)renderVocabQuiz();
+ lock.onclick=()=>{const n=vocabSelection().length;if(n<6){status.textContent='Cần thêm '+(6-n)+' cụm nữa. Có thể lật thẻ để xem nghĩa trước khi chọn.';return;}state.vocab.locked=true;saveState();lock.textContent='✓ Đã chốt bộ từ';next.disabled=false;status.textContent='✓ Đã chốt '+n+' cụm. Các cụm này sẽ xuất hiện trong bước phân tích và khi viết bài.';renderNav();renderProgress();};
+ next.onclick=()=>{if(vocabReady())goStep(0);};
 }
 
 /* =========================================================
