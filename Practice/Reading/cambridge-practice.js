@@ -40,7 +40,7 @@ $('back').href='../';
 $('pageLabel').textContent='Reading Passage '+D.passage+' — Bài '+D.folder;
 $('subtitle').textContent=D.title+' · Questions '+beginning+'–'+ending;
 $('title').textContent=D.title;
-$('guide').innerHTML='<b>▤ Reading Practice · Hướng dẫn:</b> Đồng hồ <b>đếm xuôi</b> · Bôi đen văn bản để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Rê chuột thấy dấu ?; nhấp đúp từ/cụm từ</b> để tra nghĩa hoặc lưu sổ tay · Sau khi nộp bài, xem đáp án và giải thích ngay dưới từng câu.';
+$('guide').innerHTML='<b>▤ Reading Practice · Hướng dẫn:</b> Đồng hồ <b>đếm xuôi</b> · Bôi đen văn bản để <b>highlight</b> hoặc <b>Take note</b> (rê chuột lên đoạn đã ghi chú để xem) · <b>Nhấp từ/cụm từ để tra nghĩa, nghe phát âm và lưu sổ tay</b> để tra nghĩa hoặc lưu sổ tay · Sau khi nộp bài, xem đáp án và giải thích ngay dưới từng câu.';
 /* Exact structural classes of the existing The History of Glass template. */
 const head=document.querySelector('body > header');
 head.className='top';
