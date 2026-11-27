@@ -445,6 +445,19 @@ const CSS=`
 .vocab-flip-inner img.vocab-real-photo-hq{display:block;flex:0 0 310px;width:310px;height:260px;max-width:50%;object-fit:cover;object-position:center;image-rendering:auto;filter:none;background:#edf3f8;border-radius:14px;box-shadow:0 5px 14px #25376712}
 @media(max-width:650px){.vocab-flip-inner img.vocab-real-photo-hq{flex:0 0 265px;width:265px;height:200px;max-width:100%;object-fit:cover}}
 
+
+/* Water Cycle photos: 8 distinct sources, one consistent 4:3 frame on both sides. */
+.vocab-water-card .vocab-flip-inner .vocab-face{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:14px;padding:14px}
+.vocab-water-card .vocab-picture.vocab-water-picture{display:block;position:relative;flex:0 0 49%;width:49%;height:auto;aspect-ratio:4/3;max-width:49%;overflow:hidden;border-radius:14px;background:#e8f3f9;align-self:center;box-shadow:0 5px 16px #21345b18}
+.vocab-water-card .vocab-picture.vocab-water-picture img.vocab-real-photo-hq{display:block;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:center;filter:none;box-shadow:none;border-radius:0;image-rendering:auto}
+.vocab-water-card .vocab-face-content{min-width:0;flex:1;padding:12px 10px;overflow-wrap:anywhere}
+.vocab-water-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#dff1ff,#eef9ff)}
+.vocab-water-fallback[hidden]{display:none}
+.vocab-water-fallback svg{width:100%;height:100%;display:block}
+.vocab-water-credit{max-width:660px;margin:9px auto 0;text-align:center;color:#72809a;font-size:10px;line-height:1.6}
+.vocab-water-credit a{color:#576e9a;text-decoration:underline}
+@media(max-width:650px){.vocab-water-card.vocab-flip-perspective{height:440px;max-width:100%}.vocab-water-card .vocab-flip-inner .vocab-face{flex-direction:column;justify-content:flex-start;padding:12px;gap:8px}.vocab-water-card .vocab-picture.vocab-water-picture{flex:none;width:min(100%,300px);max-width:100%;height:auto;aspect-ratio:4/3}.vocab-water-card .vocab-face-content{flex:1;min-height:0;padding:8px 12px 10px}}
+
 `;
 
 /* =========================================================
@@ -636,7 +649,17 @@ function vocabScene(index,term){
    A failed external image falls back to the original local diagram (never broken). */
 const VOCAB_TOPIC_COVERS={"10":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sunlight_in_forest.jpg?width=960","11":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Green_corn_plants_grow_in_rows_across_a_farm_field_during_daytime.jpg?width=960","12":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Boulders_in_Joshua_Tree_National_Park.JPG?width=960","13":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Monarch_butterfly_on_a_Daisy_flower3.jpg?width=960","14":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Mosquito_on_marigold_flower.JPG?width=960","15":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sea_turtle_swimming.jpg?width=960","16":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Juvenile_Salmon_(51162380538).jpg?width=960","01":"https://static.wixstatic.com/media/3c9d79_077518200e96408a88fc70ba5eb50d4a~mv2.jpg/v1/fill/w_1000%2Ch_1000%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/3c9d79_077518200e96408a88fc70ba5eb50d4a~mv2.jpg","02":"https://image.makewebeasy.net/makeweb/m_1920x0/WlHdXIaam/DefaultData/realistic-photo-ramen-closeup-food-photography_1.webp?v=202405291424","03":"https://shopcdnpro.grainajz.com/category/4956/1666/44d07b1765126975eb0f193fac1446dd/glass%20ketchup%20bottle%20%284%29.webp","07":"https://i.shgcdn.com/27d9b33f-5c07-4450-b2b4-0929e47c3941/-/format/auto/-/preview/3000x3000/-/quality/lighter/","08":"olive-oil-realistic-cover-20261127.webp?v=20261127-simple-v1","09":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Emerald_lake_trinity_alps.jpg?width=960","06":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Plastic_bottles_for_recycling.jpg?width=960","04":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Close-up_of_a_green_frog_sitting_on_reeds_in_a_pond.jpg?width=960","05":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Bumble_bee_on_butterfly_milkweed_(54699280126).jpg?width=960"};
 const VOCAB_STAGE_PHOTOS={"07":["https://www.expoegypt.gov.eg/uploads/2020/08/5f4d435c91250.jpg","https://glassopenbook.com/img/products/eme-batch-dosing-weighting-mixing-1.jpg?v=1678898915","https://shopcdnpro.grainajz.com/category/24551/2249/7973d35509ab1e1c067002f79131ba59/glass%20furnace6.jpg","https://shopcdnpro.grainajz.com/category/24551/2249/7973d35509ab1e1c067002f79131ba59/glass%20furnace6.jpg","https://clyfglass.com/storage/1.webp","https://www.vitropackaging.com/media/1060/home1.jpg?height=600&mode=max&rnd=132108838280000000&width=1920","https://image.made-in-china.com/202f0j00oliuYysJGFcn/Annealing-Furnace-for-Glass-Bottles.webp","https://img.ihned.cz/attachment.php/550/77779550/zrho3BR2cT4Qajbx1dslOpJgyW0G9VSv/IMG_8083.jpg"],"08":["https://static.wixstatic.com/media/bb4843_ec06429d8e69444884943d96e849bc40~mv2.png/v1/fill/w_980%2Ch_980%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/bb4843_ec06429d8e69444884943d96e849bc40~mv2.png",null,"https://www.ozonotec.eu/images/blog/desinfeccion-ozono-almzara-aceitunas.webp","https://www.clementeindustry.com/wp-content/uploads/2024/04/clemente-frangitore-martelli.webp",null,null,"https://img.directindustry.com/ja/images_di/photo-g/34305-17024494.jpg","https://img.directindustry.com/ja/images_di/photo-g/34305-17024494.jpg","https://imagenes.elpais.com/resizer/v2/NWDBABZQYI2JCJ6PD3L3KTBYNY.jpg?auth=825a9fcc24091166820d32f69c5ab2bc5b7a66b716642d59d0c9aabdbd1849cd&width=1200",null]};
+/* Water Cycle: one distinct nature photo per vocabulary card; source files on Wikimedia Commons. */
+const WATER_VOCAB_FILES=["Sunlight_In_Evaporation_From_Sea.JPG","White_Cumulus_Clouds_against_Blue_Sky.jpg","Rain_inside_the_forest.jpg","Water_rushing_down_the_stream.jpg","A_wet_soil_surface.jpg","Landscape_of_lake.jpg","Transpiration.jpg","A_groundwater_spring_-_geograph.org.uk_-_1221594.jpg"];
+const WATER_VOCAB_AUTHORS=["Kristian H Resset","Vanlewen","Call_me_whatever_you_want","Talha2k","Chandapiwa Malema","Toad40","Ritz.wiki25","Robert Bone"];
+function waterVocabPhotoUrl(i){return 'https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(WATER_VOCAB_FILES[i])+'?width=960';}
+function waterVocabSourceUrl(i){return 'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(WATER_VOCAB_FILES[i]);}
 function vocabVisual(index,term){
+ if(ID==='09'&&WATER_VOCAB_FILES[index]){
+   const src=waterVocabPhotoUrl(index),fallback='<span class="vocab-water-fallback" hidden>'+vocabScene(index,term)+'</span>';
+   return '<span class="vocab-picture vocab-water-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo vocab-water-photo" src="'+esc(src)+'" alt="Hình minh họa '+esc(term)+' trong vòng tuần hoàn nước" width="720" height="540" loading="eager" decoding="async" referrerpolicy="no-referrer">'+fallback+'</span>';
+ }
+
  if(ID==='06'){
    const names=['01-recycling-bins.jpg','02-collection-truck.jpg','03-sorting-bottles.jpg','04-compressing-bottles.jpg','05-crushing-washing.jpg','06-plastic-pellets.jpg','07-heating-pellets.jpg','08-raw-material.jpg','09-end-products.jpg'];
    const name=names[index];
@@ -659,7 +682,7 @@ function renderVocabulary(){
  '<div class="guide"><b>Cách học:</b> Nhìn ảnh và cụm tiếng Anh → tự đoán nghĩa → lật thẻ kiểm tra. Xem hết các thẻ để mở mini game ở màn hình tiếp theo.</div>'+
  '<div class="vocab-single-head"><strong>Thẻ '+(index+1)+' / '+bank.length+'</strong></div>'+
  '<div class="vocab-card-track"><div style="width:'+((index+1)/bank.length*100)+'%"></div></div>'+
- '<div class="vocab-flip-perspective">'+
+ '<div class="vocab-flip-perspective '+(ID==='09'?'vocab-water-card':'')+'">'+
    '<button type="button" class="vocab-flip-control" id="vocabOneCard" aria-label="Lật thẻ từ vựng" aria-pressed="false">'+
      '<span class="vocab-flip-inner">'+
        '<span class="vocab-face vocab-face-front">'+visual+
@@ -673,6 +696,7 @@ function renderVocabulary(){
      '</span>'+
    '</button>'+
  '</div>'+
+ (ID==='09'?'<p class="vocab-water-credit">Ảnh minh họa: <a target="_blank" rel="noopener noreferrer" href="'+esc(waterVocabSourceUrl(index))+'">'+esc(WATER_VOCAB_AUTHORS[index])+' / Wikimedia Commons</a> · <a target="_blank" rel="noopener noreferrer" href="https://creativecommons.org/licenses/by-sa/4.0/">Giấy phép Creative Commons</a> (ảnh cắt theo khung thẻ)</p>':'')+
  '<div class="vocab-card-actions">'+
    '<button id="vocabBack" class="vocab-edit" type="button" '+(index===0?'disabled':'')+'>← Thẻ trước</button>'+
    '<span class="vocab-card-helper">Lật thẻ để xem nghĩa</span>'+
@@ -683,6 +707,10 @@ function renderVocabulary(){
  '<div id="vocabStatus" class="vocab-status" aria-live="polite">'+(allSeen?'Có thể chuyển sang mini game.':'Lật từng thẻ để xem nghĩa rồi chuyển sang thẻ tiếp theo.')+'</div>'+
  '<div class="actions"><button class="btn" disabled>← Bước trước</button><button id="vocabRestart" class="btn" type="button">Ôn từ đầu</button><button id="vocabNext" class="btn primary" '+(allSeen?'':'disabled')+'>Bước 2 · Mini game →</button></div>';
  const card=document.getElementById('vocabOneCard'),status=document.getElementById('vocabStatus'),next=document.getElementById('vocabNext');
+ main.querySelectorAll('img.vocab-water-photo').forEach(img=>img.addEventListener('error',()=>{
+   img.hidden=true;
+   const fallback=img.closest('.vocab-picture')?.querySelector('.vocab-water-fallback');if(fallback)fallback.hidden=false;
+ },{once:true}));
  main.querySelectorAll('img.vocab-photo[data-fallback]').forEach(img=>img.addEventListener('error',()=>{
    if(img.dataset.fallback&&img.src!==img.dataset.fallback){
      img.src=img.dataset.fallback;img.classList.add('vocab-diagram-fallback');
