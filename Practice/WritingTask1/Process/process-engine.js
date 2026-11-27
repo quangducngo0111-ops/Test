@@ -417,6 +417,10 @@ const CSS=`
 @media(max-width:650px){.vocab-flip-perspective{width:min(430px,100%);height:440px}.vocab-flip-inner .vocab-face{flex-direction:column;padding:10px;gap:4px}.vocab-real-photo{height:265px;flex-basis:265px;width:265px;max-width:100%}.vocab-flip-inner .vocab-face-content{padding:9px 10px 16px}.vocab-flip-inner .vocab-face-content strong{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.vocab-flip-inner{transition-duration:.4s;-webkit-transition-duration:.4s}}
 
+/* Crisp, individual 780x580 images replace 240px tiles cropped from the low-resolution atlas. */
+.vocab-flip-inner img.vocab-real-photo-hq{display:block;flex:0 0 310px;width:310px;height:260px;max-width:50%;object-fit:cover;object-position:center;image-rendering:auto;filter:none;background:#edf3f8;border-radius:14px;box-shadow:0 5px 14px #25376712}
+@media(max-width:650px){.vocab-flip-inner img.vocab-real-photo-hq{flex:0 0 265px;width:265px;height:200px;max-width:100%;object-fit:cover}}
+
 `;
 
 /* =========================================================
@@ -575,8 +579,9 @@ function vocabScene(index,term){
    contains nine 3×3 realistic pictures, ordered exactly like topic 06 terms. */
 function vocabVisual(index,term){
  if(ID==='06'){
-   const x=(index%3)*50,y=Math.floor(index/3)*50;
-   return '<span class="vocab-real-photo" role="img" aria-label="Ảnh minh họa '+esc(term)+'" style="background-image:url('+ENGINE_ASSET_BASE+'plastic-vocab-realistic-atlas-20261127.jpg);background-position:'+x+'% '+y+'%"></span>';
+   const names=['01-recycling-bins.jpg','02-collection-truck.jpg','03-sorting-bottles.jpg','04-compressing-bottles.jpg','05-crushing-washing.jpg','06-plastic-pellets.jpg','07-heating-pellets.jpg','08-raw-material.jpg','09-end-products.jpg'];
+   const name=names[index];
+   if(name)return '<img class="vocab-real-photo vocab-real-photo-hq" src="'+ENGINE_ASSET_BASE+'vocab-plastic-hq/'+name+'" alt="Ảnh minh họa '+esc(term)+'" width="780" height="580" loading="eager" decoding="async">';
  }
  return '<span class="vocab-real-photo vocab-illustrated" role="img" aria-label="Minh họa '+esc(term)+'">'+vocabScene(index,term)+'</span>';
 }
