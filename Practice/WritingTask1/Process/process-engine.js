@@ -527,7 +527,7 @@ function vocabReference(){const bank=vocabulary(),chosen=vocabSelection();return
 const QUIZ_QUESTIONS=6;
 function renderVocabQuiz(){
  const main=document.getElementById('main'),bank=vocabulary(),q=Math.max(0,Math.min(QUIZ_QUESTIONS,Number(state.vocab.quizStep)||0));
- if(q>=QUIZ_QUESTIONS||quizReady()){
+ if(q>=QUIZ_QUESTIONS){
    main.innerHTML='<div class="ey"><span class="chip">BƯỚC 2</span><span class="counter">Mini game bắt buộc</span></div><h2>Mini game: Chọn nghĩa</h2><div class="vocab-quiz-finish"><div class="vocab-quiz-trophy" aria-hidden="true">🎉</div><h3>Hoàn thành '+QUIZ_QUESTIONS+'/'+QUIZ_QUESTIONS+' câu!</h3><p>Em đã nhận diện đúng các từ trọng tâm. Giờ có thể bắt đầu phân tích sơ đồ và vận dụng vào bài viết.</p></div><div class="actions"><button type="button" id="quizBack" class="btn">← Ôn lại thẻ</button><button type="button" id="quizRestart" class="btn">Chơi lại</button><button type="button" id="quizGoAnalysis" class="btn primary">Bước 3 · Phân tích sơ đồ →</button></div>';
    document.getElementById('quizBack').onclick=()=>goStep(1);
    document.getElementById('quizRestart').onclick=()=>{state.vocab.quizStep=0;state.vocab.quizSolved=false;state.vocab.quizWrong=0;saveState();renderVocabQuizQuestion();};
