@@ -220,6 +220,7 @@ panel.querySelector('.reading-dict-save').addEventListener('click',()=>{
  }catch(e){panel.querySelector('.reading-dict-note').textContent='Không lưu được trên trình duyệt này.'}
 });
 document.addEventListener('dblclick',event=>{
+ if(document.body.classList.contains('sc-reading-silk-tools'))return; // shared Silk dictionary owns lookup.
  if(!event.target.closest?.('#passageRoot,#questionsRoot'))return;
  if(event.target.closest('input,textarea,button,a,[contenteditable],.note-anchor,mark.user-highlight'))return;
  const word=selectedTerm();if(!word)return;
@@ -229,6 +230,7 @@ document.addEventListener('dblclick',event=>{
 },true);
 const hoverHint=document.createElement('div');hoverHint.className='reading-help-question';hoverHint.textContent='?';hoverHint.hidden=true;document.body.append(hoverHint);
 document.addEventListener('pointermove',e=>{
+ if(document.body.classList.contains('sc-reading-silk-tools')){hoverHint.hidden=true;return}
  if(e.pointerType==='touch'||e.buttons||!e.target.closest?.('#passageRoot,#questionsRoot')||e.target.closest?.('input,textarea,button,select,a,mark.user-highlight,.note-anchor')){hoverHint.hidden=true;return}
  const selection=window.getSelection();if(selection&&!selection.isCollapsed){hoverHint.hidden=true;return}
  const range=document.caretRangeFromPoint?.(e.clientX,e.clientY);
@@ -348,5 +350,11 @@ if(typeof window.submitPractice==='function'){
   setTimeout(finalizeReviews,0);
   return output;
  };
+}
+// Keep original scoring and stored annotations; standardize only tools.
+if(!document.querySelector('script[data-sc-reading-practice-tools]')){
+ const tools=document.createElement('script');tools.dataset.scReadingPracticeTools='1';
+ tools.src=new URL('./reading-silk-tools.js?v=20261127-silk-tools-unified01',document.currentScript.src).href;
+ document.body.append(tools);
 }
 })();
