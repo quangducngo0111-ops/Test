@@ -61,10 +61,10 @@ const QUIZZES={
 const ANALYSIS=[
  ['Biểu đồ thể hiện đại lượng nào?',['Tỷ lệ phần trăm tổng doanh số âm nhạc theo phương thức','Số lượng bài hát được nghe','Doanh thu tính bằng triệu USD'],0,'Trục tung thể hiện phần trăm tổng doanh số, không phải số lượng hoặc doanh thu tuyệt đối.'],
  ['Biểu đồ mô tả giai đoạn nào?',['2011–2018','2011–2028','2001–2018'],0,'Đọc năm đầu và năm cuối trên trục ngang: 2011 và 2018.'],
- ['Xu hướng nổi bật của Streaming là gì?',['Tăng liên tục và kết thúc ở vị trí cao nhất','Giảm trong toàn giai đoạn','Luôn cao nhất kể từ năm 2011'],0,'Streams tăng từ khoảng 5% lên hơn 40% và dẫn đầu ở cuối giai đoạn.'],
+ ['Xu hướng nổi bật của Streams là gì?',['Tăng liên tục và kết thúc ở vị trí cao nhất','Giảm trong toàn giai đoạn','Luôn cao nhất kể từ năm 2011'],0,'Streams tăng từ khoảng 5% lên hơn 40% và dẫn đầu ở cuối giai đoạn.'],
  ['Downloads thay đổi như thế nào?',['Tăng lên đỉnh khoảng năm 2014 rồi giảm','Giảm liên tục từ năm 2011','Luôn ổn định ở mức 35%'],0,'Downloads tăng từ khoảng 35% lên gần 45% năm 2014 trước khi giảm xuống khoảng 30% năm 2018.'],
  ['Xu hướng chung của CDs purchased là gì?',['Giảm đều từ mức cao nhất ban đầu','Tăng đều và kết thúc ở mức cao nhất','Không thay đổi suốt giai đoạn'],0,'CDs giảm từ khoảng 55% xuống khoảng 25% trong giai đoạn 2011–2018.'],
- ['Cách nhóm ý Body nào phù hợp?',['Body 1: CDs và Downloads; Body 2: Streaming và đối chiếu','Body 1: Giải thích nguyên nhân thị trường; Body 2: Dự đoán 2025','Chỉ mô tả Streaming vì tăng nhiều nhất'],0,'Có thể nhóm CDs và Downloads ở Body 1, sau đó trình bày sự gia tăng của Streaming và điểm vượt lên ở Body 2.']
+ ['Cách nhóm ý Body nào phù hợp?',['Body 1: CDs và Downloads; Body 2: Streams và đối chiếu','Body 1: Giải thích nguyên nhân thị trường; Body 2: Dự đoán 2025','Chỉ mô tả Streams vì tăng nhiều nhất'],0,'Có thể nhóm CDs và Downloads ở Body 1, sau đó trình bày sự gia tăng của Streams và điểm vượt lên ở Body 2.']
 ];
 function fresh(){return {started:false,name:'',className:'',step:0,analysis:{},notes:{streaming:'',downloads:'',cds:'',turning:'',bodyPlan:''},quiz:{},passed:{},drafts:{intro:'',overview:'',body1:'',body2:'',full:''},reviews:{},mode:'corrected'}}
 let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')state={...fresh(),...s,notes:{...fresh().notes,...s.notes},drafts:{...fresh().drafts,...s.drafts},quiz:s.quiz||{},passed:s.passed||{}}}catch{}
