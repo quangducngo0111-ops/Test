@@ -461,6 +461,14 @@ const CSS=`
 
 `;
 
+/* Fix the image inside the vocabulary flashcard: the former max-width:50% caused a half-sized strip. */
+.vocab-flip-inner .vocab-face .vocab-picture{display:block;position:relative;flex:0 0 48%;width:48%;max-width:48%;height:100%;min-width:0;overflow:hidden;border-radius:14px;background:#edf3f8;align-self:stretch}
+.vocab-flip-inner .vocab-face .vocab-picture img.vocab-real-photo-hq{display:block;width:100%;height:100%;max-width:100%;min-width:0;flex:none;object-fit:cover;object-position:center center;border-radius:0;filter:none;box-shadow:none}
+.vocab-flip-inner .vocab-face .vocab-picture.vocab-excavate-clay-picture img{object-position:center center}
+@media(max-width:650px){
+ .vocab-flip-inner .vocab-face .vocab-picture{flex:0 0 58%;width:100%;max-width:100%;height:auto;min-height:0;align-self:stretch}
+ .vocab-flip-inner .vocab-face .vocab-picture img.vocab-real-photo-hq{width:100%;height:100%;max-width:100%;object-fit:cover}
+}
 /* =========================================================
    RENDER HELPERS
    ========================================================= */
@@ -654,6 +662,11 @@ const VOCAB_STAGE_PHOTOS={"07":["https://www.expoegypt.gov.eg/uploads/2020/08/5f
 const WATER_VOCAB_FILES=["01-evaporation.webp","02-condensation.webp","03-precipitation.webp","04-surface-runoff.webp","05-infiltration.webp","06-collection.webp","07-transpiration.webp","08-groundwater.webp"];
 function waterVocabPhotoUrl(i){return ENGINE_ASSET_BASE+'vocab-water-hq/'+WATER_VOCAB_FILES[i];}
 function vocabVisual(index,term){
+ if(ID==='01'&&index===0){
+  const photo='https://www.sio-2.com/modules/ph_simpleblog/covers/49.jpg';
+  return '<span class="vocab-picture vocab-excavate-clay-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo" src="'+photo+'" alt="Máy xúc đang đào đất sét đỏ tại mỏ khai thác" title="Ảnh minh họa: SIO-2" width="640" height="480" loading="eager" decoding="async" referrerpolicy="no-referrer"><span class="vocab-image-label">Đào đất sét · Excavation</span></span>';
+ }
+
  if(ID==='09'&&WATER_VOCAB_FILES[index]){
    const src=waterVocabPhotoUrl(index),fallback='<span class="vocab-water-fallback" hidden>'+vocabScene(index,term)+'</span>';
    return '<span class="vocab-picture vocab-water-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo vocab-water-photo" src="'+esc(src)+'" alt="Hình minh họa '+esc(term)+' trong vòng tuần hoàn nước" width="720" height="540" loading="eager" decoding="async" referrerpolicy="no-referrer">'+fallback+'</span>';
