@@ -523,18 +523,48 @@ function attachHint(kind){
 function refreshHint(kind){const host=document.getElementById('hintMount');if(host){host.innerHTML=hintPanel(kind);attachHint(kind);}}
 
 function vocabReference(){const bank=vocabulary(),chosen=vocabSelection();return '<section class="vocab-reminder"><div class="vocab-reminder-head"><b>📘 Từ vựng cần vận dụng</b><span>Gợi ý cho phần phân tích</span></div><div class="vocab-chips">'+chosen.map(i=>'<span class="vocab-chip" title="'+esc(bank[i][1])+'">'+esc(bank[i][0])+' · '+esc(bank[i][1])+'</span>').join('')+'</div><button class="vocab-edit" type="button" id="analysisEditVocab">Ôn lại từ vựng</button></section>';}
+/* Step 2: mandatory independent vocabulary quiz. Correct answers unlock analysis. */
+const QUIZ_QUESTIONS=6;
 function renderVocabQuiz(){
- const holder=document.getElementById('vocabQuiz');if(!holder)return;
- const bank=vocabulary(),q=Math.max(0,Math.min(4,Number(state.vocab.quizStep)||0)),solved=Boolean(state.vocab.quizSolved);
- if(q>=4){holder.innerHTML='<div class="vocab-quiz-head"><b>🎉 Hoàn thành mini game!</b><span>4/4 câu đã xem</span></div><p class="vocab-quiz-copy">Bạn đã ôn lại các cụm từ quan trọng. Có thể chơi lại hoặc chuyển sang phần Phân tích sơ đồ.</p><button type="button" id="quizRestart" class="vocab-edit">Chơi lại</button>';document.getElementById('quizRestart').onclick=()=>{state.vocab.quizStep=0;state.vocab.quizSolved=false;saveState();renderVocabQuiz();};return;}
- const target=(q*2)%bank.length,choices=[target,(target+1)%bank.length,(target+2)%bank.length],position=(q+1)%3;
- const ordered=[null,null,null];ordered[position]=target;let k=0;for(const i of choices.slice(1)){while(ordered[k]!==null)k++;ordered[k]=i;}
- holder.innerHTML='<div class="vocab-quiz-head"><b>🎯 Mini game · Chọn nghĩa đúng</b><span>Câu '+(q+1)+'/4 · Tùy chọn, không tính điểm bài viết</span></div><p class="vocab-quiz-copy">“<strong>'+esc(bank[target][0])+'</strong>” có nghĩa là gì?</p><div class="vocab-quiz-options">'+ordered.map((idx,i)=>'<button type="button" class="vocab-choice '+(solved&&idx===target?'correct':'')+'" data-quiz-choice="'+i+'" '+(solved?'disabled':'')+'>'+esc(bank[idx][1])+'</button>').join('')+'</div><div class="vocab-quiz-result" id="vocabQuizResult" aria-live="polite">'+(solved?'✓ Đáp án: '+esc(bank[target][1]):'Chọn 1 đáp án. Nếu chưa biết, bạn có thể xem đáp án.')+'</div><div class="vocab-quiz-actions"><button type="button" class="vocab-edit" id="quizReveal" '+(solved?'disabled':'')+'>Xem đáp án</button><button type="button" class="vocab-edit" id="quizNext" '+(solved?'':'disabled')+'>'+(q===3?'Hoàn thành':'Câu tiếp →')+'</button></div>';
- const result=document.getElementById('vocabQuizResult'),next=document.getElementById('quizNext');
- const finish=()=>{state.vocab.quizSolved=true;saveState();holder.querySelectorAll('[data-quiz-choice]').forEach(button=>{button.disabled=true;if(ordered[Number(button.dataset.quizChoice)]===target)button.classList.add('correct');});next.disabled=false;};
- holder.querySelectorAll('[data-quiz-choice]').forEach(button=>button.onclick=()=>{const ix=Number(button.dataset.quizChoice);if(ordered[ix]===target){result.textContent='✓ Chính xác! '+bank[target][0]+' = '+bank[target][1]+'.';finish();}else{result.textContent='Chưa đúng. Thử lựa chọn khác hoặc nhấn “Xem đáp án”.';button.classList.add('wrong');}});
- document.getElementById('quizReveal').onclick=()=>{result.textContent='Đáp án: '+bank[target][0]+' = '+bank[target][1]+'. Hãy đọc lại từ này rồi tiếp tục.';finish();};
- next.onclick=()=>{state.vocab.quizStep=q+1;state.vocab.quizSolved=false;saveState();renderVocabQuiz();};
+ const main=document.getElementById('main'),bank=vocabulary(),q=Math.max(0,Math.min(QUIZ_QUESTIONS,Number(state.vocab.quizStep)||0));
+ if(q>=QUIZ_QUESTIONS||quizReady()){
+   main.innerHTML='<div class="ey"><span class="chip">BƯỚC 2</span><span class="counter">Mini game bắt buộc</span></div><h2>Mini game: Chọn nghĩa</h2><div class="vocab-quiz-finish"><div class="vocab-quiz-trophy" aria-hidden="true">🎉</div><h3>Hoàn thành '+QUIZ_QUESTIONS+'/'+QUIZ_QUESTIONS+' câu!</h3><p>Em đã nhận diện đúng các từ trọng tâm. Giờ có thể bắt đầu phân tích sơ đồ và vận dụng vào bài viết.</p></div><div class="actions"><button type="button" id="quizBack" class="btn">← Ôn lại thẻ</button><button type="button" id="quizRestart" class="btn">Chơi lại</button><button type="button" id="quizGoAnalysis" class="btn primary">Bước 3 · Phân tích sơ đồ →</button></div>';
+   document.getElementById('quizBack').onclick=()=>goStep(1);
+   document.getElementById('quizRestart').onclick=()=>{state.vocab.quizStep=0;state.vocab.quizSolved=false;state.vocab.quizWrong=0;saveState();renderVocabQuizQuestion();};
+   document.getElementById('quizGoAnalysis').onclick=()=>goStep(0);
+   return;
+ }
+ renderVocabQuizQuestion();
+}
+function renderVocabQuizQuestion(){
+ const main=document.getElementById('main'),bank=vocabulary(),q=Math.max(0,Math.min(QUIZ_QUESTIONS-1,Number(state.vocab.quizStep)||0));
+ const target=Math.floor(q*(bank.length-1)/(QUIZ_QUESTIONS-1));
+ const indices=[target,(target+2)%bank.length,(target+5)%bank.length],correctPosition=(q*2+1)%3,ordered=Array(3).fill(null);ordered[correctPosition]=target;
+ let cursor=0;for(const idx of indices.slice(1)){while(ordered[cursor]!==null)cursor++;ordered[cursor]=idx;}
+ const reverse=q%2===1,solved=Boolean(state.vocab.quizSolved),wrong=Number(state.vocab.quizWrong||0);
+ const prompt=reverse?'Chọn cụm tiếng Anh tương ứng với nghĩa sau:':'Cụm tiếng Anh dưới đây có nghĩa là gì?';
+ const question=reverse?bank[target][1]:bank[target][0],option=(i)=>reverse?bank[i][0]:bank[i][1];
+ main.innerHTML='<div class="ey"><span class="chip">BƯỚC 2</span><span class="counter">Mini game bắt buộc · Hoàn thành để mở Bước 3</span></div><h2>Mini game: Chọn nghĩa</h2><p class="sub">Trả lời đúng '+QUIZ_QUESTIONS+' câu để mở Phân tích sơ đồ. Nếu chọn sai, em có thể thử lại và sẽ được gợi ý.</p><section class="vocab-quiz-screen"><div class="vocab-quiz-head"><b>🎯 Câu '+(q+1)+' / '+QUIZ_QUESTIONS+'</b><span>Ôn từ vựng: '+esc(task.title)+'</span></div><div class="vocab-card-track vocab-quiz-track"><div style="width:'+((q+(solved?1:0))/QUIZ_QUESTIONS*100)+'%"></div></div><p class="vocab-quiz-copy">'+esc(prompt)+'</p><h3 class="vocab-quiz-term">'+esc(question)+'</h3><div class="vocab-quiz-options">'+ordered.map((idx,i)=>'<button type="button" class="vocab-choice '+(solved&&idx===target?'correct':'')+'" data-quiz-choice="'+i+'" '+(solved?'disabled':'')+'>'+esc(option(idx))+'</button>').join('')+'</div><div class="vocab-quiz-result" id="vocabQuizResult" aria-live="polite">'+(solved?'✓ Chính xác! '+esc(bank[target][0])+' = '+esc(bank[target][1]):wrong>=2?'Gợi ý: đáp án đúng là “'+esc(option(target))+'”. Hãy chọn đáp án để tiếp tục.':wrong>0?'Chưa đúng. Hãy thử lại.':'Chọn một đáp án để tiếp tục.')+'</div></section><div class="actions"><button type="button" class="btn" id="quizBack">← Xem lại thẻ từ</button><button type="button" class="btn primary" id="quizNext" '+(solved?'':'disabled')+'>'+(q===QUIZ_QUESTIONS-1?'Hoàn thành mini game':'Câu tiếp →')+'</button></div>';
+ document.getElementById('quizBack').onclick=()=>goStep(1);
+ const feedback=document.getElementById('vocabQuizResult'),next=document.getElementById('quizNext');
+ main.querySelectorAll('[data-quiz-choice]').forEach(button=>button.onclick=()=>{
+   if(state.vocab.quizSolved)return;
+   if(ordered[Number(button.dataset.quizChoice)]===target){
+     state.vocab.quizSolved=true;state.vocab.quizWrong=0;saveState();
+     feedback.textContent='✓ Chính xác! '+bank[target][0]+' = '+bank[target][1]+'.';
+     main.querySelectorAll('[data-quiz-choice]').forEach(other=>{other.disabled=true;if(ordered[Number(other.dataset.quizChoice)]===target)other.classList.add('correct');});
+     next.disabled=false;
+   }else{
+     state.vocab.quizWrong=(Number(state.vocab.quizWrong)||0)+1;saveState();button.classList.add('wrong');
+     feedback.textContent=state.vocab.quizWrong>=2?'Gợi ý: đáp án đúng là “'+option(target)+'”. Hãy chọn đáp án đó để tiếp tục.':'Chưa chính xác. Em có thể thử lại.';
+   }
+ });
+ next.onclick=()=>{
+   if(!state.vocab.quizSolved)return;
+   state.vocab.quizStep=q+1;state.vocab.quizSolved=false;state.vocab.quizWrong=0;
+   if(q===QUIZ_QUESTIONS-1)state.vocab.quizCompleted=true;
+   saveState();renderNav();renderProgress();renderVocabQuiz();
+ };
 }
 
 /* One focused flashcard at a time. Image context comes from the lesson's diagram,
