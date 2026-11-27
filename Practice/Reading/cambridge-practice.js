@@ -544,14 +544,13 @@ selectionMenu.addEventListener('click',event=>{
 // deliberate text-drag should launch Highlight / Take note.
 let silkSelectionStart=null;
 document.addEventListener('mousedown',event=>{
- if(D.id!=='cam11-test3-p1')return;
  if(event.button===0&&event.target.closest?.('#source,#questionsSource')&&!event.target.closest?.('input,select,textarea,button')){
   silkSelectionStart={x:event.clientX,y:event.clientY};
  }else silkSelectionStart=null;
 },true);
 document.addEventListener('mouseup',event=>{
  if(selectionMenu.contains(event.target))return;
- if(D.id==='cam11-test3-p1'){
+ {
   const drag=!!silkSelectionStart&&Math.hypot(event.clientX-silkSelectionStart.x,event.clientY-silkSelectionStart.y)>5;
   silkSelectionStart=null;
   if(!drag||event.detail>1){resetMenu();return;}
@@ -577,7 +576,7 @@ if(stored)$('source').innerHTML=stored;
 restoreQuestionMarks();
 
 // Silk uses the shared Reading Library word hint; avoid a second purple '?' cursor.
-const showLegacyWordHint=D.id!=='cam11-test3-p1';
+const showLegacyWordHint=false; // Unified shared dictionary has its own hover state.
 const scHint=document.createElement('span');scHint.textContent='?';scHint.hidden=true;
 scHint.style.cssText='position:fixed;pointer-events:none;z-index:100009;background:#f0eaff;color:#4e219a;border:1px solid #c8b7ed;width:18px;height:18px;border-radius:50%;line-height:18px;text-align:center;font:800 12px system-ui';
 if(showLegacyWordHint)document.body.append(scHint);
@@ -658,4 +657,12 @@ updateNav();
 // Reveal the page only after the renderer and interactions are initialized.
 // The identity prompt (if needed) was already made visible by getProfile().
 document.body.classList.add('sc-reading-ready');
+// The Story of Silk retains its reference UX; every other Cambridge passage
+// mounts the same dictionary/IPA/audio/notebook and Take Note enhancements.
+if(D.id!=='cam11-test3-p1'){
+ const script=document.createElement('script');
+ script.dataset.scReadingPracticeTools='1';
+ script.src=new URL('./reading-silk-tools.js?v=20261127-silk-tools-unified01',document.currentScript.src).href;
+ document.body.append(script);
+}
 })();
