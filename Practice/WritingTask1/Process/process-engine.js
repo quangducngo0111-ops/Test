@@ -434,6 +434,13 @@ const CSS=`
 @media(prefers-reduced-motion:reduce){.vocab-flip-inner{transition-duration:.4s;-webkit-transition-duration:.4s}}
 
 /* Crisp, individual 780x580 images replace 240px tiles cropped from the low-resolution atlas. */
+/* Photo-first cards across all 16 topics; no upscaling of 240px atlas tiles. */
+.vocab-picture{position:relative;display:block;flex:0 0 310px;width:310px;height:260px;max-width:50%;border-radius:14px;overflow:hidden;background:#edf3f8}
+.vocab-picture img.vocab-real-photo-hq{display:block;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:center;border-radius:0;box-shadow:none;filter:none}
+.vocab-picture img.vocab-diagram-fallback{object-fit:contain;background:#f8fafc}
+.vocab-image-label{position:absolute;bottom:8px;left:9px;font-size:10px;font-weight:700;padding:5px 8px;border-radius:99px;background:#fffffff0;color:#57607c}
+@media(max-width:650px){.vocab-picture{flex:0 0 200px;max-width:100%;width:min(340px,100%);height:200px}.vocab-picture img.vocab-real-photo-hq{width:100%;height:100%}}
+
 .vocab-flip-inner img.vocab-real-photo-hq{display:block;flex:0 0 310px;width:310px;height:260px;max-width:50%;object-fit:cover;object-position:center;image-rendering:auto;filter:none;background:#edf3f8;border-radius:14px;box-shadow:0 5px 14px #25376712}
 @media(max-width:650px){.vocab-flip-inner img.vocab-real-photo-hq{flex:0 0 265px;width:265px;height:200px;max-width:100%;object-fit:cover}}
 
@@ -623,14 +630,24 @@ function vocabScene(index,term){
 
 /* Every side of a vocabulary card uses the same image. The recycling atlas
    contains nine 3×3 realistic pictures, ordered exactly like topic 06 terms. */
+/* All Process lessons use the same photo-first vocabulary card standard.
+   Source images are already used by the course's category covers / photo diagrams.
+   A failed external image falls back to the original local diagram (never broken). */
+const VOCAB_TOPIC_COVERS={"10":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sunlight_in_forest.jpg?width=960","11":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Green_corn_plants_grow_in_rows_across_a_farm_field_during_daytime.jpg?width=960","12":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Boulders_in_Joshua_Tree_National_Park.JPG?width=960","13":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Monarch_butterfly_on_a_Daisy_flower3.jpg?width=960","14":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Mosquito_on_marigold_flower.JPG?width=960","15":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Sea_turtle_swimming.jpg?width=960","16":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Juvenile_Salmon_(51162380538).jpg?width=960","01":"https://static.wixstatic.com/media/3c9d79_077518200e96408a88fc70ba5eb50d4a~mv2.jpg/v1/fill/w_1000%2Ch_1000%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/3c9d79_077518200e96408a88fc70ba5eb50d4a~mv2.jpg","02":"https://image.makewebeasy.net/makeweb/m_1920x0/WlHdXIaam/DefaultData/realistic-photo-ramen-closeup-food-photography_1.webp?v=202405291424","03":"https://shopcdnpro.grainajz.com/category/4956/1666/44d07b1765126975eb0f193fac1446dd/glass%20ketchup%20bottle%20%284%29.webp","07":"https://i.shgcdn.com/27d9b33f-5c07-4450-b2b4-0929e47c3941/-/format/auto/-/preview/3000x3000/-/quality/lighter/","08":"olive-oil-realistic-cover-20261127.webp?v=20261127-simple-v1","09":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Emerald_lake_trinity_alps.jpg?width=960","06":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Plastic_bottles_for_recycling.jpg?width=960","04":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Close-up_of_a_green_frog_sitting_on_reeds_in_a_pond.jpg?width=960","05":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Bumble_bee_on_butterfly_milkweed_(54699280126).jpg?width=960"};
+const VOCAB_STAGE_PHOTOS={"07":["https://www.expoegypt.gov.eg/uploads/2020/08/5f4d435c91250.jpg","https://glassopenbook.com/img/products/eme-batch-dosing-weighting-mixing-1.jpg?v=1678898915","https://shopcdnpro.grainajz.com/category/24551/2249/7973d35509ab1e1c067002f79131ba59/glass%20furnace6.jpg","https://shopcdnpro.grainajz.com/category/24551/2249/7973d35509ab1e1c067002f79131ba59/glass%20furnace6.jpg","https://clyfglass.com/storage/1.webp","https://www.vitropackaging.com/media/1060/home1.jpg?height=600&mode=max&rnd=132108838280000000&width=1920","https://image.made-in-china.com/202f0j00oliuYysJGFcn/Annealing-Furnace-for-Glass-Bottles.webp","https://img.ihned.cz/attachment.php/550/77779550/zrho3BR2cT4Qajbx1dslOpJgyW0G9VSv/IMG_8083.jpg"],"08":["https://static.wixstatic.com/media/bb4843_ec06429d8e69444884943d96e849bc40~mv2.png/v1/fill/w_980%2Ch_980%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/bb4843_ec06429d8e69444884943d96e849bc40~mv2.png",null,"https://www.ozonotec.eu/images/blog/desinfeccion-ozono-almzara-aceitunas.webp","https://www.clementeindustry.com/wp-content/uploads/2024/04/clemente-frangitore-martelli.webp",null,"https://ww2.kqed.org/app/uploads/sites/10/2014/12/MalaxerMachines.jpg","https://img.directindustry.com/ja/images_di/photo-g/34305-17024494.jpg","https://www.culture.gouv.fr/var/culture/storage/images/_aliases/metadata/8/9/4/9/5979498-1-fre-FR/50b1a3fa9c4d-024_3905946.jpg","https://imagenes.elpais.com/resizer/v2/NWDBABZQYI2JCJ6PD3L3KTBYNY.jpg?auth=825a9fcc24091166820d32f69c5ab2bc5b7a66b716642d59d0c9aabdbd1849cd&width=1200",null]};
 function vocabVisual(index,term){
  if(ID==='06'){
    const names=['01-recycling-bins.jpg','02-collection-truck.jpg','03-sorting-bottles.jpg','04-compressing-bottles.jpg','05-crushing-washing.jpg','06-plastic-pellets.jpg','07-heating-pellets.jpg','08-raw-material.jpg','09-end-products.jpg'];
    const name=names[index];
-   if(name)return '<img class="vocab-real-photo vocab-real-photo-hq" src="'+ENGINE_ASSET_BASE+'vocab-plastic-hq/'+name+'" alt="Ảnh minh họa '+esc(term)+'" width="780" height="580" loading="eager" decoding="async">';
+   if(name)return '<span class="vocab-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo" src="'+ENGINE_ASSET_BASE+'vocab-plastic-hq/'+name+'" alt="Hình chụp minh họa '+esc(term)+'" width="780" height="580" loading="eager" decoding="async"><span class="vocab-image-label">Ảnh công đoạn</span></span>';
  }
- return '<span class="vocab-real-photo vocab-illustrated" role="img" aria-label="Minh họa '+esc(term)+'">'+vocabScene(index,term)+'</span>';
+ const stage=VOCAB_STAGE_PHOTOS[ID]?.[index],topic=VOCAB_TOPIC_COVERS[ID],src=stage||topic;
+ const local=ENGINE_ASSET_BASE+String(task.image||'').split('?')[0];
+ if(!src)return '<span class="vocab-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo vocab-diagram-fallback" src="'+esc(local)+'" alt="Sơ đồ học '+esc(term)+'" loading="eager" decoding="async"><span class="vocab-image-label">Sơ đồ học</span></span>';
+ const url=src.startsWith('http')?src:ENGINE_ASSET_BASE+src;
+ return '<span class="vocab-picture"><img class="vocab-real-photo vocab-real-photo-hq vocab-photo" src="'+esc(url)+'" data-fallback="'+esc(local)+'" alt="Ảnh tham khảo chủ đề '+esc(task.title)+'" loading="eager" decoding="async" referrerpolicy="no-referrer"><span class="vocab-image-label">'+(stage?'Ảnh công đoạn':'Ảnh theo chủ đề')+'</span></span>';
 }
+
 function renderVocabulary(){
  const main=document.getElementById('main'),bank=vocabulary();
  const index=Math.min(bank.length-1,Math.max(0,Number(state.vocab.cardIndex)||0));
@@ -665,6 +682,12 @@ function renderVocabulary(){
  '<div id="vocabStatus" class="vocab-status" aria-live="polite">'+(allSeen?'Có thể chuyển sang mini game.':'Lật từng thẻ để xem nghĩa rồi chuyển sang thẻ tiếp theo.')+'</div>'+
  '<div class="actions"><button class="btn" disabled>← Bước trước</button><button id="vocabRestart" class="btn" type="button">Ôn từ đầu</button><button id="vocabNext" class="btn primary" '+(allSeen?'':'disabled')+'>Bước 2 · Mini game →</button></div>';
  const card=document.getElementById('vocabOneCard'),status=document.getElementById('vocabStatus'),next=document.getElementById('vocabNext');
+ main.querySelectorAll('img.vocab-photo[data-fallback]').forEach(img=>img.addEventListener('error',()=>{
+   if(img.dataset.fallback&&img.src!==img.dataset.fallback){
+     img.src=img.dataset.fallback;img.classList.add('vocab-diagram-fallback');
+     const label=img.parentElement?.querySelector('.vocab-image-label');if(label)label.textContent='Sơ đồ học';
+   }
+ },{once:true}));
  card.onclick=()=>{
    const wasFlipped=card.classList.contains('is-flipped'),flipped=!wasFlipped,rotator=card.querySelector('.vocab-flip-inner');
    const start=wasFlipped?180:0,end=flipped?180:0;
