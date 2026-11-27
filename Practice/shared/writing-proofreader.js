@@ -74,8 +74,10 @@ button.disabled=false;button.textContent=originalLabel;
 if(textarea.value!==initial){host.textContent='Nội dung đã thay đổi trong lúc kiểm tra. Hãy kiểm tra lại.';return}
 draw(host,textarea,issues,status);
 }
+const isProcessAnalysisField=area=>/\/Practice\/WritingTask1\/Process\//i.test(location.pathname)&&Boolean(area.closest('#main .formgrid'));
 function attach(){
 document.querySelectorAll('textarea').forEach(area=>{
+if(isProcessAnalysisField(area))return;
 if(area.dataset.scProofAttached)return;
 if(area.readOnly||area.disabled||area.closest('[hidden]'))return;
 if(area.id==='analysisNotes'||area.id==='studentName'||area.closest('.pie-note'))return;

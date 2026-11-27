@@ -507,7 +507,7 @@ if(/\/Practice\/WritingTask[12]\//.test(location.pathname)){
   document.head.append(waCss);
   const waScript=document.createElement('script');
   waScript.dataset.scWritingAssistant='1';
-  waScript.src=url('Practice/shared/writing-assistant.js?v=20261120-single-check02');
+  waScript.src=url('Practice/shared/writing-assistant.js?v=20261127-process-analysis-no-history01');
   document.body.append(waScript);
  }
 }
@@ -516,7 +516,7 @@ if(/\/Practice\/WritingTask[12]\//.test(location.pathname)){
 if(/\/WritingTask[12]\//i.test(location.pathname)||/\/Vocabulary\/writing-task-2\//i.test(location.pathname)){
  if(!document.querySelector('script[data-sc-proofreader]')){
   const proof=document.createElement('script');proof.dataset.scProofreader='1';
-  proof.src=url('Practice/shared/writing-proofreader.js?v=20261120-grammar-agreement04');
+  proof.src=url('Practice/shared/writing-proofreader.js?v=20261127-process-analysis-no-history01');
   document.body.append(proof);
  }
 }

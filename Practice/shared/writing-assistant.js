@@ -5,6 +5,7 @@
    External proofreading requests are made only after a learner clicks Check. */
 (()=>{'use strict';
 if(window.__scWritingAssistantReady)return;window.__scWritingAssistantReady=true;
+const isProcessAnalysisField=area=>/\/Practice\/WritingTask1\/Process\//i.test(location.pathname)&&Boolean(area.closest('#main .formgrid'));
 const wordCount=s=>(String(s||'').match(/[\p{L}\p{N}]+(?:[’'-][\p{L}\p{N}]+)*/gu)||[]).length;
 const safe=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const known={respectivly:'respectively',respecitvly:'respectively',respectiveley:'respectively',significanly:'significantly',signifcantly:'significantly',aproximately:'approximately',approximatly:'approximately',comparision:'comparison',comparisions:'comparisons',percantage:'percentage',percenatge:'percentage',proprotion:'proportion',propotion:'proportion',consuption:'consumption',consumpsion:'consumption',decreasd:'decreased',increasd:'increased',fluctutation:'fluctuation',fluctuacted:'fluctuated',enviroment:'environment',goverment:'government',developement:'development',seperately:'separately',occured:'occurred',occurence:'occurrence',becuase:'because',thier:'their',teh:'the',wich:'which',recieve:'receive',diferent:'different',diffrent:'different',sustanable:'sustainable',sustainble:'sustainable',majoritiy:'majority',reserch:'research',becameing:'becoming'};
@@ -52,6 +53,7 @@ renderIssues(target,issues,'full');
 finally{button.disabled=false;button.textContent='Kiểm tra chính tả & ngữ pháp'}
 }
 function setup(target){
+if(isProcessAnalysisField(target))return;
 if(target.dataset.scWaAttached||target.disabled||target.readOnly||target.closest('#sc-quick-shell'))return;
 target.dataset.scWaAttached='1';target.setAttribute('spellcheck','true');target.setAttribute('lang','en-GB');
 const toolbar=document.createElement('div');toolbar.className='sc-wa-toolbar';
