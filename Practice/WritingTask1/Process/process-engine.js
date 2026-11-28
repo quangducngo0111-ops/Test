@@ -735,7 +735,7 @@ function vocabVisual(index,term){
    return '<span class="vocab-picture vocab-bricks-stage-picture">'+
      '<img class="vocab-real-photo vocab-real-photo-hq vocab-photo" src="'+esc(src)+'" alt="'+esc(description)+'" loading="eager" decoding="async" referrerpolicy="no-referrer" width="780" height="580" onerror="this.hidden=true;this.parentNode.classList.add(\'photo-unavailable\')">'+
      '<span class="vocab-stage-no-photo" aria-hidden="true"><span>'+emoji+'</span><strong>'+esc(caption)+'</strong><small>Ảnh không tải được</small></span>'+
-     '<span class="vocab-image-label">'+esc(caption)+'</span></span>';
+     '</span>';
  }
 
  if(ID==='09'&&WATER_VOCAB_FILES[index]){
