@@ -673,16 +673,16 @@ const VOCAB_STAGE_PHOTOS={"07":["https://www.expoegypt.gov.eg/uploads/2020/08/5f
 /* Manufacturing Bricks: one photo for each of the ten vocabulary terms.
    Never fall back to the generic bricks cover for these vocabulary cards. */
 const BRICKS_VOCAB_PHOTOS=[
- ['https://www.sio-2.com/modules/ph_simpleblog/covers/49.jpg','Máy xúc khai thác đất sét đỏ','Khai thác đất sét','🚜'],
- ['https://images.squarespace-cdn.com/content/v1/5ed6a7c5ee3b3c56771721c3/1596065151580-36RRAS559RXCEC6EFO5C/IMG_7373.JPG?format=1000w','Máy xử lý đất sét qua các con lăn và bộ phận kim loại','Lưới kim loại và con lăn','⚙️'],
- ['https://img.static-rmg.be/a/view/q75/w/h/5038222/feafba660178220527d77797a510d85d-jpg.jpg','Máy trộn đất sét ẩm tại nhà máy sản xuất gạch','Trộn đất sét, cát và nước','🌀'],
- ['https://image.made-in-china.com/2f0j00iOnoJGBzSMkI/Automatic-Clay-Brick-Wire-Cut-Machine-with-High-Precise.jpg','Máy cắt dây chia đất sét thành những viên gạch','Cắt gạch bằng dây','✂️'],
- ['https://1.bp.blogspot.com/-8caEabrajS4/X6AvcbrwgtI/AAAAAAAABJE/nZZisCsUsR4cOPLVF5OkHGwbEyU9vKWcgCLcBGAsYHQ/s588/machine%2Bmoulding%2Bof%2Bbricks.JPG','Máy ép khuôn định hình gạch đất sét','Tạo hình bằng khuôn','🧰'],
- ['https://img2.tradewheel.com/uploads/images/products/9/7/small-tunnel-dryer-in-clay-brick-factory-gas-burner-red-brick-making-machine-brick-making-machinery1-0499662001623659549.jpg.webp','Lò sấy gạch công nghiệp và hệ thống băng chuyền','Sấy gạch','🌬️'],
- ['https://871416.s21i.faiusr.com/4/ABUIABAEGAAgspH3ygYonMrg2QMwgAo40AU.png','Gạch được nung ở nhiệt độ cao trong lò nung','Nung gạch','🔥'],
- ['https://www.fbm.it/public/images/storia/07E_CERIC_1_1978.jpg','Buồng làm nguội gạch với hệ thống quạt công nghiệp','Làm nguội gạch','❄️'],
- ['https://image.made-in-china.com/2f0j00KqkljEfCARBs/LDPE-Transparent-PE-Shrink-Bag-Shrink-Hood-Film-for-Pallets-with-Bricks.webp','Gạch được xếp trên pallet và bọc màng đóng gói','Đóng gói gạch','📦'],
- ['https://d27f80p8ydp5dw.cloudfront.net/blogs/img3-bricks-local-suppliers-e1768579008319.webp','Xe tải chở các pallet gạch tới công trường','Giao gạch bằng xe tải','🚚']
+ [ENGINE_ASSET_BASE+'bricks-ai/01-clay-excavation.svg?v=20261128',"Máy xúc khai thác đất sét",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/02-clay-crushing.svg?v=20261128',"Đất sét đi qua lưới và trục nghiền",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/03-sand-water-mixing.svg?v=20261128',"Trộn đất sét với nước và cát",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/04-brick-shaping.svg?v=20261128',"Cắt và tạo hình viên gạch",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/10-brick-moulding.svg?v=20261128',"Tạo hình gạch bằng khuôn",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/05-brick-drying.svg?v=20261128',"Sấy khô những viên gạch",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/06-kiln-firing.svg?v=20261128',"Nung gạch trong lò",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/07-brick-cooling.svg?v=20261128',"Làm nguội gạch",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/08-brick-packaging.svg?v=20261128',"Đóng gói trên pallet",'','🧱'],
+ [ENGINE_ASSET_BASE+'bricks-ai/09-brick-delivery.svg?v=20261128',"Vận chuyển gạch bằng xe tải",'','🧱']
 ];
 
 /* Tomato ketchup: ten self-contained 4:3 illustrations, one per vocabulary stage.
